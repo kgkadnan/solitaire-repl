@@ -6,11 +6,7 @@ import Round from "../../assets/images/Round.png";
 export default function ImageTileExample() {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const handleChange = (shape: string, index: number) => {
-    console.log(
-      shape,
-      selectedShape.includes(shape),
-      selectedShape.indexOf(shape)
-    );
+   
     if (selectedShape.includes(shape)) {
       setSelectedShape((prevSelectedShape) =>
         prevSelectedShape.filter((selected) => selected !== shape)
