@@ -1,0 +1,40 @@
+.imageTileMainContainer {
+  display: flex;
+  background-color: #0c1f1f;
+  justify-content: space-between;
+  // width: 200px;
+  // height: 64px;
+  align-items: center;
+}
+
+.imageTileContainer {
+  width: 64px;
+  height: 75px;
+  padding: 5px;
+  border-radius: 2px;
+
+
+
+
+
+
+  align-items: center;
+}
+
+.imageTileImage {
+  width: 30px;
+  height: 30px;
+  margin: auto;
+}
+
+.imageTileLabel {
+  font-size: 12px;
+  color: #ffffff;
+  padding-top: 9px;
+  text-align: center;
+}
+
+.activeIndicator {
+  border: 2px solid #8c7459;
+  border-radius: 2px;
+}
