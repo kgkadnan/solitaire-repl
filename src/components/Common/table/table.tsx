@@ -7,6 +7,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
+import style from "./table.module.scss";
 
 interface TableData {
   tableHeads: string[];
@@ -14,8 +15,8 @@ interface TableData {
 }
 
 interface TableStyle {
-  headerStyle: string;
-  bodyStylr: string;
+  headerStyle?: string;
+  bodyStyle?: string;
 }
 
 interface TableProps {
@@ -31,7 +32,10 @@ export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
           <TableRow>
             {tableData.tableHeads.map((tableHead, index) => {
               return (
-                <TableHead key={index} className={tableAllStyle.headerStyle}>
+                <TableHead
+                  key={index}
+                  className={`${style.tableHead} ${tableAllStyle.headerStyle}`}
+                >
                   {tableHead}
                 </TableHead>
               );
@@ -43,7 +47,10 @@ export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
             <TableRow key={index}>
               {Object.keys(bodyData).map((item, index) => {
                 return (
-                  <TableCell key={index} className={tableAllStyle.bodyStylr}>
+                  <TableCell
+                    key={index}
+                    className={`${style.tablebody} ${tableAllStyle.bodyStyle}`}
+                  >
                     {bodyData[item]}
                   </TableCell>
                 );
