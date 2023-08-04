@@ -8,30 +8,30 @@ import {
 } from "@/components/ui/table";
 import React from "react";
 
-interface fullTableData {
+interface TableData {
   tableHeads: string[];
   bodyData: Record<string, any>[];
 }
 
-interface tableStyle {
+interface TableStyle {
   headerStyle: string;
   bodyStylr: string;
 }
 
-interface tableProps {
-  tableData: fullTableData;
-  tableAllStyle: tableStyle;
+interface TableProps {
+  tableData: TableData;
+  tableAllStyle: TableStyle;
 }
 
-export const Tabel: React.FC<tableProps> = ({ tableData, tableAllStyle }) => {
+export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
   return (
     <>
       <Table>
         <TableHeader>
           <TableRow>
-            {tableData.tableHeads.map((tableHead) => {
+            {tableData.tableHeads.map((tableHead, index) => {
               return (
-                <TableHead className={tableAllStyle.headerStyle}>
+                <TableHead key={index} className={tableAllStyle.headerStyle}>
                   {tableHead}
                 </TableHead>
               );
@@ -40,17 +40,15 @@ export const Tabel: React.FC<tableProps> = ({ tableData, tableAllStyle }) => {
         </TableHeader>
         <TableBody>
           {tableData.bodyData.map((bodyData, index) => (
-            <>
-              <TableRow key={`${tableData.tableHeads}-${index}`}>
-                {Object.keys(bodyData).map((item) => {
-                  return (
-                    <TableCell className={tableAllStyle.bodyStylr}>
-                      {bodyData[item]}
-                    </TableCell>
-                  );
-                })}
-              </TableRow>
-            </>
+            <TableRow key={index}>
+              {Object.keys(bodyData).map((item, index) => {
+                return (
+                  <TableCell key={index} className={tableAllStyle.bodyStylr}>
+                    {bodyData[item]}
+                  </TableCell>
+                );
+              })}
+            </TableRow>
           ))}
         </TableBody>
       </Table>
