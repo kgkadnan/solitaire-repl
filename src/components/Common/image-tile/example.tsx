@@ -1,9 +1,9 @@
 "use client";
 import { useState } from "react";
 import CustomImageTile, { IImageTileProps } from ".";
-import Round from "../../assets/images/Round.png";
+import Round from "../../../../public/assets/images/Round.png";
 
-export default function ImageTileExample() {
+ const ImageTileExample=()=> {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const handleChange = (shape: string, index: number) => {
    
@@ -37,3 +37,5 @@ export default function ImageTileExample() {
     />
   );
 }
+
+export default  ImageTileExample;

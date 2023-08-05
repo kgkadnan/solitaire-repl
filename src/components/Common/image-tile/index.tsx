@@ -2,9 +2,9 @@
 
 import React from "react";
 import Image, { StaticImageData } from "next/image";
-import style from "@/components/image-tile/image-tile.module.scss";
+import style from "./image-tile.module.scss";
 
-export interface IImageTilePropsStyles {
+export interface IImageTileStyleProps {
   imageTileMainContainerStyles?: string;
   imageTileContainerStyles?: string;
   imageTileImageStyles?: string;
@@ -18,12 +18,12 @@ export interface IImageTileProps {
 
 export interface IImageContainerProps {
   imageTileData: IImageTileProps[];
-  overriddenStyles?: IImageTilePropsStyles;
+  overriddenStyles?: IImageTileStyleProps;
   handleSelectTile: (shape: string, index: number) => void;
   selectedTile: string[];
 }
 
-function CustomImageTile(imageProps: IImageContainerProps) {
+const CustomImageTile:React.FC<IImageContainerProps>=(imageProps: IImageContainerProps)=> {
   const { imageTileData, overriddenStyles, selectedTile, handleSelectTile } =
     imageProps;
   return (

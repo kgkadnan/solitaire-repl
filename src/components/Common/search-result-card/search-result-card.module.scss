@@ -1,0 +1,26 @@
+.cardContainer {
+    // width:500px;
+    background-color: yellow;
+    border-radius: 10px;
+    border: none;
+}
+
+.cardHeaderText {
+    display: flex !important;
+    justify-content: space-between;
+}
+
+.cardTitle {
+    display: flex;
+}
+
+.cardActionIcon {
+    height: 20px;
+    width: 20px;
+}
+
+.cardIcon {
+    height: 20px;
+    width: 20px;
+    margin-right: 10px;
+}

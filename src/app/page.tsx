@@ -1,6 +1,6 @@
-import ImageTileExample from "@/components/image-tile/example";
+import SearchResultCardExample from "@/components/Common/search-result-card/example";
 
 
 export default function Home() {
-  return <ImageTileExample/>;
+  return <SearchResultCardExample/>;
 }
