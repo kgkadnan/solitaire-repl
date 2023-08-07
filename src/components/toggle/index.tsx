@@ -3,7 +3,7 @@ import React, { useEffect } from "react";
 import { useTheme } from "next-themes";
 import { Switch } from "../ui/switch";
 
-const Button = () => {
+export const ToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
   const currentTheme = theme === "system" ? systemTheme : theme;
 
@@ -23,5 +23,3 @@ const Button = () => {
     </Switch>
   );
 };
-
-export default Button;
