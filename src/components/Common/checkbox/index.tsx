@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { Checkbox } from "../ui/checkbox";
+import { Checkbox } from "../../ui/checkbox";
 import styles from "./checkbox.module.scss";
 
 interface CheckboxItem {

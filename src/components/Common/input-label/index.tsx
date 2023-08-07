@@ -1,5 +1,5 @@
 import React from "react";
-import { Label } from "../ui/label";
+import { Label } from "../../ui/label";
 import styles from "./input-lable.module.scss";
 
 interface style {

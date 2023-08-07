@@ -1,6 +1,6 @@
 "use client";
 import React, { ChangeEvent } from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 import styles from "./input-field.module.scss";
 
 interface style {
