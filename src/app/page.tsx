@@ -1,3 +1,6 @@
+import SearchResultCardExample from "@/components/Common/search-result-card/example";
+
+
 export default function Home() {
-  return <h1>Hlw Friends</h1>;
+  return <SearchResultCardExample/>;
 }
