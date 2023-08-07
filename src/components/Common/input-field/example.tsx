@@ -1,6 +1,5 @@
 "use client";
-import React, { ChangeEvent } from "react";
-import { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
 import { CustomInputField } from ".";
 import styles from "./example.module.scss";
 
