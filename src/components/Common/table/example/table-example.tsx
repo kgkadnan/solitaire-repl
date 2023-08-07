@@ -17,7 +17,7 @@ export const Tabelexample = () => {
 
   const tableAllStyle = {
     headerStyle: style.tableHead,
-    bodyStylr: style.tablebody,
+    bodyStyle: style.tablebody,
   };
 
   return <Tabel tableData={tableData} tableAllStyle={tableAllStyle} />;

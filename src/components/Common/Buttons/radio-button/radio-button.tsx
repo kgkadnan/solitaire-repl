@@ -18,7 +18,7 @@ interface RadioButtonStyles {
 interface RadioGroupProps {
   radioData: RadioButtonOptionProps[];
   onChange: (radioValue: string) => void;
-  radioButtonAllStyles: RadioButtonStyles;
+  radioButtonAllStyles?: RadioButtonStyles;
 }
 
 export const RadioButton: React.FC<RadioGroupProps> = ({

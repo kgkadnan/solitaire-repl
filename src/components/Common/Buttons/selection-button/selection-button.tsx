@@ -3,7 +3,7 @@ import React from "react";
 import { Button } from "../../../ui/button";
 import style from "./selection-button.module.scss";
 
-interface selectionButtonStyle {
+interface SelectionButtonStyle {
   selectionButtonStyle: string;
   selectionButtonLabelStyle: string;
 }
@@ -11,7 +11,7 @@ interface selectionButtonStyle {
 interface SelectionButtonProps {
   selectionButtonLabel: string;
   handleClick?: () => void;
-  selectionButtonAllStyles?: selectionButtonStyle;
+  selectionButtonAllStyles?: SelectionButtonStyle;
 }
 
 export const SelectionButton: React.FC<SelectionButtonProps> = ({
