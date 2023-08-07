@@ -23,7 +23,7 @@ interface style {
 interface SelectProps {
   data: ArrayItem[];
   placeholder: string;
-  style: style;
+  style?: style;
 }
 
 const handleChange = (event: any) => {
@@ -38,13 +38,13 @@ export const CustomSelect: React.FC<SelectProps> = ({
   return (
     <Select onValueChange={handleChange}>
       <SelectTrigger
-        className={`${styles.defaultselectTrigger} ${style.selectTrigger}`}
+        className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
       <SelectContent
-        className={`${styles.defaultselectcontent} ${style.selectcontent}`}
+        className={`${styles.defaultselectcontent} ${style?.selectcontent}`}
       >
         {data.map((item) => (
           <SelectItem key={item.id} value={item.value}>

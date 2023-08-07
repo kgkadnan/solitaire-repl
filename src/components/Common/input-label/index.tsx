@@ -9,7 +9,7 @@ interface style {
 interface InputLabelProps {
   htmlfor: string;
   label: string;
-  style: style;
+  style?: style;
 }
 
 export const CustomInputlabel: React.FC<InputLabelProps> = ({
@@ -17,12 +17,11 @@ export const CustomInputlabel: React.FC<InputLabelProps> = ({
   label,
   style,
 }) => {
-  console.log("style", style);
   return (
     <>
       <Label
         htmlFor={htmlfor}
-        className={`${styles.defaultLableStyle} ${style.label} `}
+        className={`${styles.defaultLableStyle} ${style?.label} `}
       >
         {label}
       </Label>

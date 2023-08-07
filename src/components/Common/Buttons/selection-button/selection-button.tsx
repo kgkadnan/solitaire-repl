@@ -10,20 +10,22 @@ interface SelectionButtonStyle {
 
 interface SelectionButtonProps {
   selectionButtonLabel: string;
-  handleClick?: () => void;
+  handleClick?: (data:string) => void;
   selectionButtonAllStyles?: SelectionButtonStyle;
+  data?:string
 }
 
 export const SelectionButton: React.FC<SelectionButtonProps> = ({
   selectionButtonLabel,
-  handleClick,
+  handleClick=()=>{},
   selectionButtonAllStyles,
+  data=""
 }) => {
   return (
     <>
       <Button
         className={`${style?.btnDefaultStyle} ${selectionButtonAllStyles?.selectionButtonStyle}`}
-        onClick={handleClick}
+        onClick={()=>{handleClick(data)}}
       >
         <div
           className={`${style?.labelDefaultStyle} ${selectionButtonAllStyles?.selectionButtonLabelStyle}`}

@@ -11,19 +11,21 @@ interface DisplayButtonStyle {
 interface DisplayBtnProps {
   displayButtonLabel: string;
   displayButtonAllStyle?: DisplayButtonStyle;
-  handleClick?: () => void;
+  handleClick?: (color:string) => void;
+  color?:string
 }
 
 export const DisplayButton: React.FC<DisplayBtnProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
-  handleClick,
+  handleClick=()=>{},
+  color=""
 }) => {
   return (
     <>
       <Button
         className={`${style?.defaultStyle} ${displayButtonAllStyle?.displayButtonStyle}`}
-        onClick={handleClick}
+        onClick={()=>{handleClick(color)}}
       >
         <div className={displayButtonAllStyle?.displayLabelStyle}>
           {displayButtonLabel}
