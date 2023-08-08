@@ -67,17 +67,35 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
           </CardTitle>
           <CardDescription>{cardDescription}</CardDescription>
           {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
-          <Image
-            src={cardActionIcon}
-            alt={"edit"}
-            onClick={() => {
-              handleCardAction(stone);
-            }}
-            className={`${style.cardActionIcon} ${cardActionIconStyle}`}
-          />
+          {!defaultCardPosition && (
+            <Image
+              src={cardActionIcon}
+              alt={"edit"}
+              onClick={() => {
+                handleCardAction(stone);
+              }}
+              className={`${style.cardActionIcon} ${cardActionIconStyle}`}
+            />
+          )}
         </div>
+        <CardDescription
+          className={`${style.cardDescription} ${cardDescription}`}
+        >
+          {cardDescription}
+        </CardDescription>
       </CardHeader>
+
       {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
+      {defaultCardPosition && (
+        <Image
+          src={cardActionIcon}
+          alt={"edit"}
+          onClick={() => {
+            handleCardAction(stone);
+          }}
+          className={`${cardActionIconStyle}`}
+        />
+      )}
     </Card>
   );
 };

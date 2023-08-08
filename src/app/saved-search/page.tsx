@@ -2,7 +2,7 @@
 import CustomSearchResultCard from "@/components/Common/search-result-card";
 import React from "react";
 import EditIcon from "../../../public/assets/icons/edit.png";
-import style from "./previous-search.module.scss";
+import style from "./saved-search.module.scss";
 import { CustomDisplayButton } from "@/components/Common/Buttons/display-button/display-button";
 import { CustomTable } from "@/components/Common/table/table";
 import { CustomCheckBox } from "@/components/Common/checkbox";

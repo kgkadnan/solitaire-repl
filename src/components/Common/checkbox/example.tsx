@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { CustomCheckBox } from ".";
 import styles from "./example.module.scss";
 
@@ -21,13 +21,10 @@ export const Example = () => {
       // className: styles.checkbox,
     },
   ];
-  const className = {
-    checkbox: styles.checkbox,
-  };
 
   return (
     <div>
-      <CustomCheckBox data={data} style={className} />
+      <CustomCheckBox data={data} style={styles.checkbox} />
     </div>
   );
 };

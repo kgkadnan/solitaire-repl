@@ -8,13 +8,9 @@ interface CheckboxItem {
   id: number;
 }
 
-interface style {
-  checkbox: string;
-}
-
 interface CustomCheckboxProps {
   data: CheckboxItem[];
-  style: style;
+  style?: string;
 }
 
 export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
@@ -27,7 +23,7 @@ export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
         return (
           <Checkbox
             key={item.id}
-            className={`${styles.defaultCheckbox} ${style.checkbox} `}
+            className={`${styles.defaultCheckbox} ${style} `}
           />
         );
       })}
