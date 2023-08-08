@@ -8,7 +8,7 @@ import {
   CardTitle,
 } from "../../ui/card";
 import Image, { StaticImageData } from "next/image";
-import Edit from "../../../../public/assets/icons/edit.png";
+import Edit from "../../../../public/assets/icons/edit.svg";
 import style from "./search-result-card.module.scss";
 
 interface ISearchCardStyleProps {
@@ -17,12 +17,10 @@ interface ISearchCardStyleProps {
   cardHeaderTextStyle?: string;
   cardTitleStyle?: string;
   cardActionIconStyle?: string;
-  cardIconStyle?: string;
 }
 
 interface ICardDataProps {
   stone?: string;
-  cardIcon?: StaticImageData;
   cardHeader: React.ReactNode;
   cardActionIcon?: StaticImageData;
   cardDescription?: React.ReactNode;
@@ -39,7 +37,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
   card: IImageContainerProps
 ) => {
   const {
-    cardIcon = Edit,
     cardHeader,
     cardActionIcon = Edit,
     cardDescription,
@@ -56,7 +53,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardHeaderContainerStyle,
     cardHeaderTextStyle,
     cardTitleStyle,
-    cardIconStyle,
     cardActionIconStyle,
   } = overriddenStyles;
 
@@ -67,13 +63,9 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
       >
         <div className={`${style.cardHeaderText} ${cardHeaderTextStyle}`}>
           <CardTitle className={`${style.cardTitle} ${cardTitleStyle}`}>
-            <Image
-              src={cardIcon}
-              alt={"card"}
-              className={`${style.cardIcon} ${cardIconStyle}`}
-            />
             {cardHeader}
           </CardTitle>
+          <CardDescription>{cardDescription}</CardDescription>
           {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
           <Image
             src={cardActionIcon}
@@ -84,7 +76,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
             className={`${style.cardActionIcon} ${cardActionIconStyle}`}
           />
         </div>
-        <CardDescription>{cardDescription}</CardDescription>
       </CardHeader>
       {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
     </Card>

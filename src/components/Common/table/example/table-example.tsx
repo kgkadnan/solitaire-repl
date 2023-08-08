@@ -1,8 +1,8 @@
 import React from "react";
-import { Tabel } from "../table";
 import style from "./table-example.module.scss";
+import { CustomTable } from "../table";
 
-export const Tabelexample = () => {
+export const TableExample = () => {
   const tableData = {
     tableHeads: ["invoice", "paymentStatus", "totalAmount", "paymentMethod"],
     bodyData: [
@@ -16,9 +16,11 @@ export const Tabelexample = () => {
   };
 
   const tableAllStyle = {
-    headerStyle: style.tableHead,
-    bodyStyle: style.tablebody,
+    tableHeaderStyle: style.tableHead,
+    tableBodyStyle: style.tablebody,
   };
 
-  return <Tabel tableData={tableData} tableAllStyle={tableAllStyle} />;
+  return (
+    <CustomTable tableData={tableData} tableStyleClasses={tableAllStyle} />
+  );
 };

@@ -4,8 +4,8 @@ import { Button } from "../../../ui/button";
 import style from "./display-button.module.scss";
 
 interface DisplayButtonStyle {
-  displayButtonStyle: string;
-  displayLabelStyle: string;
+  displayButtonStyle?: string;
+  displayLabelStyle?: string;
 }
 
 interface DisplayBtnProps {
@@ -14,7 +14,7 @@ interface DisplayBtnProps {
   handleClick?: () => void;
 }
 
-export const DisplayButton: React.FC<DisplayBtnProps> = ({
+export const CustomDisplayButton: React.FC<DisplayBtnProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
   handleClick,

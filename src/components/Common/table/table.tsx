@@ -7,24 +7,27 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import React from "react";
-import style from "./table.module.scss";
 
-interface TableData {
+interface ITableData {
   tableHeads: string[];
   bodyData: Record<string, any>[];
 }
 
-interface TableStyle {
-  headerStyle?: string;
-  bodyStyle?: string;
+interface ITableStyle {
+  tableHeaderStyle: string;
+  tableBodyStyle: string;
 }
 
 interface TableProps {
-  tableData: TableData;
-  tableAllStyle: TableStyle;
+  tableData: ITableData;
+  tableStyleClasses: ITableStyle;
 }
 
-export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
+export const CustomTable: React.FC<TableProps> = ({
+  tableData,
+  tableStyleClasses,
+}) => {
+  const { tableHeaderStyle, tableBodyStyle } = tableStyleClasses;
   return (
     <>
       <Table>
@@ -32,10 +35,7 @@ export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
           <TableRow>
             {tableData.tableHeads.map((tableHead, index) => {
               return (
-                <TableHead
-                  key={index}
-                  className={`${style.tableHead} ${tableAllStyle.headerStyle}`}
-                >
+                <TableHead key={index} className={`${tableHeaderStyle}`}>
                   {tableHead}
                 </TableHead>
               );
@@ -47,10 +47,7 @@ export const Tabel: React.FC<TableProps> = ({ tableData, tableAllStyle }) => {
             <TableRow key={index}>
               {Object.keys(bodyData).map((item, index) => {
                 return (
-                  <TableCell
-                    key={index}
-                    className={`${style.tablebody} ${tableAllStyle.bodyStyle}`}
-                  >
+                  <TableCell key={index} className={`${tableBodyStyle}`}>
                     {bodyData[item]}
                   </TableCell>
                 );
