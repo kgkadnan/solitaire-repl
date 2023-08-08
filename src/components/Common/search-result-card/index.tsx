@@ -11,7 +11,7 @@ import Image, { StaticImageData } from "next/image";
 import Edit from "../../../../public/assets/icons/edit.svg";
 import style from "./search-result-card.module.scss";
 
-interface ISearchCardStyleProps {
+export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
   cardHeaderContainerStyle?: string;
   cardHeaderTextStyle?: string;
@@ -19,7 +19,7 @@ interface ISearchCardStyleProps {
   cardActionIconStyle?: string;
 }
 
-interface ICardDataProps {
+export interface ICardDataProps {
   stone?: string;
   cardHeader: React.ReactNode;
   cardActionIcon?: StaticImageData;

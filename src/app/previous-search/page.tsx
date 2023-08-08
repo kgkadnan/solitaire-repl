@@ -1,14 +1,11 @@
-"use-client";
-import CustomSearchResultCard from "@/components/Common/search-result-card";
+import { CustomSearchCard } from "@/components/Common/search-card";
 import React from "react";
-import EditIcon from "../../../public/assets/icons/edit.png";
 import style from "./previous-search.module.scss";
+import EditIcon from "../../../public/assets/icons/edit.svg";
 import { CustomDisplayButton } from "@/components/Common/Buttons/display-button/display-button";
 import { CustomTable } from "@/components/Common/table/table";
-import { CustomCheckBox } from "@/components/Common/checkbox";
-import { ToggleButton } from "@/components/Common/toggle";
 
-const PrevioudSearch = () => {
+const PreviousSearch = () => {
   // Style classes and variables
   const displayButtonStyles = {
     displayLabelStyle: style.SearchButtonLabel,
@@ -49,17 +46,15 @@ const PrevioudSearch = () => {
       },
     ],
   };
-
   let checkboxData = [
     {
       id: 1,
       checked: false,
     },
   ];
-
-  const demoCardData = [
+  const cardData = [
     {
-      cardhandleIcon: EditIcon,
+      cardActionIcon: EditIcon,
       cardHeader: (
         <div className={style.headerContainer}>
           <div className={style.searchHeader}>
@@ -77,7 +72,7 @@ const PrevioudSearch = () => {
       ),
     },
     {
-      cardhandleIcon: EditIcon,
+      cardActionIcon: EditIcon,
       cardHeader: (
         <div className={style.headerContainer}>
           <div className={style.searchHeader}>
@@ -98,22 +93,13 @@ const PrevioudSearch = () => {
 
   return (
     <>
-      <div className="container">
-        {demoCardData.map((items, index) => {
-          return (
-            <div className="flex" key={index}>
-              <CustomCheckBox data={checkboxData} style={style.checkboxStyle} />
-              <CustomSearchResultCard
-                cardData={items}
-                overriddenStyles={cardStyles}
-                defaultCardPosition={false}
-              />
-            </div>
-          );
-        })}
-      </div>
+      <CustomSearchCard
+        cardData={cardData}
+        checkboxData={checkboxData}
+        cardStyles={cardStyles}
+      />
     </>
   );
 };
 
-export default PrevioudSearch;
+export default PreviousSearch;

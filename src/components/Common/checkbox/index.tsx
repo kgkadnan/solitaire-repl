@@ -3,7 +3,7 @@ import React from "react";
 import { Checkbox } from "../../ui/checkbox";
 import styles from "./checkbox.module.scss";
 
-interface CheckboxItem {
+export interface CheckboxItem {
   checked: boolean;
   id: number;
 }
