@@ -22,7 +22,7 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
       <div className="container">
         {cardData.map((items, index) => {
           return (
-            <div className="flex" key={index}>
+            <div className="flex mt-6" key={index}>
               <CustomCheckBox data={checkboxData} />
               <CustomSearchResultCard
                 cardData={items}

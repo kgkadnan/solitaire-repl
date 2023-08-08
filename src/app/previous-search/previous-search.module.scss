@@ -4,7 +4,6 @@
   width: 1220px;
   height: 120px;
   padding: 21px 26px 0px;
-  margin-top: 25px;
 }
 
 /* Header Styles */
@@ -61,20 +60,4 @@
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
   font-weight: 300;
-}
-
-//CheckBox
-.checkboxStyle {
-  border-color: #5d6a6a;
-  width: 20px;
-  height: 20px;
-  justify-content: center;
-  align-items: center;
-  margin-right: 14px;
-}
-
-/* Checked Checkbox */
-.checkboxStyle input[type="checkbox"]:checked ~ .content {
-  color: #8c7459;
-  border-color: #8c7459;
 }
