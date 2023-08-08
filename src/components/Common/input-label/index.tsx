@@ -9,19 +9,19 @@ interface style {
 interface InputLabelProps {
   htmlfor: string;
   label: string;
-  style?: style;
+  overriddenStyles?: style;
 }
 
 export const CustomInputlabel: React.FC<InputLabelProps> = ({
   htmlfor,
   label,
-  style,
+  overriddenStyles,
 }) => {
   return (
     <>
       <Label
         htmlFor={htmlfor}
-        className={`${styles.defaultLableStyle} ${style?.label} `}
+        className={`${styles.defaultLableStyle} ${overriddenStyles?.label} `}
       >
         {label}
       </Label>

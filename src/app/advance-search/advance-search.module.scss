@@ -1,3 +1,85 @@
 .label{
     font-size: 16px;
 }
+
+.dividerLine{
+    height: 5px;
+    border:0px solid #5D6A6A;
+    border-top-width: 1px;
+}
+
+.filterSectionLabel{
+    width: 10%;
+    height: auto;
+    align-items: center;
+}
+
+.filterSection{
+    display: flex;
+    padding: 10px 0px;
+}
+
+.filterSectionData{
+    width: 90%;
+}
+.colorFilterStyles{
+    border-radius: 30px;
+    width: 100px;
+}
+.whiteColorFilterStyle{
+    width: 45px;
+}
+
+.commonSelectionStyle{
+    width: 120px;
+}
+
+.filterWrapSection{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.otherParameterContainer{
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+}
+.otherParameterHeader{
+    padding-bottom: 30px;
+    font-weight: normal;
+}
+
+.otherParameterTitle{
+    width:20%
+}
+
+.labelPlainColor{
+    color:#CED2D2;
+    font-weight: normal;
+    font-size: 14px;
+}
+.otherParameterDataContainer{
+    padding: 0px;
+}
+
+.radioStyle{
+    border:1px solid #8C7459
+
+}
+
+.radioLabel{
+    color:  #CED2D2;
+    padding: 5px;
+    font-weight: normal;
+}
+
+.caratRangeFilter{
+    display: flex;
+    flex-direction: column;
+}
+
+.inputFieldStyles{
+    width: 100px;
+}
