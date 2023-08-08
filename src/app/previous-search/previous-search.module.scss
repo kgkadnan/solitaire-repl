@@ -1,6 +1,6 @@
 /* Card Container */
 .searchCardContainer {
-  background-color: #061010;
+  background-color: hsl(var(--solitaire-secondary));
   width: 1220px;
   height: 120px;
   padding: 21px 26px 0px;
@@ -15,14 +15,14 @@
 
 // .card-title
 .SearchCardTitle {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
   font-weight: 500;
 }
 
 // .date-time
 .SearchDateTime {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   font-size: 12px;
   font-weight: 400;
   display: flex;
@@ -39,12 +39,13 @@
 
 /* Button Styles */
 .SearchButtonLabel {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
   font-weight: 400;
 }
 
 .SearchButtonStyle {
+  background-color: hsl(var(--solitaire-primary));
   margin-top: 25px;
   border-radius: 2px;
 }
@@ -57,7 +58,7 @@
 }
 
 .tableBody {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
   font-weight: 300;
 }

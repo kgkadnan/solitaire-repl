@@ -9,12 +9,6 @@ import { CustomCheckBox } from "@/components/Common/checkbox";
 import { ToggleButton } from "@/components/Common/toggle";
 
 const PrevioudSearch = () => {
-  interface ICardData {
-    cardhandleIcon: string;
-    cardHeader: React.ReactNode;
-    cardContent: React.ReactNode;
-  }
-
   // Style classes and variables
   const displayButtonStyles = {
     displayLabelStyle: style.SearchButtonLabel,
@@ -118,7 +112,6 @@ const PrevioudSearch = () => {
           );
         })}
       </div>
-      <ToggleButton />
     </>
   );
 };
