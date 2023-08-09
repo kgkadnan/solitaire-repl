@@ -16,8 +16,8 @@ interface ArrayItem {
 }
 
 interface style {
-  selectcontent: string;
-  selectTrigger: string;
+  selectContent: string;
+  selectTrigger?: string;
 }
 
 interface SelectProps {
@@ -44,7 +44,7 @@ export const CustomSelect: React.FC<SelectProps> = ({
       </SelectTrigger>
 
       <SelectContent
-        className={`${styles.defaultselectcontent} ${style?.selectcontent}`}
+        className={`${styles.defaultselectcontent} ${style?.selectContent}`}
       >
         {data.map((item) => (
           <SelectItem key={item.id} value={item.value}>

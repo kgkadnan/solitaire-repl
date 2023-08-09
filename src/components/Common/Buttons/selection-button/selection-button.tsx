@@ -23,7 +23,6 @@ export const SelectionButton: React.FC<SelectionButtonProps> = ({
   selectionButtonAllStyles,
   data=""
 }) => {
-  console.log(selectionButtonAllStyles?.selectionButtonStyle)
   return (
     <>
       <Button

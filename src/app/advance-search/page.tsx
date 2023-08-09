@@ -14,8 +14,28 @@ import { RadioButton } from "@/components/Common/Buttons/radio-button/radio-butt
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
+  const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
+  const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
+  const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
+  const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
+  const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
+  const [selectedTingeIntensity, setSelectedTingeIntensity] = useState<
+    string[]
+  >([]);
+  const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
+
   const [selectedGirdleStep, setSelectedGirdleStep] = useState("");
-  const [selectedCaratRange, setSelectedCaratRange] = useState<string>("");
+  const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
+  const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
+    useState<string>("");
+  const [selectedMake, setSelectedMake] = useState<string>("");
+  const [selectedCut, setSelectedCut] = useState<string[]>([]);
+  const [selectedPolish, setSelectedPolish] = useState<string[]>([]);
+  const [selectedSymmetry, setSelectedSymmetry] = useState<string[]>([]);
+  const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
+    []
+  );
 
   let shapeData: IImageTileProps[] = [
     {
@@ -82,20 +102,20 @@ const AdvanceSearch = () => {
     "U-V",
   ];
   let fancyData = [
-    "YELLOW",
-    "PINK",
-    "BLUE",
-    "RED",
-    "GREEN",
-    "PURPLE",
-    "ORANGE",
-    "BLACK",
-    "GRAY",
-    "VIOLET",
-    "BROWN",
-    "WHITE",
-    "OTHER",
-    "LIGHT YELLOW",
+    "Yellow",
+    "Pink",
+    "Blue",
+    "Red",
+    "Green",
+    "Purple",
+    "Orange",
+    "Black",
+    "Gray",
+    "Violet",
+    "Brown",
+    "White",
+    "Other",
+    "Light Yellow",
   ];
 
   let makeData = ["3EX", "3EX-Non", "3VG+"];
@@ -197,42 +217,42 @@ const AdvanceSearch = () => {
   ];
 
   let intensityData = [
-    "FAINT",
-    "LIGHT",
-    "FANCY LIGHT",
-    "FANCY",
-    " FANCY DARK",
-    "FANCY INTENSE",
-    "FANCY VIVID",
-    "FANCY DEEP",
-    "VERY LIGHT",
+    "Faint",
+    "Light",
+    "Fancy light",
+    "Fancy",
+    "Fancy dark",
+    "fancy intense",
+    "Fancy vivid",
+    "Fancy deep",
+    "Very light",
   ];
 
   let overtoneData = [
-    "NONE",
-    "YELLOW",
-    "YELLOWISH",
-    "PINK",
-    "PINKISH",
-    "BLUE",
-    "BLUISH",
-    "RED",
-    "REDDISH",
-    "GREEN",
-    "GREENISH",
-    "PURPLE",
-    "PURPLISH",
-    "ORANGE",
-    "ORANGY",
-    "GRAY",
-    "GRAYISH",
-    "BLACK",
-    "BROWN",
-    "BROWNISH",
-    "VIOLETISH",
-    "WHITE",
-    "W-X LIGHT BROWN",
-    "BROWNISH ORANGY",
+    "None",
+    "Yellow",
+    "Yellowish",
+    "Pink",
+    "Pinkish",
+    "Blue",
+    "Bluish",
+    "Red",
+    "Reddish",
+    "Green",
+    "Greenish",
+    "Purple",
+    "Purplish",
+    "Orange",
+    "Orangy",
+    "Gray",
+    "Grayish",
+    "Black",
+    "Brown",
+    "Brownish",
+    "Violetish",
+    "White",
+    "W-x Light Brown",
+    "Brownish Orangy",
   ];
 
   let tingeData = [
@@ -352,26 +372,98 @@ const AdvanceSearch = () => {
   ];
 
   //// All user actions
-  const handleShapeChange = (shape: string, index: number) => {
-    // console.log(shape)
-    // if(shape==="All"){
-    //   setSelectedShape((shapeData) =>
-    //   shapeData.map((selected) => selected)
-    // );
-    // }
-    // else {
-    if (selectedShape.includes(shape)) {
-      setSelectedShape((prevSelectedShape) =>
-        prevSelectedShape.filter((selected) => selected !== shape)
-      );
-    } else {
-      setSelectedShape((prevSelectedShape) => [...prevSelectedShape, shape]);
-    }
-    // }
-  };
 
   const handleColorChange = (color: string) => {
     setSelectedColor(color);
+  };
+
+  const handleFilterChange = (
+    filterData: string,
+    selectedFilters: string[],
+    setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>
+  ) => {
+    if (selectedFilters.includes(filterData)) {
+      setSelectedFilters((prevSelectedColors) =>
+        prevSelectedColors.filter((selected) => selected !== filterData)
+      );
+    } else {
+      setSelectedFilters((prevSelectedColors) => [
+        ...prevSelectedColors,
+        filterData,
+      ]);
+    }
+  };
+
+  const handleShapeChange = (shape: string, index: number) => {
+    if (shape.toLowerCase() === "all") {
+      let filterShape: string[] = shapeData.map((data) =>
+        data.title.toLowerCase() !== "all" ? data.title : ""
+      );
+      setSelectedShape(filterShape);
+    } else {
+      handleFilterChange(shape, selectedShape, setSelectedShape);
+    }
+  };
+
+  const handleWhiteFilterChange = (data: string) => {
+    handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
+  };
+
+  const handleFancyFilterChange = (data: string) => {
+    handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
+  };
+
+  const handleRangeFilterChange = (data: string) => {
+    handleFilterChange(data, selectedRangeColor, setSelectedRangeColor);
+  };
+
+  const handleIntensityChange = (data: string) => {
+    handleFilterChange(data, selectedIntensity, setSelectedIntensity);
+  };
+  const handleOvertoneChange = (data: string) => {
+    handleFilterChange(data, selectedOvertone, setSelectedOvertone);
+  };
+
+  const handleTingeChange = (data: string) => {
+    handleFilterChange(data, selectedTinge, setSelectedTinge);
+  };
+
+  const handleTingeIntensityChange = (data: string) => {
+    handleFilterChange(data, selectedTingeIntensity, setSelectedTingeIntensity);
+  };
+  const handleClarityChange = (data: string) => {
+    handleFilterChange(data, selectedClarity, setSelectedClarity);
+  };
+  const handleCaratRangeChange = (data: string) => {
+    handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
+  };
+  const handleMakeChange = (data: string) => {
+    if (data.toLowerCase() === "3ex" || data.toLowerCase() === "3ex-non") {
+      if(!(selectedCut.includes("Excellent")&& selectedPolish.includes("Excellent")&& selectedSymmetry.includes("Excellent"))){
+      handleCutChange("Excellent");
+      handlePolishChange("Excellent");
+      handleSymmetryChange("Excellent");
+      }
+    }
+
+    if (data.toLowerCase() === "3ex-non") {
+      handleFluorescenceChange("NON");
+    }
+    setSelectedMake(data);
+  };
+
+  const handleCutChange = (data: string) => {
+    handleFilterChange(data, selectedCut, setSelectedCut);
+  };
+  const handlePolishChange = (data: string) => {
+    handleFilterChange(data, selectedPolish, setSelectedPolish);
+  };
+  const handleSymmetryChange = (data: string) => {
+    handleFilterChange(data, selectedSymmetry, setSelectedSymmetry);
+  };
+
+  const handleFluorescenceChange = (data: string) => {
+    handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
   };
 
   const handleGirdleStepChange = (radioValue: string) => {
@@ -379,47 +471,56 @@ const AdvanceSearch = () => {
   };
 
   ///reusable jsx
-  const renderSelectionButtons = (data: string[], className?: string) => {
-    console.log(className, "className");
-    const selectionButtonStyle = {
-      selectionButtonStyle: className ?? "",
-    };
-    return data.map((color: string) => (
+  const renderSelectionButtons = (
+    data: string[],
+    className?: string,
+    activeStyle?: string,
+    relatedState?: string | string[],
+    handleChange?: (change: string) => void
+  ) => {
+    return data.map((data: string) => (
       <SelectionButton
-        key={color}
-        selectionButtonLabel={color}
-        handleClick={handleColorChange}
-        data={color}
-        selectionButtonAllStyles={selectionButtonStyle}
+        key={data}
+        selectionButtonLabel={data}
+        handleClick={handleChange}
+        data={data}
+        selectionButtonAllStyles={{
+          selectionButtonStyle: `${className ?? ""}   ${
+            typeof relatedState !== "string"
+              ? relatedState?.includes(data) && activeStyle
+              : relatedState === data && activeStyle
+          }`,
+        }}
       />
     ));
   };
 
   const renderParameterFields = () => {
     return parameterData.map((parameter) => (
-      <div key={parameter}>
+      <div key={parameter} className={styles.parameterContainer}>
         <CustomInputlabel
           htmlfor="text"
           label={parameter}
           overriddenStyles={{ label: styles.labelPlainColor }}
         />
-        <div className={styles.filterSection}>
+        <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
           <CustomInputField
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
-            placeholder="From"
+            value={selectedAdditionalCaratRange}
+            // placeholder="From"
             style={{
               input: styles.inputFieldStyles,
             }}
           />
+          <div className={styles.parameterLabel}>to</div>
           <CustomInputField
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
-            placeholder="To"
+            value={selectedAdditionalCaratRange}
+            // placeholder="To"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -452,7 +553,13 @@ const AdvanceSearch = () => {
                 overriddenStyles={{ label: styles.labelPlainColor }}
               />
             </div>
-            <div>{renderSelectionButtons(data.elementValue)}</div>
+            <div>
+              {renderSelectionButtons(
+                data.elementValue,
+                "",
+                styles.activeOtherStyles
+              )}
+            </div>
           </div>
         ))}
       </div>
@@ -460,7 +567,7 @@ const AdvanceSearch = () => {
   };
   return (
     <div style={{ background: "#0C1F1F", width: "100%" }}>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
+      <div className={styles.advanceSearchHeader}>
         <CustomInputlabel
           htmlfor="text"
           label="Search Diamonds"
@@ -485,22 +592,52 @@ const AdvanceSearch = () => {
       </div>
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Color" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="Color"
+            overriddenStyles={{ label: styles.specificFilterAlign }}
+          />
         </div>
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
-            {renderSelectionButtons(colorData, styles.colorFilterStyles)}
+            {renderSelectionButtons(
+              colorData,
+              styles.colorFilterStyles,
+              styles.activeColorStyles,
+              selectedColor,
+              handleColorChange
+            )}
           </div>
           <div>
-            {selectedColor === "White" &&
-              renderSelectionButtons(whiteData, styles.whiteColorFilterStyle)}
-            {selectedColor === "Fancy" && renderSelectionButtons(fancyData)}
-            {selectedColor === "Range" && renderSelectionButtons(rangeData)}
+            {selectedColor.toLowerCase() === "white" &&
+              renderSelectionButtons(
+                whiteData,
+                styles.whiteColorFilterStyle,
+                styles.activeOtherStyles,
+                selectedWhiteColor,
+                handleWhiteFilterChange
+              )}
+            {selectedColor.toLowerCase() === "fancy" &&
+              renderSelectionButtons(
+                fancyData,
+                "",
+                styles.activeOtherStyles,
+                selectedFancyColor,
+                handleFancyFilterChange
+              )}
+            {selectedColor.toLowerCase() === "range" &&
+              renderSelectionButtons(
+                rangeData,
+                "",
+                styles.activeOtherStyles,
+                selectedRangeColor,
+                handleRangeFilterChange
+              )}
           </div>
         </div>
       </div>
 
-      {selectedColor === "Fancy" && (
+      {selectedColor.toLowerCase() === "fancy" && (
         <>
           <div className={styles.filterSection}>
             <div className={styles.filterSectionLabel}>
@@ -510,7 +647,13 @@ const AdvanceSearch = () => {
             <div
               className={`${styles.filterSection} ${styles.filterSectionData}`}
             >
-              {renderSelectionButtons(intensityData)}
+              {renderSelectionButtons(
+                intensityData,
+                "",
+                styles.activeOtherStyles,
+                selectedIntensity,
+                handleIntensityChange
+              )}
             </div>
           </div>
           <div className={styles.filterSection}>
@@ -519,7 +662,13 @@ const AdvanceSearch = () => {
             </div>
             <div className={styles.filterSectionData}>
               <div className={styles.filterSection}>
-                {renderSelectionButtons(overtoneData)}
+                {renderSelectionButtons(
+                  overtoneData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedOvertone,
+                  handleOvertoneChange
+                )}
               </div>
             </div>
           </div>
@@ -531,7 +680,13 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Tinge" />
         </div>
         <div className={styles.filterSectionData}>
-          {renderSelectionButtons(tingeData)}
+          {renderSelectionButtons(
+            tingeData,
+            "",
+            styles.activeOtherStyles,
+            selectedTinge,
+            handleTingeChange
+          )}
         </div>
       </div>
 
@@ -542,7 +697,10 @@ const AdvanceSearch = () => {
         <div>
           {renderSelectionButtons(
             tingeIntensityData,
-            styles.commonSelectionStyle
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedTingeIntensity,
+            handleTingeIntensityChange
           )}
         </div>
       </div>
@@ -550,23 +708,38 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Clarity" />
         </div>
-        <div>{renderSelectionButtons(clarityData)}</div>
+        <div>
+          {renderSelectionButtons(
+            clarityData,
+            "",
+            styles.activeOtherStyles,
+            selectedClarity,
+            handleClarityChange
+          )}
+        </div>
       </div>
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Carat Range" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="Carat Range"
+            overriddenStyles={{ label: styles.specificFilterAlign }}
+          />
         </div>
         <div
           className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
         >
-          <div className={styles.filterSection}>
+          <div
+            className={`${styles.filterSection} ${styles.rangeFilter}`}
+            style={{ width: "420px" }}
+          >
             <CustomInputField
               // style={className}
               type="text"
               name="{name}"
               onChange={() => {}}
-              value={selectedCaratRange}
+              value={selectedAdditionalCaratRange}
               placeholder="From"
               style={{
                 input: styles.inputFieldStyles,
@@ -577,7 +750,7 @@ const AdvanceSearch = () => {
               type="text"
               name="{name}"
               onChange={() => {}}
-              value={selectedCaratRange}
+              value={selectedAdditionalCaratRange}
               placeholder="To"
               style={{
                 input: styles.inputFieldStyles,
@@ -585,11 +758,21 @@ const AdvanceSearch = () => {
             />
             <SelectionButton
               selectionButtonLabel={"Add Carat"}
-              handleClick={handleColorChange}
-              //  data={color}
+              handleClick={() => {}}
+              selectionButtonAllStyles={{
+                selectionButtonStyle: styles.addCarat,
+              }}
             />
           </div>
-          <div>{renderSelectionButtons(caratRangeData)}</div>
+          <div>
+            {renderSelectionButtons(
+              caratRangeData,
+              "",
+              styles.activeOtherStyles,
+              selectedCaratRange,
+              handleCaratRangeChange
+            )}
+          </div>
         </div>
       </div>
 
@@ -598,7 +781,13 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Make" />
         </div>
         <div>
-          {renderSelectionButtons(makeData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            makeData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedMake,
+            handleMakeChange
+          )}
         </div>
       </div>
 
@@ -607,7 +796,13 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Cut" />
         </div>
         <div>
-          {renderSelectionButtons(qualityData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            qualityData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedCut,
+            handleCutChange
+          )}
         </div>
       </div>
 
@@ -616,7 +811,13 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Polish" />
         </div>
         <div>
-          {renderSelectionButtons(qualityData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            qualityData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedPolish,
+            handlePolishChange
+          )}
         </div>
       </div>
 
@@ -625,7 +826,13 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Symmetry" />
         </div>
         <div>
-          {renderSelectionButtons(qualityData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            qualityData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedSymmetry,
+            handleSymmetryChange
+          )}
         </div>
       </div>
 
@@ -636,7 +843,10 @@ const AdvanceSearch = () => {
         <div>
           {renderSelectionButtons(
             fluorescenceData,
-            styles.commonSelectionStyle
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedFluorescence,
+            handleFluorescenceChange
           )}
         </div>
       </div>
@@ -646,7 +856,11 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Lab" />
         </div>
         <div className={styles.filterSectionData}>
-          {renderSelectionButtons(labData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            labData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles
+          )}
         </div>
       </div>
 
@@ -655,7 +869,11 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="H&A" />
         </div>
         <div>
-          {renderSelectionButtons(brillianceData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            brillianceData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles
+          )}
         </div>
       </div>
 
@@ -664,7 +882,11 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Brilliance" />
         </div>
         <div>
-          {renderSelectionButtons(brillianceData, styles.commonSelectionStyle)}
+          {renderSelectionButtons(
+            brillianceData,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles
+          )}
         </div>
       </div>
 
@@ -673,7 +895,14 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Location" />
         </div>
         <div>
-          <CustomSelect data={locationData} placeholder="Location" />
+          <CustomSelect
+            data={locationData}
+            placeholder="Location"
+            style={{
+              selectTrigger: styles.dropdownHeader,
+              selectContent: styles.dropdownData,
+            }}
+          />
         </div>
       </div>
       <div className={styles.filterSection}>
@@ -681,7 +910,14 @@ const AdvanceSearch = () => {
           <CustomInputlabel htmlfor="text" label="Country of origin" />
         </div>
         <div>
-          <CustomSelect data={locationData} placeholder="Country of origin" />
+          <CustomSelect
+            data={locationData}
+            placeholder="Country of origin"
+            style={{
+              selectTrigger: styles.dropdownHeader,
+              selectContent: styles.dropdownData,
+            }}
+          />
         </div>
       </div>
 
@@ -689,13 +925,13 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Discount" />
         </div>
-        <div className={styles.filterSection}>
+        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
@@ -706,7 +942,7 @@ const AdvanceSearch = () => {
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -720,13 +956,13 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Price Range" />
         </div>
-        <div className={styles.filterSection}>
+        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
@@ -737,7 +973,7 @@ const AdvanceSearch = () => {
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -751,13 +987,13 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Price/Carat" />
         </div>
-        <div className={styles.filterSection}>
+        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
@@ -767,7 +1003,7 @@ const AdvanceSearch = () => {
             type="text"
             name="{name}"
             onChange={() => {}}
-            value={selectedCaratRange}
+            value={selectedAdditionalCaratRange}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -779,10 +1015,14 @@ const AdvanceSearch = () => {
       <div className={styles.filterSection}>
         {" "}
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Parameter" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="Parameter"
+            overriddenStyles={{ label: styles.specificFilterAlign }}
+          />
         </div>
         <div
-          className={`${styles.filterSectionData} ${styles.filterWrapSection}`}
+          className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
         >
           {renderParameterFields()}
         </div>
@@ -794,6 +1034,7 @@ const AdvanceSearch = () => {
           <CustomInputlabel
             htmlfor="text"
             label="Inclusions & other parameters"
+            overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
         <div className={styles.filterSectionData}>
@@ -806,7 +1047,11 @@ const AdvanceSearch = () => {
       <div className={styles.filterSection}>
         {" "}
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Girdle" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="Girdle"
+            overriddenStyles={{ label: styles.specificFilterAlign }}
+          />
         </div>
         <div
           style={{ display: "flex", flexDirection: "column" }}
@@ -814,10 +1059,14 @@ const AdvanceSearch = () => {
         >
           <div className={styles.filterSectionData}>
             <div className={styles.filterSection}>
-              {renderSelectionButtons(girdleData)}
+              {renderSelectionButtons(girdleData, "", styles.activeOtherStyles)}
             </div>
           </div>
-          <CustomInputlabel htmlfor="text" label="STEP1" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="STEP1"
+            overriddenStyles={{ label: styles.stepStyle }}
+          />
           <div style={{ margin: "10px" }}>
             <RadioButton
               radioData={[
@@ -839,12 +1088,20 @@ const AdvanceSearch = () => {
               }}
             />
           </div>
-          <CustomInputlabel htmlfor="text" label="STEP2" />
+          <CustomInputlabel
+            htmlfor="text"
+            label="STEP2"
+            overriddenStyles={{ label: styles.stepStyle }}
+          />
           <div
             className={`${styles.filterSection} ${styles.filterWrapSection}`}
             style={{ display: "flex", flexWrap: "wrap" }}
           >
-            {renderSelectionButtons(girdleStepData)}
+            {renderSelectionButtons(
+              girdleStepData,
+              "",
+              styles.activeOtherStyles
+            )}
           </div>
         </div>
       </div>
