@@ -36,7 +36,24 @@ const AdvanceSearch = () => {
   const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
     []
   );
+  const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
+  const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
+  
+  const [selectedLab, setSelectedLab] = useState<string[]>([]);
+  const [selectedHR, setSelectedHR] = useState<string[]>([]);
+  const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
+  
+  const [priceRangeFrom, setPriceRangeFrom] = useState("");
+  const [priceRangeTo, setPriceRangeTo] = useState("");
+  const [discountFrom, setDiscountFrom] = useState("");
+  const [discountTo, setDiscountTo] = useState("");
+  const [pricePerCaratFrom, setPricePerCaratFrom] = useState("");
+  const [pricePerCaratTo, setPricePerCaratTo] = useState("");
+  const [caratRangeFrom, setCaratRangeFrom] = useState("");
+  const [caratRangeTo, setCaratRangeTo] = useState("");
 
+  
+  
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -396,10 +413,10 @@ const AdvanceSearch = () => {
 
   const handleShapeChange = (shape: string, index: number) => {
     if (shape.toLowerCase() === "all") {
-      let filterShape: string[] = shapeData.map((data) =>
+      let filteredShape: string[] = shapeData.map((data) =>
         data.title.toLowerCase() !== "all" ? data.title : ""
       );
-      setSelectedShape(filterShape);
+      setSelectedShape(filteredShape);
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
@@ -437,19 +454,27 @@ const AdvanceSearch = () => {
   const handleCaratRangeChange = (data: string) => {
     handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
   };
+  // let prevMakeData=""
   const handleMakeChange = (data: string) => {
     if (data.toLowerCase() === "3ex" || data.toLowerCase() === "3ex-non") {
-      if(!(selectedCut.includes("Excellent")&& selectedPolish.includes("Excellent")&& selectedSymmetry.includes("Excellent"))){
-      handleCutChange("Excellent");
-      handlePolishChange("Excellent");
-      handleSymmetryChange("Excellent");
+      if (
+        !(
+          selectedCut.includes("Excellent") &&
+          selectedPolish.includes("Excellent") &&
+          selectedSymmetry.includes("Excellent")
+        )
+      ) {
+        handleCutChange("Excellent");
+        handlePolishChange("Excellent");
+        handleSymmetryChange("Excellent");
       }
     }
 
     if (data.toLowerCase() === "3ex-non") {
       handleFluorescenceChange("NON");
     }
-    setSelectedMake(data);
+    data === selectedMake ? setSelectedMake("") : setSelectedMake(data);
+    // prevMakeData=data
   };
 
   const handleCutChange = (data: string) => {
@@ -465,6 +490,31 @@ const AdvanceSearch = () => {
   const handleFluorescenceChange = (data: string) => {
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
   };
+  const handleGirdleChange = (data: string) => {
+    handleFilterChange(data, selectedGirdle, setSelectedGirdle);
+  };
+  const handleGirdleStep2Change = (data: string) => {
+    if (data.toLowerCase() === "all") {
+      let filteredGirdleStep: string[] = girdleStepData.map((data1) =>
+        data1.toLowerCase() !== "all" ? data1 : ""
+      );
+      setSelectedGirdleStep2(filteredGirdleStep);
+    } else {
+      handleFilterChange(data, selectedGirdleStep2, setSelectedGirdleStep2);
+    }
+  };
+
+
+  const handleLabChange = (data: string) => {
+    handleFilterChange(data, selectedLab, setSelectedLab);
+  };
+  const handleHRChange = (data: string) => {
+    handleFilterChange(data, selectedHR, setSelectedHR);
+  };
+  const handleBrillianceChange = (data: string) => {
+    handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
+  };
+
 
   const handleGirdleStepChange = (radioValue: string) => {
     setSelectedGirdleStep(radioValue);
@@ -507,7 +557,7 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={() => {}}
+            onChange={(e) => {}}
             value={selectedAdditionalCaratRange}
             // placeholder="From"
             style={{
@@ -518,7 +568,7 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={() => {}}
+            onChange={(e) => {}}
             value={selectedAdditionalCaratRange}
             // placeholder="To"
             style={{
@@ -736,10 +786,10 @@ const AdvanceSearch = () => {
           >
             <CustomInputField
               // style={className}
-              type="text"
-              name="{name}"
-              onChange={() => {}}
-              value={selectedAdditionalCaratRange}
+              type="number"
+              name="caratRangeFrom"
+              onChange={(e) => {setCaratRangeFrom(e.target.value)}}
+              value={caratRangeFrom}
               placeholder="From"
               style={{
                 input: styles.inputFieldStyles,
@@ -747,10 +797,10 @@ const AdvanceSearch = () => {
             />
             <CustomInputField
               // style={className}
-              type="text"
-              name="{name}"
-              onChange={() => {}}
-              value={selectedAdditionalCaratRange}
+              type="number"
+              name="caratRangeTO"
+              onChange={(e) => {setCaratRangeFrom(e.target.value)}}
+              value={caratRangeTo}
               placeholder="To"
               style={{
                 input: styles.inputFieldStyles,
@@ -859,7 +909,9 @@ const AdvanceSearch = () => {
           {renderSelectionButtons(
             labData,
             styles.commonSelectionStyle,
-            styles.activeOtherStyles
+            styles.activeOtherStyles,
+            selectedLab,
+            handleLabChange
           )}
         </div>
       </div>
@@ -872,7 +924,9 @@ const AdvanceSearch = () => {
           {renderSelectionButtons(
             brillianceData,
             styles.commonSelectionStyle,
-            styles.activeOtherStyles
+            styles.activeOtherStyles,
+            selectedHR,
+            handleHRChange
           )}
         </div>
       </div>
@@ -885,7 +939,9 @@ const AdvanceSearch = () => {
           {renderSelectionButtons(
             brillianceData,
             styles.commonSelectionStyle,
-            styles.activeOtherStyles
+            styles.activeOtherStyles,
+            selectedBrilliance,
+            handleBrillianceChange
           )}
         </div>
       </div>
@@ -928,10 +984,10 @@ const AdvanceSearch = () => {
         <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="discountFrom"
+            onChange={(e) => {setDiscountFrom(e.target.value)}}
+            value={discountFrom}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
@@ -939,10 +995,10 @@ const AdvanceSearch = () => {
           />
           <CustomInputField
             // style={className}
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="discountTo"
+            onChange={(e) => {setDiscountTo(e.target.value)}}
+            value={discountTo}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -959,10 +1015,10 @@ const AdvanceSearch = () => {
         <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="priceRangeFrom"
+            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            value={priceRangeFrom}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
@@ -970,10 +1026,10 @@ const AdvanceSearch = () => {
           />
           <CustomInputField
             // style={className}
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="priceRangeTo"
+            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            value={priceRangeTo}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -990,20 +1046,20 @@ const AdvanceSearch = () => {
         <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
           <CustomInputField
             // style={className}
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="pricePerCaratFrom"
+            onChange={(e) => {setPricePerCaratFrom(e.target.value)}}
+            value={pricePerCaratFrom}
             placeholder="From"
             style={{
               input: styles.inputFieldStyles,
             }}
           />
           <CustomInputField
-            type="text"
-            name="{name}"
-            onChange={() => {}}
-            value={selectedAdditionalCaratRange}
+            type="number"
+            name="pricePerCaratTo"
+            onChange={(e) => {setPricePerCaratTo(e.target.value)}}
+            value={pricePerCaratTo}
             placeholder="To"
             style={{
               input: styles.inputFieldStyles,
@@ -1059,7 +1115,13 @@ const AdvanceSearch = () => {
         >
           <div className={styles.filterSectionData}>
             <div className={styles.filterSection}>
-              {renderSelectionButtons(girdleData, "", styles.activeOtherStyles)}
+              {renderSelectionButtons(
+                girdleData,
+                "",
+                styles.activeOtherStyles,
+                selectedGirdle,
+                handleGirdleChange
+              )}
             </div>
           </div>
           <CustomInputlabel
@@ -1100,7 +1162,9 @@ const AdvanceSearch = () => {
             {renderSelectionButtons(
               girdleStepData,
               "",
-              styles.activeOtherStyles
+              styles.activeOtherStyles,
+              selectedGirdleStep2,
+              handleGirdleStep2Change
             )}
           </div>
         </div>

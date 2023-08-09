@@ -6,8 +6,12 @@
     padding: 10px, 10px, 10px, 5px;
     color: white;
     background-color: transparent;
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
 } 
 
 .defaultInputStyle:focus {
     outline: none;
 }
+
