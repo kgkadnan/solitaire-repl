@@ -4,7 +4,7 @@
 
 .dividerLine {
     height: 5px;
-    border: 0px solid #5d6a6a;
+    border: 0px solid hsl(var(--solitaire-quaternary));
     border-top-width: 1px;
 }
 
@@ -59,7 +59,7 @@
 }
 
 .labelPlainColor {
-    color: #ced2d2;
+    color: hsl(var(--solitaire-tertiary));
     font-weight: normal;
     font-size: 14px;
 }
@@ -69,11 +69,11 @@
 }
 
 .radioStyle {
-    border: 1px solid #8c7459;
+    border: 1px solid hsl(var(--solitaire-tertiary));
 }
 
 .radioLabel {
-    color: #ced2d2;
+    color: hsl(var(--solitaire-tertiary));
     padding: 5px;
     font-weight: normal;
 }
@@ -99,7 +99,7 @@
 }
 
 .parameterLabel {
-    color: #ced2d2;
+    color: hsl(var(--solitaire-tertiary));
     font-size: 12px;
     display: flex;
     align-items: end;
@@ -124,16 +124,16 @@
 
 .dropdownHeader {
     width: 200px;
-    color: #ced2d2;
+    color: hsl(var(--solitaire-tertiary));
 }
 
 .dropdownData {
-    background-color: #0c1f1f;
-    color: #ced2d2;
+    background-color: hsl(var(--solitaire-tertiary));
+    color: hsl(var(--solitaire-tertiary));
 }
 
 .dropdownData:hover {
-    background-color: #0c1f1f;
+    background-color: hsl(var(--solitaire-tertiary));
 }
 
 .advanceSearchHeader {
@@ -145,6 +145,7 @@
 .activeColorStyles{
     background-color: #8C7459;
     border: none;
+    // color: red
 }
 
 .activeOtherStyles{
@@ -152,6 +153,10 @@
 }
 
 .stepStyle{
-    color: #ced2d2;
+    color: hsl(var(--solitaire-tertiary));
     font-size: 14px;
+}
+
+.colorDataActiveStyle{
+    color: white;
 }

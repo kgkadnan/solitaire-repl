@@ -10,6 +10,7 @@ import { CustomInputField } from "@/components/Common/input-field";
 import { SelectionButton } from "@/components/Common/Buttons/selection-button/selection-button";
 import { CustomSelect } from "@/components/Common/select";
 import { RadioButton } from "@/components/Common/Buttons/radio-button/radio-button";
+import { ToggleButton } from "@/components/Common/toggle";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -414,9 +415,12 @@ const AdvanceSearch = () => {
   const handleShapeChange = (shape: string, index: number) => {
     if (shape.toLowerCase() === "all") {
       let filteredShape: string[] = shapeData.map((data) =>
-        data.title.toLowerCase() !== "all" ? data.title : ""
+         data.title 
       );
       setSelectedShape(filteredShape);
+      if(selectedShape.includes("All")){
+        setSelectedShape([])
+      }
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
@@ -540,6 +544,7 @@ const AdvanceSearch = () => {
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
           }`,
+          selectionButtonLabelStyle:`${relatedState === data && styles.colorDataActiveStyle}`
         }}
       />
     ));
@@ -616,7 +621,7 @@ const AdvanceSearch = () => {
     ));
   };
   return (
-    <div style={{ background: "#0C1F1F", width: "100%" }}>
+    <div>
       <div className={styles.advanceSearchHeader}>
         <CustomInputlabel
           htmlfor="text"
@@ -625,6 +630,7 @@ const AdvanceSearch = () => {
         />
         <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
+      <ToggleButton/>
       <hr className={styles.dividerLine} />
 
       <div className={styles.filterSection}>
@@ -799,7 +805,7 @@ const AdvanceSearch = () => {
               // style={className}
               type="number"
               name="caratRangeTO"
-              onChange={(e) => {setCaratRangeFrom(e.target.value)}}
+              onChange={(e) => {setCaratRangeTo(e.target.value)}}
               value={caratRangeTo}
               placeholder="To"
               style={{

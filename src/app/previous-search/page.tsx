@@ -4,6 +4,7 @@ import style from "./previous-search.module.scss";
 import EditIcon from "../../../public/assets/icons/edit.svg";
 import { CustomDisplayButton } from "@/components/Common/Buttons/display-button/display-button";
 import { CustomTable } from "@/components/Common/table/table";
+import { ToggleButton } from "@/components/Common/toggle";
 
 const PreviousSearch = () => {
   // Style classes and variables
@@ -93,6 +94,9 @@ const PreviousSearch = () => {
 
   return (
     <>
+    <div className="flex flex-end">
+      <ToggleButton />
+    </div>
       <CustomSearchCard
         cardData={cardData}
         checkboxData={checkboxData}
