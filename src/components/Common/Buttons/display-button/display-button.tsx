@@ -3,12 +3,13 @@ import React from "react";
 import { Button } from "../../../ui/button";
 import style from "./display-button.module.scss";
 
-interface DisplayButtonStyle {
+export interface DisplayButtonStyle {
   displayButtonStyle?: string;
   displayLabelStyle?: string;
 }
 
-interface DisplayBtnProps {
+export interface DisplayBtnProps {
+  id?: number;
   displayButtonLabel: string;
   displayButtonAllStyle?: DisplayButtonStyle;
   handleClick?: (color:string) => void;
