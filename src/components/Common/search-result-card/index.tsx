@@ -8,21 +8,19 @@ import {
   CardTitle,
 } from "../../ui/card";
 import Image, { StaticImageData } from "next/image";
-import Edit from "../../../../public/assets/icons/edit.png";
+import Edit from "../../../../public/assets/icons/edit.svg";
 import style from "./search-result-card.module.scss";
 
-interface ISearchCardStyleProps {
+export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
   cardHeaderContainerStyle?: string;
   cardHeaderTextStyle?: string;
   cardTitleStyle?: string;
   cardActionIconStyle?: string;
-  cardIconStyle?: string;
 }
 
-interface ICardDataProps {
+export interface ICardDataProps {
   stone?: string;
-  cardIcon?: StaticImageData;
   cardHeader: React.ReactNode;
   cardActionIcon?: StaticImageData;
   cardDescription?: React.ReactNode;
@@ -39,7 +37,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
   card: IImageContainerProps
 ) => {
   const {
-    cardIcon = Edit,
     cardHeader,
     cardActionIcon = Edit,
     cardDescription,
@@ -56,7 +53,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardHeaderContainerStyle,
     cardHeaderTextStyle,
     cardTitleStyle,
-    cardIconStyle,
     cardActionIconStyle,
   } = overriddenStyles;
 
@@ -67,26 +63,39 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
       >
         <div className={`${style.cardHeaderText} ${cardHeaderTextStyle}`}>
           <CardTitle className={`${style.cardTitle} ${cardTitleStyle}`}>
-            <Image
-              src={cardIcon}
-              alt={"card"}
-              className={`${style.cardIcon} ${cardIconStyle}`}
-            />
             {cardHeader}
           </CardTitle>
+          <CardDescription>{cardDescription}</CardDescription>
           {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
-          <Image
-            src={cardActionIcon}
-            alt={"edit"}
-            onClick={() => {
-              handleCardAction(stone);
-            }}
-            className={`${style.cardActionIcon} ${cardActionIconStyle}`}
-          />
+          {!defaultCardPosition && (
+            <Image
+              src={cardActionIcon}
+              alt={"edit"}
+              onClick={() => {
+                handleCardAction(stone);
+              }}
+              className={`${style.cardActionIcon} ${cardActionIconStyle}`}
+            />
+          )}
         </div>
-        <CardDescription>{cardDescription}</CardDescription>
+        <CardDescription
+          className={`${style.cardDescription} ${cardDescription}`}
+        >
+          {cardDescription}
+        </CardDescription>
       </CardHeader>
+
       {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
+      {defaultCardPosition && (
+        <Image
+          src={cardActionIcon}
+          alt={"edit"}
+          onClick={() => {
+            handleCardAction(stone);
+          }}
+          className={`${cardActionIconStyle}`}
+        />
+      )}
     </Card>
   );
 };

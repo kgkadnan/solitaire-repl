@@ -3,18 +3,14 @@ import React from "react";
 import { Checkbox } from "../../ui/checkbox";
 import styles from "./checkbox.module.scss";
 
-interface CheckboxItem {
+export interface CheckboxItem {
   checked: boolean;
   id: number;
 }
 
-interface style {
-  checkbox: string;
-}
-
 interface CustomCheckboxProps {
   data: CheckboxItem[];
-  style: style;
+  style?: string;
 }
 
 export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
@@ -27,7 +23,7 @@ export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
         return (
           <Checkbox
             key={item.id}
-            className={`${styles.defaultCheckbox} ${style.checkbox} `}
+            className={`${styles.defaultCheckbox} ${style} `}
           />
         );
       })}

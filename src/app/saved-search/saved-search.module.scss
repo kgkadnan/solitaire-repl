@@ -1,0 +1,79 @@
+/* Card Container */
+.searchCardContainer {
+  background-color: #061010;
+  width: 1220px;
+  height: 120px;
+  padding: 21px 26px 0px;
+  margin-top: 25px;
+}
+
+/* Header Styles */
+.searchHeader {
+  display: flex;
+  gap: 31px;
+}
+
+// .card-title
+.SearchCardTitle {
+  color: #ced2d2;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// .date-time
+.SearchDateTime {
+  color: #ced2d2;
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  letter-spacing: 0.5px;
+}
+
+/* Header Container */
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button Styles */
+.SearchButtonLabel {
+  color: #ced2d2;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.SearchButtonStyle {
+  margin-top: 25px;
+  border-radius: 2px;
+}
+
+//Table Styling
+.tableHeader {
+  color: #8c7459;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tableBody {
+  color: #ced2d2;
+  font-size: 14px;
+  font-weight: 300;
+}
+
+//CheckBox
+.checkboxStyle {
+  border-color: #5d6a6a;
+  width: 20px;
+  height: 20px;
+  justify-content: center;
+  align-items: center;
+  margin-right: 14px;
+}
+
+/* Checked Checkbox */
+.checkboxStyle input[type="checkbox"]:checked ~ .content {
+  color: #8c7459;
+  border-color: #8c7459;
+}
