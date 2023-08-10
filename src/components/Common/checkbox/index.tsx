@@ -1,38 +1,42 @@
 "use client";
 import React from "react";
-import { Checkbox } from "../../ui/checkbox";
 import styles from "./checkbox.module.scss";
+import { Checkbox } from "@/components/ui/checkbox";
 
 export interface CheckboxItem {
-  checked: boolean;
-  id: number;
+  checked?: boolean;
+  id: string;
+  handleCheck?: (checked: any) => void;
 }
 
 interface CustomCheckboxProps {
-  data: CheckboxItem[];
+  data: string;
+  onclick?: (e: any) => void;
+  isChecked?: string[];
   style?: string;
 }
 
 export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
   data,
   style,
+  onclick,
+  isChecked,
 }) => {
   return (
     <div className="flex items-center space-x-2">
-      {data.map((item) => {
-        return (
-          <Checkbox
-            key={item.id}
-            className={`${styles.defaultCheckbox} ${style} `}
-          />
-        );
-      })}
-      {/* <label
-        htmlFor="terms"
-        className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-      >
-        Accept terms and conditions
-      </label> */}
+      {/* {data.map((item) => {
+        console.log("isChecked", isChecked?.includes(item.id));
+        return ( */}
+      <Checkbox
+        key={data}
+        id={data}
+        checked={isChecked?.includes(data)}
+        onClick={onclick}
+        // onCheckedChange={item.handleCheck}
+        className={`${styles.defaultCheckbox} ${style} `}
+      />
+      {/* );
+      })} */}
     </div>
   );
 };
