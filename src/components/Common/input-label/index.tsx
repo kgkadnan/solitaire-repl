@@ -1,15 +1,15 @@
 import React from "react";
-import { Label } from "../../ui/label";
 import styles from "./input-lable.module.scss";
+import { Label } from "../../ui/label";
 
-interface style {
+interface LabelStyle {
   label: string;
 }
 
 interface InputLabelProps {
   htmlfor: string;
   label: string;
-  style: style;
+  style?: LabelStyle;
 }
 
 export const CustomInputlabel: React.FC<InputLabelProps> = ({
@@ -17,12 +17,11 @@ export const CustomInputlabel: React.FC<InputLabelProps> = ({
   label,
   style,
 }) => {
-  console.log("style", style);
   return (
     <>
       <Label
         htmlFor={htmlfor}
-        className={`${styles.defaultLableStyle} ${style.label} `}
+        className={`${styles.defaultLableStyle} ${style?.label} `}
       >
         {label}
       </Label>
