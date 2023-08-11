@@ -1,23 +1,23 @@
+"use client";
 import { CustomSearchCard } from "@/components/Common/search-card";
-import React from "react";
-import style from "./previous-search.module.scss";
+import React, { useState } from "react";
+import styles from "./previous-search.module.scss";
 import EditIcon from "../../../public/assets/icons/edit.svg";
 import { CustomDisplayButton } from "@/components/Common/Buttons/display-button/display-button";
 import { CustomTable } from "@/components/Common/table/table";
-import { ToggleButton } from "@/components/Common/toggle";
 
 const PreviousSearch = () => {
   // Style classes and variables
   const displayButtonStyles = {
-    displayLabelStyle: style.SearchButtonLabel,
-    displayButtonStyle: style.SearchButtonStyle,
+    displayLabelStyle: styles.SearchButtonLabel,
+    displayButtonStyle: styles.SearchButtonStyle,
   };
   const tableStyles = {
-    tableHeaderStyle: style.tableHeader,
-    tableBodyStyle: style.tableBody,
+    tableHeaderStyle: styles.tableHeader,
+    tableBodyStyle: styles.tableBody,
   };
   const cardStyles = {
-    cardContainerStyle: style.searchCardContainer,
+    cardContainerStyle: styles.searchCardContainer,
   };
 
   // Sample data
@@ -47,20 +47,20 @@ const PreviousSearch = () => {
       },
     ],
   };
-  let checkboxData = [
-    {
-      id: 1,
-      checked: false,
-    },
-  ];
+
+  const [isCheck, setIsCheck] = useState<string[]>([]);
+  const [isCheckAll, setIsCheckAll] = useState(false);
+
+  //Card Data
   const cardData = [
     {
+      cardId: "1",
       cardActionIcon: EditIcon,
       cardHeader: (
-        <div className={style.headerContainer}>
-          <div className={style.searchHeader}>
-            <p className={style.SearchCardTitle}>Round D 2carat</p>
-            <p className={style.SearchDateTime}>12-05-2023|10:12AM</p>
+        <div className={styles.headerContainer}>
+          <div className={styles.searchHeader}>
+            <p className={styles.SearchCardTitle}>Round D 2carat</p>
+            <p className={styles.SearchDateTime}>12-05-2023|10:12AM</p>
           </div>
           <CustomDisplayButton
             displayButtonAllStyle={displayButtonStyles}
@@ -73,12 +73,32 @@ const PreviousSearch = () => {
       ),
     },
     {
+      cardId: "2",
       cardActionIcon: EditIcon,
       cardHeader: (
-        <div className={style.headerContainer}>
-          <div className={style.searchHeader}>
-            <p className={style.SearchCardTitle}>Round D 2carat</p>
-            <p className={style.SearchDateTime}>12-05-2023|10:12AM</p>
+        <div className={styles.headerContainer}>
+          <div className={styles.searchHeader}>
+            <p className={styles.SearchCardTitle}>Round D 2carat</p>
+            <p className={styles.SearchDateTime}>12-05-2023|10:12AM</p>
+          </div>
+          <CustomDisplayButton
+            displayButtonAllStyle={displayButtonStyles}
+            displayButtonLabel="The price of the stones have been changed"
+          />
+        </div>
+      ),
+      cardContent: (
+        <CustomTable tableData={tableData} tableStyleClasses={tableStyles} />
+      ),
+    },
+    {
+      cardId: "3",
+      cardActionIcon: EditIcon,
+      cardHeader: (
+        <div className={styles.headerContainer}>
+          <div className={styles.searchHeader}>
+            <p className={styles.SearchCardTitle}>Round D 2carat</p>
+            <p className={styles.SearchDateTime}>12-05-2023|10:12AM</p>
           </div>
           <CustomDisplayButton
             displayButtonAllStyle={displayButtonStyles}
@@ -92,15 +112,48 @@ const PreviousSearch = () => {
     },
   ];
 
+  //Selecting Specific Checkbox
+  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id } = e.target;
+    let value = e.target.getAttribute("data-state");
+    setIsCheck([...isCheck, id]);
+    if (value?.toLowerCase() === "checked") {
+      console.log("not callld");
+      setIsCheck(isCheck.filter((item) => item !== id));
+    }
+  };
+
+  //Selecting All Checkbox Function
+  const handleSelectAllCheckbox = () => {
+    setIsCheckAll(!isCheckAll);
+    setIsCheck(cardData.map((li) => li.cardId));
+    if (isCheckAll) {
+      setIsCheck([]);
+    }
+  };
+
+  //Footer Button Data
+  const footerButtonData = [
+    { id: 1, displayButtonLabel: "Compare Stone", style: styles.transparent },
+    {
+      id: 2,
+      displayButtonLabel: "Find Matching Pair",
+      style: styles.transparent,
+    },
+    { id: 3, displayButtonLabel: "Add to Wishlist", style: styles.filled },
+    { id: 4, displayButtonLabel: "Add to Cart", style: styles.filled },
+  ];
+
   return (
     <>
-    <div className="flex flex-end">
-      <ToggleButton />
-    </div>
+      {/* Common CustomSearch Card for Saved Search */}
       <CustomSearchCard
         cardData={cardData}
-        checkboxData={checkboxData}
+        checkboxHandle={handleClick}
+        isChecked={isCheck}
         cardStyles={cardStyles}
+        footerButtonData={footerButtonData}
+        handleSelectAllCheckbox={handleSelectAllCheckbox}
       />
     </>
   );
