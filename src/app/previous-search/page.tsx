@@ -154,6 +154,7 @@ const PreviousSearch = () => {
         cardStyles={cardStyles}
         footerButtonData={footerButtonData}
         handleSelectAllCheckbox={handleSelectAllCheckbox}
+        headerHeading="Previous Search"
       />
     </>
   );

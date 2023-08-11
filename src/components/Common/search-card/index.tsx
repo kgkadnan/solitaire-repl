@@ -7,6 +7,7 @@ import React from "react";
 import { CustomCheckBox } from "@/components/Common/checkbox";
 import { CustomFooter } from "../footer";
 import CustomHeader from "../header";
+import { ToggleButton } from "../toggle";
 
 //footer buttonData interfrace
 export interface IfooterButtonData {
@@ -36,6 +37,7 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
 }) => {
   return (
     <>
+      <ToggleButton />
       <div className="container min-h-screen flex flex-col ">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-3">
