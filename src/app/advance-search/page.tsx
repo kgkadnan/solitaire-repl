@@ -1,16 +1,16 @@
 "use client";
-import { CustomInputlabel } from "@/components/Common/input-label";
+import { CustomInputlabel } from "@/components/common/input-label";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
 import CustomImageTile, {
   IImageTileProps,
-} from "@/components/Common/image-tile";
+} from "@/components/common/image-tile";
 import Round from "../../../public/assets/images/Round.png";
-import { CustomInputField } from "@/components/Common/input-field";
-import { SelectionButton } from "@/components/Common/Buttons/selection-button/selection-button";
-import { CustomSelect } from "@/components/Common/select";
-import { RadioButton } from "@/components/Common/Buttons/radio-button/radio-button";
-import { ToggleButton } from "@/components/Common/toggle";
+import { CustomInputField } from "@/components/common/input-field";
+import { SelectionButton } from "@/components/common/buttons/selection-button/selection-button";
+import { CustomSelect } from "@/components/common/select";
+import { RadioButton } from "@/components/common/buttons/radio-button/radio-button";
+import { ToggleButton } from "@/components/common/toggle";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -26,7 +26,7 @@ const AdvanceSearch = () => {
   >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
 
-  const [selectedGirdleStep, setSelectedGirdleStep] = useState("");
+  const [, setSelectedGirdleStep] = useState("");
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
   const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
     useState<string>("");
@@ -412,7 +412,7 @@ const AdvanceSearch = () => {
     }
   };
 
-  const handleShapeChange = (shape: string, index: number) => {
+  const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === "all") {
       let filteredShape: string[] = shapeData.map((data) =>
          data.title 
@@ -562,9 +562,8 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {setSelectedAditionalCaratRange(e.target.value)}}
             value={selectedAdditionalCaratRange}
-            // placeholder="From"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -573,9 +572,8 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {setSelectedAditionalCaratRange(e.target.value)}}
             value={selectedAdditionalCaratRange}
-            // placeholder="To"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -1034,7 +1032,7 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="priceRangeTo"
-            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            onChange={(e) => {setPriceRangeTo(e.target.value)}}
             value={priceRangeTo}
             placeholder="To"
             style={{

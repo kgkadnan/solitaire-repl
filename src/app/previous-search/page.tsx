@@ -1,10 +1,10 @@
 "use client";
-import { CustomSearchCard } from "@/components/Common/search-card";
+import { CustomSearchCard } from "@/components/common/search-card";
 import React, { useState } from "react";
 import styles from "./previous-search.module.scss";
 import EditIcon from "../../../public/assets/icons/edit.svg";
-import { CustomDisplayButton } from "@/components/Common/Buttons/display-button/display-button";
-import { CustomTable } from "@/components/Common/table/table";
+import { CustomDisplayButton } from "@/components/common/buttons/display-button/display-button";
+import { CustomTable } from "@/components/common/table/table";
 
 const PreviousSearch = () => {
   // Style classes and variables
