@@ -1,0 +1,21 @@
+.defaultInputStyle{
+    height: 40px;
+    outline: none;
+    border-bottom: 0.5px solid #8C7459;
+    font-size: 12px;
+    padding: 10px, 10px, 10px, 5px;
+    color: hsl(var(--solitaire-tertiary));
+    background-color: transparent;
+    -webkit-appearance: none;
+    margin: 0;
+    -moz-appearance: textfield;
+} 
+
+.defaultInputStyle::placeholder{
+    color: hsl(var(--solitaire-tertiary));
+}
+
+.defaultInputStyle:focus {
+    outline: none;
+}
+

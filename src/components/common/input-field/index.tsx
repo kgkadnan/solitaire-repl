@@ -8,10 +8,11 @@ interface style {
 }
 
 interface InputFieldProps {
-  style: style;
+  style?: style;
   type: string;
   value: string;
   name: string;
+  placeholder?:string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -21,15 +22,17 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   value,
   name,
   onChange,
+  placeholder
 }) => {
   return (
     <>
       <Input
-        className={`${styles.defaultInputStyle} ${style.input}`}
+        className={`${styles.defaultInputStyle} ${style?.input}`}
         type={type}
         value={value}
         name={name}
         onChange={onChange}
+        placeholder={placeholder}
       />
     </>
   );

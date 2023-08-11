@@ -16,7 +16,7 @@ export const Primary: Story = {
   args: {
     htmlfor: "id",
     label: "Enter Password",
-    style: {
+    overriddenStyles: {
       label: "text-solitaireQuaternary",
     },
   },

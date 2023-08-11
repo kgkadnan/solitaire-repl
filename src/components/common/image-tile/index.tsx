@@ -34,7 +34,7 @@ const CustomImageTile:React.FC<IImageContainerProps>=(imageProps: IImageContaine
         const { src, title } = tileData;
         return (
           <div
-            key={`image-tile-data-${index}`}
+            key={`image-tile-data-${title}`}
             className={`${style.imageTileContainer} ${
               overriddenStyles?.imageTileContainerStyles
             } ${selectedTile.includes(title) ? style.activeIndicator : " "}`}
