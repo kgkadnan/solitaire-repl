@@ -19,9 +19,10 @@ interface ISearchCardProps {
   cardData: ICardDataProps[];
   cardStyles: ISearchCardStyleProps;
   footerButtonData?: IfooterButtonData[];
-  checkboxHandle?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  isChecked: any;
+  checkboxHandle?: (e: any) => void;
+  isChecked: string[];
   handleSelectAllCheckbox: (e: any) => void;
+  headerHeading?: string;
 }
 
 export const CustomSearchCard: React.FC<ISearchCardProps> = ({
@@ -31,6 +32,7 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
   checkboxHandle,
   isChecked,
   handleSelectAllCheckbox,
+  headerHeading,
 }) => {
   return (
     <>
@@ -40,6 +42,7 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
           <CustomHeader
             handleSelectAllCheckbox={handleSelectAllCheckbox}
             searchCount={cardData.length}
+            heading={headerHeading}
           />
         </div>
 
@@ -51,7 +54,7 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
                 <div className="flex mt-6" key={index}>
                   <CustomCheckBox
                     data={items.cardId}
-                    onclick={checkboxHandle}
+                    onClick={checkboxHandle}
                     isChecked={isChecked}
                   />
                   <CustomSearchResultCard

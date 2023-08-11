@@ -113,12 +113,11 @@ const SavedSearch = () => {
   ];
 
   //Selecting Specific Checkbox
-  const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleClick = (e: any) => {
     const { id } = e.target;
     let value = e.target.getAttribute("data-state");
     setIsCheck([...isCheck, id]);
     if (value?.toLowerCase() === "checked") {
-      console.log("not callld");
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
@@ -144,11 +143,14 @@ const SavedSearch = () => {
     { id: 4, displayButtonLabel: "Add to Cart", style: styles.filled },
   ];
 
+  const heading = "Saved Search";
+
   return (
     <>
       {/* Common CustomSearch Card for Saved Search */}
       <CustomSearchCard
         cardData={cardData}
+        headerHeading={heading}
         checkboxHandle={handleClick}
         isChecked={isCheck}
         cardStyles={cardStyles}
