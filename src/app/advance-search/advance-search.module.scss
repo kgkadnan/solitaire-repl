@@ -1,0 +1,162 @@
+.label {
+    font-size: 16px;
+}
+
+.dividerLine {
+    height: 5px;
+    border: 0px solid hsl(var(--solitaire-quaternary));
+    border-top-width: 1px;
+}
+
+.filterSectionLabel {
+    width: 10%;
+    height: auto;
+    display: flex;
+}
+
+.filterSection {
+    display: flex;
+    padding: 5px 0px;
+}
+
+.filterSectionData {
+    width: 90%;
+}
+
+.colorFilterStyles {
+    border-radius: 30px;
+    width: 100px;
+}
+
+.whiteColorFilterStyle {
+    width: 45px;
+}
+
+.commonSelectionStyle {
+    width: 120px;
+}
+
+.filterWrapSection {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.otherParameterContainer {
+    width: 50%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.otherParameterHeader {
+    margin-top: 20px;
+    padding-bottom: 30px;
+    font-weight: normal;
+}
+
+.otherParameterTitle {
+    width: 20%;
+}
+
+.labelPlainColor {
+    color: hsl(var(--solitaire-tertiary));
+    font-weight: normal;
+    font-size: 14px;
+}
+
+.otherParameterDataContainer {
+    padding: 0px;
+}
+
+.radioStyle {
+    border: 1px solid hsl(var(--solitaire-tertiary));
+}
+
+.radioLabel {
+    color: hsl(var(--solitaire-tertiary));
+    padding: 5px;
+    font-weight: normal;
+}
+
+.caratRangeFilter {
+    display: flex;
+    flex-direction: column;
+}
+
+.inputFieldStyles {
+    width: 100px;
+}
+
+.parameterFilter {
+    // width: 25%;
+    justify-content: space-between;
+}
+
+.parameterContainer {
+    width: 220px;
+    margin-right: 20px;
+    margin-top: 30px;
+}
+
+.parameterLabel {
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 12px;
+    display: flex;
+    align-items: end;
+}
+
+.rangeFilter {
+    display: flex;
+    width: 220px;
+    justify-content: space-between;
+    margin-left: 10px;
+}
+
+.addCarat {
+    border: 1px solid #8c7459;
+    padding: 0px 30px;
+}
+
+.specificFilterAlign {
+    margin-top: 20px;
+    align-items: start;
+}
+
+.dropdownHeader {
+    width: 200px;
+    color: hsl(var(--solitaire-tertiary));
+}
+
+.dropdownData {
+    background-color: hsl(var(--solitaire-tertiary));
+    color: hsl(var(--solitaire-tertiary));
+}
+
+.dropdownData:hover {
+    background-color: hsl(var(--solitaire-tertiary));
+}
+
+.advanceSearchHeader {
+    display: flex;
+    justify-content: space-between;
+    padding: 30px 0px;
+}
+
+.activeColorStyles{
+    background-color: #8C7459;
+    border: none;
+    // color: red
+}
+
+.activeOtherStyles{
+    border: 1px solid #8C7459;
+}
+
+.stepStyle{
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 14px;
+}
+
+.colorDataActiveStyle{
+    color: white;
+}

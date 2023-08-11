@@ -1,33 +1,16 @@
 "use client";
-import React, { useState } from "react";
+import React from "react";
 import { CustomCheckBox } from ".";
-import styles from "./example.module.scss";
 
 export const Example = () => {
-  let data = [
-    {
-      id: 1,
-      checked: false,
-      // className: styles.checkbox,
-    },
-    {
-      id: 2,
-      checked: false,
-      // className: styles.checkbox,
-    },
-    {
-      id: 3,
-      checked: false,
-      // className: styles.checkbox,
-    },
-  ];
-  const className = {
-    checkbox: styles.checkbox,
-  };
+  const data = { id: "1" };
 
+  const handleClick = (e: any) => {
+    console.log("e.target", e.target);
+  };
   return (
     <div>
-      <CustomCheckBox data={data} style={className} />
+      <CustomCheckBox data={data.id} onClick={handleClick} />
     </div>
   );
 };

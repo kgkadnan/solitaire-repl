@@ -1,0 +1,72 @@
+/* Card Container */
+.searchCardContainer {
+  background-color: hsl(var(--solitaire-secondary));
+  width: 1220px;
+  height: 120px;
+  padding: 21px 26px 0px;
+}
+
+/* Header Styles */
+.searchHeader {
+  display: flex;
+  gap: 31px;
+}
+
+// .card-title
+.SearchCardTitle {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 16px;
+  font-weight: 500;
+}
+
+// .date-time
+.SearchDateTime {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 12px;
+  font-weight: 400;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  letter-spacing: 0.5px;
+}
+
+/* Header Container */
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button Styles */
+.SearchButtonLabel {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.SearchButtonStyle {
+  background-color: hsl(var(--solitaire-primary));
+  margin-top: 25px;
+  border-radius: 2px;
+}
+
+//Table Styling
+.tableHeader {
+  color: #8c7459;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.tableBody {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 300;
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+}
+.filled {
+  background-color: #8c7459;
+}

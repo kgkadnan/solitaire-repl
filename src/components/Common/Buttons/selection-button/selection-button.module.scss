@@ -1,11 +1,13 @@
 .btnDefaultStyle{
-    background-color: #0C1F1F;
-    border: "solid 1px #fff";
+    background-color: transparent;
+    border: 0.25px solid #5D6A6A;
+    margin: 10px;
+    border-radius: 5px;
 }
 
 .labelDefaultStyle{
     font-weight: 300;
-    color: "#fff";
+    color: hsl(var(--solitaire-tertiary));
 }
 
 

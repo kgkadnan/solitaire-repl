@@ -17,11 +17,18 @@ module.exports = {
     },
     extend: {
       colors: {
-        primaryColor: "#8C7459",
+        //*********Customize**************
+        solitairePrimary: "hsl(var(--solitaire-primary))",
+        solitaireSecondary: "hsl(var(--solitaire-secondary))",
+        solitaireTertiary: "hsl(var(--solitaire-tertiary))",
+        solitaireQuaternary: "hsl(var(--solitaire-quaternary))",
+        solitaireOutline: "hsl(var(--solitaire-outline))",
+        //********************* */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
         background: "hsl(var(--background))",
+        backgroundDark: "hsl(var(--background-dark))",
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -70,6 +77,9 @@ module.exports = {
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+      },
+      fontFamily: {
+        'custom': ['Manrope', 'sans-serif'],
       },
     },
   },

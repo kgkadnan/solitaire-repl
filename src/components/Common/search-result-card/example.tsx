@@ -2,19 +2,23 @@ import React from 'react'
 import CustomSearchResultCard from '.'
 import Edit from "../../../../public/assets/icons/edit.png";
 import ImageTileExample from '../image-tile/example';
+import overriddenStyles from "./example.module.scss"
+
+
 
 const SearchResultCardExample=()=> {
     const cardData = {
+      cardId:"1",
         cardIcon: Edit,
         cardhandleIcon:Edit,
-        cardHeader:<p>header</p>,
+        cardHeader:<p style={{color:"red"}}>header</p>,
         cardDescription:<p>desc</p>,
         cardContent:<ImageTileExample/>,
         
         
       }
   return (
-    <CustomSearchResultCard cardData={cardData} defaultCardPosition={false}/>
+    <CustomSearchResultCard cardData={cardData} defaultCardPosition={false} />
   )
 }
 
