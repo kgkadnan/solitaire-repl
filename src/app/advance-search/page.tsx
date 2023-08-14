@@ -39,11 +39,11 @@ const AdvanceSearch = () => {
   );
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
   const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
-  
+
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
-  
+
   const [priceRangeFrom, setPriceRangeFrom] = useState("");
   const [priceRangeTo, setPriceRangeTo] = useState("");
   const [discountFrom, setDiscountFrom] = useState("");
@@ -53,8 +53,6 @@ const AdvanceSearch = () => {
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
 
-  
-  
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -240,7 +238,7 @@ const AdvanceSearch = () => {
     "Fancy light",
     "Fancy",
     "Fancy dark",
-    "fancy intense",
+    "Fancy intense",
     "Fancy vivid",
     "Fancy deep",
     "Very light",
@@ -414,12 +412,10 @@ const AdvanceSearch = () => {
 
   const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === "all") {
-      let filteredShape: string[] = shapeData.map((data) =>
-         data.title 
-      );
+      let filteredShape: string[] = shapeData.map((data) => data.title);
       setSelectedShape(filteredShape);
-      if(selectedShape.includes("All")){
-        setSelectedShape([])
+      if (selectedShape.includes("All")) {
+        setSelectedShape([]);
       }
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
@@ -508,7 +504,6 @@ const AdvanceSearch = () => {
     }
   };
 
-
   const handleLabChange = (data: string) => {
     handleFilterChange(data, selectedLab, setSelectedLab);
   };
@@ -518,7 +513,6 @@ const AdvanceSearch = () => {
   const handleBrillianceChange = (data: string) => {
     handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
   };
-
 
   const handleGirdleStepChange = (radioValue: string) => {
     setSelectedGirdleStep(radioValue);
@@ -530,7 +524,8 @@ const AdvanceSearch = () => {
     className?: string,
     activeStyle?: string,
     relatedState?: string | string[],
-    handleChange?: (change: string) => void
+    handleChange?: (change: string) => void,
+    highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
       <SelectionButton
@@ -544,7 +539,11 @@ const AdvanceSearch = () => {
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
           }`,
-          selectionButtonLabelStyle:`${relatedState === data && styles.colorDataActiveStyle}`
+          selectionButtonLabelStyle: `${
+            highlightIndicator &&
+            relatedState === data &&
+            styles.colorDataActiveStyle
+          }`,
         }}
       />
     ));
@@ -562,7 +561,9 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {setSelectedAditionalCaratRange(e.target.value)}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
             style={{
               input: styles.inputFieldStyles,
@@ -572,7 +573,9 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {setSelectedAditionalCaratRange(e.target.value)}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
             style={{
               input: styles.inputFieldStyles,
@@ -628,7 +631,7 @@ const AdvanceSearch = () => {
         />
         <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
-      <ToggleButton/>
+      <ToggleButton />
       <hr className={styles.dividerLine} />
 
       <div className={styles.filterSection}>
@@ -659,7 +662,8 @@ const AdvanceSearch = () => {
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
-              handleColorChange
+              handleColorChange,
+              true
             )}
           </div>
           <div>
@@ -792,7 +796,9 @@ const AdvanceSearch = () => {
               // style={className}
               type="number"
               name="caratRangeFrom"
-              onChange={(e) => {setCaratRangeFrom(e.target.value)}}
+              onChange={(e) => {
+                setCaratRangeFrom(e.target.value);
+              }}
               value={caratRangeFrom}
               placeholder="From"
               style={{
@@ -803,7 +809,9 @@ const AdvanceSearch = () => {
               // style={className}
               type="number"
               name="caratRangeTO"
-              onChange={(e) => {setCaratRangeTo(e.target.value)}}
+              onChange={(e) => {
+                setCaratRangeTo(e.target.value);
+              }}
               value={caratRangeTo}
               placeholder="To"
               style={{
@@ -990,7 +998,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="discountFrom"
-            onChange={(e) => {setDiscountFrom(e.target.value)}}
+            onChange={(e) => {
+              setDiscountFrom(e.target.value);
+            }}
             value={discountFrom}
             placeholder="From"
             style={{
@@ -1001,7 +1011,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="discountTo"
-            onChange={(e) => {setDiscountTo(e.target.value)}}
+            onChange={(e) => {
+              setDiscountTo(e.target.value);
+            }}
             value={discountTo}
             placeholder="To"
             style={{
@@ -1021,7 +1033,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="priceRangeFrom"
-            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            onChange={(e) => {
+              setPriceRangeFrom(e.target.value);
+            }}
             value={priceRangeFrom}
             placeholder="From"
             style={{
@@ -1032,7 +1046,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="priceRangeTo"
-            onChange={(e) => {setPriceRangeTo(e.target.value)}}
+            onChange={(e) => {
+              setPriceRangeTo(e.target.value);
+            }}
             value={priceRangeTo}
             placeholder="To"
             style={{
@@ -1052,7 +1068,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="pricePerCaratFrom"
-            onChange={(e) => {setPricePerCaratFrom(e.target.value)}}
+            onChange={(e) => {
+              setPricePerCaratFrom(e.target.value);
+            }}
             value={pricePerCaratFrom}
             placeholder="From"
             style={{
@@ -1062,7 +1080,9 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="number"
             name="pricePerCaratTo"
-            onChange={(e) => {setPricePerCaratTo(e.target.value)}}
+            onChange={(e) => {
+              setPricePerCaratTo(e.target.value);
+            }}
             value={pricePerCaratTo}
             placeholder="To"
             style={{

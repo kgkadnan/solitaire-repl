@@ -18,7 +18,6 @@ export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
 }) => {
   return (
     <div className="flex items-center space-x-2">
-     
       <Checkbox
         key={data}
         id={data}
