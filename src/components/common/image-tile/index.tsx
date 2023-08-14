@@ -46,6 +46,7 @@ const CustomImageTile:React.FC<IImageContainerProps>=(imageProps: IImageContaine
               src={src}
               alt={title}
               className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+             
             />
             <div
               className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}

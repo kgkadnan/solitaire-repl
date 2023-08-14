@@ -1,4 +1,4 @@
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "../../ui/checkbox";
 import React from "react";
 
 interface CustomHeaderProps {

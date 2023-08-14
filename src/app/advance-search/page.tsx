@@ -1,16 +1,16 @@
 "use client";
-import { CustomInputlabel } from "@/components/common/input-label";
+import { CustomInputlabel } from "../../components/common/input-label";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
 import CustomImageTile, {
   IImageTileProps,
 } from "@/components/common/image-tile";
 import Round from "../../../public/assets/images/Round.png";
-import { CustomInputField } from "@/components/common/input-field";
-import { SelectionButton } from "@/components/common/buttons/selection-button/selection-button";
-import { CustomSelect } from "@/components/common/select";
-import { RadioButton } from "@/components/common/buttons/radio-button/radio-button";
-import { ToggleButton } from "@/components/common/toggle";
+import { CustomInputField } from "../../components/common/input-field";
+import { SelectionButton } from "../../components/common/buttons/selection-button/selection-button";
+import { CustomSelect } from "../../components/common/select";
+import { RadioButton } from "../../components/common/buttons/radio-button/radio-button";
+import { ToggleButton } from "../../components/common/toggle";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -1124,7 +1124,7 @@ const AdvanceSearch = () => {
         </div>
       </div>
 
-      <div className={styles.filterSection}>
+      <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
         {" "}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1138,7 +1138,7 @@ const AdvanceSearch = () => {
           className={styles.filterSectionData}
         >
           <div className={styles.filterSectionData}>
-            <div className={styles.filterSection}>
+            <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
               {renderSelectionButtons(
                 girdleData,
                 "",

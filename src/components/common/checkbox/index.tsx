@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./checkbox.module.scss";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "../../ui/checkbox";
 
 interface CustomCheckboxProps {
   data: string;

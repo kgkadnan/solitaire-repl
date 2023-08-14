@@ -2,9 +2,9 @@
 import CustomSearchResultCard, {
   ICardDataProps,
   ISearchCardStyleProps,
-} from "@/components/common/search-result-card";
+} from "../search-result-card";
 import React from "react";
-import { CustomCheckBox } from "@/components/common/checkbox";
+import { CustomCheckBox } from "../checkbox";
 import { CustomFooter } from "../footer";
 import CustomHeader from "../header";
 import { ToggleButton } from "../toggle";
@@ -49,10 +49,9 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
         </div>
 
         {/* Custom Card and Checkbox map */}
-        <div className="flex-grow overflow-y-auto">
-          {cardData.map((items, index) => {
+        <div className="flex-grow overflow-y-auto" key={headerHeading}>
+          {cardData.map((items) => {
             return (
-              <>
                 <div className="flex mt-6" key={`${items.cardId}`}>
                   <CustomCheckBox
                     data={items.cardId}
@@ -65,7 +64,6 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
                     defaultCardPosition={false}
                   />
                 </div>
-              </>
             );
           })}
         </div>
