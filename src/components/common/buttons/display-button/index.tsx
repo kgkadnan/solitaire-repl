@@ -3,12 +3,13 @@ import React from "react";
 import { Button } from "../../../ui/button";
 import style from "./display-button.module.scss";
 
+// Define interfaces for styling and component props
 export interface DisplayButtonStyle {
   displayButtonStyle?: string;
   displayLabelStyle?: string;
 }
 
-export interface DisplayBtnProps {
+export interface DisplayButtonProps {
   id?: number;
   displayButtonLabel: string;
   displayButtonAllStyle?: DisplayButtonStyle;
@@ -16,7 +17,8 @@ export interface DisplayBtnProps {
   color?: string;
 }
 
-export const CustomDisplayButton: React.FC<DisplayBtnProps> = ({
+// CustomDisplayButton component definition
+export const CustomDisplayButton: React.FC<DisplayButtonProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
   handleClick = () => {},
@@ -24,6 +26,7 @@ export const CustomDisplayButton: React.FC<DisplayBtnProps> = ({
 }) => {
   return (
     <>
+      {/* Button component with styles and click event */}
       <Button
         data-testid="display-button"
         className={`${style?.defaultStyle} ${displayButtonAllStyle?.displayButtonStyle}`}
@@ -31,6 +34,7 @@ export const CustomDisplayButton: React.FC<DisplayBtnProps> = ({
           handleClick(color);
         }}
       >
+        {/* Display button label with optional styling */}
         <div
           data-testid="display-button-label"
           className={displayButtonAllStyle?.displayLabelStyle}

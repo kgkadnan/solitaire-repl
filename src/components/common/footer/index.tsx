@@ -1,5 +1,5 @@
 import React from "react";
-import { CustomDisplayButton } from "../Buttons/display-button/display-button";
+import { CustomDisplayButton } from "../Buttons/display-button";
 import styles from "./footer.module.scss";
 import { IfooterButtonData } from "../search-card";
 

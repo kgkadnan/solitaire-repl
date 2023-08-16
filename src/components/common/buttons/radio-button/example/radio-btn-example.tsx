@@ -1,10 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { RadioButton } from "../radio-button";
+import { CustomRadioButton } from "..";
 import style from "./example.module.scss";
 
-export const RadioBtnExample = () => {
+export const RadioButtonExample = () => {
   const [selectedValue, setSelectedValue] = useState("");
 
   const handleRadioChange = (radioValue: string) => {
@@ -18,7 +18,7 @@ export const RadioBtnExample = () => {
 
   return (
     <>
-      <RadioButton
+      <CustomRadioButton
         radioData={[
           {
             id: "1",
