@@ -1,4 +1,4 @@
-import { CustomTable } from "../../../../components/Common/table/table";
+import { CustomTable } from "../../../components/Common/table/table";
 import { render, screen } from "@testing-library/react";
 
 describe("CustomTable component", () => {
