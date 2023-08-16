@@ -1,7 +1,8 @@
-import type { StorybookConfig } from "@storybook/nextjs";
+import path from "path";
 
-const config: StorybookConfig = {
-  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+module.exports = {
+  stories: ["../src/**/*.mdx", "../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"], // Configure story loading patterns
+
   addons: [
     "@storybook/addon-links",
     "@storybook/addon-essentials",
@@ -15,5 +16,39 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
+  parameters: {
+    backgrounds: {
+      default: "light",
+      values: [
+        { name: "light", value: "#ffffff" },
+        { name: "dark", value: "#333333" },
+      ],
+    },
+  },
+
+  // Add framework configuration if applicable
+  // framework: '@storybook/react',
+
+  // Typescript configuration
+  // typescript: {
+  //   check: false, // Disable TypeScript type checking
+  // },
+
+  // Custom webpack configuration
+  webpackFinal: async (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      "@": path.resolve(__dirname, "../src"),
+    };
+
+    // Modify Webpack configuration further if needed
+
+    return config;
+  },
+
+  // Custom managerWebpack configuration
+  // managerWebpack: async (config) => {
+  //   // Modify Webpack configuration for the Storybook UI
+  //   return config;
+  // },
 };
-export default config;

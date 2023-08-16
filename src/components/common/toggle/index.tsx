@@ -1,7 +1,7 @@
 "use client";
 import React, { useEffect } from "react";
 import { useTheme } from "next-themes";
-import { Switch } from "../../ui/switch";
+import { Switch } from "@/components/ui/switch";
 
 export const ToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();

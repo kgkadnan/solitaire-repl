@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { CustomSearchCard } from "../../../components/common/search-card";
+import { CustomSearchCard } from "@/components/common/search-card";
 jest.mock("next/image", () => ({
   __esModule: true,
   default: (
