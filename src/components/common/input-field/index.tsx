@@ -3,16 +3,16 @@ import React, { ChangeEvent } from "react";
 import { Input } from "../../ui/input";
 import styles from "./input-field.module.scss";
 
-interface style {
+interface IInputStyle {
   input: string;
 }
 
 interface InputFieldProps {
-  style?: style;
+  style?: IInputStyle;
   type: string;
   value: string;
   name: string;
-  placeholder?:string;
+  placeholder?: string;
   onChange: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
@@ -22,11 +22,12 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   value,
   name,
   onChange,
-  placeholder
+  placeholder,
 }) => {
   return (
     <>
       <Input
+        data-testid="custom-input"
         className={`${styles.defaultInputStyle} ${style?.input}`}
         type={type}
         value={value}

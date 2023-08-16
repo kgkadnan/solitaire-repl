@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import styles from "./checkbox.module.scss";
-import { Checkbox } from "@/components/ui/checkbox";
+import { Checkbox } from "../../../components/ui/checkbox";
 
 interface CustomCheckboxProps {
   data: string;
@@ -22,6 +22,7 @@ export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
         console.log("isChecked", isChecked?.includes(item.id));
         return ( */}
       <Checkbox
+        data-testid="custom-checkbox"
         key={data}
         id={data}
         checked={isChecked?.includes(data)}

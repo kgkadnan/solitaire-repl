@@ -11,7 +11,11 @@ export const Example = () => {
 
   return (
     <div>
-      <CustomInputlabel htmlfor="text" label="Password" style={className} />
+      <CustomInputlabel
+        htmlfor="text"
+        label="Password"
+        overriddenStyles={className}
+      />
     </div>
   );
 };
