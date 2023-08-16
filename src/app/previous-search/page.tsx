@@ -1,10 +1,10 @@
 "use client";
-import { CustomSearchCard } from "@components/common/search-card";
 import React, { useState } from "react";
 import styles from "./previous-search.module.scss";
 import EditIcon from "@public/assets/icons/edit.svg";
-import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomDisplayButton } from "@/components/Common/buttons/display-button";
+import { CustomSearchCard } from "@/components/common/search-card";
+import { CustomTable } from "@/components/common/table/table";
 
 const PreviousSearch = () => {
   // Style classes and variables
@@ -18,6 +18,12 @@ const PreviousSearch = () => {
   };
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
+  };
+
+  const [search, setSearch] = useState<string>("");
+
+  const handleSearch = (e: any) => {
+    setSearch(e.target.value);
   };
 
   // Sample data
@@ -144,6 +150,14 @@ const PreviousSearch = () => {
     { id: 4, displayButtonLabel: "Add to Cart", style: styles.filled },
   ];
 
+  const headerData = {
+    headerHeading: "Previous Search",
+    handleSelectAllCheckbox: handleSelectAllCheckbox,
+    searchCount: cardData.length,
+    handleSearch: handleSearch,
+    searchValue: search,
+  };
+
   return (
     <>
       {/* Common CustomSearch Card for Saved Search */}
@@ -153,8 +167,7 @@ const PreviousSearch = () => {
         isChecked={isCheck}
         cardStyles={cardStyles}
         footerButtonData={footerButtonData}
-        handleSelectAllCheckbox={handleSelectAllCheckbox}
-        headerHeading="Previous Search"
+        headerData={headerData}
       />
     </>
   );
