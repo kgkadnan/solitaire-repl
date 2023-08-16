@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../../ui/table";
+} from "@components/ui/table";
 import React from "react";
 
 // Interface for the data of the table

@@ -1,16 +1,19 @@
 "use client";
-import { CustomInputlabel } from "@/components/Common/input-label";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
+
+import Round from "@public/assets/images/Round.png";
 import CustomImageTile, {
   IImageTileProps,
-} from "@/components/Common/image-tile";
-import Round from "../../../public/assets/images/Round.png";
-import { CustomInputField } from "@/components/Common/input-field";
-import { CustomSelectionButton } from "@/components/Common/Buttons/selection-button";
-import { CustomSelect } from "@/components/Common/select";
-import { CustomRadioButton } from "@/components/Common/Buttons/radio-button";
-import { ToggleButton } from "@/components/Common/toggle";
+} from "@components/common/image-tile";
+import { SelectionButton } from "@components/common/buttons/selection-button/selection-button";
+import { CustomInputlabel } from "@components/common/input-label";
+import { CustomInputField } from "@components/common/input-field";
+import { ToggleButton } from "@components/common/toggle";
+import { RadioButton } from "@components/common/buttons/radio-button/radio-button";
+import { CustomSelect } from "@components/common/select";
+import { CustomSelectionButton } from "@components/Common/Buttons/selection-button";
+import { CustomRadioButton } from "@components/Common/Buttons/radio-button";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -26,7 +29,7 @@ const AdvanceSearch = () => {
   >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
 
-  const [selectedGirdleStep, setSelectedGirdleStep] = useState("");
+  const [, setSelectedGirdleStep] = useState("");
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
   const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
     useState<string>("");
@@ -238,7 +241,7 @@ const AdvanceSearch = () => {
     "Fancy light",
     "Fancy",
     "Fancy dark",
-    "fancy intense",
+    "Fancy intense",
     "Fancy vivid",
     "Fancy deep",
     "Very light",
@@ -410,7 +413,7 @@ const AdvanceSearch = () => {
     }
   };
 
-  const handleShapeChange = (shape: string, index: number) => {
+  const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === "all") {
       let filteredShape: string[] = shapeData.map((data) => data.title);
       setSelectedShape(filteredShape);
@@ -524,7 +527,8 @@ const AdvanceSearch = () => {
     className?: string,
     activeStyle?: string,
     relatedState?: string | string[],
-    handleChange?: (change: string) => void
+    handleChange?: (change: string) => void,
+    highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
       <CustomSelectionButton
@@ -539,7 +543,9 @@ const AdvanceSearch = () => {
               : relatedState === data && activeStyle
           }`,
           selectionButtonLabelStyle: `${
-            relatedState === data && styles.colorDataActiveStyle
+            highlightIndicator &&
+            relatedState === data &&
+            styles.colorDataActiveStyle
           }`,
         }}
       />
@@ -558,9 +564,10 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
-            // placeholder="From"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -569,9 +576,10 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
-            // placeholder="To"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -657,7 +665,8 @@ const AdvanceSearch = () => {
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
-              handleColorChange
+              handleColorChange,
+              true
             )}
           </div>
           <div>
@@ -1041,7 +1050,7 @@ const AdvanceSearch = () => {
             type="number"
             name="priceRangeTo"
             onChange={(e) => {
-              setPriceRangeFrom(e.target.value);
+              setPriceRangeTo(e.target.value);
             }}
             value={priceRangeTo}
             placeholder="To"
@@ -1118,7 +1127,7 @@ const AdvanceSearch = () => {
         </div>
       </div>
 
-      <div className={styles.filterSection}>
+      <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
         {" "}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1132,7 +1141,9 @@ const AdvanceSearch = () => {
           className={styles.filterSectionData}
         >
           <div className={styles.filterSectionData}>
-            <div className={styles.filterSection}>
+            <div
+              className={`${styles.filterSection} ${styles.filterWrapSection}`}
+            >
               {renderSelectionButtons(
                 girdleData,
                 "",

@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { CustomDisplayButton } from "../../../../components/Common/Buttons/display-button";
+import { CustomDisplayButton } from "@components/Common/Buttons/display-button";
 
 describe("CustomDisplayButton Component", () => {
   // Mock click handler

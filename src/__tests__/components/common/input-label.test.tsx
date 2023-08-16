@@ -1,6 +1,6 @@
 import React from "react";
 import { logRoles, render } from "@testing-library/react";
-import { CustomInputlabel } from "../../../../components/Common/input-label/index";
+import { CustomInputlabel } from "@/components/common/input-label";
 
 describe("CustomInputlabel", () => {
   it("renders label correctly with overridden style", () => {

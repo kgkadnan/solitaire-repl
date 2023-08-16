@@ -1,6 +1,6 @@
 "use client";
-import { Label } from "../../../ui/label";
-import { RadioGroup, RadioGroupItem } from "../../../ui/radio-group";
+import { Label } from "@components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
 import React from "react";
 import style from "./radio-button.module.scss";
 
