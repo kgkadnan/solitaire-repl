@@ -3,7 +3,7 @@ import { CustomSearchCard } from "@components/common/search-card";
 import React, { useState } from "react";
 import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomDisplayButton } from "@components/common/buttons/display-button";
 import EditIcon from "@public/assets/icons/edit.svg";
 
 const SavedSearch = () => {

@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import styles from "./previous-search.module.scss";
 import EditIcon from "@public/assets/icons/edit.svg";
 import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomDisplayButton } from "@components/common/buttons/display-button";
 
+// PreviousSearch component definition
 const PreviousSearch = () => {
   // Style classes and variables
   const displayButtonStyles = {
@@ -48,6 +49,7 @@ const PreviousSearch = () => {
     ],
   };
 
+  // State for checkbox selection
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
@@ -112,18 +114,17 @@ const PreviousSearch = () => {
     },
   ];
 
-  //Selecting Specific Checkbox
+  // Function for handling individual checkbox selection
   const handleClick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id } = e.target;
     let value = e.target.getAttribute("data-state");
     setIsCheck([...isCheck, id]);
     if (value?.toLowerCase() === "checked") {
-      console.log("not callld");
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
 
-  //Selecting All Checkbox Function
+  // Function for handling "Select All" checkbox
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
     setIsCheck(cardData.map((li) => li.cardId));
@@ -134,19 +135,12 @@ const PreviousSearch = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Compare Stone", style: styles.transparent },
-    {
-      id: 2,
-      displayButtonLabel: "Find Matching Pair",
-      style: styles.transparent,
-    },
-    { id: 3, displayButtonLabel: "Add to Wishlist", style: styles.filled },
-    { id: 4, displayButtonLabel: "Add to Cart", style: styles.filled },
+    { id: 4, displayButtonLabel: "Delete", style: styles.filled },
   ];
 
   return (
     <>
-      {/* Common CustomSearch Card for Saved Search */}
+      {/* Render the CustomSearchCard component */}
       <CustomSearchCard
         cardData={cardData}
         checkboxHandle={handleClick}

@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
 
 import Round from "@public/assets/images/Round.png";
-import CustomImageTile, { IImageTileProps } from "@components/common/image-tile";
-import { SelectionButton } from "@components/common/buttons/selection-button/selection-button";
+import CustomImageTile, {
+  IImageTileProps,
+} from "@components/common/image-tile";
 import { CustomInputlabel } from "@components/common/input-label";
 import { CustomInputField } from "@components/common/input-field";
 import { ToggleButton } from "@components/common/toggle";
-import { RadioButton } from "@components/common/buttons/radio-button/radio-button";
 import { CustomSelect } from "@components/common/select";
+import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
+import { CustomRadioButton } from "@/components/common/buttons/radio-button";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -527,7 +529,7 @@ const AdvanceSearch = () => {
     highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
-      <SelectionButton
+      <CustomSelectionButton
         key={data}
         selectionButtonLabel={data}
         handleClick={handleChange}
@@ -817,7 +819,7 @@ const AdvanceSearch = () => {
                 input: styles.inputFieldStyles,
               }}
             />
-            <SelectionButton
+            <CustomSelectionButton
               selectionButtonLabel={"Add Carat"}
               handleClick={() => {}}
               selectionButtonAllStyles={{
@@ -1137,7 +1139,9 @@ const AdvanceSearch = () => {
           className={styles.filterSectionData}
         >
           <div className={styles.filterSectionData}>
-            <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
+            <div
+              className={`${styles.filterSection} ${styles.filterWrapSection}`}
+            >
               {renderSelectionButtons(
                 girdleData,
                 "",
@@ -1153,7 +1157,7 @@ const AdvanceSearch = () => {
             overriddenStyles={{ label: styles.stepStyle }}
           />
           <div style={{ margin: "10px" }}>
-            <RadioButton
+            <CustomRadioButton
               radioData={[
                 {
                   id: "1",

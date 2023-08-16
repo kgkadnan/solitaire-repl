@@ -4,7 +4,7 @@ import React from "react";
 import style from "./example.module.scss";
 import { CustomDisplayButton } from "..";
 
-export const DisBtnExample = () => {
+export const DisplayButtonExample = () => {
   const handleClick = () => {
     console.log("It'sworing");
   };
