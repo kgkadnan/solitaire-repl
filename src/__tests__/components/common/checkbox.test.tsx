@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { CustomCheckBox } from "../../../../components/Common/checkbox/index";
+import { CustomCheckBox } from "@/components/common/checkbox";
 
 test("renders custom checkbox correctly", () => {
   //mock props

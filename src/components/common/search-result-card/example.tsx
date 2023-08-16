@@ -1,6 +1,6 @@
 import React from 'react'
 import CustomSearchResultCard from '.'
-import Edit from "../../../../public/assets/icons/edit.svg";
+import Edit from "@public/assets/icons/edit.svg";
 import ImageTileExample from '../image-tile/example';
 import overriddenStyles from "./example.module.scss"
 

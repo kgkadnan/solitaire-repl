@@ -1,8 +1,8 @@
 import React from "react";
 
 import userEvent from "@testing-library/user-event";
-import { CustomSelect } from "../../../../components/Common/select/index"; // Assuming the component is in a file named CustomSelect.tsx
 import { render } from "@testing-library/react";
+import { CustomSelect } from "@components/common/select";
 
 describe("CustomSelect Component", () => {
   const mockData = [

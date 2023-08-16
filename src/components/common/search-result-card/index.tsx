@@ -2,9 +2,9 @@
 import React from "react";
 
 import Image, { StaticImageData } from "next/image";
-import Edit from "../../../../public/assets/icons/edit.svg";
+import Edit from "@public/assets/icons/edit.svg";
 import style from "./search-result-card.module.scss";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@components/ui/card";
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;

@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
 import { render } from "@testing-library/react";
-import AdvanceSearch from "@/app/advance-search/page";
+import AdvanceSearch from "@app/advance-search/page";
 
 jest.mock("next/image", () => ({
   __esModule: true,

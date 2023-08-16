@@ -3,7 +3,7 @@
 "use client";
 import React from "react";
 import style from "./selection-button.module.scss";
-import { Button } from "@/components/ui/button";
+import { Button } from "@components/ui/button";
 
 interface SelectionButtonStyle {
   selectionButtonStyle: string;

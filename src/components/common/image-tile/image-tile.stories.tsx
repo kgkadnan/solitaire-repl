@@ -1,6 +1,6 @@
 "use client";
 import CustomImageTile, { IImageTileProps } from ".";
-import Round from "../../../../public/assets/images/Round.png";
+import Round from "@public/assets/images/Round.png";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {

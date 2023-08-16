@@ -2,14 +2,14 @@
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
 
-import Round from "../../../public/assets/images/Round.png";
-import CustomImageTile, { IImageTileProps } from "@/components/common/image-tile";
-import { SelectionButton } from "@/components/common/buttons/selection-button/selection-button";
-import { CustomInputlabel } from "@/components/common/input-label";
-import { CustomInputField } from "@/components/common/input-field";
-import { ToggleButton } from "@/components/common/toggle";
-import { RadioButton } from "@/components/common/buttons/radio-button/radio-button";
-import { CustomSelect } from "@/components/common/select";
+import Round from "@public/assets/images/Round.png";
+import CustomImageTile, { IImageTileProps } from "@components/common/image-tile";
+import { SelectionButton } from "@components/common/buttons/selection-button/selection-button";
+import { CustomInputlabel } from "@components/common/input-label";
+import { CustomInputField } from "@components/common/input-field";
+import { ToggleButton } from "@components/common/toggle";
+import { RadioButton } from "@components/common/buttons/radio-button/radio-button";
+import { CustomSelect } from "@components/common/select";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);

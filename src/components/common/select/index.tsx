@@ -5,7 +5,7 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "../../ui/select";
+} from "@components/ui/select";
 
 import React from "react";
 import styles from "./select.module.scss";

@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 import CustomImageTile, { IImageTileProps } from ".";
-import Round from "../../../../public/assets/images/Round.png";
+import Round from "@public/assets/images/Round.png";
 
  const ImageTileExample=()=> {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
