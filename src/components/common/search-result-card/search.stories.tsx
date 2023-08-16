@@ -1,6 +1,6 @@
 import React from "react";
 import CustomSearchResultCard from ".";
-import Edit from "../../../../public/assets/icons/edit.png";
+import Edit from "@public/assets/icons/edit.svg";
 import ImageTileExample from "../image-tile/example";
 import type { Meta, StoryObj } from "@storybook/react";
 

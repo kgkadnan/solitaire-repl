@@ -5,7 +5,7 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
+} from "@components/ui/table";
 import React from "react";
 
 interface ITableData {

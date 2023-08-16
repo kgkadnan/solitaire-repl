@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
-import { Button } from "../../../ui/button";
 import style from "./display-button.module.scss";
+import { Button } from "@components/ui/button";
 
 export interface DisplayButtonStyle {
   displayButtonStyle?: string;

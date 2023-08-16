@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { RadioButton } from "../radio-button";
 import style from "./example.module.scss";
+import { RadioButton } from "../radio-button";
 
 export const RadioBtnExample = () => {
   const [selectedValue, setSelectedValue] = useState("");

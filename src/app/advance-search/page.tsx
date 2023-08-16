@@ -1,16 +1,15 @@
 "use client";
-import { CustomInputlabel } from "@/components/Common/input-label";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
-import CustomImageTile, {
-  IImageTileProps,
-} from "@/components/Common/image-tile";
-import Round from "../../../public/assets/images/Round.png";
-import { CustomInputField } from "@/components/Common/input-field";
-import { SelectionButton } from "@/components/Common/Buttons/selection-button/selection-button";
-import { CustomSelect } from "@/components/Common/select";
-import { RadioButton } from "@/components/Common/Buttons/radio-button/radio-button";
-import { ToggleButton } from "@/components/Common/toggle";
+
+import Round from "@public/assets/images/Round.png";
+import CustomImageTile, { IImageTileProps } from "@components/common/image-tile";
+import { SelectionButton } from "@components/common/buttons/selection-button/selection-button";
+import { CustomInputlabel } from "@components/common/input-label";
+import { CustomInputField } from "@components/common/input-field";
+import { ToggleButton } from "@components/common/toggle";
+import { RadioButton } from "@components/common/buttons/radio-button/radio-button";
+import { CustomSelect } from "@components/common/select";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -26,7 +25,7 @@ const AdvanceSearch = () => {
   >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
 
-  const [selectedGirdleStep, setSelectedGirdleStep] = useState("");
+  const [, setSelectedGirdleStep] = useState("");
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
   const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
     useState<string>("");
@@ -39,11 +38,11 @@ const AdvanceSearch = () => {
   );
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
   const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
-  
+
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
-  
+
   const [priceRangeFrom, setPriceRangeFrom] = useState("");
   const [priceRangeTo, setPriceRangeTo] = useState("");
   const [discountFrom, setDiscountFrom] = useState("");
@@ -53,8 +52,6 @@ const AdvanceSearch = () => {
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
 
-  
-  
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -240,7 +237,7 @@ const AdvanceSearch = () => {
     "Fancy light",
     "Fancy",
     "Fancy dark",
-    "fancy intense",
+    "Fancy intense",
     "Fancy vivid",
     "Fancy deep",
     "Very light",
@@ -412,14 +409,12 @@ const AdvanceSearch = () => {
     }
   };
 
-  const handleShapeChange = (shape: string, index: number) => {
+  const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === "all") {
-      let filteredShape: string[] = shapeData.map((data) =>
-         data.title 
-      );
+      let filteredShape: string[] = shapeData.map((data) => data.title);
       setSelectedShape(filteredShape);
-      if(selectedShape.includes("All")){
-        setSelectedShape([])
+      if (selectedShape.includes("All")) {
+        setSelectedShape([]);
       }
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
@@ -508,7 +503,6 @@ const AdvanceSearch = () => {
     }
   };
 
-
   const handleLabChange = (data: string) => {
     handleFilterChange(data, selectedLab, setSelectedLab);
   };
@@ -518,7 +512,6 @@ const AdvanceSearch = () => {
   const handleBrillianceChange = (data: string) => {
     handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
   };
-
 
   const handleGirdleStepChange = (radioValue: string) => {
     setSelectedGirdleStep(radioValue);
@@ -530,7 +523,8 @@ const AdvanceSearch = () => {
     className?: string,
     activeStyle?: string,
     relatedState?: string | string[],
-    handleChange?: (change: string) => void
+    handleChange?: (change: string) => void,
+    highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
       <SelectionButton
@@ -544,7 +538,11 @@ const AdvanceSearch = () => {
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
           }`,
-          selectionButtonLabelStyle:`${relatedState === data && styles.colorDataActiveStyle}`
+          selectionButtonLabelStyle: `${
+            highlightIndicator &&
+            relatedState === data &&
+            styles.colorDataActiveStyle
+          }`,
         }}
       />
     ));
@@ -562,9 +560,10 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
-            // placeholder="From"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -573,9 +572,10 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="text"
             name="{name}"
-            onChange={(e) => {}}
+            onChange={(e) => {
+              setSelectedAditionalCaratRange(e.target.value);
+            }}
             value={selectedAdditionalCaratRange}
-            // placeholder="To"
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -630,7 +630,7 @@ const AdvanceSearch = () => {
         />
         <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
-      <ToggleButton/>
+      <ToggleButton />
       <hr className={styles.dividerLine} />
 
       <div className={styles.filterSection}>
@@ -661,7 +661,8 @@ const AdvanceSearch = () => {
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
-              handleColorChange
+              handleColorChange,
+              true
             )}
           </div>
           <div>
@@ -794,7 +795,9 @@ const AdvanceSearch = () => {
               // style={className}
               type="number"
               name="caratRangeFrom"
-              onChange={(e) => {setCaratRangeFrom(e.target.value)}}
+              onChange={(e) => {
+                setCaratRangeFrom(e.target.value);
+              }}
               value={caratRangeFrom}
               placeholder="From"
               style={{
@@ -805,7 +808,9 @@ const AdvanceSearch = () => {
               // style={className}
               type="number"
               name="caratRangeTO"
-              onChange={(e) => {setCaratRangeTo(e.target.value)}}
+              onChange={(e) => {
+                setCaratRangeTo(e.target.value);
+              }}
               value={caratRangeTo}
               placeholder="To"
               style={{
@@ -992,7 +997,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="discountFrom"
-            onChange={(e) => {setDiscountFrom(e.target.value)}}
+            onChange={(e) => {
+              setDiscountFrom(e.target.value);
+            }}
             value={discountFrom}
             placeholder="From"
             style={{
@@ -1003,7 +1010,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="discountTo"
-            onChange={(e) => {setDiscountTo(e.target.value)}}
+            onChange={(e) => {
+              setDiscountTo(e.target.value);
+            }}
             value={discountTo}
             placeholder="To"
             style={{
@@ -1023,7 +1032,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="priceRangeFrom"
-            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            onChange={(e) => {
+              setPriceRangeFrom(e.target.value);
+            }}
             value={priceRangeFrom}
             placeholder="From"
             style={{
@@ -1034,7 +1045,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="priceRangeTo"
-            onChange={(e) => {setPriceRangeFrom(e.target.value)}}
+            onChange={(e) => {
+              setPriceRangeTo(e.target.value);
+            }}
             value={priceRangeTo}
             placeholder="To"
             style={{
@@ -1054,7 +1067,9 @@ const AdvanceSearch = () => {
             // style={className}
             type="number"
             name="pricePerCaratFrom"
-            onChange={(e) => {setPricePerCaratFrom(e.target.value)}}
+            onChange={(e) => {
+              setPricePerCaratFrom(e.target.value);
+            }}
             value={pricePerCaratFrom}
             placeholder="From"
             style={{
@@ -1064,7 +1079,9 @@ const AdvanceSearch = () => {
           <CustomInputField
             type="number"
             name="pricePerCaratTo"
-            onChange={(e) => {setPricePerCaratTo(e.target.value)}}
+            onChange={(e) => {
+              setPricePerCaratTo(e.target.value);
+            }}
             value={pricePerCaratTo}
             placeholder="To"
             style={{
@@ -1106,7 +1123,7 @@ const AdvanceSearch = () => {
         </div>
       </div>
 
-      <div className={styles.filterSection}>
+      <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
         {" "}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1120,7 +1137,7 @@ const AdvanceSearch = () => {
           className={styles.filterSectionData}
         >
           <div className={styles.filterSectionData}>
-            <div className={styles.filterSection}>
+            <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
               {renderSelectionButtons(
                 girdleData,
                 "",

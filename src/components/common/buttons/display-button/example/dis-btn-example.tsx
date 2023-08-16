@@ -2,7 +2,7 @@
 
 import React from "react";
 import style from "./example.module.scss";
-import { CustomDisplayButton } from "../display-button";
+import { CustomDisplayButton } from "..";
 
 export const DisBtnExample = () => {
   const handleClick = () => {

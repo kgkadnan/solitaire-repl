@@ -1,6 +1,6 @@
 import React from "react";
-import styles from "./input-lable.module.scss";
-import { Label } from "../../ui/label";
+import styles from "./input-label.module.scss";
+import { Label } from "@components/ui/label";
 
 interface ILabelStyle {
   label: string;
