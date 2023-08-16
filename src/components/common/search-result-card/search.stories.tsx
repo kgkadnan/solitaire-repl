@@ -5,7 +5,7 @@ import ImageTileExample from "../image-tile/example";
 import type { Meta, StoryObj } from "@storybook/react";
 
 const meta = {
-  title: "CustomSearchResultCard",
+  title: "Components/CustomSearchResultCard",
   component: CustomSearchResultCard,
   parameters: {
     layout: "centered",
@@ -20,8 +20,8 @@ const cardData = {
   cardId: "1",
   cardIcon: Edit,
   cardhandleIcon: Edit,
-  cardHeader: <h1>Header</h1>,
-  // cardDescription:<p>desc</p>,
+  cardHeader: <p>header</p>,
+  cardDescription: <p>desc</p>,
   cardContent: <ImageTileExample />,
 };
 

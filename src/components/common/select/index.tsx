@@ -5,25 +5,25 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "../../ui/select";
 
 import React from "react";
 import styles from "./select.module.scss";
 
-interface ArrayItem {
+interface ISelectData {
   value: string;
   id: number;
 }
 
-interface style {
-  selectContent: string;
+interface Istyle {
+  selectContent?: string;
   selectTrigger?: string;
 }
 
 interface SelectProps {
-  data: ArrayItem[];
+  data: ISelectData[];
   placeholder: string;
-  style?: style;
+  style?: Istyle;
 }
 
 const handleChange = (event: any) => {

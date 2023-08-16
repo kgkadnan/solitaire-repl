@@ -2,14 +2,14 @@ import React from "react";
 import styles from "./input-lable.module.scss";
 import { Label } from "@/components/ui/label";
 
-interface style {
+interface ILabelStyle {
   label: string;
 }
 
 interface InputLabelProps {
   htmlfor: string;
   label: string;
-  overriddenStyles?: style;
+  overriddenStyles?: ILabelStyle;
 }
 
 export const CustomInputlabel: React.FC<InputLabelProps> = ({
@@ -20,6 +20,7 @@ export const CustomInputlabel: React.FC<InputLabelProps> = ({
   return (
     <>
       <Label
+        data-testid="custom-label"
         htmlFor={htmlfor}
         className={`${styles.defaultLableStyle} ${overriddenStyles?.label} `}
       >
