@@ -1,4 +1,4 @@
-import { CustomRadioButton } from "../../../../components/Common/Buttons/radio-button";
+import { CustomRadioButton } from "@/components/common/buttons/radio-button";
 import { fireEvent, render, screen } from "@testing-library/react";
 
 describe("RadioButton Component", () => {

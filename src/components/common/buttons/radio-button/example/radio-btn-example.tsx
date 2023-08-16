@@ -2,7 +2,6 @@
 
 import { useState } from "react";
 import style from "./example.module.scss";
-import { RadioButton } from "../radio-button";
 import { CustomRadioButton } from "..";
 
 export const RadioButtonExample = () => {

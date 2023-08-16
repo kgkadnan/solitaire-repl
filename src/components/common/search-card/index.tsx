@@ -48,26 +48,41 @@ export const CustomSearchCard: React.FC<ISearchCardProps> = ({
             heading={headerHeading}
           />
         </div>
-
-        {/* Custom Card and Checkbox map */}
-        <div className="flex-grow overflow-y-auto" key={headerHeading}>
-          {cardData.map((items) => {
-            return (
-              <div className="flex mt-6" key={`${items.cardId}`}>
-                <CustomCheckBox
-                  data={items.cardId}
-                  onClick={checkboxHandle}
-                  isChecked={isChecked}
-                />
-                <CustomSearchResultCard
-                  cardData={items}
-                  overriddenStyles={cardStyles}
-                  defaultCardPosition={false}
-                />
-              </div>
-            );
-          })}
-        </div>
+        <Sheet>
+          {/* Custom Card and Checkbox map */}
+          <div className="flex-grow overflow-y-auto">
+            {cardData.map((items) => {
+              return (
+                <div key={items.cardId}>
+                  <div className="flex mt-6">
+                    <CustomCheckBox
+                      data={items.cardId}
+                      onClick={checkboxHandle}
+                      isChecked={isChecked}
+                    />
+                    <SheetTrigger>
+                      <CustomSearchResultCard
+                        cardData={items}
+                        overriddenStyles={cardStyles}
+                        defaultCardPosition={false}
+                      />
+                    </SheetTrigger>
+                    <SheetContent>
+                      <h1>Aliasger</h1>
+                      <p>
+                        Lorem ipsum dolor sit amet consectetur, adipisicing
+                        elit. Recusandae incidunt libero facilis corporis
+                        consectetur. Sit, quae cupiditate numquam sequi dolores
+                        dolorum vero fugiat assumenda animi quam, labore,
+                        similique impedit ad?
+                      </p>
+                    </SheetContent>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </Sheet>
 
         {/* Custom Footer */}
         {footerButtonData?.length && (
