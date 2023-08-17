@@ -15,7 +15,7 @@ import { CustomRadioButton } from "@/components/common/buttons/radio-button";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
   const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
@@ -53,7 +53,22 @@ const AdvanceSearch = () => {
   const [pricePerCaratTo, setPricePerCaratTo] = useState("");
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
+  const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
+  const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
+  const [openCrownBI, setOpenCrownBI] = useState<string[]>([]);
+  const [openTableBI, setOpenTableBI] = useState<string[]>([]);
+  const [openPavilionBI, setOpenPavilionBI] = useState<string[]>([]);
+  const [milkyBI, setMilkyBI] = useState<string[]>([]);
+  const [lusterBI, setLusterBI] = useState<string[]>([]);
+  const [eyeCleanBI, setEyeCleanBI] = useState<string[]>([]);
 
+  const [tableInclusionWI, setTableInclusionWI] = useState<string[]>([]);
+  const [sideInclusionWI, setSideInclusionWI] = useState<string[]>([]);
+  const [naturalCrownWI, setNaturalCrownWI] = useState<string[]>([]);
+  const [naturalGirdleWI, setNaturalGirdleWI] = useState<string[]>([]);
+  const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
+  const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
+  const [lusterWI, setLusterWI] = useState<string[]>([]);
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -160,6 +175,60 @@ const AdvanceSearch = () => {
     "Star Length",
   ];
 
+  const handleBlackTableBIChange = (data: string) => {
+    handleFilterChange(data, blackTableBI, setBlackTableBI);
+  };
+
+  const handleSideBlackBIChange = (data: string) => {
+    handleFilterChange(data, sideBlackBI, setSideBlackBI);
+  };
+
+  const handleOpenCrownBIChange = (data: string) => {
+    handleFilterChange(data, openCrownBI, setOpenCrownBI);
+  };
+  const handleOpenTableBIChange = (data: string) => {
+    handleFilterChange(data, openTableBI, setOpenTableBI);
+  };
+  const handleOpenPavilionBIChange = (data: string) => {
+    handleFilterChange(data,openPavilionBI, setOpenPavilionBI);
+  };
+  const handleMilkyBIChange = (data: string) => {
+    handleFilterChange(data, milkyBI, setMilkyBI);
+  };
+  const handleLusterBIChange = (data: string) => {
+    handleFilterChange(data, lusterBI, setLusterBI);
+  };
+
+  const handleEyeCleanBIChange = (data: string) => {
+    handleFilterChange(data, eyeCleanBI, setEyeCleanBI);
+  };
+
+  const handleTableInclusionWIChange = (data: string) => {
+    handleFilterChange(data, tableInclusionWI, setTableInclusionWI);
+  };
+  const handleSideInclusionWIChange = (data: string) => {
+    handleFilterChange(data, sideInclusionWI, setSideInclusionWI);
+  };
+  const handleNaturalCrownWIChange = (data: string) => {
+    handleFilterChange(data, naturalCrownWI, setNaturalCrownWI);
+  };
+  const handleNaturalGirdleWIChange = (data: string) => {
+    handleFilterChange(data, naturalGirdleWI, setNaturalGirdleWI);
+  };
+  const handleNaturalPavilionWIChange = (data: string) => {
+    handleFilterChange(data, naturalPavilionWI, setNaturalPavilionWI);
+  };
+
+  const handleSurfaceGrainingIChange = (data: string) => {
+    handleFilterChange(data, surfaceGrainingWI, setSurfaceGrainingWI);
+  };
+
+  const handleLusterWIChange = (data: string) => {
+    handleFilterChange(data,lusterWI, setLusterWI);
+  };
+
+
+
   let otherParameterData = [
     {
       key: "Black Inclusion",
@@ -167,34 +236,50 @@ const AdvanceSearch = () => {
         {
           elementKey: "Black Table",
           elementValue: ["BO", "BPP", "B1", "B2", "B3"],
+          handleChange: handleBlackTableBIChange,
+          state:blackTableBI,
         },
         {
           elementKey: "Side Table",
           elementValue: ["SBO", "SBPP", "SB1", "SB2", "SB3"],
+          handleChange:handleSideBlackBIChange,
+          state:sideBlackBI,
         },
         {
           elementKey: "Open Crown",
           elementValue: ["None", "VS", "S", "M", "D"],
+          handleChange:handleOpenCrownBIChange,
+          state:openCrownBI
         },
         {
           elementKey: "Open Table",
           elementValue: ["None", "VS", "S", "M", "D"],
+          handleChange:handleOpenTableBIChange,
+          state:openTableBI
         },
         {
           elementKey: "Open Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange:handleOpenPavilionBIChange,
+          state:openPavilionBI
         },
         {
           elementKey: "Milky",
           elementValue: ["MO", "M1", "M2", "M3"],
+          handleChange:handleMilkyBIChange,
+          state:milkyBI
         },
         {
           elementKey: "Luster",
           elementValue: ["EX", "VG", "G", "P"],
+          handleChange:handleLusterBIChange,
+          state:lusterBI
         },
         {
           elementKey: "Eye Clean",
           elementValue: ["Yes", "No", "B"],
+          handleChange:handleEyeCleanBIChange,
+          state:eyeCleanBI
         },
       ],
     },
@@ -204,30 +289,44 @@ const AdvanceSearch = () => {
         {
           elementKey: "Table Inclusion",
           elementValue: ["TO", "T1", "B1", "T2", "T3"],
+          handleChange:handleTableInclusionWIChange,
+          state:tableInclusionWI
         },
         {
           elementKey: "Side Inclusion",
           elementValue: ["SO", "S1", "SB1", "SB2", "S3"],
+          handleChange:handleSideInclusionWIChange,
+          state:sideInclusionWI
         },
         {
           elementKey: "Natural Crown",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange:handleNaturalCrownWIChange,
+          state:naturalCrownWI
         },
         {
           elementKey: "Natural Girdle",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange:handleNaturalGirdleWIChange,
+          state:naturalGirdleWI
         },
         {
           elementKey: "Natural Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange: handleNaturalPavilionWIChange,
+          state:naturalPavilionWI
         },
         {
           elementKey: "Surface Graining",
           elementValue: ["GO", "G1", "G2", "G3"],
+          handleChange:handleSurfaceGrainingIChange,
+          state:surfaceGrainingWI
         },
         {
           elementKey: "Luster",
           elementValue: ["IGO", "IG1", "IG2", "IG3"],
+          handleChange:handleLusterWIChange,
+          state:lusterWI
         },
       ],
     },
@@ -390,21 +489,21 @@ const AdvanceSearch = () => {
 
   //// All user actions
 
-  const handleColorChange = (color: string) => {
-    setSelectedColor(color);
-  };
+  // const handleColorChange = (color: string) => {
+  //   setSelectedColor(color);
+  // };
 
   const handleFilterChange = (
     filterData: string,
-    selectedFilters: string[],
-    setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>
+    selectedFilters: string[] | string,
+    setSelectedFilters: any
   ) => {
     if (selectedFilters.includes(filterData)) {
-      setSelectedFilters((prevSelectedColors) =>
+      setSelectedFilters((prevSelectedColors: any[]) =>
         prevSelectedColors.filter((selected) => selected !== filterData)
       );
     } else {
-      setSelectedFilters((prevSelectedColors) => [
+      setSelectedFilters((prevSelectedColors: any) => [
         ...prevSelectedColors,
         filterData,
       ]);
@@ -421,6 +520,10 @@ const AdvanceSearch = () => {
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
+  };
+
+  const handleColorChange = (data: string) => {
+    handleFilterChange(data, selectedColor, setSelectedColor);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -519,6 +622,12 @@ const AdvanceSearch = () => {
     setSelectedGirdleStep(radioValue);
   };
 
+  const convertSentenceToCamelCase = (value: string) => {
+    return value.toLowerCase().replace(/\s+(.)/g, function (match, group1) {
+      return group1.toUpperCase();
+    });
+  };
+
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -542,7 +651,7 @@ const AdvanceSearch = () => {
           }`,
           selectionButtonLabelStyle: `${
             highlightIndicator &&
-            relatedState === data &&
+            relatedState?.includes(data) &&
             styles.colorDataActiveStyle
           }`,
         }}
@@ -611,11 +720,15 @@ const AdvanceSearch = () => {
               />
             </div>
             <div>
-              {renderSelectionButtons(
-                data.elementValue,
-                "",
-                styles.activeOtherStyles
-              )}
+              <>
+                {renderSelectionButtons(
+                  data.elementValue,
+                  "",
+                  styles.activeOtherStyles,
+                  data.state,
+                  data.handleChange
+                )}
+              </>
             </div>
           </div>
         ))}
@@ -667,36 +780,42 @@ const AdvanceSearch = () => {
               true
             )}
           </div>
-          <div>
-            {selectedColor.toLowerCase() === "white" &&
-              renderSelectionButtons(
-                whiteData,
-                styles.whiteColorFilterStyle,
-                styles.activeOtherStyles,
-                selectedWhiteColor,
-                handleWhiteFilterChange
-              )}
-            {selectedColor.toLowerCase() === "fancy" &&
-              renderSelectionButtons(
-                fancyData,
-                "",
-                styles.activeOtherStyles,
-                selectedFancyColor,
-                handleFancyFilterChange
-              )}
-            {selectedColor.toLowerCase() === "range" &&
-              renderSelectionButtons(
-                rangeData,
-                "",
-                styles.activeOtherStyles,
-                selectedRangeColor,
-                handleRangeFilterChange
-              )}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div>
+              {selectedColor.includes("White") &&
+                renderSelectionButtons(
+                  whiteData,
+                  styles.whiteColorFilterStyle,
+                  styles.activeOtherStyles,
+                  selectedWhiteColor,
+                  handleWhiteFilterChange
+                )}
+            </div>
+            <div>
+              {selectedColor.includes("Fancy") &&
+                renderSelectionButtons(
+                  fancyData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedFancyColor,
+                  handleFancyFilterChange
+                )}
+            </div>
+            <div>
+              {selectedColor.includes("Range") &&
+                renderSelectionButtons(
+                  rangeData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedRangeColor,
+                  handleRangeFilterChange
+                )}
+            </div>
           </div>
         </div>
       </div>
 
-      {selectedColor.toLowerCase() === "fancy" && (
+      {selectedColor.includes("Fancy") && (
         <>
           <div className={styles.filterSection}>
             <div className={styles.filterSectionLabel}>
@@ -1201,3 +1320,8 @@ const AdvanceSearch = () => {
 };
 
 export default AdvanceSearch;
+
+
+
+
+// write detailed testcase for the above code using jest and rtl ?

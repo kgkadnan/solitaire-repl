@@ -1,5 +1,5 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { render } from "@testing-library/react";
+import {  render } from "@testing-library/react";
 import AdvanceSearch from "@app/advance-search/page";
 
 jest.mock("next/image", () => ({
@@ -9,7 +9,7 @@ jest.mock("next/image", () => ({
       ClassAttributes<HTMLImageElement> &
       ImgHTMLAttributes<HTMLImageElement>
   ) => <img {...props} />,
-}));
+}));  
 
 describe("Advance Search Page", () => {
   test("renders Advance Search Page", () => {
@@ -17,4 +17,6 @@ describe("Advance Search Page", () => {
     const headerElement = getByText("Search Diamonds");
     expect(headerElement).toBeInTheDocument();
   });
+
+  
 });
