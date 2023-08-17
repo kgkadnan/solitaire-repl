@@ -3,7 +3,7 @@ import { CustomSearchCard } from "@components/common/search-card";
 import React, { useState } from "react";
 import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomDisplayButton } from "@components/common/buttons/display-button";
 import EditIcon from "@public/assets/icons/edit.svg";
 
 const SavedSearch = () => {
@@ -20,7 +20,28 @@ const SavedSearch = () => {
     cardContainerStyle: styles.searchCardContainer,
   };
 
-  // Sample data
+  const data = ["Apple", "Banana", "Cherry", "Grape", "Orange", "Pineapple"];
+
+  const [search, setSearch] = useState<string>("");
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const handleSearch = (e: any) => {
+    let inputValue = e.target.value;
+    setSearch(inputValue);
+
+    // Filter data based on input value
+    const filteredSuggestions = data.filter((item) =>
+      item.toLowerCase().includes(inputValue.toLowerCase())
+    );
+    setSuggestions(filteredSuggestions);
+  };
+
+  const handleSuggestionClick = (suggestion: any) => {
+    setSearch(suggestion);
+    setSuggestions([]); // Clear suggestions
+  };
+
+  // Sample Table data
   const tableData = {
     tableHeads: [
       "Stone shape",
@@ -48,10 +69,11 @@ const SavedSearch = () => {
     ],
   };
 
+  //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
-  //Card Data
+  //Card Content
   const cardData = [
     {
       cardId: "1",
@@ -133,29 +155,30 @@ const SavedSearch = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Compare Stone", style: styles.transparent },
-    {
-      id: 2,
-      displayButtonLabel: "Find Matching Pair",
-      style: styles.transparent,
-    },
-    { id: 3, displayButtonLabel: "Add to Wishlist", style: styles.filled },
-    { id: 4, displayButtonLabel: "Add to Cart", style: styles.filled },
+    { id: 1, displayButtonLabel: "Delete", style: styles.filled },
   ];
 
-  const heading = "Saved Search";
+  //Header Data
+  const headerData = {
+    headerHeading: "Saved Search",
+    handleSelectAllCheckbox: handleSelectAllCheckbox,
+    searchCount: cardData.length,
+    handleSearch: handleSearch,
+    searchValue: search,
+  };
 
   return (
     <>
       {/* Common CustomSearch Card for Saved Search */}
       <CustomSearchCard
         cardData={cardData}
-        headerHeading={heading}
         checkboxHandle={handleClick}
         isChecked={isCheck}
         cardStyles={cardStyles}
         footerButtonData={footerButtonData}
-        handleSelectAllCheckbox={handleSelectAllCheckbox}
+        headerData={headerData}
+        handleSuggestionClick={handleSuggestionClick}
+        suggestions={suggestions}
       />
     </>
   );

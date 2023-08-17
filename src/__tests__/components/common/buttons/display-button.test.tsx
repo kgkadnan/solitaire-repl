@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomDisplayButton } from "@components/common/buttons/display-button";
 
 describe("CustomDisplayButton Component", () => {
   // Mock click handler
@@ -24,7 +24,6 @@ describe("CustomDisplayButton Component", () => {
   test("render custom-display-button component correctly", () => {
     const buttonElement = screen.getByTestId("display-button");
 
-    // @ts-ignore
     // Check if the button element is in the document
     expect(buttonElement).toBeInTheDocument();
   });
@@ -43,12 +42,11 @@ describe("CustomDisplayButton Component", () => {
     const button = screen.getByTestId("display-button");
     const label = screen.getByTestId("display-button-label");
 
-    // @ts-ignore
     // Check if the button has the custom-button-style class
     expect(button).toHaveClass("custom-button-style");
 
     // Check if the label's parent element has the custom-label-style class
-    expect(label.parentElement?.classList.contains("custom-label-style"));
+    expect(label).toHaveClass("custom-label-style");
   });
 
   test("passes color prop to handleClick function", () => {

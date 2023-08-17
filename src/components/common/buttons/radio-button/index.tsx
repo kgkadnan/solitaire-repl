@@ -4,40 +4,50 @@ import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
 import React from "react";
 import style from "./radio-button.module.scss";
 
+// Interface for individual radio button options
 interface RadioButtonOptionProps {
   radioButtonLabel: string;
   id: string;
   value: string;
 }
 
+// Interface for styling of radio buttons and labels
 interface RadioButtonStyles {
   radioButtonStyle: string;
   radioLabelStyle: string;
 }
 
+// Interface for the RadioGroup component's props
 interface RadioGroupProps {
   radioData: RadioButtonOptionProps[];
   onChange: (radioValue: string) => void;
   radioButtonAllStyles?: RadioButtonStyles;
 }
 
-export const RadioButton: React.FC<RadioGroupProps> = ({
+// CustomRadioButton component definition
+export const CustomRadioButton: React.FC<RadioGroupProps> = ({
   radioData,
   onChange,
   radioButtonAllStyles,
 }) => {
   return (
     <>
-      <RadioGroup onValueChange={onChange} className={style?.mainRadioButton}>
-        {radioData?.map((items, index) => {
+      {/* RadioGroup component for managing radio buttons */}
+      <RadioGroup
+        onValueChange={onChange}
+        className={`${style?.mainRadioButton}`}
+      >
+        {/* Map over radioData to render individual radio buttons */}
+        {radioData?.map((items) => {
           return (
-            <div key={index}>
+            <div key={items?.id}>
+              {/* Radio button item */}
               <RadioGroupItem
                 className={radioButtonAllStyles?.radioButtonStyle}
                 value={items?.value}
                 id={items?.id}
               />
-
+              {/* Radio button label */}
               <Label
                 className={radioButtonAllStyles?.radioLabelStyle}
                 htmlFor={items?.id}

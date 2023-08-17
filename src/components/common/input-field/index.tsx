@@ -14,6 +14,8 @@ interface InputFieldProps {
   name: string;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
+  suggestions: any;
+  handleSuggestionClick: any;
 }
 
 export const CustomInputField: React.FC<InputFieldProps> = ({
@@ -23,6 +25,8 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   name,
   onChange,
   placeholder,
+  suggestions,
+  handleSuggestionClick,
 }) => {
   return (
     <>
@@ -35,6 +39,15 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
         onChange={onChange}
         placeholder={placeholder}
       />
+      {suggestions?.length > 0 && (
+        <ul>
+          {suggestions.map((suggestion: any, index: any) => (
+            <li key={index} onClick={() => handleSuggestionClick(suggestion)}>
+              {suggestion}
+            </li>
+          ))}
+        </ul>
+      )}
     </>
   );
 };

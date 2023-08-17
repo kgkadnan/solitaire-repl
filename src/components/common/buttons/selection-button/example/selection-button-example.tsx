@@ -1,10 +1,10 @@
 "use client";
 
 import React from "react";
-import { SelectionButton } from "../selection-button";
+import { CustomSelectionButton } from "..";
 import style from "./example.module.scss";
 
-const SelBtnExample = () => {
+const SelectionButtonExample = () => {
   const handleClick = () => {
     console.log("It'sworing");
   };
@@ -16,7 +16,7 @@ const SelBtnExample = () => {
 
   return (
     <>
-      <SelectionButton
+      <CustomSelectionButton
         selectionButtonAllStyles={myStyle}
         selectionButtonLabel="Button"
         handleClick={handleClick}
@@ -25,4 +25,4 @@ const SelBtnExample = () => {
   );
 };
 
-export default SelBtnExample;
+export default SelectionButtonExample;

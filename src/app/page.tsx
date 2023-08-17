@@ -1,7 +1,9 @@
+import SideBar from "@/components/common/sidebar";
+
 export default function Home() {
   return (
     <>
-      <h1
+      {/* <h1
         style={{
           fontSize: "100px",
           display: "flex",
@@ -20,7 +22,8 @@ export default function Home() {
         }}
       >
         Bulding Digital diamond platform
-      </h1>
+      </h1> */}
+      <SideBar />
     </>
   );
 }
