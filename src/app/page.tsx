@@ -1,5 +1,5 @@
+import CustomCommandExample from "@/components/common/cammand/example";
 import SideBar from "@/components/common/sidebar";
-import { TableExample } from "@/components/common/table/example/table-example";
 
 export default function Home() {
   return (
@@ -25,7 +25,7 @@ export default function Home() {
         Bulding Digital diamond platform
       </h1> */}
       <SideBar />
-      <TableExample />
+      <CustomCommandExample />
     </>
   );
 }
