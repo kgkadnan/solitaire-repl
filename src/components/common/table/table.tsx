@@ -18,6 +18,7 @@ interface ITableData {
 interface ITableStyle {
   tableHeaderStyle: string;
   tableBodyStyle: string;
+  tableStyle?: string;
 }
 
 // Interface for the props of the Table component
@@ -32,11 +33,11 @@ export const CustomTable: React.FC<TableProps> = ({
   tableStyleClasses,
 }) => {
   // Destructure styles from the props
-  const { tableHeaderStyle, tableBodyStyle } = tableStyleClasses;
+  const { tableHeaderStyle, tableBodyStyle, tableStyle } = tableStyleClasses;
   return (
     <>
       {/* Table component */}
-      <Table>
+      <Table className={`${tableStyle}`}>
         {/* Table header */}
         <TableHeader>
           <TableRow>

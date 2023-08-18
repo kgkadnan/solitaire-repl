@@ -15,6 +15,7 @@ const WishList = () => {
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
+    tableStyle: styles.tableStyle,
   };
 
   const cardStyles = {
@@ -84,11 +85,9 @@ const WishList = () => {
   cardData = searchList.map((data: any) => ({
     cardId: data.cardId,
     cardHeader: (
-      <div className={styles.headerContainer}>
-        <div className={styles.searchHeader}>
-          <p className={styles.SearchCardTitle}>{data.header}</p>
-          <p className={styles.SearchDateTime}>{data.desc}</p>
-        </div>
+      <div className={styles.searchHeader}>
+        <p className={styles.SearchCardTitle}>{data.header}</p>
+        <p className={styles.SearchDateTime}>{data.desc}</p>
       </div>
     ),
     cardContent: (
