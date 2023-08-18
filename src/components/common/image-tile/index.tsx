@@ -55,7 +55,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
             onMouseEnter={() => setHoveredTile(title)}
             onMouseLeave={() => setHoveredTile(null)}
             onClick={() => {
-              handleSelectTile && handleSelectTile(title, index);
+              handleSelectTile?.(title, index);
             }}
           >
             <Image

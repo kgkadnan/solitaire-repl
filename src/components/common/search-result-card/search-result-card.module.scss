@@ -1,8 +1,6 @@
 .cardContainer {
-    // width:500px;
-    // background-color: yellow;
-    border-radius: 10px;
-    border: none;
+  border: none;
+  width: 100%;
 }
 
 .cardHeaderText {
@@ -15,8 +13,9 @@
 }
 
 .cardActionIcon {
-  height: 20px;
-  width: 20px;
+  height: 24px;
+  width: 24px;
+  margin: 8px;
 }
 
 // .cardIcon {
@@ -24,3 +23,9 @@
 //     width: 20px;
 //     margin-right: 10px;
 // }
+.mainContainer {
+  border-radius: 10px;
+  background-color: hsl(var(--solitaire-secondary));
+  border: none;
+  justify-content: space-between;
+}

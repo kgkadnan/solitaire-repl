@@ -12,19 +12,15 @@ export interface IheaderData {
   searchCount?: number;
   handleSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
+  handleSuggestionClick?: (suggestion: any) => void;
+  suggestions?: any;
 }
 
 interface CustomHeaderProps {
   data?: IheaderData;
-  handleSuggestionClick?: any;
-  suggestions?: any;
 }
 
-const CustomHeader: React.FC<CustomHeaderProps> = ({
-  data,
-  handleSuggestionClick,
-  suggestions,
-}) => {
+const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
   //display button
   let displayButtonAllStyle = {
     displayButtonStyle: styles.headerSearchBtn,
@@ -32,7 +28,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
   };
   //input style
   let inputStyle = {
-    input: "w-[250px] pb-0",
+    input: styles.headerInputStyle,
   };
 
   return (
@@ -55,8 +51,8 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({
                   onChange={data?.handleSearch}
                   value={data?.searchValue}
                   placeholder="Search by name"
-                  handleSuggestionClick={handleSuggestionClick}
-                  suggestions={suggestions}
+                  handleSuggestionClick={data.handleSuggestionClick}
+                  suggestions={data.suggestions}
                 />
               </div>
               <CustomDisplayButton

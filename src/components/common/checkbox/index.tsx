@@ -20,7 +20,7 @@ export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
     <div className="flex items-center space-x-2">
       <Checkbox
         data-testid="custom-checkbox"
-        key={data}
+        key={`checkbox-${data}`}
         id={data}
         checked={isChecked?.includes(data)}
         onClick={onClick}
