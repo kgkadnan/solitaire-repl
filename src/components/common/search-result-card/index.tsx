@@ -4,7 +4,13 @@ import React from "react";
 import Image, { StaticImageData } from "next/image";
 import Edit from "@public/assets/icons/edit.svg";
 import style from "./search-result-card.module.scss";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+  CardContent,
+} from "@components/ui/card";
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
@@ -54,9 +60,13 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardActionIconStyle,
   } = overriddenStyles;
 
+  const handleClickEvent = (event: any) => {
+    event.stopPropagation();
+    handleCardAction(stone);
+  };
   return (
     <>
-      <div className="flex">
+      <div className={`flex ${style.mainContainer}`}>
         {/* <div>{cardCheckbox}</div> */}
         <Card className={`${style.cardContainer} ${cardContainerStyle}`}>
           <CardHeader
@@ -68,16 +78,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
               </CardTitle>
               <CardDescription>{cardDescription}</CardDescription>
               {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
-              {!defaultCardPosition && (
-                <Image
-                  src={cardActionIcon}
-                  alt={"edit"}
-                  onClick={() => {
-                    handleCardAction(stone);
-                  }}
-                  className={`${style.cardActionIcon} ${cardActionIconStyle}`}
-                />
-              )}
             </div>
             <CardDescription
               className={`${style.cardDescription} ${cardDescription}`}
@@ -98,6 +98,14 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
             />
           )}
         </Card>
+        {!defaultCardPosition && (
+          <Image
+            src={cardActionIcon}
+            alt={"edit"}
+            onClick={handleClickEvent}
+            className={`${style.cardActionIcon} ${cardActionIconStyle}`}
+          />
+        )}
       </div>
     </>
   );
