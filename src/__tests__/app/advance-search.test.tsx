@@ -18,5 +18,12 @@ describe("Advance Search Page", () => {
     expect(headerElement).toBeInTheDocument();
   });
 
+
+  test("renders Advance Search Page", () => {
+    const { getByText } = render(<AdvanceSearch />);
+    const headerElement = getByText("Your Selection:");
+    expect(headerElement).toBeInTheDocument();
+  });
+
   
 });

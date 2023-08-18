@@ -190,7 +190,7 @@ const AdvanceSearch = () => {
     handleFilterChange(data, openTableBI, setOpenTableBI);
   };
   const handleOpenPavilionBIChange = (data: string) => {
-    handleFilterChange(data,openPavilionBI, setOpenPavilionBI);
+    handleFilterChange(data, openPavilionBI, setOpenPavilionBI);
   };
   const handleMilkyBIChange = (data: string) => {
     handleFilterChange(data, milkyBI, setMilkyBI);
@@ -224,10 +224,8 @@ const AdvanceSearch = () => {
   };
 
   const handleLusterWIChange = (data: string) => {
-    handleFilterChange(data,lusterWI, setLusterWI);
+    handleFilterChange(data, lusterWI, setLusterWI);
   };
-
-
 
   let otherParameterData = [
     {
@@ -237,49 +235,49 @@ const AdvanceSearch = () => {
           elementKey: "Black Table",
           elementValue: ["BO", "BPP", "B1", "B2", "B3"],
           handleChange: handleBlackTableBIChange,
-          state:blackTableBI,
+          state: blackTableBI,
         },
         {
           elementKey: "Side Table",
           elementValue: ["SBO", "SBPP", "SB1", "SB2", "SB3"],
-          handleChange:handleSideBlackBIChange,
-          state:sideBlackBI,
+          handleChange: handleSideBlackBIChange,
+          state: sideBlackBI,
         },
         {
           elementKey: "Open Crown",
           elementValue: ["None", "VS", "S", "M", "D"],
-          handleChange:handleOpenCrownBIChange,
-          state:openCrownBI
+          handleChange: handleOpenCrownBIChange,
+          state: openCrownBI,
         },
         {
           elementKey: "Open Table",
           elementValue: ["None", "VS", "S", "M", "D"],
-          handleChange:handleOpenTableBIChange,
-          state:openTableBI
+          handleChange: handleOpenTableBIChange,
+          state: openTableBI,
         },
         {
           elementKey: "Open Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
-          handleChange:handleOpenPavilionBIChange,
-          state:openPavilionBI
+          handleChange: handleOpenPavilionBIChange,
+          state: openPavilionBI,
         },
         {
           elementKey: "Milky",
           elementValue: ["MO", "M1", "M2", "M3"],
-          handleChange:handleMilkyBIChange,
-          state:milkyBI
+          handleChange: handleMilkyBIChange,
+          state: milkyBI,
         },
         {
           elementKey: "Luster",
           elementValue: ["EX", "VG", "G", "P"],
-          handleChange:handleLusterBIChange,
-          state:lusterBI
+          handleChange: handleLusterBIChange,
+          state: lusterBI,
         },
         {
           elementKey: "Eye Clean",
           elementValue: ["Yes", "No", "B"],
-          handleChange:handleEyeCleanBIChange,
-          state:eyeCleanBI
+          handleChange: handleEyeCleanBIChange,
+          state: eyeCleanBI,
         },
       ],
     },
@@ -289,44 +287,44 @@ const AdvanceSearch = () => {
         {
           elementKey: "Table Inclusion",
           elementValue: ["TO", "T1", "B1", "T2", "T3"],
-          handleChange:handleTableInclusionWIChange,
-          state:tableInclusionWI
+          handleChange: handleTableInclusionWIChange,
+          state: tableInclusionWI,
         },
         {
           elementKey: "Side Inclusion",
           elementValue: ["SO", "S1", "SB1", "SB2", "S3"],
-          handleChange:handleSideInclusionWIChange,
-          state:sideInclusionWI
+          handleChange: handleSideInclusionWIChange,
+          state: sideInclusionWI,
         },
         {
           elementKey: "Natural Crown",
           elementValue: ["None", "VS", "S", "M", "L"],
-          handleChange:handleNaturalCrownWIChange,
-          state:naturalCrownWI
+          handleChange: handleNaturalCrownWIChange,
+          state: naturalCrownWI,
         },
         {
           elementKey: "Natural Girdle",
           elementValue: ["None", "VS", "S", "M", "L"],
-          handleChange:handleNaturalGirdleWIChange,
-          state:naturalGirdleWI
+          handleChange: handleNaturalGirdleWIChange,
+          state: naturalGirdleWI,
         },
         {
           elementKey: "Natural Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
           handleChange: handleNaturalPavilionWIChange,
-          state:naturalPavilionWI
+          state: naturalPavilionWI,
         },
         {
           elementKey: "Surface Graining",
           elementValue: ["GO", "G1", "G2", "G3"],
-          handleChange:handleSurfaceGrainingIChange,
-          state:surfaceGrainingWI
+          handleChange: handleSurfaceGrainingIChange,
+          state: surfaceGrainingWI,
         },
         {
           elementKey: "Luster",
           elementValue: ["IGO", "IG1", "IG2", "IG3"],
-          handleChange:handleLusterWIChange,
-          state:lusterWI
+          handleChange: handleLusterWIChange,
+          state: lusterWI,
         },
       ],
     },
@@ -489,9 +487,6 @@ const AdvanceSearch = () => {
 
   //// All user actions
 
-  // const handleColorChange = (color: string) => {
-  //   setSelectedColor(color);
-  // };
 
   const handleFilterChange = (
     filterData: string,
@@ -622,11 +617,7 @@ const AdvanceSearch = () => {
     setSelectedGirdleStep(radioValue);
   };
 
-  const convertSentenceToCamelCase = (value: string) => {
-    return value.toLowerCase().replace(/\s+(.)/g, function (match, group1) {
-      return group1.toUpperCase();
-    });
-  };
+
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -1321,7 +1312,3 @@ const AdvanceSearch = () => {
 
 export default AdvanceSearch;
 
-
-
-
-// write detailed testcase for the above code using jest and rtl ?
