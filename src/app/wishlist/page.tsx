@@ -173,7 +173,9 @@ const WishList = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Delete", style: styles.filled },
+    { id: 1, displayButtonLabel: "Compare Stone", style: styles.transparent },
+    { id: 2, displayButtonLabel: "Delete", style: styles.filled },
+    { id: 3, displayButtonLabel: "Add to Cart", style: styles.filled },
   ];
 
   //Header Data
