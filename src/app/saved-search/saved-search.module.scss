@@ -1,29 +1,25 @@
 /* Card Container */
 .searchCardContainer {
   background-color: hsl(var(--solitaire-secondary));
-  width: 1220px;
-  height: 120px;
-  padding: 21px 26px 0px;
+  padding: 20px 10px;
 }
 
-/* Header Styles */
-.searchHeader {
-  display: flex;
-  gap: 31px;
+.mainCardContainer {
+  width: 90%;
 }
 
-// .card-title
+/* Card Title */
 .SearchCardTitle {
   color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
   font-weight: 500;
 }
 
-// .date-time
+/* Date and Time */
 .SearchDateTime {
   color: hsl(var(--solitaire-tertiary));
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 300;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -62,28 +58,79 @@
   font-weight: 300;
 }
 
-//CheckBox
-.checkboxStyle {
-  border-color: #5d6a6a;
-  width: 20px;
-  height: 20px;
-  justify-content: center;
-  align-items: center;
-  margin-right: 14px;
+/* Sheet Styling */
+.sheetMainDiv {
+  width: 40%;
+  margin-right: 10%;
 }
 
-/* Checked Checkbox */
-.checkboxStyle input[type="checkbox"]:checked ~ .content {
-  color: #8c7459;
-  border-color: #8c7459;
+.sheetMainHeading {
+  color: var(--shadow, #8c7459);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0px 30px;
+  p {
+    margin-bottom: 30px;
+  }
 }
 
+.sheetHeading {
+  color: var(--shadow, #8c7459);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 20px 0px;
+}
+
+.inclusionDetailsMainDiv {
+  width: 40%;
+  margin-right: 10%;
+}
+
+.inclutionDetailsInnerHeadingStyle {
+  width: 100%;
+  color: var(--shadow, #8c7459);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 30px;
+}
+
+.innerHeading {
+  color: var(--shadow, #8c7459);
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 30px;
+  width: 50%;
+  padding-right: 10;
+}
+
+.sheetValues {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 30px;
+  flex-wrap: wrap;
+  display: flex;
+  width: 50%;
+  padding-left: 10%;
+}
+
+.showResultMainDiv {
+  text-align: center;
+}
+
+.showResultButtonStyle {
+  background-color: #8c7459;
+  border-radius: 5px;
+  margin-top: 30px;
+  color: hsl(var(--solitaire-tertiary));
+}
 
 //Footer Button
-.transparent{
+.transparent {
   background-color: transparent;
-  border: 1px solid #8C7459;
+  border: 1px solid #8c7459;
 }
-.filled{
-  background-color:#8C7459
+.filled {
+  background-color: #8c7459;
 }
