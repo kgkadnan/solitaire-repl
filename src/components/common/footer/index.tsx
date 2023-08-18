@@ -1,7 +1,13 @@
 import React from "react";
 import { CustomDisplayButton } from "../buttons/display-button";
 import styles from "./footer.module.scss";
-import { IfooterButtonData } from "../search-card";
+
+//footer buttonData interfrace
+export interface IfooterButtonData {
+  id: number;
+  displayButtonLabel: string;
+  style: string;
+}
 
 interface CustomFooterProps {
   footerButtonData?: IfooterButtonData[];

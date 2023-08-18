@@ -39,12 +39,14 @@ export const CustomSelect: React.FC<SelectProps> = ({
     <Select onValueChange={handleChange}>
       <SelectTrigger
         className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
+        data-testid="select"
       >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
       <SelectContent
         className={`${styles.defaultselectcontent} ${style?.selectContent}`}
+        data-testid="option"
       >
         {data.map((item) => (
           <SelectItem key={item.id} value={item.value}>

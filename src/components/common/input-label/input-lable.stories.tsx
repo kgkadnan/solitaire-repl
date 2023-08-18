@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { CustomInputlabel } from ".";
 
 const meta: Meta<typeof CustomInputlabel> = {
-  title: "components/inputLabel",
+  title: "components/InputLable",
   component: CustomInputlabel,
   argTypes: {},
   tags: ["autodocs"],

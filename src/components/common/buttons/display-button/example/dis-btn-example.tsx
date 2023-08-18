@@ -8,7 +8,7 @@ export const DisplayButtonExample = () => {
   const handleClick = () => {
     console.log("It'sworing");
   };
-  const xStyle = {
+  const classes = {
     displayButtonStyle: style?.button,
     displayLabelStyle: style?.label,
   };
@@ -16,7 +16,7 @@ export const DisplayButtonExample = () => {
     <>
       <CustomDisplayButton
         displayButtonLabel="25 Stones"
-        displayButtonAllStyle={xStyle}
+        displayButtonAllStyle={classes}
         handleClick={handleClick}
       />
     </>

@@ -1,9 +1,8 @@
 "use client";
 import React, { ChangeEvent, useState } from "react";
-import styles from "./saved-search.module.scss";
+import styles from "./wishlist.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
-import EditIcon from "@public/assets/icons/edit.svg";
 import { ToggleButton } from "@/components/common/toggle";
 import CustomHeader from "@/components/common/header";
 import { CustomCheckBox } from "@/components/common/checkbox";
@@ -11,16 +10,14 @@ import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 import CustomSearchResultCard from "@/components/common/search-result-card";
 import { CustomFooter } from "@/components/common/footer";
 
-const SavedSearch = () => {
+const WishList = () => {
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
+    tableStyle: styles.tableStyle,
   };
-  const searchCardTitle = {
-    tableHeaderStyle: styles.SearchCardTitle,
-    tableBodyStyle: styles.SearchDateTime,
-  };
+
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
@@ -32,37 +29,12 @@ const SavedSearch = () => {
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
-  //Search Bar States
-  const [search, setSearch] = useState<string>("");
-  const [searchFilter, setSearchFilter] = useState("");
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-
-  const searchData = ["R2.01VVS2 Search A", "R2.01VVS2 Searchb", "ooooo"];
-
-  const searchListNew = [
-    {
-      cardId: "1",
-      header: "ooooo",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "ooooo",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
-      },
-    },
-  ];
   const searchList = [
     {
       cardId: "1",
       header: "R2.01VVS2 Search A",
       desc: "12-05-2023 | 10.12 AM",
       body: {
-        StoneShape: "Round",
         color: "D",
         Carat: "2.01",
         Clarity: "VVS2",
@@ -70,6 +42,16 @@ const SavedSearch = () => {
         Cut: "EX",
         polish: "EX",
         Rap: "23,500.00",
+        "C/A": "59",
+        "C/H": "15.6",
+        Symmetry: "EX",
+        Lab: "GIA",
+        Girdle: "Med-Stk",
+        Cutlet: "None",
+        Ins: "Yes",
+        Origin: "IND",
+        Luster: "EX",
+        Depth: "IND",
       },
     },
     {
@@ -77,7 +59,6 @@ const SavedSearch = () => {
       header: "R2.01VVS2 Searchb",
       desc: "12-05-2023 | 10.12 AM",
       body: {
-        StoneShape: "Round",
         color: "D",
         Carat: "2.01",
         Clarity: "VVS2",
@@ -85,40 +66,40 @@ const SavedSearch = () => {
         Cut: "EX",
         polish: "EX",
         Rap: "23,500.00",
+        "C/A": "59",
+        "C/H": "15.6",
+        Symmetry: "EX",
+        Lab: "GIA",
+        Girdle: "Med-Stk",
+        Cutlet: "None",
+        Ins: "Yes",
+        Origin: "IND",
+        Luster: "EX",
+        Depth: "IND",
       },
     },
   ];
 
   var cardData: any[] = [];
 
-  const renderCardData = (data: any, suggestion: string) => {
-    cardData = data
-      .filter((data: any) =>
-        data.header.toLowerCase().includes(suggestion.toLowerCase())
-      )
-      .map((data: any) => ({
-        cardId: data.cardId,
-        cardActionIcon: EditIcon,
-        cardHeader: (
-          <CustomTable
-            tableData={{
-              tableHeads: [data.header],
-              bodyData: [{ desc: data.desc }],
-            }}
-            tableStyleClasses={searchCardTitle}
-          />
-        ),
-        cardContent: (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(data.body),
-              bodyData: [data.body],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        ),
-      }));
-  };
+  cardData = searchList.map((data: any) => ({
+    cardId: data.cardId,
+    cardHeader: (
+      <div className={styles.searchHeader}>
+        <p className={styles.SearchCardTitle}>{data.header}</p>
+        <p className={styles.SearchDateTime}>{data.desc}</p>
+      </div>
+    ),
+    cardContent: (
+      <CustomTable
+        tableData={{
+          tableHeads: Object.keys(data.body),
+          bodyData: [data.body],
+        }}
+        tableStyleClasses={tableStyles}
+      />
+    ),
+  }));
 
   const cardDetailData = [
     {
@@ -170,37 +151,7 @@ const SavedSearch = () => {
       },
     },
   ];
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value;
-    setSearch(inputValue);
-    setSearchFilter("");
 
-    // Filter data based on input value
-    const filteredSuggestions = searchData.filter((item) =>
-      item.toLowerCase().includes(inputValue.toLowerCase())
-    );
-
-    // Extract card titles from filtered suggestions
-    const suggestionTitles = filteredSuggestions.map((item) => item);
-
-    setSuggestions(suggestionTitles);
-
-    // Update state with an array of strings
-  };
-
-  const handleSuggestionClick = (suggestion: any) => {
-    setSearchFilter(suggestion);
-    setSearch(suggestion);
-
-    setSuggestions([]);
-
-    let dataNew = searchList.map((data) => data.header);
-
-    if (!dataNew.includes(suggestion)) {
-      renderCardData(searchListNew, suggestion);
-    }
-    // Cledataar suggestions
-  };
   //specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
@@ -224,17 +175,12 @@ const SavedSearch = () => {
   const footerButtonData = [
     { id: 1, displayButtonLabel: "Delete", style: styles.filled },
   ];
-  renderCardData(searchList, searchFilter);
 
   //Header Data
   const headerData = {
-    headerHeading: "Saved Search",
+    headerHeading: "Wishlist",
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
-    handleSearch: handleSearch,
-    searchValue: search,
-    handleSuggestionClick: handleSuggestionClick,
-    suggestions: suggestions,
   };
 
   // Function to handle edit action
@@ -273,7 +219,6 @@ const SavedSearch = () => {
                         <CustomSearchResultCard
                           cardData={items}
                           overriddenStyles={cardStyles}
-                          defaultCardPosition={false}
                           handleCardAction={handleEdit}
                         />
                       </SheetTrigger>
@@ -406,4 +351,4 @@ const SavedSearch = () => {
   );
 };
 
-export default SavedSearch;
+export default WishList;
