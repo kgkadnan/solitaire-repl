@@ -5,16 +5,16 @@ import { useCallback, useState } from "react";
 import KGKlogo from "@public/assets/icons/Vector.svg";
 import Image from "next/image";
 import CustomImageTile, { IImageTileProps } from "../image-tile";
-import SavedSearch from "@public/assets/icons/bookmark-outline.svg";
-import Appointment from "@public/assets/icons/calendar-clear-outline.svg";
-import myCart from "@public/assets/icons/cart-outline.svg";
-import advanceSearch from "@public/assets/icons/search-outline.svg";
-import recentConfirmation from "@public/assets/icons/checkmark-circle-outline.svg";
-import layout from "@public/assets/icons/layout.svg";
-import matchPair from "@public/assets/icons/match-pair.svg";
-import myDiamond from "@public/assets/icons/my-diamond.svg";
-import newArrival from "@public/assets/icons/new-arrival.svg";
-import dashboard from "@public/assets/icons/grid-outline.svg";
+import SavedSearch from "@public/assets/icons/bookmark-outline.svg?url";
+import Appointment from "@public/assets/icons/calendar-clear-outline.svg?url";
+import MyCart from "@public/assets/icons/cart-outline.svg?url";
+import AdvanceSearch from "@public/assets/icons/search-outline.svg?url";
+import RecentConfirmation from "@public/assets/icons/checkmark-circle-outline.svg?url";
+import Layout from "@public/assets/icons/layout.svg?url";
+import MatchPair from "@public/assets/icons/match-pair.svg?url";
+import MyDiamond from "@public/assets/icons/my-diamond.svg?url";
+import NewArrival from "@public/assets/icons/new-arrival.svg?url";
+import Dashboard from "@public/assets/icons/grid-outline.svg?url";
 import styles from "./sidebar.module.scss";
 
 const SideBar: NextPage = () => {
@@ -26,43 +26,43 @@ const SideBar: NextPage = () => {
 
   const imageData: IImageTileProps[] = [
     {
-      src: dashboard,
+      src: <Dashboard  className={styles.stroke} />,
       title: "Dashboard",
     },
     {
-      src: newArrival,
+      src: <NewArrival className={styles.stroke} />,
       title: "New Arrival",
     },
     {
-      src: advanceSearch,
+      src: <AdvanceSearch className={styles.stroke} />,
       title: "Advance Search",
     },
     {
-      src: matchPair,
+      src: <MatchPair className={styles.stroke} />,
       title: "Match Pair",
     },
     {
-      src: SavedSearch,
+      src: <SavedSearch className={styles.stroke} />,
       title: "Saved Searches",
     },
     {
-      src: myCart,
+      src: <MyCart className={styles.stroke} />,
       title: "Cart",
     },
     {
-      src: layout,
+      src: <Layout className={styles.stroke} />,
       title: "layouts",
     },
     {
-      src: recentConfirmation,
+      src: <RecentConfirmation className={styles.stroke} />,
       title: "Recent Confirmations",
     },
     {
-      src: Appointment,
+      src: <Appointment className={styles.stroke} />,
       title: "Appointments",
     },
     {
-      src: myDiamond,
+      src: <MyDiamond className={styles.stroke} />,
       title: "MyDiamonds",
     },
   ];
@@ -72,6 +72,7 @@ const SideBar: NextPage = () => {
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
+    imageTileIsNav: styles.isNav
   };
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const handleChange = (shape: string) => {

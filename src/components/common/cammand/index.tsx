@@ -1,56 +1,80 @@
 import {
   Command,
-  CommandDialog,
   CommandEmpty,
   CommandGroup,
   CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
-  CommandShortcut,
 } from "@components/ui/command";
 
-import React from "react";
+import React, { useState } from "react";
 
-interface IinputData {
-  type?: string;
-  value?: string;
-  name?: string;
-  placeholder?: string;
-  onChange: (e: any) => void;
-  onValueChange: (search: string) => void;
+
+type Status = {
+  value: string
+  label: string
 }
-
 interface ICustomCommand {
-  data: {
-    heading: string;
-    items: string[];
-  };
-  inputData: IinputData;
+    items: Status[];
 }
 
-const CustomCommand: React.FC<ICustomCommand> = ({ data, inputData }) => {
+const CustomCommand: React.FC<ICustomCommand> = ({ items }) => {
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
+    null
+  )
+
+  const handleInputBlur = () => {
+    setTimeout(() => {
+      setShowSuggestions(false);
+    }, 200);
+  };
+
+
+
+  const handleChange = (e :any) => {
+    setSelectedStatus(e.target.value)
+    setShowSuggestions(true)
+  } 
+
+
   return (
     <Command>
       <CommandInput
-        placeholder={inputData.placeholder}
-        // value={inputData.value}
-        onValueChange={inputData.onValueChange}
-        onSelect={inputData.onChange}
+        placeholder={"Search by name..."}
+        onFocus={() => {
+          setShowSuggestions(true) 
+          setSelectedStatus(null)
+        }}
+        onBlur={handleInputBlur}
+        onSelect={handleChange}
+        value={selectedStatus?.value || undefined}
+       
       />
-      <CommandList onValueChange={inputData.onValueChange}>
-        <CommandEmpty>No results found.</CommandEmpty>
-        <CommandGroup heading={data.heading}>
-          {data.items.map((items) => {
-            return (
-              <>
-                <CommandItem>{items}</CommandItem>
-              </>
-            );
-          })}
-        </CommandGroup>
-        <CommandSeparator />
-      </CommandList>
+      {showSuggestions && (
+        <CommandList>
+          <CommandEmpty>No results found.</CommandEmpty>
+          <CommandGroup >
+
+              {items.map((status :any) => (
+                  <CommandItem
+                    key={status.value}
+                    onSelect={(value) => {
+                      setSelectedStatus(
+                        items.find((priority) => priority.value === value) ||
+                          null
+                      )
+                      setShowSuggestions(false);
+                    }}
+                  >
+                    <span>{status.label}</span>
+                  </CommandItem>
+                ))}
+          </CommandGroup>
+          <CommandSeparator />
+        </CommandList>
+      )}
     </Command>
   );
 };

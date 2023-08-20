@@ -1,33 +1,29 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React from "react";
 import CustomCommand from ".";
 
 const CustomCommandExample = () => {
-  let data = {
-    heading: "Suggestions",
-    items: ["Calender", "Birthday"],
-  };
-  const [input, setInput] = useState("");
 
-  let onChange = (e: any) => {
-    console.log("e", e.target.value);
-    setInput(e.target.value);
-  };
+  let items =  [{
+    value: "backlog",
+    label: "Backlog",
+  },
+  {
+    value: "todo",
+    label: "Todo",
+  },
+  {
+    value: "in progress",
+    label: "In Progress",
+  },
+  {
+    value: "in ",
+    label: "In",
+  },
+]
 
-  let onValueChange = (search: string) => {
-    console.log("search", search);
-  };
 
-  let inputData = {
-    type: "text",
-    value: input,
-    name: "search",
-    placeholder: "search",
-    onChange: onChange,
-    onValueChange: onValueChange,
-  };
-
-  return <CustomCommand data={data} inputData={inputData} />;
+  return <CustomCommand items={items} />;
 };
 
 export default CustomCommandExample;

@@ -1,4 +1,4 @@
-import CustomCommandExample from "@/components/common/cammand/example";
+
 import SideBar from "@/components/common/sidebar";
 
 export default function Home() {
@@ -25,7 +25,6 @@ export default function Home() {
         Bulding Digital diamond platform
       </h1> */}
       <SideBar />
-      <CustomCommandExample />
     </>
   );
 }

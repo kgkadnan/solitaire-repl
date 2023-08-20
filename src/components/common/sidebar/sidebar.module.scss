@@ -3,12 +3,6 @@
     height: 20px;
 }
 
-.imageTileImageStyles{
-    fill:red;
-    filter: red;
-    color : red;
-}
-
 
 .imageTileContainerStyles{
     width: 96px;
@@ -18,3 +12,15 @@
     color:hsl(var(--solitaire-quaternary));
 }
 
+.stroke {
+    stroke: #CED2D2;
+}
+
+.imageTileContainerStyles:hover .stroke {
+    stroke : hsl(var(--solitaire-quaternary))
+}
+
+
+.isNav .stroke {
+    stroke : hsl(var(--solitaire-quaternary))
+}

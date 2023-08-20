@@ -10,9 +10,11 @@ export interface IImageTileStyleProps {
   imageTileImageStyles?: string;
   imageTileLabelStyles?: string;
   activeIndicatorStyles?: string;
+  imageTileIsNav? :string
+  
 }
 export interface IImageTileProps {
-  src: string | StaticImageData;
+  src: string | StaticImageData | any;
   title: string;
 }
 
@@ -50,7 +52,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
               overriddenStyles?.imageTileContainerStyles
             } ${
               selectedTile?.includes(title) &&
-              (isNavOption ? "" : style.activeIndicator)
+              (isNavOption ? overriddenStyles?.imageTileIsNav : style.activeIndicator)
             }`}
             onMouseEnter={() => setHoveredTile(title)}
             onMouseLeave={() => setHoveredTile(null)}
@@ -58,11 +60,12 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
               handleSelectTile?.(title, index);
             }}
           >
-            <Image
+            {src?.src ? <Image
               src={src}
               alt={title}
               className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-            />
+            /> : <div className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}>{src}</div> }
+           
             {/* <div
               className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
             >
