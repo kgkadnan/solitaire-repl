@@ -1,9 +1,8 @@
 import { Checkbox } from "@/components/ui/checkbox";
 import React, { ChangeEvent } from "react";
 import { CustomDisplayButton } from "../buttons/display-button";
-import searchIcon from "@public/assets/icons/search-outline-shadow.svg";
+import SearchIcon from "@public/assets/icons/search-outline-shadow.svg?url";
 import { CustomInputField } from "@components/common/input-field/index";
-import Image from "next/image";
 import styles from "./header.module.scss";
 
 export interface IheaderData {
@@ -43,7 +42,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
           {data?.handleSearch ? (
             <div className="flex  gap-[15px]">
               <div className="flex gap-[8px]">
-                <Image src={searchIcon} alt="searchIcon" />
+                {/* <Image src={searchIcon} alt="searchIcon" className={} /> */}
+                <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
+
                 <CustomInputField
                   type="text"
                   name="search"

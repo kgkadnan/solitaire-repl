@@ -10,6 +10,7 @@
 
 .imageTileLabelStyles{
     color:hsl(var(--solitaire-quaternary));
+    cursor : pointer;
 }
 
 .stroke {
@@ -17,7 +18,8 @@
 }
 
 .imageTileContainerStyles:hover .stroke {
-    stroke : hsl(var(--solitaire-quaternary))
+    stroke : hsl(var(--solitaire-quaternary));
+    cursor : pointer;
 }
 
 

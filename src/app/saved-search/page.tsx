@@ -77,7 +77,7 @@ const SavedSearch = () => {
       header: "R2.01VVS2 Searchb",
       desc: "12-05-2023 | 10.12 AM",
       body: {
-        StoneShape: "Round",
+        StoneShape: "Heart",
         color: "D",
         Carat: "2.01",
         Clarity: "VVS2",

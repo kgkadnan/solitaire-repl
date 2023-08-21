@@ -26,6 +26,7 @@
       "@app/*": ["src/app/*"],
       "@lib/*":["src/lib/*"],
       "@public/*": ["public/*"],
+      "@public1/*": ["public/*"],
     },
     
   },
