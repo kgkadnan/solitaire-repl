@@ -1,20 +1,40 @@
-.imageTileImageStyles{
-    width: 20px;
-    height: 20px;
+.sidebarMainDiv {
+  position: fixed;
+  left: 0;
+  top: 0;
 }
 
-.imageTileImageStyles{
-    fill:red;
-    filter: red;
-    color : red;
+.imageTileImageStyles {
+  width: 20px;
+  height: 20px;
 }
 
-
-.imageTileContainerStyles{
-    width: 96px;
+.imageTileContainerStyles {
+  width: 96px;
+  height: 65px;
 }
 
-.imageTileLabelStyles{
-    color:hsl(var(--solitaire-quaternary));
+.imageTileLabelStyles {
+  color: hsl(var(--solitaire-quaternary));
+  cursor: pointer;
 }
 
+.stroke {
+  stroke: #ced2d2;
+}
+
+.imageTileContainerStyles:hover .stroke {
+  stroke: hsl(var(--solitaire-quaternary));
+  cursor: pointer;
+}
+
+.isNav .stroke {
+  stroke: hsl(var(--solitaire-quaternary));
+}
+
+.dividerLine {
+  height: 5px;
+  border: 0px solid #5d6a6a;
+  border-top-width: 1px;
+  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+}

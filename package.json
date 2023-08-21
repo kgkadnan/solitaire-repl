@@ -70,6 +70,7 @@
     "@storybook/nextjs": "^7.2.1",
     "@storybook/react": "^7.2.1",
     "@storybook/testing-library": "^0.2.0",
+    "@svgr/webpack": "^8.1.0",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^14.0.0",
     "@types/jest": "^29.5.3",
@@ -79,8 +80,8 @@
     "@types/testing-library__jest-dom": "^5.14.9",
     "eslint-plugin-storybook": "^0.6.13",
     "identity-obj-proxy": "^3.0.0",
+    "sass": "^1.64.2",
     "storybook": "^7.2.1",
-    "ts-jest": "^29.1.1",
-    "sass": "^1.64.2"
+    "ts-jest": "^29.1.1"
   }
 }
