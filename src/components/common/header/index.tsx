@@ -66,7 +66,10 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
           )}
           {/* Select All checkbox */}
           <div className="flex items-center gap-[10px]">
-            <Checkbox onClick={data?.handleSelectAllCheckbox} />
+            <Checkbox
+              onClick={data?.handleSelectAllCheckbox}
+              data-testid={"Select All Checkbox"}
+            />
             <p className="text-solitaireTertiary text-base font-medium">
               Select All
             </p>

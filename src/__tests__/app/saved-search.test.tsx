@@ -1,5 +1,5 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
+import { fireEvent, render, waitFor } from "@testing-library/react";
 import SavedSearch from "@/app/saved-search/page";
 
 jest.mock("next/image", () => ({
@@ -37,20 +37,60 @@ describe("SavedSearch Component - Render Card Data", () => {
     expect(getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
   });
 
-  it("displays card on basis of search", () => {
-    const { getByPlaceholderText, queryByText, getByText } = render(
-      <SavedSearch />
-    );
-    const searchInput = getByPlaceholderText(/Search by name/i);
-    // Focus on the input field
-    fireEvent.focus(searchInput);
+  it("renders search input and suggestions correctly", () => {
+    const { getByPlaceholderText, getByText } = render(<SavedSearch />);
 
+    // Find the search input
+    const searchInput = getByPlaceholderText("Search by name");
+
+    // Type into the search input
+    fireEvent.change(searchInput, { target: { value: "R2" } });
+
+    // Ensure suggestions are displayed
     expect(getByText("R2.01VVS2 Search A")).toBeInTheDocument();
     expect(getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
+  });
 
-    fireEvent.click(getByText("R2.01VVS2 Search A"));
+  it("toggles 'Select All' checkbox correctly", () => {
+    const { getByTestId, getAllByRole } = render(<SavedSearch />);
 
-    expect(queryByText("R2.01VVS2 Search A")).toBeInTheDocument();
-    expect(queryByText("R2.01VVS2 Searchb")).toBeInTheDocument();
+    // Find the 'Select All' checkbox
+    const selectAllCheckbox = getByTestId("Select All Checkbox");
+
+    // Click the 'Select All' checkbox
+    fireEvent.click(selectAllCheckbox);
+
+    // Find all checkboxes
+    const checkboxes = getAllByRole("checkbox");
+
+    // Check if all checkboxes are checked
+    waitFor(() => {
+      checkboxes.forEach((checkbox) => {
+        expect(checkbox.ariaChecked).toBe(true);
+      });
+    });
+    // Click the 'Select All' checkbox again
+    fireEvent.click(selectAllCheckbox);
+
+    // Check if all checkboxes are unchecked
+    waitFor(() => {
+      checkboxes.forEach((checkbox) => {
+        expect(checkbox.ariaChecked).toBe(false);
+      });
+    });
+  });
+
+  it("displays card details when a card is clicked", () => {
+    const { getByTestId, queryAllByText } = render(<SavedSearch />);
+
+    // Find a card
+    const card = getByTestId("card-1");
+
+    // Click the card to expand its details
+    fireEvent.click(card);
+
+    // Check if detailed information is displayed
+    const basicDetailsElement = queryAllByText("Basic Details");
+    expect(basicDetailsElement).toHaveLength(2);
   });
 });

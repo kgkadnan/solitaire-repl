@@ -26,7 +26,7 @@ const SideBar: NextPage = () => {
 
   const imageData: IImageTileProps[] = [
     {
-      src: <Dashboard  className={styles.stroke} />,
+      src: <Dashboard className={styles.stroke} />,
       title: "Dashboard",
     },
     {
@@ -72,7 +72,7 @@ const SideBar: NextPage = () => {
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
-    imageTileIsNav: styles.isNav
+    imageTileIsNav: styles.isNav,
   };
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const handleChange = (shape: string) => {
