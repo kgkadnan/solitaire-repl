@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from "react";
 import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
-import EditIcon from "@public/assets/icons/edit.svg";
+import editIcon from "@public/assets/icons/edit.svg";
 import { ToggleButton } from "@/components/common/toggle";
 import CustomHeader from "@/components/common/header";
 import { CustomCheckBox } from "@/components/common/checkbox";
@@ -77,7 +77,7 @@ const SavedSearch = () => {
       header: "R2.01VVS2 Searchb",
       desc: "12-05-2023 | 10.12 AM",
       body: {
-        StoneShape: "Round",
+        StoneShape: "Heart",
         color: "D",
         Carat: "2.01",
         Clarity: "VVS2",
@@ -98,7 +98,7 @@ const SavedSearch = () => {
       )
       .map((data: any) => ({
         cardId: data.cardId,
-        cardActionIcon: EditIcon,
+        cardActionIcon: editIcon,
         cardHeader: (
           <CustomTable
             tableData={{

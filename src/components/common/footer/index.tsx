@@ -6,7 +6,7 @@ import styles from "./footer.module.scss";
 export interface IfooterButtonData {
   id: number;
   displayButtonLabel: string;
-  style: string;
+  style?: string;
 }
 
 interface CustomFooterProps {

@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "../../styles/_globals.scss";
 // import store from "@/hooks/store";
 import { Providers } from "./Providers";
+import { TopNavigationBar } from "@/components/common/top-navigation-bar";
+import { BottomNavigationBar } from "@/components/common/bottom-navigation-bar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* <Provider store={store}> */}
-
+        <TopNavigationBar />
         <Providers>{children}</Providers>
+        <BottomNavigationBar />
         {/* </Provider> */}
       </body>
     </html>
