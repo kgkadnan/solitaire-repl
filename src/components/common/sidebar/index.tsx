@@ -91,7 +91,9 @@ const SideBar = () => {
 
   return (
     <>
-      <div className="flex flex-col w-[93px] h-[100vh] bg-solitaireSecondary">
+      <div
+        className={`flex flex-col w-[93px] h-[100vh] bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+      >
         <div
           className="flex items-center justify-center cursor-pointer gap-[40px] h-[112px] "
           onClick={onKGKLogoContainerClick}
@@ -104,7 +106,7 @@ const SideBar = () => {
             height="55"
           />
         </div>
-
+        <hr className={styles.dividerLine} />
         <div className="w-[93px] h-auto flex items-center justify-center">
           <div className="overflow-hidden flex flex-row p-[3px] items-center whitespace-normal break-words justify-center bg-solitaireSecondary ">
             <CustomImageTile

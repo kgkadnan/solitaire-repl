@@ -1,13 +1,15 @@
-/* Card Container */
-.searchCardContainer {
-  background-color: hsl(var(--solitaire-secondary));
-  padding: 20px 10px;
-}
-
 .mainCardContainer {
   width: 90%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
+}
+
+/* Card Container */
+.searchCardContainer {
+  background-color: hsl(var(--solitaire-secondary));
+  padding: 20px 10px 0px 0px;
+  height: 154px;
+  width: 100%;
 }
 
 /* Card Title */
@@ -17,9 +19,23 @@
   font-weight: 500;
 }
 
+/* Header Styles */
+.cardHeaderMainDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.searchHeader {
+  display: flex;
+  gap: 31px;
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
 /* Date and Time */
 .SearchDateTime {
   color: hsl(var(--solitaire-tertiary));
+  margin-left: 50px;
   font-size: 12px;
   font-weight: 300;
   display: flex;
@@ -52,12 +68,14 @@
   color: #8c7459;
   font-size: 14px;
   font-weight: 500;
+  padding-right: 1px;
 }
 
 .tableBody {
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
   font-weight: 300;
+  padding-right: 1px;
 }
 
 /* Sheet Styling */
@@ -137,6 +155,14 @@
   margin-top: 30px;
   color: #ffffff;
   font-weight: 300;
+}
+
+.remainingCartTimeButton {
+  background-color: transparent;
+}
+
+.remainingCartTimeLabel {
+  color: hsl(var(--solitaire-tertiary));
 }
 
 //Footer Button

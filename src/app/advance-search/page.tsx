@@ -8,7 +8,6 @@ import CustomImageTile, {
 } from "@components/common/image-tile";
 import { CustomInputlabel } from "@components/common/input-label";
 import { CustomInputField } from "@components/common/input-field";
-import { ToggleButton } from "@components/common/toggle";
 import { CustomSelect } from "@components/common/select";
 import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
 import { CustomRadioButton } from "@/components/common/buttons/radio-button";
@@ -640,7 +639,6 @@ const AdvanceSearch = () => {
         />
         <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
-      <ToggleButton />
       <hr className={styles.dividerLine} />
 
       <div className={styles.filterSection}>
@@ -729,7 +727,9 @@ const AdvanceSearch = () => {
               <CustomInputlabel htmlfor="text" label="Overtone" />
             </div>
             <div className={styles.filterSectionData}>
-              <div className={styles.filterSection}>
+              <div
+                className={`${styles.filterSection} ${styles.filterWrapSection}`}
+              >
                 {renderSelectionButtons(
                   overtoneData,
                   "",

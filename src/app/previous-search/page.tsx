@@ -4,7 +4,6 @@ import styles from "./previous-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
 import EditIcon from "@public/assets/icons/edit.svg";
-import { ToggleButton } from "@/components/common/toggle";
 import CustomHeader from "@/components/common/header";
 import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
@@ -249,7 +248,6 @@ const PreviousSearch = () => {
 
   return (
     <>
-      <ToggleButton />
       <div className="container min-h-screen flex flex-col ">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-3">
@@ -277,7 +275,7 @@ const PreviousSearch = () => {
                           handleCardAction={handleEdit}
                         />
                       </SheetTrigger>
-                      <SheetContent>
+                      <SheetContent className={styles.sheetContentStyle}>
                         {/* Detailed Information section */}
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}

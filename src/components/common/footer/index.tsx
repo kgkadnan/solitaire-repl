@@ -18,7 +18,9 @@ export const CustomFooter: React.FC<CustomFooterProps> = ({
   footerButtonData,
 }) => {
   return (
-    <div className="flex justify-end w-[1255px] py-4 h-[80px] border-t border-solitaireSenary ">
+    <div
+      className={`flex justify-end py-4 border-t border-solitaireSenary ${styles.footerParentDiv}`}
+    >
       {footerButtonData?.map((item) => {
         return (
           <div key={item.id} className="ml-6">

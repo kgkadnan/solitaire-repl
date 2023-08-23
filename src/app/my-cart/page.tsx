@@ -1,28 +1,31 @@
 "use client";
-import React, { useState } from "react";
-import styles from "./wishlist.module.scss";
-import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@components/common/buttons/display-button";
-import { ToggleButton } from "@/components/common/toggle";
-import CustomHeader from "@/components/common/header";
-import { CustomCheckBox } from "@/components/common/checkbox";
-import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
-import CustomSearchResultCard from "@/components/common/search-result-card";
-import { CustomFooter } from "@/components/common/footer";
 
-const WishList = () => {
+import { CustomDisplayButton } from "@/components/common/buttons/display-button";
+import { CustomCheckBox } from "@/components/common/checkbox";
+import { CustomFooter } from "@/components/common/footer";
+import CustomHeader from "@/components/common/header";
+import CustomSearchResultCard from "@/components/common/search-result-card";
+import { CustomTable } from "@/components/common/table/table";
+import { ToggleButton } from "@/components/common/toggle";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import React, { useState } from "react";
+import styles from "./cart.module.scss";
+
+const MyCart = () => {
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
-    tableStyle: styles.tableStyle,
   };
-
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
+  };
+  const cardTimeStyles = {
+    displayButtonStyle: styles.remainingCartTimeButton,
+    displayLabelStyle: styles.remainingCartTimeLabel,
   };
 
   //checkbox states
@@ -34,6 +37,7 @@ const WishList = () => {
       cardId: "1",
       header: "R2.01VVS2 Search A",
       desc: "12-05-2023 | 10.12 AM",
+      remainingCardTime: "12 min 30 secs",
       body: {
         color: "D",
         Carat: "2.01",
@@ -45,6 +49,8 @@ const WishList = () => {
         "C/A": "59",
         "C/H": "15.6",
         Symmetry: "EX",
+        Length: "80.4",
+        Width: "7.98",
         Lab: "GIA",
         Girdle: "Med-Stk",
         Cutlet: "None",
@@ -58,6 +64,7 @@ const WishList = () => {
       cardId: "2",
       header: "R2.01VVS2 Searchb",
       desc: "12-05-2023 | 10.12 AM",
+      remainingCardTime: "12 min 30 secs",
       body: {
         color: "D",
         Carat: "2.01",
@@ -69,6 +76,8 @@ const WishList = () => {
         "C/A": "59",
         "C/H": "15.6",
         Symmetry: "EX",
+        Length: "80.4",
+        Width: "7.98",
         Lab: "GIA",
         Girdle: "Med-Stk",
         Cutlet: "None",
@@ -85,9 +94,17 @@ const WishList = () => {
   cardData = searchList.map((data: any) => ({
     cardId: data.cardId,
     cardHeader: (
-      <div className={styles.searchHeader}>
-        <p className={styles.SearchCardTitle}>{data.header}</p>
-        <p className={styles.SearchDateTime}>{data.desc}</p>
+      <div className={styles.cardHeaderMainDiv}>
+        <div className={styles.searchHeader}>
+          <p className={styles.SearchCardTitle}>{data.header}</p>
+          <p className={styles.SearchDateTime}>{data.desc}</p>
+        </div>
+        <div>
+          <CustomDisplayButton
+            displayButtonAllStyle={cardTimeStyles}
+            displayButtonLabel={`Buy within ${data.remainingCardTime}`}
+          />
+        </div>
       </div>
     ),
     cardContent: (
@@ -173,14 +190,13 @@ const WishList = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Compare Stone", style: styles.transparent },
-    { id: 2, displayButtonLabel: "Delete", style: styles.filled },
-    { id: 3, displayButtonLabel: "Add to Cart", style: styles.filled },
+    { id: 1, displayButtonLabel: "Delete", style: styles.transparent },
+    { id: 2, displayButtonLabel: "Place Order", style: styles.filled },
   ];
 
   //Header Data
   const headerData = {
-    headerHeading: "Wishlist",
+    headerHeading: "MyCart",
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
   };
@@ -353,4 +369,4 @@ const WishList = () => {
   );
 };
 
-export default WishList;
+export default MyCart;
