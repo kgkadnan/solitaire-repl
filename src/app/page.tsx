@@ -1,4 +1,5 @@
-
+import CustomCommand from "@/components/common/cammand";
+import CustomCommandExample from "@/components/common/cammand/example";
 import SideBar from "@/components/common/sidebar";
 
 export default function Home() {

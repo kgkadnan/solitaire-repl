@@ -1,6 +1,8 @@
  
   .mainCardContainer {
     width: 90%;
+    border: 0.25px solid hsl(var(--solitaire-quinary));
+    border-radius: 10px;
   }
 /* Card Container */
 .searchCardContainer {

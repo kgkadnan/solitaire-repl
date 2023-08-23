@@ -212,6 +212,10 @@ const SavedSearch = () => {
     const suggestionTitles = filteredSuggestions.map((item) => item);
     setSuggestions(suggestionTitles);
     // Update state with an array of strings
+
+    if (inputValue.length < 1) {
+      setCardData(renderCardData(searchList, ""));
+    }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
