@@ -48,3 +48,33 @@ test("handles input change", () => {
   expect(mockProps.onChange).toHaveBeenCalled();
   expect(mockProps.onChange).toHaveBeenCalledWith(expect.any(Object));
 });
+
+test("displays suggestions dropdown when focused and handles suggestion click", () => {
+  const suggestions = ["suggestion1", "suggestion2", "suggestion3"];
+  const handleSuggestionClick = jest.fn();
+
+  const { getByTestId, getByText } = render(
+    <CustomInputField
+      type="text"
+      name="search"
+      suggestions={suggestions}
+      handleSuggestionClick={handleSuggestionClick}
+    />
+  );
+
+  const inputField = getByTestId("custom-input");
+
+  // Focus on the input field
+  fireEvent.focus(inputField);
+
+  // Check if suggestions dropdown is displayed
+  suggestions.forEach((suggestion) => {
+    expect(getByText(suggestion)).toBeInTheDocument();
+  });
+
+  // Click on a suggestion
+  fireEvent.click(getByText("suggestion1"));
+
+  // Check if the handleSuggestionClick function was called
+  expect(handleSuggestionClick).toHaveBeenCalledWith("suggestion1");
+});

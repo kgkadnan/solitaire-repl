@@ -18,11 +18,15 @@ module.exports = {
     extend: {
       colors: {
         //*********Customize**************
-        solitairePrimary: "hsl(var(--solitaire-primary))",
-        solitaireSecondary: "hsl(var(--solitaire-secondary))",
-        solitaireTertiary: "hsl(var(--solitaire-tertiary))",
-        solitaireQuaternary: "hsl(var(--solitaire-quaternary))",
-        solitaireOutline: "hsl(var(--solitaire-outline))",
+        solitairePrimary: "hsl(var(--solitaire-primary))", // dark - Emerald Green / light- white
+        solitaireSecondary: "hsl(var(--solitaire-secondary))",// dark - Emerald 7 / light- white
+        solitaireTertiary: "hsl(var(--solitaire-tertiary))",// dark - Emerald 1 / light- Carbon 6
+        solitaireQuaternary: "hsl(var(--solitaire-quaternary))",// dark - shadow / light- shadow
+        solitaireQuinary: "hsl(var(--solitaire-quinary))",// dark - Emerald Green / light-Carbon 3
+        solitaireSenary: "hsl(var(--solitaire-senary))",// dark -Emerald 4 / light- Carbon 3
+        solitaireSeptenary: "hsl(var(--solitaire-septenary))",// dark - Emerald 7 / light- shadow
+        solitaireOctonary: "hsl(var(--solitaire-octonary))",// dark - Emerald 7 / light- Carbon 1
+        solitaireOutline: "hsl(var(--solitaire-outline))",// dark - Emerald 4 / light- Carbon 2
         //********************* */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

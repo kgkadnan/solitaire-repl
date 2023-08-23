@@ -44,6 +44,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardDescription,
     cardContent,
     stone = "",
+    cardId,
   } = card.cardData;
   const {
     overriddenStyles = {},
@@ -66,7 +67,10 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     <>
       <div className={`flex ${style.mainContainer}`}>
         {/* <div>{cardCheckbox}</div> */}
-        <Card className={`${style.cardContainer} ${cardContainerStyle}`}>
+        <Card
+          className={`${style.cardContainer} ${cardContainerStyle}`}
+          data-testid={`card-${cardId}`}
+        >
           <CardHeader
             className={`${style.cardHeaderContainer} ${cardHeaderContainerStyle}`}
           >

@@ -1,8 +1,8 @@
 <svg width="24" height="25" viewBox="0 0 24 25" fill="none" xmlns="http://www.w3.org/2000/svg">
 <g id="icons / calendar-clear-outline">
-<path id="Vector" d="M19.5 4.66458H4.5C3.25736 4.66458 2.25 5.67194 2.25 6.91458V20.4146C2.25 21.6572 3.25736 22.6646 4.5 22.6646H19.5C20.7426 22.6646 21.75 21.6572 21.75 20.4146V6.91458C21.75 5.67194 20.7426 4.66458 19.5 4.66458Z" stroke="#CED2D2" stroke-linejoin="round"/>
-<path id="Vector_2" d="M6 3.16458V4.66458" stroke="#CED2D2" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_3" d="M18 3.16458V4.66458" stroke="#CED2D2" stroke-linecap="round" stroke-linejoin="round"/>
-<path id="Vector_4" d="M21.75 8.41458H2.25" stroke="#CED2D2" stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector" d="M19.5 4.66458H4.5C3.25736 4.66458 2.25 5.67194 2.25 6.91458V20.4146C2.25 21.6572 3.25736 22.6646 4.5 22.6646H19.5C20.7426 22.6646 21.75 21.6572 21.75 20.4146V6.91458C21.75 5.67194 20.7426 4.66458 19.5 4.66458Z"  stroke-linejoin="round"/>
+<path id="Vector_2" d="M6 3.16458V4.66458"  stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_3" d="M18 3.16458V4.66458"  stroke-linecap="round" stroke-linejoin="round"/>
+<path id="Vector_4" d="M21.75 8.41458H2.25"  stroke-linecap="round" stroke-linejoin="round"/>
 </g>
 </svg>
