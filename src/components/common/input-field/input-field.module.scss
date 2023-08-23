@@ -34,7 +34,7 @@
     cursor: pointer;
   }
   .selectedSuggestion {
-    background-color: #f3f3f3; /* Change this to your desired background color */
+    background-color:hsl(var(--solitaire-senary)) /* Change this to your desired background color */
   }
   
   .dropdown li:hover {
