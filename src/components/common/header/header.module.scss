@@ -18,5 +18,9 @@
 .headerInputStyle {
   width: 250px;
   font-size: 16px;
-  color: hsl(var(--solitaire-tertiary));
+  color: hsl(var(--solitaire-tertiary))
+}
+
+.headerInputStyle ::placeholder {
+   color: hsl(var(--solitaire-senary));
 }

@@ -9,9 +9,7 @@
     margin: 0;
 } 
 
-.defaultInputStyle::placeholder{
-    color: hsl(var(--solitaire-tertiary));
-}
+
 
 .defaultInputStyle:focus {
     outline: none;

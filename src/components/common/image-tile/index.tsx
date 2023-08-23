@@ -10,18 +10,18 @@ export interface IImageTileStyleProps {
   imageTileImageStyles?: string;
   imageTileLabelStyles?: string;
   activeIndicatorStyles?: string;
-  imageTileIsNav? :string
-  
+  imageTileIsNav?: string;
 }
 export interface IImageTileProps {
   src: string | StaticImageData | any;
   title: string;
+  link?: string;
 }
 
 export interface IImageContainerProps {
   imageTileData: IImageTileProps[];
   overriddenStyles?: IImageTileStyleProps;
-  handleSelectTile?: (shape: string, index: number) => void;
+  handleSelectTile?: (shape: string, link?: string) => void;
   selectedTile?: string[];
   isNavOption?: boolean;
 }
@@ -43,8 +43,8 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
     <div
       className={`${style.imageTileMainContainer} ${overriddenStyles?.imageTileMainContainerStyles}`}
     >
-      {imageTileData.map((tileData: IImageTileProps, index: number) => {
-        const { src, title } = tileData;
+      {imageTileData.map((tileData: IImageTileProps) => {
+        const { src, title, link } = tileData;
         return (
           <div
             key={`image-tile-data-${title}`}
@@ -52,20 +52,32 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
               overriddenStyles?.imageTileContainerStyles
             } ${
               selectedTile?.includes(title) &&
-              (isNavOption ? overriddenStyles?.imageTileIsNav : style.activeIndicator)
+              (isNavOption
+                ? overriddenStyles?.imageTileIsNav
+                : style.activeIndicator)
             }`}
             onMouseEnter={() => setHoveredTile(title)}
             onMouseLeave={() => setHoveredTile(null)}
             onClick={() => {
-              handleSelectTile?.(title, index);
+              link
+                ? handleSelectTile?.(title, link)
+                : handleSelectTile?.(title);
             }}
           >
-            {src?.src ? <Image
-              src={src}
-              alt={title}
-              className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-            /> : <div className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}>{src}</div> }
-           
+            {src?.src ? (
+              <Image
+                src={src}
+                alt={title}
+                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+              />
+            ) : (
+              <div
+                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+              >
+                {src}
+              </div>
+            )}
+
             {/* <div
               className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
             >

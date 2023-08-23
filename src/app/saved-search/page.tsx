@@ -1,5 +1,11 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
@@ -10,6 +16,13 @@ import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 import CustomSearchResultCard from "@/components/common/search-result-card";
 import { CustomFooter } from "@/components/common/footer";
+
+interface CardData {
+  cardId: string;
+  cardActionIcon: string;
+  cardHeader: React.ReactNode;
+  cardContent: React.ReactNode;
+}
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -27,6 +40,7 @@ const SavedSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+  const [cardData, setCardData] = useState<CardData[]>([]);
 
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -34,90 +48,106 @@ const SavedSearch = () => {
 
   //Search Bar States
   const [search, setSearch] = useState<string>("");
-  const [searchFilter, setSearchFilter] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const searchData = ["R2.01VVS2 Search A", "R2.01VVS2 Searchb", "ooooo"];
 
-  const searchListNew = [
-    {
-      cardId: "1",
-      header: "ooooo",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "ooooo",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+  const searchList = useMemo(
+    () => [
+      {
+        cardId: "1",
+        header: "R2.01VVS2 Search A",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Round",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-  ];
-  const searchList = [
-    {
-      cardId: "1",
-      header: "R2.01VVS2 Search A",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "Round",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-    {
-      cardId: "2",
-      header: "R2.01VVS2 Searchb",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "Heart",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+    ],
+    [] // No dependencies
+  );
+  const searchListNew = useMemo(
+    () => [
+      {
+        cardId: "1",
+        header: "ooooo",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Round",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-  ];
+    ],
+    [] // No dependencies
+  );
 
-  var cardData: any[] = [];
+  const renderCardData = useCallback(
+    (data: any, suggestion?: string) => {
+      console.log("Data", data, suggestion);
+      return data
+        .filter((data: any) =>
+          data.header.toLowerCase().includes(suggestion?.toLowerCase())
+        )
+        .map((data: any) => ({
+          cardId: data.cardId,
+          cardActionIcon: editIcon,
+          cardHeader: (
+            <CustomTable
+              tableData={{
+                tableHeads: [data.header],
+                bodyData: [{ desc: data.desc }],
+              }}
+              tableStyleClasses={searchCardTitle}
+            />
+          ),
+          cardContent: (
+            <CustomTable
+              tableData={{
+                tableHeads: Object.keys(data.body),
+                bodyData: [data.body],
+              }}
+              tableStyleClasses={tableStyles}
+            />
+          ),
+        }));
+    },
+    [searchCardTitle, tableStyles]
+  );
 
-  const renderCardData = (data: any, suggestion: string) => {
-    cardData = data
-      .filter((data: any) =>
-        data.header.toLowerCase().includes(suggestion.toLowerCase())
-      )
-      .map((data: any) => ({
-        cardId: data.cardId,
-        cardActionIcon: editIcon,
-        cardHeader: (
-          <CustomTable
-            tableData={{
-              tableHeads: [data.header],
-              bodyData: [{ desc: data.desc }],
-            }}
-            tableStyleClasses={searchCardTitle}
-          />
-        ),
-        cardContent: (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(data.body),
-              bodyData: [data.body],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        ),
-      }));
+  const handleDelete = () => {
+    const updatedCardData = cardData.filter(
+      (item) => !isCheck.includes(item.cardId)
+    );
+
+    setCardData(updatedCardData);
+    setIsCheck([]); // Clear the selected checkboxes
   };
 
   const cardDetailData = [
@@ -173,23 +203,18 @@ const SavedSearch = () => {
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
     setSearch(inputValue);
-    setSearchFilter("");
 
     // Filter data based on input value
     const filteredSuggestions = searchData.filter((item) =>
       item.toLowerCase().includes(inputValue.toLowerCase())
     );
-
     // Extract card titles from filtered suggestions
     const suggestionTitles = filteredSuggestions.map((item) => item);
-
     setSuggestions(suggestionTitles);
-
     // Update state with an array of strings
   };
 
   const handleSuggestionClick = (suggestion: any) => {
-    setSearchFilter(suggestion);
     setSearch(suggestion);
 
     setSuggestions([]);
@@ -197,9 +222,10 @@ const SavedSearch = () => {
     let dataNew = searchList.map((data) => data.header);
 
     if (!dataNew.includes(suggestion)) {
-      renderCardData(searchListNew, suggestion);
+      setCardData(renderCardData(searchListNew, suggestion));
+    } else {
+      setCardData(renderCardData(searchList, suggestion));
     }
-    // Cledataar suggestions
   };
   //specific checkbox
   const handleClick = (e: any) => {
@@ -222,13 +248,17 @@ const SavedSearch = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Delete", style: styles.filled },
+    {
+      id: 1,
+      displayButtonLabel: "Delete",
+      style: styles.filled,
+      fn: handleDelete,
+    },
   ];
-  renderCardData(searchList, searchFilter);
 
   //Header Data
   const headerData = {
-    headerHeading: "Saved Search",
+    headerHeading: "Saved Searches",
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
     handleSearch: handleSearch,
@@ -236,6 +266,10 @@ const SavedSearch = () => {
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
   };
+
+  useEffect(() => {
+    setCardData(renderCardData(searchList, search));
+  }, []);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -396,7 +430,7 @@ const SavedSearch = () => {
           </div>
         </Sheet>
         {/* Custom Footer */}
-        {footerButtonData?.length && (
+        {!!footerButtonData?.length && (
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">
             <CustomFooter footerButtonData={footerButtonData} />
           </div>
