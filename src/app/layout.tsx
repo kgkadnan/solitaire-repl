@@ -5,6 +5,7 @@ import "../../styles/_globals.scss";
 import { Providers } from "./Providers";
 import { TopNavigationBar } from "@/components/common/top-navigation-bar";
 import { BottomNavigationBar } from "@/components/common/bottom-navigation-bar";
+import SideBar from "@/components/common/sidebar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,7 +23,29 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* <Provider store={store}> */}
-        <Providers>{children}</Providers>
+
+        <Providers>
+          {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
+          <SideBar />
+          <TopNavigationBar />
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "right",
+              marginTop: "110px",
+              padding: "0px 30px",
+            }}
+          >
+            {/* <div> */}
+            <main style={{ width: "calc(100% - 92px)", minHeight: "76vh" }}>
+              {children}
+            </main>
+            {/* </div> */}
+          </div>
+          <BottomNavigationBar />
+          {/* </div> */}
+        </Providers>
+
         {/* </Provider> */}
       </body>
     </html>

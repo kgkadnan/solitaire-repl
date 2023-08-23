@@ -8,8 +8,6 @@ import { ToggleButton } from "../toggle";
 import { CustomDisplayButton } from "../buttons/display-button";
 import { useRouter } from "next/navigation";
 import styles from "./top-navigation-bar.module.scss";
-import { BottomNavigationBar } from "../bottom-navigation-bar";
-import SideBar from "../sidebar";
 
 export const TopNavigationBar = () => {
   const router = useRouter();

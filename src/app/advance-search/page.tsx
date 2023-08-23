@@ -8,7 +8,6 @@ import CustomImageTile, {
 } from "@components/common/image-tile";
 import { CustomInputlabel } from "@components/common/input-label";
 import { CustomInputField } from "@components/common/input-field";
-import { ToggleButton } from "@components/common/toggle";
 import { CustomSelect } from "@components/common/select";
 import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
 import { CustomRadioButton } from "@/components/common/buttons/radio-button";
@@ -623,184 +622,386 @@ const AdvanceSearch = () => {
     ));
   };
   return (
-    <div>
-      <div className={styles.advanceSearchHeader}>
-        <CustomInputlabel
-          htmlfor="text"
-          label="Search Diamonds"
-          overriddenStyles={{ label: styles.label }}
-        />
-        <CustomInputlabel htmlfor="text" label="Your Selection:" />
-      </div>
-      <ToggleButton />
-      <hr className={styles.dividerLine} />
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          {" "}
-          <CustomInputlabel htmlfor="text" label="Shape" />
-        </div>
-        <div className={styles.filterSectionData}>
-          <CustomImageTile
-            imageTileData={shapeData}
-            selectedTile={selectedShape}
-            handleSelectTile={handleShapeChange}
-          />
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
+    <>
+      <div>
+        <div className={styles.advanceSearchHeader}>
           <CustomInputlabel
             htmlfor="text"
-            label="Color"
-            overriddenStyles={{ label: styles.specificFilterAlign }}
+            label="Search Diamonds"
+            overriddenStyles={{ label: styles.label }}
           />
+          <CustomInputlabel htmlfor="text" label="Your Selection:" />
         </div>
-        <div className={styles.filterSectionData}>
-          <div className={styles.filterSection}>
-            {renderSelectionButtons(
-              colorData,
-              styles.colorFilterStyles,
-              styles.activeColorStyles,
-              selectedColor,
-              handleColorChange,
-              true
-            )}
+        <hr className={styles.dividerLine} />
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            {" "}
+            <CustomInputlabel htmlfor="text" label="Shape" />
           </div>
-          <div>
-            {selectedColor.toLowerCase() === "white" &&
-              renderSelectionButtons(
-                whiteData,
-                styles.whiteColorFilterStyle,
-                styles.activeOtherStyles,
-                selectedWhiteColor,
-                handleWhiteFilterChange
-              )}
-            {selectedColor.toLowerCase() === "fancy" &&
-              renderSelectionButtons(
-                fancyData,
-                "",
-                styles.activeOtherStyles,
-                selectedFancyColor,
-                handleFancyFilterChange
-              )}
-            {selectedColor.toLowerCase() === "range" &&
-              renderSelectionButtons(
-                rangeData,
-                "",
-                styles.activeOtherStyles,
-                selectedRangeColor,
-                handleRangeFilterChange
-              )}
+          <div className={styles.filterSectionData}>
+            <CustomImageTile
+              imageTileData={shapeData}
+              selectedTile={selectedShape}
+              handleSelectTile={handleShapeChange}
+            />
           </div>
         </div>
-      </div>
-
-      {selectedColor.toLowerCase() === "fancy" && (
-        <>
-          <div className={styles.filterSection}>
-            <div className={styles.filterSectionLabel}>
-              <CustomInputlabel htmlfor="text" label="Intensity" />
-            </div>
-
-            <div
-              className={`${styles.filterSection} ${styles.filterSectionData}`}
-            >
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label="Color"
+              overriddenStyles={{ label: styles.specificFilterAlign }}
+            />
+          </div>
+          <div className={styles.filterSectionData}>
+            <div className={styles.filterSection}>
               {renderSelectionButtons(
-                intensityData,
-                "",
-                styles.activeOtherStyles,
-                selectedIntensity,
-                handleIntensityChange
+                colorData,
+                styles.colorFilterStyles,
+                styles.activeColorStyles,
+                selectedColor,
+                handleColorChange,
+                true
               )}
             </div>
-          </div>
-          <div className={styles.filterSection}>
-            <div className={styles.filterSectionLabel}>
-              <CustomInputlabel htmlfor="text" label="Overtone" />
-            </div>
-            <div className={styles.filterSectionData}>
-              <div className={styles.filterSection}>
-                {renderSelectionButtons(
-                  overtoneData,
+            <div>
+              {selectedColor.toLowerCase() === "white" &&
+                renderSelectionButtons(
+                  whiteData,
+                  styles.whiteColorFilterStyle,
+                  styles.activeOtherStyles,
+                  selectedWhiteColor,
+                  handleWhiteFilterChange
+                )}
+              {selectedColor.toLowerCase() === "fancy" &&
+                renderSelectionButtons(
+                  fancyData,
                   "",
                   styles.activeOtherStyles,
-                  selectedOvertone,
-                  handleOvertoneChange
+                  selectedFancyColor,
+                  handleFancyFilterChange
+                )}
+              {selectedColor.toLowerCase() === "range" &&
+                renderSelectionButtons(
+                  rangeData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedRangeColor,
+                  handleRangeFilterChange
+                )}
+            </div>
+          </div>
+        </div>
+
+        {selectedColor.toLowerCase() === "fancy" && (
+          <>
+            <div className={styles.filterSection}>
+              <div className={styles.filterSectionLabel}>
+                <CustomInputlabel htmlfor="text" label="Intensity" />
+              </div>
+
+              <div
+                className={`${styles.filterSection} ${styles.filterSectionData}`}
+              >
+                {renderSelectionButtons(
+                  intensityData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedIntensity,
+                  handleIntensityChange
                 )}
               </div>
             </div>
+            <div className={styles.filterSection}>
+              <div className={styles.filterSectionLabel}>
+                <CustomInputlabel htmlfor="text" label="Overtone" />
+              </div>
+              <div className={styles.filterSectionData}>
+                <div className={styles.filterSection}>
+                  {renderSelectionButtons(
+                    overtoneData,
+                    "",
+                    styles.activeOtherStyles,
+                    selectedOvertone,
+                    handleOvertoneChange
+                  )}
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Tinge" />
           </div>
-        </>
-      )}
+          <div className={styles.filterSectionData}>
+            {renderSelectionButtons(
+              tingeData,
+              "",
+              styles.activeOtherStyles,
+              selectedTinge,
+              handleTingeChange
+            )}
+          </div>
+        </div>
 
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Tinge" />
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Tinge Intensity" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              tingeIntensityData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedTingeIntensity,
+              handleTingeIntensityChange
+            )}
+          </div>
         </div>
-        <div className={styles.filterSectionData}>
-          {renderSelectionButtons(
-            tingeData,
-            "",
-            styles.activeOtherStyles,
-            selectedTinge,
-            handleTingeChange
-          )}
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Clarity" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              clarityData,
+              "",
+              styles.activeOtherStyles,
+              selectedClarity,
+              handleClarityChange
+            )}
+          </div>
         </div>
-      </div>
 
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Tinge Intensity" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            tingeIntensityData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedTingeIntensity,
-            handleTingeIntensityChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Clarity" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            clarityData,
-            "",
-            styles.activeOtherStyles,
-            selectedClarity,
-            handleClarityChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label="Carat Range"
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div
-          className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
-        >
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label="Carat Range"
+              overriddenStyles={{ label: styles.specificFilterAlign }}
+            />
+          </div>
           <div
-            className={`${styles.filterSection} ${styles.rangeFilter}`}
-            style={{ width: "420px" }}
+            className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
           >
+            <div
+              className={`${styles.filterSection} ${styles.rangeFilter}`}
+              style={{ width: "420px" }}
+            >
+              <CustomInputField
+                // style={className}
+                type="number"
+                name="caratRangeFrom"
+                onChange={(e) => {
+                  setCaratRangeFrom(e.target.value);
+                }}
+                value={caratRangeFrom}
+                placeholder="From"
+                style={{
+                  input: styles.inputFieldStyles,
+                }}
+              />
+              <CustomInputField
+                // style={className}
+                type="number"
+                name="caratRangeTO"
+                onChange={(e) => {
+                  setCaratRangeTo(e.target.value);
+                }}
+                value={caratRangeTo}
+                placeholder="To"
+                style={{
+                  input: styles.inputFieldStyles,
+                }}
+              />
+              <CustomSelectionButton
+                selectionButtonLabel={"Add Carat"}
+                handleClick={() => {}}
+                selectionButtonAllStyles={{
+                  selectionButtonStyle: styles.addCarat,
+                }}
+              />
+            </div>
+            <div>
+              {renderSelectionButtons(
+                caratRangeData,
+                "",
+                styles.activeOtherStyles,
+                selectedCaratRange,
+                handleCaratRangeChange
+              )}
+            </div>
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Make" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              makeData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedMake,
+              handleMakeChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Cut" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              qualityData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedCut,
+              handleCutChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Polish" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              qualityData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedPolish,
+              handlePolishChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Symmetry" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              qualityData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedSymmetry,
+              handleSymmetryChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Fluorescence" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              fluorescenceData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedFluorescence,
+              handleFluorescenceChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Lab" />
+          </div>
+          <div className={styles.filterSectionData}>
+            {renderSelectionButtons(
+              labData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedLab,
+              handleLabChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="H&A" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              brillianceData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedHR,
+              handleHRChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Brilliance" />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              brillianceData,
+              styles.commonSelectionStyle,
+              styles.activeOtherStyles,
+              selectedBrilliance,
+              handleBrillianceChange
+            )}
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Location" />
+          </div>
+          <div>
+            <CustomSelect
+              data={locationData}
+              placeholder="Location"
+              style={{
+                selectTrigger: styles.dropdownHeader,
+                selectContent: styles.dropdownData,
+              }}
+            />
+          </div>
+        </div>
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Country of origin" />
+          </div>
+          <div>
+            <CustomSelect
+              data={locationData}
+              placeholder="Country of origin"
+              style={{
+                selectTrigger: styles.dropdownHeader,
+                selectContent: styles.dropdownData,
+              }}
+            />
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Discount" />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
             <CustomInputField
               // style={className}
               type="number"
-              name="caratRangeFrom"
+              name="discountFrom"
               onChange={(e) => {
-                setCaratRangeFrom(e.target.value);
+                setDiscountFrom(e.target.value);
               }}
-              value={caratRangeFrom}
+              value={discountFrom}
               placeholder="From"
               style={{
                 input: styles.inputFieldStyles,
@@ -809,394 +1010,193 @@ const AdvanceSearch = () => {
             <CustomInputField
               // style={className}
               type="number"
-              name="caratRangeTO"
+              name="discountTo"
               onChange={(e) => {
-                setCaratRangeTo(e.target.value);
+                setDiscountTo(e.target.value);
               }}
-              value={caratRangeTo}
+              value={discountTo}
               placeholder="To"
               style={{
                 input: styles.inputFieldStyles,
               }}
             />
-            <CustomSelectionButton
-              selectionButtonLabel={"Add Carat"}
-              handleClick={() => {}}
-              selectionButtonAllStyles={{
-                selectionButtonStyle: styles.addCarat,
+          </div>
+        </div>
+
+        <div className={styles.filterSection}>
+          {" "}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Price Range" />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="priceRangeFrom"
+              onChange={(e) => {
+                setPriceRangeFrom(e.target.value);
+              }}
+              value={priceRangeFrom}
+              placeholder="From"
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="priceRangeTo"
+              onChange={(e) => {
+                setPriceRangeTo(e.target.value);
+              }}
+              value={priceRangeTo}
+              placeholder="To"
+              style={{
+                input: styles.inputFieldStyles,
               }}
             />
           </div>
-          <div>
-            {renderSelectionButtons(
-              caratRangeData,
-              "",
-              styles.activeOtherStyles,
-              selectedCaratRange,
-              handleCaratRangeChange
-            )}
+        </div>
+
+        <div className={styles.filterSection}>
+          {" "}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel htmlfor="text" label="Price/Carat" />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="pricePerCaratFrom"
+              onChange={(e) => {
+                setPricePerCaratFrom(e.target.value);
+              }}
+              value={pricePerCaratFrom}
+              placeholder="From"
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              type="number"
+              name="pricePerCaratTo"
+              onChange={(e) => {
+                setPricePerCaratTo(e.target.value);
+              }}
+              value={pricePerCaratTo}
+              placeholder="To"
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
           </div>
         </div>
-      </div>
 
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Make" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            makeData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedMake,
-            handleMakeChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Cut" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            qualityData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedCut,
-            handleCutChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Polish" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            qualityData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedPolish,
-            handlePolishChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Symmetry" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            qualityData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedSymmetry,
-            handleSymmetryChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Fluorescence" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            fluorescenceData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedFluorescence,
-            handleFluorescenceChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Lab" />
-        </div>
-        <div className={styles.filterSectionData}>
-          {renderSelectionButtons(
-            labData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedLab,
-            handleLabChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="H&A" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            brillianceData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedHR,
-            handleHRChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Brilliance" />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            brillianceData,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedBrilliance,
-            handleBrillianceChange
-          )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Location" />
-        </div>
-        <div>
-          <CustomSelect
-            data={locationData}
-            placeholder="Location"
-            style={{
-              selectTrigger: styles.dropdownHeader,
-              selectContent: styles.dropdownData,
-            }}
-          />
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Country of origin" />
-        </div>
-        <div>
-          <CustomSelect
-            data={locationData}
-            placeholder="Country of origin"
-            style={{
-              selectTrigger: styles.dropdownHeader,
-              selectContent: styles.dropdownData,
-            }}
-          />
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Discount" />
-        </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="discountFrom"
-            onChange={(e) => {
-              setDiscountFrom(e.target.value);
-            }}
-            value={discountFrom}
-            placeholder="From"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="discountTo"
-            onChange={(e) => {
-              setDiscountTo(e.target.value);
-            }}
-            value={discountTo}
-            placeholder="To"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        {" "}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Price Range" />
-        </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="priceRangeFrom"
-            onChange={(e) => {
-              setPriceRangeFrom(e.target.value);
-            }}
-            value={priceRangeFrom}
-            placeholder="From"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="priceRangeTo"
-            onChange={(e) => {
-              setPriceRangeTo(e.target.value);
-            }}
-            value={priceRangeTo}
-            placeholder="To"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        {" "}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Price/Carat" />
-        </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="pricePerCaratFrom"
-            onChange={(e) => {
-              setPricePerCaratFrom(e.target.value);
-            }}
-            value={pricePerCaratFrom}
-            placeholder="From"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            type="number"
-            name="pricePerCaratTo"
-            onChange={(e) => {
-              setPricePerCaratTo(e.target.value);
-            }}
-            value={pricePerCaratTo}
-            placeholder="To"
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        {" "}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label="Parameter"
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div
-          className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
-        >
-          {renderParameterFields()}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        {" "}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label="Inclusions & other parameters"
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div className={styles.filterSectionData}>
-          <div className={styles.filterSection}>
-            {renderOtherParameterFields()}
+        <div className={styles.filterSection}>
+          {" "}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label="Parameter"
+              overriddenStyles={{ label: styles.specificFilterAlign }}
+            />
+          </div>
+          <div
+            className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
+          >
+            {renderParameterFields()}
           </div>
         </div>
-      </div>
 
-      <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
-        {" "}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label="Girdle"
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div
-          style={{ display: "flex", flexDirection: "column" }}
-          className={styles.filterSectionData}
-        >
+        <div className={styles.filterSection}>
+          {" "}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label="Inclusions & other parameters"
+              overriddenStyles={{ label: styles.specificFilterAlign }}
+            />
+          </div>
           <div className={styles.filterSectionData}>
+            <div className={styles.filterSection}>
+              {renderOtherParameterFields()}
+            </div>
+          </div>
+        </div>
+
+        <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
+          {" "}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label="Girdle"
+              overriddenStyles={{ label: styles.specificFilterAlign }}
+            />
+          </div>
+          <div
+            style={{ display: "flex", flexDirection: "column" }}
+            className={styles.filterSectionData}
+          >
+            <div className={styles.filterSectionData}>
+              <div
+                className={`${styles.filterSection} ${styles.filterWrapSection}`}
+              >
+                {renderSelectionButtons(
+                  girdleData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedGirdle,
+                  handleGirdleChange
+                )}
+              </div>
+            </div>
+            <CustomInputlabel
+              htmlfor="text"
+              label="STEP1"
+              overriddenStyles={{ label: styles.stepStyle }}
+            />
+            <div style={{ margin: "10px" }}>
+              <CustomRadioButton
+                radioData={[
+                  {
+                    id: "1",
+                    value: "1",
+                    radioButtonLabel: "Contains",
+                  },
+                  {
+                    id: "2",
+                    value: "2",
+                    radioButtonLabel: "Does Not Contains",
+                  },
+                ]}
+                onChange={handleGirdleStepChange}
+                radioButtonAllStyles={{
+                  radioButtonStyle: styles.radioStyle,
+                  radioLabelStyle: styles.radioLabel,
+                }}
+              />
+            </div>
+            <CustomInputlabel
+              htmlfor="text"
+              label="STEP2"
+              overriddenStyles={{ label: styles.stepStyle }}
+            />
             <div
               className={`${styles.filterSection} ${styles.filterWrapSection}`}
+              style={{ display: "flex", flexWrap: "wrap" }}
             >
               {renderSelectionButtons(
-                girdleData,
+                girdleStepData,
                 "",
                 styles.activeOtherStyles,
-                selectedGirdle,
-                handleGirdleChange
+                selectedGirdleStep2,
+                handleGirdleStep2Change
               )}
             </div>
           </div>
-          <CustomInputlabel
-            htmlfor="text"
-            label="STEP1"
-            overriddenStyles={{ label: styles.stepStyle }}
-          />
-          <div style={{ margin: "10px" }}>
-            <CustomRadioButton
-              radioData={[
-                {
-                  id: "1",
-                  value: "1",
-                  radioButtonLabel: "Contains",
-                },
-                {
-                  id: "2",
-                  value: "2",
-                  radioButtonLabel: "Does Not Contains",
-                },
-              ]}
-              onChange={handleGirdleStepChange}
-              radioButtonAllStyles={{
-                radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel,
-              }}
-            />
-          </div>
-          <CustomInputlabel
-            htmlfor="text"
-            label="STEP2"
-            overriddenStyles={{ label: styles.stepStyle }}
-          />
-          <div
-            className={`${styles.filterSection} ${styles.filterWrapSection}`}
-            style={{ display: "flex", flexWrap: "wrap" }}
-          >
-            {renderSelectionButtons(
-              girdleStepData,
-              "",
-              styles.activeOtherStyles,
-              selectedGirdleStep2,
-              handleGirdleStep2Change
-            )}
-          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 
