@@ -54,6 +54,13 @@ const AdvanceSearch = () => {
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
 
+  const imageTileStyles = {
+    imageTileContainerStyles: styles.imageTileContainerStyles,
+    imageTileImageStyles: styles.imageTileImageStyles,
+    imageTileLabelStyles: styles.imageTileLabelStyles,
+    activeIndicatorStyles: styles.activeIndicatorStyles,
+  };
+
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -622,6 +629,7 @@ const AdvanceSearch = () => {
       </div>
     ));
   };
+
   return (
     <div>
       <div className={styles.advanceSearchHeader}>
@@ -642,6 +650,7 @@ const AdvanceSearch = () => {
         </div>
         <div className={styles.filterSectionData}>
           <CustomImageTile
+            overriddenStyles={imageTileStyles}
             imageTileData={shapeData}
             selectedTile={selectedShape}
             handleSelectTile={handleShapeChange}

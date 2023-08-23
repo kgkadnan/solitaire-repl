@@ -52,9 +52,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
               overriddenStyles?.imageTileContainerStyles
             } ${
               selectedTile?.includes(title) &&
-              (isNavOption
-                ? overriddenStyles?.imageTileIsNav
-                : style.activeIndicator)
+              overriddenStyles?.activeIndicatorStyles
             }`}
             onMouseEnter={() => setHoveredTile(title)}
             onMouseLeave={() => setHoveredTile(null)}

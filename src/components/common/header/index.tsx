@@ -20,11 +20,6 @@ interface CustomHeaderProps {
 }
 
 const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
-  //display button
-  let displayButtonAllStyle = {
-    displayButtonStyle: styles.headerSearchBtn,
-    displayLabelStyle: styles.headerSearchBtnLabel,
-  };
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,
@@ -41,24 +36,17 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
           {/* Search Input Field*/}
           {data?.handleSearch ? (
             <div className="flex  gap-[15px]">
-              <div className="flex gap-[8px]">
-                {/* <Image src={searchIcon} alt="searchIcon" className={} /> */}
-                <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
-
-                <CustomInputField
-                  type="text"
-                  name="search"
-                  style={inputStyle}
-                  onChange={data?.handleSearch}
-                  value={data?.searchValue}
-                  placeholder="Search by name"
-                  handleSuggestionClick={data.handleSuggestionClick}
-                  suggestions={data.suggestions}
-                />
-              </div>
-              <CustomDisplayButton
-                displayButtonLabel="Search"
-                displayButtonAllStyle={displayButtonAllStyle}
+              {/* <Image src={searchIcon} alt="searchIcon" className={} /> */}
+              <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
+              <CustomInputField
+                type="text"
+                name="search"
+                style={inputStyle}
+                onChange={data?.handleSearch}
+                value={data?.searchValue}
+                placeholder="Search by name"
+                handleSuggestionClick={data.handleSuggestionClick}
+                suggestions={data.suggestions}
               />
             </div>
           ) : (

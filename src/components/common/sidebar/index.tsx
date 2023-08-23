@@ -77,11 +77,10 @@ const SideBar = () => {
   ];
 
   const SideBarStyles = {
-    imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
+    imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
-    imageTileContainerStyles: styles.imageTileContainerStyles,
-    imageTileIsNav: styles.isNav,
+    activeIndicatorStyles: styles.activeIndicatorStyles,
   };
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
 
