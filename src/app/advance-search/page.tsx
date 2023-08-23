@@ -53,6 +53,7 @@ const AdvanceSearch = () => {
   const [pricePerCaratTo, setPricePerCaratTo] = useState("");
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
+  //other parameter Inclsuion state
   const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
   const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
   const [openCrownBI, setOpenCrownBI] = useState<string[]>([]);
@@ -69,6 +70,35 @@ const AdvanceSearch = () => {
   const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
   const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
   const [lusterWI, setLusterWI] = useState<string[]>([]);
+
+  //parameter state
+  const [tablePerFrom, setTablePerFrom] = useState("");
+  const [tablePerTo, setTablePerTo] = useState("");
+  const [crownAngleFrom, setCrownAngleFrom] = useState("");
+  const [crownAngleTo, setCrownAngleTo] = useState("");
+  const [lengthFrom, setLengthFrom] = useState("");
+  const [lengthTo, setLengthTo] = useState("");
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState("");
+  const [pavilionDepthTo, setPavilionDepthTo] = useState("");
+
+  const [depthPerFrom, setDepthPerFrom] = useState("");
+  const [depthPerTo, setDepthPerTo] = useState("");
+  const [crownHeightFrom, setCrownHeightFrom] = useState("");
+  const [crownHeightTo, setCrownHeightTo] = useState("");
+  const [widthFrom, setWidthFrom] = useState("");
+  const [widthTo, setWidthTo] = useState("");
+  const [lowerHalfFrom, setLowerHalfFrom] = useState("");
+  const [lowerHalfTo, setLowerHalfTo] = useState("");
+
+  const [ratioFrom, setRatioFrom] = useState("");
+  const [ratioTo, setRatioTo] = useState("");
+  const [girdlePerFrom, setGirdlePerFrom] = useState("");
+  const [girdlePerTo, setGirdlePerTo] = useState("");
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState("");
+  const [pavilionAngleTo, setPavilionAngleTo] = useState("");
+  const [starLengthFrom, setStarLengthFrom] = useState("");
+  const [starLengthTo, setStarLengthTo] = useState("");
+
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
@@ -161,18 +191,18 @@ const AdvanceSearch = () => {
   ];
 
   let parameterData = [
-    "Table%",
-    "Crown Angle",
-    "Length",
-    "Pavillion Depth",
-    "Depth%",
-    "Crown Height",
-    "Width",
-    "Lower Half",
-    "Ratio",
-    "Girdle%",
-    "Pavillion Angle",
-    "Star Length",
+    { label: "Table%", parameterState:[tablePerFrom,tablePerTo], setParameterState: [setTablePerFrom,setTablePerTo]},
+    { label: "Crown Angle", parameterState: [crownAngleFrom,crownAngleTo], setParameterState: [setCrownAngleFrom,setCrownAngleTo] },
+    { label: "Length", parameterState:[lengthFrom,lengthTo], setParameterState: [setLengthFrom,setLengthTo]},
+    { label: "Pavillion Depth", parameterState: [pavilionDepthFrom,pavilionDepthTo], setParameterState: [setPavilionDepthFrom,setPavilionDepthTo] },
+    { label: "Depth%", parameterState: [depthPerFrom,depthPerTo], setParameterState: [setDepthPerFrom,setDepthPerTo] },
+    { label: "Crown Height", parameterState: [crownHeightFrom,crownHeightTo], setParameterState: [setCrownHeightFrom,setCrownHeightTo] },
+    { label: "Width", parameterState: [widthFrom,widthTo], setParameterState: [setWidthFrom,setWidthTo] },
+    { label: "Lower Half", parameterState: [lowerHalfFrom,lowerHalfTo], setParameterState: [setLowerHalfFrom,setLowerHalfTo] },
+    { label: "Ratio", parameterState: [ratioFrom,ratioTo], setParameterState:[setRatioFrom,setRatioTo]},
+    { label: "Girdle%", parameterState: [girdlePerFrom,girdlePerTo], setParameterState: [setGirdlePerFrom,setGirdlePerTo] },
+    { label: "Pavillion Angle", parameterState: [pavilionAngleFrom,pavilionAngleTo], setParameterState: [setPavilionAngleFrom,setPavilionAngleTo] },
+    { label: "Star Length", parameterState: [starLengthFrom,starLengthTo], setParameterState: [setStarLengthFrom,setStarLengthTo]},
   ];
 
   const handleBlackTableBIChange = (data: string) => {
@@ -465,7 +495,7 @@ const AdvanceSearch = () => {
     "Twinning Wisp",
   ];
 
-  let caratRangeData = [
+  const [ caratRangeData, setCaratRangeData]= useState<string[]>([
     "0.01-0.29",
     "0.30-0.39",
     "0.40-0.49",
@@ -483,10 +513,9 @@ const AdvanceSearch = () => {
     "8.00 - 8.99",
     " 9.00 - 9.99",
     "10+",
-  ];
+  ]);
 
   //// All user actions
-
 
   const handleFilterChange = (
     filterData: string,
@@ -617,8 +646,10 @@ const AdvanceSearch = () => {
     setSelectedGirdleStep(radioValue);
   };
 
-
-
+  const handleAddCarat=(data:string)=>{
+   setCaratRangeData([...caratRangeData,data])
+   
+  }
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -652,32 +683,32 @@ const AdvanceSearch = () => {
 
   const renderParameterFields = () => {
     return parameterData.map((parameter) => (
-      <div key={parameter} className={styles.parameterContainer}>
+      <div key={parameter.label} className={styles.parameterContainer}>
         <CustomInputlabel
           htmlfor="text"
-          label={parameter}
+          label={parameter.label}
           overriddenStyles={{ label: styles.labelPlainColor }}
         />
         <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
           <CustomInputField
-            type="text"
-            name="{name}"
+            type="number"
+            name={`${parameter.parameterState[0]}`}
             onChange={(e) => {
-              setSelectedAditionalCaratRange(e.target.value);
+              parameter.setParameterState[0](e.target.value);
             }}
-            value={selectedAdditionalCaratRange}
+            value={parameter.parameterState[0]}
             style={{
               input: styles.inputFieldStyles,
             }}
           />
           <div className={styles.parameterLabel}>to</div>
           <CustomInputField
-            type="text"
-            name="{name}"
+            type="number"
+            name={`${parameter.parameterState[1]}`}
             onChange={(e) => {
-              setSelectedAditionalCaratRange(e.target.value);
+              parameter.setParameterState[1](e.target.value);
             }}
-            value={selectedAdditionalCaratRange}
+            value={parameter.parameterState[1]}
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -931,7 +962,8 @@ const AdvanceSearch = () => {
             />
             <CustomSelectionButton
               selectionButtonLabel={"Add Carat"}
-              handleClick={() => {}}
+              data={`${caratRangeFrom}-${caratRangeTo}`}
+              handleClick={handleAddCarat}
               selectionButtonAllStyles={{
                 selectionButtonStyle: styles.addCarat,
               }}
@@ -1080,6 +1112,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
+              selectElement:styles.selectElement
             }}
           />
         </div>
@@ -1095,6 +1128,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
+              selectElement:styles.selectElement
             }}
           />
         </div>
@@ -1311,4 +1345,3 @@ const AdvanceSearch = () => {
 };
 
 export default AdvanceSearch;
-

@@ -1,3 +1,4 @@
+import { Example } from "@/components/common/select/example";
 import SideBar from "@/components/common/sidebar";
 import { TableExample } from "@/components/common/table/example/table-example";
 
@@ -26,6 +27,7 @@ export default function Home() {
       </h1> */}
       <SideBar />
       <TableExample />
+      <Example/>     
     </>
   );
 }

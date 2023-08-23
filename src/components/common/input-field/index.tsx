@@ -14,8 +14,8 @@ interface InputFieldProps {
   name: string;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  suggestions: any;
-  handleSuggestionClick: any;
+  suggestions?: any;
+  handleSuggestionClick?: any;
 }
 
 export const CustomInputField: React.FC<InputFieldProps> = ({

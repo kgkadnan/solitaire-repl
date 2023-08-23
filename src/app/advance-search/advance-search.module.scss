@@ -71,12 +71,16 @@
 
 .radioStyle {
   border: 1px solid hsl(var(--solitaire-tertiary));
+  color: hsl(var(--solitaire-quaternary));
+    border-color:  hsl(var(--solitaire-quaternary));;
+    margin: 10px;
 }
 
 .radioLabel {
   color: hsl(var(--solitaire-tertiary));
   padding: 5px;
   font-weight: normal;
+  padding: 10px 0px;
 }
 
 .caratRangeFilter {
@@ -129,12 +133,16 @@
 }
 
 .dropdownData {
-  background-color: hsl(var(--solitaire-tertiary));
+  background-color: hsl(var(--solitaire-secondary));
   color: hsl(var(--solitaire-tertiary));
 }
 
 .dropdownData:hover {
-  background-color: hsl(var(--solitaire-tertiary));
+  background-color: hsl(var(--solitaire-secondary));
+}
+
+.selectElement:hover{
+  background-color: hsl(var(--solitaire-senary));;
 }
 
 .advanceSearchHeader {
@@ -156,6 +164,10 @@
 .stepStyle {
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
+  text-decoration: underline;
+  padding-bottom: 2px;
+  text-decoration-color: #8c7459;
+
 }
 
 .colorDataActiveStyle {

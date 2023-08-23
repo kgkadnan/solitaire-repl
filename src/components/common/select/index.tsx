@@ -18,6 +18,7 @@ interface ISelectData {
 interface Istyle {
   selectContent?: string;
   selectTrigger?: string;
+  selectElement?:string
 }
 
 interface SelectProps {
@@ -49,7 +50,7 @@ export const CustomSelect: React.FC<SelectProps> = ({
         data-testid="option"
       >
         {data.map((item) => (
-          <SelectItem key={item.id} value={item.value}>
+          <SelectItem key={item.id} value={item.value}  className={`${style?.selectElement}`}>
             {item.value}
           </SelectItem>
         ))}
