@@ -22,9 +22,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {/* <Provider store={store}> */}
-        <TopNavigationBar />
         <Providers>{children}</Providers>
-        <BottomNavigationBar />
         {/* </Provider> */}
       </body>
     </html>
