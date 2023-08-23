@@ -8,30 +8,30 @@
   flex-wrap: wrap;
 }
 
-.imageTileContainer {
-  width: 64px;
-  height: 75px;
-  padding: 5px;
-  border-radius: 2px;
-  align-items: center;
-  border: 2px solid transparent;
-  margin: 0 16px;
-}
+// .imageTileContainer {
+//   width: 64px;
+//   height: 75px;
+//   padding: 5px;
+//   border-radius: 2px;
+//   align-items: center;
+//   border: 2px solid transparent;
+//   margin: 0 16px
+// }
 
-.imageTileImage {
-  width: 30px;
-  height: 30px;
-  margin: auto;
-}
+// .imageTileImage {
+//   width: 30px;
+//   height: 30px;
+//   margin: auto;
+// }
 
-.imageTileLabel {
-  font-size: 12px;
-  color: hsl(var(--solitaire-tertiary));
-  padding-top: 9px;
-  text-align: center;
-}
+// .imageTileLabel {
+//   font-size: 12px;
+//   color: hsl(var(--solitaire-tertiary));
+//   padding-top: 9px;
+//   text-align: center;
+// }
 
-.activeIndicator {
-  border: 1px solid #8c7459;
-  border-radius: 2px;
-}
+// .activeIndicator {
+//   border: 1px solid #8c7459;
+//   border-radius: 2px;
+// }

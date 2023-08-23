@@ -40,9 +40,13 @@
     //customized variables
 
     --solitaire-primary: 0, 0%, 100%, 1; //white
-    --solitaire-secondary: 0, 0%, 84%, 1; //Carbon 1
+    --solitaire-secondary: 0, 0%, 100%, 1; //white
     --solitaire-tertiary: 0, 0%, 20%, 1; //Carbon 6
-    --solitaire-quaternary: 32, 22%, 45%, 1; //shadow (golden)
+    --solitaire-quaternary: 32, 22%, 45%, 1; //shadow
+    --solitaire-quinary: 0, 0%, 60%, 1; //Carbon 3
+    --solitaire-senary: 0, 0%, 60%, 1; //Carbon 3
+    --solitaire-septenary: 32, 22%, 45%, 1; //shadow
+    --solitaire-octonary: 0, 0, 84, 100%; //Carbon 1
     --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
   }
 
@@ -85,6 +89,10 @@
     --solitaire-secondary: 180, 44%, 4%, 1; //Emerald 7
     --solitaire-tertiary: 80, 4%, 82%, 1; //Emerald 1
     --solitaire-quaternary: 32, 22%, 45%, 1; //shadow
+    --solitaire-quinary: 180, 44%, 8%, 1; //Emerald Green
+    --solitaire-senary: 180, 6%, 39%, 1; //Emerald 4
+    --solitaire-septenary: 180, 44%, 4%, 1; //Emerald 7
+    --solitaire-octonary: 180, 44%, 4%, 1; //Emerald 7
     --solitaire-outline: 180, 6%, 39%, 1; //Emerald 4
   }
 }

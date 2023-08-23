@@ -17,9 +17,6 @@ describe("CustomInputlabel", () => {
     // Get the label element by its test ID
     const labelElement = getByTestId("custom-label");
 
-    // Log the roles of the label element (useful for debugging)
-    logRoles(labelElement);
-
     // Assert that the label element is in the document
     expect(labelElement).toBeInTheDocument();
 

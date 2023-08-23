@@ -1,5 +1,4 @@
 "use client";
-import type { NextPage } from "next";
 import { useRouter } from "next/navigation";
 import { useCallback, useState } from "react";
 import KGKlogo from "@public/assets/icons/Vector.svg";
@@ -17,7 +16,7 @@ import NewArrival from "@public/assets/icons/new-arrival.svg?url";
 import Dashboard from "@public/assets/icons/grid-outline.svg?url";
 import styles from "./sidebar.module.scss";
 
-const SideBar: NextPage = () => {
+const SideBar = () => {
   const router = useRouter();
 
   const onKGKLogoContainerClick = useCallback(() => {
@@ -28,54 +27,65 @@ const SideBar: NextPage = () => {
     {
       src: <Dashboard className={styles.stroke} />,
       title: "Dashboard",
+      link: "/dashboard",
     },
     {
       src: <NewArrival className={styles.stroke} />,
       title: "New Arrival",
+      link: "/new-arrival",
     },
     {
       src: <AdvanceSearch className={styles.stroke} />,
       title: "Advance Search",
+      link: "advance-search",
     },
     {
       src: <MatchPair className={styles.stroke} />,
       title: "Match Pair",
+      link: "/match-pair",
     },
     {
       src: <SavedSearch className={styles.stroke} />,
       title: "Saved Searches",
+      link: "/saved-search",
     },
     {
       src: <MyCart className={styles.stroke} />,
       title: "Cart",
+      link: "/cart",
     },
     {
       src: <Layout className={styles.stroke} />,
       title: "layouts",
+      link: "/layouts",
     },
     {
       src: <RecentConfirmation className={styles.stroke} />,
       title: "Recent Confirmations",
+      link: "/recent-confiramtion",
     },
     {
       src: <Appointment className={styles.stroke} />,
       title: "Appointments",
+      link: "/appointments",
     },
     {
       src: <MyDiamond className={styles.stroke} />,
       title: "MyDiamonds",
+      link: "/my-diamonds",
     },
   ];
 
   const SideBarStyles = {
-    imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
+    imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
-    imageTileContainerStyles: styles.imageTileContainerStyles,
-    imageTileIsNav: styles.isNav,
+    activeIndicatorStyles: styles.activeIndicatorStyles,
   };
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const handleChange = (shape: string) => {
+
+  const handleChange = (shape: string, link?: string) => {
+    router.push(link!);
     setSelectedShape(() => [shape]);
   };
 
@@ -89,9 +99,11 @@ const SideBar: NextPage = () => {
           onClick={onKGKLogoContainerClick}
         >
           <Image
-            className="w-[42px] h-[55.91px] mx-auto"
+            className="mx-auto"
             alt="KGKlogo"
             src={KGKlogo}
+            width="42"
+            height="55"
           />
         </div>
         <hr className={styles.dividerLine} />

@@ -19,7 +19,7 @@ export default function Home() {
           marginTop: "20px",
         }}
       >
-        Building Digital diamond platform
+        Bulding Digital diamond platform
       </h1>
     </>
   );

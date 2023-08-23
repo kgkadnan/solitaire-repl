@@ -9,9 +9,7 @@
     margin: 0;
 } 
 
-.defaultInputStyle::placeholder{
-    color: hsl(var(--solitaire-tertiary));
-}
+
 
 .defaultInputStyle:focus {
     outline: none;
@@ -34,6 +32,9 @@
   .dropdown li {
     padding: 8px 12px;
     cursor: pointer;
+  }
+  .selectedSuggestion {
+    background-color:hsl(var(--solitaire-senary)) /* Change this to your desired background color */
   }
   
   .dropdown li:hover {

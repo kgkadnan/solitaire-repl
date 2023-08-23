@@ -1,3 +1,31 @@
+.imageTileContainerStyles {
+  width: 64px;
+  height: 75px;
+  padding: 5px;
+  border-radius: 2px;
+  align-items: center;
+  border: 2px solid transparent;
+  margin: 0 16px
+}
+
+.imageTileImageStyles {
+  width: 30px;
+  height: 30px;
+  margin: auto;
+}
+
+.imageTileLabelStyles {
+  font-size: 12px;
+  color: hsl(var(--solitaire-tertiary));
+  padding-top: 9px;
+  text-align: center;
+}
+
+.activeIndicatorStyles{
+  border: 1px solid #8c7459;
+  border-radius: 2px;
+}
+
 .label {
   font-size: 16px;
 }

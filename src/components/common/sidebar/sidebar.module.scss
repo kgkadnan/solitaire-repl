@@ -5,23 +5,30 @@
   z-index: 1111;
 }
 
-.imageTileImageStyles {
-  width: 20px;
-  height: 20px;
-}
-
 .imageTileContainerStyles {
   width: 96px;
   height: 65px;
+  margin: 0;
+  padding: 5px;
+  border-radius: 2px;
+  align-items: center;
+  border: 2px solid transparent;
 }
-
+.imageTileImageStyles {
+  width: 20px;
+  height: 20px;
+  margin: auto;
+}
 .imageTileLabelStyles {
+  font-size: 12px;
+  padding-top: 9px;
+  text-align: center;
   color: hsl(var(--solitaire-quaternary));
   cursor: pointer;
 }
 
 .stroke {
-  stroke: #ced2d2;
+  stroke: hsl(var(--solitaire-tertiary));
 }
 
 .imageTileContainerStyles:hover .stroke {
@@ -29,13 +36,13 @@
   cursor: pointer;
 }
 
-.isNav .stroke {
-  stroke: hsl(var(--solitaire-quaternary));
-}
-
 .dividerLine {
   height: 5px;
   border: 0px solid #5d6a6a;
   border-top-width: 1px;
   box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+}
+
+.activeIndicatorStyles .stroke {
+  stroke: hsl(var(--solitaire-quaternary));
 }

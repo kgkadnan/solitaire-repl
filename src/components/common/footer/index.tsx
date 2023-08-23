@@ -7,6 +7,7 @@ export interface IfooterButtonData {
   id: number;
   displayButtonLabel: string;
   style?: string;
+  fn?: () => void;
 }
 
 interface CustomFooterProps {
@@ -18,7 +19,7 @@ export const CustomFooter: React.FC<CustomFooterProps> = ({
 }) => {
   return (
     <div
-      className={`flex justify-end py-4 border-t border-solitaireTertiary ${styles.footerParentDiv}`}
+      className={`flex justify-end py-4 border-t border-solitaireSenary ${styles.footerParentDiv}`}
     >
       {footerButtonData?.map((item) => {
         return (
@@ -29,6 +30,7 @@ export const CustomFooter: React.FC<CustomFooterProps> = ({
                 displayButtonStyle: `${styles.footerButton} ${item.style}`,
                 displayLabelStyle: styles.footerButtonLabel,
               }}
+              handleClick={item.fn}
             />
           </div>
         );
