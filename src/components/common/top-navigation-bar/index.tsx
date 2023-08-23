@@ -64,16 +64,14 @@ export const TopNavigationBar = () => {
               />
             </div>
           ))}
-          <SearchIcon className={styles.iconColor} />
-          <CalculatorIcon className={styles.iconColor} />
-          <NotificationIcon className={styles.iconColor} />
-          <MyProfileIcon className={styles.iconColor} />
+          <SearchIcon role="button" className={styles.iconColor} />
+          <CalculatorIcon role="button" className={styles.iconColor} />
+          <NotificationIcon role="button" className={styles.iconColor} />
+          <MyProfileIcon role="button" className={styles.iconColor} />
           <ToggleButton />
         </div>
       </div>
       <hr className={styles.dividerLine} />
-      <SideBar />
-      <BottomNavigationBar />
     </div>
   );
 };

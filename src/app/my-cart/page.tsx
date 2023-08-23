@@ -190,7 +190,8 @@ const MyCart = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Delete", style: styles.filled },
+    { id: 1, displayButtonLabel: "Delete", style: styles.transparent },
+    { id: 2, displayButtonLabel: "Place Order", style: styles.filled },
   ];
 
   //Header Data
