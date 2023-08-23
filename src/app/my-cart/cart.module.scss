@@ -1,0 +1,175 @@
+.mainCardContainer {
+  width: 90%;
+  border: 0.25px solid hsl(var(--solitaire-quinary));
+  border-radius: 10px;
+}
+
+/* Card Container */
+.searchCardContainer {
+  background-color: hsl(var(--solitaire-secondary));
+  padding: 20px 10px 0px 0px;
+  height: 154px;
+  width: 100%;
+}
+
+/* Card Title */
+.SearchCardTitle {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Header Styles */
+.cardHeaderMainDiv {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+.searchHeader {
+  display: flex;
+  gap: 31px;
+  margin-left: 25px;
+  margin-top: 10px;
+}
+
+/* Date and Time */
+.SearchDateTime {
+  color: hsl(var(--solitaire-tertiary));
+  margin-left: 50px;
+  font-size: 12px;
+  font-weight: 300;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  letter-spacing: 0.5px;
+}
+
+/* Header Container */
+.headerContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Button Styles */
+.SearchButtonLabel {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.SearchButtonStyle {
+  background-color: hsl(var(--solitaire-primary));
+  margin-top: 25px;
+  border-radius: 2px;
+}
+
+//Table Styling
+.tableHeader {
+  color: #8c7459;
+  font-size: 14px;
+  font-weight: 500;
+  padding-right: 1px;
+}
+
+.tableBody {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 300;
+  padding-right: 1px;
+}
+
+/* Sheet Styling */
+.sheetMainDiv {
+  width: 48%;
+  margin-right: 10%;
+}
+
+.sheetMainHeading {
+  color: var(--shadow, #8c7459);
+  text-align: center;
+  font-size: 16px;
+  font-weight: 700;
+  margin: 20px 0px 30px;
+  letter-spacing: 1px;
+  p {
+    margin-bottom: 30px;
+  }
+}
+
+.sheetHeading {
+  color: var(--shadow, #8c7459);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 20px 0px;
+  letter-spacing: 1px;
+}
+
+.sheetContentStyle {
+  background-color: hsl(var(--solitaire-secondary));
+}
+
+.inclusionDetailsMainDiv {
+  width: 42%;
+  margin-right: 10%;
+  letter-spacing: 1px;
+}
+
+.inclutionDetailsInnerHeadingStyle {
+  width: 100%;
+  color: var(--shadow, #8c7459);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 30px;
+  letter-spacing: 1px;
+}
+
+.innerHeading {
+  color: var(--shadow, #8c7459);
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 30px;
+  width: 50%;
+  padding-right: 10;
+  letter-spacing: 1px;
+}
+
+.sheetValues {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 30px;
+  flex-wrap: wrap;
+  display: flex;
+  width: 50%;
+  padding-left: 10%;
+  letter-spacing: 1px;
+}
+
+.showResultMainDiv {
+  text-align: center;
+}
+
+.showResultButtonStyle {
+  background-color: #8c7459;
+  border-radius: 5px;
+  margin-top: 30px;
+  color: #ffffff;
+  font-weight: 300;
+}
+
+.remainingCartTimeButton {
+  background-color: transparent;
+}
+
+.remainingCartTimeLabel {
+  color: hsl(var(--solitaire-tertiary));
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+}
+.filled {
+  background-color: #8c7459;
+}

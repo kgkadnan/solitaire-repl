@@ -8,7 +8,6 @@ import CustomImageTile, {
 } from "@components/common/image-tile";
 import { CustomInputlabel } from "@components/common/input-label";
 import { CustomInputField } from "@components/common/input-field";
-import { ToggleButton } from "@components/common/toggle";
 import { CustomSelect } from "@components/common/select";
 import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
 import { CustomRadioButton } from "@/components/common/buttons/radio-button";
@@ -98,6 +97,13 @@ const AdvanceSearch = () => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState("");
   const [starLengthFrom, setStarLengthFrom] = useState("");
   const [starLengthTo, setStarLengthTo] = useState("");
+
+  const imageTileStyles = {
+    imageTileContainerStyles: styles.imageTileContainerStyles,
+    imageTileImageStyles: styles.imageTileImageStyles,
+    imageTileLabelStyles: styles.imageTileLabelStyles,
+    activeIndicatorStyles: styles.activeIndicatorStyles,
+  };
 
   let shapeData: IImageTileProps[] = [
     {
@@ -757,6 +763,7 @@ const AdvanceSearch = () => {
       </div>
     ));
   };
+
   return (
     <div>
       <div className={styles.advanceSearchHeader}>
@@ -767,7 +774,6 @@ const AdvanceSearch = () => {
         />
         <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
-      <ToggleButton />
       <hr className={styles.dividerLine} />
 
       <div className={styles.filterSection}>
@@ -777,6 +783,7 @@ const AdvanceSearch = () => {
         </div>
         <div className={styles.filterSectionData}>
           <CustomImageTile
+            overriddenStyles={imageTileStyles}
             imageTileData={shapeData}
             selectedTile={selectedShape}
             handleSelectTile={handleShapeChange}
@@ -861,7 +868,9 @@ const AdvanceSearch = () => {
               <CustomInputlabel htmlfor="text" label="Overtone" />
             </div>
             <div className={styles.filterSectionData}>
-              <div className={styles.filterSection}>
+              <div
+                className={`${styles.filterSection} ${styles.filterWrapSection}`}
+              >
                 {renderSelectionButtons(
                   overtoneData,
                   "",

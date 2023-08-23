@@ -42,9 +42,12 @@ export const CustomTable: React.FC<TableProps> = ({
         <TableHeader>
           <TableRow>
             {/* Map through tableHeads to create table header cells */}
-            {tableData.tableHeads.map((tableHead) => {
+            {tableData.tableHeads.map((tableHead, index) => {
               return (
-                <TableHead key={tableHead} className={`${tableHeaderStyle}`}>
+                <TableHead
+                  key={`tablehead-${index}`}
+                  className={`${tableHeaderStyle}`}
+                >
                   {tableHead}
                 </TableHead>
               );
@@ -55,13 +58,12 @@ export const CustomTable: React.FC<TableProps> = ({
         {/* Table body */}
         <TableBody>
           {/* Map through bodyData to create table rows */}
-          {tableData.bodyData.map((bodyData) => (
-            <TableRow key={`bodyData-${tableData.tableHeads}`}>
-              {/* Map through each property in bodyData to create table cells */}
-              {Object.keys(bodyData).map((item) => {
+          {tableData.bodyData.map((bodyData, rowIndex) => (
+            <TableRow key={`row-${rowIndex}`}>
+              {Object.keys(bodyData).map((item, cellIndex) => {
                 return (
                   <TableCell
-                    key={`row-${tableData.tableHeads}`}
+                    key={`cell-${rowIndex}-${cellIndex}`}
                     className={`${tableBodyStyle}`}
                   >
                     {bodyData[item]}

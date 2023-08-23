@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { useState } from "react";
 import styles from "./wishlist.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
@@ -80,7 +80,7 @@ const WishList = () => {
     },
   ];
 
-  var cardData: any[] = [];
+  let cardData: any[] = [];
 
   cardData = searchList.map((data: any) => ({
     cardId: data.cardId,
@@ -224,7 +224,7 @@ const WishList = () => {
                           handleCardAction={handleEdit}
                         />
                       </SheetTrigger>
-                      <SheetContent>
+                      <SheetContent className={styles.sheetContentStyle}>
                         {/* Detailed Information section */}
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
