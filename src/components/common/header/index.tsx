@@ -32,7 +32,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
 
   return (
     <>
-      <div className="inline-flex w-[1255px] items-center justify-between h-[80px] border-b border-solitaireTertiary">
+      <div
+        className={`inline-flex  items-center justify-between border-b border-solitaireTertiary ${styles.mainDiv}`}
+      >
         {/* Heading */}
         <p>
           {data?.headerHeading} ({data?.searchCount})

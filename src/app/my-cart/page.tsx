@@ -99,7 +99,7 @@ const MyCart = () => {
           <p className={styles.SearchCardTitle}>{data.header}</p>
           <p className={styles.SearchDateTime}>{data.desc}</p>
         </div>
-        <div className="">
+        <div>
           <CustomDisplayButton
             displayButtonAllStyle={cardTimeStyles}
             displayButtonLabel={`Buy within ${data.remainingCardTime}`}
@@ -240,7 +240,7 @@ const MyCart = () => {
                           handleCardAction={handleEdit}
                         />
                       </SheetTrigger>
-                      <SheetContent>
+                      <SheetContent className={styles.sheetContentStyle}>
                         {/* Detailed Information section */}
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}

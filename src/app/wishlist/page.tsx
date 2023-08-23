@@ -224,7 +224,7 @@ const WishList = () => {
                           handleCardAction={handleEdit}
                         />
                       </SheetTrigger>
-                      <SheetContent>
+                      <SheetContent className={styles.sheetContentStyle}>
                         {/* Detailed Information section */}
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}

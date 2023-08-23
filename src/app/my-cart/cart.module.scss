@@ -1,12 +1,13 @@
 .mainCardContainer {
-  width: 100%;
+  width: 90%;
 }
 
 /* Card Container */
 .searchCardContainer {
   background-color: hsl(var(--solitaire-secondary));
-  padding: 20px 10px;
+  padding: 20px 10px 0px 0px;
   height: 154px;
+  width: 100%;
 }
 
 /* Card Title */
@@ -77,7 +78,7 @@
 
 /* Sheet Styling */
 .sheetMainDiv {
-  width: 40%;
+  width: 48%;
   margin-right: 10%;
 }
 
@@ -87,6 +88,7 @@
   font-size: 16px;
   font-weight: 700;
   margin: 20px 0px 30px;
+  letter-spacing: 1px;
   p {
     margin-bottom: 30px;
   }
@@ -97,39 +99,48 @@
   font-size: 16px;
   font-weight: 600;
   margin: 20px 0px;
+  letter-spacing: 1px;
+}
+
+.sheetContentStyle {
+  background-color: hsl(var(--solitaire-secondary));
 }
 
 .inclusionDetailsMainDiv {
-  width: 40%;
+  width: 42%;
   margin-right: 10%;
+  letter-spacing: 1px;
 }
 
 .inclutionDetailsInnerHeadingStyle {
   width: 100%;
   color: var(--shadow, #8c7459);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 30px;
+  letter-spacing: 1px;
 }
 
 .innerHeading {
   color: var(--shadow, #8c7459);
   font-size: 14px;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 30px;
   width: 50%;
   padding-right: 10;
+  letter-spacing: 1px;
 }
 
 .sheetValues {
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 30px;
   flex-wrap: wrap;
   display: flex;
   width: 50%;
   padding-left: 10%;
+  letter-spacing: 1px;
 }
 
 .showResultMainDiv {
@@ -140,7 +151,8 @@
   background-color: #8c7459;
   border-radius: 5px;
   margin-top: 30px;
-  color: hsl(var(--solitaire-tertiary));
+  color: #ffffff;
+  font-weight: 300;
 }
 
 .remainingCartTimeButton {
