@@ -110,7 +110,6 @@ const SavedSearch = () => {
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
-      console.log("Data", data, suggestion);
       return data
         .filter((data: any) =>
           data.header.toLowerCase().includes(suggestion?.toLowerCase())
