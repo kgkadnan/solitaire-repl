@@ -727,7 +727,9 @@ const AdvanceSearch = () => {
               <CustomInputlabel htmlfor="text" label="Overtone" />
             </div>
             <div className={styles.filterSectionData}>
-              <div className={styles.filterSection}>
+              <div
+                className={`${styles.filterSection} ${styles.filterWrapSection}`}
+              >
                 {renderSelectionButtons(
                   overtoneData,
                   "",
