@@ -11,6 +11,7 @@ export interface IheaderData {
   searchCount?: number;
   handleSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
+  isCheckAll?: boolean;
   handleSuggestionClick?: (suggestion: any) => void;
   suggestions?: any;
 }
@@ -23,6 +24,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,
+    inputMain: "relative",
   };
 
   return (
@@ -32,7 +34,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
       >
         {/* Heading */}
         <p>
-          {data?.headerHeading} ({data?.searchCount})
+          {data?.headerHeading} {`(${data?.searchCount})`}
         </p>
         <div className="flex gap-[40px]">
           {/* Search Input Field*/}
@@ -59,6 +61,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
             <Checkbox
               onClick={data?.handleSelectAllCheckbox}
               data-testid={"Select All Checkbox"}
+              checked={data?.isCheckAll}
             />
             <p className="text-solitaireTertiary text-base font-medium">
               Select All
