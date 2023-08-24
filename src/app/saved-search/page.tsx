@@ -10,6 +10,7 @@ import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
 import editIcon from "@public/assets/icons/edit.svg";
+import axios from "axios";
 import CustomHeader from "@/components/common/header";
 import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
@@ -21,6 +22,17 @@ interface CardData {
   cardActionIcon: string;
   cardHeader: React.ReactNode;
   cardContent: React.ReactNode;
+}
+
+interface data {
+  id: string;
+  name: string;
+  customer_id: string;
+  diamondCount: number;
+  filter: any;
+  isDeleted: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 const SavedSearch = () => {
@@ -39,6 +51,9 @@ const SavedSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+
+  //Data
+  const [data, setData] = useState<data[]>([]);
   const [cardData, setCardData] = useState<CardData[]>([]);
 
   //checkbox states
@@ -49,78 +64,73 @@ const SavedSearch = () => {
   const [search, setSearch] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const searchData = ["R2.01VVS2 Search A", "R2.01VVS2 Searchb", "ooooo"];
+  const searchData = [
+    "sample",
+    "sample12",
+    "sample3",
+    "sample4",
+    "sample5",
+    "ooooo",
+  ];
 
-  const searchList = useMemo(
-    () => [
-      {
-        cardId: "1",
-        header: "R2.01VVS2 Search A",
-        desc: "12-05-2023 | 10.12 AM",
-        body: {
-          StoneShape: "Round",
-          color: ["a", "b", "o"],
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
-        },
-      },
-      {
-        cardId: "2",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
-        body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
-        },
-      },
-    ],
-    [] // No dependencies
-  );
   const searchListNew = useMemo(
     () => [
       {
-        cardId: "1",
-        header: "ooooo",
-        desc: "12-05-2023 | 10.12 AM",
-        body: {
-          StoneShape: "Round",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+        id: "gkgh32465442",
+        name: "ooooo",
+        customer_id: "<sample_customer_id>",
+        diamondCount: 256,
+        filter: {
+          color: ["D", "F", "E", "G"],
+          clarity: ["VVS2", "VVS1", "VS2"],
+          polarity: ["EX", "IDEAL", "VG"],
+          lab: ["GIA", "HRD", "IGI"],
         },
+        isDeleted: false,
+        created_at: "2023-08-23T08:03:54.942Z",
+        updated_at: "2023-08-23T08:03:54.942Z",
       },
     ],
     [] // No dependencies
   );
+
+  // Function to format the created_at date
+  // Function to format the created_at date
+  const formatCreatedAt = (createdAt: any) => {
+    const createdAtDate = new Date(createdAt);
+
+    const dateFormatter = new Intl.DateTimeFormat("en-US", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+
+    const timeFormatter = new Intl.DateTimeFormat("en-US", {
+      hour: "numeric",
+      minute: "numeric",
+      hour12: true,
+    });
+
+    const formattedDate = dateFormatter.format(createdAtDate);
+    const formattedTime = timeFormatter.format(createdAtDate);
+
+    return `${formattedDate} | ${formattedTime}`;
+  };
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
         .filter((data: any) =>
-          data.header.toLowerCase().includes(suggestion?.toLowerCase())
+          data.name.toLowerCase().includes(suggestion?.toLowerCase())
         )
         .map((data: any) => ({
-          cardId: data.cardId,
+          cardId: data.id,
           cardActionIcon: editIcon,
           cardHeader: (
             <CustomTable
               tableData={{
-                tableHeads: [data.header],
-                bodyData: [{ desc: data.desc }],
+                tableHeads: [data.name],
+                bodyData: [{ desc: formatCreatedAt(data.created_at) }],
               }}
               tableStyleClasses={searchCardTitle}
             />
@@ -128,8 +138,8 @@ const SavedSearch = () => {
           cardContent: (
             <CustomTable
               tableData={{
-                tableHeads: Object.keys(data.body),
-                bodyData: [data.body],
+                tableHeads: Object.keys(data.filter),
+                bodyData: [data.filter],
               }}
               tableStyleClasses={tableStyles}
             />
@@ -139,13 +149,16 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles]
   );
 
+  //Delete Data
   const handleDelete = () => {
+    console.log("Cards", cardData);
     const updatedCardData = cardData.filter(
       (item) => !isCheck.includes(item.cardId)
     );
-
+    console.log("update", updatedCardData);
     setCardData(updatedCardData);
     setIsCheck([]); // Clear the selected checkboxes
+    setIsCheckAll(false); //clear check all
   };
 
   const cardDetailData = [
@@ -198,6 +211,8 @@ const SavedSearch = () => {
       },
     },
   ];
+
+  ///search bar
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
     setSearch(inputValue);
@@ -212,21 +227,20 @@ const SavedSearch = () => {
     // Update state with an array of strings
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(searchList, ""));
+      setCardData(renderCardData(data, ""));
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
-
     setSuggestions([]);
 
-    let dataNew = searchList.map((data) => data.header);
+    let dataNew = data.map((data) => data.name);
 
     if (!dataNew.includes(suggestion)) {
       setCardData(renderCardData(searchListNew, suggestion));
     } else {
-      setCardData(renderCardData(searchList, suggestion));
+      setCardData(renderCardData(data, suggestion));
     }
   };
   //specific checkbox
@@ -262,6 +276,7 @@ const SavedSearch = () => {
   const headerData = {
     headerHeading: "Saved Searches",
     handleSelectAllCheckbox: handleSelectAllCheckbox,
+    isCheckAll: isCheckAll,
     searchCount: cardData.length,
     handleSearch: handleSearch,
     searchValue: search,
@@ -270,7 +285,17 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    setCardData(renderCardData(searchList, search));
+    let render = async () => {
+      const SavedSearchData = await axios.get(
+        "http://localhost:4000/saveAndSearch"
+      );
+
+      setData(SavedSearchData.data);
+      setCardData(renderCardData(SavedSearchData.data, search));
+    };
+    render();
+
+    // setCardData(renderCardData(searchList, search));
   }, []);
 
   // Function to handle edit action

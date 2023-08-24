@@ -5,6 +5,7 @@ import { Input } from "@components/ui/input";
 
 interface IInputStyle {
   input: string;
+  inputMain?: string;
 }
 
 interface InputFieldProps {
@@ -61,7 +62,7 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   };
   return (
     <>
-      <div className="relative">
+      <div className={`${style?.inputMain}`}>
         <Input
           data-testid="custom-input"
           className={`${styles.defaultInputStyle} ${style?.input}`}
