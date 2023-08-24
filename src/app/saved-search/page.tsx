@@ -285,9 +285,9 @@ const SavedSearch = () => {
 
   return (
     <>
-      <div className="container min-h-screen flex flex-col ">
+      <div className="container flex flex-col">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3">
+        <div className="sticky top-0 bg-solitairePrimary mt-24 overflow-y-scroll">
           <CustomHeader data={headerData} />
         </div>
 

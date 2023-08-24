@@ -2,31 +2,31 @@
 module.exports = {
   darkMode: "class",
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
   ],
   theme: {
     container: {
       center: true,
-      padding: "2rem",
+      // padding: "2rem",
       screens: {
-        "2xl": "1400px",
+        // "2xl": "1400px",
       },
     },
     extend: {
       colors: {
         //*********Customize**************
         solitairePrimary: "hsl(var(--solitaire-primary))", // dark - Emerald Green / light- white
-        solitaireSecondary: "hsl(var(--solitaire-secondary))",// dark - Emerald 7 / light- white
-        solitaireTertiary: "hsl(var(--solitaire-tertiary))",// dark - Emerald 1 / light- Carbon 6
-        solitaireQuaternary: "hsl(var(--solitaire-quaternary))",// dark - shadow / light- shadow
-        solitaireQuinary: "hsl(var(--solitaire-quinary))",// dark - Emerald Green / light-Carbon 3
-        solitaireSenary: "hsl(var(--solitaire-senary))",// dark -Emerald 4 / light- Carbon 3
-        solitaireSeptenary: "hsl(var(--solitaire-septenary))",// dark - Emerald 7 / light- shadow
-        solitaireOctonary: "hsl(var(--solitaire-octonary))",// dark - Emerald 7 / light- Carbon 1
-        solitaireOutline: "hsl(var(--solitaire-outline))",// dark - Emerald 4 / light- Carbon 2
+        solitaireSecondary: "hsl(var(--solitaire-secondary))", // dark - Emerald 7 / light- white
+        solitaireTertiary: "hsl(var(--solitaire-tertiary))", // dark - Emerald 1 / light- Carbon 6
+        solitaireQuaternary: "hsl(var(--solitaire-quaternary))", // dark - shadow / light- shadow
+        solitaireQuinary: "hsl(var(--solitaire-quinary))", // dark - Emerald Green / light-Carbon 3
+        solitaireSenary: "hsl(var(--solitaire-senary))", // dark -Emerald 4 / light- Carbon 3
+        solitaireSeptenary: "hsl(var(--solitaire-septenary))", // dark - Emerald 7 / light- shadow
+        solitaireOctonary: "hsl(var(--solitaire-octonary))", // dark - Emerald 7 / light- Carbon 1
+        solitaireOutline: "hsl(var(--solitaire-outline))", // dark - Emerald 4 / light- Carbon 2
         //********************* */
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -83,9 +83,9 @@ module.exports = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
       fontFamily: {
-        'custom': ['Manrope', 'sans-serif'],
+        custom: ["Manrope", "sans-serif"],
       },
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
