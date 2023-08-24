@@ -1,16 +1,14 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
+import { CustomRadioButton } from "src/components/common/buttons/radio-button";
+import { CustomSelectionButton } from "src/components/common/buttons/selection-button";
+import CustomImageTile, { IImageTileProps } from "src/components/common/image-tile";
+import { CustomInputField } from "src/components/common/input-field";
+import { CustomInputlabel } from "src/components/common/input-label";
+import { CustomSelect } from "src/components/common/select";
+import Round from "../../../public/assets/images/Round.png"
 
-import Round from "@public/assets/images/Round.png";
-import CustomImageTile, {
-  IImageTileProps,
-} from "@components/common/image-tile";
-import { CustomInputlabel } from "@components/common/input-label";
-import { CustomInputField } from "@components/common/input-field";
-import { CustomSelect } from "@components/common/select";
-import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
-import { CustomRadioButton } from "@/components/common/buttons/radio-button";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -97,6 +95,9 @@ const AdvanceSearch = () => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState("");
   const [starLengthFrom, setStarLengthFrom] = useState("");
   const [starLengthTo, setStarLengthTo] = useState("");
+
+  //handle validation
+  const [isValid,setIsValid]=useState(1)
 
   const imageTileStyles = {
     imageTileContainerStyles: styles.imageTileContainerStyles,
@@ -654,7 +655,15 @@ const AdvanceSearch = () => {
 
   const handleAddCarat=(data:string)=>{
    setCaratRangeData([...caratRangeData,data])
+   setSelectedCaratRange([...selectedCaratRange,data])
    
+   
+  }
+
+  const handleSearch=()=>{
+    if (selectedShape.length===0 || selectedColor.length===0 || selectedClarity.length===0 || selectedCaratRange.length===0){
+      console.log("hi")
+    }
   }
   ///reusable jsx
   const renderSelectionButtons = (
@@ -666,11 +675,13 @@ const AdvanceSearch = () => {
     highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
+    
       <CustomSelectionButton
         key={data}
         selectionButtonLabel={data}
         handleClick={handleChange}
         data={data}
+        testId={`selection-button-white`}
         selectionButtonAllStyles={{
           selectionButtonStyle: `${className ?? ""}   ${
             typeof relatedState !== "string"
@@ -779,7 +790,7 @@ const AdvanceSearch = () => {
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           {" "}
-          <CustomInputlabel htmlfor="text" label="Shape" />
+          <CustomInputlabel htmlfor="text" label="Shape*" />
         </div>
         <div className={styles.filterSectionData}>
           <CustomImageTile
@@ -794,7 +805,7 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label="Color"
+            label="Color*"
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
@@ -915,7 +926,7 @@ const AdvanceSearch = () => {
       </div>
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Clarity" />
+          <CustomInputlabel htmlfor="text" label="Clarity*" />
         </div>
         <div>
           {renderSelectionButtons(
@@ -932,7 +943,7 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label="Carat Range"
+            label="Carat Range*"
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>

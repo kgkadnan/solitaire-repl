@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import SavedSearch from "@/app/saved-search/page";
+import SavedSearch from "@app/saved-search/page";
 
 jest.mock("next/image", () => ({
   __esModule: true,

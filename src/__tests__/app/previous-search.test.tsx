@@ -1,5 +1,5 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import PreviousSearch from "@/app/previous-search/page";
+import PreviousSearch from "@app/previous-search/page";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 
 jest.mock("next/image", () => ({

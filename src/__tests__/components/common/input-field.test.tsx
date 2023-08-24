@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react";
-import { CustomInputField } from "@/components/common/input-field";
+import { CustomInputField } from "@components/common/input-field";
 
 // Test case to render the input field correctly
 test("renders input field correctly", () => {
