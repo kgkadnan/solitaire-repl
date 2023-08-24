@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { CustomSelectionButton } from ".";
 
 const meta = {
-  title: "CustomSelectionButton",
+  title: "components/CustomSelectionButton",
   component: CustomSelectionButton,
   parameters: {
     layout: "centered",
