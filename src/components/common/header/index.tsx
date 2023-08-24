@@ -11,6 +11,7 @@ export interface IheaderData {
   searchCount?: number;
   handleSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
+  isCheckAll?: boolean;
   handleSuggestionClick?: (suggestion: any) => void;
   suggestions?: any;
   headerData?: React.ReactNode;
@@ -24,6 +25,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,
+    inputMain: "relative",
   };
 
   return (
@@ -63,6 +65,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
             <Checkbox
               onClick={data?.handleSelectAllCheckbox}
               data-testid={"Select All Checkbox"}
+              checked={data?.isCheckAll}
             />
             <p className="text-solitaireTertiary text-base font-medium">
               Select All
