@@ -92,7 +92,7 @@ const SideBar = () => {
   return (
     <>
       <div
-        className={`flex flex-col w-[93px] h-[100vh] bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+        className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
       >
         <div
           className="flex items-center justify-center cursor-pointer gap-[40px] h-[112px] "
@@ -107,8 +107,8 @@ const SideBar = () => {
           />
         </div>
         <hr className={styles.dividerLine} />
-        <div className="w-[93px] h-auto flex items-center justify-center">
-          <div className="overflow-hidden flex flex-row p-[3px] items-center whitespace-normal break-words justify-center bg-solitaireSecondary ">
+        <div className="w-[93px] flex justify-center shadow-lg ">
+          <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
             <CustomImageTile
               imageTileData={imageData}
               overriddenStyles={SideBarStyles}

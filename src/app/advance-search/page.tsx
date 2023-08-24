@@ -54,6 +54,7 @@ const AdvanceSearch = () => {
   const [caratRangeTo, setCaratRangeTo] = useState("");
 
   const imageTileStyles = {
+    imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
