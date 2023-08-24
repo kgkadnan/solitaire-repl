@@ -8,6 +8,7 @@ import { CustomInputField } from "src/components/common/input-field";
 import { CustomInputlabel } from "src/components/common/input-label";
 import { CustomSelect } from "src/components/common/select";
 import Round from "../../../public/assets/images/Round.png"
+import CustomHeader from "@/components/common/header";
 
 
 const AdvanceSearch = () => {
@@ -657,13 +658,15 @@ const AdvanceSearch = () => {
   const handleAddCarat=(data:string)=>{
    setCaratRangeData([...caratRangeData,data])
    setSelectedCaratRange([...selectedCaratRange,data])
+   setCaratRangeFrom("")
+   setCaratRangeTo("")
    
    
   }
 
   const handleSearch=()=>{
     if (selectedShape.length===0 || selectedColor.length===0 || selectedClarity.length===0 || selectedCaratRange.length===0){
-      console.log("hi")
+      console.log("please select all required fields")
     }
   }
   ///reusable jsx
@@ -682,7 +685,6 @@ const AdvanceSearch = () => {
         selectionButtonLabel={data}
         handleClick={handleChange}
         data={data}
-        testId={`selection-button-white`}
         selectionButtonAllStyles={{
           selectionButtonStyle: `${className ?? ""}   ${
             typeof relatedState !== "string"
@@ -778,15 +780,12 @@ const AdvanceSearch = () => {
 
   return (
     <div>
-      <div className={styles.advanceSearchHeader}>
-        <CustomInputlabel
-          htmlfor="text"
-          label="Search Diamonds"
-          overriddenStyles={{ label: styles.label }}
-        />
-        <CustomInputlabel htmlfor="text" label="Your Selection:" />
-      </div>
-      <hr className={styles.dividerLine} />
+       <div className="sticky top-0 bg-solitairePrimary mt-3">
+          <CustomHeader data={{headerHeading: "Search Diamonds",headerData:<div> <CustomInputlabel htmlfor="text" label="Your Selection:" /> <div style={{color:"white"}}>{selectedShape.toString().substring(0, 5).concat("...")}</div></div>}} />
+        </div>
+
+     
+      {/* <hr className={styles.dividerLine} /> */}
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
