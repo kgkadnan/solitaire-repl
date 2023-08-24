@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useMemo, useState } from "react";
 import styles from "./previous-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
@@ -38,56 +38,136 @@ const PreviousSearch = () => {
 
   const searchData = ["R2.01VVS2 Search A", "R2.01VVS2 Searchb", "ooooo"];
 
-  const searchListNew = [
-    {
-      cardId: "1",
-      header: "ooooo",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "ooooo",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+  const searchList = useMemo(
+    () => [
+      {
+        cardId: "1",
+        header: "R2.01VVS2 Search A",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Round",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-  ];
-  const searchList = [
-    {
-      cardId: "1",
-      header: "R2.01VVS2 Search A",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "Round",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-    {
-      cardId: "2",
-      header: "R2.01VVS2 Searchb",
-      desc: "12-05-2023 | 10.12 AM",
-      body: {
-        StoneShape: "Round",
-        color: "D",
-        Carat: "2.01",
-        Clarity: "VVS2",
-        Shade: "WHT",
-        Cut: "EX",
-        polish: "EX",
-        Rap: "23,500.00",
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
       },
-    },
-  ];
-
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+      {
+        cardId: "2",
+        header: "R2.01VVS2 Searchb",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Heart",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+    ],
+    [] // No dependencies
+  );
+  const searchListNew = useMemo(
+    () => [
+      {
+        cardId: "1",
+        header: "ooooo",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Round",
+          color: "D",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "EX",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+    ],
+    [] // No dependencies
+  );
   var cardData: any[] = [];
 
   const renderCardData = (data: any, suggestion: string) => {
@@ -248,9 +328,9 @@ const PreviousSearch = () => {
 
   return (
     <>
-      <div className="container min-h-screen flex flex-col ">
+      <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3">
+        <div className="sticky top-0 bg-solitairePrimary mt-24">
           <CustomHeader data={headerData} />
         </div>
 
@@ -374,9 +454,7 @@ const PreviousSearch = () => {
                             </div>
                           </div>
                         ))}
-
                         <div className="border-b border-solitaireTertiary mt-8"></div>
-
                         {/* Show Results button */}
                         <div className={styles.showResultMainDiv}>
                           <CustomDisplayButton

@@ -1,8 +1,8 @@
 .footerParentDiv {
-  width: 1255px;
   height: 80px;
-  // position: fixed;
-  // bottom: 130px;
+  position: fixed;
+  bottom: 0px;
+  background-color: hsl(var(--solitaire-primary));
 }
 
 .footerButton {
@@ -22,7 +22,7 @@
 /* Small screens */
 @media (max-width: 767px) {
   .footerParentDiv {
-    width: 100%;
+    width: 70%;
     height: auto;
   }
 
@@ -37,7 +37,7 @@
 /* Medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   .footerParentDiv {
-    width: 100%;
+    width: 80%;
     height: 60px;
   }
 
@@ -52,7 +52,7 @@
 /* Large screens */
 @media (min-width: 1024px) {
   .footerParentDiv {
-    width: 100%;
+    width: 90%;
     height: 80px;
   }
 

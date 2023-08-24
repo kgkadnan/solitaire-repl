@@ -45,6 +45,8 @@ const WishList = () => {
         "C/A": "59",
         "C/H": "15.6",
         Symmetry: "EX",
+        Length: "80.4",
+        Width: "7.98",
         Lab: "GIA",
         Girdle: "Med-Stk",
         Cutlet: "None",
@@ -69,6 +71,8 @@ const WishList = () => {
         "C/A": "59",
         "C/H": "15.6",
         Symmetry: "EX",
+        Length: "80.4",
+        Width: "7.98",
         Lab: "GIA",
         Girdle: "Med-Stk",
         Cutlet: "None",
@@ -197,10 +201,9 @@ const WishList = () => {
 
   return (
     <>
-      <ToggleButton />
-      <div className="container min-h-screen flex flex-col ">
+      <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3">
+        <div className="sticky top-0 bg-solitairePrimary mt-24">
           <CustomHeader data={headerData} />
         </div>
 

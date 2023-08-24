@@ -14,6 +14,12 @@
 //   color: hsl(var(--solitaire-tertiary));
 // }
 
+.mainDiv {
+  position: fixed;
+  top: 110px;
+  background-color: hsl(var(--solitaire-primary));
+}
+
 .headerInputStyle {
   width: 250px;
   font-size: 16px;
@@ -27,7 +33,7 @@
 /* Small screens */
 @media (max-width: 767px) {
   .mainDiv {
-    width: 100%;
+    width: 70%;
     height: auto;
   }
 
@@ -46,7 +52,7 @@
 /* Medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   .mainDiv {
-    width: 100%;
+    width: 80%;
     height: 60px;
   }
 
@@ -65,7 +71,7 @@
 /* Large screens */
 @media (min-width: 1024px) {
   .mainDiv {
-    width: 100%;
+    width: 90%;
     height: 80px;
   }
 

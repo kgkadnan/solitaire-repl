@@ -6,7 +6,6 @@ import { CustomFooter } from "@/components/common/footer";
 import CustomHeader from "@/components/common/header";
 import CustomSearchResultCard from "@/components/common/search-result-card";
 import { CustomTable } from "@/components/common/table/table";
-import { ToggleButton } from "@/components/common/toggle";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import React, { useState } from "react";
 import styles from "./cart.module.scss";
@@ -213,10 +212,9 @@ const MyCart = () => {
 
   return (
     <>
-      <ToggleButton />
-      <div className="container min-h-screen flex flex-col ">
+      <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3">
+        <div className="sticky top-0 bg-solitairePrimary mt-24">
           <CustomHeader data={headerData} />
         </div>
 
