@@ -209,7 +209,7 @@ const WishList = () => {
 
         <Sheet>
           {/* Custom Card and Checkbox map */}
-          <div className="flex-grow overflow-y-auto">
+          <div className="flex-grow overflow-y-auto min-h-[80vh]">
             <>
               {cardData?.map((items: any) => {
                 return (
