@@ -3,13 +3,15 @@ import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
 import { CustomRadioButton } from "src/components/common/buttons/radio-button";
 import { CustomSelectionButton } from "src/components/common/buttons/selection-button";
-import CustomImageTile, { IImageTileProps } from "src/components/common/image-tile";
+import CustomImageTile, {
+  IImageTileProps,
+} from "src/components/common/image-tile";
 import { CustomInputField } from "src/components/common/input-field";
 import { CustomInputlabel } from "src/components/common/input-label";
 import { CustomSelect } from "src/components/common/select";
-import Round from "../../../public/assets/images/Round.png"
+import Round from "../../../public/assets/images/Round.png";
 import CustomHeader from "@/components/common/header";
-
+import { CustomFooter } from "@/components/common/footer";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -98,7 +100,7 @@ const AdvanceSearch = () => {
   const [starLengthTo, setStarLengthTo] = useState("");
 
   //handle validation
-  const [isValid,setIsValid]=useState(1)
+  const [isValid, setIsValid] = useState(1);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -200,18 +202,66 @@ const AdvanceSearch = () => {
   ];
 
   let parameterData = [
-    { label: "Table%", parameterState:[tablePerFrom,tablePerTo], setParameterState: [setTablePerFrom,setTablePerTo]},
-    { label: "Crown Angle", parameterState: [crownAngleFrom,crownAngleTo], setParameterState: [setCrownAngleFrom,setCrownAngleTo] },
-    { label: "Length", parameterState:[lengthFrom,lengthTo], setParameterState: [setLengthFrom,setLengthTo]},
-    { label: "Pavillion Depth", parameterState: [pavilionDepthFrom,pavilionDepthTo], setParameterState: [setPavilionDepthFrom,setPavilionDepthTo] },
-    { label: "Depth%", parameterState: [depthPerFrom,depthPerTo], setParameterState: [setDepthPerFrom,setDepthPerTo] },
-    { label: "Crown Height", parameterState: [crownHeightFrom,crownHeightTo], setParameterState: [setCrownHeightFrom,setCrownHeightTo] },
-    { label: "Width", parameterState: [widthFrom,widthTo], setParameterState: [setWidthFrom,setWidthTo] },
-    { label: "Lower Half", parameterState: [lowerHalfFrom,lowerHalfTo], setParameterState: [setLowerHalfFrom,setLowerHalfTo] },
-    { label: "Ratio", parameterState: [ratioFrom,ratioTo], setParameterState:[setRatioFrom,setRatioTo]},
-    { label: "Girdle%", parameterState: [girdlePerFrom,girdlePerTo], setParameterState: [setGirdlePerFrom,setGirdlePerTo] },
-    { label: "Pavillion Angle", parameterState: [pavilionAngleFrom,pavilionAngleTo], setParameterState: [setPavilionAngleFrom,setPavilionAngleTo] },
-    { label: "Star Length", parameterState: [starLengthFrom,starLengthTo], setParameterState: [setStarLengthFrom,setStarLengthTo]},
+    {
+      label: "Table%",
+      parameterState: [tablePerFrom, tablePerTo],
+      setParameterState: [setTablePerFrom, setTablePerTo],
+    },
+    {
+      label: "Crown Angle",
+      parameterState: [crownAngleFrom, crownAngleTo],
+      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+    },
+    {
+      label: "Length",
+      parameterState: [lengthFrom, lengthTo],
+      setParameterState: [setLengthFrom, setLengthTo],
+    },
+    {
+      label: "Pavillion Depth",
+      parameterState: [pavilionDepthFrom, pavilionDepthTo],
+      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
+    },
+    {
+      label: "Depth%",
+      parameterState: [depthPerFrom, depthPerTo],
+      setParameterState: [setDepthPerFrom, setDepthPerTo],
+    },
+    {
+      label: "Crown Height",
+      parameterState: [crownHeightFrom, crownHeightTo],
+      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
+    },
+    {
+      label: "Width",
+      parameterState: [widthFrom, widthTo],
+      setParameterState: [setWidthFrom, setWidthTo],
+    },
+    {
+      label: "Lower Half",
+      parameterState: [lowerHalfFrom, lowerHalfTo],
+      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+    },
+    {
+      label: "Ratio",
+      parameterState: [ratioFrom, ratioTo],
+      setParameterState: [setRatioFrom, setRatioTo],
+    },
+    {
+      label: "Girdle%",
+      parameterState: [girdlePerFrom, girdlePerTo],
+      setParameterState: [setGirdlePerFrom, setGirdlePerTo],
+    },
+    {
+      label: "Pavillion Angle",
+      parameterState: [pavilionAngleFrom, pavilionAngleTo],
+      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
+    },
+    {
+      label: "Star Length",
+      parameterState: [starLengthFrom, starLengthTo],
+      setParameterState: [setStarLengthFrom, setStarLengthTo],
+    },
   ];
 
   const handleBlackTableBIChange = (data: string) => {
@@ -504,7 +554,7 @@ const AdvanceSearch = () => {
     "Twinning Wisp",
   ];
 
-  const [ caratRangeData, setCaratRangeData]= useState<string[]>([
+  const [caratRangeData, setCaratRangeData] = useState<string[]>([
     "0.01-0.29",
     "0.30-0.39",
     "0.40-0.49",
@@ -655,20 +705,29 @@ const AdvanceSearch = () => {
     setSelectedGirdleStep(radioValue);
   };
 
-  const handleAddCarat=(data:string)=>{
-   setCaratRangeData([...caratRangeData,data])
-   setSelectedCaratRange([...selectedCaratRange,data])
-   setCaratRangeFrom("")
-   setCaratRangeTo("")
-   
-   
-  }
+  const handleAddCarat = (data: string) => {
+    setCaratRangeData([...caratRangeData, data]);
+    setSelectedCaratRange([...selectedCaratRange, data]);
+    setCaratRangeFrom("");
+    setCaratRangeTo("");
+  };
 
-  const handleSearch=()=>{
-    if (selectedShape.length===0 || selectedColor.length===0 || selectedClarity.length===0 || selectedCaratRange.length===0){
-      console.log("please select all required fields")
+  const handleSearch = () => {
+    if (
+      selectedShape.length === 0 ||
+      selectedColor.length === 0 ||
+      selectedClarity.length === 0 ||
+      selectedCaratRange.length === 0
+    ) {
+      console.log("please select all required fields");
     }
-  }
+  };
+
+  const formatSelection = (data: string[]) => {
+    return data.length > 1
+      ? data.toString().substring(0, 4).concat("...")
+      : data.toString();
+  };
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -679,7 +738,6 @@ const AdvanceSearch = () => {
     highlightIndicator?: boolean
   ) => {
     return data.map((data: string) => (
-    
       <CustomSelectionButton
         key={data}
         selectionButtonLabel={data}
@@ -780,11 +838,26 @@ const AdvanceSearch = () => {
 
   return (
     <div>
-       <div className="sticky top-0 bg-solitairePrimary mt-3">
-          <CustomHeader data={{headerHeading: "Search Diamonds",headerData:<div> <CustomInputlabel htmlfor="text" label="Your Selection:" /> <div style={{color:"white"}}>{selectedShape.toString().substring(0, 5).concat("...")}</div></div>}} />
-        </div>
+      <div className="sticky top-0 bg-solitairePrimary mt-24">
+        <CustomHeader
+          data={{
+            headerHeading: "Search Diamonds",
+            headerData: (
+              <div style={{ display: "flex" }}>
+                {" "}
+                <CustomInputlabel htmlfor="text" label="Your Selection:" />{" "}
+                <div style={{ color: "white", width: "250px" }}>
+                  {formatSelection(selectedShape)}{" "}
+                  {formatSelection(selectedColor)}{" "}
+                  {formatSelection(selectedClarity)}{" "}
+                  {formatSelection(selectedCaratRange)}
+                </div>
+              </div>
+            ),
+          }}
+        />
+      </div>
 
-     
       {/* <hr className={styles.dividerLine} /> */}
 
       <div className={styles.filterSection}>
@@ -1132,7 +1205,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
-              selectElement:styles.selectElement
+              selectElement: styles.selectElement,
             }}
           />
         </div>
@@ -1148,7 +1221,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
-              selectElement:styles.selectElement
+              selectElement: styles.selectElement,
             }}
           />
         </div>
@@ -1360,6 +1433,10 @@ const AdvanceSearch = () => {
           </div>
         </div>
       </div>
+      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+            <CustomFooter footerButtonData={[{ id: 1, displayButtonLabel: "Delete", style: styles.transparent },
+    { id: 2, displayButtonLabel: "Place Order", style: styles.filled }]} />
+          </div>
     </div>
   );
 };
