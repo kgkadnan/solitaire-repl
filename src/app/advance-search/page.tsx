@@ -1,20 +1,21 @@
 "use client";
 import React, { useState } from "react";
 import styles from "./advance-search.module.scss";
-
-import Round from "@public/assets/images/Round.png";
+import { CustomRadioButton } from "src/components/common/buttons/radio-button";
+import { CustomSelectionButton } from "src/components/common/buttons/selection-button";
 import CustomImageTile, {
   IImageTileProps,
-} from "@components/common/image-tile";
-import { CustomInputlabel } from "@components/common/input-label";
-import { CustomInputField } from "@components/common/input-field";
-import { CustomSelect } from "@components/common/select";
-import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
-import { CustomRadioButton } from "@/components/common/buttons/radio-button";
+} from "src/components/common/image-tile";
+import { CustomInputField } from "src/components/common/input-field";
+import { CustomInputlabel } from "src/components/common/input-label";
+import { CustomSelect } from "src/components/common/select";
+import Round from "../../../public/assets/images/Round.png";
+import CustomHeader from "@/components/common/header";
+import { CustomFooter } from "@/components/common/footer";
 
 const AdvanceSearch = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string>("");
+  const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
   const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
@@ -52,6 +53,54 @@ const AdvanceSearch = () => {
   const [pricePerCaratTo, setPricePerCaratTo] = useState("");
   const [caratRangeFrom, setCaratRangeFrom] = useState("");
   const [caratRangeTo, setCaratRangeTo] = useState("");
+  //other parameter Inclsuion state
+  const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
+  const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
+  const [openCrownBI, setOpenCrownBI] = useState<string[]>([]);
+  const [openTableBI, setOpenTableBI] = useState<string[]>([]);
+  const [openPavilionBI, setOpenPavilionBI] = useState<string[]>([]);
+  const [milkyBI, setMilkyBI] = useState<string[]>([]);
+  const [lusterBI, setLusterBI] = useState<string[]>([]);
+  const [eyeCleanBI, setEyeCleanBI] = useState<string[]>([]);
+
+  const [tableInclusionWI, setTableInclusionWI] = useState<string[]>([]);
+  const [sideInclusionWI, setSideInclusionWI] = useState<string[]>([]);
+  const [naturalCrownWI, setNaturalCrownWI] = useState<string[]>([]);
+  const [naturalGirdleWI, setNaturalGirdleWI] = useState<string[]>([]);
+  const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
+  const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
+  const [lusterWI, setLusterWI] = useState<string[]>([]);
+
+  //parameter state
+  const [tablePerFrom, setTablePerFrom] = useState("");
+  const [tablePerTo, setTablePerTo] = useState("");
+  const [crownAngleFrom, setCrownAngleFrom] = useState("");
+  const [crownAngleTo, setCrownAngleTo] = useState("");
+  const [lengthFrom, setLengthFrom] = useState("");
+  const [lengthTo, setLengthTo] = useState("");
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState("");
+  const [pavilionDepthTo, setPavilionDepthTo] = useState("");
+
+  const [depthPerFrom, setDepthPerFrom] = useState("");
+  const [depthPerTo, setDepthPerTo] = useState("");
+  const [crownHeightFrom, setCrownHeightFrom] = useState("");
+  const [crownHeightTo, setCrownHeightTo] = useState("");
+  const [widthFrom, setWidthFrom] = useState("");
+  const [widthTo, setWidthTo] = useState("");
+  const [lowerHalfFrom, setLowerHalfFrom] = useState("");
+  const [lowerHalfTo, setLowerHalfTo] = useState("");
+
+  const [ratioFrom, setRatioFrom] = useState("");
+  const [ratioTo, setRatioTo] = useState("");
+  const [girdlePerFrom, setGirdlePerFrom] = useState("");
+  const [girdlePerTo, setGirdlePerTo] = useState("");
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState("");
+  const [pavilionAngleTo, setPavilionAngleTo] = useState("");
+  const [starLengthFrom, setStarLengthFrom] = useState("");
+  const [starLengthTo, setStarLengthTo] = useState("");
+
+  //handle validation
+  const [isValid, setIsValid] = useState(1);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -153,19 +202,119 @@ const AdvanceSearch = () => {
   ];
 
   let parameterData = [
-    "Table%",
-    "Crown Angle",
-    "Length",
-    "Pavillion Depth",
-    "Depth%",
-    "Crown Height",
-    "Width",
-    "Lower Half",
-    "Ratio",
-    "Girdle%",
-    "Pavillion Angle",
-    "Star Length",
+    {
+      label: "Table%",
+      parameterState: [tablePerFrom, tablePerTo],
+      setParameterState: [setTablePerFrom, setTablePerTo],
+    },
+    {
+      label: "Crown Angle",
+      parameterState: [crownAngleFrom, crownAngleTo],
+      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+    },
+    {
+      label: "Length",
+      parameterState: [lengthFrom, lengthTo],
+      setParameterState: [setLengthFrom, setLengthTo],
+    },
+    {
+      label: "Pavillion Depth",
+      parameterState: [pavilionDepthFrom, pavilionDepthTo],
+      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
+    },
+    {
+      label: "Depth%",
+      parameterState: [depthPerFrom, depthPerTo],
+      setParameterState: [setDepthPerFrom, setDepthPerTo],
+    },
+    {
+      label: "Crown Height",
+      parameterState: [crownHeightFrom, crownHeightTo],
+      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
+    },
+    {
+      label: "Width",
+      parameterState: [widthFrom, widthTo],
+      setParameterState: [setWidthFrom, setWidthTo],
+    },
+    {
+      label: "Lower Half",
+      parameterState: [lowerHalfFrom, lowerHalfTo],
+      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+    },
+    {
+      label: "Ratio",
+      parameterState: [ratioFrom, ratioTo],
+      setParameterState: [setRatioFrom, setRatioTo],
+    },
+    {
+      label: "Girdle%",
+      parameterState: [girdlePerFrom, girdlePerTo],
+      setParameterState: [setGirdlePerFrom, setGirdlePerTo],
+    },
+    {
+      label: "Pavillion Angle",
+      parameterState: [pavilionAngleFrom, pavilionAngleTo],
+      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
+    },
+    {
+      label: "Star Length",
+      parameterState: [starLengthFrom, starLengthTo],
+      setParameterState: [setStarLengthFrom, setStarLengthTo],
+    },
   ];
+
+  const handleBlackTableBIChange = (data: string) => {
+    handleFilterChange(data, blackTableBI, setBlackTableBI);
+  };
+
+  const handleSideBlackBIChange = (data: string) => {
+    handleFilterChange(data, sideBlackBI, setSideBlackBI);
+  };
+
+  const handleOpenCrownBIChange = (data: string) => {
+    handleFilterChange(data, openCrownBI, setOpenCrownBI);
+  };
+  const handleOpenTableBIChange = (data: string) => {
+    handleFilterChange(data, openTableBI, setOpenTableBI);
+  };
+  const handleOpenPavilionBIChange = (data: string) => {
+    handleFilterChange(data, openPavilionBI, setOpenPavilionBI);
+  };
+  const handleMilkyBIChange = (data: string) => {
+    handleFilterChange(data, milkyBI, setMilkyBI);
+  };
+  const handleLusterBIChange = (data: string) => {
+    handleFilterChange(data, lusterBI, setLusterBI);
+  };
+
+  const handleEyeCleanBIChange = (data: string) => {
+    handleFilterChange(data, eyeCleanBI, setEyeCleanBI);
+  };
+
+  const handleTableInclusionWIChange = (data: string) => {
+    handleFilterChange(data, tableInclusionWI, setTableInclusionWI);
+  };
+  const handleSideInclusionWIChange = (data: string) => {
+    handleFilterChange(data, sideInclusionWI, setSideInclusionWI);
+  };
+  const handleNaturalCrownWIChange = (data: string) => {
+    handleFilterChange(data, naturalCrownWI, setNaturalCrownWI);
+  };
+  const handleNaturalGirdleWIChange = (data: string) => {
+    handleFilterChange(data, naturalGirdleWI, setNaturalGirdleWI);
+  };
+  const handleNaturalPavilionWIChange = (data: string) => {
+    handleFilterChange(data, naturalPavilionWI, setNaturalPavilionWI);
+  };
+
+  const handleSurfaceGrainingIChange = (data: string) => {
+    handleFilterChange(data, surfaceGrainingWI, setSurfaceGrainingWI);
+  };
+
+  const handleLusterWIChange = (data: string) => {
+    handleFilterChange(data, lusterWI, setLusterWI);
+  };
 
   let otherParameterData = [
     {
@@ -174,34 +323,50 @@ const AdvanceSearch = () => {
         {
           elementKey: "Black Table",
           elementValue: ["BO", "BPP", "B1", "B2", "B3"],
+          handleChange: handleBlackTableBIChange,
+          state: blackTableBI,
         },
         {
           elementKey: "Side Table",
           elementValue: ["SBO", "SBPP", "SB1", "SB2", "SB3"],
+          handleChange: handleSideBlackBIChange,
+          state: sideBlackBI,
         },
         {
           elementKey: "Open Crown",
           elementValue: ["None", "VS", "S", "M", "D"],
+          handleChange: handleOpenCrownBIChange,
+          state: openCrownBI,
         },
         {
           elementKey: "Open Table",
           elementValue: ["None", "VS", "S", "M", "D"],
+          handleChange: handleOpenTableBIChange,
+          state: openTableBI,
         },
         {
           elementKey: "Open Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange: handleOpenPavilionBIChange,
+          state: openPavilionBI,
         },
         {
           elementKey: "Milky",
           elementValue: ["MO", "M1", "M2", "M3"],
+          handleChange: handleMilkyBIChange,
+          state: milkyBI,
         },
         {
           elementKey: "Luster",
           elementValue: ["EX", "VG", "G", "P"],
+          handleChange: handleLusterBIChange,
+          state: lusterBI,
         },
         {
           elementKey: "Eye Clean",
           elementValue: ["Yes", "No", "B"],
+          handleChange: handleEyeCleanBIChange,
+          state: eyeCleanBI,
         },
       ],
     },
@@ -211,30 +376,44 @@ const AdvanceSearch = () => {
         {
           elementKey: "Table Inclusion",
           elementValue: ["TO", "T1", "B1", "T2", "T3"],
+          handleChange: handleTableInclusionWIChange,
+          state: tableInclusionWI,
         },
         {
           elementKey: "Side Inclusion",
           elementValue: ["SO", "S1", "SB1", "SB2", "S3"],
+          handleChange: handleSideInclusionWIChange,
+          state: sideInclusionWI,
         },
         {
           elementKey: "Natural Crown",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange: handleNaturalCrownWIChange,
+          state: naturalCrownWI,
         },
         {
           elementKey: "Natural Girdle",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange: handleNaturalGirdleWIChange,
+          state: naturalGirdleWI,
         },
         {
           elementKey: "Natural Pavilion",
           elementValue: ["None", "VS", "S", "M", "L"],
+          handleChange: handleNaturalPavilionWIChange,
+          state: naturalPavilionWI,
         },
         {
           elementKey: "Surface Graining",
           elementValue: ["GO", "G1", "G2", "G3"],
+          handleChange: handleSurfaceGrainingIChange,
+          state: surfaceGrainingWI,
         },
         {
           elementKey: "Luster",
           elementValue: ["IGO", "IG1", "IG2", "IG3"],
+          handleChange: handleLusterWIChange,
+          state: lusterWI,
         },
       ],
     },
@@ -375,7 +554,7 @@ const AdvanceSearch = () => {
     "Twinning Wisp",
   ];
 
-  let caratRangeData = [
+  const [caratRangeData, setCaratRangeData] = useState<string[]>([
     "0.01-0.29",
     "0.30-0.39",
     "0.40-0.49",
@@ -393,25 +572,21 @@ const AdvanceSearch = () => {
     "8.00 - 8.99",
     " 9.00 - 9.99",
     "10+",
-  ];
+  ]);
 
   //// All user actions
 
-  const handleColorChange = (color: string) => {
-    setSelectedColor(color);
-  };
-
   const handleFilterChange = (
     filterData: string,
-    selectedFilters: string[],
-    setSelectedFilters: React.Dispatch<React.SetStateAction<string[]>>
+    selectedFilters: string[] | string,
+    setSelectedFilters: any
   ) => {
     if (selectedFilters.includes(filterData)) {
-      setSelectedFilters((prevSelectedColors) =>
+      setSelectedFilters((prevSelectedColors: any[]) =>
         prevSelectedColors.filter((selected) => selected !== filterData)
       );
     } else {
-      setSelectedFilters((prevSelectedColors) => [
+      setSelectedFilters((prevSelectedColors: any) => [
         ...prevSelectedColors,
         filterData,
       ]);
@@ -428,6 +603,10 @@ const AdvanceSearch = () => {
     } else {
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
+  };
+
+  const handleColorChange = (data: string) => {
+    handleFilterChange(data, selectedColor, setSelectedColor);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -526,6 +705,29 @@ const AdvanceSearch = () => {
     setSelectedGirdleStep(radioValue);
   };
 
+  const handleAddCarat = (data: string) => {
+    setCaratRangeData([...caratRangeData, data]);
+    setSelectedCaratRange([...selectedCaratRange, data]);
+    setCaratRangeFrom("");
+    setCaratRangeTo("");
+  };
+
+  const handleSearch = () => {
+    if (
+      selectedShape.length === 0 ||
+      selectedColor.length === 0 ||
+      selectedClarity.length === 0 ||
+      selectedCaratRange.length === 0
+    ) {
+      console.log("please select all required fields");
+    }
+  };
+
+  const formatSelection = (data: string[]) => {
+    return data.length > 1
+      ? data.toString().substring(0, 4).concat("...")
+      : data.toString();
+  };
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -549,7 +751,7 @@ const AdvanceSearch = () => {
           }`,
           selectionButtonLabelStyle: `${
             highlightIndicator &&
-            relatedState === data &&
+            relatedState?.includes(data) &&
             styles.colorDataActiveStyle
           }`,
         }}
@@ -559,32 +761,32 @@ const AdvanceSearch = () => {
 
   const renderParameterFields = () => {
     return parameterData.map((parameter) => (
-      <div key={parameter} className={styles.parameterContainer}>
+      <div key={parameter.label} className={styles.parameterContainer}>
         <CustomInputlabel
           htmlfor="text"
-          label={parameter}
+          label={parameter.label}
           overriddenStyles={{ label: styles.labelPlainColor }}
         />
         <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
           <CustomInputField
-            type="text"
-            name="{name}"
+            type="number"
+            name={`${parameter.parameterState[0]}`}
             onChange={(e) => {
-              setSelectedAditionalCaratRange(e.target.value);
+              parameter.setParameterState[0](e.target.value);
             }}
-            value={selectedAdditionalCaratRange}
+            value={parameter.parameterState[0]}
             style={{
               input: styles.inputFieldStyles,
             }}
           />
           <div className={styles.parameterLabel}>to</div>
           <CustomInputField
-            type="text"
-            name="{name}"
+            type="number"
+            name={`${parameter.parameterState[1]}`}
             onChange={(e) => {
-              setSelectedAditionalCaratRange(e.target.value);
+              parameter.setParameterState[1](e.target.value);
             }}
-            value={selectedAdditionalCaratRange}
+            value={parameter.parameterState[1]}
             style={{
               input: styles.inputFieldStyles,
             }}
@@ -618,11 +820,15 @@ const AdvanceSearch = () => {
               />
             </div>
             <div>
-              {renderSelectionButtons(
-                data.elementValue,
-                "",
-                styles.activeOtherStyles
-              )}
+              <>
+                {renderSelectionButtons(
+                  data.elementValue,
+                  "",
+                  styles.activeOtherStyles,
+                  data.state,
+                  data.handleChange
+                )}
+              </>
             </div>
           </div>
         ))}
@@ -632,20 +838,32 @@ const AdvanceSearch = () => {
 
   return (
     <div>
-      <div className={styles.advanceSearchHeader}>
-        <CustomInputlabel
-          htmlfor="text"
-          label="Search Diamonds"
-          overriddenStyles={{ label: styles.label }}
+      <div className="sticky top-0 bg-solitairePrimary mt-24">
+        <CustomHeader
+          data={{
+            headerHeading: "Search Diamonds",
+            headerData: (
+              <div style={{ display: "flex" }}>
+                {" "}
+                <CustomInputlabel htmlfor="text" label="Your Selection:" />{" "}
+                <div style={{ color: "white", width: "300px" }}>
+                  {formatSelection(selectedShape)}{" "}
+                  {formatSelection(selectedColor)}{" "}
+                  {formatSelection(selectedClarity)}{" "}
+                  {formatSelection(selectedCaratRange)}
+                </div>
+              </div>
+            ),
+          }}
         />
-        <CustomInputlabel htmlfor="text" label="Your Selection:" />
       </div>
-      <hr className={styles.dividerLine} />
+
+      {/* <hr className={styles.dividerLine} /> */}
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           {" "}
-          <CustomInputlabel htmlfor="text" label="Shape" />
+          <CustomInputlabel htmlfor="text" label="Shape*" />
         </div>
         <div className={styles.filterSectionData}>
           <CustomImageTile
@@ -660,7 +878,7 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label="Color"
+            label="Color*"
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
@@ -675,36 +893,42 @@ const AdvanceSearch = () => {
               true
             )}
           </div>
-          <div>
-            {selectedColor.toLowerCase() === "white" &&
-              renderSelectionButtons(
-                whiteData,
-                styles.whiteColorFilterStyle,
-                styles.activeOtherStyles,
-                selectedWhiteColor,
-                handleWhiteFilterChange
-              )}
-            {selectedColor.toLowerCase() === "fancy" &&
-              renderSelectionButtons(
-                fancyData,
-                "",
-                styles.activeOtherStyles,
-                selectedFancyColor,
-                handleFancyFilterChange
-              )}
-            {selectedColor.toLowerCase() === "range" &&
-              renderSelectionButtons(
-                rangeData,
-                "",
-                styles.activeOtherStyles,
-                selectedRangeColor,
-                handleRangeFilterChange
-              )}
+          <div style={{ display: "flex", flexDirection: "column" }}>
+            <div>
+              {selectedColor.includes("White") &&
+                renderSelectionButtons(
+                  whiteData,
+                  styles.whiteColorFilterStyle,
+                  styles.activeOtherStyles,
+                  selectedWhiteColor,
+                  handleWhiteFilterChange
+                )}
+            </div>
+            <div>
+              {selectedColor.includes("Fancy") &&
+                renderSelectionButtons(
+                  fancyData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedFancyColor,
+                  handleFancyFilterChange
+                )}
+            </div>
+            <div>
+              {selectedColor.includes("Range") &&
+                renderSelectionButtons(
+                  rangeData,
+                  "",
+                  styles.activeOtherStyles,
+                  selectedRangeColor,
+                  handleRangeFilterChange
+                )}
+            </div>
           </div>
         </div>
       </div>
 
-      {selectedColor.toLowerCase() === "fancy" && (
+      {selectedColor.includes("Fancy") && (
         <>
           <div className={styles.filterSection}>
             <div className={styles.filterSectionLabel}>
@@ -775,7 +999,7 @@ const AdvanceSearch = () => {
       </div>
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
-          <CustomInputlabel htmlfor="text" label="Clarity" />
+          <CustomInputlabel htmlfor="text" label="Clarity*" />
         </div>
         <div>
           {renderSelectionButtons(
@@ -792,7 +1016,7 @@ const AdvanceSearch = () => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label="Carat Range"
+            label="Carat Range*"
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
@@ -831,7 +1055,8 @@ const AdvanceSearch = () => {
             />
             <CustomSelectionButton
               selectionButtonLabel={"Add Carat"}
-              handleClick={() => {}}
+              data={`${caratRangeFrom}-${caratRangeTo}`}
+              handleClick={handleAddCarat}
               selectionButtonAllStyles={{
                 selectionButtonStyle: styles.addCarat,
               }}
@@ -980,6 +1205,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
+              selectElement: styles.selectElement,
             }}
           />
         </div>
@@ -995,6 +1221,7 @@ const AdvanceSearch = () => {
             style={{
               selectTrigger: styles.dropdownHeader,
               selectContent: styles.dropdownData,
+              selectElement: styles.selectElement,
             }}
           />
         </div>
@@ -1205,6 +1432,16 @@ const AdvanceSearch = () => {
             )}
           </div>
         </div>
+      </div>
+      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+        <CustomFooter
+          footerButtonData={[
+            { id: 1, displayButtonLabel: "Reset", style: styles.transparent },
+            { id: 2, displayButtonLabel: "Save & Search", style: styles.transparent },
+            { id: 3, displayButtonLabel: "Search", style: styles.filled },
+            { id: 4, displayButtonLabel: "Add Another Search", style: ` ${styles.filled} ${styles.anotherSearch}` },
+          ]}
+        />
       </div>
     </div>
   );

@@ -13,6 +13,7 @@ interface RadioButtonOptionProps {
 
 // Interface for styling of radio buttons and labels
 interface RadioButtonStyles {
+  radioContainerStyle?:string;
   radioButtonStyle: string;
   radioLabelStyle: string;
 }
@@ -40,7 +41,7 @@ export const CustomRadioButton: React.FC<RadioGroupProps> = ({
         {/* Map over radioData to render individual radio buttons */}
         {radioData?.map((items) => {
           return (
-            <div key={items?.id}>
+            <div key={items?.id} className={style?.radioContainerStyle}>
               {/* Radio button item */}
               <RadioGroupItem
                 className={radioButtonAllStyles?.radioButtonStyle}
@@ -49,7 +50,7 @@ export const CustomRadioButton: React.FC<RadioGroupProps> = ({
               />
               {/* Radio button label */}
               <Label
-                className={radioButtonAllStyles?.radioLabelStyle}
+                className={`${style.radioLabelStyle} ${radioButtonAllStyles?.radioLabelStyle}`}
                 htmlFor={items?.id}
               >
                 {items?.radioButtonLabel}

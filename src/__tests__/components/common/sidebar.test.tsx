@@ -1,5 +1,5 @@
 import { render, fireEvent } from "@testing-library/react";
-import SideBar from "@/components/common/sidebar";
+import SideBar from "@components/common/sidebar";
 import mockRouter from "next-router-mock";
 
 jest.mock("next/navigation", () => jest.requireActual("next-router-mock"));

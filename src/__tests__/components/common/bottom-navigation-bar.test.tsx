@@ -1,4 +1,4 @@
-import { TopNavigationBar } from "@/components/common/top-navigation-bar";
+import { TopNavigationBar } from "@components/common/top-navigation-bar";
 import { fireEvent, render, screen } from "@testing-library/react";
 import mockRouter from "next-router-mock";
 

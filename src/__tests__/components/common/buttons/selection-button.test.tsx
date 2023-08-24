@@ -1,6 +1,6 @@
 import React from "react";
 import { fireEvent, render, screen } from "@testing-library/react";
-import { CustomSelectionButton } from "@/components/common/buttons/selection-button";
+import { CustomSelectionButton } from "@components/common/buttons/selection-button";
 
 describe("CustomSelectionButton Component", () => {
   // Mock click handler
