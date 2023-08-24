@@ -2,7 +2,7 @@ import { Meta, StoryObj } from "@storybook/react";
 import { CustomRadioButton } from ".";
 
 const meta = {
-  title: "CustomRadioButton",
+  title: "components/CustomRadioButton",
   component: CustomRadioButton,
   parameters: {
     layout: "centered",

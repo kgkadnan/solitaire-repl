@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
 import { fireEvent, render, waitFor } from "@testing-library/react";
-import WishList from "@/app/wishlist/page";
+import WishList from "@app/wishlist/page";
 
 jest.mock("next/image", () => ({
   __esModule: true,

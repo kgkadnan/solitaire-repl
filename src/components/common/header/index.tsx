@@ -14,6 +14,7 @@ export interface IheaderData {
   isCheckAll?: boolean;
   handleSuggestionClick?: (suggestion: any) => void;
   suggestions?: any;
+  headerData?: React.ReactNode;
 }
 
 interface CustomHeaderProps {
@@ -34,7 +35,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
       >
         {/* Heading */}
         <p>
-          {data?.headerHeading} {`(${data?.searchCount})`}
+        {data?.headerHeading} {data?.searchCount &&`(${data?.searchCount})`}
         </p>
         <div className="flex gap-[40px]">
           {/* Search Input Field*/}
@@ -57,6 +58,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
             <></>
           )}
           {/* Select All checkbox */}
+          {
+            data?.headerData ? data.headerData :
+          
           <div className="flex items-center gap-[10px]">
             <Checkbox
               onClick={data?.handleSelectAllCheckbox}
@@ -67,6 +71,9 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
               Select All
             </p>
           </div>
+          
+          
+}
         </div>
       </div>
     </>

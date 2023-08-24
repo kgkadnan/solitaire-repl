@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from "react";
 import { render, fireEvent } from "@testing-library/react";
-import CustomHeader from "@/components/common/header";
+import CustomHeader from "@components/common/header";
 
 jest.mock("next/image", () => ({
   __esModule: true,

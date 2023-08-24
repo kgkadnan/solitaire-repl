@@ -9,13 +9,12 @@
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
-    "test": "react-scripts test"
+    "test": "react-scripts test "
   },
+
   "jest": {
     "collectCoverageFrom": [
-      "src/*/.{js,jsx,ts,tsx}",
-      "!src/*/.d.ts",
-      "!src/**/*.stories.tsx"
+      "src/**/*.{js,jsx,ts,tsx}"
     ],
     "moduleNameMapper": {
       "\\.svg\\?url": "<rootDir>/src/__tests__/__mocks__/mock-svg.svg",
@@ -24,6 +23,7 @@
       "^@app/(.*)$": "<rootDir>/src/app/$1",
       "^@components/(.*)$": "<rootDir>/src/components/$1",
       "^@lib/(.*)$": "<rootDir>/src/lib/$1"
+     
     }
   },
   "dependencies": {

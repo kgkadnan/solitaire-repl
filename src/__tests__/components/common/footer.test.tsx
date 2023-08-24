@@ -1,6 +1,6 @@
 import React from "react";
 import { render } from "@testing-library/react";
-import { CustomFooter, IfooterButtonData } from "@/components/common/footer";
+import { CustomFooter, IfooterButtonData } from "@components/common/footer";
 
 describe("CustomFooter component", () => {
   const footerButtonData: IfooterButtonData[] = [

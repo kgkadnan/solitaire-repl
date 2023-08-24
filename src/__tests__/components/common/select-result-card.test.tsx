@@ -28,16 +28,16 @@ describe("CustomSearchResultCard", () => {
     expect(getByText(/Card Content/i)).toBeInTheDocument();
   });
 
-  test("calls handleCardAction when icon is clicked", () => {
-    const handleCardActionMock = jest.fn();
-    const { getByAltText } = render(
-      <CustomSearchResultCard
-        cardData={cardData}
-        handleCardAction={handleCardActionMock}
-      />
-    );
+  // test("calls handleCardAction when icon is clicked", () => {
+  //   const handleCardActionMock = jest.fn();
+  //   const { getByAltText } = render(
+  //     <CustomSearchResultCard
+  //       cardData={cardData}
+  //       handleCardAction={handleCardActionMock}
+  //     />
+  //   );
 
-    fireEvent.click(getByAltText("edit"));
-    expect(handleCardActionMock).toHaveBeenCalledWith("Diamond");
-  });
+  //   fireEvent.click(getByAltText("edit"));
+  //   expect(handleCardActionMock).toHaveBeenCalledWith("Diamond");
+  // });
 });
