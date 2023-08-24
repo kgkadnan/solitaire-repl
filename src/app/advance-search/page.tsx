@@ -846,7 +846,7 @@ const AdvanceSearch = () => {
               <div style={{ display: "flex" }}>
                 {" "}
                 <CustomInputlabel htmlfor="text" label="Your Selection:" />{" "}
-                <div style={{ color: "white", width: "250px" }}>
+                <div style={{ color: "white", width: "300px" }}>
                   {formatSelection(selectedShape)}{" "}
                   {formatSelection(selectedColor)}{" "}
                   {formatSelection(selectedClarity)}{" "}
@@ -1434,9 +1434,15 @@ const AdvanceSearch = () => {
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-            <CustomFooter footerButtonData={[{ id: 1, displayButtonLabel: "Delete", style: styles.transparent },
-    { id: 2, displayButtonLabel: "Place Order", style: styles.filled }]} />
-          </div>
+        <CustomFooter
+          footerButtonData={[
+            { id: 1, displayButtonLabel: "Reset", style: styles.transparent },
+            { id: 2, displayButtonLabel: "Save & Search", style: styles.transparent },
+            { id: 3, displayButtonLabel: "Search", style: styles.filled },
+            { id: 4, displayButtonLabel: "Add Another Search", style: styles.filled },
+          ]}
+        />
+      </div>
     </div>
   );
 };
