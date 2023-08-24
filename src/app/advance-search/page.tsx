@@ -1439,7 +1439,7 @@ const AdvanceSearch = () => {
             { id: 1, displayButtonLabel: "Reset", style: styles.transparent },
             { id: 2, displayButtonLabel: "Save & Search", style: styles.transparent },
             { id: 3, displayButtonLabel: "Search", style: styles.filled },
-            { id: 4, displayButtonLabel: "Add Another Search", style: styles.filled },
+            { id: 4, displayButtonLabel: "Add Another Search", style: ` ${styles.filled} ${styles.anotherSearch}` },
           ]}
         />
       </div>
