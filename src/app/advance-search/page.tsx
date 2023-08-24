@@ -100,6 +100,7 @@ const AdvanceSearch = () => {
   const [isValid,setIsValid]=useState(1)
 
   const imageTileStyles = {
+    imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,

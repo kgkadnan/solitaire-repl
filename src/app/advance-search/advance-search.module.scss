@@ -1,3 +1,13 @@
+
+.imageTileMainContainerStyles{
+  display: flex;
+  background-color: transparent;
+  // justify-content: space-between;
+  // width: 200px;
+  // height: 64px;
+  align-items: center;
+  flex-wrap: wrap;
+}
 .imageTileContainerStyles {
   width: 64px;
   height: 75px;

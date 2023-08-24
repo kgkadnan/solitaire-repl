@@ -10,7 +10,6 @@ import styles from "./saved-search.module.scss";
 import { CustomTable } from "@components/common/table/table";
 import { CustomDisplayButton } from "@components/common/buttons/display-button";
 import editIcon from "@public/assets/icons/edit.svg";
-import { ToggleButton } from "@/components/common/toggle";
 import CustomHeader from "@/components/common/header";
 import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
@@ -60,7 +59,7 @@ const SavedSearch = () => {
         desc: "12-05-2023 | 10.12 AM",
         body: {
           StoneShape: "Round",
-          color: "D",
+          color: ["a", "b", "o"],
           Carat: "2.01",
           Clarity: "VVS2",
           Shade: "WHT",
@@ -286,7 +285,6 @@ const SavedSearch = () => {
 
   return (
     <>
-      <ToggleButton />
       <div className="container min-h-screen flex flex-col ">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-3">
