@@ -61,7 +61,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
 
   const handleClickEvent = (event: any) => {
     event.stopPropagation();
-    handleCardAction(stone);
+    handleCardAction(cardId);
   };
   return (
     <>

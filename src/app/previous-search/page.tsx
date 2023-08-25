@@ -9,9 +9,11 @@ import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 import CustomSearchResultCard from "@/components/common/search-result-card";
 import { CustomFooter } from "@/components/common/footer";
+import { useRouter } from "next/navigation";
 
 const PreviousSearch = () => {
-  // Style classes and variables
+  const router = useRouter();
+  // Style classes and variables  
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
@@ -318,7 +320,10 @@ const PreviousSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    alert("You have clicked the 'Edit button'");
+    console.log("stone",stone)
+  router.push(`/advance-search?id=${stone}`)
+
+    // alert("You have clicked the 'Edit button'");
   };
 
   // Function to handle "Show Results" button click
