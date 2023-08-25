@@ -30,7 +30,7 @@ const SideBar = () => {
       link: "/dashboard",
     },
     {
-      src: <NewArrival className={styles.stroke} />,
+      src: <NewArrival className={styles.fill} />,
       title: "New Arrival",
       link: "/new-arrival",
     },
@@ -55,7 +55,7 @@ const SideBar = () => {
       link: "/cart",
     },
     {
-      src: <Layout className={styles.stroke} />,
+      src: <Layout className={styles.fill} />,
       title: "layouts",
       link: "/layouts",
     },

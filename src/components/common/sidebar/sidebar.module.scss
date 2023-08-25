@@ -34,8 +34,15 @@
 .stroke {
   stroke: hsl(var(--solitaire-tertiary));
 }
+.fill {
+  fill: hsl(var(--solitaire-tertiary));
+}
 
 .imageTileContainerStyles:hover .stroke {
+  stroke: hsl(var(--solitaire-quaternary));
+  cursor: pointer;
+}
+.imageTileContainerStyles:hover .fill {
   stroke: hsl(var(--solitaire-quaternary));
   cursor: pointer;
 }
