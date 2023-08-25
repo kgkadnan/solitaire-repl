@@ -73,7 +73,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "3",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -88,7 +88,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "4",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -103,7 +103,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "5",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -118,7 +118,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "6",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -133,7 +133,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "7",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
