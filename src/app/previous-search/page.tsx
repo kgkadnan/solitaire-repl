@@ -9,9 +9,11 @@ import { CustomCheckBox } from "@/components/common/checkbox";
 import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
 import CustomSearchResultCard from "@/components/common/search-result-card";
 import { CustomFooter } from "@/components/common/footer";
+import { useRouter } from "next/navigation";
 
 const PreviousSearch = () => {
-  // Style classes and variables
+  const router = useRouter();
+  // Style classes and variables  
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
@@ -71,7 +73,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "3",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -86,7 +88,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "4",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -101,7 +103,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "5",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -116,7 +118,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "6",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -131,7 +133,7 @@ const PreviousSearch = () => {
         },
       },
       {
-        cardId: "2",
+        cardId: "7",
         header: "R2.01VVS2 Searchb",
         desc: "12-05-2023 | 10.12 AM",
         body: {
@@ -318,7 +320,10 @@ const PreviousSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    alert("You have clicked the 'Edit button'");
+    console.log("stone",stone)
+  router.push(`/advance-search?id=${stone}`)
+
+    // alert("You have clicked the 'Edit button'");
   };
 
   // Function to handle "Show Results" button click

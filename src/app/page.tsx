@@ -1,4 +1,12 @@
+'use client'
+// import { useRouter } from "next/router";
 export default function Home() {
+// const router =useRouter()
+
+// router.push({
+//   pathname: '/advance-search',
+  
+// })
   return (
     <>
       <h1
@@ -6,7 +14,7 @@ export default function Home() {
           fontSize: "100px",
           display: "flex",
           justifyContent: "center",
-          marginTop: "300px",
+          marginTop: "180px",
         }}
       >
         Welcome to KGK live 2.O

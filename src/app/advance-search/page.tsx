@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styles from "./advance-search.module.scss";
 import { CustomRadioButton } from "src/components/common/buttons/radio-button";
 import { CustomSelectionButton } from "src/components/common/buttons/selection-button";
@@ -12,8 +12,13 @@ import { CustomSelect } from "src/components/common/select";
 import Round from "../../../public/assets/images/Round.png";
 import CustomHeader from "@/components/common/header";
 import { CustomFooter } from "@/components/common/footer";
+import { useRouter, useSearchParams } from "next/navigation";
 
-const AdvanceSearch = () => {
+interface IAdvanceSearch {
+  shape?: string[];
+  color?: string[];
+}
+const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string[]>([]);
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -101,6 +106,40 @@ const AdvanceSearch = () => {
 
   //handle validation
   const [isValid, setIsValid] = useState(1);
+
+  ///edit functionality
+  const searchParams = useSearchParams();
+
+  const search = searchParams.get("id");
+
+  const searchListNew = useMemo(
+    () => [
+      {
+        cardId: "1",
+        header: "ooooo",
+        desc: "12-05-2023 | 10.12 AM",
+        body: {
+          StoneShape: "Round",
+          color: "White",
+          Carat: "2.01",
+          Clarity: "VVS2",
+          Shade: "WHT",
+          Cut: "Excellent",
+          polish: "EX",
+          Rap: "23,500.00",
+        },
+      },
+    ],
+    [] // No dependencies
+  );
+  useEffect(() => {
+    if (search !== null) {
+      setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
+      setSelectedColor([...selectedColor, searchListNew[0].body.color]);
+      setSelectedCut([...selectedCut, searchListNew[0].body.Cut]);
+      setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
+    }
+  }, [search]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -719,7 +758,11 @@ const AdvanceSearch = () => {
       selectedClarity.length === 0 ||
       selectedCaratRange.length === 0
     ) {
+      setIsValid(0);
       console.log("please select all required fields");
+      window.alert("please select all required fields");
+    } else {
+      window.alert("success");
     }
   };
 
@@ -727,6 +770,28 @@ const AdvanceSearch = () => {
     return data.length > 1
       ? data.toString().substring(0, 4).concat("...")
       : data.toString();
+  };
+
+  const handleReset = () => {
+    setSelectedShape([]);
+    setSelectedColor([]);
+    setSelectedWhiteColor([]);
+    setSelectedFancyColor([]);
+    setSelectedRangeColor([]);
+    setSelectedIntensity([]);
+    setSelectedOvertone([]);
+    setSelectedTinge([]);
+    setSelectedTingeIntensity([]);
+    setSelectedClarity([]);
+    setSelectedCaratRange([]);
+    setSelectedMake("");
+    setSelectedCut([]);
+    setSelectedPolish([]);
+    setSelectedSymmetry([]);
+    setSelectedFluorescence([]);
+    setSelectedLab([]);
+    setSelectedHR([]);
+    setSelectedBrilliance([]);
   };
   ///reusable jsx
   const renderSelectionButtons = (
@@ -1436,10 +1501,28 @@ const AdvanceSearch = () => {
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
         <CustomFooter
           footerButtonData={[
-            { id: 1, displayButtonLabel: "Reset", style: styles.transparent },
-            { id: 2, displayButtonLabel: "Save & Search", style: styles.transparent },
-            { id: 3, displayButtonLabel: "Search", style: styles.filled },
-            { id: 4, displayButtonLabel: "Add Another Search", style: ` ${styles.filled} ${styles.anotherSearch}` },
+            {
+              id: 1,
+              displayButtonLabel: "Reset",
+              style: styles.transparent,
+              fn: handleReset,
+            },
+            {
+              id: 2,
+              displayButtonLabel: "Save & Search",
+              style: styles.transparent,
+            },
+            {
+              id: 3,
+              displayButtonLabel: "Search",
+              style: styles.filled,
+              fn: handleSearch,
+            },
+            {
+              id: 4,
+              displayButtonLabel: "Add Another Search",
+              style: ` ${styles.filled} ${styles.anotherSearch}`,
+            },
           ]}
         />
       </div>
