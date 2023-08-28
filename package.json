@@ -14,7 +14,10 @@
   },
   "jest": {
     "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}"
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/*/.d.ts",
+      "!src/**/*.stories.tsx",
+      "!src/**/example.tsx"
     ],
     "moduleNameMapper": {
       "\\.svg\\?url": "<rootDir>/src/__tests__/__mocks__/mock-svg.svg",

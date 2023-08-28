@@ -11,8 +11,8 @@ import { CustomInputlabel } from 'src/components/common/input-label';
 import { CustomSelect } from 'src/components/common/select';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
-import {  useSearchParams } from 'next/navigation';
-import Round from "@public/assets/images/round.png"
+import { useSearchParams } from 'next/navigation';
+import Round from '@public/assets/images/round.png';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];

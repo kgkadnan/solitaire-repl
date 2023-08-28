@@ -10,10 +10,10 @@ import {
 
 import React, { useState } from 'react';
 
-interface IStatus  {
+interface IStatus {
   value: string;
   label: string;
-};
+}
 interface ICustomCommand {
   items: IStatus[];
 }

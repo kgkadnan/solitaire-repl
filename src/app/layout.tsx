@@ -22,7 +22,6 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-
         <Providers>
           <SideBar />
           <TopNavigationBar />
@@ -40,7 +39,6 @@ export default function RootLayout({
           </div>
           <BottomNavigationBar />
         </Providers>
-
       </body>
     </html>
   );
