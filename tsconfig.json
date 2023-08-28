@@ -24,11 +24,10 @@
       "@/*": ["src/*"],
       "@components/*": ["src/components/*"],
       "@app/*": ["src/app/*"],
-      "@lib/*":["src/lib/*"],
+      "@lib/*": ["src/lib/*"],
       "@public/*": ["public/*"],
-      "@public1/*": ["public/*"],
-    },
-    
+      "@public1/*": ["public/*"]
+    }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]

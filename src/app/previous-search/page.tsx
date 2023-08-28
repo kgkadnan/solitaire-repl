@@ -1,19 +1,19 @@
-"use client";
-import React, { ChangeEvent, useMemo, useState } from "react";
-import styles from "./previous-search.module.scss";
-import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@components/common/buttons/display-button";
-import EditIcon from "@public/assets/icons/edit.svg";
-import CustomHeader from "@/components/common/header";
-import { CustomCheckBox } from "@/components/common/checkbox";
-import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
-import CustomSearchResultCard from "@/components/common/search-result-card";
-import { CustomFooter } from "@/components/common/footer";
-import { useRouter } from "next/navigation";
+'use client';
+import React, { ChangeEvent, useMemo, useState } from 'react';
+import styles from './previous-search.module.scss';
+import { CustomTable } from '@/components/common/table';
+import { CustomDisplayButton } from '@components/common/buttons/display-button';
+import EditIcon from '@public/assets/icons/edit.svg';
+import CustomHeader from '@/components/common/header';
+import { CustomCheckBox } from '@/components/common/checkbox';
+import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
+import CustomSearchResultCard from '@/components/common/search-result-card';
+import { CustomFooter } from '@/components/common/footer';
+import { useRouter } from 'next/navigation';
 
 const PreviousSearch = () => {
   const router = useRouter();
-  // Style classes and variables  
+  // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
     tableBodyStyle: styles.tableBody,
@@ -34,117 +34,117 @@ const PreviousSearch = () => {
   const [isCheckAll, setIsCheckAll] = useState(false);
 
   //Search Bar States
-  const [search, setSearch] = useState<string>("");
-  const [searchFilter, setSearchFilter] = useState("");
+  const [search, setSearch] = useState<string>('');
+  const [searchFilter, setSearchFilter] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const searchData = ["R2.01VVS2 Search A", "R2.01VVS2 Searchb", "ooooo"];
+  const searchData = ['R2.01VVS2 Search A', 'R2.01VVS2 Searchb', 'ooooo'];
 
   const searchList = useMemo(
     () => [
       {
-        cardId: "1",
-        header: "R2.01VVS2 Search A",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '1',
+        header: 'R2.01VVS2 Search A',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Round",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Round',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "2",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '2',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "3",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '3',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "4",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '4',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "5",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '5',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "6",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '6',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
       {
-        cardId: "7",
-        header: "R2.01VVS2 Searchb",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '7',
+        header: 'R2.01VVS2 Searchb',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Heart",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Heart',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
     ],
@@ -153,18 +153,18 @@ const PreviousSearch = () => {
   const searchListNew = useMemo(
     () => [
       {
-        cardId: "1",
-        header: "ooooo",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '1',
+        header: 'ooooo',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Round",
-          color: "D",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "EX",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Round',
+          color: 'D',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'EX',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
     ],
@@ -205,56 +205,56 @@ const PreviousSearch = () => {
     {
       cardId: 1,
       basicCardDetails: {
-        Lab: "GIA",
-        Shape: "Round",
-        Carat: "2,2.5,3",
-        Color: "D,E,F",
-        Clarity: "FL,VVS1,VVS2",
-        Tinge: "WH",
-        Cut: "EX,VG,G",
-        Polish: "EX",
-        Symmetry: "EX",
-        Fluorescene: "Non",
-        Location: "IND",
+        Lab: 'GIA',
+        Shape: 'Round',
+        Carat: '2,2.5,3',
+        Color: 'D,E,F',
+        Clarity: 'FL,VVS1,VVS2',
+        Tinge: 'WH',
+        Cut: 'EX,VG,G',
+        Polish: 'EX',
+        Symmetry: 'EX',
+        Fluorescene: 'Non',
+        Location: 'IND',
       },
 
       inclutionDetails: {
-        "Table Black": "BO",
-        "Side Black": "SBO",
-        "Table Inclution": "TO",
-        "Side Inclution": "SO",
-        "Table Open": "N",
-        "Crown Open": "N",
-        "Pavillion Open": "N",
-        "Eye Clean": "Y",
-        "Hearts & Arrows": "-",
-        Brilliancy: "-",
-        "Type 2 Certificate": "-",
-        "Country Of Origin": "-",
-        "Rough Mine": "-",
-        "Natural Girdle": "N",
-        "Natural Crown": "N",
-        "Natural Pavillion": "N",
-        "Internal Graining": "IGO",
-        "Surface Graining": "GO",
+        'Table Black': 'BO',
+        'Side Black': 'SBO',
+        'Table Inclution': 'TO',
+        'Side Inclution': 'SO',
+        'Table Open': 'N',
+        'Crown Open': 'N',
+        'Pavillion Open': 'N',
+        'Eye Clean': 'Y',
+        'Hearts & Arrows': '-',
+        Brilliancy: '-',
+        'Type 2 Certificate': '-',
+        'Country Of Origin': '-',
+        'Rough Mine': '-',
+        'Natural Girdle': 'N',
+        'Natural Crown': 'N',
+        'Natural Pavillion': 'N',
+        'Internal Graining': 'IGO',
+        'Surface Graining': 'GO',
       },
 
       measurements: {
-        Girdle: "Med-Stk",
-        Cutlet: "None",
-        Luster: "EX",
+        Girdle: 'Med-Stk',
+        Cutlet: 'None',
+        Luster: 'EX',
       },
 
       OtherInformation: {
-        "Key To Symbol": "-",
-        "Report Comments": "-",
+        'Key To Symbol': '-',
+        'Report Comments': '-',
       },
     },
   ];
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
     setSearch(inputValue);
-    setSearchFilter("");
+    setSearchFilter('');
 
     // Filter data based on input value
     const filteredSuggestions = searchData.filter((item) =>
@@ -285,9 +285,9 @@ const PreviousSearch = () => {
   //specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
-    let value = e.target.getAttribute("data-state");
+    let value = e.target.getAttribute('data-state');
     setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === "checked") {
+    if (value?.toLowerCase() === 'checked') {
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
@@ -303,13 +303,13 @@ const PreviousSearch = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: "Delete", style: styles.filled },
+    { id: 1, displayButtonLabel: 'Delete', style: styles.filled },
   ];
   renderCardData(searchList, searchFilter);
 
   //Header Data
   const headerData = {
-    headerHeading: "Previous Search",
+    headerHeading: 'Previous Search',
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
     handleSearch: handleSearch,
@@ -320,8 +320,8 @@ const PreviousSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    console.log("stone",stone)
-  router.push(`/advance-search?id=${stone}`)
+    console.log('stone', stone);
+    router.push(`/advance-search?id=${stone}`);
 
     // alert("You have clicked the 'Edit button'");
   };

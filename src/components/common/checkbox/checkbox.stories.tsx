@@ -1,12 +1,12 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { CustomCheckBox } from ".";
-import { useState } from "react";
+import { Meta, StoryObj } from '@storybook/react';
+import { CustomCheckBox } from '.';
+import { useState } from 'react';
 
 const meta: Meta<typeof CustomCheckBox> = {
-  title: "components/Checkbox",
+  title: 'components/Checkbox',
   component: CustomCheckBox,
   argTypes: {},
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomCheckBox>;
 
 export default meta;
@@ -18,9 +18,9 @@ const CheckboxWithHooks = () => {
 
   const handleClick = (e: any) => {
     const { id } = e.target;
-    let value = e.target.getAttribute("data-state");
+    let value = e.target.getAttribute('data-state');
     setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === "checked") {
+    if (value?.toLowerCase() === 'checked') {
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
@@ -33,7 +33,7 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: {
-    data: "1",
-    style: "text-solitaireQuaternary",
+    data: '1',
+    style: 'text-solitaireQuaternary',
   },
 };

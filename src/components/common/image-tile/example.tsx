@@ -1,12 +1,11 @@
-"use client";
-import { useState } from "react";
-import CustomImageTile, { IImageTileProps } from ".";
-import Round from "@public/assets/images/Round.png";
+'use client';
+import { useState } from 'react';
+import CustomImageTile, { IImageTileProps } from '.';
+import Round from '@public/assets/images/round.png';
 
- const ImageTileExample=()=> {
+const ImageTileExample = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const handleChange = (shape: string, index: number) => {
-   
+  const handleChange = (shape: string) => {
     if (selectedShape.includes(shape)) {
       setSelectedShape((prevSelectedShape) =>
         prevSelectedShape.filter((selected) => selected !== shape)
@@ -18,15 +17,15 @@ import Round from "@public/assets/images/Round.png";
   const imageData: IImageTileProps[] = [
     {
       src: Round,
-      title: "Round",
+      title: 'Round',
     },
     {
       src: Round,
-      title: "Pear",
+      title: 'Pear',
     },
     {
       src: Round,
-      title: "Emerald",
+      title: 'Emerald',
     },
   ];
   return (
@@ -36,6 +35,6 @@ import Round from "@public/assets/images/Round.png";
       handleSelectTile={handleChange}
     />
   );
-}
+};
 
-export default  ImageTileExample;
+export default ImageTileExample;

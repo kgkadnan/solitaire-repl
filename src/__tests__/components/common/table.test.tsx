@@ -1,13 +1,13 @@
-import { CustomTable } from "@components/common/table/table";
-import { render, screen } from "@testing-library/react";
+import { CustomTable } from '@/components/common/table';
+import { render, screen } from '@testing-library/react';
 
-describe("CustomTable component", () => {
+describe('CustomTable component', () => {
   // Sample table data for testing
   const sampleTableData = {
-    tableHeads: ["Name", "Age", "City"],
+    tableHeads: ['Name', 'Age', 'City'],
     bodyData: [
-      { Name: "John", Age: 25, City: "New York" },
-      { Name: "Jane", Age: 30, City: "Los Angeles" },
+      { Name: 'John', Age: 25, City: 'New York' },
+      { Name: 'Jane', Age: 30, City: 'Los Angeles' },
     ],
   };
 
@@ -17,14 +17,14 @@ describe("CustomTable component", () => {
       <CustomTable
         tableData={sampleTableData}
         tableStyleClasses={{
-          tableHeaderStyle: "custom-header-style",
-          tableBodyStyle: "custom-body-style",
+          tableHeaderStyle: 'custom-header-style',
+          tableBodyStyle: 'custom-body-style',
         }}
       />
     );
   });
 
-  test("renders CustomTable component correctly", () => {
+  test('renders CustomTable component correctly', () => {
     // Check if table headers and body data are rendered
     const tableHeaders = sampleTableData.tableHeads.map((header) =>
       screen.getByText(header)
@@ -44,13 +44,13 @@ describe("CustomTable component", () => {
     });
   });
 
-  test("applies tableHeaderStyle and tableBodyStyle classes", () => {
+  test('applies tableHeaderStyle and tableBodyStyle classes', () => {
     // Check if table headers have the custom-header-style class
     const tableHeaders = sampleTableData.tableHeads.map((header) =>
       screen.getByText(header)
     );
     tableHeaders.forEach((header) => {
-      expect(header).toHaveClass("custom-header-style");
+      expect(header).toHaveClass('custom-header-style');
     });
 
     // Check if table body cells have the custom-body-style class
@@ -59,7 +59,7 @@ describe("CustomTable component", () => {
     );
     tableBodyCells.forEach((cellRow) => {
       cellRow.forEach((cell) => {
-        expect(cell).toHaveClass("custom-body-style");
+        expect(cell).toHaveClass('custom-body-style');
       });
     });
   });

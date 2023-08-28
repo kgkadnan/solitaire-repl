@@ -1,10 +1,10 @@
-import { Meta, StoryObj } from "@storybook/react";
-import SideBar from ".";
+import { Meta, StoryObj } from '@storybook/react';
+import SideBar from '.';
 
 const meta = {
-  title: "components/sideBar",
+  title: 'components/sideBar',
   component: SideBar,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof SideBar>;
 
 export default meta;

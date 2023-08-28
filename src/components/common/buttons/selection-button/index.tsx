@@ -1,28 +1,28 @@
-"use client";
-import React from "react";
-import style from "./selection-button.module.scss";
-import { Button } from "@/components/ui/button";
+'use client';
+import React from 'react';
+import style from './selection-button.module.scss';
+import { Button } from '@/components/ui/button';
 
 // Interface for styling of selection button and label
-export interface SelectionButtonStyle {
+export interface ISelectionButtonStyle {
   selectionButtonStyle: string;
   selectionButtonLabelStyle?: string;
 }
 
 // Interface for props of the SelectionButton component
-interface SelectionButtonProps {
+interface ISelectionButtonProps {
   selectionButtonLabel: string;
   handleClick?: (data: string) => void;
-  selectionButtonAllStyles?: SelectionButtonStyle;
+  selectionButtonAllStyles?: ISelectionButtonStyle;
   data?: string;
 }
 
 // CustomSelectionButton component definition
-export const CustomSelectionButton: React.FC<SelectionButtonProps> = ({
+export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
   selectionButtonLabel,
   handleClick = () => {},
   selectionButtonAllStyles,
-  data = "",
+  data = '',
 }) => {
   return (
     <>

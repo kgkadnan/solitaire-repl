@@ -1,8 +1,8 @@
-import React from "react";
-import { fireEvent, render, screen } from "@testing-library/react";
-import { CustomDisplayButton } from "@components/common/buttons/display-button";
+import React from 'react';
+import { fireEvent, render, screen } from '@testing-library/react';
+import { CustomDisplayButton } from '@components/common/buttons/display-button';
 
-describe("CustomDisplayButton Component", () => {
+describe('CustomDisplayButton Component', () => {
   // Mock click handler
   let onItemClick = jest.fn();
 
@@ -13,23 +13,23 @@ describe("CustomDisplayButton Component", () => {
         displayButtonLabel="Test Button"
         handleClick={onItemClick}
         displayButtonAllStyle={{
-          displayButtonStyle: "custom-button-style",
-          displayLabelStyle: "custom-label-style",
+          displayButtonStyle: 'custom-button-style',
+          displayLabelStyle: 'custom-label-style',
         }}
         color="blue"
       />
     );
   });
 
-  test("render custom-display-button component correctly", () => {
-    const buttonElement = screen.getByTestId("display-button");
+  test('render custom-display-button component correctly', () => {
+    const buttonElement = screen.getByTestId('display-button');
 
     // Check if the button element is in the document
     expect(buttonElement).toBeInTheDocument();
   });
 
-  test("calls the handleClick function when the button is clicked", () => {
-    const buttonElement = screen.getByTestId("display-button");
+  test('calls the handleClick function when the button is clicked', () => {
+    const buttonElement = screen.getByTestId('display-button');
 
     // Simulate a button click
     fireEvent.click(buttonElement);
@@ -38,24 +38,24 @@ describe("CustomDisplayButton Component", () => {
     expect(onItemClick).toHaveBeenCalledTimes(1);
   });
 
-  test("applies displayButtonStyle and displayLabelStyle classes", () => {
-    const button = screen.getByTestId("display-button");
-    const label = screen.getByTestId("display-button-label");
+  test('applies displayButtonStyle and displayLabelStyle classes', () => {
+    const button = screen.getByTestId('display-button');
+    const label = screen.getByTestId('display-button-label');
 
     // Check if the button has the custom-button-style class
-    expect(button).toHaveClass("custom-button-style");
+    expect(button).toHaveClass('custom-button-style');
 
     // Check if the label's parent element has the custom-label-style class
-    expect(label).toHaveClass("custom-label-style");
+    expect(label).toHaveClass('custom-label-style');
   });
 
-  test("passes color prop to handleClick function", () => {
-    const button = screen.getByTestId("display-button");
+  test('passes color prop to handleClick function', () => {
+    const button = screen.getByTestId('display-button');
 
     // Simulate a button click
     fireEvent.click(button);
 
     // Check if the onItemClick function was called with the correct color argument
-    expect(onItemClick).toHaveBeenCalledWith("blue");
+    expect(onItemClick).toHaveBeenCalledWith('blue');
   });
 });

@@ -1,29 +1,29 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { CustomDisplayButton } from "../buttons/display-button";
-import { useRouter } from "next/navigation";
-import styles from "./bottom-navigation-bar.module.scss";
+import React, { useState } from 'react';
+import { CustomDisplayButton } from '../buttons/display-button';
+import { useRouter } from 'next/navigation';
+import styles from './bottom-navigation-bar.module.scss';
 
 export const BottomNavigationBar = () => {
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<string>("");
+  const [activeButton, setActiveButton] = useState<string>('');
   const bottomNavData = [
     {
-      label: "About Us",
-      link: "",
+      label: 'About Us',
+      link: '',
     },
     {
-      label: "Contact US",
-      link: "",
+      label: 'Contact US',
+      link: '',
     },
     {
-      label: "Privacy Policy",
-      link: "",
+      label: 'Privacy Policy',
+      link: '',
     },
     {
-      label: "Terms & Conditions",
-      link: "",
+      label: 'Terms & Conditions',
+      link: '',
     },
   ];
 

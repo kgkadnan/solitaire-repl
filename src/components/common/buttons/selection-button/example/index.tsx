@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import { CustomSelectionButton } from "..";
-import style from "./example.module.scss";
+import React from 'react';
+import { CustomSelectionButton } from '..';
+import style from './example.module.scss';
 
 const SelectionButtonExample = () => {
   const handleClick = () => {

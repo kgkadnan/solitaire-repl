@@ -1,27 +1,27 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { CustomSelectionButton } from ".";
+import { Meta, StoryObj } from '@storybook/react';
+import { CustomSelectionButton } from '.';
 
 const meta = {
-  title: "components/CustomSelectionButton",
+  title: 'components/CustomSelectionButton',
   component: CustomSelectionButton,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomSelectionButton>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const classes = {
-  selectionButtonStyle: "p-1",
-  selectionButtonLabelStyle: "bg-green-600",
+  selectionButtonStyle: 'p-1',
+  selectionButtonLabelStyle: 'bg-green-600',
 };
 
 export const SelectionButtonStory: Story = {
   args: {
     selectionButtonAllStyles: classes,
-    selectionButtonLabel: "Slection button",
+    selectionButtonLabel: 'Slection button',
     handleClick: () => {},
   },
 };

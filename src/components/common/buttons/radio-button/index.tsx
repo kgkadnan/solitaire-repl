@@ -1,32 +1,32 @@
-"use client";
-import { Label } from "@components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
-import React from "react";
-import style from "./radio-button.module.scss";
+'use client';
+import { Label } from '@components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group';
+import React from 'react';
+import style from './radio-button.module.scss';
 
 // Interface for individual radio button options
-interface RadioButtonOptionProps {
+interface IRadioButtonOptionProps {
   radioButtonLabel: string;
   id: string;
   value: string;
 }
 
 // Interface for styling of radio buttons and labels
-interface RadioButtonStyles {
-  radioContainerStyle?:string;
+interface IRadioButtonStyles {
+  radioContainerStyle?: string;
   radioButtonStyle: string;
   radioLabelStyle: string;
 }
 
 // Interface for the RadioGroup component's props
-interface RadioGroupProps {
-  radioData: RadioButtonOptionProps[];
+interface IRadioGroupProps {
+  radioData: IRadioButtonOptionProps[];
   onChange: (radioValue: string) => void;
-  radioButtonAllStyles?: RadioButtonStyles;
+  radioButtonAllStyles?: IRadioButtonStyles;
 }
 
 // CustomRadioButton component definition
-export const CustomRadioButton: React.FC<RadioGroupProps> = ({
+export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
   radioData,
   onChange,
   radioButtonAllStyles,

@@ -1,8 +1,8 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { render, fireEvent } from "@testing-library/react";
-import CustomHeader from "@components/common/header";
+import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import CustomHeader from '@components/common/header';
 
-jest.mock("next/image", () => ({
+jest.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: React.JSX.IntrinsicAttributes &
@@ -11,54 +11,54 @@ jest.mock("next/image", () => ({
   ) => <img {...props} />,
 }));
 
-describe("CustomHeader component", () => {
+describe('CustomHeader component', () => {
   const headerData = {
-    headerHeading: "Test Heading",
+    headerHeading: 'Test Heading',
     searchCount: 5,
     handleSearch: jest.fn(),
-    searchValue: "Test Value",
+    searchValue: 'Test Value',
     handleSuggestionClick: jest.fn(),
-    suggestions: ["Suggestion 1", "Suggestion 2"],
+    suggestions: ['Suggestion 1', 'Suggestion 2'],
   };
 
-  it("renders correctly with provided data", () => {
+  it('renders correctly with provided data', () => {
     const { getByText, getByPlaceholderText } = render(
       <CustomHeader data={headerData} />
     );
 
     // Check if heading and search count are rendered correctly
-    expect(getByText("Test Heading (5)")).toBeInTheDocument();
+    expect(getByText('Test Heading (5)')).toBeInTheDocument();
 
     // Check if search input and button are rendered
-    expect(getByPlaceholderText("Search by name")).toBeInTheDocument();
-    expect(getByText("Search")).toBeInTheDocument();
+    expect(getByPlaceholderText('Search by name')).toBeInTheDocument();
+    expect(getByText('Search')).toBeInTheDocument();
   });
 
-  it("calls handleSearch when input value changes", () => {
+  it('calls handleSearch when input value changes', () => {
     const { getByPlaceholderText } = render(<CustomHeader data={headerData} />);
 
-    const inputElement = getByPlaceholderText("Search by name");
+    const inputElement = getByPlaceholderText('Search by name');
 
-    fireEvent.change(inputElement, { target: { value: "New Value" } });
+    fireEvent.change(inputElement, { target: { value: 'New Value' } });
 
     expect(headerData.handleSearch).toHaveBeenCalledWith(
       expect.any(Object) // Match any object (event)
     );
   });
 
-  it("calls handleSuggestionClick when suggestion is clicked", () => {
+  it('calls handleSuggestionClick when suggestion is clicked', () => {
     const { getByPlaceholderText, getByText } = render(
       <CustomHeader data={headerData} />
     );
 
-    const inputElement = getByPlaceholderText("Search by name");
+    const inputElement = getByPlaceholderText('Search by name');
     fireEvent.focus(inputElement);
 
-    const suggestionElement = getByText("Suggestion 1");
+    const suggestionElement = getByText('Suggestion 1');
     fireEvent.click(suggestionElement);
 
     expect(headerData.handleSuggestionClick).toHaveBeenCalledWith(
-      "Suggestion 1"
+      'Suggestion 1'
     );
   });
 });

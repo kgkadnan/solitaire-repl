@@ -1,16 +1,16 @@
-import React from "react";
-import style from "./table-example.module.scss";
-import { CustomTable } from "../table";
+import React from 'react';
+import style from './table-example.module.scss';
+import { CustomTable } from '..';
 
 export const TableExample = () => {
   const tableData = {
-    tableHeads: ["invoice", "paymentStatus", "totalAmount", "paymentMethod"],
+    tableHeads: ['invoice', 'paymentStatus', 'totalAmount', 'paymentMethod'],
     bodyData: [
       {
-        invoice: "INV001",
-        paymentStatus: "Paid",
-        totalAmount: "$250.00",
-        paymentMethod: "Credit Card",
+        invoice: 'INV001',
+        paymentStatus: 'Paid',
+        totalAmount: '$250.00',
+        paymentMethod: 'Credit Card',
       },
     ],
   };

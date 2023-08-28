@@ -1,19 +1,18 @@
-"use client";
-import React, { useEffect, useMemo, useState } from "react";
-import styles from "./advance-search.module.scss";
-import { CustomRadioButton } from "src/components/common/buttons/radio-button";
-import { CustomSelectionButton } from "src/components/common/buttons/selection-button";
+'use client';
+import React, { useEffect, useMemo, useState } from 'react';
+import styles from './advance-search.module.scss';
+import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
+import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
 import CustomImageTile, {
   IImageTileProps,
-} from "src/components/common/image-tile";
-import { CustomInputField } from "src/components/common/input-field";
-import { CustomInputlabel } from "src/components/common/input-label";
-import { CustomSelect } from "src/components/common/select";
-import Round from "../../../public/assets/images/Round.png";
-import CustomHeader from "@/components/common/header";
-import { CustomFooter } from "@/components/common/footer";
-import { useRouter, useSearchParams } from "next/navigation";
-
+} from 'src/components/common/image-tile';
+import { CustomInputField } from 'src/components/common/input-field';
+import { CustomInputlabel } from 'src/components/common/input-label';
+import { CustomSelect } from 'src/components/common/select';
+import CustomHeader from '@/components/common/header';
+import { CustomFooter } from '@/components/common/footer';
+import { useSearchParams } from 'next/navigation';
+import Round from '@public/assets/images/round.png';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -32,11 +31,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
 
-  const [, setSelectedGirdleStep] = useState("");
+  const [, setSelectedGirdleStep] = useState('');
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
   const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
-    useState<string>("");
-  const [selectedMake, setSelectedMake] = useState<string>("");
+    useState<string>('');
+  const [selectedMake, setSelectedMake] = useState<string>('');
   const [selectedCut, setSelectedCut] = useState<string[]>([]);
   const [selectedPolish, setSelectedPolish] = useState<string[]>([]);
   const [selectedSymmetry, setSelectedSymmetry] = useState<string[]>([]);
@@ -50,14 +49,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
 
-  const [priceRangeFrom, setPriceRangeFrom] = useState("");
-  const [priceRangeTo, setPriceRangeTo] = useState("");
-  const [discountFrom, setDiscountFrom] = useState("");
-  const [discountTo, setDiscountTo] = useState("");
-  const [pricePerCaratFrom, setPricePerCaratFrom] = useState("");
-  const [pricePerCaratTo, setPricePerCaratTo] = useState("");
-  const [caratRangeFrom, setCaratRangeFrom] = useState("");
-  const [caratRangeTo, setCaratRangeTo] = useState("");
+  const [priceRangeFrom, setPriceRangeFrom] = useState('');
+  const [priceRangeTo, setPriceRangeTo] = useState('');
+  const [discountFrom, setDiscountFrom] = useState('');
+  const [discountTo, setDiscountTo] = useState('');
+  const [pricePerCaratFrom, setPricePerCaratFrom] = useState('');
+  const [pricePerCaratTo, setPricePerCaratTo] = useState('');
+  const [caratRangeFrom, setCaratRangeFrom] = useState('');
+  const [caratRangeTo, setCaratRangeTo] = useState('');
   //other parameter Inclsuion state
   const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
   const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
@@ -77,32 +76,32 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [lusterWI, setLusterWI] = useState<string[]>([]);
 
   //parameter state
-  const [tablePerFrom, setTablePerFrom] = useState("");
-  const [tablePerTo, setTablePerTo] = useState("");
-  const [crownAngleFrom, setCrownAngleFrom] = useState("");
-  const [crownAngleTo, setCrownAngleTo] = useState("");
-  const [lengthFrom, setLengthFrom] = useState("");
-  const [lengthTo, setLengthTo] = useState("");
-  const [pavilionDepthFrom, setPavilionDepthFrom] = useState("");
-  const [pavilionDepthTo, setPavilionDepthTo] = useState("");
+  const [tablePerFrom, setTablePerFrom] = useState('');
+  const [tablePerTo, setTablePerTo] = useState('');
+  const [crownAngleFrom, setCrownAngleFrom] = useState('');
+  const [crownAngleTo, setCrownAngleTo] = useState('');
+  const [lengthFrom, setLengthFrom] = useState('');
+  const [lengthTo, setLengthTo] = useState('');
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState('');
+  const [pavilionDepthTo, setPavilionDepthTo] = useState('');
 
-  const [depthPerFrom, setDepthPerFrom] = useState("");
-  const [depthPerTo, setDepthPerTo] = useState("");
-  const [crownHeightFrom, setCrownHeightFrom] = useState("");
-  const [crownHeightTo, setCrownHeightTo] = useState("");
-  const [widthFrom, setWidthFrom] = useState("");
-  const [widthTo, setWidthTo] = useState("");
-  const [lowerHalfFrom, setLowerHalfFrom] = useState("");
-  const [lowerHalfTo, setLowerHalfTo] = useState("");
+  const [depthPerFrom, setDepthPerFrom] = useState('');
+  const [depthPerTo, setDepthPerTo] = useState('');
+  const [crownHeightFrom, setCrownHeightFrom] = useState('');
+  const [crownHeightTo, setCrownHeightTo] = useState('');
+  const [widthFrom, setWidthFrom] = useState('');
+  const [widthTo, setWidthTo] = useState('');
+  const [lowerHalfFrom, setLowerHalfFrom] = useState('');
+  const [lowerHalfTo, setLowerHalfTo] = useState('');
 
-  const [ratioFrom, setRatioFrom] = useState("");
-  const [ratioTo, setRatioTo] = useState("");
-  const [girdlePerFrom, setGirdlePerFrom] = useState("");
-  const [girdlePerTo, setGirdlePerTo] = useState("");
-  const [pavilionAngleFrom, setPavilionAngleFrom] = useState("");
-  const [pavilionAngleTo, setPavilionAngleTo] = useState("");
-  const [starLengthFrom, setStarLengthFrom] = useState("");
-  const [starLengthTo, setStarLengthTo] = useState("");
+  const [ratioFrom, setRatioFrom] = useState('');
+  const [ratioTo, setRatioTo] = useState('');
+  const [girdlePerFrom, setGirdlePerFrom] = useState('');
+  const [girdlePerTo, setGirdlePerTo] = useState('');
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState('');
+  const [pavilionAngleTo, setPavilionAngleTo] = useState('');
+  const [starLengthFrom, setStarLengthFrom] = useState('');
+  const [starLengthTo, setStarLengthTo] = useState('');
 
   //handle validation
   const [isValid, setIsValid] = useState(1);
@@ -110,23 +109,23 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   ///edit functionality
   const searchParams = useSearchParams();
 
-  const search = searchParams.get("id");
+  const search = searchParams.get('id');
 
   const searchListNew = useMemo(
     () => [
       {
-        cardId: "1",
-        header: "ooooo",
-        desc: "12-05-2023 | 10.12 AM",
+        cardId: '1',
+        header: 'ooooo',
+        desc: '12-05-2023 | 10.12 AM',
         body: {
-          StoneShape: "Round",
-          color: "White",
-          Carat: "2.01",
-          Clarity: "VVS2",
-          Shade: "WHT",
-          Cut: "Excellent",
-          polish: "EX",
-          Rap: "23,500.00",
+          StoneShape: 'Round',
+          color: 'White',
+          Carat: '2.01',
+          Clarity: 'VVS2',
+          Shade: 'WHT',
+          Cut: 'Excellent',
+          polish: 'EX',
+          Rap: '23,500.00',
         },
       },
     ],
@@ -152,152 +151,152 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   let shapeData: IImageTileProps[] = [
     {
       src: Round,
-      title: "Round",
+      title: 'Round',
     },
     {
       src: Round,
-      title: "Pear",
+      title: 'Pear',
     },
     {
       src: Round,
-      title: "Emerald",
+      title: 'Emerald',
     },
     {
       src: Round,
-      title: "Asscher",
+      title: 'Asscher',
     },
     {
       src: Round,
-      title: "Cushion",
+      title: 'Cushion',
     },
     {
       src: Round,
-      title: "Princess",
+      title: 'Princess',
     },
     {
       src: Round,
-      title: "Marquise",
+      title: 'Marquise',
     },
     {
       src: Round,
-      title: "Oval",
+      title: 'Oval',
     },
     {
       src: Round,
-      title: "Heart",
+      title: 'Heart',
     },
     {
       src: Round,
-      title: "Radiant",
+      title: 'Radiant',
     },
     {
       src: Round,
-      title: "Others",
+      title: 'Others',
     },
     {
       src: Round,
-      title: "All",
+      title: 'All',
     },
   ];
 
-  let colorData = ["White", "Fancy", "Range"];
-  let whiteData = ["D", "E", "F", "I", "J", "K", "L", "M", "N"];
+  let colorData = ['White', 'Fancy', 'Range'];
+  let whiteData = ['D', 'E', 'F', 'I', 'J', 'K', 'L', 'M', 'N'];
   let rangeData = [
-    "FANCY",
-    "N-O",
-    "O-P",
-    "S-T",
-    "P-R",
-    "Q-R",
-    "W-X",
-    "Y-Z",
-    "U-V",
+    'FANCY',
+    'N-O',
+    'O-P',
+    'S-T',
+    'P-R',
+    'Q-R',
+    'W-X',
+    'Y-Z',
+    'U-V',
   ];
   let fancyData = [
-    "Yellow",
-    "Pink",
-    "Blue",
-    "Red",
-    "Green",
-    "Purple",
-    "Orange",
-    "Black",
-    "Gray",
-    "Violet",
-    "Brown",
-    "White",
-    "Other",
-    "Light Yellow",
+    'Yellow',
+    'Pink',
+    'Blue',
+    'Red',
+    'Green',
+    'Purple',
+    'Orange',
+    'Black',
+    'Gray',
+    'Violet',
+    'Brown',
+    'White',
+    'Other',
+    'Light Yellow',
   ];
 
-  let makeData = ["3EX", "3EX-Non", "3VG+"];
+  let makeData = ['3EX', '3EX-Non', '3VG+'];
 
-  let qualityData = ["Ideal", "Excellent", "Very Good", "Good", "Fair"];
+  let qualityData = ['Ideal', 'Excellent', 'Very Good', 'Good', 'Fair'];
 
   let locationData = [
-    { id: 1, value: "Dubai" },
-    { id: 2, value: "India" },
-    { id: 3, value: "Belgium" },
+    { id: 1, value: 'Dubai' },
+    { id: 2, value: 'India' },
+    { id: 3, value: 'Belgium' },
   ];
 
   let parameterData = [
     {
-      label: "Table%",
+      label: 'Table%',
       parameterState: [tablePerFrom, tablePerTo],
       setParameterState: [setTablePerFrom, setTablePerTo],
     },
     {
-      label: "Crown Angle",
+      label: 'Crown Angle',
       parameterState: [crownAngleFrom, crownAngleTo],
       setParameterState: [setCrownAngleFrom, setCrownAngleTo],
     },
     {
-      label: "Length",
+      label: 'Length',
       parameterState: [lengthFrom, lengthTo],
       setParameterState: [setLengthFrom, setLengthTo],
     },
     {
-      label: "Pavillion Depth",
+      label: 'Pavillion Depth',
       parameterState: [pavilionDepthFrom, pavilionDepthTo],
       setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
     },
     {
-      label: "Depth%",
+      label: 'Depth%',
       parameterState: [depthPerFrom, depthPerTo],
       setParameterState: [setDepthPerFrom, setDepthPerTo],
     },
     {
-      label: "Crown Height",
+      label: 'Crown Height',
       parameterState: [crownHeightFrom, crownHeightTo],
       setParameterState: [setCrownHeightFrom, setCrownHeightTo],
     },
     {
-      label: "Width",
+      label: 'Width',
       parameterState: [widthFrom, widthTo],
       setParameterState: [setWidthFrom, setWidthTo],
     },
     {
-      label: "Lower Half",
+      label: 'Lower Half',
       parameterState: [lowerHalfFrom, lowerHalfTo],
       setParameterState: [setLowerHalfFrom, setLowerHalfTo],
     },
     {
-      label: "Ratio",
+      label: 'Ratio',
       parameterState: [ratioFrom, ratioTo],
       setParameterState: [setRatioFrom, setRatioTo],
     },
     {
-      label: "Girdle%",
+      label: 'Girdle%',
       parameterState: [girdlePerFrom, girdlePerTo],
       setParameterState: [setGirdlePerFrom, setGirdlePerTo],
     },
     {
-      label: "Pavillion Angle",
+      label: 'Pavillion Angle',
       parameterState: [pavilionAngleFrom, pavilionAngleTo],
       setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
     },
     {
-      label: "Star Length",
+      label: 'Star Length',
       parameterState: [starLengthFrom, starLengthTo],
       setParameterState: [setStarLengthFrom, setStarLengthTo],
     },
@@ -357,100 +356,100 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   let otherParameterData = [
     {
-      key: "Black Inclusion",
+      key: 'Black Inclusion',
       value: [
         {
-          elementKey: "Black Table",
-          elementValue: ["BO", "BPP", "B1", "B2", "B3"],
+          elementKey: 'Black Table',
+          elementValue: ['BO', 'BPP', 'B1', 'B2', 'B3'],
           handleChange: handleBlackTableBIChange,
           state: blackTableBI,
         },
         {
-          elementKey: "Side Table",
-          elementValue: ["SBO", "SBPP", "SB1", "SB2", "SB3"],
+          elementKey: 'Side Table',
+          elementValue: ['SBO', 'SBPP', 'SB1', 'SB2', 'SB3'],
           handleChange: handleSideBlackBIChange,
           state: sideBlackBI,
         },
         {
-          elementKey: "Open Crown",
-          elementValue: ["None", "VS", "S", "M", "D"],
+          elementKey: 'Open Crown',
+          elementValue: ['None', 'VS', 'S', 'M', 'D'],
           handleChange: handleOpenCrownBIChange,
           state: openCrownBI,
         },
         {
-          elementKey: "Open Table",
-          elementValue: ["None", "VS", "S", "M", "D"],
+          elementKey: 'Open Table',
+          elementValue: ['None', 'VS', 'S', 'M', 'D'],
           handleChange: handleOpenTableBIChange,
           state: openTableBI,
         },
         {
-          elementKey: "Open Pavilion",
-          elementValue: ["None", "VS", "S", "M", "L"],
+          elementKey: 'Open Pavilion',
+          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleOpenPavilionBIChange,
           state: openPavilionBI,
         },
         {
-          elementKey: "Milky",
-          elementValue: ["MO", "M1", "M2", "M3"],
+          elementKey: 'Milky',
+          elementValue: ['MO', 'M1', 'M2', 'M3'],
           handleChange: handleMilkyBIChange,
           state: milkyBI,
         },
         {
-          elementKey: "Luster",
-          elementValue: ["EX", "VG", "G", "P"],
+          elementKey: 'Luster',
+          elementValue: ['EX', 'VG', 'G', 'P'],
           handleChange: handleLusterBIChange,
           state: lusterBI,
         },
         {
-          elementKey: "Eye Clean",
-          elementValue: ["Yes", "No", "B"],
+          elementKey: 'Eye Clean',
+          elementValue: ['Yes', 'No', 'B'],
           handleChange: handleEyeCleanBIChange,
           state: eyeCleanBI,
         },
       ],
     },
     {
-      key: "White Inclusion",
+      key: 'White Inclusion',
       value: [
         {
-          elementKey: "Table Inclusion",
-          elementValue: ["TO", "T1", "B1", "T2", "T3"],
+          elementKey: 'Table Inclusion',
+          elementValue: ['TO', 'T1', 'B1', 'T2', 'T3'],
           handleChange: handleTableInclusionWIChange,
           state: tableInclusionWI,
         },
         {
-          elementKey: "Side Inclusion",
-          elementValue: ["SO", "S1", "SB1", "SB2", "S3"],
+          elementKey: 'Side Inclusion',
+          elementValue: ['SO', 'S1', 'SB1', 'SB2', 'S3'],
           handleChange: handleSideInclusionWIChange,
           state: sideInclusionWI,
         },
         {
-          elementKey: "Natural Crown",
-          elementValue: ["None", "VS", "S", "M", "L"],
+          elementKey: 'Natural Crown',
+          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalCrownWIChange,
           state: naturalCrownWI,
         },
         {
-          elementKey: "Natural Girdle",
-          elementValue: ["None", "VS", "S", "M", "L"],
+          elementKey: 'Natural Girdle',
+          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalGirdleWIChange,
           state: naturalGirdleWI,
         },
         {
-          elementKey: "Natural Pavilion",
-          elementValue: ["None", "VS", "S", "M", "L"],
+          elementKey: 'Natural Pavilion',
+          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalPavilionWIChange,
           state: naturalPavilionWI,
         },
         {
-          elementKey: "Surface Graining",
-          elementValue: ["GO", "G1", "G2", "G3"],
+          elementKey: 'Surface Graining',
+          elementValue: ['GO', 'G1', 'G2', 'G3'],
           handleChange: handleSurfaceGrainingIChange,
           state: surfaceGrainingWI,
         },
         {
-          elementKey: "Luster",
-          elementValue: ["IGO", "IG1", "IG2", "IG3"],
+          elementKey: 'Luster',
+          elementValue: ['IGO', 'IG1', 'IG2', 'IG3'],
           handleChange: handleLusterWIChange,
           state: lusterWI,
         },
@@ -459,158 +458,158 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   ];
 
   let intensityData = [
-    "Faint",
-    "Light",
-    "Fancy light",
-    "Fancy",
-    "Fancy dark",
-    "Fancy intense",
-    "Fancy vivid",
-    "Fancy deep",
-    "Very light",
+    'Faint',
+    'Light',
+    'Fancy light',
+    'Fancy',
+    'Fancy dark',
+    'Fancy intense',
+    'Fancy vivid',
+    'Fancy deep',
+    'Very light',
   ];
 
   let overtoneData = [
-    "None",
-    "Yellow",
-    "Yellowish",
-    "Pink",
-    "Pinkish",
-    "Blue",
-    "Bluish",
-    "Red",
-    "Reddish",
-    "Green",
-    "Greenish",
-    "Purple",
-    "Purplish",
-    "Orange",
-    "Orangy",
-    "Gray",
-    "Grayish",
-    "Black",
-    "Brown",
-    "Brownish",
-    "Violetish",
-    "White",
-    "W-x Light Brown",
-    "Brownish Orangy",
+    'None',
+    'Yellow',
+    'Yellowish',
+    'Pink',
+    'Pinkish',
+    'Blue',
+    'Bluish',
+    'Red',
+    'Reddish',
+    'Green',
+    'Greenish',
+    'Purple',
+    'Purplish',
+    'Orange',
+    'Orangy',
+    'Gray',
+    'Grayish',
+    'Black',
+    'Brown',
+    'Brownish',
+    'Violetish',
+    'White',
+    'W-x Light Brown',
+    'Brownish Orangy',
   ];
 
   let tingeData = [
-    "WH",
-    "YEL",
-    "BR",
-    "GRN",
-    "MIXED",
-    "PINK",
-    "BLACKISH",
-    "Gry",
-    "FY",
-    "MIX",
-    "OR",
-    "BGM",
-    "NO BGM",
-    "NO BLACK",
+    'WH',
+    'YEL',
+    'BR',
+    'GRN',
+    'MIXED',
+    'PINK',
+    'BLACKISH',
+    'Gry',
+    'FY',
+    'MIX',
+    'OR',
+    'BGM',
+    'NO BGM',
+    'NO BLACK',
   ];
 
-  let tingeIntensityData = ["None", "Faint", "Medium", "Strong"];
+  let tingeIntensityData = ['None', 'Faint', 'Medium', 'Strong'];
 
   let clarityData = [
-    "FL",
-    "IF",
-    "VVS1",
-    "VVS2",
-    "VS1",
-    "VS2",
-    "SI1",
-    "SI2",
-    "SI3",
-    "I1",
-    "I2",
-    "I3",
+    'FL',
+    'IF',
+    'VVS1',
+    'VVS2',
+    'VS1',
+    'VS2',
+    'SI1',
+    'SI2',
+    'SI3',
+    'I1',
+    'I2',
+    'I3',
   ];
 
-  let fluorescenceData = ["NON", "FNT", "VSL", "MED", "STG", "SLT", "VSTG"];
+  let fluorescenceData = ['NON', 'FNT', 'VSL', 'MED', 'STG', 'SLT', 'VSTG'];
 
   let labData = [
-    "GIA",
-    "HRD",
-    "IGI",
-    "FM",
-    "AGS",
-    "FAC",
-    "DBCOO",
-    "NGTC",
-    "IIDGR",
-    "KGK",
-    "OTHER",
-    "STP",
+    'GIA',
+    'HRD',
+    'IGI',
+    'FM',
+    'AGS',
+    'FAC',
+    'DBCOO',
+    'NGTC',
+    'IIDGR',
+    'KGK',
+    'OTHER',
+    'STP',
   ];
-  let brillianceData = ["Excellent", "Very Good", "Good"];
+  let brillianceData = ['Excellent', 'Very Good', 'Good'];
 
   let girdleData = [
-    "ETN",
-    "VTN",
-    "STN",
-    "THN",
-    "MED",
-    "STK",
-    "THK",
-    "VTK",
-    "ETK",
+    'ETN',
+    'VTN',
+    'STN',
+    'THN',
+    'MED',
+    'STK',
+    'THK',
+    'VTK',
+    'ETK',
   ];
 
   let girdleStepData = [
-    "All",
-    "Bearding",
-    "Brown patch of color",
-    "Bruise",
-    "Cavity",
-    "Chip",
-    "Cleavage",
-    "Cloud",
-    "Crystal",
-    "Crystal Surface",
-    "Etch Channel",
-    "Extra Facet",
-    "Feather",
-    "Flux Remnant",
-    "Indented Natural",
-    "Internal Graining",
-    "Internal Inscription",
-    "Internal Laser Drilling",
-    "Knot",
-    "Laser Drill Hole",
-    "Manufacturing Remnant",
-    "Minor Details of Polish",
-    "Natural",
-    "Needle",
-    "No Inclusion",
-    "Pinpoint",
-    "Reflecting Surface Graining",
-    "Surface Graining",
-    "Twinning Wisp",
+    'All',
+    'Bearding',
+    'Brown patch of color',
+    'Bruise',
+    'Cavity',
+    'Chip',
+    'Cleavage',
+    'Cloud',
+    'Crystal',
+    'Crystal Surface',
+    'Etch Channel',
+    'Extra Facet',
+    'Feather',
+    'Flux Remnant',
+    'Indented Natural',
+    'Internal Graining',
+    'Internal Inscription',
+    'Internal Laser Drilling',
+    'Knot',
+    'Laser Drill Hole',
+    'Manufacturing Remnant',
+    'Minor Details of Polish',
+    'Natural',
+    'Needle',
+    'No Inclusion',
+    'Pinpoint',
+    'Reflecting Surface Graining',
+    'Surface Graining',
+    'Twinning Wisp',
   ];
 
   const [caratRangeData, setCaratRangeData] = useState<string[]>([
-    "0.01-0.29",
-    "0.30-0.39",
-    "0.40-0.49",
-    "0.50-0.69",
-    "0.70-0.89",
-    "0.90-0.99",
-    "1.00-1.49",
-    "1.50-1.99",
-    "2.00-2.99",
-    "3.00-3.99",
-    "4.00-4.99",
-    "5.00-5.99",
-    "6.00-6.99",
-    "7.00 - 7.99",
-    "8.00 - 8.99",
-    " 9.00 - 9.99",
-    "10+",
+    '0.01-0.29',
+    '0.30-0.39',
+    '0.40-0.49',
+    '0.50-0.69',
+    '0.70-0.89',
+    '0.90-0.99',
+    '1.00-1.49',
+    '1.50-1.99',
+    '2.00-2.99',
+    '3.00-3.99',
+    '4.00-4.99',
+    '5.00-5.99',
+    '6.00-6.99',
+    '7.00 - 7.99',
+    '8.00 - 8.99',
+    ' 9.00 - 9.99',
+    '10+',
   ]);
 
   //// All user actions
@@ -633,10 +632,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleShapeChange = (shape: string) => {
-    if (shape.toLowerCase() === "all") {
+    if (shape.toLowerCase() === 'all') {
       let filteredShape: string[] = shapeData.map((data) => data.title);
       setSelectedShape(filteredShape);
-      if (selectedShape.includes("All")) {
+      if (selectedShape.includes('All')) {
         setSelectedShape([]);
       }
     } else {
@@ -682,24 +681,24 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   // let prevMakeData=""
   const handleMakeChange = (data: string) => {
-    if (data.toLowerCase() === "3ex" || data.toLowerCase() === "3ex-non") {
+    if (data.toLowerCase() === '3ex' || data.toLowerCase() === '3ex-non') {
       if (
         !(
-          selectedCut.includes("Excellent") &&
-          selectedPolish.includes("Excellent") &&
-          selectedSymmetry.includes("Excellent")
+          selectedCut.includes('Excellent') &&
+          selectedPolish.includes('Excellent') &&
+          selectedSymmetry.includes('Excellent')
         )
       ) {
-        handleCutChange("Excellent");
-        handlePolishChange("Excellent");
-        handleSymmetryChange("Excellent");
+        handleCutChange('Excellent');
+        handlePolishChange('Excellent');
+        handleSymmetryChange('Excellent');
       }
     }
 
-    if (data.toLowerCase() === "3ex-non") {
-      handleFluorescenceChange("NON");
+    if (data.toLowerCase() === '3ex-non') {
+      handleFluorescenceChange('NON');
     }
-    data === selectedMake ? setSelectedMake("") : setSelectedMake(data);
+    data === selectedMake ? setSelectedMake('') : setSelectedMake(data);
     // prevMakeData=data
   };
 
@@ -720,9 +719,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
   const handleGirdleStep2Change = (data: string) => {
-    if (data.toLowerCase() === "all") {
+    if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] = girdleStepData.map((data1) =>
-        data1.toLowerCase() !== "all" ? data1 : ""
+        data1.toLowerCase() !== 'all' ? data1 : ''
       );
       setSelectedGirdleStep2(filteredGirdleStep);
     } else {
@@ -747,8 +746,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleAddCarat = (data: string) => {
     setCaratRangeData([...caratRangeData, data]);
     setSelectedCaratRange([...selectedCaratRange, data]);
-    setCaratRangeFrom("");
-    setCaratRangeTo("");
+    setCaratRangeFrom('');
+    setCaratRangeTo('');
   };
 
   const handleSearch = () => {
@@ -759,16 +758,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedCaratRange.length === 0
     ) {
       setIsValid(0);
-      console.log("please select all required fields");
-      window.alert("please select all required fields");
+      console.log('please select all required fields');
+      window.alert('please select all required fields');
     } else {
-      window.alert("success");
+      window.alert('success');
     }
   };
 
   const formatSelection = (data: string[]) => {
     return data.length > 1
-      ? data.toString().substring(0, 4).concat("...")
+      ? data.toString().substring(0, 4).concat('...')
       : data.toString();
   };
 
@@ -784,7 +783,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedTingeIntensity([]);
     setSelectedClarity([]);
     setSelectedCaratRange([]);
-    setSelectedMake("");
+    setSelectedMake('');
     setSelectedCut([]);
     setSelectedPolish([]);
     setSelectedSymmetry([]);
@@ -809,8 +808,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         handleClick={handleChange}
         data={data}
         selectionButtonAllStyles={{
-          selectionButtonStyle: `${className ?? ""}   ${
-            typeof relatedState !== "string"
+          selectionButtonStyle: `${className ?? ''}   ${
+            typeof relatedState !== 'string'
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
           }`,
@@ -888,7 +887,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               <>
                 {renderSelectionButtons(
                   data.elementValue,
-                  "",
+                  '',
                   styles.activeOtherStyles,
                   data.state,
                   data.handleChange
@@ -906,15 +905,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       <div className="sticky top-0 bg-solitairePrimary mt-24">
         <CustomHeader
           data={{
-            headerHeading: "Search Diamonds",
+            headerHeading: 'Search Diamonds',
             headerData: (
-              <div style={{ display: "flex" }}>
-                {" "}
-                <CustomInputlabel htmlfor="text" label="Your Selection:" />{" "}
-                <div style={{ color: "white", width: "300px" }}>
-                  {formatSelection(selectedShape)}{" "}
-                  {formatSelection(selectedColor)}{" "}
-                  {formatSelection(selectedClarity)}{" "}
+              <div style={{ display: 'flex' }}>
+                {' '}
+                <CustomInputlabel htmlfor="text" label="Your Selection:" />{' '}
+                <div style={{ color: 'white', width: '300px' }}>
+                  {formatSelection(selectedShape)}{' '}
+                  {formatSelection(selectedColor)}{' '}
+                  {formatSelection(selectedClarity)}{' '}
                   {formatSelection(selectedCaratRange)}
                 </div>
               </div>
@@ -927,7 +926,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
-          {" "}
+          {' '}
           <CustomInputlabel htmlfor="text" label="Shape*" />
         </div>
         <div className={styles.filterSectionData}>
@@ -958,9 +957,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               true
             )}
           </div>
-          <div style={{ display: "flex", flexDirection: "column" }}>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
             <div>
-              {selectedColor.includes("White") &&
+              {selectedColor.includes('White') &&
                 renderSelectionButtons(
                   whiteData,
                   styles.whiteColorFilterStyle,
@@ -970,20 +969,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 )}
             </div>
             <div>
-              {selectedColor.includes("Fancy") &&
+              {selectedColor.includes('Fancy') &&
                 renderSelectionButtons(
                   fancyData,
-                  "",
+                  '',
                   styles.activeOtherStyles,
                   selectedFancyColor,
                   handleFancyFilterChange
                 )}
             </div>
             <div>
-              {selectedColor.includes("Range") &&
+              {selectedColor.includes('Range') &&
                 renderSelectionButtons(
                   rangeData,
-                  "",
+                  '',
                   styles.activeOtherStyles,
                   selectedRangeColor,
                   handleRangeFilterChange
@@ -993,7 +992,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
       </div>
 
-      {selectedColor.includes("Fancy") && (
+      {selectedColor.includes('Fancy') && (
         <>
           <div className={styles.filterSection}>
             <div className={styles.filterSectionLabel}>
@@ -1005,7 +1004,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             >
               {renderSelectionButtons(
                 intensityData,
-                "",
+                '',
                 styles.activeOtherStyles,
                 selectedIntensity,
                 handleIntensityChange
@@ -1022,7 +1021,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               >
                 {renderSelectionButtons(
                   overtoneData,
-                  "",
+                  '',
                   styles.activeOtherStyles,
                   selectedOvertone,
                   handleOvertoneChange
@@ -1040,7 +1039,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
             tingeData,
-            "",
+            '',
             styles.activeOtherStyles,
             selectedTinge,
             handleTingeChange
@@ -1069,7 +1068,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div>
           {renderSelectionButtons(
             clarityData,
-            "",
+            '',
             styles.activeOtherStyles,
             selectedClarity,
             handleClarityChange
@@ -1090,7 +1089,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         >
           <div
             className={`${styles.filterSection} ${styles.rangeFilter}`}
-            style={{ width: "420px" }}
+            style={{ width: '420px' }}
           >
             <CustomInputField
               // style={className}
@@ -1119,7 +1118,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               }}
             />
             <CustomSelectionButton
-              selectionButtonLabel={"Add Carat"}
+              selectionButtonLabel={'Add Carat'}
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
@@ -1130,7 +1129,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           <div>
             {renderSelectionButtons(
               caratRangeData,
-              "",
+              '',
               styles.activeOtherStyles,
               selectedCaratRange,
               handleCaratRangeChange
@@ -1327,7 +1326,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
 
       <div className={styles.filterSection}>
-        {" "}
+        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Price Range" />
         </div>
@@ -1362,7 +1361,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
 
       <div className={styles.filterSection}>
-        {" "}
+        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel htmlfor="text" label="Price/Carat" />
         </div>
@@ -1396,7 +1395,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
 
       <div className={styles.filterSection}>
-        {" "}
+        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
@@ -1412,7 +1411,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
 
       <div className={styles.filterSection}>
-        {" "}
+        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
@@ -1428,7 +1427,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
 
       <div className={`${styles.filterSection} ${styles.filterWrapSection}`}>
-        {" "}
+        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
@@ -1437,7 +1436,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           />
         </div>
         <div
-          style={{ display: "flex", flexDirection: "column" }}
+          style={{ display: 'flex', flexDirection: 'column' }}
           className={styles.filterSectionData}
         >
           <div className={styles.filterSectionData}>
@@ -1446,7 +1445,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             >
               {renderSelectionButtons(
                 girdleData,
-                "",
+                '',
                 styles.activeOtherStyles,
                 selectedGirdle,
                 handleGirdleChange
@@ -1458,18 +1457,18 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             label="STEP1"
             overriddenStyles={{ label: styles.stepStyle }}
           />
-          <div style={{ margin: "10px" }}>
+          <div style={{ margin: '10px' }}>
             <CustomRadioButton
               radioData={[
                 {
-                  id: "1",
-                  value: "1",
-                  radioButtonLabel: "Contains",
+                  id: '1',
+                  value: '1',
+                  radioButtonLabel: 'Contains',
                 },
                 {
-                  id: "2",
-                  value: "2",
-                  radioButtonLabel: "Does Not Contains",
+                  id: '2',
+                  value: '2',
+                  radioButtonLabel: 'Does Not Contains',
                 },
               ]}
               onChange={handleGirdleStepChange}
@@ -1486,11 +1485,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           />
           <div
             className={`${styles.filterSection} ${styles.filterWrapSection}`}
-            style={{ display: "flex", flexWrap: "wrap" }}
+            style={{ display: 'flex', flexWrap: 'wrap' }}
           >
             {renderSelectionButtons(
               girdleStepData,
-              "",
+              '',
               styles.activeOtherStyles,
               selectedGirdleStep2,
               handleGirdleStep2Change
@@ -1503,24 +1502,24 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           footerButtonData={[
             {
               id: 1,
-              displayButtonLabel: "Reset",
+              displayButtonLabel: 'Reset',
               style: styles.transparent,
               fn: handleReset,
             },
             {
               id: 2,
-              displayButtonLabel: "Save & Search",
+              displayButtonLabel: 'Save & Search',
               style: styles.transparent,
             },
             {
               id: 3,
-              displayButtonLabel: "Search",
+              displayButtonLabel: 'Search',
               style: styles.filled,
               fn: handleSearch,
             },
             {
               id: 4,
-              displayButtonLabel: "Add Another Search",
+              displayButtonLabel: 'Add Another Search',
               style: ` ${styles.filled} ${styles.anotherSearch}`,
             },
           ]}

@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import Image, { StaticImageData } from "next/image";
-import style from "./image-tile.module.scss";
+import React, { useState } from 'react';
+import Image, { StaticImageData } from 'next/image';
+import style from './image-tile.module.scss';
 
 export interface IImageTileStyleProps {
   imageTileMainContainerStyles?: string;
@@ -48,9 +48,9 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
         return (
           <div
             key={`image-tile-data-${title}`}
-            className={`${style.imageTileContainer} ${
-              overriddenStyles?.imageTileContainerStyles
-            } ${
+            className={`${
+              style.imageTileContainer
+            } ${overriddenStyles?.imageTileContainerStyles} ${
               selectedTile?.includes(title) &&
               overriddenStyles?.activeIndicatorStyles
             }`}

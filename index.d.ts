@@ -1,3 +1,3 @@
-declare module "*.png";
-declare module "*.svg";
-declare module "*.svg?url";
+declare module '*.png';
+declare module '*.svg';
+declare module '*.svg?url';

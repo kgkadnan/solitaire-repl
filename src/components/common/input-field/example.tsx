@@ -1,10 +1,10 @@
-"use client";
-import React, { ChangeEvent, useState } from "react";
-import { CustomInputField } from ".";
-import styles from "./example.module.scss";
+'use client';
+import React, { ChangeEvent, useState } from 'react';
+import { CustomInputField } from '.';
+import styles from './example.module.scss';
 
 export const Example = () => {
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     setName(event.target.value);

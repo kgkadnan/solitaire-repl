@@ -1,37 +1,37 @@
-"use client";
+'use client';
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@components/ui/select";
+} from '@components/ui/select';
 
-import React from "react";
-import styles from "./select.module.scss";
+import React from 'react';
+import styles from './select.module.scss';
 
 interface ISelectData {
   value: string;
   id: number;
 }
 
-interface Istyle {
+interface IStyle {
   selectContent?: string;
   selectTrigger?: string;
-  selectElement?:string
+  selectElement?: string;
 }
 
-interface SelectProps {
+interface ISelectProps {
   data: ISelectData[];
   placeholder: string;
-  style?: Istyle;
+  style?: IStyle;
 }
 
 const handleChange = (event: any) => {
-  console.log("event", event);
+  console.log('event', event);
 };
 
-export const CustomSelect: React.FC<SelectProps> = ({
+export const CustomSelect: React.FC<ISelectProps> = ({
   data,
   placeholder,
   style,
@@ -50,7 +50,11 @@ export const CustomSelect: React.FC<SelectProps> = ({
         data-testid="option"
       >
         {data.map((item) => (
-          <SelectItem key={item.id} value={item.value}  className={`${style?.selectElement}`}>
+          <SelectItem
+            key={item.id}
+            value={item.value}
+            className={`${style?.selectElement}`}
+          >
             {item.value}
           </SelectItem>
         ))}

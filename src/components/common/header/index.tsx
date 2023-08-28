@@ -1,9 +1,8 @@
-import { Checkbox } from "@/components/ui/checkbox";
-import React, { ChangeEvent } from "react";
-import { CustomDisplayButton } from "../buttons/display-button";
-import SearchIcon from "@public/assets/icons/search-outline-shadow.svg?url";
-import { CustomInputField } from "@components/common/input-field/index";
-import styles from "./header.module.scss";
+import { Checkbox } from '@/components/ui/checkbox';
+import React, { ChangeEvent } from 'react';
+import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
+import { CustomInputField } from '@components/common/input-field/index';
+import styles from './header.module.scss';
 
 export interface IheaderData {
   headerHeading?: string;
@@ -17,15 +16,15 @@ export interface IheaderData {
   headerData?: React.ReactNode;
 }
 
-interface CustomHeaderProps {
+interface ICustomHeaderProps {
   data?: IheaderData;
 }
 
-const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
+const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,
-    inputMain: "relative",
+    inputMain: 'relative',
   };
 
   return (
@@ -35,7 +34,7 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
       >
         {/* Heading */}
         <p>
-        {data?.headerHeading} {data?.searchCount &&`(${data?.searchCount})`}
+          {data?.headerHeading} {data?.searchCount && `(${data?.searchCount})`}
         </p>
         <div className="flex gap-[40px]">
           {/* Search Input Field*/}
@@ -58,22 +57,20 @@ const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
             <></>
           )}
           {/* Select All checkbox */}
-          {
-            data?.headerData ? data.headerData :
-          
-          <div className="flex items-center gap-[10px]">
-            <Checkbox
-              onClick={data?.handleSelectAllCheckbox}
-              data-testid={"Select All Checkbox"}
-              checked={data?.isCheckAll}
-            />
-            <p className="text-solitaireTertiary text-base font-medium">
-              Select All
-            </p>
-          </div>
-          
-          
-}
+          {data?.headerData ? (
+            data.headerData
+          ) : (
+            <div className="flex items-center gap-[10px]">
+              <Checkbox
+                onClick={data?.handleSelectAllCheckbox}
+                data-testid={'Select All Checkbox'}
+                checked={data?.isCheckAll}
+              />
+              <p className="text-solitaireTertiary text-base font-medium">
+                Select All
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </>

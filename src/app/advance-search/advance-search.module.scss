@@ -1,5 +1,4 @@
-
-.imageTileMainContainerStyles{
+.imageTileMainContainerStyles {
   display: flex;
   background-color: transparent;
   // justify-content: space-between;
@@ -8,6 +7,7 @@
   align-items: center;
   flex-wrap: wrap;
 }
+
 .imageTileContainerStyles {
   width: 64px;
   height: 75px;
@@ -15,7 +15,7 @@
   border-radius: 2px;
   align-items: center;
   border: 2px solid transparent;
-  margin: 0 16px
+  margin: 0 16px;
 }
 
 .imageTileImageStyles {
@@ -31,7 +31,7 @@
   text-align: center;
 }
 
-.activeIndicatorStyles{
+.activeIndicatorStyles {
   border: 1px solid #8c7459;
   border-radius: 2px;
 }
@@ -110,15 +110,14 @@
 .radioStyle {
   border: 1px solid hsl(var(--solitaire-tertiary));
   color: hsl(var(--solitaire-quaternary));
-    border-color:  hsl(var(--solitaire-quaternary));;
-    margin: 10px;
+  border-color: hsl(var(--solitaire-quaternary));
+  margin: 10px;
 }
 
 .radioLabel {
   color: hsl(var(--solitaire-tertiary));
-  padding: 5px;
   font-weight: normal;
-  padding: 10px 0px;
+  padding: 15px 5px;
 }
 
 .caratRangeFilter {
@@ -179,8 +178,8 @@
   background-color: hsl(var(--solitaire-secondary));
 }
 
-.selectElement:hover{
-  background-color: hsl(var(--solitaire-senary));;
+.selectElement:hover {
+  background-color: hsl(var(--solitaire-senary));
 }
 
 .advanceSearchHeader {
@@ -205,20 +204,22 @@
   text-decoration: underline;
   padding-bottom: 2px;
   text-decoration-color: #8c7459;
-
 }
 
 .colorDataActiveStyle {
   color: white;
 }
+
 //Footer Button
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
 }
+
 .filled {
   background-color: #8c7459;
 }
-.anotherSearch{
+
+.anotherSearch {
   width: 185px;
 }
