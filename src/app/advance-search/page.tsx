@@ -9,11 +9,10 @@ import CustomImageTile, {
 import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
 import { CustomSelect } from 'src/components/common/select';
-import Round from '../../../public/assets/images/Round.png';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
-import { useRouter, useSearchParams } from 'next/navigation';
-
+import {  useSearchParams } from 'next/navigation';
+import Round from "@public/assets/images/round.png"
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];

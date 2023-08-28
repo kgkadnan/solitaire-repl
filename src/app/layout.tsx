@@ -22,10 +22,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/* <Provider store={store}> */}
 
         <Providers>
-          {/* <div style={{ display: "flex", flexDirection: "column" }}> */}
           <SideBar />
           <TopNavigationBar />
           <div
@@ -36,17 +34,13 @@ export default function RootLayout({
               padding: '0px 30px',
             }}
           >
-            {/* <div> */}
             <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
               {children}
             </main>
-            {/* </div> */}
           </div>
           <BottomNavigationBar />
-          {/* </div> */}
         </Providers>
 
-        {/* </Provider> */}
       </body>
     </html>
   );

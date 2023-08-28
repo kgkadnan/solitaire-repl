@@ -1,7 +1,7 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'; // For simulating user interactions
-import Round from '@public/assets/images/Round.png';
+import Round from '@public/assets/images/round.png';
 import CustomImageTile from '@components/common/image-tile';
 
 jest.mock('next/image', () => ({

@@ -1,11 +1,11 @@
 'use client';
 import { useState } from 'react';
 import CustomImageTile, { IImageTileProps } from '.';
-import Round from '@public/assets/images/Round.png';
+import Round from "@public/assets/images/round.png"
 
 const ImageTileExample = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const handleChange = (shape: string, index: number) => {
+  const handleChange = (shape: string) => {
     if (selectedShape.includes(shape)) {
       setSelectedShape((prevSelectedShape) =>
         prevSelectedShape.filter((selected) => selected !== shape)

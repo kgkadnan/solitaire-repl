@@ -1,7 +1,7 @@
 'use client';
 import { useRouter } from 'next/navigation';
 import { useCallback, useState } from 'react';
-import KGKlogo from '@public/assets/icons/Vector.svg';
+import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
 import CustomImageTile, { IImageTileProps } from '../image-tile';
 import SavedSearch from '@public/assets/icons/bookmark-outline.svg?url';
