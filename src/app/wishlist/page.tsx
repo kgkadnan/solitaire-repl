@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
 import styles from './wishlist.module.scss';
-import { CustomTable } from '@components/common/table/table';
+import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import { ToggleButton } from '@/components/common/toggle';
 import CustomHeader from '@/components/common/header';

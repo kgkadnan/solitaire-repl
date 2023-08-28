@@ -5,7 +5,7 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { CustomFooter } from '@/components/common/footer';
 import CustomHeader from '@/components/common/header';
 import CustomSearchResultCard from '@/components/common/search-result-card';
-import { CustomTable } from '@/components/common/table/table';
+import { CustomTable } from '@/components/common/table';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState } from 'react';
 import styles from './cart.module.scss';

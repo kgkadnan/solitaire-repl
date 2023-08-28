@@ -1,6 +1,5 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import React, { ChangeEvent } from 'react';
-import { CustomDisplayButton } from '../buttons/display-button';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
 import { CustomInputField } from '@components/common/input-field/index';
 import styles from './header.module.scss';
@@ -17,11 +16,11 @@ export interface IheaderData {
   headerData?: React.ReactNode;
 }
 
-interface CustomHeaderProps {
+interface ICustomHeaderProps {
   data?: IheaderData;
 }
 
-const CustomHeader: React.FC<CustomHeaderProps> = ({ data }) => {
+const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,

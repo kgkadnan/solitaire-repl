@@ -3,14 +3,14 @@ import React from 'react';
 import styles from './checkbox.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 
-interface CustomCheckboxProps {
+interface ICustomCheckboxProps {
   data: string;
   onClick?: (e: any) => void;
   isChecked?: string[];
   style?: string;
 }
 
-export const CustomCheckBox: React.FC<CustomCheckboxProps> = ({
+export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   data,
   style,
   onClick,

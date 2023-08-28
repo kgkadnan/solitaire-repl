@@ -1,6 +1,6 @@
 import React from 'react';
 import style from './table-example.module.scss';
-import { CustomTable } from '../table';
+import { CustomTable } from '..';
 
 export const TableExample = () => {
   const tableData = {

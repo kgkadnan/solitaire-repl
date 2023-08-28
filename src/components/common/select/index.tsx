@@ -15,23 +15,23 @@ interface ISelectData {
   id: number;
 }
 
-interface Istyle {
+interface IStyle {
   selectContent?: string;
   selectTrigger?: string;
   selectElement?: string;
 }
 
-interface SelectProps {
+interface ISelectProps {
   data: ISelectData[];
   placeholder: string;
-  style?: Istyle;
+  style?: IStyle;
 }
 
 const handleChange = (event: any) => {
   console.log('event', event);
 };
 
-export const CustomSelect: React.FC<SelectProps> = ({
+export const CustomSelect: React.FC<ISelectProps> = ({
   data,
   placeholder,
   style,

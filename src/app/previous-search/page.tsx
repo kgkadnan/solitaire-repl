@@ -1,7 +1,7 @@
 'use client';
 import React, { ChangeEvent, useMemo, useState } from 'react';
 import styles from './previous-search.module.scss';
-import { CustomTable } from '@components/common/table/table';
+import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import EditIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';

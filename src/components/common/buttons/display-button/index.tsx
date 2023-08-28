@@ -4,21 +4,21 @@ import style from './display-button.module.scss';
 import { Button } from '@components/ui/button';
 
 // Define interfaces for styling and component props
-export interface DisplayButtonStyle {
+export interface IDisplayButtonStyle {
   displayButtonStyle?: string;
   displayLabelStyle?: string;
 }
 
-export interface DisplayButtonProps {
+export interface IDisplayButtonProps {
   id?: number;
   displayButtonLabel: string;
-  displayButtonAllStyle?: DisplayButtonStyle;
+  displayButtonAllStyle?: IDisplayButtonStyle;
   handleClick?: (color: string) => void;
   color?: string;
 }
 
 // CustomDisplayButton component definition
-export const CustomDisplayButton: React.FC<DisplayButtonProps> = ({
+export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
   handleClick = () => {},

@@ -22,13 +22,13 @@ interface ITableStyle {
 }
 
 // Interface for the props of the Table component
-interface TableProps {
+interface ITableProps {
   tableData: ITableData;
   tableStyleClasses: ITableStyle;
 }
 
 // CustomTable component definition
-export const CustomTable: React.FC<TableProps> = ({
+export const CustomTable: React.FC<ITableProps> = ({
   tableData,
   tableStyleClasses,
 }) => {

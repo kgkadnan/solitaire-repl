@@ -10,11 +10,11 @@ export interface IfooterButtonData {
   fn?: () => void;
 }
 
-interface CustomFooterProps {
+interface ICustomFooterProps {
   footerButtonData?: IfooterButtonData[];
 }
 
-export const CustomFooter: React.FC<CustomFooterProps> = ({
+export const CustomFooter: React.FC<ICustomFooterProps> = ({
   footerButtonData,
 }) => {
   return (

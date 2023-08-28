@@ -10,17 +10,17 @@ import {
 
 import React, { useState } from 'react';
 
-type Status = {
+interface IStatus  {
   value: string;
   label: string;
 };
 interface ICustomCommand {
-  items: Status[];
+  items: IStatus[];
 }
 
 const CustomCommand: React.FC<ICustomCommand> = ({ items }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [selectedStatus, setSelectedStatus] = React.useState<Status | null>(
+  const [selectedStatus, setSelectedStatus] = React.useState<IStatus | null>(
     null
   );
 

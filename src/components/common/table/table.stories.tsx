@@ -1,5 +1,5 @@
 import { Meta, StoryObj } from '@storybook/react';
-import { CustomTable } from './table';
+import { CustomTable } from '.';
 
 const meta = {
   title: 'components/CustomTable',
