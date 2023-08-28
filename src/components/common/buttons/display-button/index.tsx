@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import style from "./display-button.module.scss";
-import { Button } from "@components/ui/button";
+'use client';
+import React from 'react';
+import style from './display-button.module.scss';
+import { Button } from '@components/ui/button';
 
 // Define interfaces for styling and component props
 export interface DisplayButtonStyle {
@@ -22,7 +22,7 @@ export const CustomDisplayButton: React.FC<DisplayButtonProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
   handleClick = () => {},
-  color = "",
+  color = '',
 }) => {
   return (
     <>

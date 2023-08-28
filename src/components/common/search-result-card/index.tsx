@@ -1,15 +1,15 @@
-"use client";
-import React from "react";
+'use client';
+import React from 'react';
 
-import Image, { StaticImageData } from "next/image";
-import style from "./search-result-card.module.scss";
+import Image, { StaticImageData } from 'next/image';
+import style from './search-result-card.module.scss';
 import {
   Card,
   CardHeader,
   CardTitle,
   CardDescription,
   CardContent,
-} from "@components/ui/card";
+} from '@components/ui/card';
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
@@ -43,7 +43,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardActionIcon,
     cardDescription,
     cardContent,
-    stone = "",
+    stone = '',
     cardId,
   } = card.cardData;
   const {
@@ -93,7 +93,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
         {cardActionIcon && (
           <Image
             src={cardActionIcon}
-            alt={"edit"}
+            alt={'edit'}
             onClick={handleClickEvent}
             className={`${style.cardActionIcon} ${cardActionIconStyle}`}
           />

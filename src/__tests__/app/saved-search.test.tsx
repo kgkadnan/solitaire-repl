@@ -1,8 +1,8 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { fireEvent, render, waitFor } from "@testing-library/react";
-import SavedSearch from "@app/saved-search/page";
+import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import { fireEvent, render, waitFor } from '@testing-library/react';
+import SavedSearch from '@app/saved-search/page';
 
-jest.mock("next/image", () => ({
+jest.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: React.JSX.IntrinsicAttributes &
@@ -11,7 +11,7 @@ jest.mock("next/image", () => ({
   ) => <img {...props} />,
 }));
 
-describe("SavedSearch Component - Render Card Data", () => {
+describe('SavedSearch Component - Render Card Data', () => {
   // it("renders card data correctly based on search filter", () => {
   //   const { getByText, getByRole } = render(<SavedSearch />);
 
@@ -37,7 +37,7 @@ describe("SavedSearch Component - Render Card Data", () => {
   //   expect(getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
   // });
 
-  test("renders PreviousSearch component correctly", () => {
+  test('renders PreviousSearch component correctly', () => {
     const { getByText } = render(<SavedSearch />);
     // Assert the presence of key UI elements
     expect(getByText(/saved search/i)).toBeInTheDocument();
@@ -62,13 +62,13 @@ describe("SavedSearch Component - Render Card Data", () => {
     const { getByTestId, getAllByRole } = render(<SavedSearch />);
 
     // Find the 'Select All' checkbox
-    const selectAllCheckbox = getByTestId("Select All Checkbox");
+    const selectAllCheckbox = getByTestId('Select All Checkbox');
 
     // Click the 'Select All' checkbox
     fireEvent.click(selectAllCheckbox);
 
     // Find all checkboxes
-    const checkboxes = getAllByRole("checkbox");
+    const checkboxes = getAllByRole('checkbox');
 
     // Check if all checkboxes are checked
     waitFor(() => {
@@ -87,17 +87,17 @@ describe("SavedSearch Component - Render Card Data", () => {
     });
   });
 
-  it("displays card details when a card is clicked", () => {
+  it('displays card details when a card is clicked', () => {
     const { getByTestId, queryAllByText } = render(<SavedSearch />);
 
     // Find a card
-    const card = getByTestId("card-1");
+    const card = getByTestId('card-1');
 
     // Click the card to expand its details
     fireEvent.click(card);
 
     // Check if detailed information is displayed
-    const basicDetailsElement = queryAllByText("Basic Details");
+    const basicDetailsElement = queryAllByText('Basic Details');
     expect(basicDetailsElement).toHaveLength(2);
   });
 });

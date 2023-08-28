@@ -1,7 +1,7 @@
-"use client";
-import React, { ChangeEvent, useEffect, useState } from "react";
-import styles from "./input-field.module.scss";
-import { Input } from "@components/ui/input";
+'use client';
+import React, { ChangeEvent, useEffect, useState } from 'react';
+import styles from './input-field.module.scss';
+import { Input } from '@components/ui/input';
 
 interface IInputStyle {
   input: string;
@@ -33,17 +33,17 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === "ArrowDown") {
+    if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedSuggestionIndex(
         (prevIndex) => (prevIndex + 1) % suggestions.length
       );
-    } else if (event.key === "ArrowUp") {
+    } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedSuggestionIndex(
         (prevIndex) => (prevIndex - 1 + suggestions.length) % suggestions.length
       );
-    } else if (event.key === "Enter") {
+    } else if (event.key === 'Enter') {
       event.preventDefault();
       if (suggestions && suggestions.length > 0) {
         handleSuggestionClick(suggestions[selectedSuggestionIndex]);

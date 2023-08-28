@@ -1,8 +1,8 @@
-"use client";
+'use client';
 
-import React from "react";
-import style from "./example.module.scss";
-import { CustomDisplayButton } from "..";
+import React from 'react';
+import style from './example.module.scss';
+import { CustomDisplayButton } from '..';
 
 export const DisplayButtonExample = () => {
   const handleClick = () => {

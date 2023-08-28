@@ -1,14 +1,14 @@
-import React from "react";
+import React from 'react';
 
-import userEvent from "@testing-library/user-event";
-import { cleanup, render, waitFor } from "@testing-library/react";
-import { CustomSelect } from "@components/common/select";
+import userEvent from '@testing-library/user-event';
+import { cleanup, render, waitFor } from '@testing-library/react';
+import { CustomSelect } from '@components/common/select';
 
-describe("CustomSelect Component", () => {
+describe('CustomSelect Component', () => {
   const mockData = [
-    { id: 1, value: "Option 1" },
-    { id: 2, value: "Option 2" },
-    { id: 3, value: "Option 3" },
+    { id: 1, value: 'Option 1' },
+    { id: 2, value: 'Option 2' },
+    { id: 3, value: 'Option 3' },
   ];
 
   afterEach(() => {
@@ -16,18 +16,18 @@ describe("CustomSelect Component", () => {
     jest.clearAllMocks();
   });
 
-  it("should render placeholder", () => {
+  it('should render placeholder', () => {
     const { getByText } = render(
       <CustomSelect placeholder="Select an option" data={mockData} />
     );
     // This should match your placeholder default if you dont pass one in
-    expect(getByText("Select an option")).toBeInTheDocument();
+    expect(getByText('Select an option')).toBeInTheDocument();
   });
 
-  it("should render options", async () => {
+  it('should render options', async () => {
     const mockData = [
-      { id: 1, value: "Option 1" },
-      { id: 2, value: "Option 2" },
+      { id: 1, value: 'Option 1' },
+      { id: 2, value: 'Option 2' },
       // ... more mock data
     ];
 
@@ -37,10 +37,10 @@ describe("CustomSelect Component", () => {
 
     // Target the combo box trigger element by its role "button"
     // Target the combo box trigger element by its role "button"
-    const optionTrigger = getByRole("combobox")?.querySelector(
-      "span"
+    const optionTrigger = getByRole('combobox')?.querySelector(
+      'span'
     ) as HTMLElement;
-    console.log("optionTrigger", optionTrigger);
+    console.log('optionTrigger', optionTrigger);
 
     // Simulate clicking the combo box trigger to open the dropdown
     userEvent.click(optionTrigger);

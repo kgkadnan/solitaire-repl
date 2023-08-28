@@ -1,31 +1,31 @@
-import path from "path";
+import path from 'path';
 
 module.exports = {
-  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"], // Configure story loading patterns
+  stories: ['../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'], // Configure story loading patterns
 
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials",
-    "@storybook/addon-onboarding",
-    "@storybook/addon-interactions",
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-onboarding',
+    '@storybook/addon-interactions',
     // {
     //   name: '@storybook/addon-styling',
     //   options: {},
     // },
   ],
   framework: {
-    name: "@storybook/nextjs",
+    name: '@storybook/nextjs',
     options: {},
   },
   docs: {
-    autodocs: "tag",
+    autodocs: 'tag',
   },
   parameters: {
     backgrounds: {
-      default: "light",
+      default: 'light',
       values: [
-        { name: "light", value: "#ffffff" },
-        { name: "dark", value: "#333333" },
+        { name: 'light', value: '#ffffff' },
+        { name: 'dark', value: '#333333' },
       ],
     },
   },
@@ -42,7 +42,7 @@ module.exports = {
   webpackFinal: async (config) => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      "@": path.resolve(__dirname, "../src"),
+      '@': path.resolve(__dirname, '../src'),
     };
 
     // Modify Webpack configuration further if needed

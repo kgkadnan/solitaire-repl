@@ -1,8 +1,8 @@
-"use client";
-import { Label } from "@components/ui/label";
-import { RadioGroup, RadioGroupItem } from "@components/ui/radio-group";
-import React from "react";
-import style from "./radio-button.module.scss";
+'use client';
+import { Label } from '@components/ui/label';
+import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group';
+import React from 'react';
+import style from './radio-button.module.scss';
 
 // Interface for individual radio button options
 interface RadioButtonOptionProps {
@@ -13,7 +13,7 @@ interface RadioButtonOptionProps {
 
 // Interface for styling of radio buttons and labels
 interface RadioButtonStyles {
-  radioContainerStyle?:string;
+  radioContainerStyle?: string;
   radioButtonStyle: string;
   radioLabelStyle: string;
 }

@@ -1,21 +1,21 @@
-"use client";
-import React, { useEffect } from "react";
-import { useTheme } from "next-themes";
-import { Switch } from "@components/ui/switch";
+'use client';
+import React, { useEffect } from 'react';
+import { useTheme } from 'next-themes';
+import { Switch } from '@components/ui/switch';
 
 export const ToggleButton = () => {
   const { systemTheme, theme, setTheme } = useTheme();
-  const currentTheme = theme === "system" ? systemTheme : theme;
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   // Add useEffect to set the dark class on the body element
   useEffect(() => {
-    document.body.classList.toggle("dark", currentTheme === "dark");
+    document.body.classList.toggle('dark', currentTheme === 'dark');
   }, [currentTheme]);
 
   return (
     <Switch
       onClick={() =>
-        currentTheme === "dark" ? setTheme("light") : setTheme("dark")
+        currentTheme === 'dark' ? setTheme('light') : setTheme('dark')
       }
       className=""
     >

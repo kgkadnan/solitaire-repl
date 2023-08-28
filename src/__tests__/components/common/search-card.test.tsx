@@ -1,5 +1,5 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-jest.mock("next/image", () => ({
+import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+jest.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: JSX.IntrinsicAttributes &
@@ -7,37 +7,37 @@ jest.mock("next/image", () => ({
       ImgHTMLAttributes<HTMLImageElement>
   ) => <img {...props} />,
 }));
-describe("CustomSearchCard", () => {
+describe('CustomSearchCard', () => {
   const cardData = [
     {
-      cardId: "1",
-      cardHeader: "Card Header 1",
-      cardContent: "Card Content 1",
+      cardId: '1',
+      cardHeader: 'Card Header 1',
+      cardContent: 'Card Content 1',
     },
     {
-      cardId: "2",
-      cardHeader: "Card Header 2",
-      cardContent: "Card Content 2",
+      cardId: '2',
+      cardHeader: 'Card Header 2',
+      cardContent: 'Card Content 2',
     },
     // ... other card data
   ];
 
   const cardStyles = {
-    cardHeaderContainerStyle: "custom-card-header-container",
-    cardTitleStyle: "custom-card-title",
+    cardHeaderContainerStyle: 'custom-card-header-container',
+    cardTitleStyle: 'custom-card-title',
     // ... other styles
   };
 
   const footerButtonData = [
     {
       id: 1,
-      displayButtonLabel: "Button 1",
-      style: "button-style-1",
+      displayButtonLabel: 'Button 1',
+      style: 'button-style-1',
     },
     // ... other button data
   ];
 
-  test("renders header, cards, and footer correctly", () => {
+  test('renders header, cards, and footer correctly', () => {
     // const { getByText, getAllByText } = render(
     //   <CustomSearchResultCard
     //     cardData={cardData}

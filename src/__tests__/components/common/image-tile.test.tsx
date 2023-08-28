@@ -1,10 +1,10 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event"; // For simulating user interactions
-import Round from "@public/assets/images/Round.png";
-import CustomImageTile from "@components/common/image-tile";
+import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event'; // For simulating user interactions
+import Round from '@public/assets/images/Round.png';
+import CustomImageTile from '@components/common/image-tile';
 
-jest.mock("next/image", () => ({
+jest.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: JSX.IntrinsicAttributes &
@@ -12,19 +12,19 @@ jest.mock("next/image", () => ({
       ImgHTMLAttributes<HTMLImageElement>
   ) => <img {...props} />,
 }));
-describe("CustomImageTile", () => {
+describe('CustomImageTile', () => {
   const imageData = [
     {
       src: Round,
-      title: "Round",
+      title: 'Round',
     },
     {
       src: Round,
-      title: "Pear",
+      title: 'Pear',
     },
     {
       src: Round,
-      title: "Emerald",
+      title: 'Emerald',
     },
   ];
 
@@ -34,7 +34,7 @@ describe("CustomImageTile", () => {
   };
 
   const handleSelectTileMock = jest.fn();
-  test("renders image tiles", () => {
+  test('renders image tiles', () => {
     render(
       <CustomImageTile
         imageTileData={imageData}
@@ -44,7 +44,7 @@ describe("CustomImageTile", () => {
     );
 
     // Check if the image tiles are
-    const imageTiles = screen.getAllByRole("img");
+    const imageTiles = screen.getAllByRole('img');
     expect(imageTiles.length).toBe(imageData.length);
   });
 
@@ -62,8 +62,7 @@ describe("CustomImageTile", () => {
     expect(getByText('Pear')).toBeInTheDocument();
     expect(getByText('Round')).toBeInTheDocument();
   });
-  test("selects a tile when clicked", async () => {
-    
+  test('selects a tile when clicked', async () => {
     render(
       <CustomImageTile
         imageTileData={imageData}
@@ -73,15 +72,15 @@ describe("CustomImageTile", () => {
     );
 
     // Click on the Pear tile
-    const pearTile = screen.getByAltText("Pear");
+    const pearTile = screen.getByAltText('Pear');
     await userEvent.click(pearTile);
 
     // Check if the handleSelectTile function is called with the correct tile title
-    expect(handleSelectTileMock).toHaveBeenCalledWith("Pear", 1);
+    expect(handleSelectTileMock).toHaveBeenCalledWith('Pear', 1);
   });
 
-  test("displays selected tiles", () => {
-    const selectedTile = "Pear";
+  test('displays selected tiles', () => {
+    const selectedTile = 'Pear';
     render(
       <CustomImageTile
         imageTileData={imageData}
@@ -93,6 +92,6 @@ describe("CustomImageTile", () => {
     // Check if the selected tile is displayed with appropriate styling
     const selectedTileElement = screen.getByText(selectedTile);
     expect(selectedTileElement).toBeInTheDocument();
-    expect(selectedTileElement).toHaveClass("imageTileLabel"); // You can adjust this class name based on your code
+    expect(selectedTileElement).toHaveClass('imageTileLabel'); // You can adjust this class name based on your code
   });
 });

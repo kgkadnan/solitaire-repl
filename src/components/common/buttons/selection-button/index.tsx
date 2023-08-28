@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import style from "./selection-button.module.scss";
-import { Button } from "@/components/ui/button";
+'use client';
+import React from 'react';
+import style from './selection-button.module.scss';
+import { Button } from '@/components/ui/button';
 
 // Interface for styling of selection button and label
 export interface SelectionButtonStyle {
@@ -22,7 +22,7 @@ export const CustomSelectionButton: React.FC<SelectionButtonProps> = ({
   selectionButtonLabel,
   handleClick = () => {},
   selectionButtonAllStyles,
-  data = "",
+  data = '',
 }) => {
   return (
     <>

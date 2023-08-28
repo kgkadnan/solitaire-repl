@@ -1,78 +1,78 @@
-"use client";
-import { useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
-import KGKlogo from "@public/assets/icons/Vector.svg";
-import Image from "next/image";
-import CustomImageTile, { IImageTileProps } from "../image-tile";
-import SavedSearch from "@public/assets/icons/bookmark-outline.svg?url";
-import Appointment from "@public/assets/icons/calendar-clear-outline.svg?url";
-import MyCart from "@public/assets/icons/cart-outline.svg?url";
-import AdvanceSearch from "@public/assets/icons/search-outline.svg?url";
-import RecentConfirmation from "@public/assets/icons/checkmark-circle-outline.svg?url";
-import Layout from "@public/assets/icons/layout.svg?url";
-import MatchPair from "@public/assets/icons/match-pair.svg?url";
-import MyDiamond from "@public/assets/icons/my-diamond.svg?url";
-import NewArrival from "@public/assets/icons/new-arrival.svg?url";
-import Dashboard from "@public/assets/icons/grid-outline.svg?url";
-import styles from "./sidebar.module.scss";
+'use client';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
+import KGKlogo from '@public/assets/icons/Vector.svg';
+import Image from 'next/image';
+import CustomImageTile, { IImageTileProps } from '../image-tile';
+import SavedSearch from '@public/assets/icons/bookmark-outline.svg?url';
+import Appointment from '@public/assets/icons/calendar-clear-outline.svg?url';
+import MyCart from '@public/assets/icons/cart-outline.svg?url';
+import AdvanceSearch from '@public/assets/icons/search-outline.svg?url';
+import RecentConfirmation from '@public/assets/icons/checkmark-circle-outline.svg?url';
+import Layout from '@public/assets/icons/layout.svg?url';
+import MatchPair from '@public/assets/icons/match-pair.svg?url';
+import MyDiamond from '@public/assets/icons/my-diamond.svg?url';
+import NewArrival from '@public/assets/icons/new-arrival.svg?url';
+import Dashboard from '@public/assets/icons/grid-outline.svg?url';
+import styles from './sidebar.module.scss';
 
 const SideBar = () => {
   const router = useRouter();
 
   const onKGKLogoContainerClick = useCallback(() => {
-    router.push("/");
+    router.push('/');
   }, [router]);
 
   const imageData: IImageTileProps[] = [
     {
       src: <Dashboard className={styles.stroke} />,
-      title: "Dashboard",
-      link: "/dashboard",
+      title: 'Dashboard',
+      link: '/dashboard',
     },
     {
       src: <NewArrival className={styles.fill} />,
-      title: "New Arrival",
-      link: "/new-arrival",
+      title: 'New Arrival',
+      link: '/new-arrival',
     },
     {
       src: <AdvanceSearch className={styles.stroke} />,
-      title: "Advance Search",
-      link: "advance-search",
+      title: 'Advance Search',
+      link: 'advance-search',
     },
     {
       src: <MatchPair className={styles.stroke} />,
-      title: "Match Pair",
-      link: "/match-pair",
+      title: 'Match Pair',
+      link: '/match-pair',
     },
     {
       src: <SavedSearch className={styles.stroke} />,
-      title: "Saved Searches",
-      link: "/saved-search",
+      title: 'Saved Searches',
+      link: '/saved-search',
     },
     {
       src: <MyCart className={styles.stroke} />,
-      title: "Cart",
-      link: "/cart",
+      title: 'Cart',
+      link: '/cart',
     },
     {
       src: <Layout className={styles.fill} />,
-      title: "layouts",
-      link: "/layouts",
+      title: 'layouts',
+      link: '/layouts',
     },
     {
       src: <RecentConfirmation className={styles.stroke} />,
-      title: "Recent Confirmations",
-      link: "/recent-confiramtion",
+      title: 'Recent Confirmations',
+      link: '/recent-confiramtion',
     },
     {
       src: <Appointment className={styles.stroke} />,
-      title: "Appointments",
-      link: "/appointments",
+      title: 'Appointments',
+      link: '/appointments',
     },
     {
       src: <MyDiamond className={styles.stroke} />,
-      title: "MyDiamonds",
-      link: "/my-diamonds",
+      title: 'MyDiamonds',
+      link: '/my-diamonds',
     },
   ];
 

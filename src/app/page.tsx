@@ -1,30 +1,30 @@
-'use client'
+'use client';
 // import { useRouter } from "next/router";
 export default function Home() {
-// const router =useRouter()
+  // const router =useRouter()
 
-// router.push({
-//   pathname: '/advance-search',
-  
-// })
+  // router.push({
+  //   pathname: '/advance-search',
+
+  // })
   return (
     <>
       <h1
         style={{
-          fontSize: "100px",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "180px",
+          fontSize: '100px',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '180px',
         }}
       >
         Welcome to KGK live 2.O
       </h1>
       <h1
         style={{
-          fontSize: "30px",
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "20px",
+          fontSize: '30px',
+          display: 'flex',
+          justifyContent: 'center',
+          marginTop: '20px',
         }}
       >
         Bulding Digital diamond platform

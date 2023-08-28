@@ -1,7 +1,7 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from "react";
-import { render, fireEvent } from "@testing-library/react";
-import CustomSearchResultCard from "@components/common/search-result-card";
-jest.mock("next/image", () => ({
+import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import { render, fireEvent } from '@testing-library/react';
+import CustomSearchResultCard from '@components/common/search-result-card';
+jest.mock('next/image', () => ({
   __esModule: true,
   default: (
     props: JSX.IntrinsicAttributes &
@@ -9,16 +9,16 @@ jest.mock("next/image", () => ({
       ImgHTMLAttributes<HTMLImageElement>
   ) => <img {...props} />,
 }));
-describe("CustomSearchResultCard", () => {
+describe('CustomSearchResultCard', () => {
   const cardData = {
-    cardId: "1",
-    stone: "Diamond",
-    cardHeader: "Card Header",
-    cardDescription: "Card Description",
-    cardContent: "Card Content",
+    cardId: '1',
+    stone: 'Diamond',
+    cardHeader: 'Card Header',
+    cardDescription: 'Card Description',
+    cardContent: 'Card Content',
   };
 
-  test("renders card with provided data", () => {
+  test('renders card with provided data', () => {
     const { getByText } = render(
       <CustomSearchResultCard cardData={cardData} />
     );

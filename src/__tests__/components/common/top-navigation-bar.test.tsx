@@ -1,21 +1,21 @@
-import { TopNavigationBar } from "@components/common/top-navigation-bar";
-import { fireEvent, render, screen } from "@testing-library/react";
-import mockRouter from "next-router-mock";
+import { TopNavigationBar } from '@components/common/top-navigation-bar';
+import { fireEvent, render, screen } from '@testing-library/react';
+import mockRouter from 'next-router-mock';
 
-jest.mock("next/navigation", () => jest.requireActual("next-router-mock"));
-describe("Top-Navigation-Bar Component", () => {
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
+describe('Top-Navigation-Bar Component', () => {
   beforeEach(() => {
     render(<TopNavigationBar />);
   });
 
-  test("renders TopNavigationBar component correctly", () => {
+  test('renders TopNavigationBar component correctly', () => {
     // Assert the presence of key UI elements
     const labels = [
-      "For You",
-      "Advance Search",
-      "Previous Search",
-      "Wishlist",
-      "My Cart",
+      'For You',
+      'Advance Search',
+      'Previous Search',
+      'Wishlist',
+      'My Cart',
     ];
 
     labels.forEach((label) => {
@@ -23,8 +23,8 @@ describe("Top-Navigation-Bar Component", () => {
     });
   });
 
-  test("handles button clicks and navigation", () => {
-    const buttons = screen.getAllByRole("button", {
+  test('handles button clicks and navigation', () => {
+    const buttons = screen.getAllByRole('button', {
       name: /for you|advance search|previous search|wishlist|my cart/i,
     });
 

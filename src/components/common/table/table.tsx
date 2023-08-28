@@ -5,8 +5,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@components/ui/table";
-import React from "react";
+} from '@components/ui/table';
+import React from 'react';
 
 // Interface for the data of the table
 interface ITableData {
@@ -66,8 +66,8 @@ export const CustomTable: React.FC<TableProps> = ({
                     key={`cell-${rowIndex}-${cellIndex}`}
                     className={`whitespace-nowrap ${tableBodyStyle} `}
                   >
-                    {typeof bodyData[item] !== "string"
-                      ? bodyData[item].toString().substring(0, 3).concat("...")
+                    {typeof bodyData[item] !== 'string'
+                      ? bodyData[item].toString().substring(0, 3).concat('...')
                       : bodyData[item]}
                   </TableCell>
                 );

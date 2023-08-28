@@ -1,23 +1,23 @@
-import React from "react";
-import CustomSearchResultCard from ".";
-import Edit from "@public/assets/icons/edit.svg";
-import ImageTileExample from "../image-tile/example";
-import type { Meta, StoryObj } from "@storybook/react";
+import React from 'react';
+import CustomSearchResultCard from '.';
+import Edit from '@public/assets/icons/edit.svg';
+import ImageTileExample from '../image-tile/example';
+import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: "Components/CustomSearchResultCard",
+  title: 'Components/CustomSearchResultCard',
   component: CustomSearchResultCard,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomSearchResultCard>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const cardData = {
-  cardId: "1",
+  cardId: '1',
   cardIcon: Edit,
   cardhandleIcon: Edit,
   cardHeader: <p>header</p>,

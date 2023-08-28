@@ -1,33 +1,33 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { CustomTable } from "./table";
+import { Meta, StoryObj } from '@storybook/react';
+import { CustomTable } from './table';
 
 const meta = {
-  title: "components/CustomTable",
+  title: 'components/CustomTable',
   component: CustomTable,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomTable>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
 const tableData = {
-  tableHeads: ["invoice", "paymentStatus", "totalAmount", "paymentMethod"],
+  tableHeads: ['invoice', 'paymentStatus', 'totalAmount', 'paymentMethod'],
   bodyData: [
     {
-      invoice: "INV001",
-      paymentStatus: "Paid",
-      totalAmount: "$250.00",
-      paymentMethod: "Credit Card",
+      invoice: 'INV001',
+      paymentStatus: 'Paid',
+      totalAmount: '$250.00',
+      paymentMethod: 'Credit Card',
     },
   ],
 };
 
 const classes = {
-  tableHeaderStyle: "text-sky-400",
-  tableBodyStyle: "text-blue-400",
+  tableHeaderStyle: 'text-sky-400',
+  tableBodyStyle: 'text-blue-400',
 };
 
 export const TableStory: Story = {

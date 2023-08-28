@@ -1,12 +1,12 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { CustomInputField } from ".";
-import { ChangeEvent, useState } from "react";
+import { Meta, StoryObj } from '@storybook/react';
+import { CustomInputField } from '.';
+import { ChangeEvent, useState } from 'react';
 
 const meta: Meta<typeof CustomInputField> = {
-  title: "components/InputField",
+  title: 'components/InputField',
   component: CustomInputField,
   argTypes: {},
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomInputField>;
 
 export default meta;
@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof CustomInputField>;
 
 const InputWithHooks = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -35,11 +35,11 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: {
-    type: "text",
-    placeholder: "Enter Password",
-    name: "password",
+    type: 'text',
+    placeholder: 'Enter Password',
+    name: 'password',
     style: {
-      input: "text-solitaireQuaternary",
+      input: 'text-solitaireQuaternary',
     },
   },
 };

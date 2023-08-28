@@ -1,21 +1,21 @@
-"use client";
+'use client';
 import React, {
   ChangeEvent,
   useCallback,
   useEffect,
   useMemo,
   useState,
-} from "react";
-import styles from "./saved-search.module.scss";
-import { CustomTable } from "@components/common/table/table";
-import { CustomDisplayButton } from "@components/common/buttons/display-button";
-import editIcon from "@public/assets/icons/edit.svg";
-import axios from "axios";
-import CustomHeader from "@/components/common/header";
-import { CustomCheckBox } from "@/components/common/checkbox";
-import { SheetContent, SheetTrigger, Sheet } from "@/components/ui/sheet";
-import CustomSearchResultCard from "@/components/common/search-result-card";
-import { CustomFooter } from "@/components/common/footer";
+} from 'react';
+import styles from './saved-search.module.scss';
+import { CustomTable } from '@components/common/table/table';
+import { CustomDisplayButton } from '@components/common/buttons/display-button';
+import editIcon from '@public/assets/icons/edit.svg';
+import axios from 'axios';
+import CustomHeader from '@/components/common/header';
+import { CustomCheckBox } from '@/components/common/checkbox';
+import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
+import CustomSearchResultCard from '@/components/common/search-result-card';
+import { CustomFooter } from '@/components/common/footer';
 
 interface CardData {
   cardId: string;
@@ -61,34 +61,34 @@ const SavedSearch = () => {
   const [isCheckAll, setIsCheckAll] = useState(false);
 
   //Search Bar States
-  const [search, setSearch] = useState<string>("");
+  const [search, setSearch] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   const searchData = [
-    "sample",
-    "sample12",
-    "sample3",
-    "sample4",
-    "sample5",
-    "ooooo",
+    'sample',
+    'sample12',
+    'sample3',
+    'sample4',
+    'sample5',
+    'ooooo',
   ];
 
   const searchListNew = useMemo(
     () => [
       {
-        id: "gkgh32465442",
-        name: "ooooo",
-        customer_id: "<sample_customer_id>",
+        id: 'gkgh32465442',
+        name: 'ooooo',
+        customer_id: '<sample_customer_id>',
         diamondCount: 256,
         filter: {
-          color: ["D", "F", "E", "G"],
-          clarity: ["VVS2", "VVS1", "VS2"],
-          polarity: ["EX", "IDEAL", "VG"],
-          lab: ["GIA", "HRD", "IGI"],
+          color: ['D', 'F', 'E', 'G'],
+          clarity: ['VVS2', 'VVS1', 'VS2'],
+          polarity: ['EX', 'IDEAL', 'VG'],
+          lab: ['GIA', 'HRD', 'IGI'],
         },
         isDeleted: false,
-        created_at: "2023-08-23T08:03:54.942Z",
-        updated_at: "2023-08-23T08:03:54.942Z",
+        created_at: '2023-08-23T08:03:54.942Z',
+        updated_at: '2023-08-23T08:03:54.942Z',
       },
     ],
     [] // No dependencies
@@ -99,15 +99,15 @@ const SavedSearch = () => {
   const formatCreatedAt = (createdAt: any) => {
     const createdAtDate = new Date(createdAt);
 
-    const dateFormatter = new Intl.DateTimeFormat("en-US", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
     });
 
-    const timeFormatter = new Intl.DateTimeFormat("en-US", {
-      hour: "numeric",
-      minute: "numeric",
+    const timeFormatter = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
       hour12: true,
     });
 
@@ -151,11 +151,11 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = () => {
-    console.log("Cards", cardData);
+    console.log('Cards', cardData);
     const updatedCardData = cardData.filter(
       (item) => !isCheck.includes(item.cardId)
     );
-    console.log("update", updatedCardData);
+    console.log('update', updatedCardData);
     setCardData(updatedCardData);
     setIsCheck([]); // Clear the selected checkboxes
     setIsCheckAll(false); //clear check all
@@ -165,49 +165,49 @@ const SavedSearch = () => {
     {
       cardId: 1,
       basicCardDetails: {
-        Lab: "GIA",
-        Shape: "Round",
-        Carat: "2,2.5,3",
-        Color: "D,E,F",
-        Clarity: "FL,VVS1,VVS2",
-        Tinge: "WH",
-        Cut: "EX,VG,G",
-        Polish: "EX",
-        Symmetry: "EX",
-        Fluorescene: "Non",
-        Location: "IND",
+        Lab: 'GIA',
+        Shape: 'Round',
+        Carat: '2,2.5,3',
+        Color: 'D,E,F',
+        Clarity: 'FL,VVS1,VVS2',
+        Tinge: 'WH',
+        Cut: 'EX,VG,G',
+        Polish: 'EX',
+        Symmetry: 'EX',
+        Fluorescene: 'Non',
+        Location: 'IND',
       },
 
       inclutionDetails: {
-        "Table Black": "BO",
-        "Side Black": "SBO",
-        "Table Inclution": "TO",
-        "Side Inclution": "SO",
-        "Table Open": "N",
-        "Crown Open": "N",
-        "Pavillion Open": "N",
-        "Eye Clean": "Y",
-        "Hearts & Arrows": "-",
-        Brilliancy: "-",
-        "Type 2 Certificate": "-",
-        "Country Of Origin": "-",
-        "Rough Mine": "-",
-        "Natural Girdle": "N",
-        "Natural Crown": "N",
-        "Natural Pavillion": "N",
-        "Internal Graining": "IGO",
-        "Surface Graining": "GO",
+        'Table Black': 'BO',
+        'Side Black': 'SBO',
+        'Table Inclution': 'TO',
+        'Side Inclution': 'SO',
+        'Table Open': 'N',
+        'Crown Open': 'N',
+        'Pavillion Open': 'N',
+        'Eye Clean': 'Y',
+        'Hearts & Arrows': '-',
+        Brilliancy: '-',
+        'Type 2 Certificate': '-',
+        'Country Of Origin': '-',
+        'Rough Mine': '-',
+        'Natural Girdle': 'N',
+        'Natural Crown': 'N',
+        'Natural Pavillion': 'N',
+        'Internal Graining': 'IGO',
+        'Surface Graining': 'GO',
       },
 
       measurements: {
-        Girdle: "Med-Stk",
-        Cutlet: "None",
-        Luster: "EX",
+        Girdle: 'Med-Stk',
+        Cutlet: 'None',
+        Luster: 'EX',
       },
 
       OtherInformation: {
-        "Key To Symbol": "-",
-        "Report Comments": "-",
+        'Key To Symbol': '-',
+        'Report Comments': '-',
       },
     },
   ];
@@ -227,7 +227,7 @@ const SavedSearch = () => {
     // Update state with an array of strings
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(data, ""));
+      setCardData(renderCardData(data, ''));
     }
   };
 
@@ -246,9 +246,9 @@ const SavedSearch = () => {
   //specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
-    let value = e.target.getAttribute("data-state");
+    let value = e.target.getAttribute('data-state');
     setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === "checked") {
+    if (value?.toLowerCase() === 'checked') {
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
@@ -266,7 +266,7 @@ const SavedSearch = () => {
   const footerButtonData = [
     {
       id: 1,
-      displayButtonLabel: "Delete",
+      displayButtonLabel: 'Delete',
       style: styles.filled,
       fn: handleDelete,
     },
@@ -274,7 +274,7 @@ const SavedSearch = () => {
 
   //Header Data
   const headerData = {
-    headerHeading: "Saved Searches",
+    headerHeading: 'Saved Searches',
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
     searchCount: cardData.length,
@@ -287,7 +287,7 @@ const SavedSearch = () => {
   useEffect(() => {
     let render = async () => {
       const SavedSearchData = await axios.get(
-        "http://localhost:4000/saveAndSearch"
+        'http://localhost:4000/saveAndSearch'
       );
 
       setData(SavedSearchData.data);

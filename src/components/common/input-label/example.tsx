@@ -1,7 +1,7 @@
-"use client";
-import React from "react";
-import { CustomInputlabel } from ".";
-import styles from "./example.module.scss";
+'use client';
+import React from 'react';
+import { CustomInputlabel } from '.';
+import styles from './example.module.scss';
 
 export const Example = () => {
   //example

@@ -1,6 +1,6 @@
-import React from "react";
-import { CustomDisplayButton } from "../buttons/display-button";
-import styles from "./footer.module.scss";
+import React from 'react';
+import { CustomDisplayButton } from '../buttons/display-button';
+import styles from './footer.module.scss';
 
 //footer buttonData interfrace
 export interface IfooterButtonData {
