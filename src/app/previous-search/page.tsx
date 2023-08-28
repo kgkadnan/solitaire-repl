@@ -322,8 +322,6 @@ const PreviousSearch = () => {
   const handleEdit = (stone: string) => {
     console.log('stone', stone);
     router.push(`/advance-search?id=${stone}`);
-
-    // alert("You have clicked the 'Edit button'");
   };
 
   // Function to handle "Show Results" button click
@@ -335,7 +333,7 @@ const PreviousSearch = () => {
     <>
       <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-24">
+        <div className="sticky top-0 bg-solitairePrimary mt-16">
           <CustomHeader data={headerData} />
         </div>
 

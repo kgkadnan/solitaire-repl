@@ -16,8 +16,12 @@
 
 .mainDiv {
   position: fixed;
-  top: 110px;
+  top: 80px;
   background-color: hsl(var(--solitaire-primary));
+}
+
+.visible {
+  top: 0;
 }
 
 .headerInputStyle {

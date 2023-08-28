@@ -1,10 +1,10 @@
 import { Checkbox } from '@/components/ui/checkbox';
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
 import { CustomInputField } from '@components/common/input-field/index';
 import styles from './header.module.scss';
 
-export interface IheaderData {
+export interface IHeaderData {
   headerHeading?: string;
   handleSelectAllCheckbox?: (e: any) => void;
   searchCount?: number;
@@ -17,20 +17,37 @@ export interface IheaderData {
 }
 
 interface ICustomHeaderProps {
-  data?: IheaderData;
+  data?: IHeaderData;
 }
 
 const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
   //input style
   let inputStyle = {
     input: styles.headerInputStyle,
     inputMain: 'relative',
   };
 
+  const handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    setVisible(prevScrollPos > currentScrollPos);
+    setPrevScrollPos(currentScrollPos);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
     <>
       <div
-        className={`inline-flex  items-center justify-between border-b border-solitaireSenary ${styles.mainDiv}   `}
+        className={`inline-flex  items-center justify-between border-b border-solitaireSenary ${
+          styles.mainDiv
+        } ${visible ? styles.mainDiv : styles.visible}`}
       >
         {/* Heading */}
         <p>

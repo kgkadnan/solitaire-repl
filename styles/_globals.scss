@@ -48,6 +48,9 @@
     --solitaire-septenary: 32, 22%, 45%, 1; //shadow
     --solitaire-octonary: 0, 0, 84, 100%; //Carbon 1
     --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
+
+    //border -color
+    --solitaire-border: 0, 0%, 100%, 1; //white
   }
 
   .dark {
@@ -94,6 +97,8 @@
     --solitaire-septenary: 180, 44%, 4%, 1; //Emerald 7
     --solitaire-octonary: 180, 44%, 4%, 1; //Emerald 7
     --solitaire-outline: 180, 6%, 39%, 1; //Emerald 4
+    //border -color
+    --solitaire-border: 180, 6%, 39%, 1; //Emerald 4
   }
 }
 
