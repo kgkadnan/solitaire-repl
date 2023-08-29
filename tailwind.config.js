@@ -27,6 +27,7 @@ module.exports = {
         solitaireSeptenary: 'hsl(var(--solitaire-septenary))', // dark - Emerald 7 / light- shadow
         solitaireOctonary: 'hsl(var(--solitaire-octonary))', // dark - Emerald 7 / light- Carbon 1
         solitaireOutline: 'hsl(var(--solitaire-outline))', // dark - Emerald 4 / light- Carbon 2
+        solitaireBorder: 'hsl(var(--solitaire-border))', // dark - Emerald 4 / light- white
         //********************* */
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

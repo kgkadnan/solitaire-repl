@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
@@ -12,6 +12,8 @@ import styles from './top-navigation-bar.module.scss';
 export const TopNavigationBar = () => {
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
+  const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [visible, setVisible] = useState(true);
 
   const topNavData = [
     {
@@ -41,9 +43,26 @@ export const TopNavigationBar = () => {
     router.push(link);
   };
 
+  const handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    setVisible(prevScrollPos > currentScrollPos);
+    setPrevScrollPos(currentScrollPos);
+  };
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
+
   return (
-    <div className={styles.topNavigationMainDiv}>
-      <div className="h-[112px] flex justify-end items-center text-solitaireTertiary">
+    <div
+      className={`${styles.topNavigationMainDiv} ${
+        visible ? styles.visible : styles.hidden
+      }`}
+    >
+      <div className="h-[80px] flex justify-end items-center text-solitaireTertiary">
         <div className="flex items-center gap-14 mr-12">
           {topNavData.map((navData) => (
             <div key={navData.label}>
@@ -69,7 +88,7 @@ export const TopNavigationBar = () => {
           <ToggleButton />
         </div>
       </div>
-      <hr className={styles.dividerLine} />
+      {/* <hr className={styles.dividerLine} /> */}
     </div>
   );
 };

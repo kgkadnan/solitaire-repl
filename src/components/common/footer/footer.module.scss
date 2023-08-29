@@ -1,3 +1,7 @@
+.footerParentDiv {
+  width: 100%;
+}
+
 .footerButton {
   width: 152px;
   justify-content: center;
@@ -7,15 +11,15 @@
   color: hsl(var(--solitaire-tertiary));
 }
 
-.footerButtonLabel {
-  color: hsl(var(--solitaire-tertiary));
-}
+// .footerButtonLabel {
+//   color: hsl(var(--solitaire-tertiary));
+// }
 
 /* Media queries */
 /* Small screens */
 @media (max-width: 767px) {
   .footerParentDiv {
-    width: 70%;
+    width: 100%;
     height: auto;
   }
 
@@ -30,7 +34,7 @@
 /* Medium screens */
 @media (min-width: 768px) and (max-width: 1023px) {
   .footerParentDiv {
-    width: 80%;
+    width: 100%;
     height: 60px;
   }
 
@@ -45,7 +49,7 @@
 /* Large screens */
 @media (min-width: 1024px) {
   .footerParentDiv {
-    width: 90%;
+    width: 100%;
     height: 80px;
   }
 

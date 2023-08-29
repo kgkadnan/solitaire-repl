@@ -902,7 +902,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   return (
     <div>
-      <div className="sticky top-0 bg-solitairePrimary mt-24">
+      <div className="sticky top-0 bg-solitairePrimary mt-16">
         <CustomHeader
           data={{
             headerHeading: 'Search Diamonds',

@@ -203,7 +203,7 @@ const WishList = () => {
     <>
       <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-24">
+        <div className="sticky top-0 bg-solitairePrimary mt-16">
           <CustomHeader data={headerData} />
         </div>
 
