@@ -95,7 +95,6 @@ const SavedSearch = () => {
   );
 
   // Function to format the created_at date
-  // Function to format the created_at date
   const formatCreatedAt = (createdAt: any) => {
     const createdAtDate = new Date(createdAt);
 
@@ -121,7 +120,7 @@ const SavedSearch = () => {
     (data: any, suggestion?: string) => {
       return data
         .filter((data: any) =>
-          data.name.toLowerCase().includes(suggestion?.toLowerCase())
+          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
         )
         .map((data: any) => ({
           cardId: data.id,
@@ -151,11 +150,9 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = () => {
-    console.log('Cards', cardData);
     const updatedCardData = cardData.filter(
       (item) => !isCheck.includes(item.cardId)
     );
-    console.log('update', updatedCardData);
     setCardData(updatedCardData);
     setIsCheck([]); // Clear the selected checkboxes
     setIsCheckAll(false); //clear check all
@@ -212,19 +209,41 @@ const SavedSearch = () => {
     },
   ];
 
-  ///search bar
+  const debouncedSave = useCallback(
+    (inputValue: string) => {
+      // Filter data based on input value
+      const filteredSuggestions = searchData.filter((item) =>
+        item.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      // Extract card titles from filtered suggestions
+      const suggestionTitles = filteredSuggestions.map((item) => item);
+      setSuggestions(suggestionTitles);
+      // Update state with an array of strings
+    },
+    [searchData]
+  );
+
+  const debounce = <T extends any[]>(
+    fn: (...args: T) => void,
+    delay: number
+  ) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: T) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
     setSearch(inputValue);
 
-    // Filter data based on input value
-    const filteredSuggestions = searchData.filter((item) =>
-      item.toLowerCase().includes(inputValue.toLowerCase())
+    // Use the debounce function to wrap the debouncedSave function
+    const delayedSave = debounce(
+      (inputValue) => debouncedSave(inputValue),
+      1000
     );
-    // Extract card titles from filtered suggestions
-    const suggestionTitles = filteredSuggestions.map((item) => item);
-    setSuggestions(suggestionTitles);
-    // Update state with an array of strings
+    delayedSave(inputValue);
 
     if (inputValue.length < 1) {
       setCardData(renderCardData(data, ''));
@@ -233,7 +252,6 @@ const SavedSearch = () => {
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
-    setSuggestions([]);
 
     let dataNew = data.map((data) => data.name);
 
@@ -242,14 +260,30 @@ const SavedSearch = () => {
     } else {
       setCardData(renderCardData(data, suggestion));
     }
+
+    setSuggestions([]);
   };
   //specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
-    let value = e.target.getAttribute('data-state');
-    setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === 'checked') {
-      setIsCheck(isCheck.filter((item) => item !== id));
+
+    let updatedIsCheck = [...isCheck];
+
+    if (updatedIsCheck.includes(id)) {
+      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+    } else {
+      updatedIsCheck.push(id);
+    }
+
+    setIsCheck(updatedIsCheck);
+
+    if (updatedIsCheck.length === cardData.length) {
+      setIsCheckAll(true);
+    } else {
+      setIsCheckAll(false);
+    }
+    if (isCheckAll) {
+      setIsCheckAll(false);
     }
   };
 
@@ -277,7 +311,9 @@ const SavedSearch = () => {
     headerHeading: 'Saved Searches',
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
+    //count
     searchCount: cardData.length,
+    //Search Data
     handleSearch: handleSearch,
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
@@ -294,8 +330,6 @@ const SavedSearch = () => {
       setCardData(renderCardData(SavedSearchData.data, search));
     };
     render();
-
-    // setCardData(renderCardData(searchList, search));
   }, []);
 
   // Function to handle edit action
