@@ -16,6 +16,7 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
+import { ManageLocales } from '@/utils/translate';
 
 interface CardData {
   cardId: string;
@@ -300,7 +301,7 @@ const SavedSearch = () => {
   const footerButtonData = [
     {
       id: 1,
-      displayButtonLabel: 'Delete',
+      displayButtonLabel: ManageLocales('app.savedSearch.delete'),
       style: styles.filled,
       fn: handleDelete,
     },
@@ -308,7 +309,7 @@ const SavedSearch = () => {
 
   //Header Data
   const headerData = {
-    headerHeading: 'Saved Searches',
+    headerHeading: ManageLocales('app.savedSearch.header'),
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
     //count
@@ -376,7 +377,7 @@ const SavedSearch = () => {
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
                         >
-                          <p>Detailed Information</p>
+                          <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
                         </div>
 
                         {/* Loop through card detail data */}
@@ -384,7 +385,9 @@ const SavedSearch = () => {
                           <div className="flex" key={cardDetails.cardId}>
                             <div className={styles.sheetMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Basic Details</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.basicInfo')}
+                                </p>
                               </div>
 
                               <div>
@@ -405,7 +408,9 @@ const SavedSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Measurements</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.measurement')}
+                                </p>
                               </div>
 
                               <div>
@@ -426,7 +431,9 @@ const SavedSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Other Information</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.otherInfo')}
+                                </p>
                               </div>
 
                               <div>
@@ -449,7 +456,11 @@ const SavedSearch = () => {
 
                             <div className={styles.inclusionDetailsMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Inclusion Details</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.savedSearch.inclusionDetails'
+                                  )}
+                                </p>
                               </div>
                               {Object.entries(cardDetails.inclutionDetails).map(
                                 ([key, value]) => (

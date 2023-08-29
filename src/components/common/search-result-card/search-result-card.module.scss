@@ -30,3 +30,13 @@
   border: none;
   justify-content: space-between;
 }
+
+.card {
+  border: 1px solid #ccc;
+  padding: 20px;
+  transition: filter 0.3s ease-in-out;
+}
+
+.blur {
+  filter: blur(8px);
+}

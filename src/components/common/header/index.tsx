@@ -3,6 +3,7 @@ import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
 import styles from './header.module.scss';
 import { CustomSearchInputField } from '../search-input';
+import { ManageLocales } from '@/utils/translate';
 
 export interface IHeaderData {
   headerHeading?: string;
@@ -64,7 +65,7 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
                 style={searchInputStyle}
                 value={data?.searchValue}
                 onChange={data?.handleSearch}
-                placeholder="Search by name"
+                placeholder={ManageLocales('app.common.header.searchByName')}
                 handleSuggestionClick={data.handleSuggestionClick}
                 suggestions={data.suggestions}
               />
@@ -83,7 +84,7 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
                 checked={data?.isCheckAll}
               />
               <p className="text-solitaireTertiary text-base font-medium">
-                Select All
+                {ManageLocales('app.common.header.selectAll')}
               </p>
             </div>
           )}

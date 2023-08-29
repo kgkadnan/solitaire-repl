@@ -10,6 +10,7 @@ import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { useRouter } from 'next/navigation';
+import { ManageLocales } from '@/utils/translate';
 
 const PreviousSearch = () => {
   const router = useRouter();
@@ -303,13 +304,17 @@ const PreviousSearch = () => {
 
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: 'Delete', style: styles.filled },
+    {
+      id: 1,
+      displayButtonLabel: ManageLocales('app.previousSearch.delete'),
+      style: styles.filled,
+    },
   ];
   renderCardData(searchList, searchFilter);
 
   //Header Data
   const headerData = {
-    headerHeading: 'Previous Search',
+    headerHeading: ManageLocales('app.previousSearch.header'),
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
     handleSearch: handleSearch,
@@ -320,7 +325,6 @@ const PreviousSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    console.log('stone', stone);
     router.push(`/advance-search?id=${stone}`);
   };
 
@@ -363,7 +367,9 @@ const PreviousSearch = () => {
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
                         >
-                          <p>Detailed Information</p>
+                          <p>
+                            {ManageLocales('app.previousSearch.detailInfo')}
+                          </p>
                         </div>
 
                         {/* Loop through card detail data */}
@@ -371,7 +377,11 @@ const PreviousSearch = () => {
                           <div className="flex" key={cardDetails.cardId}>
                             <div className={styles.sheetMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Basic Details</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.basicInfo'
+                                  )}
+                                </p>
                               </div>
 
                               <div>
@@ -392,7 +402,11 @@ const PreviousSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Measurements</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.measurement'
+                                  )}
+                                </p>
                               </div>
 
                               <div>
@@ -413,7 +427,11 @@ const PreviousSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Other Information</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.otherInfo'
+                                  )}
+                                </p>
                               </div>
 
                               <div>
@@ -436,7 +454,11 @@ const PreviousSearch = () => {
 
                             <div className={styles.inclusionDetailsMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Inclusion Details</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.inclusionDetails'
+                                  )}
+                                </p>
                               </div>
                               {Object.entries(cardDetails.inclutionDetails).map(
                                 ([key, value]) => (

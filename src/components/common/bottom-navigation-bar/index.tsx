@@ -4,25 +4,26 @@ import React, { useState } from 'react';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { useRouter } from 'next/navigation';
 import styles from './bottom-navigation-bar.module.scss';
+import { ManageLocales } from '@/utils/translate';
 
 export const BottomNavigationBar = () => {
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
   const bottomNavData = [
     {
-      label: 'About Us',
+      label: ManageLocales('app.bottomNav.aboutUs'),
       link: '',
     },
     {
-      label: 'Contact US',
+      label: ManageLocales('app.bottomNav.contactUs'),
       link: '',
     },
     {
-      label: 'Privacy Policy',
+      label: ManageLocales('app.bottomNav.privacyPolicy'),
       link: '',
     },
     {
-      label: 'Terms & Conditions',
+      label: ManageLocales('app.bottomNav.terms'),
       link: '',
     },
   ];

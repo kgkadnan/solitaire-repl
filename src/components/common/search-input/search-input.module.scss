@@ -1,43 +1,42 @@
-.defaultSearchInputStyle{
-    height: 40px;
-    outline: none;
-    border-bottom: 0.5px solid #8C7459;
-    font-size: 12px;
-    padding: 10px, 10px, 10px, 5px;
-    color: hsl(var(--solitaire-tertiary));
-    background-color: transparent;
-    margin: 0;
-} 
-
-
-
-.defaultSearchInputStyle:focus {
-    outline: none;
+.defaultSearchInputStyle {
+  height: 40px;
+  outline: none;
+  border-bottom: 0.5px solid #8c7459;
+  font-size: 12px;
+  padding: 10px, 10px, 10px, 5px;
+  color: hsl(var(--solitaire-tertiary));
+  background-color: transparent;
+  margin: 0;
 }
 
+.defaultSearchInputStyle:focus {
+  outline: none;
+}
 
 /* input-field.module.scss */
 .dropdown {
-    position: absolute;
-    width: 250px;
-    z-index: 1;
-    background-color:hsl(var(--solitaire-secondary));
-    // border: 1px solid hsl(var(--solitaire-quaternary));
-    border-radius: 5px;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
-  }
-  
-  .dropdown li {
-    padding: 8px 12px;
-    cursor: pointer;
-  }
-  .selectedSuggestion {
-    background-color:hsl(var(--solitaire-senary)) /* Change this to your desired background color */
-  }
-  
-  .dropdown li:hover {
-    background-color: hsl(var(--solitaire-senary));
-  }
+  position: absolute;
+  width: 250px;
+  z-index: 1;
+  background-color: hsl(var(--solitaire-secondary));
+  // border: 1px solid hsl(var(--solitaire-quaternary));
+  border-radius: 5px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.dropdown li {
+  padding: 8px 12px;
+  cursor: pointer;
+}
+.selectedSuggestion {
+  background-color: hsl(
+    var(--solitaire-senary)
+  ); /* Change this to your desired background color */
+}
+
+.dropdown li:hover {
+  background-color: hsl(var(--solitaire-senary));
+}

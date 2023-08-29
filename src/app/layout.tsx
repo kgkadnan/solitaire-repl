@@ -1,7 +1,7 @@
+'use client';
 import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
-// import store from "@/hooks/store";
 import { Providers } from './Providers';
 import { TopNavigationBar } from '@/components/common/top-navigation-bar';
 import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
@@ -25,6 +25,7 @@ export default function RootLayout({
         <Providers>
           <SideBar />
           <TopNavigationBar />
+
           <div
             style={{
               display: 'flex',
