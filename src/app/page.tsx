@@ -1,5 +1,8 @@
 'use client';
 
+import LanguageSwitcher from '@/components/common/multi-lingual';
+import { ManageLocales } from '@/utils/translate';
+
 export default function Home() {
   return (
     <>
@@ -23,6 +26,8 @@ export default function Home() {
       >
         Bulding Digital diamond platform
       </h1>
+      <h1>{ManageLocales('app.welcome')}</h1>
+      <LanguageSwitcher />
     </>
   );
 }

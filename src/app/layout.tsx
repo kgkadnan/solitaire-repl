@@ -6,9 +6,6 @@ import { Providers } from './Providers';
 import { TopNavigationBar } from '@/components/common/top-navigation-bar';
 import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import SideBar from '@/components/common/sidebar';
-import LanguageSwitcher from '@/components/common/multi-lingual';
-import { ManageLocales } from '@/utils/translate';
-import SearchResultCardExample from '@/components/common/search-result-card/example';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -38,8 +35,6 @@ export default function RootLayout({
             }}
           >
             <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
-              <h1>{ManageLocales('a.welcome')}</h1>
-              <LanguageSwitcher />
               {children}
             </main>
           </div>
