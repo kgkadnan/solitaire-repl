@@ -40,7 +40,7 @@ export const TopNavigationBar = () => {
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
-    router.push(link);
+    router.push(`${link}?lang=en`);
   };
 
   const handleScroll = () => {

@@ -85,7 +85,7 @@ const SideBar = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
 
   const handleChange = (shape: string, link?: string) => {
-    router.push(link!);
+    router.push(`${link!}?lang=en`);
     setSelectedShape(() => [shape]);
   };
 

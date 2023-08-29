@@ -1,12 +1,12 @@
-import { Meta, StoryObj } from "@storybook/react";
-import { ChangeEvent, useState } from "react";
-import { CustomSearchInputField } from ".";
+import { Meta, StoryObj } from '@storybook/react';
+import { ChangeEvent, useState } from 'react';
+import { CustomSearchInputField } from '.';
 
 const meta: Meta<typeof CustomSearchInputField> = {
-  title: "components/InputField",
+  title: 'components/InputField',
   component: CustomSearchInputField,
   argTypes: {},
-  tags: ["autodocs"],
+  tags: ['autodocs'],
 } satisfies Meta<typeof CustomSearchInputField>;
 
 export default meta;
@@ -14,7 +14,7 @@ export default meta;
 type Story = StoryObj<typeof CustomSearchInputField>;
 
 const InputWithHooks = () => {
-  const [value, setValue] = useState("");
+  const [value, setValue] = useState('');
 
   const handleOnChange = (e: ChangeEvent<HTMLInputElement>) => {
     setValue(e.target.value);
@@ -35,10 +35,10 @@ export const Primary: Story = {
 
 export const Secondary: Story = {
   args: {
-    type: "text",
-    placeholder: "Search by name",
+    type: 'text',
+    placeholder: 'Search by name',
     style: {
-      input: "text-solitaireQuaternary",
+      input: 'text-solitaireQuaternary',
     },
   },
 };

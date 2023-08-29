@@ -27,6 +27,10 @@ const nextConfig = {
 
     return config;
   },
+  i18n: {
+    locales: ['en', 'fr'],
+    defaultLocale: 'en',
+  },
 };
 
 module.exports = nextConfig;
