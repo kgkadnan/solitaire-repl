@@ -1,8 +1,8 @@
 import { Checkbox } from '@/components/ui/checkbox';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
-import { CustomInputField } from '@components/common/input-field/index';
 import styles from './header.module.scss';
+import { CustomSearchInputField } from '../search-input';
 
 export interface IHeaderData {
   headerHeading?: string;
@@ -24,9 +24,9 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   //input style
-  let inputStyle = {
-    input: styles.headerInputStyle,
-    inputMain: 'relative',
+  let searchInputStyle = {
+    searchInput: styles.headerInputStyle,
+    searchInputMain: 'relative',
   };
 
   const handleScroll = () => {
@@ -57,14 +57,13 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
           {/* Search Input Field*/}
           {data?.handleSearch ? (
             <div className="flex  gap-[15px]">
-              {/* <Image src={searchIcon} alt="searchIcon" className={} /> */}
               <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
-              <CustomInputField
+              <CustomSearchInputField
                 type="text"
                 name="search"
-                style={inputStyle}
-                onChange={data?.handleSearch}
+                style={searchInputStyle}
                 value={data?.searchValue}
+                onChange={data?.handleSearch}
                 placeholder="Search by name"
                 handleSuggestionClick={data.handleSuggestionClick}
                 suggestions={data.suggestions}
