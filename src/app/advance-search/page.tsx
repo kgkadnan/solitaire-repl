@@ -14,6 +14,8 @@ import { CustomFooter } from '@/components/common/footer';
 import { useSearchParams } from 'next/navigation';
 import Round from '@public/assets/images/round.png';
 import { ManageLocales } from '@/utils/translate';
+import Tooltip from '@/components/common/tooltip';
+import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 
 interface IAdvanceSearch {
   shape?: string[];
@@ -104,9 +106,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState('');
   const [starLengthFrom, setStarLengthFrom] = useState('');
   const [starLengthTo, setStarLengthTo] = useState('');
-
+  const [yourSelection, setYourSelection] = useState<Record<string, any>[]>();
   //handle validation
-  const [isValid, setIsValid] = useState(1);
+  // const [isValid, setIsValid] = useState(1);
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -783,6 +785,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedHR([]);
     setSelectedBrilliance([]);
   };
+
+  const handleYourSelection = () => {
+    selectedColor.length > 0 && setYourSelection([{ [ManageLocales('app.advanceSearch.color')]: selectedColor }]);
+  };
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -890,7 +896,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
     ));
   };
-
   return (
     <div>
       <div className="sticky top-0 bg-solitairePrimary mt-16">
@@ -898,25 +903,61 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           data={{
             headerHeading: ManageLocales('app.advanceSearch.header'),
             headerData: (
-              <div style={{ display: 'flex' }}>
-                {' '}
-                <CustomInputlabel
-                  htmlfor="text"
-                  label={`${ManageLocales('app.advanceSearch.yourSelection')}:`}
-                />{' '}
-                <div style={{ color: 'white', width: '300px' }}>
-                  {formatSelection(selectedShape)}{' '}
-                  {formatSelection(selectedColor)}{' '}
-                  {formatSelection(selectedClarity)}{' '}
-                  {formatSelection(selectedCaratRange)}
-                </div>
-              </div>
+              <Tooltip
+                tooltipElement={
+                  <div style={{ display: 'flex' }}>
+                    {' '}
+                    <TooltipIcon />
+                    <CustomInputlabel
+                      htmlfor="text"
+                      label={`${ManageLocales(
+                        'app.advanceSearch.yourSelection'
+                      )}:`}
+                    />{' '}
+                    <div style={{ color: 'white', width: '300px' }}>
+                      {formatSelection(selectedShape)}{' '}
+                      {formatSelection(selectedColor)}{' '}
+                      {formatSelection(selectedClarity)}{' '}
+                      {formatSelection(selectedCaratRange)}
+                    </div>
+                  </div>
+                }
+                content={
+                  <div style={{ width: '500px' }}>
+                    <CustomInputlabel
+                      htmlfor="text"
+                      label={`${ManageLocales(
+                        'app.advanceSearch.yourSelection'
+                      )}:`}
+                    />
+
+                    <div>
+                      {yourSelection?.map((data) => {
+                        return (
+                          <div key={Object.keys(data)[0]} className={styles.yourSelectionContainer}>
+                            <div className={styles.labelContainer}>
+                            {' '}
+                            <CustomInputlabel
+                              htmlfor="text"
+                              label={Object.keys(data)[0]}
+                            />:
+                            {/* Check data type of values and accordingly display the content */}
+                            {Array.isArray(Object.values(data)[0])
+                              ? Object.values(data)[0].toString()
+                              : Object.values(data)[0]}
+                              </div>
+                          </div>
+                        );
+                      })}{' '}
+                    </div>
+                  </div>
+                }
+                handleEvent={handleYourSelection}
+              />
             ),
           }}
         />
       </div>
-
-      {/* <hr className={styles.dividerLine} /> */}
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
