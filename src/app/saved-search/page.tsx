@@ -17,15 +17,16 @@ import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
+import { useGetAllSavedSearchesQuery } from '../../slices/savedSearchesSlice';
 
-interface CardData {
+interface ICardData {
   cardId: string;
   cardActionIcon: string;
   cardHeader: React.ReactNode;
   cardContent: React.ReactNode;
 }
 
-interface data {
+interface IData {
   id: string;
   name: string;
   customer_id: string;
@@ -37,6 +38,7 @@ interface data {
 }
 
 const SavedSearch = () => {
+  const { data, error, isLoading, refetch }= useGetAllSavedSearchesQuery({});
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -54,8 +56,8 @@ const SavedSearch = () => {
   };
 
   //Data
-  const [data, setData] = useState<data[]>([]);
-  const [cardData, setCardData] = useState<CardData[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState<IData[]>([]);
+  const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -247,19 +249,19 @@ const SavedSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(data, ''));
+      setCardData(renderCardData(savedSearchData, ''));
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
 
-    let dataNew = data.map((data) => data.name);
+    let dataNew = savedSearchData.map((data: { name: any; }) => data.name);
 
     if (!dataNew.includes(suggestion)) {
       setCardData(renderCardData(searchListNew, suggestion));
     } else {
-      setCardData(renderCardData(data, suggestion));
+      setCardData(renderCardData(savedSearchData, suggestion));
     }
 
     setSuggestions([]);
@@ -323,15 +325,13 @@ const SavedSearch = () => {
 
   useEffect(() => {
     let render = async () => {
-      const SavedSearchData = await axios.get(
-        'http://localhost:4000/saveAndSearch'
-      );
+      const SavedSearchData = data!
 
-      setData(SavedSearchData.data);
-      setCardData(renderCardData(SavedSearchData.data, search));
+      setSavedSearchData(SavedSearchData);
+      setCardData(renderCardData(SavedSearchData, search));
     };
     render();
-  }, []);
+  }, [data]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {

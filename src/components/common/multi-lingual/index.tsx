@@ -1,19 +1,21 @@
-// components/LanguageSwitcher.js
-import { useRouter } from 'next/navigation';
+// components/LanguageSelector.js
+import React from 'react';
+import { useDispatch } from 'react-redux';
 
-function LanguageSwitcher() {
-  const router = useRouter();
+const LanguageSelector = () => {
+  const dispatch = useDispatch();
 
-  const handleLanguageChange = (locale: any) => {
-    router.push(`?lang=${locale}`);
+  const handleLanguageChange = (language:string) => {
+    dispatch({ type: 'SET_LANGUAGE', payload: language });
   };
 
   return (
     <div>
       <button onClick={() => handleLanguageChange('en')}>English</button>
-      <button onClick={() => handleLanguageChange('fr')}>Français</button>
+      <button onClick={() => handleLanguageChange('fr')}>French</button>
+      {/* Add more language options */}
     </div>
   );
-}
+};
 
-export default LanguageSwitcher;
+export default LanguageSelector;
