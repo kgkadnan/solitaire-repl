@@ -1,0 +1,13 @@
+.toastContainer {
+  display: flex;
+}
+.toast {
+  background-color: hsl(var(--solitaire-secondary));
+  border-radius: 17px;
+  height: 80px;
+  color: hsl(var(--solitaire-tertiary));
+}
+.toastMessage {
+  width: 90%;
+  text-align: center;
+}

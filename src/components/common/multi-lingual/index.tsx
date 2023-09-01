@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 const LanguageSelector = () => {
   const dispatch = useDispatch();
 
-  const handleLanguageChange = (language:string) => {
+  const handleLanguageChange = (language: string) => {
     dispatch({ type: 'SET_LANGUAGE', payload: language });
   };
 
