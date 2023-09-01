@@ -18,6 +18,7 @@
   position: fixed;
   top: 80px;
   background-color: hsl(var(--solitaire-primary));
+  z-index: 11111;
 }
 
 .visible {

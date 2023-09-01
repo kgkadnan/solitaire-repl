@@ -1,6 +1,4 @@
-'use client';
 import React from 'react';
-
 import Image, { StaticImageData } from 'next/image';
 import style from './search-result-card.module.scss';
 import {
@@ -10,11 +8,11 @@ import {
   CardDescription,
   CardContent,
 } from '@components/ui/card';
+import { CustomDisplayButton } from '../buttons/display-button';
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
   cardHeaderContainerStyle?: string;
-  cardHeaderTextStyle?: string;
   cardTitleStyle?: string;
   cardActionIconStyle?: string;
 }
@@ -26,13 +24,14 @@ export interface ICardDataProps {
   cardActionIcon?: StaticImageData;
   cardDescription?: React.ReactNode;
   cardContent: React.ReactNode;
-  // cardCheckbox: React.ReactNode;
 }
+
 export interface IImageContainerProps {
   cardData: ICardDataProps;
   overriddenStyles?: ISearchCardStyleProps;
   handleCardAction?: (stone: string) => void;
   defaultCardPosition?: boolean;
+  isBlur?: boolean;
 }
 
 const CustomSearchResultCard: React.FC<IImageContainerProps> = (
@@ -50,11 +49,11 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     overriddenStyles = {},
     handleCardAction = () => {},
     defaultCardPosition = true,
+    isBlur = false, // Default value is set to false
   } = card;
   const {
     cardContainerStyle,
     cardHeaderContainerStyle,
-    cardHeaderTextStyle,
     cardTitleStyle,
     cardActionIconStyle,
   } = overriddenStyles;
@@ -63,18 +62,24 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     event.stopPropagation();
     handleCardAction(cardId);
   };
+
   return (
     <>
-      <div className={`flex ${style.mainContainer}`}>
-        {/* <div>{cardCheckbox}</div> */}
+      <div
+        className={`flex ${style.mainContainer} ${
+          isBlur && style.cardContainerWithContent
+        }`}
+      >
         <Card
-          className={`${style.cardContainer} ${cardContainerStyle}`}
+          className={`${
+            style.cardContainer
+          } ${cardContainerStyle} ${cardHeaderContainerStyle} ${
+            isBlur ? style.blur : '' // Apply blur class if isBlur is true
+          } `}
           data-testid={`card-${cardId}`}
         >
-          <CardHeader
-            className={`${style.cardHeaderContainer} ${cardHeaderContainerStyle}`}
-          >
-            <div className={`${style.cardHeaderText} ${cardHeaderTextStyle}`}>
+          <CardHeader className={`${style.cardHeaderContainer} `}>
+            <div className={`${style.cardHeaderText} `}>
               <CardTitle className={`${style.cardTitle} ${cardTitleStyle}`}>
                 {cardHeader}
               </CardTitle>
@@ -90,6 +95,26 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
 
           {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
         </Card>
+        {isBlur && (
+          <>
+            <div className={style.floatingContent}>
+              {/* Content that appears above the blurred card */}
+              <div className={style.blurCardMainContainer}>
+                <div className={style.blurCardContent}>
+                  <p>Out of Stock</p>
+                  <CustomDisplayButton
+                    displayButtonLabel="View Similar Stone"
+                    displayButtonAllStyle={{
+                      displayButtonStyle: style.filled,
+                      displayLabelStyle: style.ViewSimilarStoneLabel,
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
+          </>
+        )}
+
         {cardActionIcon && (
           <Image
             src={cardActionIcon}
