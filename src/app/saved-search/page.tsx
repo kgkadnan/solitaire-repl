@@ -10,21 +10,23 @@ import styles from './saved-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
-import axios from 'axios';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
+import { ManageLocales } from '@/utils/translate';
+import { useGetAllSavedSearchesQuery } from '../../slices/savedSearchesSlice';
+import CustomPagination from '@/components/common/pagination';
 
-interface CardData {
+interface ICardData {
   cardId: string;
   cardActionIcon: string;
   cardHeader: React.ReactNode;
   cardContent: React.ReactNode;
 }
 
-interface data {
+interface IData {
   id: string;
   name: string;
   customer_id: string;
@@ -36,6 +38,7 @@ interface data {
 }
 
 const SavedSearch = () => {
+  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({});
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -53,8 +56,8 @@ const SavedSearch = () => {
   };
 
   //Data
-  const [data, setData] = useState<data[]>([]);
-  const [cardData, setCardData] = useState<CardData[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState<IData[]>([]);
+  const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -147,6 +150,15 @@ const SavedSearch = () => {
     },
     [searchCardTitle, tableStyles]
   );
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+
+  const totalPages = Math.ceil(cardData.length / resultsPerPage);
+
+  const startIndex = (currentPage - 1) * resultsPerPage;
+  const endIndex = Math.min(startIndex + resultsPerPage, cardData.length);
+  const currentData = cardData.slice(startIndex, endIndex);
 
   //Delete Data
   const handleDelete = () => {
@@ -246,19 +258,19 @@ const SavedSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(data, ''));
+      setCardData(renderCardData(savedSearchData, ''));
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
 
-    let dataNew = data.map((data) => data.name);
+    let dataNew = savedSearchData.map((data: { name: any }) => data.name);
 
     if (!dataNew.includes(suggestion)) {
       setCardData(renderCardData(searchListNew, suggestion));
     } else {
-      setCardData(renderCardData(data, suggestion));
+      setCardData(renderCardData(savedSearchData, suggestion));
     }
 
     setSuggestions([]);
@@ -300,7 +312,7 @@ const SavedSearch = () => {
   const footerButtonData = [
     {
       id: 1,
-      displayButtonLabel: 'Delete',
+      displayButtonLabel: ManageLocales('app.savedSearch.delete'),
       style: styles.filled,
       fn: handleDelete,
     },
@@ -308,7 +320,7 @@ const SavedSearch = () => {
 
   //Header Data
   const headerData = {
-    headerHeading: 'Saved Searches',
+    headerHeading: ManageLocales('app.savedSearch.header'),
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
     //count
@@ -322,15 +334,13 @@ const SavedSearch = () => {
 
   useEffect(() => {
     let render = async () => {
-      const SavedSearchData = await axios.get(
-        'http://localhost:4000/saveAndSearch'
-      );
+      const SavedSearchData = data!;
 
-      setData(SavedSearchData.data);
-      setCardData(renderCardData(SavedSearchData.data, search));
+      setSavedSearchData(SavedSearchData);
+      setCardData(renderCardData(SavedSearchData, search));
     };
     render();
-  }, []);
+  }, [data]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -354,7 +364,7 @@ const SavedSearch = () => {
           {/* Custom Card and Checkbox map */}
           <div className="flex-grow overflow-y-auto min-h-[80vh]">
             <>
-              {cardData?.map((items: any) => {
+              {currentData?.map((items: any) => {
                 return (
                   <div key={items.cardId}>
                     <div className="flex mt-6">
@@ -376,7 +386,7 @@ const SavedSearch = () => {
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
                         >
-                          <p>Detailed Information</p>
+                          <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
                         </div>
 
                         {/* Loop through card detail data */}
@@ -384,7 +394,9 @@ const SavedSearch = () => {
                           <div className="flex" key={cardDetails.cardId}>
                             <div className={styles.sheetMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Basic Details</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.basicInfo')}
+                                </p>
                               </div>
 
                               <div>
@@ -405,7 +417,9 @@ const SavedSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Measurements</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.measurement')}
+                                </p>
                               </div>
 
                               <div>
@@ -426,7 +440,9 @@ const SavedSearch = () => {
                               </div>
 
                               <div className={styles.sheetHeading}>
-                                <p>Other Information</p>
+                                <p>
+                                  {ManageLocales('app.savedSearch.otherInfo')}
+                                </p>
                               </div>
 
                               <div>
@@ -449,7 +465,11 @@ const SavedSearch = () => {
 
                             <div className={styles.inclusionDetailsMainDiv}>
                               <div className={styles.sheetHeading}>
-                                <p>Inclusion Details</p>
+                                <p>
+                                  {ManageLocales(
+                                    'app.savedSearch.inclusionDetails'
+                                  )}
+                                </p>
                               </div>
                               {Object.entries(cardDetails.inclutionDetails).map(
                                 ([key, value]) => (
@@ -489,6 +509,17 @@ const SavedSearch = () => {
             </>
           </div>
         </Sheet>
+
+        <div className=" sticky bottom-0 bg-solitairePrimary">
+          <CustomPagination
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            resultsPerPage={resultsPerPage}
+            setResultsPerPage={setResultsPerPage}
+          />
+        </div>
+
         {/* Custom Footer */}
         {!!footerButtonData?.length && (
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">

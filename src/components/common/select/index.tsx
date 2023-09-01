@@ -23,21 +23,19 @@ interface IStyle {
 
 interface ISelectProps {
   data: ISelectData[];
-  placeholder: string;
+  onChange?: any;
+  placeholder?: string;
   style?: IStyle;
 }
-
-const handleChange = (event: any) => {
-  console.log('event', event);
-};
 
 export const CustomSelect: React.FC<ISelectProps> = ({
   data,
   placeholder,
   style,
+  onChange,
 }) => {
   return (
-    <Select onValueChange={handleChange}>
+    <Select onValueChange={onChange}>
       <SelectTrigger
         className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
         data-testid="select"

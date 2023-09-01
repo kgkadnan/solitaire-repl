@@ -15,6 +15,7 @@ import MyDiamond from '@public/assets/icons/my-diamond.svg?url';
 import NewArrival from '@public/assets/icons/new-arrival.svg?url';
 import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
+import { ManageLocales } from '@/utils/translate';
 
 const SideBar = () => {
   const router = useRouter();
@@ -26,52 +27,52 @@ const SideBar = () => {
   const imageData: IImageTileProps[] = [
     {
       src: <Dashboard className={styles.stroke} />,
-      title: 'Dashboard',
+      title: ManageLocales('app.sideNav.dashboard'),
       link: '/dashboard',
     },
     {
       src: <NewArrival className={styles.fill} />,
-      title: 'New Arrival',
+      title: ManageLocales('app.sideNav.newArrival'),
       link: '/new-arrival',
     },
     {
       src: <AdvanceSearch className={styles.stroke} />,
-      title: 'Advance Search',
+      title: ManageLocales('app.sideNav.advanceSearch'),
       link: 'advance-search',
     },
     {
       src: <MatchPair className={styles.stroke} />,
-      title: 'Match Pair',
+      title: ManageLocales('app.sideNav.matchPair'),
       link: '/match-pair',
     },
     {
       src: <SavedSearch className={styles.stroke} />,
-      title: 'Saved Searches',
+      title: ManageLocales('app.sideNav.savedSearches'),
       link: '/saved-search',
     },
     {
       src: <MyCart className={styles.stroke} />,
-      title: 'Cart',
+      title: ManageLocales('app.sideNav.cart'),
       link: '/cart',
     },
     {
       src: <Layout className={styles.fill} />,
-      title: 'layouts',
+      title: ManageLocales('app.sideNav.layouts'),
       link: '/layouts',
     },
     {
       src: <RecentConfirmation className={styles.stroke} />,
-      title: 'Recent Confirmations',
+      title: ManageLocales('app.sideNav.recentConfirmations'),
       link: '/recent-confiramtion',
     },
     {
       src: <Appointment className={styles.stroke} />,
-      title: 'Appointments',
+      title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
     },
     {
       src: <MyDiamond className={styles.stroke} />,
-      title: 'MyDiamonds',
+      title: ManageLocales('app.sideNav.myDiamonds'),
       link: '/my-diamonds',
     },
   ];
@@ -85,7 +86,7 @@ const SideBar = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
 
   const handleChange = (shape: string, link?: string) => {
-    router.push(link!);
+    router.push(`${link!}?lang=en`);
     setSelectedShape(() => [shape]);
   };
 

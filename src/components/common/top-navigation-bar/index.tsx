@@ -8,6 +8,7 @@ import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { useRouter } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
+import { ManageLocales } from '@/utils/translate';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -17,30 +18,30 @@ export const TopNavigationBar = () => {
 
   const topNavData = [
     {
-      label: 'For You',
+      label: ManageLocales('app.topNav.forYou'),
       link: '/',
     },
     {
-      label: 'Advance Search',
+      label: ManageLocales('app.topNav.advanceSearch'),
       link: '/advance-search',
     },
     {
-      label: 'Previous Search',
+      label: ManageLocales('app.topNav.previousSearch'),
       link: '/previous-search',
     },
     {
-      label: 'Wishlist',
+      label: ManageLocales('app.topNav.wishlist'),
       link: '/wishlist',
     },
     {
-      label: 'My Cart',
+      label: ManageLocales('app.topNav.myCart'),
       link: '/my-cart',
     },
   ];
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
-    router.push(link);
+    router.push(`${link}?lang=en`);
   };
 
   const handleScroll = () => {

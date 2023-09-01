@@ -1,11 +1,12 @@
 'use client';
 
-import { PaginationExample } from '@/components/common/pagination/example';
+import LanguageSwitcher from '@/components/common/multi-lingual';
+import { ManageLocales } from '@/utils/translate';
 
 export default function Home() {
   return (
     <>
-      {/* <h1
+      <h1
         style={{
           fontSize: '100px',
           display: 'flex',
@@ -24,9 +25,9 @@ export default function Home() {
         }}
       >
         Bulding Digital diamond platform
-      </h1> */}
-
-      <PaginationExample />
+      </h1>
+      <h1>{ManageLocales('app.welcome')}</h1>
+      <LanguageSwitcher />
     </>
   );
 }
