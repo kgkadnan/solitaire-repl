@@ -8,6 +8,9 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomTable } from '@/components/common/table';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState } from 'react';
+import ImageIcon from '@public/assets/icons/image-outline.svg';
+import CertificateIcon from '@public/assets/icons/certificate.svg';
+import Image from 'next/image';
 import styles from './cart.module.scss';
 
 const MyCart = () => {
@@ -34,9 +37,10 @@ const MyCart = () => {
   const searchList = [
     {
       cardId: '1',
-      header: 'R2.01VVS2 Search A',
+      header: '263494496',
       desc: '12-05-2023 | 10.12 AM',
       remainingCardTime: '12 min 30 secs',
+      cardTimeOut: true,
       body: {
         color: 'D',
         Carat: '2.01',
@@ -61,9 +65,10 @@ const MyCart = () => {
     },
     {
       cardId: '2',
-      header: 'R2.01VVS2 Searchb',
+      header: '263494496',
       desc: '12-05-2023 | 10.12 AM',
       remainingCardTime: '12 min 30 secs',
+      cardTimeOut: false,
       body: {
         color: 'D',
         Carat: '2.01',
@@ -92,17 +97,35 @@ const MyCart = () => {
 
   cardData = searchList.map((data: any) => ({
     cardId: data.cardId,
+    cardTimeOut: data.cardTimeOut,
     cardHeader: (
       <div className={styles.cardHeaderMainDiv}>
         <div className={styles.searchHeader}>
-          <p className={styles.SearchCardTitle}>{data.header}</p>
+          <p className={styles.SearchCardTitle}>
+            <span className={styles.rptNoStyle}>RPT No. </span>
+            {data.header}
+          </p>
+          <Image
+            src={ImageIcon}
+            alt="ImageIcon"
+            className={styles.headerIconStyle}
+            onClick={(e) => handleImageButton(e)}
+          />
+          <Image
+            src={CertificateIcon}
+            alt="CertificateIcon"
+            className={styles.headerIconStyle}
+            onClick={(e) => handleCertificateButton(e)}
+          />
           <p className={styles.SearchDateTime}>{data.desc}</p>
         </div>
         <div>
-          <CustomDisplayButton
-            displayButtonAllStyle={cardTimeStyles}
-            displayButtonLabel={`Buy within ${data.remainingCardTime}`}
-          />
+          {!data.cardTimeOut && (
+            <CustomDisplayButton
+              displayButtonAllStyle={cardTimeStyles}
+              displayButtonLabel={`Buy within ${data.remainingCardTime}`}
+            />
+          )}
         </div>
       </div>
     ),
@@ -210,6 +233,16 @@ const MyCart = () => {
     alert("You have clicked the 'show result' button");
   };
 
+  const handleImageButton = (event: any) => {
+    event.stopPropagation();
+    alert('Click on Image Button');
+  };
+
+  const handleCertificateButton = (event: any) => {
+    event.stopPropagation();
+    alert('Click on Certificate Button');
+  };
+
   return (
     <>
       <div className="container flex flex-col ">
@@ -231,13 +264,23 @@ const MyCart = () => {
                         onClick={handleClick}
                         isChecked={isCheck}
                       />
-                      <SheetTrigger className={styles.mainCardContainer}>
+                      {!items.cardTimeOut ? (
+                        <SheetTrigger className={styles.mainCardContainer}>
+                          <CustomSearchResultCard
+                            cardData={items}
+                            overriddenStyles={cardStyles}
+                            handleCardAction={handleEdit}
+                            isBlur={items.cardTimeOut}
+                          />
+                        </SheetTrigger>
+                      ) : (
                         <CustomSearchResultCard
                           cardData={items}
                           overriddenStyles={cardStyles}
                           handleCardAction={handleEdit}
+                          isBlur={items.cardTimeOut}
                         />
-                      </SheetTrigger>
+                      )}
                       <SheetContent className={styles.sheetContentStyle}>
                         {/* Detailed Information section */}
                         <div

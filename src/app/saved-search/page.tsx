@@ -47,6 +47,11 @@ const SavedSearch = () => {
   const searchCardTitle = {
     tableHeaderStyle: styles.SearchCardTitle,
     tableBodyStyle: styles.SearchDateTime,
+    tableStyles: styles.searchCardTitleMainDiv,
+  };
+  const manySavedsearchButtonStyle = {
+    displayButtonStyle: styles.manySavedSearchButton,
+    displayLabelStyle: styles.manySavedSearchLabel,
   };
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
@@ -132,7 +137,19 @@ const SavedSearch = () => {
             <CustomTable
               tableData={{
                 tableHeads: [data.name],
-                bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+                bodyData: [
+                  {
+                    desc: (
+                      <div className={styles.parentDivHeaderSectiom}>
+                        <div>{formatCreatedAt(data.created_at)}</div>
+                        <CustomDisplayButton
+                          displayButtonLabel="Searches (5)"
+                          displayButtonAllStyle={manySavedsearchButtonStyle}
+                        />
+                      </div>
+                    ),
+                  },
+                ],
               }}
               tableStyleClasses={searchCardTitle}
             />
