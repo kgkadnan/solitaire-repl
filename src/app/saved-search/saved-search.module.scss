@@ -11,6 +11,16 @@
 }
 
 /* Card Title */
+
+.searchCardTitleMainDiv {
+  width: 100%;
+}
+
+.parentDivHeaderSectiom {
+  display: flex;
+  justify-content: space-between;
+}
+
 .SearchCardTitle {
   color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
@@ -26,6 +36,20 @@
   flex-direction: column;
   justify-content: center;
   letter-spacing: 0.5px;
+}
+
+.manySavedSearchButton {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: hsl(var(--solitaire-primary));
+  padding: 4px 8px;
+  border-radius: 5px;
+}
+
+.manySavedSearchLabel {
+  color: hsl(var(--solitaire-tertiary));
+  font-weight: 300;
 }
 
 /* Header Container */

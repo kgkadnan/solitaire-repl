@@ -1,14 +1,16 @@
 'use client';
 import React, { useState } from 'react';
-import styles from './wishlist.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
-import { ToggleButton } from '@/components/common/toggle';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
+import ImageIcon from '@public/assets/icons/image-outline.svg';
+import CertificateIcon from '@public/assets/icons/certificate.svg';
+import Image from 'next/image';
+import styles from './wishlist.module.scss';
 
 const WishList = () => {
   // Style classes and variables
@@ -25,6 +27,11 @@ const WishList = () => {
     displayButtonStyle: styles.showResultButtonStyle,
   };
 
+  const memoButtonStyle = {
+    displayButtonStyle: styles.memoButton,
+    displayLabelStyle: styles.memoButtonLabel,
+  };
+
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
@@ -32,7 +39,7 @@ const WishList = () => {
   const searchList = [
     {
       cardId: '1',
-      header: 'R2.01VVS2 Search A',
+      header: '454648543',
       desc: '12-05-2023 | 10.12 AM',
       body: {
         color: 'D',
@@ -58,7 +65,7 @@ const WishList = () => {
     },
     {
       cardId: '2',
-      header: 'R2.01VVS2 Searchb',
+      header: '454648543',
       desc: '12-05-2023 | 10.12 AM',
       body: {
         color: 'D',
@@ -89,9 +96,32 @@ const WishList = () => {
   cardData = searchList.map((data: any) => ({
     cardId: data.cardId,
     cardHeader: (
-      <div className={styles.searchHeader}>
-        <p className={styles.SearchCardTitle}>{data.header}</p>
-        <p className={styles.SearchDateTime}>{data.desc}</p>
+      <div className={styles.wishlistHeaderMainDiv}>
+        <div className={styles.searchHeader}>
+          <p className={styles.SearchCardTitle}>
+            <span className={styles.rptNoStyle}>RPT No. </span>
+            {data.header}
+          </p>
+          <Image
+            src={ImageIcon}
+            alt="ImageIcon"
+            className={styles.headerIconStyle}
+            onClick={(e) => handleImageButton(e)}
+          />
+          <Image
+            src={CertificateIcon}
+            alt="CertificateIcon"
+            className={styles.headerIconStyle}
+            onClick={(e) => handleCertificateButton(e)}
+          />
+          <p className={styles.SearchDateTime}>{data.desc}</p>
+        </div>
+        <div>
+          <CustomDisplayButton
+            displayButtonAllStyle={memoButtonStyle}
+            displayButtonLabel={'Moved Out'}
+          />
+        </div>
       </div>
     ),
     cardContent: (
@@ -197,6 +227,16 @@ const WishList = () => {
   // Function to handle "Show Results" button click
   const showButtonHandleClick = () => {
     alert("You have clicked the 'show result' button");
+  };
+
+  const handleImageButton = (event: any) => {
+    event.stopPropagation();
+    alert('Click on Image Button');
+  };
+
+  const handleCertificateButton = (event: any) => {
+    event.stopPropagation();
+    alert('Click on Certificate Button');
   };
 
   return (

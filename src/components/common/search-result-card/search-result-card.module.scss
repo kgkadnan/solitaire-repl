@@ -29,6 +29,51 @@
   background-color: hsl(var(--solitaire-secondary));
   border: none;
   justify-content: space-between;
+  z-index: -1111;
+}
+
+.blur {
+  filter: blur(5px);
+}
+
+.blurCardMainContainer {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+  .blurCardContent {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  p {
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 14px;
+    font-weight: 500;
+    margin-bottom: 20px;
+  }
+}
+
+.floatingContent {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+}
+
+.cardContainerWithContent {
+  position: relative; /* Establish a positioning context for the content */
+}
+
+.filled {
+  background-color: #8c7459;
+  padding: 8px 30px;
+}
+
+.ViewSimilarStoneLabel {
+  color: #ced2d2;
 }
 
 .card {
