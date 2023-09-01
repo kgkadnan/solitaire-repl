@@ -10,7 +10,6 @@ import styles from './saved-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
-import axios from 'axios';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
@@ -18,6 +17,7 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import { useGetAllSavedSearchesQuery } from '../../slices/savedSearchesSlice';
+import CustomPagination from '@/components/common/pagination';
 
 interface ICardData {
   cardId: string;
@@ -38,7 +38,7 @@ interface IData {
 }
 
 const SavedSearch = () => {
-  const { data, error, isLoading, refetch }= useGetAllSavedSearchesQuery({});
+  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({});
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -151,6 +151,15 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles]
   );
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+
+  const totalPages = Math.ceil(cardData.length / resultsPerPage);
+
+  const startIndex = (currentPage - 1) * resultsPerPage;
+  const endIndex = Math.min(startIndex + resultsPerPage, cardData.length);
+  const currentData = cardData.slice(startIndex, endIndex);
+
   //Delete Data
   const handleDelete = () => {
     const updatedCardData = cardData.filter(
@@ -256,7 +265,7 @@ const SavedSearch = () => {
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
 
-    let dataNew = savedSearchData.map((data: { name: any; }) => data.name);
+    let dataNew = savedSearchData.map((data: { name: any }) => data.name);
 
     if (!dataNew.includes(suggestion)) {
       setCardData(renderCardData(searchListNew, suggestion));
@@ -325,7 +334,7 @@ const SavedSearch = () => {
 
   useEffect(() => {
     let render = async () => {
-      const SavedSearchData = data!
+      const SavedSearchData = data!;
 
       setSavedSearchData(SavedSearchData);
       setCardData(renderCardData(SavedSearchData, search));
@@ -355,7 +364,7 @@ const SavedSearch = () => {
           {/* Custom Card and Checkbox map */}
           <div className="flex-grow overflow-y-auto min-h-[80vh]">
             <>
-              {cardData?.map((items: any) => {
+              {currentData?.map((items: any) => {
                 return (
                   <div key={items.cardId}>
                     <div className="flex mt-6">
@@ -500,6 +509,17 @@ const SavedSearch = () => {
             </>
           </div>
         </Sheet>
+
+        <div className=" sticky bottom-0 bg-solitairePrimary">
+          <CustomPagination
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={totalPages}
+            resultsPerPage={resultsPerPage}
+            setResultsPerPage={setResultsPerPage}
+          />
+        </div>
+
         {/* Custom Footer */}
         {!!footerButtonData?.length && (
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">

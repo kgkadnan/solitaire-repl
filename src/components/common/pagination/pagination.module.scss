@@ -1,0 +1,84 @@
+
+
+
+
+.paginationContainer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  
+}
+
+
+.resultsPerPage {
+  display: flex;
+  width: 4%;
+  align-items: center;
+}
+
+.showResult{
+color:  #CED2D2;
+text-align: center;
+font-size: 14px;
+font-style: normal;
+font-weight: 400;
+line-height: normal;
+}
+
+.selectTrigger{
+  width: 100%;
+  border: none;
+  color: #CED2D2;
+}
+
+
+.selectContent{
+  width: 100%;
+  color: #CED2D2;
+}
+
+.selectElement{
+  color: #CED2D2;
+  width: 100%;
+}
+
+
+
+.paginationControls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paginationButton {
+  color: white;
+  border: none;
+  padding: 5px 10px;
+  cursor: pointer;
+}
+
+.pageInfo {
+  margin: 0 15px;
+}
+
+.pageNumbers {
+  display: flex;
+  align-items: center;
+}
+
+.pageNumber {
+  color: #354444;
+  margin: 0 5px;
+  padding: 5px 8px;
+  cursor: pointer;
+}
+
+.activePage {
+  font-weight: bold;
+  color:#CED2D2
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
