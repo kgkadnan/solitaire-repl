@@ -10,6 +10,7 @@ import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
 import { Provider } from "react-redux";
 import { savedSearchesApi } from '@/slices/savedSearchesSlice';
 import store from '../store';
+import { previousSearchApi } from '@/slices/previousSearchSlice';
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -29,6 +30,7 @@ export default function RootLayout({
         <Providers>
         <Provider store={store}>
         <ApiProvider api={savedSearchesApi}>
+        <ApiProvider api={previousSearchApi}>
           <SideBar />
           <TopNavigationBar />
 
@@ -45,6 +47,7 @@ export default function RootLayout({
             </main>
           </div>
           <BottomNavigationBar />
+          </ApiProvider>
           </ApiProvider>
           </Provider>
         </Providers>

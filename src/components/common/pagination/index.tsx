@@ -52,7 +52,9 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
   };
 
   return (
-    <div className={styles.paginationContainer}>
+    <div
+      className={`border-t border-solitaireSenary py-2 ${styles.paginationContainer}`}
+    >
       <div className={styles.resultsPerPage}>
         <CustomSelect
           data={limits}
@@ -86,7 +88,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
               >
                 1
               </span>
-              {startPage > 2 && (
+              {startPage > 1 && (
                 <span className={`${styles.pageNumber}`}>...</span>
               )}
             </>

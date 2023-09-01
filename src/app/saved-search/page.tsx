@@ -510,7 +510,11 @@ const SavedSearch = () => {
           </div>
         </Sheet>
 
-        <div className=" sticky bottom-0 bg-solitairePrimary">
+        <div className=" bg-solitairePrimary"></div>
+
+        {/* Custom Footer */}
+
+        <div className="sticky bottom-0 bg-solitairePrimary mt-3">
           <CustomPagination
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
@@ -518,14 +522,10 @@ const SavedSearch = () => {
             resultsPerPage={resultsPerPage}
             setResultsPerPage={setResultsPerPage}
           />
-        </div>
-
-        {/* Custom Footer */}
-        {!!footerButtonData?.length && (
-          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+          {!!footerButtonData?.length && (
             <CustomFooter footerButtonData={footerButtonData} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
