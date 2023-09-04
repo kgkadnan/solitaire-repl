@@ -105,6 +105,14 @@
 @layer base {
   * {
     @apply border-border font-custom;
+    input[type='number']::-webkit-inner-spin-button,
+    input[type='number']::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+    }
+    input[type='number'] {
+      -moz-appearance: textfield !important;
+      appearance: none;
+    }
   }
   body {
     @apply bg-solitairePrimary text-foreground;

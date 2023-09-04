@@ -9,6 +9,12 @@ import { CustomDisplayButton } from '../buttons/display-button';
 import { useRouter } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { Calculator } from '@/components/caclulator/calculator';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -82,8 +88,15 @@ export const TopNavigationBar = () => {
               />
             </div>
           ))}
-          <SearchIcon role="button" className={styles.iconColor} />
-          <CalculatorIcon role="button" className={styles.iconColor} />
+          <Popover>
+            <PopoverTrigger>
+              <CalculatorIcon role="button" className={styles.iconColor} />
+            </PopoverTrigger>
+            <PopoverContent className={styles.popoverContent}>
+              <Calculator />
+            </PopoverContent>
+          </Popover>
+
           <NotificationIcon role="button" className={styles.iconColor} />
           <MyProfileIcon role="button" className={styles.iconColor} />
           <ToggleButton />

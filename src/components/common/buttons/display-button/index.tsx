@@ -11,7 +11,7 @@ export interface IDisplayButtonStyle {
 
 export interface IDisplayButtonProps {
   id?: number;
-  displayButtonLabel: string;
+  displayButtonLabel: string | React.ReactNode;
   displayButtonAllStyle?: IDisplayButtonStyle;
   handleClick?: (color: string) => void;
   color?: string;

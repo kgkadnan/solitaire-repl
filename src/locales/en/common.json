@@ -112,5 +112,9 @@
   "app.bottomNav.aboutUs": "About Us",
   "app.bottomNav.contactUs": "Contact Us",
   "app.bottomNav.privacyPolicy": "Privacy Policy",
-  "app.bottomNav.terms": "Terms & Conditions"
+  "app.bottomNav.terms": "Terms & Conditions",
+
+  "app.topNav.yourDiamond": "Your Diamond",
+  "app.topNav.listPrice": "List Price",
+  "app.topNav.yourPrice": "Your Price"
 }

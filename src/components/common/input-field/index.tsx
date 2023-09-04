@@ -4,14 +4,14 @@ import styles from './input-field.module.scss';
 import { Input } from '@components/ui/input';
 
 interface IInputStyle {
-  input: string;
+  input?: string;
   inputMain?: string;
 }
 
 interface InputFieldProps {
   style?: IInputStyle;
   type: string;
-  value?: string;
+  value?: string | number;
   name: string;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
