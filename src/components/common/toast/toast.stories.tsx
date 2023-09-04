@@ -14,16 +14,15 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-
 export const ToastWithMessage: Story = {
   args: {
-    message:"test"
+    message: 'test',
   },
 };
 
 export const ToastWithMessageAndIcon: Story = {
-    args: {
-      message:"test",
-      icon : Error
-    },
-  };
+  args: {
+    message: 'test',
+    icon: Error,
+  },
+};
