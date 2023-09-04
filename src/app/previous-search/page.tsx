@@ -17,7 +17,10 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
-import { useGetAllPreviousSearchesQuery, useUpdatePreviousSearchMutation } from '@/slices/previousSearchSlice';
+import {
+  useGetAllPreviousSearchesQuery,
+  useUpdatePreviousSearchMutation,
+} from '@/slices/previousSearchSlice';
 
 interface ICardData {
   cardId: string;
@@ -37,9 +40,7 @@ interface IData {
   updated_at: string;
 }
 
-const SavedSearch = () => {
-  
-
+const PreviousSearch = () => {
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -122,7 +123,6 @@ const SavedSearch = () => {
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
-      console.log("data",data)
       return data
         .filter((data: any) =>
           data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
@@ -153,37 +153,38 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles]
   );
 
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [numberOfPages, setNumberOfPages] = useState(0);
 
+  const handleResultsPerPageChange = (event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setResultsPerPage(newResultsPerPage);
+    setCurrentPage(0); // Reset current page when changing results per page
+  };
 
-  const { data, error, isLoading , refetch } = useGetAllPreviousSearchesQuery({
+  let limits = [
+    { id: 1, value: '1' },
+    { id: 2, value: '10' },
+  ];
+
+  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
     currentPage,
     resultsPerPage,
     isDeleted: false, // Set your query parameters here
   });
 
   // Destructure the mutation function from the hook
-  const [updatePreviousSearch, { isLoading: updateIsLoading, isError: updateIsError }] =
-    useUpdatePreviousSearchMutation();
-
-  const totalPages = Math.ceil(cardData.length / resultsPerPage);
-
-  const startIndex = (currentPage - 1) * resultsPerPage;
-  const endIndex = Math.min(startIndex + resultsPerPage, cardData.length);
-  // const currentData = cardData.slice(startIndex, endIndex);
+  const [
+    updatePreviousSearch,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useUpdatePreviousSearchMutation();
 
   //Delete Data
-  const handleDelete =async () => {
-    let payload= { "id": isCheck, "filter": { "is_deleted": true } }
-   await  updatePreviousSearch(payload)
-
-    // const updatedCardData = cardData.filter(
-    //   (item) => !isCheck.includes(item.cardId)
-    // );
-    // setCardData(updatedCardData);
-
-    refetch()
+  const handleDelete = async () => {
+    let payload = { id: isCheck, filter: { is_deleted: true } };
+    await updatePreviousSearch(payload);
+    refetch();
     setIsCheck([]); // Clear the selected checkboxes
     setIsCheckAll(false); //clear check all
   };
@@ -351,18 +352,15 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-
-
-
-
     let render = async () => {
-      const PreviousSearchData = data!;
-      console.log("PreviousSearchData",PreviousSearchData)
-    setPreviousSearchData(PreviousSearchData);
-      setCardData(renderCardData(PreviousSearchData, search));
+      const PreviousSearchData = data;
+      let searchData = PreviousSearchData?.previousSearch;
+      setNumberOfPages(PreviousSearchData?.totalPages);
+      setPreviousSearchData(searchData);
+      setCardData(renderCardData(searchData, search));
     };
     render();
-  }, [data]);
+  }, [data, currentPage]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -408,7 +406,9 @@ const SavedSearch = () => {
                         <div
                           className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
                         >
-                          <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
+                          <p>
+                            {ManageLocales('app.previousSearch.detailInfo')}
+                          </p>
                         </div>
 
                         {/* Loop through card detail data */}
@@ -417,7 +417,9 @@ const SavedSearch = () => {
                             <div className={styles.sheetMainDiv}>
                               <div className={styles.sheetHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.basicInfo')}
+                                  {ManageLocales(
+                                    'app.previousSearch.basicInfo'
+                                  )}
                                 </p>
                               </div>
 
@@ -440,7 +442,9 @@ const SavedSearch = () => {
 
                               <div className={styles.sheetHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.measurement')}
+                                  {ManageLocales(
+                                    'app.previousSearch.measurement'
+                                  )}
                                 </p>
                               </div>
 
@@ -463,7 +467,9 @@ const SavedSearch = () => {
 
                               <div className={styles.sheetHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.otherInfo')}
+                                  {ManageLocales(
+                                    'app.previousSearch.otherInfo'
+                                  )}
                                 </p>
                               </div>
 
@@ -489,7 +495,7 @@ const SavedSearch = () => {
                               <div className={styles.sheetHeading}>
                                 <p>
                                   {ManageLocales(
-                                    'app.savedSearch.inclusionDetails'
+                                    'app.previousSearch.inclusionDetails'
                                   )}
                                 </p>
                               </div>
@@ -537,9 +543,10 @@ const SavedSearch = () => {
           <CustomPagination
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
-            totalPages={totalPages}
+            totalPages={numberOfPages}
             resultsPerPage={resultsPerPage}
-            setResultsPerPage={setResultsPerPage}
+            limits={limits}
+            handleResultsPerPageChange={handleResultsPerPageChange}
           />
           {!!footerButtonData?.length && (
             <CustomFooter footerButtonData={footerButtonData} />
@@ -550,4 +557,4 @@ const SavedSearch = () => {
   );
 };
 
-export default SavedSearch;
+export default PreviousSearch;

@@ -2,14 +2,15 @@ import React from 'react';
 import styles from './pagination.module.scss'; // Import your CSS module
 import ChevronBack from '@public/assets/icons/chevron-back-circle-outline.svg?url';
 import ChevronForward from '@public/assets/icons/chevron-forward-circle-outline.svg?url';
-import { CustomSelect } from '../select';
+import { CustomSelect, ISelectData } from '../select';
 
 interface ICustomPaginationProps {
   currentPage: number;
   totalPages: number;
   setCurrentPage: (page: number) => void;
-  resultsPerPage?: any;
-  setResultsPerPage?: any;
+  resultsPerPage: number;
+  limits: ISelectData[];
+  handleResultsPerPageChange: (event: string) => void;
 }
 
 const CustomPagination: React.FC<ICustomPaginationProps> = ({
@@ -17,33 +18,24 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
   totalPages,
   setCurrentPage,
   resultsPerPage,
-  setResultsPerPage,
+  limits,
+  handleResultsPerPageChange,
 }) => {
   const pagesToShow = 3; // Number of pages to show in the range
 
-  let startPage = Math.max(1, currentPage - Math.floor(pagesToShow / 2));
-  let endPage = startPage + pagesToShow - 1;
-
-  if (endPage > totalPages) {
-    endPage = totalPages;
-    startPage = Math.max(1, endPage - pagesToShow + 1);
-  }
-
   const handlePageClick = (page: number) => {
-    if (page >= 1 && page <= totalPages) {
+    if (page >= 0 && page <= totalPages) {
       setCurrentPage(page);
     }
   };
-  const handleResultsPerPageChange = (event: any) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(1); // Reset current page when changing results per page
-  };
 
-  let limits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
-  ];
+  const startPage = Math.max(0, currentPage - 1);
+  const endPage = Math.min(startPage + pagesToShow, totalPages);
+
+  const pageRange = Array.from(
+    { length: endPage - startPage },
+    (_, i) => startPage + i
+  );
 
   let customSelectStyle = {
     selectTrigger: styles.selectTrigger,
@@ -65,25 +57,26 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
       </div>
       <div className={styles.showResult}>
         <p>
-          Showing Results {currentPage} of {totalPages}
+          Showing Results {currentPage + 1} of {totalPages}
         </p>
       </div>
       <div className={styles.paginationControls}>
         <div
-          onClick={() => handlePageClick(currentPage - 1)}
+          onClick={() => handlePageClick(0)} // Jump to the first page
           className={`${styles.paginationButton} ${
-            currentPage === 1 ? styles.disabled : ''
+            currentPage === 0 ? styles.disabled : ''
           }`}
         >
           <ChevronBack
-            style={{ stroke: currentPage === 1 ? '#354444' : '#CED2D2' }}
+            style={{ stroke: currentPage === 0 ? '#354444' : '#CED2D2' }}
           />
         </div>
+
         <div className={styles.pageNumbers}>
-          {startPage > 1 && (
+          {startPage > 0 && (
             <>
               <span
-                onClick={() => handlePageClick(1)}
+                onClick={() => handlePageClick(0)} // Jump to the first page
                 className={`${styles.pageNumber}`}
               >
                 1
@@ -93,10 +86,8 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
               )}
             </>
           )}
-          {Array.from(
-            { length: endPage - startPage + 1 },
-            (_, index) => startPage + index
-          ).map((page) => (
+
+          {pageRange.map((page) => (
             <span
               key={page}
               onClick={() => handlePageClick(page)}
@@ -104,32 +95,31 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
                 currentPage === page ? styles.activePage : ''
               }`}
             >
-              {page}
+              {page + 1}
             </span>
           ))}
+
+          {endPage < totalPages - 1 && (
+            <span className={`${styles.pageNumber}`}>...</span>
+          )}
           {endPage < totalPages && (
-            <>
-              {endPage < totalPages - 1 && (
-                <span className={`${styles.pageNumber}`}>...</span>
-              )}
-              <span
-                onClick={() => handlePageClick(totalPages)}
-                className={`${styles.pageNumber}`}
-              >
-                {totalPages}
-              </span>
-            </>
+            <span
+              onClick={() => handlePageClick(totalPages - 1)} // Jump to the last page
+              className={`${styles.pageNumber}`}
+            >
+              {totalPages}
+            </span>
           )}
         </div>
         <div
-          onClick={() => handlePageClick(currentPage + 1)}
+          onClick={() => handlePageClick(totalPages - 1)} // Jump to the last page
           className={`${styles.paginationButton} ${
-            currentPage === totalPages ? styles.disabled : ''
+            currentPage === totalPages - 1 ? styles.disabled : ''
           }`}
         >
           <ChevronForward
             style={{
-              stroke: currentPage === totalPages ? '#354444' : '#CED2D2',
+              stroke: currentPage === totalPages - 1 ? '#354444' : '#CED2D2',
             }}
           />
         </div>
