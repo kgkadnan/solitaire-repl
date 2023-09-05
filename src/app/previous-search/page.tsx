@@ -1,19 +1,46 @@
 'use client';
-import React, { ChangeEvent, useMemo, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './previous-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
-import EditIcon from '@public/assets/icons/edit.svg';
+import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
-import { useRouter } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
+import CustomPagination from '@/components/common/pagination';
+import {
+  useGetAllPreviousSearchesQuery,
+  useUpdatePreviousSearchMutation,
+} from '@/slices/previousSearchSlice';
+
+interface ICardData {
+  cardId: string;
+  cardActionIcon: string;
+  cardHeader: React.ReactNode;
+  cardContent: React.ReactNode;
+}
+
+interface IData {
+  id: string;
+  name: string;
+  customer_id: string;
+  diamondCount: number;
+  filter: any;
+  isDeleted: boolean;
+  created_at: string;
+  updated_at: string;
+}
 
 const PreviousSearch = () => {
-  const router = useRouter();
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -29,6 +56,37 @@ const PreviousSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [numberOfPages, setNumberOfPages] = useState(0);
+
+  const handleResultsPerPageChange = (event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setResultsPerPage(newResultsPerPage);
+    setCurrentPage(0); // Reset current page when changing results per page
+  };
+
+  let limits = [
+    { id: 1, value: '1' },
+    { id: 2, value: '10' },
+  ];
+
+  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
+    currentPage,
+    resultsPerPage,
+    isDeleted: false,
+  });
+
+  // Destructure the mutation function from the hook
+  const [
+    updatePreviousSearch,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useUpdatePreviousSearchMutation();
+
+  //Data
+  const [PreviousSearchData, setPreviousSearchData] = useState<IData[]>([]);
+  const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -36,170 +94,99 @@ const PreviousSearch = () => {
 
   //Search Bar States
   const [search, setSearch] = useState<string>('');
-  const [searchFilter, setSearchFilter] = useState('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const searchData = ['R2.01VVS2 Search A', 'R2.01VVS2 Searchb', 'ooooo'];
+  const searchData = [
+    'sample',
+    'sample12',
+    'sample3',
+    'sample4',
+    'sample5',
+    'ooooo',
+  ];
 
-  const searchList = useMemo(
-    () => [
-      {
-        cardId: '1',
-        header: 'R2.01VVS2 Search A',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Round',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '2',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '3',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '4',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '5',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '6',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-      {
-        cardId: '7',
-        header: 'R2.01VVS2 Searchb',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Heart',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-    ],
-    [] // No dependencies
-  );
   const searchListNew = useMemo(
     () => [
       {
-        cardId: '1',
-        header: 'ooooo',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Round',
-          color: 'D',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'EX',
-          polish: 'EX',
-          Rap: '23,500.00',
+        id: 'gkgh32465442',
+        name: 'ooooo',
+        customer_id: '<sample_customer_id>',
+        diamondCount: 256,
+        filter: {
+          color: ['D', 'F', 'E', 'G'],
+          clarity: ['VVS2', 'VVS1', 'VS2'],
+          polarity: ['EX', 'IDEAL', 'VG'],
+          lab: ['GIA', 'HRD', 'IGI'],
         },
+        isDeleted: false,
+        created_at: '2023-08-23T08:03:54.942Z',
+        updated_at: '2023-08-23T08:03:54.942Z',
       },
     ],
     [] // No dependencies
   );
-  var cardData: any[] = [];
 
-  const renderCardData = (data: any, suggestion: string) => {
-    cardData = data
-      .filter((data: any) =>
-        data.header.toLowerCase().includes(suggestion.toLowerCase())
-      )
-      .map((data: any) => ({
-        cardId: data.cardId,
-        cardActionIcon: EditIcon,
-        cardHeader: (
-          <CustomTable
-            tableData={{
-              tableHeads: [data.header],
-              bodyData: [{ desc: data.desc }],
-            }}
-            tableStyleClasses={searchCardTitle}
-          />
-        ),
-        cardContent: (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(data.body),
-              bodyData: [data.body],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        ),
-      }));
+  // Function to format the created_at date
+  const formatCreatedAt = (createdAt: any) => {
+    const createdAtDate = new Date(createdAt);
+
+    const dateFormatter = new Intl.DateTimeFormat('en-US', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+
+    const timeFormatter = new Intl.DateTimeFormat('en-US', {
+      hour: 'numeric',
+      minute: 'numeric',
+      hour12: true,
+    });
+
+    const formattedDate = dateFormatter.format(createdAtDate);
+    const formattedTime = timeFormatter.format(createdAtDate);
+
+    return `${formattedDate} | ${formattedTime}`;
+  };
+
+  const renderCardData = useCallback(
+    (data: any, suggestion?: string) => {
+      return data
+        ?.filter((data: any) =>
+          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+        )
+        .map((data: any) => ({
+          cardId: data.id,
+          cardActionIcon: editIcon,
+          cardHeader: (
+            <CustomTable
+              tableData={{
+                tableHeads: [data.name],
+                bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+              }}
+              tableStyleClasses={searchCardTitle}
+            />
+          ),
+          cardContent: (
+            <CustomTable
+              tableData={{
+                tableHeads: Object.keys(data.meta_data),
+                bodyData: [data.meta_data],
+              }}
+              tableStyleClasses={tableStyles}
+            />
+          ),
+        }));
+    },
+    [searchCardTitle, tableStyles]
+  );
+
+  //Delete Data
+  const handleDelete = async () => {
+    let payload = { id: isCheck, filter: { is_deleted: true } };
+    await updatePreviousSearch(payload);
+    refetch();
+    setIsCheck([]);
+    setIsCheckAll(false);
   };
 
   const cardDetailData = [
@@ -252,51 +239,89 @@ const PreviousSearch = () => {
       },
     },
   ];
+
+  const debouncedSave = useCallback(
+    (inputValue: string) => {
+      // Filter data based on input value
+      const filteredSuggestions = searchData.filter((item) =>
+        item.toLowerCase().includes(inputValue.toLowerCase())
+      );
+      // Extract card titles from filtered suggestions
+      const suggestionTitles = filteredSuggestions.map((item) => item);
+      setSuggestions(suggestionTitles);
+      // Update state with an array of strings
+    },
+    [searchData]
+  );
+
+  const debounce = <T extends any[]>(
+    fn: (...args: T) => void,
+    delay: number
+  ) => {
+    let timeoutId: NodeJS.Timeout;
+    return (...args: T) => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => fn(...args), delay);
+    };
+  };
+
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     let inputValue = e.target.value;
     setSearch(inputValue);
-    setSearchFilter('');
 
-    // Filter data based on input value
-    const filteredSuggestions = searchData.filter((item) =>
-      item.toLowerCase().includes(inputValue.toLowerCase())
+    // Use the debounce function to wrap the debouncedSave function
+    const delayedSave = debounce(
+      (inputValue) => debouncedSave(inputValue),
+      1000
     );
+    delayedSave(inputValue);
 
-    // Extract card titles from filtered suggestions
-    const suggestionTitles = filteredSuggestions.map((item) => item);
-
-    setSuggestions(suggestionTitles);
-
-    // Update state with an array of strings
+    if (inputValue.length < 1) {
+      setCardData(renderCardData(PreviousSearchData, ''));
+    }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
-    setSearchFilter(suggestion);
     setSearch(suggestion);
 
-    setSuggestions([]);
-
-    let dataNew = searchList.map((data) => data.header);
+    let dataNew = PreviousSearchData.map((data: { name: any }) => data.name);
 
     if (!dataNew.includes(suggestion)) {
-      renderCardData(searchListNew, suggestion);
+      setCardData(renderCardData(searchListNew, suggestion));
+    } else {
+      setCardData(renderCardData(PreviousSearchData, suggestion));
     }
-    // Cledataar suggestions
+
+    setSuggestions([]);
   };
   //specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
-    let value = e.target.getAttribute('data-state');
-    setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === 'checked') {
-      setIsCheck(isCheck.filter((item) => item !== id));
+
+    let updatedIsCheck = [...isCheck];
+
+    if (updatedIsCheck.includes(id)) {
+      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+    } else {
+      updatedIsCheck.push(id);
+    }
+
+    setIsCheck(updatedIsCheck);
+
+    if (updatedIsCheck.length === cardData?.length) {
+      setIsCheckAll(true);
+    } else {
+      setIsCheckAll(false);
+    }
+    if (isCheckAll) {
+      setIsCheckAll(false);
     }
   };
 
   //Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(cardData.map((li) => li.cardId));
+    setIsCheck(cardData?.map((li) => li.cardId));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -308,24 +333,38 @@ const PreviousSearch = () => {
       id: 1,
       displayButtonLabel: ManageLocales('app.previousSearch.delete'),
       style: styles.filled,
+      fn: handleDelete,
     },
   ];
-  renderCardData(searchList, searchFilter);
 
   //Header Data
   const headerData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
     handleSelectAllCheckbox: handleSelectAllCheckbox,
-    searchCount: cardData.length,
+    isCheckAll: isCheckAll,
+    //count
+    searchCount: cardData?.length,
+    //Search Data
     handleSearch: handleSearch,
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
   };
 
+  useEffect(() => {
+    let render = async () => {
+      const PreviousSearchData = data;
+      let searchData = PreviousSearchData?.previousSearch;
+      setNumberOfPages(PreviousSearchData?.totalPages);
+      setPreviousSearchData(searchData);
+      setCardData(renderCardData(searchData, search));
+    };
+    render();
+  }, [data, currentPage]);
+
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    router.push(`/advance-search?id=${stone}`);
+    alert("You have clicked the 'Edit button'");
   };
 
   // Function to handle "Show Results" button click
@@ -335,9 +374,9 @@ const PreviousSearch = () => {
 
   return (
     <>
-      <div className="container flex flex-col ">
+      <div className="container flex flex-col">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-16">
+        <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
           <CustomHeader data={headerData} />
         </div>
 
@@ -479,7 +518,9 @@ const PreviousSearch = () => {
                             </div>
                           </div>
                         ))}
+
                         <div className="border-b border-solitaireTertiary mt-8"></div>
+
                         {/* Show Results button */}
                         <div className={styles.showResultMainDiv}>
                           <CustomDisplayButton
@@ -496,12 +537,22 @@ const PreviousSearch = () => {
             </>
           </div>
         </Sheet>
+
         {/* Custom Footer */}
-        {footerButtonData?.length && (
-          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+        <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+          <CustomPagination
+            setCurrentPage={setCurrentPage}
+            currentPage={currentPage}
+            totalPages={numberOfPages}
+            resultsPerPage={resultsPerPage}
+            limits={limits}
+            handleResultsPerPageChange={handleResultsPerPageChange}
+          />
+
+          {!!footerButtonData?.length && (
             <CustomFooter footerButtonData={footerButtonData} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
