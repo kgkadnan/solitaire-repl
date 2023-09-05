@@ -657,10 +657,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleColorChange = (data: string) => {
-    setSelectedColor(data)
-    setSelectedWhiteColor([])
-    setSelectedFancyColor([])
-    setSelectedRangeColor([])
+    setSelectedColor(data);
+    setSelectedWhiteColor([]);
+    setSelectedFancyColor([]);
+    setSelectedRangeColor([]);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -780,10 +780,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     // window.alert('success');
   };
 
-  const formatSelection = (data: string[]|string) => {
-    return data.length > 1
-      ? data.toString().substring(0, 4).concat('...')
-      : data.toString();
+  const formatSelection = (data: string[] | string) => {
+    return <div className={styles.yourSelectionInHeaderElement}> {Array.isArray(data)
+      ? data.length > 1
+        ? data.toString().substring(0, 4).concat('...')
+        : data.toString()
+      : data}
+      </div>
   };
 
   const handleReset = () => {
@@ -1195,11 +1198,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                         'app.advanceSearch.yourSelection'
                       )}:`}
                     />{' '}
-                    <div style={{ color: 'white' }}>
+                    <div className={styles.yourSelectionInHeader}>
                       {formatSelection(selectedShape)}{' '}
                       {formatSelection(selectedColor)}{' '}
+                      {formatSelection(selectedTingeIntensity)}{' '}
                       {formatSelection(selectedClarity)}{' '}
                       {formatSelection(selectedCaratRange)}
+                      {formatSelection(selectedMake)}{' '}
+                      {formatSelection(selectedLab)}{' '}
+                      {formatSelection(location)}{' '}
                     </div>
                   </div>
                 }

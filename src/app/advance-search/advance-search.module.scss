@@ -274,3 +274,13 @@
 .yourSelectionTooltipHeader {
   font-weight: 600;
 }
+
+
+.yourSelectionInHeader{
+  display: flex;
+  color:hsl(var(--solitaire-tertiary)) ;
+}
+
+.yourSelectionInHeaderElement{
+  padding:0px 10px;
+}
