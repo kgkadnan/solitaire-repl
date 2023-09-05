@@ -112,7 +112,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [location, setLocation] = useState<string>('');
 
   const [origin, setOrigin] = useState<string>('');
-  const [searchResultCount, setSearchResultCount] = useState<number>(1001);
+  const [searchResultCount, setSearchResultCount] = useState<number>(0);
+  const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
   const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
@@ -764,13 +765,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = () => {
-    let i = 1;
-    setShowToast(false);
+    // setShowToast(false);
     setToastErrorMessage('');
     if (searchResultCount! > 1000) {
       console.log('called');
       setToastErrorMessage(
-        `Please modify your search, maximum 1000 stones displayed${i++}`
+        `Please modify your search, maximum 1000 stones displayed`
       );
       setShowToast(true);
     }
@@ -1908,7 +1908,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             },
             {
               id: 3,
-              displayButtonLabel: `${ManageLocales(
+              displayButtonLabel: `${ (searchApiCalled && searchResultCount! === 0) ? ManageLocales(
+                'app.advanceSearch.addDemand'
+              ): ManageLocales(
                 'app.advanceSearch.search'
               )} ${
                 searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
