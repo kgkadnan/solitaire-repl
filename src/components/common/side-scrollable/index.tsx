@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import styles from './sideScrollable.module.scss';
+import styles from './side-scrollable.module.scss';
 // import './test.css';
 
 interface ISideScrollableProps {
@@ -40,11 +40,6 @@ export const CustomSideScrollable: React.FC<ISideScrollableProps> = ({
     scrollableRef.current.scrollLeft = (scrollLeft as number) - walk;
   };
 
-  const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
-    if (scrollableRef.current) {
-      setScrollLeft(scrollableRef.current.scrollLeft);
-    }
-  };
   return (
     <div className="flex">
       <div className={`${leftFixedStyle}`}>{leftFixedContent}</div>
@@ -57,7 +52,10 @@ export const CustomSideScrollable: React.FC<ISideScrollableProps> = ({
         onMouseMove={handleMouseMove}
         onMouseLeave={handleMouseUp}
       >
-        <div className={styles.scrollText} data-testid="scrollable-container">
+        <div
+          className={`${styles.scrollText} ${rightSideStyle}`}
+          data-testid="scrollable-container"
+        >
           {rightSideContent}
         </div>
       </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { CustomSideScrollable } from '..';
-import styles from './sideScroller.module.scss';
+import styles from './side-scroller.module.scss';
 
 export const SideScrollableExample = () => {
   return (
