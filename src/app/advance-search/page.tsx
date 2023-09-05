@@ -765,13 +765,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = () => {
-    let i = 1;
-    setShowToast(false);
+    // setShowToast(false);
     setToastErrorMessage('');
     if (searchResultCount! > 1000) {
       console.log('called');
       setToastErrorMessage(
-        `Please modify your search, maximum 1000 stones displayed${i++}`
+        `Please modify your search, maximum 1000 stones displayed`
       );
       setShowToast(true);
     }
