@@ -16,6 +16,7 @@ import Round from '@public/assets/images/round.png';
 import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
+import { CustomToast } from '@/components/common/toast';
 
 interface IAdvanceSearch {
   shape?: string[];
@@ -111,6 +112,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [location, setLocation] = useState<string>('');
 
   const [origin, setOrigin] = useState<string>('');
+  const [searchResultCount, setSearchResultCount] = useState<number>(1001);
+  const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
   //handle validation
   // const [isValid, setIsValid] = useState(1);
 
@@ -759,7 +764,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = () => {
-    window.alert('success');
+    let i = 1;
+    setShowToast(false);
+    setToastErrorMessage('');
+    if (searchResultCount! > 1000) {
+      console.log('called');
+      setToastErrorMessage(
+        `Please modify your search, maximum 1000 stones displayed${i++}`
+      );
+      setShowToast(true);
+    }
+    // window.alert('success');
   };
 
   const formatSelection = (data: string[]) => {
@@ -1039,6 +1054,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     origin,
   ]);
 
+  const handleAddAnotherSearch = () => {
+    if (addSearches.length < 5) {
+      //call previous serach api
+      setAddSearches([...addSearches, 'ooo']);
+      handleReset();
+    } else {
+      setShowToast(true);
+      setToastErrorMessage('Add search limit exceeded');
+    }
+  };
+
   ///reusable jsx
   const renderSelectionButtons = (
     data: string[],
@@ -1146,8 +1172,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
     ));
   };
+
   return (
     <div>
+      {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="sticky top-0 bg-solitairePrimary mt-16">
         <CustomHeader
           data={{
@@ -1873,21 +1901,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             },
             {
               id: 2,
-              displayButtonLabel: ManageLocales('app.advanceSearch.saveSearch'),
+              displayButtonLabel: `${ManageLocales(
+                'app.advanceSearch.saveSearch'
+              )}`,
               style: styles.transparent,
             },
             {
               id: 3,
-              displayButtonLabel: ManageLocales('app.advanceSearch.search'),
+              displayButtonLabel: `${ManageLocales(
+                'app.advanceSearch.search'
+              )} ${
+                searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
+              }`,
               style: styles.filled,
               fn: handleSearch,
             },
             {
               id: 4,
-              displayButtonLabel: ManageLocales(
+              displayButtonLabel: `${ManageLocales(
                 'app.advanceSearch.addAnotherSearch'
-              ),
+              )} ${
+                addSearches.length > 0 ? '(' + addSearches.length + ')' : '  '
+              }`,
               style: ` ${styles.filled} ${styles.anotherSearch}`,
+              fn: handleAddAnotherSearch,
             },
           ]}
         />
