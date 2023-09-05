@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { CustomToast } from '.';
 
 const ToastExample = () => {
-  const [showToast, setShowToast] = useState<boolean>(false);
+  const [showToast, setShowToast] = useState<any>(['false']);
   return (
     <>
       <button
@@ -12,7 +12,9 @@ const ToastExample = () => {
       >
         click
       </button>
-      {showToast && <CustomToast message="test" />}
+      {showToast.length > 0 && <CustomToast message="test" />}
+      <CustomToast message="testss" />
+      <CustomToast message="test" />
     </>
   );
 };

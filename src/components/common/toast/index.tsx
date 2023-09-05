@@ -14,6 +14,7 @@ export const CustomToast: React.FC<ICustomToast> = ({
   message,
   icon = Error,
 }) => {
+  console.log('m');
   const notify = () =>
     toast(
       <div className={style.toastContainer}>
