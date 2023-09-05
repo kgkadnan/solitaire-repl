@@ -23,7 +23,7 @@ interface IAdvanceSearch {
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
   const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
@@ -142,7 +142,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   useEffect(() => {
     if (search !== null) {
       setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
-      setSelectedColor([...selectedColor, searchListNew[0].body.color]);
+      // setSelectedColor([...selectedColor, searchListNew[0].body.color]);
       setSelectedCut([...selectedCut, searchListNew[0].body.Cut]);
       setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
     }
@@ -652,7 +652,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleColorChange = (data: string) => {
-    handleFilterChange(data, selectedColor, setSelectedColor);
+    setSelectedColor(data)
+    setSelectedWhiteColor([])
+    setSelectedFancyColor([])
+    setSelectedRangeColor([])
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -762,7 +765,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     window.alert('success');
   };
 
-  const formatSelection = (data: string[]) => {
+  const formatSelection = (data: string[]|string) => {
     return data.length > 1
       ? data.toString().substring(0, 4).concat('...')
       : data.toString();
@@ -770,7 +773,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleReset = () => {
     setSelectedShape([]);
-    setSelectedColor([]);
+    setSelectedColor('');
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
     setSelectedRangeColor([]);
