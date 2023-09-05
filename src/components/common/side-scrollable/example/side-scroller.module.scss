@@ -1,0 +1,37 @@
+.leftSideStyle {
+  width: 30%;
+}
+
+/* Styling for the card container */
+.card {
+  width: 300px;
+  height: 100%;
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  text-align: center;
+  margin: 20px;
+  padding: 20px;
+}
+
+/* Styling for the card title */
+.cardTitle {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+/* Styling for the message inside the card */
+.cardMessage {
+  width: 250px;
+  font-size: 18px;
+  margin-bottom: 40px;
+  display: flex;
+  white-space: pre-wrap;
+}
+
+/* Styling for the sender's name */
+.senderName {
+  font-size: 16px;
+  font-style: italic;
+}
