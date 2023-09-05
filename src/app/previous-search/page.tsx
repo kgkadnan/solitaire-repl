@@ -56,6 +56,33 @@ const PreviousSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [numberOfPages, setNumberOfPages] = useState(0);
+
+  const handleResultsPerPageChange = (event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setResultsPerPage(newResultsPerPage);
+    setCurrentPage(0); // Reset current page when changing results per page
+  };
+
+  let limits = [
+    { id: 1, value: '1' },
+    { id: 2, value: '10' },
+  ];
+
+  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
+    currentPage,
+    resultsPerPage,
+    isDeleted: false,
+  });
+
+  // Destructure the mutation function from the hook
+  const [
+    updatePreviousSearch,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useUpdatePreviousSearchMutation();
 
   //Data
   const [PreviousSearchData, setPreviousSearchData] = useState<IData[]>([]);
@@ -124,7 +151,7 @@ const PreviousSearch = () => {
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
-        .filter((data: any) =>
+        ?.filter((data: any) =>
           data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
         )
         .map((data: any) => ({
@@ -153,40 +180,13 @@ const PreviousSearch = () => {
     [searchCardTitle, tableStyles]
   );
 
-  const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
-  const [numberOfPages, setNumberOfPages] = useState(0);
-
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
-
-  let limits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
-  ];
-
-  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
-    currentPage,
-    resultsPerPage,
-    isDeleted: false, // Set your query parameters here
-  });
-
-  // Destructure the mutation function from the hook
-  const [
-    updatePreviousSearch,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useUpdatePreviousSearchMutation();
-
   //Delete Data
   const handleDelete = async () => {
     let payload = { id: isCheck, filter: { is_deleted: true } };
     await updatePreviousSearch(payload);
     refetch();
-    setIsCheck([]); // Clear the selected checkboxes
-    setIsCheckAll(false); //clear check all
+    setIsCheck([]);
+    setIsCheckAll(false);
   };
 
   const cardDetailData = [
@@ -308,7 +308,7 @@ const PreviousSearch = () => {
 
     setIsCheck(updatedIsCheck);
 
-    if (updatedIsCheck.length === cardData.length) {
+    if (updatedIsCheck.length === cardData?.length) {
       setIsCheckAll(true);
     } else {
       setIsCheckAll(false);
@@ -321,7 +321,7 @@ const PreviousSearch = () => {
   //Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(cardData.map((li) => li.cardId));
+    setIsCheck(cardData?.map((li) => li.cardId));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -343,7 +343,7 @@ const PreviousSearch = () => {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
     //count
-    searchCount: cardData.length,
+    searchCount: cardData?.length,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
@@ -548,6 +548,7 @@ const PreviousSearch = () => {
             limits={limits}
             handleResultsPerPageChange={handleResultsPerPageChange}
           />
+
           {!!footerButtonData?.length && (
             <CustomFooter footerButtonData={footerButtonData} />
           )}

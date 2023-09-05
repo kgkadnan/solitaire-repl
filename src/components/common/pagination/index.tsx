@@ -62,7 +62,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
       </div>
       <div className={styles.paginationControls}>
         <div
-          onClick={() => handlePageClick(0)} // Jump to the first page
+          onClick={() => handlePageClick(currentPage - 1)}
           className={`${styles.paginationButton} ${
             currentPage === 0 ? styles.disabled : ''
           }`}
@@ -112,7 +112,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
           )}
         </div>
         <div
-          onClick={() => handlePageClick(totalPages - 1)} // Jump to the last page
+          onClick={() => handlePageClick(currentPage + 1)}
           className={`${styles.paginationButton} ${
             currentPage === totalPages - 1 ? styles.disabled : ''
           }`}

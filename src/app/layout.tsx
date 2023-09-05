@@ -6,11 +6,10 @@ import { Providers } from './Providers';
 import { TopNavigationBar } from '@/components/common/top-navigation-bar';
 import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import SideBar from '@/components/common/sidebar';
-import { ApiProvider } from '@reduxjs/toolkit/dist/query/react';
-import { Provider } from "react-redux";
-import { savedSearchesApi } from '@/slices/savedSearchesSlice';
-import store from '../store';
-import { previousSearchApi } from '@/slices/previousSearchSlice';
+import { Provider } from 'react-redux';
+import { setupStore } from '@/store';
+
+const store = setupStore();
 
 const inter = Inter({ subsets: ['latin'] });
 
@@ -28,27 +27,23 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <Providers>
-        <Provider store={store}>
-        <ApiProvider api={savedSearchesApi}>
-        <ApiProvider api={previousSearchApi}>
-          <SideBar />
-          <TopNavigationBar />
+          <Provider store={store}>
+            <SideBar />
+            <TopNavigationBar />
 
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'right',
-              marginTop: '110px',
-              padding: '0px 30px',
-            }}
-          >
-            <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
-              {children}
-            </main>
-          </div>
-          <BottomNavigationBar />
-          </ApiProvider>
-          </ApiProvider>
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'right',
+                marginTop: '110px',
+                padding: '0px 30px',
+              }}
+            >
+              <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
+                {children}
+              </main>
+            </div>
+            <BottomNavigationBar />
           </Provider>
         </Providers>
       </body>
