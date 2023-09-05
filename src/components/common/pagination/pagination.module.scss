@@ -1,4 +1,3 @@
-
 .paginationContainer {
   display: flex;
   align-items: center;
@@ -11,33 +10,30 @@
   align-items: center;
 }
 
-.showResult{
-color:  #CED2D2;
-text-align: center;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: normal;
+.showResult {
+  color: #ced2d2;
+  text-align: center;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
 }
 
-.selectTrigger{
+.selectTrigger {
   width: 100%;
   border: none;
-  color: #CED2D2;
+  color: #ced2d2;
 }
 
-
-.selectContent{
+.selectContent {
   width: 100%;
-  color: #CED2D2;
+  color: #ced2d2;
 }
 
-.selectElement{
-  color: #CED2D2;
+.selectElement {
+  color: #ced2d2;
   width: 100%;
 }
-
-
 
 .paginationControls {
   display: flex;
@@ -70,7 +66,7 @@ line-height: normal;
 
 .activePage {
   font-weight: bold;
-  color:#CED2D2
+  color: #ced2d2;
 }
 
 .disabled {

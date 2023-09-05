@@ -11,7 +11,7 @@ interface IInputStyle {
 interface InputFieldProps {
   style?: IInputStyle;
   type: string;
-  value?: string;
+  value?: string | number;
   name: string;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;

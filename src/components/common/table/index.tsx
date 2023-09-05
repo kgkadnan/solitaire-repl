@@ -66,7 +66,7 @@ export const CustomTable: React.FC<ITableProps> = ({
                     key={`cell-${rowIndex}-${cellIndex}`}
                     className={`whitespace-nowrap ${tableBodyStyle} `}
                   >
-                    {typeof bodyData[item] !== 'string'
+                    {Array.isArray(bodyData[item])
                       ? bodyData[item].toString().substring(0, 3).concat('...')
                       : bodyData[item]}
                   </TableCell>
