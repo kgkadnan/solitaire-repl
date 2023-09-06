@@ -138,7 +138,7 @@ const MyCart = () => {
         tableStyleClasses={tableStyles}
       />
     ),
-    unBlurHeader:<p className={styles.SearchCardTitle} style={{display:"flex",width:"200px",alignItems:"center",marginLeft:"43px"}}>
+    unBlurHeader:<p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`} >
     <span className={styles.rptNoStyle}>RPT No. </span>
     {data.header}
   </p>
