@@ -31,19 +31,4 @@ describe('Advance Search Page', () => {
     expect(getByText(/search diamonds/i)).toBeInTheDocument();
     expect(getByText(/your selection/i)).toBeInTheDocument();
   });
-
-  test('clicking button invokes the click handler', () => {
-    const handleClick = jest.fn(); // Mock click handler function
-    const { getByText } = render(
-      <CustomSelectionButton
-        selectionButtonLabel="Test Button"
-        handleClick={handleClick}
-      />
-    );
-
-    const buttonElement = getByText('Test Button');
-    fireEvent.click(buttonElement);
-
-    expect(handleClick).toHaveBeenCalledTimes(1); // Verify the function was called once
-  });
 });

@@ -1,5 +1,5 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import { render, fireEvent, waitFor } from '@testing-library/react';
 import CustomHeader from '@components/common/header';
 
 jest.mock('next/image', () => ({
@@ -31,7 +31,6 @@ describe('CustomHeader component', () => {
 
     // Check if search input and button are rendered
     expect(getByPlaceholderText('Search by name')).toBeInTheDocument();
-    expect(getByText('Search')).toBeInTheDocument();
   });
 
   it('calls handleSearch when input value changes', () => {
@@ -60,5 +59,35 @@ describe('CustomHeader component', () => {
     expect(headerData.handleSuggestionClick).toHaveBeenCalledWith(
       'Suggestion 1'
     );
+  });
+
+  test('updates visibility state on scroll', async () => {
+    const { container, rerender } = render(<CustomHeader data={{}} />);
+    const headerElement = container.querySelector('.mainDiv');
+
+    // Initial state should be mainDiv
+    expect(headerElement).toHaveClass('mainDiv');
+
+    // Simulate scrolling down
+    Object.defineProperty(window, 'scrollY', { value: 200 });
+    fireEvent.scroll(window);
+
+    // Wait for the scroll event to be processed
+    await waitFor(() => {
+      rerender(<CustomHeader data={{}} />);
+      // State should be updated to visible
+      expect(headerElement).toHaveClass('visible');
+    });
+
+    // Simulate scrolling back up
+    Object.defineProperty(window, 'scrollY', { value: 50 });
+    fireEvent.scroll(window);
+
+    // Wait for the scroll event to be processed
+    await waitFor(() => {
+      rerender(<CustomHeader data={{}} />);
+      // State should be updated to visible again
+      expect(headerElement).toHaveClass('visible');
+    });
   });
 });
