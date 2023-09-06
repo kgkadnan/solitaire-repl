@@ -16,7 +16,10 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
     reducer: rootReducer,
     middleware: (getDefaultMiddleware) =>
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
-      getDefaultMiddleware().concat(previousSearchApi.middleware),
+      getDefaultMiddleware().concat(
+        previousSearchApi.middleware,
+        savedSearchesApi.middleware
+      ),
     preloadedState,
   });
 };

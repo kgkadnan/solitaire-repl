@@ -7,12 +7,18 @@ export const savedSearchesApi = createApi({
 
   endpoints: (builder) => ({
     getAllSavedSearches: builder.query({
-      query: () => 'saveAndSearch',
+      query: ({ currentPage, resultsPerPage, isDeleted }) =>
+        `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
     }),
-    // getProduct: builder.query({
-    //   query: (product) => `products/search?q=${product}`,
-    // }),
+    updateSavedSearches: builder.mutation({
+      query: (filter) => ({
+        url: `previous-search`,
+        method: 'PUT', // Use the appropriate HTTP method
+        body: filter, // Modify this to match your API's payload
+      }),
+    }),
   }),
 });
 
-export const { useGetAllSavedSearchesQuery } = savedSearchesApi;
+export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation } =
+  savedSearchesApi;

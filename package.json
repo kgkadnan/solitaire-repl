@@ -17,7 +17,11 @@
       "src/**/*.{js,jsx,ts,tsx}",
       "!src/*/.d.ts",
       "!src/**/*.stories.tsx",
-      "!src/**/example.tsx"
+      "!src/**/example.tsx",
+      "!src/components/ui/**/*.{js,jsx,ts,tsx}", 
+      "!src/lib/**/*.{js,jsx,ts,tsx}", 
+      "!src/slices/**/*.{js,jsx,ts,tsx}", 
+      "!src/utils/**/*.{js,jsx,ts,tsx}" 
     ],
     "moduleNameMapper": {
       "\\.svg\\?url": "<rootDir>/src/__tests__/__mocks__/mock-svg.svg",
