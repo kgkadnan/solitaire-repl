@@ -68,7 +68,7 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
               <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
               <CustomSearchInputField
                 type="text"
-                name="search"
+                name="Search"
                 style={searchInputStyle}
                 value={data?.searchValue}
                 onChange={data?.handleSearch}
