@@ -353,7 +353,7 @@ const PreviousSearch = () => {
 
   useEffect(() => {
     let render = async () => {
-      const PreviousSearchData = data;
+      const PreviousSearchData = data?.data;
       let searchData = PreviousSearchData?.previousSearch;
       setNumberOfPages(PreviousSearchData?.totalPages);
       setPreviousSearchData(searchData);
