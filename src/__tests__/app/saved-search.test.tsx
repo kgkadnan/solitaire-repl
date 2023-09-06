@@ -1,6 +1,9 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { fireEvent, render, waitFor } from '@testing-library/react';
-import SavedSearch from '@app/saved-search/page';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
+import { renderWithProviders } from '../test-utils';
+import { server } from '../server';
+import { rest } from 'msw';
+import SavedSearch from '@/app/saved-search/page';
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -12,40 +15,49 @@ jest.mock('next/image', () => ({
 }));
 
 describe('SavedSearch Component - Render Card Data', () => {
-  // it("renders card data correctly based on search filter", () => {
-  //   const { getByText, getByRole } = render(<SavedSearch />);
+  // Common test setup
+  beforeEach(() => {
+    // Mock the data to be returned by your API request
+    const mockApiResponse = {
+      data: {
+        previousSearch: [
+          {
+            diamond_count: 256,
+            name: 'sample4',
+            customer_id: 'cus_01H90HVS4396XG4A6D1PFMCXKX',
+            is_deleted: false,
+            meta_data: {
+              cut: ['EX', 'IDEAL', 'VG'],
+              lab: ['GIA', 'HRD', 'IGI'],
+              color: ['D', 'F', 'E', 'G'],
+              clarity: ['VVS2', 'VVS1', 'VS2'],
+            },
+            id: 'saved_search_01H95GDK1N1Q1RBWF5VF5JPD7K',
+            created_at: '2023-08-31T09:57:31.317Z',
+            updated_at: '2023-09-01T11:17:11.266Z',
+          },
+        ],
+        totalPages: 5,
+      },
+    };
 
-  //   // Assuming a suggestion is selected and card data is rendered
-  //   // In this example, let's assume "R2.01VVS2 Search A" is selected
-  //   const selectedSuggestion = "R2.01VVS2 Search A";
+    // Configure MSW to return the mock data
+    server.use(
+      rest.get('/previous-search', (req, res, ctx) => {
+        return res(ctx.json(mockApiResponse));
+      })
+    );
+    renderWithProviders(<SavedSearch />);
+  });
 
-  //   // Check if the card header and content are rendered
-  //   const cardHeader = getByText(selectedSuggestion);
-  //   expect(cardHeader).toBeInTheDocument();
-
-  //   const cardContent = getByText("Round");
-  //   expect(cardContent).toBeInTheDocument();
-
-  //   // Assuming there's a "Delete" button in the footer
-  //   const deleteButton = getByRole("button", { name: /delete/i });
-  //   expect(deleteButton).toBeInTheDocument();
-  // });
-
-  // it("displays all search results on initial render", () => {
-  //   const { getByText } = render(<SavedSearch />);
-  //   expect(getByText("R2.01VVS2 Search A")).toBeInTheDocument();
-  //   expect(getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
-  // });
-
-  test('renders PreviousSearch component correctly', () => {
-    const { getByText } = render(<SavedSearch />);
+  test('renders Saved Search component correctly', () => {
     // Assert the presence of key UI elements
-    expect(getByText(/saved search/i)).toBeInTheDocument();
-    expect(getByText(/select all/i)).toBeInTheDocument();
+    expect(screen.getByText(/saved search/i)).toBeInTheDocument();
+    expect(screen.getByText(/select all/i)).toBeInTheDocument();
   });
 
   // it("renders search input and suggestions correctly", () => {
-  //   const { getByPlaceholderText, getByText } = render(<SavedSearch />);
+  //   const { getByPlaceholderText, screen.getByText } = render(<SavedSearch />);
 
   //   // Find the search input
   //   const searchInput = getByPlaceholderText("Search by name");
@@ -54,21 +66,19 @@ describe('SavedSearch Component - Render Card Data', () => {
   //   fireEvent.change(searchInput, { target: { value: "R2" } });
 
   //   // Ensure suggestions are displayed
-  //   expect(getByText("R2.01VVS2 Search A")).toBeInTheDocument();
-  //   expect(getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
+  //   expect(screen.getByText("R2.01VVS2 Search A")).toBeInTheDocument();
+  //   expect(screen.getByText("R2.01VVS2 Searchb")).toBeInTheDocument();
   // });
 
   it("toggles 'Select All' checkbox correctly", () => {
-    const { getByTestId, getAllByRole } = render(<SavedSearch />);
-
     // Find the 'Select All' checkbox
-    const selectAllCheckbox = getByTestId('Select All Checkbox');
+    const selectAllCheckbox = screen.getByTestId('Select All Checkbox');
 
     // Click the 'Select All' checkbox
     fireEvent.click(selectAllCheckbox);
 
     // Find all checkboxes
-    const checkboxes = getAllByRole('checkbox');
+    const checkboxes = screen.getAllByRole('checkbox');
 
     // Check if all checkboxes are checked
     waitFor(() => {
@@ -87,17 +97,19 @@ describe('SavedSearch Component - Render Card Data', () => {
     });
   });
 
-  it('displays card details when a card is clicked', () => {
-    const { getByTestId, queryAllByText } = render(<SavedSearch />);
-
-    // Find a card
-    const card = getByTestId('card-1');
+  test('displays card details when a card is clicked', async () => {
+    // Find the card using its dynamic ID
+    const cardId = 'saved_search_01H95GDK1N1Q1RBWF5VF5JPD7K';
+    const card = await screen.findByTestId(`card-${cardId}`);
 
     // Click the card to expand its details
     fireEvent.click(card);
 
-    // Check if detailed information is displayed
-    const basicDetailsElement = queryAllByText('Basic Details');
-    expect(basicDetailsElement).toHaveLength(2);
+    // Wait for the detailed information to appear
+    await screen.findByText('Basic Details');
+
+    // Now, you can make your assertions
+    const basicDetailsElement = screen.queryAllByText('Basic Details');
+    expect(basicDetailsElement).toHaveLength(1);
   });
 });
