@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import styles from './select.module.scss';
 
-interface ISelectData {
+export interface ISelectData {
   value: string;
   id: number;
 }
@@ -24,7 +24,7 @@ interface IStyle {
 interface ISelectProps {
   data: ISelectData[];
   onChange?: any;
-  placeholder?: string;
+  placeholder?: string | number;
   style?: IStyle;
 }
 

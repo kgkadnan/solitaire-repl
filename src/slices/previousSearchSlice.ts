@@ -1,16 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
-export const savedSearchesApi = createApi({
-  reducerPath: 'savedSearchReducer',
+export const previousSearchApi = createApi({
+  reducerPath: 'previousSearchReducer',
   baseQuery: fetchBaseQuery({ baseUrl: apiURL }),
 
   endpoints: (builder) => ({
-    getAllSavedSearches: builder.query({
+    getAllPreviousSearches: builder.query({
       query: ({ currentPage, resultsPerPage, isDeleted }) =>
         `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
     }),
-    updateSavedSearches: builder.mutation({
+    updatePreviousSearch: builder.mutation({
       query: (filter) => ({
         url: `previous-search`,
         method: 'PUT', // Use the appropriate HTTP method
@@ -20,5 +20,7 @@ export const savedSearchesApi = createApi({
   }),
 });
 
-export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation } =
-  savedSearchesApi;
+export const {
+  useGetAllPreviousSearchesQuery,
+  useUpdatePreviousSearchMutation,
+} = previousSearchApi;

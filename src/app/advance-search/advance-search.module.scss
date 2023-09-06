@@ -221,5 +221,56 @@
 }
 
 .anotherSearch {
-  width: 185px;
+  width: 195px;
+}
+
+.labelContainer {
+  display: flex;
+  padding-right: 10px;
+  // width: 200px;
+}
+
+.tooltipContainerStyles {
+  width: 100%;
+}
+.yourSelectionContainer {
+  width: calc(100% - 200px);
+}
+.yourSelectionHeader {
+  width: 100%;
+}
+
+.yourSelectionToolTipStyles {
+  display: flex;
+  justify-content: right;
+}
+
+.yourSelectionTooltipContentStyle {
+  width: 113%;
+  display: flex;
+  flex-wrap: wrap;
+  white-space: pre-wrap;
+  margin-left: -7%;
+}
+
+.yourSelectionSubContainer {
+  width: 33%;
+  display: flex;
+  text-align: left;
+}
+
+.yourSelectionMainContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 20px;
+}
+
+.yourSelectionContentContainer {
+  width: 100%;
+}
+
+.yourSelectionTooltipHeader {
+  font-weight: 600;
 }

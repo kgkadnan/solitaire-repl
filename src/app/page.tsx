@@ -1,6 +1,8 @@
 'use client';
 
 import LanguageSwitcher from '@/components/common/multi-lingual';
+import ToastExample from '@/components/common/toast/example';
+import TooltipExample from '@/components/common/tooltip/example';
 import { ManageLocales } from '@/utils/translate';
 
 export default function Home() {
@@ -28,6 +30,7 @@ export default function Home() {
       </h1>
       <h1>{ManageLocales('app.welcome')}</h1>
       <LanguageSwitcher />
+    
     </>
   );
 }

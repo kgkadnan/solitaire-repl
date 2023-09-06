@@ -16,8 +16,11 @@ import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-import { useGetAllSavedSearchesQuery } from '../../slices/savedSearchesSlice';
 import CustomPagination from '@/components/common/pagination';
+import {
+  useGetAllSavedSearchesQuery,
+  useUpdateSavedSearchesMutation,
+} from '@/slices/savedSearchesSlice';
 
 interface ICardData {
   cardId: string;
@@ -38,7 +41,6 @@ interface IData {
 }
 
 const SavedSearch = () => {
-  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({});
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -47,11 +49,6 @@ const SavedSearch = () => {
   const searchCardTitle = {
     tableHeaderStyle: styles.SearchCardTitle,
     tableBodyStyle: styles.SearchDateTime,
-    tableStyles: styles.searchCardTitleMainDiv,
-  };
-  const manySavedsearchButtonStyle = {
-    displayButtonStyle: styles.manySavedSearchButton,
-    displayLabelStyle: styles.manySavedSearchLabel,
   };
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
@@ -59,9 +56,36 @@ const SavedSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [numberOfPages, setNumberOfPages] = useState(0);
+
+  const handleResultsPerPageChange = (event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setResultsPerPage(newResultsPerPage);
+    setCurrentPage(0); // Reset current page when changing results per page
+  };
+
+  let limits = [
+    { id: 1, value: '1' },
+    { id: 2, value: '10' },
+  ];
+
+  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
+    currentPage,
+    resultsPerPage,
+    isDeleted: false,
+  });
+
+  // Destructure the mutation function from the hook
+  const [
+    updateSavedSearches,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useUpdateSavedSearchesMutation();
 
   //Data
-  const [savedSearchData, setSavedSearchData] = useState<IData[]>([]);
+  const [SavedSearchData, setSavedSearchData] = useState<IData[]>([]);
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
@@ -127,7 +151,7 @@ const SavedSearch = () => {
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
-        .filter((data: any) =>
+        ?.filter((data: any) =>
           data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
         )
         .map((data: any) => ({
@@ -137,19 +161,7 @@ const SavedSearch = () => {
             <CustomTable
               tableData={{
                 tableHeads: [data.name],
-                bodyData: [
-                  {
-                    desc: (
-                      <div className={styles.parentDivHeaderSectiom}>
-                        <div>{formatCreatedAt(data.created_at)}</div>
-                        <CustomDisplayButton
-                          displayButtonLabel="Searches (5)"
-                          displayButtonAllStyle={manySavedsearchButtonStyle}
-                        />
-                      </div>
-                    ),
-                  },
-                ],
+                bodyData: [{ desc: formatCreatedAt(data.created_at) }],
               }}
               tableStyleClasses={searchCardTitle}
             />
@@ -157,8 +169,8 @@ const SavedSearch = () => {
           cardContent: (
             <CustomTable
               tableData={{
-                tableHeads: Object.keys(data.filter),
-                bodyData: [data.filter],
+                tableHeads: Object.keys(data.meta_data),
+                bodyData: [data.meta_data],
               }}
               tableStyleClasses={tableStyles}
             />
@@ -168,23 +180,13 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles]
   );
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
-
-  const totalPages = Math.ceil(cardData.length / resultsPerPage);
-
-  const startIndex = (currentPage - 1) * resultsPerPage;
-  const endIndex = Math.min(startIndex + resultsPerPage, cardData.length);
-  const currentData = cardData.slice(startIndex, endIndex);
-
   //Delete Data
-  const handleDelete = () => {
-    const updatedCardData = cardData.filter(
-      (item) => !isCheck.includes(item.cardId)
-    );
-    setCardData(updatedCardData);
-    setIsCheck([]); // Clear the selected checkboxes
-    setIsCheckAll(false); //clear check all
+  const handleDelete = async () => {
+    let payload = { id: isCheck, filter: { is_deleted: true } };
+    await updateSavedSearches(payload);
+    refetch();
+    setIsCheck([]);
+    setIsCheckAll(false);
   };
 
   const cardDetailData = [
@@ -275,19 +277,19 @@ const SavedSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(savedSearchData, ''));
+      setCardData(renderCardData(SavedSearchData, ''));
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
 
-    let dataNew = savedSearchData.map((data: { name: any }) => data.name);
+    let dataNew = SavedSearchData.map((data: { name: any }) => data.name);
 
     if (!dataNew.includes(suggestion)) {
       setCardData(renderCardData(searchListNew, suggestion));
     } else {
-      setCardData(renderCardData(savedSearchData, suggestion));
+      setCardData(renderCardData(SavedSearchData, suggestion));
     }
 
     setSuggestions([]);
@@ -306,7 +308,7 @@ const SavedSearch = () => {
 
     setIsCheck(updatedIsCheck);
 
-    if (updatedIsCheck.length === cardData.length) {
+    if (updatedIsCheck.length === cardData?.length) {
       setIsCheckAll(true);
     } else {
       setIsCheckAll(false);
@@ -319,7 +321,7 @@ const SavedSearch = () => {
   //Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(cardData.map((li) => li.cardId));
+    setIsCheck(cardData?.map((li) => li.cardId));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -341,7 +343,7 @@ const SavedSearch = () => {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     isCheckAll: isCheckAll,
     //count
-    searchCount: cardData.length,
+    searchCount: cardData?.length,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
@@ -351,13 +353,14 @@ const SavedSearch = () => {
 
   useEffect(() => {
     let render = async () => {
-      const SavedSearchData = data!;
-
-      setSavedSearchData(SavedSearchData);
-      setCardData(renderCardData(SavedSearchData, search));
+      const SavedSearchData = data?.data;
+      let searchData = SavedSearchData?.previousSearch;
+      setNumberOfPages(SavedSearchData?.totalPages);
+      setSavedSearchData(searchData);
+      setCardData(renderCardData(searchData, search));
     };
     render();
-  }, [data]);
+  }, [data, currentPage]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -381,7 +384,7 @@ const SavedSearch = () => {
           {/* Custom Card and Checkbox map */}
           <div className="flex-grow overflow-y-auto min-h-[80vh]">
             <>
-              {currentData?.map((items: any) => {
+              {cardData?.map((items: any) => {
                 return (
                   <div key={items.cardId}>
                     <div className="flex mt-6">
@@ -527,22 +530,21 @@ const SavedSearch = () => {
           </div>
         </Sheet>
 
-        <div className=" sticky bottom-0 bg-solitairePrimary">
+        {/* Custom Footer */}
+        <div className="sticky bottom-0 bg-solitairePrimary mt-3">
           <CustomPagination
             setCurrentPage={setCurrentPage}
             currentPage={currentPage}
-            totalPages={totalPages}
+            totalPages={numberOfPages}
             resultsPerPage={resultsPerPage}
-            setResultsPerPage={setResultsPerPage}
+            limits={limits}
+            handleResultsPerPageChange={handleResultsPerPageChange}
           />
-        </div>
 
-        {/* Custom Footer */}
-        {!!footerButtonData?.length && (
-          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+          {!!footerButtonData?.length && (
             <CustomFooter footerButtonData={footerButtonData} />
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
