@@ -17,7 +17,7 @@
   color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
   font-weight: 500;
-  margin-right: 50px;
+  // margin-right: 50px;
   letter-spacing: 0.2px;
   display: flex;
   align-items: center;
@@ -31,7 +31,7 @@
 }
 .searchHeader {
   display: flex;
-  margin-left: 43.5px;
+  // margin-left: 43.5px;
   margin-top: 10px;
 }
 
@@ -189,4 +189,11 @@
 .filled {
   background-color: #8c7459;
   color: #ffffff;
+}
+
+.unBlurCardHeader{
+  width: 200px;
+  display: flex;
+  align-items: center;
+  margin-left: 43px;
 }
