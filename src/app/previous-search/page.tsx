@@ -20,7 +20,7 @@ import CustomPagination from '@/components/common/pagination';
 import {
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
-} from '@/slices/previousSearchSlice';
+} from '@/slices/previous-search';
 
 interface ICardData {
   cardId: string;

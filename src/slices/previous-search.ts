@@ -20,7 +20,7 @@ export const previousSearchApi = createApi({
   }),
 });
 
-export const {
+export const {  
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
 } = previousSearchApi;

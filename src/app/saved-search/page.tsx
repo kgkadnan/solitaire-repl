@@ -16,7 +16,7 @@ import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-import { useGetAllSavedSearchesQuery } from '../../slices/savedSearchesSlice';
+import { useGetAllSavedSearchesQuery } from '../../slices/saved-searches';
 import CustomPagination from '@/components/common/pagination';
 
 interface ICardData {
