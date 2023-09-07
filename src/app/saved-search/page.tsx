@@ -67,7 +67,15 @@ const SavedSearch = () => {
     setCurrentPage(0); // Reset current page when changing results per page
   };
 
-  let limits = [
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      setIsCheck([]);
+      setIsCheckAll(false);
+      setCurrentPage(page);
+    }
+  };
+
+  let optionLimits = [
     { id: 1, value: '1' },
     { id: 2, value: '10' },
   ];
@@ -184,9 +192,9 @@ const SavedSearch = () => {
   const handleDelete = async () => {
     let payload = { id: isCheck, filter: { is_deleted: true } };
     await updateSavedSearches(payload);
-    refetch();
     setIsCheck([]);
     setIsCheckAll(false);
+    await refetch();
   };
 
   const cardDetailData = [
@@ -352,15 +360,12 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    let render = async () => {
-      const SavedSearchData = data?.data;
-      let searchData = SavedSearchData?.previousSearch;
-      setNumberOfPages(SavedSearchData?.totalPages);
-      setSavedSearchData(searchData);
-      setCardData(renderCardData(searchData, search));
-    };
-    render();
-  }, [data, currentPage]);
+    const SavedSearchData = data?.data;
+    let searchData = SavedSearchData?.previousSearch;
+    setNumberOfPages(SavedSearchData?.totalPages);
+    setSavedSearchData(searchData);
+    setCardData(renderCardData(searchData, search));
+  }, [data, currentPage, resultsPerPage]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -533,11 +538,11 @@ const SavedSearch = () => {
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">
           <CustomPagination
-            setCurrentPage={setCurrentPage}
             currentPage={currentPage}
             totalPages={numberOfPages}
             resultsPerPage={resultsPerPage}
-            limits={limits}
+            optionLimits={optionLimits}
+            handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}
           />
 

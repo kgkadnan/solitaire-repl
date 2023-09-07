@@ -9,9 +9,9 @@ describe('Pagination test', () => {
       <CustomPagination
         currentPage={2}
         totalPages={10}
-        setCurrentPage={setCurrentPageMock}
+        handlePageClick={setCurrentPageMock}
         resultsPerPage={5}
-        limits={[{ id: 1, value: '5' }]}
+        optionLimits={[{ id: 1, value: '5' }]}
         handleResultsPerPageChange={() => {}}
       />
     );
@@ -26,14 +26,12 @@ describe('Pagination test', () => {
   });
 
   test('pagination buttons are disabled on first page', async () => {
-    const setCurrentPageMock = jest.fn();
     const { getByTestId } = render(
       <CustomPagination
         currentPage={0}
         totalPages={10}
-        setCurrentPage={setCurrentPageMock}
         resultsPerPage={5}
-        limits={[
+        optionLimits={[
           { id: 1, value: '5' },
           { id: 2, value: '10' },
         ]}
@@ -54,9 +52,9 @@ describe('Pagination test', () => {
       <CustomPagination
         currentPage={1} // Set an initial currentPage value
         totalPages={10}
-        setCurrentPage={setCurrentPageMock}
         resultsPerPage={5}
-        limits={[{ id: 1, value: '5' }]}
+        handlePageClick={setCurrentPageMock}
+        optionLimits={[{ id: 1, value: '5' }]}
         handleResultsPerPageChange={() => {}}
       />
     );
