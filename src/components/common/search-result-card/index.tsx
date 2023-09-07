@@ -24,6 +24,7 @@ export interface ICardDataProps {
   cardActionIcon?: StaticImageData;
   cardDescription?: React.ReactNode;
   cardContent: React.ReactNode;
+  unBlurHeader?: React.ReactNode;
 }
 
 export interface IImageContainerProps {
@@ -44,6 +45,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardContent,
     stone = '',
     cardId,
+    unBlurHeader
   } = card.cardData;
   const {
     overriddenStyles = {},
@@ -71,29 +73,40 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
         }`}
       >
         <Card
-          className={`${
-            style.cardContainer
-          } ${cardContainerStyle} ${cardHeaderContainerStyle} ${
-            isBlur ? style.blur : '' // Apply blur class if isBlur is true
-          } `}
+          className={`${style.cardContainer} ${cardContainerStyle} ${cardHeaderContainerStyle}  `}
           data-testid={`card-${cardId}`}
         >
           <CardHeader className={`${style.cardHeaderContainer} `}>
-            <div className={`${style.cardHeaderText} `}>
-              <CardTitle className={`${style.cardTitle} ${cardTitleStyle}`}>
-                {cardHeader}
+           
+            <div
+              className={`${style.cardHeaderText} `}
+            >
+              
+              <CardTitle className={`${style.cardTitle} ${cardTitleStyle} `}>
+                 { unBlurHeader!}
+               <div className={`${style.cardTitle} ${cardTitleStyle} ${
+                isBlur ? style.blur : '' // Apply blur class if isBlur is true
+              }`}> {cardHeader}</div>
               </CardTitle>
-              <CardDescription>{cardDescription}</CardDescription>
+              <CardDescription className={`${
+                isBlur ? style.blur : '' // Apply blur class if isBlur is true
+              }`}>{cardDescription}</CardDescription>
               {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
             </div>
             <CardDescription
-              className={`${style.cardDescription} ${cardDescription}`}
+              className={`${style.cardDescription} ${cardDescription} ${
+                isBlur ? style.blur : '' // Apply blur class if isBlur is true
+              }`}
             >
               {cardDescription}
             </CardDescription>
           </CardHeader>
 
-          {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
+          {defaultCardPosition && <CardContent 
+          className={`${
+            isBlur ? style.blur : '' // Apply blur class if isBlur is true
+          }`}
+          >{cardContent}</CardContent>}
         </Card>
         {isBlur && (
           <>
