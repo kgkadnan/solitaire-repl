@@ -21,8 +21,8 @@ export interface IDisplayButtonProps {
 export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
   displayButtonLabel,
   displayButtonAllStyle,
-  handleClick = () => {},
-  color = '',
+  handleClick,
+  color,
 }) => {
   return (
     <>
@@ -31,7 +31,7 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
         data-testid="display-button"
         className={`${style?.defaultStyle} ${displayButtonAllStyle?.displayButtonStyle}`}
         onClick={() => {
-          handleClick(color);
+          handleClick!(color!);
         }}
       >
         {/* Display button label with optional styling */}

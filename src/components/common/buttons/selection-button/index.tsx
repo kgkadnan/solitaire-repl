@@ -20,9 +20,9 @@ interface ISelectionButtonProps {
 // CustomSelectionButton component definition
 export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
   selectionButtonLabel,
-  handleClick = () => {},
+  handleClick,
   selectionButtonAllStyles,
-  data = '',
+  data,
 }) => {
   return (
     <>
@@ -31,7 +31,7 @@ export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
         data-testid="selection-button"
         className={`${style?.buttonDefaultStyle} ${selectionButtonAllStyles?.selectionButtonStyle}`}
         onClick={() => {
-          handleClick(data);
+          handleClick!(data!);
         }}
       >
         {/* Selection button label with optional styling */}
