@@ -17,6 +17,8 @@ import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
+import { useAddPreviousSearchMutation } from '@/slices/previous-searches';
+import { validateNumberInput } from '@/utils/validate-number-input';
 
 interface IAdvanceSearch {
   shape?: string[];
@@ -36,7 +38,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
 
-  const [, setSelectedGirdleStep] = useState<number>();
+  const [, setSelectedGirdleStep] = useState<string>();
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
   const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
     useState<string>('');
@@ -54,14 +56,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
 
-  const [priceRangeFrom, setPriceRangeFrom] = useState<number>();
-  const [priceRangeTo, setPriceRangeTo] = useState<number>();
-  const [discountFrom, setDiscountFrom] = useState<number>();
-  const [discountTo, setDiscountTo] = useState<number>();
-  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<number>();
-  const [pricePerCaratTo, setPricePerCaratTo] = useState<number>();
-  const [caratRangeFrom, setCaratRangeFrom] = useState<number>();
-  const [caratRangeTo, setCaratRangeTo] = useState<number>();
+  const [priceRangeFrom, setPriceRangeFrom] = useState<string>();
+  const [priceRangeTo, setPriceRangeTo] = useState<string>();
+  const [discountFrom, setDiscountFrom] = useState<string>();
+  const [discountTo, setDiscountTo] = useState<string>();
+  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>();
+  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>();
+  const [caratRangeFrom, setCaratRangeFrom] = useState<string>();
+  const [caratRangeTo, setCaratRangeTo] = useState<string>();
   //other parameter Inclsuion state
   const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
   const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
@@ -81,44 +83,44 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [lusterWI, setLusterWI] = useState<string[]>([]);
 
   //parameter state
-  const [tablePerFrom, setTablePerFrom] = useState<number>();
-  const [tablePerTo, setTablePerTo] = useState<number>();
-  const [crownAngleFrom, setCrownAngleFrom] = useState<number>();
-  const [crownAngleTo, setCrownAngleTo] = useState<number>();
-  const [lengthFrom, setLengthFrom] = useState<number>();
-  const [lengthTo, setLengthTo] = useState<number>();
-  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<number>();
-  const [pavilionDepthTo, setPavilionDepthTo] = useState<number>();
+  const [tablePerFrom, setTablePerFrom] = useState<string>();
+  const [tablePerTo, setTablePerTo] = useState<string>();
+  const [crownAngleFrom, setCrownAngleFrom] = useState<string>();
+  const [crownAngleTo, setCrownAngleTo] = useState<string>();
+  const [lengthFrom, setLengthFrom] = useState<string>();
+  const [lengthTo, setLengthTo] = useState<string>();
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<string>();
+  const [pavilionDepthTo, setPavilionDepthTo] = useState<string>();
 
-  const [depthPerFrom, setDepthPerFrom] = useState<number>();
-  const [depthPerTo, setDepthPerTo] = useState<number>();
-  const [crownHeightFrom, setCrownHeightFrom] = useState<number>();
-  const [crownHeightTo, setCrownHeightTo] = useState<number>();
-  const [widthFrom, setWidthFrom] = useState<number>();
-  const [widthTo, setWidthTo] = useState<number>();
-  const [lowerHalfFrom, setLowerHalfFrom] = useState<number>();
-  const [lowerHalfTo, setLowerHalfTo] = useState<number>();
+  const [depthPerFrom, setDepthPerFrom] = useState<string>();
+  const [depthPerTo, setDepthPerTo] = useState<string>();
+  const [crownHeightFrom, setCrownHeightFrom] = useState<string>();
+  const [crownHeightTo, setCrownHeightTo] = useState<string>();
+  const [widthFrom, setWidthFrom] = useState<string>();
+  const [widthTo, setWidthTo] = useState<string>();
+  const [lowerHalfFrom, setLowerHalfFrom] = useState<string>();
+  const [lowerHalfTo, setLowerHalfTo] = useState<string>();
 
-  const [ratioFrom, setRatioFrom] = useState<number>();
-  const [ratioTo, setRatioTo] = useState<number>();
-  const [girdlePerFrom, setGirdlePerFrom] = useState<number>();
-  const [girdlePerTo, setGirdlePerTo] = useState<number>();
-  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<number>();
-  const [pavilionAngleTo, setPavilionAngleTo] = useState<number>();
-  const [starLengthFrom, setStarLengthFrom] = useState<number>();
-  const [starLengthTo, setStarLengthTo] = useState<number>();
+  const [ratioFrom, setRatioFrom] = useState<string>();
+  const [ratioTo, setRatioTo] = useState<string>();
+  const [girdlePerFrom, setGirdlePerFrom] = useState<string>();
+  const [girdlePerTo, setGirdlePerTo] = useState<string>();
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>();
+  const [pavilionAngleTo, setPavilionAngleTo] = useState<string>();
+  const [starLengthFrom, setStarLengthFrom] = useState<string>();
+  const [starLengthTo, setStarLengthTo] = useState<string>();
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
   const [location, setLocation] = useState<string>('');
 
   const [origin, setOrigin] = useState<string>('');
-  const [searchResultCount, setSearchResultCount] = useState<number>(0);
+  const [searchResultCount, setSearchResultCount] = useState<number>(1);
   const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
   const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
-  //handle validation
-  // const [isValid, setIsValid] = useState(1);
+  const [errorMessage, setErrorMessage] = useState('');
+
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -148,7 +150,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   useEffect(() => {
     if (search !== null) {
       setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
-      // setSelectedColor([...selectedColor, searchListNew[0].body.color]);
       setSelectedCut([...selectedCut, searchListNew[0].body.Cut]);
       setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
     }
@@ -698,25 +699,51 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   // let prevMakeData=""
   const handleMakeChange = (data: string) => {
-    if (data.toLowerCase() === '3ex' || data.toLowerCase() === '3ex-non') {
-      if (
-        !(
-          selectedCut.includes('Excellent') &&
-          selectedPolish.includes('Excellent') &&
-          selectedSymmetry.includes('Excellent')
-        )
-      ) {
-        handleCutChange('Excellent');
-        handlePolishChange('Excellent');
-        handleSymmetryChange('Excellent');
-      }
+    if (data.toLowerCase() === '3ex') {
+      if(data !== selectedMake){
+      setSelectedCut([...selectedCut ,'Excellent'])
+      setSelectedPolish([...selectedPolish,"Excellent"])
+      setSelectedSymmetry([...selectedSymmetry,"Excellent"])
     }
+    else{
+      setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+      setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+      setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+    }
+    setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
+  }
 
     if (data.toLowerCase() === '3ex-non') {
-      handleFluorescenceChange('NON');
+      if(data !== selectedMake){
+        setSelectedCut([...selectedCut ,'Excellent'])
+        setSelectedPolish([...selectedPolish,"Excellent"])
+        setSelectedSymmetry([...selectedSymmetry,"Excellent"])
+        setSelectedFluorescence([...selectedFluorescence,"NON"])
+      }
+      else{
+        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
+      }
+      
+    }
+    if (data.toLowerCase() === '3vg+') {
+      if(data !== selectedMake){
+        // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
+        setSelectedCut([...selectedCut ,'Very Good'])
+        setSelectedPolish([...selectedPolish,"Excellent",'Very Good'])
+        setSelectedSymmetry([...selectedSymmetry,"Excellent",'Very Good'])
+      }
+      else{
+        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
+        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent' && e!=='Very Good'))
+        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent' && e!=='Very Good'))
+        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
+      }
+      
     }
     data === selectedMake ? setSelectedMake('') : setSelectedMake(data);
-    // prevMakeData=data
   };
 
   const handleCutChange = (data: string) => {
@@ -757,39 +784,34 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleGirdleStepChange = (radioValue: string) => {
-    setSelectedGirdleStep(parseInt(radioValue));
+    setSelectedGirdleStep(radioValue);
   };
 
   const handleAddCarat = (data: string) => {
     setCaratRangeData([...caratRangeData, data]);
     setSelectedCaratRange([...selectedCaratRange, data]);
-    setCaratRangeFrom(0);
-    setCaratRangeTo(0);
+    setCaratRangeFrom('');
+    setCaratRangeTo('');
   };
 
-  const handleSearch = () => {
-    // setShowToast(false);
-    setToastErrorMessage('');
-    if (searchResultCount! > 1000) {
-      console.log('called');
-      setToastErrorMessage(
-        `Please modify your search, maximum 1000 stones displayed`
-      );
-      setShowToast(true);
-    }
-    // window.alert('success');
-  };
+  const [addPreviousSearch, { isLoading: addIsLoading, isError: addIsError }] =
+    useAddPreviousSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
-    return <div className={styles.yourSelectionInHeaderElement}> {Array.isArray(data)
-      ? data.length > 1
-        ? data.toString().substring(0, 4).concat('...')
-        : data.toString()
-      : data}
+    return (
+      <div className={styles.yourSelectionInHeaderElement}>
+        {' '}
+        {Array.isArray(data)
+          ? data.length > 1
+            ? data.toString().substring(0, 4).concat('...')
+            : data.toString()
+          : data}
       </div>
+    );
   };
 
   const handleReset = () => {
+    setYourSelection([]);
     setSelectedShape([]);
     setSelectedColor('');
     setSelectedWhiteColor([]);
@@ -809,14 +831,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedLab([]);
     setSelectedHR([]);
     setSelectedBrilliance([]);
-    setPriceRangeFrom(0);
-    setPriceRangeTo(0);
-    setDiscountFrom(0);
-    setDiscountTo(0);
-    setPricePerCaratFrom(0);
-    setPricePerCaratTo(0);
-    setCaratRangeFrom(0);
-    setCaratRangeTo(0);
+    setPriceRangeFrom('');
+    setPriceRangeTo('');
+    setDiscountFrom('');
+    setDiscountTo('');
+    setPricePerCaratFrom('');
+    setPricePerCaratTo('');
+    setCaratRangeFrom('');
+    setCaratRangeTo('');
     setBlackTableBI([]);
     setSideBlackBI([]);
     setOpenCrownBI([]);
@@ -833,33 +855,33 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setNaturalPavilionWI([]);
     setSurfaceGrainingWI([]);
     setLusterWI([]);
-    setTablePerFrom(0);
-    setTablePerTo(0);
-    setCrownAngleFrom(0);
-    setCrownAngleTo(0);
-    setLengthFrom(0);
-    setLengthTo(0);
-    setPavilionDepthFrom(0);
-    setPavilionDepthTo(0);
+    setTablePerFrom('');
+    setTablePerTo('');
+    setCrownAngleFrom('');
+    setCrownAngleTo('');
+    setLengthFrom('');
+    setLengthTo('');
+    setPavilionDepthFrom('');
+    setPavilionDepthTo('');
 
-    setDepthPerFrom(0);
-    setDepthPerTo(0);
-    setCrownHeightFrom(0);
-    setCrownHeightTo(0);
+    setDepthPerFrom('');
+    setDepthPerTo('');
+    setCrownHeightFrom('');
+    setCrownHeightTo('');
 
-    setWidthFrom(0);
-    setWidthTo(0);
-    setLowerHalfFrom(0);
-    setLowerHalfTo(0);
-    setRatioFrom(0);
-    setRatioTo(0);
-    setGirdlePerFrom(0);
-    setGirdlePerTo(0);
+    setWidthFrom('');
+    setWidthTo('');
+    setLowerHalfFrom('');
+    setLowerHalfTo('');
+    setRatioFrom('');
+    setRatioTo('');
+    setGirdlePerFrom('');
+    setGirdlePerTo('');
 
-    setPavilionAngleFrom(0);
-    setPavilionAngleTo(0);
-    setStarLengthFrom(0);
-    setStarLengthTo(0);
+    setPavilionAngleFrom('');
+    setPavilionAngleTo('');
+    setStarLengthFrom('');
+    setStarLengthTo('');
 
     setLocation('');
     setOrigin('');
@@ -881,7 +903,36 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
   };
 
-  const handleYourSelection = useCallback(() => {
+  const handlePreviousSearchName = (name: string) => {
+    const criteriaToCheck = [
+      selectedShape,
+      selectedColor,
+      selectedWhiteColor,
+      selectedFancyColor,
+      selectedRangeColor,
+      selectedIntensity,
+      selectedOvertone,
+      selectedTinge,
+      selectedTingeIntensity,
+      selectedClarity,
+      selectedCaratRange,
+      selectedMake,
+      selectedCut,
+      selectedPolish,
+      selectedSymmetry,
+      selectedLab,
+    ];
+  
+    const selectedCriteria = criteriaToCheck
+      .filter((criteria) => criteria.length > 0)
+      .map((criteria) => Array.isArray(criteria) ? criteria.join(''):criteria)
+      .join(' ');
+  
+    return name + selectedCriteria;
+  };
+  
+
+  const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
 
     selectedColor.length > 0 && updateYourSelection('color', selectedColor);
@@ -991,74 +1042,33 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       );
     (starLengthFrom || starLengthTo) &&
       updateYourSelection('starLength', `${starLengthFrom}-${starLengthTo}`);
-  }, [
-    starLengthFrom,
-    starLengthTo,
-    pavilionAngleTo,
-    pavilionAngleFrom,
-    girdlePerTo,
-    girdlePerFrom,
-    ratioTo,
-    ratioFrom,
-    lowerHalfTo,
-    lowerHalfFrom,
-    widthTo,
-    widthFrom,
-    crownHeightTo,
-    crownHeightFrom,
-    depthPerFrom,
-    depthPerTo,
-    pavilionDepthTo,
-    pavilionDepthFrom,
-    lengthTo,
-    lengthFrom,
-    crownAngleFrom,
-    crownAngleTo,
-    tablePerFrom,
-    tablePerTo,
-    lusterWI,
-    surfaceGrainingWI,
-    naturalPavilionWI,
-    naturalGirdleWI,
-    naturalCrownWI,
-    sideInclusionWI,
-    eyeCleanBI,
-    lusterBI,
-    milkyBI,
-    openTableBI,
-    openPavilionBI,
-    blackTableBI,
-    sideBlackBI,
-    openCrownBI,
-    selectedShape,
-    selectedColor,
-    selectedWhiteColor,
-    selectedFancyColor,
-    selectedRangeColor,
-    selectedIntensity,
-    selectedOvertone,
-    selectedTinge,
-    selectedTingeIntensity,
-    selectedClarity,
-    selectedCaratRange,
-    selectedMake,
-    selectedCut,
-    selectedPolish,
-    selectedSymmetry,
-    selectedFluorescence,
-    selectedGirdle,
-    selectedLab,
-    selectedHR,
-    selectedBrilliance,
-    priceRangeFrom,
-    priceRangeTo,
-    discountFrom,
-    discountTo,
-    pricePerCaratFrom,
-    pricePerCaratTo,
-    location,
-    origin,
-  ]);
+  };
+
+  const handleSearch = async () => {
+    if (searchResultCount! > 300) {
+      setToastErrorMessage(
+        `Please modify your search, maximum 300 stones displayed`
+      );
+      setShowToast(true);
+    } else {
+      let searchName = '';
+      searchName = handlePreviousSearchName(searchName);
+      await addPreviousSearch({
+        name: searchName,
+        diamond_count: searchResultCount,
+        meta_data: {
+          shape: selectedShape,
+          color: selectedWhiteColor,
+          clarity: selectedClarity,
+          cut: selectedCut,
+          lab: selectedLab,
+          polish: selectedPolish,
+          shade: selectedColor,
+        },
+        is_deleted: false,
+      });
+    }
+  };
 
   const handleAddAnotherSearch = () => {
     if (addSearches.length < 5) {
@@ -1115,7 +1125,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name={`${parameter.parameterState[0]}`}
             onChange={(e) => {
-              parameter.setParameterState[0](parseInt(e.target.value));
+              parameter.setParameterState[0](e.target.value);
+              
             }}
             value={parameter.parameterState[0]}
             style={{
@@ -1127,7 +1138,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name={`${parameter.parameterState[1]}`}
             onChange={(e) => {
-              parameter.setParameterState[1](parseInt(e.target.value));
+              parameter.setParameterState[1](e.target.value);
             }}
             value={parameter.parameterState[1]}
             style={{
@@ -1205,8 +1216,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       {formatSelection(selectedClarity)}{' '}
                       {formatSelection(selectedCaratRange)}
                       {formatSelection(selectedMake)}{' '}
-                      {formatSelection(selectedLab)}{' '}
-                      {formatSelection(location)}{' '}
+                      {formatSelection(selectedLab)} {formatSelection(location)}{' '}
                     </div>
                   </div>
                 }
@@ -1452,7 +1462,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeFrom"
               onChange={(e) => {
-                setCaratRangeFrom(parseInt(e.target.value));
+                setCaratRangeFrom(e.target.value);
               }}
               value={caratRangeFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1465,7 +1475,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeTO"
               onChange={(e) => {
-                setCaratRangeTo(parseInt(e.target.value));
+                setCaratRangeTo(e.target.value);
               }}
               value={caratRangeTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1692,7 +1702,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="discountFrom"
             onChange={(e) => {
-              setDiscountFrom(parseInt(e.target.value));
+              setDiscountFrom(e.target.value);
             }}
             value={discountFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1705,7 +1715,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="discountTo"
             onChange={(e) => {
-              setDiscountTo(parseInt(e.target.value));
+              setDiscountTo(e.target.value);
             }}
             value={discountTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1730,7 +1740,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeFrom"
             onChange={(e) => {
-              setPriceRangeFrom(parseInt(e.target.value));
+              setPriceRangeFrom(e.target.value);
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1743,7 +1753,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeTo"
             onChange={(e) => {
-              setPriceRangeTo(parseInt(e.target.value));
+              setPriceRangeTo(e.target.value);
             }}
             value={priceRangeTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1768,7 +1778,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="pricePerCaratFrom"
             onChange={(e) => {
-              setPricePerCaratFrom(parseInt(e.target.value));
+              setPricePerCaratFrom(e.target.value);
             }}
             value={pricePerCaratFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1780,7 +1790,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="pricePerCaratTo"
             onChange={(e) => {
-              setPricePerCaratTo(parseInt(e.target.value));
+              setPricePerCaratTo(e.target.value);
             }}
             value={pricePerCaratTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1918,11 +1928,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             },
             {
               id: 3,
-              displayButtonLabel: `${ (searchApiCalled && searchResultCount! === 0) ? ManageLocales(
-                'app.advanceSearch.addDemand'
-              ): ManageLocales(
-                'app.advanceSearch.search'
-              )} ${
+              displayButtonLabel: `${
+                searchApiCalled && searchResultCount! === 0
+                  ? ManageLocales('app.advanceSearch.addDemand')
+                  : ManageLocales('app.advanceSearch.search')
+              } ${
                 searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
               }`,
               style: styles.filled,
