@@ -1,15 +1,30 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import {
+  createApi,
+  fetchBaseQuery,
+  BaseQueryFn,
+} from '@reduxjs/toolkit/query/react';
+
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
+
+// Define the type for the base query function
+type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
 export const previousSearchApi = createApi({
   reducerPath: 'previousSearchReducer',
-  baseQuery: fetchBaseQuery({ baseUrl: apiURL }),
+  baseQuery: fetchBaseQuery({ baseUrl: apiURL }) as BaseQuery,
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
       query: ({ currentPage, resultsPerPage, isDeleted }) =>
         `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['PreviousSearch'],
+    }),
+    addPreviousSearch: builder.mutation({
+      query: (data) => ({
+        url: `previous-search`,
+        method: 'POST',
+        body: data,
+      }),
     }),
     updatePreviousSearch: builder.mutation({
       query: (filter) => ({
@@ -25,4 +40,5 @@ export const previousSearchApi = createApi({
 export const {
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
+  useAddPreviousSearchMutation,
 } = previousSearchApi;
