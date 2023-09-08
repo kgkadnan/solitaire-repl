@@ -6,51 +6,66 @@ import { CustomInputField } from '../common/input-field';
 import { CustomInputlabel } from '../common/input-label';
 import DownIcon from '@public/assets/icons/chevron-back-outline.svg?url';
 import UpIcon from '@public/assets/icons/chevron-back2-outline.svg?url';
-import { CustomDisplayButton } from '../common/buttons/display-button';
-import BackspaceIcon from '@public/assets/icons/backspace-outline.svg?url';
+import { CustomSelect } from '../common/select';
 
-export const Calculator = () => {
+export const CustomCalculator = () => {
   const [count, setCount] = useState<number>(0);
-  let inputData = [
+  let labelData = [
     {
       id: 1,
-      label: ManageLocales('app.sideNav.cart'),
-      type: 'number',
-      placeholder: '99.99',
-      name: 'carat',
+      label: ManageLocales('app.advanceSearch.shape'),
+      placeholder: 'Round',
+      dropdownData: [
+        { id: 1, value: 'Round' },
+        { id: 2, value: 'Pear' },
+        { id: 3, value: 'Emerald' },
+        { id: 4, value: 'Asscher' },
+        { id: 5, value: 'Cushion' },
+        { id: 6, value: 'Princess' },
+        { id: 7, value: 'Marquise' },
+        { id: 8, value: 'Oval' },
+        { id: 9, value: 'Heart' },
+        { id: 10, value: 'Radiant' },
+      ],
     },
     {
       id: 2,
-      label: ManageLocales('app.advanceSearch.shape'),
-      type: 'text',
-      placeholder: 'Round',
-      name: 'Shape',
+      label: ManageLocales('app.advanceSearch.color'),
+      placeholder: 'D',
+      dropdownData: [
+        { id: 1, value: 'D' },
+        { id: 2, value: 'E' },
+        { id: 3, value: 'F' },
+        { id: 4, value: 'G' },
+        { id: 5, value: 'H' },
+        { id: 6, value: 'I' },
+        { id: 7, value: 'J' },
+        { id: 8, value: 'K' },
+        { id: 9, value: 'L' },
+        { id: 10, value: 'M' },
+        { id: 11, value: 'N' },
+      ],
     },
     {
       id: 3,
-      label: ManageLocales('app.advanceSearch.color'),
-      type: 'text',
-      placeholder: 'D',
-      name: 'Color',
-    },
-    {
-      id: 4,
       label: ManageLocales('app.advanceSearch.clarity'),
-      type: 'text',
       placeholder: 'IF',
-      name: 'Clarity',
+      dropdownData: [
+        { id: 1, value: 'IF' },
+        { id: 2, value: 'VVS1' },
+        { id: 3, value: 'VVS2' },
+        { id: 4, value: 'VS1' },
+        { id: 5, value: 'VS2' },
+        { id: 6, value: 'S11' },
+        { id: 7, value: 'S12' },
+        { id: 8, value: 'S13' },
+        { id: 9, value: '11' },
+        { id: 10, value: '12' },
+        { id: 11, value: '13' },
+      ],
     },
-  ];
-  const calculatorData = [
-    ['7', '8', '9'],
-    ['4', '5', '6'],
-    ['1', '2', '3'],
-    ['+/-', '0', <BackspaceIcon className={styles.backspaceButton} />],
   ];
 
-  const calcNumberHandler = (value: any) => {
-    setCount(value);
-  };
   return (
     <>
       <div className={styles.calculatorMainContainer}>
@@ -62,25 +77,46 @@ export const Calculator = () => {
         <div
           className={`border-b border-solitaireSenary ${styles.calculatorInputsContainer}`}
         >
-          {inputData.map((items) => {
-            return (
-              <>
-                <div className={styles.inputAndLabel}>
-                  <CustomInputlabel
-                    htmlfor={items.label}
-                    label={items.label}
-                    overriddenStyles={{ label: styles.inputLabels }}
-                  />
-                  <CustomInputField
-                    type={items.type}
-                    placeholder={items.placeholder}
-                    name={items.name}
-                    style={{ input: styles.inputMain }}
-                  />
-                </div>
-              </>
-            );
-          })}
+          <div className={styles.inputAndLabel}>
+            <CustomInputlabel
+              htmlfor={ManageLocales('app.sideNav.cart')}
+              label={ManageLocales('app.sideNav.cart')}
+              overriddenStyles={{ label: styles.inputLabels }}
+            />
+            <CustomInputField
+              type="text"
+              placeholder="99.99"
+              name="carat"
+              style={{
+                input: styles.calculatorInput,
+                inputMain: styles.calculatorInputMain,
+              }}
+            />
+          </div>
+          <div className="flex">
+            {labelData.map((items) => {
+              return (
+                <>
+                  <div className={styles.inputAndLabel}>
+                    <CustomInputlabel
+                      htmlfor={items.label}
+                      label={items.label}
+                      overriddenStyles={{ label: styles.inputLabels }}
+                    />
+
+                    <CustomSelect
+                      data={items.dropdownData}
+                      placeholder={items.placeholder}
+                      style={{
+                        selectTrigger: styles.selectTrigger,
+                        selectContent: styles.selectcontent,
+                      }}
+                    />
+                  </div>
+                </>
+              );
+            })}
+          </div>
         </div>
         <div
           className={`border-b border-solitaireSenary ${styles.pricingMainDiv}`}
@@ -141,7 +177,7 @@ export const Calculator = () => {
             <p className={styles.priceHeading}>Rap%</p>
             <div className={styles.rapPriceMainDiv}>
               <UpIcon
-                className={styles.downIcon}
+                className={styles.upIcon}
                 onClick={() => setCount(count + 1)}
               />
               <CustomInputField
@@ -152,28 +188,11 @@ export const Calculator = () => {
                 style={{ input: styles.rapPriceInput }}
               />
               <DownIcon
-                className={styles.upIcon}
+                className={styles.downIcon}
                 onClick={() => setCount(count - 1)}
               />
             </div>
           </div>
-        </div>
-        <div className={styles.numbersMainDiv}>
-          {calculatorData.map((rowData, rowIndex) => (
-            <div className="flex" key={rowIndex}>
-              {rowData.map((item, itemIndex) => (
-                <div key={itemIndex}>
-                  <CustomDisplayButton
-                    handleClick={() => calcNumberHandler(item)}
-                    displayButtonLabel={item}
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.transparent,
-                    }}
-                  />
-                </div>
-              ))}
-            </div>
-          ))}
         </div>
       </div>
     </>

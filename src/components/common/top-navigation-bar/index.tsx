@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
@@ -14,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { Calculator } from '@/components/caclulator/calculator';
+import { CustomCalculator } from '@/components/caclulator/calculator';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -93,7 +92,7 @@ export const TopNavigationBar = () => {
               <CalculatorIcon role="button" className={styles.iconColor} />
             </PopoverTrigger>
             <PopoverContent className={styles.popoverContent}>
-              <Calculator />
+              <CustomCalculator />
             </PopoverContent>
           </Popover>
 
