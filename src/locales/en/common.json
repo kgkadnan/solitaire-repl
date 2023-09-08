@@ -64,6 +64,7 @@
   "app.advanceSearch.step2": "Step2",
 
   "app.advanceSearch.reset": "Reset",
+  "app.advanceSearch.addDemand": "Add Demand",
   "app.advanceSearch.saveSearch": "Save & Search",
   "app.advanceSearch.addAnotherSearch": "Add Another Search",
 
@@ -72,7 +73,9 @@
   "app.advanceSearch.to": "To",
   "app.advanceSearch.radioLabel1": "Contains",
   "app.advanceSearch.radioLabel2": "Does Not Contains",
-
+  "app.advanceSearch.white": "White",
+  "app.advanceSearch.fancy": "Fancy",
+  "app.advanceSearch.range": "Range",
   "app.previousSearch.delete": "Delete",
   "app.previousSearch.header": "Previous Searches",
   "app.previousSearch.detailInfo": "Detailed Information",

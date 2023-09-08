@@ -48,6 +48,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
         return (
           <div
             key={`image-tile-data-${title}`}
+            role="img"
             className={`${
               style.imageTileContainer
             } ${overriddenStyles?.imageTileContainerStyles} ${

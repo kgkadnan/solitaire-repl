@@ -101,10 +101,10 @@ const MyCart = () => {
     cardHeader: (
       <div className={styles.cardHeaderMainDiv}>
         <div className={styles.searchHeader}>
-          <p className={styles.SearchCardTitle}>
+          {/* <p className={styles.SearchCardTitle}>
             <span className={styles.rptNoStyle}>RPT No. </span>
             {data.header}
-          </p>
+          </p> */}
           <Image
             src={ImageIcon}
             alt="ImageIcon"
@@ -138,6 +138,10 @@ const MyCart = () => {
         tableStyleClasses={tableStyles}
       />
     ),
+    unBlurHeader:<p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`} >
+    <span className={styles.rptNoStyle}>RPT No. </span>
+    {data.header}
+  </p>
   }));
 
   const cardDetailData = [

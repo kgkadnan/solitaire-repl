@@ -5,6 +5,10 @@ import styles from './header.module.scss';
 import { CustomSearchInputField } from '../search-input';
 import { ManageLocales } from '@/utils/translate';
 
+interface IHeaderDataStyle {
+  headerDataStyles?: string;
+  headerDataContainerStyles?: string;
+}
 export interface IHeaderData {
   headerHeading?: string;
   handleSelectAllCheckbox?: (e: any) => void;
@@ -15,6 +19,7 @@ export interface IHeaderData {
   handleSuggestionClick?: (suggestion: any) => void;
   suggestions?: any;
   headerData?: React.ReactNode;
+  overriddenStyles?: IHeaderDataStyle;
 }
 
 interface ICustomHeaderProps {
@@ -54,14 +59,16 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
         <p>
           {data?.headerHeading} {data?.searchCount && `(${data?.searchCount})`}
         </p>
-        <div className="flex gap-[40px]">
+        <div
+          className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}
+        >
           {/* Search Input Field*/}
           {data?.handleSearch ? (
             <div className="flex  gap-[15px]">
               <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
               <CustomSearchInputField
                 type="text"
-                name="search"
+                name="Search"
                 style={searchInputStyle}
                 value={data?.searchValue}
                 onChange={data?.handleSearch}
@@ -75,7 +82,10 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
           )}
           {/* Select All checkbox */}
           {data?.headerData ? (
-            data.headerData
+            <div className={`${data.overriddenStyles?.headerDataStyles}`}>
+              {' '}
+              {data.headerData}
+            </div>
           ) : (
             <div className="flex items-center gap-[10px]">
               <Checkbox

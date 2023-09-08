@@ -6,7 +6,7 @@
 /* Card Container */
 .searchCardContainer {
   background-color: hsl(var(--solitaire-secondary));
-  padding: 15px 20px 0px 0px;
+  padding: 12px 20px 0px 0px;
   height: 154px;
   width: 100%;
 }
@@ -18,6 +18,8 @@
   font-weight: 500;
   margin-right: 50px;
   letter-spacing: 0.2px;
+  display: flex;
+  align-items: center;
 }
 
 /* Header Styles */
@@ -62,7 +64,7 @@
   font-weight: 300;
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
+  justify-content: center;
   letter-spacing: 0.5px;
 }
 

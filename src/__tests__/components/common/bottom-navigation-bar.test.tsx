@@ -1,18 +1,18 @@
-import { TopNavigationBar } from '@components/common/top-navigation-bar';
+import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import { fireEvent, render, screen } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
-describe('Top-Navigation-Bar Component', () => {
+describe('bottom-Navigation-Bar Component', () => {
   beforeEach(() => {
-    render(<TopNavigationBar />);
+    render(<BottomNavigationBar />);
   });
 
   test('renders BottomNavigationBar component correctly', () => {
     // Assert the presence of key UI elements
     const labels = [
       'About Us',
-      'Contact US',
+      'Contact Us',
       'Privacy Policy',
       'Terms & Conditions',
     ];

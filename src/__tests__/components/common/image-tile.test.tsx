@@ -1,5 +1,5 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'; // For simulating user interactions
 import Round from '@public/assets/images/round.png';
 import CustomImageTile from '@components/common/image-tile';
@@ -62,6 +62,7 @@ describe('CustomImageTile', () => {
     expect(getByText('Pear')).toBeInTheDocument();
     expect(getByText('Round')).toBeInTheDocument();
   });
+
   test('selects a tile when clicked', async () => {
     render(
       <CustomImageTile
@@ -72,11 +73,13 @@ describe('CustomImageTile', () => {
     );
 
     // Click on the Pear tile
-    const pearTile = screen.getByAltText('Pear');
-    await userEvent.click(pearTile);
+    imageData.map(async (items) => {
+      const pearTile = screen.getByText(items.title);
+      await userEvent.click(pearTile);
 
-    // Check if the handleSelectTile function is called with the correct tile title
-    expect(handleSelectTileMock).toHaveBeenCalledWith('Pear', 1);
+      // Check if the handleSelectTile function is called with the correct tile title
+      expect(handleSelectTileMock).toHaveBeenCalledWith(items.title, 1);
+    });
   });
 
   test('displays selected tiles', () => {

@@ -26,52 +26,57 @@ const SideBar = () => {
 
   const imageData: IImageTileProps[] = [
     {
-      src: <Dashboard className={styles.stroke} />,
+      src: <Dashboard className={styles.stroke} alt="dashboard" />,
       title: ManageLocales('app.sideNav.dashboard'),
-      link: '/dashboard',
+      link: '/',
     },
     {
-      src: <NewArrival className={styles.fill} />,
+      src: <NewArrival className={styles.fill} alt="new-arrival" />,
       title: ManageLocales('app.sideNav.newArrival'),
       link: '/new-arrival',
     },
     {
-      src: <AdvanceSearch className={styles.stroke} />,
+      src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
       link: 'advance-search',
     },
     {
-      src: <MatchPair className={styles.stroke} />,
+      src: <MatchPair className={styles.stroke} alt="match-pair" />,
       title: ManageLocales('app.sideNav.matchPair'),
       link: '/match-pair',
     },
     {
-      src: <SavedSearch className={styles.stroke} />,
+      src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
       link: '/saved-search',
     },
     {
-      src: <MyCart className={styles.stroke} />,
+      src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
       link: '/cart',
     },
     {
-      src: <Layout className={styles.fill} />,
+      src: <Layout className={styles.fill} alt="layouts" />,
       title: ManageLocales('app.sideNav.layouts'),
       link: '/layouts',
     },
     {
-      src: <RecentConfirmation className={styles.stroke} />,
+      src: (
+        <RecentConfirmation
+          className={styles.stroke}
+          alt="recent-confiramtion"
+        />
+      ),
       title: ManageLocales('app.sideNav.recentConfirmations'),
       link: '/recent-confiramtion',
     },
     {
-      src: <Appointment className={styles.stroke} />,
+      src: <Appointment className={styles.stroke} alt="appointments" />,
       title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
     },
     {
-      src: <MyDiamond className={styles.stroke} />,
+      src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
       title: ManageLocales('app.sideNav.myDiamonds'),
       link: '/my-diamonds',
     },
