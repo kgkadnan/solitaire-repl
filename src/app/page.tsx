@@ -30,7 +30,6 @@ export default function Home() {
       </h1>
       <h1>{ManageLocales('app.welcome')}</h1>
       <LanguageSwitcher />
-    
     </>
   );
 }

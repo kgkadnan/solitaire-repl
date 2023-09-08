@@ -3,8 +3,8 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import { savedSearchesApi } from './slices/savedSearchesSlice';
-import { previousSearchApi } from './slices/previousSearchSlice';
+import { savedSearchesApi } from './slices/saved-searches';
+import { previousSearchApi } from './slices/previous-searches';
 
 const rootReducer = combineReducers({
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
