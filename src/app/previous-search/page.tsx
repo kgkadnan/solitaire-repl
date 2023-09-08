@@ -192,9 +192,13 @@ const PreviousSearch = () => {
   const handleDelete = async () => {
     let payload = { id: isCheck, filter: { is_deleted: true } };
     await updatePreviousSearch(payload);
+    await refetch();
     setIsCheck([]);
     setIsCheckAll(false);
-    await refetch();
+
+    if (data.data.previousSearch.length === 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const cardDetailData = [
