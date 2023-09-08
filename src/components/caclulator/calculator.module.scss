@@ -22,6 +22,7 @@
 
 .calculatorInput::placeholder {
   color: #5d6a6a;
+  padding-left: 2px;
 }
 
 .calculatorInputMain {
@@ -104,5 +105,7 @@
 .selectcontent {
   z-index: 1111;
   background-color: hsl(var(--solitaire-primary));
-  height: 150px;
+  height: 160px;
+  border-radius: 5px;
+  color: hsl(var(--solitaire-tertiary));
 }

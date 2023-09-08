@@ -96,7 +96,7 @@ export const CustomCalculator = () => {
           <div className="flex">
             {labelData.map((items) => {
               return (
-                <>
+                <div key={items.id}>
                   <div className={styles.inputAndLabel}>
                     <CustomInputlabel
                       htmlfor={items.label}
@@ -113,7 +113,7 @@ export const CustomCalculator = () => {
                       }}
                     />
                   </div>
-                </>
+                </div>
               );
             })}
           </div>
@@ -179,17 +179,22 @@ export const CustomCalculator = () => {
               <UpIcon
                 className={styles.upIcon}
                 onClick={() => setCount(count + 1)}
+                data-testid="up-icon"
               />
+
               <CustomInputField
                 type="number"
                 placeholder="0"
                 name=""
                 value={count}
                 style={{ input: styles.rapPriceInput }}
+                dataTestId="countValue"
               />
+
               <DownIcon
                 className={styles.downIcon}
                 onClick={() => setCount(count - 1)}
+                data-testid="down-icon"
               />
             </div>
           </div>
