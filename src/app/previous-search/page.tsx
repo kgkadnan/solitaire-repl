@@ -67,7 +67,7 @@ const PreviousSearch = () => {
     setCurrentPage(0); // Reset current page when changing results per page
   };
 
-  let limits = [
+  let optionLimits = [
     { id: 1, value: '1' },
     { id: 2, value: '10' },
   ];
@@ -83,6 +83,15 @@ const PreviousSearch = () => {
     updatePreviousSearch,
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useUpdatePreviousSearchMutation();
+
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      setIsCheckAll(false);
+      setIsCheck([]);
+      setCurrentPage(page);
+      // refetch();
+    }
+  };
 
   //Data
   const [PreviousSearchData, setPreviousSearchData] = useState<IData[]>([]);
@@ -184,9 +193,13 @@ const PreviousSearch = () => {
   const handleDelete = async () => {
     let payload = { id: isCheck, filter: { is_deleted: true } };
     await updatePreviousSearch(payload);
-    refetch();
+    await refetch();
     setIsCheck([]);
     setIsCheckAll(false);
+
+    if (data.data.previousSearch.length === 1) {
+      setCurrentPage(currentPage - 1);
+    }
   };
 
   const cardDetailData = [
@@ -352,15 +365,12 @@ const PreviousSearch = () => {
   };
 
   useEffect(() => {
-    let render = async () => {
-      const PreviousSearchData = data?.data;
-      let searchData = PreviousSearchData?.previousSearch;
-      setNumberOfPages(PreviousSearchData?.totalPages);
-      setPreviousSearchData(searchData);
-      setCardData(renderCardData(searchData, search));
-    };
-    render();
-  }, [data, currentPage]);
+    const previousSearchData = data?.data;
+    let searchData = previousSearchData?.previousSearch;
+    setNumberOfPages(previousSearchData?.totalPages);
+    setPreviousSearchData(searchData);
+    setCardData(renderCardData(searchData, search));
+  }, [data, resultsPerPage, currentPage]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -541,12 +551,12 @@ const PreviousSearch = () => {
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">
           <CustomPagination
-            setCurrentPage={setCurrentPage}
             currentPage={currentPage}
             totalPages={numberOfPages}
             resultsPerPage={resultsPerPage}
-            limits={limits}
+            optionLimits={optionLimits}
             handleResultsPerPageChange={handleResultsPerPageChange}
+            handlePageClick={handlePageClick}
           />
 
           {!!footerButtonData?.length && (

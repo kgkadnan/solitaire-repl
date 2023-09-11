@@ -1,6 +1,6 @@
 import '@testing-library/jest-dom/extend-expect';
 
-import { server } from '../src/__tests__/server';
+import { server } from './mock_server';
 
 // make debug output for TestingLibrary Errors larger
 process.env.DEBUG_PRINT_LIMIT = '15000';

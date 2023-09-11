@@ -7,27 +7,21 @@ import { CustomSelect, ISelectData } from '../select';
 interface ICustomPaginationProps {
   currentPage: number;
   totalPages: number;
-  setCurrentPage: (page: number) => void;
   resultsPerPage: number;
-  limits: ISelectData[];
+  optionLimits: ISelectData[];
   handleResultsPerPageChange: (event: string) => void;
+  handlePageClick?: any;
 }
 
 const CustomPagination: React.FC<ICustomPaginationProps> = ({
   currentPage,
   totalPages,
-  setCurrentPage,
   resultsPerPage,
-  limits,
+  optionLimits,
   handleResultsPerPageChange,
+  handlePageClick,
 }) => {
   const pagesToShow = 3; // Number of pages to show in the range
-
-  const handlePageClick = (page: number) => {
-    if (page >= 0 && page <= totalPages) {
-      setCurrentPage(page);
-    }
-  };
 
   const startPage = Math.max(0, currentPage - 1);
   const endPage = Math.min(startPage + pagesToShow, totalPages);
@@ -49,7 +43,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
     >
       <div className={styles.resultsPerPage}>
         <CustomSelect
-          data={limits}
+          data={optionLimits}
           onChange={handleResultsPerPageChange}
           placeholder={resultsPerPage}
           style={customSelectStyle}
@@ -66,6 +60,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
           className={`${styles.paginationButton} ${
             currentPage === 0 ? styles.disabled : ''
           }`}
+          data-testid="ChevronBack"
         >
           <ChevronBack
             style={{ stroke: currentPage === 0 ? '#354444' : '#CED2D2' }}
@@ -116,6 +111,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
           className={`${styles.paginationButton} ${
             currentPage === totalPages - 1 ? styles.disabled : ''
           }`}
+          data-testid="ChevronForward"
         >
           <ChevronForward
             style={{
