@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import PreviousSearch from '@app/previous-search/page';
-import { fireEvent, logDOM, screen, waitFor } from '@testing-library/react';
+import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from '@/mockHandlers/test-utils';
 import { setupPreviousSearchHandlers } from '@/mockHandlers/previous-search';
 

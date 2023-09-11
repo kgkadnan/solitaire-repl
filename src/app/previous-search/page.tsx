@@ -21,6 +21,7 @@ import {
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
 } from '@/slices/previous-searches';
+import { CustomToast } from '@/components/common/toast';
 
 interface ICardData {
   cardId: string;
@@ -104,6 +105,10 @@ const PreviousSearch = () => {
   //Search Bar States
   const [search, setSearch] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  //toast message
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
   const searchData = [
     'sample',
@@ -191,11 +196,16 @@ const PreviousSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    let payload = { id: isCheck, filter: { is_deleted: true } };
-    await updatePreviousSearch(payload);
-    await refetch();
-    setIsCheck([]);
-    setIsCheckAll(false);
+    if (isCheck.length) {
+      let payload = { id: isCheck, filter: { is_deleted: true } };
+      await updatePreviousSearch(payload);
+      await refetch();
+      setIsCheck([]);
+      setIsCheckAll(false);
+    } else {
+      setShowToast(true);
+      setToastErrorMessage('Check to delete previous search data.');
+    }
 
     if (data?.data?.previousSearch?.length === 1) {
       setCurrentPage(currentPage - 1);
@@ -384,6 +394,7 @@ const PreviousSearch = () => {
 
   return (
     <>
+      {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">

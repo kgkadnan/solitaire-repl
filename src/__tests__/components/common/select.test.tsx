@@ -1,7 +1,7 @@
 import React from 'react';
 
 import userEvent from '@testing-library/user-event';
-import { cleanup, render, waitFor } from '@testing-library/react';
+import { cleanup, render } from '@testing-library/react';
 import { CustomSelect } from '@components/common/select';
 
 describe('CustomSelect Component', () => {

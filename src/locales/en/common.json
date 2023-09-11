@@ -117,6 +117,8 @@
   "app.bottomNav.privacyPolicy": "Privacy Policy",
   "app.bottomNav.terms": "Terms & Conditions",
 
+  "app.pagination.showingResults" : "Showing Results",
+
   "app.topNav.yourDiamond": "Your Diamond",
   "app.topNav.listPrice": "List Price",
   "app.topNav.yourPrice": "Your Price"
