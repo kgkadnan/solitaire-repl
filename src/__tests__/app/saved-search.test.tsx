@@ -1,6 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { renderWithProviders } from '../test-utils';
+import { renderWithProviders } from '../../mock_server/test-utils';
 import { server } from '../../mock_server';
 import { rest } from 'msw';
 import SavedSearch from '@/app/saved-search/page';

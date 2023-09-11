@@ -1,7 +1,7 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import PreviousSearch from '@app/previous-search/page';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { renderWithProviders } from '../test-utils';
+import { renderWithProviders } from '../../mock_server/test-utils';
 import { server } from '../../mock_server';
 import { rest } from 'msw';
 
