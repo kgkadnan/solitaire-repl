@@ -103,7 +103,7 @@
 
   "app.sideNav.dashboard": "Dashboard",
   "app.sideNav.newArrival": "New Arrival",
-  "app.sideNav.advanceSearch": "'Advance Search",
+  "app.sideNav.advanceSearch": "Advance Search",
   "app.sideNav.matchPair": "Match Pair",
   "app.sideNav.savedSearches": "Saved Searches",
   "app.sideNav.cart": "Cart",
@@ -115,5 +115,9 @@
   "app.bottomNav.aboutUs": "About Us",
   "app.bottomNav.contactUs": "Contact Us",
   "app.bottomNav.privacyPolicy": "Privacy Policy",
-  "app.bottomNav.terms": "Terms & Conditions"
+  "app.bottomNav.terms": "Terms & Conditions",
+
+  "app.topNav.yourDiamond": "Your Diamond",
+  "app.topNav.listPrice": "List Price",
+  "app.topNav.yourPrice": "Your Price"
 }

@@ -18,17 +18,23 @@ const CustomPaginationExample = () => {
     setCurrentPage(0); // Reset current page when changing results per page
   };
 
-  let limits = [
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      setCurrentPage(page);
+    }
+  };
+
+  let optionLimits = [
     { id: 1, value: '1' },
     { id: 2, value: '10' },
   ];
   return (
     <CustomPagination
-      limits={limits}
-      setCurrentPage={setCurrentPage}
+      optionLimits={optionLimits}
       currentPage={currentPage}
       totalPages={numberOfPages}
       resultsPerPage={resultsPerPage}
+      handlePageClick={handlePageClick}
       handleResultsPerPageChange={handleResultsPerPageChange}
     />
   );

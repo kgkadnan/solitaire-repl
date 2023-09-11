@@ -12,11 +12,12 @@ type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 export const previousSearchApi = createApi({
   reducerPath: 'previousSearchReducer',
   baseQuery: fetchBaseQuery({ baseUrl: apiURL }) as BaseQuery,
-
+  tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
       query: ({ currentPage, resultsPerPage, isDeleted }) =>
         `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
+      providesTags: ['PreviousSearch'],
     }),
     addPreviousSearch: builder.mutation({
       query: (data) => ({
@@ -31,6 +32,7 @@ export const previousSearchApi = createApi({
         method: 'PUT', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),
+      invalidatesTags: ['PreviousSearch'],
     }),
   }),
 });

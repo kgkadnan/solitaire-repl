@@ -4,11 +4,13 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 export const savedSearchesApi = createApi({
   reducerPath: 'savedSearchReducer',
   baseQuery: fetchBaseQuery({ baseUrl: apiURL }),
+  tagTypes: ['SavedSearch'],
 
   endpoints: (builder) => ({
     getAllSavedSearches: builder.query({
       query: ({ currentPage, resultsPerPage, isDeleted }) =>
         `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
+      providesTags: ['SavedSearch'],
     }),
     updateSavedSearches: builder.mutation({
       query: (filter) => ({
@@ -16,6 +18,7 @@ export const savedSearchesApi = createApi({
         method: 'PUT', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),
+      invalidatesTags: ['SavedSearch'],
     }),
   }),
 });

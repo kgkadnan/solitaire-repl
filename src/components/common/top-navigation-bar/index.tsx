@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
@@ -9,6 +8,12 @@ import { CustomDisplayButton } from '../buttons/display-button';
 import { useRouter } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover';
+import { CustomCalculator } from '@/components/caclulator/calculator';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -82,8 +87,15 @@ export const TopNavigationBar = () => {
               />
             </div>
           ))}
-          <SearchIcon role="button" className={styles.iconColor} />
-          <CalculatorIcon role="button" className={styles.iconColor} />
+          <Popover>
+            <PopoverTrigger>
+              <CalculatorIcon role="button" className={styles.iconColor} />
+            </PopoverTrigger>
+            <PopoverContent className={styles.popoverContent}>
+              <CustomCalculator />
+            </PopoverContent>
+          </Popover>
+
           <NotificationIcon role="button" className={styles.iconColor} />
           <MyProfileIcon role="button" className={styles.iconColor} />
           <ToggleButton />
