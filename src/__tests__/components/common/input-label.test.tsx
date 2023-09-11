@@ -1,9 +1,9 @@
 import React from 'react';
-import { logRoles, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { CustomInputlabel } from '@components/common/input-label';
 
 describe('CustomInputlabel', () => {
-  it('renders label correctly with overridden style', () => {
+  test('renders label correctly with overridden style', () => {
     // Mock props for the component with overridden style
     const mockProps = {
       htmlfor: 'mockInput',
@@ -24,7 +24,7 @@ describe('CustomInputlabel', () => {
     expect(labelElement).toHaveClass('text-solitaireQuaternary');
   });
 
-  it('renders label correctly without overridden style', () => {
+  test('renders label correctly without overridden style', () => {
     // Mock props for the component without overridden style
     const mockProps = {
       htmlfor: 'mockInput',

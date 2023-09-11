@@ -1,6 +1,9 @@
 import { rest } from 'msw';
+import { server } from '.';
+// import the server created for the entire test suite
+// this mock server includes commonMswHandlers
 
-const handlers = [
+const savedSearchandlers = [
   rest.get('/previous-search', (req, res, ctx) => {
     const mockApiResponse = {
       data: {
@@ -16,12 +19,12 @@ const handlers = [
               color: ['D', 'F', 'E', 'G'],
               clarity: ['VVS2', 'VVS1', 'VS2'],
             },
-            id: 'previous_search_01H95GDK1N1Q1RBWF5VF5JPD7K',
+            id: 'saved_search_01H95GDK1N1Q1RBWF5VF5JPD7K',
             created_at: '2023-08-31T09:57:31.317Z',
             updated_at: '2023-09-01T11:17:11.266Z',
           },
         ],
-        totalPages: 4,
+        totalPages: 3,
       },
     };
 
@@ -29,4 +32,6 @@ const handlers = [
   }),
 ];
 
-export { handlers };
+export const setupSetupsavedSearchandlers = () => {
+  server.use(...savedSearchandlers);
+};

@@ -8,7 +8,7 @@ describe('CustomFooter component', () => {
     { id: 2, displayButtonLabel: 'Button 2' },
   ];
 
-  it('renders correctly with provided data', () => {
+  test('renders correctly with provided data', () => {
     const { getByText } = render(
       <CustomFooter footerButtonData={footerButtonData} />
     );

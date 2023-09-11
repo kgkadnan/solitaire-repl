@@ -3,6 +3,7 @@ import styles from './pagination.module.scss'; // Import your CSS module
 import ChevronBack from '@public/assets/icons/chevron-back-circle-outline.svg?url';
 import ChevronForward from '@public/assets/icons/chevron-forward-circle-outline.svg?url';
 import { CustomSelect, ISelectData } from '../select';
+import { ManageLocales } from '@/utils/translate';
 
 interface ICustomPaginationProps {
   currentPage: number;
@@ -51,7 +52,8 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
       </div>
       <div className={styles.showResult}>
         <p>
-          Showing Results {currentPage + 1} of {totalPages}
+          {ManageLocales('app.pagination.showingResults')} {currentPage + 1} of{' '}
+          {totalPages}
         </p>
       </div>
       <div className={styles.paginationControls}>
@@ -63,7 +65,12 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
           data-testid="ChevronBack"
         >
           <ChevronBack
-            style={{ stroke: currentPage === 0 ? '#354444' : '#CED2D2' }}
+            style={{
+              stroke:
+                currentPage === 0
+                  ? 'hsl(var(--solitaire-senary))'
+                  : 'hsl(var(--solitaire-tertiary))',
+            }}
           />
         </div>
 
@@ -115,7 +122,10 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
         >
           <ChevronForward
             style={{
-              stroke: currentPage === totalPages - 1 ? '#354444' : '#CED2D2',
+              stroke:
+                currentPage === totalPages - 1
+                  ? 'hsl(var(--solitaire-senary))'
+                  : 'hsl(var(--solitaire-tertiary))',
             }}
           />
         </div>

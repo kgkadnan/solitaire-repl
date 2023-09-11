@@ -11,7 +11,7 @@
 }
 
 .showResult {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   text-align: center;
   font-size: 14px;
   font-style: normal;
@@ -22,16 +22,17 @@
 .selectTrigger {
   width: 100%;
   border: none;
-  color: #ced2d2;
+  outline: none;
+  color: hsl(var(--solitaire-tertiary));
 }
 
 .selectContent {
   width: 100%;
-  color: #ced2d2;
+  color:hsl(var(--solitaire-tertiary));
 }
 
 .selectElement {
-  color: #ced2d2;
+  color: hsl(var(--solitaire-tertiary));
   width: 100%;
 }
 
@@ -58,7 +59,7 @@
 }
 
 .pageNumber {
-  color: #354444;
+  color: hsl(var(--solitaire-senary));
   margin: 0 5px;
   padding: 5px 8px;
   cursor: pointer;
@@ -66,7 +67,7 @@
 
 .activePage {
   font-weight: bold;
-  color: #ced2d2;
+  color:hsl(var(--solitaire-tertiary))
 }
 
 .disabled {

@@ -166,7 +166,9 @@
 }
 
 .dropdownHeader {
+  padding-left: 2px;
   width: 200px;
+  border-bottom: 0.5px solid #8c7459;
   color: hsl(var(--solitaire-tertiary));
 }
 
