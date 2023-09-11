@@ -1285,13 +1285,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       )}:`}
                     />{' '}
                     <div className={styles.yourSelectionInHeader}>
-                      {formatSelection(selectedShape)}{' '}
-                      {formatSelection(selectedColor)}{' '}
-                      {formatSelection(selectedTingeIntensity)}{' '}
-                      {formatSelection(selectedClarity)}{' '}
-                      {formatSelection(selectedCaratRange)}
-                      {formatSelection(selectedMake)}{' '}
-                      {formatSelection(selectedLab)} {formatSelection(location)}{' '}
+                    {selectedShape.length>0 && formatSelection(selectedShape)}{' '}
+                      {selectedColor.length>0 && formatSelection(selectedColor)}{' '}
+                      {selectedTingeIntensity.length>0 && formatSelection(selectedTingeIntensity)}{' '}
+                      {selectedClarity.length>0 && formatSelection(selectedClarity)}{' '}
+                      {selectedCaratRange.length>0 && formatSelection(selectedCaratRange)}
+                      {selectedMake && formatSelection(selectedMake)}{' '}
+                      {selectedLab.length>0 && formatSelection(selectedLab)} 
+                      {location && formatSelection(location)}{' '}
                     </div>
                   </div>
                 }
