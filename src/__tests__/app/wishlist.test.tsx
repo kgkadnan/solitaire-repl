@@ -12,7 +12,7 @@ jest.mock('next/image', () => ({
 }));
 
 describe('WishList Component - Render Card Data', () => {
-  it('renders card data correctly based on search filter', () => {
+  test('renders card data correctly based on search filter', () => {
     const { getByText, getByRole } = render(<WishList />);
 
     // Check if the card header and content are rendered
@@ -24,13 +24,13 @@ describe('WishList Component - Render Card Data', () => {
     expect(deleteButton).toBeInTheDocument();
   });
 
-  it('displays all search results on initial render', () => {
+  test('displays all search results on initial render', () => {
     const { getByText } = render(<WishList />);
     expect(getByText('R2.01VVS2 Search A')).toBeInTheDocument();
     expect(getByText('R2.01VVS2 Searchb')).toBeInTheDocument();
   });
 
-  it("toggles 'Select All' checkbox correctly", () => {
+  test("toggles 'Select All' checkbox correctly", () => {
     const { getByTestId, getAllByRole } = render(<WishList />);
 
     // Find the 'Select All' checkbox
@@ -59,7 +59,7 @@ describe('WishList Component - Render Card Data', () => {
     });
   });
 
-  it('displays card details when a card is clicked', () => {
+  test('displays card details when a card is clicked', () => {
     const { getByTestId, queryAllByText } = render(<WishList />);
 
     // Find a card

@@ -16,7 +16,7 @@ describe('CustomSelect Component', () => {
     jest.clearAllMocks();
   });
 
-  it('should render placeholder', () => {
+  test('should render placeholder', () => {
     const { getByText } = render(
       <CustomSelect placeholder="Select an option" data={mockData} />
     );
@@ -24,7 +24,7 @@ describe('CustomSelect Component', () => {
     expect(getByText('Select an option')).toBeInTheDocument();
   });
 
-  it('should render options', async () => {
+  test('should render options', async () => {
     const mockData = [
       { id: 1, value: 'Option 1' },
       { id: 2, value: 'Option 2' },
@@ -60,7 +60,7 @@ describe('CustomSelect Component', () => {
   });
 });
 
-// it("renders placeholder and options correctly", () => {
+// test("renders placeholder and options correctly", () => {
 //   const { getByText, getByRole, queryByText } = render(
 //     <CustomSelect data={mockData} placeholder="Select an option" />
 //   );

@@ -18,6 +18,7 @@
       "!src/*/.d.ts",
       "!src/**/*.stories.tsx",
       "!src/**/example.tsx",
+      "!src/mockHandlers/*.{js,jsx,ts,tsx}",
       "!src/components/ui/**/*.{js,jsx,ts,tsx}",
       "!src/lib/**/*.{js,jsx,ts,tsx}",
       "!src/slices/**/*.{js,jsx,ts,tsx}",
