@@ -56,14 +56,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
 
-  const [priceRangeFrom, setPriceRangeFrom] = useState<string>();
-  const [priceRangeTo, setPriceRangeTo] = useState<string>();
-  const [discountFrom, setDiscountFrom] = useState<string>();
-  const [discountTo, setDiscountTo] = useState<string>();
-  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>();
-  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>();
-  const [caratRangeFrom, setCaratRangeFrom] = useState<string>();
-  const [caratRangeTo, setCaratRangeTo] = useState<string>();
+  const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
+  const [priceRangeTo, setPriceRangeTo] = useState<string>('');
+  const [discountFrom, setDiscountFrom] = useState<string>('');
+  const [discountTo, setDiscountTo] = useState<string>('');
+  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>('');
+  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>('');
+  const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
+  const [caratRangeTo, setCaratRangeTo] = useState<string>('');
   //other parameter Inclsuion state
   const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
   const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
@@ -83,32 +83,32 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [lusterWI, setLusterWI] = useState<string[]>([]);
 
   //parameter state
-  const [tablePerFrom, setTablePerFrom] = useState<string>();
-  const [tablePerTo, setTablePerTo] = useState<string>();
-  const [crownAngleFrom, setCrownAngleFrom] = useState<string>();
-  const [crownAngleTo, setCrownAngleTo] = useState<string>();
-  const [lengthFrom, setLengthFrom] = useState<string>();
-  const [lengthTo, setLengthTo] = useState<string>();
-  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<string>();
-  const [pavilionDepthTo, setPavilionDepthTo] = useState<string>();
+  const [tablePerFrom, setTablePerFrom] = useState<string>('');
+  const [tablePerTo, setTablePerTo] = useState<string>('');
+  const [crownAngleFrom, setCrownAngleFrom] = useState<string>('');
+  const [crownAngleTo, setCrownAngleTo] = useState<string>('');
+  const [lengthFrom, setLengthFrom] = useState<string>('');
+  const [lengthTo, setLengthTo] = useState<string>('');
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<string>('');
+  const [pavilionDepthTo, setPavilionDepthTo] = useState<string>('');
 
-  const [depthPerFrom, setDepthPerFrom] = useState<string>();
-  const [depthPerTo, setDepthPerTo] = useState<string>();
-  const [crownHeightFrom, setCrownHeightFrom] = useState<string>();
-  const [crownHeightTo, setCrownHeightTo] = useState<string>();
-  const [widthFrom, setWidthFrom] = useState<string>();
-  const [widthTo, setWidthTo] = useState<string>();
-  const [lowerHalfFrom, setLowerHalfFrom] = useState<string>();
-  const [lowerHalfTo, setLowerHalfTo] = useState<string>();
+  const [depthPerFrom, setDepthPerFrom] = useState<string>('');
+  const [depthPerTo, setDepthPerTo] = useState<string>('');
+  const [crownHeightFrom, setCrownHeightFrom] = useState<string>('');
+  const [crownHeightTo, setCrownHeightTo] = useState<string>('');
+  const [widthFrom, setWidthFrom] = useState<string>('');
+  const [widthTo, setWidthTo] = useState<string>('');
+  const [lowerHalfFrom, setLowerHalfFrom] = useState<string>('');
+  const [lowerHalfTo, setLowerHalfTo] = useState<string>('');
 
-  const [ratioFrom, setRatioFrom] = useState<string>();
-  const [ratioTo, setRatioTo] = useState<string>();
-  const [girdlePerFrom, setGirdlePerFrom] = useState<string>();
-  const [girdlePerTo, setGirdlePerTo] = useState<string>();
-  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>();
-  const [pavilionAngleTo, setPavilionAngleTo] = useState<string>();
-  const [starLengthFrom, setStarLengthFrom] = useState<string>();
-  const [starLengthTo, setStarLengthTo] = useState<string>();
+  const [ratioFrom, setRatioFrom] = useState<string>('');
+  const [ratioTo, setRatioTo] = useState<string>('');
+  const [girdlePerFrom, setGirdlePerFrom] = useState<string>('');
+  const [girdlePerTo, setGirdlePerTo] = useState<string>('');
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>('');
+  const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
+  const [starLengthFrom, setStarLengthFrom] = useState<string>('');
+  const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
   const [location, setLocation] = useState<string>('');
@@ -120,7 +120,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
   const [errorMessage, setErrorMessage] = useState('');
-
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -700,48 +699,65 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   // let prevMakeData=""
   const handleMakeChange = (data: string) => {
     if (data.toLowerCase() === '3ex') {
-      if(data !== selectedMake){
-      setSelectedCut([...selectedCut ,'Excellent'])
-      setSelectedPolish([...selectedPolish,"Excellent"])
-      setSelectedSymmetry([...selectedSymmetry,"Excellent"])
+      if (data !== selectedMake) {
+        setSelectedCut([...selectedCut, 'Excellent']);
+        setSelectedPolish([...selectedPolish, 'Excellent']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+      }
+      setSelectedFluorescence(selectedFluorescence.filter((e) => e !== 'NON'));
     }
-    else{
-      setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-      setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-      setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-    }
-    setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-  }
 
     if (data.toLowerCase() === '3ex-non') {
-      if(data !== selectedMake){
-        setSelectedCut([...selectedCut ,'Excellent'])
-        setSelectedPolish([...selectedPolish,"Excellent"])
-        setSelectedSymmetry([...selectedSymmetry,"Excellent"])
-        setSelectedFluorescence([...selectedFluorescence,"NON"])
+      if (data !== selectedMake) {
+        setSelectedCut([...selectedCut, 'Excellent']);
+        setSelectedPolish([...selectedPolish, 'Excellent']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+        setSelectedFluorescence([...selectedFluorescence, 'NON']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedFluorescence(
+          selectedFluorescence.filter((e) => e !== 'NON')
+        );
       }
-      else{
-        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-      }
-      
     }
     if (data.toLowerCase() === '3vg+') {
-      if(data !== selectedMake){
+      if (data !== selectedMake) {
         // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
-        setSelectedCut([...selectedCut ,'Very Good'])
-        setSelectedPolish([...selectedPolish,"Excellent",'Very Good'])
-        setSelectedSymmetry([...selectedSymmetry,"Excellent",'Very Good'])
+        setSelectedCut([...selectedCut, 'Very Good']);
+        setSelectedPolish([...selectedPolish, 'Excellent', 'Very Good']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent', 'Very Good']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedFluorescence(
+          selectedFluorescence.filter((e) => e !== 'NON')
+        );
       }
-      else{
-        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent' && e!=='Very Good'))
-        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent' && e!=='Very Good'))
-        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-      }
-      
     }
     data === selectedMake ? setSelectedMake('') : setSelectedMake(data);
   };
@@ -922,15 +938,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedSymmetry,
       selectedLab,
     ];
-  
+
     const selectedCriteria = criteriaToCheck
       .filter((criteria) => criteria.length > 0)
-      .map((criteria) => Array.isArray(criteria) ? criteria.join(''):criteria)
+      .map((criteria) =>
+        Array.isArray(criteria) ? criteria.join('') : criteria
+      )
       .join(' ');
-  
+
     return name + selectedCriteria;
   };
-  
 
   const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
@@ -968,16 +985,34 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedBrilliance.length > 0 &&
       updateYourSelection('brilliance', selectedBrilliance);
     (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection('priceRange', `${priceRangeFrom}-${priceRangeTo}`);
+      updateYourSelection(
+        'priceRange',
+        `${
+          priceRangeFrom + (priceRangeFrom && priceRangeTo) &&
+          '-' + priceRangeTo
+        }`
+      );
     (discountFrom || discountTo) &&
-      updateYourSelection('discount', `${discountFrom}-${discountTo}`);
+      updateYourSelection(
+        'discount',
+        `${discountFrom + (discountFrom && discountTo) && '-' + discountTo}`
+      );
     (pricePerCaratFrom || pricePerCaratTo) &&
       updateYourSelection(
         'pricePerCarat',
-        `${pricePerCaratFrom}-${pricePerCaratTo}`
+        `${
+          pricePerCaratFrom + (pricePerCaratFrom && pricePerCaratTo) &&
+          '-' + pricePerCaratTo
+        }`
       );
     (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection('priceRange', `${priceRangeFrom}-${priceRangeTo}`);
+      updateYourSelection(
+        'priceRange',
+        `${
+          priceRangeFrom + (priceRangeFrom && priceRangeTo) &&
+          '-' + priceRangeTo
+        }`
+      );
     blackTableBI.length > 0 &&
       updateYourSelection('otherBIBlackTable', blackTableBI);
     sideBlackBI.length > 0 &&
@@ -1011,41 +1046,82 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     origin.length > 0 && updateYourSelection('origin', origin);
 
     (tablePerFrom || tablePerTo) &&
-      updateYourSelection('tablePer', `${tablePerFrom}-${tablePerTo}`);
-
+      updateYourSelection(
+        'tablePer',
+        `${tablePerFrom + (tablePerFrom && tablePerTo) && '-' + tablePerTo}`
+      );
     (crownAngleFrom || crownAngleTo) &&
-      updateYourSelection('crownAngle', `${crownAngleFrom}-${crownAngleTo}`);
+      updateYourSelection(
+        'crownAngle',
+        `${
+          crownAngleFrom + (crownAngleFrom && crownAngleTo) &&
+          '-' + crownAngleTo
+        }`
+      );
     (lengthFrom || lengthTo) &&
-      updateYourSelection('length', `${lengthFrom}-${lengthTo}`);
+      updateYourSelection(
+        'length',
+        `${lengthFrom + (lengthFrom && lengthTo) && '-' + lengthTo}`
+      );
     (pavilionDepthFrom || pavilionDepthTo) &&
       updateYourSelection(
         'pavilionDepth',
-        `${pavilionDepthFrom}-${pavilionDepthTo}`
+        `${
+          pavilionDepthFrom + (pavilionDepthFrom && pavilionDepthTo) &&
+          '-' + pavilionDepthTo
+        }`
       );
     (depthPerFrom || depthPerTo) &&
-      updateYourSelection('depthPer', `${depthPerFrom}-${depthPerTo}`);
+      updateYourSelection(
+        'depthPer',
+        `${depthPerFrom + (depthPerFrom && priceRangeTo) && '-' + priceRangeTo}`
+      );
     (crownHeightFrom || crownHeightTo) &&
-      updateYourSelection('crownHeight', `${crownHeightFrom}-${crownHeightTo}`);
+      updateYourSelection(
+        'crownHeight',
+        `${priceRangeFrom + (priceRangeFrom && depthPerTo) && '-' + depthPerTo}`
+      );
 
     (widthFrom || widthTo) &&
-      updateYourSelection('width', `${widthFrom}-${widthTo}`);
+      updateYourSelection(
+        'width',
+        `${widthFrom + (widthFrom && widthTo) && '-' + widthTo}`
+      );
     (lowerHalfFrom || lowerHalfTo) &&
-      updateYourSelection('lowerHalf', `${lowerHalfFrom}-${lowerHalfTo}`);
+      updateYourSelection(
+        'lowerHalf',
+        `${lowerHalfFrom + (lowerHalfFrom && lowerHalfTo) && '-' + lowerHalfTo}`
+      );
     (ratioFrom || ratioTo) &&
-      updateYourSelection('ratio', `${ratioFrom}-${ratioTo}`);
+      updateYourSelection(
+        'ratio',
+        `${ratioFrom + (ratioFrom && ratioTo) && '-' + ratioTo}`
+      );
     (girdlePerFrom || girdlePerTo) &&
-      updateYourSelection('girdlePer', `${girdlePerFrom}-${girdlePerTo}`);
+      updateYourSelection(
+        'girdlePer',
+        `${girdlePerFrom + (girdlePerFrom && girdlePerTo) && '-' + girdlePerTo}`
+      );
     (pavilionAngleFrom || pavilionAngleTo) &&
       updateYourSelection(
         'pavilionAngle',
-        `${pavilionAngleFrom}-${pavilionAngleTo}`
+        `${
+          pavilionAngleFrom + (pavilionAngleFrom && pavilionAngleTo) &&
+          '-' + pavilionAngleTo
+        }`
       );
     (starLengthFrom || starLengthTo) &&
-      updateYourSelection('starLength', `${starLengthFrom}-${starLengthTo}`);
+      updateYourSelection(
+        'starLength',
+        `${
+          starLengthFrom + (starLengthFrom && starLengthTo) &&
+          '-' + starLengthTo
+        }`
+      );
   };
 
   const handleSearch = async () => {
-    if (searchResultCount! > 300) {
+    if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
       );
@@ -1126,7 +1202,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name={`${parameter.parameterState[0]}`}
             onChange={(e) => {
               parameter.setParameterState[0](e.target.value);
-              
             }}
             value={parameter.parameterState[0]}
             style={{
@@ -1210,13 +1285,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       )}:`}
                     />{' '}
                     <div className={styles.yourSelectionInHeader}>
-                      {formatSelection(selectedShape)}{' '}
-                      {formatSelection(selectedColor)}{' '}
-                      {formatSelection(selectedTingeIntensity)}{' '}
-                      {formatSelection(selectedClarity)}{' '}
-                      {formatSelection(selectedCaratRange)}
-                      {formatSelection(selectedMake)}{' '}
-                      {formatSelection(selectedLab)} {formatSelection(location)}{' '}
+                    {selectedShape.length>0 && formatSelection(selectedShape)}{' '}
+                      {selectedColor.length>0 && formatSelection(selectedColor)}{' '}
+                      {selectedTingeIntensity.length>0 && formatSelection(selectedTingeIntensity)}{' '}
+                      {selectedClarity.length>0 && formatSelection(selectedClarity)}{' '}
+                      {selectedCaratRange.length>0 && formatSelection(selectedCaratRange)}
+                      {selectedMake && formatSelection(selectedMake)}{' '}
+                      {selectedLab.length>0 && formatSelection(selectedLab)} 
+                      {location && formatSelection(location)}{' '}
                     </div>
                   </div>
                 }
