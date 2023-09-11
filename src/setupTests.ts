@@ -1,12 +1,16 @@
 import '@testing-library/jest-dom/extend-expect';
 
-import { server } from './mock_server';
+import { server } from './mockHandlers';
 
 // make debug output for TestingLibrary Errors larger
 process.env.DEBUG_PRINT_LIMIT = '15000';
 
-// enable API mocking in test runs using the same request handlers
-// as for the client-side mocking.
-beforeAll(() => server.listen({ onUnhandledRequest: 'error' }));
-afterAll(() => server.close());
+// Establish API mocking before all tests.
+beforeAll(() => server.listen());
+
+// Reset any request handlers that we may add during the tests,
+// so they don't affect other tests.
 afterEach(() => server.resetHandlers());
+
+// Clean up after the tests are finished.
+afterAll(() => server.close());

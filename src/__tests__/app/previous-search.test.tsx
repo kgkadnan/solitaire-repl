@@ -1,9 +1,8 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import PreviousSearch from '@app/previous-search/page';
-import { fireEvent, screen, waitFor } from '@testing-library/react';
-import { renderWithProviders } from '../../mock_server/test-utils';
-import { server } from '../../mock_server';
-import { rest } from 'msw';
+import { fireEvent, logDOM, screen, waitFor } from '@testing-library/react';
+import { renderWithProviders } from '@/mockHandlers/test-utils';
+import { setupPreviousSearchHandlers } from '@/mockHandlers/previous-search';
 
 jest.mock('next/image', () => ({
   __esModule: true,
@@ -17,36 +16,7 @@ jest.mock('next/image', () => ({
 describe('PreviousSearch Component', () => {
   // Common test setup
   beforeEach(() => {
-    // Mock the data to be returned by your API request
-    const mockApiResponse = {
-      data: {
-        previousSearch: [
-          {
-            diamond_count: 256,
-            name: 'sample4',
-            customer_id: 'cus_01H90HVS4396XG4A6D1PFMCXKX',
-            is_deleted: false,
-            meta_data: {
-              cut: ['EX', 'IDEAL', 'VG'],
-              lab: ['GIA', 'HRD', 'IGI'],
-              color: ['D', 'F', 'E', 'G'],
-              clarity: ['VVS2', 'VVS1', 'VS2'],
-            },
-            id: 'previous_search_01H95GDK1N1Q1RBWF5VF5JPD7K',
-            created_at: '2023-08-31T09:57:31.317Z',
-            updated_at: '2023-09-01T11:17:11.266Z',
-          },
-        ],
-        totalPages: 5,
-      },
-    };
-
-    // Configure MSW to return the mock data
-    server.use(
-      rest.get('/previous-search', (req, res, ctx) => {
-        return res(ctx.json(mockApiResponse));
-      })
-    );
+    setupPreviousSearchHandlers();
     renderWithProviders(<PreviousSearch />);
   });
 
@@ -100,5 +70,25 @@ describe('PreviousSearch Component', () => {
     // Now, you can make your assertions
     const basicDetailsElement = screen.queryAllByText('Basic Details');
     expect(basicDetailsElement).toHaveLength(1);
+  });
+
+  test('Test delete functionality', async () => {
+    // Find the card using its dynamic ID
+    const cardId = 'previous_search_01H95GDK1N1Q1RBWF5VF5JPD7K';
+    // Find the 'Select All' checkbox
+    const selectAllCheckbox = screen.getByTestId('Select All Checkbox');
+
+    // Click the 'Select All' checkbox
+    fireEvent.click(selectAllCheckbox);
+    expect(selectAllCheckbox).toBeChecked();
+
+    let deleteButton = screen.getByText('Delete');
+
+    fireEvent.click(deleteButton);
+
+    // Use an `await` statement to wait for the card to be removed from the DOM
+    await waitFor(() => {
+      expect(screen.queryByTestId(`card-${cardId}`)).not.toBeInTheDocument();
+    });
   });
 });

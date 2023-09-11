@@ -197,7 +197,7 @@ const PreviousSearch = () => {
     setIsCheck([]);
     setIsCheckAll(false);
 
-    if (data.data.previousSearch.length === 1) {
+    if (data?.data?.previousSearch?.length === 1) {
       setCurrentPage(currentPage - 1);
     }
   };
