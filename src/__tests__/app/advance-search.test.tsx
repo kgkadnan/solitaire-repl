@@ -1,7 +1,6 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { fireEvent, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import AdvanceSearch from '@app/advance-search/page';
-import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 
 jest.mock('next/image', () => ({
   __esModule: true,

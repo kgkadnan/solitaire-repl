@@ -92,7 +92,8 @@ describe('Render Input Field Component', () => {
     // Ensure placeholder text is displayed
     expect(inputField).toHaveAttribute('placeholder', 'Enter value');
   });
-  test('handles ArrowDown key press', () => {
+
+  test('handles ArrowDown and ArrowUp key press', () => {
     const { getByTestId } = render(
       <CustomSearchInputField {...mockProps} value="" />
     );

@@ -21,7 +21,7 @@ describe('CustomHeader component', () => {
     suggestions: ['Suggestion 1', 'Suggestion 2'],
   };
 
-  it('renders correctly with provided data', () => {
+  test('renders correctly with provided data', () => {
     const { getByText, getByPlaceholderText } = render(
       <CustomHeader data={headerData} />
     );
@@ -33,7 +33,7 @@ describe('CustomHeader component', () => {
     expect(getByPlaceholderText('Search by name')).toBeInTheDocument();
   });
 
-  it('calls handleSearch when input value changes', () => {
+  test('calls handleSearch when input value changes', () => {
     const { getByPlaceholderText } = render(<CustomHeader data={headerData} />);
 
     const inputElement = getByPlaceholderText('Search by name');
@@ -45,7 +45,7 @@ describe('CustomHeader component', () => {
     );
   });
 
-  it('calls handleSuggestionClick when suggestion is clicked', () => {
+  test('calls handleSuggestionClick when suggestion is clicked', () => {
     const { getByPlaceholderText, getByText } = render(
       <CustomHeader data={headerData} />
     );
