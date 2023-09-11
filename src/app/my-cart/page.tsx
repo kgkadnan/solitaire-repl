@@ -6,14 +6,16 @@ import { CustomFooter } from '@/components/common/footer';
 import CustomHeader from '@/components/common/header';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomTable } from '@/components/common/table';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import React, { useState } from 'react';
 import ImageIcon from '@public/assets/icons/image-outline.svg';
 import CertificateIcon from '@public/assets/icons/certificate.svg';
 import Image from 'next/image';
 import styles from './cart.module.scss';
+import { CustomSlider } from '@/components/common/slider';
+import { useRouter } from 'next/navigation';
 
 const MyCart = () => {
+  const router = useRouter();
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -40,7 +42,7 @@ const MyCart = () => {
       header: '263494496',
       desc: '12-05-2023 | 10.12 AM',
       remainingCardTime: '12 min 30 secs',
-      cardTimeOut: true,
+      cardTimeOut: false,
       body: {
         color: 'D',
         Carat: '2.01',
@@ -68,7 +70,7 @@ const MyCart = () => {
       header: '263494496',
       desc: '12-05-2023 | 10.12 AM',
       remainingCardTime: '12 min 30 secs',
-      cardTimeOut: false,
+      cardTimeOut: true,
       body: {
         color: 'D',
         Carat: '2.01',
@@ -101,10 +103,6 @@ const MyCart = () => {
     cardHeader: (
       <div className={styles.cardHeaderMainDiv}>
         <div className={styles.searchHeader}>
-          {/* <p className={styles.SearchCardTitle}>
-            <span className={styles.rptNoStyle}>RPT No. </span>
-            {data.header}
-          </p> */}
           <Image
             src={ImageIcon}
             alt="ImageIcon"
@@ -138,10 +136,12 @@ const MyCart = () => {
         tableStyleClasses={tableStyles}
       />
     ),
-    unBlurHeader:<p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`} >
-    <span className={styles.rptNoStyle}>RPT No. </span>
-    {data.header}
-  </p>
+    unBlurHeader: (
+      <p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`}>
+        <span className={styles.rptNoStyle}>RPT No. </span>
+        {data.header}
+      </p>
+    ),
   }));
 
   const cardDetailData = [
@@ -247,6 +247,10 @@ const MyCart = () => {
     alert('Click on Certificate Button');
   };
 
+  const handleBlurFunction = () => {
+    router.push('/wishlist');
+  };
+
   return (
     <>
       <div className="container flex flex-col ">
@@ -255,76 +259,64 @@ const MyCart = () => {
           <CustomHeader data={headerData} />
         </div>
 
-        <Sheet>
-          {/* Custom Card and Checkbox map */}
-          <div className="flex-grow overflow-y-auto min-h-[80vh]">
-            <>
-              {cardData?.map((items: any) => {
-                return (
-                  <div key={items.cardId}>
-                    <div className="flex mt-6">
-                      <CustomCheckBox
-                        data={items.cardId}
-                        onClick={handleClick}
-                        isChecked={isCheck}
-                      />
-                      {!items.cardTimeOut ? (
-                        <SheetTrigger className={styles.mainCardContainer}>
+        {/* Custom Card and Checkbox map */}
+        <div className="flex-grow overflow-y-auto min-h-[80vh]">
+          <>
+            {cardData?.map((items: any) => {
+              return (
+                <div key={items.cardId}>
+                  <div className="flex mt-6">
+                    <CustomCheckBox
+                      data={items.cardId}
+                      onClick={handleClick}
+                      isChecked={isCheck}
+                    />
+                    <CustomSlider
+                      sheetTriggenContent={
+                        <>
                           <CustomSearchResultCard
                             cardData={items}
                             overriddenStyles={cardStyles}
                             handleCardAction={handleEdit}
                             isBlur={items.cardTimeOut}
+                            blurContent={
+                              <>
+                                <p>Your stone has been moved to wishlist</p>
+                                <CustomDisplayButton
+                                  displayButtonLabel="Wishlist"
+                                  handleClick={handleBlurFunction}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                    displayLabelStyle:
+                                      styles.ViewSimilarStoneLabel,
+                                  }}
+                                />
+                              </>
+                            }
                           />
-                        </SheetTrigger>
-                      ) : (
-                        <CustomSearchResultCard
-                          cardData={items}
-                          overriddenStyles={cardStyles}
-                          handleCardAction={handleEdit}
-                          isBlur={items.cardTimeOut}
-                        />
-                      )}
-                      <SheetContent className={styles.sheetContentStyle}>
-                        {/* Detailed Information section */}
-                        <div
-                          className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
-                        >
-                          <p>Detailed Information</p>
-                        </div>
+                        </>
+                      }
+                      sheetTriggerStyle={styles.mainCardContainer}
+                      sheetContent={
+                        <>
+                          {/* Detailed Information section */}
+                          <div
+                            className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
+                          >
+                            <p>Detailed Information</p>
+                          </div>
+                          {/* Loop through card detail data */}
+                          {cardDetailData.map((cardDetails) => (
+                            <div className="flex" key={cardDetails.cardId}>
+                              <div className={styles.sheetMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>Basic Details</p>
+                                </div>
 
-                        {/* Loop through card detail data */}
-                        {cardDetailData.map((cardDetails) => (
-                          <div className="flex" key={cardDetails.cardId}>
-                            <div className={styles.sheetMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>Basic Details</p>
-                              </div>
-
-                              <div>
-                                {Object.entries(
-                                  cardDetails.basicCardDetails
-                                ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {key}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {value}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className={styles.sheetHeading}>
-                                <p>Measurements</p>
-                              </div>
-
-                              <div>
-                                {Object.entries(cardDetails.measurements).map(
-                                  ([key, value]) => (
+                                <div>
+                                  {Object.entries(
+                                    cardDetails.basicCardDetails
+                                  ).map(([key, value]) => (
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
@@ -335,38 +327,59 @@ const MyCart = () => {
                                         </span>
                                       </p>
                                     </div>
-                                  )
-                                )}
+                                  ))}
+                                </div>
+
+                                <div className={styles.sheetHeading}>
+                                  <p>Measurements</p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(cardDetails.measurements).map(
+                                    ([key, value]) => (
+                                      <div key={key}>
+                                        <p className="flex">
+                                          <span className={styles.innerHeading}>
+                                            {key}
+                                          </span>
+                                          <span className={styles.sheetValues}>
+                                            {value}
+                                          </span>
+                                        </p>
+                                      </div>
+                                    )
+                                  )}
+                                </div>
+
+                                <div className={styles.sheetHeading}>
+                                  <p>Other Information</p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    cardDetails.OtherInformation
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {key}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {value}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
 
-                              <div className={styles.sheetHeading}>
-                                <p>Other Information</p>
-                              </div>
-
-                              <div>
+                              <div className={styles.inclusionDetailsMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>Inclusion Details</p>
+                                </div>
                                 {Object.entries(
-                                  cardDetails.OtherInformation
+                                  cardDetails.inclutionDetails
                                 ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {key}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {value}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className={styles.inclusionDetailsMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>Inclusion Details</p>
-                              </div>
-                              {Object.entries(cardDetails.inclutionDetails).map(
-                                ([key, value]) => (
                                   <p className="flex" key={key}>
                                     <span
                                       className={
@@ -379,30 +392,31 @@ const MyCart = () => {
                                       {value}
                                     </span>
                                   </p>
-                                )
-                              )}
+                                ))}
+                              </div>
                             </div>
+                          ))}
+                          <div className="border-b border-solitaireTertiary mt-8"></div>
+                          {/* Show Results button */}
+                          <div className={styles.showResultMainDiv}>
+                            <CustomDisplayButton
+                              displayButtonLabel="Show Results"
+                              displayButtonAllStyle={showResulutButtonStyle}
+                              handleClick={showButtonHandleClick}
+                            />
                           </div>
-                        ))}
-
-                        <div className="border-b border-solitaireTertiary mt-8"></div>
-
-                        {/* Show Results button */}
-                        <div className={styles.showResultMainDiv}>
-                          <CustomDisplayButton
-                            displayButtonLabel="Show Results"
-                            displayButtonAllStyle={showResulutButtonStyle}
-                            handleClick={showButtonHandleClick}
-                          />
-                        </div>
-                      </SheetContent>
-                    </div>
+                        </>
+                      }
+                      sheetContentStyle={styles.sheetContentStyle}
+                      cardTimeout={items.cardTimeOut}
+                    />
                   </div>
-                );
-              })}
-            </>
-          </div>
-        </Sheet>
+                </div>
+              );
+            })}
+          </>
+        </div>
+
         {/* Custom Footer */}
         {footerButtonData?.length && (
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">

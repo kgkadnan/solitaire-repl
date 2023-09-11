@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardContent,
 } from '@components/ui/card';
-import { CustomDisplayButton } from '../buttons/display-button';
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
@@ -33,6 +32,7 @@ export interface IImageContainerProps {
   handleCardAction?: (stone: string) => void;
   defaultCardPosition?: boolean;
   isBlur?: boolean;
+  blurContent?: React.ReactNode;
 }
 
 const CustomSearchResultCard: React.FC<IImageContainerProps> = (
@@ -45,13 +45,14 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardContent,
     stone = '',
     cardId,
-    unBlurHeader
+    unBlurHeader,
   } = card.cardData;
   const {
     overriddenStyles = {},
     handleCardAction = () => {},
     defaultCardPosition = true,
     isBlur = false, // Default value is set to false
+    blurContent,
   } = card;
   const {
     cardContainerStyle,
@@ -77,20 +78,25 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
           data-testid={`card-${cardId}`}
         >
           <CardHeader className={`${style.cardHeaderContainer} `}>
-           
-            <div
-              className={`${style.cardHeaderText} `}
-            >
-              
+            <div className={`${style.cardHeaderText} `}>
               <CardTitle className={`${style.cardTitle} ${cardTitleStyle} `}>
-                 { unBlurHeader!}
-               <div className={`${style.cardTitle} ${cardTitleStyle} ${
-                isBlur ? style.blur : '' // Apply blur class if isBlur is true
-              }`}> {cardHeader}</div>
+                {unBlurHeader!}
+                <div
+                  className={`${style.cardTitle} ${cardTitleStyle} ${
+                    isBlur ? style.blur : '' // Apply blur class if isBlur is true
+                  }`}
+                >
+                  {' '}
+                  {cardHeader}
+                </div>
               </CardTitle>
-              <CardDescription className={`${
-                isBlur ? style.blur : '' // Apply blur class if isBlur is true
-              }`}>{cardDescription}</CardDescription>
+              <CardDescription
+                className={`${
+                  isBlur ? style.blur : '' // Apply blur class if isBlur is true
+                }`}
+              >
+                {cardDescription}
+              </CardDescription>
               {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
             </div>
             <CardDescription
@@ -102,27 +108,22 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
             </CardDescription>
           </CardHeader>
 
-          {defaultCardPosition && <CardContent 
-          className={`${
-            isBlur ? style.blur : '' // Apply blur class if isBlur is true
-          }`}
-          >{cardContent}</CardContent>}
+          {defaultCardPosition && (
+            <CardContent
+              className={`${
+                isBlur ? style.blur : '' // Apply blur class if isBlur is true
+              }`}
+            >
+              {cardContent}
+            </CardContent>
+          )}
         </Card>
         {isBlur && (
           <>
             <div className={style.floatingContent}>
               {/* Content that appears above the blurred card */}
               <div className={style.blurCardMainContainer}>
-                <div className={style.blurCardContent}>
-                  <p>Out of Stock</p>
-                  <CustomDisplayButton
-                    displayButtonLabel="View Similar Stone"
-                    displayButtonAllStyle={{
-                      displayButtonStyle: style.filled,
-                      displayLabelStyle: style.ViewSimilarStoneLabel,
-                    }}
-                  />
-                </div>
+                <div className={style.blurCardContent}>{blurContent}</div>
               </div>
             </div>
           </>
