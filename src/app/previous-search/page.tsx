@@ -196,7 +196,7 @@ const PreviousSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    if (isCheck.length) {
+    if (isCheck?.length) {
       let payload = { id: isCheck, filter: { is_deleted: true } };
       await updatePreviousSearch(payload);
       await refetch();
