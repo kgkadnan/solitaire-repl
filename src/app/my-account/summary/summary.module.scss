@@ -1,0 +1,18 @@
+.personalCard{
+    color: hsl(var(--solitaire-tertiary));
+    background: #35444466;
+    border-radius: 12px;
+    width: 350px;
+    padding: 30px 20px;
+    margin-top: 20px;
+}
+.personalCardData{
+    font-size: 14px;
+    display: flex;
+    
+}
+.personalCardHeader{
+    font-size: 16px;
+    font-weight: 600;
+    padding-bottom: 10px;
+}

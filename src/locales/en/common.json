@@ -130,7 +130,11 @@
   "app.myProfile.changePassword" : "Change Password",
   "app.myProfile.manageDiamondSequence" : "Manage Diamond Sequence",
   "app.myProfile.emailNotification" : "Email Notification",
-  "app.myProfile.reportBug" : "Report Bug"
+  "app.myProfile.reportBug" : "Report Bug",
+
+  "app.myaccount.summary.personalInformation":"Personal Information",
+  "app.myaccount.summary.contactNo":"Contact no",
+  "app.myaccount.summary.emailID":"Email ID"
 
 
 }
