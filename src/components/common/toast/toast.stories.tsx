@@ -3,7 +3,7 @@ import { CustomToast } from '.';
 import Error from '@public/assets/icons/error.svg?url';
 
 const meta = {
-  title: 'components/CustomToast',
+  title: 'components/Toast',
   component: CustomToast,
   parameters: {
     layout: 'centered',

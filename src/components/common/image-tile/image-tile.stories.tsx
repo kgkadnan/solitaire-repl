@@ -4,7 +4,7 @@ import Round from '@public/assets/images/round.png';
 import type { Meta, StoryObj } from '@storybook/react';
 
 const meta = {
-  title: 'Components/CustomImageTile',
+  title: 'Components/ImageTile',
   component: CustomImageTile,
   parameters: {
     layout: 'centered',

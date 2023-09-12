@@ -3,7 +3,7 @@ import { ChangeEvent, useState } from 'react';
 import { CustomSearchInputField } from '.';
 
 const meta: Meta<typeof CustomSearchInputField> = {
-  title: 'components/InputField',
+  title: 'components/SearchInputField',
   component: CustomSearchInputField,
   argTypes: {},
   tags: ['autodocs'],
@@ -37,8 +37,8 @@ export const Secondary: Story = {
   args: {
     type: 'text',
     placeholder: 'Search by name',
-    style: {
-      input: 'text-solitaireQuaternary',
-    },
+    // style: {
+    //   input: 'text-solitaireQuaternary',
+    // },
   },
 };
