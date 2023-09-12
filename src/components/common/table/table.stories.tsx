@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { CustomTable } from '.';
 
 const meta = {
-  title: 'components/CustomTable',
+  title: 'components/Table',
   component: CustomTable,
   parameters: {
     layout: 'centered',

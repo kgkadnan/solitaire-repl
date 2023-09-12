@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { CustomDisplayButton } from '.';
 
 const meta = {
-  title: 'components/CustomDisplayButton',
+  title: 'components/DisplayButton',
   component: CustomDisplayButton,
   parameters: {
     layout: 'centered',
