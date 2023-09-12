@@ -121,5 +121,16 @@
 
   "app.topNav.yourDiamond": "Your Diamond",
   "app.topNav.listPrice": "List Price",
-  "app.topNav.yourPrice": "Your Price"
+  "app.topNav.yourPrice": "Your Price",
+
+
+  "app.myProfile.heading" : "Welcome to your account",
+  "app.myProfile.summary" : "Summary",
+  "app.myProfile.kyc" : "KYC",
+  "app.myProfile.changePassword" : "Change Password",
+  "app.myProfile.manageDiamondSequence" : "Manage Diamond Sequence",
+  "app.myProfile.emailNotification" : "Email Notification",
+  "app.myProfile.reportBug" : "Report Bug"
+
+
 }

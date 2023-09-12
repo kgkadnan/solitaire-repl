@@ -83,7 +83,6 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
           {/* Select All checkbox */}
           {data?.headerData ? (
             <div className={`${data.overriddenStyles?.headerDataStyles}`}>
-              {' '}
               {data.headerData}
             </div>
           ) : (

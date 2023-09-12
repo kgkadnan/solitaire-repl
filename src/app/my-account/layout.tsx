@@ -8,39 +8,51 @@ import React from 'react';
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   let currentPath = usePathname();
 
-  let headerData = {
-    headerHeading: ManageLocales('Welcome to your account'),
+  let myAccountHeader = {
+    headerHeading: ManageLocales('app.myProfile.heading'),
   };
 
-  let routes = [
+  let myProfileRoutes = [
     {
       id: '1',
-      pathName: 'Summary',
+      pathName: ManageLocales('app.myProfile.summary'),
       path: '/summary',
     },
     {
       id: '2',
-      pathName: 'KYC',
+      pathName: ManageLocales('app.myProfile.kyc'),
       path: '/kyc',
     },
-    { id: '3', pathName: 'Change Password', path: '/change-password' },
+    {
+      id: '3',
+      pathName: ManageLocales('app.myProfile.changePassword'),
+      path: '/change-password',
+    },
     {
       id: '4',
-      pathName: 'Manage Diamond Sequence',
+      pathName: ManageLocales('app.myProfile.manageDiamondSequence'),
       path: '/manage-diamond-sequence', // Corrected the path name
     },
-    { id: '5', pathName: 'Email Notification', path: '/email-notification' },
-    { id: '6', pathName: 'Report Bug', path: '/report-bug' },
+    {
+      id: '5',
+      pathName: ManageLocales('app.myProfile.emailNotification'),
+      path: '/email-notification',
+    },
+    {
+      id: '6',
+      pathName: ManageLocales('app.myProfile.reportBug'),
+      path: '/report-bug',
+    },
   ];
 
   return (
     <>
       <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-        <CustomHeader data={headerData} />
+        <CustomHeader data={myAccountHeader} />
       </div>
 
       <div className="absolute top-[172px] left-[122px] flex flex-row items-start justify-start gap-[40px]">
-        {routes.map(({ id, pathName, path }) => {
+        {myProfileRoutes.map(({ id, pathName, path }) => {
           // Check if the current route matches the link's path
           const isActive = currentPath === `/my-account${path}`;
 
