@@ -2,7 +2,7 @@ import { Meta, StoryObj } from '@storybook/react';
 import { CustomSelectionButton } from '.';
 
 const meta = {
-  title: 'components/CustomSelectionButton',
+  title: 'components/SelectionButton',
   component: CustomSelectionButton,
   parameters: {
     layout: 'centered',
@@ -21,7 +21,7 @@ const classes = {
 export const SelectionButtonStory: Story = {
   args: {
     selectionButtonAllStyles: classes,
-    selectionButtonLabel: 'Slection button',
+    selectionButtonLabel: 'Selection button',
     handleClick: () => {},
   },
 };
