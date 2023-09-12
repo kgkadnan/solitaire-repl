@@ -81,20 +81,9 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
             <></>
           )}
           {/* Select All checkbox */}
-          {data?.headerData ? (
+          {data?.headerData && (
             <div className={`${data.overriddenStyles?.headerDataStyles}`}>
               {data.headerData}
-            </div>
-          ) : (
-            <div className="flex items-center gap-[10px]">
-              <Checkbox
-                onClick={data?.handleSelectAllCheckbox}
-                data-testid={'Select All Checkbox'}
-                checked={data?.isCheckAll}
-              />
-              <p className="text-solitaireTertiary text-base font-medium">
-                {ManageLocales('app.common.header.selectAll')}
-              </p>
             </div>
           )}
         </div>

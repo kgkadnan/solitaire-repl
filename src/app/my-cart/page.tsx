@@ -12,6 +12,8 @@ import ImageIcon from '@public/assets/icons/image-outline.svg';
 import CertificateIcon from '@public/assets/icons/certificate.svg';
 import Image from 'next/image';
 import styles from './cart.module.scss';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ManageLocales } from '@/utils/translate';
 
 const MyCart = () => {
   // Style classes and variables
@@ -225,8 +227,22 @@ const MyCart = () => {
   //Header Data
   const headerData = {
     headerHeading: 'MyCart',
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   // Function to handle edit action
