@@ -64,9 +64,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'right',
-          marginTop: '110px',
-          padding: '0px 30px',
+          marginTop: '70px',
         }}
       >
         <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
