@@ -1,8 +1,8 @@
 import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import SavedSearch from '@/app/saved-search/page';
-import { renderWithProviders } from '@/mockHandlers/test-utils';
-import { setupSetupsavedSearchandlers } from '@/mockHandlers/saved-search';
+import { renderWithProviders } from '@/mock-handlers/test-utils';
+import { setupSetupsavedSearchandlers } from '@/mock-handlers/saved-search';
 
 jest.mock('next/image', () => ({
   __esModule: true,
