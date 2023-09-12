@@ -44,19 +44,19 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
           // Check if the current route matches the link's path
           const isActive = currentPath === `/my-account${path}`;
 
-          console.log('isActive', isActive);
-
           return (
             <Link
               className={`flex flex-row p-2.5 items-center justify-center text-solitaireTertiary ${
                 isActive
-                  ? 'border-b-[1px] border-solid border-solitaireQuaternary text-solitaireQuaternary'
+                  ? 'border-b-[1px] border-solid border-solitaireQuaternary'
                   : 'hover:text-solitaireQuaternary'
               }`}
               href={`/my-account${path}`}
               key={id}
             >
-              <div className="relative">{pathName}</div>
+              <div className={`${isActive && 'text-solitaireQuaternary'}`}>
+                {pathName}
+              </div>
             </Link>
           );
         })}
