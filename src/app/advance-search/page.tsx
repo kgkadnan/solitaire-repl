@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, {  useEffect, useMemo, useState } from 'react';
 import styles from './advance-search.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';

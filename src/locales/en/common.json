@@ -135,7 +135,9 @@
   "app.myaccount.summary.personalInformation":"Personal Information",
   "app.myaccount.summary.contactNo":"Contact no",
   "app.myaccount.summary.emailID":"Email ID",
-  "app.myaccount.summary.account":"Account"
+  "app.myaccount.summary.account":"Account",
 
+  "app.changePassword":"Change Password",
+  "app.changePassword.cancel":"Cancel"
 
 }

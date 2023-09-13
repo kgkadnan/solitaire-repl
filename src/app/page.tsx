@@ -15,7 +15,7 @@ export default function Home() {
         }}
       >
         Welcome to KGK live 2.O
-      </h1>
+      </h1> 
       <h1
         style={{
           fontSize: '30px',
