@@ -1,11 +1,54 @@
 'use client';
-import { CustomCheckBox } from '@/components/common/checkbox';
 import React, { useState } from 'react';
+import {
+  GridContextProvider,
+  GridDropZone,
+  GridItem,
+  swap,
+} from 'react-grid-dnd';
+
+import { CustomCheckBox } from '@/components/common/checkbox';
+import styles from './manage-diamond-sequence.module.scss';
+import { CustomFooter } from '@/components/common/footer';
+import { ManageLocales } from '@/utils/translate';
+
+const finalSpaceCharacters = [
+  {
+    id: '1',
+    name: 'Stock No',
+    isMandatory: true,
+  },
+  {
+    id: '2',
+    name: 'Details',
+    isMandatory: true,
+  },
+  {
+    id: '3',
+    name: 'Remark',
+    isMandatory: false,
+  },
+  {
+    id: '4',
+    name: 'Report No',
+    isMandatory: false,
+  },
+  {
+    id: '5',
+    name: 'Location',
+    isMandatory: false,
+  },
+  {
+    id: '6',
+    name: 'Shaper',
+    isMandatory: true,
+  },
+];
 
 const ManageDiamondSequence = () => {
-  //checkbox states
+  // Checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
-  //specific checkbox
+  // Specific checkbox
   const handleClick = (e: any) => {
     const { id } = e.target;
 
@@ -19,29 +62,79 @@ const ManageDiamondSequence = () => {
 
     setIsCheck(updatedIsCheck);
   };
+
+  const [items, setItems] = React.useState(finalSpaceCharacters);
+
+  //update sequence
+  const handleUpdateDiamondSequence = () => {};
+
+  //cancel sequence
+  const handleCancel = () => {};
+
+  //Footer Data
+  const footerButtonData = [
+    {
+      id: 1,
+      displayButtonLabel: ManageLocales(
+        'app.myaccount.diamondSequence.updateSequence'
+      ),
+      style: styles.filled,
+      fn: handleUpdateDiamondSequence,
+    },
+    {
+      id: 2,
+      displayButtonLabel: ManageLocales('app.common.footer.cancel'),
+      style: styles.transparent,
+      fn: handleCancel,
+    },
+  ];
+
+  function onChange(
+    sourceId: string,
+    sourceIndex: number,
+    targetIndex: number
+  ) {
+    const nextState = swap(items, sourceIndex, targetIndex);
+    setItems(nextState);
+  }
+
   return (
-    <div className="absolute top-[231px] left-[122px] w-[1440px] flex flex-row flex-wrap items-start justify-start gap-[28px] text-inherit font-inherit">
-      <div className="flex flex-col items-start justify-start relative gap-[10px]">
-        <div className="relative bg-solitaireSenary rounded-md w-[230px] h-7 z-[0]" />
-        <div className="my-0 mx-[!important] absolute top-[4px] left-[15px] w-[230px] flex flex-row items-center justify-start gap-[100px] z-[1]">
-          <div className="m-0 pl-[19px]">Stock No</div>
-          <CustomCheckBox
-            data={'1'}
-            onClick={handleClick}
-            isChecked={isCheck}
-          />
-        </div>
+    <div className="flex flex-col min-h-full">
+      <div className="grow">
+        <GridContextProvider onChange={onChange}>
+          <GridDropZone
+            id="items"
+            boxesPerRow={5}
+            rowHeight={50}
+            style={{ height: '100px' }}
+          >
+            {items.map(({ id, name, isMandatory }, index) => (
+              <GridItem
+                key={id}
+                className={`${styles.cardManageDiamondSequence}`}
+              >
+                <div className={`${styles.gridUi}`}>
+                  <div className={`${styles.lableManageDiamondSequence}`}>
+                    {`${index + 1}. ${name}`}
+                  </div>
+                  <div className="flex items-center">
+                    {!isMandatory && (
+                      <CustomCheckBox
+                        data={id}
+                        onClick={handleClick}
+                        isChecked={isCheck}
+                      />
+                    )}
+                  </div>
+                </div>
+              </GridItem>
+            ))}
+          </GridDropZone>
+        </GridContextProvider>
       </div>
-      <div className="flex flex-col items-start justify-start relative gap-[10px]">
-        <div className="relative rounded-md w-[230px] h-7 z-[0]" />
-        <div className="my-0 mx-[!important] absolute top-[4px] left-[15px] w-[230px] flex flex-row items-center justify-start gap-[100px] z-[1]">
-          <div className="m-0 pl-[19px]">Stock No</div>
-          <CustomCheckBox
-            data={'1'}
-            onClick={handleClick}
-            isChecked={isCheck}
-          />
-        </div>
+
+      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+        <CustomFooter footerButtonData={footerButtonData} />
       </div>
     </div>
   );

@@ -1,12 +1,18 @@
+import { CustomInputlabel } from '@/components/common/input-label';
+import { ManageLocales } from '@/utils/translate';
 import React from 'react';
-
+import style from './summary.module.scss'
 const Summary = () => {
   return (
     <div>
-      hellofsddddddd Lorem ipsum dolor sit amet consectetur adipisicing elit.
-      Aliquam fuga sint doloremque in cupiditate nostrum laudantium consequuntur
-      excepturi unde, ipsum corporis quo quidem et ex. Laudantium autem eveniet
-      quibusdam quis!
+    <CustomInputlabel htmlfor={''} label={ManageLocales('app.myaccount.summary.personalInformation')}/>
+    <div className={style.personalCard}>
+      <div className={style.personalCardHeader}>Aman</div>
+      <div>
+        <p className={style.personalCardData}>{ManageLocales('app.myaccount.summary.contactNo')} : +919108766432</p>
+        <p className={style.personalCardData}>{ManageLocales('app.myaccount.summary.emailID')} : amanwilson@mail.com</p>
+      </div>
+    </div>
     </div>
   );
 };

@@ -98,9 +98,9 @@ export const TopNavigationBar = () => {
           </Popover>
 
           <NotificationIcon role="button" className={styles.iconColor} />
-          <Link href={'/my-account/summary'}>
+          <div onClick={() => router.push('/my-account/summary')}>
             <MyProfileIcon role="button" className={styles.iconColor} />
-          </Link>
+          </div>
           <ToggleButton />
         </div>
       </div>
