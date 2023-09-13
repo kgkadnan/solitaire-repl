@@ -9,7 +9,8 @@
 
 .gridUi {
   display: flex;
-  gap: 160px;
+  width: 100%;
+  justify-content: space-between;
 }
 
 //lable
@@ -39,9 +40,7 @@ color: hsl(var(--solitaire-tertiary));
     width: 90px;
     font-size: 14px;
   }
-  .gridUi {
-    gap: 30px;
-  }
+ 
 }
 
 @media (max-width: 1024px) {
@@ -49,9 +48,7 @@ color: hsl(var(--solitaire-tertiary));
     width: 75px;
     font-size: 13px;
   }
-  .gridUi {
-    gap: 0px;
-  }
+ 
 }
 
 @media (max-width: 768px) {
@@ -59,7 +56,5 @@ color: hsl(var(--solitaire-tertiary));
     width: 50px;
     font-size: 14px;
   }
-  .gridUi {
-    gap: 100px;
-  }
+  
 }
