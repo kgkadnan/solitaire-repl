@@ -1,0 +1,17 @@
+
+.navBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background-color: hsl(var(--solitaire-primary));
+    // z-index: 1000;
+    transition: top 0.3s;
+  }
+.visible {
+    top: 0;
+  }
+  
+  .hidden {
+    top: -80px;
+  }

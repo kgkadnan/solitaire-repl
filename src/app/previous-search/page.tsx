@@ -22,6 +22,7 @@ import {
   useUpdatePreviousSearchMutation,
 } from '@/slices/previous-searches';
 import { CustomToast } from '@/components/common/toast';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ICardData {
   cardId: string;
@@ -361,10 +362,8 @@ const PreviousSearch = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    isCheckAll: isCheckAll,
     //count
     searchCount: cardData?.length,
     //Search Data
@@ -372,6 +371,21 @@ const PreviousSearch = () => {
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   useEffect(() => {
@@ -398,7 +412,7 @@ const PreviousSearch = () => {
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={previousSearchheaderData} />
         </div>
 
         <Sheet>

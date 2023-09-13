@@ -1,0 +1,65 @@
+.cardManageDiamondSequence{
+  // width: 320px !important;
+  border: 10px solid hsl(var(--solitaire-primary));
+  border-radius: 15px;
+  background: hsl(var(--solitaire-senary));
+  display: flex;
+  flex-direction: row;
+}
+
+.gridUi {
+  display: flex;
+  gap: 160px;
+}
+
+//lable
+.lableManageDiamondSequence{
+display: flex;
+margin-left: 10px;
+font-size: 16px;
+width: 100px;
+align-items: center;
+color: hsl(var(--solitaire-tertiary));
+}
+
+
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+}
+.filled {
+  background-color: #8c7459;
+  color: #ffffff;
+}
+/* Media queries */
+@media (max-width: 1200px) {
+  .lableManageDiamondSequence {
+    width: 90px;
+    font-size: 14px;
+  }
+  .gridUi {
+    gap: 30px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .lableManageDiamondSequence {
+    width: 75px;
+    font-size: 13px;
+  }
+  .gridUi {
+    gap: 0px;
+  }
+}
+
+@media (max-width: 768px) {
+  .lableManageDiamondSequence {
+    width: 50px;
+    font-size: 14px;
+  }
+  .gridUi {
+    gap: 100px;
+  }
+}

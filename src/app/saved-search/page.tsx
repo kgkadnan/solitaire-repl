@@ -17,6 +17,7 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   useGetAllSavedSearchesQuery,
   useUpdateSavedSearchesMutation,
@@ -360,10 +361,8 @@ const SavedSearch = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const savedSearchheaderData = {
     headerHeading: ManageLocales('app.savedSearch.header'),
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    isCheckAll: isCheckAll,
     //count
     searchCount: cardData?.length,
     //Search Data
@@ -371,6 +370,21 @@ const SavedSearch = () => {
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   useEffect(() => {
@@ -397,7 +411,7 @@ const SavedSearch = () => {
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={savedSearchheaderData} />
         </div>
 
         <Sheet>
