@@ -21,6 +21,7 @@ import {
   useGetAllSavedSearchesQuery,
   useUpdateSavedSearchesMutation,
 } from '@/slices/saved-searches';
+import { CustomToast } from '@/components/common/toast';
 
 interface ICardData {
   cardId: string;
@@ -103,6 +104,10 @@ const SavedSearch = () => {
   //Search Bar States
   const [search, setSearch] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  //toast message
+  const [showToast, setShowToast] = useState<boolean>(false);
+  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
   const searchData = [
     'sample',
@@ -190,13 +195,18 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    let payload = { id: isCheck, filter: { is_deleted: true } };
-    await updateSavedSearches(payload);
-    await refetch();
-    setIsCheck([]);
-    setIsCheckAll(false);
+    if (isCheck.length) {
+      let payload = { id: isCheck, filter: { is_deleted: true } };
+      await updateSavedSearches(payload);
+      await refetch();
+      setIsCheck([]);
+      setIsCheckAll(false);
+    } else {
+      setShowToast(true);
+      setToastErrorMessage('Check to delete saved search data.');
+    }
 
-    if (data?.data?.previousSearch?.length === 1) {
+    if (data?.data?.previousSearch?.length === 1 && currentPage !== 0) {
       setCurrentPage(currentPage - 1);
     }
   };
@@ -383,6 +393,7 @@ const SavedSearch = () => {
 
   return (
     <>
+      {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
