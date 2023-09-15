@@ -9,7 +9,10 @@ import UpIcon from '@public/assets/icons/chevron-back2-outline.svg?url';
 import { CustomSelect } from '../common/select';
 
 export const CustomCalculator = () => {
+  // State for the count
   const [count, setCount] = useState<number>(0);
+
+  // Data for labels and dropdowns
   let labelData = [
     {
       id: 1,
@@ -66,17 +69,48 @@ export const CustomCalculator = () => {
     },
   ];
 
+  // Data for list pricing
+  let listPricingData = [
+    {
+      id: 1,
+      label: '$/CT',
+      pricingValue: 30,
+    },
+    {
+      id: 2,
+      label: '$ Total',
+      pricingValue: 30,
+    },
+  ];
+
+  // Data for your pricing
+  let yourPricingData = [
+    {
+      id: 1,
+      label: '$/CT',
+      pricingValue: 30,
+    },
+    {
+      id: 2,
+      label: '$ Total',
+      pricingValue: 30,
+    },
+  ];
+
   return (
     <>
       <div className={styles.calculatorMainContainer}>
+        {/* Your Diamond Heading */}
         <div
           className={`border-b border-solitaireSenary ${styles.calculatorHeading}`}
         >
           <p>{ManageLocales('app.topNav.yourDiamond')}</p>
         </div>
+
         <div
           className={`border-b border-solitaireSenary ${styles.calculatorInputsContainer}`}
         >
+          {/* Carat Input */}
           <div className={styles.inputAndLabel}>
             <CustomInputlabel
               htmlfor={ManageLocales('app.sideNav.cart')}
@@ -93,6 +127,8 @@ export const CustomCalculator = () => {
               }}
             />
           </div>
+
+          {/* Label Data */}
           <div className="flex">
             {labelData.map((items) => {
               return (
@@ -103,7 +139,6 @@ export const CustomCalculator = () => {
                       label={items.label}
                       overriddenStyles={{ label: styles.inputLabels }}
                     />
-
                     <CustomSelect
                       data={items.dropdownData}
                       placeholder={items.placeholder}
@@ -118,61 +153,54 @@ export const CustomCalculator = () => {
             })}
           </div>
         </div>
+
+        {/* Pricing Section */}
         <div
           className={`border-b border-solitaireSenary ${styles.pricingMainDiv}`}
         >
+          {/* List Price */}
           <div>
             <p className={styles.priceHeading}>
               {ManageLocales('app.topNav.listPrice')}
             </p>
-            <div className="">
-              <CustomInputlabel
-                htmlfor=""
-                label="$/CT"
-                overriddenStyles={{ label: styles.priceLabel }}
-              />
-              <div className={styles.pricingValue}>
-                <p>730</p>
-              </div>
-            </div>
-            <div className="">
-              <CustomInputlabel
-                htmlfor=""
-                label="$ Total"
-                overriddenStyles={{ label: styles.priceLabel }}
-              />
-              <div className={styles.pricingValue}>
-                <p>730</p>
-              </div>
-            </div>
+            {listPricingData.map((items) => {
+              return (
+                <div key={items.id}>
+                  <CustomInputlabel
+                    htmlfor={items.label}
+                    label={items.label}
+                    overriddenStyles={{ label: styles.priceLabel }}
+                  />
+                  <div className={styles.pricingValue}>
+                    <p>{items.pricingValue}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
+          {/* Your Price */}
           <div>
             <p className={styles.priceHeading}>
               {ManageLocales('app.topNav.yourPrice')}
             </p>
-            <div className="">
-              <CustomInputlabel
-                htmlfor=""
-                label="$/CT"
-                overriddenStyles={{ label: styles.priceLabel }}
-              />
-              <div className={styles.pricingValue}>
-                <p>730</p>
-              </div>
-            </div>
-            <div className="">
-              <CustomInputlabel
-                htmlfor=""
-                label="$ Total"
-                overriddenStyles={{ label: styles.priceLabel }}
-              />
-              <div className={styles.pricingValue}>
-                <p>730</p>
-              </div>
-            </div>
+            {yourPricingData.map((items) => {
+              return (
+                <div key={items.id}>
+                  <CustomInputlabel
+                    htmlfor={items.label}
+                    label={items.label}
+                    overriddenStyles={{ label: styles.priceLabel }}
+                  />
+                  <div className={styles.pricingValue}>
+                    <p>{items.pricingValue}</p>
+                  </div>
+                </div>
+              );
+            })}
           </div>
 
+          {/* Rap% */}
           <div>
             <p className={styles.priceHeading}>Rap%</p>
             <div className={styles.rapPriceMainDiv}>
@@ -181,7 +209,6 @@ export const CustomCalculator = () => {
                 onClick={() => setCount(count + 1)}
                 data-testid="up-icon"
               />
-
               <CustomInputField
                 type="number"
                 placeholder="0"
@@ -190,7 +217,6 @@ export const CustomCalculator = () => {
                 style={{ input: styles.rapPriceInput }}
                 dataTestId="countValue"
               />
-
               <DownIcon
                 className={styles.downIcon}
                 onClick={() => setCount(count - 1)}
