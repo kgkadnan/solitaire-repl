@@ -1,25 +1,22 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import styles from './advance-search.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
-import CustomImageTile, {
-  IImageTileProps,
-} from 'src/components/common/image-tile';
+import CustomImageTile from 'src/components/common/image-tile';
 import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
 import { CustomSelect } from 'src/components/common/select';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
 import { useSearchParams } from 'next/navigation';
-import Round from '@public/assets/images/round.png';
 import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/slices/previous-searches';
-import { validateNumberInput } from '@/utils/validate-number-input';
-
+import advanceSearchNewData from '@/constants/advance-search.json';
+import Round from '@public/assets/images/Round.png';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -40,8 +37,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const [, setSelectedGirdleStep] = useState<string>();
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
-  const [selectedAdditionalCaratRange, setSelectedAditionalCaratRange] =
-    useState<string>('');
+
   const [selectedMake, setSelectedMake] = useState<string>('');
   const [selectedCut, setSelectedCut] = useState<string[]>([]);
   const [selectedPolish, setSelectedPolish] = useState<string[]>([]);
@@ -56,14 +52,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
 
-  const [priceRangeFrom, setPriceRangeFrom] = useState<string>();
-  const [priceRangeTo, setPriceRangeTo] = useState<string>();
-  const [discountFrom, setDiscountFrom] = useState<string>();
-  const [discountTo, setDiscountTo] = useState<string>();
-  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>();
-  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>();
-  const [caratRangeFrom, setCaratRangeFrom] = useState<string>();
-  const [caratRangeTo, setCaratRangeTo] = useState<string>();
+  const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
+  const [priceRangeTo, setPriceRangeTo] = useState<string>('');
+  const [discountFrom, setDiscountFrom] = useState<string>('');
+  const [discountTo, setDiscountTo] = useState<string>('');
+  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>('');
+  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>('');
+  const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
+  const [caratRangeTo, setCaratRangeTo] = useState<string>('');
   //other parameter Inclsuion state
   const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
   const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
@@ -83,32 +79,32 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [lusterWI, setLusterWI] = useState<string[]>([]);
 
   //parameter state
-  const [tablePerFrom, setTablePerFrom] = useState<string>();
-  const [tablePerTo, setTablePerTo] = useState<string>();
-  const [crownAngleFrom, setCrownAngleFrom] = useState<string>();
-  const [crownAngleTo, setCrownAngleTo] = useState<string>();
-  const [lengthFrom, setLengthFrom] = useState<string>();
-  const [lengthTo, setLengthTo] = useState<string>();
-  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<string>();
-  const [pavilionDepthTo, setPavilionDepthTo] = useState<string>();
+  const [tablePerFrom, setTablePerFrom] = useState<string>('');
+  const [tablePerTo, setTablePerTo] = useState<string>('');
+  const [crownAngleFrom, setCrownAngleFrom] = useState<string>('');
+  const [crownAngleTo, setCrownAngleTo] = useState<string>('');
+  const [lengthFrom, setLengthFrom] = useState<string>('');
+  const [lengthTo, setLengthTo] = useState<string>('');
+  const [pavilionDepthFrom, setPavilionDepthFrom] = useState<string>('');
+  const [pavilionDepthTo, setPavilionDepthTo] = useState<string>('');
 
-  const [depthPerFrom, setDepthPerFrom] = useState<string>();
-  const [depthPerTo, setDepthPerTo] = useState<string>();
-  const [crownHeightFrom, setCrownHeightFrom] = useState<string>();
-  const [crownHeightTo, setCrownHeightTo] = useState<string>();
-  const [widthFrom, setWidthFrom] = useState<string>();
-  const [widthTo, setWidthTo] = useState<string>();
-  const [lowerHalfFrom, setLowerHalfFrom] = useState<string>();
-  const [lowerHalfTo, setLowerHalfTo] = useState<string>();
+  const [depthPerFrom, setDepthPerFrom] = useState<string>('');
+  const [depthPerTo, setDepthPerTo] = useState<string>('');
+  const [crownHeightFrom, setCrownHeightFrom] = useState<string>('');
+  const [crownHeightTo, setCrownHeightTo] = useState<string>('');
+  const [widthFrom, setWidthFrom] = useState<string>('');
+  const [widthTo, setWidthTo] = useState<string>('');
+  const [lowerHalfFrom, setLowerHalfFrom] = useState<string>('');
+  const [lowerHalfTo, setLowerHalfTo] = useState<string>('');
 
-  const [ratioFrom, setRatioFrom] = useState<string>();
-  const [ratioTo, setRatioTo] = useState<string>();
-  const [girdlePerFrom, setGirdlePerFrom] = useState<string>();
-  const [girdlePerTo, setGirdlePerTo] = useState<string>();
-  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>();
-  const [pavilionAngleTo, setPavilionAngleTo] = useState<string>();
-  const [starLengthFrom, setStarLengthFrom] = useState<string>();
-  const [starLengthTo, setStarLengthTo] = useState<string>();
+  const [ratioFrom, setRatioFrom] = useState<string>('');
+  const [ratioTo, setRatioTo] = useState<string>('');
+  const [girdlePerFrom, setGirdlePerFrom] = useState<string>('');
+  const [girdlePerTo, setGirdlePerTo] = useState<string>('');
+  const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>('');
+  const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
+  const [starLengthFrom, setStarLengthFrom] = useState<string>('');
+  const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
   const [location, setLocation] = useState<string>('');
@@ -119,8 +115,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
-  const [errorMessage, setErrorMessage] = useState('');
 
+  let shapeData = advanceSearchNewData.shapeData.map((data) => {
+    return { ...data, src: Round };
+  });
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -163,159 +161,60 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     activeIndicatorStyles: styles.activeIndicatorStyles,
   };
 
-  let shapeData: IImageTileProps[] = [
+  let parameterDataState = [
     {
-      src: Round,
-      title: 'Round',
-    },
-    {
-      src: Round,
-      title: 'Pear',
-    },
-    {
-      src: Round,
-      title: 'Emerald',
-    },
-    {
-      src: Round,
-      title: 'Asscher',
-    },
-    {
-      src: Round,
-      title: 'Cushion',
-    },
-    {
-      src: Round,
-      title: 'Princess',
-    },
-    {
-      src: Round,
-      title: 'Marquise',
-    },
-    {
-      src: Round,
-      title: 'Oval',
-    },
-    {
-      src: Round,
-      title: 'Heart',
-    },
-    {
-      src: Round,
-      title: 'Radiant',
-    },
-    {
-      src: Round,
-      title: 'Others',
-    },
-    {
-      src: Round,
-      title: 'All',
-    },
-  ];
-
-  let colorData = ['White', 'Fancy', 'Range'];
-  let whiteData = ['D', 'E', 'F', 'I', 'J', 'K', 'L', 'M', 'N'];
-  let rangeData = [
-    'FANCY',
-    'N-O',
-    'O-P',
-    'S-T',
-    'P-R',
-    'Q-R',
-    'W-X',
-    'Y-Z',
-    'U-V',
-  ];
-  let fancyData = [
-    'Yellow',
-    'Pink',
-    'Blue',
-    'Red',
-    'Green',
-    'Purple',
-    'Orange',
-    'Black',
-    'Gray',
-    'Violet',
-    'Brown',
-    'White',
-    'Other',
-    'Light Yellow',
-  ];
-
-  let makeData = ['3EX', '3EX-Non', '3VG+'];
-
-  let qualityData = ['Ideal', 'Excellent', 'Very Good', 'Good', 'Fair'];
-
-  let locationData = [
-    { id: 1, value: 'Dubai' },
-    { id: 2, value: 'India' },
-    { id: 3, value: 'Belgium' },
-  ];
-
-  let parameterData = [
-    {
-      label: ManageLocales('app.advanceSearch.tablePer'),
       parameterState: [tablePerFrom, tablePerTo],
       setParameterState: [setTablePerFrom, setTablePerTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.crownAngle'),
       parameterState: [crownAngleFrom, crownAngleTo],
       setParameterState: [setCrownAngleFrom, setCrownAngleTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.length'),
       parameterState: [lengthFrom, lengthTo],
       setParameterState: [setLengthFrom, setLengthTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.pavilionDepth'),
       parameterState: [pavilionDepthFrom, pavilionDepthTo],
       setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.depthPer'),
       parameterState: [depthPerFrom, depthPerTo],
       setParameterState: [setDepthPerFrom, setDepthPerTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.crownHeight'),
       parameterState: [crownHeightFrom, crownHeightTo],
       setParameterState: [setCrownHeightFrom, setCrownHeightTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.width'),
       parameterState: [widthFrom, widthTo],
       setParameterState: [setWidthFrom, setWidthTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.lowerHalf'),
       parameterState: [lowerHalfFrom, lowerHalfTo],
       setParameterState: [setLowerHalfFrom, setLowerHalfTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.ratio'),
       parameterState: [ratioFrom, ratioTo],
       setParameterState: [setRatioFrom, setRatioTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.girdlePer'),
       parameterState: [girdlePerFrom, girdlePerTo],
       setParameterState: [setGirdlePerFrom, setGirdlePerTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.pavilionAngle'),
       parameterState: [pavilionAngleFrom, pavilionAngleTo],
       setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
     },
     {
-      label: ManageLocales('app.advanceSearch.starLength'),
       parameterState: [starLengthFrom, starLengthTo],
       setParameterState: [setStarLengthFrom, setStarLengthTo],
     },
   ];
+
+  let parameterData = parameterDataState.map((parameter, index) => {
+    return { ...parameter, ...advanceSearchNewData.parameterData[index] };
+  });
 
   const handleBlackTableBIChange = (data: string) => {
     handleFilterChange(data, blackTableBI, setBlackTableBI);
@@ -369,55 +268,39 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     handleFilterChange(data, lusterWI, setLusterWI);
   };
 
-  let otherParameterData = [
+  let otherParameterDataState = [
     {
       key: ManageLocales('app.advanceSearch.blackInclusion'),
       value: [
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIBlackTable'),
-          elementValue: ['BO', 'BPP', 'B1', 'B2', 'B3'],
           handleChange: handleBlackTableBIChange,
           state: blackTableBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBISideTable'),
-          elementValue: ['SBO', 'SBPP', 'SB1', 'SB2', 'SB3'],
           handleChange: handleSideBlackBIChange,
           state: sideBlackBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIOpenCrown'),
-          elementValue: ['None', 'VS', 'S', 'M', 'D'],
           handleChange: handleOpenCrownBIChange,
           state: openCrownBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIOpenTable'),
-          elementValue: ['None', 'VS', 'S', 'M', 'D'],
           handleChange: handleOpenTableBIChange,
           state: openTableBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIOpenPavilion'),
-          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleOpenPavilionBIChange,
           state: openPavilionBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIMilky'),
-          elementValue: ['MO', 'M1', 'M2', 'M3'],
           handleChange: handleMilkyBIChange,
           state: milkyBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBILuster'),
-          elementValue: ['EX', 'VG', 'G', 'P'],
           handleChange: handleLusterBIChange,
           state: lusterBI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherBIEyeClean'),
-          elementValue: ['Yes', 'No', 'B'],
           handleChange: handleEyeCleanBIChange,
           state: eyeCleanBI,
         },
@@ -427,44 +310,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       key: ManageLocales('app.advanceSearch.whiteInclusion'),
       value: [
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWITableInclusion'),
-          elementValue: ['TO', 'T1', 'B1', 'T2', 'T3'],
           handleChange: handleTableInclusionWIChange,
           state: tableInclusionWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWISideInclusion'),
-          elementValue: ['SO', 'S1', 'SB1', 'SB2', 'S3'],
           handleChange: handleSideInclusionWIChange,
           state: sideInclusionWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWINaturalCrown'),
-          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalCrownWIChange,
           state: naturalCrownWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWINaturalGirdle'),
-          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalGirdleWIChange,
           state: naturalGirdleWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWINaturalPavilion'),
-          elementValue: ['None', 'VS', 'S', 'M', 'L'],
           handleChange: handleNaturalPavilionWIChange,
           state: naturalPavilionWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWISurfaceGraining'),
-          elementValue: ['GO', 'G1', 'G2', 'G3'],
           handleChange: handleSurfaceGrainingIChange,
           state: surfaceGrainingWI,
         },
         {
-          elementKey: ManageLocales('app.advanceSearch.otherWILuster'),
-          elementValue: ['IGO', 'IG1', 'IG2', 'IG3'],
           handleChange: handleLusterWIChange,
           state: lusterWI,
         },
@@ -472,160 +341,23 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     },
   ];
 
-  let intensityData = [
-    'Faint',
-    'Light',
-    'Fancy light',
-    'Fancy',
-    'Fancy dark',
-    'Fancy intense',
-    'Fancy vivid',
-    'Fancy deep',
-    'Very light',
-  ];
+  let otherParameterData = otherParameterDataState.map((other, otherIndex) => {
+    return {
+      key: other.key,
+      value: other.value.map((data, valueIndex) => {
+        return {
+          ...data,
+          ...advanceSearchNewData.otherParameterData[otherIndex].value[
+            valueIndex
+          ],
+        };
+      }),
+    };
+  });
 
-  let overtoneData = [
-    'None',
-    'Yellow',
-    'Yellowish',
-    'Pink',
-    'Pinkish',
-    'Blue',
-    'Bluish',
-    'Red',
-    'Reddish',
-    'Green',
-    'Greenish',
-    'Purple',
-    'Purplish',
-    'Orange',
-    'Orangy',
-    'Gray',
-    'Grayish',
-    'Black',
-    'Brown',
-    'Brownish',
-    'Violetish',
-    'White',
-    'W-x Light Brown',
-    'Brownish Orangy',
-  ];
-
-  let tingeData = [
-    'WH',
-    'YEL',
-    'BR',
-    'GRN',
-    'MIXED',
-    'PINK',
-    'BLACKISH',
-    'Gry',
-    'FY',
-    'MIX',
-    'OR',
-    'BGM',
-    'NO BGM',
-    'NO BLACK',
-  ];
-
-  let tingeIntensityData = ['None', 'Faint', 'Medium', 'Strong'];
-
-  let clarityData = [
-    'FL',
-    'IF',
-    'VVS1',
-    'VVS2',
-    'VS1',
-    'VS2',
-    'SI1',
-    'SI2',
-    'SI3',
-    'I1',
-    'I2',
-    'I3',
-  ];
-
-  let fluorescenceData = ['NON', 'FNT', 'VSL', 'MED', 'STG', 'SLT', 'VSTG'];
-
-  let labData = [
-    'GIA',
-    'HRD',
-    'IGI',
-    'FM',
-    'AGS',
-    'FAC',
-    'DBCOO',
-    'NGTC',
-    'IIDGR',
-    'KGK',
-    'OTHER',
-    'STP',
-  ];
-  let brillianceData = ['Excellent', 'Very Good', 'Good'];
-
-  let girdleData = [
-    'ETN',
-    'VTN',
-    'STN',
-    'THN',
-    'MED',
-    'STK',
-    'THK',
-    'VTK',
-    'ETK',
-  ];
-
-  let girdleStepData = [
-    'All',
-    'Bearding',
-    'Brown patch of color',
-    'Bruise',
-    'Cavity',
-    'Chip',
-    'Cleavage',
-    'Cloud',
-    'Crystal',
-    'Crystal Surface',
-    'Etch Channel',
-    'Extra Facet',
-    'Feather',
-    'Flux Remnant',
-    'Indented Natural',
-    'Internal Graining',
-    'Internal Inscription',
-    'Internal Laser Drilling',
-    'Knot',
-    'Laser Drill Hole',
-    'Manufacturing Remnant',
-    'Minor Details of Polish',
-    'Natural',
-    'Needle',
-    'No Inclusion',
-    'Pinpoint',
-    'Reflecting Surface Graining',
-    'Surface Graining',
-    'Twinning Wisp',
-  ];
-
-  const [caratRangeData, setCaratRangeData] = useState<string[]>([
-    '0.01-0.29',
-    '0.30-0.39',
-    '0.40-0.49',
-    '0.50-0.69',
-    '0.70-0.89',
-    '0.90-0.99',
-    '1.00-1.49',
-    '1.50-1.99',
-    '2.00-2.99',
-    '3.00-3.99',
-    '4.00-4.99',
-    '5.00-5.99',
-    '6.00-6.99',
-    '7.00 - 7.99',
-    '8.00 - 8.99',
-    ' 9.00 - 9.99',
-    '10+',
-  ]);
+  const [caratRangeData, setCaratRangeData] = useState<string[]>(
+    advanceSearchNewData.caratRangeData
+  );
 
   //// All user actions
 
@@ -700,48 +432,65 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   // let prevMakeData=""
   const handleMakeChange = (data: string) => {
     if (data.toLowerCase() === '3ex') {
-      if(data !== selectedMake){
-      setSelectedCut([...selectedCut ,'Excellent'])
-      setSelectedPolish([...selectedPolish,"Excellent"])
-      setSelectedSymmetry([...selectedSymmetry,"Excellent"])
+      if (data !== selectedMake) {
+        setSelectedCut([...selectedCut, 'Excellent']);
+        setSelectedPolish([...selectedPolish, 'Excellent']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+      }
+      setSelectedFluorescence(selectedFluorescence.filter((e) => e !== 'NON'));
     }
-    else{
-      setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-      setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-      setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-    }
-    setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-  }
 
     if (data.toLowerCase() === '3ex-non') {
-      if(data !== selectedMake){
-        setSelectedCut([...selectedCut ,'Excellent'])
-        setSelectedPolish([...selectedPolish,"Excellent"])
-        setSelectedSymmetry([...selectedSymmetry,"Excellent"])
-        setSelectedFluorescence([...selectedFluorescence,"NON"])
+      if (data !== selectedMake) {
+        setSelectedCut([...selectedCut, 'Excellent']);
+        setSelectedPolish([...selectedPolish, 'Excellent']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+        setSelectedFluorescence([...selectedFluorescence, 'NON']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedFluorescence(
+          selectedFluorescence.filter((e) => e !== 'NON')
+        );
       }
-      else{
-        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-      }
-      
     }
     if (data.toLowerCase() === '3vg+') {
-      if(data !== selectedMake){
+      if (data !== selectedMake) {
         // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
-        setSelectedCut([...selectedCut ,'Very Good'])
-        setSelectedPolish([...selectedPolish,"Excellent",'Very Good'])
-        setSelectedSymmetry([...selectedSymmetry,"Excellent",'Very Good'])
+        setSelectedCut([...selectedCut, 'Very Good']);
+        setSelectedPolish([...selectedPolish, 'Excellent', 'Very Good']);
+        setSelectedSymmetry([...selectedSymmetry, 'Excellent', 'Very Good']);
+      } else {
+        setSelectedCut(
+          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedPolish(
+          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedSymmetry(
+          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+        );
+        setSelectedFluorescence(
+          selectedFluorescence.filter((e) => e !== 'NON')
+        );
       }
-      else{
-        setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'&& e!=='Very Good'))
-        setSelectedPolish(selectedPolish.filter((e)=>e!=='Excellent' && e!=='Very Good'))
-        setSelectedSymmetry(selectedSymmetry.filter((e)=>e!=='Excellent' && e!=='Very Good'))
-        setSelectedFluorescence(selectedFluorescence.filter((e)=>e!=='NON'))
-      }
-      
     }
     data === selectedMake ? setSelectedMake('') : setSelectedMake(data);
   };
@@ -764,9 +513,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
-      let filteredGirdleStep: string[] = girdleStepData.map((data1) =>
-        data1.toLowerCase() !== 'all' ? data1 : ''
-      );
+      let filteredGirdleStep: string[] =
+        advanceSearchNewData.girdleStepData.map((data1) =>
+          data1.toLowerCase() !== 'all' ? data1 : ''
+        );
       setSelectedGirdleStep2(filteredGirdleStep);
     } else {
       handleFilterChange(data, selectedGirdleStep2, setSelectedGirdleStep2);
@@ -922,15 +672,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedSymmetry,
       selectedLab,
     ];
-  
+
     const selectedCriteria = criteriaToCheck
       .filter((criteria) => criteria.length > 0)
-      .map((criteria) => Array.isArray(criteria) ? criteria.join(''):criteria)
+      .map((criteria) =>
+        Array.isArray(criteria) ? criteria.join('') : criteria
+      )
       .join(' ');
-  
+
     return name + selectedCriteria;
   };
-  
 
   const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
@@ -968,16 +719,34 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedBrilliance.length > 0 &&
       updateYourSelection('brilliance', selectedBrilliance);
     (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection('priceRange', `${priceRangeFrom}-${priceRangeTo}`);
+      updateYourSelection(
+        'priceRange',
+        `${
+          priceRangeFrom + ((priceRangeFrom && priceRangeTo) &&
+          '-') + priceRangeTo
+        }`
+      );
     (discountFrom || discountTo) &&
-      updateYourSelection('discount', `${discountFrom}-${discountTo}`);
+      updateYourSelection(
+        'discount',
+        `${discountFrom + ((discountFrom && discountTo) && '-') + discountTo}`
+      );
     (pricePerCaratFrom || pricePerCaratTo) &&
       updateYourSelection(
         'pricePerCarat',
-        `${pricePerCaratFrom}-${pricePerCaratTo}`
+        `${
+          pricePerCaratFrom + ((pricePerCaratFrom && pricePerCaratTo) &&
+          '-') + pricePerCaratTo
+        }`
       );
     (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection('priceRange', `${priceRangeFrom}-${priceRangeTo}`);
+      updateYourSelection(
+        'priceRange',
+        `${
+          priceRangeFrom + ((priceRangeFrom && priceRangeTo) &&
+          '-') + priceRangeTo
+        }`
+      );
     blackTableBI.length > 0 &&
       updateYourSelection('otherBIBlackTable', blackTableBI);
     sideBlackBI.length > 0 &&
@@ -1011,41 +780,82 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     origin.length > 0 && updateYourSelection('origin', origin);
 
     (tablePerFrom || tablePerTo) &&
-      updateYourSelection('tablePer', `${tablePerFrom}-${tablePerTo}`);
-
+      updateYourSelection(
+        'tablePer',
+        `${tablePerFrom + ((tablePerFrom && tablePerTo) && '-') + tablePerTo}`
+      );
     (crownAngleFrom || crownAngleTo) &&
-      updateYourSelection('crownAngle', `${crownAngleFrom}-${crownAngleTo}`);
+      updateYourSelection(
+        'crownAngle',
+        `${
+          crownAngleFrom + ((crownAngleFrom && crownAngleTo) &&
+          '-') + crownAngleTo
+        }`
+      );
     (lengthFrom || lengthTo) &&
-      updateYourSelection('length', `${lengthFrom}-${lengthTo}`);
+      updateYourSelection(
+        'length',
+        `${lengthFrom + ((lengthFrom && lengthTo) && '-') + lengthTo}`
+      );
     (pavilionDepthFrom || pavilionDepthTo) &&
       updateYourSelection(
         'pavilionDepth',
-        `${pavilionDepthFrom}-${pavilionDepthTo}`
+        `${
+          pavilionDepthFrom + ((pavilionDepthFrom && pavilionDepthTo) &&
+          '-') + pavilionDepthTo
+        }`
       );
     (depthPerFrom || depthPerTo) &&
-      updateYourSelection('depthPer', `${depthPerFrom}-${depthPerTo}`);
+      updateYourSelection(
+        'depthPer',
+        `${depthPerFrom + ((depthPerFrom && priceRangeTo) && '-') + priceRangeTo}`
+      );
     (crownHeightFrom || crownHeightTo) &&
-      updateYourSelection('crownHeight', `${crownHeightFrom}-${crownHeightTo}`);
+      updateYourSelection(
+        'crownHeight',
+        `${priceRangeFrom + ((priceRangeFrom && depthPerTo) && '-') + depthPerTo}`
+      );
 
     (widthFrom || widthTo) &&
-      updateYourSelection('width', `${widthFrom}-${widthTo}`);
+      updateYourSelection(
+        'width',
+        `${widthFrom + ((widthFrom && widthTo) && '-') + widthTo}`
+      );
     (lowerHalfFrom || lowerHalfTo) &&
-      updateYourSelection('lowerHalf', `${lowerHalfFrom}-${lowerHalfTo}`);
+      updateYourSelection(
+        'lowerHalf',
+        `${lowerHalfFrom + ((lowerHalfFrom && lowerHalfTo) && '-') + lowerHalfTo}`
+      );
     (ratioFrom || ratioTo) &&
-      updateYourSelection('ratio', `${ratioFrom}-${ratioTo}`);
+      updateYourSelection(
+        'ratio',
+        `${ratioFrom + ((ratioFrom && ratioTo) && '-') + ratioTo}`
+      );
     (girdlePerFrom || girdlePerTo) &&
-      updateYourSelection('girdlePer', `${girdlePerFrom}-${girdlePerTo}`);
+      updateYourSelection(
+        'girdlePer',
+        `${girdlePerFrom + ((girdlePerFrom && girdlePerTo) && '-') + girdlePerTo}`
+      );
     (pavilionAngleFrom || pavilionAngleTo) &&
       updateYourSelection(
         'pavilionAngle',
-        `${pavilionAngleFrom}-${pavilionAngleTo}`
+        `${
+          pavilionAngleFrom + ((pavilionAngleFrom && pavilionAngleTo) &&
+          '-') + pavilionAngleTo
+        }`
       );
     (starLengthFrom || starLengthTo) &&
-      updateYourSelection('starLength', `${starLengthFrom}-${starLengthTo}`);
+      updateYourSelection(
+        'starLength',
+        `${
+          starLengthFrom + ((starLengthFrom && starLengthTo) &&
+          '-') + starLengthTo
+        }`
+      );
   };
 
   const handleSearch = async () => {
-    if (searchResultCount! > 300) {
+    if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
       );
@@ -1126,7 +936,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name={`${parameter.parameterState[0]}`}
             onChange={(e) => {
               parameter.setParameterState[0](e.target.value);
-              
             }}
             value={parameter.parameterState[0]}
             style={{
@@ -1210,13 +1019,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       )}:`}
                     />{' '}
                     <div className={styles.yourSelectionInHeader}>
-                      {formatSelection(selectedShape)}{' '}
-                      {formatSelection(selectedColor)}{' '}
-                      {formatSelection(selectedTingeIntensity)}{' '}
-                      {formatSelection(selectedClarity)}{' '}
-                      {formatSelection(selectedCaratRange)}
-                      {formatSelection(selectedMake)}{' '}
-                      {formatSelection(selectedLab)} {formatSelection(location)}{' '}
+                      {selectedShape.length > 0 &&
+                        formatSelection(selectedShape)}{' '}
+                      {selectedColor.length > 0 &&
+                        formatSelection(selectedColor)}{' '}
+                      {selectedTingeIntensity.length > 0 &&
+                        formatSelection(selectedTingeIntensity)}{' '}
+                      {selectedClarity.length > 0 &&
+                        formatSelection(selectedClarity)}{' '}
+                      {selectedCaratRange.length > 0 &&
+                        formatSelection(selectedCaratRange)}
+                      {selectedMake && formatSelection(selectedMake)}{' '}
+                      {selectedLab.length > 0 && formatSelection(selectedLab)}
+                      {location && formatSelection(location)}{' '}
                     </div>
                   </div>
                 }
@@ -1300,7 +1115,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
             {renderSelectionButtons(
-              colorData,
+              advanceSearchNewData.colorData,
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
@@ -1312,7 +1127,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
-                  whiteData,
+                  advanceSearchNewData.whiteData,
                   styles.whiteColorFilterStyle,
                   styles.activeOtherStyles,
                   selectedWhiteColor,
@@ -1322,7 +1137,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Fancy') &&
                 renderSelectionButtons(
-                  fancyData,
+                  advanceSearchNewData.fancyData,
                   '',
                   styles.activeOtherStyles,
                   selectedFancyColor,
@@ -1332,7 +1147,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Range') &&
                 renderSelectionButtons(
-                  rangeData,
+                  advanceSearchNewData.rangeData,
                   '',
                   styles.activeOtherStyles,
                   selectedRangeColor,
@@ -1357,7 +1172,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterSectionData}`}
             >
               {renderSelectionButtons(
-                intensityData,
+                advanceSearchNewData.intensityData,
                 '',
                 styles.activeOtherStyles,
                 selectedIntensity,
@@ -1377,7 +1192,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 className={`${styles.filterSection} ${styles.filterWrapSection}`}
               >
                 {renderSelectionButtons(
-                  overtoneData,
+                  advanceSearchNewData.overtoneData,
                   '',
                   styles.activeOtherStyles,
                   selectedOvertone,
@@ -1398,7 +1213,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            tingeData,
+            advanceSearchNewData.tingeData,
             '',
             styles.activeOtherStyles,
             selectedTinge,
@@ -1416,7 +1231,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            tingeIntensityData,
+            advanceSearchNewData.tingeIntensityData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,
@@ -1433,7 +1248,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            clarityData,
+            advanceSearchNewData.clarityData,
             '',
             styles.activeOtherStyles,
             selectedClarity,
@@ -1513,7 +1328,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            makeData,
+            advanceSearchNewData.makeData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedMake,
@@ -1531,7 +1346,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            qualityData,
+            advanceSearchNewData.qualityData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedCut,
@@ -1549,7 +1364,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            qualityData,
+            advanceSearchNewData.qualityData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedPolish,
@@ -1567,7 +1382,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            qualityData,
+            advanceSearchNewData.qualityData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedSymmetry,
@@ -1585,7 +1400,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            fluorescenceData,
+            advanceSearchNewData.fluorescenceData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedFluorescence,
@@ -1603,7 +1418,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            labData,
+            advanceSearchNewData.labData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedLab,
@@ -1621,7 +1436,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            brillianceData,
+            advanceSearchNewData.brillianceData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedHR,
@@ -1639,7 +1454,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            brillianceData,
+            advanceSearchNewData.brillianceData,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedBrilliance,
@@ -1657,7 +1472,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           <CustomSelect
-            data={locationData}
+            data={advanceSearchNewData.locationData}
             placeholder={ManageLocales('app.advanceSearch.location')}
             style={{
               selectTrigger: styles.dropdownHeader,
@@ -1677,7 +1492,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           <CustomSelect
-            data={locationData}
+            data={advanceSearchNewData.locationData}
             placeholder={ManageLocales('app.advanceSearch.origin')}
             style={{
               selectTrigger: styles.dropdownHeader,
@@ -1853,7 +1668,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterWrapSection}`}
             >
               {renderSelectionButtons(
-                girdleData,
+                advanceSearchNewData.girdleData,
                 '',
                 styles.activeOtherStyles,
                 selectedGirdle,
@@ -1901,7 +1716,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{ display: 'flex', flexWrap: 'wrap' }}
           >
             {renderSelectionButtons(
-              girdleStepData,
+              advanceSearchNewData.girdleStepData,
               '',
               styles.activeOtherStyles,
               selectedGirdleStep2,

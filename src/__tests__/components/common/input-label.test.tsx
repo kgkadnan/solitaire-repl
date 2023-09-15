@@ -1,5 +1,5 @@
 import React from 'react';
-import { logRoles, render } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { CustomInputlabel } from '@components/common/input-label';
 
 describe('CustomInputlabel', () => {
