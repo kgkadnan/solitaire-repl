@@ -1,0 +1,97 @@
+.notificationMainContainer {
+  color: hsl(var(--solitaire-tertiary));
+  padding: 0px 10px;
+}
+
+.groupIcon {
+  stroke: hsl(var(--solitaire-tertiary));
+  margin: 0px 20px;
+}
+
+.markAllReadButton {
+  font-size: 14px;
+  font-weight: 300;
+}
+
+.newNotificationContainer {
+  padding: 20px 0px 0px;
+}
+
+.NotificationHeading {
+  font-size: 14px;
+  font-weight: 300;
+  color: #8c7459;
+  padding-bottom: 12px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.notificationsIcons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ellipseIconActive {
+  fill: #0fc200;
+}
+
+.ellipseIconInactive {
+  fill: #aeb4b4;
+}
+
+.cartIcon {
+  stroke: hsl(var(--solitaire-tertiary));
+  padding: 0px 16px;
+}
+
+.calendarIcon {
+  stroke: hsl(var(--solitaire-tertiary));
+  padding: 0px 16px;
+}
+
+.newNotificationContentMainDiv {
+  margin: 8px 5px;
+  border-radius: 5px;
+  padding: 10px 20px;
+}
+
+.readNotification {
+  margin: 8px 5px;
+  border-radius: 5px;
+  padding: 10px 20px;
+  background-color: #354444;
+}
+
+.oldNotificationContentMainDiv {
+  margin: 8px 5px;
+  padding: 10px 20px;
+}
+
+.newNotificationMessage {
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.newNotificationStatusTime {
+  font-size: 12px;
+  font-weight: 300;
+  color: #5d6a6a;
+}
+
+.notificationFooterButton {
+  margin: 0px 20px;
+}
+
+.loadMoreButtonContainer {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: red;
+}
+
+.loadMoreButton {
+}

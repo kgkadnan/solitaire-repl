@@ -12,7 +12,6 @@ import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
-import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';

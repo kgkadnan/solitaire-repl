@@ -14,6 +14,8 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CustomCalculator } from '@/components/caclulator/calculator';
+import { CustomSlider } from '../slider';
+import { Notification } from '@/components/notification';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -95,8 +97,14 @@ export const TopNavigationBar = () => {
               <CustomCalculator />
             </PopoverContent>
           </Popover>
+          <CustomSlider
+            sheetContent={<Notification />}
+            sheetTriggenContent={
+              <NotificationIcon role="button" className={styles.iconColor} />
+            }
+            sheetContentStyle={styles.notificationSheetContent}
+          />
 
-          <NotificationIcon role="button" className={styles.iconColor} />
           <MyProfileIcon role="button" className={styles.iconColor} />
           <ToggleButton />
         </div>
