@@ -6,7 +6,7 @@
 /* Card Container */
 .searchCardContainer {
   background-color: hsl(var(--solitaire-secondary));
-  padding: 12px 20px 0px 0px;
+  padding: 15px 20px 0px 0px;
   height: 154px;
   width: 100%;
 }
@@ -16,7 +16,7 @@
   color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
   font-weight: 500;
-  margin-right: 50px;
+  // margin-right: 50px;
   letter-spacing: 0.2px;
   display: flex;
   align-items: center;
@@ -30,8 +30,6 @@
 }
 .searchHeader {
   display: flex;
-  margin-left: 43.5px;
-  margin-top: 10px;
 }
 
 .rptNoStyle {
@@ -88,9 +86,6 @@
 }
 
 //Table Styling
-.tableStyle {
-  margin-top: 10px;
-}
 
 .tableHeader {
   color: #8c7459;
@@ -195,4 +190,13 @@
 .filled {
   background-color: #8c7459;
   color: #ffffff;
+  padding: 8px 30px;
+}
+
+.unBlurCardHeader {
+  width: 172px;
+  display: flex;
+  align-items: center;
+  margin-left: 43px;
+  margin-right: 50px;
 }

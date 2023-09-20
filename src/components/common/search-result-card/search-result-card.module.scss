@@ -65,11 +65,13 @@
 
 .cardContainerWithContent {
   position: relative; /* Establish a positioning context for the content */
+  z-index: 0;
 }
 
 .filled {
   background-color: #8c7459;
   padding: 8px 30px;
+  cursor: pointer !important;
 }
 
 .ViewSimilarStoneLabel {
