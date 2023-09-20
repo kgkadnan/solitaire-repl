@@ -8,7 +8,6 @@ import {
   CardDescription,
   CardContent,
 } from '@components/ui/card';
-import { CustomDisplayButton } from '../buttons/display-button';
 
 export interface ISearchCardStyleProps {
   cardContainerStyle?: string;
@@ -33,6 +32,7 @@ export interface IImageContainerProps {
   handleCardAction?: (stone: string) => void;
   defaultCardPosition?: boolean;
   isBlur?: boolean;
+  blurContent?: React.ReactNode;
 }
 
 const CustomSearchResultCard: React.FC<IImageContainerProps> = (
@@ -52,6 +52,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     handleCardAction = () => {},
     defaultCardPosition = true,
     isBlur = false, // Default value is set to false
+    blurContent,
   } = card;
   const {
     cardContainerStyle,
@@ -122,16 +123,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
             <div className={style.floatingContent}>
               {/* Content that appears above the blurred card */}
               <div className={style.blurCardMainContainer}>
-                <div className={style.blurCardContent}>
-                  <p>Out of Stock</p>
-                  <CustomDisplayButton
-                    displayButtonLabel="View Similar Stone"
-                    displayButtonAllStyle={{
-                      displayButtonStyle: style.filled,
-                      displayLabelStyle: style.ViewSimilarStoneLabel,
-                    }}
-                  />
-                </div>
+                <div className={style.blurCardContent}>{blurContent}</div>
               </div>
             </div>
           </>
