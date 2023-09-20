@@ -914,12 +914,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         handleClick={handleChange}
         data={data}
         selectionButtonAllStyles={{
-          selectionButtonStyle: `${className ?? ''}   ${
+          selectionButtonStyle: `${styles.selectionButtonStyles} ${
+            className ?? ''
+          }   ${
             typeof relatedState !== 'string'
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
           }`,
-          selectionButtonLabelStyle: `${
+          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${
             highlightIndicator &&
             relatedState?.includes(data) &&
             styles.colorDataActiveStyle
@@ -1310,7 +1312,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: styles.addCarat,
+                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
               }}
             />
           </div>
