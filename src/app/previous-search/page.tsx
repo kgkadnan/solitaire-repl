@@ -12,7 +12,6 @@ import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
-import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
@@ -24,6 +23,7 @@ import {
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
 import { Checkbox } from '@/components/ui/checkbox';
+import { formatCreatedAt } from '@/utils/format-createdAt';
 
 interface ICardData {
   cardId: string;
@@ -78,7 +78,6 @@ const PreviousSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
     currentPage,
     resultsPerPage,
-    isDeleted: false,
   });
 
   // Destructure the mutation function from the hook
@@ -142,28 +141,6 @@ const PreviousSearch = () => {
     [] // No dependencies
   );
 
-  // Function to format the created_at date
-  const formatCreatedAt = (createdAt: any) => {
-    const createdAtDate = new Date(createdAt);
-
-    const dateFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-
-    const timeFormatter = new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
-
-    const formattedDate = dateFormatter.format(createdAtDate);
-    const formattedTime = timeFormatter.format(createdAtDate);
-
-    return `${formattedDate} | ${formattedTime}`;
-  };
-
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
@@ -199,7 +176,7 @@ const PreviousSearch = () => {
   //Delete Data
   const handleDelete = async () => {
     if (isCheck?.length) {
-      let payload = { id: isCheck, filter: { is_deleted: true } };
+      let payload = { id: isCheck };
       await updatePreviousSearch(payload);
       await refetch();
       setIsCheck([]);
@@ -209,7 +186,7 @@ const PreviousSearch = () => {
       setToastErrorMessage('Check to delete previous search data.');
     }
 
-    if (data?.data?.previousSearch?.length === 1) {
+    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
     }
   };

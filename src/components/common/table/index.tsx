@@ -1,3 +1,4 @@
+import { formatCassing } from '@/utils/format-cassing';
 import {
   Table,
   TableBody,
@@ -48,7 +49,7 @@ export const CustomTable: React.FC<ITableProps> = ({
                   key={`tablehead-${index}`}
                   className={`${tableHeaderStyle}`}
                 >
-                  {tableHead}
+                  {formatCassing(tableHead)}
                 </TableHead>
               );
             })}
@@ -66,7 +67,7 @@ export const CustomTable: React.FC<ITableProps> = ({
                     key={`cell-${rowIndex}-${cellIndex}`}
                     className={`whitespace-nowrap ${tableBodyStyle} `}
                   >
-                    {Array.isArray(bodyData[item])
+                    {Array.isArray(bodyData[item]) && bodyData[item].length > 1
                       ? bodyData[item].toString().substring(0, 3).concat('...')
                       : bodyData[item]}
                   </TableCell>

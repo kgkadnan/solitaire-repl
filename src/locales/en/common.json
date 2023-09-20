@@ -147,6 +147,6 @@
   "app.myaccount.emailNotification.footer.save": "Save",
   "app.myaccount.emailNotification.footer.cancel": "Cancel",
   "app.myaccount.reportBug": "Report Bug",
-  "app.myaccount.reportBug.register": "Register",
+  "app.myaccount.reportBug.report": "Report",
   "app.myaccount.reportBug.reset": "Reset"
 }
