@@ -86,11 +86,13 @@
 .upIcon {
   margin-bottom: 15px;
   stroke: hsl(var(--solitaire-tertiary));
+  cursor: pointer;
 }
 
 .downIcon {
   margin-top: 15px;
   stroke: hsl(var(--solitaire-tertiary));
+  cursor: pointer;
 }
 
 .selectTrigger {
