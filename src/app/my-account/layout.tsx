@@ -98,12 +98,10 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
         style={{
           display: 'flex',
           marginTop: '70px',
-          width:'100%'
+          width: '100%',
         }}
       >
-        <main style={{ width: '98%', minHeight: '70vh' }}>
-          {children}
-        </main>
+        <main style={{ width: '98%', minHeight: '70vh' }}>{children}</main>
       </div>
     </>
   );

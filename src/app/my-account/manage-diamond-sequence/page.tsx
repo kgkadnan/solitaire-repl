@@ -76,14 +76,16 @@ const ManageDiamondSequence = () => {
     {
       id: 1,
       displayButtonLabel: ManageLocales(
-        'app.myaccount.diamondSequence.updateSequence'
+        'app.myaccount.diamondSequence.footer.updateSequence'
       ),
       style: styles.filled,
       fn: handleUpdateDiamondSequence,
     },
     {
       id: 2,
-      displayButtonLabel: ManageLocales('app.common.footer.cancel'),
+      displayButtonLabel: ManageLocales(
+        'app.myaccount.diamondSequence.footer.cancel'
+      ),
       style: styles.transparent,
       fn: handleCancel,
     },

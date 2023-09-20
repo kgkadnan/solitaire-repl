@@ -5,15 +5,15 @@ import { CustomCheckBox } from '@components/common/checkbox';
 test('renders custom checkbox correctly', () => {
   //mock props
   const mockProps = {
-    data: 'Option 1',
+    data: '1',
     onClick: jest.fn(),
-    isChecked: ['Option 1'],
+    isChecked: ['1'],
     style: 'bg-solitaireQuaternary',
   };
 
   const { getByTestId } = render(<CustomCheckBox {...mockProps} />);
   //getting element with test-id
-  const checkboxElement = getByTestId('custom-checkbox');
+  const checkboxElement = getByTestId('custom-checkbox-1');
   //checking class
   expect(checkboxElement).toHaveClass('bg-solitaireQuaternary');
   // Check checked status
@@ -23,7 +23,7 @@ test('renders custom checkbox correctly', () => {
 test('handles checkbox click', () => {
   //mock props
   const mockProps = {
-    data: 'Option 2',
+    data: '2',
     onClick: jest.fn(),
     isChecked: ['Option 1'],
     style: 'bg-solitaireQuaternary',
@@ -32,7 +32,7 @@ test('handles checkbox click', () => {
   const { getByTestId } = render(<CustomCheckBox {...mockProps} />);
 
   //getting element with test-id
-  const checkboxElement = getByTestId('custom-checkbox');
+  const checkboxElement = getByTestId('custom-checkbox-2');
 
   fireEvent.click(checkboxElement);
 
