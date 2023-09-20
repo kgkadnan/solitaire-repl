@@ -8,7 +8,7 @@ const MAX_CHARACTERS = 1000;
 
 const ReportBug = () => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [registerValue, setRegisterValue] = useState<string>('');
+  const [reportBug, setReportBug] = useState<string>('');
 
   const handleInput = (event: any) => {
     let inputValue = event.target.value;
@@ -17,8 +17,8 @@ const ReportBug = () => {
     }
   };
 
-  let register = () => {
-    setRegisterValue(inputValue);
+  let report = () => {
+    setReportBug(inputValue);
   };
 
   let reset = () => {
@@ -29,7 +29,7 @@ const ReportBug = () => {
     {
       id: '1',
       label: ManageLocales('app.myaccount.reportBug.report'),
-      fn: register,
+      fn: report,
       selectionButtonAllStyles: {
         selectionButtonStyle: styles.filled,
       },
