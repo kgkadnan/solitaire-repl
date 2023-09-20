@@ -1,8 +1,6 @@
 'use client';
 
 import LanguageSwitcher from '@/components/common/multi-lingual';
-import ToastExample from '@/components/common/toast/example';
-import TooltipExample from '@/components/common/tooltip/example';
 import { ManageLocales } from '@/utils/translate';
 
 export default function Home() {
@@ -17,7 +15,7 @@ export default function Home() {
         }}
       >
         Welcome to KGK live 2.O
-      </h1>
+      </h1> 
       <h1
         style={{
           fontSize: '30px',

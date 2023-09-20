@@ -121,5 +121,32 @@
 
   "app.topNav.yourDiamond": "Your Diamond",
   "app.topNav.listPrice": "List Price",
-  "app.topNav.yourPrice": "Your Price"
+  "app.topNav.yourPrice": "Your Price",
+
+  "app.myProfile.heading": "Welcome to your account",
+  "app.myProfile.summary": "Summary",
+  "app.myProfile.kyc": "KYC",
+  "app.myProfile.changePassword": "Change Password",
+  "app.myProfile.manageDiamondSequence": "Manage Diamond Sequence",
+  "app.myProfile.emailNotification": "Email Notification",
+  "app.myProfile.reportBug": "Report Bug",
+
+  "app.myaccount.summary.personalInformation": "Personal Information",
+  "app.myaccount.summary.contactNo": "Contact no",
+  "app.myaccount.summary.emailID": "Email ID",
+  "app.myaccount.summary.account": "Account",
+  "app.changePassword": "Change Password",
+  "app.changePassword.cancel": "Cancel",
+  "app.myaccount.diamondSequence.footer.cancel": "Cancel",
+  "app.myaccount.diamondSequence.footer.updateSequence": "Update Sequence",
+
+  "app.myaccount.emailNotification.bidToBuy": "Bid to Buy",
+  "app.myaccount.emailNotification.newArrival": "New Arrival",
+  "app.myaccount.emailNotification.forYou": "For You",
+  "app.myaccount.emailNotification.newsletter": "News Letter",
+  "app.myaccount.emailNotification.footer.save": "Save",
+  "app.myaccount.emailNotification.footer.cancel": "Cancel",
+  "app.myaccount.reportBug": "Report Bug",
+  "app.myaccount.reportBug.register": "Register",
+  "app.myaccount.reportBug.reset": "Reset"
 }

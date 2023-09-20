@@ -14,6 +14,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { CustomCalculator } from '@/components/caclulator/calculator';
+import Link from 'next/link';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
@@ -97,7 +98,9 @@ export const TopNavigationBar = () => {
           </Popover>
 
           <NotificationIcon role="button" className={styles.iconColor} />
-          <MyProfileIcon role="button" className={styles.iconColor} />
+          <div onClick={() => router.push('/my-account/summary')}>
+            <MyProfileIcon role="button" className={styles.iconColor} />
+          </div>
           <ToggleButton />
         </div>
       </div>

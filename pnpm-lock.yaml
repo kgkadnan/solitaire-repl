@@ -101,6 +101,9 @@ dependencies:
   react-dom:
     specifier: 18.2.0
     version: 18.2.0(react@18.2.0)
+  react-grid-dnd:
+    specifier: ^2.1.2
+    version: 2.1.2(react-dom@18.2.0)(react-gesture-responder@2.1.0)(react@18.2.0)
   react-redux:
     specifier: ^8.1.2
     version: 8.1.2(@types/react-dom@18.2.7)(@types/react@18.2.20)(react-dom@18.2.0)(react@18.2.0)(redux@4.2.1)
@@ -5973,10 +5976,24 @@ packages:
   /@types/range-parser@1.2.4:
     resolution: {integrity: sha512-EEhsLsD6UsDM1yFhAvy0Cjr6VwmpMWqFBCb9w07wVugF7w9nfajxLuVmngTIpgS6svCnm6Vaw+MZhoDCKnOfsw==}
 
+  /@types/react-dom@16.9.19:
+    resolution: {integrity: sha512-xC8D280Bf6p0zguJ8g62jcEOKZiUbx9sIe6O3tT/lKfR87A7A6g65q13z6D5QUMIa/6yFPkNhqjF5z/VVZEYqQ==}
+    dependencies:
+      '@types/react': 16.14.46
+    dev: false
+
   /@types/react-dom@18.2.7:
     resolution: {integrity: sha512-GRaAEriuT4zp9N4p1i8BDBYmEyfo+xQ3yHjJU4eiK5NDa1RmUZG+unZABUTK4/Ox/M+GaHwb6Ow8rUITrtjszA==}
     dependencies:
       '@types/react': 18.2.20
+
+  /@types/react@16.14.46:
+    resolution: {integrity: sha512-Am4pyXMrr6cWWw/TN3oqHtEZl0j+G6Up/O8m65+xF/3ZaUgkv1GAtTPWw4yNRmH0HJXmur6xKCKoMo3rBGynuw==}
+    dependencies:
+      '@types/prop-types': 15.7.5
+      '@types/scheduler': 0.16.3
+      csstype: 3.1.2
+    dev: false
 
   /@types/react@18.2.20:
     resolution: {integrity: sha512-WKNtmsLWJM/3D5mG4U84cysVY31ivmyw85dE84fOCk5Hx78wezB/XEjVPWl2JTZ5FkEeaTJf+VgUAUn3PE7Isw==}
@@ -14077,6 +14094,36 @@ packages:
     resolution: {integrity: sha512-/6UZ2qgEyH2aqzYZgQPxEnz33NJ2gNsnHA2o5+o4wW9bLM/JYQitNP9xPhsXwC08hMMovfGe/8retsdDsczPRg==}
     dev: false
 
+  /react-gesture-responder@2.1.0(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-uXfFNOtSus5zo2u2WoXMmfAWLdbAYvubmA4AOk9UyLO9n7koVagvSHW7MOUEnhE+F6NeVuyTc+8pyZxLKwyxmg==}
+    peerDependencies:
+      react: ^16.8.6
+      react-dom: ^16.8.6
+    dependencies:
+      '@types/react': 16.14.46
+      '@types/react-dom': 16.9.19
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      tslib: 1.14.1
+    dev: false
+
+  /react-grid-dnd@2.1.2(react-dom@18.2.0)(react-gesture-responder@2.1.0)(react@18.2.0):
+    resolution: {integrity: sha512-E+XcyemjmRm5Dk3Rn4e2KPpRK4dF1e8NyuOXhm4ZsmVIJVnkP+AzojkTn333ec2Fbe55PUxuHqYA6Fl0Wz65Ng==}
+    peerDependencies:
+      react: ^16.8.6
+      react-dom: ^16.8.6
+      react-gesture-responder: ^2.1.0
+    dependencies:
+      '@types/react': 16.14.46
+      '@types/react-dom': 16.9.19
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      react-gesture-responder: 2.1.0(react-dom@18.2.0)(react@18.2.0)
+      react-spring: 9.0.0-beta.8(react-dom@18.2.0)(react@18.2.0)
+      resize-observer-polyfill: 1.5.1
+      tslib: 1.14.1
+    dev: false
+
   /react-inspector@6.0.2(react@18.2.0):
     resolution: {integrity: sha512-x+b7LxhmHXjHoU/VrFAzw5iutsILRoYyDq97EDYdFpPLcvqtEzk4ZSZSQjnFPbr5T57tLXnHcqFYoN1pI6u8uQ==}
     peerDependencies:
@@ -14282,6 +14329,18 @@ packages:
       - webpack-cli
       - webpack-hot-middleware
       - webpack-plugin-serve
+    dev: false
+
+  /react-spring@9.0.0-beta.8(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-pcyQqr5W9HBM5Rm0rmdbVIEQz7wocAfWBNWSUm/EEvpb4M0OQ3Xp9JW6Ayo+6ZgV7fLzJJHO/QgNdUMpAtVaTw==}
+    peerDependencies:
+      react: '>= 16.8.0'
+      react-dom: '>= 16.8.0'
+    dependencies:
+      '@babel/runtime': 7.22.10
+      prop-types: 15.8.1
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
     dev: false
 
   /react-style-singleton@2.2.1(@types/react@18.2.20)(react@18.2.0):
@@ -14544,6 +14603,10 @@ packages:
 
   /reselect@4.1.8:
     resolution: {integrity: sha512-ab9EmR80F/zQTMNeneUr4cv+jSwPJgIlvEmVwLerwrWVbpLlBuls9XHzIeTFy4cegU2NHBp3va0LKOzU5qFEYQ==}
+    dev: false
+
+  /resize-observer-polyfill@1.5.1:
+    resolution: {integrity: sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==}
     dev: false
 
   /resolve-cwd@3.0.0:

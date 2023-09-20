@@ -722,29 +722,32 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection(
         'priceRange',
         `${
-          priceRangeFrom + ((priceRangeFrom && priceRangeTo) &&
-          '-') + priceRangeTo
+          priceRangeFrom +
+          (priceRangeFrom && priceRangeTo && '-') +
+          priceRangeTo
         }`
       );
     (discountFrom || discountTo) &&
       updateYourSelection(
         'discount',
-        `${discountFrom + ((discountFrom && discountTo) && '-') + discountTo}`
+        `${discountFrom + (discountFrom && discountTo && '-') + discountTo}`
       );
     (pricePerCaratFrom || pricePerCaratTo) &&
       updateYourSelection(
         'pricePerCarat',
         `${
-          pricePerCaratFrom + ((pricePerCaratFrom && pricePerCaratTo) &&
-          '-') + pricePerCaratTo
+          pricePerCaratFrom +
+          (pricePerCaratFrom && pricePerCaratTo && '-') +
+          pricePerCaratTo
         }`
       );
     (priceRangeFrom || priceRangeTo) &&
       updateYourSelection(
         'priceRange',
         `${
-          priceRangeFrom + ((priceRangeFrom && priceRangeTo) &&
-          '-') + priceRangeTo
+          priceRangeFrom +
+          (priceRangeFrom && priceRangeTo && '-') +
+          priceRangeTo
         }`
       );
     blackTableBI.length > 0 &&
@@ -782,74 +785,78 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     (tablePerFrom || tablePerTo) &&
       updateYourSelection(
         'tablePer',
-        `${tablePerFrom + ((tablePerFrom && tablePerTo) && '-') + tablePerTo}`
+        `${tablePerFrom + (tablePerFrom && tablePerTo && '-') + tablePerTo}`
       );
     (crownAngleFrom || crownAngleTo) &&
       updateYourSelection(
         'crownAngle',
         `${
-          crownAngleFrom + ((crownAngleFrom && crownAngleTo) &&
-          '-') + crownAngleTo
+          crownAngleFrom +
+          (crownAngleFrom && crownAngleTo && '-') +
+          crownAngleTo
         }`
       );
     (lengthFrom || lengthTo) &&
       updateYourSelection(
         'length',
-        `${lengthFrom + ((lengthFrom && lengthTo) && '-') + lengthTo}`
+        `${lengthFrom + (lengthFrom && lengthTo && '-') + lengthTo}`
       );
     (pavilionDepthFrom || pavilionDepthTo) &&
       updateYourSelection(
         'pavilionDepth',
         `${
-          pavilionDepthFrom + ((pavilionDepthFrom && pavilionDepthTo) &&
-          '-') + pavilionDepthTo
+          pavilionDepthFrom +
+          (pavilionDepthFrom && pavilionDepthTo && '-') +
+          pavilionDepthTo
         }`
       );
     (depthPerFrom || depthPerTo) &&
       updateYourSelection(
         'depthPer',
-        `${depthPerFrom + ((depthPerFrom && priceRangeTo) && '-') + priceRangeTo}`
+        `${depthPerFrom + (depthPerFrom && priceRangeTo && '-') + priceRangeTo}`
       );
     (crownHeightFrom || crownHeightTo) &&
       updateYourSelection(
         'crownHeight',
-        `${priceRangeFrom + ((priceRangeFrom && depthPerTo) && '-') + depthPerTo}`
+        `${priceRangeFrom + (priceRangeFrom && depthPerTo && '-') + depthPerTo}`
       );
 
     (widthFrom || widthTo) &&
       updateYourSelection(
         'width',
-        `${widthFrom + ((widthFrom && widthTo) && '-') + widthTo}`
+        `${widthFrom + (widthFrom && widthTo && '-') + widthTo}`
       );
     (lowerHalfFrom || lowerHalfTo) &&
       updateYourSelection(
         'lowerHalf',
-        `${lowerHalfFrom + ((lowerHalfFrom && lowerHalfTo) && '-') + lowerHalfTo}`
+        `${lowerHalfFrom + (lowerHalfFrom && lowerHalfTo && '-') + lowerHalfTo}`
       );
     (ratioFrom || ratioTo) &&
       updateYourSelection(
         'ratio',
-        `${ratioFrom + ((ratioFrom && ratioTo) && '-') + ratioTo}`
+        `${ratioFrom + (ratioFrom && ratioTo && '-') + ratioTo}`
       );
     (girdlePerFrom || girdlePerTo) &&
       updateYourSelection(
         'girdlePer',
-        `${girdlePerFrom + ((girdlePerFrom && girdlePerTo) && '-') + girdlePerTo}`
+        `${girdlePerFrom + (girdlePerFrom && girdlePerTo && '-') + girdlePerTo}`
       );
     (pavilionAngleFrom || pavilionAngleTo) &&
       updateYourSelection(
         'pavilionAngle',
         `${
-          pavilionAngleFrom + ((pavilionAngleFrom && pavilionAngleTo) &&
-          '-') + pavilionAngleTo
+          pavilionAngleFrom +
+          (pavilionAngleFrom && pavilionAngleTo && '-') +
+          pavilionAngleTo
         }`
       );
     (starLengthFrom || starLengthTo) &&
       updateYourSelection(
         'starLength',
         `${
-          starLengthFrom + ((starLengthFrom && starLengthTo) &&
-          '-') + starLengthTo
+          starLengthFrom +
+          (starLengthFrom && starLengthTo && '-') +
+          starLengthTo
         }`
       );
   };

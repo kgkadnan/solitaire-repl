@@ -23,6 +23,7 @@ import {
 } from '@/slices/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ICardData {
   cardId: string;
@@ -197,7 +198,7 @@ const PreviousSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    if (isCheck.length) {
+    if (isCheck?.length) {
       let payload = { id: isCheck, filter: { is_deleted: true } };
       await updatePreviousSearch(payload);
       await refetch();
@@ -362,10 +363,8 @@ const PreviousSearch = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    isCheckAll: isCheckAll,
     //count
     searchCount: cardData?.length,
     //Search Data
@@ -373,6 +372,21 @@ const PreviousSearch = () => {
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   useEffect(() => {
@@ -399,7 +413,7 @@ const PreviousSearch = () => {
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={previousSearchheaderData} />
         </div>
 
         {/* Custom Card and Checkbox map */}

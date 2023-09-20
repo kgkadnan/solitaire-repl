@@ -10,6 +10,8 @@ import ImageIcon from '@public/assets/icons/image-outline.svg';
 import CertificateIcon from '@public/assets/icons/certificate.svg';
 import Image from 'next/image';
 import styles from './wishlist.module.scss';
+import { Checkbox } from '@/components/ui/checkbox';
+import { ManageLocales } from '@/utils/translate';
 import { CustomSlider } from '@/components/common/slider';
 import { useRouter } from 'next/navigation';
 
@@ -220,10 +222,24 @@ const WishList = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const wishListheaderData = {
     headerHeading: 'Wishlist',
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
     searchCount: cardData.length,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   // Function to handle edit action
@@ -255,7 +271,7 @@ const WishList = () => {
       <div className="container flex flex-col ">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={wishListheaderData} />
         </div>
 
         {/* Custom Card and Checkbox map */}
