@@ -22,6 +22,7 @@ import {
   useUpdateSavedSearchesMutation,
 } from '@/slices/saved-searches';
 import { CustomSlider } from '@/components/common/slider';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface ICardData {
   cardId: string;
@@ -85,7 +86,6 @@ const SavedSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     currentPage,
     resultsPerPage,
-    isDeleted: false,
   });
 
   // Destructure the mutation function from the hook
@@ -136,28 +136,6 @@ const SavedSearch = () => {
     [] // No dependencies
   );
 
-  // Function to format the created_at date
-  const formatCreatedAt = (createdAt: any) => {
-    const createdAtDate = new Date(createdAt);
-
-    const dateFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-
-    const timeFormatter = new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
-
-    const formattedDate = dateFormatter.format(createdAtDate);
-    const formattedTime = timeFormatter.format(createdAtDate);
-
-    return `${formattedDate} | ${formattedTime}`;
-  };
-
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
@@ -192,13 +170,13 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    let payload = { id: isCheck, filter: { is_deleted: true } };
+    let payload = { id: isCheck };
     await updateSavedSearches(payload);
     await refetch();
     setIsCheck([]);
     setIsCheckAll(false);
 
-    if (data?.data?.previousSearch?.length === 1) {
+    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
     }
   };
