@@ -23,7 +23,7 @@ import {
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
 import { Checkbox } from '@/components/ui/checkbox';
-import { formatCreatedAt } from '@/utils/format-createdAt';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface ICardData {
   cardId: string;

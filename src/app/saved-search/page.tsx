@@ -22,7 +22,7 @@ import {
   useUpdateSavedSearchesMutation,
 } from '@/slices/saved-searches';
 import { CustomSlider } from '@/components/common/slider';
-import { formatCreatedAt } from '@/utils/format-createdAt';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface ICardData {
   cardId: string;
