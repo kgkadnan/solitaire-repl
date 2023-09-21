@@ -105,7 +105,10 @@ export const TopNavigationBar = () => {
             sheetContentStyle={styles.notificationSheetContent}
           />
 
-          <MyProfileIcon role="button" className={styles.iconColor} />
+          <NotificationIcon role="button" className={styles.iconColor} />
+          <div onClick={() => router.push('/my-account/summary')}>
+            <MyProfileIcon role="button" className={styles.iconColor} />
+          </div>
           <ToggleButton />
         </div>
       </div>

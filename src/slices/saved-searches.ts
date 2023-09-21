@@ -8,8 +8,8 @@ export const savedSearchesApi = createApi({
 
   endpoints: (builder) => ({
     getAllSavedSearches: builder.query({
-      query: ({ currentPage, resultsPerPage, isDeleted }) =>
-        `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
+      query: ({ currentPage, resultsPerPage }) =>
+        `previous-search?page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['SavedSearch'],
     }),
     updateSavedSearches: builder.mutation({

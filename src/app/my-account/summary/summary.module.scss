@@ -1,0 +1,64 @@
+.summaryContainer {
+  display: grid;
+  gap: 20px;
+}
+
+.personalCard {
+  color: hsl(var(--solitaire-tertiary));
+  background: #35444466;
+  border-radius: 12px;
+  width: 350px;
+  padding: 30px 20px;
+  // margin-top: 20px;
+}
+
+.personalCardData {
+  font-size: 14px;
+  display: flex;
+}
+
+.personalCardHeader {
+  font-size: 16px;
+  font-weight: 600;
+  padding-bottom: 10px;
+}
+
+.dividerLine {
+  height: 5px;
+  border: 0px solid hsl(var(--solitaire-outline));
+  border-top-width: 1px;
+  width: 100%;
+}
+
+.keyAccount {
+  color: hsl(var(--solitaire-tertiary));
+  font-weight: 600;
+}
+
+.keyAccountManagerCard {
+  width: 48%;
+  display: grid;
+  gap: 20px;
+}
+
+.keyAccountManagerCardContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userHeader {
+  display: flex;
+}
+.iconSpace {
+  padding-right: 10px;
+}
+
+.keyAccountManagerSocials {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.keyAccountManagerSocials .socials {
+  display: flex;
+}

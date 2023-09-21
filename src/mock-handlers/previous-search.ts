@@ -12,7 +12,6 @@ const previousSearchHandlers = [
             diamond_count: 256,
             name: 'sample4',
             customer_id: 'cus_01H90HVS4396XG4A6D1PFMCXKX',
-            is_deleted: false,
             meta_data: {
               cut: ['EX', 'IDEAL', 'VG'],
               lab: ['GIA', 'HRD', 'IGI'],

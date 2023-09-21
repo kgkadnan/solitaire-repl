@@ -12,16 +12,18 @@ import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
-import { SheetContent, SheetTrigger, Sheet } from '@/components/ui/sheet';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
+import { Checkbox } from '@/components/ui/checkbox';
 import {
   useGetAllSavedSearchesQuery,
   useUpdateSavedSearchesMutation,
 } from '@/slices/saved-searches';
 import { CustomToast } from '@/components/common/toast';
+import { CustomSlider } from '@/components/common/slider';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface ICardData {
   cardId: string;
@@ -61,6 +63,7 @@ const SavedSearch = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [activeTab, setActiveTab] = useState(0);
 
   const handleResultsPerPageChange = (event: string) => {
     const newResultsPerPage = parseInt(event, 10);
@@ -84,7 +87,6 @@ const SavedSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     currentPage,
     resultsPerPage,
-    isDeleted: false,
   });
 
   // Destructure the mutation function from the hook
@@ -139,28 +141,6 @@ const SavedSearch = () => {
     [] // No dependencies
   );
 
-  // Function to format the created_at date
-  const formatCreatedAt = (createdAt: any) => {
-    const createdAtDate = new Date(createdAt);
-
-    const dateFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-
-    const timeFormatter = new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
-
-    const formattedDate = dateFormatter.format(createdAtDate);
-    const formattedTime = timeFormatter.format(createdAtDate);
-
-    return `${formattedDate} | ${formattedTime}`;
-  };
-
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
@@ -195,18 +175,13 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    if (isCheck.length) {
-      let payload = { id: isCheck, filter: { is_deleted: true } };
-      await updateSavedSearches(payload);
-      await refetch();
-      setIsCheck([]);
-      setIsCheckAll(false);
-    } else {
-      setShowToast(true);
-      setToastErrorMessage('Check to delete saved search data.');
-    }
+    let payload = { id: isCheck };
+    await updateSavedSearches(payload);
+    await refetch();
+    setIsCheck([]);
+    setIsCheckAll(false);
 
-    if (data?.data?.previousSearch?.length === 1 && currentPage !== 0) {
+    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
     }
   };
@@ -360,10 +335,8 @@ const SavedSearch = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const savedSearchheaderData = {
     headerHeading: ManageLocales('app.savedSearch.header'),
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    isCheckAll: isCheckAll,
     //count
     searchCount: cardData?.length,
     //Search Data
@@ -371,6 +344,21 @@ const SavedSearch = () => {
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   useEffect(() => {
@@ -391,80 +379,123 @@ const SavedSearch = () => {
     alert("You have clicked the 'show result' button");
   };
 
+  const cardDetailHeaderData = [
+    {
+      label: 'Search 1',
+      content: '111111111111111111111',
+    },
+    {
+      label: 'Search 2',
+      content: '22222222222222222222222222',
+    },
+    {
+      label: 'Search 3',
+      content: '333333333333333333333333333333',
+    },
+    {
+      label: 'Search 4',
+      content: '44444444444444444444444444444444',
+    },
+    {
+      label: 'Search 5',
+      content: '5555555555555555555555555555555555',
+    },
+  ];
+
+  const handleButtonClick = (index: number) => {
+    setActiveTab(index);
+  };
+
   return (
     <>
       {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={savedSearchheaderData} />
         </div>
 
-        <Sheet>
-          {/* Custom Card and Checkbox map */}
-          <div className="flex-grow overflow-y-auto min-h-[80vh]">
-            <>
-              {cardData?.map((items: any) => {
-                return (
-                  <div key={items.cardId}>
-                    <div className="flex mt-6">
-                      <CustomCheckBox
-                        data={items.cardId}
-                        onClick={handleClick}
-                        isChecked={isCheck}
-                      />
-                      <SheetTrigger className={styles.mainCardContainer}>
-                        <CustomSearchResultCard
-                          cardData={items}
-                          overriddenStyles={cardStyles}
-                          defaultCardPosition={false}
-                          handleCardAction={handleEdit}
-                        />
-                      </SheetTrigger>
-                      <SheetContent className={styles.sheetContentStyle}>
-                        {/* Detailed Information section */}
-                        <div
-                          className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
-                        >
-                          <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
-                        </div>
-
-                        {/* Loop through card detail data */}
-                        {cardDetailData.map((cardDetails) => (
-                          <div className="flex" key={cardDetails.cardId}>
-                            <div className={styles.sheetMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales('app.savedSearch.basicInfo')}
-                                </p>
-                              </div>
-
-                              <div>
-                                {Object.entries(
-                                  cardDetails.basicCardDetails
-                                ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {key}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {value}
-                                      </span>
-                                    </p>
+        {/* Custom Card and Checkbox map */}
+        <div className="flex-grow overflow-y-auto min-h-[80vh]">
+          <>
+            {cardData?.map((items: any) => {
+              return (
+                <div key={items.cardId}>
+                  <div className="flex mt-6">
+                    <CustomCheckBox
+                      data={items.cardId}
+                      onClick={handleClick}
+                      isChecked={isCheck}
+                    />
+                    <CustomSlider
+                      sheetTriggerStyle={styles.mainCardContainer}
+                      sheetTriggenContent={
+                        <>
+                          <CustomSearchResultCard
+                            cardData={items}
+                            overriddenStyles={cardStyles}
+                            defaultCardPosition={false}
+                            handleCardAction={handleEdit}
+                          />
+                        </>
+                      }
+                      sheetContentStyle={styles.sheetContentStyle}
+                      sheetContent={
+                        <>
+                          {/* Detailed Information section */}
+                          <div
+                            className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
+                          >
+                            <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
+                            <div className="flex items-center gap-16 text-solitaireTertiary mb-4">
+                              {cardDetailHeaderData.map(
+                                (cardDetails, index) => (
+                                  <div
+                                    key={cardDetails.label}
+                                    style={{
+                                      marginRight:
+                                        index ===
+                                        cardDetailHeaderData.length - 1
+                                          ? '0'
+                                          : '16px',
+                                    }}
+                                  >
+                                    <CustomDisplayButton
+                                      displayButtonAllStyle={{
+                                        displayButtonStyle:
+                                          activeTab === index
+                                            ? styles.activeHeaderButtonStyle
+                                            : styles.headerButtonStyle,
+                                        displayLabelStyle:
+                                          styles.headerButtonLabelStyle,
+                                      }}
+                                      displayButtonLabel={cardDetails.label}
+                                      handleClick={() =>
+                                        handleButtonClick(index)
+                                      }
+                                    />
                                   </div>
-                                ))}
-                              </div>
+                                )
+                              )}
+                            </div>
+                          </div>
 
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales('app.savedSearch.measurement')}
-                                </p>
-                              </div>
+                          {cardDetailHeaderData[activeTab].content}
 
-                              <div>
-                                {Object.entries(cardDetails.measurements).map(
-                                  ([key, value]) => (
+                          {/* Loop through card detail data */}
+                          {cardDetailData.map((cardDetails) => (
+                            <div className="flex" key={cardDetails.cardId}>
+                              <div className={styles.sheetMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales('app.savedSearch.basicInfo')}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    cardDetails.basicCardDetails
+                                  ).map(([key, value]) => (
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
@@ -475,44 +506,69 @@ const SavedSearch = () => {
                                         </span>
                                       </p>
                                     </div>
-                                  )
-                                )}
-                              </div>
+                                  ))}
+                                </div>
 
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales('app.savedSearch.otherInfo')}
-                                </p>
-                              </div>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.savedSearch.measurement'
+                                    )}
+                                  </p>
+                                </div>
 
-                              <div>
-                                {Object.entries(
-                                  cardDetails.OtherInformation
-                                ).map(([key, value]) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {key}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {value}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className={styles.inclusionDetailsMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales(
-                                    'app.savedSearch.inclusionDetails'
+                                <div>
+                                  {Object.entries(cardDetails.measurements).map(
+                                    ([key, value]) => (
+                                      <div key={key}>
+                                        <p className="flex">
+                                          <span className={styles.innerHeading}>
+                                            {key}
+                                          </span>
+                                          <span className={styles.sheetValues}>
+                                            {value}
+                                          </span>
+                                        </p>
+                                      </div>
+                                    )
                                   )}
-                                </p>
+                                </div>
+
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales('app.savedSearch.otherInfo')}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    cardDetails.OtherInformation
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {key}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {value}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
-                              {Object.entries(cardDetails.inclutionDetails).map(
-                                ([key, value]) => (
+
+                              <div className={styles.inclusionDetailsMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.savedSearch.inclusionDetails'
+                                    )}
+                                  </p>
+                                </div>
+                                {Object.entries(
+                                  cardDetails.inclutionDetails
+                                ).map(([key, value]) => (
                                   <p className="flex" key={key}>
                                     <span
                                       className={
@@ -525,30 +581,30 @@ const SavedSearch = () => {
                                       {value}
                                     </span>
                                   </p>
-                                )
-                              )}
+                                ))}
+                              </div>
                             </div>
+                          ))}
+
+                          <div className="border-b border-solitaireTertiary mt-8"></div>
+
+                          {/* Show Results button */}
+                          <div className={styles.showResultMainDiv}>
+                            <CustomDisplayButton
+                              displayButtonLabel="Show Results"
+                              displayButtonAllStyle={showResulutButtonStyle}
+                              handleClick={showButtonHandleClick}
+                            />
                           </div>
-                        ))}
-
-                        <div className="border-b border-solitaireTertiary mt-8"></div>
-
-                        {/* Show Results button */}
-                        <div className={styles.showResultMainDiv}>
-                          <CustomDisplayButton
-                            displayButtonLabel="Show Results"
-                            displayButtonAllStyle={showResulutButtonStyle}
-                            handleClick={showButtonHandleClick}
-                          />
-                        </div>
-                      </SheetContent>
-                    </div>
+                        </>
+                      }
+                    />
                   </div>
-                );
-              })}
-            </>
-          </div>
-        </Sheet>
+                </div>
+              );
+            })}
+          </>
+        </div>
 
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">

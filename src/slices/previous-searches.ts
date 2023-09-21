@@ -15,8 +15,8 @@ export const previousSearchApi = createApi({
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
-      query: ({ currentPage, resultsPerPage, isDeleted }) =>
-        `previous-search?isDeleted=${isDeleted}&page=${currentPage}&perPage=${resultsPerPage}`,
+      query: ({ currentPage, resultsPerPage }) =>
+        `previous-search?page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['PreviousSearch'],
     }),
     addPreviousSearch: builder.mutation({

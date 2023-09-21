@@ -22,6 +22,8 @@ import {
 } from '@/slices/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
+import { Checkbox } from '@/components/ui/checkbox';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface ICardData {
   cardId: string;
@@ -76,7 +78,6 @@ const PreviousSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
     currentPage,
     resultsPerPage,
-    isDeleted: false,
   });
 
   // Destructure the mutation function from the hook
@@ -140,28 +141,6 @@ const PreviousSearch = () => {
     [] // No dependencies
   );
 
-  // Function to format the created_at date
-  const formatCreatedAt = (createdAt: any) => {
-    const createdAtDate = new Date(createdAt);
-
-    const dateFormatter = new Intl.DateTimeFormat('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-    });
-
-    const timeFormatter = new Intl.DateTimeFormat('en-US', {
-      hour: 'numeric',
-      minute: 'numeric',
-      hour12: true,
-    });
-
-    const formattedDate = dateFormatter.format(createdAtDate);
-    const formattedTime = timeFormatter.format(createdAtDate);
-
-    return `${formattedDate} | ${formattedTime}`;
-  };
-
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
@@ -207,7 +186,7 @@ const PreviousSearch = () => {
       setToastErrorMessage('Check to delete previous search data.');
     }
 
-    if (data?.data?.previousSearch?.length === 1) {
+    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
     }
   };
@@ -361,10 +340,8 @@ const PreviousSearch = () => {
   ];
 
   //Header Data
-  const headerData = {
+  const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    isCheckAll: isCheckAll,
     //count
     searchCount: cardData?.length,
     //Search Data
@@ -372,6 +349,21 @@ const PreviousSearch = () => {
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: 'flex items-end',
+    },
   };
 
   useEffect(() => {
@@ -398,7 +390,7 @@ const PreviousSearch = () => {
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={headerData} />
+          <CustomHeader data={previousSearchheaderData} />
         </div>
 
         {/* Custom Card and Checkbox map */}
