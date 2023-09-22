@@ -59,6 +59,10 @@ const SavedSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+  const manySavedsearchButtonStyle = {
+    displayButtonStyle: styles.manySavedSearchButton,
+    displayLabelStyle: styles.manySavedSearchLabel,
+  };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
@@ -166,7 +170,19 @@ const SavedSearch = () => {
             <CustomTable
               tableData={{
                 tableHeads: [item.name],
-                bodyData: [{ desc: formatCreatedAt(item.created_at) }],
+                bodyData: [
+                  {
+                    desc: (
+                      <div className={styles.parentDivHeaderSectiom}>
+                        <div>{formatCreatedAt(item.created_at)}</div>
+                        <CustomDisplayButton
+                          displayButtonLabel={`Searches (${item.meta_data.length})`}
+                          displayButtonAllStyle={manySavedsearchButtonStyle}
+                        />
+                      </div>
+                    ),
+                  },
+                ],
               }}
               tableStyleClasses={searchCardTitle}
             />
