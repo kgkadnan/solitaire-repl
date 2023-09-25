@@ -1,6 +1,5 @@
 'use client';
 
-import CustomNotificationHeader from '@/components/common/notification-header/notification-header';
 import React, { useState } from 'react';
 import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
@@ -47,13 +46,6 @@ const NotificationSetting = () => {
 
   return (
     <div className={styles.notificationSettingContainer}>
-      <div
-        className={`border-b border-solitaireSenary ${styles.showNotificationsHeading}`}
-      >
-        <p>Notifications</p>
-      </div>
-      <CustomNotificationHeader />
-
       {Object.entries(settings).map(([key]) => {
         const formattedKey = key
           .replace(/_/g, ' ')
@@ -63,7 +55,7 @@ const NotificationSetting = () => {
           <div key={key} className="border-b border-solitaireSenary">
             <div className={` ${styles.notificationSettingContent}`}>
               <div className={styles.notificationSettingTitle}>
-                <p>Allow notifications of "{formattedKey}"</p>
+                <p>Allow notifications of &quot;{formattedKey}&quot;</p>
               </div>
 
               <div className={styles.toggleContainer}>
