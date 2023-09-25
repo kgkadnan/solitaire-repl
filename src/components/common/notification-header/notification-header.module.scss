@@ -1,0 +1,25 @@
+.activeHeaderButtonStyle {
+  background-color: transparent;
+  color: #8c7459;
+  font-weight: 600;
+}
+
+.headerButtonStyle {
+  background-color: transparent;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.headerButtonStyle:hover {
+  color: #8c7459;
+}
+
+.headerButtonLabelStyle {
+  font-size: 14px;
+}
+
+.showNotificationsHeading {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 25px;
+  color: #8c7459;
+}
