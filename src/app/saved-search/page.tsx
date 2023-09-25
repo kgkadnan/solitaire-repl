@@ -174,7 +174,9 @@ const SavedSearch = () => {
                   {
                     desc: (
                       <div className={styles.parentDivHeaderSectiom}>
-                        <div>{formatCreatedAt(item.created_at)}</div>
+                        <div style={{ marginRight: '80px' }}>
+                          {formatCreatedAt(item.created_at)}
+                        </div>
                         <CustomDisplayButton
                           displayButtonLabel={`Searches (${item.meta_data.length})`}
                           displayButtonAllStyle={manySavedsearchButtonStyle}
