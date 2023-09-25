@@ -1,6 +1,7 @@
 .notificationMainContainer {
   color: hsl(var(--solitaire-tertiary));
   padding: 0px 10px;
+  // margin-bottom: 70px;
 }
 
 .groupIcon {
@@ -87,11 +88,22 @@
 }
 
 .loadMoreButtonContainer {
+  width: 100%;
   position: fixed;
   bottom: 0;
-  width: 100%;
-  background-color: red;
+  // background-color: hsl(var(--solitaire-primary));
+  padding: 15px 0px;
 }
 
 .loadMoreButton {
+  border: 1px solid #8c7459;
+  width: 150px;
+  height: 35px;
+}
+
+.viewAllButton {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  width: 150px;
+  height: 35px;
 }

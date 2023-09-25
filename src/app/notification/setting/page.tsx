@@ -5,6 +5,7 @@ import React, { useState } from 'react';
 import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
 import { CustomInputlabel } from '@/components/common/input-label';
+import { formatCassing } from '@/utils/format-cassing';
 
 interface Settings {
   my_cart: boolean;
@@ -16,9 +17,6 @@ interface Settings {
   bid_to_buy: boolean;
   appointments: boolean;
   wislist: boolean;
-  dasdsa: boolean;
-  wisdasdlist: boolean;
-  wisfdflist: boolean;
 }
 
 const NotificationSetting = () => {
@@ -32,9 +30,6 @@ const NotificationSetting = () => {
     bid_to_buy: false,
     appointments: false,
     wislist: false,
-    dasdsa: false,
-    wisdasdlist: false,
-    wisfdflist: false,
   });
 
   const toggleHandler = (key: string) => {
@@ -55,15 +50,11 @@ const NotificationSetting = () => {
       <CustomNotificationHeader />
 
       {Object.entries(settings).map(([key]) => {
-        const formattedKey = key
-          .replace(/_/g, ' ')
-          .replace(/\b\w/g, (char) => char.toUpperCase());
-
         return (
           <div key={key} className="border-b border-solitaireSenary">
             <div className={` ${styles.notificationSettingContent}`}>
               <div className={styles.notificationSettingTitle}>
-                <p>Allow notifications of "{formattedKey}"</p>
+                <p>Allow notifications of "{formatCassing(key)}"</p>
               </div>
 
               <div className={styles.toggleContainer}>
