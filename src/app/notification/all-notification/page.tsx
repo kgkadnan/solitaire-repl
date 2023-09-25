@@ -1,8 +1,7 @@
 'use client';
 
 import React from 'react';
-import styles from './show-notification.module.scss';
-import CustomNotificationHeader from '@/components/common/notification-header/notification-header';
+import styles from './all-notification.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import EllipseIcon from '@public/assets/icons/ellipse.svg?url';
 
@@ -37,19 +36,10 @@ const Notification = () => {
       status: 'unread',
     },
   ];
-  const unreadCount = showAllNotificationData.filter(
-    (item) => item.status === 'unread'
-  ).length;
+
   return (
     <>
       <div className={styles.showAllNotificationContainer}>
-        <div
-          className={`border-b border-solitaireSenary ${styles.showNotificationsHeading}`}
-        >
-          <p>Notifications ({unreadCount})</p>
-        </div>
-        <CustomNotificationHeader />
-
         {showAllNotificationData.map((items) => {
           return (
             <div

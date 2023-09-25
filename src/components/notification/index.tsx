@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './notification.module.scss';
 import CartIcon from '@public/assets/icons/cart-outline.svg?url';
 import EllipseIcon from '@public/assets/icons/ellipse.svg?url';
@@ -7,19 +7,21 @@ import CalenderIcon from '@public/assets/icons/calendar-clear-outline.svg?url';
 import { useRouter } from 'next/navigation';
 import { SheetClose } from '../ui/sheet';
 import { CustomDisplayButton } from '../common/buttons/display-button';
+import { useGetAllNotificationQuery } from '@/slices/notification';
+import { formatCreatedAt } from '@/utils/format-date';
 
 interface INotificationData {
   id: string;
   customer_id: string;
   template: string;
-  parameters: {
+  parameter: {
     stoneId: string;
     abc: string;
   };
   category: string;
   sub_category: string;
   status: string;
-  timestamp: string;
+  created_at: string;
   has_cta: boolean;
   external_link: string;
   redirect_identifier: string[];
@@ -28,376 +30,36 @@ interface INotificationData {
 export const Notification = () => {
   const router = useRouter();
   const [visibleItems, setVisibleItems] = useState(10);
+  const [notificationData, setNotificationData] = useState<INotificationData[]>(
+    []
+  );
   const itemsPerPage = 10;
 
-  const notificationData: INotificationData[] = [
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866587',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}} ',
-      parameters: {
-        stoneId: '123456789,123456780,... + 48 more',
-        abc: 'yyyyyyy',
-      },
-      category: 'my_cart',
-      sub_category: 'add',
-      status: 'unread',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866588',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'unread',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866589',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '5786615',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866484',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
+  const { data, error, isLoading, refetch } = useGetAllNotificationQuery({});
 
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866587',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}} ',
-      parameters: {
-        stoneId: '123456789,123456780,... + 48 more',
-        abc: 'yyyyyyy',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866588',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866589',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '5786615',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866484',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866587',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}} ',
-      parameters: {
-        stoneId: '123456789,123456780,... + 48 more',
-        abc: 'yyyyyyy',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866588',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866589',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '5786615',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866484',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866587',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}} ',
-      parameters: {
-        stoneId: '123456789,123456780,... + 48 more',
-        abc: 'yyyyyyy',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866588',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866589',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '5786615',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-    {
-      id: 'qwertyuiolsdfghjm',
-      customer_id: '57866484',
-      template:
-        'your stone numbers ${{stoneId}} had been moved to card ${{abc}}',
-      parameters: {
-        stoneId: '123456789,123456780,... + 6 more',
-        abc: '165296529',
-      },
-      category: 'appointment',
-      sub_category: 'add',
-      status: 'read',
-      timestamp: '2023-09-15T00:00:00Z',
-      has_cta: true,
-      external_link: 'http',
-      redirect_identifier: ['123456789'],
-    },
-  ];
+  useEffect(() => {
+    setNotificationData(data?.data);
+  }, [data]);
 
-  function replacePlaceholders(template: string, parameters: any) {
-    const placeholders = template.match(/\${{(\w+)}}/g);
-    if (!placeholders) {
-      return template;
-    }
+  function stringWithHTMLReplacement(template: string, parameter: any) {
+    const parts = template.split('${{');
 
-    placeholders.forEach((placeholder) => {
-      const key = placeholder.replace(/\${{(\w+)}}/, '$1');
-      const value = parameters[key] || '';
-
-      // const boldValue: any = `<p style="font-weight:1000" >${value}</p>`;
-
-      template = template.replace(placeholder, value);
+    const modifiedString = parts.map((part, index) => {
+      if (index === 0) {
+        return <span key={index}>{part}</span>;
+      } else {
+        const [paramName] = part.split('}}');
+        return (
+          <span key={index}>
+            <span style={{ fontWeight: 600 }}>{parameter[paramName]}</span>
+            {part.substr(paramName.length + 2)}
+          </span>
+        );
+      }
     });
 
-    return template;
+    return <div>{modifiedString}</div>;
   }
-
-  notificationData.forEach((response) => {
-    response.template = replacePlaceholders(
-      response.template,
-      response.parameters
-    );
-  });
 
   const handleNotificationRead = () => {};
 
@@ -426,14 +88,16 @@ export const Notification = () => {
                     displayButtonStyle: styles.viewAllButton,
                     displayLabelStyle: styles.viewAllLabel,
                   }}
-                  handleClick={() => router.push('/notification')}
+                  handleClick={() =>
+                    router.push('/notification/all-notification')
+                  }
                 />
               </SheetClose>
             </div>
           </div>
         </div>
         <div className={` ${styles.newNotificationContainer}`}>
-          {notificationData.slice(0, visibleItems).map((items) => {
+          {notificationData?.slice(0, visibleItems).map((items) => {
             return (
               <div
                 key={items.customer_id}
@@ -464,15 +128,10 @@ export const Notification = () => {
                   )}
                 </div>
                 <div>
-                  <p className={styles.newNotificationMessage}>
-                    {/* <div
-                      dangerouslySetInnerHTML={{ __html: items.template }}
-                      style={{ display: 'flex' }}
-                    /> */}
-                    {items.template}
-                  </p>
+                  {stringWithHTMLReplacement(items.template, items.parameter)}
+
                   <p className={styles.newNotificationStatusTime}>
-                    {items.timestamp}
+                    {formatCreatedAt(items.created_at)}
                   </p>
                 </div>
               </div>
@@ -480,7 +139,7 @@ export const Notification = () => {
           })}
         </div>
         <div className={styles.loadMoreButtonContainer}>
-          {visibleItems < notificationData.length && (
+          {visibleItems < notificationData?.length && (
             <CustomDisplayButton
               displayButtonLabel="Load More"
               displayButtonAllStyle={{
