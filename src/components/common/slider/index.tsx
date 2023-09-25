@@ -1,4 +1,9 @@
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetTrigger,
+} from '@/components/ui/sheet';
 import React from 'react';
 
 interface ISliderProps {

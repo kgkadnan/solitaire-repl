@@ -1,0 +1,45 @@
+.showNotificationsHeading {
+  font-size: 16px;
+  font-weight: 500;
+  padding-bottom: 25px;
+  color: #8c7459;
+}
+
+.notificationSettingContent {
+  width: 667px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0px;
+}
+
+.notificationSettingTitle {
+  font-size: 14px;
+  line-height: 24px;
+  font-weight: 300;
+  color: hsl(var(--solitaire-tertiary));
+  letter-spacing: 0.1px;
+}
+
+.toggleButton {
+  width: 30px;
+  height: 15px;
+}
+
+.toggleButton input:checked {
+  background-color: greenyellow;
+}
+
+.toggleContainer {
+  display: flex;
+}
+
+.toggleOn {
+  margin-left: 10px;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.toggleOff {
+  margin-left: 10px;
+  color: #5d6a6a;
+}
