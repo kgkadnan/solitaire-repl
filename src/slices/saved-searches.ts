@@ -9,12 +9,12 @@ export const savedSearchesApi = createApi({
   endpoints: (builder) => ({
     getAllSavedSearches: builder.query({
       query: ({ currentPage, resultsPerPage }) =>
-        `previous-search?page=${currentPage}&perPage=${resultsPerPage}`,
+        `saved-search?page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['SavedSearch'],
     }),
     updateSavedSearches: builder.mutation({
       query: (filter) => ({
-        url: `previous-search`,
+        url: `saved-search`,
         method: 'PUT', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),
