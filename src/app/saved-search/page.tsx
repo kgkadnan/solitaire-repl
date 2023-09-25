@@ -207,57 +207,6 @@ const SavedSearch = () => {
     }
   };
 
-  const cardDetailData = [
-    {
-      cardId: 1,
-      basicCardDetails: {
-        Lab: 'GIA',
-        Shape: 'Round',
-        Carat: '2,2.5,3',
-        Color: 'D,E,F',
-        Clarity: 'FL,VVS1,VVS2',
-        Tinge: 'WH',
-        Cut: 'EX,VG,G',
-        Polish: 'EX',
-        Symmetry: 'EX',
-        Fluorescene: 'Non',
-        Location: 'IND',
-      },
-
-      inclutionDetails: {
-        'Table Black': 'BO',
-        'Side Black': 'SBO',
-        'Table Inclution': 'TO',
-        'Side Inclution': 'SO',
-        'Table Open': 'N',
-        'Crown Open': 'N',
-        'Pavillion Open': 'N',
-        'Eye Clean': 'Y',
-        'Hearts & Arrows': '-',
-        Brilliancy: '-',
-        'Type 2 Certificate': '-',
-        'Country Of Origin': '-',
-        'Rough Mine': '-',
-        'Natural Girdle': 'N',
-        'Natural Crown': 'N',
-        'Natural Pavillion': 'N',
-        'Internal Graining': 'IGO',
-        'Surface Graining': 'GO',
-      },
-
-      measurements: {
-        Girdle: 'Med-Stk',
-        Cutlet: 'None',
-        Luster: 'EX',
-      },
-
-      OtherInformation: {
-        'Key To Symbol': '-',
-        'Report Comments': '-',
-      },
-    },
-  ];
-
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
@@ -387,7 +336,33 @@ const SavedSearch = () => {
     let searchData = SavedSearchData?.savedSearch;
     setNumberOfPages(SavedSearchData?.totalPages);
     setSavedSearchData(searchData);
-    setCardData(renderCardData(searchData, search));
+
+    // searchData?.filter((items: any) => {
+    //   items.meta_data.filter((items: any) => {
+    //     console.log(
+    //       '---------------------------------------',
+    //       items.basicCardDetails
+    //     );
+    //   });
+    // });
+
+    // Filter the location key from basicCardDetails
+    const filteredData = searchData?.map((item: any) => ({
+      ...item,
+      meta_data: item.meta_data.map((metaItem: any) => ({
+        ...metaItem,
+        basicCardDetails: (({
+          Location,
+          Tinge,
+          Fluorescence,
+          Symmetry,
+          ...rest
+        }) => rest)(metaItem.basicCardDetails),
+      })),
+    }));
+    console.log('aliasger', filteredData);
+
+    setCardData(renderCardData(filteredData, search));
   }, [data, currentPage, resultsPerPage]);
 
   // Function to handle edit action

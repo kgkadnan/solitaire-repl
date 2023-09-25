@@ -42,7 +42,7 @@ export const Notification = () => {
       },
       category: 'my_cart',
       sub_category: 'add',
-      status: 'unseen',
+      status: 'unread',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -59,7 +59,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'unseen',
+      status: 'unread',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -76,7 +76,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -93,7 +93,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -110,7 +110,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -128,7 +128,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -145,7 +145,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -162,7 +162,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -179,7 +179,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -196,7 +196,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -213,7 +213,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -230,7 +230,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -247,7 +247,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -264,7 +264,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -281,7 +281,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -298,7 +298,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -315,7 +315,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -332,7 +332,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -349,7 +349,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -366,7 +366,7 @@ export const Notification = () => {
       },
       category: 'appointment',
       sub_category: 'add',
-      status: 'seen',
+      status: 'read',
       timestamp: '2023-09-15T00:00:00Z',
       has_cta: true,
       external_link: 'http',
@@ -374,7 +374,6 @@ export const Notification = () => {
     },
   ];
 
-  // Function to replace placeholders in the template
   function replacePlaceholders(template: string, parameters: any) {
     const placeholders = template.match(/\${{(\w+)}}/g);
     if (!placeholders) {
@@ -393,7 +392,6 @@ export const Notification = () => {
     return template;
   }
 
-  // Replace placeholders in each response
   notificationData.forEach((response) => {
     response.template = replacePlaceholders(
       response.template,
@@ -440,7 +438,7 @@ export const Notification = () => {
               <div
                 key={items.customer_id}
                 className={`flex ${
-                  items.status === 'unseen'
+                  items.status === 'unread'
                     ? styles.readNotification
                     : styles.newNotificationContentMainDiv
                 }`}
@@ -449,7 +447,7 @@ export const Notification = () => {
                 <div className={styles.notificationsIcons}>
                   <EllipseIcon
                     className={
-                      items.status === 'unseen'
+                      items.status === 'unread'
                         ? styles.ellipseIconActive
                         : styles.ellipseIconInactive
                     }

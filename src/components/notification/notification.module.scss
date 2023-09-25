@@ -1,23 +1,18 @@
 .notificationMainContainer {
   color: hsl(var(--solitaire-tertiary));
   padding: 0px 10px;
-  // margin-bottom: 70px;
 }
-
 .groupIcon {
   stroke: hsl(var(--solitaire-tertiary));
   margin: 0px 20px;
 }
-
 .markAllReadButton {
   font-size: 14px;
   font-weight: 300;
 }
-
 .newNotificationContainer {
   padding: 20px 0px 0px;
 }
-
 .NotificationHeading {
   font-size: 14px;
   font-weight: 300;
@@ -28,75 +23,62 @@
   align-items: center;
   justify-content: center;
 }
-
 .notificationsIcons {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-
 .ellipseIconActive {
   fill: #0fc200;
 }
-
 .ellipseIconInactive {
   fill: #aeb4b4;
 }
-
 .cartIcon {
   stroke: hsl(var(--solitaire-tertiary));
   padding: 0px 16px;
 }
-
 .calendarIcon {
   stroke: hsl(var(--solitaire-tertiary));
   padding: 0px 16px;
 }
-
 .newNotificationContentMainDiv {
   margin: 8px 5px;
   border-radius: 5px;
   padding: 10px 20px;
 }
-
 .readNotification {
   margin: 8px 5px;
   border-radius: 5px;
   padding: 10px 20px;
   background-color: #354444;
 }
-
 .oldNotificationContentMainDiv {
   margin: 8px 5px;
   padding: 10px 20px;
 }
-
 .newNotificationMessage {
   font-size: 14px;
   font-weight: 500;
   color: hsl(var(--solitaire-tertiary));
 }
-
 .newNotificationStatusTime {
   font-size: 12px;
   font-weight: 300;
   color: #5d6a6a;
 }
-
 .notificationFooterButton {
   margin: 0px 20px;
 }
-
 .loadMoreButtonContainer {
-  width: 100%;
-  position: fixed;
-  bottom: 0;
-  // background-color: hsl(var(--solitaire-primary));
-  padding: 15px 0px;
+  position: sticky;
+  bottom: -30px;
+  padding: 15px;
+  text-align: center;
+  background-color: hsl(var(--solitaire-primary));
 }
-
 .loadMoreButton {
-  border: 1px solid #8c7459;
+  border: 1px solid hsl(var(--solitaire-quaternary));
   width: 150px;
   height: 35px;
 }
