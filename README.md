@@ -3,11 +3,11 @@
 ## Requirements
 
 For development, you will only need Node.js installed on your environement.
-And please go through the [DeveloperGuide]([http://editorconfig.org/](https://docs.google.com/document/d/1WRBPJQYTfw3Fmyx2XsdOVp5oZj4ZxvAv6XrZUBM_Poo/edit)) before starting development.
+And please go through the [DeveloperGuide](https://docs.google.com/document/d/1WRBPJQYTfw3Fmyx2XsdOVp5oZj4ZxvAv6XrZUBM_Poo/edit) before starting development.
 
 ### Node
 
-[Node](http://nodejs.org/) is really easy to install & now include [NPM](https://npmjs.org/).
+[Node](http://nodejs.org/) is really easy to install.
 You should be able to run the following command after the installation procedure
 below.
 
@@ -32,17 +32,17 @@ Also, be sure to have `git` available in your PATH, `pnpm` might need it.
     $ cd solitaire
     $ pnpm install
 
-
 ## Create env file
-  replace the example env file with actual values
+
+replace the example env file with actual values. taking .env.local.example
 
 ## Backend
-  dependency on Backend (needs to be deployed)
+
+dependency on Backend (needs to be deployed)
 
 ## Start development server
-  development: pnpm dev
-  test: pnpm run test
-  generate coverage: pnpm run test --coverage
-  storybook: pnpm storybook
 
-  
+development: pnpm dev
+test: pnpm run test
+generate coverage: pnpm run test --coverage
+storybook: pnpm storybook
