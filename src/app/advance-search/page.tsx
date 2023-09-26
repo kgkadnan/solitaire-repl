@@ -15,8 +15,7 @@ import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/slices/previous-searches';
-import advanceSearchNewData from '@/constants/advance-search.json';
-import Round from '@public/assets/images/Round.png';
+import advanceSearch from '@/constants/advance-search.json';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -116,10 +115,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
-  let shapeData = advanceSearchNewData.shapeData.map((data) => {
-    return { ...data, src: Round };
-  });
-
+ 
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -213,7 +209,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   ];
 
   let parameterData = parameterDataState.map((parameter, index) => {
-    return { ...parameter, ...advanceSearchNewData.parameterData[index] };
+    return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
   const handleBlackTableBIChange = (data: string) => {
@@ -347,7 +343,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       value: other.value.map((data, valueIndex) => {
         return {
           ...data,
-          ...advanceSearchNewData.otherParameterData[otherIndex].value[
+          ...advanceSearch.otherParameter[otherIndex].value[
             valueIndex
           ],
         };
@@ -356,7 +352,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   });
 
   const [caratRangeData, setCaratRangeData] = useState<string[]>(
-    advanceSearchNewData.caratRangeData
+    advanceSearch.caratRange
   );
 
   //// All user actions
@@ -380,7 +376,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === 'all') {
-      let filteredShape: string[] = shapeData.map((data) => data.title);
+      let filteredShape: string[] = advanceSearch.shape.map((data) => data.title);
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
@@ -514,8 +510,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] =
-        advanceSearchNewData.girdleStepData.map((data1) =>
-          data1.toLowerCase() !== 'all' ? data1 : ''
+        advanceSearch.girdleStep.map((girdleData) =>
+          girdleData.toLowerCase() !== 'all' ? girdleData : ''
         );
       setSelectedGirdleStep2(filteredGirdleStep);
     } else {
@@ -1107,7 +1103,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           <CustomImageTile
             overriddenStyles={imageTileStyles}
-            imageTileData={shapeData}
+            imageTileData={advanceSearch.shape}
             selectedTile={selectedShape}
             handleSelectTile={handleShapeChange}
           />
@@ -1124,7 +1120,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
             {renderSelectionButtons(
-              advanceSearchNewData.colorData,
+              advanceSearch.color,
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
@@ -1136,7 +1132,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.whiteData,
+                  advanceSearch.white,
                   styles.whiteColorFilterStyle,
                   styles.activeOtherStyles,
                   selectedWhiteColor,
@@ -1146,7 +1142,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Fancy') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.fancyData,
+                  advanceSearch.fancy,
                   '',
                   styles.activeOtherStyles,
                   selectedFancyColor,
@@ -1156,7 +1152,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Range') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.rangeData,
+                  advanceSearch.range,
                   '',
                   styles.activeOtherStyles,
                   selectedRangeColor,
@@ -1181,7 +1177,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterSectionData}`}
             >
               {renderSelectionButtons(
-                advanceSearchNewData.intensityData,
+                advanceSearch.intensity,
                 '',
                 styles.activeOtherStyles,
                 selectedIntensity,
@@ -1201,7 +1197,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 className={`${styles.filterSection} ${styles.filterWrapSection}`}
               >
                 {renderSelectionButtons(
-                  advanceSearchNewData.overtoneData,
+                  advanceSearch.overtone,
                   '',
                   styles.activeOtherStyles,
                   selectedOvertone,
@@ -1222,7 +1218,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearchNewData.tingeData,
+            advanceSearch.tinge,
             '',
             styles.activeOtherStyles,
             selectedTinge,
@@ -1240,7 +1236,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.tingeIntensityData,
+            advanceSearch.tingeIntensity,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,
@@ -1257,7 +1253,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.clarityData,
+            advanceSearch.clarity,
             '',
             styles.activeOtherStyles,
             selectedClarity,
@@ -1337,7 +1333,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.makeData,
+            advanceSearch.make,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedMake,
@@ -1355,7 +1351,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.quality,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedCut,
@@ -1373,7 +1369,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.quality,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedPolish,
@@ -1391,7 +1387,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.quality,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedSymmetry,
@@ -1409,7 +1405,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.fluorescenceData,
+            advanceSearch.fluorescence,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedFluorescence,
@@ -1427,7 +1423,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearchNewData.labData,
+            advanceSearch.lab,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedLab,
@@ -1445,7 +1441,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.brillianceData,
+            advanceSearch.brilliance,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedHR,
@@ -1463,7 +1459,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.brillianceData,
+            advanceSearch.brilliance,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedBrilliance,
@@ -1481,7 +1477,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           <CustomSelect
-            data={advanceSearchNewData.locationData}
+            data={advanceSearch.location}
             placeholder={ManageLocales('app.advanceSearch.location')}
             style={{
               selectTrigger: styles.dropdownHeader,
@@ -1501,7 +1497,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           <CustomSelect
-            data={advanceSearchNewData.locationData}
+            data={advanceSearch.location}
             placeholder={ManageLocales('app.advanceSearch.origin')}
             style={{
               selectTrigger: styles.dropdownHeader,
@@ -1677,7 +1673,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterWrapSection}`}
             >
               {renderSelectionButtons(
-                advanceSearchNewData.girdleData,
+                advanceSearch.girdle,
                 '',
                 styles.activeOtherStyles,
                 selectedGirdle,
@@ -1725,7 +1721,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{ display: 'flex', flexWrap: 'wrap' }}
           >
             {renderSelectionButtons(
-              advanceSearchNewData.girdleStepData,
+              advanceSearch.girdleStep,
               '',
               styles.activeOtherStyles,
               selectedGirdleStep2,
