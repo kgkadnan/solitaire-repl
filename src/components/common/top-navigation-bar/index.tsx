@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CustomCalculator } from '@/components/caclulator/calculator';
+import { CustomCalculator } from '@/components/caclulator';
 import { CustomSlider } from '../slider';
 import { Notification } from '@/components/notification';
 

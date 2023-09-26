@@ -11,7 +11,7 @@ const CustomNotificationHeader = () => {
   const cardDetailHeaderData = [
     {
       label: 'Notifications',
-      link: '/notification',
+      link: '/notification/all-notification',
     },
     {
       label: 'Notifications Settings',

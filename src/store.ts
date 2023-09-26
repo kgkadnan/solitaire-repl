@@ -5,10 +5,12 @@ import {
 } from '@reduxjs/toolkit';
 import { savedSearchesApi } from './slices/saved-searches';
 import { previousSearchApi } from './slices/previous-searches';
+import { notificationApi } from './slices/notification';
 
 const rootReducer = combineReducers({
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
+  [notificationApi.reducerPath]: notificationApi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -18,7 +20,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
-        savedSearchesApi.middleware
+        savedSearchesApi.middleware,
+        notificationApi.middleware
       ),
     preloadedState,
   });

@@ -6,7 +6,7 @@
 
 .resultsPerPage {
   display: flex;
-  width: 4%;
+  // width: 6%;
   align-items: center;
 }
 
@@ -24,6 +24,7 @@
   border: none;
   outline: none;
   color: hsl(var(--solitaire-tertiary));
+  gap: 25px;
 }
 
 .selectContent {
