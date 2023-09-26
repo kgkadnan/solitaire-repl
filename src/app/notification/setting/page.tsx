@@ -15,7 +15,7 @@ interface Settings {
   matching_pair: boolean;
   bid_to_buy: boolean;
   appointments: boolean;
-  wislist: boolean;
+  wishlist: boolean;
 }
 
 const NotificationSetting = () => {
@@ -28,7 +28,7 @@ const NotificationSetting = () => {
     matching_pair: false,
     bid_to_buy: false,
     appointments: false,
-    wislist: false,
+    wishlist: false,
   });
 
   const toggleHandler = (key: string) => {
