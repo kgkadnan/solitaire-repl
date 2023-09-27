@@ -343,7 +343,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       value: other.value.map((data, valueIndex) => {
         return {
           ...data,
-          ...advanceSearch.otherParameter[otherIndex].value[
+          ...advanceSearch.other_parameter[otherIndex].value[
             valueIndex
           ],
         };
@@ -352,7 +352,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   });
 
   const [caratRangeData, setCaratRangeData] = useState<string[]>(
-    advanceSearch.caratRange
+    advanceSearch.carat.data
   );
 
   //// All user actions
@@ -510,7 +510,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] =
-        advanceSearch.girdleStep.map((girdleData) =>
+        advanceSearch.key_to_symbol.map((girdleData) =>
           girdleData.toLowerCase() !== 'all' ? girdleData : ''
         );
       setSelectedGirdleStep2(filteredGirdleStep);
@@ -858,6 +858,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = async () => {
+    // if(parseInt(discountFrom)>advanceSearch.discount.range.start && parseInt(discountFrom)<advanceSearch.discount.range.end){
+    //   setError
+    // }
     if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
@@ -978,19 +981,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         {other.value.map((data) => (
           <div
             className={`${styles.filterSection} ${styles.otherParameterDataContainer} `}
-            key={`${other.key}-${data.elementKey}`}
+            key={`${other.key}-${data.element_key}`}
           >
             <div className={`${styles.otherParameterTitle}`}>
               <CustomInputlabel
                 htmlfor="text"
-                label={data.elementKey}
+                label={data.element_key}
                 overriddenStyles={{ label: styles.labelPlainColor }}
               />
             </div>
             <div>
               <>
                 {renderSelectionButtons(
-                  data.elementValue,
+                  data.element_value,
                   '',
                   styles.activeOtherStyles,
                   data.state,
@@ -1236,7 +1239,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.tingeIntensity,
+            advanceSearch.tinge_intensity,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,
@@ -1351,7 +1354,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.quality,
+            advanceSearch.cut,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedCut,
@@ -1369,7 +1372,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.quality,
+            advanceSearch.polish,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedPolish,
@@ -1387,7 +1390,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.quality,
+            advanceSearch.symmetry,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedSymmetry,
@@ -1721,7 +1724,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{ display: 'flex', flexWrap: 'wrap' }}
           >
             {renderSelectionButtons(
-              advanceSearch.girdleStep,
+              advanceSearch.key_to_symbol,
               '',
               styles.activeOtherStyles,
               selectedGirdleStep2,
