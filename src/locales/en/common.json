@@ -148,5 +148,12 @@
   "app.myaccount.emailNotification.footer.cancel": "Cancel",
   "app.myaccount.reportBug": "Report Bug",
   "app.myaccount.reportBug.report": "Report",
-  "app.myaccount.reportBug.reset": "Reset"
+  "app.myaccount.reportBug.reset": "Reset",
+
+  "app.searchResult.footer.addToCart": "Add to Cart",
+  "app.searchResult.footer.addToWhislist": "Add to Wishlist",
+  "app.searchResult.footer.modifySearch": "Modify Search",
+  "app.searchResult.footer.addSearch": "Add Search",
+  "app.searchResult.footer.confirmStone": "Confirm Stone",
+  "app.searchResult.footer.more": "More"
 }

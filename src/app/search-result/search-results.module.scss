@@ -1,0 +1,27 @@
+
+//Footer Button
+.transparent {
+    background-color: transparent;
+    border: 1px solid #8c7459;
+  }
+  .filled {
+    background-color: #8c7459;
+    color: #ffffff;
+  }
+  
+  .activeHeaderButtonStyle {
+    font-weight: 600;
+    padding: 0px 10px !important;
+    height: 1.8rem !important;
+    background-color: hsl(var(--solitaire-primary));
+    border-bottom:1px solid hsl(var(--solitaire-quaternary)) ;
+    color: hsl(var(--solitaire-tertiary));
+  }
+
+  .headerButtonStyle {
+    background-color: transparent;
+    font-weight: 600;
+    padding: 0px 10px !important;
+    height: 1.8rem !important;
+    color: hsl(var(--solitaire-tertiary));
+  }

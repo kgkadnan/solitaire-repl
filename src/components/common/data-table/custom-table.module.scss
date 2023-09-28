@@ -1,0 +1,116 @@
+
+
+.tableWrapper{
+    max-height: 650px;
+    overflow-y: scroll;
+    padding-bottom: 10px;
+}
+
+
+.table{
+    min-width: max-content;
+    border-collapse: separate;
+    border-spacing: 0px;
+}
+
+.tableHeader{
+    background-color: hsl(var(--solitaire-secondary));
+    position : sticky;
+    top: 0;
+    margin-bottom: 10px;
+    
+}
+
+.availableStatus{
+    color: green;
+}
+
+.customCheckboxStyle{
+    margin-right: 0px !important;
+}
+
+.checkboxSticky {
+    position: sticky;
+    left: 0;
+    z-index: 100;
+    background-color: hsl(var(--solitaire-primary));
+}
+
+.tableHeadCS , .tableDataCS {
+    padding: 0px;
+    text-align: left;
+}
+
+.tableHead , .tableData {
+    padding: 5px 80px 5px 20px;
+    text-align: left;
+}
+
+.tableData{
+    color: hsl(var(--solitaire-tertiary));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// /* custom-table.module.css */
+
+// /* Style for the main table container */
+// .tableContainer {
+//     // display: flex;
+//     // flex-direction: column;
+//   }
+
+//   /* Style for the table */
+//   .table {
+//     border-collapse: collapse;
+//     table-layout: fixed;
+//     width: 100%;
+//   }
+  
+//   .tableHeader{
+//     background-color: hsl(var(--solitaire-secondary));
+//     border-radius:10px;
+//     height: 40px;
+//     border: 1px solid #ccc; /* Add a border to the entire table header */
+//   }
+
+//   /* Style for the table header */
+//   .tableHeader th, .tableBody td {
+//     padding: 8px 16px;
+//     width: 160px;
+//     overflow: hidden;
+//     text-overflow: ellipsis;
+//     white-space: nowrap;
+//   }
+  
+//   /* Style for the table data */
+//   .tableData {
+//     padding-top: 10px;
+//     text-align: left;
+//   }
+  
+//   /* Style for the table rows */
+//   .tableRow:hover {
+//   }
+  
+//   /* Style for the "Show Results" button */
+//   .showResultButtonStyle {
+//     /* Add your styles for the "Show Results" button here */
+//   }
+  
