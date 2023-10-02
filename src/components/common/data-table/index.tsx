@@ -35,7 +35,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
 }) => {
-  console.log('tableRows', tableRows);
   const [sliderData, setSliderData] = useState<Rows[]>([]);
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
@@ -128,11 +127,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                     }`}
                   >
                     {column.accessor === 'select' ? (
-                      <Checkbox
+                      <div className='flex text-center'>
+                        <Checkbox
                         onClick={handleSelectAllCheckbox}
                         data-testid={'Select All Checkbox'}
                         checked={isCheckAll}
                       />
+                      </div>
+                      
                     ) : (
                       column.accessor !== 'status' && column.label
                     )}
@@ -143,7 +145,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
             <tbody className={styles.tableBody}>
               {tableRows.map(
                 (row: any, index: number) => (
-                  console.log('rows', row),
                   (
                     <tr key={row.id} className={styles.tableRow}>
                       {tableColumns.map((column: any) => (
@@ -160,12 +161,13 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           }`}
                         >
                           {column.accessor === 'select' ? (
-                            <CustomCheckBox
-                              style={styles.customCheckboxStyle}
-                              data={row.id}
-                              onClick={handleClick}
-                              isChecked={isCheck}
-                            />
+                             <div className='flex text-center'>
+                             <Checkbox
+                             onClick={handleSelectAllCheckbox}
+                             data-testid={'Select All Checkbox'}
+                             checked={isCheckAll}
+                           />
+                           </div>
                           ) : column.accessor === 'image' ? (
                             <div className="flex items-center">
                               <CustomSlider

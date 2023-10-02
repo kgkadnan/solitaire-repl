@@ -155,5 +155,6 @@
   "app.searchResult.footer.modifySearch": "Modify Search",
   "app.searchResult.footer.addSearch": "Add Search",
   "app.searchResult.footer.confirmStone": "Confirm Stone",
-  "app.searchResult.footer.more": "More"
+  "app.searchResult.footer.more": "More",
+  "app.searchResult.header.searchResults" : "Search Results"
 }
