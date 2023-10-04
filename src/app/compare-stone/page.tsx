@@ -10,14 +10,8 @@ import Image from 'next/image';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { CustomFooter } from '@/components/common/footer';
 import CloseButton from '@public/assets/icons/close-outline.svg?url';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { CustomDropdown } from '@/components/common/dropdown';
 
 interface DiamondData {
   id: string;
@@ -426,30 +420,17 @@ const CompareStone = () => {
     {
       id: 1,
       displayButtonLabel: (
-        <>
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <CustomDisplayButton
-                displayButtonLabel="More"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.transparent,
-                }}
-              />
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuLabel className={styles.transparent}>
-                Share
-              </DropdownMenuLabel>
-              <DropdownMenuLabel className={styles.transparent}>
-                Download Excel
-              </DropdownMenuLabel>
-              <DropdownMenuLabel className={styles.transparent}>
-                Find Matching Pair
-              </DropdownMenuLabel>
-              <DropdownMenuSeparator />
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </>
+        <CustomDropdown
+          dropdownTrigger={
+            <CustomDisplayButton
+              displayButtonLabel="More"
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.transparent,
+              }}
+            />
+          }
+          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+        />
       ),
     },
     { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
