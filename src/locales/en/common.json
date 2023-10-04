@@ -156,5 +156,9 @@
   "app.searchResult.footer.addSearch": "Add Search",
   "app.searchResult.footer.confirmStone": "Confirm Stone",
   "app.searchResult.footer.more": "More",
-  "app.searchResult.header.searchResults" : "Search Results"
+  "app.searchResult.header.searchResults": "Search Results",
+
+  "app.compareStone.heading": "Compare Stone",
+  "app.compareStone.diamondImage": "Diamond Image",
+  "app.compareStone.showOnlyDifferences": "Show only Differences"
 }

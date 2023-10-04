@@ -1,6 +1,7 @@
+'use client';
+
 import React, { useRef, useState } from 'react';
 import styles from './side-scrollable.module.scss';
-// import './test.css';
 
 interface ISideScrollableProps {
   leftFixedStyle?: string;

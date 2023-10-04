@@ -1,0 +1,112 @@
+.compareStoneLeftFixed {
+  width: 200px;
+  height: 200px;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: hsl(var(--solitaire-secondary));
+  color: hsl(var(--solitaire-quaternary));
+}
+
+.compareStoneHeading {
+  color: hsl(var(--solitaire-quaternary));
+}
+
+.comparestoneContainer {
+  height: 50%;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.compareStoneContentContainer {
+  margin: 40px 0px;
+  height: 65vh;
+  overflow: auto;
+}
+
+.compareStoneContentContainer::-webkit-scrollbar {
+  display: none;
+}
+
+.compareDiamondKeys {
+  background-color: hsl(var(--solitaire-secondary));
+  font-size: 14px;
+  line-height: 30px;
+  color: hsl(var(--solitaire-quaternary));
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.diamondImageContainer {
+  position: relative;
+}
+
+.dimaondImageContainer {
+  background-color: hsl(var(--solitaire-secondary));
+  height: 200px;
+  position: sticky;
+  top: 0;
+}
+
+.aliasger {
+  width: 100%;
+  // overflow: hidden;
+  position: relative;
+}
+
+.highlight {
+  background-color: hsl(var(--solitaire-senary));
+}
+
+.diamondImage {
+  margin: 10px 15px 0px 15px;
+}
+
+.compareStoneValue {
+  background-color: hsl(var(--solitaire-secondary));
+  width: 211px;
+  font-size: 14px;
+  line-height: 30px;
+  color: hsl(var(--solitaire-tertiary));
+  // display: flex;
+  // flex-direction: column;
+  // align-items: center;
+}
+
+.compareStoneCheckbox {
+  position: absolute;
+  top: 15px;
+  left: 20px;
+}
+
+.closeButton {
+  stroke: hsl(var(--solitaire-quaternary));
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 18px;
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  width: 150px;
+  height: 35px;
+  border: 1px solid hsl(var(--solitaire-quaternary));
+  border-radius: 5px;
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+}
+.filled {
+  background-color: hsl(var(--solitaire-quaternary));
+  width: 150px;
+  height: 35px;
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+}
