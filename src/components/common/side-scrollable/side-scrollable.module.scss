@@ -1,11 +1,9 @@
 .scrollableContainer {
   width: 100%;
-  // overflow: hidden;
   position: relative;
 }
 
 .scrollText {
   white-space: nowrap;
   position: absolute;
-  cursor: grab;
 }

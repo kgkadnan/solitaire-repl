@@ -14,10 +14,6 @@
   color: hsl(var(--solitaire-quaternary));
 }
 
-.compareStoneHeading {
-  color: hsl(var(--solitaire-quaternary));
-}
-
 .comparestoneContainer {
   height: 50%;
   color: hsl(var(--solitaire-tertiary));
@@ -25,22 +21,23 @@
 
 .compareStoneContentContainer {
   margin: 40px 0px;
-  height: 65vh;
+  max-height: 65vh;
   overflow: auto;
 }
 
-.compareStoneContentContainer::-webkit-scrollbar {
-  display: none;
+.leftFixedContent {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 1111;
 }
 
 .compareDiamondKeys {
   background-color: hsl(var(--solitaire-secondary));
   font-size: 14px;
   line-height: 30px;
+  padding-left: 40px;
   color: hsl(var(--solitaire-quaternary));
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 .diamondImageContainer {
@@ -54,10 +51,6 @@
   top: 0;
 }
 
-.highlight {
-  background-color: hsl(var(--solitaire-senary));
-}
-
 .diamondImage {
   margin: 10px 15px 0px 15px;
 }
@@ -67,6 +60,7 @@
   width: 211px;
   font-size: 14px;
   line-height: 30px;
+  padding-left: 40px;
   color: hsl(var(--solitaire-tertiary));
 }
 
