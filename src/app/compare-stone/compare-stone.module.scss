@@ -54,12 +54,6 @@
   top: 0;
 }
 
-.aliasger {
-  width: 100%;
-  // overflow: hidden;
-  position: relative;
-}
-
 .highlight {
   background-color: hsl(var(--solitaire-senary));
 }
@@ -74,9 +68,6 @@
   font-size: 14px;
   line-height: 30px;
   color: hsl(var(--solitaire-tertiary));
-  // display: flex;
-  // flex-direction: column;
-  // align-items: center;
 }
 
 .compareStoneCheckbox {

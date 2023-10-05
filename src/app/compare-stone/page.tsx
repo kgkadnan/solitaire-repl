@@ -58,7 +58,7 @@ const CompareStone = () => {
       discount: '430.00',
       amt: '782.90',
       stone_Quantity: '1',
-      stone_shape: 'princss+round',
+      stone_shape: 'princss+oval',
       lab: 'GIA',
       rap: '23800.00',
       'price/carat': '1850.00',
@@ -421,14 +421,7 @@ const CompareStone = () => {
       id: 1,
       displayButtonLabel: (
         <CustomDropdown
-          dropdownTrigger={
-            <CustomDisplayButton
-              displayButtonLabel="More"
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
-              }}
-            />
-          }
+          dropdownTrigger={<CustomDisplayButton displayButtonLabel="More" />}
           dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
         />
       ),
@@ -447,6 +440,7 @@ const CompareStone = () => {
 
   const handleShowDifferencesChange = () => {
     setShowDifferences(!showDifferences);
+    setDifferences([]);
   };
 
   const hasDifferences = (diamond: any) => {
@@ -455,7 +449,7 @@ const CompareStone = () => {
       if (otherDiamond.id !== diamond.id) {
         // Compare the current property of diamond with the same property in otherDiamond
 
-        Object.keys(diamond).map((key) => {
+        Object.keys(diamond).forEach((key) => {
           if (
             key !== 'id' &&
             key !== 'diamond_image' &&
@@ -521,14 +515,20 @@ const CompareStone = () => {
                         </div> */}
                       <div key={diamond.id}>
                         {Object.entries(diamond).map(
-                          ([key, value]) =>
+                          ([key, value]: any) =>
                             key === '0' &&
                             value !== 'dimaond_image' &&
                             value !== 'id' && (
                               // value !== 'amt' &&
                               // value !== 'discount' &&
                               <div key={key}>
-                                <div>{formatCassing(value)}</div>
+                                <div>
+                                  {showDifferences
+                                    ? differences.includes(value)
+                                      ? formatCassing(value)
+                                      : ''
+                                    : formatCassing(value)}
+                                </div>
                               </div>
                             )
                         )}
@@ -578,13 +578,7 @@ const CompareStone = () => {
                   const { id, dimaond_image, ...diamondWithoutImage } = diamond;
                   return (
                     <div
-                      className={`border-r border-solitaireSenary pt-5 ${
-                        styles.compareStoneValue
-                      } ${
-                        showDifferences && hasDifferences(diamondWithoutImage)
-                          ? styles.highlight
-                          : ''
-                      } `}
+                      className={`border-r border-solitaireSenary pt-5 ${styles.compareStoneValue}  `}
                       key={diamond.id}
                     >
                       {Object.entries(diamondWithoutImage).map(
@@ -592,10 +586,18 @@ const CompareStone = () => {
                           <div
                             key={key}
                             className={`${
-                              differences.includes(key) ? styles.highlight : ''
-                            }`}
+                              showDifferences &&
+                              hasDifferences(diamondWithoutImage)
+                                ? styles.highlight
+                                : ''
+                            } 
+                        `}
                           >
-                            {value}
+                            {showDifferences
+                              ? differences.includes(key)
+                                ? value
+                                : ''
+                              : value}
                           </div>
                         )
                       )}
