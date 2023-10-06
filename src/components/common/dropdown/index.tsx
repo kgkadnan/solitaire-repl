@@ -26,11 +26,11 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
         <DropdownMenuContent>
           {dropdownMenuLabel.map((items: string) => {
             return (
-              <>
+              <div key={items}>
                 <DropdownMenuLabel className={styles.transparent}>
                   {items}
                 </DropdownMenuLabel>
-              </>
+              </div>
             );
           })}
           <DropdownMenuSeparator />
