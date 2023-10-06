@@ -78,7 +78,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [naturalGirdleWI, setNaturalGirdleWI] = useState<string[]>([]);
   const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
   const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
-  const [lusterWI, setLusterWI] = useState<string[]>([]);
+  const [internalGrainingWI, setInternalGrainingWI] = useState<string[]>([]);
 
   //parameter state
   const [tablePerFrom, setTablePerFrom] = useState<string>('');
@@ -274,8 +274,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     handleFilterChange(data, surfaceGrainingWI, setSurfaceGrainingWI);
   };
 
-  const handleLusterWIChange = (data: string) => {
-    handleFilterChange(data, lusterWI, setLusterWI);
+  const handleinternalGrainingWIChange = (data: string) => {
+    handleFilterChange(data, internalGrainingWI, setInternalGrainingWI);
   };
 
   let otherParameterDataState = [
@@ -344,8 +344,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           state: surfaceGrainingWI,
         },
         {
-          handleChange: handleLusterWIChange,
-          state: lusterWI,
+          handleChange: handleinternalGrainingWIChange,
+          state: internalGrainingWI,
         },
       ],
     },
@@ -627,7 +627,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setNaturalGirdleWI([]);
     setNaturalPavilionWI([]);
     setSurfaceGrainingWI([]);
-    setLusterWI([]);
+    setInternalGrainingWI([]);
     setTablePerFrom('');
     setTablePerTo('');
     setCrownAngleFrom('');
@@ -801,7 +801,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('otherWINaturalPavilion', naturalPavilionWI);
     surfaceGrainingWI.length > 0 &&
       updateYourSelection('otherWISurfaceGraining', surfaceGrainingWI);
-    lusterWI.length > 0 && updateYourSelection('otherWILuster', lusterWI);
+    internalGrainingWI.length > 0 &&
+      updateYourSelection('internalGraining', internalGrainingWI);
 
     (tablePerFrom || tablePerTo) &&
       updateYourSelection(
