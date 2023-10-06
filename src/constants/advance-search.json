@@ -151,6 +151,7 @@
   ],
 
   "fluorescenceData": ["NON", "FNT", "VSL", "MED", "STG", "SLT", "VSTG"],
+  "culet": ["NON", "Minor", "Medium"],
 
   "labData": [
     "GIA",
@@ -167,6 +168,8 @@
     "STP"
   ],
   "brillianceData": ["Excellent", "Very Good", "Good"],
+  "location": ["IND", "ISR", "BEL","DUB","USA"],
+  "origin": ["RUSSIA", "BOTSWANA", "CANADA","BOTSWANA NAMIBIA CANADA OR SOUTH AFRICA","BOTSWANA NAMIBIA CANADA SOUTH AFRICA OR LESOTHO", "DTC2 BW NA CA OR ZA" , "SOUTH AFRICA"],
 
   "girdleData": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK"],
 
@@ -222,16 +225,17 @@
   ],
   "parameterData": [
     { "label": "Table%" },
-    { "label": "Crown Angle" },
-    { "label": "Length" },
-    { "label": "Pavilion Depth" },
     { "label": "Depth%" },
-    { "label": "Crown Height" },
-    { "label": "Width" },
-    { "label": "Lower Half" },
     { "label": "Ratio" },
+    { "label": "Length" },
+    { "label": "Width" },
+    { "label": "Depth" },
+    { "label": "Crown Angle" },
+    { "label": "Crown Height" },
     { "label": "Girdle%" },
     { "label": "Pavilion Angle" },
+    { "label": "Pavilion Depth" },
+    { "label": "Lower Half" },
     { "label": "Star Length" }
   ],
   "otherParameterData": [
@@ -248,15 +252,15 @@
         },
         {
           "elementKey": "Open Crown",
-          "elementValue": ["None", "VS", "S", "M", "D"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Open Table",
-          "elementValue": ["None", "VS", "S", "M", "D"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Open Pavilion",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Milky",
@@ -277,30 +281,30 @@
       "value": [
         {
           "elementKey": "Table Inclusion",
-          "elementValue": ["TO", "T1", "B1", "T2", "T3"]
+          "elementValue": ["TO", "T1", "T2", "T3"]
         },
         {
           "elementKey": "Side Inclusion",
-          "elementValue": ["SO", "S1", "SB1", "SB2", "S3"]
+          "elementValue": ["SO", "S1", "S2", "S3"]
         },
         {
           "elementKey": "Natural Crown",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Natural Girdle",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Natural Pavilion",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "elementValue": ["N", "VS", "S", "M", "L"]
         },
         {
           "elementKey": "Surface Graining",
           "elementValue": ["GO", "G1", "G2", "G3"]
         },
         {
-          "elementKey": "Luster",
+          "elementKey": "Internal Graining",
           "elementValue": ["IGO", "IG1", "IG2", "IG3"]
         }
       ]
