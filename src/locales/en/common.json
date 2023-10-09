@@ -148,5 +148,9 @@
   "app.myaccount.emailNotification.footer.cancel": "Cancel",
   "app.myaccount.reportBug": "Report Bug",
   "app.myaccount.reportBug.report": "Report",
-  "app.myaccount.reportBug.reset": "Reset"
+  "app.myaccount.reportBug.reset": "Reset",
+
+  "app.compareStone.heading":"Compare Stone",
+  "app.compareStone.diamondImage":"Diamond Image",
+  "app.compareStone.showOnlyDifferences":"Show only Differences"
 }
