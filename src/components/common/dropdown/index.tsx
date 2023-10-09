@@ -20,15 +20,17 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger>{dropdownTrigger}</DropdownMenuTrigger>
+        <DropdownMenuTrigger className={styles.transparent}>
+          {dropdownTrigger}
+        </DropdownMenuTrigger>
         <DropdownMenuContent>
           {dropdownMenuLabel.map((items: string) => {
             return (
-              <>
+              <div key={items}>
                 <DropdownMenuLabel className={styles.transparent}>
                   {items}
                 </DropdownMenuLabel>
-              </>
+              </div>
             );
           })}
           <DropdownMenuSeparator />

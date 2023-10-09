@@ -12,6 +12,8 @@ import { CustomFooter } from '@/components/common/footer';
 import CloseButton from '@public/assets/icons/close-outline.svg?url';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { CustomDropdown } from '@/components/common/dropdown';
+import CustomHeader from '@/components/common/header';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface DiamondData {
   id: string;
@@ -48,6 +50,7 @@ interface DiamondData {
   'S/L': string;
   'girdle%.': string;
   luster: string;
+  [key: string]: string | any;
 }
 
 const CompareStone = () => {
@@ -58,7 +61,7 @@ const CompareStone = () => {
       discount: '430.00',
       amt: '782.90',
       stone_Quantity: '1',
-      stone_shape: 'princss+round',
+      stone_shape: 'princss+oval',
       lab: 'GIA',
       rap: '23800.00',
       'price/carat': '1850.00',
@@ -151,7 +154,7 @@ const CompareStone = () => {
       key_to_symbol: 'natural',
       'h_&_a': '-',
       gridle: 'med-stk',
-      'P/A': '59.00',
+      'P/A': '58.00',
       'P/D': '59.00',
       culet: 'none',
       'ins.': 'yes',
@@ -421,14 +424,7 @@ const CompareStone = () => {
       id: 1,
       displayButtonLabel: (
         <CustomDropdown
-          dropdownTrigger={
-            <CustomDisplayButton
-              displayButtonLabel="More"
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
-              }}
-            />
-          }
+          dropdownTrigger={<CustomDisplayButton displayButtonLabel="More" />}
           dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
         />
       ),
@@ -447,6 +443,7 @@ const CompareStone = () => {
 
   const handleShowDifferencesChange = () => {
     setShowDifferences(!showDifferences);
+    setDifferences([]);
   };
 
   const hasDifferences = (diamond: any) => {
@@ -454,8 +451,7 @@ const CompareStone = () => {
     for (const otherDiamond of compareStoneData) {
       if (otherDiamond.id !== diamond.id) {
         // Compare the current property of diamond with the same property in otherDiamond
-
-        Object.keys(diamond).map((key) => {
+        Object.keys(diamond).forEach((key) => {
           if (
             key !== 'id' &&
             key !== 'diamond_image' &&
@@ -470,145 +466,181 @@ const CompareStone = () => {
     return false;
   };
 
-  return (
-    <div className={styles.comparestoneContainer}>
-      <div
-        className={`flex justify-between border-b border-solitaireSenary pb-[25px] ${styles.compareStoneHeading}`}
-      >
-        <p>
-          {ManageLocales('app.compareStone.heading')} ({compareStoneData.length}
-          )
+  //Header Data
+  const headerData = {
+    headerHeading: ManageLocales('app.compareStone.heading'),
+    searchCount: compareStoneData.length,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.compareStone.showOnlyDifferences')}
         </p>
-        <div className="flex">
-          <div className="text-solitaireTertiary">
-            {ManageLocales('app.compareStone.showOnlyDifferences')}
-          </div>
-          <CustomCheckBox
-            style="ml-5"
-            data="1"
-            onClick={handleShowDifferencesChange}
-          />
-        </div>
-      </div>
-
-      <div className={styles.compareStoneContentContainer}>
-        <CustomSideScrollable
-          leftFixedContent={
-            <>
-              <p
-                className={`border-b border-r border-solitaireSenary ${styles.compareStoneLeftFixed}`}
-              >
-                {ManageLocales('app.compareStone.diamondImage')}
-              </p>
-
-              {/* Keys */}
-              <div
-                className={`border-r border-solitaireSenary pt-5 ${styles.compareDiamondKeys}`}
-              >
-                {Object?.entries(compareStoneData[0]).map((diamond: any) => {
-                  return (
-                    <>
-                      {/* <div className={styles.keyFixed}>
-                          {Object.entries(diamond).map(
-                            ([key, value]) =>
-                              key === '0' &&
-                              (value === 'amt' || value === 'discount') && (
-                                <div key={key}>
-                                  <div>{formatCassing(value)}</div>
-                                </div>
-                              )
-                          )}
-                        </div> */}
-                      <div key={diamond.id}>
-                        {Object.entries(diamond).map(
-                          ([key, value]) =>
-                            key === '0' &&
-                            value !== 'dimaond_image' &&
-                            value !== 'id' && (
-                              // value !== 'amt' &&
-                              // value !== 'discount' &&
-                              <div key={key}>
-                                <div>{formatCassing(value)}</div>
-                              </div>
-                            )
-                        )}
-                      </div>
-                    </>
-                  );
-                })}
-              </div>
-            </>
-          }
-          rightSideContent={
-            <>
-              <div
-                className={`flex border-b border-solitaireSenary ${styles.dimaondImageContainer}`}
-              >
-                {compareStoneData.map((items) => {
-                  return (
-                    <div key={items.id}>
-                      <div
-                        className={`h-[200px] border-r border-solitaireSenary ${styles.diamondImageContainer}`}
-                      >
-                        <Image
-                          className={styles.diamondImage}
-                          src={items.dimaond_image}
-                          alt="Diamond Image"
-                        />
-
-                        <div className={styles.compareStoneCheckbox}>
-                          <CustomCheckBox data={items.id} />
-                        </div>
-
-                        <div
-                          className={styles.closeButton}
-                          onClick={(event) => handleClose(event, items.id)}
-                        >
-                          <CloseButton />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })}
-              </div>
-
-              {/* values */}
-              <div className={`flex ${styles.compareStonesValueContainer} `}>
-                {compareStoneData.map((diamond) => {
-                  const { id, dimaond_image, ...diamondWithoutImage } = diamond;
-                  return (
-                    <div
-                      className={`border-r border-solitaireSenary pt-5 ${
-                        styles.compareStoneValue
-                      } ${
-                        showDifferences && hasDifferences(diamondWithoutImage)
-                          ? styles.highlight
-                          : ''
-                      } `}
-                      key={diamond.id}
-                    >
-                      {Object.entries(diamondWithoutImage).map(
-                        ([key, value]: any) => (
-                          <div
-                            key={key}
-                            className={`${
-                              differences.includes(key) ? styles.highlight : ''
-                            }`}
-                          >
-                            {value}
-                          </div>
-                        )
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </>
-          }
+        <Checkbox
+          onClick={handleShowDifferencesChange}
+          data-testid={'Select All Checkbox'}
         />
       </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: `flex items-end`,
+    },
+  };
 
-      <CustomFooter footerButtonData={compareStoneFooter} />
+  return (
+    <div className={styles.comparestoneContainer}>
+      <div className="sticky text-solitaireQuaternary top-0 mt-16">
+        <CustomHeader data={headerData} />
+      </div>
+      {compareStoneData.length && (
+        <div className={styles.compareStoneContentContainer}>
+          <CustomSideScrollable
+            leftFixedStyle={styles.leftFixedContent}
+            leftFixedContent={
+              <>
+                <p
+                  className={`border-b border-r border-solitaireSenary ${styles.compareStoneLeftFixed}`}
+                >
+                  {ManageLocales('app.compareStone.diamondImage')}
+                </p>
+
+                {/* Keys */}
+                <div
+                  className={`border-r border-solitaireSenary ${styles.compareDiamondKeys}`}
+                >
+                  <div
+                    className={`sticky top-[200px] w-full bg-solitaireSecondary`}
+                  >
+                    <div>
+                      <div>
+                        {formatCassing(
+                          'discount' in compareStoneData[0] ? 'discount' : null
+                        )}
+                      </div>
+                    </div>
+                    <div>
+                      <div>
+                        {formatCassing(
+                          'amt' in compareStoneData[0] ? 'amt' : null
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                  <div>
+                    {Object?.entries(compareStoneData[0]).map(
+                      (diamond: any) => {
+                        return (
+                          <>
+                            <div key={diamond.id}>
+                              {Object.entries(diamond).map(
+                                ([key, value]: any) =>
+                                  key === '0' &&
+                                  value !== 'dimaond_image' &&
+                                  value !== 'id' &&
+                                  value !== 'amt' &&
+                                  value !== 'discount' && (
+                                    <div key={key}>
+                                      <div>
+                                        {showDifferences
+                                          ? differences.includes(value)
+                                            ? formatCassing(value)
+                                            : ''
+                                          : formatCassing(value)}
+                                      </div>
+                                    </div>
+                                  )
+                              )}
+                            </div>
+                          </>
+                        );
+                      }
+                    )}
+                  </div>
+                </div>
+              </>
+            }
+            rightSideContent={
+              <>
+                <div
+                  className={`flex border-b border-solitaireSenary ${styles.dimaondImageContainer}`}
+                >
+                  {compareStoneData.map((items) => {
+                    return (
+                      <div key={items.id}>
+                        <div
+                          className={`h-[200px] border-r border-solitaireSenary ${styles.diamondImageContainer}`}
+                        >
+                          <Image
+                            className={styles.diamondImage}
+                            src={items.dimaond_image}
+                            alt="Diamond Image"
+                          />
+
+                          <div className={styles.compareStoneCheckbox}>
+                            <CustomCheckBox data={items.id} />
+                          </div>
+
+                          <div
+                            className={styles.closeButton}
+                            onClick={(event) => handleClose(event, items.id)}
+                          >
+                            <CloseButton />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                {/* values */}
+                <div className={`flex ${styles.compareStonesValueContainer}`}>
+                  {compareStoneData.map((diamond) => {
+                    const {
+                      id,
+                      dimaond_image,
+                      discount,
+                      amt,
+                      ...diamondWithoutImage
+                    } = diamond;
+                    return (
+                      <div
+                        className={`border-r border-solitaireSenary ${styles.compareStoneValue}`}
+                        key={diamond.id}
+                      >
+                        <div className="sticky top-[200px] w-full bg-solitaireSecondary">
+                          <div className="">
+                            <p>{discount}</p>
+                          </div>
+                          <div className="">
+                            <p>{amt}</p>
+                          </div>
+                        </div>
+
+                        {Object.entries(diamondWithoutImage).map(
+                          ([key, value]: any) => {
+                            hasDifferences(diamondWithoutImage);
+                            return (
+                              <div key={key}>
+                                {showDifferences
+                                  ? differences.includes(key)
+                                    ? value
+                                    : ''
+                                  : value}
+                              </div>
+                            );
+                          }
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </>
+            }
+          />
+        </div>
+      )}
+
+      <div className="sticky bottom-0">
+        <CustomFooter footerButtonData={compareStoneFooter} />
+      </div>
     </div>
   );
 };
