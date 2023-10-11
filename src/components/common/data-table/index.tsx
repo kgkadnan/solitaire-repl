@@ -92,14 +92,12 @@ interface ICustomDataTableProps {
   tableRows: any;
   tableColumns: any;
   checkboxData: any;
-  paginationData: any;
 }
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
-  paginationData,
 }) => {
   const [sliderData, setSliderData] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState('');
@@ -107,15 +105,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
-
-  const {
-    handlePageClick,
-    handleResultsPerPageChange,
-    currentPage,
-    numberOfPages,
-    resultsPerPage,
-    optionLimits,
-  } = paginationData;
 
   const footerButtonData = [
     {
@@ -267,7 +256,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   };
 
   return (
-    <div className={''}>
+    <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead className={styles.tableHeader}>
@@ -276,13 +265,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 <th
                   key={column.accessor}
                   className={`${
-                    column.accessor === 'status'
-                      ? `${styles.tableHeadCS} ${styles.stickyStatus}`
-                      : styles.tableHead
-                  } ${
-                    column.accessor === 'select'
-                      ? `${styles.checkboxSticky} `
-                      : ''
+                    column.accessor !== 'status' ? styles.tableHead : ``
                   }`}
                 >
                   {column.accessor === 'select' ? (
@@ -310,20 +293,15 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 {tableColumns.map((column: any) => (
                   <td
                     key={`${row.id}-${column.accessor}`}
-                    className={`${
-                      column.accessor === 'status'
-                        ? `${styles.tableDataCS} ${styles.stickyStatus}`
-                        : styles.tableData
-                    }  ${
+                    className={`
+                    ${column.accessor !== 'status' ? styles.tableData : ``}  
+                    ${
                       row[column.accessor as keyof Rows] == 'A'
                         ? styles.availableStatus
                         : ''
                     }
-                   ${
-                     column.accessor === 'select'
-                       ? `${styles.checkboxSticky} ${styles.checkboxStickyBg} `
-                       : ''
-                   } cursor-pointer
+                  
+                   cursor-pointer
                   `}
                   >
                     {column.accessor === 'select' ? (
@@ -732,24 +710,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">
-            xxxxxxx
-          </span>
-          <p className="text-solitaireTertiary text-sm">Memo - Out</p>
-        </div>
-
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={numberOfPages}
-          resultsPerPage={resultsPerPage}
-          optionLimits={optionLimits}
-          handlePageClick={handlePageClick}
-          handleResultsPerPageChange={handleResultsPerPageChange}
-        />
       </div>
     </div>
   );

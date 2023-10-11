@@ -12,6 +12,7 @@ interface ICustomPaginationProps {
   optionLimits: ISelectData[];
   handleResultsPerPageChange: (event: string) => void;
   handlePageClick?: any;
+  paginationStyle?: any;
 }
 
 const CustomPagination: React.FC<ICustomPaginationProps> = ({
@@ -21,6 +22,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
   optionLimits,
   handleResultsPerPageChange,
   handlePageClick,
+  paginationStyle,
 }) => {
   const pagesToShow = 3; // Number of pages to show in the range
 
@@ -40,7 +42,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
 
   return (
     <div
-      className={`border-t border-solitaireSenary py-2 ${styles.paginationContainer}`}
+      className={`${styles.paginationContainer} ${paginationStyle?.paginationContainerStyle}`}
     >
       <div className={styles.resultsPerPage}>
         <CustomSelect
