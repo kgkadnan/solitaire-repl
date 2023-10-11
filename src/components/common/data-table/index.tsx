@@ -92,48 +92,30 @@ interface ICustomDataTableProps {
   tableRows: any;
   tableColumns: any;
   checkboxData: any;
+  paginationData: any;
 }
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
+  paginationData,
 }) => {
   const [sliderData, setSliderData] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
-  //pagination states
-  const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
-  const [numberOfPages, setNumberOfPages] = useState(0);
+
+  const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
+    checkboxData;
 
   const {
-    handleSelectAllCheckbox,
-    handleClick,
-    isCheck,
-    isCheckAll,
-    setIsCheck,
-    setIsCheckAll,
-  } = checkboxData;
-
-  // Function to handle "Show Results" button click
-  const showButtonHandleClick = () => {
-    alert("You have clicked the 'show result' button");
-  };
-
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
-
-  const handlePageClick = (page: number) => {
-    if (page >= 0 && page <= numberOfPages) {
-      setIsCheck([]);
-      setIsCheckAll(false);
-      setCurrentPage(page);
-    }
-  };
+    handlePageClick,
+    handleResultsPerPageChange,
+    currentPage,
+    numberOfPages,
+    resultsPerPage,
+    optionLimits,
+  } = paginationData;
 
   const footerButtonData = [
     {
@@ -174,14 +156,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
   ];
 
-  let optionLimits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
-  ];
+  // useEffect(() => {
 
-  useEffect(() => {
-    setNumberOfPages(2);
-  }, []);
+  // }, []);
 
   let detailPageDisplayButtonData = [
     {
@@ -373,7 +350,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               >
                                 <Image
                                   src={imageOutline}
-                                  alt={`${row.details.gia} GIA Image`}
+                                  alt={`${row?.details?.gia} GIA Image`}
                                   width={20}
                                   height={20}
                                 />
@@ -426,7 +403,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               >
                                 <Image
                                   src={certficateOutline}
-                                  alt={`${row.details.stone} Stone Image`}
+                                  alt={`${row?.details?.stone} Stone Image`}
                                   width={20}
                                   height={20}
                                 />
@@ -732,7 +709,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"
                         >
-                          {row.rpt_number}
+                          {row.rpt_number !== null ? row.rpt_number : '-'}
                         </a>
                       </div>
                     ) : column.accessor === 'lab' ? (
@@ -744,8 +721,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           {row.lab}
                         </a>
                       </div>
-                    ) : (
+                    ) : row[column.accessor as keyof Rows] !== null ? (
                       row[column.accessor as keyof Rows]
+                    ) : (
+                      '-'
                     )}
                   </td>
                 ))}

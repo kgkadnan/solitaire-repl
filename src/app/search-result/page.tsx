@@ -1,5 +1,4 @@
 'use client';
-import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { CustomFooter } from '@/components/common/footer';
 import styles from './search-results.module.scss';
 import { ManageLocales } from '@/utils/translate';
@@ -15,20 +14,28 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
+import { useGetAllProductQuery } from '@/slices/product';
+import CustomDataTable, { Rows } from '@/components/common/data-table';
+import { constructUrlParams } from '@/utils/construct-url-param';
 
 interface TableColumn {
   label: string;
   accessor: string;
 }
 
+let optionLimits = [
+  { id: 1, value: '1' },
+  { id: 2, value: '10' },
+];
+
 interface Data {
   [key: string]: {
     id: string | null;
     stock_no: string | null;
-    is_memo_out: boolean;
+    is_memo_out: boolean | null;
     status: string | null;
-    discount: number;
-    amount: number;
+    discount: number | null;
+    amount: number | null;
     details: {
       gia: string | null | StaticImageData;
       stone: string | null | StaticImageData;
@@ -95,1573 +102,686 @@ interface Data {
   }[];
 }
 
-const data: Data = {
-  Search1: [
-    {
-      id: '1',
-      stock_no: '789456465',
-      status: 'A',
-      amount: 966.5,
-      discount: -19.5,
-      shape: 'BR',
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      girdle: 'Med-Stk',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      open_pavilion: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: roundImg,
-      },
-    },
-    {
-      id: '2',
-      stock_no: '789456466',
-      status: 'H',
-      amount: 1222.0,
-      discount: -35.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-      girdle: 'Med-Stk',
-      is_memo_out: true,
-      shape: 'BR',
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '3',
-      stock_no: '789456467',
-      status: 'A',
-      amount: 765.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -12.5,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '4',
-      stock_no: '789456468',
-      status: 'A',
-      amount: 985.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -25.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '5',
-      stock_no: '789456469',
-      status: 'H',
-      amount: 1450.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -40.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '6',
-      stock_no: '789456470',
-      status: 'A',
-      amount: 1100.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -30.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '7',
-      stock_no: '789456471',
-      status: 'A',
-      amount: 820.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -18.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '8',
-      stock_no: '789456472',
-      status: 'H',
-      amount: 900.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -15.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '9',
-      stock_no: '789456473',
-      status: 'A',
-      amount: 1020.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -27.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '10',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '11',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '12',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '13',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '14',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '15',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '16',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '17',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '18',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-    {
-      id: '19',
-      stock_no: '789456474',
-      status: 'A',
-      amount: 740.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-
-      girdle: 'Med-Stk',
-      discount: -14.0,
-      shape: 'BR',
-
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-  ],
-
-  Search2: [
-    {
-      id: '1',
-      stock_no: '789456465',
-      status: 'A',
-      amount: 966.5,
-      discount: -19.5,
-      shape: 'BR',
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      girdle: 'Med-Stk',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      open_pavilion: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-      is_memo_out: false,
-      details: {
-        gia: '/dummy',
-        stone: roundImg,
-      },
-    },
-    {
-      id: '2',
-      stock_no: '789456466',
-      status: 'H',
-      amount: 1222.0,
-      discount: -35.0,
-      color: 'D',
-      clarity: 'FL',
-      cut: 'EX',
-      polish: 'EX',
-      symmetry: 'EX',
-      fluorescence: 'Non',
-      lab: 'GIA',
-      rpt_number: '352146529',
-      country_origin: '',
-      certificate_number: 326594658,
-      lot_id: 12356989,
-      certificate_url: '/certurl',
-      location: 'IND',
-      color_shade: 'WH',
-      color_shade_intensity: 'None',
-      overtone: null,
-      intensity: '',
-      ha: '.',
-      brilliance: null,
-      black_table: 'B0',
-      side_black: 'SB0',
-      open_crown: 'N',
-      milky: 'MO',
-      luster: 'EX',
-      eye_clean: 'Y',
-      table_inclusion: 'T0',
-      side_inclusion: 'S0',
-      natural_crown: 'N',
-      natural_girdle: 'N',
-      natural_pavilion: 'N',
-      surface_graining: 'G0',
-      internal_graining: 'IGO',
-      carat: 0.33,
-      price_range: null,
-      price_per_carat: 3220.0,
-      girdle_percentage: 0.0,
-      pavilion_angle: null,
-      star_length: null,
-      depth_percentage: 56.6,
-      table_percentage: 64.0,
-      crown_angle: null,
-      pavilion_depth: null,
-      crown_height: null,
-      lower_half: null,
-      ratio: 1.64,
-      length: 6.41,
-      width: 3.92,
-      depth: 2.22,
-      rap: 4000,
-      open_pavilion: 'N',
-      rap_value: 12,
-      culet: 'NONE',
-      inscription: 'YES',
-      tracr_id: 'EX',
-      total_grade: 'null',
-      disclosed_source: 'null',
-      open_table: null,
-      girdle: 'Med-Stk',
-      is_memo_out: true,
-      shape: 'BR',
-      details: {
-        gia: '/dummy',
-        stone: '/dummy2',
-      },
-    },
-  ],
-};
+// const dummyData: Data = {
+//   search1: [
+//     {
+//       id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//       title: 'Medusa T-Shirt',
+//       subtitle: null,
+//       status: 'A',
+//       external_id: null,
+//       description:
+//         'Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.',
+//       handle: 't-shirt',
+//       is_giftcard: false,
+//       discountable: true,
+//       thumbnail:
+//         'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
+//       collection_id: null,
+//       type_id: null,
+//       weight: 400,
+//       length: null,
+//       height: null,
+//       width: null,
+//       hs_code: null,
+//       origin_country: null,
+//       mid_code: null,
+//       material: null,
+//       created_at: '2023-10-09T06:07:41.807Z',
+//       updated_at: '2023-10-09T06:07:41.807Z',
+//       deleted_at: null,
+//       metadata: null,
+//       profile_id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
+//       color: null,
+//       shape: null,
+//       clarity: null,
+//       cut: null,
+//       polish: null,
+//       symmetry: null,
+//       fluorescence: null,
+//       lab: null,
+//       rpt_number: null,
+//       certificate_url: null,
+//       girdle: null,
+//       location: null,
+//       color_shade: null,
+//       color_shade_intensity: null,
+//       overtone: null,
+//       intensity: null,
+//       ha: null,
+//       brilliance: null,
+//       black_table: null,
+//       side_black: null,
+//       open_crown: null,
+//       open_table: null,
+//       open_pavilion: null,
+//       milky: null,
+//       luster: null,
+//       eye_clean: null,
+//       table_inclusion: null,
+//       side_inclusion: null,
+//       natural_crown: 'sss',
+//       natural_girdle: null,
+//       natural_pavilion: null,
+//       surface_graining: null,
+//       internal_graining: null,
+//       carat: null,
+//       discount: null,
+//       price_range: null,
+//       price_per_carat: null,
+//       girdle_percentage: null,
+//       pavilion_angle: null,
+//       star_length: null,
+//       depth_percentage: null,
+//       table_percentage: null,
+//       crown_angle: null,
+//       pavilion_depth: null,
+//       crown_height: null,
+//       lower_half: null,
+//       ratio: null,
+//       depth: null,
+//       certificate_number: null,
+//       rap: null,
+//       rap_value: null,
+//       culet: null,
+//       inscription: null,
+//       tracr_id: null,
+//       total_grade: null,
+//       disclosed_source: null,
+//       is_memo_out: null,
+//       lot_id: null,
+//       collection: null,
+//       images: [
+//         {
+//           id: 'img_01HC9GRY968Y7W36Y3FA5Y2FPM',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY96704P35JCFW2M4F80',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY97ZXFG4T8HDCEMNAW2',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY972SRKSX7XJ051NBKJ',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png',
+//           metadata: null,
+//         },
+//       ],
+//       options: [
+//         {
+//           id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'Size',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           metadata: null,
+//           values: [
+//             {
+//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'S',
+//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//           ],
+//         },
+//         {
+//           id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'Color',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           metadata: null,
+//           values: [
+//             {
+//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GRZW1CCXZ2N0T5XQ8VJEM',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZW0E9AJ30S49255671F',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS0G9W6J2YZYHYX0BKZJB',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS0G9NH8M1SNERSVYE045',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS14RJB56JWRVK6WV38S8',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS14RMZDTHA5YAF07MXFC',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS1RN2JMP6FVP01V6SQQN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS1RNX5Y8PP0N1W0J5GJA',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS2D40B6TRWYZF0H78V2D',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS2D4VKTYA9GFVMKNXNTV',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS3106AC1MSGF5S3F2CXJ',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS310X3FWNCR2W96F9J9Y',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS3NDK5QKF0NNPXCY1MCK',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS3NDQ7CE67X2WR1VT1TJ',
+//               metadata: null,
+//             },
+//           ],
+//         },
+//       ],
+//       profiles: [
+//         {
+//           id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
+//           created_at: '2023-10-09T06:07:40.697Z',
+//           updated_at: '2023-10-09T06:07:40.697Z',
+//           deleted_at: null,
+//           name: 'Default Shipping Profile',
+//           type: 'default',
+//           metadata: null,
+//         },
+//       ],
+//       tags: [],
+//       type: null,
+//       variants: [
+//         {
+//           id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'S / Black',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           sku: null,
+//           barcode: null,
+//           ean: null,
+//           upc: null,
+//           variant_rank: 0,
+//           inventory_quantity: 100,
+//           allow_backorder: false,
+//           manage_inventory: true,
+//           hs_code: null,
+//           origin_country: null,
+//           mid_code: null,
+//           material: null,
+//           weight: null,
+//           length: null,
+//           height: null,
+//           width: null,
+//           metadata: null,
+//           options: [
+//             {
+//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'S',
+//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//           ],
+//           prices: [
+//             {
+//               id: 'ma_01HC9GRZFN7ZJSMWQW9RPV7Q9H',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               currency_code: 'eur',
+//               amount: 1950,
+//               min_quantity: null,
+//               max_quantity: null,
+//               price_list_id: null,
+//               region_id: null,
+//               price_list: null,
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//             },
+//             {
+//               id: 'ma_01HC9GRZFNNAPMPSHE7ZV4Z7JF',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               currency_code: 'usd',
+//               amount: 2200,
+//               min_quantity: null,
+//               max_quantity: null,
+//               price_list_id: null,
+//               region_id: null,
+//               price_list: null,
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//             },
+//           ],
+//           original_price: null,
+//           calculated_price: null,
+//           original_price_incl_tax: null,
+//           calculated_price_incl_tax: null,
+//           original_tax: null,
+//           calculated_tax: null,
+//           tax_rates: null,
+//         },
+//       ],
+//     },
+//   ],
+//   search2: [
+//     {
+//       id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//       title: 'Medusa T-Shirt',
+//       subtitle: null,
+//       status: 'A',
+//       external_id: null,
+//       description:
+//         'Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.',
+//       handle: 't-shirt',
+//       is_giftcard: false,
+//       discountable: true,
+//       thumbnail:
+//         'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
+//       collection_id: null,
+//       type_id: null,
+//       weight: 400,
+//       length: null,
+//       height: null,
+//       width: null,
+//       hs_code: null,
+//       origin_country: null,
+//       mid_code: null,
+//       material: null,
+//       created_at: '2023-10-09T06:07:41.807Z',
+//       updated_at: '2023-10-09T06:07:41.807Z',
+//       deleted_at: null,
+//       metadata: null,
+//       profile_id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
+//       color: null,
+//       shape: null,
+//       clarity: null,
+//       cut: null,
+//       polish: null,
+//       symmetry: null,
+//       fluorescence: null,
+//       lab: null,
+//       rpt_number: null,
+//       certificate_url: null,
+//       girdle: 'yes',
+//       location: null,
+//       color_shade: null,
+//       color_shade_intensity: null,
+//       overtone: null,
+//       intensity: null,
+//       ha: null,
+//       brilliance: null,
+//       black_table: null,
+//       side_black: null,
+//       open_crown: null,
+//       open_table: null,
+//       open_pavilion: null,
+//       milky: null,
+//       luster: null,
+//       eye_clean: null,
+//       table_inclusion: null,
+//       side_inclusion: null,
+//       natural_crown: 'sss',
+//       natural_girdle: null,
+//       natural_pavilion: null,
+//       surface_graining: null,
+//       internal_graining: null,
+//       carat: null,
+//       discount: null,
+//       price_range: null,
+//       price_per_carat: null,
+//       girdle_percentage: null,
+//       pavilion_angle: null,
+//       star_length: null,
+//       depth_percentage: null,
+//       table_percentage: null,
+//       crown_angle: null,
+//       pavilion_depth: null,
+//       crown_height: null,
+//       lower_half: null,
+//       ratio: null,
+//       depth: null,
+//       certificate_number: null,
+//       rap: null,
+//       rap_value: null,
+//       culet: null,
+//       inscription: null,
+//       tracr_id: null,
+//       total_grade: null,
+//       disclosed_source: null,
+//       is_memo_out: null,
+//       lot_id: null,
+//       collection: null,
+//       images: [
+//         {
+//           id: 'img_01HC9GRY968Y7W36Y3FA5Y2FPM',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY96704P35JCFW2M4F80',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY97ZXFG4T8HDCEMNAW2',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png',
+//           metadata: null,
+//         },
+//         {
+//           id: 'img_01HC9GRY972SRKSX7XJ051NBKJ',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png',
+//           metadata: null,
+//         },
+//       ],
+//       options: [
+//         {
+//           id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'Size',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           metadata: null,
+//           values: [
+//             {
+//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'S',
+//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//           ],
+//         },
+//         {
+//           id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'Color',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           metadata: null,
+//           values: [
+//             {
+//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GRZW1CCXZ2N0T5XQ8VJEM',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZW0E9AJ30S49255671F',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS0G9W6J2YZYHYX0BKZJB',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS0G9NH8M1SNERSVYE045',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS14RJB56JWRVK6WV38S8',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS14RMZDTHA5YAF07MXFC',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS1RN2JMP6FVP01V6SQQN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS1RNX5Y8PP0N1W0J5GJA',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS2D40B6TRWYZF0H78V2D',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS2D4VKTYA9GFVMKNXNTV',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS3106AC1MSGF5S3F2CXJ',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS310X3FWNCR2W96F9J9Y',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GS3NDK5QKF0NNPXCY1MCK',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'White',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GS3NDQ7CE67X2WR1VT1TJ',
+//               metadata: null,
+//             },
+//           ],
+//         },
+//       ],
+//       profiles: [
+//         {
+//           id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
+//           created_at: '2023-10-09T06:07:40.697Z',
+//           updated_at: '2023-10-09T06:07:40.697Z',
+//           deleted_at: null,
+//           name: 'Default Shipping Profile',
+//           type: 'default',
+//           metadata: null,
+//         },
+//       ],
+//       tags: [],
+//       type: null,
+//       variants: [
+//         {
+//           id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//           created_at: '2023-10-09T06:07:41.807Z',
+//           updated_at: '2023-10-09T06:07:41.807Z',
+//           deleted_at: null,
+//           title: 'S / Black',
+//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
+//           sku: null,
+//           barcode: null,
+//           ean: null,
+//           upc: null,
+//           variant_rank: 0,
+//           inventory_quantity: 100,
+//           allow_backorder: false,
+//           manage_inventory: true,
+//           hs_code: null,
+//           origin_country: null,
+//           mid_code: null,
+//           material: null,
+//           weight: null,
+//           length: null,
+//           height: null,
+//           width: null,
+//           metadata: null,
+//           options: [
+//             {
+//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'S',
+//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//             {
+//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               value: 'Black',
+//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//               metadata: null,
+//             },
+//           ],
+//           prices: [
+//             {
+//               id: 'ma_01HC9GRZFN7ZJSMWQW9RPV7Q9H',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               currency_code: 'eur',
+//               amount: 1950,
+//               min_quantity: null,
+//               max_quantity: null,
+//               price_list_id: null,
+//               region_id: null,
+//               price_list: null,
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//             },
+//             {
+//               id: 'ma_01HC9GRZFNNAPMPSHE7ZV4Z7JF',
+//               created_at: '2023-10-09T06:07:41.807Z',
+//               updated_at: '2023-10-09T06:07:41.807Z',
+//               deleted_at: null,
+//               currency_code: 'usd',
+//               amount: 2200,
+//               min_quantity: null,
+//               max_quantity: null,
+//               price_list_id: null,
+//               region_id: null,
+//               price_list: null,
+//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
+//             },
+//           ],
+//           original_price: null,
+//           calculated_price: null,
+//           original_price_incl_tax: null,
+//           calculated_price_incl_tax: null,
+//           original_tax: null,
+//           calculated_tax: null,
+//           tax_rates: null,
+//         },
+//       ],
+//     },
+//   ],
+// };
 
 const SearchResults = () => {
+  const [dummyData, setDummyData] = useState<any>({});
+
   const [rows, setRows] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   //checkbox states
@@ -1669,8 +789,24 @@ const SearchResults = () => {
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
 
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(0);
+  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [numberOfPages, setNumberOfPages] = useState(0);
+
   //Radio Button
   const [selectedValue, setSelectedValue] = useState('');
+
+  const [totalAmount, setTotalAmount] = useState(0);
+  const [averageDiscount, setAverageDiscount] = useState(0);
+
+  const [searchUrl, setSearchUrl] = useState('');
+
+  const { data, error, isLoading, refetch } = useGetAllProductQuery({
+    offset: currentPage,
+    limit: resultsPerPage,
+    url: searchUrl,
+  });
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -1709,8 +845,6 @@ const SearchResults = () => {
     handleClick: handleClick,
     isCheck: isCheck,
     isCheckAll: isCheckAll,
-    setIsCheck: setIsCheck,
-    setIsCheckAll: setIsCheckAll,
   };
 
   const tableColumns: TableColumn[] = [
@@ -1823,13 +957,204 @@ const SearchResults = () => {
   ];
 
   const handleButtonClick = (index: number) => {
+    let result = constructUrlParams(yourSelectionData[index]);
+    setSearchUrl(result);
     setActiveTab(index);
-    const selectedSearchData = Object.values(data)[index];
-    setRows(selectedSearchData);
+    if (dummyData[`search${index + 1}`] === undefined) {
+      const searchTabKey = `search${index + 1}`;
+      console.log('dddddddddddddddd', searchTabKey);
+
+      //call api with specific parameters and set it on dummyData
+      setDummyData((prevDummyData: any) => ({
+        ...prevDummyData,
+        [searchTabKey]: [
+          {
+            id: `prod_01HC9GSECGZ1TBF80VM55GG5oo${index}`,
+            title: 'Medusa Hoodie',
+            subtitle: null,
+            status: 'published',
+            external_id: null,
+            description:
+              'Reimagine the feeling of a classic hoodie. With our cotton hoodie, everyday essentials no longer have to be ordinary.',
+            handle: 'hoodie',
+            is_giftcard: false,
+            discountable: true,
+            thumbnail:
+              'https://medusa-public-images.s3.eu-west-1.amazonaws.com/black_hoodie_front.png',
+            collection_id: null,
+            type_id: null,
+            weight: 400,
+            length: null,
+            height: null,
+            width: null,
+            hs_code: null,
+            origin_country: null,
+            mid_code: null,
+            material: null,
+            created_at: '2023-10-09T06:07:41.807Z',
+            updated_at: '2023-10-09T06:07:41.807Z',
+            deleted_at: null,
+            metadata: null,
+            color: 'dontknow',
+            shape: null,
+            clarity: null,
+            cut: null,
+            polish: null,
+            symmetry: null,
+            fluorescence: null,
+            lab: null,
+            rpt_number: null,
+            certificate_url: null,
+            girdle: null,
+            location: null,
+            color_shade: null,
+            color_shade_intensity: null,
+            overtone: null,
+            intensity: null,
+            ha: null,
+            brilliance: null,
+            black_table: null,
+            side_black: null,
+            open_crown: null,
+            open_table: null,
+            open_pavilion: null,
+            milky: null,
+            luster: null,
+            eye_clean: null,
+            table_inclusion: null,
+            side_inclusion: null,
+            natural_crown: null,
+            natural_girdle: null,
+            natural_pavilion: null,
+            surface_graining: null,
+            internal_graining: null,
+            carat: null,
+            discount: null,
+            price_range: null,
+            price_per_carat: null,
+            girdle_percentage: null,
+            pavilion_angle: null,
+            star_length: null,
+            depth_percentage: null,
+            table_percentage: null,
+            crown_angle: null,
+            pavilion_depth: null,
+            crown_height: null,
+            lower_half: null,
+            ratio: null,
+            depth: null,
+            certificate_number: null,
+            rap: null,
+            rap_value: null,
+            culet: null,
+            inscription: null,
+            tracr_id: null,
+            total_grade: null,
+            disclosed_source: null,
+            is_memo_out: null,
+            lot_id: null,
+          },
+        ], // Use computed property name
+      }));
+
+      let selectedSearchData = [
+        {
+          id: `prod_01HC9GSECGZ1TBF80VM55GG5oo${index}`,
+          title: 'Medusa Hoodie',
+          subtitle: null,
+          status: 'published',
+          external_id: null,
+          description:
+            'Reimagine the feeling of a classic hoodie. With our cotton hoodie, everyday essentials no longer have to be ordinary.',
+          handle: 'hoodie',
+          is_giftcard: false,
+          discountable: true,
+          thumbnail:
+            'https://medusa-public-images.s3.eu-west-1.amazonaws.com/black_hoodie_front.png',
+          collection_id: null,
+          type_id: null,
+          weight: 400,
+          length: null,
+          height: null,
+          width: null,
+          hs_code: null,
+          origin_country: null,
+          mid_code: null,
+          material: null,
+          created_at: '2023-10-09T06:07:41.807Z',
+          updated_at: '2023-10-09T06:07:41.807Z',
+          deleted_at: null,
+          metadata: null,
+          color: 'dontknow',
+          shape: null,
+          clarity: null,
+          cut: null,
+          polish: null,
+          symmetry: null,
+          fluorescence: null,
+          lab: null,
+          rpt_number: null,
+          certificate_url: null,
+          girdle: null,
+          location: null,
+          color_shade: null,
+          color_shade_intensity: null,
+          overtone: null,
+          intensity: null,
+          ha: null,
+          brilliance: null,
+          black_table: null,
+          side_black: null,
+          open_crown: null,
+          open_table: null,
+          open_pavilion: null,
+          milky: null,
+          luster: null,
+          eye_clean: null,
+          table_inclusion: null,
+          side_inclusion: null,
+          natural_crown: null,
+          natural_girdle: null,
+          natural_pavilion: null,
+          surface_graining: null,
+          internal_graining: null,
+          carat: null,
+          discount: null,
+          price_range: null,
+          price_per_carat: null,
+          girdle_percentage: null,
+          pavilion_angle: null,
+          star_length: null,
+          depth_percentage: null,
+          table_percentage: null,
+          crown_angle: null,
+          pavilion_depth: null,
+          crown_height: null,
+          lower_half: null,
+          ratio: null,
+          depth: null,
+          certificate_number: null,
+          rap: null,
+          rap_value: null,
+          culet: null,
+          inscription: null,
+          tracr_id: null,
+          total_grade: null,
+          disclosed_source: null,
+          is_memo_out: null,
+          lot_id: null,
+        },
+      ];
+      setRows(selectedSearchData);
+    } else {
+      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
+      console.log(dummyData, 'jyoti');
+      let selectedSearchData = dummyData[`search${index + 1}`];
+      // setRows(selectedSearchData);
+    }
   };
 
-  const [totalAmount, setTotalAmount] = useState(0);
-  const [averageDiscount, setAverageDiscount] = useState(0);
+  console.log('rows========', rows, dummyData);
 
   // Function to calculate total amount
   const calculateTotalAmount = useCallback(() => {
@@ -1869,27 +1194,28 @@ const SearchResults = () => {
     if (yourSelection) {
       setYourSelectionData(JSON.parse(yourSelection));
     }
-    setRows(Object.values(data)[0]);
-  }, []);
+
+    // data && setDummyData({ search1: Object.values(data)[0] });
+    data && setRows(Object.values(data)[0]);
+    console.log('hello====');
+    setNumberOfPages(2);
+  }, [data]);
 
   const closeSearch = (removeDataIndex: number) => {
-    // Filter the data to remove the specified search
-    const updatedData: Data = {};
-    Object.keys(data).forEach((key, index) => {
-      if (index !== removeDataIndex) {
-        updatedData[key] = data[key];
-      }
-    });
-
-    // Update the state with the filtered data
-    setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
+    // Filter the dummyData to remove the specified search
+    // const updatedData: Data = {};
+    // Object.keys(dummyData).forEach((key, index) => {
+    //   if (index !== removeDataIndex) {
+    //     updatedData[key] = dummyData[key];
+    //   }
+    // });
+    // // Update the state with the filtered dummyData
+    // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
   };
 
   const handleRadioChange = (radioValue: string) => {
     setSelectedValue(radioValue);
   };
-
-  console.log('setSelectedValue', selectedValue);
 
   const radioButtonStyles = {
     radioButtonStyle: styles.radioStyle,
@@ -2012,6 +1338,29 @@ const SearchResults = () => {
     ],
   ];
 
+  const handleResultsPerPageChange = (event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setResultsPerPage(newResultsPerPage);
+    setCurrentPage(0); // Reset current page when changing results per page
+  };
+
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      setIsCheck([]);
+      setIsCheckAll(false);
+      setCurrentPage(page);
+    }
+  };
+
+  const paginationData = {
+    handlePageClick: handlePageClick,
+    handleResultsPerPageChange: handleResultsPerPageChange,
+    currentPage: currentPage,
+    numberOfPages: numberOfPages,
+    resultsPerPage: resultsPerPage,
+    optionLimits: optionLimits,
+  };
+
   return (
     <>
       <div>
@@ -2025,120 +1374,103 @@ const SearchResults = () => {
 
           {/* Search Tab Header */}
           <div className="flex items-center gap-5 text-solitaireTertiary  p-2 bg-solitaireSenary rounded-lg bg-opacity-100">
-            {Object.keys(data).length > 0 &&
-              Object.values(data).map((data: any, index: number) => {
-                return (
-                  <div key={`Search-${index}`}>
-                    <div
-                      style={{
-                        marginRight: index === data.length - 1 ? '0px' : '5px',
-                      }}
-                      className={`flex items-center cursor-pointer gap-[8px] ${
-                        activeTab === index
-                          ? styles.activeHeaderButtonStyle
-                          : styles.headerButtonStyle
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <Tooltip
-                          tooltipElement={
-                            <InfoCircleOutline stroke="#8C7459" />
-                          }
-                          content={
-                            <div
-                              className={styles.yourSelectionContentContainer}
-                            >
-                              <CustomInputlabel
-                                htmlfor="text"
-                                label={`${ManageLocales(
-                                  'app.advanceSearch.yourSelection'
-                                )}:`}
-                                overriddenStyles={{
-                                  label: styles.yourSelectionTooltipHeader,
-                                }}
-                              />
+            {Object.keys(yourSelectionData).length > 0 &&
+              Object.values(yourSelectionData).map(
+                (yourSelection: any, index: number) => {
+                  return (
+                    <div key={`Search-${index}`}>
+                      <div
+                        style={{
+                          marginRight:
+                            index === yourSelection.length - 1 ? '0px' : '5px',
+                        }}
+                        className={`flex items-center cursor-pointer gap-[8px] ${
+                          activeTab === index
+                            ? styles.activeHeaderButtonStyle
+                            : styles.headerButtonStyle
+                        }`}
+                      >
+                        <div className="flex items-center">
+                          <Tooltip
+                            tooltipElement={
+                              <InfoCircleOutline stroke="#8C7459" />
+                            }
+                            content={
                               <div
-                                className={styles.yourSelectionMainContainer}
+                                className={styles.yourSelectionContentContainer}
                               >
-                                {yourSelectionData?.map(
-                                  (data, yourSelectionIndex) => {
-                                    console.log(
-                                      'yourSelectionIndex',
-                                      Object.values(data)
-                                    );
-
-                                    return (
-                                      <>
-                                        {yourSelectionIndex === index && (
+                                <CustomInputlabel
+                                  htmlfor="text"
+                                  label={`${ManageLocales(
+                                    'app.advanceSearch.yourSelection'
+                                  )}:`}
+                                  overriddenStyles={{
+                                    label: styles.yourSelectionTooltipHeader,
+                                  }}
+                                />
+                                <div
+                                  className={styles.yourSelectionMainContainer}
+                                >
+                                  <div key={`item-${index}`}>
+                                    {Object.keys(yourSelection).map(
+                                      (key: any) => (
+                                        <div
+                                          key={`key-${key}`}
+                                          className={`${styles.yourSelectionSubContainer}`}
+                                        >
                                           <div
-                                            key={
-                                              Object.keys(data)[
-                                                yourSelectionIndex
-                                              ]
-                                            }
-                                            className={
-                                              styles.yourSelectionSubContainer
-                                            }
+                                            className={styles.labelContainer}
                                           >
-                                            <div
-                                              className={styles.labelContainer}
-                                            >
-                                              <CustomInputlabel
-                                                htmlfor="text"
-                                                label={Object.keys(data)}
-                                              />
-                                              :
-                                            </div>
-                                            {/* Check data type of values and accordingly display the content */}
-                                            {Array.isArray(
-                                              Object.values(data)[
-                                                yourSelectionIndex
-                                              ]
-                                            )
-                                              ? Object.values(data)[
-                                                  yourSelectionIndex
-                                                ].toString()
-                                              : Object.values(data)}
+                                            <CustomInputlabel
+                                              htmlfor="text"
+                                              label={key}
+                                            />
+                                            :
                                           </div>
-                                        )}
-                                      </>
-                                    );
-                                  }
-                                )}
+                                          <div className="text-sm font-light">
+                                            {Array.isArray(yourSelection[key])
+                                              ? yourSelection[key].join(', ')
+                                              : yourSelection[key]}
+                                          </div>
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
                               </div>
-                            </div>
-                          }
-                          tooltipStyles={{
-                            tooltipContainerStyles:
-                              styles.tooltipContainerStyles,
-                            tooltipContentStyle:
-                              styles.yourSelectionTooltipContentStyle,
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <CustomDisplayButton
-                          displayButtonAllStyle={{
-                            displayLabelStyle: styles.headerButtonLabelStyle,
-                          }}
-                          displayButtonLabel={`Search ${index + 1}`}
-                          handleClick={() => handleButtonClick(index)}
-                        />
-                      </div>
-                      <div onClick={() => closeSearch(index)}>
-                        <CloseOutline stroke="#8C7459" />
+                            }
+                            tooltipStyles={{
+                              tooltipContainerStyles:
+                                styles.tooltipContainerStyles,
+                              tooltipContentStyle:
+                                styles.yourSelectionTooltipContentStyle,
+                            }}
+                          />
+                        </div>
+                        <div>
+                          <CustomDisplayButton
+                            displayButtonAllStyle={{
+                              displayLabelStyle: styles.headerButtonLabelStyle,
+                            }}
+                            displayButtonLabel={`Search ${index + 1}`}
+                            handleClick={() => handleButtonClick(index)}
+                          />
+                        </div>
+                        <div onClick={() => closeSearch(index)}>
+                          <CloseOutline stroke="#8C7459" />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
+                  );
+                }
+              )}
           </div>
 
           {/* Count Bar  */}
           <div className="flex justify-between py-3">
             <div className="flex gap-3">
-              <p>Pieces : {`${isCheck.length}/${rows.length}`}</p>
-              <p>Avg. Dis : {averageDiscount.toFixed(2)}</p>
+              <p>Pieces : {`${isCheck.length}/${rows?.length}`}</p>
+              <p>Total Avg. Dis : {averageDiscount.toFixed(2)}</p>
               <p>Total Amount : ${totalAmount.toFixed(2)}</p>
             </div>
             <CustomSlider
@@ -2165,8 +1497,8 @@ const SearchResults = () => {
                     <CustomRadioButton
                       radioData={[
                         {
-                          id: '1',
-                          value: '1',
+                          id: '0',
+                          value: '0',
                           radioButtonLabel: 'Default',
                         },
                       ]}
@@ -2210,11 +1542,12 @@ const SearchResults = () => {
             />
           </div>
         </div>
-        {/* <CustomHeader data={headerData} /> */}
+        {/* <CustomHeader dummyData={headerData} /> */}
         <CustomDataTable
           tableRows={rows}
           tableColumns={tableColumns}
           checkboxData={checkboxData}
+          paginationData={paginationData}
         />
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">
           <CustomFooter footerButtonData={footerButtonData} />
