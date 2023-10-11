@@ -49,8 +49,8 @@ const ManageDiamondSequence = () => {
   // Checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   // Specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
+  const handleClick = (id: string) => {
+    // const { id } = e.target;
 
     let updatedIsCheck = [...isCheck];
 

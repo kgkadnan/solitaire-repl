@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 
 interface ICustomCheckboxProps {
   data: string;
-  onClick?: (e: any) => void;
+  onClick: (e: any) => void;
   isChecked?: string[];
   style?: string;
 }
@@ -23,7 +23,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
         key={`checkbox-${data}`}
         id={data}
         checked={isChecked?.includes(data)}
-        onClick={onClick}
+        onClick={() => onClick(data)}
         className={`${styles.defaultCheckbox} ${style} `}
       />
       {/* );
