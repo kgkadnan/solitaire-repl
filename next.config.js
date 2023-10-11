@@ -31,6 +31,9 @@ const nextConfig = {
     locales: ['en', 'fr'],
     defaultLocale: 'en',
   },
+  images: {
+    domains: ['api.kgk.live'], // Add 'api.kgk.live' to the list of allowed domains
+  },
 };
 
 module.exports = nextConfig;

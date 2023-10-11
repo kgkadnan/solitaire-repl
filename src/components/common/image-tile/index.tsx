@@ -63,12 +63,16 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
                 : handleSelectTile?.(title);
             }}
           >
-            {src?.src ? (
+            {typeof src ==='string' ? (
+              
               <Image
                 src={src}
                 alt={title}
+                width={100}
+                height={100}
                 className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
               />
+              
             ) : (
               <div
                 className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
