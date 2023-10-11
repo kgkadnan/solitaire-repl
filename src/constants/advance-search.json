@@ -167,6 +167,7 @@
     "I3"
   ],
   "fluorescence": ["NON", "FNT", "VSL", "MED", "STG", "SLT", "VSTG"],
+  "culet": ["NON", "Minor", "Medium"],
   "lab": [
     "GIA",
     "HRD",
@@ -183,6 +184,17 @@
   ],
   "brilliance": ["Excellent", "Very Good", "Good"],
   "girdle": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK"],
+  "location": ["IND", "ISR", "BEL", "DUB", "USA"],
+  "origin": [
+    "RUSSIA",
+    "BOTSWANA",
+    "CANADA",
+    "BOTSWANA NAMIBIA CANADA OR SOUTH AFRICA",
+    "BOTSWANA NAMIBIA CANADA SOUTH AFRICA OR LESOTHO",
+    "DTC2 BW NA CA OR ZA",
+    "SOUTH AFRICA"
+  ],
+
   "key_to_symbol": [
     "All",
     "Bearding",

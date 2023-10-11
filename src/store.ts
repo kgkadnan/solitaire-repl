@@ -6,11 +6,13 @@ import {
 import { savedSearchesApi } from './slices/saved-searches';
 import { previousSearchApi } from './slices/previous-searches';
 import { notificationApi } from './slices/notification';
+import { productAPi } from './slices/product';
 
 const rootReducer = combineReducers({
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
+  [productAPi.reducerPath]: productAPi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -21,7 +23,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
         savedSearchesApi.middleware,
-        notificationApi.middleware
+        notificationApi.middleware,
+        productAPi.middleware
       ),
     preloadedState,
   });

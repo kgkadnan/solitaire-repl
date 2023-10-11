@@ -16,6 +16,7 @@ interface IRadioButtonStyles {
   radioContainerStyle?: string;
   radioButtonStyle: string;
   radioLabelStyle: string;
+  mainRadioButton?: string;
 }
 
 // Interface for the RadioGroup component's props
@@ -36,7 +37,7 @@ export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
       {/* RadioGroup component for managing radio buttons */}
       <RadioGroup
         onValueChange={onChange}
-        className={`${style?.mainRadioButton}`}
+        className={`${style?.mainRadioButton} ${radioButtonAllStyles?.mainRadioButton}`}
       >
         {/* Map over radioData to render individual radio buttons */}
         {radioData?.map((items) => {

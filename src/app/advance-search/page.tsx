@@ -6,7 +6,6 @@ import { CustomSelectionButton } from 'src/components/common/buttons/selection-b
 import CustomImageTile from 'src/components/common/image-tile';
 import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
-import { CustomSelect } from 'src/components/common/select';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
 import { useSearchParams } from 'next/navigation';
@@ -44,12 +43,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
     []
   );
+  const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
   const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
 
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
   const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
+  const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
+  const [selectedOrigin, setSelectedOrigin] = useState<string[]>([]);
 
   const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
   const [priceRangeTo, setPriceRangeTo] = useState<string>('');
@@ -75,11 +77,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [naturalGirdleWI, setNaturalGirdleWI] = useState<string[]>([]);
   const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
   const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
-  const [lusterWI, setLusterWI] = useState<string[]>([]);
+  const [internalGrainingWI, setInternalGrainingWI] = useState<string[]>([]);
 
   //parameter state
   const [tablePerFrom, setTablePerFrom] = useState<string>('');
   const [tablePerTo, setTablePerTo] = useState<string>('');
+  const [depthTo, setDepthTo] = useState<string>('');
+  const [depthFrom, setDepthFrom] = useState<string>('');
   const [crownAngleFrom, setCrownAngleFrom] = useState<string>('');
   const [crownAngleTo, setCrownAngleTo] = useState<string>('');
   const [lengthFrom, setLengthFrom] = useState<string>('');
@@ -106,9 +110,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
-  const [location, setLocation] = useState<string>('');
-
-  const [origin, setOrigin] = useState<string>('');
   const [searchResultCount, setSearchResultCount] = useState<number>(1);
   const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
   const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
@@ -163,36 +164,34 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setParameterState: [setTablePerFrom, setTablePerTo],
     },
     {
-      parameterState: [crownAngleFrom, crownAngleTo],
-      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+      parameterState: [depthPerFrom, depthPerTo],
+      setParameterState: [setDepthPerFrom, setDepthPerTo],
+    },
+    {
+      parameterState: [ratioFrom, ratioTo],
+      setParameterState: [setRatioFrom, setRatioTo],
     },
     {
       parameterState: [lengthFrom, lengthTo],
       setParameterState: [setLengthFrom, setLengthTo],
     },
     {
-      parameterState: [pavilionDepthFrom, pavilionDepthTo],
-      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
-    },
-    {
-      parameterState: [depthPerFrom, depthPerTo],
-      setParameterState: [setDepthPerFrom, setDepthPerTo],
-    },
-    {
-      parameterState: [crownHeightFrom, crownHeightTo],
-      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
-    },
-    {
       parameterState: [widthFrom, widthTo],
       setParameterState: [setWidthFrom, setWidthTo],
     },
     {
-      parameterState: [lowerHalfFrom, lowerHalfTo],
-      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+      parameterState: [depthFrom, depthTo],
+      setParameterState: [setDepthFrom, setDepthTo],
     },
+
     {
-      parameterState: [ratioFrom, ratioTo],
-      setParameterState: [setRatioFrom, setRatioTo],
+      parameterState: [crownAngleFrom, crownAngleTo],
+      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+    },
+
+    {
+      parameterState: [crownHeightFrom, crownHeightTo],
+      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
     },
     {
       parameterState: [girdlePerFrom, girdlePerTo],
@@ -202,6 +201,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       parameterState: [pavilionAngleFrom, pavilionAngleTo],
       setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
     },
+
+    {
+      parameterState: [pavilionDepthFrom, pavilionDepthTo],
+      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
+    },
+
+    {
+      parameterState: [lowerHalfFrom, lowerHalfTo],
+      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+    },
+
     {
       parameterState: [starLengthFrom, starLengthTo],
       setParameterState: [setStarLengthFrom, setStarLengthTo],
@@ -260,8 +270,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     handleFilterChange(data, surfaceGrainingWI, setSurfaceGrainingWI);
   };
 
-  const handleLusterWIChange = (data: string) => {
-    handleFilterChange(data, lusterWI, setLusterWI);
+  const handleinternalGrainingWIChange = (data: string) => {
+    handleFilterChange(data, internalGrainingWI, setInternalGrainingWI);
   };
 
   let otherParameterDataState = [
@@ -330,8 +340,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           state: surfaceGrainingWI,
         },
         {
-          handleChange: handleLusterWIChange,
-          state: lusterWI,
+          handleChange: handleinternalGrainingWIChange,
+          state: internalGrainingWI,
         },
       ],
     },
@@ -470,7 +480,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     if (data.toLowerCase() === '3vg+') {
       if (data !== selectedMake) {
         // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
-        setSelectedCut([...selectedCut, 'Very Good']);
+        setSelectedCut([...selectedCut, 'Excellent', 'Very Good']);
         setSelectedPolish([...selectedPolish, 'Excellent', 'Very Good']);
         setSelectedSymmetry([...selectedSymmetry, 'Excellent', 'Very Good']);
       } else {
@@ -504,6 +514,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleFluorescenceChange = (data: string) => {
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
   };
+
+  const handleCuletChange = (data: string) => {
+    handleFilterChange(data, selectedCulet, setSelectedCulet);
+  };
+
   const handleGirdleChange = (data: string) => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
@@ -527,6 +542,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   const handleBrillianceChange = (data: string) => {
     handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
+  };
+
+  const handleLocation = (data: string) => {
+    handleFilterChange(data, selectedLocation, setSelectedLocation);
+  };
+
+  const handleOrigin = (data: string) => {
+    handleFilterChange(data, selectedOrigin, setSelectedOrigin);
   };
 
   const handleGirdleStepChange = (radioValue: string) => {
@@ -600,7 +623,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setNaturalGirdleWI([]);
     setNaturalPavilionWI([]);
     setSurfaceGrainingWI([]);
-    setLusterWI([]);
+    setInternalGrainingWI([]);
     setTablePerFrom('');
     setTablePerTo('');
     setCrownAngleFrom('');
@@ -628,9 +651,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setPavilionAngleTo('');
     setStarLengthFrom('');
     setStarLengthTo('');
-
-    setLocation('');
-    setOrigin('');
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -709,11 +729,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('symmetry', selectedSymmetry);
     selectedFluorescence.length > 0 &&
       updateYourSelection('fluorescence', selectedFluorescence);
+    selectedCulet.length > 0 && updateYourSelection('culet', selectedCulet);
     selectedGirdle.length > 0 && updateYourSelection('girdle', selectedGirdle);
     selectedLab.length > 0 && updateYourSelection('lab', selectedLab);
     selectedHR.length > 0 && updateYourSelection('HA', selectedHR);
     selectedBrilliance.length > 0 &&
       updateYourSelection('brilliance', selectedBrilliance);
+    selectedLocation.length > 0 &&
+      updateYourSelection('location', selectedLocation);
+    selectedOrigin.length > 0 && updateYourSelection('origin', selectedOrigin);
     (priceRangeFrom || priceRangeTo) &&
       updateYourSelection(
         'priceRange',
@@ -773,10 +797,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('otherWINaturalPavilion', naturalPavilionWI);
     surfaceGrainingWI.length > 0 &&
       updateYourSelection('otherWISurfaceGraining', surfaceGrainingWI);
-    lusterWI.length > 0 && updateYourSelection('otherWILuster', lusterWI);
-
-    location.length > 0 && updateYourSelection('location', location);
-    origin.length > 0 && updateYourSelection('origin', origin);
+    internalGrainingWI.length > 0 &&
+      updateYourSelection('internalGraining', internalGrainingWI);
 
     (tablePerFrom || tablePerTo) &&
       updateYourSelection(
@@ -1039,7 +1061,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                         formatSelection(selectedCaratRange)}
                       {selectedMake && formatSelection(selectedMake)}{' '}
                       {selectedLab.length > 0 && formatSelection(selectedLab)}
-                      {location && formatSelection(location)}{' '}
                     </div>
                   </div>
                 }
@@ -1112,6 +1133,69 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           />
         </div>
       </div>
+
+      <div className={styles.filterSection}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
+            label={ManageLocales('app.advanceSearch.caratRange')}
+            overriddenStyles={{ label: styles.specificFilterAlign }}
+          />
+        </div>
+        <div
+          className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
+        >
+          <div
+            className={`${styles.filterSection} ${styles.rangeFilter}`}
+            style={{ width: '420px' }}
+          >
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="caratRangeFrom"
+              onChange={(e) => {
+                setCaratRangeFrom(e.target.value);
+              }}
+              value={caratRangeFrom}
+              placeholder={ManageLocales('app.advanceSearch.from')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="caratRangeTO"
+              onChange={(e) => {
+                setCaratRangeTo(e.target.value);
+              }}
+              value={caratRangeTo}
+              placeholder={ManageLocales('app.advanceSearch.to')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomSelectionButton
+              selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}
+              data={`${caratRangeFrom}-${caratRangeTo}`}
+              handleClick={handleAddCarat}
+              selectionButtonAllStyles={{
+                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
+              }}
+            />
+          </div>
+          <div>
+            {renderSelectionButtons(
+              caratRangeData,
+              '',
+              styles.activeOtherStyles,
+              selectedCaratRange,
+              handleCaratRangeChange
+            )}
+          </div>
+        </div>
+      </div>
+
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1216,7 +1300,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.tinge')}
+            label={ManageLocales('app.advanceSearch.colorShade')}
           />
         </div>
         <div className={styles.filterSectionData}>
@@ -1234,7 +1318,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.tingeIntensity')}
+            label={ManageLocales('app.advanceSearch.colorShadeIntensity')}
           />
         </div>
         <div>
@@ -1262,68 +1346,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             selectedClarity,
             handleClarityChange
           )}
-        </div>
-      </div>
-
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.caratRange')}
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div
-          className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
-        >
-          <div
-            className={`${styles.filterSection} ${styles.rangeFilter}`}
-            style={{ width: '420px' }}
-          >
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="caratRangeFrom"
-              onChange={(e) => {
-                setCaratRangeFrom(e.target.value);
-              }}
-              value={caratRangeFrom}
-              placeholder={ManageLocales('app.advanceSearch.from')}
-              style={{
-                input: styles.inputFieldStyles,
-              }}
-            />
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="caratRangeTO"
-              onChange={(e) => {
-                setCaratRangeTo(e.target.value);
-              }}
-              value={caratRangeTo}
-              placeholder={ManageLocales('app.advanceSearch.to')}
-              style={{
-                input: styles.inputFieldStyles,
-              }}
-            />
-            <CustomSelectionButton
-              selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}
-              data={`${caratRangeFrom}-${caratRangeTo}`}
-              handleClick={handleAddCarat}
-              selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
-              }}
-            />
-          </div>
-          <div>
-            {renderSelectionButtons(
-              caratRangeData,
-              '',
-              styles.activeOtherStyles,
-              selectedCaratRange,
-              handleCaratRangeChange
-            )}
-          </div>
         </div>
       </div>
 
@@ -1421,6 +1443,24 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
+            label={ManageLocales('app.advanceSearch.Culet')}
+          />
+        </div>
+        <div>
+          {renderSelectionButtons(
+            advanceSearch.culet,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedCulet,
+            handleCuletChange
+          )}
+        </div>
+      </div>
+
+      <div className={styles.filterSection}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
             label={ManageLocales('app.advanceSearch.lab')}
           />
         </div>
@@ -1479,18 +1519,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           />
         </div>
         <div>
-          <CustomSelect
-            data={advanceSearch.location}
-            placeholder={ManageLocales('app.advanceSearch.location')}
-            style={{
-              selectTrigger: styles.dropdownHeader,
-              selectContent: styles.dropdownData,
-              selectElement: styles.selectElement,
-            }}
-            onChange={(e: string) => setLocation(e)}
-          />
+          {renderSelectionButtons(
+            advanceSearch.location,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedLocation,
+            handleLocation
+          )}
         </div>
       </div>
+
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1499,16 +1537,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           />
         </div>
         <div>
-          <CustomSelect
-            data={advanceSearch.location}
-            placeholder={ManageLocales('app.advanceSearch.origin')}
-            style={{
-              selectTrigger: styles.dropdownHeader,
-              selectContent: styles.dropdownData,
-              selectElement: styles.selectElement,
-            }}
-            onChange={(e: string) => setOrigin(e)}
-          />
+          {renderSelectionButtons(
+            advanceSearch.origin,
+            styles.countryOriginStyle,
+            styles.activeOtherStyles,
+            selectedOrigin,
+            handleOrigin
+          )}
         </div>
       </div>
 

@@ -264,8 +264,8 @@ const SavedSearch = () => {
     setSuggestions([]);
   };
   //specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
+  const handleClick = (id: string) => {
+    // const { id } = e.target;
 
     let updatedIsCheck = [...isCheck];
 
@@ -362,7 +362,6 @@ const SavedSearch = () => {
         }) => rest)(metaItem.basicCardDetails),
       })),
     }));
-    console.log('aliasger', filteredData);
 
     setCardData(renderCardData(filteredData, search));
   }, [data, currentPage, resultsPerPage]);
