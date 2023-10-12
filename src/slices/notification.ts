@@ -11,7 +11,16 @@ export const notificationApi = createApi({
       query: () => `notification`,
       providesTags: ['notification'],
     }),
+    updateNotification: builder.mutation({
+      query: (filter) => ({
+        url: `notification`,
+        method: 'PUT', // Use the appropriate HTTP method
+        body: filter, // Modify this to match your API's payload
+      }),
+      invalidatesTags: ['notification'],
+    }),
   }),
 });
 
-export const { useGetAllNotificationQuery } = notificationApi;
+export const { useGetAllNotificationQuery, useUpdateNotificationMutation } =
+  notificationApi;

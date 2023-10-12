@@ -152,5 +152,8 @@
 
   "app.compareStone.heading":"Compare Stone",
   "app.compareStone.diamondImage":"Diamond Image",
-  "app.compareStone.showOnlyDifferences":"Show only Differences"
+  "app.compareStone.showOnlyDifferences":"Show only Differences",
+
+  "app.notification.notifications":"Notifications",
+  "app.notification.notifications.setting":"Notifications Settings"
 }

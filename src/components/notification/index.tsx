@@ -7,7 +7,10 @@ import CalenderIcon from '@public/assets/icons/calendar-clear-outline.svg?url';
 import { useRouter } from 'next/navigation';
 import { SheetClose } from '../ui/sheet';
 import { CustomDisplayButton } from '../common/buttons/display-button';
-import { useGetAllNotificationQuery } from '@/slices/notification';
+import {
+  useGetAllNotificationQuery,
+  useUpdateNotificationMutation,
+} from '@/slices/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 
 interface INotificationData {
@@ -35,11 +38,12 @@ export const Notification = () => {
   );
   const itemsPerPage = 10;
 
-  const { data, error, isLoading, refetch } = useGetAllNotificationQuery({});
+  const { data } = useGetAllNotificationQuery({});
+  const [updateNotification] = useUpdateNotificationMutation();
 
   useEffect(() => {
     setNotificationData(data?.data);
-  }, [data]);
+  }, [data, notificationData]);
 
   function stringWithHTMLReplacement(template: string, parameter: any) {
     const parts = template.split('${{');
@@ -61,7 +65,18 @@ export const Notification = () => {
     return <div>{modifiedString}</div>;
   }
 
-  const handleNotificationRead = () => {};
+  const handleNotificationRead = async (
+    // id: string,
+    // status: string,
+    category: string
+  ) => {
+    let filteredData = notificationData
+      .filter((item) => item.category === category)
+      .map((item) => ({ id: item.id, status: 'read' }));
+
+    // updateNotification([{ id: id, status: status }, ...filteredData]);
+    updateNotification(filteredData);
+  };
 
   const loadMoreItems = () => {
     setVisibleItems(visibleItems + itemsPerPage);
@@ -106,7 +121,10 @@ export const Notification = () => {
                     ? styles.readNotification
                     : styles.newNotificationContentMainDiv
                 }`}
-                onClick={() => handleNotificationRead()}
+                onClick={() =>
+                  // handleNotificationRead(items.id, items.status, items.category)
+                  handleNotificationRead(items.category)
+                }
               >
                 <div className={styles.notificationsIcons}>
                   <EllipseIcon
@@ -116,7 +134,7 @@ export const Notification = () => {
                         : styles.ellipseIconInactive
                     }
                   />
-                  {items.category === 'appointment' && (
+                  {items.category === 'appointments' && (
                     <div className={styles.calendarIcon}>
                       <CalenderIcon />
                     </div>
