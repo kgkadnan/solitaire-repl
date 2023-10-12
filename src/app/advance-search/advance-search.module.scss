@@ -298,3 +298,10 @@
 .labelDefaultStyle {
   color: hsl(var(--solitaire-tertiary));
 }
+
+.validationMessage {
+  color: red;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 300;
+}

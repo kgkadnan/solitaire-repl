@@ -972,6 +972,24 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
+            onBlur={(e) =>
+              parameter.label === 'Crown Angle' ||
+              parameter.label === 'Pavilion Angle'
+                ? handleAngle(
+                    parameter.label,
+                    e.target.value,
+                    setFromAngle,
+                    setFromError,
+                    toAngle
+                  )
+                : handleBlur(
+                    parameter.label,
+                    e.target.value,
+                    setFromValue,
+                    setFromError,
+                    toValue
+                  )
+            }
           />
           <div className={styles.parameterLabel}>to</div>
           <CustomInputField
@@ -984,8 +1002,29 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
+            onBlur={(e) =>
+              parameter.label === 'Crown Angle' ||
+              parameter.label === 'Pavilion Angle'
+                ? handleAngle(
+                    parameter.label,
+                    e.target.value,
+                    setToAngle,
+                    setFromError,
+                    fromAngle
+                  )
+                : handleBlur(
+                    parameter.label,
+                    e.target.value,
+                    setToValue,
+                    setFromError,
+                    fromValue
+                  )
+            }
           />
         </div>
+        {fromError.key === parameter.label && (
+          <div className={styles.validationMessage}>{fromError.value}</div>
+        )}
       </div>
     ));
   };
@@ -1028,6 +1067,86 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         ))}
       </div>
     ));
+  };
+
+  const initialErrorState = {
+    key: '',
+    value: '',
+  };
+
+  const isInRange = (value: string) => {
+    const numValue = parseInt(value);
+    return numValue >= 1 && numValue <= 100;
+  };
+
+  function validateAngle(value: string, min: number, max: number) {
+    const numValue = parseInt(value);
+
+    if (
+      value.length > 0 &&
+      (value === '' || numValue < min || numValue > max)
+    ) {
+      return 'Please enter a valid range from 0 to 100';
+    }
+    return '';
+  }
+
+  const [fromError, setFromError] = useState(initialErrorState);
+
+  const [fromValue, setFromValue] = useState('');
+  const [toValue, setToValue] = useState('');
+
+  const [fromAngle, setFromAngle] = useState('');
+  const [toAngle, setToAngle] = useState('');
+
+  const handleBlur = (
+    key: string,
+    value: any,
+    setValue: any,
+    setError: any,
+    otherValue: any
+  ) => {
+    const numValue = parseInt(value);
+    const otherNumValue = parseInt(otherValue);
+
+    console.log('numValue', numValue);
+    console.log('otherNumValue', otherNumValue);
+
+    if (
+      value.length > 0 &&
+      (value === '' || !isInRange(value) || numValue < otherNumValue)
+    ) {
+      setError({ key, value: 'Please enter a valid range from 0 to 100' });
+    } else {
+      setError(initialErrorState);
+    }
+
+    setValue(value);
+  };
+
+  const handleAngle = (
+    key: string,
+    value: string,
+    setAngle: any,
+    setError: any,
+    otherValue: any
+  ) => {
+    const error = validateAngle(value, 0, 360);
+
+    if (
+      value.length > 0 &&
+      otherValue !== '' &&
+      value !== '' &&
+      parseInt(value) < parseInt(otherValue)
+    ) {
+      setError({ key, value: 'Please enter a valid range from 0 to 360' });
+    } else {
+      setError(initialErrorState);
+    }
+    setAngle(value);
+    if (error) {
+      setError({ key, value: error });
+    }
   };
 
   return (
@@ -1560,6 +1679,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             // style={className}
             type="number"
             name="discountFrom"
+            onBlur={(e) =>
+              handleBlur(
+                'discount',
+                e.target.value,
+                setFromValue,
+                setFromError,
+                toValue
+              )
+            }
             onChange={(e) => {
               setDiscountFrom(e.target.value);
             }}
@@ -1569,6 +1697,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               input: styles.inputFieldStyles,
             }}
           />
+
           <CustomInputField
             // style={className}
             type="number"
@@ -1576,6 +1705,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             onChange={(e) => {
               setDiscountTo(e.target.value);
             }}
+            onBlur={(e) =>
+              handleBlur(
+                'discount',
+                e.target.value,
+                setToValue,
+                setFromError,
+                fromValue
+              )
+            }
             value={discountTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
             style={{
@@ -1583,6 +1721,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             }}
           />
         </div>
+        {fromError.key === 'discount' && (
+          <div className={styles.validationMessage}>{fromError.value}</div>
+        )}
       </div>
 
       <div className={styles.filterSection}>

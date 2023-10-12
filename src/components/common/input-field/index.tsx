@@ -16,7 +16,8 @@ interface InputFieldProps {
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   dataTestId?: string;
-  disable?:boolean;
+  disable?: boolean;
+  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 export const CustomInputField: React.FC<InputFieldProps> = ({
@@ -27,7 +28,8 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   onChange,
   dataTestId = 'custom-input',
   placeholder,
-  disable
+  disable,
+  onBlur,
 }) => {
   return (
     <>
@@ -41,6 +43,7 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
           onChange={onChange}
           placeholder={placeholder}
           disabled={disable}
+          onBlur={onBlur}
         />
       </div>
     </>
