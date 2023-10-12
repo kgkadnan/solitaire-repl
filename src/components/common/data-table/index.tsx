@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CustomCheckBox } from '../checkbox';
 import { Checkbox } from '@/components/ui/checkbox';
-import CustomPagination from '../pagination';
 import Image from 'next/image';
 import certficateOutline from '@public/assets/icons/ph_certificate-light.svg';
 import imageOutline from '@public/assets/icons/image-outline.svg';
@@ -14,6 +13,7 @@ import dna from '@public/assets/icons/ph_dna-light.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
@@ -34,7 +34,7 @@ export interface Rows {
   rpt_number: string | null;
   certificate_number: number | null;
   lot_id: number | null;
-  certificate_url: string | null;
+  certificate_url: string | StaticImport;
   girdle: string | null;
   location: string | null;
   color_shade: string | null;
@@ -119,7 +119,20 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               }}
             />
           }
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: '',
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
         />
       ),
     },
@@ -144,10 +157,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       fn: () => {},
     },
   ];
-
-  // useEffect(() => {
-
-  // }, []);
 
   let detailPageDisplayButtonData = [
     {
@@ -188,7 +197,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   ];
 
   const keyLabelMapping: KeyLabelMapping = {
-    stock_no: 'Stock No',
+    lot_id: 'Stock No',
     shape: 'Shape',
     carat: 'Carat',
     color: 'Color',
@@ -197,7 +206,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     amount: 'Amt($)',
   };
   const basicDetailsLabelMapping: KeyLabelMapping = {
-    stock_no: 'Stock No.',
+    lot_id: 'Stock No.',
     rpt_number: 'Report No.',
     lab: 'Lab',
     rap: 'Rap($)',
@@ -328,7 +337,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               >
                                 <Image
                                   src={imageOutline}
-                                  alt={`${row?.details?.gia} GIA Image`}
+                                  alt={`${row?.lot_id} GIA Image`}
                                   width={20}
                                   height={20}
                                 />
@@ -348,8 +357,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 return (
                                   <div key={data.id}>
                                     <Image
-                                      src={data.details.gia}
-                                      alt={data.details.gia}
+                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data.lot_id}/still.jpg`}
+                                      alt={`${data.lot_id}Certificate_Url`}
                                       width={500}
                                       height={500}
                                     />
@@ -381,7 +390,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               >
                                 <Image
                                   src={certficateOutline}
-                                  alt={`${row?.details?.stone} Stone Image`}
+                                  alt={`${row?.certificate_url}Certificate_Url`}
                                   width={20}
                                   height={20}
                                 />
@@ -401,8 +410,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 return (
                                   <div key={data.id}>
                                     <Image
-                                      src={data.details.stone}
-                                      alt={data.details.stone}
+                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${data.certificate_number}.jpeg`}
+                                      alt={`${data.certificate_number} Certificate_Url`}
                                       width={500}
                                       height={500}
                                     />
@@ -423,7 +432,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           }
                         />
                       </div>
-                    ) : column.accessor === 'stock_no' ? (
+                    ) : column.accessor === 'lot_id' ? (
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
@@ -437,15 +446,15 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 onClick={() => {
                                   setActiveTab('2');
                                   setDiamondDetailImageUrl(
-                                    sliderData[0]?.details?.stone
+                                    sliderData[0]?.images[0]
                                   );
                                   setSliderData([tableRows[index]]);
                                 }}
                                 className={` ${
-                                  column.accessor === 'stock_no' &&
+                                  column.accessor === 'lot_id' &&
                                   row.is_memo_out
                                     ? styles.memoOutBackground
-                                    : 'px-[8px]'
+                                    : 'px-[5px]'
                                 }`}
                               >
                                 {row[column.accessor as keyof Rows]}
@@ -459,7 +468,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 <p className={`text-solitaireTertiary`}>
                                   {`${ManageLocales(
                                     'app.searchResult.slider.diamondDetail.stockNo'
-                                  )} : ${sliderData[0]?.stock_no}`}
+                                  )} : ${sliderData[0]?.lot_id}`}
                                 </p>
                               </div>
                               <div className="border-b border-solitaireQuaternary mt-5"></div>
@@ -507,8 +516,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           />
                                         ) : (
                                           <Image
-                                            src={data.details.stone}
-                                            alt={data.details.stone}
+                                            src={data?.images[0]}
+                                            alt={data?.images[0]}
                                             width={200}
                                             height={200}
                                           />
@@ -582,7 +591,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                                 {basicDetailsLabelMapping[key]}
                                               </span>
                                               <span className="text-left">
-                                                {data[key]}
+                                                {data[key] ? data[key] : '-'}
                                               </span>
                                             </div>
                                           ))}
@@ -682,7 +691,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         />
                       </div>
                     ) : column.accessor === 'rpt_number' ? (
-                      <div>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"
@@ -691,7 +700,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         </a>
                       </div>
                     ) : column.accessor === 'lab' ? (
-                      <div>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"

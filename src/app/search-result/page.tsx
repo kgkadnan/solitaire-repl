@@ -9,7 +9,6 @@ import InfoCircleOutline from '@public/assets/icons/information-circle-outline.s
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image, { StaticImageData } from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
-import roundImg from '@public/assets/images/Roundbig.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
@@ -25,8 +24,9 @@ interface TableColumn {
 }
 
 let optionLimits = [
-  { id: 1, value: '5' },
-  { id: 2, value: '10' },
+  { id: 1, value: '50' },
+  { id: 2, value: '100' },
+  { id: 3, value: '150' },
 ];
 
 interface Data {
@@ -104,18 +104,19 @@ interface Data {
 }
 
 const SearchResults = () => {
-  const [dummyData, setDummyData] = useState<any>({});
+  // const [dummyData, setDummyData] = useState<any>({});
 
   const [rows, setRows] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
+
   const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
 
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(5); // You can set the initial value here
+  const [limit, setLimit] = useState(50); // You can set the initial value here
 
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
@@ -128,7 +129,7 @@ const SearchResults = () => {
 
   const [searchUrl, setSearchUrl] = useState('');
 
-  const { data, error, isLoading, refetch } = useGetAllProductQuery({
+  let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
     limit: limit,
     url: searchUrl,
@@ -180,7 +181,7 @@ const SearchResults = () => {
   const tableColumns: TableColumn[] = [
     { label: 'Status', accessor: 'status' },
     { label: 'Select', accessor: 'select' },
-    { label: 'Stock No', accessor: 'stock_no' },
+    { label: 'Stock No', accessor: 'lot_id' },
     { label: 'Details', accessor: 'details' },
     { label: 'RPT No.', accessor: 'rpt_number' },
     { label: 'Loc.', accessor: 'location' },
@@ -195,6 +196,7 @@ const SearchResults = () => {
     { label: 'RAP Val.', accessor: 'rap_value' },
     { label: 'Discount%', accessor: 'discount' },
     { label: 'PR/CT', accessor: 'price_per_carat' },
+    { label: 'AMT($)', accessor: 'amount' },
     { label: 'Cut', accessor: 'cut' },
     { label: 'Pol.', accessor: 'polish' },
     { label: 'Symm.', accessor: 'symmetry' },
@@ -228,12 +230,27 @@ const SearchResults = () => {
     { label: 'P/D', accessor: 'pavilion_depth' },
     { label: 'Culet', accessor: 'culet' },
     { label: 'Ins.', accessor: 'inscription' },
-    { label: 'Origin', accessor: 'country_origin' },
+    { label: 'Origin', accessor: 'origin_country' },
     { label: 'L/H.', accessor: 'lower_half' },
     { label: 'S/L', accessor: 'star_length' },
     { label: 'Girdle%', accessor: 'girdle_percentage' },
     { label: 'Luster', accessor: 'luster' },
   ];
+
+  const downloadExcel = () => {
+    console.log('isCheckAll', isCheckAll);
+    if (isCheckAll) {
+      const userConfirmed = confirm(
+        'Do you want to Download Entire Search Stone or Selected Stone?'
+      );
+      if (userConfirmed) {
+        console.log('userConfirmed', userConfirmed);
+      } else {
+        console.log('isCheck', isCheck);
+        console.log('User clicked Cancel. Action canceled.');
+      }
+    }
+  };
 
   const footerButtonData = [
     {
@@ -248,7 +265,20 @@ const SearchResults = () => {
               }}
             />
           }
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: downloadExcel,
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
         />
       ),
     },
@@ -288,23 +318,8 @@ const SearchResults = () => {
 
   const handleSearchTab = (index: number) => {
     setActiveTab(index);
-    const searchTabKey = `search${index + 1}`;
-    if (dummyData[searchTabKey] === undefined) {
-      // let url = constructUrlParams(yourSelectionData[index]);
-      // setSearchUrl(url);
-      refetch();
-      //call api with specific parameters and set it on dummyData
-      setDummyData((prevDummyData: any) => ({
-        ...prevDummyData,
-        [searchTabKey]: data?.products, // Use computed property name
-      }));
-
-      let searchTabdata = data?.products;
-      setRows(searchTabdata);
-    } else {
-      let searchTabdata = dummyData[`search${index + 1}`];
-      setRows(searchTabdata);
-    }
+    // let url = constructUrlParams(yourSelectionData[index]);
+    // setSearchUrl(url);
   };
 
   // Function to calculate total amount
@@ -341,20 +356,35 @@ const SearchResults = () => {
   }, [calculateTotalAmount, calculateAverageDiscount]);
 
   useEffect(() => {
+    // let searchTabKey = `search${activeTab + 1}`;
+
+    // if (dummyData[searchTabKey] === undefined) {
     let yourSelection = localStorage.getItem('Search');
     if (yourSelection) {
-      setYourSelectionData(JSON.parse(yourSelection));
-    }
+      // Check if the effect has not been executed
+      const parseYourSelection = JSON.parse(yourSelection);
+      setYourSelectionData(parseYourSelection);
 
-    if (dummyData['search1'] === undefined) {
-      data && setDummyData({ search1: Object.values(data)[0] });
-    }
+      // if (dummyData['search1'] === undefined) {
+      let url = constructUrlParams(parseYourSelection[activeTab]);
+      // console.log('url', url);
+      setSearchUrl(url);
+      // }
 
-    if (data?.products?.length) {
-      setRows(data?.products);
-      setNumberOfPages(Math.ceil(data?.count / data?.limit));
+      if (data?.products?.length) {
+        // setDummyData((prevDummyData: any) => ({
+        //   ...prevDummyData,
+        //   [searchTabKey]: data?.products,
+        // }));
+        setRows(data?.products);
+        setNumberOfPages(Math.ceil(data?.count / data?.limit));
+      }
     }
-  }, [data]);
+    // } else {
+    //   let searchTabdata = dummyData[`search${activeTab + 1}`];
+    //   setRows(searchTabdata);
+    // }
+  }, [data, activeTab]); // Include isEffectExecuted in the dependency array
 
   const closeSearch = (removeDataIndex: number) => {
     // Filter the dummyData to remove the specified search
@@ -493,15 +523,28 @@ const SearchResults = () => {
     ],
   ];
 
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setLimit(newResultsPerPage);
-    setOffset(0);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
+  const handleResultsPerPageChange = useCallback(
+    (event: string) => {
+      const newResultsPerPage = parseInt(event, 10);
+      setLimit(newResultsPerPage);
+      setOffset(0);
+      setCurrentPage(0); // Reset current page when changing results per page
+      // const searchTabKey = `search${activeTab + 1}`;
+
+      // if (dummyData[searchTabKey] !== undefined) {
+      //   setDummyData((prevDummyData: any) => ({
+      //     ...prevDummyData,
+      //     [searchTabKey]: data?.products,
+      //   }));
+
+      setRows(data?.products);
+      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+      // }
+    },
+    [data]
+  );
 
   const handlePageClick = (page: number) => {
-    console.log('page', page);
     if (page >= 0 && page <= numberOfPages) {
       const offset = page * limit;
       setIsCheck([]);
@@ -704,7 +747,6 @@ const SearchResults = () => {
         tableRows={rows}
         tableColumns={tableColumns}
         checkboxData={checkboxData}
-        // paginationData={paginationData}
       />
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
         <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
