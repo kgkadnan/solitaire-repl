@@ -23,29 +23,37 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  const excludePage = ['/login'];
+  const shouldApplyLayout = !excludePage.includes(window.location.pathname);
+
+  // return shouldApplyLayout ? <div>{children}</div> : <>{children}</>;
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <Provider store={store}>
-            <SideBar />
-            <TopNavigationBar />
+        {shouldApplyLayout ? (
+          <Providers>
+            <Provider store={store}>
+              <SideBar />
+              <TopNavigationBar />
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'right',
-                marginTop: '110px',
-                padding: '0px 30px',
-              }}
-            >
-              <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
-                {children}
-              </main>
-            </div>
-            <BottomNavigationBar />
-          </Provider>
-        </Providers>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'right',
+                  marginTop: '110px',
+                  padding: '0px 30px',
+                }}
+              >
+                <main style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}>
+                  {children}
+                </main>
+              </div>
+              <BottomNavigationBar />
+            </Provider>
+          </Providers>
+        ) : (
+          <div>{children}</div>
+        )}
       </body>
     </html>
   );
