@@ -85,8 +85,8 @@
 .table td:nth-child(1) {
     position: sticky;
     left: 0;
-    width: 80px;
-    min-width: 80px;
+    width: 10px;
+    min-width: 10px;
 }
 
 .table th:nth-child(2),
@@ -94,7 +94,7 @@
     position: sticky;
     /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
     /* 0 + 5 + 150 + 5 + 1 */
-    left: 80px;
+    left: 14px;
     width: 50px;
     min-width: 50px;
 }
@@ -167,7 +167,71 @@
 }
 
   .filled {
+    height: 35px;
+    width: 150px;
     background-color: #8c7459;
     color: #ffffff;
   }
 
+  .sliderData{
+    height: 80%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+  .stoneSliderData{
+    height: 75%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  }
+
+  .sheetMainHeading {
+    z-index: 9999;
+    position: sticky;
+    background-color: hsl(var(--solitaire-primary));
+    color: var(--shadow, #8c7459);
+    font-size: 16px;
+    font-weight: 300;
+    top: 0px;
+    width: 100%;
+    padding:0.9rem 1.5rem 0.3rem;
+    margin-bottom: 10px 0px 10px;
+    border-bottom: 2px solid hsl(var(--solitaire-senary));
+    letter-spacing: 1px;
+    p {
+      margin-bottom: 20px;
+    }
+  }
+
+  .diamondDetailHeader {
+    color: var(--shadow, #8c7459);
+    font-size: 16px;
+    font-weight: 300;
+    margin: 20px 0px 30px;
+    letter-spacing: 1px;
+    p {
+      margin-bottom: 30px;
+    }
+  }
+
+  .sheetContentStyle{
+    width: 40%;
+    z-index: 9999;
+    padding: 1rem 0rem;
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+
+
+  .customButtonDiv {
+    background-color: hsl(var(--solitaire-primary));
+    width: 100%;
+    border-top: 1px solid hsl(var(--solitaire-senary));
+    padding: 20px 20px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }

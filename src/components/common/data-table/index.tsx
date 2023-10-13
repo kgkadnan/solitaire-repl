@@ -20,7 +20,7 @@ export interface Rows {
   id: string | null;
   stock_no: string | null;
   is_memo_out: boolean;
-  status: string | null;
+  diamond_status: string | null;
   discount: number;
   amount: number;
   color: string | null;
@@ -102,6 +102,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const [sliderData, setSliderData] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
+  const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
 
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
@@ -158,27 +159,28 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
   ];
 
-  let detailPageDisplayButtonData = [
+  let displayButtonData = [
     {
       id: '1',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.giaCertificate'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`,
     },
+
     {
       id: '2',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondImage'
+        'app.searchResult.slider.diamondDetail.diamondVideo'
       ),
-      url: sliderData[0]?.details?.stone,
+      iframeUrl: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=${sliderData[0]?.lot_id}&autoPlay=1`,
     },
     {
       id: '3',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondVideo'
+        'app.searchResult.slider.diamondDetail.diamondImage'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
     {
       id: '4',
@@ -259,8 +261,28 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     report_comments: 'Report Comments',
   };
 
-  const handleDiamondDetailData = (id: string, url: string) => {
-    setDiamondDetailImageUrl(url);
+  const downloadImage = (imageUrl: any) => {
+    console.log('image', imageUrl);
+    window.open(imageUrl, '_blank');
+  };
+
+  const downloadFile = (downloadUrl: any) => {
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Vision360.html';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDiamondDetailData = (id: string, url: string, iframeUrl: any) => {
+    setDiamondDetailIframeUrl('');
+    setDiamondDetailImageUrl('');
+    if (iframeUrl) {
+      setDiamondDetailIframeUrl(iframeUrl);
+    } else if (url) {
+      setDiamondDetailImageUrl(url);
+    }
     setActiveTab(id);
   };
 
@@ -274,7 +296,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 <th
                   key={column.accessor}
                   className={`${
-                    column.accessor !== 'status' ? styles.tableHead : ``
+                    column.accessor !== 'diamond_status' ? styles.tableHead : ``
                   }`}
                 >
                   {column.accessor === 'select' ? (
@@ -285,7 +307,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         checked={isCheckAll}
                       />
                     </div>
-                  ) : column.accessor !== 'status' ? (
+                  ) : column.accessor !== 'diamond_status' ? (
                     column.label
                   ) : null}
                 </th>
@@ -303,7 +325,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                   <td
                     key={`${row.id}-${column.accessor}`}
                     className={`
-                    ${column.accessor !== 'status' ? styles.tableData : ``}  
+                    ${
+                      column.accessor !== 'diamond_status'
+                        ? styles.tableData
+                        : ``
+                    }  
                     ${
                       row[column.accessor as keyof Rows] == 'A'
                         ? styles.availableStatus
@@ -327,11 +353,15 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         onClick={(e) => e.stopPropagation()}
                       >
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
                                 onClick={(e) => {
+                                  setActiveTab('3');
+                                  setDiamondDetailIframeUrl('');
+                                  setDiamondDetailImageUrl(
+                                    `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`
+                                  );
                                   setSliderData([tableRows[index]]);
                                 }}
                               >
@@ -349,38 +379,99 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                             <>
                               <div className={styles.sheetMainHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.detailInfo')}
+                                  {ManageLocales(
+                                    'app.searchResult.slider.stoneImage.image'
+                                  )}
                                 </p>
                               </div>
 
-                              {sliderData.map((data) => {
-                                return (
-                                  <div key={data.id}>
+                              <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                {displayButtonData
+                                  .filter((items) => items.id !== '1') // Filter out items with id '1'
+                                  .map((items) => (
+                                    <div key={items.id} className="">
+                                      <CustomDisplayButton
+                                        displayButtonLabel={
+                                          items.displayButtonLabel
+                                        }
+                                        displayButtonAllStyle={{
+                                          displayLabelStyle:
+                                            activeTab === items.id
+                                              ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                                              : styles.headerButtonStyle,
+                                        }}
+                                        handleClick={() =>
+                                          handleDiamondDetailData(
+                                            items.id,
+                                            items.url,
+                                            items.iframeUrl
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  ))}
+                              </div>
+
+                              <div className={styles.stoneSliderData}>
+                                {!diamondDetailImageUrl.length &&
+                                  !diamondDetailIframeUrl.length && (
                                     <Image
-                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data.lot_id}/still.jpg`}
-                                      alt={`${data.lot_id}Certificate_Url`}
-                                      width={500}
-                                      height={500}
+                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                      alt={``}
+                                      width={400}
+                                      height={400}
                                     />
-                                  </div>
-                                );
-                              })}
+                                  )}
+                                {diamondDetailImageUrl && (
+                                  <Image
+                                    src={diamondDetailImageUrl}
+                                    alt={``}
+                                    width={400}
+                                    height={400}
+                                    style={{ height: '400px' }}
+                                  />
+                                )}
 
-                              <div className="border-b border-solitaireTertiary mt-8"></div>
+                                {diamondDetailIframeUrl && (
+                                  <iframe
+                                    width="50%"
+                                    height={350}
+                                    frameBorder="0"
+                                    src={diamondDetailIframeUrl}
+                                  />
+                                )}
+                              </div>
 
-                              {/* Show Results button */}
-                              {/* <div className={styles.showResultMainDiv}>
+                              {/* button */}
+                              <div className={styles.customButtonDiv}>
                                 <CustomDisplayButton
-                                  displayButtonLabel="Show Results"
-                                  displayButtonAllStyle={showResulutButtonStyle}
-                                  handleClick={showButtonHandleClick}
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.share'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.transparent,
+                                  }}
+                                  // handleClick={showButtonHandleClick}
                                 />
-                              </div> */}
+                                <CustomDisplayButton
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.download'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                  }}
+                                  handleClick={() => {
+                                    diamondDetailImageUrl.length &&
+                                      downloadImage(diamondDetailImageUrl);
+                                    diamondDetailIframeUrl.length &&
+                                      downloadFile(diamondDetailIframeUrl);
+                                  }}
+                                />
+                              </div>
                             </>
                           }
                         />
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
@@ -402,32 +493,49 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                             <>
                               <div className={styles.sheetMainHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.detailInfo')}
+                                  {ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.giaCertificate'
+                                  )}
                                 </p>
                               </div>
 
-                              {sliderData.map((data) => {
-                                return (
-                                  <div key={data.id}>
-                                    <Image
-                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${data.certificate_number}.jpeg`}
-                                      alt={`${data.certificate_number} Certificate_Url`}
-                                      width={500}
-                                      height={500}
-                                    />
-                                  </div>
-                                );
-                              })}
-                              <div className="border-b border-solitaireTertiary mt-8"></div>
+                              <div className={styles.sliderData}>
+                                {sliderData[0] && (
+                                  <Image
+                                    src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
+                                    alt={`No Certificate Found`}
+                                    width={500}
+                                    height={0}
+                                    style={{ height: '400px' }}
+                                  />
+                                )}
+                              </div>
 
-                              {/* Show Results button */}
-                              {/* <div className={styles.showResultMainDiv}>
+                              {/* button */}
+                              <div className={styles.customButtonDiv}>
                                 <CustomDisplayButton
-                                  displayButtonLabel="Show Results"
-                                  displayButtonAllStyle={showResulutButtonStyle}
-                                  handleClick={showButtonHandleClick}
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.share'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.transparent,
+                                  }}
+                                  // handleClick={showButtonHandleClick}
                                 />
-                              </div> */}
+                                <CustomDisplayButton
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.download'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                  }}
+                                  handleClick={() => {
+                                    downloadImage(
+                                      `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`
+                                    );
+                                  }}
+                                />
+                              </div>
                             </>
                           }
                         />
@@ -439,14 +547,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         }}
                       >
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
                                 onClick={() => {
-                                  setActiveTab('2');
+                                  setActiveTab('3');
+                                  setDiamondDetailIframeUrl('');
                                   setDiamondDetailImageUrl(
-                                    sliderData[0]?.images[0]
+                                    `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`
                                   );
                                   setSliderData([tableRows[index]]);
                                 }}
@@ -464,7 +572,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           sheetContentStyle={styles.diamondDetailSheet}
                           sheetContent={
                             <>
-                              <div className={styles.sheetMainHeading}>
+                              <div className={styles.diamondDetailHeader}>
                                 <p className={`text-solitaireTertiary`}>
                                   {`${ManageLocales(
                                     'app.searchResult.slider.diamondDetail.stockNo'
@@ -480,46 +588,57 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       className="flex items-center justify-between my-5 px-10"
                                     >
                                       <div className="">
-                                        {detailPageDisplayButtonData.map(
-                                          (items) => {
-                                            return (
-                                              <div key={items.id} className="">
-                                                <CustomDisplayButton
-                                                  displayButtonLabel={
-                                                    items.displayButtonLabel
-                                                  }
-                                                  displayButtonAllStyle={{
-                                                    displayLabelStyle:
-                                                      activeTab === items.id
-                                                        ? styles.activeHeaderButtonStyle
-                                                        : styles.headerButtonStyle,
-                                                  }}
-                                                  handleClick={() =>
-                                                    handleDiamondDetailData(
-                                                      items.id,
-                                                      items.url
-                                                    )
-                                                  }
-                                                />
-                                              </div>
-                                            );
-                                          }
-                                        )}
+                                        {displayButtonData.map((items) => {
+                                          return (
+                                            <div key={items.id} className="">
+                                              <CustomDisplayButton
+                                                displayButtonLabel={
+                                                  items.displayButtonLabel
+                                                }
+                                                displayButtonAllStyle={{
+                                                  displayLabelStyle:
+                                                    activeTab === items.id
+                                                      ? styles.activeHeaderButtonStyle
+                                                      : styles.headerButtonStyle,
+                                                }}
+                                                handleClick={() =>
+                                                  handleDiamondDetailData(
+                                                    items.id,
+                                                    items.url,
+                                                    items.iframeUrl
+                                                  )
+                                                }
+                                              />
+                                            </div>
+                                          );
+                                        })}
                                       </div>
-                                      <div className="">
-                                        {diamondDetailImageUrl ? (
+                                      <div>
+                                        {!diamondDetailImageUrl.length &&
+                                          !diamondDetailIframeUrl.length && (
+                                            <Image
+                                              src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                              alt={``}
+                                              width={400}
+                                              height={400}
+                                            />
+                                          )}
+                                        {diamondDetailImageUrl && (
                                           <Image
                                             src={diamondDetailImageUrl}
-                                            alt={diamondDetailImageUrl}
-                                            width={200}
-                                            height={200}
+                                            alt={``}
+                                            width={400}
+                                            height={400}
+                                            style={{ height: '400px' }}
                                           />
-                                        ) : (
-                                          <Image
-                                            src={data?.images[0]}
-                                            alt={data?.images[0]}
-                                            width={200}
-                                            height={200}
+                                        )}
+
+                                        {diamondDetailIframeUrl && (
+                                          <iframe
+                                            width="100%"
+                                            height={350}
+                                            frameBorder="0"
+                                            src={diamondDetailIframeUrl}
                                           />
                                         )}
                                       </div>
@@ -541,28 +660,50 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       </div>
                                     </div>
                                     <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
-                                      <Image
-                                        src={shareSocialOutline}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                      <Image
-                                        src={downloadOutline}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                      <Image
-                                        src={dna}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
+                                      <div
+                                        onClick={() => {}}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={shareSocialOutline}
+                                          alt="shareSocialOutline"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {}}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={downloadOutline}
+                                          alt="downloadOutline"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          window.open(
+                                            `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
+                                            '_blank'
+                                          );
+                                        }}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={dna}
+                                          alt="dna"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
                                     </div>
                                     <div className="border-b border-solitaireQuaternary"></div>
                                     <div>
-                                      <div className={styles.sheetMainHeading}>
+                                      <div
+                                        className={styles.diamondDetailHeader}
+                                      >
                                         <p
                                           className={`text-solitaireQuaternary font-bold text-lg my-5`}
                                         >

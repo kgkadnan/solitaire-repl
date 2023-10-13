@@ -17,6 +17,8 @@ import { useGetAllProductQuery } from '@/slices/product';
 import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
+import CompareStone from '../compare-stone/page';
+import { useRouter } from 'next/navigation';
 
 interface TableColumn {
   label: string;
@@ -104,6 +106,7 @@ interface Data {
 }
 
 const SearchResults = () => {
+  const router = useRouter();
   // const [dummyData, setDummyData] = useState<any>({});
 
   const [rows, setRows] = useState<Rows[]>([]);
@@ -179,7 +182,7 @@ const SearchResults = () => {
   };
 
   const tableColumns: TableColumn[] = [
-    { label: 'Status', accessor: 'status' },
+    { label: 'Status', accessor: 'diamond_status' },
     { label: 'Select', accessor: 'select' },
     { label: 'Stock No', accessor: 'lot_id' },
     { label: 'Details', accessor: 'details' },
@@ -252,6 +255,14 @@ const SearchResults = () => {
     }
   };
 
+  const CompareStone = () => {
+    if (isCheck.length > 10) {
+      alert('You can compare maximum of ten stones');
+    } else {
+      router.push(`/compare-stone?ids=${isCheck.join(',')}`);
+    }
+  };
+
   const footerButtonData = [
     {
       id: 1,
@@ -277,6 +288,10 @@ const SearchResults = () => {
             {
               label: 'Find Matching Pair',
               fn: '',
+            },
+            {
+              label: 'Compare Stone',
+              fn: CompareStone,
             },
           ]}
         />
@@ -675,7 +690,6 @@ const SearchResults = () => {
             </p>
           </div>
           <CustomSlider
-            sheetTriggerStyle={styles.mainCardContainer}
             sheetTriggenContent={
               <>
                 <div className="flex gap-1">
@@ -716,8 +730,8 @@ const SearchResults = () => {
                   ))}
                 </div>
 
-                {/* Show Results button */}
-                <div className={styles.showResultMainDiv}>
+                {/* button */}
+                <div className={styles.customButtonDiv}>
                   <CustomDisplayButton
                     displayButtonLabel={ManageLocales(
                       'app.searchResult.slider.sortBy.cancel'

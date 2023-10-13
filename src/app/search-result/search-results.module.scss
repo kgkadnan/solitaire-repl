@@ -142,18 +142,17 @@
     background-color: hsl(var(--solitaire-primary));
     color: var(--shadow, #8c7459);
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 300;
     top: 0px;
     width: 100%;
-    padding:0.3rem 1.5rem;
+    padding:0.9rem 1.5rem 0.3rem;
     margin-bottom: 10px 0px 10px;
     border-bottom: 2px solid hsl(var(--solitaire-senary));
     letter-spacing: 1px;
     p {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
-  
   .mainRadioButtonStyle{
     display: flex !important;
     flex-direction: column !important;
@@ -185,7 +184,7 @@
     padding: 8px 30px;
   }
 
-  .showResultMainDiv {
+  .customButtonDiv {
     position: fixed;
     background-color: hsl(var(--solitaire-primary));
     bottom: 0px;
