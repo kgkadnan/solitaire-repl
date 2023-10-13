@@ -8,7 +8,11 @@ export const notificationApi = createApi({
 
   endpoints: (builder) => ({
     getAllNotification: builder.query({
-      query: () => `notification`,
+      query: (args) => ({
+        url: `notification`,
+        method: 'GET',
+        params: { ...args },
+      }),
       providesTags: ['notification'],
     }),
     updateNotification: builder.mutation({

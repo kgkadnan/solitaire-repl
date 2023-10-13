@@ -5,9 +5,12 @@ import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { formatCassing } from '@/utils/format-cassing';
-import { useUpdateNotificationSettingMutation } from '@/slices/notification-setting';
+import {
+  useGetAllNotificationSettingQuery,
+  useUpdateNotificationSettingMutation,
+} from '@/slices/notification-setting';
 
-interface Setting {
+interface INotificationSetting {
   type: string;
   subscription: {
     category: string;
@@ -16,8 +19,10 @@ interface Setting {
 }
 
 const NotificationSetting = () => {
+  const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
   const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
-  const [settings, setSettings] = useState<Setting>({
+
+  const [settings, setSettings] = useState<INotificationSetting>({
     type: 'APP',
     subscription: [
       {
@@ -78,7 +83,7 @@ const NotificationSetting = () => {
     await updateNotificationSetting(settings);
   };
 
-  console.log(settings);
+  // console.log(settings);
 
   return (
     <div className={styles.notificationSettingContainer}>

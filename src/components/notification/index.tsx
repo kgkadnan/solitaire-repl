@@ -38,7 +38,7 @@ export const Notification = () => {
   );
   const itemsPerPage = 10;
 
-  const { data } = useGetAllNotificationQuery({});
+  const { data } = useGetAllNotificationQuery({ type: 'APP' });
   const [updateNotification] = useUpdateNotificationMutation();
 
   useEffect(() => {
@@ -75,7 +75,7 @@ export const Notification = () => {
       .map((item) => ({ id: item.id, status: 'read' }));
 
     // updateNotification([{ id: id, status: status }, ...filteredData]);
-    updateNotification(filteredData);
+    await updateNotification(filteredData);
   };
 
   const loadMoreItems = () => {

@@ -7,6 +7,14 @@ export const notificationSettingApi = createApi({
   tagTypes: ['notificationSetting'],
 
   endpoints: (builder) => ({
+    getAllNotificationSetting: builder.query({
+      query: (args) => ({
+        url: `subscription`,
+        method: 'GET',
+        params: { ...args },
+      }),
+      providesTags: ['notificationSetting'],
+    }),
     updateNotificationSetting: builder.mutation({
       query: (filter) => ({
         url: `manage-subscription`,
@@ -24,4 +32,7 @@ export const notificationSettingApi = createApi({
   }),
 });
 
-export const { useUpdateNotificationSettingMutation } = notificationSettingApi;
+export const {
+  useGetAllNotificationSettingQuery,
+  useUpdateNotificationSettingMutation,
+} = notificationSettingApi;
