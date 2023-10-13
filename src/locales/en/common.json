@@ -77,6 +77,7 @@
   "app.advanceSearch.fancy": "Fancy",
   "app.advanceSearch.range": "Range",
   "app.previousSearch.delete": "Delete",
+  "app.previousSearch.filterByDate": "Filter By Date",
   "app.previousSearch.header": "Previous Searches",
   "app.previousSearch.detailInfo": "Detailed Information",
   "app.previousSearch.basicInfo": "Basic Details",
