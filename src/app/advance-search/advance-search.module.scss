@@ -197,9 +197,7 @@
   // color: red
 }
 
-.activeOtherStyles {
-  border: 1px solid #8c7459;
-}
+
 
 .stepStyle {
   color: hsl(var(--solitaire-tertiary));
@@ -297,4 +295,7 @@
 
 .labelDefaultStyle {
   color: hsl(var(--solitaire-tertiary));
+}
+.activeOtherStyles {
+  border: 1px solid #8c7459;
 }

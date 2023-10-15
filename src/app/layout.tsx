@@ -30,9 +30,11 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        {shouldApplyLayout ? (
+       
           <Providers>
             <Provider store={store}>
+            {shouldApplyLayout ? (
+              <>
               <SideBar />
               <TopNavigationBar />
 
@@ -49,11 +51,13 @@ export default function RootLayout({
                 </main>
               </div>
               <BottomNavigationBar />
+              </>
+              ) : (
+                <div>{children}</div>
+              )}
             </Provider>
           </Providers>
-        ) : (
-          <div>{children}</div>
-        )}
+       
       </body>
     </html>
   );
