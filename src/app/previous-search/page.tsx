@@ -19,7 +19,7 @@ import CustomPagination from '@/components/common/pagination';
 import {
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
-} from '@/slices/previous-searches';
+} from '@/features/api/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -298,8 +298,8 @@ const PreviousSearch = () => {
     setSuggestions([]);
   };
   //specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
+  const handleClick = (id: string) => {
+    // const { id } = e.target;
 
     let updatedIsCheck = [...isCheck];
 

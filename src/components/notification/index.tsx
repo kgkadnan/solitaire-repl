@@ -10,7 +10,7 @@ import { CustomDisplayButton } from '../common/buttons/display-button';
 import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
-} from '@/slices/notification';
+} from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 
 interface INotificationData {
