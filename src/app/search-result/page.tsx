@@ -18,6 +18,8 @@ import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/hooks/hook';
+import { addComapreStone } from '@/features/compare-stone/compare-stone-slice';
 
 interface TableColumn {
   label: string;
@@ -106,6 +108,8 @@ interface Data {
 
 const SearchResults = () => {
   const router = useRouter();
+
+  const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState(0);
@@ -257,7 +261,11 @@ const SearchResults = () => {
     if (isCheck.length > 10) {
       alert('You can compare maximum of ten stones');
     } else {
-      router.push(`/compare-stone?ids=${isCheck.join(',')}`);
+      console.log('rows', rows);
+      let comapreStone = rows.filter((items, index) => {
+        return items.id === isCheck[index];
+      });
+      dispatch(addComapreStone(comapreStone));
     }
   };
 
