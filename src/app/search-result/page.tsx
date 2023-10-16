@@ -9,14 +9,16 @@ import InfoCircleOutline from '@public/assets/icons/information-circle-outline.s
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image, { StaticImageData } from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
-import roundImg from '@public/assets/images/Roundbig.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
-import { useGetAllProductQuery } from '@/slices/product';
+import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
+import CustomPagination from '@/components/common/pagination';
+import { useAppDispatch } from '@/hooks/hook';
+import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 
 interface TableColumn {
   label: string;
@@ -24,8 +26,9 @@ interface TableColumn {
 }
 
 let optionLimits = [
-  { id: 1, value: '1' },
-  { id: 2, value: '10' },
+  { id: 1, value: '50' },
+  { id: 2, value: '100' },
+  { id: 3, value: '150' },
 ];
 
 interface Data {
@@ -102,697 +105,23 @@ interface Data {
   }[];
 }
 
-// const dummyData: Data = {
-//   search1: [
-//     {
-//       id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//       title: 'Medusa T-Shirt',
-//       subtitle: null,
-//       status: 'A',
-//       external_id: null,
-//       description:
-//         'Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.',
-//       handle: 't-shirt',
-//       is_giftcard: false,
-//       discountable: true,
-//       thumbnail:
-//         'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
-//       collection_id: null,
-//       type_id: null,
-//       weight: 400,
-//       length: null,
-//       height: null,
-//       width: null,
-//       hs_code: null,
-//       origin_country: null,
-//       mid_code: null,
-//       material: null,
-//       created_at: '2023-10-09T06:07:41.807Z',
-//       updated_at: '2023-10-09T06:07:41.807Z',
-//       deleted_at: null,
-//       metadata: null,
-//       profile_id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
-//       color: null,
-//       shape: null,
-//       clarity: null,
-//       cut: null,
-//       polish: null,
-//       symmetry: null,
-//       fluorescence: null,
-//       lab: null,
-//       rpt_number: null,
-//       certificate_url: null,
-//       girdle: null,
-//       location: null,
-//       color_shade: null,
-//       color_shade_intensity: null,
-//       overtone: null,
-//       intensity: null,
-//       ha: null,
-//       brilliance: null,
-//       black_table: null,
-//       side_black: null,
-//       open_crown: null,
-//       open_table: null,
-//       open_pavilion: null,
-//       milky: null,
-//       luster: null,
-//       eye_clean: null,
-//       table_inclusion: null,
-//       side_inclusion: null,
-//       natural_crown: 'sss',
-//       natural_girdle: null,
-//       natural_pavilion: null,
-//       surface_graining: null,
-//       internal_graining: null,
-//       carat: null,
-//       discount: null,
-//       price_range: null,
-//       price_per_carat: null,
-//       girdle_percentage: null,
-//       pavilion_angle: null,
-//       star_length: null,
-//       depth_percentage: null,
-//       table_percentage: null,
-//       crown_angle: null,
-//       pavilion_depth: null,
-//       crown_height: null,
-//       lower_half: null,
-//       ratio: null,
-//       depth: null,
-//       certificate_number: null,
-//       rap: null,
-//       rap_value: null,
-//       culet: null,
-//       inscription: null,
-//       tracr_id: null,
-//       total_grade: null,
-//       disclosed_source: null,
-//       is_memo_out: null,
-//       lot_id: null,
-//       collection: null,
-//       images: [
-//         {
-//           id: 'img_01HC9GRY968Y7W36Y3FA5Y2FPM',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY96704P35JCFW2M4F80',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY97ZXFG4T8HDCEMNAW2',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY972SRKSX7XJ051NBKJ',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png',
-//           metadata: null,
-//         },
-//       ],
-//       options: [
-//         {
-//           id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'Size',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           metadata: null,
-//           values: [
-//             {
-//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'S',
-//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//           ],
-//         },
-//         {
-//           id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'Color',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           metadata: null,
-//           values: [
-//             {
-//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GRZW1CCXZ2N0T5XQ8VJEM',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZW0E9AJ30S49255671F',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS0G9W6J2YZYHYX0BKZJB',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS0G9NH8M1SNERSVYE045',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS14RJB56JWRVK6WV38S8',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS14RMZDTHA5YAF07MXFC',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS1RN2JMP6FVP01V6SQQN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS1RNX5Y8PP0N1W0J5GJA',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS2D40B6TRWYZF0H78V2D',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS2D4VKTYA9GFVMKNXNTV',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS3106AC1MSGF5S3F2CXJ',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS310X3FWNCR2W96F9J9Y',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS3NDK5QKF0NNPXCY1MCK',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS3NDQ7CE67X2WR1VT1TJ',
-//               metadata: null,
-//             },
-//           ],
-//         },
-//       ],
-//       profiles: [
-//         {
-//           id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
-//           created_at: '2023-10-09T06:07:40.697Z',
-//           updated_at: '2023-10-09T06:07:40.697Z',
-//           deleted_at: null,
-//           name: 'Default Shipping Profile',
-//           type: 'default',
-//           metadata: null,
-//         },
-//       ],
-//       tags: [],
-//       type: null,
-//       variants: [
-//         {
-//           id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'S / Black',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           sku: null,
-//           barcode: null,
-//           ean: null,
-//           upc: null,
-//           variant_rank: 0,
-//           inventory_quantity: 100,
-//           allow_backorder: false,
-//           manage_inventory: true,
-//           hs_code: null,
-//           origin_country: null,
-//           mid_code: null,
-//           material: null,
-//           weight: null,
-//           length: null,
-//           height: null,
-//           width: null,
-//           metadata: null,
-//           options: [
-//             {
-//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'S',
-//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//           ],
-//           prices: [
-//             {
-//               id: 'ma_01HC9GRZFN7ZJSMWQW9RPV7Q9H',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               currency_code: 'eur',
-//               amount: 1950,
-//               min_quantity: null,
-//               max_quantity: null,
-//               price_list_id: null,
-//               region_id: null,
-//               price_list: null,
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//             },
-//             {
-//               id: 'ma_01HC9GRZFNNAPMPSHE7ZV4Z7JF',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               currency_code: 'usd',
-//               amount: 2200,
-//               min_quantity: null,
-//               max_quantity: null,
-//               price_list_id: null,
-//               region_id: null,
-//               price_list: null,
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//             },
-//           ],
-//           original_price: null,
-//           calculated_price: null,
-//           original_price_incl_tax: null,
-//           calculated_price_incl_tax: null,
-//           original_tax: null,
-//           calculated_tax: null,
-//           tax_rates: null,
-//         },
-//       ],
-//     },
-//   ],
-//   search2: [
-//     {
-//       id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//       title: 'Medusa T-Shirt',
-//       subtitle: null,
-//       status: 'A',
-//       external_id: null,
-//       description:
-//         'Reimagine the feeling of a classic T-shirt. With our cotton T-shirts, everyday essentials no longer have to be ordinary.',
-//       handle: 't-shirt',
-//       is_giftcard: false,
-//       discountable: true,
-//       thumbnail:
-//         'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
-//       collection_id: null,
-//       type_id: null,
-//       weight: 400,
-//       length: null,
-//       height: null,
-//       width: null,
-//       hs_code: null,
-//       origin_country: null,
-//       mid_code: null,
-//       material: null,
-//       created_at: '2023-10-09T06:07:41.807Z',
-//       updated_at: '2023-10-09T06:07:41.807Z',
-//       deleted_at: null,
-//       metadata: null,
-//       profile_id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
-//       color: null,
-//       shape: null,
-//       clarity: null,
-//       cut: null,
-//       polish: null,
-//       symmetry: null,
-//       fluorescence: null,
-//       lab: null,
-//       rpt_number: null,
-//       certificate_url: null,
-//       girdle: 'yes',
-//       location: null,
-//       color_shade: null,
-//       color_shade_intensity: null,
-//       overtone: null,
-//       intensity: null,
-//       ha: null,
-//       brilliance: null,
-//       black_table: null,
-//       side_black: null,
-//       open_crown: null,
-//       open_table: null,
-//       open_pavilion: null,
-//       milky: null,
-//       luster: null,
-//       eye_clean: null,
-//       table_inclusion: null,
-//       side_inclusion: null,
-//       natural_crown: 'sss',
-//       natural_girdle: null,
-//       natural_pavilion: null,
-//       surface_graining: null,
-//       internal_graining: null,
-//       carat: null,
-//       discount: null,
-//       price_range: null,
-//       price_per_carat: null,
-//       girdle_percentage: null,
-//       pavilion_angle: null,
-//       star_length: null,
-//       depth_percentage: null,
-//       table_percentage: null,
-//       crown_angle: null,
-//       pavilion_depth: null,
-//       crown_height: null,
-//       lower_half: null,
-//       ratio: null,
-//       depth: null,
-//       certificate_number: null,
-//       rap: null,
-//       rap_value: null,
-//       culet: null,
-//       inscription: null,
-//       tracr_id: null,
-//       total_grade: null,
-//       disclosed_source: null,
-//       is_memo_out: null,
-//       lot_id: null,
-//       collection: null,
-//       images: [
-//         {
-//           id: 'img_01HC9GRY968Y7W36Y3FA5Y2FPM',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-front.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY96704P35JCFW2M4F80',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-black-back.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY97ZXFG4T8HDCEMNAW2',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-front.png',
-//           metadata: null,
-//         },
-//         {
-//           id: 'img_01HC9GRY972SRKSX7XJ051NBKJ',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           url: 'https://medusa-public-images.s3.eu-west-1.amazonaws.com/tee-white-back.png',
-//           metadata: null,
-//         },
-//       ],
-//       options: [
-//         {
-//           id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'Size',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           metadata: null,
-//           values: [
-//             {
-//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'S',
-//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//           ],
-//         },
-//         {
-//           id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'Color',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           metadata: null,
-//           values: [
-//             {
-//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GRZW1CCXZ2N0T5XQ8VJEM',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZW0E9AJ30S49255671F',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS0G9W6J2YZYHYX0BKZJB',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS0G9NH8M1SNERSVYE045',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS14RJB56JWRVK6WV38S8',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS14RMZDTHA5YAF07MXFC',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS1RN2JMP6FVP01V6SQQN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS1RNX5Y8PP0N1W0J5GJA',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS2D40B6TRWYZF0H78V2D',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS2D4VKTYA9GFVMKNXNTV',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS3106AC1MSGF5S3F2CXJ',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS310X3FWNCR2W96F9J9Y',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GS3NDK5QKF0NNPXCY1MCK',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'White',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GS3NDQ7CE67X2WR1VT1TJ',
-//               metadata: null,
-//             },
-//           ],
-//         },
-//       ],
-//       profiles: [
-//         {
-//           id: 'sp_01HC9GRRVBGGSNSHRB802WZNYJ',
-//           created_at: '2023-10-09T06:07:40.697Z',
-//           updated_at: '2023-10-09T06:07:40.697Z',
-//           deleted_at: null,
-//           name: 'Default Shipping Profile',
-//           type: 'default',
-//           metadata: null,
-//         },
-//       ],
-//       tags: [],
-//       type: null,
-//       variants: [
-//         {
-//           id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//           created_at: '2023-10-09T06:07:41.807Z',
-//           updated_at: '2023-10-09T06:07:41.807Z',
-//           deleted_at: null,
-//           title: 'S / Black',
-//           product_id: 'prod_01HC9GRYHBTC535RK044RES7PM',
-//           sku: null,
-//           barcode: null,
-//           ean: null,
-//           upc: null,
-//           variant_rank: 0,
-//           inventory_quantity: 100,
-//           allow_backorder: false,
-//           manage_inventory: true,
-//           hs_code: null,
-//           origin_country: null,
-//           mid_code: null,
-//           material: null,
-//           weight: null,
-//           length: null,
-//           height: null,
-//           width: null,
-//           metadata: null,
-//           options: [
-//             {
-//               id: 'optval_01HC9GRZ7215R5C6GMBSXYD08Z',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'S',
-//               option_id: 'opt_01HC9GRYS7AQEY2NDE0QCANDE1',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//             {
-//               id: 'optval_01HC9GRZ72H7PGGVQX2QWADJZN',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               value: 'Black',
-//               option_id: 'opt_01HC9GRYS8QF1PA9BVTDPA5ZV5',
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//               metadata: null,
-//             },
-//           ],
-//           prices: [
-//             {
-//               id: 'ma_01HC9GRZFN7ZJSMWQW9RPV7Q9H',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               currency_code: 'eur',
-//               amount: 1950,
-//               min_quantity: null,
-//               max_quantity: null,
-//               price_list_id: null,
-//               region_id: null,
-//               price_list: null,
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//             },
-//             {
-//               id: 'ma_01HC9GRZFNNAPMPSHE7ZV4Z7JF',
-//               created_at: '2023-10-09T06:07:41.807Z',
-//               updated_at: '2023-10-09T06:07:41.807Z',
-//               deleted_at: null,
-//               currency_code: 'usd',
-//               amount: 2200,
-//               min_quantity: null,
-//               max_quantity: null,
-//               price_list_id: null,
-//               region_id: null,
-//               price_list: null,
-//               variant_id: 'variant_01HC9GRZ729XVKJD8V24107FVX',
-//             },
-//           ],
-//           original_price: null,
-//           calculated_price: null,
-//           original_price_incl_tax: null,
-//           calculated_price_incl_tax: null,
-//           original_tax: null,
-//           calculated_tax: null,
-//           tax_rates: null,
-//         },
-//       ],
-//     },
-//   ],
-// };
-
 const SearchResults = () => {
-  const [dummyData, setDummyData] = useState<any>({});
+  const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
+
   const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
 
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [limit, setLimit] = useState(50); // You can set the initial value here
+
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [offset, setOffset] = useState(0);
 
   //Radio Button
   const [selectedValue, setSelectedValue] = useState('');
@@ -802,11 +131,15 @@ const SearchResults = () => {
 
   const [searchUrl, setSearchUrl] = useState('');
 
-  const { data, error, isLoading, refetch } = useGetAllProductQuery({
-    offset: currentPage,
-    limit: resultsPerPage,
+  let { data, error, isLoading, refetch } = useGetAllProductQuery({
+    offset: offset,
+    limit: limit,
     url: searchUrl,
   });
+
+  let paginationStyle = {
+    paginationContainerStyle: styles.paginationContainerStyle,
+  };
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -848,9 +181,9 @@ const SearchResults = () => {
   };
 
   const tableColumns: TableColumn[] = [
-    { label: 'Status', accessor: 'status' },
+    { label: 'Status', accessor: 'diamond_status' },
     { label: 'Select', accessor: 'select' },
-    { label: 'Stock No', accessor: 'stock_no' },
+    { label: 'Stock No', accessor: 'lot_id' },
     { label: 'Details', accessor: 'details' },
     { label: 'RPT No.', accessor: 'rpt_number' },
     { label: 'Loc.', accessor: 'location' },
@@ -865,6 +198,7 @@ const SearchResults = () => {
     { label: 'RAP Val.', accessor: 'rap_value' },
     { label: 'Discount%', accessor: 'discount' },
     { label: 'PR/CT', accessor: 'price_per_carat' },
+    { label: 'AMT($)', accessor: 'amount' },
     { label: 'Cut', accessor: 'cut' },
     { label: 'Pol.', accessor: 'polish' },
     { label: 'Symm.', accessor: 'symmetry' },
@@ -898,12 +232,38 @@ const SearchResults = () => {
     { label: 'P/D', accessor: 'pavilion_depth' },
     { label: 'Culet', accessor: 'culet' },
     { label: 'Ins.', accessor: 'inscription' },
-    { label: 'Origin', accessor: 'country_origin' },
+    { label: 'Origin', accessor: 'origin_country' },
     { label: 'L/H.', accessor: 'lower_half' },
     { label: 'S/L', accessor: 'star_length' },
     { label: 'Girdle%', accessor: 'girdle_percentage' },
     { label: 'Luster', accessor: 'luster' },
   ];
+
+  const downloadExcel = () => {
+    console.log('isCheckAll', isCheckAll);
+    if (isCheckAll) {
+      const userConfirmed = confirm(
+        'Do you want to Download Entire Search Stone or Selected Stone?'
+      );
+      if (userConfirmed) {
+        console.log('userConfirmed', userConfirmed);
+      } else {
+        console.log('isCheck', isCheck);
+        console.log('User clicked Cancel. Action canceled.');
+      }
+    }
+  };
+
+  const CompareStone = () => {
+    if (isCheck.length > 10) {
+      alert('You can compare maximum of ten stones');
+    } else {
+      let comapreStone = rows.filter((items, index) => {
+        return items.id === isCheck[index];
+      });
+      dispatch(addCompareStone(comapreStone));
+    }
+  };
 
   const footerButtonData = [
     {
@@ -918,7 +278,24 @@ const SearchResults = () => {
               }}
             />
           }
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: downloadExcel,
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+            {
+              label: 'Compare Stone',
+              fn: CompareStone,
+            },
+          ]}
         />
       ),
     },
@@ -956,205 +333,9 @@ const SearchResults = () => {
     },
   ];
 
-  const handleButtonClick = (index: number) => {
-    let result = constructUrlParams(yourSelectionData[index]);
-    setSearchUrl(result);
+  const handleSearchTab = (index: number) => {
     setActiveTab(index);
-    if (dummyData[`search${index + 1}`] === undefined) {
-      const searchTabKey = `search${index + 1}`;
-      console.log('dddddddddddddddd', searchTabKey);
-
-      //call api with specific parameters and set it on dummyData
-      setDummyData((prevDummyData: any) => ({
-        ...prevDummyData,
-        [searchTabKey]: [
-          {
-            id: `prod_01HC9GSECGZ1TBF80VM55GG5oo${index}`,
-            title: 'Medusa Hoodie',
-            subtitle: null,
-            status: 'published',
-            external_id: null,
-            description:
-              'Reimagine the feeling of a classic hoodie. With our cotton hoodie, everyday essentials no longer have to be ordinary.',
-            handle: 'hoodie',
-            is_giftcard: false,
-            discountable: true,
-            thumbnail:
-              'https://medusa-public-images.s3.eu-west-1.amazonaws.com/black_hoodie_front.png',
-            collection_id: null,
-            type_id: null,
-            weight: 400,
-            length: null,
-            height: null,
-            width: null,
-            hs_code: null,
-            origin_country: null,
-            mid_code: null,
-            material: null,
-            created_at: '2023-10-09T06:07:41.807Z',
-            updated_at: '2023-10-09T06:07:41.807Z',
-            deleted_at: null,
-            metadata: null,
-            color: 'dontknow',
-            shape: null,
-            clarity: null,
-            cut: null,
-            polish: null,
-            symmetry: null,
-            fluorescence: null,
-            lab: null,
-            rpt_number: null,
-            certificate_url: null,
-            girdle: null,
-            location: null,
-            color_shade: null,
-            color_shade_intensity: null,
-            overtone: null,
-            intensity: null,
-            ha: null,
-            brilliance: null,
-            black_table: null,
-            side_black: null,
-            open_crown: null,
-            open_table: null,
-            open_pavilion: null,
-            milky: null,
-            luster: null,
-            eye_clean: null,
-            table_inclusion: null,
-            side_inclusion: null,
-            natural_crown: null,
-            natural_girdle: null,
-            natural_pavilion: null,
-            surface_graining: null,
-            internal_graining: null,
-            carat: null,
-            discount: null,
-            price_range: null,
-            price_per_carat: null,
-            girdle_percentage: null,
-            pavilion_angle: null,
-            star_length: null,
-            depth_percentage: null,
-            table_percentage: null,
-            crown_angle: null,
-            pavilion_depth: null,
-            crown_height: null,
-            lower_half: null,
-            ratio: null,
-            depth: null,
-            certificate_number: null,
-            rap: null,
-            rap_value: null,
-            culet: null,
-            inscription: null,
-            tracr_id: null,
-            total_grade: null,
-            disclosed_source: null,
-            is_memo_out: null,
-            lot_id: null,
-          },
-        ], // Use computed property name
-      }));
-
-      let selectedSearchData = [
-        {
-          id: `prod_01HC9GSECGZ1TBF80VM55GG5oo${index}`,
-          title: 'Medusa Hoodie',
-          subtitle: null,
-          status: 'published',
-          external_id: null,
-          description:
-            'Reimagine the feeling of a classic hoodie. With our cotton hoodie, everyday essentials no longer have to be ordinary.',
-          handle: 'hoodie',
-          is_giftcard: false,
-          discountable: true,
-          thumbnail:
-            'https://medusa-public-images.s3.eu-west-1.amazonaws.com/black_hoodie_front.png',
-          collection_id: null,
-          type_id: null,
-          weight: 400,
-          length: null,
-          height: null,
-          width: null,
-          hs_code: null,
-          origin_country: null,
-          mid_code: null,
-          material: null,
-          created_at: '2023-10-09T06:07:41.807Z',
-          updated_at: '2023-10-09T06:07:41.807Z',
-          deleted_at: null,
-          metadata: null,
-          color: 'dontknow',
-          shape: null,
-          clarity: null,
-          cut: null,
-          polish: null,
-          symmetry: null,
-          fluorescence: null,
-          lab: null,
-          rpt_number: null,
-          certificate_url: null,
-          girdle: null,
-          location: null,
-          color_shade: null,
-          color_shade_intensity: null,
-          overtone: null,
-          intensity: null,
-          ha: null,
-          brilliance: null,
-          black_table: null,
-          side_black: null,
-          open_crown: null,
-          open_table: null,
-          open_pavilion: null,
-          milky: null,
-          luster: null,
-          eye_clean: null,
-          table_inclusion: null,
-          side_inclusion: null,
-          natural_crown: null,
-          natural_girdle: null,
-          natural_pavilion: null,
-          surface_graining: null,
-          internal_graining: null,
-          carat: null,
-          discount: null,
-          price_range: null,
-          price_per_carat: null,
-          girdle_percentage: null,
-          pavilion_angle: null,
-          star_length: null,
-          depth_percentage: null,
-          table_percentage: null,
-          crown_angle: null,
-          pavilion_depth: null,
-          crown_height: null,
-          lower_half: null,
-          ratio: null,
-          depth: null,
-          certificate_number: null,
-          rap: null,
-          rap_value: null,
-          culet: null,
-          inscription: null,
-          tracr_id: null,
-          total_grade: null,
-          disclosed_source: null,
-          is_memo_out: null,
-          lot_id: null,
-        },
-      ];
-      setRows(selectedSearchData);
-    } else {
-      console.log('hhhhhhhhhhhhhhhhhhhhhhhhhhhhhh');
-      console.log(dummyData, 'jyoti');
-      let selectedSearchData = dummyData[`search${index + 1}`];
-      // setRows(selectedSearchData);
-    }
   };
-
-  console.log('rows========', rows, dummyData);
 
   // Function to calculate total amount
   const calculateTotalAmount = useCallback(() => {
@@ -1192,14 +373,22 @@ const SearchResults = () => {
   useEffect(() => {
     let yourSelection = localStorage.getItem('Search');
     if (yourSelection) {
-      setYourSelectionData(JSON.parse(yourSelection));
-    }
+      // Check if the effect has not been executed
+      const parseYourSelection = JSON.parse(yourSelection);
+      setYourSelectionData(parseYourSelection);
 
-    // data && setDummyData({ search1: Object.values(data)[0] });
-    data && setRows(Object.values(data)[0]);
-    console.log('hello====');
-    setNumberOfPages(2);
-  }, [data]);
+      // if (dummyData['search1'] === undefined) {
+      let url = constructUrlParams(parseYourSelection[activeTab]);
+      // console.log('url', url);
+      setSearchUrl(url);
+      // }
+
+      if (data?.products?.length) {
+        setRows(data?.products);
+        setNumberOfPages(Math.ceil(data?.count / data?.limit));
+      }
+    }
+  }, [data, activeTab]); // Include isEffectExecuted in the dependency array
 
   const closeSearch = (removeDataIndex: number) => {
     // Filter the dummyData to remove the specified search
@@ -1338,220 +527,242 @@ const SearchResults = () => {
     ],
   ];
 
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
+  const handleResultsPerPageChange = useCallback(
+    (event: string) => {
+      const newResultsPerPage = parseInt(event, 10);
+      setLimit(newResultsPerPage);
+      setOffset(0);
+      setCurrentPage(0); // Reset current page when changing results per page
+      setRows(data?.products);
+      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+    },
+    [data]
+  );
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
+      const offset = page * limit;
       setIsCheck([]);
       setIsCheckAll(false);
+      setOffset(offset);
       setCurrentPage(page);
     }
   };
 
-  const paginationData = {
-    handlePageClick: handlePageClick,
-    handleResultsPerPageChange: handleResultsPerPageChange,
-    currentPage: currentPage,
-    numberOfPages: numberOfPages,
-    resultsPerPage: resultsPerPage,
-    optionLimits: optionLimits,
-  };
-
   return (
     <>
-      <div>
-        <div className="border-b  border-solid  border-solitaireSenary mb-5">
-          {/* top Header */}
-          <div className={styles.topHeader}>
-            <p className="">
-              {ManageLocales('app.searchResult.header.searchResults')}
-            </p>
-          </div>
+      <div className="border-b  border-solid  border-solitaireSenary mb-5">
+        {/* top Header */}
+        <div className={styles.topHeader}>
+          <p className="">
+            {ManageLocales('app.searchResult.header.searchResults')}
+          </p>
+        </div>
 
-          {/* Search Tab Header */}
-          <div className="flex items-center gap-5 text-solitaireTertiary  p-2 bg-solitaireSenary rounded-lg bg-opacity-100">
-            {Object.keys(yourSelectionData).length > 0 &&
-              Object.values(yourSelectionData).map(
-                (yourSelection: any, index: number) => {
-                  return (
-                    <div key={`Search-${index}`}>
-                      <div
-                        style={{
-                          marginRight:
-                            index === yourSelection.length - 1 ? '0px' : '5px',
-                        }}
-                        className={`flex items-center cursor-pointer gap-[8px] ${
-                          activeTab === index
-                            ? styles.activeHeaderButtonStyle
-                            : styles.headerButtonStyle
-                        }`}
-                      >
-                        <div className="flex items-center">
-                          <Tooltip
-                            tooltipElement={
-                              <InfoCircleOutline stroke="#8C7459" />
-                            }
-                            content={
+        {/* Search Tab Header */}
+        <div className="flex items-center gap-5 text-solitaireTertiary w-full  p-2 bg-solitaireSenary rounded-lg bg-opacity-0">
+          {Object.keys(yourSelectionData).length > 0 &&
+            Object.values(yourSelectionData).map(
+              (yourSelection: any, index: number) => {
+                return (
+                  <div key={`Search-${index}`}>
+                    <div
+                      style={{
+                        marginRight:
+                          index === yourSelection.length - 1 ? '0px' : '5px',
+                      }}
+                      className={`flex items-center cursor-pointer gap-[8px] ${
+                        activeTab === index
+                          ? styles.activeHeaderButtonStyle
+                          : styles.headerButtonStyle
+                      }`}
+                    >
+                      <div className="flex items-center">
+                        <Tooltip
+                          tooltipElement={
+                            <InfoCircleOutline stroke="#8C7459" />
+                          }
+                          content={
+                            <div
+                              className={styles.yourSelectionContentContainer}
+                            >
+                              <CustomInputlabel
+                                htmlfor="text"
+                                label={`${ManageLocales(
+                                  'app.advanceSearch.yourSelection'
+                                )}:`}
+                                overriddenStyles={{
+                                  label: styles.yourSelectionTooltipHeader,
+                                }}
+                              />
                               <div
-                                className={styles.yourSelectionContentContainer}
+                                className={styles.yourSelectionMainContainer}
                               >
-                                <CustomInputlabel
-                                  htmlfor="text"
-                                  label={`${ManageLocales(
-                                    'app.advanceSearch.yourSelection'
-                                  )}:`}
-                                  overriddenStyles={{
-                                    label: styles.yourSelectionTooltipHeader,
-                                  }}
-                                />
-                                <div
-                                  className={styles.yourSelectionMainContainer}
-                                >
-                                  <div key={`item-${index}`}>
-                                    {Object.keys(yourSelection).map(
-                                      (key: any) => (
-                                        <div
-                                          key={`key-${key}`}
-                                          className={`${styles.yourSelectionSubContainer}`}
-                                        >
-                                          <div
-                                            className={styles.labelContainer}
-                                          >
-                                            <CustomInputlabel
-                                              htmlfor="text"
-                                              label={key}
-                                            />
-                                            :
-                                          </div>
-                                          <div className="text-sm font-light">
-                                            {Array.isArray(yourSelection[key])
-                                              ? yourSelection[key].join(', ')
-                                              : yourSelection[key]}
-                                          </div>
-                                        </div>
-                                      )
-                                    )}
+                                {Object.keys(yourSelection).map((key: any) => (
+                                  <div
+                                    key={`key-${key}`}
+                                    className={`${styles.yourSelectionSubContainer}`}
+                                  >
+                                    <div className={styles.labelContainer}>
+                                      <CustomInputlabel
+                                        htmlfor="text"
+                                        label={key}
+                                      />
+                                      :
+                                    </div>
+                                    <div className="text-sm font-light pl-2">
+                                      {Array.isArray(yourSelection[key])
+                                        ? yourSelection[key].join(', ')
+                                        : yourSelection[key]}
+                                    </div>
                                   </div>
-                                </div>
+                                ))}
                               </div>
-                            }
-                            tooltipStyles={{
-                              tooltipContainerStyles:
-                                styles.tooltipContainerStyles,
-                              tooltipContentStyle:
-                                styles.yourSelectionTooltipContentStyle,
-                            }}
-                          />
-                        </div>
-                        <div>
-                          <CustomDisplayButton
-                            displayButtonAllStyle={{
-                              displayLabelStyle: styles.headerButtonLabelStyle,
-                            }}
-                            displayButtonLabel={`Search ${index + 1}`}
-                            handleClick={() => handleButtonClick(index)}
-                          />
-                        </div>
-                        <div onClick={() => closeSearch(index)}>
-                          <CloseOutline stroke="#8C7459" />
-                        </div>
+                            </div>
+                          }
+                          tooltipStyles={{
+                            tooltipContainerStyles:
+                              styles.tooltipContainerStyles,
+                            tooltipContentStyle:
+                              styles.yourSelectionTooltipContentStyle,
+                          }}
+                        />
+                      </div>
+                      <div>
+                        <CustomDisplayButton
+                          displayButtonAllStyle={{
+                            displayLabelStyle: styles.headerButtonLabelStyle,
+                          }}
+                          displayButtonLabel={`Search ${index + 1}`}
+                          handleClick={() => handleSearchTab(index)}
+                        />
+                      </div>
+                      <div onClick={() => closeSearch(index)}>
+                        <CloseOutline stroke="#8C7459" />
                       </div>
                     </div>
-                  );
-                }
-              )}
-          </div>
-
-          {/* Count Bar  */}
-          <div className="flex justify-between py-3">
-            <div className="flex gap-3">
-              <p>Pieces : {`${isCheck.length}/${rows?.length}`}</p>
-              <p>Total Avg. Dis : {averageDiscount.toFixed(2)}</p>
-              <p>Total Amount : ${totalAmount.toFixed(2)}</p>
-            </div>
-            <CustomSlider
-              sheetTriggerStyle={styles.mainCardContainer}
-              sheetTriggenContent={
-                <>
-                  {' '}
-                  <div className="flex gap-1">
-                    <Image src={sortOutline} alt="sortOutline" width={20} />
-                    <p className="text-solitaireTertiary">Sort by</p>
                   </div>
-                </>
+                );
               }
-              sheetContentStyle={styles.sheetContentStyle}
-              sheetContent={
-                <>
-                  <div className={styles.sheetMainHeading}>
-                    <p>
-                      {ManageLocales('app.searchResult.slider.sortBy.filter')}
-                    </p>
-                  </div>
+            )}
+        </div>
 
-                  <div className={styles.radioButtonMainDiv}>
+        {/* Count Bar  */}
+        <div className="flex justify-between py-3">
+          <div className="flex gap-3">
+            <p>
+              Pieces:
+              <span className="text-solitaireTertiary ml-[5px]">
+                {`${isCheck.length}/${rows?.length}`}
+              </span>
+            </p>
+            <p>
+              Total Avg. Dis:
+              <span className="text-solitaireTertiary ml-[5px]">
+                {averageDiscount.toFixed(2)}
+              </span>
+            </p>
+            <p>
+              Total Amount:
+              <span className="text-solitaireTertiary ml-[5px]">
+                ${totalAmount.toFixed(2)}
+              </span>
+            </p>
+          </div>
+          <CustomSlider
+            sheetTriggenContent={
+              <>
+                <div className="flex gap-1">
+                  <Image src={sortOutline} alt="sortOutline" width={20} />
+                  <p className="text-solitaireTertiary">Sort by</p>
+                </div>
+              </>
+            }
+            sheetContentStyle={styles.sheetContentStyle}
+            sheetContent={
+              <>
+                <div className={styles.sheetMainHeading}>
+                  <p>
+                    {ManageLocales('app.searchResult.slider.sortBy.filter')}
+                  </p>
+                </div>
+
+                <div className={styles.radioButtonMainDiv}>
+                  <CustomRadioButton
+                    radioData={[
+                      {
+                        id: '0',
+                        value: '0',
+                        radioButtonLabel: 'Default',
+                      },
+                    ]}
+                    onChange={handleRadioChange}
+                    radioButtonAllStyles={radioButtonDefaultStyles}
+                  />
+
+                  {radioDataList.map((radioData, index) => (
                     <CustomRadioButton
-                      radioData={[
-                        {
-                          id: '0',
-                          value: '0',
-                          radioButtonLabel: 'Default',
-                        },
-                      ]}
+                      key={index} // Ensure each component has a unique key
+                      radioData={radioData}
                       onChange={handleRadioChange}
-                      radioButtonAllStyles={radioButtonDefaultStyles}
+                      radioButtonAllStyles={radioButtonStyles}
                     />
+                  ))}
+                </div>
 
-                    {radioDataList.map((radioData, index) => (
-                      <CustomRadioButton
-                        key={index} // Ensure each component has a unique key
-                        radioData={radioData}
-                        onChange={handleRadioChange}
-                        radioButtonAllStyles={radioButtonStyles}
-                      />
-                    ))}
-                  </div>
-
-                  {/* Show Results button */}
-                  <div className={styles.showResultMainDiv}>
-                    <CustomDisplayButton
-                      displayButtonLabel={ManageLocales(
-                        'app.searchResult.slider.sortBy.cancel'
-                      )}
-                      displayButtonAllStyle={{
-                        displayButtonStyle: styles.transparent,
-                      }}
-                      // handleClick={showButtonHandleClick}
-                    />
-                    <CustomDisplayButton
-                      displayButtonLabel={ManageLocales(
-                        'app.searchResult.slider.sortBy.apply'
-                      )}
-                      displayButtonAllStyle={{
-                        displayButtonStyle: styles.filled,
-                      }}
-                      // handleClick={showButtonHandleClick}
-                    />
-                  </div>
-                </>
-              }
-            />
+                {/* button */}
+                <div className={styles.customButtonDiv}>
+                  <CustomDisplayButton
+                    displayButtonLabel={ManageLocales(
+                      'app.searchResult.slider.sortBy.cancel'
+                    )}
+                    displayButtonAllStyle={{
+                      displayButtonStyle: styles.transparent,
+                    }}
+                    // handleClick={showButtonHandleClick}
+                  />
+                  <CustomDisplayButton
+                    displayButtonLabel={ManageLocales(
+                      'app.searchResult.slider.sortBy.apply'
+                    )}
+                    displayButtonAllStyle={{
+                      displayButtonStyle: styles.filled,
+                    }}
+                    // handleClick={showButtonHandleClick}
+                  />
+                </div>
+              </>
+            }
+          />
+        </div>
+      </div>
+      {/* <CustomHeader dummyData={headerData} /> */}
+      <CustomDataTable
+        tableRows={rows}
+        tableColumns={tableColumns}
+        checkboxData={checkboxData}
+      />
+      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+        <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
+          <div className="flex items-center gap-3">
+            <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">
+              xxxxxxx
+            </span>
+            <p className="text-solitaireTertiary text-sm">Memo - Out</p>
           </div>
+
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={numberOfPages}
+            resultsPerPage={limit}
+            optionLimits={optionLimits}
+            handlePageClick={handlePageClick}
+            handleResultsPerPageChange={handleResultsPerPageChange}
+            paginationStyle={paginationStyle}
+          />
         </div>
-        {/* <CustomHeader dummyData={headerData} /> */}
-        <CustomDataTable
-          tableRows={rows}
-          tableColumns={tableColumns}
-          checkboxData={checkboxData}
-          paginationData={paginationData}
-        />
-        <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-          <CustomFooter footerButtonData={footerButtonData} />
-        </div>
+
+        <CustomFooter footerButtonData={footerButtonData} />
       </div>
     </>
   );

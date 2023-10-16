@@ -20,7 +20,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import {
   useGetAllSavedSearchesQuery,
   useUpdateSavedSearchesMutation,
-} from '@/slices/saved-searches';
+} from '@/features/api/saved-searches';
 import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';

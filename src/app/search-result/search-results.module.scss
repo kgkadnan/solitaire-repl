@@ -40,12 +40,19 @@
   }
 
 
+  .paginationContainerStyle{
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    border: none !important ;
+    padding: 0.5rem 0rem
+  }
 
 
   .labelContainer {
     display: flex;
     color: hsl(var(--solitaire-quaternary));
-    // width: 200px;
+    text-transform: capitalize;
   }
   
   .tooltipContainerStyles {
@@ -64,15 +71,18 @@
   }
   
   .yourSelectionTooltipContentStyle {
-    justify-content: center;
-    z-index: 999;
-    // width: 92vw;
-    // width: 113%; 
+    
     display: flex;
-    flex-wrap: wrap;
-    // white-space: pre-wrap;
-    margin-left: -7%;
-    transform: translateX(-5%);
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    width: 92vw; /* Adjust the width as needed */
+    max-width: 1900px; /* Optional: Set a maximum width */
+    overflow: hidden;
+    position: fixed; /* Position the content fixed to the viewport */
+    top: 27%; /* Place it at the vertical center of the viewport */
+    left: 52%; /* Place it at the horizontal center of the viewport */
+    transform: translate(-50%, -50%); /* Center it both horizontally and vertically */
   }
   
   .yourSelectionSubContainer {
@@ -83,6 +93,7 @@
   }
   
   .yourSelectionMainContainer {
+    position: relative;
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
@@ -131,18 +142,17 @@
     background-color: hsl(var(--solitaire-primary));
     color: var(--shadow, #8c7459);
     font-size: 16px;
-    font-weight: 700;
+    font-weight: 300;
     top: 0px;
     width: 100%;
-    padding:0.3rem 1.5rem;
+    padding:0.9rem 1.5rem 0.3rem;
     margin-bottom: 10px 0px 10px;
     border-bottom: 2px solid hsl(var(--solitaire-senary));
     letter-spacing: 1px;
     p {
-      margin-bottom: 30px;
+      margin-bottom: 20px;
     }
   }
-  
   .mainRadioButtonStyle{
     display: flex !important;
     flex-direction: column !important;
@@ -174,7 +184,7 @@
     padding: 8px 30px;
   }
 
-  .showResultMainDiv {
+  .customButtonDiv {
     position: fixed;
     background-color: hsl(var(--solitaire-primary));
     bottom: 0px;

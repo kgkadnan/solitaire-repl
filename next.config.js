@@ -32,7 +32,7 @@ const nextConfig = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['api.kgk.live'], // Add 'api.kgk.live' to the list of allowed domains
+    domains: ['api.kgk.live', 'storageweweb.blob.core.windows.net'], // Add 'api.kgk.live' to the list of allowed domains
   },
 };
 
