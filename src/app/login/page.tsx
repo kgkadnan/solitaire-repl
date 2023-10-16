@@ -15,7 +15,18 @@ const Login = () => {
   const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
 
 const handleLogin=async()=>{
-  await verifyLogin({email:email,password:password})
+//   fetch('http://localhost:9000/store/auth', {
+//   method: 'POST',
+//   credentials: 'include',
+//   headers: {
+//     'Content-Type': 'application/json', // Specify the content type as JSON
+//     // Add any additional headers if needed
+//   },
+//   body:'{ "email":"ali@kgkmail.com","password":"Ali@1409"}' 
+// })
+  
+ let res= await verifyLogin({email:email,password:password})
+//  console.log("lllllllllllll",res)
 
 }
   return (

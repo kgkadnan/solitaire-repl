@@ -11,7 +11,7 @@ import {
   
   export const loginApi = createApi({
     reducerPath: 'loginReducer',
-    baseQuery: fetchBaseQuery({ baseUrl: apiURL }) as BaseQuery,
+    baseQuery: fetchBaseQuery({ baseUrl: apiURL,credentials: 'include', }) as BaseQuery,
     tagTypes: ['Login'],
   
     endpoints: (builder) => ({
