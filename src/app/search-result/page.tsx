@@ -17,7 +17,6 @@ import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
-import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 
@@ -259,7 +258,6 @@ const SearchResults = () => {
     if (isCheck.length > 10) {
       alert('You can compare maximum of ten stones');
     } else {
-      console.log('rows', rows);
       let comapreStone = rows.filter((items, index) => {
         return items.id === isCheck[index];
       });
