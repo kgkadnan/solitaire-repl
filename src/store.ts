@@ -7,7 +7,7 @@ import { savedSearchesApi } from './features/api/saved-searches';
 import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
 import { productAPi } from './features/api/product';
-import compareStoneReducer from './features/compare-stone/compareStoneSlice';
+import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
@@ -35,4 +35,3 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
-// export default the store
