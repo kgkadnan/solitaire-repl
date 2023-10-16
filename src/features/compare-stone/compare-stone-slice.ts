@@ -1,7 +1,5 @@
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
-const comapreStoneAdaper = createEntityAdapter();
-console.log('comapreStoneAdaper', comapreStoneAdaper);
 const initialState: any = [];
 
 const comapreStoneSlice = createSlice({
