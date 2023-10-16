@@ -6,8 +6,8 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomInputField } from '@/components/common/input-field';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import styles from './login.module.scss';
-import { useVerifyLoginMutation } from '@/slices/login';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
+import { useVerifyLoginMutation } from '@/features/api/login';
 
 const Login = () => {
   const [email,setEmail]=useState<string>('')
@@ -15,18 +15,9 @@ const Login = () => {
   const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
 
 const handleLogin=async()=>{
-//   fetch('http://localhost:9000/store/auth', {
-//   method: 'POST',
-//   credentials: 'include',
-//   headers: {
-//     'Content-Type': 'application/json', // Specify the content type as JSON
-//     // Add any additional headers if needed
-//   },
-//   body:'{ "email":"ali@kgkmail.com","password":"Ali@1409"}' 
-// })
+
   
- let res= await verifyLogin({email:email,password:password})
-//  console.log("lllllllllllll",res)
+ await verifyLogin({email:email,password:password})
 
 }
   return (
