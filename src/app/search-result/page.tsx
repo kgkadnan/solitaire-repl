@@ -19,7 +19,7 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/hook';
-import { addComapreStone } from '@/features/compare-stone/compare-stone-slice';
+import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 
 interface TableColumn {
   label: string;
@@ -107,8 +107,6 @@ interface Data {
 }
 
 const SearchResults = () => {
-  const router = useRouter();
-
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
@@ -265,7 +263,7 @@ const SearchResults = () => {
       let comapreStone = rows.filter((items, index) => {
         return items.id === isCheck[index];
       });
-      dispatch(addComapreStone(comapreStone));
+      dispatch(addCompareStone(comapreStone));
     }
   };
 
