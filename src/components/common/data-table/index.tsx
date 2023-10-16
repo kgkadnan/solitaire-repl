@@ -1,7 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { CustomCheckBox } from '../checkbox';
 import { Checkbox } from '@/components/ui/checkbox';
-import CustomPagination from '../pagination';
 import Image from 'next/image';
 import certficateOutline from '@public/assets/icons/ph_certificate-light.svg';
 import imageOutline from '@public/assets/icons/image-outline.svg';
@@ -14,13 +13,14 @@ import dna from '@public/assets/icons/ph_dna-light.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
   id: string | null;
   stock_no: string | null;
   is_memo_out: boolean;
-  status: string | null;
+  diamond_status: string | null;
   discount: number;
   amount: number;
   color: string | null;
@@ -34,7 +34,7 @@ export interface Rows {
   rpt_number: string | null;
   certificate_number: number | null;
   lot_id: number | null;
-  certificate_url: string | null;
+  certificate_url: string | StaticImport;
   girdle: string | null;
   location: string | null;
   color_shade: string | null;
@@ -92,30 +92,20 @@ interface ICustomDataTableProps {
   tableRows: any;
   tableColumns: any;
   checkboxData: any;
-  paginationData: any;
 }
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
-  paginationData,
 }) => {
   const [sliderData, setSliderData] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
+  const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
 
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
-
-  const {
-    handlePageClick,
-    handleResultsPerPageChange,
-    currentPage,
-    numberOfPages,
-    resultsPerPage,
-    optionLimits,
-  } = paginationData;
 
   const footerButtonData = [
     {
@@ -130,7 +120,20 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               }}
             />
           }
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: '',
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
         />
       ),
     },
@@ -156,31 +159,28 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
   ];
 
-  // useEffect(() => {
-
-  // }, []);
-
-  let detailPageDisplayButtonData = [
+  let displayButtonData = [
     {
       id: '1',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.giaCertificate'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`,
     },
+
     {
       id: '2',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondImage'
+        'app.searchResult.slider.diamondDetail.diamondVideo'
       ),
-      url: sliderData[0]?.details?.stone,
+      iframeUrl: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=${sliderData[0]?.lot_id}&autoPlay=1`,
     },
     {
       id: '3',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondVideo'
+        'app.searchResult.slider.diamondDetail.diamondImage'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
     {
       id: '4',
@@ -199,7 +199,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   ];
 
   const keyLabelMapping: KeyLabelMapping = {
-    stock_no: 'Stock No',
+    lot_id: 'Stock No',
     shape: 'Shape',
     carat: 'Carat',
     color: 'Color',
@@ -208,7 +208,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     amount: 'Amt($)',
   };
   const basicDetailsLabelMapping: KeyLabelMapping = {
-    stock_no: 'Stock No.',
+    lot_id: 'Stock No.',
     rpt_number: 'Report No.',
     lab: 'Lab',
     rap: 'Rap($)',
@@ -261,13 +261,33 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     report_comments: 'Report Comments',
   };
 
-  const handleDiamondDetailData = (id: string, url: string) => {
-    setDiamondDetailImageUrl(url);
+  const downloadImage = (imageUrl: any) => {
+    console.log('image', imageUrl);
+    window.open(imageUrl, '_blank');
+  };
+
+  const downloadFile = (downloadUrl: any) => {
+    const link = document.createElement('a');
+    link.href = downloadUrl;
+    link.download = 'Vision360.html';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDiamondDetailData = (id: string, url: string, iframeUrl: any) => {
+    setDiamondDetailIframeUrl('');
+    setDiamondDetailImageUrl('');
+    if (iframeUrl) {
+      setDiamondDetailIframeUrl(iframeUrl);
+    } else if (url) {
+      setDiamondDetailImageUrl(url);
+    }
     setActiveTab(id);
   };
 
   return (
-    <div className={''}>
+    <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead className={styles.tableHeader}>
@@ -276,13 +296,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 <th
                   key={column.accessor}
                   className={`${
-                    column.accessor === 'status'
-                      ? `${styles.tableHeadCS} ${styles.stickyStatus}`
-                      : styles.tableHead
-                  } ${
-                    column.accessor === 'select'
-                      ? `${styles.checkboxSticky} `
-                      : ''
+                    column.accessor !== 'diamond_status' ? styles.tableHead : ``
                   }`}
                 >
                   {column.accessor === 'select' ? (
@@ -293,7 +307,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         checked={isCheckAll}
                       />
                     </div>
-                  ) : column.accessor !== 'status' ? (
+                  ) : column.accessor !== 'diamond_status' ? (
                     column.label
                   ) : null}
                 </th>
@@ -310,20 +324,19 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 {tableColumns.map((column: any) => (
                   <td
                     key={`${row.id}-${column.accessor}`}
-                    className={`${
-                      column.accessor === 'status'
-                        ? `${styles.tableDataCS} ${styles.stickyStatus}`
-                        : styles.tableData
-                    }  ${
+                    className={`
+                    ${
+                      column.accessor !== 'diamond_status'
+                        ? styles.tableData
+                        : ``
+                    }  
+                    ${
                       row[column.accessor as keyof Rows] == 'A'
                         ? styles.availableStatus
                         : ''
                     }
-                   ${
-                     column.accessor === 'select'
-                       ? `${styles.checkboxSticky} ${styles.checkboxStickyBg} `
-                       : ''
-                   } cursor-pointer
+                  
+                   cursor-pointer
                   `}
                   >
                     {column.accessor === 'select' ? (
@@ -340,17 +353,19 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         onClick={(e) => e.stopPropagation()}
                       >
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
                                 onClick={(e) => {
+                                  setActiveTab('3');
                                   setSliderData([tableRows[index]]);
+                                  setDiamondDetailIframeUrl('');
+                                  setDiamondDetailImageUrl('');
                                 }}
                               >
                                 <Image
                                   src={imageOutline}
-                                  alt={`${row?.details?.gia} GIA Image`}
+                                  alt={`${row?.lot_id} GIA Image`}
                                   width={20}
                                   height={20}
                                 />
@@ -362,38 +377,97 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                             <>
                               <div className={styles.sheetMainHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.detailInfo')}
+                                  {ManageLocales(
+                                    'app.searchResult.slider.stoneImage.image'
+                                  )}
                                 </p>
                               </div>
 
-                              {sliderData.map((data) => {
-                                return (
-                                  <div key={data.id}>
-                                    <Image
-                                      src={data.details.gia}
-                                      alt={data.details.gia}
-                                      width={500}
-                                      height={500}
-                                    />
-                                  </div>
-                                );
-                              })}
+                              <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                {displayButtonData
+                                  .filter((items) => items.id !== '1') // Filter out items with id '1'
+                                  .map((items) => (
+                                    <div key={items.id} className="">
+                                      <CustomDisplayButton
+                                        displayButtonLabel={
+                                          items.displayButtonLabel
+                                        }
+                                        displayButtonAllStyle={{
+                                          displayLabelStyle:
+                                            activeTab === items.id
+                                              ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                                              : styles.headerButtonStyle,
+                                        }}
+                                        handleClick={() =>
+                                          handleDiamondDetailData(
+                                            items.id,
+                                            items.url,
+                                            items.iframeUrl
+                                          )
+                                        }
+                                      />
+                                    </div>
+                                  ))}
+                              </div>
 
-                              <div className="border-b border-solitaireTertiary mt-8"></div>
+                              <div className={styles.stoneSliderData}>
+                                {diamondDetailImageUrl.length === 0 && (
+                                  <Image
+                                    src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                    alt={``}
+                                    width={400}
+                                    height={400}
+                                  />
+                                )}
+                                {diamondDetailImageUrl && (
+                                  <Image
+                                    src={diamondDetailImageUrl}
+                                    alt={``}
+                                    width={400}
+                                    height={400}
+                                    style={{ height: '400px' }}
+                                  />
+                                )}
+                                {diamondDetailIframeUrl && (
+                                  <iframe
+                                    width="50%"
+                                    height={350}
+                                    frameBorder="0"
+                                    src={diamondDetailIframeUrl}
+                                  />
+                                )}
+                              </div>
 
-                              {/* Show Results button */}
-                              {/* <div className={styles.showResultMainDiv}>
+                              {/* button */}
+                              <div className={styles.customButtonDiv}>
                                 <CustomDisplayButton
-                                  displayButtonLabel="Show Results"
-                                  displayButtonAllStyle={showResulutButtonStyle}
-                                  handleClick={showButtonHandleClick}
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.share'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.transparent,
+                                  }}
+                                  // handleClick={showButtonHandleClick}
                                 />
-                              </div> */}
+                                <CustomDisplayButton
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.download'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                  }}
+                                  handleClick={() => {
+                                    diamondDetailImageUrl.length &&
+                                      downloadImage(diamondDetailImageUrl);
+                                    diamondDetailIframeUrl.length &&
+                                      downloadFile(diamondDetailIframeUrl);
+                                  }}
+                                />
+                              </div>
                             </>
                           }
                         />
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
@@ -403,7 +477,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               >
                                 <Image
                                   src={certficateOutline}
-                                  alt={`${row?.details?.stone} Stone Image`}
+                                  alt={`${row?.certificate_url}Certificate_Url`}
                                   width={20}
                                   height={20}
                                 />
@@ -415,59 +489,74 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                             <>
                               <div className={styles.sheetMainHeading}>
                                 <p>
-                                  {ManageLocales('app.savedSearch.detailInfo')}
+                                  {ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.giaCertificate'
+                                  )}
                                 </p>
                               </div>
 
-                              {sliderData.map((data) => {
-                                return (
-                                  <div key={data.id}>
-                                    <Image
-                                      src={data.details.stone}
-                                      alt={data.details.stone}
-                                      width={500}
-                                      height={500}
-                                    />
-                                  </div>
-                                );
-                              })}
-                              <div className="border-b border-solitaireTertiary mt-8"></div>
+                              <div className={styles.sliderData}>
+                                {sliderData[0] && (
+                                  <Image
+                                    src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
+                                    alt={`No Certificate Found`}
+                                    width={500}
+                                    height={0}
+                                    style={{ height: '400px' }}
+                                  />
+                                )}
+                              </div>
 
-                              {/* Show Results button */}
-                              {/* <div className={styles.showResultMainDiv}>
+                              {/* button */}
+                              <div className={styles.customButtonDiv}>
                                 <CustomDisplayButton
-                                  displayButtonLabel="Show Results"
-                                  displayButtonAllStyle={showResulutButtonStyle}
-                                  handleClick={showButtonHandleClick}
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.share'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.transparent,
+                                  }}
+                                  // handleClick={showButtonHandleClick}
                                 />
-                              </div> */}
+                                <CustomDisplayButton
+                                  displayButtonLabel={ManageLocales(
+                                    'app.searchResult.slider.giaCertificate.download'
+                                  )}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                  }}
+                                  handleClick={() => {
+                                    downloadImage(
+                                      `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`
+                                    );
+                                  }}
+                                />
+                              </div>
                             </>
                           }
                         />
                       </div>
-                    ) : column.accessor === 'stock_no' ? (
+                    ) : column.accessor === 'lot_id' ? (
                       <div
                         onClick={(e) => {
                           e.stopPropagation();
                         }}
                       >
                         <CustomSlider
-                          sheetTriggerStyle={styles.mainCardContainer}
                           sheetTriggenContent={
                             <>
                               <div
                                 onClick={() => {
-                                  setActiveTab('2');
-                                  setDiamondDetailImageUrl(
-                                    sliderData[0]?.details?.stone
-                                  );
+                                  setActiveTab('3');
+                                  setDiamondDetailIframeUrl('');
+                                  setDiamondDetailImageUrl(``);
                                   setSliderData([tableRows[index]]);
                                 }}
                                 className={` ${
-                                  column.accessor === 'stock_no' &&
+                                  column.accessor === 'lot_id' &&
                                   row.is_memo_out
                                     ? styles.memoOutBackground
-                                    : 'px-[8px]'
+                                    : 'px-[5px]'
                                 }`}
                               >
                                 {row[column.accessor as keyof Rows]}
@@ -477,11 +566,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           sheetContentStyle={styles.diamondDetailSheet}
                           sheetContent={
                             <>
-                              <div className={styles.sheetMainHeading}>
+                              <div className={styles.diamondDetailHeader}>
                                 <p className={`text-solitaireTertiary`}>
                                   {`${ManageLocales(
                                     'app.searchResult.slider.diamondDetail.stockNo'
-                                  )} : ${sliderData[0]?.stock_no}`}
+                                  )} : ${sliderData[0]?.lot_id}`}
                                 </p>
                               </div>
                               <div className="border-b border-solitaireQuaternary mt-5"></div>
@@ -493,46 +582,57 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       className="flex items-center justify-between my-5 px-10"
                                     >
                                       <div className="">
-                                        {detailPageDisplayButtonData.map(
-                                          (items) => {
-                                            return (
-                                              <div key={items.id} className="">
-                                                <CustomDisplayButton
-                                                  displayButtonLabel={
-                                                    items.displayButtonLabel
-                                                  }
-                                                  displayButtonAllStyle={{
-                                                    displayLabelStyle:
-                                                      activeTab === items.id
-                                                        ? styles.activeHeaderButtonStyle
-                                                        : styles.headerButtonStyle,
-                                                  }}
-                                                  handleClick={() =>
-                                                    handleDiamondDetailData(
-                                                      items.id,
-                                                      items.url
-                                                    )
-                                                  }
-                                                />
-                                              </div>
-                                            );
-                                          }
-                                        )}
+                                        {displayButtonData.map((items) => {
+                                          return (
+                                            <div key={items.id} className="">
+                                              <CustomDisplayButton
+                                                displayButtonLabel={
+                                                  items.displayButtonLabel
+                                                }
+                                                displayButtonAllStyle={{
+                                                  displayLabelStyle:
+                                                    activeTab === items.id
+                                                      ? styles.activeHeaderButtonStyle
+                                                      : styles.headerButtonStyle,
+                                                }}
+                                                handleClick={() =>
+                                                  handleDiamondDetailData(
+                                                    items.id,
+                                                    items.url,
+                                                    items.iframeUrl
+                                                  )
+                                                }
+                                              />
+                                            </div>
+                                          );
+                                        })}
                                       </div>
-                                      <div className="">
-                                        {diamondDetailImageUrl ? (
+                                      <div>
+                                        {!diamondDetailImageUrl.length &&
+                                          !diamondDetailIframeUrl.length && (
+                                            <Image
+                                              src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                              alt={``}
+                                              width={400}
+                                              height={400}
+                                            />
+                                          )}
+                                        {diamondDetailImageUrl && (
                                           <Image
                                             src={diamondDetailImageUrl}
-                                            alt={diamondDetailImageUrl}
-                                            width={200}
-                                            height={200}
+                                            alt={``}
+                                            width={400}
+                                            height={400}
+                                            style={{ height: '400px' }}
                                           />
-                                        ) : (
-                                          <Image
-                                            src={data.details.stone}
-                                            alt={data.details.stone}
-                                            width={200}
-                                            height={200}
+                                        )}
+
+                                        {diamondDetailIframeUrl && (
+                                          <iframe
+                                            width="100%"
+                                            height={350}
+                                            frameBorder="0"
+                                            src={diamondDetailIframeUrl}
                                           />
                                         )}
                                       </div>
@@ -554,28 +654,50 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       </div>
                                     </div>
                                     <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
-                                      <Image
-                                        src={shareSocialOutline}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                      <Image
-                                        src={downloadOutline}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                      <Image
-                                        src={dna}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
+                                      <div
+                                        onClick={() => {}}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={shareSocialOutline}
+                                          alt="shareSocialOutline"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {}}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={downloadOutline}
+                                          alt="downloadOutline"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
+                                      <div
+                                        onClick={() => {
+                                          window.open(
+                                            `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
+                                            '_blank'
+                                          );
+                                        }}
+                                        className="cursor-pointer"
+                                      >
+                                        <Image
+                                          src={dna}
+                                          alt="dna"
+                                          width={25}
+                                          height={20}
+                                        />
+                                      </div>
                                     </div>
                                     <div className="border-b border-solitaireQuaternary"></div>
                                     <div>
-                                      <div className={styles.sheetMainHeading}>
+                                      <div
+                                        className={styles.diamondDetailHeader}
+                                      >
                                         <p
                                           className={`text-solitaireQuaternary font-bold text-lg my-5`}
                                         >
@@ -604,7 +726,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                                 {basicDetailsLabelMapping[key]}
                                               </span>
                                               <span className="text-left">
-                                                {data[key]}
+                                                {data[key] ? data[key] : '-'}
                                               </span>
                                             </div>
                                           ))}
@@ -704,7 +826,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         />
                       </div>
                     ) : column.accessor === 'rpt_number' ? (
-                      <div>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"
@@ -713,7 +835,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         </a>
                       </div>
                     ) : column.accessor === 'lab' ? (
-                      <div>
+                      <div onClick={(e) => e.stopPropagation()}>
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"
@@ -732,24 +854,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
             ))}
           </tbody>
         </table>
-      </div>
-
-      <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
-        <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">
-            xxxxxxx
-          </span>
-          <p className="text-solitaireTertiary text-sm">Memo - Out</p>
-        </div>
-
-        <CustomPagination
-          currentPage={currentPage}
-          totalPages={numberOfPages}
-          resultsPerPage={resultsPerPage}
-          optionLimits={optionLimits}
-          handlePageClick={handlePageClick}
-          handleResultsPerPageChange={handleResultsPerPageChange}
-        />
       </div>
     </div>
   );

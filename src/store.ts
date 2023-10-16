@@ -3,12 +3,14 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import { savedSearchesApi } from './slices/saved-searches';
-import { previousSearchApi } from './slices/previous-searches';
-import { notificationApi } from './slices/notification';
-import { productAPi } from './slices/product';
+import { savedSearchesApi } from './features/api/saved-searches';
+import { previousSearchApi } from './features/api/previous-searches';
+import { notificationApi } from './features/api/notification';
+import { productAPi } from './features/api/product';
+import compareStoneReducer from './features/compare-stone/compareStoneSlice';
 
 const rootReducer = combineReducers({
+  compareStone: compareStoneReducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,

@@ -7,7 +7,7 @@ import CalenderIcon from '@public/assets/icons/calendar-clear-outline.svg?url';
 import { useRouter } from 'next/navigation';
 import { SheetClose } from '../ui/sheet';
 import { CustomDisplayButton } from '../common/buttons/display-button';
-import { useGetAllNotificationQuery } from '@/slices/notification';
+import { useGetAllNotificationQuery } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 
 interface INotificationData {

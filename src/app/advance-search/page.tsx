@@ -13,7 +13,7 @@ import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
-import { useAddPreviousSearchMutation } from '@/slices/previous-searches';
+import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
 interface IAdvanceSearch {
   shape?: string[];
@@ -116,7 +116,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
- 
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -353,9 +352,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       value: other.value.map((data, valueIndex) => {
         return {
           ...data,
-          ...advanceSearch.other_parameter[otherIndex].value[
-            valueIndex
-          ],
+          ...advanceSearch.other_parameter[otherIndex].value[valueIndex],
         };
       }),
     };
@@ -386,7 +383,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === 'all') {
-      let filteredShape: string[] = advanceSearch.shape.map((data) => data.title);
+      let filteredShape: string[] = advanceSearch.shape.map(
+        (data) => data.title
+      );
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
@@ -524,10 +523,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
-      let filteredGirdleStep: string[] =
-        advanceSearch.key_to_symbol.map((girdleData) =>
-          girdleData.toLowerCase() !== 'all' ? girdleData : ''
-        );
+      let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
+        (girdleData) => (girdleData.toLowerCase() !== 'all' ? girdleData : '')
+      );
       setSelectedGirdleStep2(filteredGirdleStep);
     } else {
       handleFilterChange(data, selectedGirdleStep2, setSelectedGirdleStep2);
