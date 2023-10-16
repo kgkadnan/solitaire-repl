@@ -358,11 +358,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               <div
                                 onClick={(e) => {
                                   setActiveTab('3');
-                                  setDiamondDetailIframeUrl('');
-                                  setDiamondDetailImageUrl(
-                                    `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`
-                                  );
                                   setSliderData([tableRows[index]]);
+                                  setDiamondDetailIframeUrl('');
+                                  setDiamondDetailImageUrl('');
                                 }}
                               >
                                 <Image
@@ -413,15 +411,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               </div>
 
                               <div className={styles.stoneSliderData}>
-                                {!diamondDetailImageUrl.length &&
-                                  !diamondDetailIframeUrl.length && (
-                                    <Image
-                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
-                                      alt={``}
-                                      width={400}
-                                      height={400}
-                                    />
-                                  )}
+                                {diamondDetailImageUrl.length === 0 && (
+                                  <Image
+                                    src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                    alt={``}
+                                    width={400}
+                                    height={400}
+                                  />
+                                )}
                                 {diamondDetailImageUrl && (
                                   <Image
                                     src={diamondDetailImageUrl}
@@ -431,7 +428,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                     style={{ height: '400px' }}
                                   />
                                 )}
-
                                 {diamondDetailIframeUrl && (
                                   <iframe
                                     width="50%"
@@ -553,9 +549,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 onClick={() => {
                                   setActiveTab('3');
                                   setDiamondDetailIframeUrl('');
-                                  setDiamondDetailImageUrl(
-                                    `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`
-                                  );
+                                  setDiamondDetailImageUrl(``);
                                   setSliderData([tableRows[index]]);
                                 }}
                                 className={` ${

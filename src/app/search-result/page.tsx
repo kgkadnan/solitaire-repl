@@ -13,11 +13,10 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
-import { useGetAllProductQuery } from '@/slices/product';
+import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
-import CompareStone from '../compare-stone/page';
 import { useRouter } from 'next/navigation';
 
 interface TableColumn {
@@ -107,7 +106,6 @@ interface Data {
 
 const SearchResults = () => {
   const router = useRouter();
-  // const [dummyData, setDummyData] = useState<any>({});
 
   const [rows, setRows] = useState<Rows[]>([]);
   const [activeTab, setActiveTab] = useState(0);
@@ -333,8 +331,6 @@ const SearchResults = () => {
 
   const handleSearchTab = (index: number) => {
     setActiveTab(index);
-    // let url = constructUrlParams(yourSelectionData[index]);
-    // setSearchUrl(url);
   };
 
   // Function to calculate total amount
@@ -371,9 +367,6 @@ const SearchResults = () => {
   }, [calculateTotalAmount, calculateAverageDiscount]);
 
   useEffect(() => {
-    // let searchTabKey = `search${activeTab + 1}`;
-
-    // if (dummyData[searchTabKey] === undefined) {
     let yourSelection = localStorage.getItem('Search');
     if (yourSelection) {
       // Check if the effect has not been executed
@@ -387,18 +380,10 @@ const SearchResults = () => {
       // }
 
       if (data?.products?.length) {
-        // setDummyData((prevDummyData: any) => ({
-        //   ...prevDummyData,
-        //   [searchTabKey]: data?.products,
-        // }));
         setRows(data?.products);
         setNumberOfPages(Math.ceil(data?.count / data?.limit));
       }
     }
-    // } else {
-    //   let searchTabdata = dummyData[`search${activeTab + 1}`];
-    //   setRows(searchTabdata);
-    // }
   }, [data, activeTab]); // Include isEffectExecuted in the dependency array
 
   const closeSearch = (removeDataIndex: number) => {
@@ -544,17 +529,8 @@ const SearchResults = () => {
       setLimit(newResultsPerPage);
       setOffset(0);
       setCurrentPage(0); // Reset current page when changing results per page
-      // const searchTabKey = `search${activeTab + 1}`;
-
-      // if (dummyData[searchTabKey] !== undefined) {
-      //   setDummyData((prevDummyData: any) => ({
-      //     ...prevDummyData,
-      //     [searchTabKey]: data?.products,
-      //   }));
-
       setRows(data?.products);
       setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
-      // }
     },
     [data]
   );
