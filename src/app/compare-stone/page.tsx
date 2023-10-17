@@ -95,6 +95,7 @@ const CompareStone = () => {
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
     comapreStoneStoreData.compareStone[0]
   );
+  const [differences, setDifferences] = useState<string[]>([]);
 
   const compareStoneFooter = [
     {
@@ -132,6 +133,11 @@ const CompareStone = () => {
   const [showDifferences, setShowDifferences] = useState(false);
 
   const handleShowDifferencesChange = () => {
+    // Check if "Select All Checkbox" is checked and there are differences
+    if (!showDifferences) {
+      const differingValues = findDifferences(compareStoneData);
+      console.log(differingValues);
+    }
     setShowDifferences(!showDifferences);
   };
 
@@ -191,6 +197,31 @@ const CompareStone = () => {
     girdle_percentage: 'Girdle%',
     luster: 'Luster',
   };
+  console.log('compareStoneData', compareStoneData);
+
+  function findDifferences(objects: any) {
+    const differences: any = {};
+
+    for (let i = 0; i < objects.length; i++) {
+      for (let j = i + 1; j < objects.length; j++) {
+        for (const key in objects[i]) {
+          if (objects[i][key] !== objects[j][key]) {
+            if (!differences[key]) {
+              differences[key] = [];
+            }
+            if (!differences[key].find((item: any) => item.index === i)) {
+              differences[key].push({ index: i, value: objects[i][key] });
+            }
+            if (!differences[key].find((item: any) => item.index === j)) {
+              differences[key].push({ index: j, value: objects[j][key] });
+            }
+          }
+        }
+      }
+    }
+
+    return differences;
+  }
 
   return (
     <div className={styles.comparestoneContainer}>
