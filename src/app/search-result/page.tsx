@@ -274,6 +274,8 @@ const SearchResults = () => {
   const addToCart = () => {
     if (isCheck.length > 100) {
       alert('The cart does not allow more than 100 Stones.');
+    } else if (isCheck.length < 1) {
+      alert('select stone to add to cart.');
     } else {
       addCart({
         variants: [
