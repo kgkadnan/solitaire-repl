@@ -19,7 +19,7 @@ import { Notification } from '@/components/notification';
 import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
-} from '@/slices/notification';
+} from '@/features/api/notification';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
