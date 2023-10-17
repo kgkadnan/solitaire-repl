@@ -406,7 +406,7 @@ const SavedSearch = () => {
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
           <>
-            {cardData?.map((items: any, index: number) => {
+            {cardData?.map((items: any, indexTest: number) => {
               return (
                 <div key={items.cardId}>
                   <div className="flex mt-6">
@@ -420,7 +420,7 @@ const SavedSearch = () => {
                       sheetTriggenContent={
                         <>
                           <div
-                            onClick={() => handleSlider(SavedSearchData[index])}
+                            onClick={() => handleSlider(SavedSearchData[indexTest])}
                           >
                             <CustomSearchResultCard
                               cardData={items}
@@ -441,15 +441,15 @@ const SavedSearch = () => {
                           {/* {sliderData.map((cardDetails: any) => ( */}
                             <>
                               <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
-                                {SavedSearchData[index].meta_data.length > 1 &&
-                                  SavedSearchData[index].meta_data.map(
-                                    (data: any, indexNew: number) => (
+                                {SavedSearchData[indexTest].meta_data.length > 1 &&
+                                  SavedSearchData[indexTest].meta_data.map(
+                                    (data: any, index: number) => (
                                       <div
-                                        key={`Search-${indexNew}`}
+                                        key={`Search-${index}`}
                                         style={{
                                           marginRight:
-                                          indexNew ===
-                                            SavedSearchData[index].meta_data.length - 1
+                                          index ===
+                                            SavedSearchData[indexTest].meta_data.length - 1
                                               ? '0px'
                                               : '16px',
                                         }}
@@ -464,10 +464,10 @@ const SavedSearch = () => {
                                               styles.headerButtonLabelStyle,
                                           }}
                                           displayButtonLabel={`Search ${
-                                            indexNew + 1
+                                            index + 1
                                           }`}
                                           handleClick={() =>
-                                            handleButtonClick(indexNew)
+                                            handleButtonClick(index)
                                           }
                                         />
                                       </div>
@@ -476,7 +476,7 @@ const SavedSearch = () => {
                               </div>
                               <div
                                 className="flex"
-                                key={SavedSearchData[index].meta_data.cardId}
+                                key={SavedSearchData[indexTest].meta_data.cardId}
                               >
                                 <div className={styles.sheetMainDiv}>
                                   {/* Detailed Information section */}
@@ -490,8 +490,8 @@ const SavedSearch = () => {
 
                                   <div>
                                     {Object?.entries(
-                                      SavedSearchData[index] &&
-                                      SavedSearchData[index]?.meta_data[activeTab]
+                                      SavedSearchData[indexTest] &&
+                                      SavedSearchData[indexTest]?.meta_data[activeTab]
                                           ?.basic_card_details
                                     ).map(([key, value]) => (
                                       <div key={key}>
@@ -520,8 +520,8 @@ const SavedSearch = () => {
 
                                   <div>
                                     {Object?.entries(
-                                      SavedSearchData[index] &&
-                                      SavedSearchData[index]?.meta_data[activeTab]
+                                      SavedSearchData[indexTest] &&
+                                      SavedSearchData[indexTest]?.meta_data[activeTab]
                                           .measurements
                                     ).map(([key, value]) => (
                                       <div key={key}>
@@ -550,8 +550,8 @@ const SavedSearch = () => {
 
                                   <div>
                                     {Object.entries(
-                                      SavedSearchData[index] &&
-                                      SavedSearchData[index]?.meta_data[activeTab]
+                                      SavedSearchData[indexTest] &&
+                                      SavedSearchData[indexTest]?.meta_data[activeTab]
                                           .other_information
                                     ).map(([key, value]) => (
                                       <div key={key}>
@@ -580,17 +580,20 @@ const SavedSearch = () => {
                                     </p>
                                   </div>
 
-                                  {Object.entries(
-                                    SavedSearchData[index] &&
-                                    SavedSearchData[index]?.meta_data[activeTab]
+                                  {
+                               
+                                    SavedSearchData[indexTest] &&
+                                    SavedSearchData[indexTest]?.meta_data[activeTab]
                                         .inclusion_details
-                                  ).map((inclusionData) => (
+                                  .map((inclusionData) => (
                                     <p className="flex" key={inclusionData.element_key}>
+                                   
                                       <span
                                         className={
                                           styles.inclutionDetailsInnerHeadingStyle
                                         }
                                       >
+                                         {console.log("jyoti",inclusionData)}
                                         {inclusionData.element_key}
                                       </span>
                                       <span className={styles.sheetValues}>
