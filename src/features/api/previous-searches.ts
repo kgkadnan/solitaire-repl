@@ -16,7 +16,14 @@ export const previousSearchApi = createApi({
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
       query: ({ currentPage, resultsPerPage }) =>
-        `previous-search?page=${currentPage}&perPage=${resultsPerPage}`,
+     ({
+        url: `previous-search?limit=${currentPage}&offset=${resultsPerPage}`,
+        method: 'GET',
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTQ0NjEyLCJleHAiOjE3MDAxMzY2MTJ9.FMnWqLfZfocWUZI0GAmGRmfCwLnEwCe3XtR_COUNnQk',
+        },
+      }),
       providesTags: ['PreviousSearch'],
     }),
     addPreviousSearch: builder.mutation({
@@ -24,6 +31,10 @@ export const previousSearchApi = createApi({
         url: `previous-search`,
         method: 'POST',
         body: data,
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTQ0NjEyLCJleHAiOjE3MDAxMzY2MTJ9.FMnWqLfZfocWUZI0GAmGRmfCwLnEwCe3XtR_COUNnQk',
+        },
       }),
     }),
     updatePreviousSearch: builder.mutation({

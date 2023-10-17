@@ -15,11 +15,14 @@ import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url
 import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
+  const [saveSearchName, setSaveSearchName] = useState<string>('');
+
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -561,8 +564,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setCaratRangeTo('');
   };
 
-  const [addPreviousSearch, { isLoading: addIsLoading, isError: addIsError }] =
+  let [addPreviousSearch] =
     useAddPreviousSearchMutation();
+    let [addSavedSearch] =
+    useAddSavedSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
     return (
@@ -876,6 +881,112 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         }`
       );
   };
+  const handleSaveAndSearch=async()=>{
+    await addSavedSearch({
+      name: saveSearchName,
+      diamond_count: searchResultCount,
+      meta_data: [{
+        basic_card_details:{
+        shape: selectedShape,
+        color: selectedWhiteColor,
+        clarity: selectedClarity,
+        cut: selectedCut,
+        lab: selectedLab,
+        polish: selectedPolish,
+        shade: selectedColor,
+        carat:selectedCaratRange,
+        color_shade:selectedTinge,
+        location:selectedLocation,
+        symmetry:selectedSymmetry,
+        fluoroscence:selectedFluorescence
+
+        },
+        "measurements": {
+          "cutlet": "None",
+          "girdle": selectedGirdle,
+          "luster": lusterBI
+      },
+      "other_information": {
+        "Key To Symbol": "-",
+        "Report Comments": "-"
+    },
+    inclusion_details:[
+      {
+        "element_key": "Black Table",
+        "element_value":blackTableBI
+    },
+    {
+        "element_key": "Side Table",
+        "element_value": sideBlackBI
+    },
+    {
+        "element_key": "Open Crown",
+        "element_value":openCrownBI
+    },
+    {
+        "element_key": "Open Table",
+        "element_value": openTableBI
+    },
+    {
+        "element_key": "Open Pavilion",
+        "element_value": openPavilionBI
+    },
+    {
+        "element_key": "Milky",
+        "element_value": milkyBI
+    },
+    {
+        "element_key": "Luster",
+        "element_value": lusterBI
+    },
+    {
+        "element_key": "Eye Clean",
+        "element_value": eyeCleanBI
+    },
+    {
+        "element_key": "Table Inclusion",
+        "element_value": tableInclusionWI
+    },
+    {
+        "element_key": "Side Inclusion",
+        "element_value": sideInclusionWI
+    },
+    {
+        "element_key": "Natural Crown",
+        "element_value":naturalCrownWI
+    },
+    {
+        "element_key": "Natural Girdle",
+        "element_value": naturalGirdleWI
+    },
+    {
+        "element_key": "Natural Pavilion",
+        "element_value": naturalPavilionWI
+    },
+    {
+        "element_key": "Surface Graining",
+        "element_value": surfaceGrainingWI
+    },
+    {
+        "element_key": "Internal Graining",
+        "element_value": internalGrainingWI
+    },
+    {
+        "element_key": "Brilliance",
+        "element_value":selectedBrilliance
+    },
+    {
+        "element_key": "Country of Origin",
+        "element_value": selectedOrigin
+    }
+    ]
+
+      }],
+      is_deleted: false,
+    });
+
+    handleSearch()
+  }
 
   const handleSearch = async () => {
     // if(parseInt(discountFrom)>advanceSearch.discount.range.start && parseInt(discountFrom)<advanceSearch.discount.range.end){
@@ -893,6 +1004,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         name: searchName,
         diamond_count: searchResultCount,
         meta_data: {
+          basic_card_details:{
           shape: selectedShape,
           color: selectedWhiteColor,
           clarity: selectedClarity,
@@ -900,6 +1012,93 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           lab: selectedLab,
           polish: selectedPolish,
           shade: selectedColor,
+          carat:selectedCaratRange,
+          color_shade:selectedTinge,
+          location:selectedLocation,
+          symmetry:selectedSymmetry,
+          fluoroscence:selectedFluorescence
+
+          },
+          "measurements": {
+            "cutlet": "None",
+            "girdle": selectedGirdle,
+            "luster": lusterBI
+        },
+        "other_information": {
+          "Key To Symbol": "-",
+          "Report Comments": "-"
+      },
+      inclusion_details:[
+        {
+          "element_key": "Black Table",
+          "element_value":blackTableBI
+      },
+      {
+          "element_key": "Side Table",
+          "element_value": sideBlackBI
+      },
+      {
+          "element_key": "Open Crown",
+          "element_value":openCrownBI
+      },
+      {
+          "element_key": "Open Table",
+          "element_value": openTableBI
+      },
+      {
+          "element_key": "Open Pavilion",
+          "element_value": openPavilionBI
+      },
+      {
+          "element_key": "Milky",
+          "element_value": milkyBI
+      },
+      {
+          "element_key": "Luster",
+          "element_value": lusterBI
+      },
+      {
+          "element_key": "Eye Clean",
+          "element_value": eyeCleanBI
+      },
+      {
+          "element_key": "Table Inclusion",
+          "element_value": tableInclusionWI
+      },
+      {
+          "element_key": "Side Inclusion",
+          "element_value": sideInclusionWI
+      },
+      {
+          "element_key": "Natural Crown",
+          "element_value":naturalCrownWI
+      },
+      {
+          "element_key": "Natural Girdle",
+          "element_value": naturalGirdleWI
+      },
+      {
+          "element_key": "Natural Pavilion",
+          "element_value": naturalPavilionWI
+      },
+      {
+          "element_key": "Surface Graining",
+          "element_value": surfaceGrainingWI
+      },
+      {
+          "element_key": "Internal Graining",
+          "element_value": internalGrainingWI
+      },
+      {
+          "element_key": "Brilliance",
+          "element_value":selectedBrilliance
+      },
+      {
+          "element_key": "Country of Origin",
+          "element_value": selectedOrigin
+      }
+      ]
+
         },
         is_deleted: false,
       });
@@ -1781,6 +1980,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 'app.advanceSearch.saveSearch'
               )}`,
               style: styles.transparent,
+              fn: handleSaveAndSearch,
             },
             {
               id: 3,

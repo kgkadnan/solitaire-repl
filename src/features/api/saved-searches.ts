@@ -12,6 +12,17 @@ export const savedSearchesApi = createApi({
         `saved-search?page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['SavedSearch'],
     }),
+    addSavedSearch: builder.mutation({
+      query: (data) => ({
+        url: `previous-search`,
+        method: 'POST',
+        body: data,
+        headers: {
+          Authorization:
+            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTQ0NjEyLCJleHAiOjE3MDAxMzY2MTJ9.FMnWqLfZfocWUZI0GAmGRmfCwLnEwCe3XtR_COUNnQk',
+        },
+      }),
+    }),
     updateSavedSearches: builder.mutation({
       query: (filter) => ({
         url: `saved-search`,
@@ -23,5 +34,5 @@ export const savedSearchesApi = createApi({
   }),
 });
 
-export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation } =
+export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation, useAddSavedSearchMutation} =
   savedSearchesApi;
