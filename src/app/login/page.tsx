@@ -1,4 +1,4 @@
-'use client'
+'use client';
 import React, { useState } from 'react';
 import login from '@public/assets/images/login-screen.png';
 import Image, { StaticImageData } from 'next/image';
@@ -10,16 +10,14 @@ import { CustomSelectionButton } from '@/components/common/buttons/selection-but
 import { useVerifyLoginMutation } from '@/features/api/login';
 
 const Login = () => {
-  const [email,setEmail]=useState<string>('')
-  const [password,setPassword]=useState<string>('')
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
   const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
 
-const handleLogin=async()=>{
-
-  
- await verifyLogin({email:email,password:password})
-
-}
+  const handleLogin = async () => {
+    await verifyLogin({ email: email, password: password });
+    console.log('data', data);
+  };
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
@@ -50,14 +48,14 @@ const handleLogin=async()=>{
           name={'email'}
           placeholder="Email"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={(e)=>setEmail(e.target.value)}
+          onChange={(e) => setEmail(e.target.value)}
         />
         <CustomInputField
           type={'password'}
           name={'password'}
           placeholder="Password"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={(e)=>setPassword(e.target.value)}
+          onChange={(e) => setPassword(e.target.value)}
         />
         <CustomDisplayButton
           displayButtonLabel={'Login'}
