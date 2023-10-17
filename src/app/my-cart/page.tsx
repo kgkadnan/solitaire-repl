@@ -198,16 +198,13 @@ const MyCart = () => {
   ];
 
   //specific checkbox
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
+  const handleClick = (e: any) => {
+    const { id } = e.target;
+    let value = e.target.getAttribute('data-state');
+    setIsCheck([...isCheck, id]);
+    if (value?.toLowerCase() === 'checked') {
+      setIsCheck(isCheck.filter((item) => item !== id));
     }
-
-    setIsCheck(updatedIsCheck);
   };
 
   //Selecting All Checkbox Function
