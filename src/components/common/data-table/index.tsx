@@ -187,14 +187,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2b'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
     {
       id: '5',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
-      url: sliderData[0]?.details?.gia,
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
   ];
 
@@ -275,7 +275,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     document.body.removeChild(link);
   };
 
-  const handleDiamondDetailData = (id: string, url: string, iframeUrl: any) => {
+  const handleDiamondDetailData = (id: string, url: any, iframeUrl: any) => {
     setDiamondDetailIframeUrl('');
     setDiamondDetailImageUrl('');
     if (iframeUrl) {
@@ -411,31 +411,35 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               </div>
 
                               <div className={styles.stoneSliderData}>
-                                {diamondDetailImageUrl.length === 0 && (
-                                  <Image
-                                    src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
-                                    alt={``}
-                                    width={400}
-                                    height={400}
-                                  />
-                                )}
-                                {diamondDetailImageUrl && (
-                                  <Image
-                                    src={diamondDetailImageUrl}
-                                    alt={``}
-                                    width={400}
-                                    height={400}
-                                    style={{ height: '400px' }}
-                                  />
-                                )}
-                                {diamondDetailIframeUrl && (
-                                  <iframe
-                                    width="50%"
-                                    height={350}
-                                    frameBorder="0"
-                                    src={diamondDetailIframeUrl}
-                                  />
-                                )}
+                                {diamondDetailImageUrl.length === 0 &&
+                                  diamondDetailIframeUrl.length === 0 && (
+                                    <Image
+                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                      alt={``}
+                                      width={350}
+                                      height={350}
+                                      style={{ height: '350px' }}
+                                    />
+                                  )}
+                                {diamondDetailImageUrl &&
+                                  !diamondDetailIframeUrl && (
+                                    <Image
+                                      src={diamondDetailImageUrl}
+                                      alt={``}
+                                      width={350}
+                                      height={350}
+                                      style={{ height: '350px' }}
+                                    />
+                                  )}
+                                {diamondDetailIframeUrl &&
+                                  !diamondDetailImageUrl && (
+                                    <iframe
+                                      width="50%"
+                                      height={350}
+                                      frameBorder="0"
+                                      src={diamondDetailIframeUrl}
+                                    />
+                                  )}
                               </div>
 
                               {/* button */}
@@ -499,7 +503,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                 {sliderData[0] && (
                                   <Image
                                     src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
-                                    alt={`No Certificate Found`}
+                                    alt={``}
                                     width={500}
                                     height={0}
                                     style={{ height: '400px' }}
@@ -613,28 +617,31 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                             <Image
                                               src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
                                               alt={``}
-                                              width={400}
-                                              height={400}
+                                              width={350}
+                                              height={350}
+                                              style={{ height: '350px' }}
                                             />
                                           )}
-                                        {diamondDetailImageUrl && (
-                                          <Image
-                                            src={diamondDetailImageUrl}
-                                            alt={``}
-                                            width={400}
-                                            height={400}
-                                            style={{ height: '400px' }}
-                                          />
-                                        )}
+                                        {diamondDetailImageUrl &&
+                                          !diamondDetailIframeUrl && (
+                                            <Image
+                                              src={diamondDetailImageUrl}
+                                              alt={``}
+                                              width={350}
+                                              height={350}
+                                              style={{ height: '350px' }}
+                                            />
+                                          )}
 
-                                        {diamondDetailIframeUrl && (
-                                          <iframe
-                                            width="100%"
-                                            height={350}
-                                            frameBorder="0"
-                                            src={diamondDetailIframeUrl}
-                                          />
-                                        )}
+                                        {diamondDetailIframeUrl &&
+                                          !diamondDetailImageUrl && (
+                                            <iframe
+                                              width="100%"
+                                              height={350}
+                                              frameBorder="0"
+                                              src={diamondDetailIframeUrl}
+                                            />
+                                          )}
                                       </div>
                                       <div className="">
                                         {Object.keys(keyLabelMapping).map(
@@ -826,7 +833,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         />
                       </div>
                     ) : column.accessor === 'rpt_number' ? (
-                      <div onClick={(e) => e.stopPropagation()}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="border-b border-solitaireQuaternary border-solid"
+                      >
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"
@@ -835,7 +845,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         </a>
                       </div>
                     ) : column.accessor === 'lab' ? (
-                      <div onClick={(e) => e.stopPropagation()}>
+                      <div
+                        onClick={(e) => e.stopPropagation()}
+                        className="border-b border-solitaireQuaternary border-solid"
+                      >
                         <a
                           href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
                           target="_blank"

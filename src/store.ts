@@ -8,10 +8,12 @@ import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
 import { productAPi } from './features/api/product';
 import compareStoneReducer from './features/compare-stone/compare-stone-slice';
+import { cartApi } from './features/api/cart';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
+  [cartApi.reducerPath]: cartApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
   [productAPi.reducerPath]: productAPi.reducer,
@@ -24,6 +26,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
+        cartApi.middleware,
         savedSearchesApi.middleware,
         notificationApi.middleware,
         productAPi.middleware

@@ -19,6 +19,7 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
+import { useAddCartMutation } from '@/features/api/cart';
 
 interface TableColumn {
   label: string;
@@ -136,6 +137,9 @@ const SearchResults = () => {
     limit: limit,
     url: searchUrl,
   });
+
+  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useAddCartMutation();
 
   let paginationStyle = {
     paginationContainerStyle: styles.paginationContainerStyle,
@@ -257,11 +261,26 @@ const SearchResults = () => {
   const CompareStone = () => {
     if (isCheck.length > 10) {
       alert('You can compare maximum of ten stones');
+    } else if (isCheck.length < 2) {
+      alert('minimum 2 stone to compare');
     } else {
       let comapreStone = rows.filter((items, index) => {
         return items.id === isCheck[index];
       });
       dispatch(addCompareStone(comapreStone));
+    }
+  };
+
+  const addToCart = () => {
+    if (isCheck.length > 100) {
+      alert('The cart does not allow more than 100 Stones.');
+    } else {
+      addCart({
+        variants: [
+          'variant_01HC9GSJWBQ8T2W8ZS9MMN19X8',
+          'variant_01HC9GSNHA4KGV0N6FBHWQFCY3',
+        ],
+      });
     }
   };
 
@@ -329,11 +348,13 @@ const SearchResults = () => {
       id: 6,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: () => {},
+      fn: addToCart,
     },
   ];
 
   const handleSearchTab = (index: number) => {
+    setIsCheckAll(false);
+    setIsCheck([]);
     setActiveTab(index);
   };
 
@@ -358,7 +379,6 @@ const SearchResults = () => {
         totalDiscount += selectedRow.discount;
       }
     });
-
     // Calculate average discount
     const avgDiscount = isCheck.length > 0 ? totalDiscount / isCheck.length : 0;
     return avgDiscount;
@@ -376,12 +396,8 @@ const SearchResults = () => {
       // Check if the effect has not been executed
       const parseYourSelection = JSON.parse(yourSelection);
       setYourSelectionData(parseYourSelection);
-
-      // if (dummyData['search1'] === undefined) {
       let url = constructUrlParams(parseYourSelection[activeTab]);
-      // console.log('url', url);
       setSearchUrl(url);
-      // }
 
       if (data?.products?.length) {
         setRows(data?.products);
