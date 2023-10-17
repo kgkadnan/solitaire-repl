@@ -110,11 +110,15 @@ const CompareStone = () => {
             },
             {
               label: 'Download Excel',
-              fn: '',
+              fn: () => {},
             },
             {
               label: 'Find Matching Pair',
               fn: '',
+            },
+            {
+              label: 'Compare Stone',
+              fn: () => {},
             },
           ]}
         />
