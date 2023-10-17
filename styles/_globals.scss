@@ -114,8 +114,10 @@
       appearance: none;
     }
   }
+  
   body {
     @apply bg-solitairePrimary text-foreground;
+
     /* width */
     ::-webkit-scrollbar {
       width: 4px !important;

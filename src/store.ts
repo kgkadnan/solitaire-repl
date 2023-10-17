@@ -3,16 +3,21 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
-import { savedSearchesApi } from './slices/saved-searches';
-import { previousSearchApi } from './slices/previous-searches';
-import { notificationApi } from './slices/notification';
-import { notificationSettingApi } from './slices/notification-setting';
+
+import { notificationSettingApi } from './features/api/notification-setting';
+import { savedSearchesApi } from './features/api/saved-searches';
+import { previousSearchApi } from './features/api/previous-searches';
+import { notificationApi } from './features/api/notification';
+import { productAPi } from './features/api/product';
+import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 
 const rootReducer = combineReducers({
+  compareStone: compareStoneReducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
+  [productAPi.reducerPath]: productAPi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -24,7 +29,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         previousSearchApi.middleware,
         savedSearchesApi.middleware,
         notificationApi.middleware,
-        notificationSettingApi.middleware
+        notificationSettingApi.middleware,
+        productAPi.middleware
       ),
     preloadedState,
   });
@@ -33,4 +39,3 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
 export type RootState = ReturnType<typeof rootReducer>;
 export type AppStore = ReturnType<typeof setupStore>;
 export type AppDispatch = AppStore['dispatch'];
-// export default the store
