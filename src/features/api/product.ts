@@ -9,7 +9,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // Define the type for the base query function
 type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
-export const productAPi = createApi({
+export const productApi = createApi({
   reducerPath: 'productReducer',
   baseQuery: fetchBaseQuery({ baseUrl: apiURL }) as BaseQuery,
   tagTypes: ['Product'],
@@ -24,4 +24,4 @@ export const productAPi = createApi({
   }),
 });
 
-export const { useGetAllProductQuery } = productAPi;
+export const { useGetAllProductQuery } = productApi;

@@ -8,7 +8,9 @@ import { notificationSettingApi } from './features/api/notification-setting';
 import { savedSearchesApi } from './features/api/saved-searches';
 import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
-import { productAPi } from './features/api/product';
+import { productApi } from './features/api/product';
+import { loginApi } from './features/api/login';
+
 import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 
 const rootReducer = combineReducers({
@@ -17,7 +19,8 @@ const rootReducer = combineReducers({
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
-  [productAPi.reducerPath]: productAPi.reducer,
+  [productApi.reducerPath]: productApi.reducer,
+  [loginApi.reducerPath]: loginApi.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -30,7 +33,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         savedSearchesApi.middleware,
         notificationApi.middleware,
         notificationSettingApi.middleware,
-        productAPi.middleware
+        productApi.middleware,
+        loginApi.middleware
       ),
     preloadedState,
   });
