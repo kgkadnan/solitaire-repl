@@ -5,43 +5,90 @@ import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { formatCassing } from '@/utils/format-cassing';
+import {
+  useGetAllNotificationSettingQuery,
+  useUpdateNotificationSettingMutation,
+} from '@/slices/notification-setting';
 
-interface Settings {
-  my_cart: boolean;
-  new_arrival: boolean;
-  my_diamonds: boolean;
-  layouts: boolean;
-  deal_of_the_day: boolean;
-  matching_pair: boolean;
-  bid_to_buy: boolean;
-  appointments: boolean;
-  wishlist: boolean;
+interface INotificationSetting {
+  type: string;
+  subscription: {
+    category: string;
+    is_subscribed: boolean;
+  }[];
 }
 
 const NotificationSetting = () => {
-  const [settings, setSettings] = useState<Settings>({
-    my_cart: false,
-    new_arrival: false,
-    my_diamonds: false,
-    layouts: false,
-    deal_of_the_day: false,
-    matching_pair: false,
-    bid_to_buy: false,
-    appointments: false,
-    wishlist: false,
+  const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
+  const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
+
+  const [settings, setSettings] = useState<INotificationSetting>({
+    type: 'APP',
+    subscription: [
+      {
+        category: 'my_cart',
+        is_subscribed: false,
+      },
+      // {
+      //   category: 'new_arrival',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'my_diamonds',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'layouts',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'deal_of_the_day',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'matching_pair',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'bid_to_buy',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'appointments',
+      //   is_subscribed: false,
+      // },
+      // {
+      //   category: 'wishlist',
+      //   is_subscribed: false,
+      // },
+    ],
   });
 
-  const toggleHandler = (key: string) => {
+  const toggleHandler = async (category: string) => {
     // Toggle the individual setting
-    setSettings((prevSettings: any) => ({
-      ...prevSettings,
-      [key]: !prevSettings[key],
-    }));
+    setSettings((prevSettings) => {
+      return {
+        ...prevSettings,
+        subscription: prevSettings.subscription.map((setting) => {
+          if (setting.category === category) {
+            return {
+              ...setting,
+              is_subscribed: !setting.is_subscribed,
+            };
+          }
+          return setting;
+        }),
+      };
+    });
+    await updateNotificationSetting(settings);
   };
+
+  // console.log(settings);
 
   return (
     <div className={styles.notificationSettingContainer}>
-      {Object.entries(settings).map(([key]) => {
+      {settings.subscription.map((setting) => {
+        const key = setting.category;
         return (
           <div key={key} className="border-b border-solitaireSenary">
             <div className={` ${styles.notificationSettingContent}`}>
@@ -57,9 +104,9 @@ const NotificationSetting = () => {
                 />
                 <CustomInputlabel
                   htmlfor={`on${key}`}
-                  label={settings[key as keyof Settings] ? 'On' : 'Off'}
+                  label={setting.is_subscribed ? 'On' : 'Off'}
                   overriddenStyles={{
-                    label: settings[key as keyof Settings]
+                    label: setting.is_subscribed
                       ? styles.toggleOn
                       : styles.toggleOff,
                   }}

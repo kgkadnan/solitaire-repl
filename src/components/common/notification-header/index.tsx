@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './notification-header.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { useRouter } from 'next/navigation';
