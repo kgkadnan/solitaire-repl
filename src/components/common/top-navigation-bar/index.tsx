@@ -16,12 +16,19 @@ import {
 import { CustomCalculator } from '@/components/caclulator';
 import { CustomSlider } from '../slider';
 import { Notification } from '@/components/notification';
+import {
+  useGetAllNotificationQuery,
+  useUpdateNotificationMutation,
+} from '@/slices/notification';
 
 export const TopNavigationBar = () => {
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+
+  const { data } = useGetAllNotificationQuery({});
+  const [updateNotification] = useUpdateNotificationMutation();
 
   const topNavData = [
     {
@@ -64,6 +71,15 @@ export const TopNavigationBar = () => {
     };
   }, [prevScrollPos]);
 
+  const handleNotificationClick = async () => {
+    let notificationMapData = data.data.map((item: any) => ({
+      id: item.id,
+      status: 'unread',
+    }));
+
+    await updateNotification(notificationMapData);
+  };
+
   return (
     <div
       className={`${styles.topNavigationMainDiv} ${
@@ -100,7 +116,9 @@ export const TopNavigationBar = () => {
           <CustomSlider
             sheetContent={<Notification />}
             sheetTriggenContent={
-              <NotificationIcon role="button" className={styles.iconColor} />
+              <div onClick={handleNotificationClick}>
+                <NotificationIcon role="button" className={styles.iconColor} />
+              </div>
             }
             sheetContentStyle={styles.notificationSheetContent}
           />

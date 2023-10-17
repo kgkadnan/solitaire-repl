@@ -3,6 +3,8 @@ import {
   combineReducers,
   configureStore,
 } from '@reduxjs/toolkit';
+
+import { notificationSettingApi } from './features/api/notification-setting';
 import { savedSearchesApi } from './features/api/saved-searches';
 import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
@@ -18,9 +20,9 @@ const rootReducer = combineReducers({
   [cartApi.reducerPath]: cartApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
+  [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
-
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -33,6 +35,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         cartApi.middleware,
         savedSearchesApi.middleware,
         notificationApi.middleware,
+        notificationSettingApi.middleware,
         productApi.middleware,
         loginApi.middleware
       ),

@@ -77,6 +77,7 @@
   "app.advanceSearch.fancy": "Fancy",
   "app.advanceSearch.range": "Range",
   "app.previousSearch.delete": "Delete",
+  "app.previousSearch.filterByDate": "Filter By Date",
   "app.previousSearch.header": "Previous Searches",
   "app.previousSearch.detailInfo": "Detailed Information",
   "app.previousSearch.basicInfo": "Basic Details",
@@ -150,6 +151,12 @@
   "app.myaccount.reportBug.report": "Report",
   "app.myaccount.reportBug.reset": "Reset",
 
+  "app.compareStone.heading":"Compare Stone",
+  "app.compareStone.diamondImage":"Diamond Image",
+  "app.compareStone.showOnlyDifferences":"Show only Differences",
+
+  "app.notification.notifications":"Notifications",
+  "app.notification.notifications.setting":"Notifications Settings",
   "app.searchResult.footer.addToCart": "Add to Cart",
   "app.searchResult.footer.addToWhislist": "Add to Wishlist",
   "app.searchResult.footer.modifySearch": "Modify Search",
@@ -174,9 +181,5 @@
   "app.searchResult.slider.diamondDetail.diamondImage": "Diamond Image",
   "app.searchResult.slider.diamondDetail.giaCertificate": "GIA Certificate",
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
-  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
-
-  "app.compareStone.heading": "Compare Stone",
-  "app.compareStone.diamondImage": "Diamond Image",
-  "app.compareStone.showOnlyDifferences": "Show only Differences"
+  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle"
 }

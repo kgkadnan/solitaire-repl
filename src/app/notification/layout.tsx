@@ -1,8 +1,9 @@
 'use client';
-import CustomNotificationHeader from '@/components/common/notification-header/notification-header';
+import CustomNotificationHeader from '@/components/common/notification-header';
 import React from 'react';
 import styles from './show-notification.module.scss';
 import { usePathname } from 'next/navigation';
+import { ManageLocales } from '@/utils/translate';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -46,7 +47,8 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
         className={`border-b border-solitaireSenary ${styles.showNotificationsHeading}`}
       >
         <p>
-          Notifications {path !== '/notification/setting' && `(${unreadCount})`}
+          {ManageLocales('app.notification.notifications')}
+          {path !== '/notification/setting' && `(${unreadCount})`}
         </p>
       </div>
       <CustomNotificationHeader />

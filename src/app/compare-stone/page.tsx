@@ -425,7 +425,24 @@ const CompareStone = () => {
       displayButtonLabel: (
         <CustomDropdown
           dropdownTrigger={<CustomDisplayButton displayButtonLabel="More" />}
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: () => {},
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+            {
+              label: 'Compare Stone',
+              fn: () => {},
+            },
+          ]}
         />
       ),
     },
@@ -485,6 +502,8 @@ const CompareStone = () => {
       headerDataStyles: `flex items-end`,
     },
   };
+
+  const handleCLick = () => {};
 
   return (
     <div className={styles.comparestoneContainer}>
@@ -576,7 +595,10 @@ const CompareStone = () => {
                           />
 
                           <div className={styles.compareStoneCheckbox}>
-                            <CustomCheckBox data={items.id} />
+                            <CustomCheckBox
+                              data={items.id}
+                              onClick={handleCLick}
+                            />
                           </div>
 
                           <div
