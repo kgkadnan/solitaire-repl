@@ -19,6 +19,7 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
+import { useRouter } from 'next/navigation';
 
 interface TableColumn {
   label: string;
@@ -106,6 +107,7 @@ interface Data {
 }
 
 const SearchResults = () => {
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
@@ -262,6 +264,8 @@ const SearchResults = () => {
         return items.id === isCheck[index];
       });
       dispatch(addCompareStone(comapreStone));
+
+      router.push('/compare-stone');
     }
   };
 

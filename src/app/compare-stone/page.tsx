@@ -14,410 +14,91 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useAppSelector } from '@/hooks/hook';
 
-interface DiamondData {
-  id: string;
-  dimaond_image: any;
-  discount: string;
-  amt: string;
-  stone_Quantity: string;
-  stone_shape: string;
-  lab: string;
-  rap: string;
-  'price/carat': string;
-  carat: string;
-  color: string;
-  clarity: string;
-  shade: string;
-  cut: string;
-  polish: string;
-  'C/A': string;
-  'C/H': string;
-  summetry: string;
-  'table%': string;
-  'depth%': string;
-  width: string;
-  depth: string;
-  ratio: string;
-  key_to_symbol: string;
-  'h_&_a': string;
-  gridle: string;
-  'P/A': string;
-  'P/D': string;
-  culet: string;
-  'ins.': string;
-  origin: string;
-  'S/L': string;
-  'girdle%.': string;
-  luster: string;
-  [key: string]: string | any;
+interface ICompareStoneData {
+  [key: string]: {
+    id: string | null;
+    stock_no: string | null;
+    is_memo_out: boolean | null;
+    status: string | null;
+    discount: number | null;
+    amount: number | null;
+    color: string | null;
+    country_origin: string | null;
+    shape: string | null;
+    clarity: string | null;
+    cut: string | null;
+    polish: string | null;
+    fluorescence: string | null;
+    symmetry: string | null;
+    lab: string | null;
+    rpt_number: string | null;
+    certificate_number: number | null;
+    lot_id: number | null;
+    certificate_url: string | null;
+    girdle: string | null;
+    location: string | null;
+    color_shade: string | null;
+    color_shade_intensity: string | null;
+    intensity: string | null;
+    overtone: string | null;
+    ha: string | null;
+    brilliance: string | null;
+    black_table: string | null;
+    side_black: string | null;
+    open_crown: string | null;
+    open_pavilion: string | null;
+    milky: string | null;
+    luster: string | null;
+    eye_clean: string | null;
+    table_inclusion: string | null;
+    side_inclusion: string | null;
+    natural_crown: string | null;
+    natural_pavilion: string | null;
+    natural_girdle: string | null;
+    surface_graining: string | null;
+    internal_graining: string | null;
+    carat: number | null;
+    star_length: number | null;
+    price_range: number | null;
+    price_per_carat: number | null;
+    girdle_percentage: number | null;
+    pavilion_angle: number | null;
+    depth_percentage: number | null;
+    table_percentage: number | null;
+    crown_angle: number | null;
+    crown_height: number | null;
+    pavilion_depth: number | null;
+    lower_half: number | null;
+    ratio: number | null;
+    length: number | null;
+    depth: number | null;
+    width: number | null;
+    rap: number | null;
+    rap_value: number | null;
+    culet: string | null;
+    inscription: string | null;
+    tracr_id: string | null;
+    total_grade: string | null;
+    disclosed_source: string | null;
+    open_table: string | null;
+  }[];
+}
+
+interface KeyLabelMapping {
+  [key: string]: string;
 }
 
 const CompareStone = () => {
-  let data: DiamondData[] = [
-    {
-      id: '1',
-      dimaond_image: DiamondImage,
-      discount: '430.00',
-      amt: '782.90',
-      stone_Quantity: '1',
-      stone_shape: 'princss+oval',
-      lab: 'GIA',
-      rap: '23800.00',
-      'price/carat': '1850.00',
-      carat: '1.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '2',
-      dimaond_image: DiamondImage,
-      discount: '37.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '3',
-      dimaond_image: DiamondImage,
-      discount: '38.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '58.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '4',
-      dimaond_image: DiamondImage,
-      discount: '39.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '5',
-      dimaond_image: DiamondImage,
-      discount: '36.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '6',
-      dimaond_image: DiamondImage,
-      discount: '40.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '7',
-      dimaond_image: DiamondImage,
-      discount: '36.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '8',
-      dimaond_image: DiamondImage,
-      discount: '36.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '9',
-      dimaond_image: DiamondImage,
-      discount: '36.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-    {
-      id: '10',
-      dimaond_image: DiamondImage,
-      discount: '36.00',
-      amt: '556.80',
-      stone_Quantity: '1',
-      stone_shape: 'princss+round',
-      lab: 'GIA',
-      rap: '23500.00',
-      'price/carat': '1850.00',
-      carat: '2.01',
-      color: 'F',
-      clarity: 'WS2',
-      shade: 'WHT',
-      cut: 'EX',
-      polish: 'EX',
-      'C/A': '59.00',
-      'C/H': '15.65',
-      summetry: 'EX',
-      'table%': '56',
-      'depth%': '63.2',
-      width: '7.98',
-      depth: '5.06',
-      ratio: '-',
-      key_to_symbol: 'natural',
-      'h_&_a': '-',
-      gridle: 'med-stk',
-      'P/A': '59.00',
-      'P/D': '59.00',
-      culet: 'none',
-      'ins.': 'yes',
-      origin: 'IND',
-      'S/L': '-',
-      'girdle%.': '59.00',
-      luster: 'EX',
-    },
-  ];
-  const [compareStoneData, setCompareStoneData] = useState<DiamondData[]>(data);
+  const comapreStoneStoreData: any = useAppSelector((store) => store);
+
+  const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
+    comapreStoneStoreData.compareStone[0]
+  );
   const [differences, setDifferences] = useState<string[]>([]);
+
+  console.log(compareStoneData, 'compareStoneData');
 
   const compareStoneFooter = [
     {
@@ -425,7 +106,20 @@ const CompareStone = () => {
       displayButtonLabel: (
         <CustomDropdown
           dropdownTrigger={<CustomDisplayButton displayButtonLabel="More" />}
-          dropdownMenuLabel={['Share', 'Download Excel', 'Find Matching Pair']}
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: '',
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
         />
       ),
     },
@@ -442,8 +136,9 @@ const CompareStone = () => {
   const [showDifferences, setShowDifferences] = useState(false);
 
   const handleShowDifferencesChange = () => {
+    hasDifferences(compareStoneData);
     setShowDifferences(!showDifferences);
-    setDifferences([]);
+    // setDifferences([]);
   };
 
   const hasDifferences = (diamond: any) => {
@@ -453,8 +148,6 @@ const CompareStone = () => {
         // Compare the current property of diamond with the same property in otherDiamond
         Object.keys(diamond).forEach((key) => {
           if (
-            key !== 'id' &&
-            key !== 'diamond_image' &&
             !differences.includes(key) &&
             diamond[key] !== otherDiamond[key]
           ) {
@@ -465,11 +158,11 @@ const CompareStone = () => {
     }
     return false;
   };
-
+  console.log('differences', differences);
   //Header Data
   const headerData = {
     headerHeading: ManageLocales('app.compareStone.heading'),
-    searchCount: compareStoneData.length,
+    searchCount: compareStoneData?.length,
     headerData: (
       <div className="flex items-center gap-[10px] bottom-0">
         <p className="text-solitaireTertiary text-base font-medium">
@@ -486,12 +179,47 @@ const CompareStone = () => {
     },
   };
 
+  const handleCheckBox = (id: string) => {
+    alert('click checkbox ' + id);
+  };
+
+  const keyLabelMapping: KeyLabelMapping = {
+    id: 'id',
+    shape: 'Shape',
+    lab: 'Lab',
+    rap: 'Rap($)',
+    price_per_carat: 'PR/CT',
+    carat: 'Carat',
+    color: 'Color',
+    clarity: 'Clarity',
+    color_shade: 'Color Shade',
+    cut: 'Cut',
+    polish: 'Polish',
+    crown_angle: 'C/A',
+    crown_height: 'C/H',
+    symmetry: 'Symmetry',
+    table_percentage: 'Table%',
+    depth_percentage: 'Depth%',
+    width: 'Width',
+    depth: 'Depth',
+    ratio: 'Ratio',
+    ha: 'H&A',
+    girdle: 'Girdle',
+    pavilion_angle: 'P/A',
+    pavilion_depth: 'P/D',
+    culet: 'Culet',
+    inscription: 'Ins.',
+    origin_country: 'Origin',
+    star_length: 'S/L',
+    girdle_percentage: 'Girdle%',
+    luster: 'Luster',
+  };
   return (
     <div className={styles.comparestoneContainer}>
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
         <CustomHeader data={headerData} />
       </div>
-      {compareStoneData.length && (
+      {compareStoneData?.length && (
         <div className={styles.compareStoneContentContainer}>
           <CustomSideScrollable
             leftFixedStyle={styles.leftFixedContent}
@@ -512,21 +240,20 @@ const CompareStone = () => {
                   >
                     <div>
                       <div>
-                        {formatCassing(
-                          'discount' in compareStoneData[0] ? 'discount' : null
-                        )}
+                        {'discount' in compareStoneData[0] ? 'Discount' : null}
                       </div>
                     </div>
                     <div>
                       <div>
-                        {formatCassing(
-                          'amt' in compareStoneData[0] ? 'amt' : null
-                        )}
+                        {'amount' in compareStoneData[0] ? 'Amount' : null}
+                        {/* {formatCassing(
+                          'amount' in compareStoneData[0] ? 'amount' : null
+                        )} */}
                       </div>
                     </div>
                   </div>
                   <div>
-                    {Object?.entries(compareStoneData[0]).map(
+                    {/* {Object?.entries(compareStoneData[0]).map(
                       (diamond: any) => {
                         return (
                           <>
@@ -534,17 +261,19 @@ const CompareStone = () => {
                               {Object.entries(diamond).map(
                                 ([key, value]: any) =>
                                   key === '0' &&
-                                  value !== 'dimaond_image' &&
+                                  value !== 'images' &&
                                   value !== 'id' &&
-                                  value !== 'amt' &&
+                                  value !== 'amount' &&
                                   value !== 'discount' && (
                                     <div key={key}>
                                       <div>
                                         {showDifferences
                                           ? differences.includes(value)
-                                            ? formatCassing(value)
+                                            ? // ? formatCassing(value)
+                                              value
                                             : ''
-                                          : formatCassing(value)}
+                                          : // : formatCassing(value)}
+                                            value}
                                       </div>
                                     </div>
                                   )
@@ -553,7 +282,13 @@ const CompareStone = () => {
                           </>
                         );
                       }
-                    )}
+                    )} */}
+
+                    {Object.keys(keyLabelMapping).map((key) => (
+                      <div key={key}>
+                        <span>{key !== 'id' && keyLabelMapping[key]}</span>
+                      </div>
+                    ))}
                   </div>
                 </div>
               </>
@@ -563,7 +298,7 @@ const CompareStone = () => {
                 <div
                   className={`flex border-b border-solitaireSenary ${styles.dimaondImageContainer}`}
                 >
-                  {compareStoneData.map((items) => {
+                  {compareStoneData.map((items: any) => {
                     return (
                       <div key={items.id}>
                         <div
@@ -576,7 +311,10 @@ const CompareStone = () => {
                           />
 
                           <div className={styles.compareStoneCheckbox}>
-                            <CustomCheckBox data={items.id} />
+                            <CustomCheckBox
+                              data={items.id}
+                              onClick={() => handleCheckBox(items.id)}
+                            />
                           </div>
 
                           <div
@@ -592,14 +330,10 @@ const CompareStone = () => {
                 </div>
                 {/* values */}
                 <div className={`flex ${styles.compareStonesValueContainer}`}>
-                  {compareStoneData.map((diamond) => {
-                    const {
-                      id,
-                      dimaond_image,
-                      discount,
-                      amt,
-                      ...diamondWithoutImage
-                    } = diamond;
+                  {compareStoneData.map((diamond: any) => {
+                    console.log('aaaaaaaaaaaaaaaaa', diamond);
+
+                    const { discount, amount } = diamond;
                     return (
                       <div
                         className={`border-r border-solitaireSenary ${styles.compareStoneValue}`}
@@ -610,24 +344,39 @@ const CompareStone = () => {
                             <p>{discount}</p>
                           </div>
                           <div className="">
-                            <p>{amt}</p>
+                            <p>{amount}</p>
                           </div>
                         </div>
 
-                        {Object.entries(diamondWithoutImage).map(
-                          ([key, value]: any) => {
+                        {/* {Object.entries(diamondWithoutImage).map(
+                          ([key, value]: [string, any]) => {
                             hasDifferences(diamondWithoutImage);
                             return (
                               <div key={key}>
                                 {showDifferences
                                   ? differences.includes(key)
-                                    ? value
+                                    ? renderValue(value)
                                     : ''
-                                  : value}
+                                  : renderValue(value)}
                               </div>
                             );
                           }
-                        )}
+                        )} */}
+
+                        {Object.keys(keyLabelMapping).map((key) => {
+                          // hasDifferences(diamond);
+                          return (
+                            <div key={key}>
+                              {key !== 'id'
+                                ? showDifferences
+                                  ? differences.includes(key)
+                                  : diamond[key]
+                                  ? diamond[key]
+                                  : '_'
+                                : ''}
+                            </div>
+                          );
+                        })}
                       </div>
                     );
                   })}
