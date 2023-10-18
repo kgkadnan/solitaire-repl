@@ -91,7 +91,6 @@ interface KeyLabelMapping {
 
 const CompareStone = () => {
   const comapreStoneStoreData: any = useAppSelector((store) => store);
-  console.log('comapreStoneStoreData', comapreStoneStoreData.compareStone);
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
     comapreStoneStoreData.compareStone[0]
   );
