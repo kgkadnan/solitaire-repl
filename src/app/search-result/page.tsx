@@ -20,6 +20,8 @@ import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useAddCartMutation } from '@/features/api/cart';
+import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
+import { useSearchParams } from 'next/navigation';
 
 interface TableColumn {
   label: string;
@@ -107,6 +109,8 @@ interface Data {
 }
 
 const SearchResults = () => {
+  const searchParams = useSearchParams();
+  const previousSearchIds = searchParams.get('id');
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
@@ -120,7 +124,6 @@ const SearchResults = () => {
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [limit, setLimit] = useState(50); // You can set the initial value here
-
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -136,6 +139,10 @@ const SearchResults = () => {
     offset: offset,
     limit: limit,
     url: searchUrl,
+  });
+
+  let { data: previousSearch } = useGetSpecificPreviousQuery({
+    id: previousSearchIds,
   });
 
   const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
@@ -278,10 +285,7 @@ const SearchResults = () => {
       alert('select stone to add to cart.');
     } else {
       addCart({
-        variants: [
-          'variant_01HC9GSJWBQ8T2W8ZS9MMN19X8',
-          'variant_01HC9GSNHA4KGV0N6FBHWQFCY3',
-        ],
+        variants: ['variant_01HCYGV6W4410DQNKFJ460K0D4'],
       });
     }
   };

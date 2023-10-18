@@ -10,9 +10,8 @@ import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
 import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
-
-import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 import { cartApi } from './features/api/cart';
+import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
