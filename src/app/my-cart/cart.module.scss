@@ -184,17 +184,30 @@
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
+  font-size: 14px;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .filled {
   background-color: #8c7459;
-  padding: 8px 30px;
   color: #ffffff;
+  font-size: 14px;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
 .unBlurCardHeader {
   width: 172px;
   display: flex;
   align-items: center;
-  margin-left: 43px;
+  margin-left: 30px;
   margin-right: 50px;
 }
