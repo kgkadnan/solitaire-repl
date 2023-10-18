@@ -70,7 +70,7 @@
 
 .cardContainerWithContent {
   position: relative; /* Establish a positioning context for the content */
-  z-index: 0;
+  z-index: -1111;
 }
 
 .filled {

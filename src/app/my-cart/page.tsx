@@ -6,7 +6,7 @@ import { CustomFooter } from '@/components/common/footer';
 import CustomHeader from '@/components/common/header';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomTable } from '@/components/common/table';
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import ImageIcon from '@public/assets/icons/image-outline.svg';
 import CertificateIcon from '@public/assets/icons/certificate.svg';
 import Image from 'next/image';
@@ -15,6 +15,12 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSlider } from '@/components/common/slider';
 import { useRouter } from 'next/navigation';
+import { useGetCartQuery } from '@/features/api/cart';
+import { formatCreatedAt } from '@/utils/format-date';
+
+interface KeyLabelMapping {
+  [key: string]: string;
+}
 
 const MyCart = () => {
   const router = useRouter();
@@ -37,114 +43,123 @@ const MyCart = () => {
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
+  const [cardData, setCardData] = useState([]);
 
-  const searchList = [
-    {
-      cardId: '1',
-      header: '263494496',
-      desc: '12-05-2023 | 10.12 AM',
-      remainingCardTime: '12 min 30 secs',
-      cardTimeOut: false,
-      body: {
-        color: 'D',
-        Carat: '2.01',
-        Clarity: 'VVS2',
-        Shade: 'WHT',
-        Cut: 'EX',
-        polish: 'EX',
-        Rap: '23,500.00',
-        'C/A': '59',
-        'C/H': '15.6',
-        Symmetry: 'EX',
-        Length: '80.4',
-        Width: '7.98',
-        Lab: 'GIA',
-        Girdle: 'Med-Stk',
-        Cutlet: 'None',
-        Ins: 'Yes',
-        Origin: 'IND',
-        Luster: 'EX',
-        Depth: 'IND',
-      },
-    },
-    {
-      cardId: '2',
-      header: '263494496',
-      desc: '12-05-2023 | 10.12 AM',
-      remainingCardTime: '12 min 30 secs',
-      cardTimeOut: true,
-      body: {
-        color: 'D',
-        Carat: '2.01',
-        Clarity: 'VVS2',
-        Shade: 'WHT',
-        Cut: 'EX',
-        polish: 'EX',
-        Rap: '23,500.00',
-        'C/A': '59',
-        'C/H': '15.6',
-        Symmetry: 'EX',
-        Length: '80.4',
-        Width: '7.98',
-        Lab: 'GIA',
-        Girdle: 'Med-Stk',
-        Cutlet: 'None',
-        Ins: 'Yes',
-        Origin: 'IND',
-        Luster: 'EX',
-        Depth: 'IND',
-      },
-    },
-  ];
+  const { data } = useGetCartQuery({});
 
-  let cardData: any[] = [];
+  function calculateRemainingTime(createdAt: string) {
+    const createdAtTime = new Date(createdAt).getTime(); // Convert created at to milliseconds since epoch
+    const now = new Date().getTime(); // Current time in milliseconds
+    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-  cardData = searchList.map((data: any) => ({
-    cardId: data.cardId,
-    cardTimeOut: data.cardTimeOut,
-    cardHeader: (
-      <div className={styles.cardHeaderMainDiv}>
-        <div className={styles.searchHeader}>
-          <Image
-            src={ImageIcon}
-            alt="ImageIcon"
-            className={styles.headerIconStyle}
-            onClick={(e) => handleImageButton(e)}
+    const remainingTime = thirtyMinutesInMilliseconds - (now - createdAtTime);
+
+    if (remainingTime <= 0) {
+      return false;
+    } else {
+      // Limit the remaining time to a maximum of 30 minutes
+      const remainingMinutes = Math.min(Math.floor(remainingTime / 60000), 29);
+      const remainingSeconds = Math.floor((remainingTime % 60000) / 1000);
+      return `Buy within ${remainingMinutes} min ${remainingSeconds} secs`;
+    }
+  }
+
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'Color',
+    carat: 'Carat',
+    clarity: 'Clarity',
+    color_shade: 'Shade',
+    cut: 'Cut',
+    polish: 'Polish',
+    rap: 'Rap($)',
+    crown_angle: 'C/A',
+    crown_height: 'C/H',
+    symmetry: 'Symmetry',
+    length: 'Length',
+    width: 'Width',
+    lab: 'Lab',
+    girdle: 'Girdle',
+    culet: 'Culet',
+    inscription: 'Ins.',
+    origin_country: 'Origin',
+    luster: 'Luster',
+    depth: 'Depth',
+  };
+
+  const renderCardData = useCallback((data: any) => {
+    return data.map((data: any) => {
+      let timeData = calculateRemainingTime(data.created_at);
+
+      const filteredData: any = {};
+
+      for (const key in keyLabelMapping) {
+        const dataKey = keyLabelMapping[key];
+        if (data.product[key] !== undefined) {
+          filteredData[dataKey] = data.product[key] ? data.product[key] : '-';
+        }
+      }
+
+      return {
+        cardId: data.id,
+        cardTimeOut: !timeData ? true : false,
+        cardHeader: (
+          <div className={styles.cardHeaderMainDiv}>
+            <div className={styles.searchHeader}>
+              <Image
+                src={ImageIcon}
+                alt="ImageIcon"
+                className={styles.headerIconStyle}
+                onClick={(e) => handleImageButton(e)}
+              />
+              <Image
+                src={CertificateIcon}
+                alt="CertificateIcon"
+                className={styles.headerIconStyle}
+                onClick={(e) => handleCertificateButton(e)}
+              />
+              <p className={styles.SearchDateTime}>
+                {formatCreatedAt(data.created_at)}
+              </p>
+            </div>
+            <div>
+              {data.created_at && (
+                <CustomDisplayButton
+                  displayButtonAllStyle={cardTimeStyles}
+                  displayButtonLabel={!timeData ? '' : timeData}
+                />
+              )}
+            </div>
+          </div>
+        ),
+        cardContent: (
+          <CustomTable
+            tableData={{
+              tableHeads: Object.keys(keyLabelMapping).map(
+                (key) => keyLabelMapping[key]
+              ),
+              bodyData: [filteredData],
+            }}
+            tableStyleClasses={tableStyles}
           />
-          <Image
-            src={CertificateIcon}
-            alt="CertificateIcon"
-            className={styles.headerIconStyle}
-            onClick={(e) => handleCertificateButton(e)}
-          />
-          <p className={styles.SearchDateTime}>{data.desc}</p>
-        </div>
-        <div>
-          {!data.cardTimeOut && (
-            <CustomDisplayButton
-              displayButtonAllStyle={cardTimeStyles}
-              displayButtonLabel={`Buy within ${data.remainingCardTime}`}
-            />
-          )}
-        </div>
-      </div>
-    ),
-    cardContent: (
-      <CustomTable
-        tableData={{
-          tableHeads: Object.keys(data.body),
-          bodyData: [data.body],
-        }}
-        tableStyleClasses={tableStyles}
-      />
-    ),
-    unBlurHeader: (
-      <p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`}>
-        <span className={styles.rptNoStyle}>RPT No. </span>
-        {data.header}
-      </p>
-    ),
-  }));
+        ),
+        unBlurHeader: (
+          <p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`}>
+            <span className={styles.rptNoStyle}>RPT No. </span>
+            {data.product.rpt_number}
+          </p>
+        ),
+      };
+    });
+  }, []);
+
+  useEffect(() => {
+    if (data) {
+      setCardData(renderCardData(data.items));
+    }
+  }, [data]);
+
+  console.log('catrdData', cardData);
 
   const cardDetailData = [
     {
@@ -198,19 +213,31 @@ const MyCart = () => {
   ];
 
   //specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
-    let value = e.target.getAttribute('data-state');
-    setIsCheck([...isCheck, id]);
-    if (value?.toLowerCase() === 'checked') {
-      setIsCheck(isCheck.filter((item) => item !== id));
+  const handleClick = (id: string) => {
+    let updatedIsCheck = [...isCheck];
+
+    if (updatedIsCheck.includes(id)) {
+      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+    } else {
+      updatedIsCheck.push(id);
+    }
+
+    setIsCheck(updatedIsCheck);
+
+    if (updatedIsCheck.length === cardData?.length) {
+      setIsCheckAll(true);
+    } else {
+      setIsCheckAll(false);
+    }
+    if (isCheckAll) {
+      setIsCheckAll(false);
     }
   };
 
   //Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(cardData.map((li) => li.cardId));
+    setIsCheck(cardData?.map((li: any) => li.cardId));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -225,7 +252,7 @@ const MyCart = () => {
   //Header Data
   const headerData = {
     headerHeading: 'MyCart',
-    searchCount: cardData.length,
+    searchCount: cardData?.length,
     headerData: (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
