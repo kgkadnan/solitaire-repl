@@ -14,6 +14,7 @@ import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { useAddCartMutation } from '@/features/api/cart';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
@@ -104,8 +105,26 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
 
+  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useAddCartMutation();
+
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
+
+  const addToCart = () => {
+    if (sliderData[0]) {
+      addCart({
+        variants: [sliderData[0]?.variants[0].id],
+      })
+        .unwrap()
+        .then(() => {
+          console.log('hhhhhhhhhhhhhhhhhhhhh');
+        })
+        .catch(() => {
+          console.log('1111111111111111');
+        });
+    }
+  };
 
   const footerButtonData = [
     {
@@ -133,6 +152,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               label: 'Find Matching Pair',
               fn: '',
             },
+            {
+              label: 'Compare Stone',
+              fn: '',
+            },
           ]}
         />
       ),
@@ -155,7 +178,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: () => {},
+      fn: addToCart,
     },
   ];
 
@@ -210,18 +233,24 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const basicDetailsLabelMapping: KeyLabelMapping = {
     lot_id: 'Stock No.',
     rpt_number: 'Report No.',
-    lab: 'Lab',
-    rap: 'Rap($)',
     shape: 'Shape',
     carat: 'Carat',
     color: 'Color',
-    clarity: 'Clarity',
     color_shade: 'Color Shade',
+    color_shade_intensity: 'Color Shade Intensity',
+    clarity: 'Clarity',
     cut: 'Cut',
     polish: 'Polish',
     symmetry: 'Symmetry',
     fluorescence: 'Fluorescence',
     culet: 'Culet',
+    lab: 'Lab',
+    ha: 'Hearts & Arrows',
+    brilliance: 'Brilliancy',
+    country_origin: 'Country of Origin',
+    location: 'Location',
+    type_certificate: 'Type 2 Certificate',
+    inscription: 'Laser Inscription',
   };
   const measurementsLabelMapping: KeyLabelMapping = {
     table_percentage: 'Table%',
@@ -232,31 +261,32 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     depth: 'Depth',
     crown_angle: 'Crown Angle',
     crown_height: 'Crown Height',
+    girdle_percentage: 'Girdle%',
     pavilion_angle: 'Pavilion Angle',
     pavilion_depth: 'Pavilion Depth',
-    girdle_percentage: 'Girdle%',
-    luster: 'Luster',
+    lower_half: 'Lower Half',
+    star_length: 'Star Length',
   };
   const inclusionDetailsLabelMapping: KeyLabelMapping = {
     black_table: 'Table Black',
-    side_black: 'Black Side%',
+    side_black: 'Black Side',
+    open_crown: 'Crown Open',
+    open_table: 'Table Open',
+    open_pavilion: 'Pavilion Open',
+    milky: 'Milky',
+    luster: 'Luster',
+    eye_clean: 'Eye Clean',
     table_inclusion: 'Table Inclusion',
     side_inclusion: 'Side Inclusion',
-    open_table: 'Table Open',
-    open_crown: 'Crown Open',
-    open_pavilion: 'Pavilion Open',
-    eye_clean: 'Eye Clean',
-    ha: 'Hearts & Arrows',
-    brilliance: 'Brilliancy',
-    country_origin: 'Country of Origin',
-    natural_girdle: 'Natural Girdle',
     natural_crown: 'Natural Crown',
+    natural_girdle: 'Natural Girdle',
     natural_pavilion: 'Natural Pavilion',
-    internal_graining: 'Internal Graining',
     surface_graining: 'Surface Graining',
+    internal_graining: 'Internal Graining',
   };
 
   const otherInformationsLabelMapping: KeyLabelMapping = {
+    girdle: 'Girdle',
     key_to_symbbol: 'Key to Symbol',
     report_comments: 'Report Comments',
   };

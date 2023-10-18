@@ -91,7 +91,6 @@ interface KeyLabelMapping {
 
 const CompareStone = () => {
   const comapreStoneStoreData: any = useAppSelector((store) => store);
-
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
     comapreStoneStoreData.compareStone[0]
   );
@@ -201,7 +200,6 @@ const CompareStone = () => {
     girdle_percentage: 'Girdle%',
     luster: 'Luster',
   };
-  console.log('compareStoneData', compareStoneData);
 
   function findDifferences(objects: any) {
     const differences: any = {};
