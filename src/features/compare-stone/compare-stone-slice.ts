@@ -8,7 +8,7 @@ const comapreStoneSlice = createSlice({
   reducers: {
     addCompareStone: (state, { payload }) => {
       // Merge the new stones into the existing state
-      state.push(payload);
+      return [payload];
     },
   },
 });

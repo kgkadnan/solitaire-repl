@@ -19,10 +19,9 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
-import { useSearchParams } from 'next/navigation';
 
 interface TableColumn {
   label: string;
@@ -143,6 +142,8 @@ const SearchResults = () => {
     url: searchUrl,
   });
 
+  // console.log('Data', data?.products);
+
   let { data: previousSearch } = useGetSpecificPreviousQuery({
     id: previousSearchIds,
   });
@@ -253,13 +254,13 @@ const SearchResults = () => {
   ];
 
   const downloadExcel = () => {
-    console.log('isCheckAll', isCheckAll);
     if (isCheckAll) {
       const userConfirmed = confirm(
         'Do you want to Download Entire Search Stone or Selected Stone?'
       );
       if (userConfirmed) {
         console.log('userConfirmed', userConfirmed);
+        setIsCheck([]);
       } else {
         console.log('isCheck', isCheck);
         console.log('User clicked Cancel. Action canceled.');
@@ -273,11 +274,11 @@ const SearchResults = () => {
     } else if (isCheck.length < 2) {
       alert('minimum 2 stone to compare');
     } else {
-      let comapreStone = rows.filter((items, index) => {
-        return items.id === isCheck[index];
+      let comapreStone = isCheck.map((id) => {
+        return rows.find((row) => row.id === id);
       });
-      dispatch(addCompareStone(comapreStone));
 
+      dispatch(addCompareStone(comapreStone));
       router.push('/compare-stone');
     }
   };
@@ -288,9 +289,16 @@ const SearchResults = () => {
     } else if (isCheck.length < 1) {
       alert('select stone to add to cart.');
     } else {
-      addCart({
-        variants: ['variant_01HCYGV6W4410DQNKFJ460K0D4'],
+      let variantIds = isCheck.map((id) => {
+        const selectedRow = rows.find((row) => row.id === id);
+        return selectedRow?.variants[0].id;
       });
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds,
+        });
+        setIsCheck([]);
+      }
     }
   };
 
