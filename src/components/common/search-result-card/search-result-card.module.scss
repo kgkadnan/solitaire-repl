@@ -7,14 +7,14 @@
 .cardHeaderText {
   display: flex !important;
   justify-content: space-between;
-  gap: 50px;
+  // gap: 50px;
   align-items: center;
 }
 
 .cardTitle {
   display: flex;
   width: 100%;
-  }
+}
 
 .cardActionIcon {
   height: 24px;
@@ -45,12 +45,12 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-    .blurCardContent {
+  .blurCardContent {
     display: flex;
     width: 100%;
     flex-direction: column;
     align-items: center;
-      }
+  }
   p {
     color: hsl(var(--solitaire-tertiary));
     font-size: 14px;
@@ -71,7 +71,6 @@
 .cardContainerWithContent {
   position: relative; /* Establish a positioning context for the content */
   z-index: 0;
-
 }
 
 .filled {
