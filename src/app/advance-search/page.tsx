@@ -22,6 +22,7 @@ interface IAdvanceSearch {
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const [savedSearches, setSavedSearches] = useState<any[]>([]);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -564,10 +565,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setCaratRangeTo('');
   };
 
-  let [addPreviousSearch] =
-    useAddPreviousSearchMutation();
-    let [addSavedSearch] =
-    useAddSavedSearchMutation();
+  let [addPreviousSearch] = useAddPreviousSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
     return (
@@ -654,6 +653,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setPavilionAngleTo('');
     setStarLengthFrom('');
     setStarLengthTo('');
+    setSelectedLocation([]);
+    setSelectedOrigin([])
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -716,10 +717,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
       updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 && updateYourSelection('tinge', selectedTinge);
+    selectedTinge.length > 0 && updateYourSelection('colorShade', selectedTinge);
 
     selectedTingeIntensity.length > 0 &&
-      updateYourSelection('tingeIntensity', selectedTingeIntensity);
+      updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
     selectedClarity.length > 0 &&
       updateYourSelection('clarity', selectedClarity);
     selectedCaratRange.length > 0 &&
@@ -881,12 +882,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         }`
       );
   };
-  const handleSaveAndSearch=async()=>{
-    await addSavedSearch({
-      name: saveSearchName,
-      diamond_count: searchResultCount,
-      meta_data: [{
-        basic_card_details:{
+
+  const prepareSearchParam=()=>{
+  let response=  {
+      basic_card_details: {
         shape: selectedShape,
         color: selectedWhiteColor,
         clarity: selectedClarity,
@@ -894,99 +893,67 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         lab: selectedLab,
         polish: selectedPolish,
         shade: selectedColor,
-        carat:selectedCaratRange,
-        color_shade:selectedTinge,
-        location:selectedLocation,
-        symmetry:selectedSymmetry,
-        fluoroscence:selectedFluorescence
-
-        },
-        "measurements": {
-          "cutlet": "None",
-          "girdle": selectedGirdle,
-          "luster": lusterBI
+        carat: selectedCaratRange,
+        color_shade: selectedTinge,
+        location: selectedLocation,
+        symmetry: selectedSymmetry,
+        fluoroscence: selectedFluorescence,
+        culet: 'None',
+        country_of_origin: selectedOrigin,
+        laser_inscription: '-',
       },
-      "other_information": {
-        "Key To Symbol": "-",
-        "Report Comments": "-"
-    },
-    inclusion_details:[
-      {
-        "element_key": "Black Table",
-        "element_value":blackTableBI
-    },
-    {
-        "element_key": "Side Table",
-        "element_value": sideBlackBI
-    },
-    {
-        "element_key": "Open Crown",
-        "element_value":openCrownBI
-    },
-    {
-        "element_key": "Open Table",
-        "element_value": openTableBI
-    },
-    {
-        "element_key": "Open Pavilion",
-        "element_value": openPavilionBI
-    },
-    {
-        "element_key": "Milky",
-        "element_value": milkyBI
-    },
-    {
-        "element_key": "Luster",
-        "element_value": lusterBI
-    },
-    {
-        "element_key": "Eye Clean",
-        "element_value": eyeCleanBI
-    },
-    {
-        "element_key": "Table Inclusion",
-        "element_value": tableInclusionWI
-    },
-    {
-        "element_key": "Side Inclusion",
-        "element_value": sideInclusionWI
-    },
-    {
-        "element_key": "Natural Crown",
-        "element_value":naturalCrownWI
-    },
-    {
-        "element_key": "Natural Girdle",
-        "element_value": naturalGirdleWI
-    },
-    {
-        "element_key": "Natural Pavilion",
-        "element_value": naturalPavilionWI
-    },
-    {
-        "element_key": "Surface Graining",
-        "element_value": surfaceGrainingWI
-    },
-    {
-        "element_key": "Internal Graining",
-        "element_value": internalGrainingWI
-    },
-    {
-        "element_key": "Brilliance",
-        "element_value":selectedBrilliance
-    },
-    {
-        "element_key": "Country of Origin",
-        "element_value": selectedOrigin
+      measurements: {
+        'table%': `${tablePerFrom}-${tablePerTo}`,
+        ratio: `${ratioFrom}-${ratioTo}`,
+        length: `${lengthFrom}-${lengthTo}`,
+        width: `${widthFrom}-${widthTo}`,
+        depth: `${depthFrom}-${depthTo}`,
+        crown_angle: `${crownAngleFrom}-${crownAngleTo}`,
+        crown_height: `${crownHeightFrom}-${crownHeightTo}`,
+        'girdle%': `${girdlePerFrom}-${girdlePerTo}`,
+        pavilion_angle: `${pavilionAngleFrom}-${pavilionAngleTo}`,
+        pavilion_depth: `${pavilionDepthFrom}-${pavilionDepthTo}`,
+        lower_half: `${lowerHalfFrom}-${lowerHalfTo}`,
+        star_length: `${starLengthFrom}-${starLengthTo}`,
+      },
+      other_information: {
+        girdle: selectedGirdle,
+        key_to_symbol: '-',
+        report_comments: '-',
+      },
+      inclusion_details: {
+        black_table: blackTableBI,
+        side_table: sideBlackBI,
+        open_crown: openCrownBI,
+        open_table: openTableBI,
+        open_pavilion: openPavilionBI,
+        milky: milkyBI,
+        luster: lusterBI,
+        eye_clean: eyeCleanBI,
+        table_inclusion: tableInclusionWI,
+        side_inclusion: sideInclusionWI,
+        natural_crown: naturalCrownWI,
+        natural_girdle: naturalGirdleWI,
+        natural_pavilion: naturalPavilionWI,
+        surface_graining: surfaceGrainingWI,
+        internal_graining: internalGrainingWI,
+        brilliance: selectedBrilliance,
+      },
     }
-    ]
-
-      }],
+    return response;
+  }
+  const handleSaveAndSearch = async () => {
+    await addSavedSearch({
+      name: saveSearchName,
+      diamond_count: searchResultCount,
+      meta_data: [
+        prepareSearchParam()
+      ],
       is_deleted: false,
     });
 
-    handleSearch()
-  }
+    handleSearch();
+  };
 
   const handleSearch = async () => {
     // if(parseInt(discountFrom)>advanceSearch.discount.range.start && parseInt(discountFrom)<advanceSearch.discount.range.end){
@@ -1003,105 +970,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data: {
-          basic_card_details:{
-          shape: selectedShape,
-          color: selectedWhiteColor,
-          clarity: selectedClarity,
-          cut: selectedCut,
-          lab: selectedLab,
-          polish: selectedPolish,
-          shade: selectedColor,
-          carat:selectedCaratRange,
-          color_shade:selectedTinge,
-          location:selectedLocation,
-          symmetry:selectedSymmetry,
-          fluoroscence:selectedFluorescence
-
-          },
-          "measurements": {
-            "cutlet": "None",
-            "girdle": selectedGirdle,
-            "luster": lusterBI
-        },
-        "other_information": {
-          "Key To Symbol": "-",
-          "Report Comments": "-"
-      },
-      inclusion_details:[
-        {
-          "element_key": "Black Table",
-          "element_value":blackTableBI
-      },
-      {
-          "element_key": "Side Table",
-          "element_value": sideBlackBI
-      },
-      {
-          "element_key": "Open Crown",
-          "element_value":openCrownBI
-      },
-      {
-          "element_key": "Open Table",
-          "element_value": openTableBI
-      },
-      {
-          "element_key": "Open Pavilion",
-          "element_value": openPavilionBI
-      },
-      {
-          "element_key": "Milky",
-          "element_value": milkyBI
-      },
-      {
-          "element_key": "Luster",
-          "element_value": lusterBI
-      },
-      {
-          "element_key": "Eye Clean",
-          "element_value": eyeCleanBI
-      },
-      {
-          "element_key": "Table Inclusion",
-          "element_value": tableInclusionWI
-      },
-      {
-          "element_key": "Side Inclusion",
-          "element_value": sideInclusionWI
-      },
-      {
-          "element_key": "Natural Crown",
-          "element_value":naturalCrownWI
-      },
-      {
-          "element_key": "Natural Girdle",
-          "element_value": naturalGirdleWI
-      },
-      {
-          "element_key": "Natural Pavilion",
-          "element_value": naturalPavilionWI
-      },
-      {
-          "element_key": "Surface Graining",
-          "element_value": surfaceGrainingWI
-      },
-      {
-          "element_key": "Internal Graining",
-          "element_value": internalGrainingWI
-      },
-      {
-          "element_key": "Brilliance",
-          "element_value":selectedBrilliance
-      },
-      {
-          "element_key": "Country of Origin",
-          "element_value": selectedOrigin
-      }
-      ]
-
-        },
+        meta_data:  prepareSearchParam(),
         is_deleted: false,
-      });
+      });    
     }
   };
 
@@ -1502,7 +1373,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearch.tinge,
+            advanceSearch.color_shade,
             '',
             styles.activeOtherStyles,
             selectedTinge,
@@ -1520,7 +1391,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.tinge_intensity,
+            advanceSearch.color_shade_intensity,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,

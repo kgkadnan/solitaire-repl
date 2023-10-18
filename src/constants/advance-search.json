@@ -135,7 +135,7 @@
     "W-x Light Brown",
     "Brownish Orangy"
   ],
-  "tinge": [
+  "color_shade": [
     "WH",
     "YEL",
     "BR",
@@ -151,7 +151,7 @@
     "NO BGM",
     "NO BLACK"
   ],
-  "tinge_intensity": ["None", "Faint", "Medium", "Strong"],
+  "color_shade_intensity": ["None", "Faint", "Medium", "Strong"],
   "clarity": [
     "FL",
     "IF",

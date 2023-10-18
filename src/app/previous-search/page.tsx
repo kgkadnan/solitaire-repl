@@ -517,22 +517,22 @@ const PreviousSearch = () => {
                                     )}
                                   </p>
                                 </div>
-                                {
+                                {Object.entries(
                                   PreviousSearchData[index].meta_data.inclusion_details
-                                .map((inclusionData) => (
-                                  <p className="flex" key={inclusionData.element_key}>
+                                .map(([key, value]) => (
+                                  <p className="flex" key={key}>
                                     <span
                                       className={
                                         styles.inclutionDetailsInnerHeadingStyle
                                       }
                                     >
-                                      {inclusionData.element_key}
+                                      {key}
                                     </span>
                                     <span className={styles.sheetValues}>
-                                    {typeof inclusionData.element_value!=='string'? inclusionData.element_value.join(','): inclusionData.element_value} 
+                                    {typeof value!=='string'? value.join(','): value} 
                                     </span>
                                   </p>
-                                ))}
+                                )))}
                               </div>
                             </div>
                           {/* ))} */}
