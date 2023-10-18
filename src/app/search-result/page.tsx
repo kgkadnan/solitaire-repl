@@ -136,6 +136,9 @@ const SearchResults = () => {
 
   const [searchUrl, setSearchUrl] = useState('');
 
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
     limit: limit,
@@ -285,15 +288,18 @@ const SearchResults = () => {
 
   const addToCart = () => {
     if (isCheck.length > 100) {
-      alert('The cart does not allow more than 100 Stones.');
+      // alert('The cart does not allow more than 100 Stones.');
+      setIsError(true);
+      setErrorText('The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
-      alert('select stone to add to cart.');
+      setIsError(true);
+      setErrorText('*Select stone to add cart.');
+      // alert('select stone to add to cart.');
     } else {
       let variantIds = isCheck.map((id) => {
         const selectedRow = rows.find((row) => row.id === id);
         return selectedRow?.variants[0].id;
       });
-      console.log('variantIds', variantIds);
       if (variantIds.length) {
         addCart({
           variants: variantIds,
@@ -309,6 +315,8 @@ const SearchResults = () => {
       }
     }
   };
+
+  // console.log("reosssss")
 
   const footerButtonData = [
     {
@@ -804,7 +812,17 @@ const SearchResults = () => {
           />
         </div>
 
-        <CustomFooter footerButtonData={footerButtonData} />
+        <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
+          {isError && (
+            <div className="w-[30%]">
+              <p className="text-red-700 text-base">{errorText}</p>
+            </div>
+          )}
+          <CustomFooter
+            footerButtonData={footerButtonData}
+            noBorderTop={styles.paginationContainerStyle}
+          />
+        </div>
       </div>
     </>
   );
