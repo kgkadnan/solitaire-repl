@@ -293,10 +293,18 @@ const SearchResults = () => {
         const selectedRow = rows.find((row) => row.id === id);
         return selectedRow?.variants[0].id;
       });
+      console.log('variantIds', variantIds);
       if (variantIds.length) {
         addCart({
           variants: variantIds,
-        });
+        })
+          .unwrap()
+          .then(() => {
+            console.log('hhhhhhhhhhhhhhhhhhhhh');
+          })
+          .catch(() => {
+            console.log('1111111111111111');
+          });
         setIsCheck([]);
       }
     }
