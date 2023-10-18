@@ -26,8 +26,8 @@ export default function Home() {
       >
         Bulding Digital diamond platform
       </h1>
-      <h1>{ManageLocales('app.welcome')}</h1>
-      <LanguageSwitcher />
+      {/* <h1>{ManageLocales('app.welcome')}</h1>
+      <LanguageSwitcher /> */}
     </>
   );
 }

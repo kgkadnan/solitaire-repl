@@ -142,7 +142,7 @@ const SearchResults = () => {
     url: searchUrl,
   });
 
-  console.log('Data', data?.products[0]);
+  // console.log('Data', data?.products);
 
   let { data: previousSearch } = useGetSpecificPreviousQuery({
     id: previousSearchIds,
@@ -274,9 +274,10 @@ const SearchResults = () => {
     } else if (isCheck.length < 2) {
       alert('minimum 2 stone to compare');
     } else {
-      let comapreStone = rows.filter((items, index) => {
-        return items.id === isCheck[index];
+      let comapreStone = isCheck.map((id) => {
+        return rows.find((row) => row.id === id);
       });
+
       dispatch(addCompareStone(comapreStone));
       router.push('/compare-stone');
     }
