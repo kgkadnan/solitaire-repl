@@ -21,7 +21,11 @@ export const cartApi = createApi({
         body: data,
       }),
     }),
+    getCart: builder.query({
+      query: () => `cart`,
+      providesTags: ['cart'],
+    }),
   }),
 });
 
-export const { useAddCartMutation } = cartApi;
+export const { useAddCartMutation, useGetCartQuery } = cartApi;

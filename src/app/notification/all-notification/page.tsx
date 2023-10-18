@@ -7,7 +7,7 @@ import EllipseIcon from '@public/assets/icons/ellipse.svg?url';
 import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
-} from '@/slices/notification';
+} from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 interface INotificationData {
   id: string;
