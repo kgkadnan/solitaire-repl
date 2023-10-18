@@ -33,7 +33,7 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
               <div
                 key={items.label}
                 onClick={items.fn}
-                className="cursor-pointer"
+                className="cursor-pointer z-[1112px]"
               >
                 <DropdownMenuLabel className={styles.transparent}>
                   {items.label}

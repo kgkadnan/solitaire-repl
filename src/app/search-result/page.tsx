@@ -22,6 +22,7 @@ import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
+import { CustomDialog } from '@/components/common/dialog';
 
 interface TableColumn {
   label: string;
@@ -138,6 +139,11 @@ const SearchResults = () => {
 
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+
+  const [dialog, setDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState<React.ReactNode | null>(
+    null
+  );
 
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
@@ -261,6 +267,12 @@ const SearchResults = () => {
       const userConfirmed = confirm(
         'Do you want to Download Entire Search Stone or Selected Stone?'
       );
+      setDialog(true);
+      setDialogContent(
+        <>
+          <div>`hello`</div>
+        </>
+      );
       if (userConfirmed) {
         console.log('userConfirmed', userConfirmed);
         setIsCheck([]);
@@ -268,6 +280,10 @@ const SearchResults = () => {
         console.log('isCheck', isCheck);
         console.log('User clicked Cancel. Action canceled.');
       }
+    } else if (isCheck.length === 0) {
+      console.log('isCheck', isCheck);
+    } else {
+      console.log('Download Started');
     }
   };
 
@@ -601,6 +617,7 @@ const SearchResults = () => {
 
   return (
     <>
+      {dialog && <CustomDialog dialogContent={dialogContent} />}
       <div className="border-b  border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
@@ -815,7 +832,7 @@ const SearchResults = () => {
         <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
           {isError && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-base">{errorText}</p>
+              <p className="text-red-700 text-sm ">{errorText}</p>
             </div>
           )}
           <CustomFooter
