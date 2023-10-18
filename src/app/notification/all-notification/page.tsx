@@ -30,7 +30,7 @@ const Notification = () => {
     []
   );
 
-  const { data } = useGetAllNotificationQuery({});
+  const { data } = useGetAllNotificationQuery({ type: 'APP' });
   const [updateNotification] = useUpdateNotificationMutation();
 
   useEffect(() => {
