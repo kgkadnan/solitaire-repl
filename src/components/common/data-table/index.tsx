@@ -14,6 +14,7 @@ import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { useAddCartMutation } from '@/features/api/cart';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
@@ -104,8 +105,26 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
 
+  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useAddCartMutation();
+
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
+
+  const addToCart = () => {
+    if (sliderData[0]) {
+      addCart({
+        variants: [sliderData[0]?.variants[0].id],
+      })
+        .unwrap()
+        .then(() => {
+          console.log('hhhhhhhhhhhhhhhhhhhhh');
+        })
+        .catch(() => {
+          console.log('1111111111111111');
+        });
+    }
+  };
 
   const footerButtonData = [
     {
@@ -133,6 +152,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               label: 'Find Matching Pair',
               fn: '',
             },
+            {
+              label: 'Compare Stone',
+              fn: '',
+            },
           ]}
         />
       ),
@@ -155,7 +178,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: () => {},
+      fn: addToCart,
     },
   ];
 
