@@ -29,7 +29,7 @@ export const CustomSlider: React.FC<ISliderProps> = ({
             {sheetTriggenContent}
           </SheetTrigger>
         ) : (
-          <div>{sheetTriggenContent}</div>
+          <div className="w-[90%]">{sheetTriggenContent}</div>
         )}
 
         <SheetContent className={sheetContentStyle}>

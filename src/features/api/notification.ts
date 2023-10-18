@@ -3,8 +3,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const notificationApi = createApi({
   reducerPath: 'notificationReducer',
-  baseQuery: fetchBaseQuery({ baseUrl: apiURL,credentials: 'include',
-  }),
+  baseQuery: fetchBaseQuery({ baseUrl: apiURL, credentials: 'include' }),
   tagTypes: ['notification'],
 
   endpoints: (builder) => ({
@@ -12,7 +11,16 @@ export const notificationApi = createApi({
       query: () => `store/all-notification`,
       providesTags: ['notification'],
     }),
+    updateNotification: builder.mutation({
+      query: (filter) => ({
+        url: `notification`,
+        method: 'PUT', // Use the appropriate HTTP method
+        body: filter, // Modify this to match your API's payload
+      }),
+      invalidatesTags: ['notification'],
+    }),
   }),
 });
 
-export const { useGetAllNotificationQuery } = notificationApi;
+export const { useGetAllNotificationQuery, useUpdateNotificationMutation } =
+  notificationApi;

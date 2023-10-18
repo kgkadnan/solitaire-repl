@@ -19,6 +19,10 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
+import { useRouter } from 'next/navigation';
+import { useAddCartMutation } from '@/features/api/cart';
+import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
+import { useSearchParams } from 'next/navigation';
 
 interface TableColumn {
   label: string;
@@ -106,6 +110,9 @@ interface Data {
 }
 
 const SearchResults = () => {
+  const searchParams = useSearchParams();
+  const previousSearchIds = searchParams.get('id');
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
@@ -119,7 +126,6 @@ const SearchResults = () => {
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [limit, setLimit] = useState(50); // You can set the initial value here
-
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -136,6 +142,13 @@ const SearchResults = () => {
     limit: limit,
     url: searchUrl,
   });
+
+  let { data: previousSearch } = useGetSpecificPreviousQuery({
+    id: previousSearchIds,
+  });
+
+  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useAddCartMutation();
 
   let paginationStyle = {
     paginationContainerStyle: styles.paginationContainerStyle,
@@ -257,11 +270,27 @@ const SearchResults = () => {
   const CompareStone = () => {
     if (isCheck.length > 10) {
       alert('You can compare maximum of ten stones');
+    } else if (isCheck.length < 2) {
+      alert('minimum 2 stone to compare');
     } else {
       let comapreStone = rows.filter((items, index) => {
         return items.id === isCheck[index];
       });
       dispatch(addCompareStone(comapreStone));
+
+      router.push('/compare-stone');
+    }
+  };
+
+  const addToCart = () => {
+    if (isCheck.length > 100) {
+      alert('The cart does not allow more than 100 Stones.');
+    } else if (isCheck.length < 1) {
+      alert('select stone to add to cart.');
+    } else {
+      addCart({
+        variants: ['variant_01HCYGV6W4410DQNKFJ460K0D4'],
+      });
     }
   };
 
@@ -329,11 +358,13 @@ const SearchResults = () => {
       id: 6,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: () => {},
+      fn: addToCart,
     },
   ];
 
   const handleSearchTab = (index: number) => {
+    setIsCheckAll(false);
+    setIsCheck([]);
     setActiveTab(index);
   };
 
@@ -358,7 +389,6 @@ const SearchResults = () => {
         totalDiscount += selectedRow.discount;
       }
     });
-
     // Calculate average discount
     const avgDiscount = isCheck.length > 0 ? totalDiscount / isCheck.length : 0;
     return avgDiscount;
@@ -376,12 +406,8 @@ const SearchResults = () => {
       // Check if the effect has not been executed
       const parseYourSelection = JSON.parse(yourSelection);
       setYourSelectionData(parseYourSelection);
-
-      // if (dummyData['search1'] === undefined) {
       let url = constructUrlParams(parseYourSelection[activeTab]);
-      // console.log('url', url);
       setSearchUrl(url);
-      // }
 
       if (data?.products?.length) {
         setRows(data?.products);

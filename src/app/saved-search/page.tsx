@@ -24,6 +24,7 @@ import {
 import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
+import { CustomCalender } from '@/components/common/calender';
 
 interface ICardData {
   cardId: string;
@@ -317,19 +318,24 @@ const SavedSearch = () => {
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
     headerData: (
-      <div className="flex items-center gap-[10px] bottom-0">
-        <Checkbox
-          onClick={handleSelectAllCheckbox}
-          data-testid={'Select All Checkbox'}
-          checked={isCheckAll}
-        />
-        <p className="text-solitaireTertiary text-base font-medium">
-          {ManageLocales('app.common.header.selectAll')}
-        </p>
-      </div>
+      <>
+        <div className="flex mr-[30px] ">
+          <CustomCalender />
+        </div>
+        <div className="flex items-center gap-[10px] bottom-0">
+          <Checkbox
+            onClick={handleSelectAllCheckbox}
+            data-testid={'Select All Checkbox'}
+            checked={isCheckAll}
+          />
+          <p className="text-solitaireTertiary text-base font-medium">
+            {ManageLocales('app.common.header.selectAll')}
+          </p>
+        </div>
+      </>
     ),
     overriddenStyles: {
-      headerDataStyles: 'flex items-end',
+      headerDataStyles: 'flex items-center',
     },
   };
 
