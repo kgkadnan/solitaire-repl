@@ -15,20 +15,17 @@ export const previousSearchApi = createApi({
     baseUrl: apiURL,
     headers: {
       Authorization:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTMyNTYwLCJleHAiOjE3MDAxMjQ1NjB9.qdhsLTNiU7sNLyUbesWLxjtql9MceZCBYIxZ1nnCh9U',
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhEMFI2NFZHQThLNFcyNkFORlZDUTQ1TSIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NjExNzEzLCJleHAiOjE3MDAyMDM3MTN9.X_ETyZIozIhg5bm7kcu2jRxG500sCHfl98eESyBQtHo',
     },
   }) as BaseQuery,
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
-      query: ({ currentPage, resultsPerPage }) =>
+      query: ({ currentPage, resultsPerPage,searchUrl='' }) =>
      ({
-        url: `previous-search?limit=${currentPage}&offset=${resultsPerPage}`,
+        url: `previous-search?limit=${currentPage}&offset=${resultsPerPage}${searchUrl}`,
         method: 'GET',
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTQ0NjEyLCJleHAiOjE3MDAxMzY2MTJ9.FMnWqLfZfocWUZI0GAmGRmfCwLnEwCe3XtR_COUNnQk',
-        },
+       
       }),
       providesTags: ['PreviousSearch'],
     }),
@@ -41,10 +38,7 @@ export const previousSearchApi = createApi({
         url: `previous-search`,
         method: 'POST',
         body: data,
-        headers: {
-          Authorization:
-            'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhDOVYxVDRNSkVWWkhWTUJZUkY4NDFRTiIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NTQ0NjEyLCJleHAiOjE3MDAxMzY2MTJ9.FMnWqLfZfocWUZI0GAmGRmfCwLnEwCe3XtR_COUNnQk',
-        },
+       
       }),
     }),
     updatePreviousSearch: builder.mutation({

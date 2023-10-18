@@ -25,6 +25,7 @@ import { CustomToast } from '@/components/common/toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
+import { DateRange } from 'react-day-picker';
 
 interface ICardData {
   cardId: string;
@@ -64,6 +65,8 @@ const PreviousSearch = () => {
   const [currentPage, setCurrentPage] = useState(0);
   const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [searchUrl, setSearchUrl] = useState('');
+  const [date, setDate] = React.useState<DateRange | undefined>();
 
   const handleResultsPerPageChange = (event: string) => {
     const newResultsPerPage = parseInt(event, 10);
@@ -79,6 +82,7 @@ const PreviousSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
     currentPage,
     resultsPerPage,
+    searchUrl,
   });
 
   // Destructure the mutation function from the hook
@@ -339,7 +343,18 @@ const PreviousSearch = () => {
       fn: handleDelete,
     },
   ];
-
+  const handleDate = (date: any) => {
+    setDate(date);
+    setSearchUrl(
+      `&startDate=${new Date(date.from)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}&endDate=${new Date(date.to)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}`
+    );
+  };
   //Header Data
   const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
@@ -353,7 +368,7 @@ const PreviousSearch = () => {
     headerData: (
       <>
         <div className="flex mr-[30px]">
-          <CustomCalender />
+          <CustomCalender date={date} handleDate={handleDate} />
         </div>
 
         <div className="flex items-center gap-[10px] bottom-0">
@@ -375,7 +390,7 @@ const PreviousSearch = () => {
 
   useEffect(() => {
     const previousSearchData = data?.data;
-    console.log(previousSearchData,"previousSearchData")
+    console.log(previousSearchData, 'previousSearchData');
     let searchData = previousSearchData?.previousSearch;
     setNumberOfPages(previousSearchData?.totalPages);
     setPreviousSearchData(searchData);
@@ -404,7 +419,7 @@ const PreviousSearch = () => {
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
           <>
-            {cardData?.map((items: any,index:number) => {
+            {cardData?.map((items: any, index: number) => {
               return (
                 <div key={items.cardId}>
                   <div className="flex mt-6">
@@ -438,110 +453,125 @@ const PreviousSearch = () => {
 
                           {/* Loop through card detail data */}
                           {/* {PreviousSearchData.map((cardDetails) => ( */}
-                            <div className="flex" key={PreviousSearchData[index]?.id}>
-                              <div className={styles.sheetMainDiv}>
-                                <div className={styles.sheetHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.previousSearch.basicInfo'
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  {Object.entries(
-                                    PreviousSearchData[index].meta_data.basic_card_details
-                                  ).map(([key, value]) => (
-                                    <div key={key}>
-                                      <p className="flex">
-                                        <span className={styles.innerHeading}>
-                                          {key}
-                                        </span>
-                                        <span className={styles.sheetValues}>
-                                        {typeof value!=='string'? value.join(','): value}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-
-                                <div className={styles.sheetHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.previousSearch.measurement'
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  {Object.entries(PreviousSearchData[index].meta_data.measurements).map(
-                                    ([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                          {typeof value!=='string'? value.join(','): value}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    )
+                          <div
+                            className="flex"
+                            key={PreviousSearchData[index]?.id}
+                          >
+                            <div className={styles.sheetMainDiv}>
+                              <div className={styles.sheetHeading}>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.basicInfo'
                                   )}
-                                </div>
-
-                                <div className={styles.sheetHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.previousSearch.otherInfo'
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div>
-                                  {Object.entries(
-                                    PreviousSearchData[index].meta_data.other_information
-                                  ).map(([key, value]) => (
-                                    <div key={key}>
-                                      <p className="flex">
-                                        <span className={styles.innerHeading}>
-                                          {key}
-                                        </span>
-                                        <span className={styles.sheetValues}>
-                                          {typeof value!=='string'? value.join(','): value}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
+                                </p>
                               </div>
 
-                              <div className={styles.inclusionDetailsMainDiv}>
-                                <div className={styles.sheetHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.previousSearch.inclusionDetails'
-                                    )}
-                                  </p>
-                                </div>
+                              <div>
                                 {Object.entries(
-                                  PreviousSearchData[index].meta_data.inclusion_details
-                                .map(([key, value]) => (
-                                  <p className="flex" key={key}>
-                                    <span
-                                      className={
-                                        styles.inclutionDetailsInnerHeadingStyle
-                                      }
-                                    >
-                                      {key}
-                                    </span>
-                                    <span className={styles.sheetValues}>
-                                    {typeof value!=='string'? value.join(','): value} 
-                                    </span>
-                                  </p>
-                                )))}
+                                  PreviousSearchData[index].meta_data
+                                    .basic_card_details
+                                ).map(([key, value]) => (
+                                  <div key={key}>
+                                    <p className="flex">
+                                      <span className={styles.innerHeading}>
+                                        {key}
+                                      </span>
+                                      <span className={styles.sheetValues}>
+                                        {typeof value !== 'string'
+                                          ? value.join(',')
+                                          : value}
+                                      </span>
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className={styles.sheetHeading}>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.measurement'
+                                  )}
+                                </p>
+                              </div>
+
+                              <div>
+                                {Object.entries(
+                                  PreviousSearchData[index].meta_data
+                                    .measurements
+                                ).map(([key, value]) => (
+                                  <div key={key}>
+                                    <p className="flex">
+                                      <span className={styles.innerHeading}>
+                                        {key}
+                                      </span>
+                                      <span className={styles.sheetValues}>
+                                        {typeof value !== 'string'
+                                          ? value.join(',')
+                                          : value}
+                                      </span>
+                                    </p>
+                                  </div>
+                                ))}
+                              </div>
+
+                              <div className={styles.sheetHeading}>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.otherInfo'
+                                  )}
+                                </p>
+                              </div>
+
+                              <div>
+                                {Object.entries(
+                                  PreviousSearchData[index].meta_data
+                                    .other_information
+                                ).map(([key, value]) => (
+                                  <div key={key}>
+                                    <p className="flex">
+                                      <span className={styles.innerHeading}>
+                                        {key}
+                                      </span>
+                                      <span className={styles.sheetValues}>
+                                        {typeof value !== 'string'
+                                          ? value.join(',')
+                                          : value}
+                                      </span>
+                                    </p>
+                                  </div>
+                                ))}
                               </div>
                             </div>
+
+                            <div className={styles.inclusionDetailsMainDiv}>
+                              <div className={styles.sheetHeading}>
+                                <p>
+                                  {ManageLocales(
+                                    'app.previousSearch.inclusionDetails'
+                                  )}
+                                </p>
+                              </div>
+                              {Object.entries(
+                                PreviousSearchData[index].meta_data
+                                  .inclusion_details
+                              ).map(([key, value]) => (
+                                <p className="flex" key={key}>
+                                  <span
+                                    className={
+                                      styles.inclutionDetailsInnerHeadingStyle
+                                    }
+                                  >
+                                    {key}
+                                  </span>
+                                  <span className={styles.sheetValues}>
+                                    {typeof value !== 'string'
+                                      ? value.join(',')
+                                      : value}
+                                  </span>
+                                </p>
+                              ))}
+                            </div>
+                          </div>
                           {/* ))} */}
 
                           <div className="border-b border-solitaireTertiary mt-8"></div>

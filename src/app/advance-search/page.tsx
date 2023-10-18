@@ -946,9 +946,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     await addSavedSearch({
       name: saveSearchName,
       diamond_count: searchResultCount,
-      meta_data: [
-        prepareSearchParam()
-      ],
+      meta_data: savedSearches,
       is_deleted: false,
     });
 
@@ -976,10 +974,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     }
   };
 
-  const handleAddAnotherSearch = () => {
+  const handleAddAnotherSearch = async () => {
     if (addSearches.length < 5) {
       //call previous serach api
       setAddSearches([...addSearches, 'ooo']);
+      setSavedSearches([...savedSearches,prepareSearchParam()])
+      let searchName = '';
+      searchName = handlePreviousSearchName(searchName);
+      await addPreviousSearch({
+        name: searchName,
+        diamond_count: searchResultCount,
+        meta_data:  prepareSearchParam(),
+        is_deleted: false,
+      });    
       handleReset();
     } else {
       setShowToast(true);
