@@ -8,7 +8,7 @@ import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
@@ -23,6 +23,8 @@ interface IAdvanceSearch {
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
+  const router=useRouter()
+  const [searchIndex, setSearchIndex] = useState<number>(0);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -116,7 +118,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const [searchResultCount, setSearchResultCount] = useState<number>(1);
   const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
-  const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
+  const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
@@ -152,6 +154,18 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
     }
   }, [search]);
+  useEffect(() => {
+    let data=JSON.parse(localStorage.getItem('Search')!);
+    if (data?.length!== undefined && data?.length >0 && data[0]!==undefined){
+      setAddSearches(data);
+      setSelectedShape(data[0]?.shape)
+
+
+      localStorage.removeItem("Search");
+
+    }
+   
+  }, []);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -672,7 +686,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ];
     });
   };
-
+console.log(yourSelection)
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -951,6 +965,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
 
     handleSearch();
+  }
+  const handleAddSearchIndex = () => {
+    setAddSearches((prevSearches) => [
+      ...prevSearches,
+      { ...prevSearches[searchIndex], shape: selectedShape },
+    ]);
   };
 
   const handleSearch = async () => {
@@ -972,7 +992,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         is_deleted: false,
       });    
     }
-  };
+  
+
+
+      console.log(JSON.stringify(addSearches))
+      localStorage.setItem("Search",JSON.stringify([...addSearches,{shape:selectedShape}]))
+      router.push('/')
+    }
+  
 
   const handleAddAnotherSearch = async () => {
     if (addSearches.length < 5) {
@@ -987,12 +1014,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         meta_data:  prepareSearchParam(),
         is_deleted: false,
       });    
-      handleReset();
-    } else {
-      setShowToast(true);
-      setToastErrorMessage('Add search limit exceeded');
+      };
     }
-  };
+
+
+
+  const handleAddSearches=()=>{
+    setAddSearches([...addSearches, {shape:selectedShape}]);
+    setSearchIndex(addSearches.length+1)
+
+  }
 
   ///reusable jsx
   const renderSelectionButtons = (
