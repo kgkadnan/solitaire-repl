@@ -245,7 +245,18 @@ const MyCart = () => {
   };
 
   const handleDelete = () => {
-    deleteCart(isCheck);
+    console.log(isCheck);
+
+    deleteCart({
+      items: isCheck,
+    })
+      .unwrap()
+      .then((data) => {
+        setCardData(data.items);
+      })
+      .catch(() => {
+        console.log('1111111111111111');
+      });
   };
 
   //Footer Button Data
