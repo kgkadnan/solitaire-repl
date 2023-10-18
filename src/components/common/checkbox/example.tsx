@@ -5,8 +5,8 @@ import { CustomCheckBox } from '.';
 export const Example = () => {
   const data = { id: '1' };
 
-  const handleClick = (e: any) => {
-    console.log('e.target', e.target);
+  const handleClick = (id: string) => {
+    console.log('id', id);
   };
   return (
     <div>

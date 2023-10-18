@@ -5,7 +5,7 @@ import styles from './footer.module.scss';
 //footer buttonData interfrace
 export interface IfooterButtonData {
   id: number;
-  displayButtonLabel: string;
+  displayButtonLabel: string | React.ReactNode;
   style?: string;
   fn?: () => void;
 }

@@ -1,38 +1,48 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# SOLITAIRE
 
-## Getting Started
+## Requirements
 
-First, run the development server:
+For development, you will only need Node.js installed on your environement.
+And please go through the [DeveloperGuide](https://docs.google.com/document/d/1WRBPJQYTfw3Fmyx2XsdOVp5oZj4ZxvAv6XrZUBM_Poo/edit) before starting development.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+### Node
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+[Node](http://nodejs.org/) is really easy to install.
+You should be able to run the following command after the installation procedure
+below.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+[PNPM](https://pnpm.io/motivation) is an alternative package manager for Node. js which stands for “Performant NPM”. The main purpose of PNPM is to hold all the packages at a global (centralized) store and use them if needed by other projects too by creating hard links to it.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+    $ node --version
+    v18.17.0
 
-## Learn More
+    $ pnpm --version
+    8.6.11
 
-To learn more about Next.js, take a look at the following resources:
+#### Node installation on Windows
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Just go on [official Node.js website](http://nodejs.org/) & grab the installer.
+Also, be sure to have `git` available in your PATH, `pnpm` might need it.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## Install
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    $ git clone https://github.com/KGK-Live/solitaire.git
+    $ cd solitaire
+    $ pnpm install
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+## Create env file
 
-## .env.local example
+replace the example env file with actual values. taking .env.local.example
 
-NEXT_PUBLIC_API_URL=baseUrl
+## Backend
+
+dependency on Backend (needs to be deployed)
+
+## Start development server
+
+development: pnpm dev
+test: pnpm run test
+generate coverage: pnpm run test --coverage
+storybook: pnpm storybook

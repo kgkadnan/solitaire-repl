@@ -1,56 +1,70 @@
 {
-  "shapeData": [
+  "shape": [
     {
-      "title": "Round"
+      "title": "Round",
+      "short_name": "BR",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Pear"
+      "title": "Pear",
+      "short_name": "PS",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Emerald"
+      "title": "Emerald",
+      "short_name": "EM",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Asscher"
+      "title": "Asscher",
+      "short_name": "AS",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Cushion"
+      "title": "Cushion",
+      "short_name": "CU",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Princess"
+      "title": "Princess",
+      "short_name": "PR",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Marquise"
+      "title": "Marquise",
+      "short_name": "MQ",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Oval"
+      "title": "Oval",
+      "short_name": "OV",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Heart"
+      "title": "Heart",
+      "short_name": "HS",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Radiant"
+      "title": "Radiant",
+      "short_name": "RAD",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "Others"
+      "title": "Others",
+      "short_name": "OTHER",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     },
     {
-      "title": "All"
+      "title": "All",
+      "short_name": "All",
+      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
     }
   ],
-  "colorData": ["White", "Fancy", "Range"],
-  "whiteData": ["D", "E", "F", "I", "J", "K", "L", "M", "N"],
-  "rangeData": [
-    "FANCY",
-    "N-O",
-    "O-P",
-    "S-T",
-    "P-R",
-    "Q-R",
-    "W-X",
-    "Y-Z",
-    "U-V"
-  ],
-  "fancyData": [
+  "color": ["White", "Fancy", "Range"],
+  "white": ["D", "E", "F", "I", "J", "K", "L", "M", "N"],
+  "range": ["FANCY", "N-O", "O-P", "S-T", "P-R", "Q-R", "W-X", "Y-Z", "U-V"],
+  "fancy": [
     "Yellow",
     "Pink",
     "Blue",
@@ -66,18 +80,25 @@
     "Other",
     "Light Yellow"
   ],
-
-  "makeData": ["3EX", "3EX-Non", "3VG+"],
-
-  "qualityData": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
-
-  "locationData": [
-    { "id": 1, "value": "Dubai" },
-    { "id": 2, "value": "India" },
-    { "id": 3, "value": "Belgium" }
+  "make": ["3EX", "3EX-Non", "3VG+"],
+  "cut": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
+  "polish": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
+  "symmetry": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
+  "location": [
+    {
+      "id": 1,
+      "value": "Dubai"
+    },
+    {
+      "id": 2,
+      "value": "India"
+    },
+    {
+      "id": 3,
+      "value": "Belgium"
+    }
   ],
-
-  "intensityData": [
+  "intensity": [
     "Faint",
     "Light",
     "Fancy light",
@@ -88,8 +109,7 @@
     "Fancy deep",
     "Very light"
   ],
-
-  "overtoneData": [
+  "overtone": [
     "None",
     "Yellow",
     "Yellowish",
@@ -115,8 +135,7 @@
     "W-x Light Brown",
     "Brownish Orangy"
   ],
-
-  "tingeData": [
+  "tinge": [
     "WH",
     "YEL",
     "BR",
@@ -132,10 +151,8 @@
     "NO BGM",
     "NO BLACK"
   ],
-
-  "tingeIntensityData": ["None", "Faint", "Medium", "Strong"],
-
-  "clarityData": [
+  "tinge_intensity": ["None", "Faint", "Medium", "Strong"],
+  "clarity": [
     "FL",
     "IF",
     "VVS1",
@@ -149,10 +166,9 @@
     "I2",
     "I3"
   ],
-
-  "fluorescenceData": ["NON", "FNT", "VSL", "MED", "STG", "SLT", "VSTG"],
-
-  "labData": [
+  "fluorescence": ["NON", "FNT", "VSL", "MED", "STG", "SLT", "VSTG"],
+  "culet": ["NON", "Minor", "Medium"],
+  "lab": [
     "GIA",
     "HRD",
     "IGI",
@@ -166,11 +182,20 @@
     "OTHER",
     "STP"
   ],
-  "brillianceData": ["Excellent", "Very Good", "Good"],
+  "brilliance": ["Excellent", "Very Good", "Good"],
+  "girdle": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK"],
+  "location": ["IND", "ISR", "BEL", "DUB", "USA"],
+  "origin": [
+    "RUSSIA",
+    "BOTSWANA",
+    "CANADA",
+    "BOTSWANA NAMIBIA CANADA OR SOUTH AFRICA",
+    "BOTSWANA NAMIBIA CANADA SOUTH AFRICA OR LESOTHO",
+    "DTC2 BW NA CA OR ZA",
+    "SOUTH AFRICA"
+  ],
 
-  "girdleData": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK"],
-
-  "girdleStepData": [
+  "key_to_symbol": [
     "All",
     "Bearding",
     "Brown patch of color",
@@ -201,74 +226,152 @@
     "Surface Graining",
     "Twinning Wisp"
   ],
-  "caratRangeData": [
-    "0.01-0.29",
-    "0.30-0.39",
-    "0.40-0.49",
-    "0.50-0.69",
-    "0.70-0.89",
-    "0.90-0.99",
-    "1.00-1.49",
-    "1.50-1.99",
-    "2.00-2.99",
-    "3.00-3.99",
-    "4.00-4.99",
-    "5.00-5.99",
-    "6.00-6.99",
-    "7.00 - 7.99",
-    "8.00 - 8.99",
-    " 9.00 - 9.99",
-    "10+"
+  "carat": {
+    "data": [
+      "0.01-0.29",
+      "0.30-0.39",
+      "0.40-0.49",
+      "0.50-0.69",
+      "0.70-0.89",
+      "0.90-0.99",
+      "1.00-1.49",
+      "1.50-1.99",
+      "2.00-2.99",
+      "3.00-3.99",
+      "4.00-4.99",
+      "5.00-5.99",
+      "6.00-6.99",
+      "7.00 - 7.99",
+      "8.00 - 8.99",
+      " 9.00 - 9.99",
+      "10+"
+    ],
+    "range": {
+      "start": 0,
+      "end": 100
+    }
+  },
+  "parameter": [
+    {
+      "label": "Table%",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Crown Angle",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Length",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Pavilion Depth",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Depth%",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Crown Height",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Width",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Lower Half",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Ratio",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Girdle%",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Pavilion Angle",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Star Length",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    }
   ],
-  "parameterData": [
-    { "label": "Table%" },
-    { "label": "Crown Angle" },
-    { "label": "Length" },
-    { "label": "Pavilion Depth" },
-    { "label": "Depth%" },
-    { "label": "Crown Height" },
-    { "label": "Width" },
-    { "label": "Lower Half" },
-    { "label": "Ratio" },
-    { "label": "Girdle%" },
-    { "label": "Pavilion Angle" },
-    { "label": "Star Length" }
-  ],
-  "otherParameterData": [
+  "other_parameter": [
     {
       "key": "Black Inclusion",
       "value": [
         {
-          "elementKey": "Black Table",
-          "elementValue": ["BO", "BPP", "B1", "B2", "B3"]
+          "element_key": "Black Table",
+          "element_value": ["BO", "BPP", "B1", "B2", "B3"]
         },
         {
-          "elementKey": "Side Table",
-          "elementValue": ["SBO", "SBPP", "SB1", "SB2", "SB3"]
+          "element_key": "Side Table",
+          "element_value": ["SBO", "SBPP", "SB1", "SB2", "SB3"]
         },
         {
-          "elementKey": "Open Crown",
-          "elementValue": ["None", "VS", "S", "M", "D"]
+          "element_key": "Open Crown",
+          "element_value": ["None", "VS", "S", "M", "D"]
         },
         {
-          "elementKey": "Open Table",
-          "elementValue": ["None", "VS", "S", "M", "D"]
+          "element_key": "Open Table",
+          "element_value": ["None", "VS", "S", "M", "D"]
         },
         {
-          "elementKey": "Open Pavilion",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "element_key": "Open Pavilion",
+          "element_value": ["None", "VS", "S", "M", "L"]
         },
         {
-          "elementKey": "Milky",
-          "elementValue": ["MO", "M1", "M2", "M3"]
+          "element_key": "Milky",
+          "element_value": ["MO", "M1", "M2", "M3"]
         },
         {
-          "elementKey": "Luster",
-          "elementValue": ["EX", "VG", "G", "P"]
+          "element_key": "Luster",
+          "element_value": ["EX", "VG", "G", "P"]
         },
         {
-          "elementKey": "Eye Clean",
-          "elementValue": ["Yes", "No", "B"]
+          "element_key": "Eye Clean",
+          "element_value": ["Yes", "No", "B"]
         }
       ]
     },
@@ -276,34 +379,52 @@
       "key": "White Inclusion",
       "value": [
         {
-          "elementKey": "Table Inclusion",
-          "elementValue": ["TO", "T1", "B1", "T2", "T3"]
+          "element_key": "Table Inclusion",
+          "element_value": ["TO", "T1", "B1", "T2", "T3"]
         },
         {
-          "elementKey": "Side Inclusion",
-          "elementValue": ["SO", "S1", "SB1", "SB2", "S3"]
+          "element_key": "Side Inclusion",
+          "element_value": ["SO", "S1", "SB1", "SB2", "S3"]
         },
         {
-          "elementKey": "Natural Crown",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "element_key": "Natural Crown",
+          "element_value": ["None", "VS", "S", "M", "L"]
         },
         {
-          "elementKey": "Natural Girdle",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "element_key": "Natural Girdle",
+          "element_value": ["None", "VS", "S", "M", "L"]
         },
         {
-          "elementKey": "Natural Pavilion",
-          "elementValue": ["None", "VS", "S", "M", "L"]
+          "element_key": "Natural Pavilion",
+          "element_value": ["None", "VS", "S", "M", "L"]
         },
         {
-          "elementKey": "Surface Graining",
-          "elementValue": ["GO", "G1", "G2", "G3"]
+          "element_key": "Surface Graining",
+          "element_value": ["GO", "G1", "G2", "G3"]
         },
         {
-          "elementKey": "Luster",
-          "elementValue": ["IGO", "IG1", "IG2", "IG3"]
+          "element_key": "Luster",
+          "element_value": ["IGO", "IG1", "IG2", "IG3"]
         }
       ]
     }
-  ]
+  ],
+  "discount": {
+    "range": {
+      "start": 0,
+      "end": 100
+    }
+  },
+  "price": {
+    "range": {
+      "start": 0,
+      "end": 100
+    }
+  },
+  "price_per_carat": {
+    "range": {
+      "start": 0,
+      "end": 100
+    }
+  }
 }

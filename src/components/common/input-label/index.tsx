@@ -8,7 +8,7 @@ interface ILabelStyle {
 
 interface InputLabelProps {
   htmlfor: string;
-  label: string;
+  label: string | string[];
   overriddenStyles?: ILabelStyle;
 }
 

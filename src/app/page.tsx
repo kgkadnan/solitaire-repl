@@ -15,7 +15,7 @@ export default function Home() {
         }}
       >
         Welcome to KGK live 2.O
-      </h1> 
+      </h1>
       <h1
         style={{
           fontSize: '30px',
@@ -26,8 +26,8 @@ export default function Home() {
       >
         Bulding Digital diamond platform
       </h1>
-      <h1>{ManageLocales('app.welcome')}</h1>
-      <LanguageSwitcher />
+      {/* <h1>{ManageLocales('app.welcome')}</h1>
+      <LanguageSwitcher /> */}
     </>
   );
 }

@@ -19,11 +19,12 @@ import CustomPagination from '@/components/common/pagination';
 import {
   useGetAllPreviousSearchesQuery,
   useUpdatePreviousSearchMutation,
-} from '@/slices/previous-searches';
+} from '@/features/api/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatCreatedAt } from '@/utils/format-date';
+import { CustomCalender } from '@/components/common/calender';
 
 interface ICardData {
   cardId: string;
@@ -96,7 +97,7 @@ const PreviousSearch = () => {
   };
 
   //Data
-  const [PreviousSearchData, setPreviousSearchData] = useState<IData[]>([]);
+  const [PreviousSearchData, setPreviousSearchData] = useState<any[]>([]);
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
@@ -162,8 +163,8 @@ const PreviousSearch = () => {
           cardContent: (
             <CustomTable
               tableData={{
-                tableHeads: Object.keys(data.meta_data),
-                bodyData: [data.meta_data],
+                tableHeads: Object.keys(data.meta_data.basic_card_details),
+                bodyData: [data.meta_data.basic_card_details],
               }}
               tableStyleClasses={tableStyles}
             />
@@ -297,8 +298,8 @@ const PreviousSearch = () => {
     setSuggestions([]);
   };
   //specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
+  const handleClick = (id: string) => {
+    // const { id } = e.target;
 
     let updatedIsCheck = [...isCheck];
 
@@ -350,24 +351,31 @@ const PreviousSearch = () => {
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
     headerData: (
-      <div className="flex items-center gap-[10px] bottom-0">
-        <Checkbox
-          onClick={handleSelectAllCheckbox}
-          data-testid={'Select All Checkbox'}
-          checked={isCheckAll}
-        />
-        <p className="text-solitaireTertiary text-base font-medium">
-          {ManageLocales('app.common.header.selectAll')}
-        </p>
-      </div>
+      <>
+        <div className="flex mr-[30px]">
+          <CustomCalender />
+        </div>
+
+        <div className="flex items-center gap-[10px] bottom-0">
+          <Checkbox
+            onClick={handleSelectAllCheckbox}
+            data-testid={'Select All Checkbox'}
+            checked={isCheckAll}
+          />
+          <p className="text-solitaireTertiary text-base font-medium">
+            {ManageLocales('app.common.header.selectAll')}
+          </p>
+        </div>
+      </>
     ),
     overriddenStyles: {
-      headerDataStyles: 'flex items-end',
+      headerDataStyles: 'flex items-center',
     },
   };
 
   useEffect(() => {
     const previousSearchData = data?.data;
+    console.log(previousSearchData,"previousSearchData")
     let searchData = previousSearchData?.previousSearch;
     setNumberOfPages(previousSearchData?.totalPages);
     setPreviousSearchData(searchData);
@@ -396,7 +404,7 @@ const PreviousSearch = () => {
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
           <>
-            {cardData?.map((items: any) => {
+            {cardData?.map((items: any,index:number) => {
               return (
                 <div key={items.cardId}>
                   <div className="flex mt-6">
@@ -429,8 +437,8 @@ const PreviousSearch = () => {
                           </div>
 
                           {/* Loop through card detail data */}
-                          {cardDetailData.map((cardDetails) => (
-                            <div className="flex" key={cardDetails.cardId}>
+                          {/* {PreviousSearchData.map((cardDetails) => ( */}
+                            <div className="flex" key={PreviousSearchData[index]?.id}>
                               <div className={styles.sheetMainDiv}>
                                 <div className={styles.sheetHeading}>
                                   <p>
@@ -442,7 +450,7 @@ const PreviousSearch = () => {
 
                                 <div>
                                   {Object.entries(
-                                    cardDetails.basicCardDetails
+                                    PreviousSearchData[index].meta_data.basic_card_details
                                   ).map(([key, value]) => (
                                     <div key={key}>
                                       <p className="flex">
@@ -450,7 +458,7 @@ const PreviousSearch = () => {
                                           {key}
                                         </span>
                                         <span className={styles.sheetValues}>
-                                          {value}
+                                        {typeof value!=='string'? value.join(','): value}
                                         </span>
                                       </p>
                                     </div>
@@ -466,7 +474,7 @@ const PreviousSearch = () => {
                                 </div>
 
                                 <div>
-                                  {Object.entries(cardDetails.measurements).map(
+                                  {Object.entries(PreviousSearchData[index].meta_data.measurements).map(
                                     ([key, value]) => (
                                       <div key={key}>
                                         <p className="flex">
@@ -474,7 +482,7 @@ const PreviousSearch = () => {
                                             {key}
                                           </span>
                                           <span className={styles.sheetValues}>
-                                            {value}
+                                          {typeof value!=='string'? value.join(','): value}
                                           </span>
                                         </p>
                                       </div>
@@ -492,7 +500,7 @@ const PreviousSearch = () => {
 
                                 <div>
                                   {Object.entries(
-                                    cardDetails.OtherInformation
+                                    PreviousSearchData[index].meta_data.other_information
                                   ).map(([key, value]) => (
                                     <div key={key}>
                                       <p className="flex">
@@ -500,7 +508,7 @@ const PreviousSearch = () => {
                                           {key}
                                         </span>
                                         <span className={styles.sheetValues}>
-                                          {value}
+                                          {typeof value!=='string'? value.join(','): value}
                                         </span>
                                       </p>
                                     </div>
@@ -516,25 +524,25 @@ const PreviousSearch = () => {
                                     )}
                                   </p>
                                 </div>
-                                {Object.entries(
-                                  cardDetails.inclutionDetails
-                                ).map(([key, value]) => (
-                                  <p className="flex" key={key}>
+                                {
+                                  PreviousSearchData[index].meta_data.inclusion_details
+                                .map((inclusionData) => (
+                                  <p className="flex" key={inclusionData.element_key}>
                                     <span
                                       className={
                                         styles.inclutionDetailsInnerHeadingStyle
                                       }
                                     >
-                                      {key}
+                                      {inclusionData.element_key}
                                     </span>
                                     <span className={styles.sheetValues}>
-                                      {value}
+                                    {typeof inclusionData.element_value!=='string'? inclusionData.element_value.join(','): inclusionData.element_value} 
                                     </span>
                                   </p>
                                 ))}
                               </div>
                             </div>
-                          ))}
+                          {/* ))} */}
 
                           <div className="border-b border-solitaireTertiary mt-8"></div>
 
