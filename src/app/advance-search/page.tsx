@@ -16,12 +16,16 @@ import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import { constructUrlParams } from '@/utils/construct-url-param';
+import { useGetProductCountQuery } from '@/features/api/product';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const [searchUrl, setSearchUrl] = useState<string>('');
+
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
   const router=useRouter()
   const [searchIndex, setSearchIndex] = useState<number>(0);
@@ -122,6 +126,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
+
+console.log("jyoti",searchUrl)
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -167,6 +173,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
    
   }, []);
 
+  useEffect(() => {
+   selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
+   selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
+  }, [selectedShape,selectedWhiteColor]);
+
+  const { data, error, isLoading, refetch } = useGetProductCountQuery({
+    searchUrl
+  });
+console.log("llllllll",data,searchUrl)
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
@@ -957,10 +972,13 @@ console.log(yourSelection)
     return response;
   }
   const handleSaveAndSearch = async () => {
+    if(addSearches.length===1){
+      setSavedSearches([prepareSearchParam()])
+    }
     await addSavedSearch({
-      name: saveSearchName,
+      name: "saveSearchName",
       diamond_count: searchResultCount,
-      meta_data: savedSearches,
+      meta_data: addSearches.length===1 ? [prepareSearchParam()] : savedSearches,
       is_deleted: false,
     });
 
@@ -974,9 +992,7 @@ console.log(yourSelection)
   };
 
   const handleSearch = async () => {
-    // if(parseInt(discountFrom)>advanceSearch.discount.range.start && parseInt(discountFrom)<advanceSearch.discount.range.end){
-    //   setError
-    // }
+
     if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
@@ -1002,9 +1018,10 @@ console.log(yourSelection)
   
 
   const handleAddAnotherSearch = async () => {
+    handleAddSearchIndex()
     if (addSearches.length < 5) {
       //call previous serach api
-      setAddSearches([...addSearches, 'ooo']);
+      // setAddSearches([...addSearches, 'ooo']);
       setSavedSearches([...savedSearches,prepareSearchParam()])
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
@@ -1013,8 +1030,14 @@ console.log(yourSelection)
         diamond_count: searchResultCount,
         meta_data:  prepareSearchParam(),
         is_deleted: false,
-      });    
-      };
+      });  
+      handleAddSearches()
+      handleReset();  
+      }else {
+        setShowToast(true);
+        setToastErrorMessage('Add search limit exceeded');
+      }
+    
     }
 
 
