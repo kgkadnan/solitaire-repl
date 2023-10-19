@@ -94,9 +94,9 @@
     position: sticky;
     /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
     /* 0 + 5 + 150 + 5 + 1 */
-    left: 13px;
-    width: 50px;
-    min-width: 50px;
+    left: 10px;
+    width: 30px;
+    min-width: 30px;
 }
 
 .table td:nth-child(1),
@@ -127,6 +127,7 @@
 .tableBody {
   position: relative;
   z-index: 1;
+  font-size: 14px;
 }
 
 .tableBody::before {
