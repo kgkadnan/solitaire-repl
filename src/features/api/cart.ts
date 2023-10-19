@@ -20,12 +20,22 @@ export const cartApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['cart'],
     }),
     getCart: builder.query({
       query: () => `cart`,
       providesTags: ['cart'],
     }),
+    deleteCart: builder.mutation({
+      query: (data) => ({
+        url: `cart`,
+        method: 'DELETE',
+        body: data,
+      }),
+      invalidatesTags: ['cart'],
+    }),
   }),
 });
 
-export const { useAddCartMutation, useGetCartQuery } = cartApi;
+export const { useAddCartMutation, useGetCartQuery, useDeleteCartMutation } =
+  cartApi;

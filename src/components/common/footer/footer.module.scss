@@ -1,4 +1,8 @@
 .footerParentDiv {
+  display: flex;
+  justify-content: flex-end;
+  padding: 16px 0px;
+  border-top: 1px solid hsl(var(--solitaire-senary));
   width: 100%;
 }
 

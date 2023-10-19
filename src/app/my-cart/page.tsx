@@ -15,14 +15,18 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSlider } from '@/components/common/slider';
 import { useRouter } from 'next/navigation';
-import { useGetCartQuery } from '@/features/api/cart';
+import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
 import { formatCreatedAt } from '@/utils/format-date';
+import { CustomDropdown } from '@/components/common/dropdown';
+import { useAppDispatch } from '@/hooks/hook';
+import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 
 interface KeyLabelMapping {
   [key: string]: string;
 }
 
 const MyCart = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   // Style classes and variables
   const tableStyles = {
@@ -44,8 +48,12 @@ const MyCart = () => {
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [cardData, setCardData] = useState([]);
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const { data } = useGetCartQuery({});
+  const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useDeleteCartMutation();
 
   function calculateRemainingTime(createdAt: string) {
     const createdAtTime = new Date(createdAt).getTime(); // Convert created at to milliseconds since epoch
@@ -159,8 +167,6 @@ const MyCart = () => {
     }
   }, [data]);
 
-  console.log('catrdData', cardData);
-
   const cardDetailData = [
     {
       cardId: 1,
@@ -243,10 +249,82 @@ const MyCart = () => {
     }
   };
 
+  const handleDelete = () => {
+    console.log(isCheck);
+
+    deleteCart({
+      items: isCheck,
+    })
+      .unwrap()
+      .then((data) => {
+        setCardData(data.items);
+      })
+      .catch(() => {
+        console.log('1111111111111111');
+      });
+  };
+
+  const handleCompareStone = () => {
+    const maxStones = 10;
+    const minStones = 2;
+
+    if (isCheck.length > maxStones) {
+      setIsError(true);
+      setErrorText(`You can compare a maximum of ${maxStones} stones`);
+    } else if (isCheck.length < minStones) {
+      setIsError(true);
+      setErrorText(`Minimum ${minStones} stones are required to compare`);
+    } else {
+      const compareStones = isCheck
+        .map((id) => data.items.find((row: any) => row.id === id))
+        .map((stone) => stone.product);
+
+      dispatch(addCompareStone(compareStones));
+      router.push('/compare-stone');
+    }
+  };
+
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: 'Delete', style: styles.transparent },
-    { id: 2, displayButtonLabel: 'Place Order', style: styles.filled },
+    {
+      id: 1,
+      displayButtonLabel: (
+        <CustomDropdown
+          dropdownTrigger={
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
+            />
+          }
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: '',
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
+        />
+      ),
+    },
+    {
+      id: 2,
+      displayButtonLabel: 'Compare Stone',
+      style: styles.transparent,
+      fn: handleCompareStone,
+    },
+    {
+      id: 2,
+      displayButtonLabel: 'Delete',
+      style: styles.transparent,
+      fn: handleDelete,
+    },
+    { id: 3, displayButtonLabel: 'Confirm Stone', style: styles.filled },
   ];
 
   //Header Data
@@ -462,7 +540,12 @@ const MyCart = () => {
 
         {/* Custom Footer */}
         {footerButtonData?.length && (
-          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+          <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+            {isError && (
+              <div className="w-[30%]">
+                <p className="text-red-700 text-base ">{errorText}</p>
+              </div>
+            )}
             <CustomFooter footerButtonData={footerButtonData} />
           </div>
         )}
