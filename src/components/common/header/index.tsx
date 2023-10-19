@@ -23,7 +23,7 @@ export interface IHeaderData {
 }
 
 interface ICustomHeaderProps {
-  data?: IHeaderData;
+  data: IHeaderData;
 }
 
 const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
@@ -57,7 +57,8 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
       >
         {/* Heading */}
         <p>
-          {data?.headerHeading} {data?.searchCount && `(${data?.searchCount})`}
+          {data?.headerHeading}
+          {data?.searchCount > 0 && `(${data?.searchCount})`}
         </p>
         <div
           className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}
