@@ -136,6 +136,14 @@ const SearchResults = () => {
 
   const [searchUrl, setSearchUrl] = useState('');
 
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
+  const [dialog, setDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState<React.ReactNode | null>(
+    null
+  );
+
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
     limit: limit,
@@ -258,6 +266,12 @@ const SearchResults = () => {
       const userConfirmed = confirm(
         'Do you want to Download Entire Search Stone or Selected Stone?'
       );
+      setDialog(true);
+      setDialogContent(
+        <>
+          <div>`hello`</div>
+        </>
+      );
       if (userConfirmed) {
         console.log('userConfirmed', userConfirmed);
         setIsCheck([]);
@@ -265,6 +279,10 @@ const SearchResults = () => {
         console.log('isCheck', isCheck);
         console.log('User clicked Cancel. Action canceled.');
       }
+    } else if (isCheck.length === 0) {
+      console.log('isCheck', isCheck);
+    } else {
+      console.log('Download Started');
     }
   };
 
@@ -285,15 +303,16 @@ const SearchResults = () => {
 
   const addToCart = () => {
     if (isCheck.length > 100) {
-      alert('The cart does not allow more than 100 Stones.');
+      setIsError(true);
+      setErrorText('The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
-      alert('select stone to add to cart.');
+      setIsError(true);
+      setErrorText('*Select stone to add to cart.');
     } else {
       let variantIds = isCheck.map((id) => {
         const selectedRow = rows.find((row) => row.id === id);
         return selectedRow?.variants[0].id;
       });
-      console.log('variantIds', variantIds);
       if (variantIds.length) {
         addCart({
           variants: variantIds,
@@ -309,6 +328,8 @@ const SearchResults = () => {
       }
     }
   };
+
+  // console.log("reosssss")
 
   const footerButtonData = [
     {
@@ -804,7 +825,17 @@ const SearchResults = () => {
           />
         </div>
 
-        <CustomFooter footerButtonData={footerButtonData} />
+        <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
+          {isError && (
+            <div className="w-[30%]">
+              <p className="text-red-700 text-base ">{errorText}</p>
+            </div>
+          )}
+          <CustomFooter
+            footerButtonData={footerButtonData}
+            noBorderTop={styles.paginationContainerStyle}
+          />
+        </div>
       </div>
     </>
   );
