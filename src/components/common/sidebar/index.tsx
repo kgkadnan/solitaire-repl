@@ -53,7 +53,7 @@ const SideBar = () => {
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
-      link: '/cart',
+      link: '/my-cart',
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,

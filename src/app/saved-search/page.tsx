@@ -25,6 +25,7 @@ import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
+import { DateRange } from 'react-day-picker';
 
 interface ICardData {
   cardId: string;
@@ -70,6 +71,8 @@ const SavedSearch = () => {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [sliderData, setSliderData] = useState<any>([]);
+  const [date, setDate] = React.useState<DateRange | undefined>();
+  const [searchUrl, setSearchUrl] = useState('');
 
   const handleResultsPerPageChange = (event: string) => {
     const newResultsPerPage = parseInt(event, 10);
@@ -93,6 +96,7 @@ const SavedSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     currentPage,
     resultsPerPage,
+    searchUrl
   });
 
   // Destructure the mutation function from the hook
@@ -307,6 +311,19 @@ const SavedSearch = () => {
     },
   ];
 
+  const handleDate = (date: any) => {
+    setDate(date);
+    setSearchUrl(
+      `&startDate=${new Date(date.from)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}&endDate=${new Date(date.to)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}`
+    );
+  };
+
   //Header Data
   const savedSearchheaderData = {
     headerHeading: ManageLocales('app.savedSearch.header'),
@@ -320,7 +337,8 @@ const SavedSearch = () => {
     headerData: (
       <>
         <div className="flex mr-[30px] ">
-          <CustomCalender />
+        <CustomCalender date={date} handleDate={handleDate} />
+
         </div>
         <div className="flex items-center gap-[10px] bottom-0">
           <Checkbox
@@ -583,23 +601,23 @@ const SavedSearch = () => {
                                   {
                                
                                     SavedSearchData[indexTest] &&
+                                    Object.entries(
                                     SavedSearchData[indexTest]?.meta_data[activeTab]
                                         .inclusion_details
-                                  .map((inclusionData) => (
-                                    <p className="flex" key={inclusionData.element_key}>
+                                  ).map(([key,value]) => (
+                                    <p className="flex" key={key}>
                                    
                                       <span
                                         className={
                                           styles.inclutionDetailsInnerHeadingStyle
                                         }
                                       >
-                                         {console.log("jyoti",inclusionData)}
-                                        {inclusionData.element_key}
+                                        {key}
                                       </span>
                                       <span className={styles.sheetValues}>
-                                        {Array.isArray(inclusionData.element_value)
-                                          ? (inclusionData.element_value as string[]).join(', ')
-                                          : (inclusionData.element_value as string)}
+                                        {Array.isArray(value)
+                                          ? (value as string[]).join(', ')
+                                          : (value as string)}
                                       </span>
                                     </p>
                                   ))}

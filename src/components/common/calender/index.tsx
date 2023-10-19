@@ -15,11 +15,14 @@ import {
 import CalenderIcon from '@public/assets/icons/calender.svg';
 import Image from 'next/image';
 import { CustomDisplayButton } from '../buttons/display-button';
-
-export function CustomCalender({
-  className,
-}: React.HTMLAttributes<HTMLDivElement>) {
-  const [date, setDate] = React.useState<DateRange | undefined>();
+interface ICustomeCalendarProps {
+  className?:string;
+  date:any;
+  handleDate:(date:any)=>void
+}
+export const CustomCalender: React.FC<ICustomeCalendarProps> =({
+  className,date,handleDate
+})=> {
 
   return (
     <div className={cn('grid gap-2', className)}>
@@ -64,7 +67,7 @@ export function CustomCalender({
             mode="range"
             defaultMonth={date?.from}
             selected={date}
-            onSelect={setDate}
+            onSelect={handleDate}
             numberOfMonths={2}
           />
 
@@ -72,7 +75,7 @@ export function CustomCalender({
             <CustomDisplayButton
               displayButtonLabel="Clear Dates"
               displayButtonAllStyle={{ displayButtonStyle: styles.transparent }}
-              handleClick={() => setDate(undefined)}
+              handleClick={() => handleDate('')}
             />
             <CustomDisplayButton
               displayButtonLabel="Close"

@@ -8,18 +8,30 @@ import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import { constructUrlParams } from '@/utils/construct-url-param';
+import { useGetProductCountQuery } from '@/features/api/product';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
+  const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const [searchUrl, setSearchUrl] = useState<string>('');
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
+  const [savedSearches, setSavedSearches] = useState<any[]>([]);
+  const router=useRouter()
+  const [searchIndex, setSearchIndex] = useState<number>(0);
+
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -112,10 +124,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const [searchResultCount, setSearchResultCount] = useState<number>(1);
   const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
-  const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
+  const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
+
+console.log("jyoti",searchUrl)
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -148,6 +162,38 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
     }
   }, [search]);
+  useEffect(() => {
+    let data=JSON.parse(localStorage.getItem('Search')!);
+    if (data?.length!== undefined && data?.length >0 && data[0]!==undefined){
+      setAddSearches(data);
+      setSelectedShape(data[0]?.shape)
+
+
+      localStorage.removeItem("Search");
+
+    }
+   
+  }, []);
+
+  useEffect(() => {
+   selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
+   selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
+  }, [selectedShape,selectedWhiteColor]);
+
+  const { data, error, isLoading, refetch } = useGetProductCountQuery({
+    searchUrl
+  });
+
+useEffect(() => {
+ if(data?.count>300){
+  setIsError(true)
+  setErrorText('>300 please modify search')
+ }
+ else{
+  setIsError(false)
+  setErrorText('')
+ }
+}, [data]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -561,8 +607,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setCaratRangeTo('');
   };
 
-  const [addPreviousSearch, { isLoading: addIsLoading, isError: addIsError }] =
-    useAddPreviousSearchMutation();
+  let [addPreviousSearch] = useAddPreviousSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
     return (
@@ -649,6 +695,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setPavilionAngleTo('');
     setStarLengthFrom('');
     setStarLengthTo('');
+    setSelectedLocation([]);
+    setSelectedOrigin([])
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -666,7 +714,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ];
     });
   };
-
+console.log(yourSelection)
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -711,10 +759,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
       updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 && updateYourSelection('tinge', selectedTinge);
+    selectedTinge.length > 0 && updateYourSelection('colorShade', selectedTinge);
 
     selectedTingeIntensity.length > 0 &&
-      updateYourSelection('tingeIntensity', selectedTingeIntensity);
+      updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
     selectedClarity.length > 0 &&
       updateYourSelection('clarity', selectedClarity);
     selectedCaratRange.length > 0 &&
@@ -877,10 +925,87 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       );
   };
 
+  const prepareSearchParam=()=>{
+  let response=  {
+      basic_card_details: {
+        shape: selectedShape,
+        color: selectedWhiteColor,
+        clarity: selectedClarity,
+        cut: selectedCut,
+        lab: selectedLab,
+        polish: selectedPolish,
+        shade: selectedColor,
+        carat: selectedCaratRange,
+        color_shade: selectedTinge,
+        location: selectedLocation,
+        symmetry: selectedSymmetry,
+        fluoroscence: selectedFluorescence,
+        culet: 'None',
+        country_of_origin: selectedOrigin,
+        laser_inscription: '-',
+      },
+      measurements: {
+        'table%': `${tablePerFrom}-${tablePerTo}`,
+        ratio: `${ratioFrom}-${ratioTo}`,
+        length: `${lengthFrom}-${lengthTo}`,
+        width: `${widthFrom}-${widthTo}`,
+        depth: `${depthFrom}-${depthTo}`,
+        crown_angle: `${crownAngleFrom}-${crownAngleTo}`,
+        crown_height: `${crownHeightFrom}-${crownHeightTo}`,
+        'girdle%': `${girdlePerFrom}-${girdlePerTo}`,
+        pavilion_angle: `${pavilionAngleFrom}-${pavilionAngleTo}`,
+        pavilion_depth: `${pavilionDepthFrom}-${pavilionDepthTo}`,
+        lower_half: `${lowerHalfFrom}-${lowerHalfTo}`,
+        star_length: `${starLengthFrom}-${starLengthTo}`,
+      },
+      other_information: {
+        girdle: selectedGirdle,
+        key_to_symbol: '-',
+        report_comments: '-',
+      },
+      inclusion_details: {
+        black_table: blackTableBI,
+        side_table: sideBlackBI,
+        open_crown: openCrownBI,
+        open_table: openTableBI,
+        open_pavilion: openPavilionBI,
+        milky: milkyBI,
+        luster: lusterBI,
+        eye_clean: eyeCleanBI,
+        table_inclusion: tableInclusionWI,
+        side_inclusion: sideInclusionWI,
+        natural_crown: naturalCrownWI,
+        natural_girdle: naturalGirdleWI,
+        natural_pavilion: naturalPavilionWI,
+        surface_graining: surfaceGrainingWI,
+        internal_graining: internalGrainingWI,
+        brilliance: selectedBrilliance,
+      },
+    }
+    return response;
+  }
+  const handleSaveAndSearch = async () => {
+    if(addSearches.length===1){
+      setSavedSearches([prepareSearchParam()])
+    }
+    await addSavedSearch({
+      name: "saveSearchName",
+      diamond_count: searchResultCount,
+      meta_data: addSearches.length===1 ? [prepareSearchParam()] : savedSearches,
+      is_deleted: false,
+    });
+
+    handleSearch();
+  }
+  const handleAddSearchIndex = () => {
+    setAddSearches((prevSearches) => [
+      ...prevSearches,
+      { ...prevSearches[searchIndex], shape: selectedShape },
+    ]);
+  };
+
   const handleSearch = async () => {
-    // if(parseInt(discountFrom)>advanceSearch.discount.range.start && parseInt(discountFrom)<advanceSearch.discount.range.end){
-    //   setError
-    // }
+
     if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
@@ -892,30 +1017,49 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data: {
-          shape: selectedShape,
-          color: selectedWhiteColor,
-          clarity: selectedClarity,
-          cut: selectedCut,
-          lab: selectedLab,
-          polish: selectedPolish,
-          shade: selectedColor,
-        },
+        meta_data:  prepareSearchParam(),
         is_deleted: false,
-      });
+      });    
     }
-  };
+  
 
-  const handleAddAnotherSearch = () => {
+
+      console.log(JSON.stringify(addSearches))
+      localStorage.setItem("Search",JSON.stringify([...addSearches,{shape:selectedShape}]))
+      router.push('/search-result')
+    }
+  
+
+  const handleAddAnotherSearch = async () => {
+    handleAddSearchIndex()
     if (addSearches.length < 5) {
       //call previous serach api
-      setAddSearches([...addSearches, 'ooo']);
-      handleReset();
-    } else {
-      setShowToast(true);
-      setToastErrorMessage('Add search limit exceeded');
+      // setAddSearches([...addSearches, 'ooo']);
+      setSavedSearches([...savedSearches,prepareSearchParam()])
+      let searchName = '';
+      searchName = handlePreviousSearchName(searchName);
+      await addPreviousSearch({
+        name: searchName,
+        diamond_count: searchResultCount,
+        meta_data:  prepareSearchParam(),
+        is_deleted: false,
+      });  
+      handleAddSearches()
+      handleReset();  
+      }else {
+        setShowToast(true);
+        setToastErrorMessage('Add search limit exceeded');
+      }
+    
     }
-  };
+
+
+
+  const handleAddSearches=()=>{
+    setAddSearches([...addSearches, {shape:selectedShape}]);
+    setSearchIndex(addSearches.length+1)
+
+  }
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -1303,7 +1447,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearch.tinge,
+            advanceSearch.color_shade,
             '',
             styles.activeOtherStyles,
             selectedTinge,
@@ -1321,7 +1465,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearch.tinge_intensity,
+            advanceSearch.color_shade_intensity,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,
@@ -1767,6 +1911,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+      {isError && (
+            <div className="w-[30%]">
+              <p className="text-red-700 text-base ">{errorText}</p>
+            </div>
+          )}
         <CustomFooter
           footerButtonData={[
             {
@@ -1781,6 +1930,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 'app.advanceSearch.saveSearch'
               )}`,
               style: styles.transparent,
+              fn: handleSaveAndSearch,
             },
             {
               id: 3,
@@ -1788,8 +1938,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 searchApiCalled && searchResultCount! === 0
                   ? ManageLocales('app.advanceSearch.addDemand')
                   : ManageLocales('app.advanceSearch.search')
-              } ${
-                searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
               }`,
               style: styles.filled,
               fn: handleSearch,

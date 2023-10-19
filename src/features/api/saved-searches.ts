@@ -3,7 +3,10 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const savedSearchesApi = createApi({
   reducerPath: 'savedSearchReducer',
-  baseQuery: fetchBaseQuery({ baseUrl: apiURL }),
+  baseQuery: fetchBaseQuery({ baseUrl: apiURL, headers: {
+    Authorization:
+      'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhEMFI2NFZHQThLNFcyNkFORlZDUTQ1TSIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NjExNzEzLCJleHAiOjE3MDAyMDM3MTN9.X_ETyZIozIhg5bm7kcu2jRxG500sCHfl98eESyBQtHo',
+  }, }),
   tagTypes: ['SavedSearch'],
 
   endpoints: (builder) => ({
@@ -11,6 +14,14 @@ export const savedSearchesApi = createApi({
       query: ({ currentPage, resultsPerPage }) =>
         `saved-search?page=${currentPage}&perPage=${resultsPerPage}`,
       providesTags: ['SavedSearch'],
+    }),
+    addSavedSearch: builder.mutation({
+      query: (data) => ({
+        url: `saved-search`,
+        method: 'POST',
+        body: data,
+       
+      }),
     }),
     updateSavedSearches: builder.mutation({
       query: (filter) => ({
@@ -23,5 +34,5 @@ export const savedSearchesApi = createApi({
   }),
 });
 
-export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation } =
+export const { useGetAllSavedSearchesQuery, useUpdateSavedSearchesMutation, useAddSavedSearchMutation} =
   savedSearchesApi;

@@ -8,16 +8,21 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import styles from './login.module.scss';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import { useVerifyLoginMutation } from '@/features/api/login';
+import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
+  const router = useRouter();
 
-  const handleLogin = async () => {
-    await verifyLogin({ email: email, password: password });
-    console.log('data', data);
-  };
+const handleLogin=async()=>{
+
+  
+ await verifyLogin({email:email,password:password})
+ if(data) { router.push('/') }
+
+}
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>

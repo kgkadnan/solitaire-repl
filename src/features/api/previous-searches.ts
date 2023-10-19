@@ -21,8 +21,12 @@ export const previousSearchApi = createApi({
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
-      query: ({ currentPage, resultsPerPage }) =>
-        `previous-search?page=${currentPage}&perPage=${resultsPerPage}`,
+      query: ({ currentPage, resultsPerPage,searchUrl='' }) =>
+     ({
+        url: `previous-search?limit=${currentPage}&offset=${resultsPerPage}${searchUrl}`,
+        method: 'GET',
+       
+      }),
       providesTags: ['PreviousSearch'],
     }),
     getSpecificPrevious: builder.query({
@@ -34,6 +38,7 @@ export const previousSearchApi = createApi({
         url: `previous-search`,
         method: 'POST',
         body: data,
+       
       }),
     }),
     updatePreviousSearch: builder.mutation({
