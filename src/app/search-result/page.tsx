@@ -22,6 +22,7 @@ import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
 interface TableColumn {
   label: string;
@@ -139,16 +140,13 @@ const SearchResults = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  const [dialog, setDialog] = useState(false);
-  const [dialogContent, setDialogContent] = useState<React.ReactNode | null>(
-    null
-  );
-
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
     limit: limit,
     url: searchUrl,
   });
+
+  let [downloadExcel] = useDownloadExcelMutation();
 
   // console.log('Data', data?.products);
 
@@ -204,7 +202,6 @@ const SearchResults = () => {
 
   const tableColumns: TableColumn[] = [
     { label: 'Status', accessor: 'diamond_status' },
-    { label: 'Select', accessor: 'select' },
     { label: 'Stock No', accessor: 'lot_id' },
     { label: 'Details', accessor: 'details' },
     { label: 'RPT No.', accessor: 'rpt_number' },
@@ -261,36 +258,70 @@ const SearchResults = () => {
     { label: 'Luster', accessor: 'luster' },
   ];
 
-  const downloadExcel = () => {
+  const downloadExcelFunction = () => {
     if (isCheckAll) {
       const userConfirmed = confirm(
         'Do you want to Download Entire Search Stone or Selected Stone?'
       );
-      setDialog(true);
-      setDialogContent(
-        <>
-          <div>`hello`</div>
-        </>
-      );
+
       if (userConfirmed) {
         console.log('userConfirmed', userConfirmed);
         setIsCheck([]);
-      } else {
-        console.log('isCheck', isCheck);
-        console.log('User clicked Cancel. Action canceled.');
+      } else if (isCheck.length) {
+        downloadExcel({
+          productIds: isCheck,
+        })
+          .unwrap()
+          .then((res) => {
+            if (res.filePath) {
+              window.open(
+                `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
+                '_blank'
+              );
+              console.log('Download Excel Succesfully', res);
+            }
+          })
+          .catch((e) => {
+            console.log('error', error);
+          });
+        setIsError(false);
       }
     } else if (isCheck.length === 0) {
-      console.log('isCheck', isCheck);
+      setIsError(true);
+      setErrorText('*Select stone to Download Excel.');
     } else {
-      console.log('Download Started');
+      if (isCheck.length) {
+        downloadExcel({
+          productIds: isCheck,
+        })
+          .unwrap()
+          .then((res) => {
+            if (res.filePath) {
+              window.open(
+                `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
+                '_blank'
+              );
+              console.log('Download Excel Succesfully', res);
+            }
+          })
+          .catch((e) => {
+            console.log('error', error);
+          });
+      }
+      setIsError(false);
     }
   };
 
   const CompareStone = () => {
     if (isCheck.length > 10) {
-      alert('You can compare maximum of ten stones');
+      setIsError(true);
+      setErrorText('*You can compare maximum of ten stones.');
+    } else if (isCheck.length < 1) {
+      setIsError(true);
+      setErrorText('*Select stone to compare.');
     } else if (isCheck.length < 2) {
-      alert('minimum 2 stone to compare');
+      setIsError(true);
+      setErrorText('*Minimum 2 stone to compare.');
     } else {
       let comapreStone = isCheck.map((id) => {
         return rows.find((row) => row.id === id);
@@ -298,13 +329,15 @@ const SearchResults = () => {
 
       dispatch(addCompareStone(comapreStone));
       router.push('/compare-stone');
+      setIsError(false);
+      setErrorText('');
     }
   };
 
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
-      setErrorText('The cart does not allow more than 100 Stones.');
+      setErrorText('*The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
       setErrorText('*Select stone to add to cart.');
@@ -351,7 +384,7 @@ const SearchResults = () => {
             },
             {
               label: 'Download Excel',
-              fn: downloadExcel,
+              fn: downloadExcelFunction,
             },
             {
               label: 'Find Matching Pair',
