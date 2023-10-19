@@ -29,7 +29,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [errorText, setErrorText] = useState('');
 
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
-  const router=useRouter()
+  const router = useRouter();
   const [searchIndex, setSearchIndex] = useState<number>(0);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -128,8 +128,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
-
-console.log("jyoti",searchUrl)
+  console.log('jyoti', searchUrl);
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -162,38 +161,215 @@ console.log("jyoti",searchUrl)
       setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
     }
   }, [search]);
+
   useEffect(() => {
-    let data=JSON.parse(localStorage.getItem('Search')!);
-    if (data?.length!== undefined && data?.length >0 && data[0]!==undefined){
+    let data = JSON.parse(localStorage.getItem('Search')!);
+    if (
+      data?.length !== undefined &&
+      data?.length > 0 &&
+      data[0] !== undefined
+    ) {
       setAddSearches(data);
-      setSelectedShape(data[0]?.shape)
+      setSelectedShape(data[0]?.shape);
 
-
-      localStorage.removeItem("Search");
-
+      localStorage.removeItem('Search');
     }
-   
   }, []);
 
+  // useEffect(() => {
+  //  selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
+  //  selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
+  // }, [selectedShape,selectedWhiteColor]);
+
   useEffect(() => {
-   selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
-   selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
-  }, [selectedShape,selectedWhiteColor]);
+    const queryParams: any = {};
+
+    selectedShape.length !== 0 && (queryParams['shape'] = selectedShape);
+    // selectedColor && (queryParams['color'] = selectedColor);
+    selectedWhiteColor.length !== 0 &&
+      (queryParams['color'] = selectedWhiteColor);
+    // selectedFancyColor.length !== 0 &&
+    //   (queryParams['color'] = selectedFancyColor);
+    // selectedRangeColor.length !== 0 &&
+    //   (queryParams['color'] = selectedRangeColor);
+    selectedIntensity.length !== 0 &&
+      (queryParams['intensity'] = selectedIntensity); //done
+    selectedOvertone.length !== 0 &&
+      (queryParams['overtone'] = selectedOvertone); //done
+    selectedTinge.length !== 0 && (queryParams['color_shade'] = selectedTinge); //done
+    selectedTingeIntensity.length !== 0 &&
+      (queryParams['color_shade_intensity'] = selectedTingeIntensity); //done
+    selectedClarity.length !== 0 && (queryParams['clarity'] = selectedClarity); //done
+    selectedCaratRange.length !== 0 &&
+      (queryParams['caratRange'] = selectedCaratRange);
+    selectedMake && (queryParams['make'] = selectedMake);
+    selectedCut.length !== 0 && (queryParams['cut'] = selectedCut); //done
+    selectedPolish.length !== 0 && (queryParams['polish'] = selectedPolish); //done
+    selectedSymmetry.length !== 0 &&
+      (queryParams['symmetry'] = selectedSymmetry); //done
+    selectedFluorescence.length !== 0 &&
+      (queryParams['fluorescence'] = selectedFluorescence); //done
+    selectedCulet.length !== 0 && (queryParams['culet'] = selectedCulet); //done
+    selectedGirdle.length !== 0 && (queryParams['girdle'] = selectedGirdle);
+    selectedGirdleStep2.length !== 0 &&
+      (queryParams['girdleStep2'] = selectedGirdleStep2);
+    selectedLab.length !== 0 && (queryParams['lab'] = selectedLab); //done
+    selectedHR.length !== 0 && (queryParams['ha'] = selectedHR); //done
+    selectedBrilliance.length !== 0 &&
+      (queryParams['brilliance'] = selectedBrilliance); //done
+    selectedLocation.length !== 0 &&
+      (queryParams['location'] = selectedLocation); //done
+    selectedOrigin.length !== 0 &&
+      (queryParams['origin_country'] = selectedOrigin); //done
+    priceRangeFrom && (queryParams['priceRangeFrom'] = priceRangeFrom);
+    priceRangeTo && (queryParams['priceRangeTo'] = priceRangeTo);
+    discountFrom && (queryParams['discountFrom'] = discountFrom);
+    discountTo && (queryParams['discountTo'] = discountTo);
+    pricePerCaratFrom && (queryParams['pricePerCaratFrom'] = pricePerCaratFrom);
+    pricePerCaratTo && (queryParams['pricePerCaratTo'] = pricePerCaratTo);
+    caratRangeFrom && (queryParams['caratRangeFrom'] = caratRangeFrom);
+    caratRangeTo && (queryParams['caratRangeTo'] = caratRangeTo);
+    blackTableBI.length !== 0 && (queryParams['black_table'] = blackTableBI); //done
+    sideBlackBI.length !== 0 && (queryParams['side_black'] = sideBlackBI); //done
+    openCrownBI.length !== 0 && (queryParams['open_crown'] = openCrownBI); //done
+    openTableBI.length !== 0 && (queryParams['open_table'] = openTableBI); //done
+    openPavilionBI.length !== 0 &&
+      (queryParams['open_pavilion'] = openPavilionBI); //done
+    milkyBI.length !== 0 && (queryParams['milky'] = milkyBI); //done
+    lusterBI.length !== 0 && (queryParams['luster'] = lusterBI); //done
+    eyeCleanBI.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI); //done
+    tableInclusionWI.length !== 0 &&
+      (queryParams['table_inclusion'] = tableInclusionWI); //done
+    sideInclusionWI.length !== 0 &&
+      (queryParams['side_inclusion'] = sideInclusionWI); //done
+    naturalCrownWI.length !== 0 &&
+      (queryParams['natural_crown'] = naturalCrownWI); //done
+    naturalGirdleWI.length !== 0 &&
+      (queryParams['natural_girdle'] = naturalGirdleWI); //done
+    naturalPavilionWI.length !== 0 &&
+      (queryParams['natural_pavilion'] = naturalPavilionWI); //done
+    surfaceGrainingWI.length !== 0 &&
+      (queryParams['surface_graining'] = surfaceGrainingWI); //done
+    internalGrainingWI.length !== 0 &&
+      (queryParams['internal_graining'] = internalGrainingWI); //done
+    tablePerFrom && (queryParams['tablePerFrom'] = tablePerFrom);
+    tablePerTo && (queryParams['tablePerTo'] = tablePerTo);
+    depthTo && (queryParams['depth'] = depthTo);
+    depthFrom && (queryParams['depth'] = depthFrom);
+    crownAngleFrom && (queryParams['crownAngleFrom'] = crownAngleFrom);
+    crownAngleTo && (queryParams['crownAngleTo'] = crownAngleTo);
+    lengthFrom && (queryParams['lengthFrom'] = lengthFrom);
+    lengthTo && (queryParams['lengthTo'] = lengthTo);
+    pavilionDepthFrom && (queryParams['pavilionDepthFrom'] = pavilionDepthFrom);
+    pavilionDepthTo && (queryParams['pavilionDepthTo'] = pavilionDepthTo);
+    depthPerFrom && (queryParams['depthPerFrom'] = depthPerFrom);
+    depthPerTo && (queryParams['depthPerTo'] = depthPerTo);
+    crownHeightFrom && (queryParams['crownHeightFrom'] = crownHeightFrom);
+    crownHeightTo && (queryParams['crownHeightTo'] = crownHeightTo);
+    widthFrom && (queryParams['widthFrom'] = widthFrom);
+    widthTo && (queryParams['widthTo'] = widthTo);
+    lowerHalfFrom && (queryParams['lowerHalfFrom'] = lowerHalfFrom);
+    lowerHalfTo && (queryParams['lowerHalfTo'] = lowerHalfTo);
+    ratioFrom && (queryParams['ratioFrom'] = ratioFrom);
+    ratioTo && (queryParams['ratioTo'] = ratioTo);
+    girdlePerFrom && (queryParams['girdlePerFrom'] = girdlePerFrom);
+    girdlePerTo && (queryParams['girdlePerTo'] = girdlePerTo);
+    pavilionAngleFrom && (queryParams['pavilionAngleFrom'] = pavilionAngleFrom);
+    pavilionAngleTo && (queryParams['pavilionAngleTo'] = pavilionAngleTo);
+    starLengthFrom && (queryParams['starLengthFrom'] = starLengthFrom);
+    starLengthTo && (queryParams['starLengthTo'] = starLengthTo);
+
+    // Construct your search URL here
+    setSearchUrl(constructUrlParams(queryParams));
+  }, [
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
+    selectedFancyColor,
+    selectedRangeColor,
+    selectedIntensity,
+    selectedOvertone,
+    selectedTinge,
+    selectedTingeIntensity,
+    selectedClarity,
+    selectedCaratRange,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedCulet,
+    selectedGirdle,
+    selectedGirdleStep2,
+    selectedLab,
+    selectedHR,
+    selectedBrilliance,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    caratRangeFrom,
+    caratRangeTo,
+    blackTableBI,
+    sideBlackBI,
+    openCrownBI,
+    openTableBI,
+    openPavilionBI,
+    milkyBI,
+    lusterBI,
+    eyeCleanBI,
+    tableInclusionWI,
+    sideInclusionWI,
+    naturalCrownWI,
+    naturalGirdleWI,
+    naturalPavilionWI,
+    surfaceGrainingWI,
+    internalGrainingWI,
+    tablePerFrom,
+    tablePerTo,
+    depthTo,
+    depthFrom,
+    crownAngleFrom,
+    crownAngleTo,
+    lengthFrom,
+    lengthTo,
+    pavilionDepthFrom,
+    pavilionDepthTo,
+    depthPerFrom,
+    depthPerTo,
+    crownHeightFrom,
+    crownHeightTo,
+    widthFrom,
+    widthTo,
+    lowerHalfFrom,
+    lowerHalfTo,
+    ratioFrom,
+    ratioTo,
+    girdlePerFrom,
+    girdlePerTo,
+    pavilionAngleFrom,
+    pavilionAngleTo,
+    starLengthFrom,
+    starLengthTo,
+  ]);
 
   const { data, error, isLoading, refetch } = useGetProductCountQuery({
-    searchUrl
+    searchUrl,
   });
 
-useEffect(() => {
- if(data?.count>300){
-  setIsError(true)
-  setErrorText('>300 please modify search')
- }
- else{
-  setIsError(false)
-  setErrorText('')
- }
-}, [data]);
+  useEffect(() => {
+    if (data?.count > 300) {
+      setIsError(true);
+      setErrorText('>300 please modify search');
+    } else {
+      setIsError(false);
+      setErrorText('');
+    }
+  }, [data]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -696,7 +872,7 @@ useEffect(() => {
     setStarLengthFrom('');
     setStarLengthTo('');
     setSelectedLocation([]);
-    setSelectedOrigin([])
+    setSelectedOrigin([]);
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -714,7 +890,7 @@ useEffect(() => {
       ];
     });
   };
-console.log(yourSelection)
+  console.log(yourSelection);
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -759,7 +935,8 @@ console.log(yourSelection)
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
       updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 && updateYourSelection('colorShade', selectedTinge);
+    selectedTinge.length > 0 &&
+      updateYourSelection('colorShade', selectedTinge);
 
     selectedTingeIntensity.length > 0 &&
       updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
@@ -925,8 +1102,8 @@ console.log(yourSelection)
       );
   };
 
-  const prepareSearchParam=()=>{
-  let response=  {
+  const prepareSearchParam = () => {
+    let response = {
       basic_card_details: {
         shape: selectedShape,
         color: selectedWhiteColor,
@@ -981,22 +1158,23 @@ console.log(yourSelection)
         internal_graining: internalGrainingWI,
         brilliance: selectedBrilliance,
       },
-    }
+    };
     return response;
-  }
+  };
   const handleSaveAndSearch = async () => {
-    if(addSearches.length===1){
-      setSavedSearches([prepareSearchParam()])
+    if (addSearches.length === 1) {
+      setSavedSearches([prepareSearchParam()]);
     }
     await addSavedSearch({
-      name: "saveSearchName",
+      name: 'saveSearchName',
       diamond_count: searchResultCount,
-      meta_data: addSearches.length===1 ? [prepareSearchParam()] : savedSearches,
+      meta_data:
+        addSearches.length === 1 ? [prepareSearchParam()] : savedSearches,
       is_deleted: false,
     });
 
     handleSearch();
-  }
+  };
   const handleAddSearchIndex = () => {
     setAddSearches((prevSearches) => [
       ...prevSearches,
@@ -1005,7 +1183,6 @@ console.log(yourSelection)
   };
 
   const handleSearch = async () => {
-
     if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
@@ -1017,49 +1194,45 @@ console.log(yourSelection)
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data:  prepareSearchParam(),
+        meta_data: prepareSearchParam(),
         is_deleted: false,
-      });    
+      });
     }
-  
 
-
-      console.log(JSON.stringify(addSearches))
-      localStorage.setItem("Search",JSON.stringify([...addSearches,{shape:selectedShape}]))
-      router.push('/search-result')
-    }
-  
+    console.log(JSON.stringify(addSearches));
+    localStorage.setItem(
+      'Search',
+      JSON.stringify([...addSearches, { shape: selectedShape }])
+    );
+    router.push('/search-result');
+  };
 
   const handleAddAnotherSearch = async () => {
-    handleAddSearchIndex()
+    handleAddSearchIndex();
     if (addSearches.length < 5) {
       //call previous serach api
       // setAddSearches([...addSearches, 'ooo']);
-      setSavedSearches([...savedSearches,prepareSearchParam()])
+      setSavedSearches([...savedSearches, prepareSearchParam()]);
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data:  prepareSearchParam(),
+        meta_data: prepareSearchParam(),
         is_deleted: false,
-      });  
-      handleAddSearches()
-      handleReset();  
-      }else {
-        setShowToast(true);
-        setToastErrorMessage('Add search limit exceeded');
-      }
-    
+      });
+      handleAddSearches();
+      handleReset();
+    } else {
+      setShowToast(true);
+      setToastErrorMessage('Add search limit exceeded');
     }
+  };
 
-
-
-  const handleAddSearches=()=>{
-    setAddSearches([...addSearches, {shape:selectedShape}]);
-    setSearchIndex(addSearches.length+1)
-
-  }
+  const handleAddSearches = () => {
+    setAddSearches([...addSearches, { shape: selectedShape }]);
+    setSearchIndex(addSearches.length + 1);
+  };
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -1911,11 +2084,11 @@ console.log(yourSelection)
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-      {isError && (
-            <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
-            </div>
-          )}
+        {isError && (
+          <div className="w-[30%]">
+            <p className="text-red-700 text-base ">{errorText}</p>
+          </div>
+        )}
         <CustomFooter
           footerButtonData={[
             {
