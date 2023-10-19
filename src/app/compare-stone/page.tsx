@@ -95,6 +95,8 @@ const CompareStone = () => {
     comapreStoneStoreData.compareStone[0]
   );
 
+  const [isCheck, setIsCheck] = useState<string[]>([]);
+
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
@@ -109,7 +111,7 @@ const CompareStone = () => {
 
       return compareStoneCheck?.variants[0].id;
     });
-    console.log('variantIds', variantIds);
+
     if (variantIds.length) {
       addCart({
         variants: variantIds,
@@ -168,35 +170,7 @@ const CompareStone = () => {
   };
 
   const [showDifferences, setShowDifferences] = useState(false);
-
-  const handleShowDifferencesChange = () => {
-    // Check if "Select All Checkbox" is checked and there are differences
-    if (!showDifferences) {
-      const differingValues = findDifferences(compareStoneData);
-      console.log(differingValues);
-    }
-    setShowDifferences(!showDifferences);
-  };
-
-  //Header Data
-  const headerData = {
-    headerHeading: ManageLocales('app.compareStone.heading'),
-    searchCount: compareStoneData?.length,
-    headerData: (
-      <div className="flex items-center gap-[10px] bottom-0">
-        <p className="text-solitaireTertiary text-base font-medium">
-          {ManageLocales('app.compareStone.showOnlyDifferences')}
-        </p>
-        <Checkbox
-          onClick={handleShowDifferencesChange}
-          data-testid={'Select All Checkbox'}
-        />
-      </div>
-    ),
-    overriddenStyles: {
-      headerDataStyles: `flex items-end`,
-    },
-  };
+  const [compareValues, setCompareValues] = useState({});
 
   const keyLabelMapping: KeyLabelMapping = {
     id: 'id',
@@ -230,30 +204,59 @@ const CompareStone = () => {
     luster: 'Luster',
   };
 
-  function findDifferences(objects: any) {
-    const differences: any = {};
+  const handleShowDifferencesChange = () => {
+    // Check if "Select All Checkbox" is checked and there are differences
+    if (!showDifferences) {
+      const propertiesToKeep = Object.keys(keyLabelMapping);
+      // Create a new array with filtered data
+      const filteredData = compareStoneData.map((item) => {
+        const filteredItem: any = {};
+        propertiesToKeep.forEach((prop) => {
+          filteredItem[prop] = item[prop];
+        });
+        return filteredItem;
+      });
 
-    for (let i = 0; i < objects.length; i++) {
-      for (let j = i + 1; j < objects.length; j++) {
-        for (const key in objects[i]) {
-          if (objects[i][key] !== objects[j][key]) {
-            if (!differences[key]) {
-              differences[key] = [];
-            }
-            if (!differences[key].find((item: any) => item.index === i)) {
-              differences[key].push({ index: i, value: objects[i][key] });
-            }
-            if (!differences[key].find((item: any) => item.index === j)) {
-              differences[key].push({ index: j, value: objects[j][key] });
-            }
+      // Create a result object to store differing values
+      const differingValues: any = {};
+
+      // Iterate over the properties in the first object
+      for (const key in filteredData[0]) {
+        if (filteredData[0].hasOwnProperty(key)) {
+          // Compare values for the current key in all objects
+          const values = filteredData.map((item) => item[key]);
+
+          // Check if there are differing values
+          if ([...new Set(values)].length > 1) {
+            differingValues[key] = values;
           }
         }
       }
-    }
 
-    return differences;
-  }
-  const [isCheck, setIsCheck] = useState<string[]>([]);
+      setCompareValues(differingValues);
+    }
+    setShowDifferences(!showDifferences);
+  };
+  //Header Data
+  const headerData = {
+    headerHeading: ManageLocales('app.compareStone.heading'),
+    searchCount: compareStoneData?.length,
+    headerData: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.compareStone.showOnlyDifferences')}
+        </p>
+        <Checkbox
+          onClick={handleShowDifferencesChange}
+          data-testid={'Select All Checkbox'}
+        />
+      </div>
+    ),
+    overriddenStyles: {
+      headerDataStyles: `flex items-end`,
+    },
+  };
+
   //specific checkbox
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
@@ -302,11 +305,21 @@ const CompareStone = () => {
                     </div>
                   </div>
                   <div>
-                    {Object.keys(keyLabelMapping).map((key) => (
-                      <div key={key}>
-                        <span>{key !== 'id' && keyLabelMapping[key]}</span>
-                      </div>
-                    ))}
+                    {!showDifferences
+                      ? Object.keys(keyLabelMapping).map((key) => (
+                          <div key={key}>
+                            <span>{key !== 'id' && keyLabelMapping[key]}</span>
+                          </div>
+                        ))
+                      : Object.keys(compareValues).map((key) => {
+                          return (
+                            <div key={key}>
+                              <span>
+                                {key !== 'id' && keyLabelMapping[key]}
+                              </span>
+                            </div>
+                          );
+                        })}
                   </div>
                 </div>
               </>
@@ -373,17 +386,29 @@ const CompareStone = () => {
                           </div>
                         </div>
 
-                        {Object.keys(keyLabelMapping).map((key) => {
-                          return (
-                            <div key={key}>
-                              {key !== 'id'
-                                ? diamond[key]
-                                  ? diamond[key]
-                                  : '-'
-                                : ''}
-                            </div>
-                          );
-                        })}
+                        {!showDifferences
+                          ? Object.keys(keyLabelMapping).map((key) => {
+                              return (
+                                <div key={key}>
+                                  {key !== 'id'
+                                    ? diamond[key]
+                                      ? diamond[key]
+                                      : '-'
+                                    : ''}
+                                </div>
+                              );
+                            })
+                          : Object.keys(compareValues).map((key) => {
+                              return (
+                                <div key={key}>
+                                  {key !== 'id'
+                                    ? diamond[key]
+                                      ? diamond[key]
+                                      : '-'
+                                    : ''}
+                                </div>
+                              );
+                            })}
                       </div>
                     );
                   })}
