@@ -17,7 +17,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   isChecked,
 }) => {
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center text-center space-x-2">
       <Checkbox
         data-testid={`custom-checkbox-${data}`}
         key={`checkbox-${data}`}
