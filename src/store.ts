@@ -12,10 +12,12 @@ import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import compareStoneReducer from './features/compare-stone/compare-stone-slice';
+import notificationBadgeReducer from './features/notification/notification-slice';
 import { downloadExcelApi } from './features/api/download-excel';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
+  notificationBadge: notificationBadgeReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
