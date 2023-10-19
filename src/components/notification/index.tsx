@@ -82,6 +82,15 @@ export const Notification = () => {
     setVisibleItems(visibleItems + itemsPerPage);
   };
 
+  const handleMarkAllAsRead = async () => {
+    let notificationMapData = data.data.map((item: any) => ({
+      id: item.id,
+      status: 'read',
+    }));
+
+    await updateNotification(notificationMapData);
+  };
+
   return (
     <>
       <div className={styles.notificationMainContainer}>
@@ -93,7 +102,10 @@ export const Notification = () => {
           </div>
 
           <div className={`flex items-center ${styles.markAllReadButton}`}>
-            <CustomDisplayButton displayButtonLabel="Mark all as read" />
+            <CustomDisplayButton
+              displayButtonLabel="Mark all as read"
+              handleClick={handleMarkAllAsRead}
+            />
 
             <div className={styles.notificationFooterButton}>
               <SheetClose>

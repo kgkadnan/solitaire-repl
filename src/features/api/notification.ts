@@ -15,12 +15,16 @@ export const notificationApi = createApi({
 
   endpoints: (builder) => ({
     getAllNotification: builder.query({
-      query: () => `store/all-notification`,
+      query: (args) => ({
+        url: `store/all-notification`,
+        method: 'GET',
+        params: { ...args },
+      }),
       providesTags: ['notification'],
     }),
     updateNotification: builder.mutation({
       query: (filter) => ({
-        url: `notification`,
+        url: `store/notification`,
         method: 'PUT', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),

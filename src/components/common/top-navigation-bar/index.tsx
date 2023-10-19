@@ -33,7 +33,7 @@ export const TopNavigationBar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  const { data } = useGetAllNotificationQuery({});
+  const { data } = useGetAllNotificationQuery({ type: 'APP' });
   const [updateNotification] = useUpdateNotificationMutation();
 
   const topNavData = [
