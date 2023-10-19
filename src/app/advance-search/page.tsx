@@ -29,7 +29,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [errorText, setErrorText] = useState('');
 
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
-  const router=useRouter()
+  const router = useRouter();
   const [searchIndex, setSearchIndex] = useState<number>(0);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -128,8 +128,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
-
-console.log("jyoti",searchUrl)
+  console.log('jyoti', searchUrl);
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -163,37 +162,40 @@ console.log("jyoti",searchUrl)
     }
   }, [search]);
   useEffect(() => {
-    let data=JSON.parse(localStorage.getItem('Search')!);
-    if (data?.length!== undefined && data?.length >0 && data[0]!==undefined){
+    let data = JSON.parse(localStorage.getItem('Search')!);
+    if (
+      data?.length !== undefined &&
+      data?.length > 0 &&
+      data[0] !== undefined
+    ) {
       setAddSearches(data);
-      setSelectedShape(data[0]?.shape)
+      setSelectedShape(data[0]?.shape);
 
-
-      localStorage.removeItem("Search");
-
+      localStorage.removeItem('Search');
     }
-   
   }, []);
 
   useEffect(() => {
-   selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
-   selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
-  }, [selectedShape,selectedWhiteColor]);
+    selectedShape.length !== 0 &&
+      setSearchUrl(constructUrlParams({ shape: selectedShape }));
+    selectedWhiteColor.length !== 0 &&
+      setSearchUrl(constructUrlParams({ color: selectedWhiteColor }));
+  }, [selectedShape, selectedWhiteColor]);
 
   const { data, error, isLoading, refetch } = useGetProductCountQuery({
-    searchUrl
+    searchUrl,
   });
 
-useEffect(() => {
- if(data?.count>300){
-  setIsError(true)
-  setErrorText('>300 please modify search')
- }
- else{
-  setIsError(false)
-  setErrorText('')
- }
-}, [data]);
+  useEffect(() => {
+    if (data?.count > 300) {
+      setIsError(true);
+      setErrorText('result should be less than 300. please modify search');
+    } 
+    else if(data?.count<300){
+      setIsError(true);
+      setErrorText(`${data.count} stones found`);
+    }
+  }, [data]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -696,7 +698,7 @@ useEffect(() => {
     setStarLengthFrom('');
     setStarLengthTo('');
     setSelectedLocation([]);
-    setSelectedOrigin([])
+    setSelectedOrigin([]);
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -714,7 +716,7 @@ useEffect(() => {
       ];
     });
   };
-console.log(yourSelection)
+  console.log(yourSelection);
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -759,7 +761,8 @@ console.log(yourSelection)
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
       updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 && updateYourSelection('colorShade', selectedTinge);
+    selectedTinge.length > 0 &&
+      updateYourSelection('colorShade', selectedTinge);
 
     selectedTingeIntensity.length > 0 &&
       updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
@@ -925,8 +928,8 @@ console.log(yourSelection)
       );
   };
 
-  const prepareSearchParam=()=>{
-  let response=  {
+  const prepareSearchParam = () => {
+    let response = {
       basic_card_details: {
         shape: selectedShape,
         color: selectedWhiteColor,
@@ -981,85 +984,87 @@ console.log(yourSelection)
         internal_graining: internalGrainingWI,
         brilliance: selectedBrilliance,
       },
-    }
+    };
     return response;
-  }
+  };
   const handleSaveAndSearch = async () => {
-    if(addSearches.length===1){
-      setSavedSearches([prepareSearchParam()])
+    console.log('kkkkkkkkkk', addSearches.length, 'pppp', prepareSearchParam());
+    if (addSearches.length === 0) {
+      setSavedSearches([prepareSearchParam()]);
     }
     await addSavedSearch({
-      name: "saveSearchName",
+      name: 'saveSearchName',
       diamond_count: searchResultCount,
-      meta_data: addSearches.length===1 ? [prepareSearchParam()] : savedSearches,
+      meta_data:
+        addSearches.length === 0 ? [prepareSearchParam()] : savedSearches,
       is_deleted: false,
     });
 
     handleSearch();
-  }
+  };
   const handleAddSearchIndex = () => {
-    setAddSearches((prevSearches) => [
-      ...prevSearches,
-      { ...prevSearches[searchIndex], shape: selectedShape },
-    ]);
+    if(addSearches.length<5){
+      setAddSearches((prevSearches) => [
+        ...prevSearches,
+        { ...prevSearches[searchIndex], shape: selectedShape },
+      ]);
+    }
+  
   };
 
   const handleSearch = async () => {
-
     if (searchResultCount > 300) {
       setToastErrorMessage(
         `Please modify your search, maximum 300 stones displayed`
       );
       setShowToast(true);
     } else {
+     
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data:  prepareSearchParam(),
+        meta_data: prepareSearchParam(),
         is_deleted: false,
-      });    
+      });
     }
-  
 
-
-      console.log(JSON.stringify(addSearches))
-      localStorage.setItem("Search",JSON.stringify([...addSearches,{shape:selectedShape}]))
-      router.push('/search-result')
-    }
-  
+    console.log(JSON.stringify(addSearches));
+    localStorage.setItem(
+      'Search',
+      JSON.stringify([...addSearches, { shape: selectedShape }])
+    );
+    router.push('/search-result');
+  };
 
   const handleAddAnotherSearch = async () => {
-    handleAddSearchIndex()
+    handleAddSearchIndex();
+    console.log("jjjjjjj",addSearches.length)
     if (addSearches.length < 5) {
       //call previous serach api
       // setAddSearches([...addSearches, 'ooo']);
-      setSavedSearches([...savedSearches,prepareSearchParam()])
+      setSavedSearches([...savedSearches, prepareSearchParam()]);
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
         diamond_count: searchResultCount,
-        meta_data:  prepareSearchParam(),
+        meta_data: prepareSearchParam(),
         is_deleted: false,
-      });  
-      handleAddSearches()
-      handleReset();  
-      }else {
-        setShowToast(true);
-        setToastErrorMessage('Add search limit exceeded');
-      }
-    
+      });
+      handleAddSearches();
+      handleReset();
+    } else {
+      setShowToast(true);
+      setToastErrorMessage('Add search limit exceeded');
     }
+  };
 
-
-
-  const handleAddSearches=()=>{
-    setAddSearches([...addSearches, {shape:selectedShape}]);
-    setSearchIndex(addSearches.length+1)
-
-  }
+  const handleAddSearches = () => {
+    setAddSearches([...addSearches, { shape: selectedShape }]);
+    setSearchIndex(addSearches.length + 1);
+  };
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -1911,11 +1916,12 @@ console.log(yourSelection)
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-      {isError && (
-            <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
-            </div>
-          )}
+        {isError && (
+          <div className="w-[30%]">
+            <span className='hidden  text-green-700 text-red-700'/> 
+            <p className={`text-${data.count < 300 ? "green" : "red"}-700 text-base`} >{errorText}</p>
+          </div>
+        )}
         <CustomFooter
           footerButtonData={[
             {
