@@ -25,7 +25,15 @@ export const cartApi = createApi({
       query: () => `cart`,
       providesTags: ['cart'],
     }),
+    deleteCart: builder.mutation({
+      query: (data) => ({
+        url: `carts`,
+        method: 'DELETE',
+        body: data,
+      }),
+    }),
   }),
 });
 
-export const { useAddCartMutation, useGetCartQuery } = cartApi;
+export const { useAddCartMutation, useGetCartQuery, useDeleteCartMutation } =
+  cartApi;

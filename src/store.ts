@@ -12,9 +12,11 @@ import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import compareStoneReducer from './features/compare-stone/compare-stone-slice';
+import notificationBadgeReducer from './features/notification/notification-slice';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
+  notificationBadge: notificationBadgeReducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,

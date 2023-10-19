@@ -22,6 +22,7 @@ import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
+import { notificationBadge } from '@/features/notification/notification-slice';
 
 interface TableColumn {
   label: string;
@@ -319,7 +320,7 @@ const SearchResults = () => {
         })
           .unwrap()
           .then(() => {
-            console.log('hhhhhhhhhhhhhhhhhhhhh');
+            dispatch(notificationBadge(true));
           })
           .catch(() => {
             console.log('1111111111111111');

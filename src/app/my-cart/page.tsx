@@ -15,8 +15,9 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSlider } from '@/components/common/slider';
 import { useRouter } from 'next/navigation';
-import { useGetCartQuery } from '@/features/api/cart';
+import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
 import { formatCreatedAt } from '@/utils/format-date';
+import { CustomDropdown } from '@/components/common/dropdown';
 
 interface KeyLabelMapping {
   [key: string]: string;
@@ -46,6 +47,8 @@ const MyCart = () => {
   const [cardData, setCardData] = useState([]);
 
   const { data } = useGetCartQuery({});
+  const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useDeleteCartMutation();
 
   function calculateRemainingTime(createdAt: string) {
     const createdAtTime = new Date(createdAt).getTime(); // Convert created at to milliseconds since epoch
@@ -159,8 +162,6 @@ const MyCart = () => {
     }
   }, [data]);
 
-  console.log('catrdData', cardData);
-
   const cardDetailData = [
     {
       cardId: 1,
@@ -243,10 +244,50 @@ const MyCart = () => {
     }
   };
 
+  const handleDelete = () => {
+    deleteCart(isCheck);
+  };
+
   //Footer Button Data
   const footerButtonData = [
-    { id: 1, displayButtonLabel: 'Delete', style: styles.transparent },
-    { id: 2, displayButtonLabel: 'Place Order', style: styles.filled },
+    {
+      id: 1,
+      displayButtonLabel: (
+        <CustomDropdown
+          dropdownTrigger={
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
+            />
+          }
+          dropdownMenu={[
+            {
+              label: 'Share',
+              fn: '',
+            },
+            {
+              label: 'Download Excel',
+              fn: '',
+            },
+            {
+              label: 'Find Matching Pair',
+              fn: '',
+            },
+          ]}
+        />
+      ),
+    },
+    {
+      id: 2,
+      displayButtonLabel: 'Compare Stone',
+      style: styles.transparent,
+    },
+    {
+      id: 2,
+      displayButtonLabel: 'Delete',
+      style: styles.transparent,
+      fn: handleDelete,
+    },
+    { id: 3, displayButtonLabel: 'Confirm Stone', style: styles.filled },
   ];
 
   //Header Data

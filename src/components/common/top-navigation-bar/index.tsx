@@ -20,8 +20,14 @@ import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
 } from '@/features/api/notification';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { notificationBadge } from '@/features/notification/notification-slice';
 
 export const TopNavigationBar = () => {
+  const dispatch = useAppDispatch();
+  const notificationBadgeStoreData: any = useAppSelector((store) => store);
+  let badgeData = notificationBadgeStoreData.notificationBadge.status;
+
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -72,6 +78,7 @@ export const TopNavigationBar = () => {
   }, [prevScrollPos]);
 
   const handleNotificationClick = async () => {
+    dispatch(notificationBadge(false));
     let notificationMapData = data.data.map((item: any) => ({
       id: item.id,
       status: 'unread',
@@ -117,7 +124,13 @@ export const TopNavigationBar = () => {
             sheetContent={<Notification />}
             sheetTriggenContent={
               <div onClick={handleNotificationClick}>
-                <NotificationIcon role="button" className={styles.iconColor} />
+                <div className={styles.notificationContainer}>
+                  <NotificationIcon
+                    role="button"
+                    className={styles.iconColor}
+                  />
+                  {badgeData && <div className={styles.badge}></div>}
+                </div>
               </div>
             }
             sheetContentStyle={styles.notificationSheetContent}
@@ -128,7 +141,6 @@ export const TopNavigationBar = () => {
           <ToggleButton />
         </div>
       </div>
-      {/* <hr className={styles.dividerLine} /> */}
     </div>
   );
 };
