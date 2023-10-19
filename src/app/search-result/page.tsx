@@ -22,7 +22,6 @@ import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
-import { CustomDialog } from '@/components/common/dialog';
 
 interface TableColumn {
   label: string;
@@ -304,13 +303,11 @@ const SearchResults = () => {
 
   const addToCart = () => {
     if (isCheck.length > 100) {
-      // alert('The cart does not allow more than 100 Stones.');
       setIsError(true);
       setErrorText('The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('*Select stone to add cart.');
-      // alert('select stone to add to cart.');
+      setErrorText('*Select stone to add to cart.');
     } else {
       let variantIds = isCheck.map((id) => {
         const selectedRow = rows.find((row) => row.id === id);
@@ -617,7 +614,6 @@ const SearchResults = () => {
 
   return (
     <>
-      {dialog && <CustomDialog dialogContent={dialogContent} />}
       <div className="border-b  border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
@@ -832,7 +828,7 @@ const SearchResults = () => {
         <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
           {isError && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-sm ">{errorText}</p>
+              <p className="text-red-700 text-base ">{errorText}</p>
             </div>
           )}
           <CustomFooter

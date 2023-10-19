@@ -15,7 +15,6 @@ import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { useAddCartMutation } from '@/features/api/cart';
-import { CustomDialog } from '../dialog';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
@@ -323,7 +322,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 
   return (
     <>
-      {dialog && <CustomDialog dialogContent={dialogContent} />}
       <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
