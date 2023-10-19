@@ -3,13 +3,19 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
 export const notificationSettingApi = createApi({
   reducerPath: 'notificationSettingReducer',
-  baseQuery: fetchBaseQuery({ baseUrl: apiURL, credentials: 'include' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: apiURL,
+    headers: {
+      Authorization:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhEMFI2NFZHQThLNFcyNkFORlZDUTQ1TSIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNjk3NjExNzEzLCJleHAiOjE3MDAyMDM3MTN9.X_ETyZIozIhg5bm7kcu2jRxG500sCHfl98eESyBQtHo',
+    },
+  }),
   tagTypes: ['notificationSetting'],
 
   endpoints: (builder) => ({
     getAllNotificationSetting: builder.query({
       query: (args) => ({
-        url: `subscription`,
+        url: `store/subscription`,
         method: 'GET',
         params: { ...args },
       }),
@@ -17,15 +23,9 @@ export const notificationSettingApi = createApi({
     }),
     updateNotificationSetting: builder.mutation({
       query: (filter) => ({
-        url: `manage-subscription`,
+        url: `store/manage-subscription`,
         method: 'PUT', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
-        credentials: 'include',
-        // headers: {
-        //   Cookie:
-        //     'connect.sid=s%3AX-BXAeOVF2dqX9af4GwpedFh1Db86k-H.eEIHv41OPI6JbekBOfxi8%2FqtyYvs250RL%2Bcfo1oQfms',
-        //   // SameSite: 'None',
-        // },
       }),
       invalidatesTags: ['notificationSetting'],
     }),

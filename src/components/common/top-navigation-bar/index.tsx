@@ -79,12 +79,17 @@ export const TopNavigationBar = () => {
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
+
     let notificationMapData = data.data.map((item: any) => ({
       id: item.id,
-      status: 'unread',
+      status: item.status === 'unread' ? 'read' : item.status,
     }));
 
-    await updateNotification(notificationMapData);
+    const unreadNotifications = notificationMapData.filter(
+      (item: any) => item.status === 'unread'
+    );
+
+    await updateNotification(unreadNotifications);
   };
 
   return (

@@ -74,25 +74,16 @@ const MyCart = () => {
 
   const keyLabelMapping: KeyLabelMapping = {
     shape: 'Shape',
-    color: 'Color',
     carat: 'Carat',
+    color: 'Color',
     clarity: 'Clarity',
     color_shade: 'Shade',
     cut: 'Cut',
     polish: 'Polish',
-    rap: 'Rap($)',
-    crown_angle: 'C/A',
-    crown_height: 'C/H',
     symmetry: 'Symmetry',
-    length: 'Length',
-    width: 'Width',
+    rap: 'Rap($)',
     lab: 'Lab',
-    girdle: 'Girdle',
-    culet: 'Culet',
     inscription: 'Ins.',
-    origin_country: 'Origin',
-    luster: 'Luster',
-    depth: 'Depth',
   };
 
   const renderCardData = useCallback((data: any) => {
