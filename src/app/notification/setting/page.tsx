@@ -8,7 +8,7 @@ import { formatCassing } from '@/utils/format-cassing';
 import {
   useGetAllNotificationSettingQuery,
   useUpdateNotificationSettingMutation,
-} from '@/slices/notification-setting';
+} from '@/features/api/notification-setting';
 
 interface INotificationSetting {
   type: string;
