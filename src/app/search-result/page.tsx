@@ -353,6 +353,8 @@ const SearchResults = () => {
         })
           .unwrap()
           .then(() => {
+            setIsError(false);
+            setErrorText('');
             dispatch(notificationBadge(true));
           })
           .catch(() => {
