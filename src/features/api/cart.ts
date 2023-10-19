@@ -20,6 +20,7 @@ export const cartApi = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['cart'],
     }),
     getCart: builder.query({
       query: () => `cart`,
@@ -27,10 +28,11 @@ export const cartApi = createApi({
     }),
     deleteCart: builder.mutation({
       query: (data) => ({
-        url: `carts`,
+        url: `cart`,
         method: 'DELETE',
         body: data,
       }),
+      invalidatesTags: ['cart'],
     }),
   }),
 });

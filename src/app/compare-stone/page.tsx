@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import styles from './compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
-import DiamondImage from '@public/assets/images/history-of-diamonds1 1.png';
 import Image from 'next/image';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { CustomFooter } from '@/components/common/footer';
@@ -14,6 +13,7 @@ import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAppSelector } from '@/hooks/hook';
+import { useAddCartMutation } from '@/features/api/cart';
 
 interface ICompareStoneData {
   [key: string]: {
@@ -94,7 +94,36 @@ const CompareStone = () => {
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
     comapreStoneStoreData.compareStone[0]
   );
-  const [differences, setDifferences] = useState<string[]>([]);
+
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
+  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
+    useAddCartMutation();
+
+  const handleAddToCart = () => {
+    let variantIds = isCheck.map((id) => {
+      const compareStoneCheck = compareStoneData.find((compareStone: any) => {
+        return compareStone.id === id;
+      });
+
+      return compareStoneCheck?.variants[0].id;
+    });
+    console.log('variantIds', variantIds);
+    if (variantIds.length) {
+      addCart({
+        variants: variantIds,
+      })
+        .unwrap()
+        .then(() => {
+          console.log('hhhhhhhhhhhhhhhhhhhhh');
+        })
+        .catch(() => {
+          console.log('1111111111111111');
+        });
+      setIsCheck([]);
+    }
+  };
 
   const compareStoneFooter = [
     {
@@ -125,7 +154,12 @@ const CompareStone = () => {
     },
     { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
     { id: 3, displayButtonLabel: 'Add to Wishlist', style: styles.filled },
-    { id: 4, displayButtonLabel: 'Add to Cart', style: styles.filled },
+    {
+      id: 4,
+      displayButtonLabel: 'Add to Cart',
+      style: styles.filled,
+      fn: handleAddToCart,
+    },
   ];
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>, id: string) => {
@@ -151,8 +185,7 @@ const CompareStone = () => {
     headerData: (
       <div className="flex items-center gap-[10px] bottom-0">
         <p className="text-solitaireTertiary text-base font-medium">
-          {/* {ManageLocales('app.compareStone.showOnlyDifferences')} */}
-          Select All Checkbox
+          {ManageLocales('app.compareStone.showOnlyDifferences')}
         </p>
         <Checkbox
           onClick={handleShowDifferencesChange}
@@ -163,10 +196,6 @@ const CompareStone = () => {
     overriddenStyles: {
       headerDataStyles: `flex items-end`,
     },
-  };
-
-  const handleCheckBox = (id: string) => {
-    alert('click checkbox ' + id);
   };
 
   const keyLabelMapping: KeyLabelMapping = {
@@ -224,6 +253,18 @@ const CompareStone = () => {
 
     return differences;
   }
+  const [isCheck, setIsCheck] = useState<string[]>([]);
+  //specific checkbox
+  const handleClick = (id: string) => {
+    let updatedIsCheck = [...isCheck];
+
+    if (updatedIsCheck.includes(id)) {
+      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+    } else {
+      updatedIsCheck.push(id);
+    }
+    setIsCheck(updatedIsCheck);
+  };
 
   return (
     <div className={styles.comparestoneContainer}>
@@ -292,13 +333,20 @@ const CompareStone = () => {
                           <div className={styles.compareStoneCheckbox}>
                             <CustomCheckBox
                               data={items.id}
-                              onClick={() => handleCheckBox(items.id)}
+                              onClick={() => handleClick(items.id)}
                             />
                           </div>
 
                           <div
                             className={styles.closeButton}
-                            onClick={(event) => handleClose(event, items.id)}
+                            onClick={(event) =>
+                              compareStoneData.length > 2
+                                ? handleClose(event, items.id)
+                                : (setIsError(true),
+                                  setErrorText(
+                                    'Two stones should be available for comparison.'
+                                  ))
+                            }
                           >
                             <CloseButton />
                           </div>
@@ -346,8 +394,16 @@ const CompareStone = () => {
         </div>
       )}
 
-      <div className="sticky bottom-0">
-        <CustomFooter footerButtonData={compareStoneFooter} />
+      <div className="sticky bottom-0 flex border-t-2 border-solitaireSenary items-center justify-between">
+        {isError && (
+          <div className="w-[30%]">
+            <p className="text-red-700 text-base ">{errorText}</p>
+          </div>
+        )}
+        <CustomFooter
+          footerButtonData={compareStoneFooter}
+          noBorderTop={styles.paginationContainerStyle}
+        />
       </div>
     </div>
   );

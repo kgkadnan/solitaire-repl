@@ -18,12 +18,15 @@ import { useRouter } from 'next/navigation';
 import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomDropdown } from '@/components/common/dropdown';
+import { useAppDispatch } from '@/hooks/hook';
+import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 
 interface KeyLabelMapping {
   [key: string]: string;
 }
 
 const MyCart = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
   // Style classes and variables
   const tableStyles = {
@@ -45,6 +48,8 @@ const MyCart = () => {
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [cardData, setCardData] = useState([]);
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const { data } = useGetCartQuery({});
   const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
@@ -245,7 +250,38 @@ const MyCart = () => {
   };
 
   const handleDelete = () => {
-    deleteCart(isCheck);
+    console.log(isCheck);
+
+    deleteCart({
+      items: isCheck,
+    })
+      .unwrap()
+      .then((data) => {
+        setCardData(data.items);
+      })
+      .catch(() => {
+        console.log('1111111111111111');
+      });
+  };
+
+  const handleCompareStone = () => {
+    const maxStones = 10;
+    const minStones = 2;
+
+    if (isCheck.length > maxStones) {
+      setIsError(true);
+      setErrorText(`You can compare a maximum of ${maxStones} stones`);
+    } else if (isCheck.length < minStones) {
+      setIsError(true);
+      setErrorText(`Minimum ${minStones} stones are required to compare`);
+    } else {
+      const compareStones = isCheck
+        .map((id) => data.items.find((row: any) => row.id === id))
+        .map((stone) => stone.product);
+
+      dispatch(addCompareStone(compareStones));
+      router.push('/compare-stone');
+    }
   };
 
   //Footer Button Data
@@ -280,6 +316,7 @@ const MyCart = () => {
       id: 2,
       displayButtonLabel: 'Compare Stone',
       style: styles.transparent,
+      fn: handleCompareStone,
     },
     {
       id: 2,
@@ -503,7 +540,12 @@ const MyCart = () => {
 
         {/* Custom Footer */}
         {footerButtonData?.length && (
-          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+          <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+            {isError && (
+              <div className="w-[30%]">
+                <p className="text-red-700 text-base ">{errorText}</p>
+              </div>
+            )}
             <CustomFooter footerButtonData={footerButtonData} />
           </div>
         )}
