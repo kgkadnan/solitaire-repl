@@ -25,6 +25,8 @@ interface IAdvanceSearch {
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
   const router=useRouter()
@@ -181,7 +183,18 @@ console.log("jyoti",searchUrl)
   const { data, error, isLoading, refetch } = useGetProductCountQuery({
     searchUrl
   });
-console.log("llllllll",data,searchUrl)
+
+useEffect(() => {
+ if(data?.count>300){
+  setIsError(true)
+  setErrorText('>300 please modify search')
+ }
+ else{
+  setIsError(false)
+  setErrorText('')
+ }
+}, [data]);
+
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
@@ -1013,7 +1026,7 @@ console.log(yourSelection)
 
       console.log(JSON.stringify(addSearches))
       localStorage.setItem("Search",JSON.stringify([...addSearches,{shape:selectedShape}]))
-      router.push('/')
+      router.push('/search-result')
     }
   
 
@@ -1898,6 +1911,11 @@ console.log(yourSelection)
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+      {isError && (
+            <div className="w-[30%]">
+              <p className="text-red-700 text-base ">{errorText}</p>
+            </div>
+          )}
         <CustomFooter
           footerButtonData={[
             {
@@ -1920,8 +1938,6 @@ console.log(yourSelection)
                 searchApiCalled && searchResultCount! === 0
                   ? ManageLocales('app.advanceSearch.addDemand')
                   : ManageLocales('app.advanceSearch.search')
-              } ${
-                searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
               }`,
               style: styles.filled,
               fn: handleSearch,
