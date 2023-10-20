@@ -96,7 +96,7 @@ const SavedSearch = () => {
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     currentPage,
     resultsPerPage,
-    searchUrl
+    searchUrl,
   });
 
   // Destructure the mutation function from the hook
@@ -337,8 +337,7 @@ const SavedSearch = () => {
     headerData: (
       <>
         <div className="flex mr-[30px] ">
-        <CustomCalender date={date} handleDate={handleDate} />
-
+          <CustomCalender date={date} handleDate={handleDate} />
         </div>
         <div className="flex items-center gap-[10px] bottom-0">
           <Checkbox
@@ -397,7 +396,7 @@ const SavedSearch = () => {
 
   // Function to handle "Show Results" button click
   const showButtonHandleClick = () => {
-    alert("You have clicked the 'show result' button"); 
+    alert("You have clicked the 'show result' button");
   };
 
   const handleButtonClick = (index: number) => {
@@ -438,7 +437,9 @@ const SavedSearch = () => {
                       sheetTriggenContent={
                         <>
                           <div
-                            onClick={() => handleSlider(SavedSearchData[indexTest])}
+                            onClick={() =>
+                              handleSlider(SavedSearchData[indexTest])
+                            }
                           >
                             <CustomSearchResultCard
                               cardData={items}
@@ -457,156 +458,158 @@ const SavedSearch = () => {
                           </div>
 
                           {/* {sliderData.map((cardDetails: any) => ( */}
-                            <>
-                              <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
-                                {SavedSearchData[indexTest].meta_data.length > 1 &&
-                                  SavedSearchData[indexTest].meta_data.map(
-                                    (data: any, index: number) => (
-                                      <div
-                                        key={`Search-${index}`}
-                                        style={{
-                                          marginRight:
+                          <>
+                            <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
+                              {SavedSearchData[indexTest].meta_data.length >
+                                1 &&
+                                SavedSearchData[indexTest].meta_data.map(
+                                  (data: any, index: number) => (
+                                    <div
+                                      key={`Search-${index}`}
+                                      style={{
+                                        marginRight:
                                           index ===
-                                            SavedSearchData[indexTest].meta_data.length - 1
-                                              ? '0px'
-                                              : '16px',
+                                          SavedSearchData[indexTest].meta_data
+                                            .length -
+                                            1
+                                            ? '0px'
+                                            : '16px',
+                                      }}
+                                    >
+                                      <CustomDisplayButton
+                                        displayButtonAllStyle={{
+                                          displayButtonStyle:
+                                            activeTab === index
+                                              ? styles.activeHeaderButtonStyle
+                                              : styles.headerButtonStyle,
+                                          displayLabelStyle:
+                                            styles.headerButtonLabelStyle,
                                         }}
-                                      >
-                                        <CustomDisplayButton
-                                          displayButtonAllStyle={{
-                                            displayButtonStyle:
-                                              activeTab === index
-                                                ? styles.activeHeaderButtonStyle
-                                                : styles.headerButtonStyle,
-                                            displayLabelStyle:
-                                              styles.headerButtonLabelStyle,
-                                          }}
-                                          displayButtonLabel={`Search ${
-                                            index + 1
-                                          }`}
-                                          handleClick={() =>
-                                            handleButtonClick(index)
-                                          }
-                                        />
-                                      </div>
-                                    )
-                                  )}
-                              </div>
-                              <div
-                                className="flex"
-                                key={SavedSearchData[indexTest].meta_data.cardId}
-                              >
-                                <div className={styles.sheetMainDiv}>
-                                  {/* Detailed Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.savedSearch.basicInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object?.entries(
-                                      SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[activeTab]
-                                          ?.basic_card_details
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  {/* measurement Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.measurement'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object?.entries(
-                                      SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[activeTab]
-                                          .measurements
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  {/* other Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.otherInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object.entries(
-                                      SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[activeTab]
-                                          .other_information
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
+                                        displayButtonLabel={`Search ${
+                                          index + 1
+                                        }`}
+                                        handleClick={() =>
+                                          handleButtonClick(index)
+                                        }
+                                      />
+                                    </div>
+                                  )
+                                )}
+                            </div>
+                            <div
+                              className="flex"
+                              key={SavedSearchData[indexTest].meta_data.cardId}
+                            >
+                              <div className={styles.sheetMainDiv}>
+                                {/* Detailed Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales('app.savedSearch.basicInfo')}
+                                  </p>
                                 </div>
 
-                                {/* inclusionDetails Information section */}
-                                <div className={styles.inclusionDetailsMainDiv}>
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.inclusionDetails'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  {
-                               
+                                <div>
+                                  {Object?.entries(
                                     SavedSearchData[indexTest] &&
-                                    Object.entries(
-                                    SavedSearchData[indexTest]?.meta_data[activeTab]
-                                        .inclusion_details
-                                  ).map(([key,value]) => (
+                                      SavedSearchData[indexTest]?.meta_data[
+                                        activeTab
+                                      ]?.basic_card_details
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {key}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {Array.isArray(value)
+                                            ? (value as string[]).join(', ')
+                                            : (value as string)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* measurement Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.measurement'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object?.entries(
+                                    SavedSearchData[indexTest] &&
+                                      SavedSearchData[indexTest]?.meta_data[
+                                        activeTab
+                                      ].measurements
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {key}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {Array.isArray(value)
+                                            ? (value as string[]).join(', ')
+                                            : (value as string)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* other Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    SavedSearchData[indexTest] &&
+                                      SavedSearchData[indexTest]?.meta_data[
+                                        activeTab
+                                      ].other_information
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {key}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {Array.isArray(value)
+                                            ? (value as string[]).join(', ')
+                                            : (value as string)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* inclusionDetails Information section */}
+                              <div className={styles.inclusionDetailsMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.inclusionDetails'
+                                    )}
+                                  </p>
+                                </div>
+
+                                {SavedSearchData[indexTest] &&
+                                  Object.entries(
+                                    SavedSearchData[indexTest]?.meta_data[
+                                      activeTab
+                                    ].inclusion_details
+                                  ).map(([key, value]) => (
                                     <p className="flex" key={key}>
-                                   
                                       <span
                                         className={
                                           styles.inclutionDetailsInnerHeadingStyle
@@ -621,9 +624,9 @@ const SavedSearch = () => {
                                       </span>
                                     </p>
                                   ))}
-                                </div>
                               </div>
-                            </>
+                            </div>
+                          </>
                           {/* // ))} */}
 
                           <div className="border-b border-solitaireTertiary mt-8"></div>
