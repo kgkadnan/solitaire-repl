@@ -69,8 +69,6 @@ const Notification = () => {
     <>
       <div className={styles.showAllNotificationContainer}>
         {notificationData?.map((items) => {
-          console.log('aliasger', items);
-
           return (
             <div key={items.id} className="border-b border-solitaireSenary">
               <div
