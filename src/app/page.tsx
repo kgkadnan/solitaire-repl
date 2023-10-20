@@ -24,7 +24,7 @@ export default function Home() {
           marginTop: '20px',
         }}
       >
-        Bulding Digital diamond platform
+        Building Digital Diamond Platform
       </h1>
       {/* <h1>{ManageLocales('app.welcome')}</h1>
       <LanguageSwitcher /> */}

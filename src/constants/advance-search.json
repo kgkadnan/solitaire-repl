@@ -81,9 +81,9 @@
     "Light Yellow"
   ],
   "make": ["3EX", "3EX-Non", "3VG+"],
-  "cut": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
-  "polish": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
-  "symmetry": ["Ideal", "Excellent", "Very Good", "Good", "Fair"],
+  "cut": ["Ideal", "Excellent", "VG", "Good", "Fair"],
+  "polish": ["Ideal", "Excellent", "VG", "Good", "Fair"],
+  "symmetry": ["Ideal", "Excellent", "VG", "Good", "Fair"],
   "location": [
     {
       "id": 1,
@@ -260,7 +260,14 @@
       }
     },
     {
-      "label": "Crown Angle",
+      "label": "Depth%",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Ratio",
       "range": {
         "start": 0,
         "end": 100
@@ -274,27 +281,6 @@
       }
     },
     {
-      "label": "Pavilion Depth",
-      "range": {
-        "start": 0,
-        "end": 100
-      }
-    },
-    {
-      "label": "Depth%",
-      "range": {
-        "start": 0,
-        "end": 100
-      }
-    },
-    {
-      "label": "Crown Height",
-      "range": {
-        "start": 0,
-        "end": 100
-      }
-    },
-    {
       "label": "Width",
       "range": {
         "start": 0,
@@ -302,14 +288,21 @@
       }
     },
     {
-      "label": "Lower Half",
+      "label": "Depth",
       "range": {
         "start": 0,
         "end": 100
       }
     },
     {
-      "label": "Ratio",
+      "label": "Crown Angle",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+    {
+      "label": "Crown Height",
       "range": {
         "start": 0,
         "end": 100
@@ -329,6 +322,22 @@
         "end": 100
       }
     },
+    {
+      "label": "Pavilion Depth",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+
+    {
+      "label": "Lower Half",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
+    },
+
     {
       "label": "Star Length",
       "range": {
