@@ -1061,7 +1061,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ];
     });
   };
-
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -1334,9 +1333,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   const handleSaveAndSearch = async () => {
     if (data.count < 300 && data.count > 0) {
-      if (addSearches.length === 1) {
+      if (addSearches.length === 0) {
         setSavedSearches([prepareSearchParam()]);
       }
+
       await addSavedSearch({
         name: 'saveSearchName',
         diamond_count: searchResultCount,
@@ -1355,10 +1355,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     }
   };
   const handleAddSearchIndex = () => {
-    setAddSearches((prevSearches) => [
-      ...prevSearches,
-      { ...prevSearches[searchIndex], shape: selectedShape },
-    ]);
+    if (addSearches.length < 5) {
+      setAddSearches((prevSearches) => [
+        ...prevSearches,
+        { ...prevSearches[searchIndex], shape: selectedShape },
+      ]);
+    }
   };
 
   const handleSearch = async () => {
@@ -1378,7 +1380,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       });
     }
 
-    console.log(JSON.stringify(addSearches));
     const queryParams = generateQueryParams({
       selectedShape,
       selectedColor,
@@ -2343,7 +2344,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
         {isError && (
           <div className="w-[30%]">
-            <p className="text-red-700 text-base ">{errorText}</p>
+            <span className="hidden  text-green-700 text-red-700" />
+            <p
+              className={`text-${
+                data.count < 300 ? 'green' : 'red'
+              }-700 text-base`}
+            >
+              {errorText}
+            </p>
           </div>
         )}
         <CustomFooter
