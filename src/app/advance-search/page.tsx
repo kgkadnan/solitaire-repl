@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './advance-search.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
@@ -128,7 +128,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
 
-  console.log('jyoti', searchUrl);
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -154,6 +153,197 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     ],
     [] // No dependencies
   );
+
+  function generateQueryParams({
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
+    selectedIntensity,
+    selectedOvertone,
+    selectedTinge,
+    selectedTingeIntensity,
+    selectedClarity,
+    selectedCaratRange,
+    caratRangeFrom,
+    caratRangeTo,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedCulet,
+    selectedGirdle,
+    selectedGirdleStep2,
+    selectedLab,
+    selectedHR,
+    selectedBrilliance,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    blackTableBI,
+    sideBlackBI,
+    openCrownBI,
+    openTableBI,
+    openPavilionBI,
+    milkyBI,
+    lusterBI,
+    eyeCleanBI,
+    tableInclusionWI,
+    sideInclusionWI,
+    naturalCrownWI,
+    naturalGirdleWI,
+    naturalPavilionWI,
+    surfaceGrainingWI,
+    internalGrainingWI,
+    tablePerFrom,
+    tablePerTo,
+    depthTo,
+    depthFrom,
+    crownAngleFrom,
+    crownAngleTo,
+    lengthFrom,
+    lengthTo,
+    pavilionDepthFrom,
+    pavilionDepthTo,
+    depthPerFrom,
+    depthPerTo,
+    crownHeightFrom,
+    crownHeightTo,
+    widthFrom,
+    widthTo,
+    lowerHalfFrom,
+    lowerHalfTo,
+    ratioFrom,
+    ratioTo,
+    girdlePerFrom,
+    girdlePerTo,
+    pavilionAngleFrom,
+    pavilionAngleTo,
+    starLengthFrom,
+    starLengthTo,
+  }: any) {
+    const queryParams: any = {};
+
+    selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
+    selectedColor && (queryParams['color'] = selectedColor);
+    selectedWhiteColor?.length !== 0 &&
+      (queryParams['color'] = selectedWhiteColor);
+    selectedIntensity?.length !== 0 &&
+      (queryParams['intensity'] = selectedIntensity);
+    selectedOvertone?.length !== 0 &&
+      (queryParams['overtone'] = selectedOvertone);
+    selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
+    selectedTingeIntensity?.length !== 0 &&
+      (queryParams['color_shade_intensity'] = selectedTingeIntensity);
+    selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
+    selectedCaratRange?.length !== 0 &&
+      (queryParams['carat'] = selectedCaratRange);
+    caratRangeFrom &&
+      caratRangeTo &&
+      (queryParams['carat'] = `${caratRangeFrom}-${caratRangeTo}`);
+    selectedMake && (queryParams['make'] = selectedMake);
+    selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
+    selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
+    selectedSymmetry?.length !== 0 &&
+      (queryParams['symmetry'] = selectedSymmetry);
+    selectedFluorescence?.length !== 0 &&
+      (queryParams['fluorescence'] = selectedFluorescence);
+    selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
+    selectedGirdle?.length !== 0 && (queryParams['girdle'] = selectedGirdle);
+    selectedGirdleStep2?.length !== 0 &&
+      (queryParams['girdleStep2'] = selectedGirdleStep2);
+    selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
+    selectedHR?.length !== 0 && (queryParams['ha'] = selectedHR);
+    selectedBrilliance?.length !== 0 &&
+      (queryParams['brilliance'] = selectedBrilliance);
+    selectedLocation?.length !== 0 &&
+      (queryParams['location'] = selectedLocation);
+    selectedOrigin?.length !== 0 &&
+      (queryParams['origin_country'] = selectedOrigin);
+    priceRangeFrom &&
+      priceRangeTo &&
+      (queryParams['price_range'] = `${priceRangeFrom}-${priceRangeTo}`);
+    discountFrom &&
+      discountTo &&
+      (queryParams['discount'] = `${discountFrom}-${discountTo}`);
+    pricePerCaratFrom &&
+      pricePerCaratTo &&
+      (queryParams[
+        'price_per_carat'
+      ] = `${pricePerCaratFrom}-${pricePerCaratTo}`);
+    blackTableBI?.length !== 0 && (queryParams['black_table'] = blackTableBI);
+    sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
+    openCrownBI?.length !== 0 && (queryParams['open_crown'] = openCrownBI);
+    openTableBI?.length !== 0 && (queryParams['open_table'] = openTableBI);
+    openPavilionBI?.length !== 0 &&
+      (queryParams['open_pavilion'] = openPavilionBI);
+    milkyBI?.length !== 0 && (queryParams['milky'] = milkyBI);
+    lusterBI?.length !== 0 && (queryParams['luster'] = lusterBI);
+    eyeCleanBI?.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI);
+    tableInclusionWI?.length !== 0 &&
+      (queryParams['table_inclusion'] = tableInclusionWI);
+    sideInclusionWI?.length !== 0 &&
+      (queryParams['side_inclusion'] = sideInclusionWI);
+    naturalCrownWI?.length !== 0 &&
+      (queryParams['natural_crown'] = naturalCrownWI);
+    naturalGirdleWI?.length !== 0 &&
+      (queryParams['natural_girdle'] = naturalGirdleWI);
+    naturalPavilionWI?.length !== 0 &&
+      (queryParams['natural_pavilion'] = naturalPavilionWI);
+    surfaceGrainingWI?.length !== 0 &&
+      (queryParams['surface_graining'] = surfaceGrainingWI);
+    internalGrainingWI?.length !== 0 &&
+      (queryParams['internal_graining'] = internalGrainingWI);
+    tablePerFrom &&
+      tablePerTo &&
+      (queryParams['table_percentage'] = `${tablePerFrom}-${tablePerTo}`);
+    depthFrom &&
+      depthTo &&
+      (queryParams['depth_percentage'] = `${depthTo}-${depthFrom}`);
+    crownAngleFrom &&
+      crownAngleTo &&
+      (queryParams['crown_angle'] = `${crownAngleFrom}-${crownAngleTo}`);
+    lengthFrom &&
+      lengthTo &&
+      (queryParams['length'] = `${lengthFrom}-${lengthTo}`);
+    pavilionDepthFrom &&
+      pavilionDepthTo &&
+      (queryParams[
+        'pavilion_depth'
+      ] = `${pavilionDepthFrom}-${pavilionDepthTo}`);
+    depthPerFrom &&
+      depthPerTo &&
+      (queryParams['depth'] = `${depthPerFrom}-${depthPerTo}`);
+    crownHeightFrom &&
+      crownHeightTo &&
+      (queryParams['crown_height'] = `${crownHeightFrom}-${crownHeightTo}`);
+    widthFrom && widthTo && (queryParams['width'] = `${widthFrom}-${widthTo}`);
+    lowerHalfFrom &&
+      lowerHalfTo &&
+      (queryParams['lower_half'] = `${lowerHalfFrom}-${lowerHalfTo}`);
+    ratioFrom &&
+      ratioTo &&
+      (queryParams['ratioFrom'] = `${ratioFrom}-${ratioTo}`);
+    girdlePerFrom &&
+      girdlePerTo &&
+      (queryParams['girdle_percentage'] = `${girdlePerFrom}-${girdlePerTo}`);
+    pavilionAngleFrom &&
+      pavilionAngleTo &&
+      (queryParams[
+        'pavilion_angle'
+      ] = `${pavilionAngleFrom}-${pavilionAngleTo}`);
+    starLengthFrom &&
+      starLengthTo &&
+      (queryParams['star_length'] = `${starLengthFrom}-${starLengthTo}`);
+
+    return queryParams;
+  }
+
   useEffect(() => {
     if (search !== null) {
       setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
@@ -182,102 +372,81 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   // }, [selectedShape,selectedWhiteColor]);
 
   useEffect(() => {
-    const queryParams: any = {};
-
-    selectedShape.length !== 0 && (queryParams['shape'] = selectedShape);
-    // selectedColor && (queryParams['color'] = selectedColor);
-    selectedWhiteColor.length !== 0 &&
-      (queryParams['color'] = selectedWhiteColor);
-    // selectedFancyColor.length !== 0 &&
-    //   (queryParams['color'] = selectedFancyColor);
-    // selectedRangeColor.length !== 0 &&
-    //   (queryParams['color'] = selectedRangeColor);
-    selectedIntensity.length !== 0 &&
-      (queryParams['intensity'] = selectedIntensity); //done
-    selectedOvertone.length !== 0 &&
-      (queryParams['overtone'] = selectedOvertone); //done
-    selectedTinge.length !== 0 && (queryParams['color_shade'] = selectedTinge); //done
-    selectedTingeIntensity.length !== 0 &&
-      (queryParams['color_shade_intensity'] = selectedTingeIntensity); //done
-    selectedClarity.length !== 0 && (queryParams['clarity'] = selectedClarity); //done
-    selectedCaratRange.length !== 0 &&
-      (queryParams['caratRange'] = selectedCaratRange);
-    selectedMake && (queryParams['make'] = selectedMake);
-    selectedCut.length !== 0 && (queryParams['cut'] = selectedCut); //done
-    selectedPolish.length !== 0 && (queryParams['polish'] = selectedPolish); //done
-    selectedSymmetry.length !== 0 &&
-      (queryParams['symmetry'] = selectedSymmetry); //done
-    selectedFluorescence.length !== 0 &&
-      (queryParams['fluorescence'] = selectedFluorescence); //done
-    selectedCulet.length !== 0 && (queryParams['culet'] = selectedCulet); //done
-    selectedGirdle.length !== 0 && (queryParams['girdle'] = selectedGirdle);
-    selectedGirdleStep2.length !== 0 &&
-      (queryParams['girdleStep2'] = selectedGirdleStep2);
-    selectedLab.length !== 0 && (queryParams['lab'] = selectedLab); //done
-    selectedHR.length !== 0 && (queryParams['ha'] = selectedHR); //done
-    selectedBrilliance.length !== 0 &&
-      (queryParams['brilliance'] = selectedBrilliance); //done
-    selectedLocation.length !== 0 &&
-      (queryParams['location'] = selectedLocation); //done
-    selectedOrigin.length !== 0 &&
-      (queryParams['origin_country'] = selectedOrigin); //done
-    priceRangeFrom && (queryParams['priceRangeFrom'] = priceRangeFrom);
-    priceRangeTo && (queryParams['priceRangeTo'] = priceRangeTo);
-    discountFrom && (queryParams['discountFrom'] = discountFrom);
-    discountTo && (queryParams['discountTo'] = discountTo);
-    pricePerCaratFrom && (queryParams['pricePerCaratFrom'] = pricePerCaratFrom);
-    pricePerCaratTo && (queryParams['pricePerCaratTo'] = pricePerCaratTo);
-    caratRangeFrom && (queryParams['caratRangeFrom'] = caratRangeFrom);
-    caratRangeTo && (queryParams['caratRangeTo'] = caratRangeTo);
-    blackTableBI.length !== 0 && (queryParams['black_table'] = blackTableBI); //done
-    sideBlackBI.length !== 0 && (queryParams['side_black'] = sideBlackBI); //done
-    openCrownBI.length !== 0 && (queryParams['open_crown'] = openCrownBI); //done
-    openTableBI.length !== 0 && (queryParams['open_table'] = openTableBI); //done
-    openPavilionBI.length !== 0 &&
-      (queryParams['open_pavilion'] = openPavilionBI); //done
-    milkyBI.length !== 0 && (queryParams['milky'] = milkyBI); //done
-    lusterBI.length !== 0 && (queryParams['luster'] = lusterBI); //done
-    eyeCleanBI.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI); //done
-    tableInclusionWI.length !== 0 &&
-      (queryParams['table_inclusion'] = tableInclusionWI); //done
-    sideInclusionWI.length !== 0 &&
-      (queryParams['side_inclusion'] = sideInclusionWI); //done
-    naturalCrownWI.length !== 0 &&
-      (queryParams['natural_crown'] = naturalCrownWI); //done
-    naturalGirdleWI.length !== 0 &&
-      (queryParams['natural_girdle'] = naturalGirdleWI); //done
-    naturalPavilionWI.length !== 0 &&
-      (queryParams['natural_pavilion'] = naturalPavilionWI); //done
-    surfaceGrainingWI.length !== 0 &&
-      (queryParams['surface_graining'] = surfaceGrainingWI); //done
-    internalGrainingWI.length !== 0 &&
-      (queryParams['internal_graining'] = internalGrainingWI); //done
-    tablePerFrom && (queryParams['tablePerFrom'] = tablePerFrom);
-    tablePerTo && (queryParams['tablePerTo'] = tablePerTo);
-    depthTo && (queryParams['depth'] = depthTo);
-    depthFrom && (queryParams['depth'] = depthFrom);
-    crownAngleFrom && (queryParams['crownAngleFrom'] = crownAngleFrom);
-    crownAngleTo && (queryParams['crownAngleTo'] = crownAngleTo);
-    lengthFrom && (queryParams['lengthFrom'] = lengthFrom);
-    lengthTo && (queryParams['lengthTo'] = lengthTo);
-    pavilionDepthFrom && (queryParams['pavilionDepthFrom'] = pavilionDepthFrom);
-    pavilionDepthTo && (queryParams['pavilionDepthTo'] = pavilionDepthTo);
-    depthPerFrom && (queryParams['depthPerFrom'] = depthPerFrom);
-    depthPerTo && (queryParams['depthPerTo'] = depthPerTo);
-    crownHeightFrom && (queryParams['crownHeightFrom'] = crownHeightFrom);
-    crownHeightTo && (queryParams['crownHeightTo'] = crownHeightTo);
-    widthFrom && (queryParams['widthFrom'] = widthFrom);
-    widthTo && (queryParams['widthTo'] = widthTo);
-    lowerHalfFrom && (queryParams['lowerHalfFrom'] = lowerHalfFrom);
-    lowerHalfTo && (queryParams['lowerHalfTo'] = lowerHalfTo);
-    ratioFrom && (queryParams['ratioFrom'] = ratioFrom);
-    ratioTo && (queryParams['ratioTo'] = ratioTo);
-    girdlePerFrom && (queryParams['girdlePerFrom'] = girdlePerFrom);
-    girdlePerTo && (queryParams['girdlePerTo'] = girdlePerTo);
-    pavilionAngleFrom && (queryParams['pavilionAngleFrom'] = pavilionAngleFrom);
-    pavilionAngleTo && (queryParams['pavilionAngleTo'] = pavilionAngleTo);
-    starLengthFrom && (queryParams['starLengthFrom'] = starLengthFrom);
-    starLengthTo && (queryParams['starLengthTo'] = starLengthTo);
+    const queryParams = generateQueryParams({
+      selectedShape,
+      selectedColor,
+      selectedWhiteColor,
+      selectedFancyColor,
+      selectedRangeColor,
+      selectedIntensity,
+      selectedOvertone,
+      selectedTinge,
+      selectedTingeIntensity,
+      selectedClarity,
+      selectedCaratRange,
+      caratRangeFrom,
+      caratRangeTo,
+      selectedMake,
+      selectedCut,
+      selectedPolish,
+      selectedSymmetry,
+      selectedFluorescence,
+      selectedCulet,
+      selectedGirdle,
+      selectedGirdleStep2,
+      selectedLab,
+      selectedHR,
+      selectedBrilliance,
+      selectedLocation,
+      selectedOrigin,
+      priceRangeFrom,
+      priceRangeTo,
+      discountFrom,
+      discountTo,
+      pricePerCaratFrom,
+      pricePerCaratTo,
+      blackTableBI,
+      sideBlackBI,
+      openCrownBI,
+      openTableBI,
+      openPavilionBI,
+      milkyBI,
+      lusterBI,
+      eyeCleanBI,
+      tableInclusionWI,
+      sideInclusionWI,
+      naturalCrownWI,
+      naturalGirdleWI,
+      naturalPavilionWI,
+      surfaceGrainingWI,
+      internalGrainingWI,
+      tablePerFrom,
+      tablePerTo,
+      depthTo,
+      depthFrom,
+      crownAngleFrom,
+      crownAngleTo,
+      lengthFrom,
+      lengthTo,
+      pavilionDepthFrom,
+      pavilionDepthTo,
+      depthPerFrom,
+      depthPerTo,
+      crownHeightFrom,
+      crownHeightTo,
+      widthFrom,
+      widthTo,
+      lowerHalfFrom,
+      lowerHalfTo,
+      ratioFrom,
+      ratioTo,
+      girdlePerFrom,
+      girdlePerTo,
+      pavilionAngleFrom,
+      pavilionAngleTo,
+      starLengthFrom,
+      starLengthTo,
+    });
 
     // Construct your search URL here
     setSearchUrl(constructUrlParams(queryParams));
@@ -608,11 +777,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       let filteredShape: string[] = advanceSearch.shape.map(
         (data) => data.title
       );
+
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
       }
     } else {
+      console.log('filteredShape', shape);
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
   };
@@ -890,7 +1061,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ];
     });
   };
-  console.log(yourSelection);
+
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -1200,12 +1371,90 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     }
 
     console.log(JSON.stringify(addSearches));
+    const queryParams = generateQueryParams({
+      selectedShape,
+      selectedColor,
+      selectedWhiteColor,
+      selectedFancyColor,
+      selectedRangeColor,
+      selectedIntensity,
+      selectedOvertone,
+      selectedTinge,
+      selectedTingeIntensity,
+      selectedClarity,
+      selectedCaratRange,
+      caratRangeFrom,
+      caratRangeTo,
+      selectedMake,
+      selectedCut,
+      selectedPolish,
+      selectedSymmetry,
+      selectedFluorescence,
+      selectedCulet,
+      selectedGirdle,
+      selectedGirdleStep2,
+      selectedLab,
+      selectedHR,
+      selectedBrilliance,
+      selectedLocation,
+      selectedOrigin,
+      priceRangeFrom,
+      priceRangeTo,
+      discountFrom,
+      discountTo,
+      pricePerCaratFrom,
+      pricePerCaratTo,
+      blackTableBI,
+      sideBlackBI,
+      openCrownBI,
+      openTableBI,
+      openPavilionBI,
+      milkyBI,
+      lusterBI,
+      eyeCleanBI,
+      tableInclusionWI,
+      sideInclusionWI,
+      naturalCrownWI,
+      naturalGirdleWI,
+      naturalPavilionWI,
+      surfaceGrainingWI,
+      internalGrainingWI,
+      tablePerFrom,
+      tablePerTo,
+      depthTo,
+      depthFrom,
+      crownAngleFrom,
+      crownAngleTo,
+      lengthFrom,
+      lengthTo,
+      pavilionDepthFrom,
+      pavilionDepthTo,
+      depthPerFrom,
+      depthPerTo,
+      crownHeightFrom,
+      crownHeightTo,
+      widthFrom,
+      widthTo,
+      lowerHalfFrom,
+      lowerHalfTo,
+      ratioFrom,
+      ratioTo,
+      girdlePerFrom,
+      girdlePerTo,
+      pavilionAngleFrom,
+      pavilionAngleTo,
+      starLengthFrom,
+      starLengthTo,
+    });
+
     localStorage.setItem(
       'Search',
-      JSON.stringify([...addSearches, { shape: selectedShape }])
+      JSON.stringify([...addSearches, queryParams])
     );
     router.push('/search-result');
   };
+
+  // const setLocalData = () => {};
 
   const handleAddAnotherSearch = async () => {
     handleAddSearchIndex();
@@ -1362,20 +1611,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       label={`${ManageLocales(
                         'app.advanceSearch.yourSelection'
                       )}:`}
-                    />{' '}
+                    />
                     <div className={styles.yourSelectionInHeader}>
-                      {selectedShape.length > 0 &&
+                      {selectedShape?.length > 0 &&
                         formatSelection(selectedShape)}{' '}
-                      {selectedColor.length > 0 &&
+                      {selectedColor?.length > 0 &&
                         formatSelection(selectedColor)}{' '}
-                      {selectedTingeIntensity.length > 0 &&
+                      {selectedTingeIntensity?.length > 0 &&
                         formatSelection(selectedTingeIntensity)}{' '}
-                      {selectedClarity.length > 0 &&
+                      {selectedClarity?.length > 0 &&
                         formatSelection(selectedClarity)}{' '}
-                      {selectedCaratRange.length > 0 &&
+                      {selectedCaratRange?.length > 0 &&
                         formatSelection(selectedCaratRange)}
                       {selectedMake && formatSelection(selectedMake)}{' '}
-                      {selectedLab.length > 0 && formatSelection(selectedLab)}
+                      {selectedLab?.length > 0 && formatSelection(selectedLab)}
                     </div>
                   </div>
                 }
