@@ -1333,18 +1333,26 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     return response;
   };
   const handleSaveAndSearch = async () => {
-    if (addSearches.length === 1) {
-      setSavedSearches([prepareSearchParam()]);
-    }
-    await addSavedSearch({
-      name: 'saveSearchName',
-      diamond_count: searchResultCount,
-      meta_data:
-        addSearches.length === 1 ? [prepareSearchParam()] : savedSearches,
-      is_deleted: false,
-    });
+    if (data.count < 300 && data.count > 0) {
+      if (addSearches.length === 1) {
+        setSavedSearches([prepareSearchParam()]);
+      }
+      await addSavedSearch({
+        name: 'saveSearchName',
+        diamond_count: searchResultCount,
+        meta_data:
+          addSearches.length === 1 ? [prepareSearchParam()] : savedSearches,
+        is_deleted: false,
+      });
 
-    handleSearch();
+      handleSearch();
+    } else if (data.count === 0) {
+      setIsError(true);
+      setErrorText('No results found');
+    } else {
+      setIsError(true);
+      setErrorText('Please modify your search, maximum 300 stones displayed');
+    }
   };
   const handleAddSearchIndex = () => {
     setAddSearches((prevSearches) => [
