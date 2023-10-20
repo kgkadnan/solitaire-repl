@@ -16,13 +16,12 @@ const Login = () => {
   const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
   const router = useRouter();
 
-const handleLogin=async()=>{
-
-  
- await verifyLogin({email:email,password:password})
- if(data) { router.push('/') }
-
-}
+  const handleLogin = async () => {
+    let res: any = await verifyLogin({ email: email, password: password });
+    if (res.data.customer) {
+      router.push('/');
+    }
+  };
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
