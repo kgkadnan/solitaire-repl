@@ -752,7 +752,7 @@ const SearchResults = () => {
             <p>
               Pieces:
               <span className="text-solitaireTertiary ml-[5px]">
-                {`${isCheck.length}/${rows?.length}`}
+                {`${isCheck.length}/${data?.count}`}
               </span>
             </p>
             <p>
