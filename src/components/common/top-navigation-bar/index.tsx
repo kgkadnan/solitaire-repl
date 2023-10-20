@@ -61,6 +61,7 @@ export const TopNavigationBar = () => {
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
+    localStorage.removeItem("Search");
     router.push(`${link}?lang=en`);
   };
 
