@@ -144,7 +144,9 @@ const SearchResults = () => {
   const [errorText, setErrorText] = useState('');
 
   const [dialogContent, setDialogContent] = useState<ReactNode>()
-  const [isDialogOpen, setIsDialogOpen] = useState(Boolean)
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+
+  const [isEntireSearch , setIsEntireSearch] = useState(false)
 
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
@@ -264,16 +266,25 @@ const SearchResults = () => {
     { label: 'Luster', accessor: 'luster' },
   ];
 
+ 
+
   const downloadExcelFunction = () => {
     if (isCheckAll) {
-      const userConfirmed = confirm(
-        'Do you want to Download Entire Search Stone or Selected Stone?'
-      );
+      setDialogContent(<> 
+        <div className="max-w-[400px] flex justify-center align-middle">
+          Do you want to download excel of entire search or selected stone
+        </div>
+          <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+            <CustomDisplayButton displayButtonLabel="Select All" handleClick={() => {setIsEntireSearch(true)}}/>
+            <CustomDisplayButton displayButtonLabel="Selected" handleClick={() => {setIsEntireSearch(false)}}/>
+          </div></>)
+      setIsDialogOpen(true)
 
-      if (userConfirmed) {
-        console.log('userConfirmed', userConfirmed);
+
+      if (isEntireSearch) {
+        console.log('userConfirmed', isEntireSearch);
         setIsCheck([]);
-      } else if (isCheck.length) {
+      } else if (isCheck.length && !isEntireSearch) {
         downloadExcel({
           productIds: isCheck,
         })
@@ -284,7 +295,14 @@ const SearchResults = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
               );
-              console.log('Download Excel Succesfully', res);
+              setDialogContent(<> 
+                <div className="max-w-[400px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="vector image" />
+                </div>
+                  <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                    Download Excel Successfully 
+                  </div></>)
+                setIsDialogOpen(true)
             }
           })
           .catch((e) => {
@@ -670,7 +688,7 @@ const SearchResults = () => {
 
   return (
     <>
-      <CustomDialog dialogContent={'hellos'} isOpens={false} />
+      <CustomDialog dialogContent={dialogContent} isOpens={isDialogOpen} />
       <div className="border-b  border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
