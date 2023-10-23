@@ -156,7 +156,6 @@ const SearchResults = () => {
 
   let [downloadExcel] = useDownloadExcelMutation();
 
-  // console.log('Data', data?.products);
 
   let { data: previousSearch } = useGetSpecificPreviousQuery({
     id: previousSearchIds,
@@ -292,7 +291,6 @@ const SearchResults = () => {
       setIsDialogOpen(true);
 
       if (isEntireSearch) {
-        console.log('userConfirmed', isEntireSearch);
         setIsCheck([]);
       } else if (isCheck.length && !isEntireSearch) {
         downloadExcel({
@@ -422,7 +420,6 @@ const SearchResults = () => {
     }
   };
 
-  // console.log("reosssss")
 
   const footerButtonData = [
     {
