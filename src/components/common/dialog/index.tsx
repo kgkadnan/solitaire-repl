@@ -9,7 +9,7 @@ interface IDialog {
 
 export const CustomDialog: React.FC<IDialog> = ({
   dialogContent,
-  isOpens = false,
+  isOpens,
   setIsOpen,
 }) => {
   const onclose = (open: boolean) => {
@@ -17,8 +17,7 @@ export const CustomDialog: React.FC<IDialog> = ({
   };
   return (
     <>
-      <Dialog open={isOpens} onOpenChange={onclose}>
-        {/* <DialogTrigger>{dialogTrigger}</DialogTrigger> */}
+      <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
         <DialogContent className="sm:max-w-[400px] h-[200px] bg-solitaireSecondary z-[1200]">
           {dialogContent}
         </DialogContent>

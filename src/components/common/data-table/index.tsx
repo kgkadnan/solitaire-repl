@@ -122,14 +122,17 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       })
         .unwrap()
         .then(() => {
-          setDialogContent(<> 
-            <div className="max-w-[400px] flex justify-center align-middle">
-              <Image src={confirmImage} alt="vector image" />
-            </div>
+          setDialogContent(
+            <>
+              <div className="max-w-[400px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully 
-              </div></>)
-            setIsDialogOpen(true)
+                Download Excel Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
           console.log('hhhhhhhhhhhhhhhhhhhhh');
         })
         .catch(() => {
@@ -330,7 +333,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 
   return (
     <>
-    <CustomDialog dialogContent={dialogContent} isOpens={isDialogOpen} />
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
