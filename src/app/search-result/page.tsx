@@ -2,7 +2,13 @@
 import { CustomFooter } from '@/components/common/footer';
 import styles from './search-results.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, {
+  ReactNode,
+  Suspense,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import InfoCircleOutline from '@public/assets/icons/information-circle-outline.svg?url';
