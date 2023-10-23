@@ -95,7 +95,6 @@ const CompareStone = () => {
     comapreStoneStoreData.compareStone[0]
   );
 
-  console.log('compareStoneData', compareStoneData);
 
   const [isCheck, setIsCheck] = useState<string[]>([]);
 

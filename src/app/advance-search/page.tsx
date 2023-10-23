@@ -23,6 +23,7 @@ interface IAdvanceSearch {
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
+const [searchCount, setSearchCount]=useState<number>(0)
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
@@ -122,7 +123,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
-  const [searchResultCount, setSearchResultCount] = useState<number>(1);
   const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -530,18 +530,31 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     searchUrl,
   });
 
+  
   useEffect(() => {
-    console.log('llll', data?.count);
-    if (data?.count > 300 && data?.count > 0) {
+    if(searchCount>1){
+    if (data?.count > 300 && data?.count >0) {
       setIsError(true);
-      setErrorText('Please modify your search, maximum 300 stones displayed');
-    } else if (data?.count !== 0) {
-      setIsError(true);
-      setErrorText(`${data?.count} stones found`);
-    } else {
+      setErrorText('Please modify your search, the stones exceeds the limit.');
+    } 
+    else if(data?.count===0){
+      setIsError(true)
+      setErrorText(`no stones found`)
+    }
+    else if(data?.count!==0){
+      setIsError(true)
+      setErrorText(`${data?.count} stones found`)
+    }
+    else {
       setIsError(false);
       setErrorText('');
     }
+  }
+  // else{
+  //   setIsError(true)
+  //   setErrorText(`Please select the stone parameters to make the search.`)
+  // }
+setSearchCount(searchCount+1)
   }, [data]);
 
   const imageTileStyles = {
@@ -787,7 +800,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         setSelectedShape([]);
       }
     } else {
-      console.log('filteredShape', shape);
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
   };
@@ -1336,27 +1348,22 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     return response;
   };
   const handleSaveAndSearch = async () => {
-    if (data.count < 300 && data.count > 0) {
+    if (data?.count < 300 && data?.count > 0) {
       if (addSearches.length === 0) {
         setSavedSearches([prepareSearchParam()]);
       }
 
       await addSavedSearch({
         name: 'saveSearchName',
-        diamond_count: searchResultCount,
+        diamond_count: data?.count,
         meta_data:
           addSearches.length === 1 ? [prepareSearchParam()] : savedSearches,
         is_deleted: false,
       });
 
       handleSearch();
-    } else if (data.count === 0) {
-      setIsError(true);
-      setErrorText('No results found');
-    } else {
-      setIsError(true);
-      setErrorText('Please modify your search, maximum 300 stones displayed');
-    }
+    } 
+   
   };
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
@@ -1368,21 +1375,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = async () => {
-    if (searchResultCount > 300) {
-      setToastErrorMessage(
-        `Please modify your search, maximum 300 stones displayed`
-      );
-      setShowToast(true);
-    } else {
+    if (data?.count < 300 && data?.count>0) {
+   
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
-        diamond_count: searchResultCount,
+        diamond_count: data?.count,
         meta_data: prepareSearchParam(),
         is_deleted: false,
       });
-    }
+    
 
     const queryParams = generateQueryParams({
       selectedShape,
@@ -1465,6 +1468,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       JSON.stringify([...addSearches, queryParams])
     );
     router.push('/search-result');
+    }
   };
 
   // const setLocalData = () => {};
@@ -1479,7 +1483,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
-        diamond_count: searchResultCount,
+        diamond_count: data?.count,
         meta_data: prepareSearchParam(),
         is_deleted: false,
       });
@@ -2377,7 +2381,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             {
               id: 3,
               displayButtonLabel: `${
-                searchApiCalled && searchResultCount! === 0
+                searchApiCalled && data?.count! === 0
                   ? ManageLocales('app.advanceSearch.addDemand')
                   : ManageLocales('app.advanceSearch.search')
               }`,

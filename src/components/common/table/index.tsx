@@ -33,7 +33,6 @@ export const CustomTable: React.FC<ITableProps> = ({
   tableData,
   tableStyleClasses,
 }) => {
-  console.log('ttttttttttttttttttttttttt', tableData.bodyData);
 
   // Destructure styles from the props
   const { tableHeaderStyle, tableBodyStyle, tableStyle } = tableStyleClasses;

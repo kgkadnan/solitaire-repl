@@ -130,7 +130,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 Download Excel Successfully 
               </div></>)
             setIsDialogOpen(true)
-          console.log('hhhhhhhhhhhhhhhhhhhhh');
         })
         .catch(() => {
           console.log('1111111111111111');
@@ -304,7 +303,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   };
 
   const downloadImage = (imageUrl: any) => {
-    console.log('image', imageUrl);
     window.open(imageUrl, '_blank');
   };
 

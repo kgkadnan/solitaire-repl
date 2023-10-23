@@ -344,7 +344,6 @@ const PreviousSearch = () => {
 
   useEffect(() => {
     const previousSearchData = data?.data;
-    console.log(previousSearchData, 'previousSearchData');
     let searchData = previousSearchData?.previousSearch;
     setNumberOfPages(previousSearchData?.totalPages);
     setPreviousSearchData(searchData);
