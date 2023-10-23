@@ -67,35 +67,42 @@ const SavedSearch = () => {
   };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [limit, setLimit] = useState(50); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [offset, setOffset] = useState(0);
+
   const [activeTab, setActiveTab] = useState(0);
+
   const [sliderData, setSliderData] = useState<any>([]);
   const [date, setDate] = useState<DateRange | undefined>();
   const [searchUrl, setSearchUrl] = useState('');
 
-  const handleResultsPerPageChange = (event: string) => {
+  const handleResultsPerPageChange = useCallback((event: string) => {
     const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
+    setLimit(newResultsPerPage);
+    setOffset(0);
     setCurrentPage(0); // Reset current page when changing results per page
-  };
+    setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+  }, []);
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
+      const offset = page * limit;
       setIsCheck([]);
       setIsCheckAll(false);
+      setOffset(offset);
       setCurrentPage(page);
     }
   };
 
   let optionLimits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
+    { id: 1, value: '50' },
+    { id: 2, value: '100' },
   ];
 
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
-    currentPage,
-    resultsPerPage,
+    limit,
+    offset,
     searchUrl,
   });
 
@@ -154,7 +161,7 @@ const SavedSearch = () => {
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data?.map((item: any) => {
-        const meta_data = Array.isArray(item.meta_data)
+        const meta_data = Array.isArray(item?.meta_data)
           ? item.meta_data[0].basic_card_details
           : item.meta_data.basic_card_details;
 
@@ -359,17 +366,10 @@ const SavedSearch = () => {
   useEffect(() => {
     const SavedSearchData = data?.data;
     let searchData = SavedSearchData?.savedSearch;
-    setNumberOfPages(SavedSearchData?.totalPages);
+    setNumberOfPages(
+      Math.ceil(SavedSearchData?.count / SavedSearchData?.limit)
+    );
     setSavedSearchData(searchData);
-
-    // searchData?.filter((items: any) => {
-    //   items.meta_data.filter((items: any) => {
-    //     console.log(
-    //       '---------------------------------------',
-    //       items.basic_card_details
-    //     );
-    //   });
-    // });
 
     // Filter the location key from basic_card_details
     const filteredData = searchData?.map((item: any) => ({
@@ -387,7 +387,7 @@ const SavedSearch = () => {
     }));
 
     setCardData(renderCardData(filteredData, search));
-  }, [data, currentPage, resultsPerPage]);
+  }, [data, limit, offset]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -654,7 +654,7 @@ const SavedSearch = () => {
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
-            resultsPerPage={resultsPerPage}
+            resultsPerPage={limit}
             optionLimits={optionLimits}
             handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}
