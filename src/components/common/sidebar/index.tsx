@@ -99,11 +99,13 @@ const SideBar = () => {
     imageTileLabelStyles: styles.imageTileLabelStyles,
     activeIndicatorStyles: styles.activeIndicatorStyles,
   };
-  const [selectedShape, setSelectedShape] = useState<string[]>([]);
+  const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
-  const handleChange = (shape: string, link?: string) => {
+  const handleChange = (nav: string, link?: string) => {
+    localStorage.removeItem("Search");
+
     router.push(`${link!}?lang=en`);
-    setSelectedShape(() => [shape]);
+    setSelectedNav(() => [nav]);
   };
 
   return (
@@ -128,7 +130,7 @@ const SideBar = () => {
             <CustomImageTile
               imageTileData={imageData}
               overriddenStyles={SideBarStyles}
-              selectedTile={selectedShape}
+              selectedTile={selectedNav}
               handleSelectTile={handleChange}
               isNavOption={true}
             />

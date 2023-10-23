@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
 import { CustomInputlabel } from '@/components/common/input-label';
@@ -21,48 +21,15 @@ interface INotificationSetting {
 const NotificationSetting = () => {
   const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
   const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
-
   const [settings, setSettings] = useState<INotificationSetting>({
     type: 'APP',
-    subscription: [
-      {
-        category: 'my_cart',
-        is_subscribed: false,
-      },
-      // {
-      //   category: 'new_arrival',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'my_diamonds',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'layouts',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'deal_of_the_day',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'matching_pair',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'bid_to_buy',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'appointments',
-      //   is_subscribed: false,
-      // },
-      // {
-      //   category: 'wishlist',
-      //   is_subscribed: false,
-      // },
-    ],
+    subscription: [],
   });
+
+  useEffect(() => {
+    setSettings({ type: 'APP', subscription: data?.data });
+  }, [data, settings]);
+
 
   const toggleHandler = async (category: string) => {
     // Toggle the individual setting
@@ -83,12 +50,10 @@ const NotificationSetting = () => {
     await updateNotificationSetting(settings);
   };
 
-  // console.log(settings);
-
   return (
     <div className={styles.notificationSettingContainer}>
-      {settings.subscription.map((setting) => {
-        const key = setting.category;
+      {settings?.subscription?.map((setting) => {
+        const key = setting?.category;
         return (
           <div key={key} className="border-b border-solitaireSenary">
             <div className={` ${styles.notificationSettingContent}`}>

@@ -5,7 +5,7 @@
   border: 1px solid hsl(var(--solitaire-quaternary));
   border-radius: 5px;
   color: hsl(var(--solitaire-tertiary));
-  font-size: 14px;
+  font-size: 14px !important;
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -21,11 +21,9 @@ export const previousSearchApi = createApi({
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
-      query: ({ currentPage, resultsPerPage,searchUrl='' }) =>
-     ({
-        url: `previous-search?limit=${currentPage}&offset=${resultsPerPage}${searchUrl}`,
+      query: ({ limit, offset, searchUrl = '' }) => ({
+        url: `previous-search?limit=${limit}&offset=${offset}${searchUrl}`,
         method: 'GET',
-       
       }),
       providesTags: ['PreviousSearch'],
     }),
@@ -38,7 +36,6 @@ export const previousSearchApi = createApi({
         url: `previous-search`,
         method: 'POST',
         body: data,
-       
       }),
     }),
     updatePreviousSearch: builder.mutation({

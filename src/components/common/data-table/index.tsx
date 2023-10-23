@@ -122,15 +122,17 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       })
         .unwrap()
         .then(() => {
-          setDialogContent(<> 
-            <div className="max-w-[400px] flex justify-center align-middle">
-              <Image src={confirmImage} alt="vector image" />
-            </div>
+          setDialogContent(
+            <>
+              <div className="max-w-[400px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully 
-              </div></>)
-            setIsDialogOpen(true)
-          console.log('hhhhhhhhhhhhhhhhhhhhh');
+                Download Excel Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
         })
         .catch(() => {
           console.log('1111111111111111');
@@ -304,7 +306,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   };
 
   const downloadImage = (imageUrl: any) => {
-    console.log('image', imageUrl);
     window.open(imageUrl, '_blank');
   };
 
@@ -330,7 +331,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 
   return (
     <>
-    <CustomDialog dialogContent={dialogContent} isOpens={isDialogOpen} />
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
@@ -920,6 +925,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               {row.lab}
                             </a>
                           </div>
+                        ) : column.accessor === 'amount' ? (
+                          row.variants[0].prices[0].amount
                         ) : row[column.accessor as keyof Rows] !== null ? (
                           row[column.accessor as keyof Rows]
                         ) : (
