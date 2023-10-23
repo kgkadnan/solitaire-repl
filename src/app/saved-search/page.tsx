@@ -71,7 +71,7 @@ const SavedSearch = () => {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [activeTab, setActiveTab] = useState(0);
   const [sliderData, setSliderData] = useState<any>([]);
-  const [date, setDate] = React.useState<DateRange | undefined>();
+  const [date, setDate] = useState<DateRange | undefined>();
   const [searchUrl, setSearchUrl] = useState('');
 
   const handleResultsPerPageChange = (event: string) => {

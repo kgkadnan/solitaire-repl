@@ -531,16 +531,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   });
 
   useEffect(() => {
-    console.log("llll",data?.count)
-    if (data?.count > 300 && data?.count >0) {
+    console.log('llll', data?.count);
+    if (data?.count > 300 && data?.count > 0) {
       setIsError(true);
       setErrorText('Please modify your search, maximum 300 stones displayed');
-    } 
-    else if(data?.count!==0){
-      setIsError(true)
-      setErrorText(`${data.count} stones found`)
-    }
-    else {
+    } else if (data?.count !== 0) {
+      setIsError(true);
+      setErrorText(`${data?.count} stones found`);
+    } else {
       setIsError(false);
       setErrorText('');
     }
@@ -2349,11 +2347,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
-          <div className="w-[30%]">
+          <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-700 text-red-700" />
             <p
               className={`text-${
-                data.count < 300 ? 'green' : 'red'
+                data?.count < 300 ? 'green' : 'red'
               }-700 text-base`}
             >
               {errorText}
