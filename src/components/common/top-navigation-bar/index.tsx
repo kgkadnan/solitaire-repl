@@ -5,7 +5,7 @@ import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import {
@@ -24,6 +24,7 @@ import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 
 export const TopNavigationBar = () => {
+  const currentRoute = usePathname();
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: any = useAppSelector((store) => store);
   let badgeData = notificationBadgeStoreData.notificationBadge.status;
@@ -40,28 +41,33 @@ export const TopNavigationBar = () => {
     {
       label: ManageLocales('app.topNav.forYou'),
       link: '/',
+      isActive: currentRoute === '/',
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
       link: '/advance-search',
+      isActive: currentRoute === '/advance-search',
     },
     {
       label: ManageLocales('app.topNav.previousSearch'),
       link: '/previous-search',
+      isActive: currentRoute === '/previous-search',
     },
     {
       label: ManageLocales('app.topNav.wishlist'),
       link: '/wishlist',
+      isActive: currentRoute === '/wishlist',
     },
     {
       label: ManageLocales('app.topNav.myCart'),
       link: '/my-cart',
+      isActive: currentRoute === '/my-cart',
     },
   ];
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
-    localStorage.removeItem("Search");
+    localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
   };
 
@@ -76,14 +82,14 @@ export const TopNavigationBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [prevScrollPos, data]);
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
     let notificationMapData = data.data.map((item: any) => ({
       id: item.id,
-      status: item.status === 'unread' ? 'read' : item.status,
+      status: item.status === 'read' ? 'read' : 'unread',
     }));
 
     const unreadNotifications = notificationMapData.filter(
@@ -106,7 +112,7 @@ export const TopNavigationBar = () => {
               <CustomDisplayButton
                 displayButtonAllStyle={{
                   displayButtonStyle:
-                    activeButton === navData.label
+                    activeButton === navData.label || navData.isActive
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
                   displayLabelStyle: styles.headerButtonLabelStyle,

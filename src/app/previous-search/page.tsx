@@ -35,17 +35,6 @@ interface ICardData {
   cardContent: React.ReactNode;
 }
 
-interface IData {
-  id: string;
-  name: string;
-  customer_id: string;
-  diamondCount: number;
-  filter: any;
-  isDeleted: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
 interface KeyLabelMapping {
   [key: string]: string;
 }
@@ -68,42 +57,12 @@ const PreviousSearch = () => {
   };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [limit, setLimit] = useState(50); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [offset, setOffset] = useState(0);
+
   const [searchUrl, setSearchUrl] = useState('');
   const [date, setDate] = React.useState<DateRange | undefined>();
-
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
-
-  let optionLimits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
-  ];
-
-  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
-    currentPage,
-    resultsPerPage,
-    searchUrl,
-  });
-
-  // Destructure the mutation function from the hook
-  const [
-    updatePreviousSearch,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useUpdatePreviousSearchMutation();
-
-  const handlePageClick = (page: number) => {
-    if (page >= 0 && page <= numberOfPages) {
-      setIsCheckAll(false);
-      setIsCheck([]);
-      setCurrentPage(page);
-      // refetch();
-    }
-  };
 
   //Data
   const [PreviousSearchData, setPreviousSearchData] = useState<any[]>([]);
@@ -120,6 +79,44 @@ const PreviousSearch = () => {
   //toast message
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
+
+  let optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' },
+  ];
+
+  const { data, error, isLoading, refetch } = useGetAllPreviousSearchesQuery({
+    offset,
+    limit,
+    searchUrl,
+  });
+
+  const handleResultsPerPageChange = useCallback(
+    (event: string) => {
+      const newResultsPerPage = parseInt(event, 10);
+      setLimit(newResultsPerPage);
+      setOffset(0);
+      setCurrentPage(0); // Reset current page when changing results per page
+      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+    },
+    [data]
+  );
+
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      const offset = page * limit;
+      setIsCheck([]);
+      setIsCheckAll(false);
+      setOffset(offset);
+      setCurrentPage(page);
+    }
+  };
+
+  // Destructure the mutation function from the hook
+  const [
+    updatePreviousSearch,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useUpdatePreviousSearchMutation();
 
   const searchData = [
     'sample',
@@ -344,12 +341,14 @@ const PreviousSearch = () => {
 
   useEffect(() => {
     const previousSearchData = data?.data;
-    console.log(previousSearchData, 'previousSearchData');
     let searchData = previousSearchData?.previousSearch;
-    setNumberOfPages(previousSearchData?.totalPages);
+    setNumberOfPages(
+      Math.ceil(previousSearchData?.count / previousSearchData?.limit)
+    );
+    console.log('numberofpages', data);
     setPreviousSearchData(searchData);
     setCardData(renderCardData(searchData, search));
-  }, [data, resultsPerPage, currentPage]);
+  }, [data, offset, limit]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -424,7 +423,7 @@ const PreviousSearch = () => {
                                 {Object.entries(
                                   PreviousSearchData[index].meta_data
                                     .basic_card_details
-                                ).map(([key, value]) => (
+                                ).map(([key, value]: any) => (
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
@@ -452,7 +451,7 @@ const PreviousSearch = () => {
                                 {Object.entries(
                                   PreviousSearchData[index].meta_data
                                     .measurements
-                                ).map(([key, value]) => (
+                                ).map(([key, value]: any) => (
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
@@ -480,7 +479,7 @@ const PreviousSearch = () => {
                                 {Object.entries(
                                   PreviousSearchData[index].meta_data
                                     .other_information
-                                ).map(([key, value]) => (
+                                ).map(([key, value]: any) => (
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
@@ -508,7 +507,7 @@ const PreviousSearch = () => {
                               {Object.entries(
                                 PreviousSearchData[index].meta_data
                                   .inclusion_details
-                              ).map(([key, value]) => (
+                              ).map(([key, value]: any) => (
                                 <p className="flex" key={key}>
                                   <span
                                     className={
@@ -554,10 +553,10 @@ const PreviousSearch = () => {
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
-            resultsPerPage={resultsPerPage}
+            resultsPerPage={limit}
             optionLimits={optionLimits}
-            handleResultsPerPageChange={handleResultsPerPageChange}
             handlePageClick={handlePageClick}
+            handleResultsPerPageChange={handleResultsPerPageChange}
           />
 
           {!!footerButtonData?.length && (

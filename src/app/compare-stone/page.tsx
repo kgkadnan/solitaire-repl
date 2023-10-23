@@ -95,6 +95,7 @@ const CompareStone = () => {
     comapreStoneStoreData.compareStone[0]
   );
 
+
   const [isCheck, setIsCheck] = useState<string[]>([]);
 
   const [isError, setIsError] = useState(false);
@@ -145,10 +146,6 @@ const CompareStone = () => {
             {
               label: 'Find Matching Pair',
               fn: '',
-            },
-            {
-              label: 'Compare Stone',
-              fn: () => {},
             },
           ]}
         />

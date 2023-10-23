@@ -222,7 +222,6 @@ const MyCart = () => {
   };
 
   const handleDelete = () => {
-    console.log(isCheck);
 
     deleteCart({
       items: isCheck,
