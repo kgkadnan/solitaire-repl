@@ -86,14 +86,16 @@
   border: 1px solid hsl(var(--solitaire-quaternary));
   border-radius: 5px;
   color: hsl(var(--solitaire-tertiary));
-  font-size: 14px;
+  font-size: 14px !important;
 }
 .filled {
   background-color: hsl(var(--solitaire-quaternary));
   width: 150px;
   height: 35px;
   color: hsl(var(--solitaire-tertiary));
-  font-size: 14px;
+  font-size: 14px !important;
+
+  
 }
 
 .paginationContainerStyle {

@@ -186,11 +186,13 @@
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
+  font-size: 14px !important;
 }
 .filled {
   background-color: #8c7459;
   color: #ffffff;
   padding: 8px 30px;
+  font-size: 14px !important;
 }
 
 .unBlurCardHeader {
