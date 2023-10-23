@@ -8,7 +8,7 @@ import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import SideBar from '@/components/common/sidebar';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const store = setupStore();
 
