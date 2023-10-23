@@ -22,12 +22,14 @@ export const productApi = createApi({
       providesTags: ['Product'],
     }),
     getProductCount: builder.query({
-      query: ({searchUrl=''}) => ({
-        url: `/store/products?limit=1&expand=collection&fields=id${searchUrl!=='' ? '&'+searchUrl:''}`,
+      query: ({ searchUrl = '' }) => ({
+        url: `/store/products?limit=1&expand=collection&fields=id${
+          searchUrl !== '' ? '&' + searchUrl : ''
+        }`,
       }),
       providesTags: ['Product'],
     }),
   }),
 });
 
-export const { useGetAllProductQuery,useGetProductCountQuery } = productApi;
+export const { useGetAllProductQuery, useGetProductCountQuery } = productApi;

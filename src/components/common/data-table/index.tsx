@@ -925,6 +925,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               {row.lab}
                             </a>
                           </div>
+                        ) : column.accessor === 'amount' ? (
+                          row.variants[0].prices[0].amount
                         ) : row[column.accessor as keyof Rows] !== null ? (
                           row[column.accessor as keyof Rows]
                         ) : (
