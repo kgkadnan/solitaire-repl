@@ -143,10 +143,10 @@ const SearchResults = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  const [dialogContent, setDialogContent] = useState<ReactNode>()
-  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [isEntireSearch , setIsEntireSearch] = useState(false)
+  const [isEntireSearch, setIsEntireSearch] = useState(false);
 
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
@@ -266,20 +266,30 @@ const SearchResults = () => {
     { label: 'Luster', accessor: 'luster' },
   ];
 
- 
-
   const downloadExcelFunction = () => {
     if (isCheckAll) {
-      setDialogContent(<> 
-        <div className="max-w-[400px] flex justify-center align-middle">
-          Do you want to download excel of entire search or selected stone
-        </div>
+      setDialogContent(
+        <>
+          <div className="max-w-[400px] flex justify-center align-middle">
+            Do you want to download excel of entire search or selected stone
+          </div>
           <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-            <CustomDisplayButton displayButtonLabel="Select All" handleClick={() => {setIsEntireSearch(true)}}/>
-            <CustomDisplayButton displayButtonLabel="Selected" handleClick={() => {setIsEntireSearch(false)}}/>
-          </div></>)
-      setIsDialogOpen(true)
-
+            <CustomDisplayButton
+              displayButtonLabel="Select All"
+              handleClick={() => {
+                setIsEntireSearch(true);
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Selected"
+              handleClick={() => {
+                setIsEntireSearch(false);
+              }}
+            />
+          </div>
+        </>
+      );
+      setIsDialogOpen(true);
 
       if (isEntireSearch) {
         console.log('userConfirmed', isEntireSearch);
@@ -295,14 +305,17 @@ const SearchResults = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
               );
-              setDialogContent(<> 
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
+              setDialogContent(
+                <>
+                  <div className="max-w-[400px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
                   <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                    Download Excel Successfully 
-                  </div></>)
-                setIsDialogOpen(true)
+                    Download Excel Successfully
+                  </div>
+                </>
+              );
+              setIsDialogOpen(true);
             }
           })
           .catch((e) => {
@@ -325,14 +338,17 @@ const SearchResults = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
               );
-              setDialogContent(<> 
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
+              setDialogContent(
+                <>
+                  <div className="max-w-[400px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
                   <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                    Download Excel Successfully 
-                  </div></>)
-                setIsDialogOpen(true)
+                    Download Excel Successfully
+                  </div>
+                </>
+              );
+              setIsDialogOpen(true);
             }
           })
           .catch((e) => {
@@ -385,14 +401,17 @@ const SearchResults = () => {
           .then(() => {
             setIsError(false);
             setErrorText('');
-            setDialogContent(<> 
-            <div className="max-w-[400px] flex justify-center align-middle">
-              <Image src={confirmImage} alt="vector image" />
-            </div>
-              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Item Successfully added to cart
-              </div></>)
-            setIsDialogOpen(true)
+            setDialogContent(
+              <>
+                <div className="max-w-[400px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="vector image" />
+                </div>
+                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                  Item Successfully added to cart
+                </div>
+              </>
+            );
+            setIsDialogOpen(true);
             dispatch(notificationBadge(true));
           })
           .catch(() => {
@@ -443,19 +462,19 @@ const SearchResults = () => {
       id: 2,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.transparent,
-      fn: () => { },
+      fn: () => {},
     },
     {
       id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addSearch'),
       style: styles.transparent,
-      fn: () => { },
+      fn: () => {},
     },
     {
       id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.modifySearch'),
       style: styles.transparent,
-      fn: () => { },
+      fn: () => {},
     },
     {
       id: 5,
@@ -463,7 +482,7 @@ const SearchResults = () => {
         'app.searchResult.footer.addToWhislist'
       ),
       style: styles.filled,
-      fn: () => { },
+      fn: () => {},
     },
     {
       id: 6,
@@ -688,7 +707,11 @@ const SearchResults = () => {
 
   return (
     <>
-      <CustomDialog dialogContent={dialogContent} isOpens={isDialogOpen} />
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="border-b  border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
@@ -709,10 +732,11 @@ const SearchResults = () => {
                         marginRight:
                           index === yourSelection.length - 1 ? '0px' : '5px',
                       }}
-                      className={`flex items-center cursor-pointer gap-[8px] ${activeTab === index
+                      className={`flex items-center cursor-pointer gap-[8px] ${
+                        activeTab === index
                           ? styles.activeHeaderButtonStyle
                           : styles.headerButtonStyle
-                        }`}
+                      }`}
                     >
                       <div className="flex items-center">
                         <Tooltip
@@ -856,7 +880,7 @@ const SearchResults = () => {
                     displayButtonAllStyle={{
                       displayButtonStyle: styles.transparent,
                     }}
-                  // handleClick={showButtonHandleClick}
+                    // handleClick={showButtonHandleClick}
                   />
                   <CustomDisplayButton
                     displayButtonLabel={ManageLocales(
@@ -865,7 +889,7 @@ const SearchResults = () => {
                     displayButtonAllStyle={{
                       displayButtonStyle: styles.filled,
                     }}
-                  // handleClick={showButtonHandleClick}
+                    // handleClick={showButtonHandleClick}
                   />
                 </div>
               </>
