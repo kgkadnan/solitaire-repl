@@ -1,5 +1,5 @@
 'use client';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ import { ManageLocales } from '@/utils/translate';
 
 const SideBar = () => {
   const router = useRouter();
+  const currentRoute = usePathname();
 
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
@@ -29,36 +30,43 @@ const SideBar = () => {
       src: <Dashboard className={styles.stroke} alt="dashboard" />,
       title: ManageLocales('app.sideNav.dashboard'),
       link: '/',
+      isActive: currentRoute === '/',
     },
     {
       src: <NewArrival className={styles.fill} alt="new-arrival" />,
       title: ManageLocales('app.sideNav.newArrival'),
       link: '/new-arrival',
+      isActive: currentRoute === '/new-arrival',
     },
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
       link: 'advance-search',
+      isActive: currentRoute === '/advance-search',
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
       title: ManageLocales('app.sideNav.matchPair'),
       link: '/match-pair',
+      isActive: currentRoute === '/match-pair',
     },
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
       link: '/saved-search',
+      isActive: currentRoute === '/saved-search',
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
       link: '/my-cart',
+      isActive: currentRoute === '/my-cart',
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,
       title: ManageLocales('app.sideNav.layouts'),
       link: '/layouts',
+      isActive: currentRoute === '/layouts',
     },
     {
       src: (
@@ -69,16 +77,19 @@ const SideBar = () => {
       ),
       title: ManageLocales('app.sideNav.recentConfirmations'),
       link: '/recent-confiramtion',
+      isActive: currentRoute === '/recent-confiramtion',
     },
     {
       src: <Appointment className={styles.stroke} alt="appointments" />,
       title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
+      isActive: currentRoute === '/appointments',
     },
     {
       src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
       title: ManageLocales('app.sideNav.myDiamonds'),
       link: '/my-diamonds',
+      isActive: currentRoute === '/my-diamonds',
     },
   ];
 

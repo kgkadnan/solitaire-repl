@@ -17,6 +17,7 @@ export interface IImageTileProps {
   title: string;
   link?: string;
   short_name?: any;
+  isActive?: any;
 }
 
 export interface IImageContainerProps {
@@ -45,7 +46,9 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
       className={`${style.imageTileMainContainer} ${overriddenStyles?.imageTileMainContainerStyles}`}
     >
       {imageTileData.map((tileData: IImageTileProps) => {
-        const { src, title, link, short_name } = tileData;
+        const { src, title, link, short_name, isActive } = tileData;
+
+        const isTileActive = isActive || selectedTile?.includes(short_name);
         return (
           <div
             key={`image-tile-data-${title}`}
@@ -53,8 +56,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
             className={`${
               style.imageTileContainer
             } ${overriddenStyles?.imageTileContainerStyles} ${
-              selectedTile?.includes(short_name ? short_name : title) &&
-              overriddenStyles?.activeIndicatorStyles
+              isTileActive && overriddenStyles?.activeIndicatorStyles
             }`}
             onMouseEnter={() => setHoveredTile(title)}
             onMouseLeave={() => setHoveredTile(null)}
