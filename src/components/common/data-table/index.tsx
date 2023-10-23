@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import { CustomCheckBox } from '../checkbox';
 import { Checkbox } from '@/components/ui/checkbox';
 import Image from 'next/image';
@@ -15,6 +15,8 @@ import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { useAddCartMutation } from '@/features/api/cart';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import { CustomDialog } from '../dialog';
 
 export interface Rows {
   [key: string]: string | number | boolean | null | undefined | any;
@@ -104,8 +106,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
-  const [dialogContent, setDialogContent] = useState('');
-  const [dialog, setDialog] = useState(false);
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useAddCartMutation();
@@ -120,9 +122,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       })
         .unwrap()
         .then(() => {
-          setDialogContent('Item successfully added to cart');
-          setDialog(true);
-          console.log('hhhhhhhhhhhhhhhhhhhhh');
+          setDialogContent(<> 
+            <div className="max-w-[400px] flex justify-center align-middle">
+              <Image src={confirmImage} alt="vector image" />
+            </div>
+              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                Download Excel Successfully 
+              </div></>)
+            setIsDialogOpen(true)
         })
         .catch(() => {
           console.log('1111111111111111');
@@ -296,7 +303,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   };
 
   const downloadImage = (imageUrl: any) => {
-    console.log('image', imageUrl);
     window.open(imageUrl, '_blank');
   };
 
@@ -322,6 +328,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 
   return (
     <>
+    <CustomDialog dialogContent={dialogContent} isOpens={isDialogOpen} />
       <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>

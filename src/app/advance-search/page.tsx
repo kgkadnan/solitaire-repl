@@ -532,7 +532,6 @@ const [searchCount, setSearchCount]=useState<number>(0)
 
   
   useEffect(() => {
-    console.log("jyoti",searchCount)
     if(searchCount>1){
     if (data?.count > 300 && data?.count >0) {
       setIsError(true);
@@ -801,7 +800,6 @@ setSearchCount(searchCount+1)
         setSelectedShape([]);
       }
     } else {
-      console.log('filteredShape', shape);
       handleFilterChange(shape, selectedShape, setSelectedShape);
     }
   };
@@ -2353,7 +2351,7 @@ setSearchCount(searchCount+1)
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
-          <div className="w-[60%]">
+          <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-700 text-red-700" />
             <p
               className={`text-${

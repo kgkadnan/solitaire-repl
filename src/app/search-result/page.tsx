@@ -2,7 +2,7 @@
 import { CustomFooter } from '@/components/common/footer';
 import styles from './search-results.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import InfoCircleOutline from '@public/assets/icons/information-circle-outline.svg?url';
@@ -24,6 +24,8 @@ import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
+import { CustomDialog } from '@/components/common/dialog';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 
 interface TableColumn {
   label: string;
@@ -141,6 +143,11 @@ const SearchResults = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [isEntireSearch, setIsEntireSearch] = useState(false);
+
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: offset,
     limit: limit,
@@ -149,7 +156,6 @@ const SearchResults = () => {
 
   let [downloadExcel] = useDownloadExcelMutation();
 
-  // console.log('Data', data?.products);
 
   let { data: previousSearch } = useGetSpecificPreviousQuery({
     id: previousSearchIds,
@@ -261,14 +267,32 @@ const SearchResults = () => {
 
   const downloadExcelFunction = () => {
     if (isCheckAll) {
-      const userConfirmed = confirm(
-        'Do you want to Download Entire Search Stone or Selected Stone?'
+      setDialogContent(
+        <>
+          <div className="max-w-[400px] flex justify-center align-middle">
+            Do you want to download excel of entire search or selected stone
+          </div>
+          <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+            <CustomDisplayButton
+              displayButtonLabel="Select All"
+              handleClick={() => {
+                setIsEntireSearch(true);
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Selected"
+              handleClick={() => {
+                setIsEntireSearch(false);
+              }}
+            />
+          </div>
+        </>
       );
+      setIsDialogOpen(true);
 
-      if (userConfirmed) {
-        console.log('userConfirmed', userConfirmed);
+      if (isEntireSearch) {
         setIsCheck([]);
-      } else if (isCheck.length) {
+      } else if (isCheck.length && !isEntireSearch) {
         downloadExcel({
           productIds: isCheck,
         })
@@ -279,7 +303,17 @@ const SearchResults = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
               );
-              console.log('Download Excel Succesfully', res);
+              setDialogContent(
+                <>
+                  <div className="max-w-[400px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
+                  <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                    Download Excel Successfully
+                  </div>
+                </>
+              );
+              setIsDialogOpen(true);
             }
           })
           .catch((e) => {
@@ -302,7 +336,17 @@ const SearchResults = () => {
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
               );
-              console.log('Download Excel Succesfully', res);
+              setDialogContent(
+                <>
+                  <div className="max-w-[400px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
+                  <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                    Download Excel Successfully
+                  </div>
+                </>
+              );
+              setIsDialogOpen(true);
             }
           })
           .catch((e) => {
@@ -355,6 +399,17 @@ const SearchResults = () => {
           .then(() => {
             setIsError(false);
             setErrorText('');
+            setDialogContent(
+              <>
+                <div className="max-w-[400px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="vector image" />
+                </div>
+                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                  Item Successfully added to cart
+                </div>
+              </>
+            );
+            setIsDialogOpen(true);
             dispatch(notificationBadge(true));
           })
           .catch(() => {
@@ -365,7 +420,6 @@ const SearchResults = () => {
     }
   };
 
-  // console.log("reosssss")
 
   const footerButtonData = [
     {
@@ -650,6 +704,11 @@ const SearchResults = () => {
 
   return (
     <>
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="border-b  border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
