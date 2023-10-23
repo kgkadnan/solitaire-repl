@@ -11,8 +11,8 @@ import React from 'react';
 
 // Interface for the data of the table
 interface ITableData {
-  tableHeads: string[];
-  bodyData: Record<string, any>[];
+  tableHeads: any;
+  bodyData: any;
 }
 
 // Interface for the styles of the table
@@ -33,6 +33,8 @@ export const CustomTable: React.FC<ITableProps> = ({
   tableData,
   tableStyleClasses,
 }) => {
+  console.log('ttttttttttttttttttttttttt', tableData.bodyData);
+
   // Destructure styles from the props
   const { tableHeaderStyle, tableBodyStyle, tableStyle } = tableStyleClasses;
   return (
@@ -43,7 +45,7 @@ export const CustomTable: React.FC<ITableProps> = ({
         <TableHeader>
           <TableRow>
             {/* Map through tableHeads to create table header cells */}
-            {tableData.tableHeads.map((tableHead, index) => {
+            {tableData.tableHeads.map((tableHead: any, index: number) => {
               return (
                 <TableHead
                   key={`tablehead-${index}`}
@@ -59,7 +61,7 @@ export const CustomTable: React.FC<ITableProps> = ({
         {/* Table body */}
         <TableBody>
           {/* Map through bodyData to create table rows */}
-          {tableData.bodyData.map((bodyData, rowIndex) => (
+          {tableData.bodyData.map((bodyData: any, rowIndex: number) => (
             <TableRow key={`row-${rowIndex}`}>
               {Object.keys(bodyData).map((item, cellIndex) => {
                 return (

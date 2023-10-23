@@ -61,7 +61,7 @@ export const TopNavigationBar = () => {
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
-    localStorage.removeItem("Search");
+    localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
   };
 
@@ -76,14 +76,14 @@ export const TopNavigationBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [prevScrollPos, data]);
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
     let notificationMapData = data.data.map((item: any) => ({
       id: item.id,
-      status: item.status === 'unread' ? 'read' : item.status,
+      status: item.status === 'read' ? 'read' : 'unread',
     }));
 
     const unreadNotifications = notificationMapData.filter(
