@@ -26,6 +26,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
+import { formatCassing } from '@/utils/format-cassing';
 
 interface ICardData {
   cardId: string;
@@ -43,6 +44,10 @@ interface IData {
   isDeleted: boolean;
   created_at: string;
   updated_at: string;
+}
+
+interface KeyLabelMapping {
+  [key: string]: string;
 }
 
 const PreviousSearch = () => {
@@ -195,57 +200,6 @@ const PreviousSearch = () => {
       setCurrentPage(currentPage - 1);
     }
   };
-
-  const cardDetailData = [
-    {
-      cardId: 1,
-      basicCardDetails: {
-        Lab: 'GIA',
-        Shape: 'Round',
-        Carat: '2,2.5,3',
-        Color: 'D,E,F',
-        Clarity: 'FL,VVS1,VVS2',
-        Tinge: 'WH',
-        Cut: 'EX,VG,G',
-        Polish: 'EX',
-        Symmetry: 'EX',
-        Fluorescene: 'Non',
-        Location: 'IND',
-      },
-
-      inclutionDetails: {
-        'Table Black': 'BO',
-        'Side Black': 'SBO',
-        'Table Inclution': 'TO',
-        'Side Inclution': 'SO',
-        'Table Open': 'N',
-        'Crown Open': 'N',
-        'Pavillion Open': 'N',
-        'Eye Clean': 'Y',
-        'Hearts & Arrows': '-',
-        Brilliancy: '-',
-        'Type 2 Certificate': '-',
-        'Country Of Origin': '-',
-        'Rough Mine': '-',
-        'Natural Girdle': 'N',
-        'Natural Crown': 'N',
-        'Natural Pavillion': 'N',
-        'Internal Graining': 'IGO',
-        'Surface Graining': 'GO',
-      },
-
-      measurements: {
-        Girdle: 'Med-Stk',
-        Cutlet: 'None',
-        Luster: 'EX',
-      },
-
-      OtherInformation: {
-        'Key To Symbol': '-',
-        'Report Comments': '-',
-      },
-    },
-  ];
 
   const debouncedSave = useCallback(
     (inputValue: string) => {
@@ -474,12 +428,12 @@ const PreviousSearch = () => {
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
-                                        {key}
+                                        {formatCassing(key)}
                                       </span>
                                       <span className={styles.sheetValues}>
                                         {typeof value !== 'string'
-                                          ? value.join(',')
-                                          : value}
+                                          ? value?.join(',')
+                                          : formatCassing(value)}
                                       </span>
                                     </p>
                                   </div>
@@ -502,12 +456,12 @@ const PreviousSearch = () => {
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
-                                        {key}
+                                        {formatCassing(key)}
                                       </span>
                                       <span className={styles.sheetValues}>
                                         {typeof value !== 'string'
                                           ? value.join(',')
-                                          : value}
+                                          : formatCassing(value)}
                                       </span>
                                     </p>
                                   </div>
@@ -530,12 +484,12 @@ const PreviousSearch = () => {
                                   <div key={key}>
                                     <p className="flex">
                                       <span className={styles.innerHeading}>
-                                        {key}
+                                        {formatCassing(key)}
                                       </span>
                                       <span className={styles.sheetValues}>
                                         {typeof value !== 'string'
                                           ? value.join(',')
-                                          : value}
+                                          : formatCassing(value)}
                                       </span>
                                     </p>
                                   </div>
@@ -561,12 +515,12 @@ const PreviousSearch = () => {
                                       styles.inclutionDetailsInnerHeadingStyle
                                     }
                                   >
-                                    {key}
+                                    {formatCassing(key)}
                                   </span>
                                   <span className={styles.sheetValues}>
                                     {typeof value !== 'string'
                                       ? value.join(',')
-                                      : value}
+                                      : formatCassing(value)}
                                   </span>
                                 </p>
                               ))}
