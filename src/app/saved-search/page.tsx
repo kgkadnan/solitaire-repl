@@ -21,6 +21,7 @@ import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
+import { formatCassing } from '@/utils/format-cassing';
 
 interface ICardData {
   cardId: string;
@@ -478,7 +479,7 @@ const SavedSearch = () => {
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
-                                          {key}
+                                          {formatCassing(key)}
                                         </span>
                                         <span className={styles.sheetValues}>
                                           {Array.isArray(value)
@@ -509,7 +510,7 @@ const SavedSearch = () => {
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
-                                          {key}
+                                        {formatCassing(key)}
                                         </span>
                                         <span className={styles.sheetValues}>
                                           {Array.isArray(value)
@@ -540,7 +541,7 @@ const SavedSearch = () => {
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
-                                          {key}
+                                        {formatCassing(key)}
                                         </span>
                                         <span className={styles.sheetValues}>
                                           {Array.isArray(value)
@@ -575,7 +576,7 @@ const SavedSearch = () => {
                                           styles.inclutionDetailsInnerHeadingStyle
                                         }
                                       >
-                                        {key}
+                                        {formatCassing(key)}
                                       </span>
                                       <span className={styles.sheetValues}>
                                         {Array.isArray(value)
