@@ -58,6 +58,7 @@ const Summary = () => {
             return (
               <div
                 className={`${style.personalCard} ${style.keyAccountManagerCard}`}
+                key={manager.email} // add a unique key prop
               >
                 <div className={style.userHeader}>
                   <div className={style.iconSpace}>
@@ -70,10 +71,7 @@ const Summary = () => {
                   <p>{manager.address}</p>
                 </div>
                 <div className={style.keyAccountManagerSocials}>
-                  <a
-                    href={`tel:${manager.contactNo}`}
-                    className={style.socials}
-                  >
+                  <a href={`tel:${manager.contactNo}`} className={style.socials}>
                     {' '}
                     <div className={style.iconSpace}>
                       <Phone alt="Phone" />

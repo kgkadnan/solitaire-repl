@@ -18,6 +18,7 @@ import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
 import {
   useGetAllPreviousSearchesQuery,
+  useGetPreviousSearchListQuery,
   useUpdatePreviousSearchMutation,
 } from '@/features/api/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
@@ -85,6 +86,7 @@ const PreviousSearch = () => {
 
   //Search Bar States
   const [search, setSearch] = useState<string>('');
+  const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
   //toast message
@@ -100,7 +102,9 @@ const PreviousSearch = () => {
     offset,
     limit,
     searchUrl,
+    searchByName,
   });
+  const { data: searchList } = useGetPreviousSearchListQuery(search);
 
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
@@ -129,90 +133,30 @@ const PreviousSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useUpdatePreviousSearchMutation();
 
-  const searchData = [
-    'sample',
-    'sample12',
-    'sample3',
-    'sample4',
-    'sample5',
-    'ooooo',
-  ];
-
-  const searchListNew = useMemo(
-    () => [
-      {
-        id: 'gkgh32465442',
-        name: 'ooooo',
-        customer_id: '<sample_customer_id>',
-        diamondCount: 256,
-        filter: {
-          color: ['D', 'F', 'E', 'G'],
-          clarity: ['VVS2', 'VVS1', 'VS2'],
-          polarity: ['EX', 'IDEAL', 'VG'],
-          lab: ['GIA', 'HRD', 'IGI'],
-        },
-        isDeleted: false,
-        created_at: '2023-08-23T08:03:54.942Z',
-        updated_at: '2023-08-23T08:03:54.942Z',
-      },
-    ],
-    [] // No dependencies
-  );
-
-  const keyLabelMapping: KeyLabelMapping = {
-    shape: 'Shape',
-    color: 'color',
-    carat: 'carat',
-    culet: 'Culet',
-    clarity: 'clarity',
-    shade: 'shade',
-    cut: 'cut',
-    polish: 'polish',
-    luster: 'Luster',
-  };
-
   const renderCardData = useCallback(
-    (data: any, suggestion?: string) => {
-      return data
-        ?.filter((data: any) =>
-          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
-        )
-        .map((data: any) => {
-          // Filter the data based on the keyLabelMapping
-          const filteredData: any = {};
-          for (const key in keyLabelMapping) {
-            if (data.meta_data.basic_card_details) {
-              filteredData[keyLabelMapping[key]] =
-                data.meta_data.basic_card_details[key] &&
-                data.meta_data.basic_card_details[key].length
-                  ? data.meta_data.basic_card_details[key]
-                  : '-';
-            }
-          }
-
-          return {
-            cardId: data.id,
-            cardActionIcon: editIcon,
-            cardHeader: (
-              <CustomTable
-                tableData={{
-                  tableHeads: [data.name],
-                  bodyData: [{ desc: formatCreatedAt(data.created_at) }],
-                }}
-                tableStyleClasses={searchCardTitle}
-              />
-            ),
-            cardContent: (
-              <CustomTable
-                tableData={{
-                  tableHeads: Object.keys(filteredData),
-                  bodyData: [Object.values(filteredData)],
-                }}
-                tableStyleClasses={tableStyles}
-              />
-            ),
-          };
-        });
+    (data: any) => {
+      return data?.map((data: any) => ({
+        cardId: data.id,
+        cardActionIcon: editIcon,
+        cardHeader: (
+          <CustomTable
+            tableData={{
+              tableHeads: [data.name],
+              bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+            }}
+            tableStyleClasses={searchCardTitle}
+          />
+        ),
+        cardContent: (
+          <CustomTable
+            tableData={{
+              tableHeads: Object.keys(data.meta_data.basic_card_details),
+              bodyData: [data.meta_data.basic_card_details],
+            }}
+            tableStyleClasses={tableStyles}
+          />
+        ),
+      }));
     },
     [searchCardTitle, tableStyles]
   );
@@ -238,15 +182,18 @@ const PreviousSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchData.filter((item) =>
-        item.toLowerCase().includes(inputValue.toLowerCase())
+      const filteredSuggestions = searchList.filter((item: any) =>
+        item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
       // Extract card titles from filtered suggestions
-      const suggestionTitles = filteredSuggestions.map((item) => item);
+      const suggestionTitles = filteredSuggestions.map(
+        (item: any) => item.name
+      );
+
       setSuggestions(suggestionTitles);
       // Update state with an array of strings
     },
-    [searchData]
+    [searchList]
   );
 
   const debounce = <T extends any[]>(
@@ -272,23 +219,17 @@ const PreviousSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(PreviousSearchData, ''));
+      setSearchByName('');
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
+    console.log('suggestion', suggestion);
     setSearch(suggestion);
-
-    let dataNew = PreviousSearchData.map((data: { name: any }) => data.name);
-
-    if (!dataNew.includes(suggestion)) {
-      setCardData(renderCardData(searchListNew, suggestion));
-    } else {
-      setCardData(renderCardData(PreviousSearchData, suggestion));
-    }
-
+    setSearchByName(suggestion);
     setSuggestions([]);
   };
+
   //specific checkbox
   const handleClick = (id: string) => {
     // const { id } = e.target;
@@ -382,9 +323,8 @@ const PreviousSearch = () => {
     setNumberOfPages(
       Math.ceil(previousSearchData?.count / previousSearchData?.limit)
     );
-    console.log('numberofpages', data);
     setPreviousSearchData(searchData);
-    setCardData(renderCardData(searchData, search));
+    setCardData(renderCardData(searchData));
   }, [data, offset, limit]);
 
   // Function to handle edit action

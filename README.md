@@ -1,6 +1,6 @@
 # SOLITAIRE
 
-## Requirements
+## Requirements:
 
 For development, you will only need Node.js installed on your environement.
 And please go through the [DeveloperGuide](https://docs.google.com/document/d/1WRBPJQYTfw3Fmyx2XsdOVp5oZj4ZxvAv6XrZUBM_Poo/edit) before starting development.
