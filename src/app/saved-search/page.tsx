@@ -1,11 +1,5 @@
 'use client';
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styles from './saved-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
@@ -19,6 +13,7 @@ import CustomPagination from '@/components/common/pagination';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
   useGetAllSavedSearchesQuery,
+  useGetSavedSearchListQuery,
   useUpdateSavedSearchesMutation,
 } from '@/features/api/saved-searches';
 import { CustomToast } from '@/components/common/toast';
@@ -78,6 +73,19 @@ const SavedSearch = () => {
   const [date, setDate] = useState<DateRange | undefined>();
   const [searchUrl, setSearchUrl] = useState('');
 
+  //Data
+  const [SavedSearchData, setSavedSearchData] = useState<any[]>([]);
+  const [cardData, setCardData] = useState<ICardData[]>([]);
+
+  //checkbox states
+  const [isCheck, setIsCheck] = useState<string[]>([]);
+  const [isCheckAll, setIsCheckAll] = useState(false);
+
+  //Search Bar States
+  const [search, setSearch] = useState<string>('');
+  const [searchByName, setSearchByName] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
   const handleResultsPerPageChange = useCallback((event: string) => {
     const newResultsPerPage = parseInt(event, 10);
     setLimit(newResultsPerPage);
@@ -105,7 +113,10 @@ const SavedSearch = () => {
     limit,
     offset,
     searchUrl,
+    searchByName,
   });
+
+  const { data: searchList } = useGetSavedSearchListQuery(search);
 
   // Destructure the mutation function from the hook
   const [
@@ -113,54 +124,8 @@ const SavedSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useUpdateSavedSearchesMutation();
 
-  //Data
-  const [SavedSearchData, setSavedSearchData] = useState<any[]>([]);
-  const [cardData, setCardData] = useState<ICardData[]>([]);
-
-  //checkbox states
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState(false);
-
-  //Search Bar States
-  const [search, setSearch] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-
-  //toast message
-  const [showToast, setShowToast] = useState<boolean>(false);
-  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
-
-  const searchData = [
-    'sample',
-    'sample12',
-    'sample3',
-    'sample4',
-    'sample5',
-    'ooooo',
-  ];
-
-  const searchListNew = useMemo(
-    () => [
-      {
-        id: 'gkgh32465442',
-        name: 'ooooo',
-        customer_id: '<sample_customer_id>',
-        diamondCount: 256,
-        filter: {
-          color: ['D', 'F', 'E', 'G'],
-          clarity: ['VVS2', 'VVS1', 'VS2'],
-          polarity: ['EX', 'IDEAL', 'VG'],
-          lab: ['GIA', 'HRD', 'IGI'],
-        },
-        isDeleted: false,
-        created_at: '2023-08-23T08:03:54.942Z',
-        updated_at: '2023-08-23T08:03:54.942Z',
-      },
-    ],
-    [] // No dependencies
-  );
-
   const renderCardData = useCallback(
-    (data: any, suggestion?: string) => {
+    (data: any) => {
       return data?.map((item: any) => {
         const meta_data = Array.isArray(item?.meta_data)
           ? item.meta_data[0].basic_card_details
@@ -225,15 +190,18 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchData.filter((item) =>
-        item.toLowerCase().includes(inputValue.toLowerCase())
+      const filteredSuggestions = searchList.filter((item: any) =>
+        item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
       // Extract card titles from filtered suggestions
-      const suggestionTitles = filteredSuggestions.map((item) => item);
+      const suggestionTitles = filteredSuggestions.map(
+        (item: any) => item.name
+      );
+
       setSuggestions(suggestionTitles);
       // Update state with an array of strings
     },
-    [searchData]
+    [searchList]
   );
 
   const debounce = <T extends any[]>(
@@ -259,23 +227,16 @@ const SavedSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(SavedSearchData, ''));
+      setSearchByName('');
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
-
-    let dataNew = SavedSearchData.map((data: { name: any }) => data.name);
-
-    if (!dataNew.includes(suggestion)) {
-      setCardData(renderCardData(searchListNew, suggestion));
-    } else {
-      setCardData(renderCardData(SavedSearchData, suggestion));
-    }
-
+    setSearchByName(suggestion);
     setSuggestions([]);
   };
+
   //specific checkbox
   const handleClick = (id: string) => {
     // const { id } = e.target;
@@ -366,14 +327,14 @@ const SavedSearch = () => {
 
   useEffect(() => {
     const SavedSearchData = data?.data;
-    let searchData = SavedSearchData?.savedSearch;
+    let specificSavedSearchData = SavedSearchData?.savedSearch;
     setNumberOfPages(
       Math.ceil(SavedSearchData?.count / SavedSearchData?.limit)
     );
-    setSavedSearchData(searchData);
+    setSavedSearchData(specificSavedSearchData);
 
     // Filter the location key from basic_card_details
-    const filteredData = searchData?.map((item: any) => ({
+    const filteredData = specificSavedSearchData?.map((item: any) => ({
       ...item,
       meta_data: item.meta_data.map((metaItem: any) => ({
         ...metaItem,
@@ -387,7 +348,7 @@ const SavedSearch = () => {
       })),
     }));
 
-    setCardData(renderCardData(filteredData, search));
+    setCardData(renderCardData(filteredData));
   }, [data, limit, offset]);
 
   // Function to handle edit action
@@ -414,7 +375,6 @@ const SavedSearch = () => {
 
   return (
     <>
-      {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
