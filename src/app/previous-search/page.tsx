@@ -39,6 +39,17 @@ interface KeyLabelMapping {
   [key: string]: string;
 }
 
+interface IData {
+  id: string;
+  name: string;
+  customer_id: string;
+  diamondCount: number;
+  filter: any;
+  isDeleted: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 const PreviousSearch = () => {
   // Style classes and variables
   const tableStyles = {
@@ -148,34 +159,60 @@ const PreviousSearch = () => {
     [] // No dependencies
   );
 
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'color',
+    carat: 'carat',
+    culet: 'Culet',
+    clarity: 'clarity',
+    shade: 'shade',
+    cut: 'cut',
+    polish: 'polish',
+    luster: 'Luster',
+  };
+
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
       return data
         ?.filter((data: any) =>
           data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
         )
-        .map((data: any) => ({
-          cardId: data.id,
-          cardActionIcon: editIcon,
-          cardHeader: (
-            <CustomTable
-              tableData={{
-                tableHeads: [data.name],
-                bodyData: [{ desc: formatCreatedAt(data.created_at) }],
-              }}
-              tableStyleClasses={searchCardTitle}
-            />
-          ),
-          cardContent: (
-            <CustomTable
-              tableData={{
-                tableHeads: Object.keys(data.meta_data.basic_card_details),
-                bodyData: [data.meta_data.basic_card_details],
-              }}
-              tableStyleClasses={tableStyles}
-            />
-          ),
-        }));
+        .map((data: any) => {
+          // Filter the data based on the keyLabelMapping
+          const filteredData: any = {};
+          for (const key in keyLabelMapping) {
+            if (data.meta_data.basic_card_details) {
+              filteredData[keyLabelMapping[key]] =
+                data.meta_data.basic_card_details[key] &&
+                data.meta_data.basic_card_details[key].length
+                  ? data.meta_data.basic_card_details[key]
+                  : '-';
+            }
+          }
+
+          return {
+            cardId: data.id,
+            cardActionIcon: editIcon,
+            cardHeader: (
+              <CustomTable
+                tableData={{
+                  tableHeads: [data.name],
+                  bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+                }}
+                tableStyleClasses={searchCardTitle}
+              />
+            ),
+            cardContent: (
+              <CustomTable
+                tableData={{
+                  tableHeads: Object.keys(filteredData),
+                  bodyData: [Object.values(filteredData)],
+                }}
+                tableStyleClasses={tableStyles}
+              />
+            ),
+          };
+        });
     },
     [searchCardTitle, tableStyles]
   );
