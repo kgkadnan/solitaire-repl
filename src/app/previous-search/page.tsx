@@ -40,6 +40,17 @@ interface KeyLabelMapping {
   [key: string]: string;
 }
 
+interface IData {
+  id: string;
+  name: string;
+  customer_id: string;
+  diamondCount: number;
+  filter: any;
+  isDeleted: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 const PreviousSearch = () => {
   // Style classes and variables
   const tableStyles = {

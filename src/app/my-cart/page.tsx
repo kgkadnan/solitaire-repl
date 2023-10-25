@@ -68,6 +68,7 @@ const MyCart = () => {
   const [cardData, setCardData] = useState([]);
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [createdAt, setCreateAt] = useState('');
   const [sliderData, setSliderData] = useState<any>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
@@ -77,21 +78,21 @@ const MyCart = () => {
   const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useDeleteCartMutation();
 
-  function calculateRemainingTime(createdAt: string) {
-    const createdAtTime = new Date(createdAt).getTime(); // Convert created at to milliseconds since epoch
-    const now = new Date().getTime(); // Current time in milliseconds
-    const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
+  const [remainingTime, setRemainingTime] = useState([]);
 
-    const remainingTime = thirtyMinutesInMilliseconds - (now - createdAtTime);
+  function calculateRemainingTime(createdAt: any) {
+    let millisecondData = createdAt.map((items: any) => {
+      const createdAtTime = new Date(items).getTime(); // Convert created at to milliseconds since epoch
+      const now = new Date().getTime(); // Current time in milliseconds
+      const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
 
-    if (remainingTime <= 0) {
-      return false;
-    } else {
-      // Limit the remaining time to a maximum of 30 minutes
-      const remainingMinutes = Math.min(Math.floor(remainingTime / 60000), 29);
-      const remainingSeconds = Math.floor((remainingTime % 60000) / 1000);
-      return `Buy within ${remainingMinutes} min ${remainingSeconds} secs`;
-    }
+      const remainingTimea =
+        thirtyMinutesInMilliseconds - (now - createdAtTime);
+
+      return remainingTimea;
+    });
+
+    return millisecondData;
   }
 
   const cardDetailMainKeys: KeyLabelMapping = {
@@ -118,77 +119,118 @@ const MyCart = () => {
     inscription: 'Ins.',
   };
 
-  const renderCardData = useCallback((data: any) => {
-    return data.map((data: any) => {
-      let timeData = calculateRemainingTime(data.created_at);
-
-      const filteredData: any = {};
-
-      for (const key in keyLabelMapping) {
-        const dataKey = keyLabelMapping[key];
-        if (data.product[key] !== undefined) {
-          filteredData[dataKey] = data.product[key] ? data.product[key] : '-';
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const updatedRemainingTime = calculateRemainingTime(createdAt).map(
+        (item: any) => {
+          if (item <= 0) {
+            return false;
+          }
+          return item;
         }
-      }
+      );
 
-      return {
-        cardId: data.id,
-        cardTimeOut: !timeData ? true : false,
-        cardHeader: (
-          <div className={styles.cardHeaderMainDiv}>
-            <div className={styles.searchHeader}>
-              <Image
-                src={ImageIcon}
-                alt="ImageIcon"
-                className={styles.headerIconStyle}
-                onClick={(e) => handleImageButton(e)}
-              />
-              <Image
-                src={CertificateIcon}
-                alt="CertificateIcon"
-                className={styles.headerIconStyle}
-                onClick={(e) => handleCertificateButton(e)}
-              />
-              <p className={styles.SearchDateTime}>
-                {formatCreatedAt(data.created_at)}
-              </p>
-            </div>
-            <div>
-              {data.created_at && (
-                <CustomDisplayButton
-                  displayButtonAllStyle={cardTimeStyles}
-                  displayButtonLabel={!timeData ? '' : timeData}
+      setRemainingTime(updatedRemainingTime);
+
+      if (updatedRemainingTime.some((item: any) => item <= 0)) {
+        clearInterval(interval);
+      }
+    }, 1000);
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [createdAt, remainingTime]);
+
+  const renderCardData = useCallback(
+    (data: any) => {
+      const createdAtArray: any = [];
+      return data.map((data: any, index: number) => {
+        createdAtArray.push(data.created_at);
+
+        setCreateAt(createdAtArray);
+
+        let timeData = remainingTime.map((items: any) => {
+          if (items <= 0) {
+            return true;
+          } else {
+            let remainingMinutes = Math.min(Math.floor(items / 60000), 29);
+            let remainingSeconds = Math.floor((items % 60000) / 1000);
+            return `Buy within ${remainingMinutes} min ${remainingSeconds} secs`;
+          }
+        });
+
+        const filteredData: any = {};
+
+        for (const key in keyLabelMapping) {
+          const dataKey = keyLabelMapping[key];
+          if (data.product[key] !== undefined) {
+            filteredData[dataKey] = data.product[key] ? data.product[key] : '-';
+          }
+        }
+
+        return {
+          cardId: data.id,
+          cardTimeOut: typeof timeData[index] === 'string' ? false : true,
+          cardHeader: (
+            <div className={styles.cardHeaderMainDiv}>
+              <div className={styles.searchHeader}>
+                <Image
+                  src={ImageIcon}
+                  alt="ImageIcon"
+                  className={styles.headerIconStyle}
+                  onClick={(e) => handleImageButton(e)}
                 />
-              )}
+                <Image
+                  src={CertificateIcon}
+                  alt="CertificateIcon"
+                  className={styles.headerIconStyle}
+                  onClick={(e) => handleCertificateButton(e)}
+                />
+                <p className={styles.SearchDateTime}>
+                  {formatCreatedAt(data.created_at)}
+                </p>
+              </div>
+              <div>
+                {data.created_at && (
+                  <CustomDisplayButton
+                    displayButtonAllStyle={cardTimeStyles}
+                    displayButtonLabel={!timeData ? '' : timeData[index]}
+                  />
+                )}
+              </div>
             </div>
-          </div>
-        ),
-        cardContent: (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(keyLabelMapping).map(
-                (key) => keyLabelMapping[key]
-              ),
-              bodyData: [filteredData],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        ),
-        unBlurHeader: (
-          <p className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`}>
-            <span className={styles.rptNoStyle}>RPT No. </span>
-            {data.product.rpt_number}
-          </p>
-        ),
-      };
-    });
-  }, []);
+          ),
+          cardContent: (
+            <CustomTable
+              tableData={{
+                tableHeads: Object.keys(keyLabelMapping).map(
+                  (key) => keyLabelMapping[key]
+                ),
+                bodyData: [filteredData],
+              }}
+              tableStyleClasses={tableStyles}
+            />
+          ),
+          unBlurHeader: (
+            <p
+              className={`${styles.SearchCardTitle} ${styles.unBlurCardHeader}`}
+            >
+              <span className={styles.rptNoStyle}>RPT No. </span>
+              {data.product.rpt_number}
+            </p>
+          ),
+        };
+      });
+    },
+    [remainingTime, createdAt]
+  );
 
   useEffect(() => {
     if (data) {
       setCardData(renderCardData(data?.items));
     }
-  }, [data]);
+  }, [data, remainingTime]);
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -222,7 +264,6 @@ const MyCart = () => {
   };
 
   const handleDelete = () => {
-
     deleteCart({
       items: isCheck,
     })
