@@ -20,10 +20,28 @@ import { formatCreatedAt } from '@/utils/format-date';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { useAppDispatch } from '@/hooks/hook';
 import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
+import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
+import downloadOutline from '@public/assets/icons/download-outline.svg';
+import dna from '@public/assets/icons/ph_dna-light.svg';
 
 interface KeyLabelMapping {
   [key: string]: string;
 }
+
+export interface StaticImageData {
+  src: string;
+  height: number;
+  width: number;
+  blurDataURL?: string;
+  blurWidth?: number;
+  blurHeight?: number;
+}
+
+export interface StaticRequire {
+  default: StaticImageData;
+}
+
+export type StaticImport = StaticRequire | StaticImageData;
 
 const MyCart = () => {
   const dispatch = useAppDispatch();
@@ -51,6 +69,10 @@ const MyCart = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [createdAt, setCreateAt] = useState('');
+  const [sliderData, setSliderData] = useState<any>([]);
+  const [activeTab, setActiveTab] = useState('');
+  const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
+  const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
 
   const { data } = useGetCartQuery({});
   const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
@@ -72,6 +94,16 @@ const MyCart = () => {
 
     return millisecondData;
   }
+
+  const cardDetailMainKeys: KeyLabelMapping = {
+    lot_id: 'Stock No',
+    shape: 'Shape',
+    carat: 'Carat',
+    color: 'Color',
+    clarity: 'Clarity',
+    discount: 'Discount',
+    amount: 'Amt($)',
+  };
 
   const keyLabelMapping: KeyLabelMapping = {
     shape: 'Shape',
@@ -196,60 +228,9 @@ const MyCart = () => {
 
   useEffect(() => {
     if (data) {
-      setCardData(renderCardData(data.items));
+      setCardData(renderCardData(data?.items));
     }
   }, [data, remainingTime]);
-
-  const cardDetailData = [
-    {
-      cardId: 1,
-      basicCardDetails: {
-        Lab: 'GIA',
-        Shape: 'Round',
-        Carat: '2,2.5,3',
-        Color: 'D,E,F',
-        Clarity: 'FL,VVS1,VVS2',
-        Tinge: 'WH',
-        Cut: 'EX,VG,G',
-        Polish: 'EX',
-        Symmetry: 'EX',
-        Fluorescene: 'Non',
-        Location: 'IND',
-      },
-
-      inclutionDetails: {
-        'Table Black': 'BO',
-        'Side Black': 'SBO',
-        'Table Inclution': 'TO',
-        'Side Inclution': 'SO',
-        'Table Open': 'N',
-        'Crown Open': 'N',
-        'Pavillion Open': 'N',
-        'Eye Clean': 'Y',
-        'Hearts & Arrows': '-',
-        Brilliancy: '-',
-        'Type 2 Certificate': '-',
-        'Country Of Origin': '-',
-        'Rough Mine': '-',
-        'Natural Girdle': 'N',
-        'Natural Crown': 'N',
-        'Natural Pavillion': 'N',
-        'Internal Graining': 'IGO',
-        'Surface Graining': 'GO',
-      },
-
-      measurements: {
-        Girdle: 'Med-Stk',
-        Cutlet: 'None',
-        Luster: 'EX',
-      },
-
-      OtherInformation: {
-        'Key To Symbol': '-',
-        'Report Comments': '-',
-      },
-    },
-  ];
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -358,6 +339,106 @@ const MyCart = () => {
     { id: 3, displayButtonLabel: 'Confirm Stone', style: styles.filled },
   ];
 
+  let displayButtonData = [
+    {
+      id: '1',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.giaCertificate'
+      ),
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.product?.certificate_number}.jpeg`,
+    },
+
+    {
+      id: '2',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondVideo'
+      ),
+      iframeUrl: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=${sliderData[0]?.product?.lot_id}&autoPlay=1`,
+    },
+    {
+      id: '3',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondImage'
+      ),
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+    },
+    {
+      id: '4',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.b2b'
+      ),
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+    },
+    {
+      id: '5',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.b2bSparkle'
+      ),
+      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+    },
+  ];
+
+  const basicDetailsLabelMapping: KeyLabelMapping = {
+    lot_id: 'Stock No.',
+    rpt_number: 'Report No.',
+    shape: 'Shape',
+    carat: 'Carat',
+    color: 'Color',
+    color_shade: 'Color Shade',
+    color_shade_intensity: 'Color Shade Intensity',
+    clarity: 'Clarity',
+    cut: 'Cut',
+    polish: 'Polish',
+    symmetry: 'Symmetry',
+    fluorescence: 'Fluorescence',
+    culet: 'Culet',
+    lab: 'Lab',
+    ha: 'Hearts & Arrows',
+    brilliance: 'Brilliancy',
+    country_origin: 'Country of Origin',
+    location: 'Location',
+    type_certificate: 'Type 2 Certificate',
+    inscription: 'Laser Inscription',
+  };
+  const measurementsLabelMapping: KeyLabelMapping = {
+    table_percentage: 'Table%',
+    depth_percentage: 'Depth%',
+    ratio: 'Ratio',
+    length: 'Length',
+    width: 'Width',
+    depth: 'Depth',
+    crown_angle: 'Crown Angle',
+    crown_height: 'Crown Height',
+    girdle_percentage: 'Girdle%',
+    pavilion_angle: 'Pavilion Angle',
+    pavilion_depth: 'Pavilion Depth',
+    lower_half: 'Lower Half',
+    star_length: 'Star Length',
+  };
+  const inclusionDetailsLabelMapping: KeyLabelMapping = {
+    black_table: 'Table Black',
+    side_black: 'Black Side',
+    open_crown: 'Crown Open',
+    open_table: 'Table Open',
+    open_pavilion: 'Pavilion Open',
+    milky: 'Milky',
+    luster: 'Luster',
+    eye_clean: 'Eye Clean',
+    table_inclusion: 'Table Inclusion',
+    side_inclusion: 'Side Inclusion',
+    natural_crown: 'Natural Crown',
+    natural_girdle: 'Natural Girdle',
+    natural_pavilion: 'Natural Pavilion',
+    surface_graining: 'Surface Graining',
+    internal_graining: 'Internal Graining',
+  };
+
+  const otherInformationsLabelMapping: KeyLabelMapping = {
+    girdle: 'Girdle',
+    key_to_symbbol: 'Key to Symbol',
+    report_comments: 'Report Comments',
+  };
+
   //Header Data
   const headerData = {
     headerHeading: 'MyCart',
@@ -403,6 +484,17 @@ const MyCart = () => {
     router.push('/wishlist');
   };
 
+  const handleDiamondDetailData = (id: string, url: any, iframeUrl: any) => {
+    setDiamondDetailIframeUrl('');
+    setDiamondDetailImageUrl('');
+    if (iframeUrl) {
+      setDiamondDetailIframeUrl(iframeUrl);
+    } else if (url) {
+      setDiamondDetailImageUrl(url);
+    }
+    setActiveTab(id);
+  };
+
   return (
     <>
       <div className="container flex flex-col ">
@@ -414,7 +506,7 @@ const MyCart = () => {
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
           <>
-            {cardData?.map((items: any) => {
+            {cardData?.map((items: any, index) => {
               return (
                 <div key={items.cardId}>
                   <div className="flex mt-6">
@@ -423,9 +515,17 @@ const MyCart = () => {
                       onClick={handleClick}
                       isChecked={isCheck}
                     />
+
                     <CustomSlider
                       sheetTriggenContent={
-                        <>
+                        <div
+                          onClick={() => {
+                            setActiveTab('3');
+                            setDiamondDetailIframeUrl('');
+                            setDiamondDetailImageUrl('');
+                            setSliderData([data?.items[index]]);
+                          }}
+                        >
                           <CustomSearchResultCard
                             cardData={items}
                             overriddenStyles={cardStyles}
@@ -446,121 +546,267 @@ const MyCart = () => {
                               </>
                             }
                           />
-                        </>
+                        </div>
                       }
                       sheetTriggerStyle={styles.mainCardContainer}
+                      sheetContentStyle={styles.diamondDetailSheet}
+                      // sheetContentStyle={styles.sheetContentStyle}
+                      cardTimeout={items.cardTimeOut}
                       sheetContent={
                         <>
-                          {/* Detailed Information section */}
-                          <div
-                            className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
-                          >
-                            <p>Detailed Information</p>
+                          <div className={styles.diamondDetailHeader}>
+                            <p className={`text-solitaireTertiary`}>
+                              {`${ManageLocales(
+                                'app.searchResult.slider.diamondDetail.stockNo'
+                              )} : ${sliderData[0]?.product?.lot_id}`}
+                            </p>
                           </div>
-                          {/* Loop through card detail data */}
-                          {cardDetailData.map((cardDetails) => (
-                            <div className="flex" key={cardDetails.cardId}>
-                              <div className={styles.sheetMainDiv}>
-                                <div className={styles.sheetHeading}>
-                                  <p>Basic Details</p>
-                                </div>
+                          <div className="border-b border-solitaireQuaternary mt-5"></div>
 
-                                <div>
-                                  {Object.entries(
-                                    cardDetails.basicCardDetails
-                                  ).map(([key, value]) => (
-                                    <div key={key}>
-                                      <p className="flex">
-                                        <span className={styles.innerHeading}>
-                                          {key}
-                                        </span>
-                                        <span className={styles.sheetValues}>
-                                          {value}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
+                          {sliderData.map((data: any) => {
+                            data = data.product;
 
-                                <div className={styles.sheetHeading}>
-                                  <p>Measurements</p>
-                                </div>
+                            return (
+                              <>
+                                <div
+                                  key={data.id}
+                                  className="flex items-center justify-between my-5 px-10"
+                                >
+                                  <div>
+                                    {displayButtonData.map((items) => {
+                                      return (
+                                        <div key={items.id}>
+                                          <CustomDisplayButton
+                                            displayButtonLabel={
+                                              items.displayButtonLabel
+                                            }
+                                            displayButtonAllStyle={{
+                                              displayLabelStyle:
+                                                activeTab === items.id
+                                                  ? styles.activeHeaderButtonStyle
+                                                  : styles.headerButtonStyle,
+                                            }}
+                                            handleClick={() =>
+                                              handleDiamondDetailData(
+                                                items.id,
+                                                items.url,
+                                                items.iframeUrl
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                  <div>
+                                    {!diamondDetailImageUrl.length &&
+                                      !diamondDetailIframeUrl.length && (
+                                        <Image
+                                          src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                          alt={``}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
+                                        />
+                                      )}
+                                    {diamondDetailImageUrl &&
+                                      !diamondDetailIframeUrl && (
+                                        <Image
+                                          src={diamondDetailImageUrl}
+                                          alt={``}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
+                                        />
+                                      )}
 
-                                <div>
-                                  {Object.entries(cardDetails.measurements).map(
-                                    ([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
+                                    {diamondDetailIframeUrl &&
+                                      !diamondDetailImageUrl && (
+                                        <iframe
+                                          width="100%"
+                                          height={350}
+                                          frameBorder="0"
+                                          src={diamondDetailIframeUrl}
+                                        />
+                                      )}
+                                  </div>
+                                  <div>
+                                    {Object.keys(cardDetailMainKeys).map(
+                                      (key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1"
+                                        >
+                                          <span className="text-xs">
+                                            {cardDetailMainKeys[key]}
                                           </span>
-                                          <span className={styles.sheetValues}>
-                                            {value}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    )
-                                  )}
+                                          <br />
+                                          {data[key] ? data[key] : '-'}
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
                                 </div>
-
-                                <div className={styles.sheetHeading}>
-                                  <p>Other Information</p>
+                                <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
+                                  <div
+                                    onClick={() => {}}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={shareSocialOutline}
+                                      alt="shareSocialOutline"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
+                                  <div
+                                    onClick={() => {}}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={downloadOutline}
+                                      alt="downloadOutline"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
+                                  <div
+                                    onClick={() => {
+                                      window.open(
+                                        `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
+                                        '_blank'
+                                      );
+                                    }}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={dna}
+                                      alt="dna"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
                                 </div>
-
+                                <div className="border-b border-solitaireQuaternary"></div>
                                 <div>
-                                  {Object.entries(
-                                    cardDetails.OtherInformation
-                                  ).map(([key, value]) => (
-                                    <div key={key}>
-                                      <p className="flex">
-                                        <span className={styles.innerHeading}>
-                                          {key}
-                                        </span>
-                                        <span className={styles.sheetValues}>
-                                          {value}
-                                        </span>
-                                      </p>
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-
-                              <div className={styles.inclusionDetailsMainDiv}>
-                                <div className={styles.sheetHeading}>
-                                  <p>Inclusion Details</p>
-                                </div>
-                                {Object.entries(
-                                  cardDetails.inclutionDetails
-                                ).map(([key, value]) => (
-                                  <p className="flex" key={key}>
-                                    <span
-                                      className={
-                                        styles.inclutionDetailsInnerHeadingStyle
-                                      }
+                                  <div className={styles.diamondDetailHeader}>
+                                    <p
+                                      className={`text-solitaireQuaternary font-bold text-lg my-5`}
                                     >
-                                      {key}
-                                    </span>
-                                    <span className={styles.sheetValues}>
-                                      {value}
-                                    </span>
-                                  </p>
-                                ))}
-                              </div>
-                            </div>
-                          ))}
-                          <div className="border-b border-solitaireTertiary mt-8"></div>
-                          {/* Show Results button */}
-                          <div className={styles.showResultMainDiv}>
-                            <CustomDisplayButton
-                              displayButtonLabel="Show Results"
-                              displayButtonAllStyle={showResulutButtonStyle}
-                              handleClick={showButtonHandleClick}
-                            />
-                          </div>
+                                      {`${ManageLocales(
+                                        'app.searchResult.slider.diamondDetail.diamondDetails'
+                                      )} `}
+                                    </p>
+                                  </div>
+                                  <div className="flex justify-start">
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.basicDetails'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        basicDetailsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex "
+                                        >
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {basicDetailsLabelMapping[key]}
+                                          </span>
+                                          <span className="text-left">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.measurements'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        measurementsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
+                                        >
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {measurementsLabelMapping[key]}
+                                          </span>
+                                          <span>
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.inclusionDetails'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        inclusionDetailsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
+                                        >
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {inclusionDetailsLabelMapping[key]}
+                                          </span>
+                                          <span className="">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.otherInformations'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        otherInformationsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
+                                        >
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {otherInformationsLabelMapping[key]}
+                                          </span>
+                                          <span className="">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="sticky bottom-[-35px] bg-solitairePrimary">
+                                  <CustomFooter
+                                    footerButtonData={footerButtonData}
+                                  />
+                                </div>
+                              </>
+                            );
+                          })}
                         </>
                       }
-                      sheetContentStyle={styles.sheetContentStyle}
-                      cardTimeout={items.cardTimeOut}
                     />
                   </div>
                 </div>
