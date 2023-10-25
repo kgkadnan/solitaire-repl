@@ -15,15 +15,23 @@ import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url
 import { CustomToast } from '@/components/common/toast';
 import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { CustomDialog } from '@/components/common/dialog';
+import { useAppSelector } from '@/hooks/hook';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
+  const router = useRouter();
+  const { previousSearch } = useAppSelector((store) => store);
+  const { savedSearch } = useAppSelector((store) => store);
+
   const [searchCount, setSearchCount] = useState<number>(-1);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
@@ -31,7 +39,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [errorText, setErrorText] = useState('');
 
   const [savedSearches, setSavedSearches] = useState<any[]>([]);
-  const router = useRouter();
+
   const [searchIndex, setSearchIndex] = useState<number>(0);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
@@ -59,7 +67,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   );
   const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
-  const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
+  const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
 
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
@@ -132,28 +140,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   ///edit functionality
   const searchParams = useSearchParams();
 
-  const search = searchParams.get('id');
-
-  const searchListNew = useMemo(
-    () => [
-      {
-        cardId: '1',
-        header: 'ooooo',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Round',
-          color: 'White',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'Excellent',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-    ],
-    [] // No dependencies
-  );
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
   function generateQueryParams({
     selectedShape,
@@ -174,7 +161,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedFluorescence,
     selectedCulet,
     selectedGirdle,
-    selectedGirdleStep2,
+    selectedKeyToSymbol,
     selectedLab,
     selectedHR,
     selectedBrilliance,
@@ -256,8 +243,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       (queryParams['fluorescence'] = selectedFluorescence);
     selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
     selectedGirdle?.length !== 0 && (queryParams['girdle'] = selectedGirdle);
-    selectedGirdleStep2?.length !== 0 &&
-      (queryParams['girdleStep2'] = selectedGirdleStep2);
+    selectedKeyToSymbol?.length !== 0 &&
+      (queryParams['key_to_symbol'] = selectedKeyToSymbol);
     selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
     selectedHR?.length !== 0 && (queryParams['ha'] = selectedHR);
     selectedBrilliance?.length !== 0 &&
@@ -303,9 +290,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     tablePerFrom &&
       tablePerTo &&
       (queryParams['table_percentage'] = `${tablePerFrom}-${tablePerTo}`);
-    depthFrom &&
-      depthTo &&
-      (queryParams['depth_percentage'] = `${depthTo}-${depthFrom}`);
+    depthFrom && depthTo && (queryParams['depth'] = `${depthTo}-${depthFrom}`);
     crownAngleFrom &&
       crownAngleTo &&
       (queryParams['crown_angle'] = `${crownAngleFrom}-${crownAngleTo}`);
@@ -319,7 +304,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ] = `${pavilionDepthFrom}-${pavilionDepthTo}`);
     depthPerFrom &&
       depthPerTo &&
-      (queryParams['depth'] = `${depthPerFrom}-${depthPerTo}`);
+      (queryParams['depth_percentage'] = `${depthPerFrom}-${depthPerTo}`);
     crownHeightFrom &&
       crownHeightTo &&
       (queryParams['crown_height'] = `${crownHeightFrom}-${crownHeightTo}`);
@@ -345,13 +330,232 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     return queryParams;
   }
 
+  const modifySearchFrom = searchParams.get('edit');
+
+  function setModifySearch(data: any) {
+    //basic_card_details
+    const cut = data?.basic_card_details?.cut;
+    const lab = data?.basic_card_details?.lab;
+    const carat = data?.basic_card_details?.carat;
+    const color = data?.basic_card_details?.color;
+    const culet = data?.basic_card_details?.culet;
+    const shapes = data?.basic_card_details?.shape;
+    const polish = data?.basic_card_details?.polish;
+    const clarity = data?.basic_card_details?.clarity;
+    const location = data?.basic_card_details?.location;
+    const symmetry = data?.basic_card_details?.symmetry;
+    const color_shade = data?.basic_card_details?.color_shade;
+    const color_shade_intensity =
+      data?.basic_card_details?.color_shade_intensity;
+    const overtone = data?.basic_card_details?.overtone;
+    const HA = data?.basic_card_details?.['H&A'];
+    const brilliance = data?.basic_card_details?.brilliance;
+    const fluoroscence = data?.basic_card_details?.fluoroscence;
+    const country_of_origin = data?.basic_card_details?.country_of_origin;
+
+    //measurements
+    const depth = data?.measurements?.depth;
+    const ratio = data?.measurements?.ratio;
+    const width = data?.measurements?.width;
+    const length = data?.measurements?.length;
+    const table_per = data?.measurements?.['table%'];
+    const girdle_per = data?.measurements?.['girdle%'];
+    const depth_per = data?.measurements?.['depth%'];
+    const lower_half = data?.measurements?.lower_half;
+    const crown_angle = data?.measurements?.crown_angle;
+    const star_length = data?.measurements?.star_length;
+    const crown_height = data?.measurements?.crown_height;
+    const pavilion_angle = data?.measurements?.pavilion_angle;
+    const pavilion_depth = data?.measurements?.pavilion_depth;
+
+    //inclusion_details
+    const milky = data?.inclusion_details?.milky;
+    const luster = data?.inclusion_details?.luster;
+    const eye_clean = data?.inclusion_details?.eye_clean;
+    const open_crown = data?.inclusion_details?.open_crown;
+    const open_table = data?.inclusion_details?.open_table;
+    const side_table = data?.inclusion_details?.side_table;
+    const black_table = data?.inclusion_details?.black_table;
+    const natural_crown = data?.inclusion_details?.natural_crown;
+    const open_pavilion = data?.inclusion_details?.open_pavilion;
+    const natural_girdle = data?.inclusion_details?.natural_girdle;
+    const side_inclusion = data?.inclusion_details?.side_inclusion;
+    const table_inclusion = data?.inclusion_details?.table_inclusion;
+    const natural_pavilion = data?.inclusion_details?.natural_pavilion;
+    const surface_graining = data?.inclusion_details?.surface_graining;
+    const internal_graining = data?.inclusion_details?.internal_graining;
+
+    //other_information
+    const girdle = data?.other_information?.girdle;
+    const key_to_symbol = data?.other_information?.key_to_symbol;
+
+    //basic_card_details states
+    shapes &&
+      setSelectedShape((prevSelectedShapes) =>
+        prevSelectedShapes.concat(shapes)
+      );
+    // carat &&
+    //   setSelectedCaratRange((prevSelectedCarat) =>
+    //     prevSelectedCarat.concat(carat)
+    //   );
+    clarity &&
+      setSelectedClarity((prevSelectedClarity) =>
+        prevSelectedClarity.concat(clarity)
+      );
+
+    cut && setSelectedCut((prevSelectedCut) => prevSelectedCut.concat(cut));
+    lab && setSelectedLab((prevSelectedLab) => prevSelectedLab.concat(lab));
+    // culet &&
+    //   setSelectedCulet((prevSelectedCulet) => prevSelectedCulet.concat(culet));
+    polish &&
+      setSelectedPolish((prevSelectedPolish) =>
+        prevSelectedPolish.concat(polish)
+      );
+    location &&
+      setSelectedLocation((prevSelectedLocation) =>
+        prevSelectedLocation.concat(location)
+      );
+    HA && setSelectedHR((prevSelectedHA) => prevSelectedHA.concat(HA));
+    symmetry &&
+      setSelectedSymmetry((prevSelectedSymmetry) =>
+        prevSelectedSymmetry.concat(symmetry)
+      );
+    fluoroscence &&
+      setSelectedFluorescence((prevSelectedFluoroscence) =>
+        prevSelectedFluoroscence.concat(fluoroscence)
+      );
+    country_of_origin &&
+      setSelectedOrigin((prevSelectedOrigin) =>
+        prevSelectedOrigin.concat(country_of_origin)
+      );
+    color_shade &&
+      setSelectedTinge((prevSelectedTinge) =>
+        prevSelectedTinge.concat(color_shade)
+      );
+    color_shade_intensity &&
+      setSelectedTingeIntensity((prevSelectedTingeIntensity) =>
+        prevSelectedTingeIntensity.concat(color_shade_intensity)
+      );
+    overtone &&
+      setSelectedOvertone((prevSelectedOvertone) =>
+        prevSelectedOvertone.concat(overtone)
+      );
+    brilliance &&
+      setSelectedBrilliance((prevSelectedBrilliance) =>
+        prevSelectedBrilliance.concat(brilliance)
+      );
+
+    //measurements States
+
+    depth && setDepthFrom(depth.split('-')[0]);
+    depth && setDepthTo(depth.split('-')[1]);
+    ratio && setRatioFrom(ratio.split('-')[0]);
+    ratio && setRatioTo(ratio.split('-')[1]);
+    width && setWidthFrom(width.split('-')[0]);
+    width && setWidthTo(width.split('-')[1]);
+    length && setLengthFrom(length.split('-')[0]);
+    length && setLengthTo(length.split('-')[1]);
+    table_per && setTablePerFrom(table_per.split('-')[0]);
+    table_per && setTablePerTo(table_per.split('-')[1]);
+    girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
+    girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
+    depth_per && setDepthPerFrom(depth_per.split('-')[0]);
+    depth_per && setDepthPerTo(depth_per.split('-')[1]);
+    lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
+    lower_half && setLowerHalfTo(lower_half.split('-')[1]);
+    crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
+    crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
+    star_length && setStarLengthFrom(star_length.split('-')[0]);
+    star_length && setStarLengthTo(star_length.split('-')[1]);
+    crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
+    crown_height && setCrownHeightTo(crown_height.split('-')[1]);
+    pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
+    pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
+    pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
+    pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
+
+    //inclusion_details States
+    milky &&
+      setMilkyBI((prevSelectedMilkyBI) => prevSelectedMilkyBI.concat(milky));
+    luster &&
+      setLusterBI((prevSelectedLusterBI) =>
+        prevSelectedLusterBI.concat(luster)
+      );
+    eye_clean &&
+      setEyeCleanBI((prevSelectedEyeCleanBI) =>
+        prevSelectedEyeCleanBI.concat(eye_clean)
+      );
+
+    open_crown &&
+      setOpenCrownBI((prevSelectedopenCrownBI) =>
+        prevSelectedopenCrownBI.concat(open_crown)
+      );
+    open_table &&
+      setOpenTableBI((prevSelectedOpenTableBI) =>
+        prevSelectedOpenTableBI.concat(open_table)
+      );
+    side_table &&
+      setSideBlackBI((prevSelectedSideTableBI) =>
+        prevSelectedSideTableBI.concat(side_table)
+      );
+    black_table &&
+      setBlackTableBI((prevSelectedBlackTableBI) =>
+        prevSelectedBlackTableBI.concat(black_table)
+      );
+    natural_crown &&
+      setNaturalCrownWI((prevSelectedNaturalCrownWI) =>
+        prevSelectedNaturalCrownWI.concat(natural_crown)
+      );
+    open_pavilion &&
+      setOpenPavilionBI((prevSelectedOpenPavilionBI) =>
+        prevSelectedOpenPavilionBI.concat(open_pavilion)
+      );
+    natural_girdle &&
+      setNaturalGirdleWI((prevSelectedNaturalGirdle) =>
+        prevSelectedNaturalGirdle.concat(natural_girdle)
+      );
+    side_inclusion &&
+      setSideInclusionWI((prevSelectedSideInclusionWI) =>
+        prevSelectedSideInclusionWI.concat(side_inclusion)
+      );
+    table_inclusion &&
+      setTableInclusionWI((prevSelectedTableInclusionWI) =>
+        prevSelectedTableInclusionWI.concat(table_inclusion)
+      );
+    natural_pavilion &&
+      setNaturalPavilionWI((prevSelectedNaturalPavilionWI) =>
+        prevSelectedNaturalPavilionWI.concat(natural_pavilion)
+      );
+    surface_graining &&
+      setSurfaceGrainingWI((prevSelectedSurfaceGrainingWI) =>
+        prevSelectedSurfaceGrainingWI.concat(surface_graining)
+      );
+    internal_graining &&
+      setInternalGrainingWI((prevSelectedInternalGrainingWI) =>
+        prevSelectedInternalGrainingWI.concat(internal_graining)
+      );
+
+    //other_information States
+    girdle &&
+      setSelectedGirdle((prevSelectedGirdle) =>
+        prevSelectedGirdle.concat(girdle)
+      );
+    // key_to_symbol &&
+    //   setSelectedKeyToSymbol((prevSelectedkeyToSymbol) =>
+    //     prevSelectedkeyToSymbol.concat(key_to_symbol)
+    //   );
+  }
+
   useEffect(() => {
-    if (search !== null) {
-      setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
-      setSelectedCut([...selectedCut, searchListNew[0].body.Cut]);
-      setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
+    let modifyPreviousSearchData = previousSearch?.previousSearch?.meta_data;
+    let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+
+    if (modifySearchFrom === 'previous-search' && modifyPreviousSearchData) {
+      setModifySearch(modifyPreviousSearchData);
+    } else if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
+      setModifySearch(modifysavedSearchData[savedSearch.activeTab]);
     }
-  }, [search]);
+  }, [modifySearchFrom]);
 
   useEffect(() => {
     let data = JSON.parse(localStorage.getItem('Search')!);
@@ -366,11 +570,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       localStorage.removeItem('Search');
     }
   }, []);
-
-  // useEffect(() => {
-  //  selectedShape.length!==0 && setSearchUrl(constructUrlParams({'shape':selectedShape}))
-  //  selectedWhiteColor.length!==0 && setSearchUrl(constructUrlParams({'color':selectedWhiteColor}))
-  // }, [selectedShape,selectedWhiteColor]);
 
   useEffect(() => {
     const queryParams = generateQueryParams({
@@ -394,7 +593,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedFluorescence,
       selectedCulet,
       selectedGirdle,
-      selectedGirdleStep2,
+      selectedKeyToSymbol,
       selectedLab,
       selectedHR,
       selectedBrilliance,
@@ -470,7 +669,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedFluorescence,
     selectedCulet,
     selectedGirdle,
-    selectedGirdleStep2,
+    selectedKeyToSymbol,
     selectedLab,
     selectedHR,
     selectedBrilliance,
@@ -934,9 +1133,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
         (girdleData) => (girdleData.toLowerCase() !== 'all' ? girdleData : '')
       );
-      setSelectedGirdleStep2(filteredGirdleStep);
+      setSelectedKeyToSymbol(filteredGirdleStep);
     } else {
-      handleFilterChange(data, selectedGirdleStep2, setSelectedGirdleStep2);
+      handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
     }
   };
 
@@ -1299,18 +1498,22 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         cut: selectedCut,
         lab: selectedLab,
         polish: selectedPolish,
-        shade: selectedColor,
         carat: selectedCaratRange,
         color_shade: selectedTinge,
+        color_shade_intensity: selectedTingeIntensity,
+        'H&A': selectedHR,
         location: selectedLocation,
         symmetry: selectedSymmetry,
         fluoroscence: selectedFluorescence,
-        culet: 'None',
+        culet: selectedCulet,
         country_of_origin: selectedOrigin,
         laser_inscription: '-',
+        brilliance: selectedBrilliance,
+        overtone: selectedOvertone,
       },
       measurements: {
         'table%': `${tablePerFrom}-${tablePerTo}`,
+        'depth%': `${depthPerFrom}-${depthPerTo}`,
         ratio: `${ratioFrom}-${ratioTo}`,
         length: `${lengthFrom}-${lengthTo}`,
         width: `${widthFrom}-${widthTo}`,
@@ -1325,7 +1528,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       },
       other_information: {
         girdle: selectedGirdle,
-        key_to_symbol: '-',
+        key_to_symbol: selectedKeyToSymbol,
         report_comments: '-',
       },
       inclusion_details: {
@@ -1344,34 +1547,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         natural_pavilion: naturalPavilionWI,
         surface_graining: surfaceGrainingWI,
         internal_graining: internalGrainingWI,
-        brilliance: selectedBrilliance,
       },
     };
     return response;
   };
   const handleSaveAndSearch = async () => {
-  
-    if(searchCount>1){
-    if (data?.count < 300 && data?.count > 0) {
-      if (addSearches.length === 0) {
-        setSavedSearches([prepareSearchParam()]);
+    if (searchCount > 1) {
+      if (data?.count < 300 && data?.count > 0) {
+        if (addSearches.length === 0) {
+          setSavedSearches([prepareSearchParam()]);
+        }
+
+        await addSavedSearch({
+          name: 'saveSearchName1',
+          diamond_count: data?.count,
+          meta_data: [...savedSearches, prepareSearchParam()],
+          is_deleted: false,
+        });
+
+        handleSearch();
       }
-
-      await addSavedSearch({
-        name: 'saveSearchName1',
-        diamond_count: data?.count,
-        meta_data:
-         [...savedSearches, prepareSearchParam()],
-        is_deleted: false,
-      });
-
-      handleSearch();
+    } else {
+      setIsError(true);
+      setErrorText('Please select some parameter before initiating search');
     }
-  }
-  else{
-    setIsError(true)
-    setErrorText('Please select some parameter before initiating search')
-  }
   };
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
@@ -1383,104 +1582,126 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSearch = async () => {
-    if(searchCount>1){
-    if (data?.count < 300 && data?.count > 0) {
-      let searchName = '';
-      searchName = handlePreviousSearchName(searchName);
-      await addPreviousSearch({
-        name: searchName,
-        diamond_count: data?.count,
-        meta_data: prepareSearchParam(),
-        is_deleted: false,
-      });
+    if (searchCount > 1) {
+      if (data?.count < 300 && data?.count > 0) {
+        let searchName = '';
+        searchName = handlePreviousSearchName(searchName);
+        await addPreviousSearch({
+          name: searchName,
+          diamond_count: data?.count,
+          meta_data: prepareSearchParam(),
+          is_deleted: false,
+        });
 
-      const queryParams = generateQueryParams({
-        selectedShape,
-        selectedColor,
-        selectedWhiteColor,
-        selectedFancyColor,
-        selectedRangeColor,
-        selectedIntensity,
-        selectedOvertone,
-        selectedTinge,
-        selectedTingeIntensity,
-        selectedClarity,
-        selectedCaratRange,
-        caratRangeFrom,
-        caratRangeTo,
-        selectedMake,
-        selectedCut,
-        selectedPolish,
-        selectedSymmetry,
-        selectedFluorescence,
-        selectedCulet,
-        selectedGirdle,
-        selectedGirdleStep2,
-        selectedLab,
-        selectedHR,
-        selectedBrilliance,
-        selectedLocation,
-        selectedOrigin,
-        priceRangeFrom,
-        priceRangeTo,
-        discountFrom,
-        discountTo,
-        pricePerCaratFrom,
-        pricePerCaratTo,
-        blackTableBI,
-        sideBlackBI,
-        openCrownBI,
-        openTableBI,
-        openPavilionBI,
-        milkyBI,
-        lusterBI,
-        eyeCleanBI,
-        tableInclusionWI,
-        sideInclusionWI,
-        naturalCrownWI,
-        naturalGirdleWI,
-        naturalPavilionWI,
-        surfaceGrainingWI,
-        internalGrainingWI,
-        tablePerFrom,
-        tablePerTo,
-        depthTo,
-        depthFrom,
-        crownAngleFrom,
-        crownAngleTo,
-        lengthFrom,
-        lengthTo,
-        pavilionDepthFrom,
-        pavilionDepthTo,
-        depthPerFrom,
-        depthPerTo,
-        crownHeightFrom,
-        crownHeightTo,
-        widthFrom,
-        widthTo,
-        lowerHalfFrom,
-        lowerHalfTo,
-        ratioFrom,
-        ratioTo,
-        girdlePerFrom,
-        girdlePerTo,
-        pavilionAngleFrom,
-        pavilionAngleTo,
-        starLengthFrom,
-        starLengthTo,
-      });
+        const queryParams = generateQueryParams({
+          selectedShape,
+          selectedColor,
+          selectedWhiteColor,
+          selectedFancyColor,
+          selectedRangeColor,
+          selectedIntensity,
+          selectedOvertone,
+          selectedTinge,
+          selectedTingeIntensity,
+          selectedClarity,
+          selectedCaratRange,
+          caratRangeFrom,
+          caratRangeTo,
+          selectedMake,
+          selectedCut,
+          selectedPolish,
+          selectedSymmetry,
+          selectedFluorescence,
+          selectedCulet,
+          selectedGirdle,
+          selectedKeyToSymbol,
+          selectedLab,
+          selectedHR,
+          selectedBrilliance,
+          selectedLocation,
+          selectedOrigin,
+          priceRangeFrom,
+          priceRangeTo,
+          discountFrom,
+          discountTo,
+          pricePerCaratFrom,
+          pricePerCaratTo,
+          blackTableBI,
+          sideBlackBI,
+          openCrownBI,
+          openTableBI,
+          openPavilionBI,
+          milkyBI,
+          lusterBI,
+          eyeCleanBI,
+          tableInclusionWI,
+          sideInclusionWI,
+          naturalCrownWI,
+          naturalGirdleWI,
+          naturalPavilionWI,
+          surfaceGrainingWI,
+          internalGrainingWI,
+          tablePerFrom,
+          tablePerTo,
+          depthTo,
+          depthFrom,
+          crownAngleFrom,
+          crownAngleTo,
+          lengthFrom,
+          lengthTo,
+          pavilionDepthFrom,
+          pavilionDepthTo,
+          depthPerFrom,
+          depthPerTo,
+          crownHeightFrom,
+          crownHeightTo,
+          widthFrom,
+          widthTo,
+          lowerHalfFrom,
+          lowerHalfTo,
+          ratioFrom,
+          ratioTo,
+          girdlePerFrom,
+          girdlePerTo,
+          pavilionAngleFrom,
+          pavilionAngleTo,
+          starLengthFrom,
+          starLengthTo,
+        });
 
-      localStorage.setItem(
-        'Search',
-        JSON.stringify([...addSearches, queryParams])
-      );
-      router.push('/search-result');
+        if (modifySearchFrom === 'saved-search') {
+          console.log(
+            'savedSearch.savedSearchfirst load ',
+            savedSearch.savedSearch.meta_data[savedSearch.activeTab]
+          );
+          if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
+            const updatedMeta = [...savedSearch.savedSearch.meta_data];
+            updatedMeta[savedSearch.activeTab] = prepareSearchParam();
+
+            console.log(
+              'savedSearch.savedSearch secondtime',
+              savedSearch.savedSearch.meta_data[savedSearch.activeTab]
+            );
+            let data = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta,
+            };
+
+            updateSavedSearch(data);
+          }
+        }
+        console.log('queryParams', queryParams);
+        // return;
+        localStorage.setItem(
+          'Search',
+          JSON.stringify([...addSearches, queryParams])
+        );
+        router.push('/search-result');
+      }
+    } else {
+      setIsError(true);
+      setErrorText('Please select some parameter before initiating search');
     }
-  }
-  else{
-    setIsError(true)
-    setErrorText('Please select some parameter before initiating search')
-  }
   };
 
   // const setLocalData = () => {};
@@ -1510,8 +1731,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setAddSearches([...addSearches, { shape: selectedShape }]);
     setSearchIndex(addSearches.length + 1);
   };
-
-
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -2356,7 +2575,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               advanceSearch.key_to_symbol,
               '',
               styles.activeOtherStyles,
-              selectedGirdleStep2,
+              selectedKeyToSymbol,
               handleGirdleStep2Change
             )}
           </div>
@@ -2368,7 +2587,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <span className="hidden  text-green-700 text-red-700" />
             <p
               className={`text-${
-                (data?.count < 300 && data?.count >0)? 'green' : 'red'
+                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
               }-700 text-base`}
             >
               {errorText}
@@ -2390,14 +2609,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               )}`,
               style: styles.transparent,
               fn: handleSaveAndSearch,
+              isDisable:
+                modifySearchFrom === 'previous-search' ||
+                modifySearchFrom === 'saved-search',
             },
             {
               id: 3,
-              displayButtonLabel: `${
-                searchApiCalled && data?.count! === 0
-                  ? ManageLocales('app.advanceSearch.addDemand')
-                  : ManageLocales('app.advanceSearch.search')
-              }`,
+              displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
             },
@@ -2410,6 +2628,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               }`,
               style: ` ${styles.filled} ${styles.anotherSearch}`,
               fn: handleAddAnotherSearch,
+              isDisable:
+                modifySearchFrom === 'previous-search' ||
+                modifySearchFrom === 'saved-search',
             },
           ]}
           noBorderTop={styles.paginationContainerStyle}

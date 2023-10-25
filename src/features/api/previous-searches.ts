@@ -42,10 +42,10 @@ export const previousSearchApi = createApi({
         body: data,
       }),
     }),
-    updatePreviousSearch: builder.mutation({
+    deletePreviousSearch: builder.mutation({
       query: (filter) => ({
         url: `previous-search`,
-        method: 'PUT', // Use the appropriate HTTP method
+        method: 'DELETE', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),
       invalidatesTags: ['PreviousSearch'],
@@ -57,6 +57,6 @@ export const {
   useGetAllPreviousSearchesQuery,
   useGetSpecificPreviousQuery,
   useGetPreviousSearchListQuery,
-  useUpdatePreviousSearchMutation,
   useAddPreviousSearchMutation,
+  useDeletePreviousSearchMutation,
 } = previousSearchApi;

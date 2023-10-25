@@ -17,9 +17,9 @@ import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
 import {
+  useDeletePreviousSearchMutation,
   useGetAllPreviousSearchesQuery,
   useGetPreviousSearchListQuery,
-  useUpdatePreviousSearchMutation,
 } from '@/features/api/previous-searches';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomToast } from '@/components/common/toast';
@@ -28,6 +28,9 @@ import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
 import { formatCassing } from '@/utils/format-cassing';
+import { useRouter } from 'next/navigation';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifyPreviousSearch } from '@/features/previous-search/previous-search';
 
 interface ICardData {
   cardId: string;
@@ -56,6 +59,9 @@ const PreviousSearch = () => {
   const showResulutButtonStyle = {
     displayButtonStyle: styles.showResultButtonStyle,
   };
+
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [limit, setLimit] = useState(50); // You can set the initial value here
@@ -117,10 +123,7 @@ const PreviousSearch = () => {
   };
 
   // Destructure the mutation function from the hook
-  const [
-    updatePreviousSearch,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useUpdatePreviousSearchMutation();
+  const [deletePreviousSearch] = useDeletePreviousSearchMutation();
 
   const renderCardData = useCallback(
     (data: any) => {
@@ -153,8 +156,8 @@ const PreviousSearch = () => {
   //Delete Data
   const handleDelete = async () => {
     if (isCheck.length) {
-      let payload = { id: isCheck, filter: { is_deleted: true } };
-      await updatePreviousSearch(payload);
+      // let payload = { id: isCheck, filter: { is_deleted: true } };
+      await deletePreviousSearch(isCheck);
       await refetch();
       setIsCheck([]);
       setIsCheckAll(false);
@@ -277,7 +280,7 @@ const PreviousSearch = () => {
   const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
     //count
-    searchCount: cardData?.length,
+    searchCount: data?.data?.count,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
@@ -317,8 +320,12 @@ const PreviousSearch = () => {
   }, [data, offset, limit]);
 
   // Function to handle edit action
-  const handleEdit = (stone: string) => {
-    alert("You have clicked the 'Edit button'");
+  const handleEdit = (id: string) => {
+    const modifyData = PreviousSearchData.filter((previousSearch) => {
+      return previousSearch.id === id;
+    })[0];
+    dispatch(modifyPreviousSearch(modifyData));
+    router.push(`/advance-search?edit=previous-search`);
   };
 
   // Function to handle "Show Results" button click

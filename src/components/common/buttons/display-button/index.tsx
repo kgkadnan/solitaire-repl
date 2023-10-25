@@ -15,6 +15,7 @@ export interface IDisplayButtonProps {
   displayButtonAllStyle?: IDisplayButtonStyle;
   handleClick?: (color: string) => void;
   color?: string;
+  isDisable?: boolean;
 }
 
 // CustomDisplayButton component definition
@@ -23,6 +24,7 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
   displayButtonAllStyle,
   handleClick,
   color,
+  isDisable,
 }) => {
   return (
     <>
@@ -33,6 +35,7 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
         onClick={() => {
           handleClick!(color!);
         }}
+        disabled={isDisable}
       >
         {/* Display button label with optional styling */}
         <div
