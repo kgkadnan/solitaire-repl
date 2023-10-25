@@ -4,6 +4,7 @@ import * as React from 'react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { DayPicker } from 'react-day-picker';
 import { cn } from '@lib/utils';
+import { isAfter, isBefore, endOfDay } from 'date-fns';
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>;
 
@@ -13,8 +14,15 @@ function Calendar({
   showOutsideDays = true,
   ...props
 }: CalendarProps) {
+  const today = new Date(); // Get the current date
+
+  const isDateDisabled = (date: any) => {
+    // Disable dates that are after today (future dates)
+    return isAfter(date, endOfDay(today));
+  };
   return (
     <DayPicker
+      disabled={isDateDisabled}
       showOutsideDays={showOutsideDays}
       className={cn('p-3', className)}
       classNames={{
