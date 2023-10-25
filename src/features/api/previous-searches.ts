@@ -21,10 +21,14 @@ export const previousSearchApi = createApi({
   tagTypes: ['PreviousSearch'],
   endpoints: (builder) => ({
     getAllPreviousSearches: builder.query({
-      query: ({ limit, offset, searchUrl = '' }) => ({
-        url: `previous-search?limit=${limit}&offset=${offset}${searchUrl}`,
+      query: ({ limit, offset, searchUrl = '', searchByName }) => ({
+        url: `previous-search?limit=${limit}&offset=${offset}&name=${searchByName}${searchUrl}`,
         method: 'GET',
       }),
+      providesTags: ['PreviousSearch'],
+    }),
+    getPreviousSearchList: builder.query({
+      query: (searchByName) => `previous-search-list?name=${searchByName}`,
       providesTags: ['PreviousSearch'],
     }),
     getSpecificPrevious: builder.query({
@@ -51,7 +55,8 @@ export const previousSearchApi = createApi({
 
 export const {
   useGetAllPreviousSearchesQuery,
+  useGetSpecificPreviousQuery,
+  useGetPreviousSearchListQuery,
   useUpdatePreviousSearchMutation,
   useAddPreviousSearchMutation,
-  useGetSpecificPreviousQuery,
 } = previousSearchApi;

@@ -18,12 +18,13 @@ import advanceSearch from '@/constants/advance-search.json';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
+import { CustomDialog } from '@/components/common/dialog';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
-const [searchCount, setSearchCount]=useState<number>(0)
+  const [searchCount, setSearchCount] = useState<number>(-1);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
@@ -530,31 +531,29 @@ const [searchCount, setSearchCount]=useState<number>(0)
     searchUrl,
   });
 
-  
   useEffect(() => {
-    if(searchCount>1){
-    if (data?.count > 300 && data?.count >0) {
-      setIsError(true);
-      setErrorText('Please modify your search, the stones exceeds the limit.');
-    } 
-    else if(data?.count===0){
-      setIsError(true)
-      setErrorText(`no stones found`)
+    if (searchCount > 0) {
+      if (data?.count > 300 && data?.count > 0) {
+        setIsError(true);
+        setErrorText(
+          'Please modify your search, the stones exceeds the limit.'
+        );
+      } else if (data?.count === 0) {
+        setIsError(true);
+        setErrorText(`no stones found`);
+      } else if (data?.count !== 0) {
+        setIsError(true);
+        setErrorText(`${data?.count} stones found`);
+      } else {
+        setIsError(false);
+        setErrorText('');
+      }
     }
-    else if(data?.count!==0){
-      setIsError(true)
-      setErrorText(`${data?.count} stones found`)
-    }
-    else {
-      setIsError(false);
-      setErrorText('');
-    }
-  }
-  // else{
-  //   setIsError(true)
-  //   setErrorText(`Please select the stone parameters to make the search.`)
-  // }
-setSearchCount(searchCount+1)
+    // else{
+    //   setIsError(true)
+    //   setErrorText(`Please select the stone parameters to make the search.`)
+    // }
+    setSearchCount(searchCount + 1);
   }, [data]);
 
   const imageTileStyles = {
@@ -987,6 +986,9 @@ setSearchCount(searchCount+1)
   };
 
   const handleReset = () => {
+    setSearchCount(0);
+    setIsError(false);
+    setErrorText('');
     setYourSelection([]);
     setSelectedShape([]);
     setSelectedColor('');
@@ -1348,22 +1350,28 @@ setSearchCount(searchCount+1)
     return response;
   };
   const handleSaveAndSearch = async () => {
+  
+    if(searchCount>1){
     if (data?.count < 300 && data?.count > 0) {
       if (addSearches.length === 0) {
         setSavedSearches([prepareSearchParam()]);
       }
 
       await addSavedSearch({
-        name: 'saveSearchName',
+        name: 'saveSearchName1',
         diamond_count: data?.count,
         meta_data:
-          addSearches.length === 1 ? [prepareSearchParam()] : savedSearches,
+         [...savedSearches, prepareSearchParam()],
         is_deleted: false,
       });
 
       handleSearch();
-    } 
-   
+    }
+  }
+  else{
+    setIsError(true)
+    setErrorText('Please select some parameter before initiating search')
+  }
   };
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
@@ -1375,8 +1383,8 @@ setSearchCount(searchCount+1)
   };
 
   const handleSearch = async () => {
-    if (data?.count < 300 && data?.count>0) {
-   
+    if(searchCount>1){
+    if (data?.count < 300 && data?.count > 0) {
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
@@ -1385,90 +1393,94 @@ setSearchCount(searchCount+1)
         meta_data: prepareSearchParam(),
         is_deleted: false,
       });
-    
 
-    const queryParams = generateQueryParams({
-      selectedShape,
-      selectedColor,
-      selectedWhiteColor,
-      selectedFancyColor,
-      selectedRangeColor,
-      selectedIntensity,
-      selectedOvertone,
-      selectedTinge,
-      selectedTingeIntensity,
-      selectedClarity,
-      selectedCaratRange,
-      caratRangeFrom,
-      caratRangeTo,
-      selectedMake,
-      selectedCut,
-      selectedPolish,
-      selectedSymmetry,
-      selectedFluorescence,
-      selectedCulet,
-      selectedGirdle,
-      selectedGirdleStep2,
-      selectedLab,
-      selectedHR,
-      selectedBrilliance,
-      selectedLocation,
-      selectedOrigin,
-      priceRangeFrom,
-      priceRangeTo,
-      discountFrom,
-      discountTo,
-      pricePerCaratFrom,
-      pricePerCaratTo,
-      blackTableBI,
-      sideBlackBI,
-      openCrownBI,
-      openTableBI,
-      openPavilionBI,
-      milkyBI,
-      lusterBI,
-      eyeCleanBI,
-      tableInclusionWI,
-      sideInclusionWI,
-      naturalCrownWI,
-      naturalGirdleWI,
-      naturalPavilionWI,
-      surfaceGrainingWI,
-      internalGrainingWI,
-      tablePerFrom,
-      tablePerTo,
-      depthTo,
-      depthFrom,
-      crownAngleFrom,
-      crownAngleTo,
-      lengthFrom,
-      lengthTo,
-      pavilionDepthFrom,
-      pavilionDepthTo,
-      depthPerFrom,
-      depthPerTo,
-      crownHeightFrom,
-      crownHeightTo,
-      widthFrom,
-      widthTo,
-      lowerHalfFrom,
-      lowerHalfTo,
-      ratioFrom,
-      ratioTo,
-      girdlePerFrom,
-      girdlePerTo,
-      pavilionAngleFrom,
-      pavilionAngleTo,
-      starLengthFrom,
-      starLengthTo,
-    });
+      const queryParams = generateQueryParams({
+        selectedShape,
+        selectedColor,
+        selectedWhiteColor,
+        selectedFancyColor,
+        selectedRangeColor,
+        selectedIntensity,
+        selectedOvertone,
+        selectedTinge,
+        selectedTingeIntensity,
+        selectedClarity,
+        selectedCaratRange,
+        caratRangeFrom,
+        caratRangeTo,
+        selectedMake,
+        selectedCut,
+        selectedPolish,
+        selectedSymmetry,
+        selectedFluorescence,
+        selectedCulet,
+        selectedGirdle,
+        selectedGirdleStep2,
+        selectedLab,
+        selectedHR,
+        selectedBrilliance,
+        selectedLocation,
+        selectedOrigin,
+        priceRangeFrom,
+        priceRangeTo,
+        discountFrom,
+        discountTo,
+        pricePerCaratFrom,
+        pricePerCaratTo,
+        blackTableBI,
+        sideBlackBI,
+        openCrownBI,
+        openTableBI,
+        openPavilionBI,
+        milkyBI,
+        lusterBI,
+        eyeCleanBI,
+        tableInclusionWI,
+        sideInclusionWI,
+        naturalCrownWI,
+        naturalGirdleWI,
+        naturalPavilionWI,
+        surfaceGrainingWI,
+        internalGrainingWI,
+        tablePerFrom,
+        tablePerTo,
+        depthTo,
+        depthFrom,
+        crownAngleFrom,
+        crownAngleTo,
+        lengthFrom,
+        lengthTo,
+        pavilionDepthFrom,
+        pavilionDepthTo,
+        depthPerFrom,
+        depthPerTo,
+        crownHeightFrom,
+        crownHeightTo,
+        widthFrom,
+        widthTo,
+        lowerHalfFrom,
+        lowerHalfTo,
+        ratioFrom,
+        ratioTo,
+        girdlePerFrom,
+        girdlePerTo,
+        pavilionAngleFrom,
+        pavilionAngleTo,
+        starLengthFrom,
+        starLengthTo,
+      });
 
-    localStorage.setItem(
-      'Search',
-      JSON.stringify([...addSearches, queryParams])
-    );
-    router.push('/search-result');
+      localStorage.setItem(
+        'Search',
+        JSON.stringify([...addSearches, queryParams])
+      );
+      router.push('/search-result');
     }
+  }
+  else{
+    setIsError(true)
+    setErrorText('Please select some parameter before initiating search')
+  }
   };
 
   // const setLocalData = () => {};
@@ -1477,7 +1489,6 @@ setSearchCount(searchCount+1)
     handleAddSearchIndex();
     if (addSearches.length < 5) {
       //call previous serach api
-      // setAddSearches([...addSearches, 'ooo']);
       setSavedSearches([...savedSearches, prepareSearchParam()]);
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
@@ -1499,6 +1510,8 @@ setSearchCount(searchCount+1)
     setAddSearches([...addSearches, { shape: selectedShape }]);
     setSearchIndex(addSearches.length + 1);
   };
+
+
 
   ///reusable jsx
   const renderSelectionButtons = (
@@ -2355,7 +2368,7 @@ setSearchCount(searchCount+1)
             <span className="hidden  text-green-700 text-red-700" />
             <p
               className={`text-${
-                data?.count < 300 ? 'green' : 'red'
+                (data?.count < 300 && data?.count >0)? 'green' : 'red'
               }-700 text-base`}
             >
               {errorText}
