@@ -41,6 +41,10 @@ interface IData {
   updated_at: string;
 }
 
+interface KeyLabelMapping {
+  [key: string]: string;
+}
+
 const SavedSearch = () => {
   // Style classes and variables
   const tableStyles = {
@@ -124,52 +128,75 @@ const SavedSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useUpdateSavedSearchesMutation();
 
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'color',
+    carat: 'carat',
+    clarity: 'clarity',
+    cut: 'cut',
+    polish: 'polish',
+    symmetry: 'Symmetry',
+    price_range: 'Price Range',
+    discount: 'Discount',
+  };
+
   const renderCardData = useCallback(
-    (data: any) => {
-      return data?.map((item: any) => {
-        const meta_data = Array.isArray(item?.meta_data)
-          ? item.meta_data[0].basic_card_details
-          : item.meta_data.basic_card_details;
-
-        const cardContent = (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(meta_data),
-              bodyData: [meta_data],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        );
-
-        return {
-          cardId: item.id,
-          cardActionIcon: editIcon,
-          cardHeader: (
+    (data: any, suggestion?: string) => {
+      return data
+        ?.filter((data: any) =>
+          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+        )
+        .map((item: any) => {
+          // Filter the data based on the keyLabelMapping
+          const filteredData: any = {};
+          for (const key in keyLabelMapping) {
+            if (item.meta_data[0].basic_card_details) {
+              filteredData[keyLabelMapping[key]] =
+                item.meta_data[0].basic_card_details[key] &&
+                item.meta_data[0].basic_card_details[key].length
+                  ? item.meta_data[0].basic_card_details[key]
+                  : '-';
+            }
+          }
+          const cardContent = (
             <CustomTable
               tableData={{
-                tableHeads: [item.name],
-                bodyData: [
-                  {
-                    desc: (
-                      <div className={styles.parentDivHeaderSectiom}>
-                        <div style={{ marginRight: '80px' }}>
-                          {formatCreatedAt(item.created_at)}
-                        </div>
-                        <CustomDisplayButton
-                          displayButtonLabel={`Searches (${item.meta_data.length})`}
-                          displayButtonAllStyle={manySavedsearchButtonStyle}
-                        />
-                      </div>
-                    ),
-                  },
-                ],
+                tableHeads: Object.keys(filteredData),
+                bodyData: [Object.values(filteredData)],
               }}
-              tableStyleClasses={searchCardTitle}
+              tableStyleClasses={tableStyles}
             />
-          ),
-          cardContent: cardContent,
-        };
-      });
+          );
+
+          return {
+            cardId: item.id,
+            cardActionIcon: editIcon,
+            cardHeader: (
+              <CustomTable
+                tableData={{
+                  tableHeads: [item.name],
+                  bodyData: [
+                    {
+                      desc: (
+                        <div className={styles.parentDivHeaderSectiom}>
+                          <div style={{ marginRight: '80px' }}>
+                            {formatCreatedAt(item.created_at)}
+                          </div>
+                          <CustomDisplayButton
+                            displayButtonLabel={`Searches (${item.meta_data.length})`}
+                            displayButtonAllStyle={manySavedsearchButtonStyle}
+                          />
+                        </div>
+                      ),
+                    },
+                  ],
+                }}
+                tableStyleClasses={searchCardTitle}
+              />
+            ),
+            cardContent: cardContent,
+          };
+        });
     },
     [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
   );
@@ -510,7 +537,7 @@ const SavedSearch = () => {
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
-                                        {formatCassing(key)}
+                                          {formatCassing(key)}
                                         </span>
                                         <span className={styles.sheetValues}>
                                           {Array.isArray(value)
@@ -541,7 +568,7 @@ const SavedSearch = () => {
                                     <div key={key}>
                                       <p className="flex">
                                         <span className={styles.innerHeading}>
-                                        {formatCassing(key)}
+                                          {formatCassing(key)}
                                         </span>
                                         <span className={styles.sheetValues}>
                                           {Array.isArray(value)

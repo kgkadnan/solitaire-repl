@@ -133,30 +133,60 @@ const PreviousSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useUpdatePreviousSearchMutation();
 
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'color',
+    carat: 'carat',
+    clarity: 'clarity',
+    cut: 'cut',
+    polish: 'polish',
+    symmetry: 'Symmetry',
+    price_range: 'Price Range',
+    discount: 'Discount',
+  };
+
   const renderCardData = useCallback(
-    (data: any) => {
-      return data?.map((data: any) => ({
-        cardId: data.id,
-        cardActionIcon: editIcon,
-        cardHeader: (
-          <CustomTable
-            tableData={{
-              tableHeads: [data.name],
-              bodyData: [{ desc: formatCreatedAt(data.created_at) }],
-            }}
-            tableStyleClasses={searchCardTitle}
-          />
-        ),
-        cardContent: (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(data.meta_data.basic_card_details),
-              bodyData: [data.meta_data.basic_card_details],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        ),
-      }));
+    (data: any, suggestion?: string) => {
+      return data
+        ?.filter((data: any) =>
+          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+        )
+        .map((data: any) => {
+          // Filter the data based on the keyLabelMapping
+          const filteredData: any = {};
+          for (const key in keyLabelMapping) {
+            if (data.meta_data.basic_card_details) {
+              filteredData[keyLabelMapping[key]] =
+                data.meta_data.basic_card_details[key] &&
+                data.meta_data.basic_card_details[key].length
+                  ? data.meta_data.basic_card_details[key]
+                  : '-';
+            }
+          }
+
+          return {
+            cardId: data.id,
+            cardActionIcon: editIcon,
+            cardHeader: (
+              <CustomTable
+                tableData={{
+                  tableHeads: [data.name],
+                  bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+                }}
+                tableStyleClasses={searchCardTitle}
+              />
+            ),
+            cardContent: (
+              <CustomTable
+                tableData={{
+                  tableHeads: Object.keys(filteredData),
+                  bodyData: [Object.values(filteredData)],
+                }}
+                tableStyleClasses={tableStyles}
+              />
+            ),
+          };
+        });
     },
     [searchCardTitle, tableStyles]
   );
