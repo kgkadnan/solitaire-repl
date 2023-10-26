@@ -163,12 +163,12 @@ const PreviousSearch = () => {
     shape: 'Shape',
     color: 'color',
     carat: 'carat',
-    culet: 'Culet',
     clarity: 'clarity',
-    shade: 'shade',
     cut: 'cut',
     polish: 'polish',
-    luster: 'Luster',
+    symmetry: 'Symmetry',
+    price_range: 'Price Range',
+    discount: 'Discount',
   };
 
   const renderCardData = useCallback(
