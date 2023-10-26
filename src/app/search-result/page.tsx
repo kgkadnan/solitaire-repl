@@ -201,13 +201,13 @@ const SearchResults = () => {
           </div>
           <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
             <CustomDisplayButton
-              displayButtonLabel="Select All"
+              displayButtonLabel="Selected"
               handleClick={() => {
                 setIsEntireSearch(true);
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="Selected"
+              displayButtonLabel="All"
               handleClick={() => {
                 setIsEntireSearch(false);
               }}
