@@ -142,61 +142,63 @@ const SavedSearch = () => {
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
-      return data
-        ?.filter((data: any) =>
-          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
-        )
-        .map((item: any) => {
-          // Filter the data based on the keyLabelMapping
-          const filteredData: any = {};
-          for (const key in keyLabelMapping) {
-            if (item.meta_data[0].basic_card_details) {
-              filteredData[keyLabelMapping[key]] =
-                item.meta_data[0].basic_card_details[key] &&
-                item.meta_data[0].basic_card_details[key].length
-                  ? item.meta_data[0].basic_card_details[key]
-                  : '-';
+      return (
+        data
+          // ?.filter((data: any) =>
+          //   data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+          // )
+          ?.map((item: any) => {
+            // Filter the data based on the keyLabelMapping
+            const filteredData: any = {};
+            for (const key in keyLabelMapping) {
+              if (item.meta_data[0].basic_card_details) {
+                filteredData[keyLabelMapping[key]] =
+                  item.meta_data[0].basic_card_details[key] &&
+                  item.meta_data[0].basic_card_details[key].length
+                    ? item.meta_data[0].basic_card_details[key]
+                    : '-';
+              }
             }
-          }
-          const cardContent = (
-            <CustomTable
-              tableData={{
-                tableHeads: Object.keys(filteredData),
-                bodyData: [Object.values(filteredData)],
-              }}
-              tableStyleClasses={tableStyles}
-            />
-          );
-
-          return {
-            cardId: item.id,
-            cardActionIcon: editIcon,
-            cardHeader: (
+            const cardContent = (
               <CustomTable
                 tableData={{
-                  tableHeads: [item.name],
-                  bodyData: [
-                    {
-                      desc: (
-                        <div className={styles.parentDivHeaderSectiom}>
-                          <div style={{ marginRight: '80px' }}>
-                            {formatCreatedAt(item.created_at)}
-                          </div>
-                          <CustomDisplayButton
-                            displayButtonLabel={`Searches (${item.meta_data.length})`}
-                            displayButtonAllStyle={manySavedsearchButtonStyle}
-                          />
-                        </div>
-                      ),
-                    },
-                  ],
+                  tableHeads: Object.keys(filteredData),
+                  bodyData: [Object.values(filteredData)],
                 }}
-                tableStyleClasses={searchCardTitle}
+                tableStyleClasses={tableStyles}
               />
-            ),
-            cardContent: cardContent,
-          };
-        });
+            );
+
+            return {
+              cardId: item.id,
+              cardActionIcon: editIcon,
+              cardHeader: (
+                <CustomTable
+                  tableData={{
+                    tableHeads: [item.name],
+                    bodyData: [
+                      {
+                        desc: (
+                          <div className={styles.parentDivHeaderSectiom}>
+                            <div style={{ marginRight: '80px' }}>
+                              {formatCreatedAt(item.created_at)}
+                            </div>
+                            <CustomDisplayButton
+                              displayButtonLabel={`Searches (${item.meta_data.length})`}
+                              displayButtonAllStyle={manySavedsearchButtonStyle}
+                            />
+                          </div>
+                        ),
+                      },
+                    ],
+                  }}
+                  tableStyleClasses={searchCardTitle}
+                />
+              ),
+              cardContent: cardContent,
+            };
+          })
+      );
     },
     [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
   );
