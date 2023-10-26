@@ -147,46 +147,50 @@ const PreviousSearch = () => {
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
-      return data
-        ?.filter((data: any) =>
-          data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
-        )
-        .map((data: any) => {
-          // Filter the data based on the keyLabelMapping
-          const filteredData: any = {};
-          for (const key in keyLabelMapping) {
-            if (data.meta_data.basic_card_details) {
-              filteredData[keyLabelMapping[key]] =
-                data.meta_data.basic_card_details[key] &&
-                data.meta_data.basic_card_details[key].length
-                  ? data.meta_data.basic_card_details[key]
-                  : '-';
+      // console.log('data', data);
+      return (
+        data
+          // .filter((data: any) =>
+          //   data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+          // )
+          ?.map((data: any) => {
+            console.log('data', data);
+            // Filter the data based on the keyLabelMapping
+            const filteredData: any = {};
+            for (const key in keyLabelMapping) {
+              if (data.meta_data.basic_card_details) {
+                filteredData[keyLabelMapping[key]] =
+                  data.meta_data.basic_card_details[key] &&
+                  data.meta_data.basic_card_details[key].length
+                    ? data.meta_data.basic_card_details[key]
+                    : '-';
+              }
             }
-          }
 
-          return {
-            cardId: data.id,
-            cardActionIcon: editIcon,
-            cardHeader: (
-              <CustomTable
-                tableData={{
-                  tableHeads: [data.name],
-                  bodyData: [{ desc: formatCreatedAt(data.created_at) }],
-                }}
-                tableStyleClasses={searchCardTitle}
-              />
-            ),
-            cardContent: (
-              <CustomTable
-                tableData={{
-                  tableHeads: Object.keys(filteredData),
-                  bodyData: [Object.values(filteredData)],
-                }}
-                tableStyleClasses={tableStyles}
-              />
-            ),
-          };
-        });
+            return {
+              cardId: data.id,
+              cardActionIcon: editIcon,
+              cardHeader: (
+                <CustomTable
+                  tableData={{
+                    tableHeads: [data.name],
+                    bodyData: [{ desc: formatCreatedAt(data.created_at) }],
+                  }}
+                  tableStyleClasses={searchCardTitle}
+                />
+              ),
+              cardContent: (
+                <CustomTable
+                  tableData={{
+                    tableHeads: Object.keys(filteredData),
+                    bodyData: [Object.values(filteredData)],
+                  }}
+                  tableStyleClasses={tableStyles}
+                />
+              ),
+            };
+          })
+      );
     },
     [searchCardTitle, tableStyles]
   );
