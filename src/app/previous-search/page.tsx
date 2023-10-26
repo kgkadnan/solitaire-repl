@@ -166,7 +166,7 @@ const PreviousSearch = () => {
                     : '-';
               }
             }
-            console.log('filteredData', filteredData);
+
             return {
               cardId: data.id,
               cardActionIcon: editIcon,
