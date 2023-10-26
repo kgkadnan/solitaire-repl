@@ -17,8 +17,6 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
     setNotificationSettingData(data?.data);
   }, [data, notificationSettingData]);
 
-  // console.log(notificationSettingData);
-
   const unreadCount =
     notificationSettingData &&
     notificationSettingData.filter((item: any) => item.status === 'unread')
