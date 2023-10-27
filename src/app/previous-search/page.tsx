@@ -150,14 +150,12 @@ const PreviousSearch = () => {
 
   const renderCardData = useCallback(
     (data: any, suggestion?: string) => {
-      // console.log('data', data);
       return (
         data
           // .filter((data: any) =>
           //   data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
           // )
           ?.map((data: any) => {
-            console.log('data', data);
             // Filter the data based on the keyLabelMapping
             const filteredData: any = {};
             for (const key in keyLabelMapping) {
@@ -261,7 +259,6 @@ const PreviousSearch = () => {
   };
 
   const handleSuggestionClick = (suggestion: any) => {
-    console.log('suggestion', suggestion);
     setSearch(suggestion);
     setSearchByName(suggestion);
     setSuggestions([]);
@@ -415,7 +412,7 @@ const PreviousSearch = () => {
                         <>
                           {/* Detailed Information section */}
                           <div
-                            className={`border-b border-solitaireTertiary ${styles.sheetMainHeading}`}
+                            className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
                           >
                             <p>
                               {ManageLocales('app.previousSearch.detailInfo')}
@@ -545,10 +542,12 @@ const PreviousSearch = () => {
                           </div>
                           {/* ))} */}
 
-                          <div className="border-b border-solitaireTertiary mt-8"></div>
+                          {/* <div className="border-b border-solitaireTertiary mt-8"></div> */}
 
                           {/* Show Results button */}
-                          <div className={styles.showResultMainDiv}>
+                          <div
+                            className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
+                          >
                             <CustomDisplayButton
                               displayButtonLabel="Show Results"
                               displayButtonAllStyle={showResulutButtonStyle}

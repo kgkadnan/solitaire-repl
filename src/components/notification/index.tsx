@@ -85,7 +85,7 @@ export const Notification = ({
     <>
       <div className={styles.notificationMainContainer}>
         <div
-          className={`flex justify-between border-b border-solitaireSenary pb-5`}
+          className={`sticky top-0 bg-solitairePrimary flex justify-between border-b border-solitaireSenary pb-5 pt-5`}
         >
           <div className={`flex items-center ${styles.notificationHeading}`}>
             <p>Notifications</p>

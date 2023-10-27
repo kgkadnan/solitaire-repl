@@ -7,27 +7,53 @@ import Eye from '@public/assets/icons/eye-outline.svg?url';
 import validatePassword from '@/utils/validate-password';
 import { ManageLocales } from '@/utils/translate';
 import { CustomFooter } from '@/components/common/footer';
+import { useChangePasswordMutation } from '@/features/api/change-password';
 const ChangePassword = () => {
-  const [currentPasswordVisible, setCurrentPasswordVisible] = useState(false);
+  const [currentPasswordVisible, setCurrentPasswordVisible] = useState(true);
   const [newPasswordVisible, setNewPasswordVisible] = useState(true);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(true);
 
-  const [currentPassword] = useState<string>('test');
+  const [currentPassword, setCurrentPassword] = useState<string>('');
   const [newPassword, setNewPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const [newPasswordError, setNewPasswordError] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+  const [currentPasswordError, setCurrentPasswordError] = useState<string>('');
 
   const handleCancel = () => {
     setNewPassword('');
     setConfirmPassword('');
     setNewPasswordError('');
     setConfirmPasswordError('');
-    setCurrentPasswordVisible(false);
+    setCurrentPassword('');
+    setCurrentPasswordVisible(true);
     setNewPasswordVisible(true);
     setConfirmPasswordVisible(true);
   };
+
+  const [
+    ChangePassword,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useChangePasswordMutation();
+
+  const handleChangePassword = async () => {
+    await ChangePassword({
+      new_password: newPassword,
+      confirm_password: confirmPassword,
+      password: currentPassword,
+    });
+    setCurrentPassword('');
+    setCurrentPasswordError('');
+    setCurrentPasswordVisible(true);
+    setNewPassword('');
+    setNewPasswordError('');
+    setNewPasswordVisible(true);
+    setConfirmPassword('');
+    setConfirmPasswordError('');
+    setConfirmPasswordVisible(true);
+  };
+
   return (
     <>
       <div className={style.changePassword}>
@@ -42,7 +68,12 @@ const ChangePassword = () => {
                 input: style.inputStyles,
               }}
               value={currentPassword}
-              disable={true}
+              onChange={(e) => {
+                setCurrentPassword(e.target.value);
+                !validatePassword(e.target.value)
+                  ? setCurrentPasswordError('invalid new password')
+                  : setCurrentPasswordError('');
+              }}
             />
             <div
               className={style.togglePassword}
@@ -51,6 +82,7 @@ const ChangePassword = () => {
               {currentPasswordVisible ? <Eye /> : <EyeSlash />}
             </div>
           </div>
+          <p className={style.errorMessage}>{currentPasswordError}</p>
 
           <div className={style.passwordInputWrapper}>
             <CustomInputField
@@ -63,8 +95,9 @@ const ChangePassword = () => {
               }}
               onChange={(e) => {
                 setNewPassword(e.target.value);
-                !validatePassword(e.target.value) ?
-                  setNewPasswordError('invalid new password'):setNewPasswordError('')
+                !validatePassword(e.target.value)
+                  ? setNewPasswordError('invalid new password')
+                  : setNewPasswordError('');
               }}
               value={newPassword}
             />
@@ -87,8 +120,9 @@ const ChangePassword = () => {
               }}
               onChange={(e) => {
                 setConfirmPassword(e.target.value);
-                !validatePassword(e.target.value) ?
-                  setConfirmPasswordError('invalid confirm password') :setConfirmPasswordError('')
+                !validatePassword(e.target.value)
+                  ? setConfirmPasswordError('invalid confirm password')
+                  : setConfirmPasswordError('');
               }}
               value={confirmPassword}
             />
@@ -109,7 +143,7 @@ const ChangePassword = () => {
               id: 1,
               displayButtonLabel: ManageLocales('app.changePassword'),
               style: style.filled,
-              // fn: handleCancel,
+              fn: handleChangePassword,
             },
             {
               id: 2,

@@ -30,8 +30,6 @@ const NotificationSetting = () => {
     setSettings({ type: 'APP', subscription: data?.data });
   }, [data]);
 
-  // console.log(settings);
-
   const toggleHandler = async (category: string) => {
     // Toggle the individual setting
     setSettings((prevSettings) => {

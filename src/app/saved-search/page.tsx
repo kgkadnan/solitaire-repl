@@ -145,81 +145,73 @@ const SavedSearch = () => {
   };
 
   const renderCardData = useCallback(
-    (data: any, suggestion?: string) => {
-      return (
-        data
-          // ?.filter((data: any) =>
-          //   data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
-          // )
-          ?.map((item: any) => {
-            // Filter the data based on the keyLabelMapping
-            const filteredData: any = {};
-            for (const key in keyLabelMapping) {
-              if (item.meta_data[0].basic_card_details) {
-                filteredData[keyLabelMapping[key]] =
-                  item.meta_data[0].basic_card_details[key] &&
-                  item.meta_data[0].basic_card_details[key].length
-                    ? item.meta_data[0].basic_card_details[key]
-                    : '-';
-              }
-            }
-            const cardContent = (
+    (data: any) => {
+      return data?.map((item: any) => {
+        // Filter the data based on the keyLabelMapping
+        const filteredData: any = {};
+        for (const key in keyLabelMapping) {
+          if (item.meta_data[0].basic_card_details) {
+            filteredData[keyLabelMapping[key]] =
+              item.meta_data[0].basic_card_details[key] &&
+              item.meta_data[0].basic_card_details[key].length
+                ? item.meta_data[0].basic_card_details[key]
+                : '-';
+          }
+        }
+        const cardContent = (
+          <CustomTable
+            tableData={{
+              tableHeads: Object.keys(filteredData),
+              bodyData: [Object.values(filteredData)],
+            }}
+            tableStyleClasses={tableStyles}
+          />
+        );
+
+        // const cardContent = (
+        //   <CustomTable
+        //     tableData={{
+        //       tableHeads: Object.keys(meta_data),
+        //       bodyData: [meta_data],
+        //     }}
+        //     tableStyleClasses={tableStyles}
+        //   />
+        // );
+
+        return {
+          cardId: item.id,
+          cardActionIcon: item.meta_data.length <= 1 && editIcon,
+          cardHeader: (
+            <div className="">
               <CustomTable
                 tableData={{
-                  tableHeads: Object.keys(filteredData),
-                  bodyData: [Object.values(filteredData)],
+                  tableHeads: [item.name],
+                  bodyData: [
+                    {
+                      desc: (
+                        <div className={styles.parentDivHeaderSectiom}>
+                          <div style={{ marginRight: '80px' }}>
+                            {formatCreatedAt(item.created_at)}
+                          </div>
+
+                          {item.meta_data.length > 1 && ( // Conditionally render the button
+                            <CustomDisplayButton
+                              displayButtonLabel={`Searches (${item.meta_data.length})`}
+                              displayButtonAllStyle={manySavedsearchButtonStyle}
+                            />
+                          )}
+                        </div>
+                      ),
+                    },
+                  ],
                 }}
-                tableStyleClasses={tableStyles}
+                tableStyleClasses={searchCardTitle}
               />
-            );
-
-            // const cardContent = (
-            //   <CustomTable
-            //     tableData={{
-            //       tableHeads: Object.keys(meta_data),
-            //       bodyData: [meta_data],
-            //     }}
-            //     tableStyleClasses={tableStyles}
-            //   />
-            // );
-
-            return {
-              cardId: item.id,
-              cardActionIcon: item.meta_data.length <= 1 && editIcon,
-              cardHeader: (
-                <div className="w-[350px]">
-                  <CustomTable
-                    tableData={{
-                      tableHeads: [item.name],
-                      bodyData: [
-                        {
-                          desc: (
-                            <div className={styles.parentDivHeaderSectiom}>
-                              <div style={{ marginRight: '80px' }}>
-                                {formatCreatedAt(item.created_at)}
-                              </div>
-
-                              {item.meta_data.length > 1 && ( // Conditionally render the button
-                                <CustomDisplayButton
-                                  displayButtonLabel={`Searches (${item.meta_data.length})`}
-                                  displayButtonAllStyle={
-                                    manySavedsearchButtonStyle
-                                  }
-                                />
-                              )}
-                            </div>
-                          ),
-                        },
-                      ],
-                    }}
-                    tableStyleClasses={searchCardTitle}
-                  />
-                </div>
-              ),
-              cardContent: cardContent,
-            };
-          })
-      );
+            </div>
+          ),
+          cardContent: cardContent,
+        };
+      });
     },
     [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
   );
@@ -478,13 +470,15 @@ const SavedSearch = () => {
                       sheetContentStyle={styles.sheetContentStyle}
                       sheetContent={
                         <>
-                          <div className={styles.sheetMainHeading}>
+                          <div
+                            className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
+                          >
                             <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
                           </div>
 
                           {/* {sliderData.map((cardDetails: any) => ( */}
                           <>
-                            <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
+                            <div className="flex items-center gap-14 text-solitaireTertiary">
                               {savedSearchData[indexTest].meta_data.length >
                                 1 &&
                                 savedSearchData[indexTest].meta_data.map(
@@ -685,10 +679,10 @@ const SavedSearch = () => {
                           </>
                           {/* // ))} */}
 
-                          <div className="border-b border-solitaireTertiary mt-8"></div>
-
                           {/* Show Results button */}
-                          <div className={styles.showResultMainDiv}>
+                          <div
+                            className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
+                          >
                             <CustomDisplayButton
                               displayButtonLabel="Modify Search"
                               displayButtonAllStyle={{

@@ -1,5 +1,6 @@
 /* Card Container */
 .searchCardContainer {
+  width: 95% !important;
   background-color: hsl(var(--solitaire-secondary));
   padding: 20px 10px;
 }
@@ -97,8 +98,11 @@
   color: var(--shadow, #8c7459);
   font-size: 16px;
   font-weight: 700;
-  margin: 10px 0px 10px;
   letter-spacing: 1px;
+  padding-top: 27px;
+  position: sticky;
+  top: 0;
+  background-color: hsl(var(--solitaire-secondary));
   p {
     margin-bottom: 30px;
   }
@@ -170,14 +174,20 @@
 }
 
 .showResultMainDiv {
+  text-align: center;
+  position: sticky;
+  bottom: 0;
+  background-color: hsl(var(--solitaire-secondary));
+  padding-bottom: 27px;
+}
+.showResultButtonStyle {
+  background-color: #8c7459;
   gap: 20px;
   display: flex;
   justify-content: center;
- 
 }
 
-
-.showResultButtonTransparent{
+.showResultButtonTransparent {
   background-color: transparent;
   border: 1px solid #8c7459;
   font-size: 14px !important;
@@ -188,7 +198,7 @@
   padding: 8px 30px;
 }
 
-.showResultButtonFilled{
+.showResultButtonFilled {
   background-color: #8c7459;
   border-radius: 5px;
   font-size: 14px !important;
@@ -197,8 +207,6 @@
   font-weight: 300;
   padding: 8px 30px;
 }
-
-
 
 //Footer Button
 .transparent {
