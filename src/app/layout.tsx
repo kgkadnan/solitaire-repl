@@ -47,7 +47,7 @@ export default function RootLayout({
                   }}
                 >
                   <main
-                    style={{ width: 'calc(100% - 92px)', minHeight: '76vh' }}
+                    style={{ width: 'calc(100% - 92px)', minHeight: '78vh' }}
                   >
                     {children}
                   </main>

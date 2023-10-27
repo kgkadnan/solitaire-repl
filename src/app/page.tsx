@@ -1,8 +1,5 @@
 'use client';
 
-import LanguageSwitcher from '@/components/common/multi-lingual';
-import { ManageLocales } from '@/utils/translate';
-
 export default function Home() {
   return (
     <>

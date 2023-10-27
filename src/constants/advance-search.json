@@ -8,57 +8,57 @@
     {
       "title": "Pear",
       "short_name": "PS",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/pears-501bf89c-bc08-4a2a-bab3-d598ba3b55d3.png  "
     },
     {
       "title": "Emerald",
       "short_name": "EM",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/emerald-857b64d3-741d-4929-b3c7-27661d772539.png"
     },
     {
       "title": "Asscher",
       "short_name": "AS",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/asscher-8a7a2c13-0c33-4691-9bbd-d414ecc79c4e.png"
     },
     {
       "title": "Cushion",
       "short_name": "CU",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/cushion-9801ebb3-9739-47ac-a530-c77b60c11a3c.png"
     },
     {
       "title": "Princess",
       "short_name": "PR",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/princess-484e558a-e9ec-469e-98d9-df26a5c1619b.png"
     },
     {
       "title": "Marquise",
       "short_name": "MQ",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/marquise-1c9930c6-f7dd-493e-a65a-e1737cb0561b.png"
     },
     {
       "title": "Oval",
       "short_name": "OV",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/oval-27ec1732-da71-4f32-9dd6-03065aeacb2d.png"
     },
     {
       "title": "Heart",
       "short_name": "HS",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/hearts-240e7aaf-aee9-4807-91f1-5469abfecf92.png"
     },
     {
       "title": "Radiant",
       "short_name": "RAD",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/radiant-1a877796-a6fc-4669-8e98-1d686f524c76.png"
     },
     {
       "title": "Others",
       "short_name": "OTHER",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/others-deaf0f6c-39a5-4a90-a264-56734dcaf642.png"
     },
     {
       "title": "All",
       "short_name": "All",
-      "src": "https://api.kgk.live/images/image/Round-f1708d48-29d8-4c5e-a2a8-bcdd69177345.png"
+      "src": "https://api.kgk.live/images/image/others-deaf0f6c-39a5-4a90-a264-56734dcaf642.png"
     }
   ],
   "color": ["White", "Fancy", "Range"],
