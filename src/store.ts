@@ -17,6 +17,7 @@ import notificationBadgeReducer from './features/notification/notification-slice
 import searchListReducer from './features/search/search-list';
 import previousSearchReducer from './features/previous-search/previous-search';
 import savedSearchReducer from './features/saved-search/saved-search';
+import { changePasswordApi } from './features/api/change-password';
 
 const rootReducer = combineReducers({
   compareStone: compareStoneReducer,
@@ -27,6 +28,7 @@ const rootReducer = combineReducers({
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
+  [changePasswordApi.reducerPath]: changePasswordApi.reducer,
   [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
@@ -41,6 +43,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
+        changePasswordApi.middleware,
         downloadExcelApi.middleware,
         cartApi.middleware,
         savedSearchesApi.middleware,
