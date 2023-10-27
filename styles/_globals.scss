@@ -114,7 +114,7 @@
       appearance: none;
     }
   }
-  
+
   body {
     @apply bg-solitairePrimary text-foreground;
 
@@ -137,5 +137,9 @@
     }
 
     font-size: 14px;
+    font-family: 'Manrope, sans-serif' !important;
+  }
+  body::-webkit-scrollbar {
+    width: 0.1rem;
   }
 }
