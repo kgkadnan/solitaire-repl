@@ -44,6 +44,10 @@ interface IData {
   updated_at: string;
 }
 
+interface KeyLabelMapping {
+  [key: string]: string;
+}
+
 const SavedSearch = () => {
   const router = useRouter();
   // Style classes and variables
@@ -128,22 +132,56 @@ const SavedSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useDeleteSavedSearchMutation();
 
-  const renderCardData = useCallback(
-    (data: any) => {
-      return data?.map((item: any) => {
-        const meta_data = Array.isArray(item?.meta_data)
-          ? item.meta_data[0].basic_card_details
-          : item.meta_data.basic_card_details;
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'color',
+    carat: 'carat',
+    clarity: 'clarity',
+    cut: 'cut',
+    polish: 'polish',
+    symmetry: 'Symmetry',
+    price_range: 'Price Range',
+    discount: 'Discount',
+  };
 
-        const cardContent = (
-          <CustomTable
-            tableData={{
-              tableHeads: Object.keys(meta_data),
-              bodyData: [meta_data],
-            }}
-            tableStyleClasses={tableStyles}
-          />
-        );
+  const renderCardData = useCallback(
+    (data: any, suggestion?: string) => {
+      return (
+        data
+          // ?.filter((data: any) =>
+          //   data.name.toLowerCase().startsWith(suggestion?.toLowerCase())
+          // )
+          ?.map((item: any) => {
+            // Filter the data based on the keyLabelMapping
+            const filteredData: any = {};
+            for (const key in keyLabelMapping) {
+              if (item.meta_data[0].basic_card_details) {
+                filteredData[keyLabelMapping[key]] =
+                  item.meta_data[0].basic_card_details[key] &&
+                  item.meta_data[0].basic_card_details[key].length
+                    ? item.meta_data[0].basic_card_details[key]
+                    : '-';
+              }
+            }
+            const cardContent = (
+              <CustomTable
+                tableData={{
+                  tableHeads: Object.keys(filteredData),
+                  bodyData: [Object.values(filteredData)],
+                }}
+                tableStyleClasses={tableStyles}
+              />
+            );
+
+        // const cardContent = (
+        //   <CustomTable
+        //     tableData={{
+        //       tableHeads: Object.keys(meta_data),
+        //       bodyData: [meta_data],
+        //     }}
+        //     tableStyleClasses={tableStyles}
+        //   />
+        // );
 
         return {
           cardId: item.id,
@@ -176,8 +214,8 @@ const SavedSearch = () => {
           ),
           cardContent: cardContent,
         };
-      });
-    },
+      }));
+  },
     [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
   );
 
@@ -527,6 +565,37 @@ const SavedSearch = () => {
                                       savedSearchData[indexTest]?.meta_data[
                                         activeTab
                                       ].measurements
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {formatCassing(key)}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {Array.isArray(value)
+                                            ? (value as string[]).join(', ')
+                                            : (value as string)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                {/* other Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    savedSearchData[indexTest] &&
+                                      savedSearchData[indexTest]?.meta_data[
+                                        activeTab
+                                      ].other_information
                                   ).map(([key, value]) => (
                                     <div key={key}>
                                       <p className="flex">

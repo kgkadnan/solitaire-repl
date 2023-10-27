@@ -22,19 +22,20 @@ const NotificationSetting = () => {
   const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
   const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
   const [settings, setSettings] = useState<INotificationSetting>({
-    type: 'APP',
+    type: '',
     subscription: [],
   });
 
   useEffect(() => {
     setSettings({ type: 'APP', subscription: data?.data });
-  }, [data, settings]);
+  }, [data]);
 
+  // console.log(settings);
 
   const toggleHandler = async (category: string) => {
     // Toggle the individual setting
     setSettings((prevSettings) => {
-      return {
+      const updatedSettings = {
         ...prevSettings,
         subscription: prevSettings.subscription.map((setting) => {
           if (setting.category === category) {
@@ -46,8 +47,11 @@ const NotificationSetting = () => {
           return setting;
         }),
       };
+
+      updateNotificationSetting(updatedSettings);
+
+      return updatedSettings;
     });
-    await updateNotificationSetting(settings);
   };
 
   return (
@@ -66,6 +70,7 @@ const NotificationSetting = () => {
                   id={`on${key}`}
                   onClick={() => toggleHandler(key)}
                   className={styles.toggleButton}
+                  checked={setting.is_subscribed}
                 />
                 <CustomInputlabel
                   htmlfor={`on${key}`}

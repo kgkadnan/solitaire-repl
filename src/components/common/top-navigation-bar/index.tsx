@@ -33,8 +33,14 @@ export const TopNavigationBar = () => {
   const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [offset, setOffset] = useState(0);
+  let limit = 11;
+  const { data } = useGetAllNotificationQuery({
+    type: 'APP',
+    offset,
+    limit,
+  });
 
-  const { data } = useGetAllNotificationQuery({ type: 'APP' });
   const [updateNotification] = useUpdateNotificationMutation();
 
   const topNavData = [
@@ -87,16 +93,18 @@ export const TopNavigationBar = () => {
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    let notificationMapData = data.data.map((item: any) => ({
+    let notificationMapData = data?.data?.map((item: any) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread',
     }));
 
-    const unreadNotifications = notificationMapData.filter(
+    const unreadNotifications = notificationMapData?.filter(
       (item: any) => item.status === 'unread'
     );
 
-    await updateNotification(unreadNotifications);
+    unreadNotifications.length
+      ? await updateNotification(unreadNotifications)
+      : '';
   };
 
   return (
@@ -133,7 +141,14 @@ export const TopNavigationBar = () => {
             </PopoverContent>
           </Popover>
           <CustomSlider
-            sheetContent={<Notification />}
+            sheetContent={
+              <Notification
+                notificationData={data}
+                setOffset={setOffset}
+                offset={offset}
+                limit={limit}
+              />
+            }
             sheetTriggenContent={
               <div onClick={handleNotificationClick}>
                 <div className={styles.notificationContainer}>
