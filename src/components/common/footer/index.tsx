@@ -8,6 +8,7 @@ export interface IfooterButtonData {
   displayButtonLabel: string | React.ReactNode;
   style?: string;
   fn?: () => void;
+  isDisable?: boolean;
 }
 
 interface ICustomFooterProps {
@@ -31,6 +32,7 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
                 displayLabelStyle: styles.footerButtonLabel,
               }}
               handleClick={item.fn}
+              isDisable={item.isDisable}
             />
           </div>
         );

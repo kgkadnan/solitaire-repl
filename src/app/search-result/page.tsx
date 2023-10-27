@@ -247,6 +247,8 @@ const SearchResults = () => {
           .catch((e) => {
             console.log('error', error);
           });
+        setIsCheck([]);
+        setIsCheckAll(false);
         setIsError(false);
       }
     } else if (isCheck.length === 0) {
@@ -281,6 +283,8 @@ const SearchResults = () => {
             console.log('error', error);
           });
       }
+      setIsCheck([]);
+      setIsCheckAll(false);
       setIsError(false);
     }
   };
@@ -344,6 +348,7 @@ const SearchResults = () => {
             console.log('1111111111111111');
           });
         setIsCheck([]);
+        setIsCheckAll(false);
       }
     }
   };

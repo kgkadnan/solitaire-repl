@@ -29,10 +29,17 @@ export const savedSearchesApi: any = createApi({
         body: data,
       }),
     }),
-    updateSavedSearches: builder.mutation({
+    updateSavedSearch: builder.mutation({
+      query: (data) => ({
+        url: `saved-search`,
+        method: 'PUT',
+        body: data,
+      }),
+    }),
+    deleteSavedSearch: builder.mutation({
       query: (filter) => ({
         url: `saved-search`,
-        method: 'PUT', // Use the appropriate HTTP method
+        method: 'DELETE',
         body: filter, // Modify this to match your API's payload
       }),
       invalidatesTags: ['SavedSearch'],
@@ -42,7 +49,8 @@ export const savedSearchesApi: any = createApi({
 
 export const {
   useGetAllSavedSearchesQuery,
+  useUpdateSavedSearchMutation,
   useGetSavedSearchListQuery,
-  useUpdateSavedSearchesMutation,
   useAddSavedSearchMutation,
+  useDeleteSavedSearchMutation,
 } = savedSearchesApi;
