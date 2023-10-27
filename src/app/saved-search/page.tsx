@@ -173,51 +173,54 @@ const SavedSearch = () => {
               />
             );
 
-        // const cardContent = (
-        //   <CustomTable
-        //     tableData={{
-        //       tableHeads: Object.keys(meta_data),
-        //       bodyData: [meta_data],
-        //     }}
-        //     tableStyleClasses={tableStyles}
-        //   />
-        // );
+            // const cardContent = (
+            //   <CustomTable
+            //     tableData={{
+            //       tableHeads: Object.keys(meta_data),
+            //       bodyData: [meta_data],
+            //     }}
+            //     tableStyleClasses={tableStyles}
+            //   />
+            // );
 
-        return {
-          cardId: item.id,
-          cardActionIcon: item.meta_data.length <= 1 && editIcon,
-          cardHeader: (
-            <div className="w-[350px]">
-              <CustomTable
-                tableData={{
-                  tableHeads: [item.name],
-                  bodyData: [
-                    {
-                      desc: (
-                        <div className={styles.parentDivHeaderSectiom}>
-                          <div style={{ marginRight: '80px' }}>
-                            {formatCreatedAt(item.created_at)}
-                          </div>
+            return {
+              cardId: item.id,
+              cardActionIcon: item.meta_data.length <= 1 && editIcon,
+              cardHeader: (
+                <div className="w-[350px]">
+                  <CustomTable
+                    tableData={{
+                      tableHeads: [item.name],
+                      bodyData: [
+                        {
+                          desc: (
+                            <div className={styles.parentDivHeaderSectiom}>
+                              <div style={{ marginRight: '80px' }}>
+                                {formatCreatedAt(item.created_at)}
+                              </div>
 
-                          {item.meta_data.length > 1 && ( // Conditionally render the button
-                            <CustomDisplayButton
-                              displayButtonLabel={`Searches (${item.meta_data.length})`}
-                              displayButtonAllStyle={manySavedsearchButtonStyle}
-                            />
-                          )}
-                        </div>
-                      ),
-                    },
-                  ],
-                }}
-                tableStyleClasses={searchCardTitle}
-              />
-            </div>
-          ),
-          cardContent: cardContent,
-        };
-      }));
-  },
+                              {item.meta_data.length > 1 && ( // Conditionally render the button
+                                <CustomDisplayButton
+                                  displayButtonLabel={`Searches (${item.meta_data.length})`}
+                                  displayButtonAllStyle={
+                                    manySavedsearchButtonStyle
+                                  }
+                                />
+                              )}
+                            </div>
+                          ),
+                        },
+                      ],
+                    }}
+                    tableStyleClasses={searchCardTitle}
+                  />
+                </div>
+              ),
+              cardContent: cardContent,
+            };
+          })
+      );
+    },
     [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
   );
 
