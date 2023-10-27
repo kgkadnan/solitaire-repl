@@ -443,13 +443,15 @@ const SavedSearch = () => {
                       sheetContentStyle={styles.sheetContentStyle}
                       sheetContent={
                         <>
-                          <div className={styles.sheetMainHeading}>
+                          <div
+                            className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
+                          >
                             <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
                           </div>
 
                           {/* {sliderData.map((cardDetails: any) => ( */}
                           <>
-                            <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
+                            <div className="flex items-center gap-14 text-solitaireTertiary">
                               {SavedSearchData[indexTest].meta_data.length >
                                 1 &&
                                 SavedSearchData[indexTest].meta_data.map(
@@ -619,10 +621,10 @@ const SavedSearch = () => {
                           </>
                           {/* // ))} */}
 
-                          <div className="border-b border-solitaireTertiary mt-8"></div>
-
                           {/* Show Results button */}
-                          <div className={styles.showResultMainDiv}>
+                          <div
+                            className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
+                          >
                             <CustomDisplayButton
                               displayButtonLabel="Show Results"
                               displayButtonAllStyle={showResulutButtonStyle}

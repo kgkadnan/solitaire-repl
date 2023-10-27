@@ -82,8 +82,6 @@ const SearchResults = () => {
 
   let [downloadExcel] = useDownloadExcelMutation();
 
-  // console.log('Data', data?.products);
-
   let { data: previousSearch } = useGetSpecificPreviousQuery({
     id: previousSearchIds,
   });
