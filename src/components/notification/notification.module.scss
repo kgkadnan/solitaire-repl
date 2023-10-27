@@ -12,7 +12,7 @@
   font-weight: 300;
 }
 .newNotificationContainer {
-  padding: 20px 0px 0px;
+  padding-top: 10px;
 }
 .NotificationHeading {
   font-size: 14px;
@@ -74,7 +74,7 @@
 }
 .loadMoreButtonContainer {
   position: sticky;
-  bottom: -30px;
+  bottom: 0px;
   padding: 15px;
   text-align: center;
   background-color: hsl(var(--solitaire-primary));
