@@ -179,7 +179,26 @@
 }
 .showResultButtonStyle {
   background-color: #8c7459;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.showResultButtonTransparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  font-size: 14px !important;
   border-radius: 5px;
+  margin-top: 30px;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 8px 30px;
+}
+
+.showResultButtonFilled {
+  background-color: #8c7459;
+  border-radius: 5px;
+  font-size: 14px !important;
   margin-top: 30px;
   color: #ffffff;
   font-weight: 300;

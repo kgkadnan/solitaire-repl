@@ -12,9 +12,9 @@ import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
   useGetSavedSearchListQuery,
-  useUpdateSavedSearchesMutation,
 } from '@/features/api/saved-searches';
 import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
@@ -22,6 +22,9 @@ import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
 import { formatCassing } from '@/utils/format-cassing';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySavedSearch } from '@/features/saved-search/saved-search';
+import { useRouter } from 'next/navigation';
 
 interface ICardData {
   cardId: string;
@@ -46,6 +49,7 @@ interface KeyLabelMapping {
 }
 
 const SavedSearch = () => {
+  const router = useRouter();
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -58,9 +62,7 @@ const SavedSearch = () => {
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
-  const showResulutButtonStyle = {
-    displayButtonStyle: styles.showResultButtonStyle,
-  };
+
   const manySavedsearchButtonStyle = {
     displayButtonStyle: styles.manySavedSearchButton,
     displayLabelStyle: styles.manySavedSearchLabel,
@@ -78,7 +80,7 @@ const SavedSearch = () => {
   const [searchUrl, setSearchUrl] = useState('');
 
   //Data
-  const [SavedSearchData, setSavedSearchData] = useState<any[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState<any[]>([]);
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
@@ -89,6 +91,8 @@ const SavedSearch = () => {
   const [search, setSearch] = useState<string>('');
   const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  const dispatch = useAppDispatch();
 
   const handleResultsPerPageChange = useCallback((event: string) => {
     const newResultsPerPage = parseInt(event, 10);
@@ -124,9 +128,9 @@ const SavedSearch = () => {
 
   // Destructure the mutation function from the hook
   const [
-    updateSavedSearches,
+    deleteSavedSearch,
     { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useUpdateSavedSearchesMutation();
+  ] = useDeleteSavedSearchMutation();
 
   const keyLabelMapping: KeyLabelMapping = {
     shape: 'Shape',
@@ -169,9 +173,19 @@ const SavedSearch = () => {
               />
             );
 
+            // const cardContent = (
+            //   <CustomTable
+            //     tableData={{
+            //       tableHeads: Object.keys(meta_data),
+            //       bodyData: [meta_data],
+            //     }}
+            //     tableStyleClasses={tableStyles}
+            //   />
+            // );
+
             return {
               cardId: item.id,
-              cardActionIcon: editIcon,
+              cardActionIcon: item.meta_data.length <= 1 && editIcon,
               cardHeader: (
                 <CustomTable
                   tableData={{
@@ -183,10 +197,15 @@ const SavedSearch = () => {
                             <div style={{ marginRight: '80px' }}>
                               {formatCreatedAt(item.created_at)}
                             </div>
-                            <CustomDisplayButton
-                              displayButtonLabel={`Searches (${item.meta_data.length})`}
-                              displayButtonAllStyle={manySavedsearchButtonStyle}
-                            />
+
+                            {item.meta_data.length > 1 && ( // Conditionally render the button
+                              <CustomDisplayButton
+                                displayButtonLabel={`Searches (${item.meta_data.length})`}
+                                displayButtonAllStyle={
+                                  manySavedsearchButtonStyle
+                                }
+                              />
+                            )}
                           </div>
                         ),
                       },
@@ -205,11 +224,16 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    let payload = { id: isCheck };
-    await updateSavedSearches(payload);
-    await refetch();
-    setIsCheck([]);
-    setIsCheckAll(false);
+    if (isCheck.length) {
+      // let payload = { id: isCheck, filter: { is_deleted: true } };
+      await deleteSavedSearch(isCheck);
+      await refetch();
+      setIsCheck([]);
+      setIsCheckAll(false);
+    } else {
+      // setShowToast(true);
+      // setToastErrorMessage('Check to delete previous search data.');
+    }
 
     if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
@@ -268,8 +292,6 @@ const SavedSearch = () => {
 
   //specific checkbox
   const handleClick = (id: string) => {
-    // const { id } = e.target;
-
     let updatedIsCheck = [...isCheck];
 
     if (updatedIsCheck.includes(id)) {
@@ -326,7 +348,7 @@ const SavedSearch = () => {
   const savedSearchheaderData = {
     headerHeading: ManageLocales('app.savedSearch.header'),
     //count
-    searchCount: cardData?.length,
+    searchCount: data?.data?.count,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
@@ -355,10 +377,10 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    const SavedSearchData = data?.data;
-    let specificSavedSearchData = SavedSearchData?.savedSearch;
+    const savedSearchData = data?.data;
+    let specificSavedSearchData = savedSearchData?.savedSearch;
     setNumberOfPages(
-      Math.ceil(SavedSearchData?.count / SavedSearchData?.limit)
+      Math.ceil(savedSearchData?.count / savedSearchData?.limit)
     );
     setSavedSearchData(specificSavedSearchData);
 
@@ -391,15 +413,26 @@ const SavedSearch = () => {
   };
 
   const handleButtonClick = (index: number) => {
+    console.log('specificSavedSearchData', index);
     setActiveTab(index);
   };
 
   const handleSlider = (data: any) => {
-    let savedSearchsingleDiamondData = SavedSearchData.filter((items: any) => {
+    let savedSearchsingleDiamondData = savedSearchData.filter((items: any) => {
       return items.id === data.id;
     });
     setSliderData(savedSearchsingleDiamondData);
     setActiveTab(0);
+  };
+
+  const modifySearchHandler = (id: string, activeTab: number) => {
+    let modifyData = savedSearchData.filter((data) => {
+      return data.id === id;
+    })[0];
+
+    dispatch(modifySavedSearch({ modifyData, activeTab }));
+
+    router.push(`/advance-search?edit=saved-search`);
   };
 
   return (
@@ -428,7 +461,7 @@ const SavedSearch = () => {
                         <>
                           <div
                             onClick={() =>
-                              handleSlider(SavedSearchData[indexTest])
+                              handleSlider(savedSearchData[indexTest])
                             }
                           >
                             <CustomSearchResultCard
@@ -452,16 +485,16 @@ const SavedSearch = () => {
                           {/* {sliderData.map((cardDetails: any) => ( */}
                           <>
                             <div className="flex items-center gap-14 text-solitaireTertiary">
-                              {SavedSearchData[indexTest].meta_data.length >
+                              {savedSearchData[indexTest].meta_data.length >
                                 1 &&
-                                SavedSearchData[indexTest].meta_data.map(
+                                savedSearchData[indexTest].meta_data.map(
                                   (data: any, index: number) => (
                                     <div
                                       key={`Search-${index}`}
                                       style={{
                                         marginRight:
                                           index ===
-                                          SavedSearchData[indexTest].meta_data
+                                          savedSearchData[indexTest].meta_data
                                             .length -
                                             1
                                             ? '0px'
@@ -490,7 +523,7 @@ const SavedSearch = () => {
                             </div>
                             <div
                               className="flex"
-                              key={SavedSearchData[indexTest].meta_data.cardId}
+                              key={savedSearchData[indexTest].meta_data.cardId}
                             >
                               <div className={styles.sheetMainDiv}>
                                 {/* Detailed Information section */}
@@ -502,8 +535,8 @@ const SavedSearch = () => {
 
                                 <div>
                                   {Object?.entries(
-                                    SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[
+                                    savedSearchData[indexTest] &&
+                                      savedSearchData[indexTest]?.meta_data[
                                         activeTab
                                       ]?.basic_card_details
                                   ).map(([key, value]) => (
@@ -533,8 +566,8 @@ const SavedSearch = () => {
 
                                 <div>
                                   {Object?.entries(
-                                    SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[
+                                    savedSearchData[indexTest] &&
+                                      savedSearchData[indexTest]?.meta_data[
                                         activeTab
                                       ].measurements
                                   ).map(([key, value]) => (
@@ -564,8 +597,8 @@ const SavedSearch = () => {
 
                                 <div>
                                   {Object.entries(
-                                    SavedSearchData[indexTest] &&
-                                      SavedSearchData[indexTest]?.meta_data[
+                                    savedSearchData[indexTest] &&
+                                      savedSearchData[indexTest]?.meta_data[
                                         activeTab
                                       ].other_information
                                   ).map(([key, value]) => (
@@ -595,9 +628,9 @@ const SavedSearch = () => {
                                   </p>
                                 </div>
 
-                                {SavedSearchData[indexTest] &&
+                                {savedSearchData[indexTest] &&
                                   Object.entries(
-                                    SavedSearchData[indexTest]?.meta_data[
+                                    savedSearchData[indexTest]?.meta_data[
                                       activeTab
                                     ].inclusion_details
                                   ).map(([key, value]) => (
@@ -616,6 +649,37 @@ const SavedSearch = () => {
                                       </span>
                                     </p>
                                   ))}
+
+                                {/* other Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    savedSearchData[indexTest] &&
+                                      savedSearchData[indexTest]?.meta_data[
+                                        activeTab
+                                      ].other_information
+                                  ).map(([key, value]) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {formatCassing(key)}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {Array.isArray(value)
+                                            ? (value as string[]).join(', ')
+                                            : (value as string)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
                               </div>
                             </div>
                           </>
@@ -626,8 +690,21 @@ const SavedSearch = () => {
                             className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
                           >
                             <CustomDisplayButton
+                              displayButtonLabel="Modify Search"
+                              displayButtonAllStyle={{
+                                displayButtonStyle:
+                                  styles.showResultButtonTransparent,
+                              }}
+                              handleClick={() =>
+                                modifySearchHandler(items.cardId, activeTab)
+                              }
+                            />
+                            <CustomDisplayButton
                               displayButtonLabel="Show Results"
-                              displayButtonAllStyle={showResulutButtonStyle}
+                              displayButtonAllStyle={{
+                                displayButtonStyle:
+                                  styles.showResultButtonFilled,
+                              }}
                               handleClick={showButtonHandleClick}
                             />
                           </div>
