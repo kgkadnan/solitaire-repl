@@ -27,10 +27,6 @@
   background-color: hsl(var(--solitaire-secondary));
 }
 
-.table thead tr:first-child th:first-child {
-  border-top-left-radius: 10px;
-  border-bottom-left-radius: 10px;
-}
 
 .table thead tr:first-child th:last-child {
   border-top-right-radius: 10px;
@@ -62,24 +58,16 @@
   margin-right: 0px !important;
 }
 
-// .checkboxSticky {
-//   position: sticky;
-//   left: 0;
-//   z-index: 2; /* Ensure the sticky header is above the table content */
+
+
+.table th:nth-child(1) {
+  background-color: hsl(var(--solitaire-primary));
+}
+.table th:nth-child(2) {
+  border-bottom-left-radius: 25%;
+  border-top-left-radius: 25%;
   
-// }
-
-// .checkboxStickyBg{
-//   background-color: hsl(var(--solitaire-primary));
-// }
-
-// .stickyStatus {
-//   position: sticky;
-//   left: 0;
-//   z-index: 2;
-//   background-color: hsl(var(--solitaire-primary));
-// }
-
+}
 
 .table th:nth-child(1),
 .table td:nth-child(1) {
@@ -97,6 +85,7 @@
     left: 20px;
     width: 30px;
     min-width: 30px;
+    padding-left: 6px;
 }
 
 .table td:nth-child(1),

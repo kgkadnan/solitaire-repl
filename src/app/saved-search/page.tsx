@@ -149,30 +149,32 @@ const SavedSearch = () => {
           cardId: item.id,
           cardActionIcon: item.meta_data.length <= 1 && editIcon,
           cardHeader: (
-            <CustomTable
-              tableData={{
-                tableHeads: [item.name],
-                bodyData: [
-                  {
-                    desc: (
-                      <div className={styles.parentDivHeaderSectiom}>
-                        <div style={{ marginRight: '80px' }}>
-                          {formatCreatedAt(item.created_at)}
-                        </div>
+            <div className="w-[350px]">
+              <CustomTable
+                tableData={{
+                  tableHeads: [item.name],
+                  bodyData: [
+                    {
+                      desc: (
+                        <div className={styles.parentDivHeaderSectiom}>
+                          <div style={{ marginRight: '80px' }}>
+                            {formatCreatedAt(item.created_at)}
+                          </div>
 
-                        {item.meta_data.length > 1 && ( // Conditionally render the button
-                          <CustomDisplayButton
-                            displayButtonLabel={`Searches (${item.meta_data.length})`}
-                            displayButtonAllStyle={manySavedsearchButtonStyle}
-                          />
-                        )}
-                      </div>
-                    ),
-                  },
-                ],
-              }}
-              tableStyleClasses={searchCardTitle}
-            />
+                          {item.meta_data.length > 1 && ( // Conditionally render the button
+                            <CustomDisplayButton
+                              displayButtonLabel={`Searches (${item.meta_data.length})`}
+                              displayButtonAllStyle={manySavedsearchButtonStyle}
+                            />
+                          )}
+                        </div>
+                      ),
+                    },
+                  ],
+                }}
+                tableStyleClasses={searchCardTitle}
+              />
+            </div>
           ),
           cardContent: cardContent,
         };
