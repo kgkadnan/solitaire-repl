@@ -119,7 +119,7 @@ export const Notification = ({
               <div
                 key={items.customer_id}
                 className={`flex ${
-                  items.status === 'unread'
+                  items.status === 'unread' || items.status === 'unseen'
                     ? styles.readNotification
                     : styles.newNotificationContentMainDiv
                 }`}
@@ -128,7 +128,7 @@ export const Notification = ({
                 <div className={styles.notificationsIcons}>
                   <EllipseIcon
                     className={
-                      items.status === 'unread'
+                      items.status === 'unread' || items.status === 'unseen'
                         ? styles.ellipseIconActive
                         : styles.ellipseIconInactive
                     }
