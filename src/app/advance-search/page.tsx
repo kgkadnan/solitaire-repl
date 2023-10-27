@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './advance-search.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
@@ -21,8 +21,9 @@ import {
 } from '@/features/api/saved-searches';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
-import { CustomDialog } from '@/components/common/dialog';
+
 import { useAppSelector } from '@/hooks/hook';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -31,6 +32,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const router = useRouter();
   const { previousSearch } = useAppSelector((store) => store);
   const { savedSearch } = useAppSelector((store) => store);
+
+  const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
+
+  const [validationError, setValidationError] = useState('');
+
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
 
   const [searchCount, setSearchCount] = useState<number>(-1);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
@@ -132,7 +139,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
-  const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
@@ -141,6 +147,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const searchParams = useSearchParams();
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
+  let [addPreviousSearch] = useAddPreviousSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   function generateQueryParams({
     selectedShape,
@@ -218,9 +226,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     const queryParams: any = {};
 
     selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
-    selectedColor && (queryParams['color'] = selectedColor);
+    // selectedColor && (queryParams['color'] = selectedColor);
     selectedWhiteColor?.length !== 0 &&
       (queryParams['color'] = selectedWhiteColor);
+    selectedFancyColor?.length !== 0 &&
+      (queryParams['fancy'] = selectedFancyColor);
+    selectedRangeColor?.length !== 0 &&
+      (queryParams['range'] = selectedRangeColor);
     selectedIntensity?.length !== 0 &&
       (queryParams['intensity'] = selectedIntensity);
     selectedOvertone?.length !== 0 &&
@@ -229,12 +241,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedTingeIntensity?.length !== 0 &&
       (queryParams['color_shade_intensity'] = selectedTingeIntensity);
     selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
-    selectedCaratRange?.length !== 0 &&
-      (queryParams['carat'] = selectedCaratRange);
-    caratRangeFrom &&
-      caratRangeTo &&
-      (queryParams['carat'] = `${caratRangeFrom}-${caratRangeTo}`);
-    selectedMake && (queryParams['make'] = selectedMake);
+
+    selectedCaratRange?.forEach((caratRange: any) => {
+      let caratData = caratRange.split('-');
+      const caratFrom = parseFloat(caratData[0]).toFixed(2);
+      const caratTo = parseFloat(caratData[1]).toFixed(2);
+      queryParams['carat'] = `${caratFrom}-${caratTo}`;
+    });
+
     selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
     selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
     selectedSymmetry?.length !== 0 &&
@@ -273,6 +287,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     milkyBI?.length !== 0 && (queryParams['milky'] = milkyBI);
     lusterBI?.length !== 0 && (queryParams['luster'] = lusterBI);
     eyeCleanBI?.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI);
+    selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
     tableInclusionWI?.length !== 0 &&
       (queryParams['table_inclusion'] = tableInclusionWI);
     sideInclusionWI?.length !== 0 &&
@@ -312,9 +327,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     lowerHalfFrom &&
       lowerHalfTo &&
       (queryParams['lower_half'] = `${lowerHalfFrom}-${lowerHalfTo}`);
-    ratioFrom &&
-      ratioTo &&
-      (queryParams['ratioFrom'] = `${ratioFrom}-${ratioTo}`);
+    ratioFrom && ratioTo && (queryParams['ratio'] = `${ratioFrom}-${ratioTo}`);
     girdlePerFrom &&
       girdlePerTo &&
       (queryParams['girdle_percentage'] = `${girdlePerFrom}-${girdlePerTo}`);
@@ -344,6 +357,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     const clarity = data?.basic_card_details?.clarity;
     const location = data?.basic_card_details?.location;
     const symmetry = data?.basic_card_details?.symmetry;
+    const priceRange = data?.basic_card_details?.price_range;
+    const pricePerCarat = data?.basic_card_details?.price_per_carat;
+    const discount = data?.basic_card_details?.discount;
     const color_shade = data?.basic_card_details?.color_shade;
     const color_shade_intensity =
       data?.basic_card_details?.color_shade_intensity;
@@ -390,61 +406,28 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     const key_to_symbol = data?.other_information?.key_to_symbol;
 
     //basic_card_details states
-    shapes &&
-      setSelectedShape((prevSelectedShapes) =>
-        prevSelectedShapes.concat(shapes)
-      );
-    // carat &&
-    //   setSelectedCaratRange((prevSelectedCarat) =>
-    //     prevSelectedCarat.concat(carat)
-    //   );
-    clarity &&
-      setSelectedClarity((prevSelectedClarity) =>
-        prevSelectedClarity.concat(clarity)
-      );
-
-    cut && setSelectedCut((prevSelectedCut) => prevSelectedCut.concat(cut));
-    lab && setSelectedLab((prevSelectedLab) => prevSelectedLab.concat(lab));
-    // culet &&
-    //   setSelectedCulet((prevSelectedCulet) => prevSelectedCulet.concat(culet));
-    polish &&
-      setSelectedPolish((prevSelectedPolish) =>
-        prevSelectedPolish.concat(polish)
-      );
-    location &&
-      setSelectedLocation((prevSelectedLocation) =>
-        prevSelectedLocation.concat(location)
-      );
-    HA && setSelectedHR((prevSelectedHA) => prevSelectedHA.concat(HA));
-    symmetry &&
-      setSelectedSymmetry((prevSelectedSymmetry) =>
-        prevSelectedSymmetry.concat(symmetry)
-      );
-    fluoroscence &&
-      setSelectedFluorescence((prevSelectedFluoroscence) =>
-        prevSelectedFluoroscence.concat(fluoroscence)
-      );
-    country_of_origin &&
-      setSelectedOrigin((prevSelectedOrigin) =>
-        prevSelectedOrigin.concat(country_of_origin)
-      );
-    color_shade &&
-      setSelectedTinge((prevSelectedTinge) =>
-        prevSelectedTinge.concat(color_shade)
-      );
-    color_shade_intensity &&
-      setSelectedTingeIntensity((prevSelectedTingeIntensity) =>
-        prevSelectedTingeIntensity.concat(color_shade_intensity)
-      );
-    overtone &&
-      setSelectedOvertone((prevSelectedOvertone) =>
-        prevSelectedOvertone.concat(overtone)
-      );
-    brilliance &&
-      setSelectedBrilliance((prevSelectedBrilliance) =>
-        prevSelectedBrilliance.concat(brilliance)
-      );
-
+    shapes && setSelectedShape(shapes);
+    carat && setSelectedCaratRange(carat);
+    clarity && setSelectedClarity(clarity);
+    cut && setSelectedCut(cut);
+    lab && setSelectedLab(lab);
+    culet && setSelectedCulet(culet);
+    polish && setSelectedPolish(polish);
+    location && setSelectedLocation(location);
+    HA && setSelectedHR(HA);
+    symmetry && setSelectedSymmetry(symmetry);
+    fluoroscence && setSelectedFluorescence(fluoroscence);
+    country_of_origin && setSelectedOrigin(country_of_origin);
+    color_shade && setSelectedTinge(color_shade);
+    color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
+    overtone && setSelectedOvertone(overtone);
+    brilliance && setSelectedBrilliance(brilliance);
+    priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
+    priceRange && setPriceRangeTo(priceRange.split('-')[1]);
+    discount && setDiscountFrom(discount.split('-')[0]);
+    discount && setDiscountTo(discount.split('-')[1]);
+    pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
+    pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
     //measurements States
 
     depth && setDepthFrom(depth.split('-')[0]);
@@ -475,75 +458,25 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
 
     //inclusion_details States
-    milky &&
-      setMilkyBI((prevSelectedMilkyBI) => prevSelectedMilkyBI.concat(milky));
-    luster &&
-      setLusterBI((prevSelectedLusterBI) =>
-        prevSelectedLusterBI.concat(luster)
-      );
-    eye_clean &&
-      setEyeCleanBI((prevSelectedEyeCleanBI) =>
-        prevSelectedEyeCleanBI.concat(eye_clean)
-      );
-
-    open_crown &&
-      setOpenCrownBI((prevSelectedopenCrownBI) =>
-        prevSelectedopenCrownBI.concat(open_crown)
-      );
-    open_table &&
-      setOpenTableBI((prevSelectedOpenTableBI) =>
-        prevSelectedOpenTableBI.concat(open_table)
-      );
-    side_table &&
-      setSideBlackBI((prevSelectedSideTableBI) =>
-        prevSelectedSideTableBI.concat(side_table)
-      );
-    black_table &&
-      setBlackTableBI((prevSelectedBlackTableBI) =>
-        prevSelectedBlackTableBI.concat(black_table)
-      );
-    natural_crown &&
-      setNaturalCrownWI((prevSelectedNaturalCrownWI) =>
-        prevSelectedNaturalCrownWI.concat(natural_crown)
-      );
-    open_pavilion &&
-      setOpenPavilionBI((prevSelectedOpenPavilionBI) =>
-        prevSelectedOpenPavilionBI.concat(open_pavilion)
-      );
-    natural_girdle &&
-      setNaturalGirdleWI((prevSelectedNaturalGirdle) =>
-        prevSelectedNaturalGirdle.concat(natural_girdle)
-      );
-    side_inclusion &&
-      setSideInclusionWI((prevSelectedSideInclusionWI) =>
-        prevSelectedSideInclusionWI.concat(side_inclusion)
-      );
-    table_inclusion &&
-      setTableInclusionWI((prevSelectedTableInclusionWI) =>
-        prevSelectedTableInclusionWI.concat(table_inclusion)
-      );
-    natural_pavilion &&
-      setNaturalPavilionWI((prevSelectedNaturalPavilionWI) =>
-        prevSelectedNaturalPavilionWI.concat(natural_pavilion)
-      );
-    surface_graining &&
-      setSurfaceGrainingWI((prevSelectedSurfaceGrainingWI) =>
-        prevSelectedSurfaceGrainingWI.concat(surface_graining)
-      );
-    internal_graining &&
-      setInternalGrainingWI((prevSelectedInternalGrainingWI) =>
-        prevSelectedInternalGrainingWI.concat(internal_graining)
-      );
+    milky && setMilkyBI(milky);
+    luster && setLusterBI(luster);
+    eye_clean && setEyeCleanBI(eye_clean);
+    open_crown && setOpenCrownBI(open_crown);
+    open_table && setOpenTableBI(open_table);
+    side_table && setSideBlackBI(side_table);
+    black_table && setBlackTableBI(black_table);
+    natural_crown && setNaturalCrownWI(natural_crown);
+    open_pavilion && setOpenPavilionBI(open_pavilion);
+    natural_girdle && setNaturalGirdleWI(natural_girdle);
+    side_inclusion && setSideInclusionWI(side_inclusion);
+    table_inclusion && setTableInclusionWI(table_inclusion);
+    natural_pavilion && setNaturalPavilionWI(natural_pavilion);
+    surface_graining && setSurfaceGrainingWI(surface_graining);
+    internal_graining && setInternalGrainingWI(internal_graining);
 
     //other_information States
-    girdle &&
-      setSelectedGirdle((prevSelectedGirdle) =>
-        prevSelectedGirdle.concat(girdle)
-      );
-    // key_to_symbol &&
-    //   setSelectedKeyToSymbol((prevSelectedkeyToSymbol) =>
-    //     prevSelectedkeyToSymbol.concat(key_to_symbol)
-    //   );
+    girdle && setSelectedGirdle(girdle);
+    key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
   }
 
   useEffect(() => {
@@ -1161,15 +1094,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedGirdleStep(radioValue);
   };
 
+  function normalizeValue(value: string) {
+    // Normalize user input like "3-3.99" to "3.00-3.99"
+    const caratRange = value.split('-');
+
+    if (caratRange[1].trim() || caratRange[0].trim() === '') {
+      console.log('sdasda');
+    } else if (caratRange.length === 2 && caratRange[1].trim() !== '') {
+      const caratFrom = parseFloat(caratRange[0]).toFixed(2);
+      const caratTo = parseFloat(caratRange[1]).toFixed(2);
+      return `${caratFrom}-${caratTo}`;
+    }
+    return value;
+  }
+
   const handleAddCarat = (data: string) => {
-    setCaratRangeData([...caratRangeData, data]);
+    data = normalizeValue(data);
+
+    if (!caratRangeData.includes(data)) {
+      setCaratRangeData([...caratRangeData, data]);
+    }
     setSelectedCaratRange([...selectedCaratRange, data]);
     setCaratRangeFrom('');
     setCaratRangeTo('');
   };
-
-  let [addPreviousSearch] = useAddPreviousSearchMutation();
-  let [addSavedSearch] = useAddSavedSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
     return (
@@ -1278,6 +1226,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       ];
     });
   };
+
   const handlePreviousSearchName = (name: string) => {
     const criteriaToCheck = [
       selectedShape,
@@ -1493,43 +1442,63 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     let response = {
       basic_card_details: {
         shape: selectedShape,
-        color: selectedWhiteColor,
-        clarity: selectedClarity,
-        cut: selectedCut,
-        lab: selectedLab,
-        polish: selectedPolish,
         carat: selectedCaratRange,
+        color: selectedWhiteColor,
         color_shade: selectedTinge,
         color_shade_intensity: selectedTingeIntensity,
-        'H&A': selectedHR,
-        location: selectedLocation,
+        clarity: selectedClarity,
+        cut: selectedCut,
+        polish: selectedPolish,
         symmetry: selectedSymmetry,
         fluoroscence: selectedFluorescence,
         culet: selectedCulet,
-        country_of_origin: selectedOrigin,
-        laser_inscription: '-',
+        lab: selectedLab,
+        'H&A': selectedHR,
         brilliance: selectedBrilliance,
+        location: selectedLocation,
+        country_of_origin: selectedOrigin,
         overtone: selectedOvertone,
+        price_per_carat:
+          pricePerCaratFrom &&
+          pricePerCaratTo &&
+          `${pricePerCaratFrom}-${pricePerCaratTo}`,
+        price_range:
+          priceRangeFrom && priceRangeTo && `${priceRangeFrom}-${priceRangeTo}`,
+        discount: discountFrom && discountTo && `${discountFrom}-${discountTo}`,
+        // laser_inscription: '-',
       },
       measurements: {
-        'table%': `${tablePerFrom}-${tablePerTo}`,
-        'depth%': `${depthPerFrom}-${depthPerTo}`,
-        ratio: `${ratioFrom}-${ratioTo}`,
-        length: `${lengthFrom}-${lengthTo}`,
-        width: `${widthFrom}-${widthTo}`,
-        depth: `${depthFrom}-${depthTo}`,
-        crown_angle: `${crownAngleFrom}-${crownAngleTo}`,
-        crown_height: `${crownHeightFrom}-${crownHeightTo}`,
-        'girdle%': `${girdlePerFrom}-${girdlePerTo}`,
-        pavilion_angle: `${pavilionAngleFrom}-${pavilionAngleTo}`,
-        pavilion_depth: `${pavilionDepthFrom}-${pavilionDepthTo}`,
-        lower_half: `${lowerHalfFrom}-${lowerHalfTo}`,
-        star_length: `${starLengthFrom}-${starLengthTo}`,
+        'table%': tablePerFrom && tablePerTo && `${tablePerFrom}-${tablePerTo}`,
+        'depth%': depthPerFrom && depthPerTo && `${depthPerFrom}-${depthPerTo}`,
+        ratio: ratioFrom && ratioTo && `${ratioFrom}-${ratioTo}`,
+        length: lengthFrom && lengthTo && `${lengthFrom}-${lengthTo}`,
+        width: widthFrom && widthTo && `${widthFrom}-${widthTo}`,
+        depth: depthFrom && depthTo && `${depthFrom}-${depthTo}`,
+        crown_angle:
+          crownAngleFrom && crownAngleTo && `${crownAngleFrom}-${crownAngleTo}`,
+        crown_height:
+          crownHeightFrom &&
+          crownHeightTo &&
+          `${crownHeightFrom}-${crownHeightTo}`,
+        'girdle%':
+          girdlePerFrom && girdlePerTo && `${girdlePerFrom}-${girdlePerTo}`,
+        pavilion_angle:
+          pavilionAngleFrom &&
+          pavilionAngleTo &&
+          `${pavilionAngleFrom}-${pavilionAngleTo}`,
+        pavilion_depth:
+          pavilionDepthFrom &&
+          pavilionDepthTo &&
+          `${pavilionDepthFrom}-${pavilionDepthTo}`,
+        lower_half:
+          lowerHalfFrom && lowerHalfTo && `${lowerHalfFrom}-${lowerHalfTo}`,
+        star_length:
+          starLengthFrom && starLengthTo && `${starLengthFrom}-${starLengthTo}`,
       },
       other_information: {
         girdle: selectedGirdle,
         key_to_symbol: selectedKeyToSymbol,
-        report_comments: '-',
+        // report_comments: '-',
       },
       inclusion_details: {
         black_table: blackTableBI,
@@ -1551,6 +1520,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     };
     return response;
   };
+
   const handleSaveAndSearch = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
@@ -1559,7 +1529,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         }
 
         await addSavedSearch({
-          name: 'saveSearchName1',
+          name: saveSearchName,
           diamond_count: data?.count,
           meta_data: [...savedSearches, prepareSearchParam()],
           is_deleted: false,
@@ -1572,6 +1542,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setErrorText('Please select some parameter before initiating search');
     }
   };
+
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
       setAddSearches((prevSearches) => [
@@ -1670,18 +1641,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         });
 
         if (modifySearchFrom === 'saved-search') {
-          console.log(
-            'savedSearch.savedSearchfirst load ',
-            savedSearch.savedSearch.meta_data[savedSearch.activeTab]
-          );
           if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
             updatedMeta[savedSearch.activeTab] = prepareSearchParam();
 
-            console.log(
-              'savedSearch.savedSearch secondtime',
-              savedSearch.savedSearch.meta_data[savedSearch.activeTab]
-            );
+            console.log('savedSearch.savedSearch secondtime', updatedMeta);
             let data = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
@@ -1691,6 +1655,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           }
         }
         console.log('queryParams', queryParams);
+        console.log('addSearches', addSearches);
+
         // return;
         localStorage.setItem(
           'Search',
@@ -1842,8 +1808,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     ));
   };
 
+  const customInputDialogData = {
+    isOpens: isInputDialogOpen,
+    setIsOpen: setIsInputDialogOpen,
+    setInputvalue: setSaveSearchName,
+    inputValue: saveSearchName,
+    displayButtonFunction: handleSaveAndSearch,
+    label: 'Save And Search',
+    name: 'saveAndSearch',
+    displayButtonLabel2: 'Save',
+  };
+
   return (
     <div>
+      <CustomInputDialog customInputDialogData={customInputDialogData} />
       {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="sticky top-0 bg-solitairePrimary mt-16">
         <CustomHeader
@@ -1967,7 +1945,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeFrom"
               onChange={(e) => {
-                setCaratRangeFrom(e.target.value);
+                if (regexPattern.test(e.target.value)) {
+                  setValidationError('');
+                  setCaratRangeFrom(e.target.value);
+                } else {
+                  setValidationError('Please enter value between “0.30 to 50”');
+                }
               }}
               value={caratRangeFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1980,7 +1963,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeTO"
               onChange={(e) => {
-                setCaratRangeTo(e.target.value);
+                // Use a regular expression to allow only numbers with up to two decimal places
+                if (regexPattern.test(e.target.value)) {
+                  setCaratRangeTo(e.target.value);
+                  setValidationError('');
+                } else {
+                  setValidationError('Please enter value between “0.30 to 50”');
+                }
               }}
               value={caratRangeTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1988,6 +1977,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 input: styles.inputFieldStyles,
               }}
             />
+
             <CustomSelectionButton
               selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}
               data={`${caratRangeFrom}-${caratRangeTo}`}
@@ -1997,6 +1987,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               }}
             />
           </div>
+          <div className="text-red-500">
+            {validationError && validationError}
+          </div>
+
           <div>
             {renderSelectionButtons(
               caratRangeData,
@@ -2608,7 +2602,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 'app.advanceSearch.saveSearch'
               )}`,
               style: styles.transparent,
-              fn: handleSaveAndSearch,
+              fn: () => {
+                setIsInputDialogOpen(true);
+              },
               isDisable:
                 modifySearchFrom === 'previous-search' ||
                 modifySearchFrom === 'saved-search',

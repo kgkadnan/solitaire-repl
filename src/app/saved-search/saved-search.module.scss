@@ -1,11 +1,12 @@
 /* Card Container */
 .searchCardContainer {
+  width: 95% !important;
   background-color: hsl(var(--solitaire-secondary));
   padding: 20px 10px;
 }
 
 .mainCardContainer {
-  width: 90%;
+  width: 95%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
 }
@@ -20,6 +21,7 @@
   display: flex;
   // justify-content: space-between;
   align-items: center;
+  height: 40px;
 }
 
 .SearchCardTitle {
@@ -37,6 +39,7 @@
   flex-direction: column;
   justify-content: center;
   letter-spacing: 0.5px;
+  padding-right: 0px !important;
 }
 
 .manySavedSearchButton {

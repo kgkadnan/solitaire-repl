@@ -1,0 +1,29 @@
+.showResultButtonTransparent{
+    background-color: transparent;
+    border: 1px solid #8c7459;
+    font-size: 14px !important;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: 300;
+    padding: 8px 40px;
+  }
+  
+  .showResultButtonFilled{
+    background-color: #8c7459;
+    border-radius: 5px;
+    font-size: 14px !important;
+    color: #ffffff;
+    font-weight: 300;
+    padding: 8px 45px;
+  }
+
+  .customLabel {
+    font-size: 14px;
+    color: hsl(var(--solitaire-tertiary));
+  }
+  
+
+  .input {
+    font-size: 14px;
+    width: 100%;
+  }

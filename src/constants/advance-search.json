@@ -81,23 +81,10 @@
     "Light Yellow"
   ],
   "make": ["3EX", "3EX-Non", "3VG+"],
-  "cut": ["Ideal", "Excellent", "VG", "Good", "Fair"],
-  "polish": ["Ideal", "Excellent", "VG", "Good", "Fair"],
-  "symmetry": ["Ideal", "Excellent", "VG", "Good", "Fair"],
-  "location": [
-    {
-      "id": 1,
-      "value": "Dubai"
-    },
-    {
-      "id": 2,
-      "value": "India"
-    },
-    {
-      "id": 3,
-      "value": "Belgium"
-    }
-  ],
+  "cut": ["Ideal", "EX", "VG", "G", "F"],
+  "polish": ["Ideal", "EX", "VG", "G", "F"],
+  "symmetry": ["Ideal", "EX", "VG", "G", "F"],
+
   "intensity": [
     "Faint",
     "Light",
@@ -182,17 +169,17 @@
     "OTHER",
     "STP"
   ],
-  "brilliance": ["Excellent", "Very Good", "Good"],
+  "brilliance": ["EX", "VG", "G"],
   "girdle": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK"],
   "location": ["IND", "ISR", "BEL", "DUB", "USA"],
   "origin": [
-    "RUSSIA",
-    "BOTSWANA",
-    "CANADA",
-    "BOTSWANA NAMIBIA CANADA OR SOUTH AFRICA",
-    "BOTSWANA NAMIBIA CANADA SOUTH AFRICA OR LESOTHO",
+    "Russia",
+    "Botswana",
+    "Canada",
+    "Botswana Namibia Canada OR South Africa",
+    "Botswana Namibia Canada South Africa OR Lesotho",
     "DTC2 BW NA CA OR ZA",
-    "SOUTH AFRICA"
+    "South Africa"
   ],
 
   "key_to_symbol": [

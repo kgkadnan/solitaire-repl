@@ -194,8 +194,9 @@ const SearchResults = () => {
     if (isCheckAll) {
       setDialogContent(
         <>
-          <div className="max-w-[400px] flex justify-center align-middle">
-            Do you want to download excel of entire search or selected stone
+          <div className="max-w-[400px] flex justify-center align-middle ">
+            Do you want to all the stones available in search or just selected
+            stones!
           </div>
           <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
             <CustomDisplayButton
@@ -203,11 +204,17 @@ const SearchResults = () => {
               handleClick={() => {
                 setIsEntireSearch(true);
               }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
             />
             <CustomDisplayButton
               displayButtonLabel="All"
               handleClick={() => {
                 setIsEntireSearch(false);
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
               }}
             />
           </div>
