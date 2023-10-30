@@ -12,7 +12,6 @@ import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
-import compareStoneReducer from './features/compare-stone/compare-stone-slice';
 import notificationBadgeReducer from './features/notification/notification-slice';
 import searchListReducer from './features/search/search-list';
 import previousSearchReducer from './features/previous-search/previous-search';
@@ -20,7 +19,6 @@ import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 
 const rootReducer = combineReducers({
-  compareStone: compareStoneReducer,
   notificationBadge: notificationBadgeReducer,
   searchList: searchListReducer,
   previousSearch: previousSearchReducer,
