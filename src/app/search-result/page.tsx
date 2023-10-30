@@ -192,17 +192,19 @@ const SearchResults = () => {
 
   const downloadExcelFunction = () => {
     if (isCheckAll) {
+      setIsDialogOpen(true);
       setDialogContent(
         <>
-          <div className="max-w-[400px] flex justify-center align-middle ">
+          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
             Do you want to all the stones available in search or just selected
             stones!
           </div>
-          <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
             <CustomDisplayButton
               displayButtonLabel="Selected"
               handleClick={() => {
-                setIsEntireSearch(true);
+                setIsEntireSearch(false);
+                setIsDialogOpen(false);
               }}
               displayButtonAllStyle={{
                 displayButtonStyle: styles.showResultButtonTransparent,
@@ -211,7 +213,8 @@ const SearchResults = () => {
             <CustomDisplayButton
               displayButtonLabel="All"
               handleClick={() => {
-                setIsEntireSearch(false);
+                setIsEntireSearch(true);
+                setIsDialogOpen(false);
               }}
               displayButtonAllStyle={{
                 displayButtonStyle: styles.showResultButtonFilled,
@@ -220,18 +223,19 @@ const SearchResults = () => {
           </div>
         </>
       );
-      setIsDialogOpen(true);
 
       if (isEntireSearch) {
         console.log('userConfirmed', isEntireSearch);
         setIsCheck([]);
       } else if (isCheck.length && !isEntireSearch) {
+        console.log('isCheck', isCheck);
         downloadExcel({
           productIds: isCheck,
         })
           .unwrap()
           .then((res) => {
             if (res.filePath) {
+              console.log('res', res);
               window.open(
                 `${process.env.NEXT_PUBLIC_API_URL}${res.filePath}`,
                 '_blank'
@@ -261,6 +265,7 @@ const SearchResults = () => {
       setErrorText('*Select stone to Download Excel.');
     } else {
       if (isCheck.length) {
+        console.log('one downoad', isCheck);
         downloadExcel({
           productIds: isCheck,
         })
