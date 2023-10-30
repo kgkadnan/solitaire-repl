@@ -1,57 +1,83 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './all-notification.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import EllipseIcon from '@public/assets/icons/ellipse.svg?url';
-
+import {
+  useGetAllNotificationQuery,
+  useUpdateNotificationMutation,
+} from '@/features/api/notification';
+import { formatCreatedAt } from '@/utils/format-date';
+interface INotificationData {
+  id: string;
+  customer_id: string;
+  template: string;
+  parameter: {
+    stoneId: string;
+    abc: string;
+  };
+  category: string;
+  sub_category: string;
+  status: string;
+  created_at: string;
+  has_cta: boolean;
+  external_link: string;
+  redirect_identifier: string[];
+}
 const Notification = () => {
-  let showAllNotificationData = [
-    {
-      notification_id: '57866587',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'unread',
-    },
-    {
-      notification_id: '57866586',
-      type: 'cart',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'read',
-    },
-    {
-      notification_id: '57866585',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'read',
-    },
-    {
-      notification_id: '57866584',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'unread',
-    },
-  ];
+  const [notificationData, setNotificationData] = useState<INotificationData[]>(
+    []
+  );
+
+  const { data } = useGetAllNotificationQuery({ type: 'APP' });
+  const [updateNotification] = useUpdateNotificationMutation();
+
+  useEffect(() => {
+    setNotificationData(data?.data);
+  }, [data, notificationData]);
+
+  function stringWithHTMLReplacement(template: string, parameter: any) {
+    const parts = template.split('${{');
+
+    const modifiedString = parts.map((part, index) => {
+      if (index === 0) {
+        return <span key={index}>{part}</span>;
+      } else {
+        const [paramName] = part.split('}}');
+        return (
+          <span key={index}>
+            <span style={{ fontWeight: 600 }}>{parameter[paramName]}</span>
+            {part.substr(paramName.length + 2)}
+          </span>
+        );
+      }
+    });
+
+    return <div>{modifiedString}</div>;
+  }
+
+  const handleNotificationRead = async (category: string) => {
+    let filteredData = notificationData
+      .filter((item) => item.category === category)
+      .map((item) => ({ id: item.id, status: 'read' }));
+
+    updateNotification(filteredData);
+  };
 
   return (
     <>
       <div className={styles.showAllNotificationContainer}>
-        {showAllNotificationData.map((items) => {
+        {notificationData?.map((items) => {
           return (
-            <div
-              key={items.notification_id}
-              className="border-b border-solitaireSenary"
-            >
+            <div key={items.id} className="border-b border-solitaireSenary">
               <div
                 className={`flex justify-between  ${
                   items.status === 'unread'
                     ? styles.notificationCardContainer
                     : styles.readNotification
                 }`}
+                onClick={() => handleNotificationRead(items.category)}
               >
                 <div className="flex justify-center items-center">
                   <EllipseIcon
@@ -63,16 +89,23 @@ const Notification = () => {
                   />
 
                   <div className={styles.cardContentMainDiv}>
-                    <p className={styles.title}>{items.title}</p>
-                    <p className={styles.time}>{items.time}</p>
+                    <p className={styles.title}>
+                      {stringWithHTMLReplacement(
+                        items.template,
+                        items.parameter
+                      )}
+                    </p>
+                    <p className={styles.time}>
+                      {formatCreatedAt(items.created_at)}
+                    </p>
                   </div>
                 </div>
                 <div className="flex justify-center items-center">
                   <CustomDisplayButton
                     displayButtonLabel={
-                      items.type === 'wishlist'
+                      items.category === 'wishlist'
                         ? 'Wishlist'
-                        : items.type === 'cart'
+                        : items.category === 'my_cart'
                         ? 'My Cart'
                         : ''
                     }

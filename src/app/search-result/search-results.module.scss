@@ -1,0 +1,218 @@
+.topHeader{
+  width: 90%;
+  padding-bottom: 15px;
+}
+
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  width: 150px;
+  height: 35px;
+  border: 1px solid hsl(var(--solitaire-quaternary));
+  border-radius: 5px;
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px !important;
+}
+
+  .filled {
+    height: 35px;
+    width: 150px;
+    background-color: #8c7459;
+    color: #ffffff;
+    font-size: 14px !important;
+  }
+
+  .showResultButtonTransparent{
+    background-color: transparent;
+    border: 1px solid #8c7459;
+    font-size: 14px !important;
+    border-radius: 5px;
+    color: #ffffff;
+    font-weight: 300;
+    padding: 8px 40px;
+  }
+  
+  .showResultButtonFilled{
+    background-color: #8c7459;
+    border-radius: 5px;
+    font-size: 14px !important;
+    color: #ffffff;
+    font-weight: 300;
+    padding: 8px 45px;
+  }
+
+  
+  .activeHeaderButtonStyle {
+    font-weight: 600;
+    padding: 0px 10px !important;
+    height: 1.8rem !important;
+    background-color: hsl(var(--solitaire-primary));
+    border-bottom:1px solid hsl(var(--solitaire-quaternary)) ;
+    color: hsl(var(--solitaire-tertiary));
+  }
+
+  .headerButtonStyle {
+    background-color: transparent;
+    font-weight: 600;
+    padding: 0px 10px !important;
+    height: 1.8rem !important;
+    color: hsl(var(--solitaire-tertiary));
+  }
+
+
+  .paginationContainerStyle{
+    
+    border: none !important ;
+  }
+
+
+  .labelContainer {
+    display: flex;
+    color: hsl(var(--solitaire-quaternary));
+    text-transform: capitalize;
+  }
+  
+  .tooltipContainerStyles {
+    width: 100%;
+  }
+  .yourSelectionContainer {
+    width: calc(100% - 200px);
+  }
+  .yourSelectionHeader {
+    width: 100%;
+  }
+  
+  .yourSelectionToolTipStyles {
+    display: flex;
+    justify-content: right;
+  }
+  
+  .yourSelectionTooltipContentStyle {
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+    width: 92vw; /* Adjust the width as needed */
+    max-width: 1900px; /* Optional: Set a maximum width */
+    overflow: hidden;
+    position: fixed; /* Position the content fixed to the viewport */
+    top: 27%; /* Place it at the vertical center of the viewport */
+    left: 52%; /* Place it at the horizontal center of the viewport */
+    transform: translate(-50%, -50%); /* Center it both horizontally and vertically */
+  }
+  
+  .yourSelectionSubContainer {
+    width: 33%;
+    display: flex;
+    text-align: left;
+    align-items: center;
+  }
+  
+  .yourSelectionMainContainer {
+    position: relative;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    width: 100%;
+    padding-top: 20px;
+    align-items: center;
+  }
+  
+  .yourSelectionContentContainer {
+    width: 100%;
+  }
+  
+  .yourSelectionTooltipHeader {
+    font-weight: 600;
+  }
+  
+  .yourSelectionInHeader {
+    display: flex;
+    color: hsl(var(--solitaire-tertiary));
+  }
+  
+  .yourSelectionInHeaderElement {
+    padding: 0px 10px;
+  }
+  .selectionButtonStyles{
+    border: 0.25px solid #5d6a6a;
+  }
+  
+  .labelDefaultStyle{
+    color: hsl(var(--solitaire-tertiary));
+  }
+
+  
+
+  .sheetContentStyle{
+    width: 20%;
+    z-index: 9999;
+    padding: 1rem 0rem;
+    animation-duration: 1ms !important;
+    transition-duration: 1ms !important;
+  }
+
+  .sheetMainHeading {
+    z-index: 9999;
+    position: sticky;
+    background-color: hsl(var(--solitaire-primary));
+    color: var(--shadow, #8c7459);
+    font-size: 16px;
+    font-weight: 300;
+    top: 0px;
+    width: 100%;
+    padding:0.9rem 1.5rem 0.3rem;
+    margin-bottom: 10px 0px 10px;
+    border-bottom: 2px solid hsl(var(--solitaire-senary));
+    letter-spacing: 1px;
+    p {
+      margin-bottom: 20px;
+    }
+  }
+  .mainRadioButtonStyle{
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 0px !important;
+    margin: 15px 0px;
+  }
+
+  .radioStyle {
+    color: #8c7459;
+    background-color: #0c1f1f;
+    border-color: #8c7459;
+    margin: 10px;
+  }
+  
+  .labelStyle {
+    color: hsl(var(--solitaire-tertiary))
+  }
+  
+  .radioButtonMainDiv{
+    padding:1.5rem 1.5rem 3.5rem;
+  }
+
+  .showResultButtonStyle {
+    background-color: #8c7459;
+    border-radius: 5px;
+    margin-top: 30px;
+    color: #ffffff;
+    font-weight: 300;
+    padding: 8px 30px;
+  }
+
+  .customButtonDiv {
+    position: fixed;
+    background-color: hsl(var(--solitaire-primary));
+    bottom: 0px;
+    width: 20%;
+    padding: 20px 0px;
+    z-index: 999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+  }
+
+  

@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, Suspense, useEffect, useState } from 'react';
 import styles from './search-input.module.scss';
 import { Input } from '@components/ui/input';
 
@@ -48,6 +48,9 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
       if (suggestions && suggestions.length > 0) {
         handleSuggestionClick(suggestions[selectedSuggestionIndex]);
       }
+      // else if (!suggestions.length && value?.length) {
+      //   handleSuggestionClick(value);
+      // }
     }
   };
 
@@ -60,6 +63,7 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
       setShowSuggestions(false);
     }, 200);
   };
+
   return (
     <>
       <div className={`${style?.searchInputMain}`}>

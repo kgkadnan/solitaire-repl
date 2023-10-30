@@ -1,8 +1,5 @@
 'use client';
 
-import LanguageSwitcher from '@/components/common/multi-lingual';
-import { ManageLocales } from '@/utils/translate';
-
 export default function Home() {
   return (
     <>
@@ -15,7 +12,7 @@ export default function Home() {
         }}
       >
         Welcome to KGK live 2.O
-      </h1> 
+      </h1>
       <h1
         style={{
           fontSize: '30px',
@@ -24,10 +21,10 @@ export default function Home() {
           marginTop: '20px',
         }}
       >
-        Bulding Digital diamond platform
+        Building Digital Diamond Platform
       </h1>
-      <h1>{ManageLocales('app.welcome')}</h1>
-      <LanguageSwitcher />
+      {/* <h1>{ManageLocales('app.welcome')}</h1>
+      <LanguageSwitcher /> */}
     </>
   );
 }

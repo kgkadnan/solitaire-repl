@@ -8,14 +8,18 @@ import {
 import React from 'react';
 import styles from './dropdown.module.scss';
 
+interface IdropdownMenu {
+  label: string;
+  fn: any;
+}
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
-  dropdownMenuLabel: string[];
+  dropdownMenu: IdropdownMenu[];
 }
 
 export const CustomDropdown: React.FC<IDropdownData> = ({
   dropdownTrigger,
-  dropdownMenuLabel,
+  dropdownMenu,
 }) => {
   return (
     <div>
@@ -24,11 +28,15 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
           {dropdownTrigger}
         </DropdownMenuTrigger>
         <DropdownMenuContent>
-          {dropdownMenuLabel.map((items: string) => {
+          {dropdownMenu.map((items) => {
             return (
-              <div key={items}>
+              <div
+                key={items.label}
+                onClick={items.fn}
+                className="cursor-pointer z-[1112px]"
+              >
                 <DropdownMenuLabel className={styles.transparent}>
-                  {items}
+                  {items.label}
                 </DropdownMenuLabel>
               </div>
             );

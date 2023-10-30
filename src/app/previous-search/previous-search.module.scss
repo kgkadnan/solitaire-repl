@@ -5,7 +5,7 @@
 }
 
 .mainCardContainer {
-  width: 90%;
+  width: 95%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
 }
@@ -68,11 +68,13 @@
 
 .sheetMainHeading {
   color: var(--shadow, #8c7459);
-  text-align: center;
   font-size: 16px;
   font-weight: 700;
-  margin: 20px 0px 30px;
   letter-spacing: 1px;
+  padding-top: 27px;
+  position: sticky;
+  top: 0;
+  background-color: hsl(var(--solitaire-secondary));
   p {
     margin-bottom: 30px;
   }
@@ -130,6 +132,10 @@
 
 .showResultMainDiv {
   text-align: center;
+  position: sticky;
+  bottom: 0;
+  background-color: hsl(var(--solitaire-secondary));
+  padding-bottom: 27px;
 }
 
 .showResultButtonStyle {
@@ -145,8 +151,10 @@
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
+  font-size: 14px !important;
 }
 .filled {
   background-color: #8c7459;
   color: #ffffff;
+  font-size: 14px !important;
 }

@@ -1,47 +1,61 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './notification-setting.module.scss';
 import { Switch } from '@/components/ui/switch';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { formatCassing } from '@/utils/format-cassing';
+import {
+  useGetAllNotificationSettingQuery,
+  useUpdateNotificationSettingMutation,
+} from '@/features/api/notification-setting';
 
-interface Settings {
-  my_cart: boolean;
-  new_arrival: boolean;
-  my_diamonds: boolean;
-  layouts: boolean;
-  deal_of_the_day: boolean;
-  matching_pair: boolean;
-  bid_to_buy: boolean;
-  appointments: boolean;
-  wishlist: boolean;
+interface INotificationSetting {
+  type: string;
+  subscription: {
+    category: string;
+    is_subscribed: boolean;
+  }[];
 }
 
 const NotificationSetting = () => {
-  const [settings, setSettings] = useState<Settings>({
-    my_cart: false,
-    new_arrival: false,
-    my_diamonds: false,
-    layouts: false,
-    deal_of_the_day: false,
-    matching_pair: false,
-    bid_to_buy: false,
-    appointments: false,
-    wishlist: false,
+  const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
+  const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
+  const [settings, setSettings] = useState<INotificationSetting>({
+    type: '',
+    subscription: [],
   });
 
-  const toggleHandler = (key: string) => {
+  useEffect(() => {
+    setSettings({ type: 'APP', subscription: data?.data });
+  }, [data]);
+
+  const toggleHandler = async (category: string) => {
     // Toggle the individual setting
-    setSettings((prevSettings: any) => ({
-      ...prevSettings,
-      [key]: !prevSettings[key],
-    }));
+    setSettings((prevSettings) => {
+      const updatedSettings = {
+        ...prevSettings,
+        subscription: prevSettings.subscription.map((setting) => {
+          if (setting.category === category) {
+            return {
+              ...setting,
+              is_subscribed: !setting.is_subscribed,
+            };
+          }
+          return setting;
+        }),
+      };
+
+      updateNotificationSetting(updatedSettings);
+
+      return updatedSettings;
+    });
   };
 
   return (
     <div className={styles.notificationSettingContainer}>
-      {Object.entries(settings).map(([key]) => {
+      {settings?.subscription?.map((setting) => {
+        const key = setting?.category;
         return (
           <div key={key} className="border-b border-solitaireSenary">
             <div className={` ${styles.notificationSettingContent}`}>
@@ -54,12 +68,13 @@ const NotificationSetting = () => {
                   id={`on${key}`}
                   onClick={() => toggleHandler(key)}
                   className={styles.toggleButton}
+                  checked={setting.is_subscribed}
                 />
                 <CustomInputlabel
                   htmlfor={`on${key}`}
-                  label={settings[key as keyof Settings] ? 'On' : 'Off'}
+                  label={setting.is_subscribed ? 'On' : 'Off'}
                   overriddenStyles={{
-                    label: settings[key as keyof Settings]
+                    label: setting.is_subscribed
                       ? styles.toggleOn
                       : styles.toggleOff,
                   }}

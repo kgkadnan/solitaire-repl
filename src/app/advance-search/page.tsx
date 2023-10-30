@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './advance-search.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
@@ -8,19 +8,47 @@ import { CustomInputField } from 'src/components/common/input-field';
 import { CustomInputlabel } from 'src/components/common/input-label';
 import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import Tooltip from '@/components/common/tooltip';
 import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
-import { useAddPreviousSearchMutation } from '@/slices/previous-searches';
-import advanceSearchNewData from '@/constants/advance-search.json';
-import Round from '@public/assets/images/Round.png';
+import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
+import advanceSearch from '@/constants/advance-search.json';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
+import { constructUrlParams } from '@/utils/construct-url-param';
+import { useGetProductCountQuery } from '@/features/api/product';
+
+import { useAppSelector } from '@/hooks/hook';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
+  const router = useRouter();
+  const { previousSearch } = useAppSelector((store) => store);
+  const { savedSearch } = useAppSelector((store) => store);
+
+  const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
+
+  const [validationError, setValidationError] = useState('');
+
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
+
+  const [searchCount, setSearchCount] = useState<number>(-1);
+  const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const [searchUrl, setSearchUrl] = useState<string>('');
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
+
+  const [savedSearches, setSavedSearches] = useState<any[]>([]);
+
+  const [searchIndex, setSearchIndex] = useState<number>(0);
+
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -46,7 +74,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   );
   const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
-  const [selectedGirdleStep2, setSelectedGirdleStep2] = useState<string[]>([]);
+  const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
 
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
@@ -111,48 +139,554 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [starLengthTo, setStarLengthTo] = useState<string>('');
   const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
-  const [searchResultCount, setSearchResultCount] = useState<number>(1);
-  const [searchApiCalled, setSearchApiCalled] = useState<boolean>(false);
-  const [addSearches, setAddSearches] = useState<any[]>(['p', 'l', 'o', 'u']);
+  const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
-
-  let shapeData = advanceSearchNewData.shapeData.map((data) => {
-    return { ...data, src: Round };
-  });
 
   ///edit functionality
   const searchParams = useSearchParams();
 
-  const search = searchParams.get('id');
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
+  let [addPreviousSearch] = useAddPreviousSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
-  const searchListNew = useMemo(
-    () => [
-      {
-        cardId: '1',
-        header: 'ooooo',
-        desc: '12-05-2023 | 10.12 AM',
-        body: {
-          StoneShape: 'Round',
-          color: 'White',
-          Carat: '2.01',
-          Clarity: 'VVS2',
-          Shade: 'WHT',
-          Cut: 'Excellent',
-          polish: 'EX',
-          Rap: '23,500.00',
-        },
-      },
-    ],
-    [] // No dependencies
-  );
+  function generateQueryParams({
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
+    selectedIntensity,
+    selectedOvertone,
+    selectedTinge,
+    selectedTingeIntensity,
+    selectedClarity,
+    selectedCaratRange,
+    caratRangeFrom,
+    caratRangeTo,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedCulet,
+    selectedGirdle,
+    selectedKeyToSymbol,
+    selectedLab,
+    selectedHR,
+    selectedBrilliance,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    blackTableBI,
+    sideBlackBI,
+    openCrownBI,
+    openTableBI,
+    openPavilionBI,
+    milkyBI,
+    lusterBI,
+    eyeCleanBI,
+    tableInclusionWI,
+    sideInclusionWI,
+    naturalCrownWI,
+    naturalGirdleWI,
+    naturalPavilionWI,
+    surfaceGrainingWI,
+    internalGrainingWI,
+    tablePerFrom,
+    tablePerTo,
+    depthTo,
+    depthFrom,
+    crownAngleFrom,
+    crownAngleTo,
+    lengthFrom,
+    lengthTo,
+    pavilionDepthFrom,
+    pavilionDepthTo,
+    depthPerFrom,
+    depthPerTo,
+    crownHeightFrom,
+    crownHeightTo,
+    widthFrom,
+    widthTo,
+    lowerHalfFrom,
+    lowerHalfTo,
+    ratioFrom,
+    ratioTo,
+    girdlePerFrom,
+    girdlePerTo,
+    pavilionAngleFrom,
+    pavilionAngleTo,
+    starLengthFrom,
+    starLengthTo,
+  }: any) {
+    const queryParams: any = {};
+
+    selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
+    // selectedColor && (queryParams['color'] = selectedColor);
+    selectedWhiteColor?.length !== 0 &&
+      (queryParams['color'] = selectedWhiteColor);
+    selectedFancyColor?.length !== 0 &&
+      (queryParams['fancy'] = selectedFancyColor);
+    selectedRangeColor?.length !== 0 &&
+      (queryParams['range'] = selectedRangeColor);
+    selectedIntensity?.length !== 0 &&
+      (queryParams['intensity'] = selectedIntensity);
+    selectedOvertone?.length !== 0 &&
+      (queryParams['overtone'] = selectedOvertone);
+    selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
+    selectedTingeIntensity?.length !== 0 &&
+      (queryParams['color_shade_intensity'] = selectedTingeIntensity);
+    selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
+
+    selectedCaratRange?.forEach((caratRange: any) => {
+      let caratData = caratRange.split('-');
+      const caratFrom = parseFloat(caratData[0]).toFixed(2);
+      const caratTo = parseFloat(caratData[1]).toFixed(2);
+      queryParams['carat'] = `${caratFrom}-${caratTo}`;
+    });
+
+    selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
+    selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
+    selectedSymmetry?.length !== 0 &&
+      (queryParams['symmetry'] = selectedSymmetry);
+    selectedFluorescence?.length !== 0 &&
+      (queryParams['fluorescence'] = selectedFluorescence);
+    selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
+    selectedGirdle?.length !== 0 && (queryParams['girdle'] = selectedGirdle);
+    selectedKeyToSymbol?.length !== 0 &&
+      (queryParams['key_to_symbol'] = selectedKeyToSymbol);
+    selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
+    selectedHR?.length !== 0 && (queryParams['ha'] = selectedHR);
+    selectedBrilliance?.length !== 0 &&
+      (queryParams['brilliance'] = selectedBrilliance);
+    selectedLocation?.length !== 0 &&
+      (queryParams['location'] = selectedLocation);
+    selectedOrigin?.length !== 0 &&
+      (queryParams['origin_country'] = selectedOrigin);
+    priceRangeFrom &&
+      priceRangeTo &&
+      (queryParams['price_range'] = `${priceRangeFrom}-${priceRangeTo}`);
+    discountFrom &&
+      discountTo &&
+      (queryParams['discount'] = `${discountFrom}-${discountTo}`);
+    pricePerCaratFrom &&
+      pricePerCaratTo &&
+      (queryParams[
+        'price_per_carat'
+      ] = `${pricePerCaratFrom}-${pricePerCaratTo}`);
+    blackTableBI?.length !== 0 && (queryParams['black_table'] = blackTableBI);
+    sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
+    openCrownBI?.length !== 0 && (queryParams['open_crown'] = openCrownBI);
+    openTableBI?.length !== 0 && (queryParams['open_table'] = openTableBI);
+    openPavilionBI?.length !== 0 &&
+      (queryParams['open_pavilion'] = openPavilionBI);
+    milkyBI?.length !== 0 && (queryParams['milky'] = milkyBI);
+    lusterBI?.length !== 0 && (queryParams['luster'] = lusterBI);
+    eyeCleanBI?.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI);
+    selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
+    tableInclusionWI?.length !== 0 &&
+      (queryParams['table_inclusion'] = tableInclusionWI);
+    sideInclusionWI?.length !== 0 &&
+      (queryParams['side_inclusion'] = sideInclusionWI);
+    naturalCrownWI?.length !== 0 &&
+      (queryParams['natural_crown'] = naturalCrownWI);
+    naturalGirdleWI?.length !== 0 &&
+      (queryParams['natural_girdle'] = naturalGirdleWI);
+    naturalPavilionWI?.length !== 0 &&
+      (queryParams['natural_pavilion'] = naturalPavilionWI);
+    surfaceGrainingWI?.length !== 0 &&
+      (queryParams['surface_graining'] = surfaceGrainingWI);
+    internalGrainingWI?.length !== 0 &&
+      (queryParams['internal_graining'] = internalGrainingWI);
+    tablePerFrom &&
+      tablePerTo &&
+      (queryParams['table_percentage'] = `${tablePerFrom}-${tablePerTo}`);
+    depthFrom && depthTo && (queryParams['depth'] = `${depthTo}-${depthFrom}`);
+    crownAngleFrom &&
+      crownAngleTo &&
+      (queryParams['crown_angle'] = `${crownAngleFrom}-${crownAngleTo}`);
+    lengthFrom &&
+      lengthTo &&
+      (queryParams['length'] = `${lengthFrom}-${lengthTo}`);
+    pavilionDepthFrom &&
+      pavilionDepthTo &&
+      (queryParams[
+        'pavilion_depth'
+      ] = `${pavilionDepthFrom}-${pavilionDepthTo}`);
+    depthPerFrom &&
+      depthPerTo &&
+      (queryParams['depth_percentage'] = `${depthPerFrom}-${depthPerTo}`);
+    crownHeightFrom &&
+      crownHeightTo &&
+      (queryParams['crown_height'] = `${crownHeightFrom}-${crownHeightTo}`);
+    widthFrom && widthTo && (queryParams['width'] = `${widthFrom}-${widthTo}`);
+    lowerHalfFrom &&
+      lowerHalfTo &&
+      (queryParams['lower_half'] = `${lowerHalfFrom}-${lowerHalfTo}`);
+    ratioFrom && ratioTo && (queryParams['ratio'] = `${ratioFrom}-${ratioTo}`);
+    girdlePerFrom &&
+      girdlePerTo &&
+      (queryParams['girdle_percentage'] = `${girdlePerFrom}-${girdlePerTo}`);
+    pavilionAngleFrom &&
+      pavilionAngleTo &&
+      (queryParams[
+        'pavilion_angle'
+      ] = `${pavilionAngleFrom}-${pavilionAngleTo}`);
+    starLengthFrom &&
+      starLengthTo &&
+      (queryParams['star_length'] = `${starLengthFrom}-${starLengthTo}`);
+
+    return queryParams;
+  }
+
+  const modifySearchFrom = searchParams.get('edit');
+
+  function setModifySearch(data: any) {
+    //basic_card_details
+    const cut = data?.basic_card_details?.cut;
+    const lab = data?.basic_card_details?.lab;
+    const carat = data?.basic_card_details?.carat;
+    const color = data?.basic_card_details?.color;
+    const culet = data?.basic_card_details?.culet;
+    const shapes = data?.basic_card_details?.shape;
+    const polish = data?.basic_card_details?.polish;
+    const clarity = data?.basic_card_details?.clarity;
+    const location = data?.basic_card_details?.location;
+    const symmetry = data?.basic_card_details?.symmetry;
+    const priceRange = data?.basic_card_details?.price_range;
+    const pricePerCarat = data?.basic_card_details?.price_per_carat;
+    const discount = data?.basic_card_details?.discount;
+    const color_shade = data?.basic_card_details?.color_shade;
+    const color_shade_intensity =
+      data?.basic_card_details?.color_shade_intensity;
+    const overtone = data?.basic_card_details?.overtone;
+    const HA = data?.basic_card_details?.['H&A'];
+    const brilliance = data?.basic_card_details?.brilliance;
+    const fluoroscence = data?.basic_card_details?.fluoroscence;
+    const country_of_origin = data?.basic_card_details?.country_of_origin;
+
+    //measurements
+    const depth = data?.measurements?.depth;
+    const ratio = data?.measurements?.ratio;
+    const width = data?.measurements?.width;
+    const length = data?.measurements?.length;
+    const table_per = data?.measurements?.['table%'];
+    const girdle_per = data?.measurements?.['girdle%'];
+    const depth_per = data?.measurements?.['depth%'];
+    const lower_half = data?.measurements?.lower_half;
+    const crown_angle = data?.measurements?.crown_angle;
+    const star_length = data?.measurements?.star_length;
+    const crown_height = data?.measurements?.crown_height;
+    const pavilion_angle = data?.measurements?.pavilion_angle;
+    const pavilion_depth = data?.measurements?.pavilion_depth;
+
+    //inclusion_details
+    const milky = data?.inclusion_details?.milky;
+    const luster = data?.inclusion_details?.luster;
+    const eye_clean = data?.inclusion_details?.eye_clean;
+    const open_crown = data?.inclusion_details?.open_crown;
+    const open_table = data?.inclusion_details?.open_table;
+    const side_table = data?.inclusion_details?.side_table;
+    const black_table = data?.inclusion_details?.black_table;
+    const natural_crown = data?.inclusion_details?.natural_crown;
+    const open_pavilion = data?.inclusion_details?.open_pavilion;
+    const natural_girdle = data?.inclusion_details?.natural_girdle;
+    const side_inclusion = data?.inclusion_details?.side_inclusion;
+    const table_inclusion = data?.inclusion_details?.table_inclusion;
+    const natural_pavilion = data?.inclusion_details?.natural_pavilion;
+    const surface_graining = data?.inclusion_details?.surface_graining;
+    const internal_graining = data?.inclusion_details?.internal_graining;
+
+    //other_information
+    const girdle = data?.other_information?.girdle;
+    const key_to_symbol = data?.other_information?.key_to_symbol;
+
+    //basic_card_details states
+    shapes && setSelectedShape(shapes);
+    carat && setSelectedCaratRange(carat);
+    clarity && setSelectedClarity(clarity);
+    cut && setSelectedCut(cut);
+    lab && setSelectedLab(lab);
+    culet && setSelectedCulet(culet);
+    polish && setSelectedPolish(polish);
+    location && setSelectedLocation(location);
+    HA && setSelectedHR(HA);
+    symmetry && setSelectedSymmetry(symmetry);
+    fluoroscence && setSelectedFluorescence(fluoroscence);
+    country_of_origin && setSelectedOrigin(country_of_origin);
+    color_shade && setSelectedTinge(color_shade);
+    color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
+    overtone && setSelectedOvertone(overtone);
+    brilliance && setSelectedBrilliance(brilliance);
+    priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
+    priceRange && setPriceRangeTo(priceRange.split('-')[1]);
+    discount && setDiscountFrom(discount.split('-')[0]);
+    discount && setDiscountTo(discount.split('-')[1]);
+    pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
+    pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
+    //measurements States
+
+    depth && setDepthFrom(depth.split('-')[0]);
+    depth && setDepthTo(depth.split('-')[1]);
+    ratio && setRatioFrom(ratio.split('-')[0]);
+    ratio && setRatioTo(ratio.split('-')[1]);
+    width && setWidthFrom(width.split('-')[0]);
+    width && setWidthTo(width.split('-')[1]);
+    length && setLengthFrom(length.split('-')[0]);
+    length && setLengthTo(length.split('-')[1]);
+    table_per && setTablePerFrom(table_per.split('-')[0]);
+    table_per && setTablePerTo(table_per.split('-')[1]);
+    girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
+    girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
+    depth_per && setDepthPerFrom(depth_per.split('-')[0]);
+    depth_per && setDepthPerTo(depth_per.split('-')[1]);
+    lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
+    lower_half && setLowerHalfTo(lower_half.split('-')[1]);
+    crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
+    crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
+    star_length && setStarLengthFrom(star_length.split('-')[0]);
+    star_length && setStarLengthTo(star_length.split('-')[1]);
+    crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
+    crown_height && setCrownHeightTo(crown_height.split('-')[1]);
+    pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
+    pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
+    pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
+    pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
+
+    //inclusion_details States
+    milky && setMilkyBI(milky);
+    luster && setLusterBI(luster);
+    eye_clean && setEyeCleanBI(eye_clean);
+    open_crown && setOpenCrownBI(open_crown);
+    open_table && setOpenTableBI(open_table);
+    side_table && setSideBlackBI(side_table);
+    black_table && setBlackTableBI(black_table);
+    natural_crown && setNaturalCrownWI(natural_crown);
+    open_pavilion && setOpenPavilionBI(open_pavilion);
+    natural_girdle && setNaturalGirdleWI(natural_girdle);
+    side_inclusion && setSideInclusionWI(side_inclusion);
+    table_inclusion && setTableInclusionWI(table_inclusion);
+    natural_pavilion && setNaturalPavilionWI(natural_pavilion);
+    surface_graining && setSurfaceGrainingWI(surface_graining);
+    internal_graining && setInternalGrainingWI(internal_graining);
+
+    //other_information States
+    girdle && setSelectedGirdle(girdle);
+    key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
+  }
+
   useEffect(() => {
-    if (search !== null) {
-      setSelectedShape([...selectedShape, searchListNew[0].body.StoneShape]);
-      setSelectedCut([...selectedCut, searchListNew[0].body.Cut]);
-      setSelectedClarity([...selectedClarity, searchListNew[0].body.Clarity]);
+    let modifyPreviousSearchData = previousSearch?.previousSearch?.meta_data;
+    let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+
+    if (modifySearchFrom === 'previous-search' && modifyPreviousSearchData) {
+      setModifySearch(modifyPreviousSearchData);
+    } else if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
+      setModifySearch(modifysavedSearchData[savedSearch.activeTab]);
     }
-  }, [search]);
+  }, [modifySearchFrom]);
+
+  useEffect(() => {
+    let data = JSON.parse(localStorage.getItem('Search')!);
+    if (
+      data?.length !== undefined &&
+      data?.length > 0 &&
+      data[0] !== undefined
+    ) {
+      setAddSearches(data);
+      setSelectedShape(data[0]?.shape);
+
+      localStorage.removeItem('Search');
+    }
+  }, []);
+
+  useEffect(() => {
+    const queryParams = generateQueryParams({
+      selectedShape,
+      selectedColor,
+      selectedWhiteColor,
+      selectedFancyColor,
+      selectedRangeColor,
+      selectedIntensity,
+      selectedOvertone,
+      selectedTinge,
+      selectedTingeIntensity,
+      selectedClarity,
+      selectedCaratRange,
+      caratRangeFrom,
+      caratRangeTo,
+      selectedMake,
+      selectedCut,
+      selectedPolish,
+      selectedSymmetry,
+      selectedFluorescence,
+      selectedCulet,
+      selectedGirdle,
+      selectedKeyToSymbol,
+      selectedLab,
+      selectedHR,
+      selectedBrilliance,
+      selectedLocation,
+      selectedOrigin,
+      priceRangeFrom,
+      priceRangeTo,
+      discountFrom,
+      discountTo,
+      pricePerCaratFrom,
+      pricePerCaratTo,
+      blackTableBI,
+      sideBlackBI,
+      openCrownBI,
+      openTableBI,
+      openPavilionBI,
+      milkyBI,
+      lusterBI,
+      eyeCleanBI,
+      tableInclusionWI,
+      sideInclusionWI,
+      naturalCrownWI,
+      naturalGirdleWI,
+      naturalPavilionWI,
+      surfaceGrainingWI,
+      internalGrainingWI,
+      tablePerFrom,
+      tablePerTo,
+      depthTo,
+      depthFrom,
+      crownAngleFrom,
+      crownAngleTo,
+      lengthFrom,
+      lengthTo,
+      pavilionDepthFrom,
+      pavilionDepthTo,
+      depthPerFrom,
+      depthPerTo,
+      crownHeightFrom,
+      crownHeightTo,
+      widthFrom,
+      widthTo,
+      lowerHalfFrom,
+      lowerHalfTo,
+      ratioFrom,
+      ratioTo,
+      girdlePerFrom,
+      girdlePerTo,
+      pavilionAngleFrom,
+      pavilionAngleTo,
+      starLengthFrom,
+      starLengthTo,
+    });
+
+    // Construct your search URL here
+    setSearchUrl(constructUrlParams(queryParams));
+  }, [
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
+    selectedFancyColor,
+    selectedRangeColor,
+    selectedIntensity,
+    selectedOvertone,
+    selectedTinge,
+    selectedTingeIntensity,
+    selectedClarity,
+    selectedCaratRange,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedCulet,
+    selectedGirdle,
+    selectedKeyToSymbol,
+    selectedLab,
+    selectedHR,
+    selectedBrilliance,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    caratRangeFrom,
+    caratRangeTo,
+    blackTableBI,
+    sideBlackBI,
+    openCrownBI,
+    openTableBI,
+    openPavilionBI,
+    milkyBI,
+    lusterBI,
+    eyeCleanBI,
+    tableInclusionWI,
+    sideInclusionWI,
+    naturalCrownWI,
+    naturalGirdleWI,
+    naturalPavilionWI,
+    surfaceGrainingWI,
+    internalGrainingWI,
+    tablePerFrom,
+    tablePerTo,
+    depthTo,
+    depthFrom,
+    crownAngleFrom,
+    crownAngleTo,
+    lengthFrom,
+    lengthTo,
+    pavilionDepthFrom,
+    pavilionDepthTo,
+    depthPerFrom,
+    depthPerTo,
+    crownHeightFrom,
+    crownHeightTo,
+    widthFrom,
+    widthTo,
+    lowerHalfFrom,
+    lowerHalfTo,
+    ratioFrom,
+    ratioTo,
+    girdlePerFrom,
+    girdlePerTo,
+    pavilionAngleFrom,
+    pavilionAngleTo,
+    starLengthFrom,
+    starLengthTo,
+  ]);
+
+  const { data, error, isLoading, refetch } = useGetProductCountQuery({
+    searchUrl,
+  });
+
+  useEffect(() => {
+    if (searchCount > 0) {
+      if (data?.count > 300 && data?.count > 0) {
+        setIsError(true);
+        setErrorText(
+          'Please modify your search, the stones exceeds the limit.'
+        );
+      } else if (data?.count === 0) {
+        setIsError(true);
+        setErrorText(`no stones found`);
+      } else if (data?.count !== 0) {
+        setIsError(true);
+        setErrorText(`${data?.count} stones found`);
+      } else {
+        setIsError(false);
+        setErrorText('');
+      }
+    }
+    // else{
+    //   setIsError(true)
+    //   setErrorText(`Please select the stone parameters to make the search.`)
+    // }
+    setSearchCount(searchCount + 1);
+  }, [data]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -223,7 +757,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   ];
 
   let parameterData = parameterDataState.map((parameter, index) => {
-    return { ...parameter, ...advanceSearchNewData.parameterData[index] };
+    return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
   const handleBlackTableBIChange = (data: string) => {
@@ -357,16 +891,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       value: other.value.map((data, valueIndex) => {
         return {
           ...data,
-          ...advanceSearchNewData.otherParameterData[otherIndex].value[
-            valueIndex
-          ],
+          ...advanceSearch.other_parameter[otherIndex].value[valueIndex],
         };
       }),
     };
   });
 
   const [caratRangeData, setCaratRangeData] = useState<string[]>(
-    advanceSearchNewData.caratRangeData
+    advanceSearch.carat.data
   );
 
   //// All user actions
@@ -390,7 +922,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === 'all') {
-      let filteredShape: string[] = shapeData.map((data) => data.title);
+      let filteredShape: string[] = advanceSearch.shape.map(
+        (data) => data.title
+      );
+
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
@@ -528,13 +1063,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
-      let filteredGirdleStep: string[] =
-        advanceSearchNewData.girdleStepData.map((data1) =>
-          data1.toLowerCase() !== 'all' ? data1 : ''
-        );
-      setSelectedGirdleStep2(filteredGirdleStep);
+      let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
+        (girdleData) => (girdleData.toLowerCase() !== 'all' ? girdleData : '')
+      );
+      setSelectedKeyToSymbol(filteredGirdleStep);
     } else {
-      handleFilterChange(data, selectedGirdleStep2, setSelectedGirdleStep2);
+      handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
     }
   };
 
@@ -560,15 +1094,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedGirdleStep(radioValue);
   };
 
+  function normalizeValue(value: string) {
+    // Normalize user input like "3-3.99" to "3.00-3.99"
+    const caratRange = value.split('-');
+
+    if (caratRange[1].trim() || caratRange[0].trim() === '') {
+      console.log('sdasda');
+    } else if (caratRange.length === 2 && caratRange[1].trim() !== '') {
+      const caratFrom = parseFloat(caratRange[0]).toFixed(2);
+      const caratTo = parseFloat(caratRange[1]).toFixed(2);
+      return `${caratFrom}-${caratTo}`;
+    }
+    return value;
+  }
+
   const handleAddCarat = (data: string) => {
-    setCaratRangeData([...caratRangeData, data]);
+    data = normalizeValue(data);
+
+    if (!caratRangeData.includes(data)) {
+      setCaratRangeData([...caratRangeData, data]);
+    }
     setSelectedCaratRange([...selectedCaratRange, data]);
     setCaratRangeFrom('');
     setCaratRangeTo('');
   };
-
-  const [addPreviousSearch, { isLoading: addIsLoading, isError: addIsError }] =
-    useAddPreviousSearchMutation();
 
   const formatSelection = (data: string[] | string) => {
     return (
@@ -584,6 +1133,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleReset = () => {
+    setSearchCount(0);
+    setIsError(false);
+    setErrorText('');
     setYourSelection([]);
     setSelectedShape([]);
     setSelectedColor('');
@@ -655,6 +1207,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setPavilionAngleTo('');
     setStarLengthFrom('');
     setStarLengthTo('');
+    setSelectedLocation([]);
+    setSelectedOrigin([]);
   };
 
   const updateYourSelection = (key: string, value: any) => {
@@ -717,10 +1271,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
       updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 && updateYourSelection('tinge', selectedTinge);
+    selectedTinge.length > 0 &&
+      updateYourSelection('colorShade', selectedTinge);
 
     selectedTingeIntensity.length > 0 &&
-      updateYourSelection('tingeIntensity', selectedTingeIntensity);
+      updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
     selectedClarity.length > 0 &&
       updateYourSelection('clarity', selectedClarity);
     selectedCaratRange.length > 0 &&
@@ -883,41 +1438,264 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       );
   };
 
-  const handleSearch = async () => {
-    if (searchResultCount > 300) {
-      setToastErrorMessage(
-        `Please modify your search, maximum 300 stones displayed`
-      );
-      setShowToast(true);
+  const prepareSearchParam = () => {
+    let response = {
+      basic_card_details: {
+        shape: selectedShape,
+        carat: selectedCaratRange,
+        color: selectedWhiteColor,
+        color_shade: selectedTinge,
+        color_shade_intensity: selectedTingeIntensity,
+        clarity: selectedClarity,
+        cut: selectedCut,
+        polish: selectedPolish,
+        symmetry: selectedSymmetry,
+        fluoroscence: selectedFluorescence,
+        culet: selectedCulet,
+        lab: selectedLab,
+        'H&A': selectedHR,
+        brilliance: selectedBrilliance,
+        location: selectedLocation,
+        country_of_origin: selectedOrigin,
+        overtone: selectedOvertone,
+        price_per_carat:
+          pricePerCaratFrom &&
+          pricePerCaratTo &&
+          `${pricePerCaratFrom}-${pricePerCaratTo}`,
+        price_range:
+          priceRangeFrom && priceRangeTo && `${priceRangeFrom}-${priceRangeTo}`,
+        discount: discountFrom && discountTo && `${discountFrom}-${discountTo}`,
+        // laser_inscription: '-',
+      },
+      measurements: {
+        'table%': tablePerFrom && tablePerTo && `${tablePerFrom}-${tablePerTo}`,
+        'depth%': depthPerFrom && depthPerTo && `${depthPerFrom}-${depthPerTo}`,
+        ratio: ratioFrom && ratioTo && `${ratioFrom}-${ratioTo}`,
+        length: lengthFrom && lengthTo && `${lengthFrom}-${lengthTo}`,
+        width: widthFrom && widthTo && `${widthFrom}-${widthTo}`,
+        depth: depthFrom && depthTo && `${depthFrom}-${depthTo}`,
+        crown_angle:
+          crownAngleFrom && crownAngleTo && `${crownAngleFrom}-${crownAngleTo}`,
+        crown_height:
+          crownHeightFrom &&
+          crownHeightTo &&
+          `${crownHeightFrom}-${crownHeightTo}`,
+        'girdle%':
+          girdlePerFrom && girdlePerTo && `${girdlePerFrom}-${girdlePerTo}`,
+        pavilion_angle:
+          pavilionAngleFrom &&
+          pavilionAngleTo &&
+          `${pavilionAngleFrom}-${pavilionAngleTo}`,
+        pavilion_depth:
+          pavilionDepthFrom &&
+          pavilionDepthTo &&
+          `${pavilionDepthFrom}-${pavilionDepthTo}`,
+        lower_half:
+          lowerHalfFrom && lowerHalfTo && `${lowerHalfFrom}-${lowerHalfTo}`,
+        star_length:
+          starLengthFrom && starLengthTo && `${starLengthFrom}-${starLengthTo}`,
+      },
+      other_information: {
+        girdle: selectedGirdle,
+        key_to_symbol: selectedKeyToSymbol,
+        // report_comments: '-',
+      },
+      inclusion_details: {
+        black_table: blackTableBI,
+        side_table: sideBlackBI,
+        open_crown: openCrownBI,
+        open_table: openTableBI,
+        open_pavilion: openPavilionBI,
+        milky: milkyBI,
+        luster: lusterBI,
+        eye_clean: eyeCleanBI,
+        table_inclusion: tableInclusionWI,
+        side_inclusion: sideInclusionWI,
+        natural_crown: naturalCrownWI,
+        natural_girdle: naturalGirdleWI,
+        natural_pavilion: naturalPavilionWI,
+        surface_graining: surfaceGrainingWI,
+        internal_graining: internalGrainingWI,
+      },
+    };
+    return response;
+  };
+
+  const handleSaveAndSearch: any = async () => {
+    if (searchCount > 1) {
+      if (data?.count < 300 && data?.count > 0) {
+        if (addSearches.length === 0) {
+          setSavedSearches([prepareSearchParam()]);
+        }
+
+        await addSavedSearch({
+          name: saveSearchName,
+          diamond_count: data?.count,
+          meta_data: [...savedSearches, prepareSearchParam()],
+          is_deleted: false,
+        });
+
+        handleSearch();
+      }
     } else {
+      setIsError(true);
+      setErrorText('Please select some parameter before initiating search');
+    }
+  };
+
+  const handleAddSearchIndex = () => {
+    if (addSearches.length < 5) {
+      setAddSearches((prevSearches) => [
+        ...prevSearches,
+        { ...prevSearches[searchIndex], shape: selectedShape },
+      ]);
+    }
+  };
+
+  const handleSearch = async () => {
+    if (searchCount > 1) {
+      if (data?.count < 300 && data?.count > 0) {
+        let searchName = '';
+        searchName = handlePreviousSearchName(searchName);
+        await addPreviousSearch({
+          name: searchName,
+          diamond_count: data?.count,
+          meta_data: prepareSearchParam(),
+          is_deleted: false,
+        });
+
+        const queryParams = generateQueryParams({
+          selectedShape,
+          selectedColor,
+          selectedWhiteColor,
+          selectedFancyColor,
+          selectedRangeColor,
+          selectedIntensity,
+          selectedOvertone,
+          selectedTinge,
+          selectedTingeIntensity,
+          selectedClarity,
+          selectedCaratRange,
+          caratRangeFrom,
+          caratRangeTo,
+          selectedMake,
+          selectedCut,
+          selectedPolish,
+          selectedSymmetry,
+          selectedFluorescence,
+          selectedCulet,
+          selectedGirdle,
+          selectedKeyToSymbol,
+          selectedLab,
+          selectedHR,
+          selectedBrilliance,
+          selectedLocation,
+          selectedOrigin,
+          priceRangeFrom,
+          priceRangeTo,
+          discountFrom,
+          discountTo,
+          pricePerCaratFrom,
+          pricePerCaratTo,
+          blackTableBI,
+          sideBlackBI,
+          openCrownBI,
+          openTableBI,
+          openPavilionBI,
+          milkyBI,
+          lusterBI,
+          eyeCleanBI,
+          tableInclusionWI,
+          sideInclusionWI,
+          naturalCrownWI,
+          naturalGirdleWI,
+          naturalPavilionWI,
+          surfaceGrainingWI,
+          internalGrainingWI,
+          tablePerFrom,
+          tablePerTo,
+          depthTo,
+          depthFrom,
+          crownAngleFrom,
+          crownAngleTo,
+          lengthFrom,
+          lengthTo,
+          pavilionDepthFrom,
+          pavilionDepthTo,
+          depthPerFrom,
+          depthPerTo,
+          crownHeightFrom,
+          crownHeightTo,
+          widthFrom,
+          widthTo,
+          lowerHalfFrom,
+          lowerHalfTo,
+          ratioFrom,
+          ratioTo,
+          girdlePerFrom,
+          girdlePerTo,
+          pavilionAngleFrom,
+          pavilionAngleTo,
+          starLengthFrom,
+          starLengthTo,
+        });
+
+        if (modifySearchFrom === 'saved-search') {
+          if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
+            const updatedMeta = [...savedSearch.savedSearch.meta_data];
+            updatedMeta[savedSearch.activeTab] = prepareSearchParam();
+
+            console.log('savedSearch.savedSearch secondtime', updatedMeta);
+            let data = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta,
+            };
+
+            updateSavedSearch(data);
+          }
+        }
+        console.log('queryParams', queryParams);
+        console.log('addSearches', addSearches);
+
+        // return;
+        localStorage.setItem(
+          'Search',
+          JSON.stringify([...addSearches, queryParams])
+        );
+        router.push('/search-result');
+      }
+    } else {
+      setIsError(true);
+      setErrorText('Please select some parameter before initiating search');
+    }
+  };
+
+  // const setLocalData = () => {};
+
+  const handleAddAnotherSearch = async () => {
+    handleAddSearchIndex();
+    if (addSearches.length < 5) {
+      //call previous serach api
+      setSavedSearches([...savedSearches, prepareSearchParam()]);
       let searchName = '';
       searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
         name: searchName,
-        diamond_count: searchResultCount,
-        meta_data: {
-          shape: selectedShape,
-          color: selectedWhiteColor,
-          clarity: selectedClarity,
-          cut: selectedCut,
-          lab: selectedLab,
-          polish: selectedPolish,
-          shade: selectedColor,
-        },
+        diamond_count: data?.count,
+        meta_data: prepareSearchParam(),
         is_deleted: false,
       });
-    }
-  };
-
-  const handleAddAnotherSearch = () => {
-    if (addSearches.length < 5) {
-      //call previous serach api
-      setAddSearches([...addSearches, 'ooo']);
+      handleAddSearches();
       handleReset();
     } else {
       setShowToast(true);
       setToastErrorMessage('Add search limit exceeded');
     }
+  };
+
+  const handleAddSearches = () => {
+    setAddSearches([...addSearches, { shape: selectedShape }]);
+    setSearchIndex(addSearches.length + 1);
   };
 
   ///reusable jsx
@@ -1043,19 +1821,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         {other.value.map((data) => (
           <div
             className={`${styles.filterSection} ${styles.otherParameterDataContainer} `}
-            key={`${other.key}-${data.elementKey}`}
+            key={`${other.key}-${data.element_key}`}
           >
             <div className={`${styles.otherParameterTitle}`}>
               <CustomInputlabel
                 htmlfor="text"
-                label={data.elementKey}
+                label={data.element_key}
                 overriddenStyles={{ label: styles.labelPlainColor }}
               />
             </div>
             <div>
               <>
                 {renderSelectionButtons(
-                  data.elementValue,
+                  data.element_value,
                   '',
                   styles.activeOtherStyles,
                   data.state,
@@ -1148,9 +1926,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setError({ key, value: error });
     }
   };
+  const customInputDialogData = {
+    isOpens: isInputDialogOpen,
+    setIsOpen: setIsInputDialogOpen,
+    setInputvalue: setSaveSearchName,
+    inputValue: saveSearchName,
+    displayButtonFunction: handleSaveAndSearch,
+    label: 'Save And Search',
+    name: 'saveAndSearch',
+    displayButtonLabel2: 'Save',
+  };
 
   return (
     <div>
+      <CustomInputDialog customInputDialogData={customInputDialogData} />
       {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="sticky top-0 bg-solitairePrimary mt-16">
         <CustomHeader
@@ -1167,20 +1956,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                       label={`${ManageLocales(
                         'app.advanceSearch.yourSelection'
                       )}:`}
-                    />{' '}
+                    />
                     <div className={styles.yourSelectionInHeader}>
-                      {selectedShape.length > 0 &&
+                      {selectedShape?.length > 0 &&
                         formatSelection(selectedShape)}{' '}
-                      {selectedColor.length > 0 &&
+                      {selectedColor?.length > 0 &&
                         formatSelection(selectedColor)}{' '}
-                      {selectedTingeIntensity.length > 0 &&
+                      {selectedTingeIntensity?.length > 0 &&
                         formatSelection(selectedTingeIntensity)}{' '}
-                      {selectedClarity.length > 0 &&
+                      {selectedClarity?.length > 0 &&
                         formatSelection(selectedClarity)}{' '}
-                      {selectedCaratRange.length > 0 &&
+                      {selectedCaratRange?.length > 0 &&
                         formatSelection(selectedCaratRange)}
                       {selectedMake && formatSelection(selectedMake)}{' '}
-                      {selectedLab.length > 0 && formatSelection(selectedLab)}
+                      {selectedLab?.length > 0 && formatSelection(selectedLab)}
                     </div>
                   </div>
                 }
@@ -1247,7 +2036,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           <CustomImageTile
             overriddenStyles={imageTileStyles}
-            imageTileData={shapeData}
+            imageTileData={advanceSearch.shape}
             selectedTile={selectedShape}
             handleSelectTile={handleShapeChange}
           />
@@ -1274,7 +2063,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeFrom"
               onChange={(e) => {
-                setCaratRangeFrom(e.target.value);
+                if (regexPattern.test(e.target.value)) {
+                  setValidationError('');
+                  setCaratRangeFrom(e.target.value);
+                } else {
+                  setValidationError('Please enter value between “0.30 to 50”');
+                }
               }}
               value={caratRangeFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1287,7 +2081,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               type="number"
               name="caratRangeTO"
               onChange={(e) => {
-                setCaratRangeTo(e.target.value);
+                // Use a regular expression to allow only numbers with up to two decimal places
+                if (regexPattern.test(e.target.value)) {
+                  setCaratRangeTo(e.target.value);
+                  setValidationError('');
+                } else {
+                  setValidationError('Please enter value between “0.30 to 50”');
+                }
               }}
               value={caratRangeTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1295,6 +2095,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 input: styles.inputFieldStyles,
               }}
             />
+
             <CustomSelectionButton
               selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}
               data={`${caratRangeFrom}-${caratRangeTo}`}
@@ -1304,6 +2105,10 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               }}
             />
           </div>
+          <div className="text-red-500">
+            {validationError && validationError}
+          </div>
+
           <div>
             {renderSelectionButtons(
               caratRangeData,
@@ -1327,7 +2132,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
             {renderSelectionButtons(
-              advanceSearchNewData.colorData,
+              advanceSearch.color,
               styles.colorFilterStyles,
               styles.activeColorStyles,
               selectedColor,
@@ -1339,7 +2144,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.whiteData,
+                  advanceSearch.white,
                   styles.whiteColorFilterStyle,
                   styles.activeOtherStyles,
                   selectedWhiteColor,
@@ -1349,7 +2154,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Fancy') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.fancyData,
+                  advanceSearch.fancy,
                   '',
                   styles.activeOtherStyles,
                   selectedFancyColor,
@@ -1359,7 +2164,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             <div>
               {selectedColor.includes('Range') &&
                 renderSelectionButtons(
-                  advanceSearchNewData.rangeData,
+                  advanceSearch.range,
                   '',
                   styles.activeOtherStyles,
                   selectedRangeColor,
@@ -1384,7 +2189,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterSectionData}`}
             >
               {renderSelectionButtons(
-                advanceSearchNewData.intensityData,
+                advanceSearch.intensity,
                 '',
                 styles.activeOtherStyles,
                 selectedIntensity,
@@ -1404,7 +2209,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 className={`${styles.filterSection} ${styles.filterWrapSection}`}
               >
                 {renderSelectionButtons(
-                  advanceSearchNewData.overtoneData,
+                  advanceSearch.overtone,
                   '',
                   styles.activeOtherStyles,
                   selectedOvertone,
@@ -1425,7 +2230,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearchNewData.tingeData,
+            advanceSearch.color_shade,
             '',
             styles.activeOtherStyles,
             selectedTinge,
@@ -1443,7 +2248,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.tingeIntensityData,
+            advanceSearch.color_shade_intensity,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedTingeIntensity,
@@ -1460,7 +2265,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.clarityData,
+            advanceSearch.clarity,
             '',
             styles.activeOtherStyles,
             selectedClarity,
@@ -1478,7 +2283,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.makeData,
+            advanceSearch.make,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedMake,
@@ -1496,7 +2301,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.cut,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedCut,
@@ -1514,7 +2319,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.polish,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedPolish,
@@ -1532,7 +2337,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.qualityData,
+            advanceSearch.symmetry,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedSymmetry,
@@ -1550,7 +2355,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.fluorescenceData,
+            advanceSearch.fluorescence,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedFluorescence,
@@ -1568,7 +2373,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.culet,
+            advanceSearch.culet,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedCulet,
@@ -1586,7 +2391,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
-            advanceSearchNewData.labData,
+            advanceSearch.lab,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedLab,
@@ -1604,7 +2409,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.brillianceData,
+            advanceSearch.brilliance,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedHR,
@@ -1622,7 +2427,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.brillianceData,
+            advanceSearch.brilliance,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedBrilliance,
@@ -1640,7 +2445,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.location,
+            advanceSearch.location,
             styles.commonSelectionStyle,
             styles.activeOtherStyles,
             selectedLocation,
@@ -1658,7 +2463,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
         <div>
           {renderSelectionButtons(
-            advanceSearchNewData.origin,
+            advanceSearch.origin,
             styles.countryOriginStyle,
             styles.activeOtherStyles,
             selectedOrigin,
@@ -1853,7 +2658,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               className={`${styles.filterSection} ${styles.filterWrapSection}`}
             >
               {renderSelectionButtons(
-                advanceSearchNewData.girdleData,
+                advanceSearch.girdle,
                 '',
                 styles.activeOtherStyles,
                 selectedGirdle,
@@ -1901,16 +2706,28 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{ display: 'flex', flexWrap: 'wrap' }}
           >
             {renderSelectionButtons(
-              advanceSearchNewData.girdleStepData,
+              advanceSearch.key_to_symbol,
               '',
               styles.activeOtherStyles,
-              selectedGirdleStep2,
+              selectedKeyToSymbol,
               handleGirdleStep2Change
             )}
           </div>
         </div>
       </div>
-      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+      <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
+        {isError && (
+          <div className="w-[40%] flex items-center">
+            <span className="hidden  text-green-700 text-red-700" />
+            <p
+              className={`text-${
+                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
+              }-700 text-base`}
+            >
+              {errorText}
+            </p>
+          </div>
+        )}
         <CustomFooter
           footerButtonData={[
             {
@@ -1925,16 +2742,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 'app.advanceSearch.saveSearch'
               )}`,
               style: styles.transparent,
+              fn: () => {
+                setIsInputDialogOpen(true);
+              },
+              isDisable:
+                modifySearchFrom === 'previous-search' ||
+                modifySearchFrom === 'saved-search',
             },
             {
               id: 3,
-              displayButtonLabel: `${
-                searchApiCalled && searchResultCount! === 0
-                  ? ManageLocales('app.advanceSearch.addDemand')
-                  : ManageLocales('app.advanceSearch.search')
-              } ${
-                searchResultCount! > 0 ? '(' + searchResultCount + ')' : '  '
-              }`,
+              displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
             },
@@ -1947,8 +2764,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               }`,
               style: ` ${styles.filled} ${styles.anotherSearch}`,
               fn: handleAddAnotherSearch,
+              isDisable:
+                modifySearchFrom === 'previous-search' ||
+                modifySearchFrom === 'saved-search',
             },
           ]}
+          noBorderTop={styles.paginationContainerStyle}
         />
       </div>
     </div>

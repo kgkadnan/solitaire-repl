@@ -8,19 +8,20 @@ export interface IfooterButtonData {
   displayButtonLabel: string | React.ReactNode;
   style?: string;
   fn?: () => void;
+  isDisable?: boolean;
 }
 
 interface ICustomFooterProps {
   footerButtonData?: IfooterButtonData[];
+  noBorderTop?: string;
 }
 
 export const CustomFooter: React.FC<ICustomFooterProps> = ({
   footerButtonData,
+  noBorderTop,
 }) => {
   return (
-    <div
-      className={`flex justify-end py-4 border-t border-solitaireSenary ${styles.footerParentDiv}`}
-    >
+    <div className={`${styles.footerParentDiv} ${noBorderTop}`}>
       {footerButtonData?.map((item) => {
         return (
           <div key={item.id} className="ml-6">
@@ -31,6 +32,7 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
                 displayLabelStyle: styles.footerButtonLabel,
               }}
               handleClick={item.fn}
+              isDisable={item.isDisable}
             />
           </div>
         );

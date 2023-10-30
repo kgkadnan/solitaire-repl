@@ -1,11 +1,12 @@
 /* Card Container */
 .searchCardContainer {
+  width: 95% !important;
   background-color: hsl(var(--solitaire-secondary));
   padding: 20px 10px;
 }
 
 .mainCardContainer {
-  width: 90%;
+  width: 95%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
 }
@@ -20,6 +21,7 @@
   display: flex;
   // justify-content: space-between;
   align-items: center;
+  height: 40px;
 }
 
 .SearchCardTitle {
@@ -37,6 +39,7 @@
   flex-direction: column;
   justify-content: center;
   letter-spacing: 0.5px;
+  padding-right: 0px !important;
 }
 
 .manySavedSearchButton {
@@ -93,11 +96,13 @@
 
 .sheetMainHeading {
   color: var(--shadow, #8c7459);
-  text-align: center;
   font-size: 16px;
   font-weight: 700;
-  margin: 10px 0px 10px;
   letter-spacing: 1px;
+  padding-top: 27px;
+  position: sticky;
+  top: 0;
+  background-color: hsl(var(--solitaire-secondary));
   p {
     margin-bottom: 30px;
   }
@@ -114,6 +119,8 @@
 .activeHeaderButtonStyle {
   background-color: transparent;
   color: #8c7459;
+  border-bottom: 1px solid #8c7459;
+  border-radius: 0;
   font-weight: 600;
 }
 
@@ -170,10 +177,22 @@
 
 .showResultMainDiv {
   text-align: center;
+  position: sticky;
+  bottom: 0;
+  background-color: hsl(var(--solitaire-secondary));
+  padding-bottom: 27px;
 }
-
 .showResultButtonStyle {
   background-color: #8c7459;
+  gap: 20px;
+  display: flex;
+  justify-content: center;
+}
+
+.showResultButtonTransparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  font-size: 14px !important;
   border-radius: 5px;
   margin-top: 30px;
   color: #ffffff;
@@ -181,12 +200,25 @@
   padding: 8px 30px;
 }
 
+.showResultButtonFilled {
+  background-color: #8c7459;
+  border-radius: 5px;
+  font-size: 14px !important;
+  margin-top: 30px;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 8px 30px;
+  margin-left: 20px;
+}
+
 //Footer Button
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
+  font-size: 14px !important;
 }
 .filled {
   background-color: #8c7459;
   color: #ffffff;
+  font-size: 14px !important;
 }

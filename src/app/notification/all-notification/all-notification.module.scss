@@ -1,5 +1,6 @@
 .showAllNotificationContainer {
   color: hsl(var(--solitaire-tertiary));
+  margin-bottom: 40px;
 }
 
 .notificationCardContainer {
@@ -50,4 +51,5 @@
   padding: 8px 30px;
   width: 150px;
   height: 35px;
+  font-size: 14px !important;
 }

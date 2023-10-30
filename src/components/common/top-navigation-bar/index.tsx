@@ -5,7 +5,7 @@ import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import {
@@ -16,38 +16,64 @@ import {
 import { CustomCalculator } from '@/components/caclulator';
 import { CustomSlider } from '../slider';
 import { Notification } from '@/components/notification';
+import {
+  useGetAllNotificationQuery,
+  useUpdateNotificationMutation,
+} from '@/features/api/notification';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { notificationBadge } from '@/features/notification/notification-slice';
 
 export const TopNavigationBar = () => {
+  const currentRoute = usePathname();
+  const dispatch = useAppDispatch();
+  const notificationBadgeStoreData: any = useAppSelector((store) => store);
+  let badgeData = notificationBadgeStoreData.notificationBadge.status;
+
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [offset, setOffset] = useState(0);
+  let limit = 11;
+  const { data } = useGetAllNotificationQuery({
+    type: 'APP',
+    offset,
+    limit,
+  });
+
+  const [updateNotification] = useUpdateNotificationMutation();
 
   const topNavData = [
     {
       label: ManageLocales('app.topNav.forYou'),
       link: '/',
+      isActive: currentRoute === '/',
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
       link: '/advance-search',
+      isActive: currentRoute === '/advance-search',
     },
     {
       label: ManageLocales('app.topNav.previousSearch'),
       link: '/previous-search',
+      isActive: currentRoute === '/previous-search',
     },
     {
       label: ManageLocales('app.topNav.wishlist'),
       link: '/wishlist',
+      isActive: currentRoute === '/wishlist',
     },
     {
       label: ManageLocales('app.topNav.myCart'),
       link: '/my-cart',
+      isActive: currentRoute === '/my-cart',
     },
   ];
 
   const handleButtonClick = (label: string, link: string) => {
     setActiveButton(label);
+    localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
   };
 
@@ -62,7 +88,24 @@ export const TopNavigationBar = () => {
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [prevScrollPos, data]);
+
+  const handleNotificationClick = async () => {
+    dispatch(notificationBadge(false));
+
+    let notificationMapData = data?.data?.map((item: any) => ({
+      id: item.id,
+      status: item.status === 'read' ? 'read' : 'unread',
+    }));
+
+    const unreadNotifications = notificationMapData?.filter(
+      (item: any) => item.status === 'unread'
+    );
+
+    unreadNotifications.length
+      ? await updateNotification(unreadNotifications)
+      : '';
+  };
 
   return (
     <div
@@ -77,7 +120,7 @@ export const TopNavigationBar = () => {
               <CustomDisplayButton
                 displayButtonAllStyle={{
                   displayButtonStyle:
-                    activeButton === navData.label
+                    activeButton === navData.label || navData.isActive
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
                   displayLabelStyle: styles.headerButtonLabelStyle,
@@ -98,9 +141,24 @@ export const TopNavigationBar = () => {
             </PopoverContent>
           </Popover>
           <CustomSlider
-            sheetContent={<Notification />}
+            sheetContent={
+              <Notification
+                notificationData={data}
+                setOffset={setOffset}
+                offset={offset}
+                limit={limit}
+              />
+            }
             sheetTriggenContent={
-              <NotificationIcon role="button" className={styles.iconColor} />
+              <div onClick={handleNotificationClick}>
+                <div className={styles.notificationContainer}>
+                  <NotificationIcon
+                    role="button"
+                    className={styles.iconColor}
+                  />
+                  {badgeData && <div className={styles.badge}></div>}
+                </div>
+              </div>
             }
             sheetContentStyle={styles.notificationSheetContent}
           />
@@ -110,7 +168,6 @@ export const TopNavigationBar = () => {
           <ToggleButton />
         </div>
       </div>
-      {/* <hr className={styles.dividerLine} /> */}
     </div>
   );
 };

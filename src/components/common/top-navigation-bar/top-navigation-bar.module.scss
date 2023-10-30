@@ -38,7 +38,7 @@
 .activeHeaderButtonStyle {
   background-color: transparent;
   color: #8c7459;
-  font-weight: 600;
+  font-weight: 600 !important;
 }
 
 .dividerLine {
@@ -56,4 +56,24 @@
 
 .notificationSheetContent {
   z-index: 1111;
+}
+
+.notificationContainer {
+  margin-top: 8px;
+  position: relative;
+  display: inline-block;
+}
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background-color: red;
+  border-radius: 50%;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

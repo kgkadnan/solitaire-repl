@@ -1,9 +1,6 @@
 .imageTileMainContainerStyles {
   display: flex;
   background-color: transparent;
-  // justify-content: space-between;
-  // width: 200px;
-  // height: 64px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -16,6 +13,9 @@
   align-items: center;
   border: 2px solid transparent;
   margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .imageTileImageStyles {
@@ -163,6 +163,7 @@
 .specificFilterAlign {
   margin-top: 20px;
   align-items: start;
+  font-size: 14px;
 }
 
 .dropdownHeader {
@@ -197,9 +198,7 @@
   // color: red
 }
 
-.activeOtherStyles {
-  border: 1px solid #8c7459;
-}
+
 
 .stepStyle {
   color: hsl(var(--solitaire-tertiary));
@@ -217,11 +216,15 @@
 .transparent {
   background-color: transparent;
   border: 1px solid #8c7459;
+  font-size: 14px !important;
 }
 
 .filled {
+  font-size: 14px !important;
   background-color: #8c7459;
 }
+
+
 
 .anotherSearch {
   width: 195px;
@@ -304,4 +307,14 @@
   font-size: 12px;
   text-align: center;
   font-weight: 300;
+}
+.activeOtherStyles {
+  border: 1px solid #8c7459;
+}
+
+
+
+.paginationContainerStyle{
+    
+  border: none !important ;
 }

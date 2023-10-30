@@ -2,6 +2,9 @@
   display: flex;
   align-items: center;
   justify-content: flex-end;
+  border-top: 1px solid hsl(var(--solitaire-senary)) ;
+  padding: 0.5rem 0rem
+  
 }
 
 .resultsPerPage {
@@ -30,6 +33,7 @@
 .selectContent {
   width: 100%;
   color: hsl(var(--solitaire-tertiary));
+  background-color: hsl(var(--solitaire-secondary));
 }
 
 .selectElement {

@@ -1,4 +1,3 @@
-import { Checkbox } from '@/components/ui/checkbox';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
 import styles from './header.module.scss';
@@ -23,7 +22,7 @@ export interface IHeaderData {
 }
 
 interface ICustomHeaderProps {
-  data?: IHeaderData;
+  data: IHeaderData;
 }
 
 const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
@@ -57,7 +56,8 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
       >
         {/* Heading */}
         <p>
-          {data?.headerHeading} {data?.searchCount && `(${data?.searchCount})`}
+          {data?.headerHeading}
+          {data?.searchCount && `(${data?.searchCount})`}
         </p>
         <div
           className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}

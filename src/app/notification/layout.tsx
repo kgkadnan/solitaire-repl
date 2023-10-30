@@ -1,52 +1,37 @@
 'use client';
-import CustomNotificationHeader from '@/components/common/notification-header/notification-header';
-import React from 'react';
+import CustomNotificationHeader from '@/components/common/notification-header';
+import React, { useEffect, useState } from 'react';
 import styles from './show-notification.module.scss';
 import { usePathname } from 'next/navigation';
+import { ManageLocales } from '@/utils/translate';
+import { useGetAllNotificationQuery } from '@/features/api/notification';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
 
-  let showAllNotificationData = [
-    {
-      notification_id: '57866587',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'unread',
-    },
-    {
-      notification_id: '57866586',
-      type: 'cart',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'read',
-    },
-    {
-      notification_id: '57866585',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'read',
-    },
-    {
-      notification_id: '57866584',
-      type: 'wishlist',
-      title: ' Your item has been moved from “My Cart” to “Wishlist”',
-      time: '2023-09-15T00:00:00Z',
-      status: 'unread',
-    },
-  ];
-  const unreadCount = showAllNotificationData.filter(
-    (item) => item.status === 'unread'
-  ).length;
+  const [notificationSettingData, setNotificationSettingData] = useState([]);
+
+  const { data } = useGetAllNotificationQuery({ type: 'APP' });
+
+  useEffect(() => {
+    setNotificationSettingData(data?.data);
+  }, [data, notificationSettingData]);
+
+  const unreadCount =
+    notificationSettingData &&
+    notificationSettingData.filter((item: any) => item.status === 'unread')
+      .length;
+
   return (
     <>
       <div
         className={`border-b border-solitaireSenary ${styles.showNotificationsHeading}`}
       >
         <p>
-          Notifications {path !== '/notification/setting' && `(${unreadCount})`}
+          {ManageLocales('app.notification.notifications')}
+          {path !== '/notification/setting' &&
+            unreadCount > 0 &&
+            `(${unreadCount})`}
         </p>
       </div>
       <CustomNotificationHeader />

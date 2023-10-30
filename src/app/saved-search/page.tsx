@@ -1,11 +1,5 @@
 'use client';
-import React, {
-  ChangeEvent,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import styles from './saved-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
@@ -18,12 +12,19 @@ import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
 import { Checkbox } from '@/components/ui/checkbox';
 import {
+  useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
-  useUpdateSavedSearchesMutation,
-} from '@/slices/saved-searches';
+  useGetSavedSearchListQuery,
+} from '@/features/api/saved-searches';
 import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
+import { CustomCalender } from '@/components/common/calender';
+import { DateRange } from 'react-day-picker';
+import { formatCassing } from '@/utils/format-cassing';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySavedSearch } from '@/features/saved-search/saved-search';
+import { useRouter } from 'next/navigation';
 
 interface ICardData {
   cardId: string;
@@ -43,7 +44,12 @@ interface IData {
   updated_at: string;
 }
 
+interface KeyLabelMapping {
+  [key: string]: string;
+}
+
 const SavedSearch = () => {
+  const router = useRouter();
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -56,52 +62,25 @@ const SavedSearch = () => {
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
-  const showResulutButtonStyle = {
-    displayButtonStyle: styles.showResultButtonStyle,
-  };
+
   const manySavedsearchButtonStyle = {
     displayButtonStyle: styles.manySavedSearchButton,
     displayLabelStyle: styles.manySavedSearchLabel,
   };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [resultsPerPage, setResultsPerPage] = useState(1); // You can set the initial value here
+  const [limit, setLimit] = useState(50); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
+  const [offset, setOffset] = useState(0);
+
   const [activeTab, setActiveTab] = useState(0);
+
   const [sliderData, setSliderData] = useState<any>([]);
-
-  const handleResultsPerPageChange = (event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setResultsPerPage(newResultsPerPage);
-    setCurrentPage(0); // Reset current page when changing results per page
-  };
-
-  const handlePageClick = (page: number) => {
-    if (page >= 0 && page <= numberOfPages) {
-      setIsCheck([]);
-      setIsCheckAll(false);
-      setCurrentPage(page);
-    }
-  };
-
-  let optionLimits = [
-    { id: 1, value: '1' },
-    { id: 2, value: '10' },
-  ];
-
-  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
-    currentPage,
-    resultsPerPage,
-  });
-
-  // Destructure the mutation function from the hook
-  const [
-    updateSavedSearches,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useUpdateSavedSearchesMutation();
+  const [date, setDate] = useState<DateRange | undefined>();
+  const [searchUrl, setSearchUrl] = useState('');
 
   //Data
-  const [SavedSearchData, setSavedSearchData] = useState<IData[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState<any[]>([]);
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
@@ -110,54 +89,80 @@ const SavedSearch = () => {
 
   //Search Bar States
   const [search, setSearch] = useState<string>('');
+  const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  //toast message
-  const [showToast, setShowToast] = useState<boolean>(false);
-  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
+  const dispatch = useAppDispatch();
 
-  const searchData = [
-    'sample',
-    'sample12',
-    'sample3',
-    'sample4',
-    'sample5',
-    'ooooo',
+  const handleResultsPerPageChange = useCallback((event: string) => {
+    const newResultsPerPage = parseInt(event, 10);
+    setLimit(newResultsPerPage);
+    setOffset(0);
+    setCurrentPage(0); // Reset current page when changing results per page
+    setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+  }, []);
+
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      const offset = page * limit;
+      setIsCheck([]);
+      setIsCheckAll(false);
+      setOffset(offset);
+      setCurrentPage(page);
+    }
+  };
+
+  let optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' },
   ];
 
-  const searchListNew = useMemo(
-    () => [
-      {
-        id: 'gkgh32465442',
-        name: 'ooooo',
-        customer_id: '<sample_customer_id>',
-        diamondCount: 256,
-        filter: {
-          color: ['D', 'F', 'E', 'G'],
-          clarity: ['VVS2', 'VVS1', 'VS2'],
-          polarity: ['EX', 'IDEAL', 'VG'],
-          lab: ['GIA', 'HRD', 'IGI'],
-        },
-        isDeleted: false,
-        created_at: '2023-08-23T08:03:54.942Z',
-        updated_at: '2023-08-23T08:03:54.942Z',
-      },
-    ],
-    [] // No dependencies
-  );
+  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
+    limit,
+    offset,
+    searchUrl,
+    searchByName,
+  });
+
+  const { data: searchList } = useGetSavedSearchListQuery(search);
+
+  // Destructure the mutation function from the hook
+  const [
+    deleteSavedSearch,
+    { isLoading: updateIsLoading, isError: updateIsError },
+  ] = useDeleteSavedSearchMutation();
+
+  const keyLabelMapping: KeyLabelMapping = {
+    shape: 'Shape',
+    color: 'color',
+    carat: 'carat',
+    clarity: 'clarity',
+    cut: 'cut',
+    polish: 'polish',
+    symmetry: 'Symmetry',
+    price_range: 'Price Range',
+    discount: 'Discount',
+  };
 
   const renderCardData = useCallback(
-    (data: any, suggestion?: string) => {
+    (data: any) => {
       return data?.map((item: any) => {
-        const meta_data = Array.isArray(item.meta_data)
-          ? item.meta_data[0].basicCardDetails
-          : item.meta_data.basicCardDetails;
-
+        // Filter the data based on the keyLabelMapping
+        const filteredData: any = {};
+        for (const key in keyLabelMapping) {
+          if (item.meta_data[0].basic_card_details) {
+            filteredData[keyLabelMapping[key]] =
+              item.meta_data[0].basic_card_details[key] &&
+              item.meta_data[0].basic_card_details[key].length
+                ? item.meta_data[0].basic_card_details[key]
+                : '-';
+          }
+        }
         const cardContent = (
           <CustomTable
             tableData={{
-              tableHeads: Object.keys(meta_data),
-              bodyData: [meta_data],
+              tableHeads: Object.keys(filteredData),
+              bodyData: [Object.values(filteredData)],
             }}
             tableStyleClasses={tableStyles}
           />
@@ -165,29 +170,34 @@ const SavedSearch = () => {
 
         return {
           cardId: item.id,
-          cardActionIcon: editIcon,
+          cardActionIcon: item.meta_data.length <= 1 && editIcon,
           cardHeader: (
-            <CustomTable
-              tableData={{
-                tableHeads: [item.name],
-                bodyData: [
-                  {
-                    desc: (
-                      <div className={styles.parentDivHeaderSectiom}>
-                        <div style={{ marginRight: '80px' }}>
-                          {formatCreatedAt(item.created_at)}
+            <div className="">
+              <CustomTable
+                tableData={{
+                  tableHeads: [item.name],
+                  bodyData: [
+                    {
+                      desc: (
+                        <div className={styles.parentDivHeaderSectiom}>
+                          <div style={{ marginRight: '80px' }}>
+                            {formatCreatedAt(item.created_at)}
+                          </div>
+
+                          {item.meta_data.length > 1 && ( // Conditionally render the button
+                            <CustomDisplayButton
+                              displayButtonLabel={`Searches (${item.meta_data.length})`}
+                              displayButtonAllStyle={manySavedsearchButtonStyle}
+                            />
+                          )}
                         </div>
-                        <CustomDisplayButton
-                          displayButtonLabel={`Searches (${item.meta_data.length})`}
-                          displayButtonAllStyle={manySavedsearchButtonStyle}
-                        />
-                      </div>
-                    ),
-                  },
-                ],
-              }}
-              tableStyleClasses={searchCardTitle}
-            />
+                      ),
+                    },
+                  ],
+                }}
+                tableStyleClasses={searchCardTitle}
+              />
+            </div>
           ),
           cardContent: cardContent,
         };
@@ -198,11 +208,16 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = async () => {
-    let payload = { id: isCheck };
-    await updateSavedSearches(payload);
-    await refetch();
-    setIsCheck([]);
-    setIsCheckAll(false);
+    if (isCheck.length) {
+      // let payload = { id: isCheck, filter: { is_deleted: true } };
+      await deleteSavedSearch(isCheck);
+      await refetch();
+      setIsCheck([]);
+      setIsCheckAll(false);
+    } else {
+      // setShowToast(true);
+      // setToastErrorMessage('Check to delete previous search data.');
+    }
 
     if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
@@ -212,15 +227,18 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchData.filter((item) =>
-        item.toLowerCase().includes(inputValue.toLowerCase())
+      const filteredSuggestions = searchList.filter((item: any) =>
+        item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
       // Extract card titles from filtered suggestions
-      const suggestionTitles = filteredSuggestions.map((item) => item);
+      const suggestionTitles = filteredSuggestions.map(
+        (item: any) => item.name
+      );
+
       setSuggestions(suggestionTitles);
       // Update state with an array of strings
     },
-    [searchData]
+    [searchList]
   );
 
   const debounce = <T extends any[]>(
@@ -246,27 +264,18 @@ const SavedSearch = () => {
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
-      setCardData(renderCardData(SavedSearchData, ''));
+      setSearchByName('');
     }
   };
 
   const handleSuggestionClick = (suggestion: any) => {
     setSearch(suggestion);
-
-    let dataNew = SavedSearchData.map((data: { name: any }) => data.name);
-
-    if (!dataNew.includes(suggestion)) {
-      setCardData(renderCardData(searchListNew, suggestion));
-    } else {
-      setCardData(renderCardData(SavedSearchData, suggestion));
-    }
-
+    setSearchByName(suggestion);
     setSuggestions([]);
   };
-  //specific checkbox
-  const handleClick = (e: any) => {
-    const { id } = e.target;
 
+  //specific checkbox
+  const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
     if (updatedIsCheck.includes(id)) {
@@ -306,65 +315,76 @@ const SavedSearch = () => {
     },
   ];
 
+  const handleDate = (date: any) => {
+    setDate(date);
+    setSearchUrl(
+      `&startDate=${new Date(date.from)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}&endDate=${new Date(date.to)
+        .toISOString()
+        .replace('T', ' ')
+        .replace('Z', '%2B00')}`
+    );
+  };
+
   //Header Data
   const savedSearchheaderData = {
     headerHeading: ManageLocales('app.savedSearch.header'),
     //count
-    searchCount: cardData?.length,
+    searchCount: data?.data?.count,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
     headerData: (
-      <div className="flex items-center gap-[10px] bottom-0">
-        <Checkbox
-          onClick={handleSelectAllCheckbox}
-          data-testid={'Select All Checkbox'}
-          checked={isCheckAll}
-        />
-        <p className="text-solitaireTertiary text-base font-medium">
-          {ManageLocales('app.common.header.selectAll')}
-        </p>
-      </div>
+      <>
+        <div className="flex mr-[30px] ">
+          <CustomCalender date={date} handleDate={handleDate} />
+        </div>
+        <div className="flex items-center gap-[10px] bottom-0">
+          <Checkbox
+            onClick={handleSelectAllCheckbox}
+            data-testid={'Select All Checkbox'}
+            checked={isCheckAll}
+          />
+          <p className="text-solitaireTertiary text-base font-medium">
+            {ManageLocales('app.common.header.selectAll')}
+          </p>
+        </div>
+      </>
     ),
     overriddenStyles: {
-      headerDataStyles: 'flex items-end',
+      headerDataStyles: 'flex items-center',
     },
   };
 
   useEffect(() => {
-    const SavedSearchData = data?.data;
-    let searchData = SavedSearchData?.savedSearch;
-    setNumberOfPages(SavedSearchData?.totalPages);
-    setSavedSearchData(searchData);
+    const savedSearchData = data?.data;
+    let specificSavedSearchData = savedSearchData?.savedSearch;
+    setNumberOfPages(
+      Math.ceil(savedSearchData?.count / savedSearchData?.limit)
+    );
+    setSavedSearchData(specificSavedSearchData);
 
-    // searchData?.filter((items: any) => {
-    //   items.meta_data.filter((items: any) => {
-    //     console.log(
-    //       '---------------------------------------',
-    //       items.basicCardDetails
-    //     );
-    //   });
-    // });
-
-    // Filter the location key from basicCardDetails
-    const filteredData = searchData?.map((item: any) => ({
+    // Filter the location key from basic_card_details
+    const filteredData = specificSavedSearchData?.map((item: any) => ({
       ...item,
       meta_data: item.meta_data.map((metaItem: any) => ({
         ...metaItem,
-        basicCardDetails: (({
+        basic_card_details: (({
           Location,
           Tinge,
           Fluorescence,
           Symmetry,
           ...rest
-        }) => rest)(metaItem.basicCardDetails),
+        }) => rest)(metaItem.basic_card_details),
       })),
     }));
 
-    setCardData(renderCardData(filteredData, search));
-  }, [data, currentPage, resultsPerPage]);
+    setCardData(renderCardData(filteredData));
+  }, [data, limit, offset]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
@@ -381,16 +401,25 @@ const SavedSearch = () => {
   };
 
   const handleSlider = (data: any) => {
-    let savedSearchsingleDiamondData = SavedSearchData.filter((items: any) => {
+    let savedSearchsingleDiamondData = savedSearchData.filter((items: any) => {
       return items.id === data.id;
     });
     setSliderData(savedSearchsingleDiamondData);
     setActiveTab(0);
   };
 
+  const modifySearchHandler = (id: string, activeTab: number) => {
+    let modifyData = savedSearchData.filter((data) => {
+      return data.id === id;
+    })[0];
+
+    dispatch(modifySavedSearch({ modifyData, activeTab }));
+
+    router.push(`/advance-search?edit=saved-search`);
+  };
+
   return (
     <>
-      {showToast && <CustomToast message={toastErrorMessage} />}
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
@@ -400,7 +429,7 @@ const SavedSearch = () => {
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
           <>
-            {cardData?.map((items: any, index: number) => {
+            {cardData?.map((items: any, indexTest: number) => {
               return (
                 <div key={items.cardId}>
                   <div className="flex mt-6">
@@ -414,7 +443,9 @@ const SavedSearch = () => {
                       sheetTriggenContent={
                         <>
                           <div
-                            onClick={() => handleSlider(SavedSearchData[index])}
+                            onClick={() =>
+                              handleSlider(savedSearchData[indexTest])
+                            }
                           >
                             <CustomSearchResultCard
                               cardData={items}
@@ -428,156 +459,253 @@ const SavedSearch = () => {
                       sheetContentStyle={styles.sheetContentStyle}
                       sheetContent={
                         <>
-                          <div className={styles.sheetMainHeading}>
+                          <div
+                            className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
+                          >
                             <p>{ManageLocales('app.savedSearch.detailInfo')}</p>
                           </div>
-
-                          {sliderData.map((cardDetails: any) => (
-                            <>
-                              <div className="border-b border-solitaireTertiary flex items-center gap-14 text-solitaireTertiary mb-3 pb-5">
-                                {cardDetails.meta_data.length > 1 &&
-                                  cardDetails.meta_data.map(
-                                    (data: any, index: number) => (
-                                      <div
-                                        key={`Search-${index}`}
-                                        style={{
-                                          marginRight:
-                                            index ===
-                                            cardDetails.meta_data.length - 1
-                                              ? '0px'
-                                              : '16px',
+                          {/* {sliderData.map((cardDetails: any) => ( */}
+                          <>
+                            <div className="sticky top-[82px] bg-solitaireSecondary flex items-center gap-14 text-solitaireTertiary">
+                              {savedSearchData[indexTest].meta_data.length >
+                                1 &&
+                                savedSearchData[indexTest].meta_data.map(
+                                  (data: any, index: number) => (
+                                    <div
+                                      key={`Search-${index}`}
+                                      style={{
+                                        marginRight:
+                                          index ===
+                                          savedSearchData[indexTest].meta_data
+                                            .length -
+                                            1
+                                            ? '0px'
+                                            : '16px',
+                                      }}
+                                    >
+                                      <CustomDisplayButton
+                                        displayButtonAllStyle={{
+                                          displayButtonStyle:
+                                            activeTab === index
+                                              ? styles.activeHeaderButtonStyle
+                                              : styles.headerButtonStyle,
+                                          displayLabelStyle:
+                                            styles.headerButtonLabelStyle,
                                         }}
-                                      >
-                                        <CustomDisplayButton
-                                          displayButtonAllStyle={{
-                                            displayButtonStyle:
-                                              activeTab === index
-                                                ? styles.activeHeaderButtonStyle
-                                                : styles.headerButtonStyle,
-                                            displayLabelStyle:
-                                              styles.headerButtonLabelStyle,
-                                          }}
-                                          displayButtonLabel={`Search ${
-                                            index + 1
-                                          }`}
-                                          handleClick={() =>
-                                            handleButtonClick(index)
-                                          }
-                                        />
-                                      </div>
-                                    )
-                                  )}
-                              </div>
-                              <div
-                                className="flex"
-                                key={cardDetails.meta_data.cardId}
-                              >
-                                <div className={styles.sheetMainDiv}>
-                                  {/* Detailed Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.savedSearch.basicInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object?.entries(
-                                      cardDetails &&
-                                        cardDetails?.meta_data[activeTab]
-                                          ?.basicCardDetails
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  {/* measurement Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.measurement'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object?.entries(
-                                      cardDetails &&
-                                        cardDetails?.meta_data[activeTab]
-                                          .measurements
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
-
-                                  {/* other Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.otherInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {Object.entries(
-                                      cardDetails &&
-                                        cardDetails?.meta_data[activeTab]
-                                          .OtherInformation
-                                    ).map(([key, value]) => (
-                                      <div key={key}>
-                                        <p className="flex">
-                                          <span className={styles.innerHeading}>
-                                            {key}
-                                          </span>
-                                          <span className={styles.sheetValues}>
-                                            {Array.isArray(value)
-                                              ? (value as string[]).join(', ')
-                                              : (value as string)}
-                                          </span>
-                                        </p>
-                                      </div>
-                                    ))}
-                                  </div>
+                                        displayButtonLabel={`Search ${
+                                          index + 1
+                                        }`}
+                                        handleClick={() =>
+                                          handleButtonClick(index)
+                                        }
+                                      />
+                                    </div>
+                                  )
+                                )}
+                            </div>
+                            <div
+                              className="flex"
+                              key={savedSearchData[indexTest].meta_data.cardId}
+                            >
+                              <div className={styles.sheetMainDiv}>
+                                {/* Detailed Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales('app.savedSearch.basicInfo')}
+                                  </p>
                                 </div>
 
-                                {/* inclusionDetails Information section */}
-                                <div className={styles.inclusionDetailsMainDiv}>
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.inclusionDetails'
-                                      )}
-                                    </p>
-                                  </div>
+                                <div>
+                                  {savedSearchData[indexTest] &&
+                                  savedSearchData[indexTest]?.meta_data &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ] &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ]?.basic_card_details
+                                    ? Object.entries(
+                                        savedSearchData[indexTest]?.meta_data[
+                                          activeTab
+                                        ]?.basic_card_details
+                                      ).map(([key, value]) => (
+                                        <div key={key}>
+                                          <p className="flex">
+                                            <span
+                                              className={styles.innerHeading}
+                                            >
+                                              {formatCassing(key)}
+                                            </span>
+                                            <span
+                                              className={styles.sheetValues}
+                                            >
+                                              <span
+                                                className={styles.sheetValues}
+                                              >
+                                                <span
+                                                  className={styles.sheetValues}
+                                                >
+                                                  <span
+                                                    className={
+                                                      styles.sheetValues
+                                                    }
+                                                  >
+                                                    <span
+                                                      className={
+                                                        styles.sheetValues
+                                                      }
+                                                    >
+                                                      <span
+                                                        className={
+                                                          styles.sheetValues
+                                                        }
+                                                      >
+                                                        {Array.isArray(value)
+                                                          ? value.length > 0
+                                                            ? value.join(', ')
+                                                            : '-'
+                                                          : typeof value ===
+                                                              'string' &&
+                                                            value.trim() === ''
+                                                          ? '-'
+                                                          : typeof value ===
+                                                            'string'
+                                                          ? value
+                                                          : '-'}
+                                                      </span>
+                                                    </span>
+                                                  </span>
+                                                </span>
+                                              </span>
+                                            </span>
+                                          </p>
+                                        </div>
+                                      ))
+                                    : ''}
+                                </div>
 
-                                  {Object.entries(
-                                    cardDetails &&
-                                      cardDetails?.meta_data[activeTab]
-                                        .inclusionDetails
+                                {/* measurement Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.measurement'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {savedSearchData[indexTest] &&
+                                  savedSearchData[indexTest]?.meta_data &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ] &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ].measurements
+                                    ? Object.entries(
+                                        savedSearchData[indexTest]?.meta_data[
+                                          activeTab
+                                        ].measurements
+                                      ).map(([key, value]) => (
+                                        <div key={key}>
+                                          <p className="flex">
+                                            <span
+                                              className={styles.innerHeading}
+                                            >
+                                              {formatCassing(key)}
+                                            </span>
+                                            <span
+                                              className={styles.sheetValues}
+                                            >
+                                              {Array.isArray(value)
+                                                ? value.length > 0
+                                                  ? value.join(', ')
+                                                  : '-'
+                                                : typeof value === 'string' &&
+                                                  value.trim() === ''
+                                                ? '-'
+                                                : typeof value === 'string'
+                                                ? value
+                                                : '-'}
+                                            </span>
+                                          </p>
+                                        </div>
+                                      ))
+                                    : ''}
+                                </div>
+
+                                {/* other Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {savedSearchData[indexTest] &&
+                                  savedSearchData[indexTest]?.meta_data &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ] &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ].other_information
+                                    ? Object.entries(
+                                        savedSearchData[indexTest]?.meta_data[
+                                          activeTab
+                                        ].other_information
+                                      ).map(([key, value]) => (
+                                        <div key={key}>
+                                          <p className="flex">
+                                            <span
+                                              className={styles.innerHeading}
+                                            >
+                                              {formatCassing(key)}
+                                            </span>
+                                            <span
+                                              className={styles.sheetValues}
+                                            >
+                                              {Array.isArray(value)
+                                                ? value.length > 0
+                                                  ? value.join(', ')
+                                                  : '-'
+                                                : typeof value === 'string' &&
+                                                  value.trim() === ''
+                                                ? '-'
+                                                : typeof value === 'string'
+                                                ? value
+                                                : '-'}
+                                            </span>
+                                          </p>
+                                        </div>
+                                      ))
+                                    : ''}
+                                </div>
+                              </div>
+
+                              {/* inclusionDetails Information section */}
+                              <div className={styles.inclusionDetailsMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.inclusionDetails'
+                                    )}
+                                  </p>
+                                </div>
+
+                                {savedSearchData[indexTest] &&
+                                savedSearchData[indexTest]?.meta_data &&
+                                savedSearchData[indexTest]?.meta_data[
+                                  activeTab
+                                ] &&
+                                savedSearchData[indexTest]?.meta_data[activeTab]
+                                  .inclusion_details ? (
+                                  Object.entries(
+                                    savedSearchData[indexTest]?.meta_data[
+                                      activeTab
+                                    ].inclusion_details
                                   ).map(([key, value]) => (
                                     <p className="flex" key={key}>
                                       <span
@@ -585,27 +713,102 @@ const SavedSearch = () => {
                                           styles.inclutionDetailsInnerHeadingStyle
                                         }
                                       >
-                                        {key}
+                                        {formatCassing(key)}
                                       </span>
                                       <span className={styles.sheetValues}>
-                                        {Array.isArray(value)
-                                          ? (value as string[]).join(', ')
-                                          : (value as string)}
+                                        {Array.isArray(value) &&
+                                        value.length > 0
+                                          ? value.join(', ')
+                                          : (typeof value === 'string' &&
+                                              value.trim() !== '') ||
+                                            typeof value === 'number'
+                                          ? value
+                                          : '-'}
                                       </span>
                                     </p>
-                                  ))}
+                                  ))
+                                ) : (
+                                  // Handle the case where the data is not available, e.g., display a loading message or an error message.
+                                  <p>Data not available</p>
+                                )}
+
+                                {/* other Information section */}
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {savedSearchData[indexTest] &&
+                                  savedSearchData[indexTest]?.meta_data &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ] &&
+                                  savedSearchData[indexTest]?.meta_data[
+                                    activeTab
+                                  ].other_information
+                                    ? Object.entries(
+                                        savedSearchData[indexTest]?.meta_data[
+                                          activeTab
+                                        ].other_information
+                                      ).map(([key, value]) => (
+                                        <div key={key}>
+                                          <p className="flex">
+                                            <span
+                                              className={styles.innerHeading}
+                                            >
+                                              {formatCassing(key)}
+                                            </span>
+                                            <span
+                                              className={styles.sheetValues}
+                                            >
+                                              <span
+                                                className={styles.sheetValues}
+                                              >
+                                                {Array.isArray(value) &&
+                                                value.length > 0
+                                                  ? value.join(', ')
+                                                  : (typeof value ===
+                                                      'string' &&
+                                                      value.trim() !== '') ||
+                                                    typeof value === 'number'
+                                                  ? value
+                                                  : '-'}
+                                              </span>
+                                            </span>
+                                          </p>
+                                        </div>
+                                      ))
+                                    : ''}
                                 </div>
                               </div>
-                            </>
-                          ))}
-
-                          <div className="border-b border-solitaireTertiary mt-8"></div>
+                            </div>
+                          </>
+                          {/* // ))} */}
 
                           {/* Show Results button */}
-                          <div className={styles.showResultMainDiv}>
+                          <div
+                            className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
+                          >
+                            <CustomDisplayButton
+                              displayButtonLabel="Modify Search"
+                              displayButtonAllStyle={{
+                                displayButtonStyle:
+                                  styles.showResultButtonTransparent,
+                              }}
+                              handleClick={() =>
+                                modifySearchHandler(items.cardId, activeTab)
+                              }
+                            />
                             <CustomDisplayButton
                               displayButtonLabel="Show Results"
-                              displayButtonAllStyle={showResulutButtonStyle}
+                              displayButtonAllStyle={{
+                                displayButtonStyle:
+                                  styles.showResultButtonFilled,
+                              }}
                               handleClick={showButtonHandleClick}
                             />
                           </div>
@@ -624,7 +827,7 @@ const SavedSearch = () => {
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
-            resultsPerPage={resultsPerPage}
+            resultsPerPage={limit}
             optionLimits={optionLimits}
             handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}

@@ -114,8 +114,10 @@
       appearance: none;
     }
   }
+
   body {
     @apply bg-solitairePrimary text-foreground;
+
     /* width */
     ::-webkit-scrollbar {
       width: 4px !important;
@@ -133,5 +135,11 @@
       background: hsl(var(--solitaire-tertiary));
       border-radius: 10px;
     }
+
+    font-size: 14px;
+    font-family: 'Manrope, sans-serif' !important;
+  }
+  body::-webkit-scrollbar {
+    width: 0.1rem;
   }
 }
