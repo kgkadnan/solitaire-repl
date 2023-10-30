@@ -18,7 +18,6 @@ import CustomDataTable, { Rows } from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
-import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
@@ -309,7 +308,7 @@ const SearchResults = () => {
         return rows.find((row) => row.id === id);
       });
 
-      dispatch(addCompareStone(comapreStone));
+      localStorage.setItem('compareStone', JSON.stringify(comapreStone));
       router.push('/compare-stone');
       setIsError(false);
       setErrorText('');
