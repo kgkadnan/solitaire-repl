@@ -18,8 +18,6 @@ import { useRouter } from 'next/navigation';
 import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomDropdown } from '@/components/common/dropdown';
-import { useAppDispatch } from '@/hooks/hook';
-import { addCompareStone } from '@/features/compare-stone/compare-stone-slice';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import dna from '@public/assets/icons/ph_dna-light.svg';
@@ -45,7 +43,6 @@ export interface StaticRequire {
 export type StaticImport = StaticRequire | StaticImageData;
 
 const MyCart = () => {
-  const dispatch = useAppDispatch();
   const router = useRouter();
   // Style classes and variables
   const tableStyles = {
@@ -55,9 +52,7 @@ const MyCart = () => {
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
-  const showResulutButtonStyle = {
-    displayButtonStyle: styles.showResultButtonStyle,
-  };
+
   const cardTimeStyles = {
     displayButtonStyle: styles.remainingCartTimeButton,
     displayLabelStyle: styles.remainingCartTimeLabel,
@@ -302,7 +297,7 @@ const MyCart = () => {
         .map((id) => data.items.find((row: any) => row.id === id))
         .map((stone) => stone.product);
 
-      dispatch(addCompareStone(compareStones));
+      localStorage.setItem('compareStone', JSON.stringify(compareStones));
       router.push('/compare-stone');
     }
   };

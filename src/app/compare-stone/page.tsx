@@ -12,7 +12,6 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useAppSelector } from '@/hooks/hook';
 import { useAddCartMutation } from '@/features/api/cart';
 
 interface ICompareStoneData {
@@ -90,9 +89,14 @@ interface KeyLabelMapping {
 }
 
 const CompareStone = () => {
-  const comapreStoneStoreData: any = useAppSelector((store) => store);
+  let compareStoneStoreData;
+  const storedJsonRows = localStorage.getItem('compareStone');
+  if (storedJsonRows) {
+    compareStoneStoreData = JSON.parse(storedJsonRows);
+  }
+
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
-    comapreStoneStoreData.compareStone[0]
+    compareStoneStoreData
   );
 
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -161,6 +165,14 @@ const CompareStone = () => {
   ];
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>, id: string) => {
+    const compareStones = JSON.parse(
+      localStorage.getItem('compareStone') || '[]'
+    );
+
+    const updatedStones = compareStones.filter((stone: any) => stone.id !== id);
+
+    localStorage.setItem('compareStone', JSON.stringify(updatedStones));
+
     const filterData = compareStoneData.filter((item: any) => item.id !== id);
     setCompareStoneData(filterData);
   };
@@ -259,6 +271,7 @@ const CompareStone = () => {
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+      console.log('updateIsCheck', updatedIsCheck);
     } else {
       updatedIsCheck.push(id);
     }
