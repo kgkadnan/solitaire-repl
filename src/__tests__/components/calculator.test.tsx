@@ -1,10 +1,8 @@
 import React from 'react';
 import { fireEvent, render, screen } from '@testing-library/react';
-import { CustomCalculator } from '@/components/caclulator';
+import { CustomCalculator } from '@/components/calculator';
 
 describe('CustomCalculator Component', () => {
-
-
   // Common test setup
   beforeEach(() => {
     render(<CustomCalculator />);

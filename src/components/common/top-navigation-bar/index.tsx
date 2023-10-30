@@ -13,7 +13,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover';
-import { CustomCalculator } from '@/components/caclulator';
+import { CustomCalculator } from '@/components/calculator';
 import { CustomSlider } from '../slider';
 import { Notification } from '@/components/notification';
 import {
@@ -72,9 +72,15 @@ export const TopNavigationBar = () => {
   ];
 
   const handleButtonClick = (label: string, link: string) => {
-    setActiveButton(label);
     localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
+    setActiveButton(label);
+
+    topNavData.forEach((navData) => {
+      if (navData.label !== label) {
+        navData.isActive = false;
+      }
+    });
   };
 
   const handleScroll = () => {
@@ -105,6 +111,8 @@ export const TopNavigationBar = () => {
     unreadNotifications.length
       ? await updateNotification(unreadNotifications)
       : '';
+
+    setOffset(0);
   };
 
   return (
@@ -119,10 +127,9 @@ export const TopNavigationBar = () => {
             <div key={navData.label}>
               <CustomDisplayButton
                 displayButtonAllStyle={{
-                  displayButtonStyle:
-                    activeButton === navData.label || navData.isActive
-                      ? styles.activeHeaderButtonStyle
-                      : styles.headerButtonStyle,
+                  displayButtonStyle: navData.isActive
+                    ? styles.activeHeaderButtonStyle
+                    : styles.headerButtonStyle,
                   displayLabelStyle: styles.headerButtonLabelStyle,
                 }}
                 displayButtonLabel={navData.label}
