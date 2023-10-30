@@ -9,9 +9,9 @@ interface IHeaderDataStyle {
   headerDataContainerStyles?: string;
 }
 export interface IHeaderData {
-  headerHeading?: string;
+  headerHeading?: string | React.ReactNode;
   handleSelectAllCheckbox?: (e: any) => void;
-  searchCount?: number;
+  searchCount?: any;
   handleSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
   isCheckAll?: boolean;

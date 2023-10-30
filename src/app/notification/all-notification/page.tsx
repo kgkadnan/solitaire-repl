@@ -9,6 +9,7 @@ import {
   useUpdateNotificationMutation,
 } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
+import { NoDataFound } from '@/components/common/no-data-found';
 interface INotificationData {
   id: string;
   customer_id: string;
@@ -68,56 +69,60 @@ const Notification = () => {
   return (
     <>
       <div className={styles.showAllNotificationContainer}>
-        {notificationData?.map((items) => {
-          return (
-            <div key={items.id} className="border-b border-solitaireSenary">
-              <div
-                className={`flex justify-between  ${
-                  items.status === 'unread'
-                    ? styles.notificationCardContainer
-                    : styles.readNotification
-                }`}
-                onClick={() => handleNotificationRead(items.category)}
-              >
-                <div className="flex justify-center items-center">
-                  <EllipseIcon
-                    className={
-                      items.status === 'unread'
-                        ? styles.ellipseIconActive
-                        : styles.ellipseIconInactive
-                    }
-                  />
+        {notificationData?.length > 0 ? (
+          notificationData?.map((items) => {
+            return (
+              <div key={items.id} className="border-b border-solitaireSenary">
+                <div
+                  className={`flex justify-between  ${
+                    items.status === 'unread' || items.status === 'unseen'
+                      ? styles.notificationCardContainer
+                      : styles.readNotification
+                  }`}
+                  onClick={() => handleNotificationRead(items.category)}
+                >
+                  <div className="flex justify-center items-center">
+                    <EllipseIcon
+                      className={
+                        items.status === 'unread' || items.status === 'unseen'
+                          ? styles.ellipseIconActive
+                          : styles.ellipseIconInactive
+                      }
+                    />
 
-                  <div className={styles.cardContentMainDiv}>
-                    <p className={styles.title}>
-                      {stringWithHTMLReplacement(
-                        items.template,
-                        items.parameter
-                      )}
-                    </p>
-                    <p className={styles.time}>
-                      {formatCreatedAt(items.created_at)}
-                    </p>
+                    <div className={styles.cardContentMainDiv}>
+                      <p className={styles.title}>
+                        {stringWithHTMLReplacement(
+                          items.template,
+                          items.parameter
+                        )}
+                      </p>
+                      <p className={styles.time}>
+                        {formatCreatedAt(items.created_at)}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex justify-center items-center">
+                    <CustomDisplayButton
+                      displayButtonLabel={
+                        items.category === 'wishlist'
+                          ? 'Wishlist'
+                          : items.category === 'my_cart'
+                          ? 'My Cart'
+                          : ''
+                      }
+                      displayButtonAllStyle={{
+                        displayButtonStyle: styles.transparent,
+                      }}
+                    />
                   </div>
                 </div>
-                <div className="flex justify-center items-center">
-                  <CustomDisplayButton
-                    displayButtonLabel={
-                      items.category === 'wishlist'
-                        ? 'Wishlist'
-                        : items.category === 'my_cart'
-                        ? 'My Cart'
-                        : ''
-                    }
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.transparent,
-                    }}
-                  />
-                </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        ) : (
+          <NoDataFound />
+        )}
       </div>
     </>
   );

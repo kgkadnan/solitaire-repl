@@ -2226,7 +2226,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCartButtonStyles} ${styles.addCarat}`,
               }}
             />
           </div>
