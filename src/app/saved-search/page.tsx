@@ -16,7 +16,6 @@ import {
   useGetAllSavedSearchesQuery,
   useGetSavedSearchListQuery,
 } from '@/features/api/saved-searches';
-import { CustomToast } from '@/components/common/toast';
 import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
@@ -26,6 +25,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { CustomDialog } from '@/components/common/dialog';
 
 interface ICardData {
   cardId: string;
@@ -92,6 +92,9 @@ const SavedSearch = () => {
   const [search, setSearch] = useState<string>('');
   const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState('');
 
   const dispatch = useAppDispatch();
 
@@ -208,21 +211,25 @@ const SavedSearch = () => {
   );
 
   //Delete Data
-  const handleDelete = async () => {
+  const handleDelete = () => {
     if (isCheck.length) {
-      // let payload = { id: isCheck, filter: { is_deleted: true } };
-      await deleteSavedSearch(isCheck);
-      await refetch();
-      setIsCheck([]);
-      setIsCheckAll(false);
+      setIsDialogOpen(true);
     } else {
-      // setShowToast(true);
-      // setToastErrorMessage('Check to delete previous search data.');
+      setIsError(true);
+      setErrorText(`You haven't picked any stones.`);
     }
 
     if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
       setCurrentPage(currentPage - 1);
     }
+  };
+
+  const deleteStoneHandler = async () => {
+    await deleteSavedSearch(isCheck);
+    await refetch();
+    setIsCheck([]);
+    setIsCheckAll(false);
+    setIsDialogOpen(false);
   };
 
   const debouncedSave = useCallback(
@@ -421,6 +428,33 @@ const SavedSearch = () => {
 
   return (
     <>
+      <CustomDialog
+        setIsOpen={setIsDialogOpen}
+        isOpens={isDialogOpen}
+        dialogContent={
+          <>
+            <p className="text-center mt-3">
+              Do you want to Delete the selected Stones?
+            </p>
+            <div className="flex justify-center">
+              <CustomDisplayButton
+                displayButtonLabel="Yes"
+                displayButtonAllStyle={{
+                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                }}
+                handleClick={deleteStoneHandler}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="No"
+                displayButtonAllStyle={{
+                  displayButtonStyle: styles.filled,
+                }}
+                handleClick={() => setIsDialogOpen(false)}
+              />
+            </div>
+          </>
+        }
+      />
       <div className="container flex flex-col">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
@@ -848,8 +882,19 @@ const SavedSearch = () => {
             handleResultsPerPageChange={handleResultsPerPageChange}
           />
 
-          {!!footerButtonData?.length && (
-            <CustomFooter footerButtonData={footerButtonData} />
+          {/* Custom Footer */}
+          {footerButtonData?.length && (
+            <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+              {isError && (
+                <div className="w-[30%]">
+                  <p className="text-red-700 text-base ">{errorText}</p>
+                </div>
+              )}
+              <CustomFooter
+                footerButtonData={footerButtonData}
+                noBorderTop={styles.paginationContainerStyle}
+              />
+            </div>
           )}
         </div>
       </div>
