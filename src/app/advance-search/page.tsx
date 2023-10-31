@@ -1374,34 +1374,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
   };
 
-  const handlePreviousSearchName = (name: string) => {
-    const criteriaToCheck = [
-      selectedShape,
-      selectedColor,
-      selectedWhiteColor,
-      selectedFancyColor,
-      selectedIntensity,
-      selectedOvertone,
-      selectedTinge,
-      selectedTingeIntensity,
-      selectedClarity,
-      selectedCaratRange,
-      selectedMake,
-      selectedCut,
-      selectedPolish,
-      selectedSymmetry,
-      selectedLab,
-    ];
 
-    const selectedCriteria = criteriaToCheck
-      .filter((criteria) => criteria.length > 0)
-      .map((criteria) =>
-        Array.isArray(criteria) ? criteria.join('') : criteria
-      )
-      .join(' ');
-
-    return name + selectedCriteria;
-  };
 
   const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
@@ -1779,10 +1752,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleSearch = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        let searchName = '';
-        searchName = handlePreviousSearchName(searchName);
+        
         await addPreviousSearch({
-          name: searchName,
           diamond_count: data?.count,
           meta_data: prepareSearchParam(),
           is_deleted: false,
@@ -1900,10 +1871,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     if (addSearches.length < 4) {
       //call previous serach api
       setSavedSearches([...savedSearches, prepareSearchParam()]);
-      let searchName = '';
-      searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
-        name: searchName,
         diamond_count: data?.count,
         meta_data: prepareSearchParam(),
         is_deleted: false,
