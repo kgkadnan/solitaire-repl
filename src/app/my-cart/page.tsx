@@ -77,7 +77,7 @@ const MyCart = () => {
   const [remainingTime, setRemainingTime] = useState([]);
 
   function calculateRemainingTime(createdAt: any) {
-    let millisecondData = createdAt.map((items: any) => {
+    let millisecondData = createdAt?.map((items: any) => {
       const createdAtTime = new Date(items).getTime(); // Convert created at to milliseconds since epoch
       const now = new Date().getTime(); // Current time in milliseconds
       const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
@@ -846,7 +846,10 @@ const MyCart = () => {
                 <p className="text-red-700 text-base ">{errorText}</p>
               </div>
             )}
-            <CustomFooter footerButtonData={footerButtonData} />
+            <CustomFooter
+              footerButtonData={footerButtonData}
+              noBorderTop={styles.paginationContainerStyle}
+            />
           </div>
         )}
       </div>
