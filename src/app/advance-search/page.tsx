@@ -53,7 +53,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
   const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
   const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
@@ -231,8 +230,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       (queryParams['color'] = selectedWhiteColor);
     selectedFancyColor?.length !== 0 &&
       (queryParams['fancy'] = selectedFancyColor);
-    selectedRangeColor?.length !== 0 &&
-      (queryParams['range'] = selectedRangeColor);
     selectedIntensity?.length !== 0 &&
       (queryParams['intensity'] = selectedIntensity);
     selectedOvertone?.length !== 0 &&
@@ -242,12 +239,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       (queryParams['color_shade_intensity'] = selectedTingeIntensity);
     selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
 
-    selectedCaratRange?.forEach((caratRange: any) => {
-      let caratData = caratRange.split('-');
-      const caratFrom = parseFloat(caratData[0]).toFixed(2);
-      const caratTo = parseFloat(caratData[1]).toFixed(2);
-      queryParams['carat'] = `${caratFrom}-${caratTo}`;
-    });
+    let caratValues: string[] = [];
+    if (selectedCaratRange && selectedCaratRange.length > 0) {
+      caratValues = selectedCaratRange.map((caratRange: any) => {
+        const caratData = caratRange.split('-');
+        const caratFrom = parseFloat(caratData[0]).toFixed(2);
+        const caratTo = parseFloat(caratData[1]).toFixed(2);
+        return `${caratFrom}-${caratTo}`;
+      });
+
+      caratValues && (queryParams['carat'] = caratValues);
+    }
 
     selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
     selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
@@ -491,16 +493,152 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   }, [modifySearchFrom]);
 
   useEffect(() => {
-    let data = JSON.parse(localStorage.getItem('Search')!);
+    let data: any = JSON.parse(localStorage.getItem('Search')!);
+
     if (
       data?.length !== undefined &&
       data?.length > 0 &&
-      data[0] !== undefined
+      data[data?.length - 1] !== undefined
     ) {
-      setAddSearches(data);
-      setSelectedShape(data[0]?.shape);
+      let index = data?.length - 1;
+      //basic_card_details
+      const cut = data[index]?.cut;
+      const lab = data[index]?.lab;
+      const carat = data[index]?.carat;
+      const color = data[index]?.color;
+      const culet = data[index]?.culet;
+      const shapes = data[index]?.shape;
+      const polish = data[index]?.polish;
+      const clarity = data[index]?.clarity;
+      const location = data[index]?.location;
+      const symmetry = data[index]?.symmetry;
+      const priceRange = data[index]?.price_range;
+      const pricePerCarat = data[index]?.price_per_carat;
+      const discount = data[index]?.discount;
+      const color_shade = data[index]?.color_shade;
+      const color_shade_intensity = data[index]?.color_shade_intensity;
+      const overtone = data[index]?.overtone;
+      const HA = data[index]?.['H&A'];
+      const brilliance = data[index]?.brilliance;
+      const fluoroscence = data[index]?.fluoroscence;
+      const country_of_origin = data[index]?.country_of_origin;
 
+      //measurements
+      const depth = data[index]?.depth;
+      const ratio = data[index]?.ratio;
+      const width = data[index]?.width;
+      const length = data[index]?.length;
+      const table_per = data[index]?.['table%'];
+      const girdle_per = data[index]?.['girdle%'];
+      const depth_per = data[index]?.['depth%'];
+      const lower_half = data[index]?.lower_half;
+      const crown_angle = data[index]?.crown_angle;
+      const star_length = data[index]?.star_length;
+      const crown_height = data[index]?.crown_height;
+      const pavilion_angle = data[index]?.pavilion_angle;
+      const pavilion_depth = data[index]?.pavilion_depth;
+
+      //inclusion_details
+      const milky = data[index]?.milky;
+      const luster = data[index]?.luster;
+      const eye_clean = data[index]?.eye_clean;
+      const open_crown = data[index]?.open_crown;
+      const open_table = data[index]?.open_table;
+      const side_table = data[index]?.side_table;
+      const black_table = data[index]?.black_table;
+      const natural_crown = data[index]?.natural_crown;
+      const open_pavilion = data[index]?.open_pavilion;
+      const natural_girdle = data[index]?.natural_girdle;
+      const side_inclusion = data[index]?.side_inclusion;
+      const table_inclusion = data[index]?.table_inclusion;
+      const natural_pavilion = data[index]?.natural_pavilion;
+      const surface_graining = data[index]?.surface_graining;
+      const internal_graining = data[index]?.internal_graining;
+
+      //other_information
+      const girdle = data[index]?.girdle;
+      const key_to_symbol = data[index]?.key_to_symbol;
+
+      //basic_card_details states
+      shapes && setSelectedShape(shapes);
+      carat && setSelectedCaratRange(carat);
+      clarity && setSelectedClarity(clarity);
+      cut && setSelectedCut(cut);
+      lab && setSelectedLab(lab);
+      culet && setSelectedCulet(culet);
+      polish && setSelectedPolish(polish);
+      location && setSelectedLocation(location);
+      HA && setSelectedHR(HA);
+      symmetry && setSelectedSymmetry(symmetry);
+      fluoroscence && setSelectedFluorescence(fluoroscence);
+      country_of_origin && setSelectedOrigin(country_of_origin);
+      color_shade && setSelectedTinge(color_shade);
+      color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
+      overtone && setSelectedOvertone(overtone);
+      brilliance && setSelectedBrilliance(brilliance);
+      priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
+      priceRange && setPriceRangeTo(priceRange.split('-')[1]);
+      discount && setDiscountFrom(discount.split('-')[0]);
+      discount && setDiscountTo(discount.split('-')[1]);
+      pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
+      pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
+      //measurements States
+
+      depth && setDepthFrom(depth.split('-')[0]);
+      depth && setDepthTo(depth.split('-')[1]);
+      ratio && setRatioFrom(ratio.split('-')[0]);
+      ratio && setRatioTo(ratio.split('-')[1]);
+      width && setWidthFrom(width.split('-')[0]);
+      width && setWidthTo(width.split('-')[1]);
+      length && setLengthFrom(length.split('-')[0]);
+      length && setLengthTo(length.split('-')[1]);
+      table_per && setTablePerFrom(table_per.split('-')[0]);
+      table_per && setTablePerTo(table_per.split('-')[1]);
+      girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
+      girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
+      depth_per && setDepthPerFrom(depth_per.split('-')[0]);
+      depth_per && setDepthPerTo(depth_per.split('-')[1]);
+      lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
+      lower_half && setLowerHalfTo(lower_half.split('-')[1]);
+      crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
+      crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
+      star_length && setStarLengthFrom(star_length.split('-')[0]);
+      star_length && setStarLengthTo(star_length.split('-')[1]);
+      crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
+      crown_height && setCrownHeightTo(crown_height.split('-')[1]);
+      pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
+      pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
+      pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
+      pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
+
+      //inclusion_details States
+      milky && setMilkyBI(milky);
+      luster && setLusterBI(luster);
+      eye_clean && setEyeCleanBI(eye_clean);
+      open_crown && setOpenCrownBI(open_crown);
+      open_table && setOpenTableBI(open_table);
+      side_table && setSideBlackBI(side_table);
+      black_table && setBlackTableBI(black_table);
+      natural_crown && setNaturalCrownWI(natural_crown);
+      open_pavilion && setOpenPavilionBI(open_pavilion);
+      natural_girdle && setNaturalGirdleWI(natural_girdle);
+      side_inclusion && setSideInclusionWI(side_inclusion);
+      table_inclusion && setTableInclusionWI(table_inclusion);
+      natural_pavilion && setNaturalPavilionWI(natural_pavilion);
+      surface_graining && setSurfaceGrainingWI(surface_graining);
+      internal_graining && setInternalGrainingWI(internal_graining);
+
+      //other_information States
+      girdle && setSelectedGirdle(girdle);
+      key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
+
+      let popData = data.filter((items: any, dataIndex: number) => {
+        return dataIndex !== index;
+      });
+      setAddSearches(popData);
       localStorage.removeItem('Search');
+
+      // setAddSearches(data);
     }
   }, []);
 
@@ -510,7 +648,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -588,7 +725,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedColor,
     selectedWhiteColor,
     selectedFancyColor,
-    selectedRangeColor,
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
@@ -668,25 +804,31 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
-          'Please modify your search, the stones exceeds the limit.'
+          '*Please modify your search, the stones exceeds the limit.'
         );
       } else if (data?.count === 0) {
         setIsError(true);
-        setErrorText(`no stones found`);
+        setErrorText(`*no stones found`);
       } else if (data?.count !== 0) {
         setIsError(true);
-        setErrorText(`${data?.count} stones found`);
+        setErrorText(`*${data?.count} stones found`);
       } else {
         setIsError(false);
         setErrorText('');
       }
     }
+    if (error) {
+      let error1: any = error;
+      setIsError(true);
+      setErrorText(error1?.error);
+    }
+    // console.log(error, 'error');
     // else{
     //   setIsError(true)
     //   setErrorText(`Please select the stone parameters to make the search.`)
     // }
     setSearchCount(searchCount + 1);
-  }, [data]);
+  }, [data, error]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -936,10 +1078,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleColorChange = (data: string) => {
-    setSelectedColor(data);
+    if (selectedColor !== data) {
+      setSelectedColor(data);
+    } else {
+      setSelectedColor('');
+    }
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -948,10 +1093,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleFancyFilterChange = (data: string) => {
     handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
-  };
-
-  const handleRangeFilterChange = (data: string) => {
-    handleFilterChange(data, selectedRangeColor, setSelectedRangeColor);
   };
 
   const handleIntensityChange = (data: string) => {
@@ -978,18 +1119,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleMakeChange = (data: string) => {
     if (data.toLowerCase() === '3ex') {
       if (data !== selectedMake) {
-        setSelectedCut([...selectedCut, 'Excellent']);
-        setSelectedPolish([...selectedPolish, 'Excellent']);
-        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+        setSelectedCut([...selectedCut, 'EX']);
+        setSelectedPolish([...selectedPolish, 'EX']);
+        setSelectedSymmetry([...selectedSymmetry, 'EX']);
       } else {
-        setSelectedCut(
-          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
-        );
+        setSelectedCut(selectedCut.filter((e) => e !== 'EX' && e !== 'VG'));
         setSelectedPolish(
-          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedPolish.filter((e) => e !== 'EX' && e !== 'VG')
         );
         setSelectedSymmetry(
-          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedSymmetry.filter((e) => e !== 'EX' && e !== 'VG')
         );
       }
       setSelectedFluorescence(selectedFluorescence.filter((e) => e !== 'NON'));
@@ -997,19 +1136,17 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
     if (data.toLowerCase() === '3ex-non') {
       if (data !== selectedMake) {
-        setSelectedCut([...selectedCut, 'Excellent']);
-        setSelectedPolish([...selectedPolish, 'Excellent']);
-        setSelectedSymmetry([...selectedSymmetry, 'Excellent']);
+        setSelectedCut([...selectedCut, 'EX']);
+        setSelectedPolish([...selectedPolish, 'EX']);
+        setSelectedSymmetry([...selectedSymmetry, 'EX']);
         setSelectedFluorescence([...selectedFluorescence, 'NON']);
       } else {
-        setSelectedCut(
-          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
-        );
+        setSelectedCut(selectedCut.filter((e) => e !== 'EX' && e !== 'VG'));
         setSelectedPolish(
-          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedPolish.filter((e) => e !== 'EX' && e !== 'VG')
         );
         setSelectedSymmetry(
-          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedSymmetry.filter((e) => e !== 'EX' && e !== 'VG')
         );
         setSelectedFluorescence(
           selectedFluorescence.filter((e) => e !== 'NON')
@@ -1019,18 +1156,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     if (data.toLowerCase() === '3vg+') {
       if (data !== selectedMake) {
         // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
-        setSelectedCut([...selectedCut, 'Excellent', 'Very Good']);
-        setSelectedPolish([...selectedPolish, 'Excellent', 'Very Good']);
-        setSelectedSymmetry([...selectedSymmetry, 'Excellent', 'Very Good']);
+        setSelectedCut([...selectedCut, 'EX', 'VG']);
+        setSelectedPolish([...selectedPolish, 'EX', 'VG']);
+        setSelectedSymmetry([...selectedSymmetry, 'EX', 'VG']);
       } else {
-        setSelectedCut(
-          selectedCut.filter((e) => e !== 'Excellent' && e !== 'Very Good')
-        );
+        setSelectedCut(selectedCut.filter((e) => e !== 'EX' && e !== 'VG'));
         setSelectedPolish(
-          selectedPolish.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedPolish.filter((e) => e !== 'EX' && e !== 'VG')
         );
         setSelectedSymmetry(
-          selectedSymmetry.filter((e) => e !== 'Excellent' && e !== 'Very Good')
+          selectedSymmetry.filter((e) => e !== 'EX' && e !== 'VG')
         );
         setSelectedFluorescence(
           selectedFluorescence.filter((e) => e !== 'NON')
@@ -1098,9 +1233,20 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     // Normalize user input like "3-3.99" to "3.00-3.99"
     const caratRange = value.split('-');
 
-    if (caratRange[1].trim() || caratRange[0].trim() === '') {
-      console.log('sdasda');
-    } else if (caratRange.length === 2 && caratRange[1].trim() !== '') {
+    console.log('caratRange[0]', caratRange[0] === '');
+
+    if (caratRange[0] === '' || caratRange[1] === '') {
+      setValidationError(`Please enter a valid carat range.`);
+      return;
+    } else if (caratRange[0] === '0' || caratRange[1] === '0') {
+      setValidationError('Please enter value between “0.10 to 50”');
+      return;
+    } else if (caratRange[0] > caratRange[1]) {
+      setValidationError(
+        `Carat range cannot be ${caratRange[0]} to ${caratRange[1]}. Please enter a valid carat range.`
+      );
+      return;
+    } else if (caratRange.length === 2) {
       const caratFrom = parseFloat(caratRange[0]).toFixed(2);
       const caratTo = parseFloat(caratRange[1]).toFixed(2);
       return `${caratFrom}-${caratTo}`;
@@ -1109,14 +1255,16 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   }
 
   const handleAddCarat = (data: string) => {
-    data = normalizeValue(data);
+    let Validatedata = normalizeValue(data);
 
-    if (!caratRangeData.includes(data)) {
-      setCaratRangeData([...caratRangeData, data]);
+    if (Validatedata) {
+      if (!caratRangeData.includes(Validatedata)) {
+        setCaratRangeData([...caratRangeData, Validatedata]);
+      }
+      setSelectedCaratRange([...selectedCaratRange, Validatedata]);
+      setCaratRangeFrom('');
+      setCaratRangeTo('');
     }
-    setSelectedCaratRange([...selectedCaratRange, data]);
-    setCaratRangeFrom('');
-    setCaratRangeTo('');
   };
 
   const formatSelection = (data: string[] | string) => {
@@ -1141,7 +1289,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedColor('');
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
     setSelectedIntensity([]);
     setSelectedOvertone([]);
     setSelectedTinge([]);
@@ -1237,8 +1384,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('white', selectedWhiteColor);
     selectedFancyColor.length > 0 &&
       updateYourSelection('fancy', selectedFancyColor);
-    selectedRangeColor.length > 0 &&
-      updateYourSelection('range', selectedRangeColor);
     selectedIntensity.length > 0 &&
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
@@ -1494,24 +1639,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSaveAndSearch = async () => {
-    if (searchCount > 1) {
-      if (data?.count < 300 && data?.count > 0) {
-        if (addSearches.length === 0) {
-          setSavedSearches([prepareSearchParam()]);
-        }
-
-        await addSavedSearch({
-          name: saveSearchName,
-          diamond_count: data?.count,
-          meta_data: [...savedSearches, prepareSearchParam()],
-          is_deleted: false,
-        });
-
-        handleSearch();
+    if (data?.count < 300 && data?.count > 0) {
+      if (addSearches.length === 0) {
+        setSavedSearches([prepareSearchParam()]);
       }
-    } else {
-      setIsError(true);
-      setErrorText('Please select some parameter before initiating search');
+
+      await addSavedSearch({
+        name: saveSearchName,
+        diamond_count: data?.count,
+        meta_data: [...savedSearches, prepareSearchParam()],
+        is_deleted: false,
+      });
+
+      handleSearch();
     }
   };
 
@@ -1519,18 +1659,101 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     if (addSearches.length < 5) {
       setAddSearches((prevSearches) => [
         ...prevSearches,
-        { ...prevSearches[searchIndex], shape: selectedShape },
+        {
+          ...prevSearches[searchIndex],
+          shape: selectedShape,
+          clarity: selectedClarity,
+        },
       ]);
     }
+  };
+
+  const handleAddSearches = () => {
+    const queryParams = generateQueryParams({
+      selectedShape,
+      selectedColor,
+      selectedWhiteColor,
+      selectedFancyColor,
+      selectedIntensity,
+      selectedOvertone,
+      selectedTinge,
+      selectedTingeIntensity,
+      selectedClarity,
+      selectedCaratRange,
+      caratRangeFrom,
+      caratRangeTo,
+      selectedMake,
+      selectedCut,
+      selectedPolish,
+      selectedSymmetry,
+      selectedFluorescence,
+      selectedCulet,
+      selectedGirdle,
+      selectedKeyToSymbol,
+      selectedLab,
+      selectedHR,
+      selectedBrilliance,
+      selectedLocation,
+      selectedOrigin,
+      priceRangeFrom,
+      priceRangeTo,
+      discountFrom,
+      discountTo,
+      pricePerCaratFrom,
+      pricePerCaratTo,
+      blackTableBI,
+      sideBlackBI,
+      openCrownBI,
+      openTableBI,
+      openPavilionBI,
+      milkyBI,
+      lusterBI,
+      eyeCleanBI,
+      tableInclusionWI,
+      sideInclusionWI,
+      naturalCrownWI,
+      naturalGirdleWI,
+      naturalPavilionWI,
+      surfaceGrainingWI,
+      internalGrainingWI,
+      tablePerFrom,
+      tablePerTo,
+      depthTo,
+      depthFrom,
+      crownAngleFrom,
+      crownAngleTo,
+      lengthFrom,
+      lengthTo,
+      pavilionDepthFrom,
+      pavilionDepthTo,
+      depthPerFrom,
+      depthPerTo,
+      crownHeightFrom,
+      crownHeightTo,
+      widthFrom,
+      widthTo,
+      lowerHalfFrom,
+      lowerHalfTo,
+      ratioFrom,
+      ratioTo,
+      girdlePerFrom,
+      girdlePerTo,
+      pavilionAngleFrom,
+      pavilionAngleTo,
+      starLengthFrom,
+      starLengthTo,
+    });
+
+    setAddSearches([...addSearches, queryParams]);
+
+    // setSearchIndex(addSearches.length + 1);
   };
 
   const handleSearch = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        // let searchName = '';
-        // searchName = handlePreviousSearchName(searchName);
+        
         await addPreviousSearch({
-          // name: searchName,
           diamond_count: data?.count,
           meta_data: prepareSearchParam(),
           is_deleted: false,
@@ -1541,7 +1764,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           selectedColor,
           selectedWhiteColor,
           selectedFancyColor,
-          selectedRangeColor,
           selectedIntensity,
           selectedOvertone,
           selectedTinge,
@@ -1626,33 +1848,30 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             updateSavedSearch(data);
           }
         }
-        console.log('queryParams', queryParams);
-        console.log('addSearches', addSearches);
 
         // return;
+
         localStorage.setItem(
           'Search',
           JSON.stringify([...addSearches, queryParams])
         );
+
         router.push('/search-result');
       }
     } else {
       setIsError(true);
-      setErrorText('Please select some parameter before initiating search');
+      setErrorText('*Please select some parameter before initiating search');
     }
   };
 
   // const setLocalData = () => {};
 
   const handleAddAnotherSearch = async () => {
-    handleAddSearchIndex();
-    if (addSearches.length < 5) {
+    // handleAddSearchIndex();
+    if (addSearches.length < 4) {
       //call previous serach api
       setSavedSearches([...savedSearches, prepareSearchParam()]);
-      let searchName = '';
-      // searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
-        // name: searchName,
         diamond_count: data?.count,
         meta_data: prepareSearchParam(),
         is_deleted: false,
@@ -1663,11 +1882,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setShowToast(true);
       setToastErrorMessage('Add search limit exceeded');
     }
-  };
-
-  const handleAddSearches = () => {
-    setAddSearches([...addSearches, { shape: selectedShape }]);
-    setSearchIndex(addSearches.length + 1);
   };
 
   ///reusable jsx
@@ -1912,54 +2126,62 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             className={`${styles.filterSection} ${styles.rangeFilter}`}
             style={{ width: '420px' }}
           >
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="caratRangeFrom"
-              onChange={(e) => {
-                if (regexPattern.test(e.target.value)) {
-                  setValidationError('');
-                  setCaratRangeFrom(e.target.value);
-                } else {
-                  setValidationError('Please enter value between “0.30 to 50”');
-                }
-              }}
-              value={caratRangeFrom}
-              placeholder={ManageLocales('app.advanceSearch.from')}
-              style={{
-                input: styles.inputFieldStyles,
-              }}
-            />
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="caratRangeTO"
-              onChange={(e) => {
-                // Use a regular expression to allow only numbers with up to two decimal places
-                if (regexPattern.test(e.target.value)) {
-                  setCaratRangeTo(e.target.value);
-                  setValidationError('');
-                } else {
-                  setValidationError('Please enter value between “0.30 to 50”');
-                }
-              }}
-              value={caratRangeTo}
-              placeholder={ManageLocales('app.advanceSearch.to')}
-              style={{
-                input: styles.inputFieldStyles,
-              }}
-            />
+            <div>
+              <div className="flex gap-5">
+                <CustomInputField
+                  // style={className}
+                  type="number"
+                  name="caratRangeFrom"
+                  onChange={(e) => {
+                    if (regexPattern.test(e.target.value)) {
+                      setValidationError('');
+                      setCaratRangeFrom(e.target.value);
+                    } else {
+                      setValidationError(
+                        'Please enter value between “0.01 to 50”'
+                      );
+                    }
+                  }}
+                  value={caratRangeFrom}
+                  placeholder={ManageLocales('app.advanceSearch.from')}
+                  style={{
+                    input: styles.inputFieldStyles,
+                  }}
+                />
+                <CustomInputField
+                  // style={className}
+                  type="number"
+                  name="caratRangeTO"
+                  onChange={(e) => {
+                    // Use a regular expression to allow only numbers with up to two decimal places
+                    if (regexPattern.test(e.target.value)) {
+                      setCaratRangeTo(e.target.value);
+                      setValidationError('');
+                    } else {
+                      setValidationError(
+                        'Please enter value between “0.10 to 50”'
+                      );
+                    }
+                  }}
+                  value={caratRangeTo}
+                  placeholder={ManageLocales('app.advanceSearch.to')}
+                  style={{
+                    input: styles.inputFieldStyles,
+                  }}
+                />
+              </div>
+            </div>
 
             <CustomSelectionButton
               selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCartButtonStyles} ${styles.addCarat}`,
               }}
             />
           </div>
-          <div className="text-red-500">
+          <div className="text-red-500 text-xs ml-2 ">
             {validationError && validationError}
           </div>
 
@@ -1999,7 +2221,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
                   advanceSearch.white,
-                  styles.whiteColorFilterStyle,
+                  '',
                   styles.activeOtherStyles,
                   selectedWhiteColor,
                   handleWhiteFilterChange
@@ -2013,16 +2235,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                   styles.activeOtherStyles,
                   selectedFancyColor,
                   handleFancyFilterChange
-                )}
-            </div>
-            <div>
-              {selectedColor.includes('Range') &&
-                renderSelectionButtons(
-                  advanceSearch.range,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedRangeColor,
-                  handleRangeFilterChange
                 )}
             </div>
           </div>
@@ -2550,11 +2762,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
           <div className="w-[40%] flex items-center">
-            <span className="hidden  text-green-700 text-red-700" />
+            <span className="hidden  text-green-500 text-red-500" />
             <p
               className={`text-${
                 data?.count < 300 && data?.count > 0 ? 'green' : 'red'
-              }-700 text-base`}
+              }-500 text-base`}
             >
               {errorText}
             </p>
@@ -2575,7 +2787,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               )}`,
               style: styles.transparent,
               fn: () => {
-                setIsInputDialogOpen(true);
+                if (searchCount > 1) {
+                  setIsInputDialogOpen(true);
+                } else {
+                  setIsError(true);
+                  setErrorText(
+                    '*Please select some parameter before initiating search'
+                  );
+                }
               },
               isDisable:
                 modifySearchFrom === 'previous-search' ||
@@ -2592,7 +2811,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               displayButtonLabel: `${ManageLocales(
                 'app.advanceSearch.addAnotherSearch'
               )} ${
-                addSearches.length > 0 ? '(' + addSearches.length + ')' : '  '
+                addSearches.length > 0 ? `(${addSearches.length + 1})` : '  '
               }`,
               style: ` ${styles.filled} ${styles.anotherSearch}`,
               fn: handleAddAnotherSearch,

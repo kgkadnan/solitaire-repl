@@ -1,13 +1,13 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import styles from './notification-header.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 
 const CustomNotificationHeader = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState<string>('Notifications');
+  let currentPath = usePathname();
   const cardDetailHeaderData = [
     {
       label: 'Notifications',
@@ -19,32 +19,31 @@ const CustomNotificationHeader = () => {
     },
   ];
 
-  const handleButtonClick = (label: string, link: string) => {
-    setActiveTab(label);
+  const handleButtonClick = (link: string) => {
     router.push(`${link}?lang=en`);
   };
 
   return (
     <>
       <div className={styles.showAllNotificationContainer}>
-        <div className="flex items-center gap-14 mt-[15px]">
-          {cardDetailHeaderData.map((cardDetails) => (
-            <div key={cardDetails.label}>
-              <CustomDisplayButton
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    activeTab === cardDetails.label
+        <div className="flex items-center gap-14 ">
+          {cardDetailHeaderData.map((cardDetails) => {
+            const isActive = currentPath === cardDetails.link;
+            return (
+              <div key={cardDetails.label}>
+                <CustomDisplayButton
+                  displayButtonAllStyle={{
+                    displayButtonStyle: isActive
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
-                  displayLabelStyle: styles.headerButtonLabelStyle,
-                }}
-                displayButtonLabel={cardDetails.label}
-                handleClick={() =>
-                  handleButtonClick(cardDetails.label, cardDetails.link)
-                }
-              />
-            </div>
-          ))}
+                    displayLabelStyle: styles.headerButtonLabelStyle,
+                  }}
+                  displayButtonLabel={cardDetails.label}
+                  handleClick={() => handleButtonClick(cardDetails.link)}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
     </>

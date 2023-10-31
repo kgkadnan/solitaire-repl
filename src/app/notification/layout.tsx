@@ -1,10 +1,10 @@
 'use client';
 import CustomNotificationHeader from '@/components/common/notification-header';
 import React, { useEffect, useState } from 'react';
-import styles from './show-notification.module.scss';
 import { usePathname } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import { useGetAllNotificationQuery } from '@/features/api/notification';
+import CustomHeader from '@/components/common/header';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
@@ -22,17 +22,21 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
     notificationSettingData.filter((item: any) => item.status === 'unread')
       .length;
 
+  let notificationHeader = {
+    headerHeading: (
+      <p>
+        {ManageLocales('app.notification.notifications')}
+        {path !== '/notification/setting' &&
+          unreadCount > 0 &&
+          `(${unreadCount})`}
+      </p>
+    ),
+  };
+
   return (
     <>
-      <div
-        className={`border-b border-solitaireSenary ${styles.showNotificationsHeading}`}
-      >
-        <p>
-          {ManageLocales('app.notification.notifications')}
-          {path !== '/notification/setting' &&
-            unreadCount > 0 &&
-            `(${unreadCount})`}
-        </p>
+      <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
+        <CustomHeader data={notificationHeader} />
       </div>
       <CustomNotificationHeader />
       <div

@@ -9,6 +9,7 @@ import { SheetClose } from '../ui/sheet';
 import { CustomDisplayButton } from '../common/buttons/display-button';
 import { useUpdateNotificationMutation } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
+import { NoDataFound } from '../common/no-data-found';
 
 export const Notification = ({
   notificationData,
@@ -33,9 +34,16 @@ export const Notification = ({
 
   const storeMyNotificationData = useCallback(() => {
     if (offset > 0) {
+      const newNotificationData = notificationData?.data?.filter(
+        (newItem: any) =>
+          !storeNotificationData.some(
+            (existingItem: any) => newItem.id === existingItem.id
+          )
+      );
+
       setStoreNotificationData([
         ...storeNotificationData,
-        ...notificationData?.data,
+        ...newNotificationData,
       ]);
     }
   }, [notificationData]);
@@ -114,49 +122,53 @@ export const Notification = ({
           </div>
         </div>
         <div className={` ${styles.newNotificationContainer}`}>
-          {storeNotificationData?.map((items: any) => {
-            return (
-              <div
-                key={items.customer_id}
-                className={`flex ${
-                  items.status === 'unread' || items.status === 'unseen'
-                    ? styles.readNotification
-                    : styles.newNotificationContentMainDiv
-                }`}
-                onClick={() => handleNotificationRead(items.category)}
-              >
-                <div className={styles.notificationsIcons}>
-                  <EllipseIcon
-                    className={
-                      items.status === 'unread' || items.status === 'unseen'
-                        ? styles.ellipseIconActive
-                        : styles.ellipseIconInactive
-                    }
-                  />
-                  {items.category === 'appointments' && (
-                    <div className={styles.calendarIcon}>
-                      <CalenderIcon />
-                    </div>
-                  )}
-                  {items.category === 'my_cart' && (
-                    <div className={styles.cartIcon}>
-                      <CartIcon />
-                    </div>
-                  )}
-                </div>
-                <div>
-                  {stringWithHTMLReplacement(items.template, items.parameter)}
+          {storeNotificationData?.length > 0 ? (
+            storeNotificationData?.map((items: any) => {
+              return (
+                <div
+                  key={items.customer_id}
+                  className={`flex ${
+                    items.status === 'unread' || items.status === 'unseen'
+                      ? styles.readNotification
+                      : styles.newNotificationContentMainDiv
+                  }`}
+                  onClick={() => handleNotificationRead(items.category)}
+                >
+                  <div className={styles.notificationsIcons}>
+                    <EllipseIcon
+                      className={
+                        items.status === 'unread' || items.status === 'unseen'
+                          ? styles.ellipseIconActive
+                          : styles.ellipseIconInactive
+                      }
+                    />
+                    {items.category === 'appointments' && (
+                      <div className={styles.calendarIcon}>
+                        <CalenderIcon />
+                      </div>
+                    )}
+                    {items.category === 'my_cart' && (
+                      <div className={styles.cartIcon}>
+                        <CartIcon />
+                      </div>
+                    )}
+                  </div>
+                  <div>
+                    {stringWithHTMLReplacement(items.template, items.parameter)}
 
-                  <p className={styles.newNotificationStatusTime}>
-                    {formatCreatedAt(items.created_at)}
-                  </p>
+                    <p className={styles.newNotificationStatusTime}>
+                      {formatCreatedAt(items.created_at)}
+                    </p>
+                  </div>
                 </div>
-              </div>
-            );
-          })}
+              );
+            })
+          ) : (
+            <NoDataFound />
+          )}
         </div>
         <div className={styles.loadMoreButtonContainer}>
-          {notificationData.data.length ? (
+          {notificationData?.data?.length >= limit ? (
             <CustomDisplayButton
               displayButtonLabel="Load More"
               displayButtonAllStyle={{
