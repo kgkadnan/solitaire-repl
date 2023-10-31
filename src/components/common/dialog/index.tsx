@@ -21,7 +21,7 @@ export const CustomDialog: React.FC<IDialog> = ({
     <>
       <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
         <DialogContent
-          className={`sm:max-w-[400px] h-[200px] bg-solitaireSecondary  ${dialogStyle?.dialogContent}`}
+          className={`sm:max-w-[377px] h-[147px] bg-solitaireSecondary text-solitaireTertiary  justify-center  ${dialogStyle?.dialogContent}`}
         >
           {dialogContent}
         </DialogContent>

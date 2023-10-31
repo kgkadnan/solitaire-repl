@@ -22,6 +22,7 @@ import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import dna from '@public/assets/icons/ph_dna-light.svg';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { CustomDialog } from '@/components/common/dialog';
 
 interface KeyLabelMapping {
   [key: string]: string;
@@ -69,6 +70,7 @@ const MyCart = () => {
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data } = useGetCartQuery({});
   const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
@@ -77,7 +79,7 @@ const MyCart = () => {
   const [remainingTime, setRemainingTime] = useState([]);
 
   function calculateRemainingTime(createdAt: any) {
-    let millisecondData = createdAt.map((items: any) => {
+    let millisecondData = createdAt?.map((items: any) => {
       const createdAtTime = new Date(items).getTime(); // Convert created at to milliseconds since epoch
       const now = new Date().getTime(); // Current time in milliseconds
       const thirtyMinutesInMilliseconds = 30 * 60 * 1000; // 30 minutes in milliseconds
@@ -261,20 +263,30 @@ const MyCart = () => {
 
   const handleDelete = () => {
     if (isCheck.length) {
-      deleteCart({
-        items: isCheck,
-      })
-        .unwrap()
-        .then((data) => {
-          setCardData(data.items);
-        })
-        .catch(() => {
-          console.log('1111111111111111');
-        });
+      setIsError(false);
+      setIsDialogOpen(true);
     } else {
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     }
+  };
+
+  const deleteStoneHandler = () => {
+    deleteCart({
+      items: isCheck,
+    })
+      .unwrap()
+      .then((data) => {
+        setCardData(data.items);
+      })
+      .catch((error) => {
+        console.log('error', error);
+      });
+    setIsDialogOpen(false);
+  };
+
+  const handleMoveToWishlist = () => {
+    router.push('/wishlist');
   };
 
   const handleConfirm = () => {
@@ -508,6 +520,33 @@ const MyCart = () => {
 
   return (
     <>
+      <CustomDialog
+        setIsOpen={setIsDialogOpen}
+        isOpens={isDialogOpen}
+        dialogContent={
+          <>
+            <p className="mt-3 px-[50px] text-center">
+              Do you want to “Delete” the cart or “Move to Wishlist”
+            </p>
+            <div className="flex justify-center">
+              <CustomDisplayButton
+                displayButtonLabel="Delete"
+                displayButtonAllStyle={{
+                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                }}
+                handleClick={deleteStoneHandler}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="Move to Wishlist"
+                displayButtonAllStyle={{
+                  displayButtonStyle: styles.filled,
+                }}
+                handleClick={handleMoveToWishlist}
+              />
+            </div>
+          </>
+        }
+      />
       <div className="container flex flex-col ">
         {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-16">
@@ -817,11 +856,6 @@ const MyCart = () => {
                                       </div>
                                     </div>
                                   </div>
-                                  <div className="sticky bottom-[-35px] bg-solitairePrimary">
-                                    <CustomFooter
-                                      footerButtonData={footerButtonData}
-                                    />
-                                  </div>
                                 </>
                               );
                             })}
@@ -846,7 +880,10 @@ const MyCart = () => {
                 <p className="text-red-700 text-base ">{errorText}</p>
               </div>
             )}
-            <CustomFooter footerButtonData={footerButtonData} />
+            <CustomFooter
+              footerButtonData={footerButtonData}
+              noBorderTop={styles.paginationContainerStyle}
+            />
           </div>
         )}
       </div>

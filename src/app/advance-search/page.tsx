@@ -53,7 +53,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
   const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
   const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
@@ -231,8 +230,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       (queryParams['color'] = selectedWhiteColor);
     selectedFancyColor?.length !== 0 &&
       (queryParams['fancy'] = selectedFancyColor);
-    selectedRangeColor?.length !== 0 &&
-      (queryParams['range'] = selectedRangeColor);
     selectedIntensity?.length !== 0 &&
       (queryParams['intensity'] = selectedIntensity);
     selectedOvertone?.length !== 0 &&
@@ -651,7 +648,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -729,7 +725,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     selectedColor,
     selectedWhiteColor,
     selectedFancyColor,
-    selectedRangeColor,
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
@@ -1083,10 +1078,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleColorChange = (data: string) => {
-    setSelectedColor(data);
+    if (selectedColor !== data) {
+      setSelectedColor(data);
+    } else {
+      setSelectedColor('');
+    }
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -1095,10 +1093,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleFancyFilterChange = (data: string) => {
     handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
-  };
-
-  const handleRangeFilterChange = (data: string) => {
-    handleFilterChange(data, selectedRangeColor, setSelectedRangeColor);
   };
 
   const handleIntensityChange = (data: string) => {
@@ -1295,7 +1289,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedColor('');
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
     setSelectedIntensity([]);
     setSelectedOvertone([]);
     setSelectedTinge([]);
@@ -1387,7 +1380,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -1419,8 +1411,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('white', selectedWhiteColor);
     selectedFancyColor.length > 0 &&
       updateYourSelection('fancy', selectedFancyColor);
-    selectedRangeColor.length > 0 &&
-      updateYourSelection('range', selectedRangeColor);
     selectedIntensity.length > 0 &&
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
@@ -1676,24 +1666,19 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleSaveAndSearch = async () => {
-    if (searchCount > 1) {
-      if (data?.count < 300 && data?.count > 0) {
-        if (addSearches.length === 0) {
-          setSavedSearches([prepareSearchParam()]);
-        }
-
-        await addSavedSearch({
-          name: saveSearchName,
-          diamond_count: data?.count,
-          meta_data: [...savedSearches, prepareSearchParam()],
-          is_deleted: false,
-        });
-
-        handleSearch();
+    if (data?.count < 300 && data?.count > 0) {
+      if (addSearches.length === 0) {
+        setSavedSearches([prepareSearchParam()]);
       }
-    } else {
-      setIsError(true);
-      setErrorText('*Please select some parameter before initiating search');
+
+      await addSavedSearch({
+        name: saveSearchName,
+        diamond_count: data?.count,
+        meta_data: [...savedSearches, prepareSearchParam()],
+        is_deleted: false,
+      });
+
+      handleSearch();
     }
   };
 
@@ -1716,7 +1701,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -1809,7 +1793,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           selectedColor,
           selectedWhiteColor,
           selectedFancyColor,
-          selectedRangeColor,
           selectedIntensity,
           selectedOvertone,
           selectedTinge,
@@ -2270,7 +2253,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
                   advanceSearch.white,
-                  styles.whiteColorFilterStyle,
+                  '',
                   styles.activeOtherStyles,
                   selectedWhiteColor,
                   handleWhiteFilterChange
@@ -2284,16 +2267,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                   styles.activeOtherStyles,
                   selectedFancyColor,
                   handleFancyFilterChange
-                )}
-            </div>
-            <div>
-              {selectedColor.includes('Range') &&
-                renderSelectionButtons(
-                  advanceSearch.range,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedRangeColor,
-                  handleRangeFilterChange
                 )}
             </div>
           </div>
@@ -2846,7 +2819,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               )}`,
               style: styles.transparent,
               fn: () => {
-                setIsInputDialogOpen(true);
+                if (searchCount > 1) {
+                  setIsInputDialogOpen(true);
+                } else {
+                  setIsError(true);
+                  setErrorText(
+                    '*Please select some parameter before initiating search'
+                  );
+                }
               },
               isDisable:
                 modifySearchFrom === 'previous-search' ||
