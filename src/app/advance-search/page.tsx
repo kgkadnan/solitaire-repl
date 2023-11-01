@@ -809,14 +809,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
-          '*Please modify your search, the stones exceeds the limit.'
+          'Please modify your search, the stones exceeds the limit.'
         );
       } else if (data?.count === 0) {
         setIsError(true);
-        setErrorText(`*no stones found`);
+        setErrorText(`No stones found`);
       } else if (data?.count !== 0) {
         setIsError(true);
-        setErrorText(`*${data?.count} stones found`);
+        setErrorText(`${data?.count} stones found`);
       } else {
         setIsError(false);
         setErrorText('');
@@ -1593,11 +1593,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const prepareSearchParam = () => {
-    let response = {
+    let response: any = {
       basic_card_details: {
         shape: selectedShape,
         carat: selectedCaratRange,
         color: selectedWhiteColor,
+        ...(selectedOvertone && { overtone: selectedOvertone }),
+        ...(selectedIntensity && { intensity: selectedIntensity }),
         color_shade: selectedTinge,
         color_shade_intensity: selectedTingeIntensity,
         clarity: selectedClarity,
@@ -1611,7 +1613,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         brilliance: selectedBrilliance,
         location: selectedLocation,
         country_of_origin: selectedOrigin,
-        overtone: selectedOvertone,
         price_per_carat:
           pricePerCaratFrom &&
           pricePerCaratTo &&
@@ -1672,6 +1673,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         internal_graining: internalGrainingWI,
       },
     };
+
     return response;
   };
 
@@ -1693,7 +1695,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       }
     } else {
       setIsError(true);
-      setErrorText('*Please select some parameter before initiating search');
+      setErrorText('Please select some parameter before initiating search');
     }
   };
 
@@ -1906,7 +1908,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       }
     } else {
       setIsError(true);
-      setErrorText('*Please select some parameter before initiating search');
+      setErrorText('Please select some parameter before initiating search');
     }
   };
 
@@ -1985,23 +1987,25 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
-            onBlur={(e) =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setFromAngle,
-                    setFromError,
-                    toAngle
-                  )
-                : handleBlur(
-                    parameter.label,
-                    e.target.value,
-                    setFromValue,
-                    setFromError,
-                    toValue
-                  )
+            onBlur={
+              (e) =>
+                parameter.label === 'Crown Angle' ||
+                parameter.label === 'Pavilion Angle'
+                  ? handleAngle(
+                      parameter.label,
+                      e.target.value,
+                      setFromAngle,
+                      setFromError,
+                      toAngle
+                    )
+                  : ''
+              // handleValidate(
+              //     parameter.label,
+              //     e.target.value,
+              //     setFromValue,
+              //     setFromError,
+              //     toValue
+              //   )
             }
           />
           <div className={styles.parameterLabel}>to</div>
@@ -2015,23 +2019,25 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
-            onBlur={(e) =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setToAngle,
-                    setFromError,
-                    fromAngle
-                  )
-                : handleBlur(
-                    parameter.label,
-                    e.target.value,
-                    setToValue,
-                    setFromError,
-                    fromValue
-                  )
+            onBlur={
+              (e) =>
+                parameter.label === 'Crown Angle' ||
+                parameter.label === 'Pavilion Angle'
+                  ? handleAngle(
+                      parameter.label,
+                      e.target.value,
+                      setToAngle,
+                      setFromError,
+                      fromAngle
+                    )
+                  : ''
+              //  handleValidate(
+              //     parameter.label,
+              //     e.target.value,
+              //     setToValue,
+              //     setFromError,
+              //     fromValue
+              //   )
             }
           />
         </div>
@@ -2106,35 +2112,84 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const [fromError, setFromError] = useState(initialErrorState);
 
-  const [fromValue, setFromValue] = useState('');
-  const [toValue, setToValue] = useState('');
-
   const [fromAngle, setFromAngle] = useState('');
   const [toAngle, setToAngle] = useState('');
 
-  const handleBlur = (
-    key: string,
+  interface Errors {
+    discount: { from: string | null; to: string | null };
+    price_range: { from: string | null; to: string | null };
+    price_per_carat: { from: string | null; to: string | null };
+    // Add more input groups here if needed
+  }
+
+  const [errors, setErrors] = useState<Errors>({
+    discount: { from: null, to: null },
+    price_range: { from: null, to: null },
+    price_per_carat: { from: null, to: null },
+    // Add more input groups here if needed
+  });
+  const handleValidate = (
+    key: keyof Errors,
+    inputType: 'from' | 'to',
     value: any,
-    setValue: any,
-    setError: any,
     otherValue: any
   ) => {
-    const numValue = parseInt(value);
-    const otherNumValue = parseInt(otherValue);
-
-    console.log('numValue', numValue);
-    console.log('otherNumValue', otherNumValue);
-
-    if (
-      value.length > 0 &&
-      (value === '' || !isInRange(value) || numValue < otherNumValue)
+    if (value == '' && otherValue == '') {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
+    } else if (value.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} from'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (otherValue.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} to'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (value > 100 || otherValue > 100) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: 'Please enter a valid range from 0 to 100',
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (
+      (inputType === 'from' && value > otherValue) ||
+      (inputType === 'to' && +value < otherValue)
     ) {
-      setError({ key, value: 'Please enter a valid range from 0 to 100' });
+      // Error handling for 'from' value being greater than 'to' value and vice versa
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `'${
+            inputType === 'from' ? 'From' : 'To'
+          }' value should not be ${
+            inputType === 'from' ? 'greater' : 'less'
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+        },
+      }));
     } else {
-      setError(initialErrorState);
-    }
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
 
-    setValue(value);
+      // Handle other error logic as needed
+    }
   };
 
   const handleAngle = (
@@ -2161,6 +2216,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       setError({ key, value: error });
     }
   };
+
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -2727,17 +2783,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             // style={className}
             type="number"
             name="discountFrom"
-            onBlur={(e) =>
-              handleBlur(
-                'discount',
-                e.target.value,
-                setFromValue,
-                setFromError,
-                toValue
-              )
-            }
             onChange={(e) => {
               setDiscountFrom(e.target.value);
+              handleValidate('discount', 'from', e.target.value, discountTo);
             }}
             value={discountFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2752,16 +2800,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="discountTo"
             onChange={(e) => {
               setDiscountTo(e.target.value);
+              handleValidate('discount', 'to', e.target.value, discountFrom);
             }}
-            onBlur={(e) =>
-              handleBlur(
-                'discount',
-                e.target.value,
-                setToValue,
-                setFromError,
-                fromValue
-              )
-            }
             value={discountTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
             style={{
@@ -2769,9 +2809,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             }}
           />
         </div>
-        {fromError.key === 'discount' && (
-          <div className={styles.validationMessage}>{fromError.value}</div>
-        )}
+        {/* {fromError.key === 'discount' && ( */}
+        <div className={styles.validationMessage}>
+          {errors?.discount.from ?? errors?.discount.to}
+        </div>
+        {/* )} */}
       </div>
 
       <div className={styles.filterSection}>
@@ -2789,6 +2831,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="priceRangeFrom"
             onChange={(e) => {
               setPriceRangeFrom(e.target.value);
+              handleValidate(
+                'price_range',
+                'from',
+                e.target.value,
+                priceRangeTo
+              );
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2802,6 +2850,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="priceRangeTo"
             onChange={(e) => {
               setPriceRangeTo(e.target.value);
+              handleValidate(
+                'price_range',
+                'to',
+                e.target.value,
+                priceRangeFrom
+              );
             }}
             value={priceRangeTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2809,6 +2863,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               input: styles.inputFieldStyles,
             }}
           />
+        </div>
+        <div className={styles.validationMessage}>
+          {errors?.price_range.from ?? errors?.price_range.to}
         </div>
       </div>
 
@@ -2827,6 +2884,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="pricePerCaratFrom"
             onChange={(e) => {
               setPricePerCaratFrom(e.target.value);
+              handleValidate(
+                'price_per_carat',
+                'from',
+                e.target.value,
+                pricePerCaratTo
+              );
             }}
             value={pricePerCaratFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2839,6 +2902,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="pricePerCaratTo"
             onChange={(e) => {
               setPricePerCaratTo(e.target.value);
+              handleValidate(
+                'price_per_carat',
+                'to',
+                e.target.value,
+                pricePerCaratFrom
+              );
             }}
             value={pricePerCaratTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2961,7 +3030,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
           <div className="w-[40%] flex items-center">
-            <span className="hidden  text-green-500 text-red-500" />
+            <span className="hidden  text-green-500" />
             <p
               className={`text-${
                 data?.count < 300 && data?.count > 0 ? 'green' : 'red'

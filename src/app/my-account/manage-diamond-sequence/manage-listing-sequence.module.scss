@@ -1,10 +1,20 @@
-.cardManageDiamondSequence{
+.cardManageListingSequence{
   // width: 320px !important;
   border: 10px solid hsl(var(--solitaire-primary));
   border-radius: 15px;
-  background: hsl(var(--solitaire-senary));
+  background: hsl(var(--solitaire-denary));
+
   display: flex;
   flex-direction: row;
+}
+.cardNonManageListingSequence{
+  // width: 320px !important;
+  border: 10px solid hsl(var(--solitaire-primary));
+  border-radius: 15px;
+  background: hsl(var(--solitaire-denary));
+  display: block;
+  width: 20%;
+  padding: 5px 0;
 }
 
 .gridUi {
@@ -14,10 +24,10 @@
 }
 
 //lable
-.lableManageDiamondSequence{
+.lableManageListingSequence{
 display: flex;
 margin-left: 10px;
-font-size: 16px;
+font-size: 14px;
 width: 100px;
 align-items: center;
 color: hsl(var(--solitaire-tertiary));
@@ -38,7 +48,7 @@ color: hsl(var(--solitaire-tertiary));
 }
 /* Media queries */
 @media (max-width: 1200px) {
-  .lableManageDiamondSequence {
+  .lableManageListingSequence {
     width: 90px;
     font-size: 14px;
   }
@@ -46,7 +56,7 @@ color: hsl(var(--solitaire-tertiary));
 }
 
 @media (max-width: 1024px) {
-  .lableManageDiamondSequence {
+  .lableManageListingSequence {
     width: 75px;
     font-size: 13px;
   }
@@ -54,7 +64,7 @@ color: hsl(var(--solitaire-tertiary));
 }
 
 @media (max-width: 768px) {
-  .lableManageDiamondSequence {
+  .lableManageListingSequence {
     width: 50px;
     font-size: 14px;
   }
