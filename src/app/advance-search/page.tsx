@@ -24,6 +24,7 @@ import { useGetProductCountQuery } from '@/features/api/product';
 
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
+import { priceSchema } from '@/utils/zod-schema';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -141,6 +142,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
+  const [isValidationError, setIsValidationError] = useState<boolean>(false);
+
+  const [fieldValidation, setFieldValidation] = useState<string>('');
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -719,7 +723,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
 
     // Construct your search URL here
-    setSearchUrl(constructUrlParams(queryParams));
+   !isValidationError && setSearchUrl(constructUrlParams(queryParams));
   }, [
     selectedShape,
     selectedColor,
@@ -1655,6 +1659,110 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     }
   };
 
+  const validateField = (fieldName:string, fieldValue:string) => {
+    const validationResult = priceSchema.safeParse(parseFloat(fieldValue));
+    if (!validationResult.success) {
+      setValidationError(`Invalid ${fieldName}.`);
+      return false;
+    }
+    return true;
+  };
+
+  const handlePriceChange = (e:any, field:string) => {
+    const newValue = e.target.value;
+    let fromError;
+    let toError;
+    if (field === "from") {
+      setPriceRangeFrom(newValue);
+      fromError  = validateField("from price", newValue);
+    if(  !fromError){setIsValidationError(true);  setValidationError("error");}
+
+
+    } else if (field === "to") {
+      setPriceRangeTo(newValue);
+      toError = validateField("to price", newValue);
+      if(  !toError){setIsValidationError(true);  setValidationError("error1");}
+
+
+    }
+
+
+    const rangeError = validatePriceRange();
+    if(rangeError.length>0){
+      setIsValidationError(true)
+      setValidationError(rangeError)
+    }
+    if (!fromError && !toError && !rangeError) {
+      // Both fields are valid, and the range is valid
+      setValidationError('')
+      setIsValidationError(false)
+      console.log("From Price:", parseFloat(priceRangeFrom));
+      console.log("To Price:", parseFloat(priceRangeTo));
+    }
+  };
+
+  const validatePriceRange = () => {
+    const from = parseFloat(priceRangeFrom);
+    const to = parseFloat(priceRangeTo);
+
+    if (from > to) {
+      return "'From' price should be less than 'to' price.";
+    }
+
+    return "";
+  };
+
+
+
+  // const handleFromPriceChange = (e:any) => {
+  //   const newValue = e.target.value;
+  //   setPriceRangeFrom(newValue);
+  //   const error = validateField("from price", newValue);
+  //   setIsValidationError(error)
+  //   if(!error){
+  //     console.log(error)
+  //     // setValidationError("kkk");
+  //     }
+  //     else {
+  //       const from = parseFloat(e.target.value);
+  //       const to = parseFloat(priceRangeTo);
+  
+  //       if (from > to) {
+  //         setValidationError("'From' price should be less than 'to' price.");
+  //       } else {
+  //         setValidationError('')
+  //         // Both fields are valid, and the range is valid
+  //         console.log("From Price:", from);
+  //         console.log("To Price:", to);
+  //       }
+  //     }
+  // };
+
+  // const handleToPriceChange = (e:any) => {
+  //   const newValue = e.target.value;
+  //   setPriceRangeTo(newValue);
+  //   const error = validateField("to price", newValue);
+  //   setIsValidationError(error)
+  //   if(!error){
+  //     console.log(error)
+  //   // setValidationError("lkk");
+  //   }
+  //   else {
+  //     const from = parseFloat(priceRangeFrom);
+  //     const to = parseFloat(e.target.value);
+
+  //     if (from > to) {
+  //       setValidationError("'From' price should be less than 'to' price.");
+  //     } else {
+  //       setValidationError('')
+  //       // Both fields are valid, and the range is valid
+  //       console.log("From Price:", from);
+  //       console.log("To Price:", to);
+  //     }
+  //   }
+  // };
+
+
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
       setAddSearches((prevSearches) => [
@@ -2589,7 +2697,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeFrom"
             onChange={(e) => {
-              setPriceRangeFrom(e.target.value);
+              handlePriceChange(e,"from")
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2602,7 +2710,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeTo"
             onChange={(e) => {
-              setPriceRangeTo(e.target.value);
+              handlePriceChange(e,"to")
             }}
             value={priceRangeTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2611,6 +2719,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             }}
           />
         </div>
+        {validationError}
       </div>
 
       <div className={styles.filterSection}>
@@ -2760,7 +2869,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
-        {isError && (
+        {(isError) && (
           <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-500 text-red-500" />
             <p
@@ -2768,7 +2877,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 data?.count < 300 && data?.count > 0 ? 'green' : 'red'
               }-500 text-base`}
             >
-              {errorText}
+              {!isValidationError  && errorText}
             </p>
           </div>
         )}
