@@ -10,6 +10,7 @@ import {
 } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { NotificationParameter } from '@/components/notification';
 interface INotificationData {
   id: string;
   customer_id: string;
@@ -38,7 +39,10 @@ const Notification = () => {
     setNotificationData(data?.data);
   }, [data, notificationData]);
 
-  function stringWithHTMLReplacement(template: string, parameter: any) {
+  function stringWithHTMLReplacement(
+    template: string,
+    parameter: NotificationParameter
+  ) {
     const parts = template.split('${{');
 
     const modifiedString = parts.map((part, index) => {
@@ -48,7 +52,9 @@ const Notification = () => {
         const [paramName] = part.split('}}');
         return (
           <span key={index}>
-            <span style={{ fontWeight: 600 }}>{parameter[paramName]}</span>
+            <span style={{ fontWeight: 600 }}>
+              {parameter[paramName as keyof NotificationParameter]}
+            </span>
             {part.substr(paramName.length + 2)}
           </span>
         );

@@ -15,7 +15,11 @@ import {
 } from '@/components/ui/popover';
 import { CustomCalculator } from '@/components/calculator';
 import { CustomSlider } from '../slider';
-import { Notification } from '@/components/notification';
+import {
+  Notification,
+  NotificationItem,
+  NotificationUpdate,
+} from '@/components/notification';
 import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
@@ -23,14 +27,18 @@ import {
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 
+interface StatusResponse {
+  status: boolean;
+}
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const notificationBadgeStoreData: any = useAppSelector((store) => store);
-  let badgeData = notificationBadgeStoreData.notificationBadge.status;
+  const notificationBadgeStoreData: StatusResponse = useAppSelector(
+    (store) => store.notificationBadge
+  );
+  let badgeData = notificationBadgeStoreData.status;
 
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [offset, setOffset] = useState(0);
@@ -74,8 +82,6 @@ export const TopNavigationBar = () => {
   const handleButtonClick = (label: string, link: string) => {
     localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
-    setActiveButton(label);
-
     topNavData.forEach((navData) => {
       if (navData.label !== label) {
         navData.isActive = false;
@@ -99,14 +105,15 @@ export const TopNavigationBar = () => {
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    let notificationMapData = data?.data?.map((item: any) => ({
+    let notificationMapData = data?.data?.map((item: NotificationItem) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread',
     }));
 
-    const unreadNotifications = notificationMapData?.filter(
-      (item: any) => item.status === 'unread'
-    );
+    const unreadNotifications: NotificationUpdate[] =
+      notificationMapData?.filter(
+        (item: NotificationUpdate) => item.status === 'unread'
+      );
 
     unreadNotifications.length
       ? await updateNotification(unreadNotifications)
