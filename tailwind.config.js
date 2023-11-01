@@ -26,6 +26,8 @@ module.exports = {
         solitaireSenary: 'hsl(var(--solitaire-senary))', // dark -Emerald 4 / light- Carbon 3
         solitaireSeptenary: 'hsl(var(--solitaire-septenary))', // dark - Emerald 7 / light- shadow
         solitaireOctonary: 'hsl(var(--solitaire-octonary))', // dark - Emerald 7 / light- Carbon 1
+        solitaireNonary: 'hsl(var(--solitaire-nonary))', // dark - Emerald 7 / light- Carbon 1
+        solitaireDenary: 'hsl(var(--solitaire-denary))', // dark - Emerald 7 / light- Carbon 1
         solitaireOutline: 'hsl(var(--solitaire-outline))', // dark - Emerald 4 / light- Carbon 2
         solitaireBorder: 'hsl(var(--solitaire-border))', // dark - Emerald 4 / light- white
         //********************* */
