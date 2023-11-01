@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
@@ -90,7 +90,12 @@ interface KeyLabelMapping {
 
 const CompareStone = () => {
   let compareStoneStoreData;
-  const storedJsonRows = localStorage.getItem('compareStone');
+  let storedJsonRows;
+  useEffect(() => {
+     storedJsonRows = localStorage.getItem('compareStone');
+
+  },[])
+  
   if (storedJsonRows) {
     compareStoneStoreData = JSON.parse(storedJsonRows);
   }
