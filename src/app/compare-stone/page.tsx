@@ -89,20 +89,17 @@ interface KeyLabelMapping {
 }
 
 const CompareStone = () => {
-  let compareStoneStoreData;
-  let storedJsonRows;
-  useEffect(() => {
-     storedJsonRows = localStorage.getItem('compareStone');
-
-  },[])
-  
-  if (storedJsonRows) {
-    compareStoneStoreData = JSON.parse(storedJsonRows);
-  }
-
   const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
-    compareStoneStoreData
+    []
   );
+
+  useEffect(() => {
+    let compareStoneStoreData = JSON.parse(
+      localStorage.getItem('compareStone')!
+    );
+
+    setCompareStoneData(compareStoneStoreData);
+  }, []);
 
   const [isCheck, setIsCheck] = useState<string[]>([]);
 
