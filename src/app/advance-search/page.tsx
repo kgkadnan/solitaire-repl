@@ -2697,7 +2697,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeFrom"
             onChange={(e) => {
-              handlePriceChange(e,"from")
+              setPriceRangeFrom(e.target.value)
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2710,7 +2710,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeTo"
             onChange={(e) => {
-              handlePriceChange(e,"to")
+             setPriceRangeTo(e.target.value)
             }}
             value={priceRangeTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
