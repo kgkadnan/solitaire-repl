@@ -5,6 +5,7 @@ export const downloadExcelApi = createApi({
   reducerPath: 'downloadExcelReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
     
   }),
   tagTypes: ['downloadExcel'],

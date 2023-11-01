@@ -6,6 +6,7 @@ export const cartApi = createApi({
   reducerPath: 'cartReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
     
   }),
   tagTypes: ['cart'],
