@@ -13,6 +13,7 @@ export const previousSearchApi = createApi({
   reducerPath: 'previousSearchReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
    
   }) as BaseQuery,
   tagTypes: ['PreviousSearch'],

@@ -11,7 +11,7 @@ type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
 export const productApi = createApi({
   reducerPath: 'productReducer',
-  baseQuery: fetchBaseQuery({ baseUrl: apiURL }) as BaseQuery,
+  baseQuery: fetchBaseQuery({ baseUrl: apiURL, credentials: 'include', }) as BaseQuery,
   tagTypes: ['Product'],
 
   endpoints: (builder) => ({

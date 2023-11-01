@@ -5,6 +5,7 @@ export const notificationSettingApi = createApi({
   reducerPath: 'notificationSettingReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
    
   }),
   tagTypes: ['notificationSetting'],
