@@ -157,6 +157,7 @@
 
 .addCarat {
   border: 1px solid #8c7459;
+  color: hsl(var(--solitaire-tertiary));
   padding: 0px 30px;
 }
 
@@ -198,8 +199,6 @@
   // color: red
 }
 
-
-
 .stepStyle {
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
@@ -223,8 +222,6 @@
   font-size: 14px !important;
   background-color: #8c7459;
 }
-
-
 
 .anotherSearch {
   width: 195px;
@@ -298,6 +295,10 @@
   border: 0.25px solid #5d6a6a;
 }
 
+.addCartButtonStyles {
+  border: 0.25px solid hsl(var(--solitaire-quaternary));
+}
+
 .labelDefaultStyle {
   color: hsl(var(--solitaire-tertiary));
 }
@@ -312,9 +313,6 @@
   border: 1px solid #8c7459;
 }
 
-
-
-.paginationContainerStyle{
-    
+.paginationContainerStyle {
   border: none !important ;
 }

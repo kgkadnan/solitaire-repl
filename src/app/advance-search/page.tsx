@@ -24,6 +24,7 @@ import { useGetProductCountQuery } from '@/features/api/product';
 
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
+import { priceSchema } from '@/utils/zod-schema';
 interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
@@ -53,7 +54,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedRangeColor, setSelectedRangeColor] = useState<string[]>([]);
   const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
   const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
@@ -142,6 +142,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
+  const [isValidationError, setIsValidationError] = useState<boolean>(false);
+
+  const [fieldValidation, setFieldValidation] = useState<string>('');
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -231,8 +234,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       (queryParams['color'] = selectedWhiteColor);
     selectedFancyColor?.length !== 0 &&
       (queryParams['fancy'] = selectedFancyColor);
-    selectedRangeColor?.length !== 0 &&
-      (queryParams['range'] = selectedRangeColor);
     selectedIntensity?.length !== 0 &&
       (queryParams['intensity'] = selectedIntensity);
     selectedOvertone?.length !== 0 &&
@@ -651,7 +652,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -723,13 +723,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
 
     // Construct your search URL here
-    setSearchUrl(constructUrlParams(queryParams));
+    !isValidationError && setSearchUrl(constructUrlParams(queryParams));
   }, [
     selectedShape,
     selectedColor,
     selectedWhiteColor,
     selectedFancyColor,
-    selectedRangeColor,
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
@@ -1083,10 +1082,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const handleColorChange = (data: string) => {
-    setSelectedColor(data);
+    if (selectedColor !== data) {
+      setSelectedColor(data);
+    } else {
+      setSelectedColor('');
+    }
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
   };
 
   const handleWhiteFilterChange = (data: string) => {
@@ -1095,10 +1097,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
   const handleFancyFilterChange = (data: string) => {
     handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
-  };
-
-  const handleRangeFilterChange = (data: string) => {
-    handleFilterChange(data, selectedRangeColor, setSelectedRangeColor);
   };
 
   const handleIntensityChange = (data: string) => {
@@ -1295,7 +1293,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     setSelectedColor('');
     setSelectedWhiteColor([]);
     setSelectedFancyColor([]);
-    setSelectedRangeColor([]);
     setSelectedIntensity([]);
     setSelectedOvertone([]);
     setSelectedTinge([]);
@@ -1381,36 +1378,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
   };
 
-  const handlePreviousSearchName = (name: string) => {
-    const criteriaToCheck = [
-      selectedShape,
-      selectedColor,
-      selectedWhiteColor,
-      selectedFancyColor,
-      selectedRangeColor,
-      selectedIntensity,
-      selectedOvertone,
-      selectedTinge,
-      selectedTingeIntensity,
-      selectedClarity,
-      selectedCaratRange,
-      selectedMake,
-      selectedCut,
-      selectedPolish,
-      selectedSymmetry,
-      selectedLab,
-    ];
-
-    const selectedCriteria = criteriaToCheck
-      .filter((criteria) => criteria.length > 0)
-      .map((criteria) =>
-        Array.isArray(criteria) ? criteria.join('') : criteria
-      )
-      .join(' ');
-
-    return name + selectedCriteria;
-  };
-
   const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
 
@@ -1419,8 +1386,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       updateYourSelection('white', selectedWhiteColor);
     selectedFancyColor.length > 0 &&
       updateYourSelection('fancy', selectedFancyColor);
-    selectedRangeColor.length > 0 &&
-      updateYourSelection('range', selectedRangeColor);
     selectedIntensity.length > 0 &&
       updateYourSelection('intensity', selectedIntensity);
     selectedOvertone.length > 0 &&
@@ -1699,6 +1664,108 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     }
   };
 
+  const validateField = (fieldName: string, fieldValue: string) => {
+    const validationResult = priceSchema.safeParse(parseFloat(fieldValue));
+    if (!validationResult.success) {
+      setValidationError(`Invalid ${fieldName}.`);
+      return false;
+    }
+    return true;
+  };
+
+  const handlePriceChange = (e: any, field: string) => {
+    const newValue = e.target.value;
+    let fromError;
+    let toError;
+    if (field === 'from') {
+      setPriceRangeFrom(newValue);
+      fromError = validateField('from price', newValue);
+      if (!fromError) {
+        setIsValidationError(true);
+        setValidationError('error');
+      }
+    } else if (field === 'to') {
+      setPriceRangeTo(newValue);
+      toError = validateField('to price', newValue);
+      if (!toError) {
+        setIsValidationError(true);
+        setValidationError('error1');
+      }
+    }
+
+    const rangeError = validatePriceRange();
+    if (rangeError.length > 0) {
+      setIsValidationError(true);
+      setValidationError(rangeError);
+    }
+    if (!fromError && !toError && !rangeError) {
+      // Both fields are valid, and the range is valid
+      setValidationError('');
+      setIsValidationError(false);
+      console.log('From Price:', parseFloat(priceRangeFrom));
+      console.log('To Price:', parseFloat(priceRangeTo));
+    }
+  };
+
+  const validatePriceRange = () => {
+    const from = parseFloat(priceRangeFrom);
+    const to = parseFloat(priceRangeTo);
+
+    if (from > to) {
+      return "'From' price should be less than 'to' price.";
+    }
+
+    return '';
+  };
+
+  // const handleFromPriceChange = (e:any) => {
+  //   const newValue = e.target.value;
+  //   setPriceRangeFrom(newValue);
+  //   const error = validateField("from price", newValue);
+  //   setIsValidationError(error)
+  //   if(!error){
+  //     console.log(error)
+  //     // setValidationError("kkk");
+  //     }
+  //     else {
+  //       const from = parseFloat(e.target.value);
+  //       const to = parseFloat(priceRangeTo);
+
+  //       if (from > to) {
+  //         setValidationError("'From' price should be less than 'to' price.");
+  //       } else {
+  //         setValidationError('')
+  //         // Both fields are valid, and the range is valid
+  //         console.log("From Price:", from);
+  //         console.log("To Price:", to);
+  //       }
+  //     }
+  // };
+
+  // const handleToPriceChange = (e:any) => {
+  //   const newValue = e.target.value;
+  //   setPriceRangeTo(newValue);
+  //   const error = validateField("to price", newValue);
+  //   setIsValidationError(error)
+  //   if(!error){
+  //     console.log(error)
+  //   // setValidationError("lkk");
+  //   }
+  //   else {
+  //     const from = parseFloat(priceRangeFrom);
+  //     const to = parseFloat(e.target.value);
+
+  //     if (from > to) {
+  //       setValidationError("'From' price should be less than 'to' price.");
+  //     } else {
+  //       setValidationError('')
+  //       // Both fields are valid, and the range is valid
+  //       console.log("From Price:", from);
+  //       console.log("To Price:", to);
+  //     }
+  //   }
+  // };
+
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
       setAddSearches((prevSearches) => [
@@ -1718,7 +1785,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       selectedColor,
       selectedWhiteColor,
       selectedFancyColor,
-      selectedRangeColor,
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
@@ -1797,10 +1863,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleSearch = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        let searchName = '';
-        searchName = handlePreviousSearchName(searchName);
         await addPreviousSearch({
-          name: searchName,
           diamond_count: data?.count,
           meta_data: prepareSearchParam(),
           is_deleted: false,
@@ -1811,7 +1874,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
           selectedColor,
           selectedWhiteColor,
           selectedFancyColor,
-          selectedRangeColor,
           selectedIntensity,
           selectedOvertone,
           selectedTinge,
@@ -1919,10 +1981,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     if (addSearches.length < 4) {
       //call previous serach api
       setSavedSearches([...savedSearches, prepareSearchParam()]);
-      let searchName = '';
-      searchName = handlePreviousSearchName(searchName);
       await addPreviousSearch({
-        name: searchName,
         diamond_count: data?.count,
         meta_data: prepareSearchParam(),
         is_deleted: false,
@@ -2400,7 +2459,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.selectionButtonStyles} ${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCartButtonStyles} ${styles.addCarat}`,
               }}
             />
           </div>
@@ -2444,7 +2503,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               {selectedColor.includes('White') &&
                 renderSelectionButtons(
                   advanceSearch.white,
-                  styles.whiteColorFilterStyle,
+                  '',
                   styles.activeOtherStyles,
                   selectedWhiteColor,
                   handleWhiteFilterChange
@@ -2458,16 +2517,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                   styles.activeOtherStyles,
                   selectedFancyColor,
                   handleFancyFilterChange
-                )}
-            </div>
-            <div>
-              {selectedColor.includes('Range') &&
-                renderSelectionButtons(
-                  advanceSearch.range,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedRangeColor,
-                  handleRangeFilterChange
                 )}
             </div>
           </div>
@@ -2831,12 +2880,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="priceRangeFrom"
             onChange={(e) => {
               setPriceRangeFrom(e.target.value);
-              handleValidate(
-                'price_range',
-                'from',
-                e.target.value,
-                priceRangeTo
-              );
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2864,9 +2907,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             }}
           />
         </div>
-        <div className={styles.validationMessage}>
-          {errors?.price_range.from ?? errors?.price_range.to}
-        </div>
+        {validationError}
       </div>
 
       <div className={styles.filterSection}>
@@ -3036,7 +3077,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
                 data?.count < 300 && data?.count > 0 ? 'green' : 'red'
               }-500 text-base`}
             >
-              {errorText}
+              {!isValidationError && errorText}
             </p>
           </div>
         )}
@@ -3055,7 +3096,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               )}`,
               style: styles.transparent,
               fn: () => {
-                setIsInputDialogOpen(true);
+                if (searchCount > 1) {
+                  setIsInputDialogOpen(true);
+                } else {
+                  setIsError(true);
+                  setErrorText(
+                    '*Please select some parameter before initiating search'
+                  );
+                }
               },
               isDisable:
                 modifySearchFrom === 'previous-search' ||

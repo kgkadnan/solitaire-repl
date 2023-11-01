@@ -31,6 +31,7 @@ import { formatCassing } from '@/utils/format-cassing';
 import { useRouter } from 'next/navigation';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifyPreviousSearch } from '@/features/previous-search/previous-search';
+import { NoDataFound } from '@/components/common/no-data-found';
 
 interface ICardData {
   cardId: string;
@@ -322,7 +323,7 @@ const PreviousSearch = () => {
   const previousSearchheaderData = {
     headerHeading: ManageLocales('app.previousSearch.header'),
     //count
-    searchCount: data?.data?.count,
+    searchCount: data?.data?.count > 0 && data?.data?.count,
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
@@ -385,185 +386,189 @@ const PreviousSearch = () => {
         </div>
 
         {/* Custom Card and Checkbox map */}
-        <div className="flex-grow overflow-y-auto min-h-[80vh]">
-          <>
-            {cardData?.map((items: any, index: number) => {
-              return (
-                <div key={items.cardId}>
-                  <div className="flex mt-6">
-                    <CustomCheckBox
-                      data={items.cardId}
-                      onClick={handleClick}
-                      isChecked={isCheck}
-                    />
-                    <CustomSlider
-                      sheetTriggenContent={
-                        <>
-                          <CustomSearchResultCard
-                            cardData={items}
-                            overriddenStyles={cardStyles}
-                            defaultCardPosition={false}
-                            handleCardAction={handleEdit}
-                          />
-                        </>
-                      }
-                      sheetTriggerStyle={styles.mainCardContainer}
-                      sheetContent={
-                        <>
-                          {/* Detailed Information section */}
-                          <div
-                            className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
-                          >
-                            <p>
-                              {ManageLocales('app.previousSearch.detailInfo')}
-                            </p>
-                          </div>
-
-                          {/* Loop through card detail data */}
-                          {/* {PreviousSearchData.map((cardDetails) => ( */}
-                          <div
-                            className="flex"
-                            key={PreviousSearchData[index]?.id}
-                          >
-                            <div className={styles.sheetMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales(
-                                    'app.previousSearch.basicInfo'
-                                  )}
-                                </p>
-                              </div>
-
-                              <div>
-                                {Object.entries(
-                                  PreviousSearchData[index].meta_data
-                                    .basic_card_details
-                                ).map(([key, value]: any) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {formatCassing(key)}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {typeof value !== 'string'
-                                          ? value?.join(',')
-                                          : formatCassing(value)}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales(
-                                    'app.previousSearch.measurement'
-                                  )}
-                                </p>
-                              </div>
-
-                              <div>
-                                {Object.entries(
-                                  PreviousSearchData[index].meta_data
-                                    .measurements
-                                ).map(([key, value]: any) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {formatCassing(key)}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {typeof value !== 'string'
-                                          ? value.join(',')
-                                          : formatCassing(value)}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales(
-                                    'app.previousSearch.otherInfo'
-                                  )}
-                                </p>
-                              </div>
-
-                              <div>
-                                {Object.entries(
-                                  PreviousSearchData[index].meta_data
-                                    .other_information
-                                ).map(([key, value]: any) => (
-                                  <div key={key}>
-                                    <p className="flex">
-                                      <span className={styles.innerHeading}>
-                                        {formatCassing(key)}
-                                      </span>
-                                      <span className={styles.sheetValues}>
-                                        {typeof value !== 'string'
-                                          ? value.join(',')
-                                          : formatCassing(value)}
-                                      </span>
-                                    </p>
-                                  </div>
-                                ))}
-                              </div>
-                            </div>
-
-                            <div className={styles.inclusionDetailsMainDiv}>
-                              <div className={styles.sheetHeading}>
-                                <p>
-                                  {ManageLocales(
-                                    'app.previousSearch.inclusionDetails'
-                                  )}
-                                </p>
-                              </div>
-                              {Object.entries(
-                                PreviousSearchData[index].meta_data
-                                  .inclusion_details
-                              ).map(([key, value]: any) => (
-                                <p className="flex" key={key}>
-                                  <span
-                                    className={
-                                      styles.inclutionDetailsInnerHeadingStyle
-                                    }
-                                  >
-                                    {formatCassing(key)}
-                                  </span>
-                                  <span className={styles.sheetValues}>
-                                    {typeof value !== 'string'
-                                      ? value.join(',')
-                                      : formatCassing(value)}
-                                  </span>
-                                </p>
-                              ))}
-                            </div>
-                          </div>
-                          {/* ))} */}
-
-                          {/* <div className="border-b border-solitaireTertiary mt-8"></div> */}
-
-                          {/* Show Results button */}
-                          <div
-                            className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
-                          >
-                            <CustomDisplayButton
-                              displayButtonLabel="Show Results"
-                              displayButtonAllStyle={showResulutButtonStyle}
-                              handleClick={showButtonHandleClick}
+        {cardData?.length ? (
+          <div className="flex-grow overflow-y-auto min-h-[80vh]">
+            <>
+              {cardData?.map((items: any, index: number) => {
+                return (
+                  <div key={items.cardId}>
+                    <div className="flex mt-6">
+                      <CustomCheckBox
+                        data={items.cardId}
+                        onClick={handleClick}
+                        isChecked={isCheck}
+                      />
+                      <CustomSlider
+                        sheetTriggenContent={
+                          <>
+                            <CustomSearchResultCard
+                              cardData={items}
+                              overriddenStyles={cardStyles}
+                              defaultCardPosition={false}
+                              handleCardAction={handleEdit}
                             />
-                          </div>
-                        </>
-                      }
-                      sheetContentStyle={styles.sheetContentStyle}
-                    />
+                          </>
+                        }
+                        sheetTriggerStyle={styles.mainCardContainer}
+                        sheetContent={
+                          <>
+                            {/* Detailed Information section */}
+                            <div
+                              className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
+                            >
+                              <p>
+                                {ManageLocales('app.previousSearch.detailInfo')}
+                              </p>
+                            </div>
+
+                            {/* Loop through card detail data */}
+                            {/* {PreviousSearchData.map((cardDetails) => ( */}
+                            <div
+                              className="flex"
+                              key={PreviousSearchData[index]?.id}
+                            >
+                              <div className={styles.sheetMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.basicInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    PreviousSearchData[index].meta_data
+                                      .basic_card_details
+                                  ).map(([key, value]: any) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {formatCassing(key)}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {typeof value !== 'string'
+                                            ? value?.join(',')
+                                            : formatCassing(value)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.measurement'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    PreviousSearchData[index].meta_data
+                                      .measurements
+                                  ).map(([key, value]: any) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {formatCassing(key)}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {typeof value !== 'string'
+                                            ? value.join(',')
+                                            : formatCassing(value)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.otherInfo'
+                                    )}
+                                  </p>
+                                </div>
+
+                                <div>
+                                  {Object.entries(
+                                    PreviousSearchData[index].meta_data
+                                      .other_information
+                                  ).map(([key, value]: any) => (
+                                    <div key={key}>
+                                      <p className="flex">
+                                        <span className={styles.innerHeading}>
+                                          {formatCassing(key)}
+                                        </span>
+                                        <span className={styles.sheetValues}>
+                                          {typeof value !== 'string'
+                                            ? value.join(',')
+                                            : formatCassing(value)}
+                                        </span>
+                                      </p>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              <div className={styles.inclusionDetailsMainDiv}>
+                                <div className={styles.sheetHeading}>
+                                  <p>
+                                    {ManageLocales(
+                                      'app.previousSearch.inclusionDetails'
+                                    )}
+                                  </p>
+                                </div>
+                                {Object.entries(
+                                  PreviousSearchData[index].meta_data
+                                    .inclusion_details
+                                ).map(([key, value]: any) => (
+                                  <p className="flex" key={key}>
+                                    <span
+                                      className={
+                                        styles.inclutionDetailsInnerHeadingStyle
+                                      }
+                                    >
+                                      {formatCassing(key)}
+                                    </span>
+                                    <span className={styles.sheetValues}>
+                                      {typeof value !== 'string'
+                                        ? value.join(',')
+                                        : formatCassing(value)}
+                                    </span>
+                                  </p>
+                                ))}
+                              </div>
+                            </div>
+                            {/* ))} */}
+
+                            {/* <div className="border-b border-solitaireTertiary mt-8"></div> */}
+
+                            {/* Show Results button */}
+                            <div
+                              className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
+                            >
+                              <CustomDisplayButton
+                                displayButtonLabel="Show Results"
+                                displayButtonAllStyle={showResulutButtonStyle}
+                                handleClick={showButtonHandleClick}
+                              />
+                            </div>
+                          </>
+                        }
+                        sheetContentStyle={styles.sheetContentStyle}
+                      />
+                    </div>
                   </div>
-                </div>
-              );
-            })}
-          </>
-        </div>
+                );
+              })}
+            </>
+          </div>
+        ) : (
+          <NoDataFound />
+        )}
 
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">

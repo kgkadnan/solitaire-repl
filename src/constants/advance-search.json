@@ -61,9 +61,8 @@
       "src": "https://api.kgk.live/images/image/others-deaf0f6c-39a5-4a90-a264-56734dcaf642.png"
     }
   ],
-  "color": ["White", "Fancy", "Range"],
-  "white": ["D", "E", "F", "I", "J", "K", "L", "M", "N"],
-  "range": ["FANCY", "N-O", "O-P", "S-T", "P-R", "Q-R", "W-X", "Y-Z", "U-V"],
+  "color": ["White", "Fancy"],
+  "white": ["D", "E", "F", "I", "J", "K", "L", "M", "N","FANCY", "N-O", "O-P", "S-T", "P-R", "Q-R", "W-X", "Y-Z", "U-V"],
   "fancy": [
     "Yellow",
     "Pink",

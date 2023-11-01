@@ -216,9 +216,25 @@
   background-color: transparent;
   border: 1px solid #8c7459;
   font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 .filled {
   background-color: #8c7459;
   color: #ffffff;
   font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.paginationContainerStyle {
+  border: none !important ;
 }
