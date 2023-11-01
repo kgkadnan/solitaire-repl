@@ -723,7 +723,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
 
     // Construct your search URL here
-   !isValidationError && setSearchUrl(constructUrlParams(queryParams));
+    !isValidationError && setSearchUrl(constructUrlParams(queryParams));
   }, [
     selectedShape,
     selectedColor,
@@ -808,14 +808,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
-          '*Please modify your search, the stones exceeds the limit.'
+          'Please modify your search, the stones exceeds the limit.'
         );
       } else if (data?.count === 0) {
         setIsError(true);
-        setErrorText(`*no stones found`);
+        setErrorText(`No stones found`);
       } else if (data?.count !== 0) {
         setIsError(true);
-        setErrorText(`*${data?.count} stones found`);
+        setErrorText(`${data?.count} stones found`);
       } else {
         setIsError(false);
         setErrorText('');
@@ -1378,8 +1378,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     });
   };
 
-
-
   const handleYourSelection = () => {
     selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
 
@@ -1560,11 +1558,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   };
 
   const prepareSearchParam = () => {
-    let response = {
+    let response: any = {
       basic_card_details: {
         shape: selectedShape,
         carat: selectedCaratRange,
         color: selectedWhiteColor,
+        ...(selectedOvertone && { overtone: selectedOvertone }),
+        ...(selectedIntensity && { intensity: selectedIntensity }),
         color_shade: selectedTinge,
         color_shade_intensity: selectedTingeIntensity,
         clarity: selectedClarity,
@@ -1578,7 +1578,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         brilliance: selectedBrilliance,
         location: selectedLocation,
         country_of_origin: selectedOrigin,
-        overtone: selectedOvertone,
         price_per_carat:
           pricePerCaratFrom &&
           pricePerCaratTo &&
@@ -1639,27 +1638,33 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         internal_graining: internalGrainingWI,
       },
     };
+
     return response;
   };
 
-  const handleSaveAndSearch = async () => {
-    if (data?.count < 300 && data?.count > 0) {
-      if (addSearches.length === 0) {
-        setSavedSearches([prepareSearchParam()]);
+  const handleSaveAndSearch: any = async () => {
+    if (searchCount > 1) {
+      if (data?.count < 300 && data?.count > 0) {
+        if (addSearches.length === 0) {
+          setSavedSearches([prepareSearchParam()]);
+        }
+
+        await addSavedSearch({
+          name: saveSearchName,
+          diamond_count: data?.count,
+          meta_data: [...savedSearches, prepareSearchParam()],
+          is_deleted: false,
+        });
+
+        handleSearch();
       }
-
-      await addSavedSearch({
-        name: saveSearchName,
-        diamond_count: data?.count,
-        meta_data: [...savedSearches, prepareSearchParam()],
-        is_deleted: false,
-      });
-
-      handleSearch();
+    } else {
+      setIsError(true);
+      setErrorText('Please select some parameter before initiating search');
     }
   };
 
-  const validateField = (fieldName:string, fieldValue:string) => {
+  const validateField = (fieldName: string, fieldValue: string) => {
     const validationResult = priceSchema.safeParse(parseFloat(fieldValue));
     if (!validationResult.success) {
       setValidationError(`Invalid ${fieldName}.`);
@@ -1668,36 +1673,37 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     return true;
   };
 
-  const handlePriceChange = (e:any, field:string) => {
+  const handlePriceChange = (e: any, field: string) => {
     const newValue = e.target.value;
     let fromError;
     let toError;
-    if (field === "from") {
+    if (field === 'from') {
       setPriceRangeFrom(newValue);
-      fromError  = validateField("from price", newValue);
-    if(  !fromError){setIsValidationError(true);  setValidationError("error");}
-
-
-    } else if (field === "to") {
+      fromError = validateField('from price', newValue);
+      if (!fromError) {
+        setIsValidationError(true);
+        setValidationError('error');
+      }
+    } else if (field === 'to') {
       setPriceRangeTo(newValue);
-      toError = validateField("to price", newValue);
-      if(  !toError){setIsValidationError(true);  setValidationError("error1");}
-
-
+      toError = validateField('to price', newValue);
+      if (!toError) {
+        setIsValidationError(true);
+        setValidationError('error1');
+      }
     }
 
-
     const rangeError = validatePriceRange();
-    if(rangeError.length>0){
-      setIsValidationError(true)
-      setValidationError(rangeError)
+    if (rangeError.length > 0) {
+      setIsValidationError(true);
+      setValidationError(rangeError);
     }
     if (!fromError && !toError && !rangeError) {
       // Both fields are valid, and the range is valid
-      setValidationError('')
-      setIsValidationError(false)
-      console.log("From Price:", parseFloat(priceRangeFrom));
-      console.log("To Price:", parseFloat(priceRangeTo));
+      setValidationError('');
+      setIsValidationError(false);
+      console.log('From Price:', parseFloat(priceRangeFrom));
+      console.log('To Price:', parseFloat(priceRangeTo));
     }
   };
 
@@ -1709,10 +1715,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       return "'From' price should be less than 'to' price.";
     }
 
-    return "";
+    return '';
   };
-
-
 
   // const handleFromPriceChange = (e:any) => {
   //   const newValue = e.target.value;
@@ -1726,7 +1730,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   //     else {
   //       const from = parseFloat(e.target.value);
   //       const to = parseFloat(priceRangeTo);
-  
+
   //       if (from > to) {
   //         setValidationError("'From' price should be less than 'to' price.");
   //       } else {
@@ -1761,7 +1765,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   //     }
   //   }
   // };
-
 
   const handleAddSearchIndex = () => {
     if (addSearches.length < 5) {
@@ -1860,7 +1863,6 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleSearch = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        
         await addPreviousSearch({
           diamond_count: data?.count,
           meta_data: prepareSearchParam(),
@@ -1968,7 +1970,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
       }
     } else {
       setIsError(true);
-      setErrorText('*Please select some parameter before initiating search');
+      setErrorText('Please select some parameter before initiating search');
     }
   };
 
@@ -2044,6 +2046,26 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
+            onBlur={
+              (e) =>
+                parameter.label === 'Crown Angle' ||
+                parameter.label === 'Pavilion Angle'
+                  ? handleAngle(
+                      parameter.label,
+                      e.target.value,
+                      setFromAngle,
+                      setFromError,
+                      toAngle
+                    )
+                  : ''
+              // handleValidate(
+              //     parameter.label,
+              //     e.target.value,
+              //     setFromValue,
+              //     setFromError,
+              //     toValue
+              //   )
+            }
           />
           <div className={styles.parameterLabel}>to</div>
           <CustomInputField
@@ -2056,8 +2078,31 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             style={{
               input: styles.inputFieldStyles,
             }}
+            onBlur={
+              (e) =>
+                parameter.label === 'Crown Angle' ||
+                parameter.label === 'Pavilion Angle'
+                  ? handleAngle(
+                      parameter.label,
+                      e.target.value,
+                      setToAngle,
+                      setFromError,
+                      fromAngle
+                    )
+                  : ''
+              //  handleValidate(
+              //     parameter.label,
+              //     e.target.value,
+              //     setToValue,
+              //     setFromError,
+              //     fromValue
+              //   )
+            }
           />
         </div>
+        {fromError.key === parameter.label && (
+          <div className={styles.validationMessage}>{fromError.value}</div>
+        )}
       </div>
     ));
   };
@@ -2100,6 +2145,135 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         ))}
       </div>
     ));
+  };
+
+  const initialErrorState = {
+    key: '',
+    value: '',
+  };
+
+  const isInRange = (value: string) => {
+    const numValue = parseInt(value);
+    return numValue >= 1 && numValue <= 100;
+  };
+
+  function validateAngle(value: string, min: number, max: number) {
+    const numValue = parseInt(value);
+
+    if (
+      value.length > 0 &&
+      (value === '' || numValue < min || numValue > max)
+    ) {
+      return 'Please enter a valid range from 0 to 100';
+    }
+    return '';
+  }
+
+  const [fromError, setFromError] = useState(initialErrorState);
+
+  const [fromAngle, setFromAngle] = useState('');
+  const [toAngle, setToAngle] = useState('');
+
+  interface Errors {
+    discount: { from: string | null; to: string | null };
+    price_range: { from: string | null; to: string | null };
+    price_per_carat: { from: string | null; to: string | null };
+    // Add more input groups here if needed
+  }
+
+  const [errors, setErrors] = useState<Errors>({
+    discount: { from: null, to: null },
+    price_range: { from: null, to: null },
+    price_per_carat: { from: null, to: null },
+    // Add more input groups here if needed
+  });
+  const handleValidate = (
+    key: keyof Errors,
+    inputType: 'from' | 'to',
+    value: any,
+    otherValue: any
+  ) => {
+    if (value == '' && otherValue == '') {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
+    } else if (value.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} from'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (otherValue.length === 0) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} to'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (value > 100 || otherValue > 100) {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: 'Please enter a valid range from 0 to 100',
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (
+      (inputType === 'from' && value > otherValue) ||
+      (inputType === 'to' && +value < otherValue)
+    ) {
+      // Error handling for 'from' value being greater than 'to' value and vice versa
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `'${
+            inputType === 'from' ? 'From' : 'To'
+          }' value should not be ${
+            inputType === 'from' ? 'greater' : 'less'
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+        },
+      }));
+    } else {
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
+
+      // Handle other error logic as needed
+    }
+  };
+
+  const handleAngle = (
+    key: string,
+    value: string,
+    setAngle: any,
+    setError: any,
+    otherValue: any
+  ) => {
+    const error = validateAngle(value, 0, 360);
+
+    if (
+      value.length > 0 &&
+      otherValue !== '' &&
+      value !== '' &&
+      parseInt(value) < parseInt(otherValue)
+    ) {
+      setError({ key, value: 'Please enter a valid range from 0 to 360' });
+    } else {
+      setError(initialErrorState);
+    }
+    setAngle(value);
+    if (error) {
+      setError({ key, value: error });
+    }
   };
 
   const customInputDialogData = {
@@ -2660,6 +2834,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="discountFrom"
             onChange={(e) => {
               setDiscountFrom(e.target.value);
+              handleValidate('discount', 'from', e.target.value, discountTo);
             }}
             value={discountFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2667,12 +2842,14 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
               input: styles.inputFieldStyles,
             }}
           />
+
           <CustomInputField
             // style={className}
             type="number"
             name="discountTo"
             onChange={(e) => {
               setDiscountTo(e.target.value);
+              handleValidate('discount', 'to', e.target.value, discountFrom);
             }}
             value={discountTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2681,6 +2858,11 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             }}
           />
         </div>
+        {/* {fromError.key === 'discount' && ( */}
+        <div className={styles.validationMessage}>
+          {errors?.discount.from ?? errors?.discount.to}
+        </div>
+        {/* )} */}
       </div>
 
       <div className={styles.filterSection}>
@@ -2697,7 +2879,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeFrom"
             onChange={(e) => {
-              setPriceRangeFrom(e.target.value)
+              setPriceRangeFrom(e.target.value);
             }}
             value={priceRangeFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2710,7 +2892,13 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             type="number"
             name="priceRangeTo"
             onChange={(e) => {
-             setPriceRangeTo(e.target.value)
+              setPriceRangeTo(e.target.value);
+              handleValidate(
+                'price_range',
+                'to',
+                e.target.value,
+                priceRangeFrom
+              );
             }}
             value={priceRangeTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2737,6 +2925,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="pricePerCaratFrom"
             onChange={(e) => {
               setPricePerCaratFrom(e.target.value);
+              handleValidate(
+                'price_per_carat',
+                'from',
+                e.target.value,
+                pricePerCaratTo
+              );
             }}
             value={pricePerCaratFrom}
             placeholder={ManageLocales('app.advanceSearch.from')}
@@ -2749,6 +2943,12 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
             name="pricePerCaratTo"
             onChange={(e) => {
               setPricePerCaratTo(e.target.value);
+              handleValidate(
+                'price_per_carat',
+                'to',
+                e.target.value,
+                pricePerCaratFrom
+              );
             }}
             value={pricePerCaratTo}
             placeholder={ManageLocales('app.advanceSearch.to')}
@@ -2869,15 +3069,15 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         </div>
       </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
-        {(isError) && (
+        {isError && (
           <div className="w-[40%] flex items-center">
-            <span className="hidden  text-green-500 text-red-500" />
+            <span className="hidden  text-green-500" />
             <p
               className={`text-${
                 data?.count < 300 && data?.count > 0 ? 'green' : 'red'
               }-500 text-base`}
             >
-              {!isValidationError  && errorText}
+              {!isValidationError && errorText}
             </p>
           </div>
         )}

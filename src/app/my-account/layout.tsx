@@ -33,7 +33,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
     },
     {
       id: '4',
-      pathName: ManageLocales('app.myProfile.manageDiamondSequence'),
+      pathName: ManageLocales('app.myProfile.ManageListingSequence'),
       path: 'manage-diamond-sequence', // Corrected the path name
     },
     {

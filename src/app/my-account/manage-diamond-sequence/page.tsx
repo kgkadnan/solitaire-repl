@@ -1,58 +1,45 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   GridContextProvider,
   GridDropZone,
   GridItem,
+  move,
   swap,
 } from 'react-grid-dnd';
 
 import { CustomCheckBox } from '@/components/common/checkbox';
-import styles from './manage-diamond-sequence.module.scss';
+import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
+import data from './data.json';
+import { Checkbox } from '@/components/ui/checkbox';
 
-const finalSpaceCharacters = [
-  {
-    id: '1',
-    name: 'Stock No',
-    isMandatory: true,
-  },
-  {
-    id: '2',
-    name: 'Details',
-    isMandatory: true,
-  },
-  {
-    id: '3',
-    name: 'Remark',
-    isMandatory: false,
-  },
-  {
-    id: '4',
-    name: 'Report No',
-    isMandatory: false,
-  },
-  {
-    id: '5',
-    name: 'Location',
-    isMandatory: false,
-  },
-  {
-    id: '6',
-    name: 'Shaper',
-    isMandatory: true,
-  },
-];
-
-const ManageDiamondSequence = () => {
+const ManageListingSequence = () => {
   // Checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
+  const [manageableListings, setManageableListings] = useState([]);
+  const [nonManageableListings, setNonManageableListings] = useState([]);
+  const [updateSequence, setUpdateSequence] = useState<any>([]);
+
+  useEffect(() => {
+    const nonManageable: any = data.filter((items) => {
+      return items.is_fixed === true;
+    });
+    const manageable: any = data
+      .filter((items: any) => {
+        return items.is_fixed === false;
+      })
+      .sort((a: any, b: any) => a.sequence - b.sequence);
+
+    setManageableListings(manageable);
+    setNonManageableListings(nonManageable);
+  }, []);
+
   // Specific checkbox
   const handleClick = (id: string) => {
-    // const { id } = e.target;
-
     let updatedIsCheck = [...isCheck];
+    console.log('updatedIsCheck', updatedIsCheck);
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
@@ -63,10 +50,12 @@ const ManageDiamondSequence = () => {
     setIsCheck(updatedIsCheck);
   };
 
-  const [items, setItems] = React.useState(finalSpaceCharacters);
+  console.log('isCheck', isCheck);
 
   //update sequence
-  const handleUpdateDiamondSequence = () => {};
+  const handleUpdateDiamondSequence = () => {
+    console.log('update diamond sequence', manageableListings);
+  };
 
   //cancel sequence
   const handleCancel = () => {};
@@ -96,41 +85,70 @@ const ManageDiamondSequence = () => {
     sourceIndex: number,
     targetIndex: number
   ) {
-    const nextState = swap(items, sourceIndex, targetIndex);
-    setItems(nextState);
+    const nextState: any = swap(manageableListings, sourceIndex, targetIndex);
+
+    // Update sequence numbers after reordering
+    const updatedWithSequence = nextState.map((item: any, index: number) => {
+      return { ...item, sequence: index + nonManageableListings.length + 1 };
+    });
+    setUpdateSequence([...nonManageableListings, ...updatedWithSequence]);
+
+    setManageableListings(nextState);
   }
 
   return (
-    <div className="flex flex-col min-h-full">
+    <div className="flex flex-col min-h-[84vh]">
+      <div>
+        <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
+        <div className="flex">
+          {nonManageableListings.map(({ id, label }, index) => (
+            <div key={id} className={`${styles.cardNonManageListingSequence}`}>
+              <div className={`${styles.gridUi}`}>
+                <div className={`${styles.lableManageListingSequence}`}>
+                  {`${index + 1}. ${label}`}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      <hr className=" border-solitaireSenary mx-2 my-3" />
       <div className="grow">
+        <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
         <GridContextProvider onChange={onChange}>
           <GridDropZone
-            id="items"
+            id="sequence"
             boxesPerRow={5}
             rowHeight={50}
-            style={{ height: '100px' }}
+            style={{ height: 280 * Math.ceil(data.length / 5) }}
+            className="flex"
           >
-            {items.map(({ id, name, isMandatory }, index) => (
-              <GridItem
-                key={id}
-                className={`${styles.cardManageDiamondSequence}`}
-              >
-                <div className={`${styles.gridUi}`}>
-                  <div className={`${styles.lableManageDiamondSequence}`}>
-                    {`${index + 1}. ${name}`}
-                  </div>
-                  <div className="flex items-center">
-                    {!isMandatory && (
-                      <CustomCheckBox
-                        data={id}
-                        onClick={handleClick}
-                        isChecked={isCheck}
+            {manageableListings.map(
+              ({ sequence, label, id, is_disable }, index) => (
+                <GridItem
+                  key={sequence}
+                  className={`${styles.cardManageListingSequence}`}
+                >
+                  <div className={`${styles.gridUi}`}>
+                    <div className={`${styles.lableManageListingSequence}`}>
+                      {`${index + 1 + nonManageableListings.length}. ${label}`}
+                    </div>
+                    <div className="flex items-center">
+                      {/* <CustomCheckBox
+                      data={id}
+                      onClick={handleClick}
+                      isChecked={isCheck}
+                    /> */}
+
+                      <Checkbox
+                        onClick={() => handleClick(id)}
+                        checked={is_disable}
                       />
-                    )}
+                    </div>
                   </div>
-                </div>
-              </GridItem>
-            ))}
+                </GridItem>
+              )
+            )}
           </GridDropZone>
         </GridContextProvider>
       </div>
@@ -142,4 +160,4 @@ const ManageDiamondSequence = () => {
   );
 };
 
-export default ManageDiamondSequence;
+export default ManageListingSequence;
