@@ -336,7 +336,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <div className={'flex-grow overflow-y-auto min-h-[50vh]'}>
+      <div className={'flex-grow overflow-y-auto'}>
         <div className={styles.tableWrapper}>
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
