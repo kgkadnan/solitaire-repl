@@ -6,6 +6,7 @@ export const changePasswordApi = createApi({
   reducerPath: 'changePasswordReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
    
   }),
   tagTypes: ['changePassword'],

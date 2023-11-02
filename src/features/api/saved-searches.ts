@@ -5,6 +5,7 @@ export const savedSearchesApi: any = createApi({
   reducerPath: 'savedSearchReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
+    credentials: 'include',
     
   }),
   tagTypes: ['SavedSearch'],
