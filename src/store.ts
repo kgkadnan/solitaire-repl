@@ -17,6 +17,7 @@ import searchListReducer from './features/search/search-list';
 import previousSearchReducer from './features/previous-search/previous-search';
 import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
+import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -24,6 +25,7 @@ const rootReducer = combineReducers({
   previousSearch: previousSearchReducer,
   savedSearch: savedSearchReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
+  [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [changePasswordApi.reducerPath]: changePasswordApi.reducer,
@@ -41,6 +43,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
+        manageListingSequenceApi.middleware,
         changePasswordApi.middleware,
         downloadExcelApi.middleware,
         cartApi.middleware,
