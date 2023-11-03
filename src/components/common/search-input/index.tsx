@@ -36,7 +36,7 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedSuggestionIndex(
-        (prevIndex) => (prevIndex + 1) % suggestions.length
+        (prevIndex) => (prevIndex + 1) % suggestions?.length
       );
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();

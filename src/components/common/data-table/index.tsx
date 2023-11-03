@@ -330,7 +330,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                               sheetTriggenContent={
                                 <>
                                   <div
-                                    onClick={(e) => {
+                                    onClick={() => {
                                       setActiveTab('3');
                                       setSliderData([tableRows[index]]);
                                       setDiamondDetailIframeUrl('');

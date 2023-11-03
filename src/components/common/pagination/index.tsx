@@ -4,16 +4,7 @@ import ChevronBack from '@public/assets/icons/chevron-back-circle-outline.svg?ur
 import ChevronForward from '@public/assets/icons/chevron-forward-circle-outline.svg?url';
 import { CustomSelect, ISelectData } from '../select';
 import { ManageLocales } from '@/utils/translate';
-
-interface ICustomPaginationProps {
-  currentPage: number;
-  totalPages: number;
-  resultsPerPage: number;
-  optionLimits: ISelectData[];
-  handleResultsPerPageChange: (event: string) => void;
-  handlePageClick?: any;
-  paginationStyle?: any;
-}
+import { ICustomPaginationProps } from './interface';
 
 const CustomPagination: React.FC<ICustomPaginationProps> = ({
   currentPage,
