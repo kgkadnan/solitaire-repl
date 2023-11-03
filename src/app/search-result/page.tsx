@@ -7,14 +7,14 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import InfoCircleOutline from '@public/assets/icons/information-circle-outline.svg?url';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { CustomInputlabel } from '@/components/common/input-label';
 import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { useGetAllProductQuery } from '@/features/api/product';
-import CustomDataTable, { Rows } from '@/components/common/data-table';
+import CustomDataTable from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
@@ -26,16 +26,8 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/page';
-
-export interface TableColumn {
-  label: string;
-  accessor: string;
-  sequence: number;
-  is_fixed: boolean;
-  is_disabled: boolean;
-  id: string;
-}
+import { Product, TableColumn } from './interface';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 
 let optionLimits = [
   { id: 1, value: '50' },
@@ -49,7 +41,7 @@ const SearchResults = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const [rows, setRows] = useState<Rows[]>([]);
+  const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   //checkbox states
@@ -127,7 +119,8 @@ const SearchResults = () => {
   //Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
-    setIsCheck(rows?.map((li: any) => li.id));
+
+    setIsCheck(rows?.map((li: Product) => li.id));
     if (isCheckAll) {
       setIsCheck([]);
     }
@@ -144,63 +137,6 @@ const SearchResults = () => {
     isCheck: isCheck,
     isCheckAll: isCheckAll,
   };
-
-  // const tableColumns: TableColumn[] = [
-  //   { label: 'Stock No', accessor: 'lot_id' },
-  //   { label: 'Details', accessor: 'details' },
-  //   { label: 'RPT No.', accessor: 'rpt_number' },
-  //   { label: 'Loc.', accessor: 'location' },
-  //   { label: 'SHP', accessor: 'shape' },
-  //   { label: 'CTS', accessor: 'carat' },
-  //   { label: 'COL', accessor: 'color' },
-  //   { label: 'Clarity', accessor: 'clarity' },
-  //   { label: 'CS', accessor: 'color_shade' },
-  //   { label: 'CSI', accessor: 'color_shade_intensity' },
-  //   { label: 'Milky', accessor: 'milky' },
-  //   { label: 'RAP($)', accessor: 'rap' },
-  //   { label: 'RAP Val.', accessor: 'rap_value' },
-  //   { label: 'Discount%', accessor: 'discount' },
-  //   { label: 'PR/CT', accessor: 'price_per_carat' },
-  //   { label: 'AMT($)', accessor: 'amount' },
-  //   { label: 'Cut', accessor: 'cut' },
-  //   { label: 'Pol.', accessor: 'polish' },
-  //   { label: 'Symm.', accessor: 'symmetry' },
-  //   { label: 'FLS', accessor: 'fluorescence' },
-  //   { label: 'LAB', accessor: 'lab' },
-  //   { label: 'BRL', accessor: 'brilliance' },
-  //   { label: 'TB', accessor: 'black_table' },
-  //   { label: 'SI', accessor: 'side_inclusion' },
-  //   { label: 'SB', accessor: 'side_black' },
-  //   { label: 'TI', accessor: 'table_inclusion' },
-  //   { label: 'TO', accessor: 'open_table' },
-  //   { label: 'CO', accessor: 'open_crown' },
-  //   { label: 'PO', accessor: 'open_pavilion' },
-  //   { label: 'EC', accessor: 'eye_clean' },
-  //   { label: 'CN', accessor: 'natural_crown' },
-  //   { label: 'GN', accessor: 'natural_girdle' },
-  //   { label: 'PN', accessor: 'natural_pavilion' },
-  //   { label: 'SG', accessor: 'surface_graining' },
-  //   { label: 'IG', accessor: 'internal_graining' },
-  //   { label: 'TBL%', accessor: 'table_percentage' },
-  //   { label: 'DEP%', accessor: 'depth_percentage' },
-  //   { label: 'Length', accessor: 'length' },
-  //   { label: 'Width', accessor: 'width' },
-  //   { label: 'Depth', accessor: 'depth' },
-  //   { label: 'Ratio', accessor: 'ratio' },
-  //   { label: 'C/A', accessor: 'crown_angle' },
-  //   { label: 'C/H', accessor: 'crown_height' },
-  //   { label: 'H&A', accessor: 'ha' },
-  //   { label: 'Girdle', accessor: 'girdle' },
-  //   { label: 'P/A', accessor: 'pavilion_angle' },
-  //   { label: 'P/D', accessor: 'pavilion_depth' },
-  //   { label: 'Culet', accessor: 'culet' },
-  //   { label: 'Ins.', accessor: 'inscription' },
-  //   { label: 'Origin', accessor: 'origin_country' },
-  //   { label: 'L/H.', accessor: 'lower_half' },
-  //   { label: 'S/L', accessor: 'star_length' },
-  //   { label: 'Girdle%', accessor: 'girdle_percentage' },
-  //   { label: 'Luster', accessor: 'luster' },
-  // ];
 
   const downloadExcelFunction = () => {
     if (isCheckAll) {
@@ -343,7 +279,7 @@ const SearchResults = () => {
     } else {
       let variantIds = isCheck.map((id) => {
         const selectedRow = rows.find((row) => row.id === id);
-        return selectedRow?.variants[0].id;
+        return selectedRow?.variants[0]?.id;
       });
       if (variantIds.length) {
         addCart({
@@ -454,12 +390,19 @@ const SearchResults = () => {
   // Function to calculate total amount
   const calculateTotalAmount = useCallback(() => {
     let total = 0;
+
     isCheck.forEach((id) => {
       const selectedRow = rows.find((row) => row.id === id);
       if (selectedRow) {
-        total += selectedRow.amount;
+        const variant = selectedRow.variants.find(
+          (variant) => variant.prices.length > 0
+        );
+        if (variant) {
+          total += variant.prices[0].amount;
+        }
       }
     });
+
     return total;
   }, [isCheck, rows]);
 
@@ -469,7 +412,7 @@ const SearchResults = () => {
     isCheck.forEach((id) => {
       const selectedRow = rows.find((row) => row.id === id);
       if (selectedRow) {
-        totalDiscount += selectedRow.discount;
+        totalDiscount += selectedRow?.discount;
       }
     });
     // Calculate average discount
@@ -712,25 +655,27 @@ const SearchResults = () => {
                               <div
                                 className={styles.yourSelectionMainContainer}
                               >
-                                {Object.keys(yourSelection).map((key: any) => (
-                                  <div
-                                    key={`key-${key}`}
-                                    className={`${styles.yourSelectionSubContainer}`}
-                                  >
-                                    <div className={styles.labelContainer}>
-                                      <CustomInputlabel
-                                        htmlfor="text"
-                                        label={key}
-                                      />
-                                      :
+                                {Object.keys(yourSelection).map(
+                                  (key: string) => (
+                                    <div
+                                      key={`key-${key}`}
+                                      className={`${styles.yourSelectionSubContainer}`}
+                                    >
+                                      <div className={styles.labelContainer}>
+                                        <CustomInputlabel
+                                          htmlfor="text"
+                                          label={key}
+                                        />
+                                        :
+                                      </div>
+                                      <div className="text-sm font-light pl-2">
+                                        {Array.isArray(yourSelection[key])
+                                          ? yourSelection[key].join(', ')
+                                          : yourSelection[key]}
+                                      </div>
                                     </div>
-                                    <div className="text-sm font-light pl-2">
-                                      {Array.isArray(yourSelection[key])
-                                        ? yourSelection[key].join(', ')
-                                        : yourSelection[key]}
-                                    </div>
-                                  </div>
-                                ))}
+                                  )
+                                )}
                               </div>
                             </div>
                           }

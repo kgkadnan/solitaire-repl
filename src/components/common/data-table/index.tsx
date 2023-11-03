@@ -13,97 +13,18 @@ import dna from '@public/assets/icons/ph_dna-light.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import { CustomFooter } from '../footer';
 import { CustomDropdown } from '../dropdown';
-import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { useAddCartMutation } from '@/features/api/cart';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
-import { TableColumn } from '@/app/search-result/page';
-
-export interface Rows {
-  [key: string]: string | number | boolean | null | undefined | any;
-  id: string | null;
-  stock_no: string | null;
-  is_memo_out: boolean;
-  diamond_status: string | null;
-  discount: number;
-  amount: number;
-  color: string | null;
-  shape: string | null;
-  clarity: string | null;
-  cut: string | null;
-  polish: string | null;
-  fluorescence: string | null;
-  symmetry: string | null;
-  lab: string | null;
-  rpt_number: string | null;
-  certificate_number: number | null;
-  lot_id: number | null;
-  certificate_url: string | StaticImport;
-  girdle: string | null;
-  location: string | null;
-  color_shade: string | null;
-  color_shade_intensity: string | null;
-  intensity: string | null;
-  overtone: string | null;
-  ha: string | null;
-  brilliance: string | null;
-  black_table: string | null;
-  side_black: string | null;
-  open_crown: string | null;
-  open_pavilion: string | null;
-  milky: string | null;
-  luster: string | null;
-  eye_clean: string | null;
-  open_table: string | null;
-  table_inclusion: string | null;
-  side_inclusion: string | null;
-  natural_crown: string | null;
-  natural_pavilion: string | null;
-  natural_girdle: string | null;
-  surface_graining: string | null;
-  internal_graining: string | null;
-  carat: number | null;
-  star_length: number | null;
-  price_range: number | null;
-  price_per_carat: number | null;
-  girdle_percentage: number | null;
-  pavilion_angle: number | null;
-  depth_percentage: number | null;
-  table_percentage: number | null;
-  crown_angle: number | null;
-  crown_height: number | null;
-  pavilion_depth: number | null;
-  lower_half: number | null;
-  ratio: number | null;
-  length: number | null;
-  depth: number | null;
-  width: number | null;
-  rap: number | null;
-  rap_value: number | null;
-  culet: string | null;
-  inscription: string | null;
-  tracr_id: string | null;
-  total_grade: string | null;
-  disclosed_source: string | null;
-  country_origin: string | null;
-  details: any;
-}
-
-interface KeyLabelMapping {
-  [key: string]: string;
-}
-interface ICustomDataTableProps {
-  tableRows: Rows[];
-  tableColumns: TableColumn[];
-  checkboxData: any;
-}
+import { Product } from '@/app/search-result/interface';
+import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
 }) => {
-  const [sliderData, setSliderData] = useState<Rows[]>([]);
+  const [sliderData, setSliderData] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
@@ -306,11 +227,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     report_comments: 'Report Comments',
   };
 
-  const downloadImage = (imageUrl: any) => {
+  const downloadImage = (imageUrl: string | undefined) => {
     window.open(imageUrl, '_blank');
   };
 
-  const downloadFile = (downloadUrl: any) => {
+  const downloadFile = (downloadUrl: string) => {
     const link = document.createElement('a');
     link.href = downloadUrl;
     link.download = 'Vision360.html';
@@ -319,7 +240,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     document.body.removeChild(link);
   };
 
-  const handleDiamondDetailData = (id: string, url: any, iframeUrl: any) => {
+  const handleDiamondDetailData = (
+    id: string,
+    url: string | undefined,
+    iframeUrl: string | undefined
+  ) => {
     setDiamondDetailIframeUrl('');
     setDiamondDetailImageUrl('');
     if (iframeUrl) {
@@ -609,7 +534,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       : 'px-[5px]'
                                   }`}
                                 >
-                                  {row[column.accessor as keyof Rows]}
+                                  {row[column.accessor as keyof Product]}
                                 </div>
                               </>
                             }
@@ -912,8 +837,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                         </div>
                       ) : column.accessor === 'amount' ? (
                         row.variants[0].prices[0].amount
-                      ) : row[column.accessor as keyof Rows] !== null ? (
-                        row[column.accessor as keyof Rows]
+                      ) : row[column.accessor as keyof Product] !== null ? (
+                        row[column.accessor as keyof Product]
                       ) : (
                         '-'
                       )}

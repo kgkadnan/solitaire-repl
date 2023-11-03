@@ -1,6 +1,11 @@
 'use client';
 import React, { ReactNode, useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
@@ -12,20 +17,9 @@ import {
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
-// Define IManageListingSequence interface
-
-interface IManageListingSequence {
-  label: string;
-  accessor: string;
-  sequence: number;
-  is_fixed: boolean;
-  is_disabled: boolean;
-  id: string;
-}
-
-export interface ManageListingSequenceResponse {
-  data: IManageListingSequence[];
-}
+import { TableColumn } from '@/app/search-result/interface';
+import { ManageListingSequenceResponse } from './interface';
+// Define TableColumn interface
 
 const ManageListingSequence = () => {
   const { data } =
@@ -35,15 +29,13 @@ const ManageListingSequence = () => {
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [manageableListings, setManageableListings] = useState<
-    IManageListingSequence[]
-  >([]);
+  const [manageableListings, setManageableListings] = useState<TableColumn[]>(
+    []
+  );
   const [nonManageableListings, setNonManageableListings] = useState<
-    IManageListingSequence[]
+    TableColumn[]
   >([]);
-  const [updateSequence, setUpdateSequence] = useState<
-    IManageListingSequence[]
-  >([]);
+  const [updateSequence, setUpdateSequence] = useState<TableColumn[]>([]);
 
   useEffect(() => {
     if (data?.length) {
@@ -103,7 +95,7 @@ const ManageListingSequence = () => {
     setManageableListings(manageable);
   };
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
@@ -111,7 +103,7 @@ const ManageListingSequence = () => {
     const updatedList = Array.from(manageableListings);
     const movedItem = updatedList.find(
       (item) => item.id === result.draggableId
-    ) as IManageListingSequence | undefined;
+    ) as TableColumn | undefined;
 
     if (movedItem) {
       updatedList.splice(result.source.index, 1);
@@ -172,7 +164,7 @@ const ManageListingSequence = () => {
         <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable" direction="horizontal">
-            {(provided: any) => (
+            {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
@@ -180,7 +172,7 @@ const ManageListingSequence = () => {
               >
                 {manageableListings.map(({ label, id, is_disabled }, index) => (
                   <Draggable key={id} draggableId={id} index={index}>
-                    {(provided: any) => (
+                    {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
