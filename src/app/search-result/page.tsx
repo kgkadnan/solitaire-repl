@@ -652,7 +652,7 @@ const SearchResults = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <div className="border-b  border-solid  border-solitaireSenary mb-5">
+      <div className="border-b border-solid  border-solitaireSenary mb-5">
         {/* top Header */}
         <div className={styles.topHeader}>
           <p className="">
@@ -661,7 +661,7 @@ const SearchResults = () => {
         </div>
 
         {/* Search Tab Header */}
-        <div className="flex items-center gap-5 text-solitaireTertiary w-full  p-2 bg-solitaireSenary rounded-lg bg-opacity-0">
+        <div className="flex items-center gap-5 text-solitaireTertiary w-full  p-2 bg-solitaireNonary rounded-lg bg-opacity-0">
           {Object.keys(yourSelectionData).length > 0 &&
             Object.values(yourSelectionData).map(
               (yourSelection: any, index: number) => {
@@ -672,7 +672,7 @@ const SearchResults = () => {
                         marginRight:
                           index === yourSelection.length - 1 ? '0px' : '5px',
                       }}
-                      className={`flex items-center cursor-pointer gap-[8px] ${
+                      className={`flex items-center cursor-pointer gap-[8px] rounded-sm ${
                         activeTab === index
                           ? styles.activeHeaderButtonStyle
                           : styles.headerButtonStyle
@@ -843,7 +843,7 @@ const SearchResults = () => {
         tableColumns={tableColumns}
         checkboxData={checkboxData}
       />
-      <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+      <div className="sticky-bottom bg-solitairePrimary mt-3">
         <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
           <div className="flex items-center gap-3">
             <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">

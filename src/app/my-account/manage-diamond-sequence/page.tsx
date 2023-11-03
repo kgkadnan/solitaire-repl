@@ -1,77 +1,113 @@
 'use client';
-import React, { useState } from 'react';
-import {
-  GridContextProvider,
-  GridDropZone,
-  GridItem,
-  swap,
-} from 'react-grid-dnd';
-
-import { CustomCheckBox } from '@/components/common/checkbox';
-import styles from './manage-diamond-sequence.module.scss';
+import React, { useEffect, useState } from 'react';
+import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import { Checkbox } from '@/components/ui/checkbox';
+import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
+import data from './data.json';
+import {
+  useAddManageListingSequenceMutation,
+  useGetManageListingSequenceQuery,
+} from '@/features/api/manage-listing-sequence';
 
-const finalSpaceCharacters = [
-  {
-    id: '1',
-    name: 'Stock No',
-    isMandatory: true,
-  },
-  {
-    id: '2',
-    name: 'Details',
-    isMandatory: true,
-  },
-  {
-    id: '3',
-    name: 'Remark',
-    isMandatory: false,
-  },
-  {
-    id: '4',
-    name: 'Report No',
-    isMandatory: false,
-  },
-  {
-    id: '5',
-    name: 'Location',
-    isMandatory: false,
-  },
-  {
-    id: '6',
-    name: 'Shaper',
-    isMandatory: true,
-  },
-];
+// Define IManageListingSequence interface
 
-const ManageDiamondSequence = () => {
-  // Checkbox states
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  // Specific checkbox
-  const handleClick = (id: string) => {
-    // const { id } = e.target;
+interface IManageListingSequence {
+  label: string;
+  accessor: string;
+  sequence: number;
+  is_active: boolean;
+  is_fixed: boolean;
+  width?: string | null;
+  meta_data?: string | null;
+  is_disable: boolean;
+  id: string;
+  created_at: string;
+  updated_at: string;
+}
 
-    let updatedIsCheck = [...isCheck];
+const ManageListingSequence = () => {
+  // let { data: manageListingSequence } = useGetManageListingSequenceQuery({});
+  // let [addManageListingSequence] = useAddManageListingSequenceMutation();
 
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
+  const [manageableListings, setManageableListings] = useState<
+    IManageListingSequence[]
+  >([]);
+  const [nonManageableListings, setNonManageableListings] = useState<
+    IManageListingSequence[]
+  >([]);
+  const [updateSequence, setUpdateSequence] = useState<
+    IManageListingSequence[]
+  >([]);
 
-    setIsCheck(updatedIsCheck);
+  useEffect(() => {
+    // Simulating fetching or setting data from data.json
+    // const initialData = data.map((item, index) => ({
+    //   ...item,
+    //   sequence: index + 1,
+    // }));
+
+    const nonManageable = data.filter((item) => item.is_fixed);
+    const manageable = data
+      .filter((item) => !item.is_fixed)
+      .sort((a, b) => a.sequence - b.sequence);
+
+    setManageableListings(manageable);
+    setNonManageableListings(nonManageable);
+  }, []);
+
+  const handleCheckboxClick = (id: string) => {
+    const updatedListings = manageableListings.map((item) => {
+      if (item.id === id) {
+        return { ...item, is_disable: !item.is_disable };
+      }
+      return item;
+    });
+
+    setManageableListings(updatedListings);
+
+    setUpdateSequence([...nonManageableListings, ...updatedListings]);
   };
 
-  const [items, setItems] = React.useState(finalSpaceCharacters);
+  const handleUpdateDiamondSequence = () => {
+    console.log('update diamond sequence', updateSequence);
+    // Perform actions on update
+  };
 
-  //update sequence
-  const handleUpdateDiamondSequence = () => {};
+  const handleCancel = () => {
+    // Handle cancel action
+    const manageable = data
+      .filter((item) => !item.is_fixed)
+      .sort((a, b) => a.sequence - b.sequence);
 
-  //cancel sequence
-  const handleCancel = () => {};
+    setManageableListings(manageable);
+  };
 
-  //Footer Data
+  const onDragEnd = (result: any) => {
+    if (!result.destination) {
+      return;
+    }
+
+    const updatedList = Array.from(manageableListings);
+    const movedItem = updatedList.find(
+      (item) => item.id === result.draggableId
+    ) as IManageListingSequence | undefined;
+
+    if (movedItem) {
+      updatedList.splice(result.source.index, 1);
+      updatedList.splice(result.destination.index, 0, movedItem);
+
+      const updatedWithSequence = updatedList.map((item, index) => ({
+        ...item,
+        sequence: index + nonManageableListings.length + 1,
+      }));
+
+      setManageableListings(updatedWithSequence);
+      setUpdateSequence([...nonManageableListings, ...updatedWithSequence]);
+    }
+  };
+
   const footerButtonData = [
     {
       id: 1,
@@ -91,50 +127,65 @@ const ManageDiamondSequence = () => {
     },
   ];
 
-  function onChange(
-    sourceId: string,
-    sourceIndex: number,
-    targetIndex: number
-  ) {
-    const nextState = swap(items, sourceIndex, targetIndex);
-    setItems(nextState);
-  }
-
   return (
-    <div className="flex flex-col min-h-full">
-      <div className="grow">
-        <GridContextProvider onChange={onChange}>
-          <GridDropZone
-            id="items"
-            boxesPerRow={5}
-            rowHeight={50}
-            style={{ height: '100px' }}
-          >
-            {items.map(({ id, name, isMandatory }, index) => (
-              <GridItem
-                key={id}
-                className={`${styles.cardManageDiamondSequence}`}
-              >
-                <div className={`${styles.gridUi}`}>
-                  <div className={`${styles.lableManageDiamondSequence}`}>
-                    {`${index + 1}. ${name}`}
-                  </div>
-                  <div className="flex items-center">
-                    {!isMandatory && (
-                      <CustomCheckBox
-                        data={id}
-                        onClick={handleClick}
-                        isChecked={isCheck}
-                      />
-                    )}
-                  </div>
+    <div className="flex flex-col min-h-[84vh]">
+      <div>
+        <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
+        <div className="flex">
+          {nonManageableListings.map(({ id, label }, index) => (
+            <div key={id} className={`${styles.cardManageListingSequence}`}>
+              <div className={`${styles.gridUi}`}>
+                <div className={`${styles.lableManageListingSequence}`}>
+                  {`${index + 1}. ${label}`}
                 </div>
-              </GridItem>
-            ))}
-          </GridDropZone>
-        </GridContextProvider>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-
+      <hr className=" border-solitaireSenary mx-2 my-3" />
+      <div className="grow">
+        <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
+        <DragDropContext onDragEnd={onDragEnd}>
+          <Droppable droppableId="droppable" direction="horizontal">
+            {(provided: any) => (
+              <div
+                ref={provided.innerRef}
+                {...provided.droppableProps}
+                className="flex flex-wrap"
+              >
+                {manageableListings.map(({ label, id, is_disable }, index) => (
+                  <Draggable key={id} draggableId={id} index={index}>
+                    {(provided: any) => (
+                      <div
+                        ref={provided.innerRef}
+                        {...provided.draggableProps}
+                        {...provided.dragHandleProps}
+                        className={`${styles.cardManageListingSequence} `}
+                      >
+                        <div className={`${styles.gridUi}`}>
+                          <div
+                            className={`${styles.lableManageListingSequence}`}
+                          >{`${
+                            index + 1 + nonManageableListings.length
+                          }. ${label}`}</div>
+                          <div className="flex items-center">
+                            <Checkbox
+                              onClick={() => handleCheckboxClick(id)}
+                              checked={is_disable}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    )}
+                  </Draggable>
+                ))}
+                {provided.placeholder}
+              </div>
+            )}
+          </Droppable>
+        </DragDropContext>
+      </div>
       <div className="sticky bottom-0 bg-solitairePrimary mt-3">
         <CustomFooter footerButtonData={footerButtonData} />
       </div>
@@ -142,4 +193,4 @@ const ManageDiamondSequence = () => {
   );
 };
 
-export default ManageDiamondSequence;
+export default ManageListingSequence;

@@ -128,7 +128,7 @@
   "app.myProfile.summary": "Summary",
   "app.myProfile.kyc": "KYC",
   "app.myProfile.changePassword": "Change Password",
-  "app.myProfile.manageDiamondSequence": "Manage Diamond Sequence",
+  "app.myProfile.ManageListingSequence": "Manage Listing Sequence",
   "app.myProfile.emailNotification": "Email Notification",
   "app.myProfile.reportBug": "Report Bug",
 
@@ -151,12 +151,12 @@
   "app.myaccount.reportBug.report": "Report",
   "app.myaccount.reportBug.reset": "Reset",
 
-  "app.compareStone.heading":"Compare Stone",
-  "app.compareStone.diamondImage":"Diamond Image",
-  "app.compareStone.showOnlyDifferences":"Show only Differences",
+  "app.compareStone.heading": "Compare Stone",
+  "app.compareStone.diamondImage": "Diamond Image",
+  "app.compareStone.showOnlyDifferences": "Show only Differences",
 
-  "app.notification.notifications":"Notifications",
-  "app.notification.notifications.setting":"Notifications Settings",
+  "app.notification.notifications": "Notifications",
+  "app.notification.notifications.setting": "Notifications Settings",
   "app.searchResult.footer.addToCart": "Add to Cart",
   "app.searchResult.footer.addToWhislist": "Add to Wishlist",
   "app.searchResult.footer.modifySearch": "Modify Search",
