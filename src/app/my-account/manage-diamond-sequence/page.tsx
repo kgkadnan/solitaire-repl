@@ -1,16 +1,17 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-// import data from './data.json';
 import {
   useAddManageListingSequenceMutation,
   useGetManageListingSequenceQuery,
 } from '@/features/api/manage-listing-sequence';
-
+import Image from 'next/image';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import { CustomDialog } from '@/components/common/dialog';
 // Define IManageListingSequence interface
 
 interface IManageListingSequence {
@@ -30,6 +31,9 @@ const ManageListingSequence = () => {
   const { data } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
   let [addManageListingSequence] = useAddManageListingSequenceMutation();
+
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [manageableListings, setManageableListings] = useState<
     IManageListingSequence[]
@@ -67,8 +71,26 @@ const ManageListingSequence = () => {
   };
 
   const handleUpdateDiamondSequence = () => {
-    addManageListingSequence(updateSequence);
-    console.log('update diamond sequence', updateSequence);
+    if (updateSequence?.length) {
+      addManageListingSequence(updateSequence)
+        .unwrap()
+        .then(() => {
+          setDialogContent(
+            <>
+              <div className="max-w-[400px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
+              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                Updated Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
+        })
+        .catch(() => {
+          console.log('1111111111111111');
+        });
+    }
     // Perform actions on update
   };
 
@@ -126,6 +148,11 @@ const ManageListingSequence = () => {
 
   return (
     <div className="flex flex-col min-h-[84vh]">
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div>
         <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
         <div className="flex">
