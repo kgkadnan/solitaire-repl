@@ -25,10 +25,16 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/page';
 
-interface TableColumn {
+export interface TableColumn {
   label: string;
   accessor: string;
+  sequence: number;
+  is_fixed: boolean;
+  is_disabled: boolean;
+  id: string;
 }
 
 let optionLimits = [
@@ -44,6 +50,7 @@ const SearchResults = () => {
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Rows[]>([]);
+  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -88,6 +95,9 @@ const SearchResults = () => {
   const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useAddCartMutation();
 
+  const { data: listingColumns } =
+    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+
   let paginationStyle = {
     paginationContainerStyle: styles.paginationContainerStyle,
   };
@@ -123,6 +133,10 @@ const SearchResults = () => {
     }
   };
 
+  useEffect(() => {
+    setTableColumns(listingColumns);
+  }, [listingColumns]);
+
   //
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
@@ -131,63 +145,62 @@ const SearchResults = () => {
     isCheckAll: isCheckAll,
   };
 
-  const tableColumns: TableColumn[] = [
-    { label: 'Status', accessor: 'diamond_status' },
-    { label: 'Stock No', accessor: 'lot_id' },
-    { label: 'Details', accessor: 'details' },
-    { label: 'RPT No.', accessor: 'rpt_number' },
-    { label: 'Loc.', accessor: 'location' },
-    { label: 'SHP', accessor: 'shape' },
-    { label: 'CTS', accessor: 'carat' },
-    { label: 'COL', accessor: 'color' },
-    { label: 'Clarity', accessor: 'clarity' },
-    { label: 'CS', accessor: 'color_shade' },
-    { label: 'CSI', accessor: 'color_shade_intensity' },
-    { label: 'Milky', accessor: 'milky' },
-    { label: 'RAP($)', accessor: 'rap' },
-    { label: 'RAP Val.', accessor: 'rap_value' },
-    { label: 'Discount%', accessor: 'discount' },
-    { label: 'PR/CT', accessor: 'price_per_carat' },
-    { label: 'AMT($)', accessor: 'amount' },
-    { label: 'Cut', accessor: 'cut' },
-    { label: 'Pol.', accessor: 'polish' },
-    { label: 'Symm.', accessor: 'symmetry' },
-    { label: 'FLS', accessor: 'fluorescence' },
-    { label: 'LAB', accessor: 'lab' },
-    { label: 'BRL', accessor: 'brilliance' },
-    { label: 'TB', accessor: 'black_table' },
-    { label: 'SI', accessor: 'side_inclusion' },
-    { label: 'SB', accessor: 'side_black' },
-    { label: 'TI', accessor: 'table_inclusion' },
-    { label: 'TO', accessor: 'open_table' },
-    { label: 'CO', accessor: 'open_crown' },
-    { label: 'PO', accessor: 'open_pavilion' },
-    { label: 'EC', accessor: 'eye_clean' },
-    { label: 'CN', accessor: 'natural_crown' },
-    { label: 'GN', accessor: 'natural_girdle' },
-    { label: 'PN', accessor: 'natural_pavilion' },
-    { label: 'SG', accessor: 'surface_graining' },
-    { label: 'IG', accessor: 'internal_graining' },
-    { label: 'TBL%', accessor: 'table_percentage' },
-    { label: 'DEP%', accessor: 'depth_percentage' },
-    { label: 'Length', accessor: 'length' },
-    { label: 'Width', accessor: 'width' },
-    { label: 'Depth', accessor: 'depth' },
-    { label: 'Ratio', accessor: 'ratio' },
-    { label: 'C/A', accessor: 'crown_angle' },
-    { label: 'C/H', accessor: 'crown_height' },
-    { label: 'H&A', accessor: 'ha' },
-    { label: 'Girdle', accessor: 'girdle' },
-    { label: 'P/A', accessor: 'pavilion_angle' },
-    { label: 'P/D', accessor: 'pavilion_depth' },
-    { label: 'Culet', accessor: 'culet' },
-    { label: 'Ins.', accessor: 'inscription' },
-    { label: 'Origin', accessor: 'origin_country' },
-    { label: 'L/H.', accessor: 'lower_half' },
-    { label: 'S/L', accessor: 'star_length' },
-    { label: 'Girdle%', accessor: 'girdle_percentage' },
-    { label: 'Luster', accessor: 'luster' },
-  ];
+  // const tableColumns: TableColumn[] = [
+  //   { label: 'Stock No', accessor: 'lot_id' },
+  //   { label: 'Details', accessor: 'details' },
+  //   { label: 'RPT No.', accessor: 'rpt_number' },
+  //   { label: 'Loc.', accessor: 'location' },
+  //   { label: 'SHP', accessor: 'shape' },
+  //   { label: 'CTS', accessor: 'carat' },
+  //   { label: 'COL', accessor: 'color' },
+  //   { label: 'Clarity', accessor: 'clarity' },
+  //   { label: 'CS', accessor: 'color_shade' },
+  //   { label: 'CSI', accessor: 'color_shade_intensity' },
+  //   { label: 'Milky', accessor: 'milky' },
+  //   { label: 'RAP($)', accessor: 'rap' },
+  //   { label: 'RAP Val.', accessor: 'rap_value' },
+  //   { label: 'Discount%', accessor: 'discount' },
+  //   { label: 'PR/CT', accessor: 'price_per_carat' },
+  //   { label: 'AMT($)', accessor: 'amount' },
+  //   { label: 'Cut', accessor: 'cut' },
+  //   { label: 'Pol.', accessor: 'polish' },
+  //   { label: 'Symm.', accessor: 'symmetry' },
+  //   { label: 'FLS', accessor: 'fluorescence' },
+  //   { label: 'LAB', accessor: 'lab' },
+  //   { label: 'BRL', accessor: 'brilliance' },
+  //   { label: 'TB', accessor: 'black_table' },
+  //   { label: 'SI', accessor: 'side_inclusion' },
+  //   { label: 'SB', accessor: 'side_black' },
+  //   { label: 'TI', accessor: 'table_inclusion' },
+  //   { label: 'TO', accessor: 'open_table' },
+  //   { label: 'CO', accessor: 'open_crown' },
+  //   { label: 'PO', accessor: 'open_pavilion' },
+  //   { label: 'EC', accessor: 'eye_clean' },
+  //   { label: 'CN', accessor: 'natural_crown' },
+  //   { label: 'GN', accessor: 'natural_girdle' },
+  //   { label: 'PN', accessor: 'natural_pavilion' },
+  //   { label: 'SG', accessor: 'surface_graining' },
+  //   { label: 'IG', accessor: 'internal_graining' },
+  //   { label: 'TBL%', accessor: 'table_percentage' },
+  //   { label: 'DEP%', accessor: 'depth_percentage' },
+  //   { label: 'Length', accessor: 'length' },
+  //   { label: 'Width', accessor: 'width' },
+  //   { label: 'Depth', accessor: 'depth' },
+  //   { label: 'Ratio', accessor: 'ratio' },
+  //   { label: 'C/A', accessor: 'crown_angle' },
+  //   { label: 'C/H', accessor: 'crown_height' },
+  //   { label: 'H&A', accessor: 'ha' },
+  //   { label: 'Girdle', accessor: 'girdle' },
+  //   { label: 'P/A', accessor: 'pavilion_angle' },
+  //   { label: 'P/D', accessor: 'pavilion_depth' },
+  //   { label: 'Culet', accessor: 'culet' },
+  //   { label: 'Ins.', accessor: 'inscription' },
+  //   { label: 'Origin', accessor: 'origin_country' },
+  //   { label: 'L/H.', accessor: 'lower_half' },
+  //   { label: 'S/L', accessor: 'star_length' },
+  //   { label: 'Girdle%', accessor: 'girdle_percentage' },
+  //   { label: 'Luster', accessor: 'luster' },
+  // ];
 
   const downloadExcelFunction = () => {
     if (isCheckAll) {

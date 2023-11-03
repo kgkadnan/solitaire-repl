@@ -5,7 +5,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-import data from './data.json';
+// import data from './data.json';
 import {
   useAddManageListingSequenceMutation,
   useGetManageListingSequenceQuery,
@@ -17,19 +17,19 @@ interface IManageListingSequence {
   label: string;
   accessor: string;
   sequence: number;
-  is_active: boolean;
   is_fixed: boolean;
-  width?: string | null;
-  meta_data?: string | null;
-  is_disable: boolean;
+  is_disabled: boolean;
   id: string;
-  created_at: string;
-  updated_at: string;
+}
+
+export interface ManageListingSequenceResponse {
+  data: IManageListingSequence[];
 }
 
 const ManageListingSequence = () => {
-  // let { data: manageListingSequence } = useGetManageListingSequenceQuery({});
-  // let [addManageListingSequence] = useAddManageListingSequenceMutation();
+  const { data } =
+    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+  let [addManageListingSequence] = useAddManageListingSequenceMutation();
 
   const [manageableListings, setManageableListings] = useState<
     IManageListingSequence[]
@@ -42,25 +42,21 @@ const ManageListingSequence = () => {
   >([]);
 
   useEffect(() => {
-    // Simulating fetching or setting data from data.json
-    // const initialData = data.map((item, index) => ({
-    //   ...item,
-    //   sequence: index + 1,
-    // }));
+    if (data?.length) {
+      const nonManageable = data?.filter((item) => item.is_fixed);
+      const manageable = data
+        ?.filter((item) => !item.is_fixed)
+        ?.sort((a, b) => a.sequence - b.sequence);
 
-    const nonManageable = data.filter((item) => item.is_fixed);
-    const manageable = data
-      .filter((item) => !item.is_fixed)
-      .sort((a, b) => a.sequence - b.sequence);
-
-    setManageableListings(manageable);
-    setNonManageableListings(nonManageable);
-  }, []);
+      setManageableListings(manageable);
+      setNonManageableListings(nonManageable);
+    }
+  }, [data]);
 
   const handleCheckboxClick = (id: string) => {
     const updatedListings = manageableListings.map((item) => {
       if (item.id === id) {
-        return { ...item, is_disable: !item.is_disable };
+        return { ...item, is_disabled: !item.is_disabled };
       }
       return item;
     });
@@ -71,6 +67,7 @@ const ManageListingSequence = () => {
   };
 
   const handleUpdateDiamondSequence = () => {
+    addManageListingSequence(updateSequence);
     console.log('update diamond sequence', updateSequence);
     // Perform actions on update
   };
@@ -154,7 +151,7 @@ const ManageListingSequence = () => {
                 {...provided.droppableProps}
                 className="flex flex-wrap"
               >
-                {manageableListings.map(({ label, id, is_disable }, index) => (
+                {manageableListings.map(({ label, id, is_disabled }, index) => (
                   <Draggable key={id} draggableId={id} index={index}>
                     {(provided: any) => (
                       <div
@@ -172,7 +169,7 @@ const ManageListingSequence = () => {
                           <div className="flex items-center">
                             <Checkbox
                               onClick={() => handleCheckboxClick(id)}
-                              checked={is_disable}
+                              checked={!is_disabled}
                             />
                           </div>
                         </div>
