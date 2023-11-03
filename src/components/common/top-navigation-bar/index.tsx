@@ -16,16 +16,16 @@ import {
 import { CustomCalculator } from '@/components/calculator';
 import { CustomSlider } from '../slider';
 import {
-  Notification,
-  NotificationItem,
-  NotificationUpdate,
-} from '@/components/notification';
-import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
 } from '@/features/api/notification';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
+import {
+  NotificationItem,
+  NotificationUpdate,
+} from '@/components/notification/notification-interface';
+import { Notification } from '@/components/notification';
 
 interface StatusResponse {
   status: boolean;
