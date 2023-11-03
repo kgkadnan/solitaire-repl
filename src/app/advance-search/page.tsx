@@ -29,6 +29,10 @@ interface IAdvanceSearch {
   shape?: string[];
   color?: string[];
 }
+
+interface QueryParameters {
+  [key: string]: string | string[] | undefined;
+}
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const router = useRouter();
   const { previousSearch } = useAppSelector((store) => store);
@@ -226,7 +230,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
     starLengthFrom,
     starLengthTo,
   }: any) {
-    const queryParams: any = {};
+    const queryParams: QueryParameters = {};
 
     selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
     // selectedColor && (queryParams['color'] = selectedColor);
@@ -245,7 +249,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
 
     let caratValues: string[] = [];
     if (selectedCaratRange && selectedCaratRange.length > 0) {
-      caratValues = selectedCaratRange.map((caratRange: any) => {
+      caratValues = selectedCaratRange.map((caratRange: string) => {
         const caratData = caratRange.split('-');
         const caratFrom = parseFloat(caratData[0]).toFixed(2);
         const caratTo = parseFloat(caratData[1]).toFixed(2);
