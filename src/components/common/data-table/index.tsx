@@ -309,541 +309,557 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                       isChecked={isCheck}
                     />
                   </td>
-                  {tableColumns?.map((column: any) => (
-                    <td
-                      key={`${row.id}-${column.accessor}`}
-                      className={`
+                  {tableColumns
+                    ?.filter((column) => !column.is_disabled)
+                    ?.sort((a, b) => a.sequence - b.sequence)
+                    .map((column: any) => (
+                      <td
+                        key={`${row.id}-${column.accessor}`}
+                        className={`
                     ${styles.tableData}  
                    
                    cursor-pointer
                   `}
-                    >
-                      {column.accessor === 'details' ? (
-                        <div
-                          className="flex items-center gap-2"
-                          onClick={(e) => e.stopPropagation()}
-                        >
-                          <CustomSlider
-                            sheetTriggenContent={
-                              <>
-                                <div
-                                  onClick={(e) => {
-                                    setActiveTab('3');
-                                    setSliderData([tableRows[index]]);
-                                    setDiamondDetailIframeUrl('');
-                                    setDiamondDetailImageUrl('');
-                                  }}
-                                >
-                                  <Image
-                                    src={imageOutline}
-                                    alt={`${row?.lot_id} GIA Image`}
-                                    width={20}
-                                    height={20}
-                                  />
-                                </div>
-                              </>
-                            }
-                            sheetContentStyle={styles.sheetContentStyle}
-                            sheetContent={
-                              <>
-                                <div className={styles.sheetMainHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.searchResult.slider.stoneImage.image'
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
-                                  {displayButtonData
-                                    .filter((items) => items.id !== '1') // Filter out items with id '1'
-                                    .map((items) => (
-                                      <div key={items.id} className="">
-                                        <CustomDisplayButton
-                                          displayButtonLabel={
-                                            items.displayButtonLabel
-                                          }
-                                          displayButtonAllStyle={{
-                                            displayLabelStyle:
-                                              activeTab === items.id
-                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
-                                                : styles.headerButtonStyle,
-                                          }}
-                                          handleClick={() =>
-                                            handleDiamondDetailData(
-                                              items.id,
-                                              items.url,
-                                              items.iframeUrl
-                                            )
-                                          }
-                                        />
-                                      </div>
-                                    ))}
-                                </div>
-
-                                <div className={styles.stoneSliderData}>
-                                  {diamondDetailImageUrl.length === 0 &&
-                                    diamondDetailIframeUrl.length === 0 && (
-                                      <Image
-                                        src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
-                                        alt={``}
-                                        width={350}
-                                        height={350}
-                                        style={{ height: '350px' }}
-                                      />
-                                    )}
-                                  {diamondDetailImageUrl &&
-                                    !diamondDetailIframeUrl && (
-                                      <Image
-                                        src={diamondDetailImageUrl}
-                                        alt={``}
-                                        width={350}
-                                        height={350}
-                                        style={{ height: '350px' }}
-                                      />
-                                    )}
-                                  {diamondDetailIframeUrl &&
-                                    !diamondDetailImageUrl && (
-                                      <iframe
-                                        width="50%"
-                                        height={350}
-                                        frameBorder="0"
-                                        src={diamondDetailIframeUrl}
-                                      />
-                                    )}
-                                </div>
-
-                                {/* button */}
-                                <div className={styles.customButtonDiv}>
-                                  <CustomDisplayButton
-                                    displayButtonLabel={ManageLocales(
-                                      'app.searchResult.slider.giaCertificate.share'
-                                    )}
-                                    displayButtonAllStyle={{
-                                      displayButtonStyle: styles.transparent,
+                      >
+                        {column.accessor === 'details' ? (
+                          <div
+                            className="flex items-center gap-2"
+                            onClick={(e) => e.stopPropagation()}
+                          >
+                            <CustomSlider
+                              sheetTriggenContent={
+                                <>
+                                  <div
+                                    onClick={(e) => {
+                                      setActiveTab('3');
+                                      setSliderData([tableRows[index]]);
+                                      setDiamondDetailIframeUrl('');
+                                      setDiamondDetailImageUrl('');
                                     }}
-                                    // handleClick={showButtonHandleClick}
-                                  />
-                                  <CustomDisplayButton
-                                    displayButtonLabel={ManageLocales(
-                                      'app.searchResult.slider.giaCertificate.download'
-                                    )}
-                                    displayButtonAllStyle={{
-                                      displayButtonStyle: styles.filled,
-                                    }}
-                                    handleClick={() => {
-                                      diamondDetailImageUrl.length &&
-                                        downloadImage(diamondDetailImageUrl);
-                                      diamondDetailIframeUrl.length &&
-                                        downloadFile(diamondDetailIframeUrl);
-                                    }}
-                                  />
-                                </div>
-                              </>
-                            }
-                          />
-                          <CustomSlider
-                            sheetTriggenContent={
-                              <>
-                                <div
-                                  onClick={(e) => {
-                                    setSliderData([tableRows[index]]);
-                                  }}
-                                >
-                                  <Image
-                                    src={certficateOutline}
-                                    alt={`${row?.certificate_url}Certificate_Url`}
-                                    width={20}
-                                    height={20}
-                                  />
-                                </div>
-                              </>
-                            }
-                            sheetContentStyle={styles.sheetContentStyle}
-                            sheetContent={
-                              <>
-                                <div className={styles.sheetMainHeading}>
-                                  <p>
-                                    {ManageLocales(
-                                      'app.searchResult.slider.giaCertificate.giaCertificate'
-                                    )}
-                                  </p>
-                                </div>
-
-                                <div className={styles.sliderData}>
-                                  {sliderData[0] && (
+                                  >
                                     <Image
-                                      src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
-                                      alt={``}
-                                      width={500}
-                                      height={0}
-                                      style={{ height: '400px' }}
+                                      src={imageOutline}
+                                      alt={`${row?.lot_id} GIA Image`}
+                                      width={20}
+                                      height={20}
                                     />
-                                  )}
-                                </div>
+                                  </div>
+                                </>
+                              }
+                              sheetContentStyle={styles.sheetContentStyle}
+                              sheetContent={
+                                <>
+                                  <div className={styles.sheetMainHeading}>
+                                    <p>
+                                      {ManageLocales(
+                                        'app.searchResult.slider.stoneImage.image'
+                                      )}
+                                    </p>
+                                  </div>
 
-                                {/* button */}
-                                <div className={styles.customButtonDiv}>
-                                  <CustomDisplayButton
-                                    displayButtonLabel={ManageLocales(
-                                      'app.searchResult.slider.giaCertificate.share'
-                                    )}
-                                    displayButtonAllStyle={{
-                                      displayButtonStyle: styles.transparent,
-                                    }}
-                                    // handleClick={showButtonHandleClick}
-                                  />
-                                  <CustomDisplayButton
-                                    displayButtonLabel={ManageLocales(
-                                      'app.searchResult.slider.giaCertificate.download'
-                                    )}
-                                    displayButtonAllStyle={{
-                                      displayButtonStyle: styles.filled,
-                                    }}
-                                    handleClick={() => {
-                                      downloadImage(
-                                        `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`
-                                      );
-                                    }}
-                                  />
-                                </div>
-                              </>
-                            }
-                          />
-                        </div>
-                      ) : column.accessor === 'lot_id' ? (
-                        <div
-                          onClick={(e) => {
-                            e.stopPropagation();
-                          }}
-                        >
-                          <CustomSlider
-                            sheetTriggenContent={
-                              <>
-                                <div
-                                  onClick={() => {
-                                    setActiveTab('3');
-                                    setDiamondDetailIframeUrl('');
-                                    setDiamondDetailImageUrl(``);
-                                    setSliderData([tableRows[index]]);
-                                  }}
-                                  className={` ${
-                                    column.accessor === 'lot_id' &&
-                                    row.is_memo_out
-                                      ? styles.memoOutBackground
-                                      : 'px-[5px]'
-                                  }`}
-                                >
-                                  {row[column.accessor as keyof Product]}
-                                </div>
-                              </>
-                            }
-                            sheetContentStyle={styles.diamondDetailSheet}
-                            sheetContent={
-                              <>
-                                <div className={styles.diamondDetailHeader}>
-                                  <p className={`text-solitaireTertiary`}>
-                                    {`${ManageLocales(
-                                      'app.searchResult.slider.diamondDetail.stockNo'
-                                    )} : ${sliderData[0]?.lot_id}`}
-                                  </p>
-                                </div>
-                                <div className="border-b border-solitaireQuaternary mt-5"></div>
-                                {sliderData.map((data) => {
-                                  return (
-                                    <>
-                                      <div
-                                        key={data.id}
-                                        className="flex items-center justify-between my-5 px-10"
-                                      >
-                                        <div className="">
-                                          {displayButtonData.map((items) => {
-                                            return (
-                                              <div key={items.id} className="">
-                                                <CustomDisplayButton
-                                                  displayButtonLabel={
-                                                    items.displayButtonLabel
-                                                  }
-                                                  displayButtonAllStyle={{
-                                                    displayLabelStyle:
-                                                      activeTab === items.id
-                                                        ? styles.activeHeaderButtonStyle
-                                                        : styles.headerButtonStyle,
-                                                  }}
-                                                  handleClick={() =>
-                                                    handleDiamondDetailData(
-                                                      items.id,
-                                                      items.url,
-                                                      items.iframeUrl
-                                                    )
-                                                  }
-                                                />
-                                              </div>
-                                            );
-                                          })}
+                                  <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                    {displayButtonData
+                                      .filter((items) => items.id !== '1') // Filter out items with id '1'
+                                      .map((items) => (
+                                        <div key={items.id} className="">
+                                          <CustomDisplayButton
+                                            displayButtonLabel={
+                                              items.displayButtonLabel
+                                            }
+                                            displayButtonAllStyle={{
+                                              displayLabelStyle:
+                                                activeTab === items.id
+                                                  ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                                                  : styles.headerButtonStyle,
+                                            }}
+                                            handleClick={() =>
+                                              handleDiamondDetailData(
+                                                items.id,
+                                                items.url,
+                                                items.iframeUrl
+                                              )
+                                            }
+                                          />
                                         </div>
-                                        <div>
-                                          {!diamondDetailImageUrl.length &&
-                                            !diamondDetailIframeUrl.length && (
-                                              <Image
-                                                src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
-                                                alt={``}
-                                                width={350}
-                                                height={350}
-                                                style={{ height: '350px' }}
-                                              />
-                                            )}
-                                          {diamondDetailImageUrl &&
-                                            !diamondDetailIframeUrl && (
-                                              <Image
-                                                src={diamondDetailImageUrl}
-                                                alt={``}
-                                                width={350}
-                                                height={350}
-                                                style={{ height: '350px' }}
-                                              />
-                                            )}
+                                      ))}
+                                  </div>
 
-                                          {diamondDetailIframeUrl &&
-                                            !diamondDetailImageUrl && (
-                                              <iframe
-                                                width="100%"
-                                                height={350}
-                                                frameBorder="0"
-                                                src={diamondDetailIframeUrl}
-                                              />
-                                            )}
-                                        </div>
-                                        <div className="">
-                                          {Object.keys(keyLabelMapping).map(
-                                            (key) => (
-                                              <div
-                                                key={key}
-                                                className="text-solitaireTertiary py-1"
-                                              >
-                                                <span className="text-xs">
-                                                  {keyLabelMapping[key]}
-                                                </span>
-                                                <br />
-                                                {data[key] ? data[key] : '-'}
-                                              </div>
-                                            )
-                                          )}
-                                        </div>
-                                      </div>
-                                      <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
-                                        <div
-                                          onClick={() => {}}
-                                          className="cursor-pointer"
-                                        >
-                                          <Image
-                                            src={shareSocialOutline}
-                                            alt="shareSocialOutline"
-                                            width={25}
-                                            height={20}
-                                          />
-                                        </div>
-                                        <div
-                                          onClick={() => {}}
-                                          className="cursor-pointer"
-                                        >
-                                          <Image
-                                            src={downloadOutline}
-                                            alt="downloadOutline"
-                                            width={25}
-                                            height={20}
-                                          />
-                                        </div>
-                                        <div
-                                          onClick={() => {
-                                            window.open(
-                                              `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
-                                              '_blank'
-                                            );
-                                          }}
-                                          className="cursor-pointer"
-                                        >
-                                          <Image
-                                            src={dna}
-                                            alt="dna"
-                                            width={25}
-                                            height={20}
-                                          />
-                                        </div>
-                                      </div>
-                                      <div className="border-b border-solitaireQuaternary"></div>
-                                      <div>
-                                        <div
-                                          className={styles.diamondDetailHeader}
-                                        >
-                                          <p
-                                            className={`text-solitaireQuaternary font-bold text-lg my-5`}
-                                          >
-                                            {`${ManageLocales(
-                                              'app.searchResult.slider.diamondDetail.diamondDetails'
-                                            )} `}
-                                          </p>
-                                        </div>
-                                        <div className="flex justify-start">
-                                          <div className="w-1/4">
-                                            <p
-                                              className={`text-solitaireQuaternary text-lg my-5`}
-                                            >
-                                              {`${ManageLocales(
-                                                'app.searchResult.slider.diamondDetail.basicDetails'
-                                              )} `}
-                                            </p>
-                                            {Object.keys(
-                                              basicDetailsLabelMapping
-                                            ).map((key) => (
-                                              <div
-                                                key={key}
-                                                className="text-solitaireTertiary py-1 flex "
-                                              >
-                                                <span className="text-solitaireQuaternary w-[150px]">
-                                                  {
-                                                    basicDetailsLabelMapping[
-                                                      key
-                                                    ]
-                                                  }
-                                                </span>
-                                                <span className="text-left">
-                                                  {data[key] ? data[key] : '-'}
-                                                </span>
-                                              </div>
-                                            ))}
-                                          </div>
-                                          <div className="w-1/4">
-                                            <p
-                                              className={`text-solitaireQuaternary text-lg my-5`}
-                                            >
-                                              {`${ManageLocales(
-                                                'app.searchResult.slider.diamondDetail.measurements'
-                                              )} `}
-                                            </p>
-                                            {Object.keys(
-                                              measurementsLabelMapping
-                                            ).map((key) => (
-                                              <div
-                                                key={key}
-                                                className="text-solitaireTertiary py-1 flex"
-                                              >
-                                                <span className="text-solitaireQuaternary w-[150px]">
-                                                  {
-                                                    measurementsLabelMapping[
-                                                      key
-                                                    ]
-                                                  }
-                                                </span>
-                                                <span>
-                                                  {data[key] ? data[key] : '-'}
-                                                </span>
-                                              </div>
-                                            ))}
-                                          </div>
-                                          <div className="w-1/4">
-                                            <p
-                                              className={`text-solitaireQuaternary text-lg my-5`}
-                                            >
-                                              {`${ManageLocales(
-                                                'app.searchResult.slider.diamondDetail.inclusionDetails'
-                                              )} `}
-                                            </p>
-                                            {Object.keys(
-                                              inclusionDetailsLabelMapping
-                                            ).map((key) => (
-                                              <div
-                                                key={key}
-                                                className="text-solitaireTertiary py-1 flex"
-                                              >
-                                                <span className="text-solitaireQuaternary w-[150px]">
-                                                  {
-                                                    inclusionDetailsLabelMapping[
-                                                      key
-                                                    ]
-                                                  }
-                                                </span>
-                                                <span className="">
-                                                  {data[key] ? data[key] : '-'}
-                                                </span>
-                                              </div>
-                                            ))}
-                                          </div>
-                                          <div className="w-1/4">
-                                            <p
-                                              className={`text-solitaireQuaternary text-lg my-5`}
-                                            >
-                                              {`${ManageLocales(
-                                                'app.searchResult.slider.diamondDetail.otherInformations'
-                                              )} `}
-                                            </p>
-                                            {Object.keys(
-                                              otherInformationsLabelMapping
-                                            ).map((key) => (
-                                              <div
-                                                key={key}
-                                                className="text-solitaireTertiary py-1 flex"
-                                              >
-                                                <span className="text-solitaireQuaternary w-[150px]">
-                                                  {
-                                                    otherInformationsLabelMapping[
-                                                      key
-                                                    ]
-                                                  }
-                                                </span>
-                                                <span className="">
-                                                  {data[key] ? data[key] : '-'}
-                                                </span>
-                                              </div>
-                                            ))}
-                                          </div>
-                                        </div>
-                                      </div>
-                                      <div className="sticky bottom-[-35px] bg-solitairePrimary">
-                                        <CustomFooter
-                                          footerButtonData={footerButtonData}
+                                  <div className={styles.stoneSliderData}>
+                                    {diamondDetailImageUrl.length === 0 &&
+                                      diamondDetailIframeUrl.length === 0 && (
+                                        <Image
+                                          src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                          alt={``}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
                                         />
-                                      </div>
-                                    </>
-                                  );
-                                })}
-                              </>
-                            }
-                          />
-                        </div>
-                      ) : column.accessor === 'rpt_number' ? (
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          className="border-b border-solitaireQuaternary border-solid"
-                        >
-                          <a
-                            href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
-                            target="_blank"
+                                      )}
+                                    {diamondDetailImageUrl &&
+                                      !diamondDetailIframeUrl && (
+                                        <Image
+                                          src={diamondDetailImageUrl}
+                                          alt={``}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
+                                        />
+                                      )}
+                                    {diamondDetailIframeUrl &&
+                                      !diamondDetailImageUrl && (
+                                        <iframe
+                                          width="50%"
+                                          height={350}
+                                          frameBorder="0"
+                                          src={diamondDetailIframeUrl}
+                                        />
+                                      )}
+                                  </div>
+
+                                  {/* button */}
+                                  <div className={styles.customButtonDiv}>
+                                    <CustomDisplayButton
+                                      displayButtonLabel={ManageLocales(
+                                        'app.searchResult.slider.giaCertificate.share'
+                                      )}
+                                      displayButtonAllStyle={{
+                                        displayButtonStyle: styles.transparent,
+                                      }}
+                                      // handleClick={showButtonHandleClick}
+                                    />
+                                    <CustomDisplayButton
+                                      displayButtonLabel={ManageLocales(
+                                        'app.searchResult.slider.giaCertificate.download'
+                                      )}
+                                      displayButtonAllStyle={{
+                                        displayButtonStyle: styles.filled,
+                                      }}
+                                      handleClick={() => {
+                                        diamondDetailImageUrl.length &&
+                                          downloadImage(diamondDetailImageUrl);
+                                        diamondDetailIframeUrl.length &&
+                                          downloadFile(diamondDetailIframeUrl);
+                                      }}
+                                    />
+                                  </div>
+                                </>
+                              }
+                            />
+                            <CustomSlider
+                              sheetTriggenContent={
+                                <>
+                                  <div
+                                    onClick={(e) => {
+                                      setSliderData([tableRows[index]]);
+                                    }}
+                                  >
+                                    <Image
+                                      src={certficateOutline}
+                                      alt={`${row?.certificate_url}Certificate_Url`}
+                                      width={20}
+                                      height={20}
+                                    />
+                                  </div>
+                                </>
+                              }
+                              sheetContentStyle={styles.sheetContentStyle}
+                              sheetContent={
+                                <>
+                                  <div className={styles.sheetMainHeading}>
+                                    <p>
+                                      {ManageLocales(
+                                        'app.searchResult.slider.giaCertificate.giaCertificate'
+                                      )}
+                                    </p>
+                                  </div>
+
+                                  <div className={styles.sliderData}>
+                                    {sliderData[0] && (
+                                      <Image
+                                        src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
+                                        alt={``}
+                                        width={500}
+                                        height={0}
+                                        style={{ height: '400px' }}
+                                      />
+                                    )}
+                                  </div>
+
+                                  {/* button */}
+                                  <div className={styles.customButtonDiv}>
+                                    <CustomDisplayButton
+                                      displayButtonLabel={ManageLocales(
+                                        'app.searchResult.slider.giaCertificate.share'
+                                      )}
+                                      displayButtonAllStyle={{
+                                        displayButtonStyle: styles.transparent,
+                                      }}
+                                      // handleClick={showButtonHandleClick}
+                                    />
+                                    <CustomDisplayButton
+                                      displayButtonLabel={ManageLocales(
+                                        'app.searchResult.slider.giaCertificate.download'
+                                      )}
+                                      displayButtonAllStyle={{
+                                        displayButtonStyle: styles.filled,
+                                      }}
+                                      handleClick={() => {
+                                        downloadImage(
+                                          `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`
+                                        );
+                                      }}
+                                    />
+                                  </div>
+                                </>
+                              }
+                            />
+                          </div>
+                        ) : column.accessor === 'lot_id' ? (
+                          <div
+                            onClick={(e) => {
+                              e.stopPropagation();
+                            }}
                           >
-                            {row.rpt_number !== null ? row.rpt_number : '-'}
-                          </a>
-                        </div>
-                      ) : column.accessor === 'lab' ? (
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          className="border-b border-solitaireQuaternary border-solid"
-                        >
-                          <a
-                            href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
-                            target="_blank"
+                            <CustomSlider
+                              sheetTriggenContent={
+                                <>
+                                  <div
+                                    onClick={() => {
+                                      setActiveTab('3');
+                                      setDiamondDetailIframeUrl('');
+                                      setDiamondDetailImageUrl(``);
+                                      setSliderData([tableRows[index]]);
+                                    }}
+                                    className={` ${
+                                      column.accessor === 'lot_id' &&
+                                      row.is_memo_out
+                                        ? styles.memoOutBackground
+                                        : 'px-[5px]'
+                                    }`}
+                                  >
+                                    {row[column.accessor as keyof Product]}
+                                  </div>
+                                </>
+                              }
+                              sheetContentStyle={styles.diamondDetailSheet}
+                              sheetContent={
+                                <>
+                                  <div className={styles.diamondDetailHeader}>
+                                    <p className={`text-solitaireTertiary`}>
+                                      {`${ManageLocales(
+                                        'app.searchResult.slider.diamondDetail.stockNo'
+                                      )} : ${sliderData[0]?.lot_id}`}
+                                    </p>
+                                  </div>
+                                  <div className="border-b border-solitaireQuaternary mt-5"></div>
+                                  {sliderData.map((data) => {
+                                    return (
+                                      <>
+                                        <div
+                                          key={data.id}
+                                          className="flex items-center justify-between my-5 px-10"
+                                        >
+                                          <div className="">
+                                            {displayButtonData.map((items) => {
+                                              return (
+                                                <div
+                                                  key={items.id}
+                                                  className=""
+                                                >
+                                                  <CustomDisplayButton
+                                                    displayButtonLabel={
+                                                      items.displayButtonLabel
+                                                    }
+                                                    displayButtonAllStyle={{
+                                                      displayLabelStyle:
+                                                        activeTab === items.id
+                                                          ? styles.activeHeaderButtonStyle
+                                                          : styles.headerButtonStyle,
+                                                    }}
+                                                    handleClick={() =>
+                                                      handleDiamondDetailData(
+                                                        items.id,
+                                                        items.url,
+                                                        items.iframeUrl
+                                                      )
+                                                    }
+                                                  />
+                                                </div>
+                                              );
+                                            })}
+                                          </div>
+                                          <div>
+                                            {!diamondDetailImageUrl.length &&
+                                              !diamondDetailIframeUrl.length && (
+                                                <Image
+                                                  src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                                  alt={``}
+                                                  width={350}
+                                                  height={350}
+                                                  style={{ height: '350px' }}
+                                                />
+                                              )}
+                                            {diamondDetailImageUrl &&
+                                              !diamondDetailIframeUrl && (
+                                                <Image
+                                                  src={diamondDetailImageUrl}
+                                                  alt={``}
+                                                  width={350}
+                                                  height={350}
+                                                  style={{ height: '350px' }}
+                                                />
+                                              )}
+
+                                            {diamondDetailIframeUrl &&
+                                              !diamondDetailImageUrl && (
+                                                <iframe
+                                                  width="100%"
+                                                  height={350}
+                                                  frameBorder="0"
+                                                  src={diamondDetailIframeUrl}
+                                                />
+                                              )}
+                                          </div>
+                                          <div className="">
+                                            {Object.keys(keyLabelMapping).map(
+                                              (key) => (
+                                                <div
+                                                  key={key}
+                                                  className="text-solitaireTertiary py-1"
+                                                >
+                                                  <span className="text-xs">
+                                                    {keyLabelMapping[key]}
+                                                  </span>
+                                                  <br />
+                                                  {data[key] ? data[key] : '-'}
+                                                </div>
+                                              )
+                                            )}
+                                          </div>
+                                        </div>
+                                        <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
+                                          <div
+                                            onClick={() => {}}
+                                            className="cursor-pointer"
+                                          >
+                                            <Image
+                                              src={shareSocialOutline}
+                                              alt="shareSocialOutline"
+                                              width={25}
+                                              height={20}
+                                            />
+                                          </div>
+                                          <div
+                                            onClick={() => {}}
+                                            className="cursor-pointer"
+                                          >
+                                            <Image
+                                              src={downloadOutline}
+                                              alt="downloadOutline"
+                                              width={25}
+                                              height={20}
+                                            />
+                                          </div>
+                                          <div
+                                            onClick={() => {
+                                              window.open(
+                                                `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
+                                                '_blank'
+                                              );
+                                            }}
+                                            className="cursor-pointer"
+                                          >
+                                            <Image
+                                              src={dna}
+                                              alt="dna"
+                                              width={25}
+                                              height={20}
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="border-b border-solitaireQuaternary"></div>
+                                        <div>
+                                          <div
+                                            className={
+                                              styles.diamondDetailHeader
+                                            }
+                                          >
+                                            <p
+                                              className={`text-solitaireQuaternary font-bold text-lg my-5`}
+                                            >
+                                              {`${ManageLocales(
+                                                'app.searchResult.slider.diamondDetail.diamondDetails'
+                                              )} `}
+                                            </p>
+                                          </div>
+                                          <div className="flex justify-start">
+                                            <div className="w-1/4">
+                                              <p
+                                                className={`text-solitaireQuaternary text-lg my-5`}
+                                              >
+                                                {`${ManageLocales(
+                                                  'app.searchResult.slider.diamondDetail.basicDetails'
+                                                )} `}
+                                              </p>
+                                              {Object.keys(
+                                                basicDetailsLabelMapping
+                                              ).map((key) => (
+                                                <div
+                                                  key={key}
+                                                  className="text-solitaireTertiary py-1 flex "
+                                                >
+                                                  <span className="text-solitaireQuaternary w-[150px]">
+                                                    {
+                                                      basicDetailsLabelMapping[
+                                                        key
+                                                      ]
+                                                    }
+                                                  </span>
+                                                  <span className="text-left">
+                                                    {data[key]
+                                                      ? data[key]
+                                                      : '-'}
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                            <div className="w-1/4">
+                                              <p
+                                                className={`text-solitaireQuaternary text-lg my-5`}
+                                              >
+                                                {`${ManageLocales(
+                                                  'app.searchResult.slider.diamondDetail.measurements'
+                                                )} `}
+                                              </p>
+                                              {Object.keys(
+                                                measurementsLabelMapping
+                                              ).map((key) => (
+                                                <div
+                                                  key={key}
+                                                  className="text-solitaireTertiary py-1 flex"
+                                                >
+                                                  <span className="text-solitaireQuaternary w-[150px]">
+                                                    {
+                                                      measurementsLabelMapping[
+                                                        key
+                                                      ]
+                                                    }
+                                                  </span>
+                                                  <span>
+                                                    {data[key]
+                                                      ? data[key]
+                                                      : '-'}
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                            <div className="w-1/4">
+                                              <p
+                                                className={`text-solitaireQuaternary text-lg my-5`}
+                                              >
+                                                {`${ManageLocales(
+                                                  'app.searchResult.slider.diamondDetail.inclusionDetails'
+                                                )} `}
+                                              </p>
+                                              {Object.keys(
+                                                inclusionDetailsLabelMapping
+                                              ).map((key) => (
+                                                <div
+                                                  key={key}
+                                                  className="text-solitaireTertiary py-1 flex"
+                                                >
+                                                  <span className="text-solitaireQuaternary w-[150px]">
+                                                    {
+                                                      inclusionDetailsLabelMapping[
+                                                        key
+                                                      ]
+                                                    }
+                                                  </span>
+                                                  <span className="">
+                                                    {data[key]
+                                                      ? data[key]
+                                                      : '-'}
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                            <div className="w-1/4">
+                                              <p
+                                                className={`text-solitaireQuaternary text-lg my-5`}
+                                              >
+                                                {`${ManageLocales(
+                                                  'app.searchResult.slider.diamondDetail.otherInformations'
+                                                )} `}
+                                              </p>
+                                              {Object.keys(
+                                                otherInformationsLabelMapping
+                                              ).map((key) => (
+                                                <div
+                                                  key={key}
+                                                  className="text-solitaireTertiary py-1 flex"
+                                                >
+                                                  <span className="text-solitaireQuaternary w-[150px]">
+                                                    {
+                                                      otherInformationsLabelMapping[
+                                                        key
+                                                      ]
+                                                    }
+                                                  </span>
+                                                  <span className="">
+                                                    {data[key]
+                                                      ? data[key]
+                                                      : '-'}
+                                                  </span>
+                                                </div>
+                                              ))}
+                                            </div>
+                                          </div>
+                                        </div>
+                                        <div className="sticky bottom-[-35px] bg-solitairePrimary">
+                                          <CustomFooter
+                                            footerButtonData={footerButtonData}
+                                          />
+                                        </div>
+                                      </>
+                                    );
+                                  })}
+                                </>
+                              }
+                            />
+                          </div>
+                        ) : column.accessor === 'rpt_number' ? (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="border-b border-solitaireQuaternary border-solid"
                           >
-                            {row.lab}
-                          </a>
-                        </div>
-                      ) : column.accessor === 'amount' ? (
-                        row.variants[0].prices[0].amount
-                      ) : row[column.accessor as keyof Product] !== null ? (
-                        row[column.accessor as keyof Product]
-                      ) : (
-                        '-'
-                      )}
-                    </td>
-                  ))}
+                            <a
+                              href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
+                              target="_blank"
+                            >
+                              {row.rpt_number !== null ? row.rpt_number : '-'}
+                            </a>
+                          </div>
+                        ) : column.accessor === 'lab' ? (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            className="border-b border-solitaireQuaternary border-solid"
+                          >
+                            <a
+                              href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
+                              target="_blank"
+                            >
+                              {row.lab}
+                            </a>
+                          </div>
+                        ) : column.accessor === 'amount' ? (
+                          row.variants[0].prices[0].amount
+                        ) : row[column.accessor as keyof Product] !== null ? (
+                          row[column.accessor as keyof Product]
+                        ) : (
+                          '-'
+                        )}
+                      </td>
+                    ))}
                 </tr>
               ))}
             </tbody>

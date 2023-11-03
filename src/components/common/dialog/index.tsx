@@ -1,12 +1,6 @@
 import React from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-
-interface IDialog {
-  dialogContent: React.ReactNode;
-  isOpens?: boolean;
-  setIsOpen?: any;
-  dialogStyle?: any;
-}
+import { IDialog } from './interface';
 
 export const CustomDialog: React.FC<IDialog> = ({
   dialogContent,

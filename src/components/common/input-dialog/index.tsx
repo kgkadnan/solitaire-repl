@@ -4,12 +4,9 @@ import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomInputField } from '../input-field';
 import { CustomInputlabel } from '../input-label';
 import styles from './input-dialog.module.scss';
+import { IInputDialog } from './interface';
 
-interface IDialog {
-  customInputDialogData: any;
-}
-
-export const CustomInputDialog: React.FC<IDialog> = ({
+export const CustomInputDialog: React.FC<IInputDialog> = ({
   customInputDialogData,
 }) => {
   let {

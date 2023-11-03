@@ -11,12 +11,12 @@ interface IHeaderDataStyle {
 export interface IHeaderData {
   headerHeading?: string | React.ReactNode;
   handleSelectAllCheckbox?: (e: any) => void;
-  searchCount?: any;
+  searchCount?: string | number;
   handleSearch?: (e: ChangeEvent<HTMLInputElement>) => void;
   searchValue?: string;
   isCheckAll?: boolean;
   handleSuggestionClick?: (suggestion: any) => void;
-  suggestions?: any;
+  suggestions?: string[];
   headerData?: React.ReactNode;
   overriddenStyles?: IHeaderDataStyle;
 }
