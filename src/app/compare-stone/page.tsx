@@ -110,10 +110,11 @@ const CompareStone = () => {
     useAddCartMutation();
 
   const handleAddToCart = () => {
-    let variantIds = isCheck.map((id) => {
-      const compareStoneCheck = compareStoneData.find((compareStone: any) => {
-        return compareStone.id === id;
-      });
+    let variantIds = isCheck.map((id: string) => {
+      const compareStoneCheck: ICompareStoneData | undefined =
+        compareStoneData.find((compareStone: any) => {
+          return compareStone?.id === id;
+        });
 
       return compareStoneCheck?.variants[0].id;
     });
@@ -311,7 +312,9 @@ const CompareStone = () => {
                     </div>
                     <div>
                       <div>
-                        {'amount' in compareStoneData[0] ? 'Amount' : null}
+                        {'amount' in compareStoneData[0]?.variants[0]?.prices[0]
+                          ? 'Amount'
+                          : null}
                       </div>
                     </div>
                   </div>
@@ -382,7 +385,7 @@ const CompareStone = () => {
                 {/* values */}
                 <div className={`flex ${styles.compareStonesValueContainer}`}>
                   {compareStoneData.map((diamond: any) => {
-                    const { discount, amount } = diamond;
+                    const { discount } = diamond;
                     return (
                       <div
                         className={`border-r border-solitaireSenary ${styles.compareStoneValue}`}
@@ -393,7 +396,7 @@ const CompareStone = () => {
                             <p>{discount}</p>
                           </div>
                           <div className="">
-                            <p>{amount}</p>
+                            <p>{diamond.variants[0].prices[0].amount}</p>
                           </div>
                         </div>
 
