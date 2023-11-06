@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
@@ -84,18 +84,18 @@ export const TopNavigationBar = () => {
     });
   };
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
-  };
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos, data]);
+  }, [prevScrollPos, data, handleScroll]);
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));

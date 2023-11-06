@@ -1,17 +1,29 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import SavedSearch from '@/app/saved-search/page';
 import { renderWithProviders } from '@/mock-handlers/test-utils';
 import { setupSetupsavedSearchandlers } from '@/mock-handlers/saved-search';
+import Image from 'next/image';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (
-    props: React.JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLImageElement> &
-      ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} />,
-}));
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: ({
+      src,
+      alt,
+      width,
+      height,
+      ...rest
+    }: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      // Add more specific types for other props if needed
+      // ...rest: SomeType;
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+  };
+});
 
 describe('SavedSearch Component - Render Card Data', () => {
   // Common test setup

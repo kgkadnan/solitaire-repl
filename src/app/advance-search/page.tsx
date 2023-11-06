@@ -25,11 +25,8 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
-interface IAdvanceSearch {
-  shape?: string[];
-  color?: string[];
-}
-const AdvanceSearch = (props?: IAdvanceSearch) => {
+
+const AdvanceSearch = () => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
@@ -1157,9 +1154,9 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         );
       }
     }
+
     if (data.toLowerCase() === '3vg+') {
       if (data !== selectedMake) {
-        // setSelectedCut(selectedCut.filter((e)=>e!=='Excellent'))
         setSelectedCut([...selectedCut, 'EX', 'VG']);
         setSelectedPolish([...selectedPolish, 'EX', 'VG']);
         setSelectedSymmetry([...selectedSymmetry, 'EX', 'VG']);
@@ -1176,7 +1173,8 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
         );
       }
     }
-    data === selectedMake ? setSelectedMake('') : setSelectedMake(data);
+
+    setSelectedMake(data === selectedMake ? '' : data);
   };
 
   const handleCutChange = (data: string) => {

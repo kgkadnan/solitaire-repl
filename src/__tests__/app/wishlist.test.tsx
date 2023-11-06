@@ -1,15 +1,27 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import React from 'react';
 import { fireEvent, render, waitFor } from '@testing-library/react';
 import WishList from '@app/wishlist/page';
+import Image from 'next/image';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (
-    props: React.JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLImageElement> &
-      ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} />,
-}));
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: ({
+      src,
+      alt,
+      width,
+      height,
+      ...rest
+    }: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      // Add more specific types for other props if needed
+      // ...rest: SomeType;
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+  };
+});
 
 describe('WishList Component - Render Card Data', () => {
   test('renders card data correctly based on search filter', () => {

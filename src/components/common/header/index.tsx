@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
 import styles from './header.module.scss';
 import { CustomSearchInputField } from '../search-input';
@@ -34,18 +34,18 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
     searchInputMain: 'relative',
   };
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
-  };
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [handleScroll, prevScrollPos]);
 
   return (
     <>

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -14,24 +14,27 @@ export const CustomToast: React.FC<ICustomToast> = ({
   message,
   icon = Error,
 }) => {
-  const notify = () =>
-    toast(
-      <div className={style.toastContainer}>
-        <p className={style.toastMessage}>{message}</p>
-        <Close />
-      </div>,
-      {
-        className: style.toast,
-        bodyClassName: style.toastCloseButton,
-        closeButton: false,
-        hideProgressBar: true,
-        icon: icon,
-      }
-    );
+  const notify = useCallback(
+    () =>
+      toast(
+        <div className={style.toastContainer}>
+          <p className={style.toastMessage}>{message}</p>
+          <Close />
+        </div>,
+        {
+          className: style.toast,
+          bodyClassName: style.toastCloseButton,
+          closeButton: false,
+          hideProgressBar: true,
+          icon: icon,
+        }
+      ),
+    [icon, message]
+  );
 
   useEffect(() => {
     notify();
-  }, [message]);
+  }, [message, notify]);
 
   return (
     <div>

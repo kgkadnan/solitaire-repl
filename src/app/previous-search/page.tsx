@@ -1,5 +1,11 @@
 'use client';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './previous-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
@@ -38,27 +44,21 @@ interface KeyLabelMapping {
   [key: string]: string;
 }
 
-interface IData {
-  id: string;
-  name: string;
-  customer_id: string;
-  diamondCount: number;
-  filter: any;
-  isDeleted: boolean;
-  created_at: string;
-  updated_at: string;
-}
-
 const PreviousSearch = () => {
   // Style classes and variables
-  const tableStyles = {
-    tableHeaderStyle: styles.tableHeader,
-    tableBodyStyle: styles.tableBody,
-  };
-  const searchCardTitle = {
-    tableHeaderStyle: styles.SearchCardTitle,
-    tableBodyStyle: styles.SearchDateTime,
-  };
+  const tableStyles = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.tableHeader,
+      tableBodyStyle: styles.tableBody,
+    };
+  }, []);
+  const searchCardTitle = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.SearchCardTitle,
+      tableBodyStyle: styles.SearchDateTime,
+    };
+  }, []);
+
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer,
   };
@@ -131,20 +131,22 @@ const PreviousSearch = () => {
   // Destructure the mutation function from the hook
   const [deletePreviousSearch] = useDeletePreviousSearchMutation();
 
-  const keyLabelMapping: KeyLabelMapping = {
-    shape: 'Shape',
-    color: 'color',
-    carat: 'carat',
-    clarity: 'clarity',
-    cut: 'cut',
-    polish: 'polish',
-    symmetry: 'Symmetry',
-    price_range: 'Price Range',
-    discount: 'Discount',
-  };
+  const keyLabelMapping: KeyLabelMapping = useMemo(() => {
+    return {
+      shape: 'Shape',
+      color: 'color',
+      carat: 'carat',
+      clarity: 'clarity',
+      cut: 'cut',
+      polish: 'polish',
+      symmetry: 'Symmetry',
+      price_range: 'Price Range',
+      discount: 'Discount',
+    };
+  }, []);
 
   const renderCardData = useCallback(
-    (data: any, suggestion?: string) => {
+    (data: any) => {
       return (
         data
           // .filter((data: any) =>
@@ -188,7 +190,7 @@ const PreviousSearch = () => {
           })
       );
     },
-    [searchCardTitle, tableStyles]
+    [keyLabelMapping, searchCardTitle, tableStyles]
   );
 
   //Delete Data
