@@ -16,7 +16,7 @@ export interface IHeaderData {
   searchValue?: string;
   isCheckAll?: boolean;
   handleSuggestionClick?: (suggestion: any) => void;
-  suggestions?: any;
+  suggestions?: string[];
   headerData?: React.ReactNode;
   overriddenStyles?: IHeaderDataStyle;
 }

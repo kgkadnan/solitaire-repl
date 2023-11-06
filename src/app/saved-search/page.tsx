@@ -26,28 +26,14 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
-
-interface ICardData {
-  cardId: string;
-  cardActionIcon: string;
-  cardHeader: React.ReactNode;
-  cardContent: React.ReactNode;
-}
-
-interface IData {
-  id: string;
-  name: string;
-  customer_id: string;
-  diamondCount: number;
-  meta_data: any;
-  filter: any;
-  created_at: string;
-  updated_at: string;
-}
-
-interface KeyLabelMapping {
-  [key: string]: string;
-}
+import {
+  ICardData,
+  IDateRange,
+  IFormatedData,
+  IKeyLabelMapping,
+  ISavedSearchData,
+  Item,
+} from './interface';
 
 const SavedSearch = () => {
   const router = useRouter();
@@ -76,12 +62,13 @@ const SavedSearch = () => {
 
   const [activeTab, setActiveTab] = useState(0);
 
-  const [sliderData, setSliderData] = useState<any>([]);
   const [date, setDate] = useState<DateRange | undefined>();
   const [searchUrl, setSearchUrl] = useState('');
 
   //Data
-  const [savedSearchData, setSavedSearchData] = useState<any[]>([]);
+  const [savedSearchData, setSavedSearchData] = useState<ISavedSearchData[]>(
+    []
+  );
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
@@ -136,7 +123,7 @@ const SavedSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useDeleteSavedSearchMutation();
 
-  const keyLabelMapping: KeyLabelMapping = {
+  const keyLabelMapping: IKeyLabelMapping = {
     shape: 'Shape',
     color: 'color',
     carat: 'carat',
@@ -149,15 +136,15 @@ const SavedSearch = () => {
   };
 
   const renderCardData = useCallback(
-    (data: any) => {
-      return data?.map((item: any) => {
+    (data: ISavedSearchData[]) => {
+      return data?.map((item) => {
         // Filter the data based on the keyLabelMapping
-        const filteredData: any = {};
+        const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
           if (item.meta_data[0].basic_card_details) {
             filteredData[keyLabelMapping[key]] =
               item.meta_data[0].basic_card_details[key] &&
-              item.meta_data[0].basic_card_details[key].length
+              item.meta_data[0].basic_card_details[key]?.length
                 ? item.meta_data[0].basic_card_details[key]
                 : '-';
           }
@@ -235,12 +222,12 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchList.filter((item: any) =>
+      const filteredSuggestions = searchList.filter((item: Item) =>
         item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
       // Extract card titles from filtered suggestions
       const suggestionTitles = filteredSuggestions.map(
-        (item: any) => item.name
+        (item: Item) => item.name
       );
 
       setSuggestions(suggestionTitles);
@@ -276,7 +263,7 @@ const SavedSearch = () => {
     }
   };
 
-  const handleSuggestionClick = (suggestion: any) => {
+  const handleSuggestionClick = (suggestion: string) => {
     setSearch(suggestion);
     setSearchByName(suggestion);
     setSuggestions([]);
@@ -323,7 +310,8 @@ const SavedSearch = () => {
     },
   ];
 
-  const handleDate = (date: any) => {
+  const handleDate = (date: IDateRange) => {
+    console.log('date', date);
     setDate(date);
     setSearchUrl(
       `&startDate=${new Date(date.from)
@@ -374,22 +362,25 @@ const SavedSearch = () => {
     setNumberOfPages(
       Math.ceil(savedSearchData?.count / savedSearchData?.limit)
     );
+
     setSavedSearchData(specificSavedSearchData);
 
     // Filter the location key from basic_card_details
-    const filteredData = specificSavedSearchData?.map((item: any) => ({
-      ...item,
-      meta_data: item.meta_data.map((metaItem: any) => ({
-        ...metaItem,
-        basic_card_details: (({
-          Location,
-          Tinge,
-          Fluorescence,
-          Symmetry,
-          ...rest
-        }) => rest)(metaItem.basic_card_details),
-      })),
-    }));
+    const filteredData = specificSavedSearchData?.map(
+      (item: ISavedSearchData) => ({
+        ...item,
+        meta_data: item.meta_data.map((metaItem) => ({
+          ...metaItem,
+          basic_card_details: (({
+            Location,
+            Tinge,
+            Fluorescence,
+            Symmetry,
+            ...rest
+          }) => rest)(metaItem.basic_card_details),
+        })),
+      })
+    );
 
     setCardData(renderCardData(filteredData));
   }, [data, limit, offset]);
@@ -408,11 +399,10 @@ const SavedSearch = () => {
     setActiveTab(index);
   };
 
-  const handleSlider = (data: any) => {
-    let savedSearchsingleDiamondData = savedSearchData.filter((items: any) => {
-      return items.id === data.id;
-    });
-    setSliderData(savedSearchsingleDiamondData);
+  const handleSlider = () => {
+    // let savedSearchsingleDiamondData = savedSearchData.filter((items: any) => {
+    //   return items.id === data.id;
+    // });
     setActiveTab(0);
   };
 
@@ -465,7 +455,7 @@ const SavedSearch = () => {
         {cardData?.length ? (
           <div className="flex-grow overflow-y-auto min-h-[80vh]">
             <>
-              {cardData?.map((items: any, indexTest: number) => {
+              {cardData?.map((items: ICardData, indexTest: number) => {
                 return (
                   <div key={items.cardId}>
                     <div className="flex mt-6">
@@ -480,7 +470,8 @@ const SavedSearch = () => {
                           <>
                             <div
                               onClick={() =>
-                                handleSlider(savedSearchData[indexTest])
+                                // handleSlider(savedSearchData[indexTest])
+                                handleSlider()
                               }
                             >
                               <CustomSearchResultCard
@@ -508,7 +499,7 @@ const SavedSearch = () => {
                                 {savedSearchData[indexTest].meta_data.length >
                                   1 &&
                                   savedSearchData[indexTest].meta_data.map(
-                                    (data: any, index: number) => (
+                                    (data, index: number) => (
                                       <div
                                         key={`Search-${index}`}
                                         style={{
@@ -543,9 +534,7 @@ const SavedSearch = () => {
                               </div>
                               <div
                                 className="flex"
-                                key={
-                                  savedSearchData[indexTest].meta_data.cardId
-                                }
+                                key={savedSearchData[indexTest].id}
                               >
                                 <div className={styles.sheetMainDiv}>
                                   {/* Detailed Information section */}

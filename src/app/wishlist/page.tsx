@@ -13,7 +13,7 @@ import styles from './wishlist.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSlider } from '@/components/common/slider';
-import { useRouter } from 'next/navigation';
+import { notFound, useRouter } from 'next/navigation';
 
 const WishList = () => {
   const router = useRouter();

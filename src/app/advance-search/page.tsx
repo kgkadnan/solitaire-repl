@@ -31,8 +31,8 @@ interface IAdvanceSearch {
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const router = useRouter();
-  const { previousSearch } = useAppSelector((store) => store);
-  const { savedSearch } = useAppSelector((store) => store);
+  const previousSearch = useAppSelector((store) => store.previousSearch);
+  const savedSearch = useAppSelector((store) => store.savedSearch);
 
   const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
 
@@ -1069,7 +1069,7 @@ const AdvanceSearch = (props?: IAdvanceSearch) => {
   const handleShapeChange = (shape: string) => {
     if (shape.toLowerCase() === 'all') {
       let filteredShape: string[] = advanceSearch.shape.map(
-        (data) => data.title
+        (data) => data.short_name
       );
 
       setSelectedShape(filteredShape);

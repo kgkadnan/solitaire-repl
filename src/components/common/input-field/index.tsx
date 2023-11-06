@@ -1,24 +1,8 @@
 'use client';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import styles from './input-field.module.scss';
 import { Input } from '@components/ui/input';
-
-interface IInputStyle {
-  input?: string;
-  inputMain?: string;
-}
-
-interface InputFieldProps {
-  style?: IInputStyle;
-  type: string;
-  value?: string | number;
-  name: string;
-  placeholder?: string;
-  onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
-  dataTestId?: string;
-  disable?: boolean;
-  onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
-}
+import { InputFieldProps } from './interface';
 
 export const CustomInputField: React.FC<InputFieldProps> = ({
   style,

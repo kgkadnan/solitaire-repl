@@ -1,66 +1,58 @@
 'use client';
-import React, { useEffect, useState } from 'react';
-import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd';
+import React, { ReactNode, useEffect, useState } from 'react';
+import {
+  DragDropContext,
+  Droppable,
+  Draggable,
+  DropResult,
+} from 'react-beautiful-dnd';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-import data from './data.json';
 import {
   useAddManageListingSequenceMutation,
   useGetManageListingSequenceQuery,
 } from '@/features/api/manage-listing-sequence';
-
-// Define IManageListingSequence interface
-
-interface IManageListingSequence {
-  label: string;
-  accessor: string;
-  sequence: number;
-  is_active: boolean;
-  is_fixed: boolean;
-  width?: string | null;
-  meta_data?: string | null;
-  is_disable: boolean;
-  id: string;
-  created_at: string;
-  updated_at: string;
-}
+import Image from 'next/image';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import { CustomDialog } from '@/components/common/dialog';
+import { TableColumn } from '@/app/search-result/interface';
+import { ManageListingSequenceResponse } from './interface';
+// Define TableColumn interface
 
 const ManageListingSequence = () => {
-  // let { data: manageListingSequence } = useGetManageListingSequenceQuery({});
-  // let [addManageListingSequence] = useAddManageListingSequenceMutation();
+  const { data } =
+    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+  let [addManageListingSequence] = useAddManageListingSequenceMutation();
 
-  const [manageableListings, setManageableListings] = useState<
-    IManageListingSequence[]
-  >([]);
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [manageableListings, setManageableListings] = useState<TableColumn[]>(
+    []
+  );
   const [nonManageableListings, setNonManageableListings] = useState<
-    IManageListingSequence[]
+    TableColumn[]
   >([]);
-  const [updateSequence, setUpdateSequence] = useState<
-    IManageListingSequence[]
-  >([]);
+  const [updateSequence, setUpdateSequence] = useState<TableColumn[]>([]);
 
   useEffect(() => {
-    // Simulating fetching or setting data from data.json
-    // const initialData = data.map((item, index) => ({
-    //   ...item,
-    //   sequence: index + 1,
-    // }));
+    if (data?.length) {
+      const nonManageable = data?.filter((item) => item.is_fixed);
+      const manageable = data
+        ?.filter((item) => !item.is_fixed)
+        ?.sort((a, b) => a.sequence - b.sequence);
 
-    const nonManageable = data.filter((item) => item.is_fixed);
-    const manageable = data
-      .filter((item) => !item.is_fixed)
-      .sort((a, b) => a.sequence - b.sequence);
-
-    setManageableListings(manageable);
-    setNonManageableListings(nonManageable);
-  }, []);
+      setManageableListings(manageable);
+      setNonManageableListings(nonManageable);
+    }
+  }, [data]);
 
   const handleCheckboxClick = (id: string) => {
     const updatedListings = manageableListings.map((item) => {
       if (item.id === id) {
-        return { ...item, is_disable: !item.is_disable };
+        return { ...item, is_disabled: !item.is_disabled };
       }
       return item;
     });
@@ -71,7 +63,26 @@ const ManageListingSequence = () => {
   };
 
   const handleUpdateDiamondSequence = () => {
-    console.log('update diamond sequence', updateSequence);
+    if (updateSequence?.length) {
+      addManageListingSequence(updateSequence)
+        .unwrap()
+        .then(() => {
+          setDialogContent(
+            <>
+              <div className="max-w-[400px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
+              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                Updated Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
+        })
+        .catch(() => {
+          console.log('1111111111111111');
+        });
+    }
     // Perform actions on update
   };
 
@@ -84,7 +95,7 @@ const ManageListingSequence = () => {
     setManageableListings(manageable);
   };
 
-  const onDragEnd = (result: any) => {
+  const onDragEnd = (result: DropResult) => {
     if (!result.destination) {
       return;
     }
@@ -92,7 +103,7 @@ const ManageListingSequence = () => {
     const updatedList = Array.from(manageableListings);
     const movedItem = updatedList.find(
       (item) => item.id === result.draggableId
-    ) as IManageListingSequence | undefined;
+    ) as TableColumn | undefined;
 
     if (movedItem) {
       updatedList.splice(result.source.index, 1);
@@ -129,6 +140,11 @@ const ManageListingSequence = () => {
 
   return (
     <div className="flex flex-col min-h-[84vh]">
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div>
         <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
         <div className="flex">
@@ -148,15 +164,15 @@ const ManageListingSequence = () => {
         <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable" direction="horizontal">
-            {(provided: any) => (
+            {(provided) => (
               <div
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 className="flex flex-wrap"
               >
-                {manageableListings.map(({ label, id, is_disable }, index) => (
+                {manageableListings.map(({ label, id, is_disabled }, index) => (
                   <Draggable key={id} draggableId={id} index={index}>
-                    {(provided: any) => (
+                    {(provided) => (
                       <div
                         ref={provided.innerRef}
                         {...provided.draggableProps}
@@ -172,7 +188,7 @@ const ManageListingSequence = () => {
                           <div className="flex items-center">
                             <Checkbox
                               onClick={() => handleCheckboxClick(id)}
-                              checked={is_disable}
+                              checked={!is_disabled}
                             />
                           </div>
                         </div>

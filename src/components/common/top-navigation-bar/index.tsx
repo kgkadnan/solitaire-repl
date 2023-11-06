@@ -26,8 +26,9 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const notificationBadgeStoreData: any = useAppSelector((store) => store);
-  let badgeData = notificationBadgeStoreData.notificationBadge.status;
+  const notificationBadgeStoreData: any = useAppSelector(
+    (store) => store.notificationBadge.status
+  );
 
   const router = useRouter();
   const [activeButton, setActiveButton] = useState<string>('');
@@ -163,7 +164,9 @@ export const TopNavigationBar = () => {
                     role="button"
                     className={styles.iconColor}
                   />
-                  {badgeData && <div className={styles.badge}></div>}
+                  {notificationBadgeStoreData && (
+                    <div className={styles.badge}></div>
+                  )}
                 </div>
               </div>
             }
