@@ -1,10 +1,14 @@
 import React from 'react';
 import styles from './no-data-founs.module.scss';
 
-export const NoDataFound = () => {
+interface INoDataFound {
+  message?: React.ReactNode;
+}
+
+export const NoDataFound: React.FC<INoDataFound> = ({ message }) => {
   return (
     <div className={styles.noDataFound}>
-      <p>No data found</p>
+      {message ? message : <p>No data found</p>}
     </div>
   );
 };

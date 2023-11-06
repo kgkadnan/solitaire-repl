@@ -62,8 +62,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.myCart'),
-      link: '/my-cart',
-      isActive: currentRoute === '/my-cart',
+      link: 'my-cart/active',
+      isActive: currentRoute === '/my-cart/active',
     },
   ];
 

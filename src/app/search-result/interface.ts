@@ -1,4 +1,4 @@
-import { StaticImport } from '../my-cart/page';
+import { StaticImport } from '../my-cart/active/page';
 
 export interface TableColumn {
   label: string;

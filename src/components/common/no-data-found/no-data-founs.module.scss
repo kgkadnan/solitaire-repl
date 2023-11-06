@@ -6,12 +6,12 @@
   padding: 20px;
   border-radius: 4px;
   margin: 0 auto;
-  color: #555;
-  font-size: 16px;
-  height: 80vh;
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  height: 70vh;
 }
 
 .noDataFound p {
   margin: 0;
-  font-weight: bold;
+  font-weight: 300;
 }
