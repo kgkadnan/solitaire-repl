@@ -28,13 +28,13 @@ import {
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 
-interface StatusResponse {
+interface IStatusResponse {
   status: boolean;
 }
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const notificationBadgeStoreData: StatusResponse = useAppSelector(
+  const notificationBadgeStoreData: IStatusResponse = useAppSelector(
     (store) => store.notificationBadge
   );
   let badgeData = notificationBadgeStoreData.status;
