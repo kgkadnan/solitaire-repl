@@ -1,9 +1,9 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import { CustomFooter, IfooterButtonData } from '@components/common/footer';
+import { CustomFooter } from '@components/common/footer';
 
 describe('CustomFooter component', () => {
-  const footerButtonData: IfooterButtonData[] = [
+  const footerButtonData: any = [
     { id: 1, displayButtonLabel: 'Button 1' },
     { id: 2, displayButtonLabel: 'Button 2' },
   ];
@@ -13,8 +13,8 @@ describe('CustomFooter component', () => {
       <CustomFooter footerButtonData={footerButtonData} />
     );
 
-    footerButtonData.forEach((item) => {
-      const buttonLabel = getByText(item.displayButtonLabel);
+    footerButtonData.forEach((item: any) => {
+      const buttonLabel = getByText(item?.displayButtonLabel);
       expect(buttonLabel).toBeInTheDocument();
     });
   });

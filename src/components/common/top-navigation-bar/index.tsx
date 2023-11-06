@@ -37,7 +37,7 @@ export const TopNavigationBar = () => {
   const notificationBadgeStoreData: IStatusResponse = useAppSelector(
     (store) => store.notificationBadge
   );
-  let badgeData = notificationBadgeStoreData.status;
+  // let badgeData = notificationBadgeStoreData.status;
 
   const router = useRouter();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -162,7 +162,9 @@ export const TopNavigationBar = () => {
                     role="button"
                     className={styles.iconColor}
                   />
-                  {badgeData && <div className={styles.badge}></div>}
+                  {notificationBadgeStoreData && (
+                    <div className={styles.badge}></div>
+                  )}
                 </div>
               </div>
             }

@@ -1,5 +1,4 @@
 'use client';
-import type { Metadata } from 'next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
 import { Providers } from './Providers';
@@ -8,7 +7,7 @@ import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import SideBar from '@/components/common/sidebar';
 import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 const store = setupStore();
 
@@ -27,7 +26,6 @@ export default function RootLayout({
   const path = usePathname();
   const showHeader = path === '/login' ? false : true;
 
-  // return shouldApplyLayout ? <div>{children}</div> : <>{children}</>;
   return (
     <html lang="en">
       <body className={inter.className}>

@@ -1,20 +1,9 @@
 import React from 'react';
 import { CustomDisplayButton } from '../buttons/display-button';
 import styles from './footer.module.scss';
+import { ICustomFooterProps } from './interface';
 
 //footer buttonData interfrace
-export interface IfooterButtonData {
-  id: number;
-  displayButtonLabel: string | React.ReactNode;
-  style?: string;
-  fn?: () => void;
-  isDisable?: boolean;
-}
-
-interface ICustomFooterProps {
-  footerButtonData?: IfooterButtonData[];
-  noBorderTop?: string;
-}
 
 export const CustomFooter: React.FC<ICustomFooterProps> = ({
   footerButtonData,
