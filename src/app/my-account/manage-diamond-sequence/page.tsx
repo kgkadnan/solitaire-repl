@@ -19,7 +19,6 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
 import { TableColumn } from '@/app/search-result/interface';
 import { ManageListingSequenceResponse } from './interface';
-// Define TableColumn interface
 
 const ManageListingSequence = () => {
   const { data } =
@@ -70,7 +69,7 @@ const ManageListingSequence = () => {
           setDialogContent(
             <>
               <div className="max-w-[400px] flex justify-center align-middle">
-                <Image src={confirmImage} alt="vector image" />
+                <Image src={confirmImage} alt="confirmImage" />
               </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
                 Updated Successfully
@@ -101,6 +100,7 @@ const ManageListingSequence = () => {
     }
 
     const updatedList = Array.from(manageableListings);
+
     const movedItem = updatedList.find(
       (item) => item.id === result.draggableId
     ) as TableColumn | undefined;
