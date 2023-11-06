@@ -31,7 +31,7 @@ interface IAdvanceSearch {
 }
 
 interface QueryParameters {
-  [key: string]: string | string[] | undefined;
+  [key: string]: string | string[];
 }
 const AdvanceSearch = (props?: IAdvanceSearch) => {
   const router = useRouter();

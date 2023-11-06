@@ -84,8 +84,8 @@ export const Notification: React.FC<NotificationProps> = ({
 
   const handleNotificationRead = async (category: string) => {
     let filteredData: NotificationUpdate[] = storeNotificationData
-      ?.filter((item) => item?.category === category)
-      .map((item) => ({ id: item.id, status: 'read' }));
+      ?.filter((item: NotificationItem) => item.category === category)
+      .map((item: NotificationItem) => ({ id: item.id, status: 'read' }));
 
     await updateNotification(filteredData);
   };

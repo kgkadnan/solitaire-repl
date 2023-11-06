@@ -94,7 +94,7 @@ const CompareStone = () => {
   );
 
   useEffect(() => {
-    let compareStoneStoreData = JSON.parse(
+    let compareStoneStoreData: ICompareStoneData[] = JSON.parse(
       localStorage.getItem('compareStone')!
     );
 
@@ -110,13 +110,13 @@ const CompareStone = () => {
     useAddCartMutation();
 
   const handleAddToCart = () => {
-    let variantIds = isCheck.map((id: string) => {
-      const compareStoneCheck: ICompareStoneData | undefined =
+    let variantIds = isCheck?.map((id: string) => {
+      const compareStoneCheck: ICompareStoneData =
         compareStoneData.find((compareStone: any) => {
           return compareStone?.id === id;
-        });
+        }) ?? {};
 
-      return compareStoneCheck?.variants[0].id;
+      return compareStoneCheck?.variants[0]?.id;
     });
 
     if (variantIds.length) {

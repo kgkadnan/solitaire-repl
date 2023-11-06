@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
+import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter } from 'next/navigation';
@@ -61,16 +62,6 @@ export const TopNavigationBar = () => {
       label: ManageLocales('app.topNav.advanceSearch'),
       link: '/advance-search',
       isActive: currentRoute === '/advance-search',
-    },
-    {
-      label: ManageLocales('app.topNav.previousSearch'),
-      link: '/previous-search',
-      isActive: currentRoute === '/previous-search',
-    },
-    {
-      label: ManageLocales('app.topNav.wishlist'),
-      link: '/wishlist',
-      isActive: currentRoute === '/wishlist',
     },
     {
       label: ManageLocales('app.topNav.myCart'),
@@ -146,6 +137,7 @@ export const TopNavigationBar = () => {
               />
             </div>
           ))}
+          {/* <SearchIcon className={styles.stroke} alt="advance-search" /> */}
           <Popover>
             <PopoverTrigger>
               <CalculatorIcon role="button" className={styles.iconColor} />
