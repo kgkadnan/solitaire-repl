@@ -139,14 +139,18 @@ const ManageListingSequence = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-[84vh]">
+    <div className="flex flex-col min-h-[74vh]">
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
       <div>
-        <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
+        <h1 className="text-solitaireTertiary ml-2">
+          {ManageLocales(
+            'app.myProfile.ManageListingSequence.NonManageableEntities'
+          )}
+        </h1>
         <div className="flex">
           {nonManageableListings.map(({ id, label }, index) => (
             <div key={id} className={`${styles.cardManageListingSequence}`}>
@@ -161,7 +165,11 @@ const ManageListingSequence = () => {
       </div>
       <hr className=" border-solitaireSenary mx-2 my-3" />
       <div className="grow">
-        <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
+        <h1 className="text-solitaireTertiary ml-2">
+          {ManageLocales(
+            'app.myProfile.ManageListingSequence.ManageableEntities'
+          )}{' '}
+        </h1>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable" direction="horizontal">
             {(provided) => (
