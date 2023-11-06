@@ -26,7 +26,6 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
-import { StaticImageData } from 'next/image';
 import {
   ICardData,
   IDateRange,
@@ -34,7 +33,7 @@ import {
   IKeyLabelMapping,
   ISavedSearchData,
   Item,
-} from './interfrace';
+} from './interface';
 
 const SavedSearch = () => {
   const router = useRouter();

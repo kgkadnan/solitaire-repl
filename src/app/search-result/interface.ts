@@ -10,7 +10,6 @@ export interface TableColumn {
 }
 
 export interface Rows {
-  [key: string]: string | number | boolean | null | undefined | any;
   id: string;
   stock_no: string | null;
   is_memo_out: boolean;
@@ -80,7 +79,6 @@ export interface Rows {
 }
 
 export interface Product {
-  [key: string]: string | number | boolean | null | undefined | any;
   id: string;
   title: string | null;
   subtitle: string | null;

@@ -552,7 +552,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                     </p>
                                   </div>
                                   <div className="border-b border-solitaireQuaternary mt-5"></div>
-                                  {sliderData.map((data) => {
+                                  {sliderData.map((data: Product | any) => {
                                     return (
                                       <>
                                         <div
