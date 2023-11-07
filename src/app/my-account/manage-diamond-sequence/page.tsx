@@ -19,7 +19,6 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
 import { TableColumn } from '@/app/search-result/interface';
 import { ManageListingSequenceResponse } from './interface';
-// Define TableColumn interface
 
 const ManageListingSequence = () => {
   const { data } =
@@ -70,7 +69,7 @@ const ManageListingSequence = () => {
           setDialogContent(
             <>
               <div className="max-w-[400px] flex justify-center align-middle">
-                <Image src={confirmImage} alt="vector image" />
+                <Image src={confirmImage} alt="confirmImage" />
               </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
                 Updated Successfully
@@ -101,6 +100,7 @@ const ManageListingSequence = () => {
     }
 
     const updatedList = Array.from(manageableListings);
+
     const movedItem = updatedList.find(
       (item) => item.id === result.draggableId
     ) as TableColumn | undefined;
@@ -139,14 +139,18 @@ const ManageListingSequence = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-[84vh]">
+    <div className="flex flex-col min-h-[74vh]">
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
       <div>
-        <h1 className="text-solitaireTertiary ml-2">Non Manageable entities</h1>
+        <h1 className="text-solitaireTertiary ml-2">
+          {ManageLocales(
+            'app.myProfile.ManageListingSequence.NonManageableEntities'
+          )}
+        </h1>
         <div className="flex">
           {nonManageableListings.map(({ id, label }, index) => (
             <div key={id} className={`${styles.cardManageListingSequence}`}>
@@ -161,7 +165,11 @@ const ManageListingSequence = () => {
       </div>
       <hr className=" border-solitaireSenary mx-2 my-3" />
       <div className="grow">
-        <h1 className="text-solitaireTertiary ml-2">Manageable entities</h1>
+        <h1 className="text-solitaireTertiary ml-2">
+          {ManageLocales(
+            'app.myProfile.ManageListingSequence.ManageableEntities'
+          )}{' '}
+        </h1>
         <DragDropContext onDragEnd={onDragEnd}>
           <Droppable droppableId="droppable" direction="horizontal">
             {(provided) => (

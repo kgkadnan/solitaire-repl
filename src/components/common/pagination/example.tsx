@@ -10,7 +10,7 @@ const CustomPaginationExample = () => {
 
   useEffect(() => {
     setNumberOfPages(10);
-  });
+  }, []);
 
   const handleResultsPerPageChange = (event: any) => {
     const newResultsPerPage = parseInt(event, 10);

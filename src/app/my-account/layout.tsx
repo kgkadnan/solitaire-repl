@@ -3,7 +3,7 @@ import CustomHeader from '@/components/common/header';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import the useRouter hook
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styles from './my-account.module.scss';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
@@ -48,18 +48,18 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
     },
   ];
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
-  };
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos]);
+  }, [handleScroll, prevScrollPos]);
 
   return (
     <>
