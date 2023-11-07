@@ -1,6 +1,6 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import AdvanceSearch from '@/app/search-result/advance-search/page';
+import AdvanceSearch from '@/app/search/advance-search/page';
 import Image from 'next/image';
 
 jest.mock('next/image', () => {

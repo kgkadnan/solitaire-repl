@@ -1,4 +1,4 @@
-import { Product, TableColumn } from '@/app/search-result/interface';
+import { Product, TableColumn } from '@/app/search/result/interface';
 
 export interface ICheckboxData {
   handleSelectAllCheckbox: () => void;

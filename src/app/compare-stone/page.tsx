@@ -13,7 +13,7 @@ import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAddCartMutation } from '@/features/api/cart';
-import { Product } from '../search-result/interface';
+import { Product } from '../search/result/interface';
 import { IDifferValue, IKeyLabelMapping } from './compare-stone-interface';
 
 const CompareStone = () => {

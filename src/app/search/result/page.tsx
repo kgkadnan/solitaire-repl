@@ -25,7 +25,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { Product, TableColumn } from './interface';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { ManageListingSequenceResponse } from '../../my-account/manage-diamond-sequence/interface';
 
 let optionLimits = [
   { id: 1, value: '50' },
@@ -379,12 +379,6 @@ const SearchResults = () => {
       fn: addToCart,
     },
   ];
-
-  const handleSearchTab = (index: number) => {
-    setIsCheckAll(false);
-    setIsCheck([]);
-    setActiveTab(index);
-  };
 
   // Function to calculate total amount
   const calculateTotalAmount = useCallback(() => {

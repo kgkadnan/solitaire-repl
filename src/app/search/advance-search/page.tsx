@@ -1968,7 +1968,7 @@ const AdvanceSearch = () => {
           JSON.stringify([...addSearches, queryParams])
         );
 
-        router.push('/search-result');
+        router.push('/search/result');
       }
     } else {
       setIsError(true);

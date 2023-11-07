@@ -17,7 +17,7 @@ import {
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
-import { TableColumn } from '@/app/search-result/interface';
+import { TableColumn } from '@/app/search/result/interface';
 import { ManageListingSequenceResponse } from './interface';
 
 const ManageListingSequence = () => {
