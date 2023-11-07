@@ -1,17 +1,30 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { fireEvent, render, screen } from '@testing-library/react';
+import React from 'react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'; // For simulating user interactions
 import Round from '@public/assets/images/round.png';
 import CustomImageTile from '@components/common/image-tile';
+import Image from 'next/image';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (
-    props: JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLImageElement> &
-      ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} />,
-}));
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: ({
+      src,
+      alt,
+      width,
+      height,
+      ...rest
+    }: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      // Add more specific types for other props if needed
+      // ...rest: SomeType;
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+  };
+});
+
 describe('CustomImageTile', () => {
   const imageData = [
     {

@@ -166,6 +166,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     discount: 'Discount',
     amount: 'Amt($)',
   };
+
   const basicDetailsLabelMapping: KeyLabelMapping = {
     lot_id: 'Stock No.',
     rpt_number: 'Report No.',
@@ -267,6 +268,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
+                {/* Empty table head for Diamond status*/}
                 <th></th>
                 <th>
                   <div className={`flex text-center`}>
@@ -328,23 +330,21 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           >
                             <CustomSlider
                               sheetTriggenContent={
-                                <>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTab('3');
-                                      setSliderData([tableRows[index]]);
-                                      setDiamondDetailIframeUrl('');
-                                      setDiamondDetailImageUrl('');
-                                    }}
-                                  >
-                                    <Image
-                                      src={imageOutline}
-                                      alt={`${row?.lot_id} GIA Image`}
-                                      width={20}
-                                      height={20}
-                                    />
-                                  </div>
-                                </>
+                                <div
+                                  onClick={() => {
+                                    setActiveTab('3');
+                                    setSliderData([tableRows[index]]);
+                                    setDiamondDetailIframeUrl('');
+                                    setDiamondDetailImageUrl('');
+                                  }}
+                                >
+                                  <Image
+                                    src={imageOutline}
+                                    alt={`${row?.lot_id} GIA Image`}
+                                    width={20}
+                                    height={20}
+                                  />
+                                </div>
                               }
                               sheetContentStyle={styles.sheetContentStyle}
                               sheetContent={

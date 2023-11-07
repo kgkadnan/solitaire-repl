@@ -614,19 +614,19 @@ const SearchResults = () => {
         <div className="flex justify-between py-3">
           <div className="flex gap-3">
             <p>
-              Pieces:
+              {ManageLocales('app.searchResult.countBar.pieces')}:
               <span className="text-solitaireTertiary ml-[5px]">
-                {`${isCheck.length}/${data?.count}`}
+                {`${isCheck.length}/${data?.count ? data?.count : 0}`}
               </span>
             </p>
             <p>
-              Total Avg. Dis:
+              {ManageLocales('app.searchResult.countBar.totalAvgDis')}:
               <span className="text-solitaireTertiary ml-[5px]">
                 {averageDiscount.toFixed(2)}
               </span>
             </p>
             <p>
-              Total Amount:
+              {ManageLocales('app.searchResult.countBar.totalAmount')}:
               <span className="text-solitaireTertiary ml-[5px]">
                 ${totalAmount.toFixed(2)}
               </span>

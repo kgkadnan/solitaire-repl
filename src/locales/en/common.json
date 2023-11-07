@@ -129,6 +129,8 @@
   "app.myProfile.kyc": "KYC",
   "app.myProfile.changePassword": "Change Password",
   "app.myProfile.ManageListingSequence": "Manage Listing Sequence",
+  "app.myProfile.ManageListingSequence.NonManageableEntities": "Non manageable ntities",
+  "app.myProfile.ManageListingSequence.ManageableEntities": "Manageable entities",
   "app.myProfile.emailNotification": "Email Notification",
   "app.myProfile.reportBug": "Report Bug",
 
@@ -157,6 +159,10 @@
 
   "app.notification.notifications": "Notifications",
   "app.notification.notifications.setting": "Notifications Settings",
+
+  "app.searchResult.countBar.pieces": "Pieces",
+  "app.searchResult.countBar.totalAvgDis": "Total Avg. Dis",
+  "app.searchResult.countBar.totalAmount": "Total Amount",
   "app.searchResult.footer.addToCart": "Add to Cart",
   "app.searchResult.footer.addToWhislist": "Add to Wishlist",
   "app.searchResult.footer.modifySearch": "Modify Search",
@@ -182,6 +188,12 @@
   "app.searchResult.slider.diamondDetail.diamondImage": "Diamond Image",
   "app.searchResult.slider.diamondDetail.giaCertificate": "GIA Certificate",
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
-  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle"
- 
+  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
+
+
+  "app.myCart.active": "Active",
+  "app.myCart.outOfStock": "Out of Stock",
+  "app.myCart.memoOut": "Memo-Out"
+
+
 }

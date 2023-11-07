@@ -1,5 +1,11 @@
 'use client';
-import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import React, {
+  ChangeEvent,
+  useCallback,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 import styles from './saved-search.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
@@ -34,6 +40,7 @@ import {
   ISavedSearchData,
   Item,
 } from './interface';
+import { KeyLabelMapping } from '@/components/common/data-table/interface';
 
 const SavedSearch = () => {
   const router = useRouter();
@@ -85,13 +92,23 @@ const SavedSearch = () => {
 
   const dispatch = useAppDispatch();
 
-  const handleResultsPerPageChange = useCallback((event: string) => {
-    const newResultsPerPage = parseInt(event, 10);
-    setLimit(newResultsPerPage);
-    setOffset(0);
-    setCurrentPage(0); // Reset current page when changing results per page
-    setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
-  }, []);
+  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
+    limit,
+    offset,
+    searchUrl,
+    searchByName,
+  });
+
+  const handleResultsPerPageChange = useCallback(
+    (event: string) => {
+      const newResultsPerPage = parseInt(event, 10);
+      setLimit(newResultsPerPage);
+      setOffset(0);
+      setCurrentPage(0); // Reset current page when changing results per page
+      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+    },
+    [data?.count]
+  );
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
@@ -108,13 +125,6 @@ const SavedSearch = () => {
     { id: 2, value: '100' },
   ];
 
-  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
-    limit,
-    offset,
-    searchUrl,
-    searchByName,
-  });
-
   const { data: searchList } = useGetSavedSearchListQuery(search);
 
   // Destructure the mutation function from the hook
@@ -123,17 +133,19 @@ const SavedSearch = () => {
     { isLoading: updateIsLoading, isError: updateIsError },
   ] = useDeleteSavedSearchMutation();
 
-  const keyLabelMapping: IKeyLabelMapping = {
-    shape: 'Shape',
-    color: 'color',
-    carat: 'carat',
-    clarity: 'clarity',
-    cut: 'cut',
-    polish: 'polish',
-    symmetry: 'Symmetry',
-    price_range: 'Price Range',
-    discount: 'Discount',
-  };
+  const keyLabelMapping: KeyLabelMapping = useMemo(() => {
+    return {
+      shape: 'Shape',
+      color: 'color',
+      carat: 'carat',
+      clarity: 'clarity',
+      cut: 'cut',
+      polish: 'polish',
+      symmetry: 'Symmetry',
+      price_range: 'Price Range',
+      discount: 'Discount',
+    };
+  }, []);
 
   const renderCardData = useCallback(
     (data: ISavedSearchData[]) => {
@@ -194,7 +206,7 @@ const SavedSearch = () => {
         };
       });
     },
-    [searchCardTitle, tableStyles, editIcon, formatCreatedAt]
+    [searchCardTitle, tableStyles, keyLabelMapping, manySavedsearchButtonStyle]
   );
 
   //Delete Data
