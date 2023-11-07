@@ -23,6 +23,10 @@ import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
 
+interface QueryParameters {
+  [key: string]: string | string[];
+}
+
 const AdvanceSearch = () => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
@@ -218,7 +222,7 @@ const AdvanceSearch = () => {
     starLengthFrom,
     starLengthTo,
   }: any) {
-    const queryParams: any = {};
+    const queryParams: QueryParameters = {};
 
     selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
     // selectedColor && (queryParams['color'] = selectedColor);
@@ -237,7 +241,7 @@ const AdvanceSearch = () => {
 
     let caratValues: string[] = [];
     if (selectedCaratRange && selectedCaratRange.length > 0) {
-      caratValues = selectedCaratRange.map((caratRange: any) => {
+      caratValues = selectedCaratRange.map((caratRange: string) => {
         const caratData = caratRange.split('-');
         const caratFrom = parseFloat(caratData[0]).toFixed(2);
         const caratTo = parseFloat(caratData[1]).toFixed(2);

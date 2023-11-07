@@ -117,28 +117,28 @@ const MyCart = () => {
     inscription: 'Ins.',
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const updatedRemainingTime = calculateRemainingTime(createdAt).map(
-        (item: any) => {
-          if (item <= 0) {
-            return false;
-          }
-          return item;
-        }
-      );
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const updatedRemainingTime = calculateRemainingTime(createdAt).map(
+  //       (item: any) => {
+  //         if (item <= 0) {
+  //           return false;
+  //         }
+  //         return item;
+  //       }
+  //     );
 
-      setRemainingTime(updatedRemainingTime);
+  //     setRemainingTime(updatedRemainingTime);
 
-      if (updatedRemainingTime.some((item: any) => item <= 0)) {
-        clearInterval(interval);
-      }
-    }, 1000);
+  //     if (updatedRemainingTime.some((item: any) => item <= 0)) {
+  //       clearInterval(interval);
+  //     }
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [createdAt, remainingTime]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [createdAt, remainingTime]);
 
   const renderCardData = useCallback(
     (data: any) => {
@@ -283,10 +283,6 @@ const MyCart = () => {
         console.log('error', error);
       });
     setIsDialogOpen(false);
-  };
-
-  const handleMoveToWishlist = () => {
-    router.push('/wishlist');
   };
 
   const handleConfirm = () => {
@@ -464,8 +460,8 @@ const MyCart = () => {
 
   //Header Data
   const headerData = {
-    headerHeading: 'MyCart',
-    searchCount: cardData?.length > 0 && cardData?.length,
+    headerHeading: 'My Cart',
+    // searchCount: cardData?.length > 0 && cardData?.length,
     headerData: (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
@@ -486,11 +482,6 @@ const MyCart = () => {
   // Function to handle edit action
   const handleEdit = (stone: string) => {
     alert("You have clicked the 'Edit button'");
-  };
-
-  // Function to handle "Show Results" button click
-  const showButtonHandleClick = () => {
-    alert("You have clicked the 'show result' button");
   };
 
   const handleImageButton = (event: any) => {
@@ -526,22 +517,22 @@ const MyCart = () => {
         dialogContent={
           <>
             <p className="mt-3 px-[50px] text-center">
-              Do you want to “Delete” the cart or “Move to Wishlist”
+              Do you want to Delete the selected Stones?
             </p>
             <div className="flex justify-center">
               <CustomDisplayButton
-                displayButtonLabel="Delete"
+                displayButtonLabel="NO"
                 displayButtonAllStyle={{
                   displayButtonStyle: `mr-[25px] ${styles.transparent}`,
                 }}
-                handleClick={deleteStoneHandler}
+                handleClick={() => setIsDialogOpen(false)}
               />
               <CustomDisplayButton
-                displayButtonLabel="Move to Wishlist"
+                displayButtonLabel="Yes"
                 displayButtonAllStyle={{
                   displayButtonStyle: styles.filled,
                 }}
-                handleClick={handleMoveToWishlist}
+                handleClick={deleteStoneHandler}
               />
             </div>
           </>
@@ -549,7 +540,7 @@ const MyCart = () => {
       />
       <div className="container flex flex-col ">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-16">
+        <div className="sticky top-0 bg-solitairePrimary mt-10">
           <CustomHeader data={headerData} />
         </div>
 
@@ -664,7 +655,7 @@ const MyCart = () => {
                                         !diamondDetailIframeUrl && (
                                           <Image
                                             src={diamondDetailImageUrl}
-                                            alt={``}
+                                            alt={`Diamond detail`}
                                             width={350}
                                             height={350}
                                             style={{ height: '350px' }}
@@ -867,7 +858,22 @@ const MyCart = () => {
                 );
               })
             ) : (
-              <NoDataFound />
+              <NoDataFound
+                message={
+                  <div className="">
+                    <p className="solitaireTertiary pb-[16px]">
+                      No Items in your Cart
+                    </p>
+                    <CustomDisplayButton
+                      displayButtonLabel="Search Diamonds"
+                      handleClick={() => router.push('/advance-search')}
+                      displayButtonAllStyle={{
+                        displayButtonStyle: styles.filled,
+                      }}
+                    />
+                  </div>
+                }
+              />
             )}
           </>
         </div>
