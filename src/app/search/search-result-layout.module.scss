@@ -1,0 +1,30 @@
+.navBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: hsl(var(--solitaire-primary));
+  transition: top 0.3s;
+}
+.visible {
+  top: 0;
+}
+
+.hidden {
+  top: -80px;
+}
+
+.activeHeaderButtonStyle {
+  font-weight: 600;
+  padding: 0px 10px !important;
+  height: 1.8rem !important;
+  color: hsl(var(--solitaire-quaternary));
+}
+
+.headerButtonStyle {
+  background-color: transparent;
+  font-weight: 600;
+  padding: 0px 10px !important;
+  height: 1.8rem !important;
+  color: hsl(var(--solitaire-tertiary));
+}
