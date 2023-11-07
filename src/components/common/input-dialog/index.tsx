@@ -24,53 +24,52 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
     setIsOpen(open);
   };
   return (
-    <>
-      <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
-        <DialogContent className="sm:max-w-[400px] h-[200px] bg-solitaireSecondary z-[1200]">
-          {label && (
-            <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-              <CustomInputlabel
-                label={label}
-                htmlfor={name}
-                overriddenStyles={{ label: styles.customLabel }}
-              />
-            </div>
-          )}
-          <div className="w-full">
-            <CustomInputField
-              placeholder="Search Title* (Max 150 characters)"
-              type="text"
-              onChange={(e) => setInputvalue(e.target.value)}
-              value={inputValue}
-              name={name}
-              style={{
-                inputMain: 'w-full',
-                input: styles.input,
-              }}
+    <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
+      <DialogContent className="max-w-[450px] h-[200px] bg-solitairePrimary z-[1200] rounded-lg">
+        {label && (
+          <div className="max-w-[450px] flex justify-center align-middle text-solitaireTertiary">
+            <CustomInputlabel
+              label={label}
+              htmlfor={name}
+              overriddenStyles={{ label: styles.customLabel }}
             />
           </div>
-          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
-            <CustomDisplayButton
-              displayButtonLabel="Cancel"
-              handleClick={() => {
-                setIsOpen(false);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel={displayButtonLabel2}
-              handleClick={() => {
-                displayButtonFunction();
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
-              }}
-            />
-          </div>
-        </DialogContent>
-      </Dialog>
-    </>
+        )}
+        <div className="w-full">
+          <CustomInputField
+            placeholder="Search Title* (Max 150 characters)"
+            type="text"
+            onChange={(e) => setInputvalue(e.target.value)}
+            value={inputValue}
+            name={name}
+            style={{
+              inputMain: 'w-full',
+              input: styles.input,
+            }}
+            maxLength={150}
+          />
+        </div>
+        <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
+          <CustomDisplayButton
+            displayButtonLabel="Cancel"
+            handleClick={() => {
+              setIsOpen(false);
+            }}
+            displayButtonAllStyle={{
+              displayButtonStyle: styles.showResultButtonTransparent,
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={displayButtonLabel2}
+            handleClick={() => {
+              displayButtonFunction();
+            }}
+            displayButtonAllStyle={{
+              displayButtonStyle: styles.showResultButtonFilled,
+            }}
+          />
+        </div>
+      </DialogContent>
+    </Dialog>
   );
 };

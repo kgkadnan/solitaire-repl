@@ -25,8 +25,6 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     url: searchUrl,
   });
 
-  console.log('layoutdata', data);
-
   let myProfileRoutes = [
     {
       id: '1',
