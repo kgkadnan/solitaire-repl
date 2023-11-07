@@ -14,7 +14,7 @@ import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -641,7 +641,7 @@ const SearchResults = () => {
         </div>
 
         {/* Count Bar  */}
-        <div className="flex justify-between py-3">
+        <div className="flex justify-between py-3 items-center">
           <div className="flex gap-3">
             <p>
               {ManageLocales('app.searchResult.countBar.pieces')}:
@@ -753,12 +753,18 @@ const SearchResults = () => {
         checkboxData={checkboxData}
       />
       <div className="sticky-bottom bg-solitairePrimary mt-3">
-        <div className="flex border-t-2 border-solitaireSenary items-center justify-between py-3">
+        <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
           <div className="flex items-center gap-3">
             <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">
               xxxxxxx
             </span>
             <p className="text-solitaireTertiary text-sm">Memo - Out</p>
+          </div>
+          <div className="flex items-center gap-3">
+            <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-lg">
+              xxxxxxx
+            </span>
+            <p className="text-solitaireTertiary text-sm">In Cart</p>
           </div>
         </div>
 

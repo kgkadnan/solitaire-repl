@@ -1967,6 +1967,7 @@ const AdvanceSearch = () => {
     price_per_carat: { from: null, to: null },
     // Add more input groups here if needed
   });
+
   const handleValidate = (
     key: keyof Errors,
     inputType: 'from' | 'to',
