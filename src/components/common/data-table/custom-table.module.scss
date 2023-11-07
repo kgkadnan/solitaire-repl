@@ -8,10 +8,10 @@
 }
 
 .tableWrapper {
-  max-height:  55vh; /* Set to 80% of the viewport height */
+  max-height:  65vh; /* Set to 80% of the viewport height */
   overflow-y: scroll;
   padding-bottom: 10px;
-  height: calc(100vh - 50vh )  ; /* This may not be needed, depending on the layout */
+  height: calc(100vh - 45vh )  ; /* This may not be needed, depending on the layout */
 }
 
 .table {

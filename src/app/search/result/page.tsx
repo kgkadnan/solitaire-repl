@@ -593,7 +593,7 @@ const SearchResults = () => {
       />
       <div className="mb-2">
         {/* Count Bar  */}
-        <div className="flex justify-between pb-3 items-center">
+        <div className="flex justify-between  items-center">
           <div className="flex gap-3">
             <p>
               {ManageLocales('app.searchResult.countBar.pieces')}:
