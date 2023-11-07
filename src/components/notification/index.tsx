@@ -10,23 +10,29 @@ import { CustomDisplayButton } from '../common/buttons/display-button';
 import { useUpdateNotificationMutation } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '../common/no-data-found';
+import {
+  NotificationItem,
+  NotificationParameter,
+  NotificationProps,
+  NotificationUpdate,
+} from './notification-interface';
 
-export const Notification = ({
+export const Notification: React.FC<NotificationProps> = ({
   notificationData,
   setOffset,
   offset,
   limit,
-}: any) => {
+}) => {
   const router = useRouter();
 
   const [updateNotification] = useUpdateNotificationMutation();
-  const [storeNotificationData, setStoreNotificationData] = useState<string[]>(
-    []
-  );
+  const [storeNotificationData, setStoreNotificationData] = useState<
+    NotificationItem[]
+  >([]);
 
   useEffect(() => {
-    if (offset === 0) {
-      setStoreNotificationData(notificationData?.data);
+    if (offset === 0 && notificationData) {
+      setStoreNotificationData(notificationData.data);
     } else if (offset > 0) {
       storeMyNotificationData();
     }
@@ -34,10 +40,12 @@ export const Notification = ({
 
   const storeMyNotificationData = useCallback(() => {
     if (offset > 0) {
-      const newNotificationData = notificationData?.data?.filter(
-        (newItem: any) =>
+      const newNotificationData: NotificationItem[] = (
+        notificationData?.data ?? []
+      ).filter(
+        (newItem) =>
           !storeNotificationData.some(
-            (existingItem: any) => newItem.id === existingItem.id
+            (existingItem) => newItem.id === existingItem.id
           )
       );
 
@@ -48,7 +56,10 @@ export const Notification = ({
     }
   }, [notificationData]);
 
-  function stringWithHTMLReplacement(template: string, parameter: any) {
+  function stringWithHTMLReplacement(
+    template: string,
+    parameter: NotificationParameter
+  ) {
     const parts = template?.split('${{');
 
     const modifiedString = parts?.map((part, index) => {
@@ -56,9 +67,12 @@ export const Notification = ({
         return <span key={index}>{part}</span>;
       } else {
         const [paramName] = part?.split('}}');
+
         return (
           <span key={index}>
-            <span style={{ fontWeight: 600 }}>{parameter[paramName]}</span>
+            <span style={{ fontWeight: 600 }}>
+              {parameter[paramName as keyof NotificationParameter]}
+            </span>
             {part.substr(paramName.length + 2)}
           </span>
         );
@@ -69,9 +83,9 @@ export const Notification = ({
   }
 
   const handleNotificationRead = async (category: string) => {
-    let filteredData = storeNotificationData
-      ?.filter((item: any) => item?.category === category)
-      .map((item: any) => ({ id: item.id, status: 'read' }));
+    let filteredData: NotificationUpdate[] = storeNotificationData
+      ?.filter((item: NotificationItem) => item.category === category)
+      .map((item: NotificationItem) => ({ id: item.id, status: 'read' }));
 
     await updateNotification(filteredData);
   };
@@ -81,10 +95,12 @@ export const Notification = ({
   };
 
   const handleMarkAllAsRead = async () => {
-    let notificationMapData = storeNotificationData.map((item: any) => ({
-      id: item.id,
-      status: 'read',
-    }));
+    let notificationMapData = storeNotificationData.map(
+      (item: NotificationItem) => ({
+        id: item.id,
+        status: 'read',
+      })
+    );
 
     await updateNotification(notificationMapData);
   };
@@ -123,7 +139,7 @@ export const Notification = ({
         </div>
         <div className={` ${styles.newNotificationContainer}`}>
           {storeNotificationData?.length > 0 ? (
-            storeNotificationData?.map((items: any) => {
+            storeNotificationData?.map((items: NotificationItem) => {
               return (
                 <div
                   key={items.customer_id}
@@ -168,7 +184,7 @@ export const Notification = ({
           )}
         </div>
         <div className={styles.loadMoreButtonContainer}>
-          {notificationData?.data?.length >= limit ? (
+          {notificationData && notificationData?.data?.length >= limit ? (
             <CustomDisplayButton
               displayButtonLabel="Load More"
               displayButtonAllStyle={{
