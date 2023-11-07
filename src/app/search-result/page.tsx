@@ -5,39 +5,28 @@ import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
-import InfoCircleOutline from '@public/assets/icons/information-circle-outline.svg?url';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
-import { CustomInputlabel } from '@/components/common/input-label';
-import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
-import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
-import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { Product, TableColumn } from './interface';
+import { IYourSelection, Product, TableColumn } from './interface';
 import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
-
-let optionLimits = [
-  { id: 1, value: '50' },
-  { id: 2, value: '100' },
-  { id: 3, value: '150' },
-];
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 
 const SearchResults = () => {
-  const searchParams = useSearchParams();
-  const previousSearchIds = searchParams.get('id');
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -48,13 +37,11 @@ const SearchResults = () => {
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
-  const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
+  const [yourSelectionData, setYourSelectionData] = useState<IYourSelection[]>(
+    []
+  );
 
-  //pagination states
-  const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(50); // You can set the initial value here
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [offset, setOffset] = useState(0);
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   //Radio Button
   const [selectedValue, setSelectedValue] = useState('');
@@ -72,27 +59,22 @@ const SearchResults = () => {
 
   const [isEntireSearch, setIsEntireSearch] = useState(false);
 
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
+  const [saveSearchName, setSaveSearchName] = useState<string>('');
+
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
-    offset: offset,
-    limit: limit,
+    offset: 0,
+    limit: 300,
     url: searchUrl,
   });
 
   let [downloadExcel] = useDownloadExcelMutation();
-
-  let { data: previousSearch } = useGetSpecificPreviousQuery({
-    id: previousSearchIds,
-  });
 
   const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useAddCartMutation();
 
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
-
-  let paginationStyle = {
-    paginationContainerStyle: styles.paginationContainerStyle,
-  };
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -126,11 +108,12 @@ const SearchResults = () => {
     }
   };
 
+  //setting listing columns
   useEffect(() => {
     setTableColumns(listingColumns);
   }, [listingColumns]);
 
-  //
+  //Checkbox Data for Custom Data Table
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     handleClick: handleClick,
@@ -138,6 +121,7 @@ const SearchResults = () => {
     isCheckAll: isCheckAll,
   };
 
+  //download Excel
   const downloadExcelFunction = () => {
     if (isCheckAll) {
       setIsDialogOpen(true);
@@ -247,6 +231,7 @@ const SearchResults = () => {
     }
   };
 
+  //compareStone
   const CompareStone = () => {
     if (isCheck.length > 10) {
       setIsError(true);
@@ -269,6 +254,7 @@ const SearchResults = () => {
     }
   };
 
+  //cart
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
@@ -355,26 +341,6 @@ const SearchResults = () => {
     },
     {
       id: 3,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.addSearch'),
-      style: styles.transparent,
-      fn: () => {},
-    },
-    {
-      id: 4,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.modifySearch'),
-      style: styles.transparent,
-      fn: () => {},
-    },
-    {
-      id: 5,
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.footer.addToWhislist'
-      ),
-      style: styles.filled,
-      fn: () => {},
-    },
-    {
-      id: 6,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
       fn: addToCart,
@@ -431,13 +397,13 @@ const SearchResults = () => {
     if (yourSelection) {
       // Check if the effect has not been executed
       const parseYourSelection = JSON.parse(yourSelection);
+
       setYourSelectionData(parseYourSelection);
-      let url = constructUrlParams(parseYourSelection[activeTab]);
+      let url = constructUrlParams(parseYourSelection[activeTab].queryParams);
       setSearchUrl(url);
 
       if (data?.products?.length) {
         setRows(data?.products);
-        setNumberOfPages(Math.ceil(data?.count / data?.limit));
       }
     }
   }, [data, activeTab]); // Include isEffectExecuted in the dependency array
@@ -579,30 +545,51 @@ const SearchResults = () => {
     ],
   ];
 
-  const handleResultsPerPageChange = useCallback(
-    (event: string) => {
-      const newResultsPerPage = parseInt(event, 10);
-      setLimit(newResultsPerPage);
-      setOffset(0);
-      setCurrentPage(0); // Reset current page when changing results per page
-      setRows(data?.products);
-      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
-    },
-    [data]
-  );
+  const handleSaveSearch = async () => {
+    // Retrieve the array from localStorage
+    const searchData = localStorage.getItem('Search');
 
-  const handlePageClick = (page: number) => {
-    if (page >= 0 && page <= numberOfPages) {
-      const offset = page * limit;
-      setIsCheck([]);
-      setIsCheckAll(false);
-      setOffset(offset);
-      setCurrentPage(page);
+    if (searchData !== null) {
+      const data = JSON.parse(searchData) || [];
+
+      await addSavedSearch({
+        name: saveSearchName,
+        diamond_count: data?.count,
+        meta_data: [data[activeTab].queryParams],
+        is_deleted: false,
+      })
+        .unwrap()
+        .then(() => {
+          data[activeTab] = {
+            saveSearchName,
+            isSavedSearch: true,
+            queryParams: data[activeTab].queryParams,
+          };
+          localStorage.setItem('Search', JSON.stringify(data));
+          setYourSelectionData(data);
+          setIsInputDialogOpen(false);
+        })
+
+        .catch((error: any) => {
+          console.log('error', error);
+        });
     }
+  };
+
+  const customInputDialogData = {
+    isOpens: isInputDialogOpen,
+    setIsOpen: setIsInputDialogOpen,
+    setInputvalue: setSaveSearchName,
+    inputValue: saveSearchName,
+    displayButtonFunction: handleSaveSearch,
+    label: 'Save And Search',
+    name: 'save',
+    displayButtonLabel2: 'Save',
   };
 
   return (
     <>
+      <CustomInputDialog customInputDialogData={customInputDialogData} />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -634,59 +621,6 @@ const SearchResults = () => {
                           : styles.headerButtonStyle
                       }`}
                     >
-                      <div className="flex items-center">
-                        <Tooltip
-                          tooltipElement={
-                            <InfoCircleOutline stroke="#8C7459" />
-                          }
-                          content={
-                            <div
-                              className={styles.yourSelectionContentContainer}
-                            >
-                              <CustomInputlabel
-                                htmlfor="text"
-                                label={`${ManageLocales(
-                                  'app.advanceSearch.yourSelection'
-                                )}:`}
-                                overriddenStyles={{
-                                  label: styles.yourSelectionTooltipHeader,
-                                }}
-                              />
-                              <div
-                                className={styles.yourSelectionMainContainer}
-                              >
-                                {Object.keys(yourSelection).map(
-                                  (key: string) => (
-                                    <div
-                                      key={`key-${key}`}
-                                      className={`${styles.yourSelectionSubContainer}`}
-                                    >
-                                      <div className={styles.labelContainer}>
-                                        <CustomInputlabel
-                                          htmlfor="text"
-                                          label={key}
-                                        />
-                                        :
-                                      </div>
-                                      <div className="text-sm font-light pl-2">
-                                        {Array.isArray(yourSelection[key])
-                                          ? yourSelection[key].join(', ')
-                                          : yourSelection[key]}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          }
-                          tooltipStyles={{
-                            tooltipContainerStyles:
-                              styles.tooltipContainerStyles,
-                            tooltipContentStyle:
-                              styles.yourSelectionTooltipContentStyle,
-                          }}
-                        />
-                      </div>
                       <div>
                         <CustomDisplayButton
                           displayButtonAllStyle={{
@@ -728,71 +662,88 @@ const SearchResults = () => {
               </span>
             </p>
           </div>
-          <CustomSlider
-            sheetTriggenContent={
-              <>
+          <div className="flex gap-6">
+            {yourSelectionData &&
+            !yourSelectionData[activeTab]?.isSavedSearch ? (
+              <CustomDisplayButton
+                displayButtonLabel={'Save this search'}
+                handleClick={() =>
+                  yourSelectionData[activeTab].saveSearchName.length
+                    ? ''
+                    : setIsInputDialogOpen(true)
+                }
+                displayButtonAllStyle={{
+                  displayLabelStyle: `text-solitaireTertiary cursor-pointer`,
+                }}
+              />
+            ) : (
+              ''
+            )}
+
+            <CustomSlider
+              sheetTriggenContent={
                 <div className="flex gap-1">
                   <Image src={sortOutline} alt="sortOutline" width={20} />
                   <p className="text-solitaireTertiary">Sort by</p>
                 </div>
-              </>
-            }
-            sheetContentStyle={styles.sheetContentStyle}
-            sheetContent={
-              <>
-                <div className={styles.sheetMainHeading}>
-                  <p>
-                    {ManageLocales('app.searchResult.slider.sortBy.filter')}
-                  </p>
-                </div>
+              }
+              sheetContentStyle={styles.sheetContentStyle}
+              sheetContent={
+                <>
+                  <div className={styles.sheetMainHeading}>
+                    <p>
+                      {ManageLocales('app.searchResult.slider.sortBy.filter')}
+                    </p>
+                  </div>
 
-                <div className={styles.radioButtonMainDiv}>
-                  <CustomRadioButton
-                    radioData={[
-                      {
-                        id: '0',
-                        value: '0',
-                        radioButtonLabel: 'Default',
-                      },
-                    ]}
-                    onChange={handleRadioChange}
-                    radioButtonAllStyles={radioButtonDefaultStyles}
-                  />
-
-                  {radioDataList.map((radioData, index) => (
+                  <div className={styles.radioButtonMainDiv}>
                     <CustomRadioButton
-                      key={index} // Ensure each component has a unique key
-                      radioData={radioData}
+                      radioData={[
+                        {
+                          id: '0',
+                          value: '0',
+                          radioButtonLabel: 'Default',
+                        },
+                      ]}
                       onChange={handleRadioChange}
-                      radioButtonAllStyles={radioButtonStyles}
+                      radioButtonAllStyles={radioButtonDefaultStyles}
                     />
-                  ))}
-                </div>
 
-                {/* button */}
-                <div className={styles.customButtonDiv}>
-                  <CustomDisplayButton
-                    displayButtonLabel={ManageLocales(
-                      'app.searchResult.slider.sortBy.cancel'
-                    )}
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.transparent,
-                    }}
-                    // handleClick={showButtonHandleClick}
-                  />
-                  <CustomDisplayButton
-                    displayButtonLabel={ManageLocales(
-                      'app.searchResult.slider.sortBy.apply'
-                    )}
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.filled,
-                    }}
-                    // handleClick={showButtonHandleClick}
-                  />
-                </div>
-              </>
-            }
-          />
+                    {radioDataList.map((radioData, index) => (
+                      <CustomRadioButton
+                        key={index} // Ensure each component has a unique key
+                        radioData={radioData}
+                        onChange={handleRadioChange}
+                        radioButtonAllStyles={radioButtonStyles}
+                      />
+                    ))}
+                  </div>
+
+                  {/* button */}
+                  <div className={styles.customButtonDiv}>
+                    <CustomDisplayButton
+                      displayButtonLabel={ManageLocales(
+                        'app.searchResult.slider.sortBy.cancel'
+                      )}
+                      displayButtonAllStyle={{
+                        displayButtonStyle: styles.transparent,
+                      }}
+                      // handleClick={showButtonHandleClick}
+                    />
+                    <CustomDisplayButton
+                      displayButtonLabel={ManageLocales(
+                        'app.searchResult.slider.sortBy.apply'
+                      )}
+                      displayButtonAllStyle={{
+                        displayButtonStyle: styles.filled,
+                      }}
+                      // handleClick={showButtonHandleClick}
+                    />
+                  </div>
+                </>
+              }
+            />
+          </div>
         </div>
       </div>
       {/* <CustomHeader dummyData={headerData} /> */}
@@ -802,23 +753,13 @@ const SearchResults = () => {
         checkboxData={checkboxData}
       />
       <div className="sticky-bottom bg-solitairePrimary mt-3">
-        <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
+        <div className="flex border-t-2 border-solitaireSenary items-center justify-between py-3">
           <div className="flex items-center gap-3">
             <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-lg">
               xxxxxxx
             </span>
             <p className="text-solitaireTertiary text-sm">Memo - Out</p>
           </div>
-
-          <CustomPagination
-            currentPage={currentPage}
-            totalPages={numberOfPages}
-            resultsPerPage={limit}
-            optionLimits={optionLimits}
-            handlePageClick={handlePageClick}
-            handleResultsPerPageChange={handleResultsPerPageChange}
-            paginationStyle={paginationStyle}
-          />
         </div>
 
         <div className="flex border-t-2 border-solitaireSenary items-center justify-between">

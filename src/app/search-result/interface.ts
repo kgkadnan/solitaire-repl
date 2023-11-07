@@ -277,3 +277,9 @@ export interface Product {
     tax_rates: string | null;
   }[];
 }
+
+export interface IYourSelection {
+  saveSearchName: string;
+  isSavedSearch: boolean;
+  queryParams: string[];
+}
