@@ -187,5 +187,11 @@
   "app.searchResult.slider.diamondDetail.diamondImage": "Diamond Image",
   "app.searchResult.slider.diamondDetail.giaCertificate": "GIA Certificate",
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
-  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle"
+  "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
+
+  "app.myCart.active": "Active",
+  "app.myCart.outOfStock": "Out of Stock",
+  "app.myCart.memoOut": "Memo-Out"
+
+
 }

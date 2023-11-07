@@ -13,88 +13,14 @@ import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAddCartMutation } from '@/features/api/cart';
-
-interface ICompareStoneData {
-  [key: string]: {
-    id: string | null;
-    stock_no: string | null;
-    is_memo_out: boolean | null;
-    status: string | null;
-    discount: number | null;
-    amount: number | null;
-    color: string | null;
-    country_origin: string | null;
-    shape: string | null;
-    clarity: string | null;
-    cut: string | null;
-    polish: string | null;
-    fluorescence: string | null;
-    symmetry: string | null;
-    lab: string | null;
-    rpt_number: string | null;
-    certificate_number: number | null;
-    lot_id: number | null;
-    certificate_url: string | null;
-    girdle: string | null;
-    location: string | null;
-    color_shade: string | null;
-    color_shade_intensity: string | null;
-    intensity: string | null;
-    overtone: string | null;
-    ha: string | null;
-    brilliance: string | null;
-    black_table: string | null;
-    side_black: string | null;
-    open_crown: string | null;
-    open_pavilion: string | null;
-    milky: string | null;
-    luster: string | null;
-    eye_clean: string | null;
-    table_inclusion: string | null;
-    side_inclusion: string | null;
-    natural_crown: string | null;
-    natural_pavilion: string | null;
-    natural_girdle: string | null;
-    surface_graining: string | null;
-    internal_graining: string | null;
-    carat: number | null;
-    star_length: number | null;
-    price_range: number | null;
-    price_per_carat: number | null;
-    girdle_percentage: number | null;
-    pavilion_angle: number | null;
-    depth_percentage: number | null;
-    table_percentage: number | null;
-    crown_angle: number | null;
-    crown_height: number | null;
-    pavilion_depth: number | null;
-    lower_half: number | null;
-    ratio: number | null;
-    length: number | null;
-    depth: number | null;
-    width: number | null;
-    rap: number | null;
-    rap_value: number | null;
-    culet: string | null;
-    inscription: string | null;
-    tracr_id: string | null;
-    total_grade: string | null;
-    disclosed_source: string | null;
-    open_table: string | null;
-  }[];
-}
-
-interface KeyLabelMapping {
-  [key: string]: string;
-}
+import { Product } from '../search-result/interface';
+import { IDifferValue, IKeyLabelMapping } from './compare-stone-interface';
 
 const CompareStone = () => {
-  const [compareStoneData, setCompareStoneData] = useState<ICompareStoneData[]>(
-    []
-  );
+  const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
 
   useEffect(() => {
-    let compareStoneStoreData = JSON.parse(
+    let compareStoneStoreData: Product[] = JSON.parse(
       localStorage.getItem('compareStone')!
     );
 
@@ -110,15 +36,22 @@ const CompareStone = () => {
     useAddCartMutation();
 
   const handleAddToCart = () => {
-    let variantIds = isCheck.map((id) => {
-      const compareStoneCheck = compareStoneData.find((compareStone: any) => {
-        return compareStone.id === id;
-      });
+    let variantIds = isCheck?.map((id: string) => {
+      const compareStoneCheck: Product | {} =
+        compareStoneData.find((compareStone: Product) => {
+          return compareStone?.id === id;
+        }) ?? {};
 
-      return compareStoneCheck?.variants[0].id;
+      if (compareStoneCheck && 'variants' in compareStoneCheck) {
+        return compareStoneCheck.variants[0]?.id;
+      }
+
+      return null;
     });
 
     if (variantIds.length) {
+      console.log('variantIds', variantIds);
+
       addCart({
         variants: variantIds,
       })
@@ -171,18 +104,22 @@ const CompareStone = () => {
       localStorage.getItem('compareStone') || '[]'
     );
 
-    const updatedStones = compareStones.filter((stone: any) => stone.id !== id);
+    const updatedStones = compareStones.filter(
+      (stone: Product) => stone.id !== id
+    );
 
     localStorage.setItem('compareStone', JSON.stringify(updatedStones));
 
-    const filterData = compareStoneData.filter((item: any) => item.id !== id);
+    const filterData = compareStoneData.filter(
+      (item: Product) => item.id !== id
+    );
     setCompareStoneData(filterData);
   };
 
   const [showDifferences, setShowDifferences] = useState(false);
   const [compareValues, setCompareValues] = useState({});
 
-  const keyLabelMapping: KeyLabelMapping = {
+  const keyLabelMapping: IKeyLabelMapping = {
     id: 'id',
     shape: 'Shape',
     lab: 'Lab',
@@ -217,18 +154,18 @@ const CompareStone = () => {
   const handleShowDifferencesChange = () => {
     // Check if "Select All Checkbox" is checked and there are differences
     if (!showDifferences) {
-      const propertiesToKeep = Object.keys(keyLabelMapping);
+      const propertiesToKeep: string[] = Object.keys(keyLabelMapping);
       // Create a new array with filtered data
-      const filteredData = compareStoneData.map((item) => {
-        const filteredItem: any = {};
+      const filteredData = compareStoneData.map((item: Product) => {
+        let filteredItem: Product = {} as Product;
         propertiesToKeep.forEach((prop) => {
-          filteredItem[prop] = item[prop];
+          filteredItem[prop] = item[prop as keyof Product];
         });
         return filteredItem;
       });
 
       // Create a result object to store differing values
-      const differingValues: any = {};
+      const differingValues: IDifferValue = {};
 
       // Iterate over the properties in the first object
       for (const key in filteredData[0]) {
@@ -273,7 +210,6 @@ const CompareStone = () => {
 
     if (updatedIsCheck.includes(id)) {
       updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-      console.log('updateIsCheck', updatedIsCheck);
     } else {
       updatedIsCheck.push(id);
     }
@@ -311,7 +247,9 @@ const CompareStone = () => {
                     </div>
                     <div>
                       <div>
-                        {'amount' in compareStoneData[0] ? 'Amount' : null}
+                        {'amount' in compareStoneData[0]?.variants[0]?.prices[0]
+                          ? 'Amount'
+                          : null}
                       </div>
                     </div>
                   </div>
@@ -340,7 +278,7 @@ const CompareStone = () => {
                 <div
                   className={`flex border-b border-solitaireSenary ${styles.dimaondImageContainer}`}
                 >
-                  {compareStoneData.map((items: any) => {
+                  {compareStoneData.map((items: Product) => {
                     return (
                       <div key={items.id}>
                         <div
@@ -381,8 +319,8 @@ const CompareStone = () => {
                 </div>
                 {/* values */}
                 <div className={`flex ${styles.compareStonesValueContainer}`}>
-                  {compareStoneData.map((diamond: any) => {
-                    const { discount, amount } = diamond;
+                  {compareStoneData.map((diamond: Product) => {
+                    const { discount } = diamond;
                     return (
                       <div
                         className={`border-r border-solitaireSenary ${styles.compareStoneValue}`}
@@ -393,7 +331,7 @@ const CompareStone = () => {
                             <p>{discount}</p>
                           </div>
                           <div className="">
-                            <p>{amount}</p>
+                            <p>{diamond.variants[0].prices[0].amount}</p>
                           </div>
                         </div>
 
