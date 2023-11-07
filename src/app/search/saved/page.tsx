@@ -425,7 +425,7 @@ const SavedSearch = () => {
 
     dispatch(modifySavedSearch({ modifyData, activeTab }));
 
-    router.push(`/advance-search?edit=saved-search`);
+    router.push(`/form?edit=saved`);
   };
 
   return (

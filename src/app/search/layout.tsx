@@ -31,12 +31,12 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     {
       id: '1',
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'advance-search',
+      path: 'form',
     },
     {
       id: '2',
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved-search',
+      path: 'saved',
     },
   ];
 

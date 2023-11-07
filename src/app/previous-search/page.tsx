@@ -363,7 +363,7 @@ const PreviousSearch = () => {
       return previousSearch.id === id;
     })[0];
     dispatch(modifyPreviousSearch(modifyData));
-    router.push(`/advance-search?edit=previous-search`);
+    router.push(`/form?edit=previous-search`);
   };
 
   // Function to handle "Show Results" button click

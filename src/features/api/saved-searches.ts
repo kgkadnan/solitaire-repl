@@ -6,7 +6,6 @@ export const savedSearchesApi: any = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
     credentials: 'include',
-    
   }),
   tagTypes: ['SavedSearch'],
 
