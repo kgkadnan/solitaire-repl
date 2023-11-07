@@ -1,5 +1,7 @@
 import React from 'react';
 
-export const OutOfStock = () => {
+const OutOfStock = () => {
   return <div>OutOfStock</div>;
 };
+
+export default OutOfStock;

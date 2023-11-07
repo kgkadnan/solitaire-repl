@@ -60,7 +60,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
                     ? 'border-b-[1px] border-solid border-solitaireQuaternary'
                     : 'hover:text-solitaireQuaternary'
                 }`}
-                href={`my-cart/${path}`}
+                href={`${path}`}
                 key={id}
               >
                 <div className={`${isActive && 'text-solitaireQuaternary'}`}>

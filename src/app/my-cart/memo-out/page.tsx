@@ -1,5 +1,7 @@
 import React from 'react';
 
-export const MemoOut = () => {
+const MemoOut = () => {
   return <div>MemoOut</div>;
 };
+
+export default MemoOut;

@@ -117,28 +117,28 @@ const MyCart = () => {
     inscription: 'Ins.',
   };
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const updatedRemainingTime = calculateRemainingTime(createdAt).map(
-        (item: any) => {
-          if (item <= 0) {
-            return false;
-          }
-          return item;
-        }
-      );
+  // useEffect(() => {
+  //   const interval = setInterval(() => {
+  //     const updatedRemainingTime = calculateRemainingTime(createdAt).map(
+  //       (item: any) => {
+  //         if (item <= 0) {
+  //           return false;
+  //         }
+  //         return item;
+  //       }
+  //     );
 
-      setRemainingTime(updatedRemainingTime);
+  //     setRemainingTime(updatedRemainingTime);
 
-      if (updatedRemainingTime.some((item: any) => item <= 0)) {
-        clearInterval(interval);
-      }
-    }, 1000);
+  //     if (updatedRemainingTime.some((item: any) => item <= 0)) {
+  //       clearInterval(interval);
+  //     }
+  //   }, 1000);
 
-    return () => {
-      clearInterval(interval);
-    };
-  }, [createdAt, remainingTime]);
+  //   return () => {
+  //     clearInterval(interval);
+  //   };
+  // }, [createdAt, remainingTime]);
 
   const renderCardData = useCallback(
     (data: any) => {
