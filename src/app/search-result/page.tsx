@@ -5,12 +5,10 @@ import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
-import InfoCircleOutline from '@public/assets/icons/information-circle-outline.svg?url';
+import EditIcon from '@public/assets/icons/edit.svg';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
-import { CustomInputlabel } from '@/components/common/input-label';
-import Tooltip from '@/components/common/tooltip';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { useGetAllProductQuery } from '@/features/api/product';
@@ -18,7 +16,7 @@ import CustomDataTable from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import CustomPagination from '@/components/common/pagination';
 import { useAppDispatch } from '@/hooks/hook';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useGetSpecificPreviousQuery } from '@/features/api/previous-searches';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
@@ -40,6 +38,7 @@ const SearchResults = () => {
   const previousSearchIds = searchParams.get('id');
   const router = useRouter();
   const dispatch = useAppDispatch();
+  let currentPath = usePathname();
 
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
@@ -433,6 +432,8 @@ const SearchResults = () => {
       const parseYourSelection = JSON.parse(yourSelection);
       setYourSelectionData(parseYourSelection);
       let url = constructUrlParams(parseYourSelection[activeTab]);
+      console.log('uuuuuuuuuuuuuuuuuuuuuuuuu', url);
+
       setSearchUrl(url);
 
       if (data?.products?.length) {
@@ -608,104 +609,7 @@ const SearchResults = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <div className="border-b border-solid  border-solitaireSenary mb-5">
-        {/* top Header */}
-        <div className={styles.topHeader}>
-          <p className="">
-            {ManageLocales('app.searchResult.header.searchResults')}
-          </p>
-        </div>
-
-        {/* Search Tab Header */}
-        <div className="flex items-center gap-5 text-solitaireTertiary w-full  p-2 bg-solitaireNonary rounded-lg bg-opacity-0">
-          {Object.keys(yourSelectionData).length > 0 &&
-            Object.values(yourSelectionData).map(
-              (yourSelection: any, index: number) => {
-                return (
-                  <div key={`Search-${index}`}>
-                    <div
-                      style={{
-                        marginRight:
-                          index === yourSelection.length - 1 ? '0px' : '5px',
-                      }}
-                      className={`flex items-center cursor-pointer gap-[8px] rounded-sm ${
-                        activeTab === index
-                          ? styles.activeHeaderButtonStyle
-                          : styles.headerButtonStyle
-                      }`}
-                    >
-                      <div className="flex items-center">
-                        <Tooltip
-                          tooltipElement={
-                            <InfoCircleOutline stroke="#8C7459" />
-                          }
-                          content={
-                            <div
-                              className={styles.yourSelectionContentContainer}
-                            >
-                              <CustomInputlabel
-                                htmlfor="text"
-                                label={`${ManageLocales(
-                                  'app.advanceSearch.yourSelection'
-                                )}:`}
-                                overriddenStyles={{
-                                  label: styles.yourSelectionTooltipHeader,
-                                }}
-                              />
-                              <div
-                                className={styles.yourSelectionMainContainer}
-                              >
-                                {Object.keys(yourSelection).map(
-                                  (key: string) => (
-                                    <div
-                                      key={`key-${key}`}
-                                      className={`${styles.yourSelectionSubContainer}`}
-                                    >
-                                      <div className={styles.labelContainer}>
-                                        <CustomInputlabel
-                                          htmlfor="text"
-                                          label={key}
-                                        />
-                                        :
-                                      </div>
-                                      <div className="text-sm font-light pl-2">
-                                        {Array.isArray(yourSelection[key])
-                                          ? yourSelection[key].join(', ')
-                                          : yourSelection[key]}
-                                      </div>
-                                    </div>
-                                  )
-                                )}
-                              </div>
-                            </div>
-                          }
-                          tooltipStyles={{
-                            tooltipContainerStyles:
-                              styles.tooltipContainerStyles,
-                            tooltipContentStyle:
-                              styles.yourSelectionTooltipContentStyle,
-                          }}
-                        />
-                      </div>
-                      <div>
-                        <CustomDisplayButton
-                          displayButtonAllStyle={{
-                            displayLabelStyle: styles.headerButtonLabelStyle,
-                          }}
-                          displayButtonLabel={`Search ${index + 1}`}
-                          handleClick={() => handleSearchTab(index)}
-                        />
-                      </div>
-                      <div onClick={() => closeSearch(index)}>
-                        <CloseOutline stroke="#8C7459" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )}
-        </div>
-
+      <div className="mb-2">
         {/* Count Bar  */}
         <div className="flex justify-between py-3">
           <div className="flex gap-3">

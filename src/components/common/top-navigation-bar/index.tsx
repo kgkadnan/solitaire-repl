@@ -57,8 +57,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: '/advance-search',
-      isActive: currentRoute === '/advance-search',
+      link: '/search-result/advance-search',
+      isActive: currentRoute === '/search-result/advance-search',
     },
     {
       label: ManageLocales('app.topNav.myCart'),

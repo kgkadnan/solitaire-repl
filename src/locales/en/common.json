@@ -170,6 +170,7 @@
   "app.searchResult.footer.confirmStone": "Confirm Stone",
   "app.searchResult.footer.more": "More",
   "app.searchResult.header.searchResults": "Search Results",
+  "app.searchResult.header.newSearch": "New Search",
   "app.searchResult.slider.stoneImage.image": "Image",
   "app.searchResult.slider.giaCertificate.giaCertificate": "GIA Certificate",
   "app.searchResult.slider.giaCertificate.download": "Download",
@@ -188,6 +189,7 @@
   "app.searchResult.slider.diamondDetail.giaCertificate": "GIA Certificate",
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
   "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
+
 
   "app.myCart.active": "Active",
   "app.myCart.outOfStock": "Out of Stock",
