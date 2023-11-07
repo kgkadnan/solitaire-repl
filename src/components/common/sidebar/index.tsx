@@ -41,8 +41,8 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: 'advance-search',
-      isActive: currentRoute === '/advance-search',
+      link: '/search-result/advance-search',
+      isActive: currentRoute === '/search-result/advance-search',
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -53,8 +53,8 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: '/saved-search',
-      isActive: currentRoute === '/saved-search',
+      link: '/search-result/saved-search',
+      isActive: currentRoute === '/search-result/saved-search',
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
@@ -102,7 +102,7 @@ const SideBar = () => {
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
   const handleChange = (nav: string, link?: string) => {
-    localStorage.removeItem("Search");
+    localStorage.removeItem('Search');
 
     router.push(`${link!}?lang=en`);
     setSelectedNav(() => [nav]);

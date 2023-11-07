@@ -31,7 +31,6 @@ export const TopNavigationBar = () => {
   );
 
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [offset, setOffset] = useState(0);
@@ -52,8 +51,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: '/advance-search',
-      isActive: currentRoute === '/advance-search',
+      link: '/search-result/advance-search',
+      isActive: currentRoute === '/search-result/advance-search',
     },
     {
       label: ManageLocales('app.topNav.previousSearch'),
@@ -75,7 +74,6 @@ export const TopNavigationBar = () => {
   const handleButtonClick = (label: string, link: string) => {
     localStorage.removeItem('Search');
     router.push(`${link}?lang=en`);
-    setActiveButton(label);
 
     topNavData.forEach((navData) => {
       if (navData.label !== label) {
