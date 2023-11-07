@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
-import SavedSearch from '@/app/saved-search/page';
+import SavedSearch from '@/app/search/saved/page';
 import { renderWithProviders } from '@/mock-handlers/test-utils';
 import { setupSetupsavedSearchandlers } from '@/mock-handlers/saved-search';
 import Image from 'next/image';

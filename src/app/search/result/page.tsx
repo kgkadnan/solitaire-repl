@@ -5,6 +5,7 @@ import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
+import EditIcon from '@public/assets/icons/edit.svg';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
@@ -14,7 +15,7 @@ import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable from '@/components/common/data-table';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -22,13 +23,14 @@ import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { IYourSelection, Product, TableColumn } from './interface';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
+import { ManageListingSequenceResponse } from '../../my-account/manage-diamond-sequence/interface';
 
 const SearchResults = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
+  let currentPath = usePathname();
 
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
@@ -347,12 +349,6 @@ const SearchResults = () => {
     },
   ];
 
-  const handleSearchTab = (index: number) => {
-    setIsCheckAll(false);
-    setIsCheck([]);
-    setActiveTab(index);
-  };
-
   // Function to calculate total amount
   const calculateTotalAmount = useCallback(() => {
     let total = 0;
@@ -595,53 +591,9 @@ const SearchResults = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <div className="border-b border-solid  border-solitaireSenary mb-5">
-        {/* top Header */}
-        <div className={styles.topHeader}>
-          <p className="">
-            {ManageLocales('app.searchResult.header.searchResults')}
-          </p>
-        </div>
-
-        {/* Search Tab Header */}
-        <div className="flex items-center gap-5 text-solitaireTertiary w-full  p-2 bg-solitaireNonary rounded-lg bg-opacity-0">
-          {Object.keys(yourSelectionData).length > 0 &&
-            Object.values(yourSelectionData).map(
-              (yourSelection: any, index: number) => {
-                return (
-                  <div key={`Search-${index}`}>
-                    <div
-                      style={{
-                        marginRight:
-                          index === yourSelection.length - 1 ? '0px' : '5px',
-                      }}
-                      className={`flex items-center cursor-pointer gap-[8px] rounded-sm ${
-                        activeTab === index
-                          ? styles.activeHeaderButtonStyle
-                          : styles.headerButtonStyle
-                      }`}
-                    >
-                      <div>
-                        <CustomDisplayButton
-                          displayButtonAllStyle={{
-                            displayLabelStyle: styles.headerButtonLabelStyle,
-                          }}
-                          displayButtonLabel={`Search ${index + 1}`}
-                          handleClick={() => handleSearchTab(index)}
-                        />
-                      </div>
-                      <div onClick={() => closeSearch(index)}>
-                        <CloseOutline stroke="#8C7459" />
-                      </div>
-                    </div>
-                  </div>
-                );
-              }
-            )}
-        </div>
-
+      <div className="mb-2">
         {/* Count Bar  */}
-        <div className="flex justify-between py-3 items-center">
+        <div className="flex justify-between pb-3 items-center">
           <div className="flex gap-3">
             <p>
               {ManageLocales('app.searchResult.countBar.pieces')}:

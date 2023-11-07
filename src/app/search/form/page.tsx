@@ -1752,7 +1752,7 @@ const AdvanceSearch = () => {
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
 
-        router.push('/search-result');
+        router.push('/search/result');
       }
     } else {
       setIsError(true);
@@ -2072,18 +2072,6 @@ const AdvanceSearch = () => {
     <div>
       <CustomInputDialog customInputDialogData={customInputDialogData} />
       {showToast && <CustomToast message={toastErrorMessage} />}
-      <div className="sticky top-0 bg-solitairePrimary mt-16">
-        <CustomHeader
-          data={{
-            headerHeading: ManageLocales('app.advanceSearch.header'),
-
-            overriddenStyles: {
-              headerDataStyles: styles.yourSelectionHeader,
-              headerDataContainerStyles: styles.yourSelectionContainer,
-            },
-          }}
-        />
-      </div>
 
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>

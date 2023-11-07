@@ -425,7 +425,7 @@ const SavedSearch = () => {
 
     dispatch(modifySavedSearch({ modifyData, activeTab }));
 
-    router.push(`/advance-search?edit=saved-search`);
+    router.push(`/form?edit=saved`);
   };
 
   return (
@@ -459,9 +459,9 @@ const SavedSearch = () => {
       />
       <div className="container flex flex-col">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
+        {/* <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
           <CustomHeader data={savedSearchheaderData} />
-        </div>
+        </div> */}
 
         {/* Custom Card and Checkbox map */}
         {cardData?.length ? (
