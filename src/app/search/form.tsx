@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import styles from './advance-search.module.scss';
+import styles from './form.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
 import CustomImageTile from 'src/components/common/image-tile';
@@ -22,12 +22,15 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
+import Link from 'next/link';
 
 interface QueryParameters {
   [key: string]: string | string[];
 }
 
-const AdvanceSearch = () => {
+
+
+const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => void }) => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
@@ -1751,8 +1754,8 @@ const AdvanceSearch = () => {
           JSON.stringify([...addSearches, setDataOnLocalStorage])
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
-
-        // router.push('/search/result');
+       
+        router.push(`/search?route=${JSON.parse(localStorage.getItem('Search')!).length}`);
       }
     } else {
       setIsError(true);

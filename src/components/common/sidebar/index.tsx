@@ -1,5 +1,5 @@
 'use client';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
@@ -20,11 +20,10 @@ import { ManageLocales } from '@/utils/translate';
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
-
+const subRoute=useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
   }, [router]);
-
   const imageData: IImageTileProps[] = [
     {
       src: <Dashboard className={styles.stroke} alt="dashboard" />,
@@ -41,8 +40,8 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: '/search/form',
-      isActive: currentRoute === '/search/form',
+      link: '/search?route=form',
+      isActive: (currentRoute === '/search' && subRoute==='form'),
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -53,8 +52,8 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: '/search/saved',
-      isActive: currentRoute === '/search/saved',
+      link: '/search?route=saved',
+      isActive: (currentRoute === '/search' && subRoute==='saved'),
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
@@ -104,7 +103,7 @@ const SideBar = () => {
   const handleChange = (nav: string, link?: string) => {
     localStorage.removeItem('Search');
 
-    router.push(`${link!}?lang=en`);
+    router.push(`${link!}`);
     setSelectedNav(() => [nav]);
   };
 
