@@ -41,8 +41,8 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: '/search-result/advance-search',
-      isActive: currentRoute === '/search-result/advance-search',
+      link: '/search/form',
+      isActive: currentRoute === '/search/form',
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -53,8 +53,8 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: '/search-result/saved-search',
-      isActive: currentRoute === '/search-result/saved-search',
+      link: '/search/saved',
+      isActive: currentRoute === '/search/saved',
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,

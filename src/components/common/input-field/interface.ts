@@ -15,4 +15,5 @@ export interface InputFieldProps {
   dataTestId?: string;
   disable?: boolean;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
+  maxLength?: number;
 }

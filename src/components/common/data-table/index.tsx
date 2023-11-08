@@ -16,7 +16,7 @@ import { CustomDropdown } from '../dropdown';
 import { useAddCartMutation } from '@/features/api/cart';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
-import { Product } from '@/app/search-result/interface';
+import { Product } from '@/app/search/result/interface';
 import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
@@ -269,7 +269,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
             <thead className={styles.tableHeader}>
               <tr>
                 {/* Empty table head for Diamond status*/}
-                <th></th>
+
                 <th>
                   <div className={`flex text-center`}>
                     <Checkbox
@@ -296,14 +296,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                   className={styles.tableRow}
                   onClick={() => handleClick(row.id)}
                 >
-                  <td
-                    className={` ${
-                      row.diamond_status == 'A' ? styles.availableStatus : ''
-                    }
-                  `}
-                  >
-                    {row.diamond_status}
-                  </td>
                   <td>
                     <CustomCheckBox
                       data={row.id}

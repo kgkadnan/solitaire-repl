@@ -866,7 +866,7 @@ const MyCart = () => {
                     </p>
                     <CustomDisplayButton
                       displayButtonLabel="Search Diamonds"
-                      handleClick={() => router.push('/advance-search')}
+                      handleClick={() => router.push('/form')}
                       displayButtonAllStyle={{
                         displayButtonStyle: styles.filled,
                       }}

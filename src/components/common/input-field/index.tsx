@@ -14,22 +14,22 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   placeholder,
   disable,
   onBlur,
+  maxLength,
 }) => {
   return (
-    <>
-      <div className={`${style?.inputMain}`}>
-        <Input
-          data-testid={`${dataTestId}`}
-          className={`${styles.defaultInputStyle} ${style?.input}`}
-          type={type}
-          name={name}
-          value={value}
-          onChange={onChange}
-          placeholder={placeholder}
-          disabled={disable}
-          onBlur={onBlur}
-        />
-      </div>
-    </>
+    <div className={`${style?.inputMain}`}>
+      <Input
+        data-testid={`${dataTestId}`}
+        className={`${styles.defaultInputStyle} ${style?.input}`}
+        type={type}
+        name={name}
+        value={value}
+        onChange={onChange}
+        placeholder={placeholder}
+        disabled={disable}
+        onBlur={onBlur}
+        maxLength={maxLength}
+      />
+    </div>
   );
 };

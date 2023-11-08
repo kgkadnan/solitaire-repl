@@ -25,18 +25,16 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     url: searchUrl,
   });
 
-  console.log('data', data);
-
   let myProfileRoutes = [
     {
       id: '1',
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'advance-search',
+      path: 'form',
     },
     {
       id: '2',
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved-search',
+      path: 'saved',
     },
   ];
 
@@ -56,15 +54,13 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     let yourSelection = localStorage.getItem('Search');
     if (yourSelection) {
-      // Check if the effect has not been executed
       const parseYourSelection = JSON.parse(yourSelection);
       setYourSelectionData(parseYourSelection);
+      // Always fetch data, even on initial load
       let url = constructUrlParams(parseYourSelection[activeTab]);
-      console.log('nnnnnnnnnnnnnnnnnnnnnnnnnn', url);
-
       setSearchUrl(url);
     }
-  }, [activeTab]);
+  }, [activeTab, data]);
 
   const handleSearchTab = (index: number) => {
     setActiveTab(index);
@@ -92,14 +88,14 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
         <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
           {myProfileRoutes.map(({ id, pathName, path }) => {
             // Check if the current route matches the link's path
-            const isActive = currentPath === `/search-result/${path}`;
+            const isActive = currentPath === `/search/${path}`;
 
             return (
               <Link
                 className={`flex flex-row p-2.5  text-solitaireTertiary ${
                   isActive ? '' : 'hover:text-solitaireQuaternary'
                 }`}
-                href={`/search-result/${path}`}
+                href={`/search/${path}`}
                 key={id}
               >
                 <div className={`${isActive && 'text-solitaireQuaternary'}`}>
