@@ -1,7 +1,7 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -10,9 +10,14 @@ import EditIcon from '@public/assets/icons/edit.svg';
 import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySearchResult } from '@/features/search-result/search-result';
 
 function SearchResultLayout({ children }: { children: React.ReactNode }) {
   let currentPath = usePathname();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
@@ -78,6 +83,11 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
   };
 
+  const editSearchResult = (activeTab: number) => {
+    dispatch(modifySearchResult({ activeTab }));
+    router.push(`/search/form?edit=search-result`);
+  };
+
   return (
     <>
       <div
@@ -85,7 +95,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
+        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary py-3">
           {myProfileRoutes.map(({ id, pathName, path }) => {
             // Check if the current route matches the link's path
             const isActive = currentPath === `/search/${path}`;
@@ -123,7 +133,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
                         }`}
                       >
                         {activeTab === index && (
-                          <div>
+                          <div onClick={() => editSearchResult(activeTab)}>
                             <Image src={EditIcon} alt="Edit Icon" />
                           </div>
                         )}
