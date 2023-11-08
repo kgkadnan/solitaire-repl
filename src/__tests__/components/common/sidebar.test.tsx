@@ -36,6 +36,6 @@ describe('Check SideBar component', () => {
     fireEvent.click(tileElement);
 
     // Check if router.push was called with the expected URL
-    expect(mockPush).toHaveBeenCalledWith('/new-arrival?lang=en');
+    expect(mockPush).toHaveBeenCalledWith('/new-arrival');
   });
 });
