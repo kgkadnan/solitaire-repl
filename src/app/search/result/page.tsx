@@ -347,36 +347,16 @@ const SearchResults = () => {
       ),
     },
     {
-      id: 2,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
-      style: styles.transparent,
-      fn: () => {},
-    },
-    {
-      id: 3,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.addSearch'),
-      style: styles.transparent,
-      fn: () => {},
-    },
-    {
-      id: 4,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.modifySearch'),
-      style: styles.transparent,
-      fn: () => {},
-    },
-    {
-      id: 5,
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.footer.addToWhislist'
-      ),
-      style: styles.filled,
-      fn: () => {},
-    },
-    {
       id: 6,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
-      style: styles.filled,
+      style: styles.transparent,
       fn: addToCart,
+    },
+    {
+      id: 2,
+      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
+      style: styles.filled,
+      fn: () => {},
     },
   ];
 
@@ -426,8 +406,6 @@ const SearchResults = () => {
       const parseYourSelection = JSON.parse(yourSelection);
       setYourSelectionData(parseYourSelection);
       let url = constructUrlParams(parseYourSelection[activeTab]);
-      console.log('uuuuuuuuuuuuuuuuuuuuuuuuu', url);
-
       setSearchUrl(url);
 
       if (data?.products?.length) {
@@ -436,18 +414,6 @@ const SearchResults = () => {
       }
     }
   }, [data, activeTab]); // Include isEffectExecuted in the dependency array
-
-  const closeSearch = (removeDataIndex: number) => {
-    // Filter the dummyData to remove the specified search
-    // const updatedData: Data = {};
-    // Object.keys(dummyData).forEach((key, index) => {
-    //   if (index !== removeDataIndex) {
-    //     updatedData[key] = dummyData[key];
-    //   }
-    // });
-    // // Update the state with the filtered dummyData
-    // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
-  };
 
   const handleRadioChange = (radioValue: string) => {
     setSelectedValue(radioValue);

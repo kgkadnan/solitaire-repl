@@ -25,8 +25,6 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     url: searchUrl,
   });
 
-  console.log('layoutdata', data);
-
   let myProfileRoutes = [
     {
       id: '1',
@@ -62,7 +60,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
       let url = constructUrlParams(parseYourSelection[activeTab]);
       setSearchUrl(url);
     }
-  }, [activeTab, data]);
+  }, [activeTab, localStorage.getItem('Search')]);
 
   const handleSearchTab = (index: number) => {
     setActiveTab(index);
@@ -79,6 +77,8 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     // // Update the state with the filtered dummyData
     // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
   };
+
+  console.log('yourSelectionData', yourSelectionData.length <= 5);
 
   return (
     <>
