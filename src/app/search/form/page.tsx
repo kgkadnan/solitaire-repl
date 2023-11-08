@@ -10,10 +10,7 @@ import CustomHeader from '@/components/common/header';
 import { CustomFooter } from '@/components/common/footer';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
-import Tooltip from '@/components/common/tooltip';
-import TooltipIcon from '@public/assets/icons/information-circle-outline.svg?url';
 import { CustomToast } from '@/components/common/toast';
-import { useAddPreviousSearchMutation } from '@/features/api/previous-searches';
 import advanceSearch from '@/constants/advance-search.json';
 import {
   useAddSavedSearchMutation,
@@ -138,7 +135,6 @@ const AdvanceSearch = () => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
   const [starLengthTo, setStarLengthTo] = useState<string>('');
-  const [yourSelection, setYourSelection] = useState<Record<string, any>[]>([]);
 
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [showToast, setShowToast] = useState<boolean>(false);
@@ -151,7 +147,6 @@ const AdvanceSearch = () => {
   const searchParams = useSearchParams();
 
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  let [addPreviousSearch] = useAddPreviousSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
 
   function generateQueryParams({
@@ -1202,6 +1197,7 @@ const AdvanceSearch = () => {
   const handleGirdleChange = (data: string) => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
+
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
@@ -1273,24 +1269,10 @@ const AdvanceSearch = () => {
     }
   };
 
-  const formatSelection = (data: string[] | string) => {
-    return (
-      <div className={styles.yourSelectionInHeaderElement}>
-        {' '}
-        {Array.isArray(data)
-          ? data.length > 1
-            ? data.toString().substring(0, 4).concat('...')
-            : data.toString()
-          : data}
-      </div>
-    );
-  };
-
   const handleReset = () => {
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
-    setYourSelection([]);
     setSelectedShape([]);
     setSelectedColor('');
     setSelectedWhiteColor([]);
@@ -1364,301 +1346,102 @@ const AdvanceSearch = () => {
     setSelectedOrigin([]);
   };
 
-  const updateYourSelection = (key: string, value: any) => {
-    setYourSelection((prevSelection) => {
-      // Use filter to remove items with the same key
-      const updatedSelection = prevSelection.filter(
-        (item) =>
-          !Object.keys(item).includes(ManageLocales(`app.advanceSearch.${key}`))
-      );
-
-      // Add the new item to the array
-      return [
-        ...updatedSelection,
-        { [ManageLocales(`app.advanceSearch.${key}`)]: value },
-      ];
-    });
-  };
-
-  const handleYourSelection = () => {
-    selectedShape.length > 0 && updateYourSelection('shape', selectedShape);
-
-    selectedColor.length > 0 && updateYourSelection('color', selectedColor);
-    selectedWhiteColor.length > 0 &&
-      updateYourSelection('white', selectedWhiteColor);
-    selectedFancyColor.length > 0 &&
-      updateYourSelection('fancy', selectedFancyColor);
-    selectedIntensity.length > 0 &&
-      updateYourSelection('intensity', selectedIntensity);
-    selectedOvertone.length > 0 &&
-      updateYourSelection('overtone', selectedOvertone);
-    selectedTinge.length > 0 &&
-      updateYourSelection('colorShade', selectedTinge);
-
-    selectedTingeIntensity.length > 0 &&
-      updateYourSelection('colorShadeIntensity', selectedTingeIntensity);
-    selectedClarity.length > 0 &&
-      updateYourSelection('clarity', selectedClarity);
-    selectedCaratRange.length > 0 &&
-      updateYourSelection('caratRange', selectedCaratRange);
-    selectedMake.length > 0 && updateYourSelection('make', selectedMake);
-    selectedCut.length > 0 && updateYourSelection('cut', selectedCut);
-    selectedPolish.length > 0 && updateYourSelection('polish', selectedPolish);
-
-    selectedSymmetry.length > 0 &&
-      updateYourSelection('symmetry', selectedSymmetry);
-    selectedFluorescence.length > 0 &&
-      updateYourSelection('fluorescence', selectedFluorescence);
-    selectedCulet.length > 0 && updateYourSelection('culet', selectedCulet);
-    selectedGirdle.length > 0 && updateYourSelection('girdle', selectedGirdle);
-    selectedLab.length > 0 && updateYourSelection('lab', selectedLab);
-    selectedHR.length > 0 && updateYourSelection('HA', selectedHR);
-    selectedBrilliance.length > 0 &&
-      updateYourSelection('brilliance', selectedBrilliance);
-    selectedLocation.length > 0 &&
-      updateYourSelection('location', selectedLocation);
-    selectedOrigin.length > 0 && updateYourSelection('origin', selectedOrigin);
-    (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection(
-        'priceRange',
-        `${
-          priceRangeFrom +
-          (priceRangeFrom && priceRangeTo && '-') +
-          priceRangeTo
-        }`
-      );
-    (discountFrom || discountTo) &&
-      updateYourSelection(
-        'discount',
-        `${discountFrom + (discountFrom && discountTo && '-') + discountTo}`
-      );
-    (pricePerCaratFrom || pricePerCaratTo) &&
-      updateYourSelection(
-        'pricePerCarat',
-        `${
-          pricePerCaratFrom +
-          (pricePerCaratFrom && pricePerCaratTo && '-') +
-          pricePerCaratTo
-        }`
-      );
-    (priceRangeFrom || priceRangeTo) &&
-      updateYourSelection(
-        'priceRange',
-        `${
-          priceRangeFrom +
-          (priceRangeFrom && priceRangeTo && '-') +
-          priceRangeTo
-        }`
-      );
-    blackTableBI.length > 0 &&
-      updateYourSelection('otherBIBlackTable', blackTableBI);
-    sideBlackBI.length > 0 &&
-      updateYourSelection('otherBISideTable', sideBlackBI);
-    openCrownBI.length > 0 &&
-      updateYourSelection('otherBIOpenCrown', openCrownBI);
-
-    openTableBI.length > 0 &&
-      updateYourSelection('otherBIOpenTable', openTableBI);
-    openPavilionBI.length > 0 &&
-      updateYourSelection('otherBIOpenPavilion', openPavilionBI);
-    milkyBI.length > 0 && updateYourSelection('otherBIMilky', milkyBI);
-    lusterBI.length > 0 && updateYourSelection('otherBILuster', lusterBI);
-    eyeCleanBI.length > 0 && updateYourSelection('otherBIEyeClean', eyeCleanBI);
-    tableInclusionWI.length > 0 &&
-      updateYourSelection('otherWITableInclusion', tableInclusionWI);
-    sideInclusionWI.length > 0 &&
-      updateYourSelection('otherWISideInclusion', sideInclusionWI);
-    naturalCrownWI.length > 0 &&
-      updateYourSelection('otherWINaturalCrown', naturalCrownWI);
-
-    naturalGirdleWI.length > 0 &&
-      updateYourSelection('otherWINaturalGirdle', naturalGirdleWI);
-    naturalPavilionWI.length > 0 &&
-      updateYourSelection('otherWINaturalPavilion', naturalPavilionWI);
-    surfaceGrainingWI.length > 0 &&
-      updateYourSelection('otherWISurfaceGraining', surfaceGrainingWI);
-    internalGrainingWI.length > 0 &&
-      updateYourSelection('internalGraining', internalGrainingWI);
-
-    (tablePerFrom || tablePerTo) &&
-      updateYourSelection(
-        'tablePer',
-        `${tablePerFrom + (tablePerFrom && tablePerTo && '-') + tablePerTo}`
-      );
-    (crownAngleFrom || crownAngleTo) &&
-      updateYourSelection(
-        'crownAngle',
-        `${
-          crownAngleFrom +
-          (crownAngleFrom && crownAngleTo && '-') +
-          crownAngleTo
-        }`
-      );
-    (lengthFrom || lengthTo) &&
-      updateYourSelection(
-        'length',
-        `${lengthFrom + (lengthFrom && lengthTo && '-') + lengthTo}`
-      );
-    (pavilionDepthFrom || pavilionDepthTo) &&
-      updateYourSelection(
-        'pavilionDepth',
-        `${
-          pavilionDepthFrom +
-          (pavilionDepthFrom && pavilionDepthTo && '-') +
-          pavilionDepthTo
-        }`
-      );
-    (depthPerFrom || depthPerTo) &&
-      updateYourSelection(
-        'depthPer',
-        `${depthPerFrom + (depthPerFrom && priceRangeTo && '-') + priceRangeTo}`
-      );
-    (crownHeightFrom || crownHeightTo) &&
-      updateYourSelection(
-        'crownHeight',
-        `${priceRangeFrom + (priceRangeFrom && depthPerTo && '-') + depthPerTo}`
-      );
-
-    (widthFrom || widthTo) &&
-      updateYourSelection(
-        'width',
-        `${widthFrom + (widthFrom && widthTo && '-') + widthTo}`
-      );
-    (lowerHalfFrom || lowerHalfTo) &&
-      updateYourSelection(
-        'lowerHalf',
-        `${lowerHalfFrom + (lowerHalfFrom && lowerHalfTo && '-') + lowerHalfTo}`
-      );
-    (ratioFrom || ratioTo) &&
-      updateYourSelection(
-        'ratio',
-        `${ratioFrom + (ratioFrom && ratioTo && '-') + ratioTo}`
-      );
-    (girdlePerFrom || girdlePerTo) &&
-      updateYourSelection(
-        'girdlePer',
-        `${girdlePerFrom + (girdlePerFrom && girdlePerTo && '-') + girdlePerTo}`
-      );
-    (pavilionAngleFrom || pavilionAngleTo) &&
-      updateYourSelection(
-        'pavilionAngle',
-        `${
-          pavilionAngleFrom +
-          (pavilionAngleFrom && pavilionAngleTo && '-') +
-          pavilionAngleTo
-        }`
-      );
-    (starLengthFrom || starLengthTo) &&
-      updateYourSelection(
-        'starLength',
-        `${
-          starLengthFrom +
-          (starLengthFrom && starLengthTo && '-') +
-          starLengthTo
-        }`
-      );
-  };
-
-  const prepareSearchParam = () => {
-    let response: any = {
-      basic_card_details: {
-        shape: selectedShape,
-        carat: selectedCaratRange,
-        color: selectedWhiteColor,
-        ...(selectedOvertone && { overtone: selectedOvertone }),
-        ...(selectedIntensity && { intensity: selectedIntensity }),
-        color_shade: selectedTinge,
-        color_shade_intensity: selectedTingeIntensity,
-        clarity: selectedClarity,
-        cut: selectedCut,
-        polish: selectedPolish,
-        symmetry: selectedSymmetry,
-        fluoroscence: selectedFluorescence,
-        culet: selectedCulet,
-        lab: selectedLab,
-        'H&A': selectedHR,
-        brilliance: selectedBrilliance,
-        location: selectedLocation,
-        country_of_origin: selectedOrigin,
-        price_per_carat:
-          pricePerCaratFrom &&
-          pricePerCaratTo &&
-          `${pricePerCaratFrom}-${pricePerCaratTo}`,
-        price_range:
-          priceRangeFrom && priceRangeTo && `${priceRangeFrom}-${priceRangeTo}`,
-        discount: discountFrom && discountTo && `${discountFrom}-${discountTo}`,
-        // laser_inscription: '-',
-      },
-      measurements: {
-        'table%': tablePerFrom && tablePerTo && `${tablePerFrom}-${tablePerTo}`,
-        'depth%': depthPerFrom && depthPerTo && `${depthPerFrom}-${depthPerTo}`,
-        ratio: ratioFrom && ratioTo && `${ratioFrom}-${ratioTo}`,
-        length: lengthFrom && lengthTo && `${lengthFrom}-${lengthTo}`,
-        width: widthFrom && widthTo && `${widthFrom}-${widthTo}`,
-        depth: depthFrom && depthTo && `${depthFrom}-${depthTo}`,
-        crown_angle:
-          crownAngleFrom && crownAngleTo && `${crownAngleFrom}-${crownAngleTo}`,
-        crown_height:
-          crownHeightFrom &&
-          crownHeightTo &&
-          `${crownHeightFrom}-${crownHeightTo}`,
-        'girdle%':
-          girdlePerFrom && girdlePerTo && `${girdlePerFrom}-${girdlePerTo}`,
-        pavilion_angle:
-          pavilionAngleFrom &&
-          pavilionAngleTo &&
-          `${pavilionAngleFrom}-${pavilionAngleTo}`,
-        pavilion_depth:
-          pavilionDepthFrom &&
-          pavilionDepthTo &&
-          `${pavilionDepthFrom}-${pavilionDepthTo}`,
-        lower_half:
-          lowerHalfFrom && lowerHalfTo && `${lowerHalfFrom}-${lowerHalfTo}`,
-        star_length:
-          starLengthFrom && starLengthTo && `${starLengthFrom}-${starLengthTo}`,
-      },
-      other_information: {
-        girdle: selectedGirdle,
-        key_to_symbol: selectedKeyToSymbol,
-        // report_comments: '-',
-      },
-      inclusion_details: {
-        black_table: blackTableBI,
-        side_table: sideBlackBI,
-        open_crown: openCrownBI,
-        open_table: openTableBI,
-        open_pavilion: openPavilionBI,
-        milky: milkyBI,
-        luster: lusterBI,
-        eye_clean: eyeCleanBI,
-        table_inclusion: tableInclusionWI,
-        side_inclusion: sideInclusionWI,
-        natural_crown: naturalCrownWI,
-        natural_girdle: naturalGirdleWI,
-        natural_pavilion: naturalPavilionWI,
-        surface_graining: surfaceGrainingWI,
-        internal_graining: internalGrainingWI,
-      },
-    };
-
-    return response;
-  };
-
   const handleSaveAndSearch: any = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        if (addSearches.length === 0) {
-          setSavedSearches([prepareSearchParam()]);
-        }
+        const queryParams = generateQueryParams({
+          selectedShape,
+          selectedColor,
+          selectedWhiteColor,
+          selectedFancyColor,
+          selectedIntensity,
+          selectedOvertone,
+          selectedTinge,
+          selectedTingeIntensity,
+          selectedClarity,
+          selectedCaratRange,
+          caratRangeFrom,
+          caratRangeTo,
+          selectedMake,
+          selectedCut,
+          selectedPolish,
+          selectedSymmetry,
+          selectedFluorescence,
+          selectedCulet,
+          selectedGirdle,
+          selectedKeyToSymbol,
+          selectedLab,
+          selectedHR,
+          selectedBrilliance,
+          selectedLocation,
+          selectedOrigin,
+          priceRangeFrom,
+          priceRangeTo,
+          discountFrom,
+          discountTo,
+          pricePerCaratFrom,
+          pricePerCaratTo,
+          blackTableBI,
+          sideBlackBI,
+          openCrownBI,
+          openTableBI,
+          openPavilionBI,
+          milkyBI,
+          lusterBI,
+          eyeCleanBI,
+          tableInclusionWI,
+          sideInclusionWI,
+          naturalCrownWI,
+          naturalGirdleWI,
+          naturalPavilionWI,
+          surfaceGrainingWI,
+          internalGrainingWI,
+          tablePerFrom,
+          tablePerTo,
+          depthTo,
+          depthFrom,
+          crownAngleFrom,
+          crownAngleTo,
+          lengthFrom,
+          lengthTo,
+          pavilionDepthFrom,
+          pavilionDepthTo,
+          depthPerFrom,
+          depthPerTo,
+          crownHeightFrom,
+          crownHeightTo,
+          widthFrom,
+          widthTo,
+          lowerHalfFrom,
+          lowerHalfTo,
+          ratioFrom,
+          ratioTo,
+          girdlePerFrom,
+          girdlePerTo,
+          pavilionAngleFrom,
+          pavilionAngleTo,
+          starLengthFrom,
+          starLengthTo,
+        });
 
+        if (addSearches.length === 0) {
+          setSavedSearches([queryParams]);
+        }
+        console.log('queryParams', queryParams);
         await addSavedSearch({
           name: saveSearchName,
           diamond_count: data?.count,
-          meta_data: [...savedSearches, prepareSearchParam()],
+          meta_data: [...savedSearches, queryParams],
           is_deleted: false,
-        });
-
-        handleSearch();
+        })
+          .unwrap()
+          .then(() => {
+            console.log('hereeeeeeeeeeeeeeeeeee');
+            handleSearch(true);
+          })
+          .catch((error: any) => {
+            console.log('error', error);
+          });
       }
     } else {
       setIsError(true);
@@ -1862,15 +1645,9 @@ const AdvanceSearch = () => {
     // setSearchIndex(addSearches.length + 1);
   };
 
-  const handleSearch = async () => {
+  const handleSearch = async (isSaved: boolean = false) => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
-        await addPreviousSearch({
-          diamond_count: data?.count,
-          meta_data: prepareSearchParam(),
-          is_deleted: false,
-        });
-
         const queryParams = generateQueryParams({
           selectedShape,
           selectedColor,
@@ -1949,9 +1726,9 @@ const AdvanceSearch = () => {
         if (modifySearchFrom === 'saved-search') {
           if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
-            updatedMeta[savedSearch.activeTab] = prepareSearchParam();
+            // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
+            updatedMeta[savedSearch.activeTab] = queryParams;
 
-            console.log('savedSearch.savedSearch secondtime', updatedMeta);
             let data = {
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta,
@@ -1976,18 +1753,12 @@ const AdvanceSearch = () => {
     }
   };
 
-  // const setLocalData = () => {};
-
   const handleAddAnotherSearch = async () => {
     // handleAddSearchIndex();
     if (addSearches.length < 4) {
       //call previous serach api
-      setSavedSearches([...savedSearches, prepareSearchParam()]);
-      await addPreviousSearch({
-        diamond_count: data?.count,
-        meta_data: prepareSearchParam(),
-        is_deleted: false,
-      });
+      // setSavedSearches([...savedSearches, prepareSearchParam()]);
+
       handleAddSearches();
       handleReset();
     } else {
@@ -2189,6 +1960,7 @@ const AdvanceSearch = () => {
     price_per_carat: { from: null, to: null },
     // Add more input groups here if needed
   });
+
   const handleValidate = (
     key: keyof Errors,
     inputType: 'from' | 'to',
@@ -2285,7 +2057,7 @@ const AdvanceSearch = () => {
     inputValue: saveSearchName,
     displayButtonFunction: handleSaveAndSearch,
     label: 'Save And Search',
-    name: 'saveAndSearch',
+    name: 'Save',
     displayButtonLabel2: 'Save',
   };
 
@@ -3024,28 +2796,13 @@ const AdvanceSearch = () => {
                   );
                 }
               },
-              isDisable:
-                modifySearchFrom === 'previous-search' ||
-                modifySearchFrom === 'saved-search',
+              isDisable: modifySearchFrom === 'saved-search',
             },
             {
               id: 3,
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
-            },
-            {
-              id: 4,
-              displayButtonLabel: `${ManageLocales(
-                'app.advanceSearch.addAnotherSearch'
-              )} ${
-                addSearches.length > 0 ? `(${addSearches.length + 1})` : '  '
-              }`,
-              style: ` ${styles.filled} ${styles.anotherSearch}`,
-              fn: handleAddAnotherSearch,
-              isDisable:
-                modifySearchFrom === 'previous-search' ||
-                modifySearchFrom === 'saved-search',
             },
           ]}
           noBorderTop={styles.paginationContainerStyle}

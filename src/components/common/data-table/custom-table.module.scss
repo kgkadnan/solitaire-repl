@@ -8,10 +8,10 @@
 }
 
 .tableWrapper {
-  max-height:  55vh; /* Set to 80% of the viewport height */
+  max-height:  65vh; /* Set to 80% of the viewport height */
   overflow-y: scroll;
   padding-bottom: 10px;
-  height: calc(100vh - 50vh )  ; /* This may not be needed, depending on the layout */
+  height: calc(100vh - 45vh )  ; /* This may not be needed, depending on the layout */
 }
 
 .table {
@@ -58,41 +58,23 @@
 
 
 
-.table th:nth-child(1) {
-  background-color: hsl(var(--solitaire-primary));
-}
-.table th:nth-child(2) {
-  border-bottom-left-radius: 25%;
-  border-top-left-radius: 25%;
-  
-}
-
 .table th:nth-child(1),
 .table td:nth-child(1) {
+    border-bottom-left-radius: 25%;
+  border-top-left-radius: 25%;
     position: sticky;
     left: 0;
     width: 20px;
     min-width: 20px;
+    padding-left: 8px;
 }
 
-.table th:nth-child(2),
-.table td:nth-child(2) {
-    position: sticky;
-    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
-    /* 0 + 5 + 150 + 5 + 1 */
-    left: 20px;
-    width: 30px;
-    min-width: 30px;
-    padding-left: 6px;
-}
 
-.table td:nth-child(1),
-.table td:nth-child(2) {
+.table td:nth-child(1) {
   background-color: hsl(var(--solitaire-primary));
 }
 
-.table th:nth-child(1),
-.table th:nth-child(2) {
+.table th:nth-child(1){
     z-index: 2;
 }
 
