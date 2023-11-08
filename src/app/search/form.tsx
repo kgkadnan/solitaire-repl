@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import styles from './advance-search.module.scss';
+import styles from './form.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
 import CustomImageTile from 'src/components/common/image-tile';
@@ -22,12 +22,15 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
+import Link from 'next/link';
 
 interface QueryParameters {
   [key: string]: string | string[];
 }
 
-const AdvanceSearch = () => {
+
+
+const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => void }) => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
@@ -492,155 +495,155 @@ const AdvanceSearch = () => {
     }
   }, [modifySearchFrom]);
 
-  // useEffect(() => {
-  //   let data: any = JSON.parse(localStorage.getItem('Search')!);
+  useEffect(() => {
+    let data: any = JSON.parse(localStorage.getItem('Search')!);
 
-  //   if (
-  //     data?.length !== undefined &&
-  //     data?.length > 0 &&
-  //     data[data?.length - 1] !== undefined
-  //   ) {
-  //     let index = data?.length - 1;
-  //     //basic_card_details
-  //     const cut = data[index]?.cut;
-  //     const lab = data[index]?.lab;
-  //     const carat = data[index]?.carat;
-  //     const color = data[index]?.color;
-  //     const culet = data[index]?.culet;
-  //     const shapes = data[index]?.shape;
-  //     const polish = data[index]?.polish;
-  //     const clarity = data[index]?.clarity;
-  //     const location = data[index]?.location;
-  //     const symmetry = data[index]?.symmetry;
-  //     const priceRange = data[index]?.price_range;
-  //     const pricePerCarat = data[index]?.price_per_carat;
-  //     const discount = data[index]?.discount;
-  //     const color_shade = data[index]?.color_shade;
-  //     const color_shade_intensity = data[index]?.color_shade_intensity;
-  //     const overtone = data[index]?.overtone;
-  //     const HA = data[index]?.['H&A'];
-  //     const brilliance = data[index]?.brilliance;
-  //     const fluoroscence = data[index]?.fluoroscence;
-  //     const country_of_origin = data[index]?.country_of_origin;
+    if (
+      data?.length !== undefined &&
+      data?.length > 0 &&
+      data[data?.length - 1] !== undefined
+    ) {
+      let index = data?.length - 1;
+      //basic_card_details
+      const cut = data[index]?.cut;
+      const lab = data[index]?.lab;
+      const carat = data[index]?.carat;
+      const color = data[index]?.color;
+      const culet = data[index]?.culet;
+      const shapes = data[index]?.shape;
+      const polish = data[index]?.polish;
+      const clarity = data[index]?.clarity;
+      const location = data[index]?.location;
+      const symmetry = data[index]?.symmetry;
+      const priceRange = data[index]?.price_range;
+      const pricePerCarat = data[index]?.price_per_carat;
+      const discount = data[index]?.discount;
+      const color_shade = data[index]?.color_shade;
+      const color_shade_intensity = data[index]?.color_shade_intensity;
+      const overtone = data[index]?.overtone;
+      const HA = data[index]?.['H&A'];
+      const brilliance = data[index]?.brilliance;
+      const fluoroscence = data[index]?.fluoroscence;
+      const country_of_origin = data[index]?.country_of_origin;
 
-  //     //measurements
-  //     const depth = data[index]?.depth;
-  //     const ratio = data[index]?.ratio;
-  //     const width = data[index]?.width;
-  //     const length = data[index]?.length;
-  //     const table_per = data[index]?.['table%'];
-  //     const girdle_per = data[index]?.['girdle%'];
-  //     const depth_per = data[index]?.['depth%'];
-  //     const lower_half = data[index]?.lower_half;
-  //     const crown_angle = data[index]?.crown_angle;
-  //     const star_length = data[index]?.star_length;
-  //     const crown_height = data[index]?.crown_height;
-  //     const pavilion_angle = data[index]?.pavilion_angle;
-  //     const pavilion_depth = data[index]?.pavilion_depth;
+      //measurements
+      const depth = data[index]?.depth;
+      const ratio = data[index]?.ratio;
+      const width = data[index]?.width;
+      const length = data[index]?.length;
+      const table_per = data[index]?.['table%'];
+      const girdle_per = data[index]?.['girdle%'];
+      const depth_per = data[index]?.['depth%'];
+      const lower_half = data[index]?.lower_half;
+      const crown_angle = data[index]?.crown_angle;
+      const star_length = data[index]?.star_length;
+      const crown_height = data[index]?.crown_height;
+      const pavilion_angle = data[index]?.pavilion_angle;
+      const pavilion_depth = data[index]?.pavilion_depth;
 
-  //     //inclusion_details
-  //     const milky = data[index]?.milky;
-  //     const luster = data[index]?.luster;
-  //     const eye_clean = data[index]?.eye_clean;
-  //     const open_crown = data[index]?.open_crown;
-  //     const open_table = data[index]?.open_table;
-  //     const side_table = data[index]?.side_table;
-  //     const black_table = data[index]?.black_table;
-  //     const natural_crown = data[index]?.natural_crown;
-  //     const open_pavilion = data[index]?.open_pavilion;
-  //     const natural_girdle = data[index]?.natural_girdle;
-  //     const side_inclusion = data[index]?.side_inclusion;
-  //     const table_inclusion = data[index]?.table_inclusion;
-  //     const natural_pavilion = data[index]?.natural_pavilion;
-  //     const surface_graining = data[index]?.surface_graining;
-  //     const internal_graining = data[index]?.internal_graining;
+      //inclusion_details
+      const milky = data[index]?.milky;
+      const luster = data[index]?.luster;
+      const eye_clean = data[index]?.eye_clean;
+      const open_crown = data[index]?.open_crown;
+      const open_table = data[index]?.open_table;
+      const side_table = data[index]?.side_table;
+      const black_table = data[index]?.black_table;
+      const natural_crown = data[index]?.natural_crown;
+      const open_pavilion = data[index]?.open_pavilion;
+      const natural_girdle = data[index]?.natural_girdle;
+      const side_inclusion = data[index]?.side_inclusion;
+      const table_inclusion = data[index]?.table_inclusion;
+      const natural_pavilion = data[index]?.natural_pavilion;
+      const surface_graining = data[index]?.surface_graining;
+      const internal_graining = data[index]?.internal_graining;
 
-  //     //other_information
-  //     const girdle = data[index]?.girdle;
-  //     const key_to_symbol = data[index]?.key_to_symbol;
+      //other_information
+      const girdle = data[index]?.girdle;
+      const key_to_symbol = data[index]?.key_to_symbol;
 
-  //     //basic_card_details states
-  //     shapes && setSelectedShape(shapes);
-  //     carat && setSelectedCaratRange(carat);
-  //     clarity && setSelectedClarity(clarity);
-  //     cut && setSelectedCut(cut);
-  //     lab && setSelectedLab(lab);
-  //     culet && setSelectedCulet(culet);
-  //     polish && setSelectedPolish(polish);
-  //     location && setSelectedLocation(location);
-  //     HA && setSelectedHR(HA);
-  //     symmetry && setSelectedSymmetry(symmetry);
-  //     fluoroscence && setSelectedFluorescence(fluoroscence);
-  //     country_of_origin && setSelectedOrigin(country_of_origin);
-  //     color_shade && setSelectedTinge(color_shade);
-  //     color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
-  //     overtone && setSelectedOvertone(overtone);
-  //     brilliance && setSelectedBrilliance(brilliance);
-  //     priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
-  //     priceRange && setPriceRangeTo(priceRange.split('-')[1]);
-  //     discount && setDiscountFrom(discount.split('-')[0]);
-  //     discount && setDiscountTo(discount.split('-')[1]);
-  //     pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
-  //     pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
-  //     //measurements States
+      //basic_card_details states
+      shapes && setSelectedShape(shapes);
+      carat && setSelectedCaratRange(carat);
+      clarity && setSelectedClarity(clarity);
+      cut && setSelectedCut(cut);
+      lab && setSelectedLab(lab);
+      culet && setSelectedCulet(culet);
+      polish && setSelectedPolish(polish);
+      location && setSelectedLocation(location);
+      HA && setSelectedHR(HA);
+      symmetry && setSelectedSymmetry(symmetry);
+      fluoroscence && setSelectedFluorescence(fluoroscence);
+      country_of_origin && setSelectedOrigin(country_of_origin);
+      color_shade && setSelectedTinge(color_shade);
+      color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
+      overtone && setSelectedOvertone(overtone);
+      brilliance && setSelectedBrilliance(brilliance);
+      priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
+      priceRange && setPriceRangeTo(priceRange.split('-')[1]);
+      discount && setDiscountFrom(discount.split('-')[0]);
+      discount && setDiscountTo(discount.split('-')[1]);
+      pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
+      pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
+      //measurements States
 
-  //     depth && setDepthFrom(depth.split('-')[0]);
-  //     depth && setDepthTo(depth.split('-')[1]);
-  //     ratio && setRatioFrom(ratio.split('-')[0]);
-  //     ratio && setRatioTo(ratio.split('-')[1]);
-  //     width && setWidthFrom(width.split('-')[0]);
-  //     width && setWidthTo(width.split('-')[1]);
-  //     length && setLengthFrom(length.split('-')[0]);
-  //     length && setLengthTo(length.split('-')[1]);
-  //     table_per && setTablePerFrom(table_per.split('-')[0]);
-  //     table_per && setTablePerTo(table_per.split('-')[1]);
-  //     girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
-  //     girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
-  //     depth_per && setDepthPerFrom(depth_per.split('-')[0]);
-  //     depth_per && setDepthPerTo(depth_per.split('-')[1]);
-  //     lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
-  //     lower_half && setLowerHalfTo(lower_half.split('-')[1]);
-  //     crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
-  //     crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
-  //     star_length && setStarLengthFrom(star_length.split('-')[0]);
-  //     star_length && setStarLengthTo(star_length.split('-')[1]);
-  //     crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
-  //     crown_height && setCrownHeightTo(crown_height.split('-')[1]);
-  //     pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
-  //     pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
-  //     pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
-  //     pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
+      depth && setDepthFrom(depth.split('-')[0]);
+      depth && setDepthTo(depth.split('-')[1]);
+      ratio && setRatioFrom(ratio.split('-')[0]);
+      ratio && setRatioTo(ratio.split('-')[1]);
+      width && setWidthFrom(width.split('-')[0]);
+      width && setWidthTo(width.split('-')[1]);
+      length && setLengthFrom(length.split('-')[0]);
+      length && setLengthTo(length.split('-')[1]);
+      table_per && setTablePerFrom(table_per.split('-')[0]);
+      table_per && setTablePerTo(table_per.split('-')[1]);
+      girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
+      girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
+      depth_per && setDepthPerFrom(depth_per.split('-')[0]);
+      depth_per && setDepthPerTo(depth_per.split('-')[1]);
+      lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
+      lower_half && setLowerHalfTo(lower_half.split('-')[1]);
+      crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
+      crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
+      star_length && setStarLengthFrom(star_length.split('-')[0]);
+      star_length && setStarLengthTo(star_length.split('-')[1]);
+      crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
+      crown_height && setCrownHeightTo(crown_height.split('-')[1]);
+      pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
+      pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
+      pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
+      pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
 
-  //     //inclusion_details States
-  //     milky && setMilkyBI(milky);
-  //     luster && setLusterBI(luster);
-  //     eye_clean && setEyeCleanBI(eye_clean);
-  //     open_crown && setOpenCrownBI(open_crown);
-  //     open_table && setOpenTableBI(open_table);
-  //     side_table && setSideBlackBI(side_table);
-  //     black_table && setBlackTableBI(black_table);
-  //     natural_crown && setNaturalCrownWI(natural_crown);
-  //     open_pavilion && setOpenPavilionBI(open_pavilion);
-  //     natural_girdle && setNaturalGirdleWI(natural_girdle);
-  //     side_inclusion && setSideInclusionWI(side_inclusion);
-  //     table_inclusion && setTableInclusionWI(table_inclusion);
-  //     natural_pavilion && setNaturalPavilionWI(natural_pavilion);
-  //     surface_graining && setSurfaceGrainingWI(surface_graining);
-  //     internal_graining && setInternalGrainingWI(internal_graining);
+      //inclusion_details States
+      milky && setMilkyBI(milky);
+      luster && setLusterBI(luster);
+      eye_clean && setEyeCleanBI(eye_clean);
+      open_crown && setOpenCrownBI(open_crown);
+      open_table && setOpenTableBI(open_table);
+      side_table && setSideBlackBI(side_table);
+      black_table && setBlackTableBI(black_table);
+      natural_crown && setNaturalCrownWI(natural_crown);
+      open_pavilion && setOpenPavilionBI(open_pavilion);
+      natural_girdle && setNaturalGirdleWI(natural_girdle);
+      side_inclusion && setSideInclusionWI(side_inclusion);
+      table_inclusion && setTableInclusionWI(table_inclusion);
+      natural_pavilion && setNaturalPavilionWI(natural_pavilion);
+      surface_graining && setSurfaceGrainingWI(surface_graining);
+      internal_graining && setInternalGrainingWI(internal_graining);
 
-  //     //other_information States
-  //     girdle && setSelectedGirdle(girdle);
-  //     key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
+      //other_information States
+      girdle && setSelectedGirdle(girdle);
+      key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
 
-  //     let popData = data.filter((items: any, dataIndex: number) => {
-  //       return dataIndex !== index;
-  //     });
-  //     setAddSearches(popData);
-  //     // localStorage.removeItem('Search');
+      let popData = data.filter((items: any, dataIndex: number) => {
+        return dataIndex !== index;
+      });
+      setAddSearches(popData);
+      // localStorage.removeItem('Search');
 
-  //     // setAddSearches(data);
-  //   }
-  // }, []);
+      // setAddSearches(data);
+    }
+  }, []);
 
   useEffect(() => {
     const queryParams = generateQueryParams({
@@ -1751,8 +1754,8 @@ const AdvanceSearch = () => {
           JSON.stringify([...addSearches, setDataOnLocalStorage])
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
-
-        router.push('/search/result');
+       
+        router.push(`/search?route=${JSON.parse(localStorage.getItem('Search')!).length}`);
       }
     } else {
       setIsError(true);

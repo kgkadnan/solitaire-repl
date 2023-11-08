@@ -6,7 +6,7 @@ import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import {
@@ -29,6 +29,8 @@ import {
 import { Notification } from '@/components/notification';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
+  const subRoute=useSearchParams().get('route');
+
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(
     (store) => store.notificationBadge.status
@@ -57,8 +59,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: '/search/form',
-      isActive: currentRoute === '/search/form',
+      link: '/search?route=form',
+      isActive: (currentRoute === '/search' && subRoute==='form'),
     },
     {
       label: ManageLocales('app.topNav.myCart'),
@@ -69,7 +71,7 @@ export const TopNavigationBar = () => {
 
   const handleButtonClick = (label: string, link: string) => {
     localStorage.removeItem('Search');
-    router.push(`${link}?lang=en`);
+    router.push(`${link}`);
     topNavData.forEach((navData) => {
       if (navData.label !== label) {
         navData.isActive = false;
