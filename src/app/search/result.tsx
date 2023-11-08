@@ -22,15 +22,14 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IYourSelection, Product, TableColumn } from './interface';
+import { IYourSelection, Product, TableColumn } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { ManageListingSequenceResponse } from '../../my-account/manage-diamond-sequence/interface';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 
-const SearchResults = () => {
+const SearchResults = ({ data }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  let currentPath = usePathname();
 
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
@@ -63,12 +62,6 @@ const SearchResults = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
-
-  let { data, error, isLoading, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: 300,
-    url: searchUrl,
-  });
 
   let [downloadExcel] = useDownloadExcelMutation();
 
@@ -188,7 +181,7 @@ const SearchResults = () => {
             }
           })
           .catch((e) => {
-            console.log('error', error);
+            console.log('error', e);
           });
         setIsCheck([]);
         setIsCheckAll(false);
@@ -224,7 +217,7 @@ const SearchResults = () => {
             }
           })
           .catch((e) => {
-            console.log('error', error);
+            console.log('error', e);
           });
       }
       setIsCheck([]);

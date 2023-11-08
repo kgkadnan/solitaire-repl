@@ -28,9 +28,7 @@ interface QueryParameters {
   [key: string]: string | string[];
 }
 
-
-
-const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => void }) => {
+const AdvanceSearch = () => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
@@ -1754,26 +1752,16 @@ const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => v
           JSON.stringify([...addSearches, setDataOnLocalStorage])
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
-       
-        router.push(`/search?route=${JSON.parse(localStorage.getItem('Search')!).length}`);
+
+        router.push(
+          `/search?route=${
+            JSON.parse(localStorage.getItem('Search')!).length + 2
+          }`
+        );
       }
     } else {
       setIsError(true);
       setErrorText('Please select some parameter before initiating search');
-    }
-  };
-
-  const handleAddAnotherSearch = async () => {
-    // handleAddSearchIndex();
-    if (addSearches.length < 4) {
-      //call previous serach api
-      // setSavedSearches([...savedSearches, prepareSearchParam()]);
-
-      handleAddSearches();
-      handleReset();
-    } else {
-      setShowToast(true);
-      setToastErrorMessage('Add search limit exceeded');
     }
   };
 

@@ -1,23 +1,23 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import EditIcon from '@public/assets/icons/edit.svg';
 import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
 import AdvanceSearch from './form';
+import SavedSearch from './saved';
+import SearchResults from './result';
 
 function SearchResultLayout({ children }: { children: React.ReactNode }) {
   const subRoute = useSearchParams().get('route');
 
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   const [searchUrl, setSearchUrl] = useState('');
   const [myProfileRoutes, setMyProfileRoutes] = useState([
@@ -35,17 +35,19 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
   const computeRouteAndComponentRenderer = () => {
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!)}`;
+    else return `Search Results ${parseInt(subRoute!) - 2}`;
   };
-  const [pathU, setPathU] = useState(computeRouteAndComponentRenderer());
+  const [headerPath, setheaderPath] = useState(
+    computeRouteAndComponentRenderer()
+  );
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
     limit: 300,
     url: searchUrl,
   });
-  console.log(pathU, 'pathU');
+
   useEffect(() => {
-    setPathU(computeRouteAndComponentRenderer());
+    setheaderPath(computeRouteAndComponentRenderer());
   }, [subRoute]);
 
   const handleScroll = () => {
@@ -65,33 +67,56 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     let yourSelection = localStorage.getItem('Search');
     if (yourSelection) {
       const parseYourSelection = JSON.parse(yourSelection);
-      setYourSelectionData(parseYourSelection);
+      // setYourSelectionData(parseYourSelection);
       // Always fetch data, even on initial load
-      let url = constructUrlParams(parseYourSelection[activeTab + 1]);
+      let url = constructUrlParams(
+        parseYourSelection[activeTab - 1].queryParams
+      );
       setSearchUrl(url);
     }
-  }, [activeTab, data]);
+  }, [activeTab]);
 
   useEffect(() => {
-    let yourSelection = localStorage.getItem('Search');
-    if (yourSelection) {
-      const parseYourSelection = JSON.parse(yourSelection);
+    if (subRoute !== 'form' && subRoute !== 'saved')
+      setActiveTab(parseInt(subRoute!) - 2);
+  }, [subRoute]);
 
-      let remainingRoutes = parseYourSelection.map(
-        (data: any, index: number) => {
-          return {
+  useEffect(() => {
+    let fetchMyAPI = async () => {
+      let yourSelection = localStorage.getItem('Search');
+
+      if (yourSelection) {
+        const parseYourSelection = JSON.parse(yourSelection);
+        // console.log('parseYourSelection', parseYourSelection);
+
+        // Always fetch data, even on initial load
+        // let url = constructUrlParams(parseYourSelection[activeTab + 1]);
+        // console.log('kkkkkkkkkkkkk', url);
+
+        // setSearchUrl(url);
+
+        const newRoutes = parseYourSelection
+          .map((data: any, index: number) => ({
             id: index + 3,
             pathName: `Search Results ${index + 1}`,
             path: index + 3,
-          };
-        }
-      );
-      setMyProfileRoutes([...myProfileRoutes, ...remainingRoutes]);
-    }
+          }))
+          .filter(
+            (newRoute: any) =>
+              !myProfileRoutes.some(
+                (existingRoute) => existingRoute.path === newRoute.path
+              )
+          );
+
+        setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+      }
+    };
+    fetchMyAPI();
   }, [localStorage.getItem('Search')]);
 
-  const handleSearchTab = (index: number) => {
-    setActiveTab(index + 1);
+  const handleSearchTab = (index: number, pathName: string) => {
+    setActiveTab(index);
+    setheaderPath(pathName);
   };
 
   const closeSearch = (removeDataIndex: number) => {
@@ -105,7 +130,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     // // Update the state with the filtered dummyData
     // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
   };
-  console.log(pathU, 'oooooooooo');
+
   return (
     <>
       <div
@@ -116,63 +141,56 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
         <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
           {myProfileRoutes.map(({ id, pathName, path }) => {
             // Check if the current route matches the link's path
-            return (
+            return path === 'form' || path === 'saved' ? (
               <Link
                 className={`flex flex-row p-2.5  text-solitaireTertiary ${
-                  pathU === pathName ? '' : 'hover:text-solitaireQuaternary'
+                  headerPath === pathName
+                    ? ''
+                    : 'hover:text-solitaireQuaternary'
                 }`}
-                onClick={() => setPathU(pathName)}
+                onClick={() => handleSearchTab(0, pathName)}
                 href={`/search?route=${path}`}
                 key={id}
               >
                 <div
                   className={`${
-                    pathU === pathName && 'text-solitaireQuaternary'
+                    headerPath === pathName && 'text-solitaireQuaternary'
                   }`}
                 >
                   {pathName}
                 </div>
               </Link>
-              // <AdvanceSearch/>
+            ) : (
+              <div
+                className={`flex items-center cursor-pointer gap-[8px] rounded-sm `}
+              >
+                {activeTab === parseInt(path) - 2 && (
+                  <Image src={EditIcon} alt="Edit Icon" />
+                )}
+                <Link
+                  className={`flex flex-row p-2.5  text-solitaireTertiary ${
+                    headerPath === pathName
+                      ? ''
+                      : 'hover:text-solitaireQuaternary'
+                  }`}
+                  onClick={() => handleSearchTab(parseInt(path) - 2, pathName)}
+                  href={`/search?route=${path}`}
+                  key={id}
+                >
+                  <div
+                    className={`${
+                      headerPath === pathName && 'text-solitaireQuaternary'
+                    }`}
+                  >
+                    {pathName}
+                  </div>
+                </Link>
+                <div onClick={() => closeSearch(parseInt(path) - 3)}>
+                  <CloseOutline stroke="#8C7459" />
+                </div>
+              </div>
             );
           })}
-
-          {/* <div className="flex items-start justify-start gap-[20px] text-solitaireTertiary pb-3 pt-2">
-            {Object.keys(yourSelectionData).length > 0 &&
-              Object.values(yourSelectionData).map(
-                (yourSelection: any, index: number) => {
-                  return (
-                    <div key={`Search-${index}`}>
-                      <div
-                        style={{
-                          marginRight:
-                            index === yourSelection.length - 1 ? '0px' : '5px',
-                        }}
-                        className={`flex items-center cursor-pointer gap-[8px] rounded-sm ${activeTab === index
-                            ? styles.activeHeaderButtonStyle
-                            : styles.headerButtonStyle
-                          }`}
-                      >
-                        {activeTab === index && (
-                          <div>
-                            <Image src={EditIcon} alt="Edit Icon" />
-                          </div>
-                        )}
-                        <div>
-                          <CustomDisplayButton
-                            displayButtonLabel={`Search Results ${index + 1}`}
-                            handleClick={() => handleSearchTab(index)}
-                          />
-                        </div>
-                        <div onClick={() => closeSearch(index)}>
-                          <CloseOutline stroke="#8C7459" />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                }
-              )}
-          </div> */}
         </div>
       </div>
       <div
@@ -183,12 +201,12 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {pathU === 'Saved Searches' ? (
-            <div>hello</div>
-          ) : pathU === 'New Search' ? (
-            <AdvanceSearch setPathState={setPathU} />
+          {headerPath === 'Saved Searches' ? (
+            <SavedSearch />
+          ) : headerPath === 'New Search' ? (
+            <AdvanceSearch />
           ) : (
-            <div>listing</div>
+            <SearchResults data={data} />
           )}
         </main>
       </div>
