@@ -22,14 +22,14 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IYourSelection, Product, TableColumn } from './interface';
+import { IYourSelection, Product, TableColumn } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { ManageListingSequenceResponse } from '../../my-account/manage-diamond-sequence/interface';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import CustomLoader from '@/components/common/loader';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 
-const SearchResults = () => {
+const SearchResults = ({ data }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -62,12 +62,6 @@ const SearchResults = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
-
-  let { data, error, isLoading, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: 300,
-    url: searchUrl,
-  });
 
   let [downloadExcel] = useDownloadExcelMutation();
 
@@ -301,16 +295,16 @@ const SearchResults = () => {
       ),
     },
     {
-      id: 2,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
+      id: 6,
+      displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
-      fn: () => {},
+      fn: addToCart,
     },
     {
-      id: 3,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
+      id: 2,
+      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
-      fn: addToCart,
+      fn: () => {},
     },
   ];
 
@@ -368,18 +362,6 @@ const SearchResults = () => {
       }
     }
   }, [data, activeTab]); // Include isEffectExecuted in the dependency array
-
-  const closeSearch = (removeDataIndex: number) => {
-    // Filter the dummyData to remove the specified search
-    // const updatedData: Data = {};
-    // Object.keys(dummyData).forEach((key, index) => {
-    //   if (index !== removeDataIndex) {
-    //     updatedData[key] = dummyData[key];
-    //   }
-    // });
-    // // Update the state with the filtered dummyData
-    // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
-  };
 
   const handleRadioChange = (radioValue: string) => {
     setSelectedValue(radioValue);
@@ -556,157 +538,152 @@ const SearchResults = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      {isLoading ? (
-        <CustomLoader />
-      ) : (
-        <>
-          <div className="mb-2">
-            {/* Count Bar  */}
-            <div className="flex justify-between items-center">
-              <div className="flex gap-3">
-                <p>
-                  {ManageLocales('app.searchResult.countBar.pieces')}:
-                  <span className="text-solitaireTertiary ml-[5px]">
-                    {`${isCheck.length}/${data?.count ? data?.count : 0}`}
-                  </span>
-                </p>
-                <p>
-                  {ManageLocales('app.searchResult.countBar.totalAvgDis')}:
-                  <span className="text-solitaireTertiary ml-[5px]">
-                    {averageDiscount.toFixed(2)}
-                  </span>
-                </p>
-                <p>
-                  {ManageLocales('app.searchResult.countBar.totalAmount')}:
-                  <span className="text-solitaireTertiary ml-[5px]">
-                    ${totalAmount.toFixed(2)}
-                  </span>
-                </p>
-              </div>
-              <div className="flex gap-6">
-                {yourSelectionData &&
-                !yourSelectionData[activeTab]?.isSavedSearch ? (
-                  <CustomDisplayButton
-                    displayButtonLabel={'Save this search'}
-                    handleClick={() =>
-                      yourSelectionData[activeTab].saveSearchName.length
-                        ? ''
-                        : setIsInputDialogOpen(true)
-                    }
-                    displayButtonAllStyle={{
-                      displayLabelStyle: `text-solitaireTertiary cursor-pointer`,
-                    }}
-                  />
-                ) : (
-                  ''
-                )}
 
-                <CustomSlider
-                  sheetTriggenContent={
-                    <div className="flex gap-1">
-                      <Image src={sortOutline} alt="sortOutline" width={20} />
-                      <p className="text-solitaireTertiary">Sort by</p>
-                    </div>
+      <>
+        <div className="mb-2">
+          {/* Count Bar  */}
+          <div className="flex justify-between items-center">
+            <div className="flex gap-3">
+              <p>
+                {ManageLocales('app.searchResult.countBar.pieces')}:
+                <span className="text-solitaireTertiary ml-[5px]">
+                  {`${isCheck.length}/${data?.count ? data?.count : 0}`}
+                </span>
+              </p>
+              <p>
+                {ManageLocales('app.searchResult.countBar.totalAvgDis')}:
+                <span className="text-solitaireTertiary ml-[5px]">
+                  {averageDiscount.toFixed(2)}
+                </span>
+              </p>
+              <p>
+                {ManageLocales('app.searchResult.countBar.totalAmount')}:
+                <span className="text-solitaireTertiary ml-[5px]">
+                  ${totalAmount.toFixed(2)}
+                </span>
+              </p>
+            </div>
+            <div className="flex gap-6">
+              {yourSelectionData &&
+              !yourSelectionData[activeTab]?.isSavedSearch ? (
+                <CustomDisplayButton
+                  displayButtonLabel={'Save this search'}
+                  handleClick={() =>
+                    yourSelectionData[activeTab].saveSearchName.length
+                      ? ''
+                      : setIsInputDialogOpen(true)
                   }
-                  sheetContentStyle={styles.sheetContentStyle}
-                  sheetContent={
-                    <>
-                      <div className={styles.sheetMainHeading}>
-                        <p>
-                          {ManageLocales(
-                            'app.searchResult.slider.sortBy.filter'
-                          )}
-                        </p>
-                      </div>
-
-                      <div className={styles.radioButtonMainDiv}>
-                        <CustomRadioButton
-                          radioData={[
-                            {
-                              id: '0',
-                              value: '0',
-                              radioButtonLabel: 'Default',
-                            },
-                          ]}
-                          onChange={handleRadioChange}
-                          radioButtonAllStyles={radioButtonDefaultStyles}
-                        />
-
-                        {radioDataList.map((radioData, index) => (
-                          <CustomRadioButton
-                            key={index} // Ensure each component has a unique key
-                            radioData={radioData}
-                            onChange={handleRadioChange}
-                            radioButtonAllStyles={radioButtonStyles}
-                          />
-                        ))}
-                      </div>
-
-                      {/* button */}
-                      <div className={styles.customButtonDiv}>
-                        <CustomDisplayButton
-                          displayButtonLabel={ManageLocales(
-                            'app.searchResult.slider.sortBy.cancel'
-                          )}
-                          displayButtonAllStyle={{
-                            displayButtonStyle: styles.transparent,
-                          }}
-                          // handleClick={showButtonHandleClick}
-                        />
-                        <CustomDisplayButton
-                          displayButtonLabel={ManageLocales(
-                            'app.searchResult.slider.sortBy.apply'
-                          )}
-                          displayButtonAllStyle={{
-                            displayButtonStyle: styles.filled,
-                          }}
-                          // handleClick={showButtonHandleClick}
-                        />
-                      </div>
-                    </>
-                  }
+                  displayButtonAllStyle={{
+                    displayLabelStyle: `text-solitaireTertiary cursor-pointer`,
+                  }}
                 />
-              </div>
-            </div>
-          </div>
-          {/* <CustomHeader dummyData={headerData} /> */}
-
-          <CustomDataTable
-            tableRows={rows}
-            tableColumns={tableColumns}
-            checkboxData={checkboxData}
-          />
-
-          <div className="sticky-bottom bg-solitairePrimary mt-3">
-            <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
-              <div className="flex items-center gap-3">
-                <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-md">
-                  xxxxxxx
-                </span>
-                <p className="text-solitaireTertiary text-sm">Memo - Out</p>
-              </div>
-              <div className="flex items-center gap-3">
-                <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-md">
-                  xxxxxxx
-                </span>
-                <p className="text-solitaireTertiary text-sm">In Cart</p>
-              </div>
-            </div>
-
-            <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
-              {isError && (
-                <div className="w-[30%]">
-                  <p className="text-red-700 text-base ">{errorText}</p>
-                </div>
+              ) : (
+                ''
               )}
-              <CustomFooter
-                footerButtonData={footerButtonData}
-                noBorderTop={styles.paginationContainerStyle}
+
+              <CustomSlider
+                sheetTriggenContent={
+                  <div className="flex gap-1">
+                    <Image src={sortOutline} alt="sortOutline" width={20} />
+                    <p className="text-solitaireTertiary">Sort by</p>
+                  </div>
+                }
+                sheetContentStyle={styles.sheetContentStyle}
+                sheetContent={
+                  <>
+                    <div className={styles.sheetMainHeading}>
+                      <p>
+                        {ManageLocales('app.searchResult.slider.sortBy.filter')}
+                      </p>
+                    </div>
+
+                    <div className={styles.radioButtonMainDiv}>
+                      <CustomRadioButton
+                        radioData={[
+                          {
+                            id: '0',
+                            value: '0',
+                            radioButtonLabel: 'Default',
+                          },
+                        ]}
+                        onChange={handleRadioChange}
+                        radioButtonAllStyles={radioButtonDefaultStyles}
+                      />
+
+                      {radioDataList.map((radioData, index) => (
+                        <CustomRadioButton
+                          key={index} // Ensure each component has a unique key
+                          radioData={radioData}
+                          onChange={handleRadioChange}
+                          radioButtonAllStyles={radioButtonStyles}
+                        />
+                      ))}
+                    </div>
+
+                    {/* button */}
+                    <div className={styles.customButtonDiv}>
+                      <CustomDisplayButton
+                        displayButtonLabel={ManageLocales(
+                          'app.searchResult.slider.sortBy.cancel'
+                        )}
+                        displayButtonAllStyle={{
+                          displayButtonStyle: styles.transparent,
+                        }}
+                        // handleClick={showButtonHandleClick}
+                      />
+                      <CustomDisplayButton
+                        displayButtonLabel={ManageLocales(
+                          'app.searchResult.slider.sortBy.apply'
+                        )}
+                        displayButtonAllStyle={{
+                          displayButtonStyle: styles.filled,
+                        }}
+                        // handleClick={showButtonHandleClick}
+                      />
+                    </div>
+                  </>
+                }
               />
             </div>
           </div>
-        </>
-      )}
+        </div>
+        {/* <CustomHeader dummyData={headerData} /> */}
+
+        <CustomDataTable
+          tableRows={rows}
+          tableColumns={tableColumns}
+          checkboxData={checkboxData}
+        />
+
+        <div className="sticky-bottom bg-solitairePrimary mt-3">
+          <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
+            <div className="flex items-center gap-3">
+              <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-md">
+                xxxxxxx
+              </span>
+              <p className="text-solitaireTertiary text-sm">Memo - Out</p>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-md">
+                xxxxxxx
+              </span>
+              <p className="text-solitaireTertiary text-sm">In Cart</p>
+            </div>
+          </div>
+
+          <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
+            {isError && (
+              <div className="w-[30%]">
+                <p className="text-red-700 text-base ">{errorText}</p>
+              </div>
+            )}
+            <CustomFooter
+              footerButtonData={footerButtonData}
+              noBorderTop={styles.paginationContainerStyle}
+            />
+          </div>
+        </div>
+      </>
     </>
   );
 };

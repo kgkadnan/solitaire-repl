@@ -1,6 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import styles from './advance-search.module.scss';
+import styles from './form.module.scss';
 import { CustomRadioButton } from 'src/components/common/buttons/radio-button';
 import { CustomSelectionButton } from 'src/components/common/buttons/selection-button';
 import CustomImageTile from 'src/components/common/image-tile';
@@ -21,6 +21,7 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
+import Link from 'next/link';
 
 interface QueryParameters {
   [key: string]: string | string[];
@@ -586,7 +587,7 @@ const AdvanceSearch = () => {
         return dataIndex !== index;
       });
       setAddSearches(popData);
-      localStorage.removeItem('Search');
+      // localStorage.removeItem('Search');
 
       // setAddSearches(data);
     }
@@ -1702,25 +1703,15 @@ const AdvanceSearch = () => {
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
 
-        router.push('/search/result');
+        router.push(
+          `/search?route=${
+            JSON.parse(localStorage.getItem('Search')!).length + 2
+          }`
+        );
       }
     } else {
       setIsError(true);
       setErrorText('Please select some parameter before initiating search');
-    }
-  };
-
-  const handleAddAnotherSearch = async () => {
-    // handleAddSearchIndex();
-    if (addSearches.length < 4) {
-      //call previous serach api
-      // setSavedSearches([...savedSearches, prepareSearchParam()]);
-
-      handleAddSearches();
-      handleReset();
-    } else {
-      setShowToast(true);
-      setToastErrorMessage('Add search limit exceeded');
     }
   };
 

@@ -16,7 +16,7 @@ import { CustomDropdown } from '../dropdown';
 import { useAddCartMutation } from '@/features/api/cart';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
-import { Product } from '@/app/search/result/interface';
+import { Product } from '@/app/search/result-interface';
 import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';

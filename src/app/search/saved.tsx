@@ -39,7 +39,7 @@ import {
   IKeyLabelMapping,
   ISavedSearchData,
   Item,
-} from './interface';
+} from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
 
 const SavedSearch = () => {
