@@ -363,7 +363,6 @@ const SavedSearch = () => {
     setNumberOfPages(
       Math.ceil(savedSearchData?.count / savedSearchData?.limit)
     );
-    console.log('specificSavedSearchData', specificSavedSearchData);
 
     setSavedSearchData(specificSavedSearchData);
 
