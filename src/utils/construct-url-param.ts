@@ -30,6 +30,5 @@ export function constructUrlParams(data: any) {
       );
     }
   }
-
   return params.join('&');
 }
