@@ -28,9 +28,7 @@ interface QueryParameters {
   [key: string]: string | string[];
 }
 
-
-
-const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => void }) => {
+const AdvanceSearch = () => {
   const router = useRouter();
   const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
@@ -1754,8 +1752,10 @@ const AdvanceSearch = ({ setPathState }: { setPathState: (newState: string) => v
           JSON.stringify([...addSearches, setDataOnLocalStorage])
           // JSON.stringify([ ,setDataOnLocalStorage])
         );
-       
-        router.push(`/search?route=${JSON.parse(localStorage.getItem('Search')!).length}`);
+
+        router.push(
+          `/search?route=${JSON.parse(localStorage.getItem('Search')!).length}`
+        );
       }
     } else {
       setIsError(true);
