@@ -42,7 +42,7 @@
     var(--solitaire-senary)
   ); /* Change this to the desired background color */
   padding: 0px 5px;
-  border-radius: 15px;
+  border-radius: 10px;
   color: hsl(
     var(--solitaire-tertiary)
   ); /* Change this to the desired text color */
@@ -58,25 +58,38 @@
 
 
 
+
 .table th:nth-child(1),
 .table td:nth-child(1) {
-    border-bottom-left-radius: 25%;
+  border-bottom-left-radius: 25%;
   border-top-left-radius: 25%;
     position: sticky;
     left: 0;
-    width: 20px;
-    min-width: 20px;
-    padding-left: 8px;
+    width: 10px;
+    min-width: 10px;
+    padding-left: 10px;
 }
 
+.table th:nth-child(2),
+.table td:nth-child(2) {
+    position: sticky;
+    /* 1st cell left/right padding + 1st cell width + 1st cell left/right border width */
+    /* 0 + 5 + 150 + 5 + 1 */
+    left: 45px;
+    width: 30px;
+    min-width: 30px;
+}
 
-.table td:nth-child(1) {
+.table td:nth-child(1),
+.table td:nth-child(2) {
   background-color: hsl(var(--solitaire-primary));
 }
 
-.table th:nth-child(1){
+.table th:nth-child(1),
+.table th:nth-child(2) {
     z-index: 2;
 }
+
 
 
 .tableHead,
