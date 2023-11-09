@@ -18,6 +18,16 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
 
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+
+  const computeRouteAndComponentRenderer = () => {
+    if (subRoute === 'saved') return 'Saved Searches';
+    else if (subRoute === 'form') return 'New Search';
+    else return `Search Results ${parseInt(subRoute!) - 2}`;
+  };
+  const [headerPath, setheaderPath] = useState(
+    computeRouteAndComponentRenderer()
+  );
+  const [yourSelectionData, setYourSelectionData] = useState<string[]>([]);
   const [activeTab, setActiveTab] = useState(0);
   const [searchUrl, setSearchUrl] = useState('');
   const [myProfileRoutes, setMyProfileRoutes] = useState([
@@ -32,14 +42,8 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
       path: 'saved',
     },
   ]);
-  const computeRouteAndComponentRenderer = () => {
-    if (subRoute === 'saved') return 'Saved Searches';
-    else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!) - 2}`;
-  };
-  const [headerPath, setheaderPath] = useState(
-    computeRouteAndComponentRenderer()
-  );
+
+  const [pathU, setPathU] = useState(computeRouteAndComponentRenderer());
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
     limit: 300,

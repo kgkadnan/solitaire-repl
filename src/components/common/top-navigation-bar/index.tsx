@@ -1,11 +1,12 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
+import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import styles from './top-navigation-bar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import {
@@ -15,23 +16,29 @@ import {
 } from '@/components/ui/popover';
 import { CustomCalculator } from '@/components/calculator';
 import { CustomSlider } from '../slider';
-import { Notification } from '@/components/notification';
 import {
   useGetAllNotificationQuery,
   useUpdateNotificationMutation,
 } from '@/features/api/notification';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
-
+import {
+  NotificationItem,
+  NotificationUpdate,
+} from '@/components/notification/notification-interface';
+import { Notification } from '@/components/notification';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
+  const subRoute=useSearchParams().get('route');
+
   const dispatch = useAppDispatch();
-  const notificationBadgeStoreData: any = useAppSelector(
+  const notificationBadgeStoreData: boolean = useAppSelector(
     (store) => store.notificationBadge.status
   );
 
+  // let badgeData = notificationBadgeStoreData.status;
+
   const router = useRouter();
-  const [activeButton, setActiveButton] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [offset, setOffset] = useState(0);
@@ -52,31 +59,19 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: '/advance-search',
-      isActive: currentRoute === '/advance-search',
-    },
-    {
-      label: ManageLocales('app.topNav.previousSearch'),
-      link: '/previous-search',
-      isActive: currentRoute === '/previous-search',
-    },
-    {
-      label: ManageLocales('app.topNav.wishlist'),
-      link: '/wishlist',
-      isActive: currentRoute === '/wishlist',
+      link: '/search?route=form',
+      isActive: (currentRoute === '/search' && subRoute==='form'),
     },
     {
       label: ManageLocales('app.topNav.myCart'),
-      link: '/my-cart',
-      isActive: currentRoute === '/my-cart',
+      link: 'my-cart/active',
+      isActive: currentRoute === '/my-cart/active',
     },
   ];
 
   const handleButtonClick = (label: string, link: string) => {
     localStorage.removeItem('Search');
-    router.push(`${link}?lang=en`);
-    setActiveButton(label);
-
+    router.push(`${link}`);
     topNavData.forEach((navData) => {
       if (navData.label !== label) {
         navData.isActive = false;
@@ -84,30 +79,31 @@ export const TopNavigationBar = () => {
     });
   };
 
-  const handleScroll = () => {
+  const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
-  };
+  }, [prevScrollPos]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
-  }, [prevScrollPos, data]);
+  }, [prevScrollPos, data, handleScroll]);
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    let notificationMapData = data?.data?.map((item: any) => ({
+    let notificationMapData = data?.data?.map((item: NotificationItem) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread',
     }));
 
-    const unreadNotifications = notificationMapData?.filter(
-      (item: any) => item.status === 'unread'
-    );
+    const unreadNotifications: NotificationUpdate[] =
+      notificationMapData?.filter(
+        (item: NotificationUpdate) => item.status === 'unread'
+      );
 
     unreadNotifications.length
       ? await updateNotification(unreadNotifications)
@@ -140,6 +136,7 @@ export const TopNavigationBar = () => {
               />
             </div>
           ))}
+          {/* <SearchIcon className={styles.stroke} alt="advance-search" /> */}
           <Popover>
             <PopoverTrigger>
               <CalculatorIcon role="button" className={styles.iconColor} />

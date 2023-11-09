@@ -10,22 +10,9 @@ import {
 } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '@/components/common/no-data-found';
-interface INotificationData {
-  id: string;
-  customer_id: string;
-  template: string;
-  parameter: {
-    stoneId: string;
-    abc: string;
-  };
-  category: string;
-  sub_category: string;
-  status: string;
-  created_at: string;
-  has_cta: boolean;
-  external_link: string;
-  redirect_identifier: string[];
-}
+import { INotificationData } from './all-notification-interface';
+import { NotificationParameter } from '@/components/notification/notification-interface';
+
 const Notification = () => {
   const [notificationData, setNotificationData] = useState<INotificationData[]>(
     []
@@ -38,7 +25,10 @@ const Notification = () => {
     setNotificationData(data?.data);
   }, [data, notificationData]);
 
-  function stringWithHTMLReplacement(template: string, parameter: any) {
+  function stringWithHTMLReplacement(
+    template: string,
+    parameter: NotificationParameter
+  ) {
     const parts = template.split('${{');
 
     const modifiedString = parts.map((part, index) => {
@@ -48,7 +38,9 @@ const Notification = () => {
         const [paramName] = part.split('}}');
         return (
           <span key={index}>
-            <span style={{ fontWeight: 600 }}>{parameter[paramName]}</span>
+            <span style={{ fontWeight: 600 }}>
+              {parameter[paramName as keyof NotificationParameter]}
+            </span>
             {part.substr(paramName.length + 2)}
           </span>
         );

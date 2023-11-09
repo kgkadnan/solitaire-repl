@@ -9,14 +9,7 @@ import {
   useGetAllNotificationSettingQuery,
   useUpdateNotificationSettingMutation,
 } from '@/features/api/notification-setting';
-
-interface INotificationSetting {
-  type: string;
-  subscription: {
-    category: string;
-    is_subscribed: boolean;
-  }[];
-}
+import { INotificationSetting } from './setting-interface';
 
 const NotificationSetting = () => {
   const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });

@@ -1,17 +1,29 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
+import React from 'react';
 import PreviousSearch from '@app/previous-search/page';
 import { fireEvent, screen, waitFor } from '@testing-library/react';
 import { renderWithProviders } from '@/mock-handlers/test-utils';
 import { setupPreviousSearchHandlers } from '@/mock-handlers/previous-search';
+import Image from 'next/image';
 
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (
-    props: React.JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLImageElement> &
-      ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} />,
-}));
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: ({
+      src,
+      alt,
+      width,
+      height,
+      ...rest
+    }: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      // Add more specific types for other props if needed
+      // ...rest: SomeType;
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+  };
+});
 
 describe('PreviousSearch Component', () => {
   // Common test setup

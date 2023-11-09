@@ -1,14 +1,26 @@
-import React, { ClassAttributes, ImgHTMLAttributes } from 'react';
-import { render, fireEvent } from '@testing-library/react';
+import React from 'react';
+import { render } from '@testing-library/react';
 import CustomSearchResultCard from '@components/common/search-result-card';
-jest.mock('next/image', () => ({
-  __esModule: true,
-  default: (
-    props: JSX.IntrinsicAttributes &
-      ClassAttributes<HTMLImageElement> &
-      ImgHTMLAttributes<HTMLImageElement>
-  ) => <img {...props} />,
-}));
+import Image from 'next/image';
+jest.mock('next/image', () => {
+  return {
+    __esModule: true,
+    default: ({
+      src,
+      alt,
+      width,
+      height,
+      ...rest
+    }: {
+      src: string;
+      alt: string;
+      width: number;
+      height: number;
+      // Add more specific types for other props if needed
+      // ...rest: SomeType;
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+  };
+});
 describe('CustomSearchResultCard', () => {
   const cardData = {
     cardId: '1',

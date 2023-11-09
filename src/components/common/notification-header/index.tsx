@@ -20,7 +20,7 @@ const CustomNotificationHeader = () => {
   ];
 
   const handleButtonClick = (link: string) => {
-    router.push(`${link}?lang=en`);
+    router.push(`${link}`);
   };
 
   return (

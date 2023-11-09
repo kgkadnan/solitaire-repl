@@ -1,4 +1,4 @@
-import { StaticImport } from '../my-cart/page';
+import { StaticImport } from '../../my-cart/active/page';
 
 export interface TableColumn {
   label: string;
@@ -276,4 +276,10 @@ export interface Product {
     calculated_tax: string | null;
     tax_rates: string | null;
   }[];
+}
+
+export interface IYourSelection {
+  saveSearchName: string;
+  isSavedSearch: boolean;
+  queryParams: string[];
 }

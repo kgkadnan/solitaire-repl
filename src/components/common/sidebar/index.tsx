@@ -1,5 +1,5 @@
 'use client';
-import { useRouter, usePathname } from 'next/navigation';
+import { useRouter, usePathname, useSearchParams } from 'next/navigation';
 import { useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
@@ -20,15 +20,11 @@ import { ManageLocales } from '@/utils/translate';
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
-<<<<<<< Updated upstream
 
-=======
   const subRoute = useSearchParams().get('route');
->>>>>>> Stashed changes
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
   }, [router]);
-
   const imageData: IImageTileProps[] = [
     {
       src: <Dashboard className={styles.stroke} alt="dashboard" />,
@@ -45,13 +41,8 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-<<<<<<< Updated upstream
-      link: 'advance-search',
-      isActive: currentRoute === '/advance-search',
-=======
       link: '/search?route=form',
       isActive: currentRoute === '/search' && subRoute === 'form',
->>>>>>> Stashed changes
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -62,13 +53,8 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-<<<<<<< Updated upstream
-      link: '/saved-search',
-      isActive: currentRoute === '/saved-search',
-=======
       link: '/search?route=saved',
       isActive: currentRoute === '/search' && subRoute === 'saved',
->>>>>>> Stashed changes
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
@@ -116,42 +102,40 @@ const SideBar = () => {
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
   const handleChange = (nav: string, link?: string) => {
-    localStorage.removeItem("Search");
+    localStorage.removeItem('Search');
 
-    router.push(`${link!}?lang=en`);
+    router.push(`${link!}`);
     setSelectedNav(() => [nav]);
   };
 
   return (
-    <>
+    <div
+      className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+    >
       <div
-        className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+        className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
+        onClick={onKGKLogoContainerClick}
       >
-        <div
-          className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
-          onClick={onKGKLogoContainerClick}
-        >
-          <Image
-            className="mx-auto"
-            alt="KGKlogo"
-            src={KGKlogo}
-            width="42"
-            height="55"
+        <Image
+          className="mx-auto"
+          alt="KGKlogo"
+          src={KGKlogo}
+          width="42"
+          height="55"
+        />
+      </div>
+      <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
+        <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
+          <CustomImageTile
+            imageTileData={imageData}
+            overriddenStyles={SideBarStyles}
+            selectedTile={selectedNav}
+            handleSelectTile={handleChange}
+            isNavOption={true}
           />
         </div>
-        <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
-          <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
-            <CustomImageTile
-              imageTileData={imageData}
-              overriddenStyles={SideBarStyles}
-              selectedTile={selectedNav}
-              handleSelectTile={handleChange}
-              isNavOption={true}
-            />
-          </div>
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 

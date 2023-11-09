@@ -16,7 +16,7 @@ import { CustomDropdown } from '../dropdown';
 import { useAddCartMutation } from '@/features/api/cart';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
-import { Product } from '@/app/search-result/interface';
+import { Product } from '@/app/search/result/interface';
 import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
@@ -166,6 +166,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     discount: 'Discount',
     amount: 'Amt($)',
   };
+
   const basicDetailsLabelMapping: KeyLabelMapping = {
     lot_id: 'Stock No.',
     rpt_number: 'Report No.',
@@ -267,7 +268,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
-                <th></th>
+                {/* Empty table head for Diamond status*/}
+
                 <th>
                   <div className={`flex text-center`}>
                     <Checkbox
@@ -294,14 +296,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                   className={styles.tableRow}
                   onClick={() => handleClick(row.id)}
                 >
-                  <td
-                    className={` ${
-                      row.diamond_status == 'A' ? styles.availableStatus : ''
-                    }
-                  `}
-                  >
-                    {row.diamond_status}
-                  </td>
                   <td>
                     <CustomCheckBox
                       data={row.id}
@@ -328,23 +322,21 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                           >
                             <CustomSlider
                               sheetTriggenContent={
-                                <>
-                                  <div
-                                    onClick={() => {
-                                      setActiveTab('3');
-                                      setSliderData([tableRows[index]]);
-                                      setDiamondDetailIframeUrl('');
-                                      setDiamondDetailImageUrl('');
-                                    }}
-                                  >
-                                    <Image
-                                      src={imageOutline}
-                                      alt={`${row?.lot_id} GIA Image`}
-                                      width={20}
-                                      height={20}
-                                    />
-                                  </div>
-                                </>
+                                <div
+                                  onClick={() => {
+                                    setActiveTab('3');
+                                    setSliderData([tableRows[index]]);
+                                    setDiamondDetailIframeUrl('');
+                                    setDiamondDetailImageUrl('');
+                                  }}
+                                >
+                                  <Image
+                                    src={imageOutline}
+                                    alt={`${row?.lot_id} GIA Image`}
+                                    width={20}
+                                    height={20}
+                                  />
+                                </div>
                               }
                               sheetContentStyle={styles.sheetContentStyle}
                               sheetContent={
