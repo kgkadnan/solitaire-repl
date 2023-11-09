@@ -7,7 +7,6 @@ export function constructUrlParams(data: any) {
         // If the key is 'carat', process as range values
         data[key].forEach((value: any) => {
           const [min, max] = value.split('-').map(Number);
-          console.log('value', min, max);
           if (!isNaN(max))
             params.push(`${encodeURIComponent(key)}[lte]=${max}`);
           if (!isNaN(min))
@@ -31,7 +30,6 @@ export function constructUrlParams(data: any) {
       );
     }
   }
-  console.log('aliasger', params);
 
   return params.join('&');
 }

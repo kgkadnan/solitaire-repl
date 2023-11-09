@@ -13,6 +13,7 @@ import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
+import searchResultReducer from './features/search-result/search-result';
 import searchListReducer from './features/search/search-list';
 import previousSearchReducer from './features/previous-search/previous-search';
 import savedSearchReducer from './features/saved-search/saved-search';
@@ -21,6 +22,7 @@ import { manageListingSequenceApi } from './features/api/manage-listing-sequence
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
+  searchResult: searchResultReducer,
   searchList: searchListReducer,
   previousSearch: previousSearchReducer,
   savedSearch: savedSearchReducer,

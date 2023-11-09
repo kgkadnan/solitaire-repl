@@ -12,6 +12,7 @@ interface ISliderProps {
   sheetContentStyle?: string;
   sheetContent: React.ReactNode;
   cardTimeout?: boolean;
+  isSliderOpen?: boolean;
 }
 
 export const CustomSlider: React.FC<ISliderProps> = ({
@@ -20,10 +21,11 @@ export const CustomSlider: React.FC<ISliderProps> = ({
   sheetContentStyle,
   sheetContent,
   cardTimeout,
+  isSliderOpen,
 }) => {
   return (
     <>
-      <Sheet>
+      <Sheet open={isSliderOpen}>
         {!cardTimeout ? (
           <SheetTrigger className={sheetTriggerStyle}>
             {sheetTriggenContent}

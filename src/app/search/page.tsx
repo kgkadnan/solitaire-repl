@@ -1,7 +1,7 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import React, { useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
@@ -12,9 +12,13 @@ import { useGetAllProductQuery } from '@/features/api/product';
 import AdvanceSearch from './form';
 import SavedSearch from './saved';
 import SearchResults from './result';
+import { modifySearchResult } from '@/features/search-result/search-result';
+import { useAppDispatch } from '@/hooks/hook';
 
-function SearchResultLayout({ children }: { children: React.ReactNode }) {
+function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -37,6 +41,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     else if (subRoute === 'form') return 'New Search';
     else return `Search Results ${parseInt(subRoute!) - 2}`;
   };
+
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
   );
@@ -56,6 +61,31 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     setPrevScrollPos(currentScrollPos);
   };
 
+  const closeSearch = (removeDataIndex: number) => {
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
+    if (yourSelection[removeDataIndex]) {
+      let closeSpecificSearch = yourSelection.filter(
+        (items: any, index: number) => {
+          return index !== removeDataIndex;
+        }
+      );
+      localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+      let updateData = myProfileRoutes.filter((items, index) => {
+        return index !== removeDataIndex + 2;
+      });
+
+      if (removeDataIndex === 0) {
+        router.push(`search?route=form`);
+      } else {
+        router.push(`/search?route=${removeDataIndex + 2}`);
+      }
+      setMyProfileRoutes(updateData);
+      setheaderPath(`Search Results ${removeDataIndex}`);
+      setActiveTab(removeDataIndex);
+    }
+  };
+
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
@@ -63,18 +93,16 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
     };
   }, [prevScrollPos]);
 
-  useEffect(() => {
-    let yourSelection = localStorage.getItem('Search');
-    if (yourSelection) {
-      const parseYourSelection = JSON.parse(yourSelection);
-      // setYourSelectionData(parseYourSelection);
-      // Always fetch data, even on initial load
-      let url = constructUrlParams(
-        parseYourSelection[activeTab - 1].queryParams
-      );
-      setSearchUrl(url);
-    }
-  }, [activeTab]);
+  // useEffect(() => {
+  //   let yourSelection = localStorage.getItem('Search');
+  //   if (yourSelection) {
+  //     const parseYourSelection = JSON.parse(yourSelection);
+  //     let url = constructUrlParams(
+  //       parseYourSelection[activeTab - 1]?.queryParams
+  //     );
+  //     setSearchUrl(url);
+  //   }
+  // }, [activeTab]);
 
   useEffect(() => {
     if (subRoute !== 'form' && subRoute !== 'saved')
@@ -87,13 +115,13 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
-        // console.log('parseYourSelection', parseYourSelection);
 
         // Always fetch data, even on initial load
-        // let url = constructUrlParams(parseYourSelection[activeTab + 1]);
-        // console.log('kkkkkkkkkkkkk', url);
+        let url = constructUrlParams(
+          parseYourSelection[activeTab - 1]?.queryParams
+        );
 
-        // setSearchUrl(url);
+        setSearchUrl(url);
 
         const newRoutes = parseYourSelection
           .map((data: any, index: number) => ({
@@ -112,23 +140,17 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search')]);
+  }, [localStorage.getItem('Search')!, activeTab]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     setActiveTab(index);
+    console.log('pathName', pathName);
     setheaderPath(pathName);
   };
 
-  const closeSearch = (removeDataIndex: number) => {
-    // Filter the dummyData to remove the specified search
-    // const updatedData: Data = {};
-    // Object.keys(dummyData).forEach((key, index) => {
-    //   if (index !== removeDataIndex) {
-    //     updatedData[key] = dummyData[key];
-    //   }
-    // });
-    // // Update the state with the filtered dummyData
-    // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
+  const editSearchResult = (activeTab: number) => {
+    dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
+    router.push(`/search?route=form&&edit=search-result`);
   };
 
   return (
@@ -165,7 +187,9 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
                 className={`flex items-center cursor-pointer gap-[8px] rounded-sm `}
               >
                 {activeTab === parseInt(path) - 2 && (
-                  <Image src={EditIcon} alt="Edit Icon" />
+                  <div onClick={() => editSearchResult(activeTab)}>
+                    <Image src={EditIcon} alt="Edit Icon" />
+                  </div>
                 )}
                 <Link
                   className={`flex flex-row p-2.5  text-solitaireTertiary ${
