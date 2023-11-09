@@ -354,7 +354,7 @@ const SearchResults = ({ data }: any) => {
       const parseYourSelection = JSON.parse(yourSelection);
 
       setYourSelectionData(parseYourSelection);
-      let url = constructUrlParams(parseYourSelection[activeTab].queryParams);
+      let url = constructUrlParams(parseYourSelection[activeTab]?.queryParams);
       setSearchUrl(url);
 
       if (data?.products?.length) {
