@@ -388,11 +388,29 @@ const SavedSearch = () => {
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
 
-      if (data.length) {
-        let abc = [...data, cardClickData[0].meta_data];
-        localStorage.setItem('Search', JSON.stringify(abc));
+      if (data?.length) {
+        let localStorageData = [
+          ...data,
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
+
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
         router.push(`/search?route=${data.length + 3}`);
       } else {
+        let localStorageData = [
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
+
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
+        router.push(`/search?route=${3}`);
       }
     }
   };
