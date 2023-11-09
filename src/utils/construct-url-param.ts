@@ -31,6 +31,7 @@ export function constructUrlParams(data: any) {
       );
     }
   }
+  console.log('aliasger', params);
 
   return params.join('&');
 }

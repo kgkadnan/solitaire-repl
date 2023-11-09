@@ -22,15 +22,14 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IYourSelection, Product, TableColumn } from './interface';
+import { IYourSelection, Product, TableColumn } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { ManageListingSequenceResponse } from '../../my-account/manage-diamond-sequence/interface';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 
-const SearchResults = () => {
+const SearchResults = ({ data }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
-  let currentPath = usePathname();
 
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
@@ -63,12 +62,6 @@ const SearchResults = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
-
-  let { data, error, isLoading, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: 300,
-    url: searchUrl,
-  });
 
   let [downloadExcel] = useDownloadExcelMutation();
 
@@ -188,7 +181,7 @@ const SearchResults = () => {
             }
           })
           .catch((e) => {
-            console.log('error', error);
+            console.log('error', e);
           });
         setIsCheck([]);
         setIsCheckAll(false);
@@ -224,7 +217,7 @@ const SearchResults = () => {
             }
           })
           .catch((e) => {
-            console.log('error', error);
+            console.log('error', e);
           });
       }
       setIsCheck([]);
@@ -336,16 +329,16 @@ const SearchResults = () => {
       ),
     },
     {
-      id: 2,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
+      id: 6,
+      displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
-      fn: () => {},
+      fn: addToCart,
     },
     {
-      id: 3,
-      displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
+      id: 2,
+      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
-      fn: addToCart,
+      fn: () => {},
     },
   ];
 
@@ -403,18 +396,6 @@ const SearchResults = () => {
       }
     }
   }, [data, activeTab]); // Include isEffectExecuted in the dependency array
-
-  const closeSearch = (removeDataIndex: number) => {
-    // Filter the dummyData to remove the specified search
-    // const updatedData: Data = {};
-    // Object.keys(dummyData).forEach((key, index) => {
-    //   if (index !== removeDataIndex) {
-    //     updatedData[key] = dummyData[key];
-    //   }
-    // });
-    // // Update the state with the filtered dummyData
-    // setRows([...Object.values(updatedData)[0]]); // Assuming you want to show the first search results after closing a search
-  };
 
   const handleRadioChange = (radioValue: string) => {
     setSelectedValue(radioValue);
