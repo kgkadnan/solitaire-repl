@@ -15,6 +15,12 @@ import SearchResults from './result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
 
+interface IMyProfileRoutes {
+  id: number;
+  pathName: string;
+  path: string | number;
+}
+
 function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
   const dispatch = useAppDispatch();
@@ -24,14 +30,14 @@ function SearchResultLayout() {
   const [visible, setVisible] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [searchUrl, setSearchUrl] = useState('');
-  const [myProfileRoutes, setMyProfileRoutes] = useState([
+  const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
-      id: '1',
+      id: 1,
       pathName: ManageLocales('app.searchResult.header.newSearch'),
       path: 'form',
     },
     {
-      id: '2',
+      id: 2,
       pathName: ManageLocales('app.savedSearch.header'),
       path: 'saved',
     },
@@ -60,7 +66,6 @@ function SearchResultLayout() {
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
   };
-
   const closeSearch = (removeDataIndex: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
@@ -70,19 +75,30 @@ function SearchResultLayout() {
           return index !== removeDataIndex;
         }
       );
-      localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
-      let updateData = myProfileRoutes.filter((items, index) => {
+
+      let updateMyProfileRoute = myProfileRoutes.filter((items, index) => {
         return index !== removeDataIndex + 2;
       });
 
-      if (removeDataIndex === 0) {
+      for (let i = 2; i < updateMyProfileRoute.length; i++) {
+        updateMyProfileRoute[i].id = i + 1;
+        updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
+        updateMyProfileRoute[i].path = i + 1;
+      }
+
+      if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
         router.push(`search?route=form`);
+      } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
+        router.push(`/search?route=${removeDataIndex + 3}`);
+        setheaderPath(`Search Results ${removeDataIndex + 1}`);
+        setActiveTab(removeDataIndex + 1);
       } else {
         router.push(`/search?route=${removeDataIndex + 2}`);
+        setheaderPath(`Search Results ${removeDataIndex}`);
+        setActiveTab(removeDataIndex);
       }
-      setMyProfileRoutes(updateData);
-      setheaderPath(`Search Results ${removeDataIndex}`);
-      setActiveTab(removeDataIndex);
+      localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+      setMyProfileRoutes(updateMyProfileRoute);
     }
   };
 
@@ -144,7 +160,6 @@ function SearchResultLayout() {
 
   const handleSearchTab = (index: number, pathName: string) => {
     setActiveTab(index);
-    console.log('pathName', pathName);
     setheaderPath(pathName);
   };
 
@@ -161,7 +176,7 @@ function SearchResultLayout() {
         }`}
       >
         <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
-          {myProfileRoutes.map(({ id, pathName, path }) => {
+          {myProfileRoutes.map(({ id, pathName, path }: any) => {
             // Check if the current route matches the link's path
             return path === 'form' || path === 'saved' ? (
               <Link
@@ -230,7 +245,7 @@ function SearchResultLayout() {
           ) : headerPath === 'New Search' ? (
             <AdvanceSearch />
           ) : (
-            <SearchResults data={data} />
+            <SearchResults data={data} activeTab={activeTab - 1} />
           )}
         </main>
       </div>

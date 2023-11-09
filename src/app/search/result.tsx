@@ -4,18 +4,14 @@ import styles from './search-results.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import CloseOutline from '@public/assets/icons/close-outline.svg?url';
-import EditIcon from '@public/assets/icons/edit.svg';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomRadioButton } from '@/components/common/buttons/radio-button';
-import { useGetAllProductQuery } from '@/features/api/product';
 import CustomDataTable from '@/components/common/data-table';
-import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -26,16 +22,15 @@ import { IYourSelection, Product, TableColumn } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import CustomLoader from '@/components/common/loader';
 import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 
-const SearchResults = ({ data }: any) => {
+const SearchResults = ({ data, activeTab }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [activeTab, setActiveTab] = useState(0);
+
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
@@ -348,20 +343,14 @@ const SearchResults = ({ data }: any) => {
   }, [calculateTotalAmount, calculateAverageDiscount]);
 
   useEffect(() => {
-    let yourSelection = localStorage.getItem('Search');
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
     if (yourSelection) {
-      // Check if the effect has not been executed
-      const parseYourSelection = JSON.parse(yourSelection);
-
-      setYourSelectionData(parseYourSelection);
-      let url = constructUrlParams(parseYourSelection[activeTab]?.queryParams);
-      setSearchUrl(url);
-
+      setYourSelectionData(yourSelection);
       if (data?.products?.length) {
         setRows(data?.products);
       }
     }
-  }, [data, activeTab]); // Include isEffectExecuted in the dependency array
+  }, [data]); // Include isEffectExecuted in the dependency array
 
   const handleRadioChange = (radioValue: string) => {
     setSelectedValue(radioValue);
@@ -498,7 +487,7 @@ const SearchResults = ({ data }: any) => {
       await addSavedSearch({
         name: saveSearchName,
         diamond_count: data?.count,
-        meta_data: [data[activeTab].queryParams],
+        meta_data: data[activeTab].queryParams,
         is_deleted: false,
       })
         .unwrap()

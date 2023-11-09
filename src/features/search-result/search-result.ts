@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState: any = {
-  activeTab: 0,
+  activeTab: '',
 };
 
 const searchResultSlice = createSlice({
