@@ -21,7 +21,6 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
-import Link from 'next/link';
 
 interface QueryParameters {
   [key: string]: string | string[];
@@ -1294,6 +1293,8 @@ const AdvanceSearch = () => {
     setSelectedOrigin([]);
   };
 
+  // console.log('addsEarc', addSearches[searchResult?.activeTab].isSavedSearch);
+
   const handleSaveAndSearch: any = async () => {
     if (searchCount > 1) {
       if (data?.count < 300 && data?.count > 0) {
@@ -1372,22 +1373,46 @@ const AdvanceSearch = () => {
           starLengthTo,
         });
 
-        if (addSearches.length === 0) {
-          setSavedSearches([queryParams]);
+        // if (addSearches.length === 0) {
+        //   setSavedSearches([queryParams]);
+        // }
+
+        const activeTab = searchResult?.activeTab;
+        const activeSearch: boolean = addSearches[activeTab]?.isSavedSearch;
+        if (activeSearch) {
+          const updatedMeta = addSearches;
+
+          updatedMeta[activeTab].queryParams = queryParams;
+
+          let data = {
+            name: updatedMeta[0].saveSearchName,
+            data: updatedMeta[0].queryParams,
+          };
+
+          updateSavedSearch(data)
+            .unwrap()
+            .then(() => {
+              handleSearch(true);
+            })
+            .catch((error: any) => {
+              console.log('error', error);
+            });
+        } else {
+          saveSearchName.length &&
+            (await addSavedSearch({
+              name: saveSearchName,
+              diamond_count: data?.count,
+              meta_data: queryParams,
+              is_deleted: false,
+            })
+              .unwrap()
+              .then(() => {
+                handleSearch(true);
+              })
+              .catch((error: any) => {
+                console.log('error', error);
+              }));
         }
-        await addSavedSearch({
-          name: saveSearchName,
-          diamond_count: data?.count,
-          meta_data: [...savedSearches, queryParams],
-          is_deleted: false,
-        })
-          .unwrap()
-          .then(() => {
-            handleSearch(true);
-          })
-          .catch((error: any) => {
-            console.log('error', error);
-          });
       }
     } else {
       setIsError(true);
@@ -1682,20 +1707,21 @@ const AdvanceSearch = () => {
             updatedData[searchResult.activeTab] = setDataOnLocalStorage;
             localStorage.setItem('Search', JSON.stringify(updatedData));
           }
+
+          router.push(`/search?route=${searchResult.activeTab + 3}`);
         } else {
           localStorage.setItem(
             'Search',
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
+          router.push(
+            `/search?route=${
+              JSON.parse(localStorage.getItem('Search')!).length + 2
+            }`
+          );
         }
 
         // return;
-
-        router.push(
-          `/search?route=${
-            JSON.parse(localStorage.getItem('Search')!).length + 2
-          }`
-        );
       }
     } else {
       setIsError(true);
@@ -2724,12 +2750,22 @@ const AdvanceSearch = () => {
               style: styles.transparent,
               fn: () => {
                 if (searchCount > 1) {
-                  setIsInputDialogOpen(true);
-                } else {
-                  setIsError(true);
-                  setErrorText(
-                    '*Please select some parameter before initiating search'
-                  );
+                  const activeTab = searchResult?.activeTab;
+                  if (activeTab !== undefined) {
+                    const activeSearch: boolean =
+                      addSearches[activeTab]?.saveSearchName;
+                    // Check if the active search is not null and isSavedSearch is true
+                    if (activeSearch) {
+                      handleSaveAndSearch();
+                    } else {
+                      setIsInputDialogOpen(true);
+                    }
+                  } else {
+                    setIsError(true);
+                    setErrorText(
+                      '*Please select some parameters before initiating a search'
+                    );
+                  }
                 }
               },
               isDisable: modifySearchFrom === 'saved-search',

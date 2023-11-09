@@ -5,7 +5,7 @@ export interface IInputDialog {
     setIsOpen: Dispatch<SetStateAction<boolean>>;
     label: string;
     name: string;
-    inputValue: string | number;
+    inputValue: string;
     setInputvalue: any;
     displayButtonLabel2: string;
     displayButtonFunction: () => void;

@@ -23,6 +23,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
   const onclose = (open: boolean) => {
     setIsOpen(open);
   };
+
   return (
     <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
       <DialogContent className="max-w-[450px] h-[200px] bg-solitairePrimary z-[1200] rounded-lg">
@@ -62,7 +63,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           <CustomDisplayButton
             displayButtonLabel={displayButtonLabel2}
             handleClick={() => {
-              displayButtonFunction();
+              inputValue.length > 0 && displayButtonFunction();
             }}
             displayButtonAllStyle={{
               displayButtonStyle: styles.showResultButtonFilled,
