@@ -15,7 +15,7 @@ import SearchResults from './result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
 
-function SearchResultLayout({ children }: { children: React.ReactNode }) {
+function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -140,7 +140,7 @@ function SearchResultLayout({ children }: { children: React.ReactNode }) {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search'), activeTab]);
+  }, [localStorage.getItem('Search')!, activeTab]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     setActiveTab(index);
