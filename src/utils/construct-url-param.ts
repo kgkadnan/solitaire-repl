@@ -31,6 +31,9 @@ export function constructUrlParams(data: any) {
       );
     }
   }
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
   return params.join('&');
 }

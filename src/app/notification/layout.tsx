@@ -36,7 +36,11 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-        <CustomHeader data={notificationHeader} />
+        <CustomHeader
+          data={notificationHeader}
+          // mainDivStyle={styles.mainHeaderStyle}
+          // visibleStyle={styles.visibleStyle}
+        />
       </div>
       <CustomNotificationHeader />
       <div

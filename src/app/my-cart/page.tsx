@@ -549,8 +549,17 @@ const MyCart = () => {
       />
       <div className="container flex flex-col ">
         {/* Custom Header */}
+<<<<<<< Updated upstream:src/app/my-cart/page.tsx
         <div className="sticky top-0 bg-solitairePrimary mt-16">
           <CustomHeader data={headerData} />
+=======
+        <div className="sticky top-0 bg-solitairePrimary mt-10">
+          <CustomHeader
+            data={headerData}
+            mainDivStyle={styles.mainHeaderStyle}
+            visibleStyle={styles.visibleStyle}
+          />
+>>>>>>> Stashed changes:src/app/my-cart/active/page.tsx
         </div>
 
         {/* Custom Card and Checkbox map */}

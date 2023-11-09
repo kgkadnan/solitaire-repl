@@ -23,9 +23,15 @@ export interface IHeaderData {
 
 interface ICustomHeaderProps {
   data: IHeaderData;
+  mainDivStyle?: string;
+  visibleStyle?: string;
 }
 
-const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
+const CustomHeader: React.FC<ICustomHeaderProps> = ({
+  data,
+  mainDivStyle,
+  visibleStyle,
+}) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   //input style
@@ -48,47 +54,45 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({ data }) => {
   }, [prevScrollPos]);
 
   return (
-    <>
+    <div
+      className={`inline-flex  items-center justify-between border-b border-solitaireSenary ${mainDivStyle} ${
+        visible ? styles.mainDiv : visibleStyle
+      }`}
+    >
+      {/* Heading */}
+      <p>
+        {data?.headerHeading}
+        {data?.searchCount && `(${data?.searchCount})`}
+      </p>
       <div
-        className={`inline-flex  items-center justify-between border-b border-solitaireSenary ${
-          styles.mainDiv
-        } ${visible ? styles.mainDiv : styles.visible}`}
+        className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}
       >
-        {/* Heading */}
-        <p>
-          {data?.headerHeading}
-          {data?.searchCount && `(${data?.searchCount})`}
-        </p>
-        <div
-          className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}
-        >
-          {/* Search Input Field*/}
-          {data?.handleSearch ? (
-            <div className="flex  gap-[15px]">
-              <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
-              <CustomSearchInputField
-                type="text"
-                name="Search"
-                style={searchInputStyle}
-                value={data?.searchValue}
-                onChange={data?.handleSearch}
-                placeholder={ManageLocales('app.common.header.searchByName')}
-                handleSuggestionClick={data.handleSuggestionClick}
-                suggestions={data.suggestions}
-              />
-            </div>
-          ) : (
-            <></>
-          )}
-          {/* Select All checkbox */}
-          {data?.headerData && (
-            <div className={`${data.overriddenStyles?.headerDataStyles}`}>
-              {data.headerData}
-            </div>
-          )}
-        </div>
+        {/* Search Input Field*/}
+        {data?.handleSearch ? (
+          <div className="flex  gap-[15px]">
+            <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
+            <CustomSearchInputField
+              type="text"
+              name="Search"
+              style={searchInputStyle}
+              value={data?.searchValue}
+              onChange={data?.handleSearch}
+              placeholder={ManageLocales('app.common.header.searchByName')}
+              handleSuggestionClick={data.handleSuggestionClick}
+              suggestions={data.suggestions}
+            />
+          </div>
+        ) : (
+          <></>
+        )}
+        {/* Select All checkbox */}
+        {data?.headerData && (
+          <div className={`${data.overriddenStyles?.headerDataStyles}`}>
+            {data.headerData}
+          </div>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

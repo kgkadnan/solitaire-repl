@@ -20,7 +20,11 @@ import { ManageLocales } from '@/utils/translate';
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
+<<<<<<< Updated upstream
 
+=======
+  const subRoute = useSearchParams().get('route');
+>>>>>>> Stashed changes
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
   }, [router]);
@@ -41,8 +45,13 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
+<<<<<<< Updated upstream
       link: 'advance-search',
       isActive: currentRoute === '/advance-search',
+=======
+      link: '/search?route=form',
+      isActive: currentRoute === '/search' && subRoute === 'form',
+>>>>>>> Stashed changes
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -53,14 +62,19 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
+<<<<<<< Updated upstream
       link: '/saved-search',
       isActive: currentRoute === '/saved-search',
+=======
+      link: '/search?route=saved',
+      isActive: currentRoute === '/search' && subRoute === 'saved',
+>>>>>>> Stashed changes
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
-      link: '/my-cart',
-      isActive: currentRoute === '/my-cart',
+      link: '/my-cart/active',
+      isActive: currentRoute === '/my-cart/active',
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,

@@ -283,7 +283,11 @@ const CompareStone = () => {
   return (
     <div className={styles.comparestoneContainer}>
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
-        <CustomHeader data={headerData} />
+        <CustomHeader
+          data={headerData}
+          mainDivStyle={styles.mainHeaderStyle}
+          visibleStyle={styles.visibleStyle}
+        />
       </div>
       {compareStoneData?.length && (
         <div className={styles.compareStoneContentContainer}>

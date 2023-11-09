@@ -64,7 +64,11 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
   return (
     <>
       <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-        <CustomHeader data={myAccountHeader} />
+        <CustomHeader
+          data={myAccountHeader}
+          mainDivStyle={styles.mainHeaderStyle}
+          visibleStyle={styles.visibleStyle}
+        />
       </div>
       <div
         className={`${styles.navBar} ${

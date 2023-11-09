@@ -242,3 +242,16 @@
 .paginationContainerStyle {
   border: none !important ;
 }
+
+.mainHeaderStyle {
+  position: fixed;
+  top: 80px;
+  background-color: hsl(var(--solitaire-primary));
+  z-index: 11111;
+  width: 90%;
+  height: 80px;
+}
+
+.visibleStyle {
+  top: 0;
+}
