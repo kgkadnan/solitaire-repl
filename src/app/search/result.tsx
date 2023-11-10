@@ -513,6 +513,7 @@ const SearchResults = ({ data, activeTab }: any) => {
           localStorage.setItem('Search', JSON.stringify(parseData));
           setYourSelectionData(parseData);
           setIsInputDialogOpen(false);
+          setSaveSearchName('');
         })
 
         .catch((error: any) => {

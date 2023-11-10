@@ -128,6 +128,7 @@ function SearchResultLayout() {
       .then(() => {
         setIsInputDialogOpen(false);
         closeTheSearchFunction(removeIndex, yourSelection);
+        setSaveSearchName('');
       })
       .catch((error: any) => {
         console.log('error', error);
@@ -146,6 +147,16 @@ function SearchResultLayout() {
             session?
           </div>
           <div className="max-w-[450px] flex justify-around align-middle text-solitaireTertiary gap-[25px]">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                closeTheSearchFunction(removeDataIndex, yourSelection);
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
             <CustomDisplayButton
               displayButtonLabel="Yes"
               handleClick={async () => {
@@ -173,17 +184,7 @@ function SearchResultLayout() {
                 }
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                closeTheSearchFunction(removeDataIndex, yourSelection);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
+                displayButtonStyle: styles.showResultButtonFilled,
               }}
             />
           </div>
