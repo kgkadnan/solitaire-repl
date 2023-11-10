@@ -17,7 +17,10 @@ import { useAppDispatch } from '@/hooks/hook';
 import { CustomDialog } from '@/components/common/dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
 
 interface IMyProfileRoutes {
   id: number;
@@ -55,7 +58,7 @@ function SearchResultLayout() {
     else if (subRoute === 'form') return 'New Search';
     else return `Search Results ${parseInt(subRoute!) - 2}`;
   };
-
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
   );
@@ -145,12 +148,23 @@ function SearchResultLayout() {
             <CustomDisplayButton
               displayButtonLabel="Yes"
               handleClick={async () => {
-                if (yourSelection[removeDataIndex]?.saveSearchName) {
+                if (yourSelection[removeDataIndex]?.saveSearchName.length) {
                   //update logic comes here
-                  console.log('lets update the data here');
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                  closeTheSearchFunction(removeDataIndex, yourSelection);
+                  let updateSaveSearchData = {
+                    name: yourSelection[removeDataIndex]?.saveSearchName,
+                    meta_data: yourSelection[removeDataIndex]?.queryParams,
+                    diamond_count: data?.count,
+                  };
+                  updateSavedSearch(updateSaveSearchData)
+                    .unwrap()
+                    .then(() => {
+                      setIsInputDialogOpen(true);
+                      setIsDialogOpen(false);
+                      closeTheSearchFunction(removeDataIndex, yourSelection);
+                    })
+                    .catch((error: any) => {
+                      console.log('error', error);
+                    });
                 } else {
                   setIsInputDialogOpen(true);
                   setIsDialogOpen(false);
@@ -185,17 +199,6 @@ function SearchResultLayout() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
-
-  // useEffect(() => {
-  //   let yourSelection = localStorage.getItem('Search');
-  //   if (yourSelection) {
-  //     const parseYourSelection = JSON.parse(yourSelection);
-  //     let url = constructUrlParams(
-  //       parseYourSelection[activeTab - 1]?.queryParams
-  //     );
-  //     setSearchUrl(url);
-  //   }
-  // }, [activeTab]);
 
   useEffect(() => {
     if (subRoute !== 'form' && subRoute !== 'saved')

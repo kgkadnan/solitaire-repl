@@ -19,7 +19,10 @@ import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { IYourSelection, Product, TableColumn } from './result-interface';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
@@ -40,7 +43,7 @@ const SearchResults = ({ data, activeTab }: any) => {
   );
 
   let [addSavedSearch] = useAddSavedSearchMutation();
-
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   //Radio Button
   const [selectedValue, setSelectedValue] = useState('');
 
@@ -529,6 +532,16 @@ const SearchResults = ({ data, activeTab }: any) => {
     displayButtonLabel2: 'Save',
   };
 
+  const handleUpdateSaveSearch = () => {
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    let updateSaveSearchData = {
+      name: yourSelection[activeTab]?.saveSearchName,
+      meta_data: yourSelection[activeTab]?.queryParams,
+      diamond_count: data?.count,
+    };
+    updateSavedSearch(updateSaveSearchData);
+  };
+
   return (
     <>
       <CustomInputDialog customInputDialogData={customInputDialogData} />
@@ -569,7 +582,7 @@ const SearchResults = ({ data, activeTab }: any) => {
                   displayButtonLabel={'Save this search'}
                   handleClick={() =>
                     yourSelectionData[activeTab].saveSearchName.length
-                      ? console.log('i"m Here to update')
+                      ? handleUpdateSaveSearch()
                       : setIsInputDialogOpen(true)
                   }
                   displayButtonAllStyle={{

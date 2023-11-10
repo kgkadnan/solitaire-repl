@@ -1373,10 +1373,6 @@ const AdvanceSearch = () => {
           starLengthTo,
         });
 
-        // if (addSearches.length === 0) {
-        //   setSavedSearches([queryParams]);
-        // }
-
         const activeTab = searchResult?.activeTab;
         const activeSearch: boolean =
           addSearches[activeTab]?.saveSearchName.length;
@@ -1390,6 +1386,8 @@ const AdvanceSearch = () => {
             meta_data: updatedMeta[0].queryParams,
             diamond_count: data?.count,
           };
+
+          console.log('updateSaveSearchData', updateSaveSearchData);
 
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
