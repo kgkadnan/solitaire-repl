@@ -47,6 +47,14 @@
     var(--solitaire-tertiary)
   ); /* Change this to the desired text color */
 }
+.inCartBackground {
+  background-color: #614C4B; /* Change this to the desired background color */
+  padding: 0px 5px;
+  border-radius: 10px;
+  color: hsl(
+    var(--solitaire-tertiary)
+  ); /* Change this to the desired text color */
+}
 
 .availableStatus {
   color: green;

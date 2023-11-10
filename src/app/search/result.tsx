@@ -290,13 +290,21 @@ const SearchResults = ({ data, activeTab }: any) => {
       ),
     },
     {
-      id: 6,
+      id: 2,
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.footer.bookAppointment'
+      ),
+      style: styles.transparent,
+      fn: () => {},
+    },
+    {
+      id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
       fn: addToCart,
     },
     {
-      id: 2,
+      id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
       fn: () => {},
@@ -347,6 +355,8 @@ const SearchResults = ({ data, activeTab }: any) => {
     if (yourSelection) {
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
+        setIsCheck([]);
+        setIsCheckAll(false);
         setRows(data?.products);
       }
     }
@@ -482,23 +492,23 @@ const SearchResults = ({ data, activeTab }: any) => {
     const searchData = localStorage.getItem('Search');
 
     if (searchData !== null) {
-      const data = JSON.parse(searchData) || [];
+      const parseData = JSON.parse(searchData) || [];
 
       await addSavedSearch({
         name: saveSearchName,
         diamond_count: data?.count,
-        meta_data: data[activeTab].queryParams,
+        meta_data: parseData[activeTab].queryParams,
         is_deleted: false,
       })
         .unwrap()
         .then(() => {
-          data[activeTab] = {
+          parseData[activeTab] = {
             saveSearchName,
             isSavedSearch: true,
-            queryParams: data[activeTab].queryParams,
+            queryParams: parseData[activeTab].queryParams,
           };
-          localStorage.setItem('Search', JSON.stringify(data));
-          setYourSelectionData(data);
+          localStorage.setItem('Search', JSON.stringify(parseData));
+          setYourSelectionData(parseData);
           setIsInputDialogOpen(false);
         })
 
@@ -531,7 +541,7 @@ const SearchResults = ({ data, activeTab }: any) => {
       <>
         <div className="mb-2">
           {/* Count Bar  */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-7">
             <div className="flex gap-3">
               <p>
                 {ManageLocales('app.searchResult.countBar.pieces')}:
@@ -559,7 +569,7 @@ const SearchResults = ({ data, activeTab }: any) => {
                   displayButtonLabel={'Save this search'}
                   handleClick={() =>
                     yourSelectionData[activeTab].saveSearchName.length
-                      ? ''
+                      ? console.log('i"m Here to update')
                       : setIsInputDialogOpen(true)
                   }
                   displayButtonAllStyle={{
@@ -637,7 +647,6 @@ const SearchResults = ({ data, activeTab }: any) => {
           </div>
         </div>
         {/* <CustomHeader dummyData={headerData} /> */}
-
         <CustomDataTable
           tableRows={rows}
           tableColumns={tableColumns}

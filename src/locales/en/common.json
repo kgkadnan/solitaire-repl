@@ -165,6 +165,7 @@
   "app.searchResult.countBar.totalAvgDis": "Total Avg. Dis",
   "app.searchResult.countBar.totalAmount": "Total Amount",
   "app.searchResult.footer.addToCart": "Add to Cart",
+  "app.searchResult.footer.bookAppointment": "Book Appointment",
   "app.searchResult.footer.addToWhislist": "Add to Wishlist",
   "app.searchResult.footer.modifySearch": "Modify Search",
   "app.searchResult.footer.addSearch": "Add Search",
@@ -191,10 +192,7 @@
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
   "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
 
-
   "app.myCart.active": "Active",
   "app.myCart.outOfStock": "Out of Stock",
   "app.myCart.memoOut": "Memo-Out"
-
-
 }

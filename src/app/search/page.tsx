@@ -2,7 +2,7 @@
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import EditIcon from '@public/assets/icons/edit.svg';
@@ -14,6 +14,10 @@ import SavedSearch from './saved';
 import SearchResults from './result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
+import { CustomDialog } from '@/components/common/dialog';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { CustomInputDialog } from '@/components/common/input-dialog';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 
 interface IMyProfileRoutes {
   id: number;
@@ -26,11 +30,15 @@ function SearchResultLayout() {
   const editSubRoute = useSearchParams().get('edit');
   const dispatch = useAppDispatch();
   const router = useRouter();
-
+  const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
+  const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [activeTab, setActiveTab] = useState(0);
   const [searchUrl, setSearchUrl] = useState('');
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [removeIndex, setRemoveIndex] = useState<number>(0);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
@@ -52,6 +60,7 @@ function SearchResultLayout() {
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
   );
+  let [addSavedSearch] = useAddSavedSearchMutation();
   let { data, error, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
     limit: 300,
@@ -67,39 +76,107 @@ function SearchResultLayout() {
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
   };
+
+  const closeTheSearchFunction = (
+    removeDataIndex: number,
+    yourSelection: string[]
+  ) => {
+    let closeSpecificSearch = yourSelection.filter(
+      (items: any, index: number) => {
+        return index !== removeDataIndex;
+      }
+    );
+
+    let updateMyProfileRoute = myProfileRoutes.filter((items, index) => {
+      return index !== removeDataIndex + 2;
+    });
+
+    for (let i = 2; i < updateMyProfileRoute.length; i++) {
+      updateMyProfileRoute[i].id = i + 1;
+      updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
+      updateMyProfileRoute[i].path = i + 1;
+    }
+
+    if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
+      router.push(`search?route=form`);
+    } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
+      router.push(`/search?route=${removeDataIndex + 3}`);
+      setheaderPath(`Search Results ${removeDataIndex + 1}`);
+      setActiveTab(removeDataIndex + 1);
+    } else {
+      router.push(`/search?route=${removeDataIndex + 2}`);
+      setheaderPath(`Search Results ${removeDataIndex}`);
+      setActiveTab(removeDataIndex);
+    }
+    localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+    setMyProfileRoutes(updateMyProfileRoute);
+  };
+
+  const handleCloseAndSave = async () => {
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
+    await addSavedSearch({
+      name: saveSearchName,
+      diamond_count: data?.count,
+      meta_data: yourSelection[removeIndex]?.queryParams,
+      is_deleted: false,
+    })
+      .unwrap()
+      .then(() => {
+        setIsInputDialogOpen(false);
+        closeTheSearchFunction(removeIndex, yourSelection);
+      })
+      .catch((error: any) => {
+        console.log('error', error);
+      });
+  };
+
   const closeSearch = (removeDataIndex: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    if (yourSelection[removeDataIndex]) {
-      let closeSpecificSearch = yourSelection.filter(
-        (items: any, index: number) => {
-          return index !== removeDataIndex;
-        }
+    if (!yourSelection[removeDataIndex].isSavedSearch) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
+            Do you want to save your &quot;Search <br /> Result &quot; for this
+            session?
+          </div>
+          <div className="max-w-[450px] flex justify-around align-middle text-solitaireTertiary gap-[25px]">
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={async () => {
+                if (yourSelection[removeDataIndex]?.saveSearchName) {
+                  //update logic comes here
+                  console.log('lets update the data here');
+                  setIsInputDialogOpen(true);
+                  setIsDialogOpen(false);
+                  closeTheSearchFunction(removeDataIndex, yourSelection);
+                } else {
+                  setIsInputDialogOpen(true);
+                  setIsDialogOpen(false);
+                  setRemoveIndex(removeDataIndex);
+                }
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                closeTheSearchFunction(removeDataIndex, yourSelection);
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+          </div>
+        </>
       );
-
-      let updateMyProfileRoute = myProfileRoutes.filter((items, index) => {
-        return index !== removeDataIndex + 2;
-      });
-
-      for (let i = 2; i < updateMyProfileRoute.length; i++) {
-        updateMyProfileRoute[i].id = i + 1;
-        updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
-        updateMyProfileRoute[i].path = i + 1;
-      }
-
-      if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-        router.push(`search?route=form`);
-      } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-        router.push(`/search?route=${removeDataIndex + 3}`);
-        setheaderPath(`Search Results ${removeDataIndex + 1}`);
-        setActiveTab(removeDataIndex + 1);
-      } else {
-        router.push(`/search?route=${removeDataIndex + 2}`);
-        setheaderPath(`Search Results ${removeDataIndex}`);
-        setActiveTab(removeDataIndex);
-      }
-      localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
-      setMyProfileRoutes(updateMyProfileRoute);
+    } else if (yourSelection[removeDataIndex]) {
+      closeTheSearchFunction(removeDataIndex, yourSelection);
     }
   };
 
@@ -169,8 +246,25 @@ function SearchResultLayout() {
     router.push(`/search?route=${subRoute}&edit=search-result`);
   };
 
+  const customInputDialogData = {
+    isOpens: isInputDialogOpen,
+    setIsOpen: setIsInputDialogOpen,
+    setInputvalue: setSaveSearchName,
+    inputValue: saveSearchName,
+    displayButtonFunction: handleCloseAndSave,
+    label: 'Save and close this search',
+    name: 'Save',
+    displayButtonLabel2: 'Save',
+  };
+
   return (
     <>
+      <CustomInputDialog customInputDialogData={customInputDialogData} />
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div
         className={` ${styles.navBar} ${
           visible ? styles.visible : styles.hidden
