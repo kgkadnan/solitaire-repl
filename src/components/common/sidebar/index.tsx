@@ -20,7 +20,8 @@ import { ManageLocales } from '@/utils/translate';
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
-const subRoute=useSearchParams().get('route');
+
+  const subRoute = useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
   }, [router]);
@@ -41,7 +42,7 @@ const subRoute=useSearchParams().get('route');
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
       link: '/search?route=form',
-      isActive: (currentRoute === '/search' && subRoute==='form'),
+      isActive: currentRoute === '/search' && subRoute === 'form',
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -53,13 +54,13 @@ const subRoute=useSearchParams().get('route');
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
       link: '/search?route=saved',
-      isActive: (currentRoute === '/search' && subRoute==='saved'),
+      isActive: currentRoute === '/search' && subRoute === 'saved',
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
-      link: '/my-cart',
-      isActive: currentRoute === '/my-cart',
+      link: '/my-cart/active',
+      isActive: currentRoute === '/my-cart/active',
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,
@@ -108,35 +109,33 @@ const subRoute=useSearchParams().get('route');
   };
 
   return (
-    <>
+    <div
+      className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+    >
       <div
-        className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
+        className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
+        onClick={onKGKLogoContainerClick}
       >
-        <div
-          className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
-          onClick={onKGKLogoContainerClick}
-        >
-          <Image
-            className="mx-auto"
-            alt="KGKlogo"
-            src={KGKlogo}
-            width="42"
-            height="55"
+        <Image
+          className="mx-auto"
+          alt="KGKlogo"
+          src={KGKlogo}
+          width="42"
+          height="55"
+        />
+      </div>
+      <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
+        <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
+          <CustomImageTile
+            imageTileData={imageData}
+            overriddenStyles={SideBarStyles}
+            selectedTile={selectedNav}
+            handleSelectTile={handleChange}
+            isNavOption={true}
           />
         </div>
-        <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
-          <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
-            <CustomImageTile
-              imageTileData={imageData}
-              overriddenStyles={SideBarStyles}
-              selectedTile={selectedNav}
-              handleSelectTile={handleChange}
-              isNavOption={true}
-            />
-          </div>
-        </div>
       </div>
-    </>
+    </div>
   );
 };
 

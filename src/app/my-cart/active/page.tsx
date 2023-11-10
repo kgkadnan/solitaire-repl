@@ -539,343 +539,336 @@ const MyCart = () => {
         }
       />
       <div className="container flex flex-col ">
-        {/* Custom Header */}
         <div className="sticky top-0 bg-solitairePrimary mt-10">
-          <CustomHeader data={headerData} />
+          <CustomHeader
+            data={headerData}
+            mainDivStyle={styles.mainHeaderStyle}
+            visibleStyle={styles.visibleStyle}
+          />
         </div>
 
         {/* Custom Card and Checkbox map */}
         <div className="flex-grow overflow-y-auto min-h-[80vh]">
-          <>
-            {cardData.length > 0 ? (
-              cardData?.map((items: any, index) => {
-                return (
-                  <div key={items.cardId}>
-                    <div className="flex mt-6">
-                      <CustomCheckBox
-                        data={items.cardId}
-                        onClick={handleClick}
-                        isChecked={isCheck}
-                      />
+          {cardData.length > 0 ? (
+            cardData?.map((items: any, index) => {
+              return (
+                <div key={items.cardId}>
+                  <div className="flex mt-6">
+                    <CustomCheckBox
+                      data={items.cardId}
+                      onClick={handleClick}
+                      isChecked={isCheck}
+                    />
 
-                      <CustomSlider
-                        sheetTriggenContent={
-                          <div
-                            onClick={() => {
-                              setActiveTab('3');
-                              setDiamondDetailIframeUrl('');
-                              setDiamondDetailImageUrl('');
-                              setSliderData([data?.items[index]]);
-                            }}
-                          >
-                            <CustomSearchResultCard
-                              cardData={items}
-                              overriddenStyles={cardStyles}
-                              handleCardAction={handleEdit}
-                              isBlur={items.cardTimeOut}
-                              blurContent={
-                                <>
-                                  <p>Your stone has been moved to wishlist</p>
-                                  <CustomDisplayButton
-                                    displayButtonLabel="Wishlist"
-                                    handleClick={handleBlurFunction}
-                                    displayButtonAllStyle={{
-                                      displayButtonStyle: styles.filled,
-                                      displayLabelStyle:
-                                        styles.ViewSimilarStoneLabel,
-                                    }}
-                                  />
-                                </>
-                              }
-                            />
+                    <CustomSlider
+                      sheetTriggenContent={
+                        <div
+                          onClick={() => {
+                            setActiveTab('3');
+                            setDiamondDetailIframeUrl('');
+                            setDiamondDetailImageUrl('');
+                            setSliderData([data?.items[index]]);
+                          }}
+                        >
+                          <CustomSearchResultCard
+                            cardData={items}
+                            overriddenStyles={cardStyles}
+                            handleCardAction={handleEdit}
+                            isBlur={items.cardTimeOut}
+                            blurContent={
+                              <>
+                                <p>Your stone has been moved to wishlist</p>
+                                <CustomDisplayButton
+                                  displayButtonLabel="Wishlist"
+                                  handleClick={handleBlurFunction}
+                                  displayButtonAllStyle={{
+                                    displayButtonStyle: styles.filled,
+                                    displayLabelStyle:
+                                      styles.ViewSimilarStoneLabel,
+                                  }}
+                                />
+                              </>
+                            }
+                          />
+                        </div>
+                      }
+                      sheetTriggerStyle={styles.mainCardContainer}
+                      sheetContentStyle={styles.diamondDetailSheet}
+                      // sheetContentStyle={styles.sheetContentStyle}
+                      cardTimeout={items.cardTimeOut}
+                      sheetContent={
+                        <>
+                          <div className={styles.diamondDetailHeader}>
+                            <p className={`text-solitaireTertiary`}>
+                              {`${ManageLocales(
+                                'app.searchResult.slider.diamondDetail.stockNo'
+                              )} : ${sliderData[0]?.product?.lot_id}`}
+                            </p>
                           </div>
-                        }
-                        sheetTriggerStyle={styles.mainCardContainer}
-                        sheetContentStyle={styles.diamondDetailSheet}
-                        // sheetContentStyle={styles.sheetContentStyle}
-                        cardTimeout={items.cardTimeOut}
-                        sheetContent={
-                          <>
-                            <div className={styles.diamondDetailHeader}>
-                              <p className={`text-solitaireTertiary`}>
-                                {`${ManageLocales(
-                                  'app.searchResult.slider.diamondDetail.stockNo'
-                                )} : ${sliderData[0]?.product?.lot_id}`}
-                              </p>
-                            </div>
-                            <div className="border-b border-solitaireQuaternary mt-5"></div>
+                          <div className="border-b border-solitaireQuaternary mt-5"></div>
 
-                            {sliderData.map((data: any) => {
-                              data = data.product;
+                          {sliderData.map((data: any) => {
+                            data = data.product;
 
-                              return (
-                                <>
-                                  <div
-                                    key={data.id}
-                                    className="flex items-center justify-between my-5 px-10"
-                                  >
-                                    <div>
-                                      {displayButtonData.map((items) => {
-                                        return (
-                                          <div key={items.id}>
-                                            <CustomDisplayButton
-                                              displayButtonLabel={
-                                                items.displayButtonLabel
-                                              }
-                                              displayButtonAllStyle={{
-                                                displayLabelStyle:
-                                                  activeTab === items.id
-                                                    ? styles.activeHeaderButtonStyle
-                                                    : styles.headerButtonStyle,
-                                              }}
-                                              handleClick={() =>
-                                                handleDiamondDetailData(
-                                                  items.id,
-                                                  items.url,
-                                                  items.iframeUrl
-                                                )
-                                              }
-                                            />
-                                          </div>
-                                        );
-                                      })}
-                                    </div>
-                                    <div>
-                                      {!diamondDetailImageUrl.length &&
-                                        !diamondDetailIframeUrl.length && (
-                                          <Image
-                                            src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
-                                            alt={``}
-                                            width={350}
-                                            height={350}
-                                            style={{ height: '350px' }}
-                                          />
-                                        )}
-                                      {diamondDetailImageUrl &&
-                                        !diamondDetailIframeUrl && (
-                                          <Image
-                                            src={diamondDetailImageUrl}
-                                            alt={`Diamond detail`}
-                                            width={350}
-                                            height={350}
-                                            style={{ height: '350px' }}
-                                          />
-                                        )}
-
-                                      {diamondDetailIframeUrl &&
-                                        !diamondDetailImageUrl && (
-                                          <iframe
-                                            width="100%"
-                                            height={350}
-                                            frameBorder="0"
-                                            src={diamondDetailIframeUrl}
-                                          />
-                                        )}
-                                    </div>
-                                    <div>
-                                      {Object.keys(cardDetailMainKeys).map(
-                                        (key) => (
-                                          <div
-                                            key={key}
-                                            className="text-solitaireTertiary py-1"
-                                          >
-                                            <span className="text-xs">
-                                              {cardDetailMainKeys[key]}
-                                            </span>
-                                            <br />
-                                            {data[key] ? data[key] : '-'}
-                                          </div>
-                                        )
-                                      )}
-                                    </div>
-                                  </div>
-                                  <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
-                                    <div
-                                      onClick={() => {}}
-                                      className="cursor-pointer"
-                                    >
-                                      <Image
-                                        src={shareSocialOutline}
-                                        alt="shareSocialOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                    </div>
-                                    <div
-                                      onClick={() => {}}
-                                      className="cursor-pointer"
-                                    >
-                                      <Image
-                                        src={downloadOutline}
-                                        alt="downloadOutline"
-                                        width={25}
-                                        height={20}
-                                      />
-                                    </div>
-                                    <div
-                                      onClick={() => {
-                                        window.open(
-                                          `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
-                                          '_blank'
-                                        );
-                                      }}
-                                      className="cursor-pointer"
-                                    >
-                                      <Image
-                                        src={dna}
-                                        alt="dna"
-                                        width={25}
-                                        height={20}
-                                      />
-                                    </div>
-                                  </div>
-                                  <div className="border-b border-solitaireQuaternary"></div>
+                            return (
+                              <>
+                                <div
+                                  key={data.id}
+                                  className="flex items-center justify-between my-5 px-10"
+                                >
                                   <div>
-                                    <div className={styles.diamondDetailHeader}>
+                                    {displayButtonData.map((items) => {
+                                      return (
+                                        <div key={items.id}>
+                                          <CustomDisplayButton
+                                            displayButtonLabel={
+                                              items.displayButtonLabel
+                                            }
+                                            displayButtonAllStyle={{
+                                              displayLabelStyle:
+                                                activeTab === items.id
+                                                  ? styles.activeHeaderButtonStyle
+                                                  : styles.headerButtonStyle,
+                                            }}
+                                            handleClick={() =>
+                                              handleDiamondDetailData(
+                                                items.id,
+                                                items.url,
+                                                items.iframeUrl
+                                              )
+                                            }
+                                          />
+                                        </div>
+                                      );
+                                    })}
+                                  </div>
+                                  <div>
+                                    {!diamondDetailImageUrl.length &&
+                                      !diamondDetailIframeUrl.length && (
+                                        <Image
+                                          src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                          alt={``}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
+                                        />
+                                      )}
+                                    {diamondDetailImageUrl &&
+                                      !diamondDetailIframeUrl && (
+                                        <Image
+                                          src={diamondDetailImageUrl}
+                                          alt={`Diamond detail`}
+                                          width={350}
+                                          height={350}
+                                          style={{ height: '350px' }}
+                                        />
+                                      )}
+
+                                    {diamondDetailIframeUrl &&
+                                      !diamondDetailImageUrl && (
+                                        <iframe
+                                          width="100%"
+                                          height={350}
+                                          frameBorder="0"
+                                          src={diamondDetailIframeUrl}
+                                        />
+                                      )}
+                                  </div>
+                                  <div>
+                                    {Object.keys(cardDetailMainKeys).map(
+                                      (key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1"
+                                        >
+                                          <span className="text-xs">
+                                            {cardDetailMainKeys[key]}
+                                          </span>
+                                          <br />
+                                          {data[key] ? data[key] : '-'}
+                                        </div>
+                                      )
+                                    )}
+                                  </div>
+                                </div>
+                                <div className="flex gap-10 items-center justify-center mb-5 ml-[60px]">
+                                  <div
+                                    onClick={() => {}}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={shareSocialOutline}
+                                      alt="shareSocialOutline"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
+                                  <div
+                                    onClick={() => {}}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={downloadOutline}
+                                      alt="downloadOutline"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
+                                  <div
+                                    onClick={() => {
+                                      window.open(
+                                        `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
+                                        '_blank'
+                                      );
+                                    }}
+                                    className="cursor-pointer"
+                                  >
+                                    <Image
+                                      src={dna}
+                                      alt="dna"
+                                      width={25}
+                                      height={20}
+                                    />
+                                  </div>
+                                </div>
+                                <div className="border-b border-solitaireQuaternary"></div>
+                                <div>
+                                  <div className={styles.diamondDetailHeader}>
+                                    <p
+                                      className={`text-solitaireQuaternary font-bold text-lg my-5`}
+                                    >
+                                      {`${ManageLocales(
+                                        'app.searchResult.slider.diamondDetail.diamondDetails'
+                                      )} `}
+                                    </p>
+                                  </div>
+                                  <div className="flex justify-start">
+                                    <div className="w-1/4">
                                       <p
-                                        className={`text-solitaireQuaternary font-bold text-lg my-5`}
+                                        className={`text-solitaireQuaternary text-lg my-5`}
                                       >
                                         {`${ManageLocales(
-                                          'app.searchResult.slider.diamondDetail.diamondDetails'
+                                          'app.searchResult.slider.diamondDetail.basicDetails'
                                         )} `}
                                       </p>
+                                      {Object.keys(
+                                        basicDetailsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex "
+                                        >
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {basicDetailsLabelMapping[key]}
+                                          </span>
+                                          <span className="text-left">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
                                     </div>
-                                    <div className="flex justify-start">
-                                      <div className="w-1/4">
-                                        <p
-                                          className={`text-solitaireQuaternary text-lg my-5`}
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.measurements'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        measurementsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
                                         >
-                                          {`${ManageLocales(
-                                            'app.searchResult.slider.diamondDetail.basicDetails'
-                                          )} `}
-                                        </p>
-                                        {Object.keys(
-                                          basicDetailsLabelMapping
-                                        ).map((key) => (
-                                          <div
-                                            key={key}
-                                            className="text-solitaireTertiary py-1 flex "
-                                          >
-                                            <span className="text-solitaireQuaternary w-[150px]">
-                                              {basicDetailsLabelMapping[key]}
-                                            </span>
-                                            <span className="text-left">
-                                              {data[key] ? data[key] : '-'}
-                                            </span>
-                                          </div>
-                                        ))}
-                                      </div>
-                                      <div className="w-1/4">
-                                        <p
-                                          className={`text-solitaireQuaternary text-lg my-5`}
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {measurementsLabelMapping[key]}
+                                          </span>
+                                          <span>
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.inclusionDetails'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        inclusionDetailsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
                                         >
-                                          {`${ManageLocales(
-                                            'app.searchResult.slider.diamondDetail.measurements'
-                                          )} `}
-                                        </p>
-                                        {Object.keys(
-                                          measurementsLabelMapping
-                                        ).map((key) => (
-                                          <div
-                                            key={key}
-                                            className="text-solitaireTertiary py-1 flex"
-                                          >
-                                            <span className="text-solitaireQuaternary w-[150px]">
-                                              {measurementsLabelMapping[key]}
-                                            </span>
-                                            <span>
-                                              {data[key] ? data[key] : '-'}
-                                            </span>
-                                          </div>
-                                        ))}
-                                      </div>
-                                      <div className="w-1/4">
-                                        <p
-                                          className={`text-solitaireQuaternary text-lg my-5`}
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {inclusionDetailsLabelMapping[key]}
+                                          </span>
+                                          <span className="">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
+                                    </div>
+                                    <div className="w-1/4">
+                                      <p
+                                        className={`text-solitaireQuaternary text-lg my-5`}
+                                      >
+                                        {`${ManageLocales(
+                                          'app.searchResult.slider.diamondDetail.otherInformations'
+                                        )} `}
+                                      </p>
+                                      {Object.keys(
+                                        otherInformationsLabelMapping
+                                      ).map((key) => (
+                                        <div
+                                          key={key}
+                                          className="text-solitaireTertiary py-1 flex"
                                         >
-                                          {`${ManageLocales(
-                                            'app.searchResult.slider.diamondDetail.inclusionDetails'
-                                          )} `}
-                                        </p>
-                                        {Object.keys(
-                                          inclusionDetailsLabelMapping
-                                        ).map((key) => (
-                                          <div
-                                            key={key}
-                                            className="text-solitaireTertiary py-1 flex"
-                                          >
-                                            <span className="text-solitaireQuaternary w-[150px]">
-                                              {
-                                                inclusionDetailsLabelMapping[
-                                                  key
-                                                ]
-                                              }
-                                            </span>
-                                            <span className="">
-                                              {data[key] ? data[key] : '-'}
-                                            </span>
-                                          </div>
-                                        ))}
-                                      </div>
-                                      <div className="w-1/4">
-                                        <p
-                                          className={`text-solitaireQuaternary text-lg my-5`}
-                                        >
-                                          {`${ManageLocales(
-                                            'app.searchResult.slider.diamondDetail.otherInformations'
-                                          )} `}
-                                        </p>
-                                        {Object.keys(
-                                          otherInformationsLabelMapping
-                                        ).map((key) => (
-                                          <div
-                                            key={key}
-                                            className="text-solitaireTertiary py-1 flex"
-                                          >
-                                            <span className="text-solitaireQuaternary w-[150px]">
-                                              {
-                                                otherInformationsLabelMapping[
-                                                  key
-                                                ]
-                                              }
-                                            </span>
-                                            <span className="">
-                                              {data[key] ? data[key] : '-'}
-                                            </span>
-                                          </div>
-                                        ))}
-                                      </div>
+                                          <span className="text-solitaireQuaternary w-[150px]">
+                                            {otherInformationsLabelMapping[key]}
+                                          </span>
+                                          <span className="">
+                                            {data[key] ? data[key] : '-'}
+                                          </span>
+                                        </div>
+                                      ))}
                                     </div>
                                   </div>
-                                </>
-                              );
-                            })}
-                          </>
-                        }
-                      />
-                    </div>
-                  </div>
-                );
-              })
-            ) : (
-              <NoDataFound
-                message={
-                  <div className="">
-                    <p className="solitaireTertiary pb-[16px]">
-                      No Items in your Cart
-                    </p>
-                    <CustomDisplayButton
-                      displayButtonLabel="Search Diamonds"
-                      handleClick={() => router.push('/form')}
-                      displayButtonAllStyle={{
-                        displayButtonStyle: styles.filled,
-                      }}
+                                </div>
+                              </>
+                            );
+                          })}
+                        </>
+                      }
                     />
                   </div>
-                }
-              />
-            )}
-          </>
+                </div>
+              );
+            })
+          ) : (
+            <NoDataFound
+              message={
+                <div className="">
+                  <p className="solitaireTertiary pb-[16px]">
+                    No Items in your Cart
+                  </p>
+                  <CustomDisplayButton
+                    displayButtonLabel="Search Diamonds"
+                    handleClick={() => router.push('/form')}
+                    displayButtonAllStyle={{
+                      displayButtonStyle: styles.filled,
+                    }}
+                  />
+                </div>
+              }
+            />
+          )}
         </div>
 
         {/* Custom Footer */}

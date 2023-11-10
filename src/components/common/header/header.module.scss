@@ -1,30 +1,3 @@
-// .headerSearchBtn {
-//   width: 90px;
-//   justify-content: center;
-//   padding: 4px 20px;
-//   align-items: center;
-//   border-radius: 25px;
-//   background-color: hsl(var(--solitaire-quaternary));
-//   font-style: normal;
-//   font-weight: 500;
-//   line-height: normal;
-// }
-
-// .headerSearchBtnLabel {
-//   color: hsl(var(--solitaire-tertiary));
-// }
-
-.mainDiv {
-  position: fixed;
-  top: 80px;
-  background-color: hsl(var(--solitaire-primary));
-  z-index: 11111;
-}
-
-.visible {
-  top: 0;
-}
-
 .headerInputStyle {
   width: 250px;
   font-size: 16px;

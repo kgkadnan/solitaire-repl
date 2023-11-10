@@ -22,28 +22,24 @@ import {
   useGetAllSavedSearchesQuery,
   useGetSavedSearchListQuery,
 } from '@/features/api/saved-searches';
-import { CustomSlider } from '@/components/common/slider';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
-import { formatCassing } from '@/utils/format-cassing';
-import { useAppDispatch } from '@/hooks/hook';
-import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
+import { useGetProductCountQuery } from '@/features/api/product';
 import {
   ICardData,
   IDateRange,
   IFormatedData,
-  IKeyLabelMapping,
   ISavedSearchData,
   Item,
 } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
+import { constructUrlParams } from '@/utils/construct-url-param';
 
 const SavedSearch = () => {
-  const router = useRouter();
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
@@ -67,9 +63,8 @@ const SavedSearch = () => {
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 
-  const [activeTab, setActiveTab] = useState(0);
-
   const [date, setDate] = useState<DateRange | undefined>();
+  const [dateSearchUrl, setDateSearchUrl] = useState('');
   const [searchUrl, setSearchUrl] = useState('');
 
   //Data
@@ -90,13 +85,17 @@ const SavedSearch = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  const dispatch = useAppDispatch();
+  let router = useRouter();
 
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     limit,
     offset,
-    searchUrl,
+    dateSearchUrl,
     searchByName,
+  });
+
+  const { data: productData } = useGetProductCountQuery({
+    searchUrl,
   });
 
   const handleResultsPerPageChange = useCallback(
@@ -148,16 +147,15 @@ const SavedSearch = () => {
   }, []);
 
   const renderCardData = useCallback(
-    (data: ISavedSearchData[]) => {
-      return data?.map((item) => {
+    (data: any) => {
+      return data?.map((item: any) => {
         // Filter the data based on the keyLabelMapping
         const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
-          if (item.meta_data[0].basic_card_details) {
+          if (item.meta_data) {
             filteredData[keyLabelMapping[key]] =
-              item.meta_data[0].basic_card_details[key] &&
-              item.meta_data[0].basic_card_details[key]?.length
-                ? item.meta_data[0].basic_card_details[key]
+              item.meta_data[key] && item.meta_data[key]?.length
+                ? item.meta_data[key]
                 : '-';
           }
         }
@@ -173,7 +171,7 @@ const SavedSearch = () => {
 
         return {
           cardId: item.id,
-          cardActionIcon: item.meta_data.length <= 1 && editIcon,
+          cardActionIcon: editIcon,
           cardHeader: (
             <div className="">
               <CustomTable
@@ -186,13 +184,6 @@ const SavedSearch = () => {
                           <div style={{ marginRight: '80px' }}>
                             {formatCreatedAt(item.created_at)}
                           </div>
-
-                          {item.meta_data.length > 1 && ( // Conditionally render the button
-                            <CustomDisplayButton
-                              displayButtonLabel={`Searches (${item.meta_data.length})`}
-                              displayButtonAllStyle={manySavedsearchButtonStyle}
-                            />
-                          )}
                         </div>
                       ),
                     },
@@ -325,7 +316,7 @@ const SavedSearch = () => {
   const handleDate = (date: IDateRange) => {
     console.log('date', date);
     setDate(date);
-    setSearchUrl(
+    setDateSearchUrl(
       `&startDate=${new Date(date.from)
         .toISOString()
         .replace('T', ' ')
@@ -338,30 +329,27 @@ const SavedSearch = () => {
 
   //Header Data
   const savedSearchheaderData = {
-    headerHeading: ManageLocales('app.savedSearch.header'),
-    //count
-    searchCount: data?.data?.count > 0 && data?.data?.count,
+    headerHeading: (
+      <div className="flex items-center gap-[10px] bottom-0">
+        <Checkbox
+          onClick={handleSelectAllCheckbox}
+          data-testid={'Select All Checkbox'}
+          checked={isCheckAll}
+        />
+        <p className="text-solitaireTertiary text-base font-medium">
+          {ManageLocales('app.common.header.selectAll')}
+        </p>
+      </div>
+    ),
     //Search Data
     handleSearch: handleSearch,
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
     headerData: (
-      <>
-        <div className="flex mr-[30px] ">
-          <CustomCalender date={date} handleDate={handleDate} />
-        </div>
-        <div className="flex items-center gap-[10px] bottom-0">
-          <Checkbox
-            onClick={handleSelectAllCheckbox}
-            data-testid={'Select All Checkbox'}
-            checked={isCheckAll}
-          />
-          <p className="text-solitaireTertiary text-base font-medium">
-            {ManageLocales('app.common.header.selectAll')}
-          </p>
-        </div>
-      </>
+      <div className="flex mr-[30px] ">
+        <CustomCalender date={date} handleDate={handleDate} />
+      </div>
     ),
     overriddenStyles: {
       headerDataStyles: 'flex items-center',
@@ -370,6 +358,7 @@ const SavedSearch = () => {
 
   useEffect(() => {
     const savedSearchData = data?.data;
+
     let specificSavedSearchData = savedSearchData?.savedSearch;
     setNumberOfPages(
       Math.ceil(savedSearchData?.count / savedSearchData?.limit)
@@ -377,24 +366,7 @@ const SavedSearch = () => {
 
     setSavedSearchData(specificSavedSearchData);
 
-    // Filter the location key from basic_card_details
-    const filteredData = specificSavedSearchData?.map(
-      (item: ISavedSearchData) => ({
-        ...item,
-        meta_data: item.meta_data.map((metaItem) => ({
-          ...metaItem,
-          basic_card_details: (({
-            Location,
-            Tinge,
-            Fluorescence,
-            Symmetry,
-            ...rest
-          }) => rest)(metaItem.basic_card_details),
-        })),
-      })
-    );
-
-    setCardData(renderCardData(filteredData));
+    setCardData(renderCardData(specificSavedSearchData));
   }, [data, limit, offset]);
 
   // Function to handle edit action
@@ -402,30 +374,45 @@ const SavedSearch = () => {
     alert("You have clicked the 'Edit button'");
   };
 
-  // Function to handle "Show Results" button click
-  const showButtonHandleClick = () => {
-    alert("You have clicked the 'show result' button");
-  };
+  const handleCardClick = (id: string) => {
+    let cardClickData = savedSearchData.filter((items: any) => {
+      return items.id === id;
+    });
 
-  const handleButtonClick = (index: number) => {
-    setActiveTab(index);
-  };
+    let url = constructUrlParams(cardClickData[0].meta_data);
+    setSearchUrl(url);
 
-  const handleSlider = () => {
-    // let savedSearchsingleDiamondData = savedSearchData.filter((items: any) => {
-    //   return items.id === data.id;
-    // });
-    setActiveTab(0);
-  };
+    if (productData.count < 300) {
+      setIsError(true);
+      setErrorText('Please modify your search, the stones exceeds the limit.');
+    } else {
+      let data: any = JSON.parse(localStorage.getItem('Search')!);
 
-  const modifySearchHandler = (id: string, activeTab: number) => {
-    let modifyData = savedSearchData.filter((data) => {
-      return data.id === id;
-    })[0];
+      if (data?.length) {
+        let localStorageData = [
+          ...data,
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
 
-    dispatch(modifySavedSearch({ modifyData, activeTab }));
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
+        router.push(`/search?route=${data.length + 3}`);
+      } else {
+        let localStorageData = [
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
 
-    router.push(`/form?edit=saved`);
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
+        router.push(`/search?route=${3}`);
+      }
+    }
   };
 
   return (
@@ -459,414 +446,42 @@ const SavedSearch = () => {
       />
       <div className="container flex flex-col">
         {/* Custom Header */}
-        {/* <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
-          <CustomHeader data={savedSearchheaderData} />
-        </div> */}
+        <div className="sticky top-0 bg-solitairePrimary mt-3">
+          <CustomHeader
+            data={savedSearchheaderData}
+            mainDivStyle={styles.mainHeaderStyle}
+            visibleStyle={styles.visibleStyle}
+          />
+        </div>
 
         {/* Custom Card and Checkbox map */}
         {cardData?.length ? (
           <div className="flex-grow overflow-y-auto min-h-[80vh]">
-            <>
-              {cardData?.map((items: ICardData, indexTest: number) => {
-                return (
-                  <div key={items.cardId}>
-                    <div className="flex mt-6">
-                      <CustomCheckBox
-                        data={items.cardId}
-                        onClick={handleClick}
-                        isChecked={isCheck}
-                      />
-                      <CustomSlider
-                        sheetTriggerStyle={styles.mainCardContainer}
-                        sheetTriggenContent={
-                          <>
-                            <div
-                              onClick={() =>
-                                // handleSlider(savedSearchData[indexTest])
-                                handleSlider()
-                              }
-                            >
-                              <CustomSearchResultCard
-                                cardData={items}
-                                overriddenStyles={cardStyles}
-                                defaultCardPosition={false}
-                                handleCardAction={handleEdit}
-                              />
-                            </div>
-                          </>
-                        }
-                        sheetContentStyle={styles.sheetContentStyle}
-                        sheetContent={
-                          <>
-                            <div
-                              className={`border-b border-solitaireSenary ${styles.sheetMainHeading}`}
-                            >
-                              <p>
-                                {ManageLocales('app.savedSearch.detailInfo')}
-                              </p>
-                            </div>
-                            {/* {sliderData.map((cardDetails: any) => ( */}
-                            <>
-                              <div className="sticky top-[82px] bg-solitaireSecondary flex items-center gap-14 text-solitaireTertiary">
-                                {savedSearchData[indexTest].meta_data.length >
-                                  1 &&
-                                  savedSearchData[indexTest].meta_data.map(
-                                    (data, index: number) => (
-                                      <div
-                                        key={`Search-${index}`}
-                                        style={{
-                                          marginRight:
-                                            index ===
-                                            savedSearchData[indexTest].meta_data
-                                              .length -
-                                              1
-                                              ? '0px'
-                                              : '16px',
-                                        }}
-                                      >
-                                        <CustomDisplayButton
-                                          displayButtonAllStyle={{
-                                            displayButtonStyle:
-                                              activeTab === index
-                                                ? styles.activeHeaderButtonStyle
-                                                : styles.headerButtonStyle,
-                                            displayLabelStyle:
-                                              styles.headerButtonLabelStyle,
-                                          }}
-                                          displayButtonLabel={`Search ${
-                                            index + 1
-                                          }`}
-                                          handleClick={() =>
-                                            handleButtonClick(index)
-                                          }
-                                        />
-                                      </div>
-                                    )
-                                  )}
-                              </div>
-                              <div
-                                className="flex"
-                                key={savedSearchData[indexTest].id}
-                              >
-                                <div className={styles.sheetMainDiv}>
-                                  {/* Detailed Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.savedSearch.basicInfo'
-                                      )}
-                                    </p>
-                                  </div>
+            {cardData?.map((items: ICardData) => {
+              return (
+                <div key={items.cardId}>
+                  <div className="flex mt-6">
+                    <CustomCheckBox
+                      data={items.cardId}
+                      onClick={handleClick}
+                      isChecked={isCheck}
+                    />
 
-                                  <div>
-                                    {savedSearchData[indexTest] &&
-                                    savedSearchData[indexTest]?.meta_data &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ] &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ]?.basic_card_details
-                                      ? Object.entries(
-                                          savedSearchData[indexTest]?.meta_data[
-                                            activeTab
-                                          ]?.basic_card_details
-                                        ).map(([key, value]) => (
-                                          <div key={key}>
-                                            <p className="flex">
-                                              <span
-                                                className={styles.innerHeading}
-                                              >
-                                                {formatCassing(key)}
-                                              </span>
-                                              <span
-                                                className={styles.sheetValues}
-                                              >
-                                                <span
-                                                  className={styles.sheetValues}
-                                                >
-                                                  <span
-                                                    className={
-                                                      styles.sheetValues
-                                                    }
-                                                  >
-                                                    <span
-                                                      className={
-                                                        styles.sheetValues
-                                                      }
-                                                    >
-                                                      <span
-                                                        className={
-                                                          styles.sheetValues
-                                                        }
-                                                      >
-                                                        <span
-                                                          className={
-                                                            styles.sheetValues
-                                                          }
-                                                        >
-                                                          {Array.isArray(value)
-                                                            ? value.length > 0
-                                                              ? value.join(', ')
-                                                              : '-'
-                                                            : typeof value ===
-                                                                'string' &&
-                                                              value.trim() ===
-                                                                ''
-                                                            ? '-'
-                                                            : typeof value ===
-                                                              'string'
-                                                            ? value
-                                                            : '-'}
-                                                        </span>
-                                                      </span>
-                                                    </span>
-                                                  </span>
-                                                </span>
-                                              </span>
-                                            </p>
-                                          </div>
-                                        ))
-                                      : ''}
-                                  </div>
-
-                                  {/* measurement Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.measurement'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {savedSearchData[indexTest] &&
-                                    savedSearchData[indexTest]?.meta_data &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ] &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ].measurements
-                                      ? Object.entries(
-                                          savedSearchData[indexTest]?.meta_data[
-                                            activeTab
-                                          ].measurements
-                                        ).map(([key, value]) => (
-                                          <div key={key}>
-                                            <p className="flex">
-                                              <span
-                                                className={styles.innerHeading}
-                                              >
-                                                {formatCassing(key)}
-                                              </span>
-                                              <span
-                                                className={styles.sheetValues}
-                                              >
-                                                {Array.isArray(value)
-                                                  ? value.length > 0
-                                                    ? value.join(', ')
-                                                    : '-'
-                                                  : typeof value === 'string' &&
-                                                    value.trim() === ''
-                                                  ? '-'
-                                                  : typeof value === 'string'
-                                                  ? value
-                                                  : '-'}
-                                              </span>
-                                            </p>
-                                          </div>
-                                        ))
-                                      : ''}
-                                  </div>
-
-                                  {/* other Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.otherInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {savedSearchData[indexTest] &&
-                                    savedSearchData[indexTest]?.meta_data &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ] &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ].other_information
-                                      ? Object.entries(
-                                          savedSearchData[indexTest]?.meta_data[
-                                            activeTab
-                                          ].other_information
-                                        ).map(([key, value]) => (
-                                          <div key={key}>
-                                            <p className="flex">
-                                              <span
-                                                className={styles.innerHeading}
-                                              >
-                                                {formatCassing(key)}
-                                              </span>
-                                              <span
-                                                className={styles.sheetValues}
-                                              >
-                                                {Array.isArray(value)
-                                                  ? value.length > 0
-                                                    ? value.join(', ')
-                                                    : '-'
-                                                  : typeof value === 'string' &&
-                                                    value.trim() === ''
-                                                  ? '-'
-                                                  : typeof value === 'string'
-                                                  ? value
-                                                  : '-'}
-                                              </span>
-                                            </p>
-                                          </div>
-                                        ))
-                                      : ''}
-                                  </div>
-                                </div>
-
-                                {/* inclusionDetails Information section */}
-                                <div className={styles.inclusionDetailsMainDiv}>
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.inclusionDetails'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  {savedSearchData[indexTest] &&
-                                  savedSearchData[indexTest]?.meta_data &&
-                                  savedSearchData[indexTest]?.meta_data[
-                                    activeTab
-                                  ] &&
-                                  savedSearchData[indexTest]?.meta_data[
-                                    activeTab
-                                  ].inclusion_details ? (
-                                    Object.entries(
-                                      savedSearchData[indexTest]?.meta_data[
-                                        activeTab
-                                      ].inclusion_details
-                                    ).map(([key, value]) => (
-                                      <p className="flex" key={key}>
-                                        <span
-                                          className={
-                                            styles.inclutionDetailsInnerHeadingStyle
-                                          }
-                                        >
-                                          {formatCassing(key)}
-                                        </span>
-                                        <span className={styles.sheetValues}>
-                                          {Array.isArray(value) &&
-                                          value.length > 0
-                                            ? value.join(', ')
-                                            : (typeof value === 'string' &&
-                                                value.trim() !== '') ||
-                                              typeof value === 'number'
-                                            ? value
-                                            : '-'}
-                                        </span>
-                                      </p>
-                                    ))
-                                  ) : (
-                                    // Handle the case where the data is not available, e.g., display a loading message or an error message.
-                                    <p>Data not available</p>
-                                  )}
-
-                                  {/* other Information section */}
-                                  <div className={styles.sheetHeading}>
-                                    <p>
-                                      {ManageLocales(
-                                        'app.previousSearch.otherInfo'
-                                      )}
-                                    </p>
-                                  </div>
-
-                                  <div>
-                                    {savedSearchData[indexTest] &&
-                                    savedSearchData[indexTest]?.meta_data &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ] &&
-                                    savedSearchData[indexTest]?.meta_data[
-                                      activeTab
-                                    ].other_information
-                                      ? Object.entries(
-                                          savedSearchData[indexTest]?.meta_data[
-                                            activeTab
-                                          ].other_information
-                                        ).map(([key, value]) => (
-                                          <div key={key}>
-                                            <p className="flex">
-                                              <span
-                                                className={styles.innerHeading}
-                                              >
-                                                {formatCassing(key)}
-                                              </span>
-                                              <span
-                                                className={styles.sheetValues}
-                                              >
-                                                <span
-                                                  className={styles.sheetValues}
-                                                >
-                                                  {Array.isArray(value) &&
-                                                  value.length > 0
-                                                    ? value.join(', ')
-                                                    : (typeof value ===
-                                                        'string' &&
-                                                        value.trim() !== '') ||
-                                                      typeof value === 'number'
-                                                    ? value
-                                                    : '-'}
-                                                </span>
-                                              </span>
-                                            </p>
-                                          </div>
-                                        ))
-                                      : ''}
-                                  </div>
-                                </div>
-                              </div>
-                            </>
-                            {/* // ))} */}
-
-                            {/* Show Results button */}
-                            <div
-                              className={`border-t border-solitaireTertiary mt-8 ${styles.showResultMainDiv}`}
-                            >
-                              <CustomDisplayButton
-                                displayButtonLabel="Modify Search"
-                                displayButtonAllStyle={{
-                                  displayButtonStyle:
-                                    styles.showResultButtonTransparent,
-                                }}
-                                handleClick={() =>
-                                  modifySearchHandler(items.cardId, activeTab)
-                                }
-                              />
-                              <CustomDisplayButton
-                                displayButtonLabel="Show Results"
-                                displayButtonAllStyle={{
-                                  displayButtonStyle:
-                                    styles.showResultButtonFilled,
-                                }}
-                                handleClick={showButtonHandleClick}
-                              />
-                            </div>
-                          </>
-                        }
+                    <div
+                      className={`overflow-auto ${styles.mainCardContainer}`}
+                      onClick={() => handleCardClick(items.cardId)}
+                    >
+                      <CustomSearchResultCard
+                        cardData={items}
+                        overriddenStyles={cardStyles}
+                        defaultCardPosition={false}
+                        handleCardAction={handleEdit}
                       />
                     </div>
                   </div>
-                );
-              })}
-            </>
+                </div>
+              );
+            })}
           </div>
         ) : (
           <NoDataFound />

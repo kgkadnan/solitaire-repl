@@ -9,6 +9,7 @@
   width: 95%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
+  cursor: pointer;
 }
 
 /* Card Title */
@@ -237,4 +238,18 @@
 
 .paginationContainerStyle {
   border: none !important ;
+}
+
+.mainHeaderStyle {
+  position: fixed;
+  top: 146px;
+  background-color: hsl(var(--solitaire-primary));
+  z-index: 11111;
+  width: 90%;
+  height: 60px;
+  border: none !important ;
+}
+
+.visibleStyle {
+  top: 66px;
 }
