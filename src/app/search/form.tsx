@@ -757,7 +757,7 @@ const AdvanceSearch = () => {
         );
       } else if (data?.count === 0) {
         setIsError(true);
-        setErrorText(`No stones found`);
+        setErrorText(`No stones found, Please modify your search.`);
       } else if (data?.count !== 0) {
         setIsError(true);
         setErrorText(`${data?.count} stones found`);
@@ -1378,7 +1378,8 @@ const AdvanceSearch = () => {
         // }
 
         const activeTab = searchResult?.activeTab;
-        const activeSearch: boolean = addSearches[activeTab]?.isSavedSearch;
+        const activeSearch: boolean =
+          addSearches[activeTab]?.saveSearchName.length;
         if (activeSearch) {
           const updatedMeta = addSearches;
 
@@ -1398,20 +1399,19 @@ const AdvanceSearch = () => {
               console.log('error', error);
             });
         } else {
-          saveSearchName.length &&
-            (await addSavedSearch({
-              name: saveSearchName,
-              diamond_count: data?.count,
-              meta_data: queryParams,
-              is_deleted: false,
+          await addSavedSearch({
+            name: saveSearchName,
+            diamond_count: data?.count,
+            meta_data: queryParams,
+            is_deleted: false,
+          })
+            .unwrap()
+            .then(() => {
+              handleSearch(true);
             })
-              .unwrap()
-              .then(() => {
-                handleSearch(true);
-              })
-              .catch((error: any) => {
-                console.log('error', error);
-              }));
+            .catch((error: any) => {
+              console.log('error', error);
+            });
         }
       }
     } else {
@@ -1694,14 +1694,14 @@ const AdvanceSearch = () => {
           }
         }
 
-        let setDataOnLocalStorage = {
-          saveSearchName,
-          isSavedSearch: isSaved,
-          queryParams,
-        };
-
         if (modifySearchFrom === 'search-result') {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+          let setDataOnLocalStorage = {
+            saveSearchName:
+              modifySearchResult[searchResult.activeTab]?.saveSearchName,
+            isSavedSearch: isSaved,
+            queryParams,
+          };
           if (modifySearchResult[searchResult.activeTab]) {
             const updatedData = [...modifySearchResult];
             updatedData[searchResult.activeTab] = setDataOnLocalStorage;
@@ -1710,6 +1710,11 @@ const AdvanceSearch = () => {
 
           router.push(`/search?route=${searchResult.activeTab + 3}`);
         } else {
+          let setDataOnLocalStorage = {
+            saveSearchName: saveSearchName,
+            isSavedSearch: isSaved,
+            queryParams,
+          };
           localStorage.setItem(
             'Search',
             JSON.stringify([...addSearches, setDataOnLocalStorage])
@@ -2752,19 +2757,21 @@ const AdvanceSearch = () => {
                 if (searchCount > 1) {
                   const activeTab = searchResult?.activeTab;
                   if (activeTab !== undefined) {
-                    const activeSearch: boolean =
-                      addSearches[activeTab]?.saveSearchName;
+                    const isSearchName: boolean =
+                      addSearches[activeTab]?.saveSearchName.length;
+                    const isSaved: boolean =
+                      addSearches[activeTab]?.isSavedSearch.length;
                     // Check if the active search is not null and isSavedSearch is true
-                    if (activeSearch) {
+                    if (isSaved) {
+                      handleSaveAndSearch();
+                    } else if (!isSaved && isSearchName) {
                       handleSaveAndSearch();
                     } else {
                       setIsInputDialogOpen(true);
                     }
                   } else {
                     setIsError(true);
-                    setErrorText(
-                      '*Please select some parameters before initiating a search'
-                    );
+                    setErrorText('Please make a selection to perform action.');
                   }
                 }
               },

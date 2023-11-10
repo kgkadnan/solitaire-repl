@@ -290,13 +290,21 @@ const SearchResults = ({ data, activeTab }: any) => {
       ),
     },
     {
-      id: 6,
+      id: 2,
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.footer.bookAppointment'
+      ),
+      style: styles.transparent,
+      fn: () => {},
+    },
+    {
+      id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
       fn: addToCart,
     },
     {
-      id: 2,
+      id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
       fn: () => {},
@@ -347,6 +355,8 @@ const SearchResults = ({ data, activeTab }: any) => {
     if (yourSelection) {
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
+        setIsCheck([]);
+        setIsCheckAll(false);
         setRows(data?.products);
       }
     }
@@ -531,7 +541,7 @@ const SearchResults = ({ data, activeTab }: any) => {
       <>
         <div className="mb-2">
           {/* Count Bar  */}
-          <div className="flex justify-between items-center">
+          <div className="flex justify-between items-center h-7">
             <div className="flex gap-3">
               <p>
                 {ManageLocales('app.searchResult.countBar.pieces')}:
@@ -559,7 +569,7 @@ const SearchResults = ({ data, activeTab }: any) => {
                   displayButtonLabel={'Save this search'}
                   handleClick={() =>
                     yourSelectionData[activeTab].saveSearchName.length
-                      ? ''
+                      ? console.log('i"m Here')
                       : setIsInputDialogOpen(true)
                   }
                   displayButtonAllStyle={{
