@@ -359,12 +359,8 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    const savedSearchData = data?.data;
-
-    let specificSavedSearchData = savedSearchData?.savedSearch;
-    setNumberOfPages(
-      Math.ceil(savedSearchData?.count / savedSearchData?.limit)
-    );
+    let specificSavedSearchData = data?.savedSearches;
+    setNumberOfPages(Math.ceil(data?.count / data?.limit));
 
     setSavedSearchData(specificSavedSearchData);
 
