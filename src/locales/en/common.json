@@ -76,6 +76,7 @@
   "app.advanceSearch.white": "White",
   "app.advanceSearch.fancy": "Fancy",
   "app.advanceSearch.range": "Range",
+  "app.advanceSearch.cancel":"Cancel",
   "app.previousSearch.delete": "Delete",
   "app.previousSearch.filterByDate": "Filter By Date",
   "app.previousSearch.header": "Previous Searches",

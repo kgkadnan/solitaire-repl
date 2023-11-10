@@ -12,6 +12,9 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
   return (
     <div className={`${styles.footerParentDiv} ${noBorderTop}`}>
       {footerButtonData?.map((item) => {
+        if (item.isHidden) {
+          return null;
+        }
         return (
           <div key={item.id} className="ml-6">
             <CustomDisplayButton
@@ -21,7 +24,6 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
                 displayLabelStyle: styles.footerButtonLabel,
               }}
               handleClick={item.fn}
-              isDisable={item.isDisable}
             />
           </div>
         );
