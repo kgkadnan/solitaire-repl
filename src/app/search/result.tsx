@@ -492,23 +492,23 @@ const SearchResults = ({ data, activeTab }: any) => {
     const searchData = localStorage.getItem('Search');
 
     if (searchData !== null) {
-      const data = JSON.parse(searchData) || [];
+      const parseData = JSON.parse(searchData) || [];
 
       await addSavedSearch({
         name: saveSearchName,
         diamond_count: data?.count,
-        meta_data: data[activeTab].queryParams,
+        meta_data: parseData[activeTab].queryParams,
         is_deleted: false,
       })
         .unwrap()
         .then(() => {
-          data[activeTab] = {
+          parseData[activeTab] = {
             saveSearchName,
             isSavedSearch: true,
-            queryParams: data[activeTab].queryParams,
+            queryParams: parseData[activeTab].queryParams,
           };
-          localStorage.setItem('Search', JSON.stringify(data));
-          setYourSelectionData(data);
+          localStorage.setItem('Search', JSON.stringify(parseData));
+          setYourSelectionData(parseData);
           setIsInputDialogOpen(false);
         })
 
@@ -569,7 +569,7 @@ const SearchResults = ({ data, activeTab }: any) => {
                   displayButtonLabel={'Save this search'}
                   handleClick={() =>
                     yourSelectionData[activeTab].saveSearchName.length
-                      ? console.log('i"m Here')
+                      ? console.log('i"m Here to update')
                       : setIsInputDialogOpen(true)
                   }
                   displayButtonAllStyle={{

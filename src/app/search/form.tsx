@@ -667,8 +667,6 @@ const AdvanceSearch = () => {
       starLengthTo,
     });
 
-    console.log('queryParams', queryParams);
-
     // Construct your search URL here
     !isValidationError && setSearchUrl(constructUrlParams(queryParams));
   }, [
@@ -1387,12 +1385,13 @@ const AdvanceSearch = () => {
 
           updatedMeta[activeTab].queryParams = queryParams;
 
-          let data = {
+          let updateSaveSearchData = {
             name: updatedMeta[0].saveSearchName,
-            data: updatedMeta[0].queryParams,
+            meta_data: updatedMeta[0].queryParams,
+            diamond_count: data?.count,
           };
 
-          updateSavedSearch(data)
+          updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
               handleSearch(true);
