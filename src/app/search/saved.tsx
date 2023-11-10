@@ -38,6 +38,8 @@ import {
 } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import { constructUrlParams } from '@/utils/construct-url-param';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySavedSearch } from '@/features/saved-search/saved-search';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -86,6 +88,7 @@ const SavedSearch = () => {
   const [errorText, setErrorText] = useState('');
 
   let router = useRouter();
+  const dispatch = useAppDispatch();
 
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     limit,
@@ -314,7 +317,6 @@ const SavedSearch = () => {
   ];
 
   const handleDate = (date: IDateRange) => {
-    console.log('date', date);
     setDate(date);
     setDateSearchUrl(
       `&startDate=${new Date(date.from)
@@ -371,7 +373,12 @@ const SavedSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    alert("You have clicked the 'Edit button'");
+    let savedSearchEditData = savedSearchData.filter((items: any) => {
+      return items.id === stone;
+    });
+
+    dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
+    router.push(`/search?route=form&&edit=saved-search`);
   };
 
   const handleCardClick = (id: string) => {

@@ -436,7 +436,7 @@ const AdvanceSearch = () => {
     if (modifySearchFrom === 'previous-search' && modifyPreviousSearchData) {
       setModifySearch(modifyPreviousSearchData);
     } else if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
-      setModifySearch(modifysavedSearchData[savedSearch.activeTab]);
+      setModifySearch(modifysavedSearchData);
     } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
       setModifySearch(modifySearchResult[searchResult.activeTab]?.queryParams);
     }
@@ -1680,7 +1680,7 @@ const AdvanceSearch = () => {
         });
 
         if (modifySearchFrom === 'saved-search') {
-          if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
+          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
             // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
             updatedMeta[savedSearch.activeTab] = queryParams;
@@ -2738,12 +2738,27 @@ const AdvanceSearch = () => {
           footerButtonData={[
             {
               id: 1,
+              displayButtonLabel: ManageLocales('app.advanceSearch.cancel'),
+              style: styles.transparent,
+              fn: () => {
+                if (modifySearchFrom === 'saved-search') {
+                  router.push('/search?route=saved');
+                } else if (modifySearchFrom === 'search-result') {
+                  router.push(`/search?route=${searchResult.activeTab + 3}`);
+                }
+              },
+              isHidden:
+                modifySearchFrom !== 'saved-search' &&
+                modifySearchFrom !== 'search-result',
+            },
+            {
+              id: 2,
               displayButtonLabel: ManageLocales('app.advanceSearch.reset'),
               style: styles.transparent,
               fn: handleReset,
             },
             {
-              id: 2,
+              id: 3,
               displayButtonLabel: `${ManageLocales(
                 'app.advanceSearch.saveSearch'
               )}`,
@@ -2768,10 +2783,9 @@ const AdvanceSearch = () => {
                   }
                 }
               },
-              isDisable: modifySearchFrom === 'saved-search',
             },
             {
-              id: 3,
+              id: 4,
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
