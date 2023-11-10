@@ -647,7 +647,6 @@ const SearchResults = ({ data, activeTab }: any) => {
           </div>
         </div>
         {/* <CustomHeader dummyData={headerData} /> */}
-
         <CustomDataTable
           tableRows={rows}
           tableColumns={tableColumns}

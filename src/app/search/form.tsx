@@ -667,6 +667,8 @@ const AdvanceSearch = () => {
       starLengthTo,
     });
 
+    console.log('queryParams', queryParams);
+
     // Construct your search URL here
     !isValidationError && setSearchUrl(constructUrlParams(queryParams));
   }, [
