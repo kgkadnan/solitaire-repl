@@ -378,7 +378,7 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?route=form&&edit=saved-search`);
+    router.push(`/search?route=saved&edit=saved-search`);
   };
 
   const handleCardClick = (id: string) => {
