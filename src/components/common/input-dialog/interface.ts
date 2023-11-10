@@ -8,6 +8,7 @@ export interface IInputDialog {
     inputValue: string;
     setInputvalue: any;
     displayButtonLabel2: string;
-    displayButtonFunction: () => void;
+    displayButtonFunction: (id?: any) => void;
+    displayButtonFunctionParameter?: any;
   };
 }

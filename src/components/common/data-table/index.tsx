@@ -544,10 +544,12 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                   setDiamondDetailImageUrl(``);
                                   setSliderData([tableRows[index]]);
                                 }}
-                                className={` ${
+                                className={`${
                                   column.accessor === 'lot_id' &&
-                                  row.is_memo_out
+                                  row?.diamond_status === 'MemoOut'
                                     ? styles.memoOutBackground
+                                    : row?.in_cart?.length
+                                    ? styles.inCartBackground // Add your inCartBackground class
                                     : 'px-[5px]'
                                 }`}
                               >
@@ -641,7 +643,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                                   {keyLabelMapping[key]}
                                                 </span>
                                                 <br />
-                                                {data[key] ? data[key] : '-'}
+                                                {key === 'amount'
+                                                  ? data?.variants[0]?.prices[0]
+                                                      ?.amount ?? '-'
+                                                  : data[key] ?? '-'}
                                               </div>
                                             )
                                           )}
