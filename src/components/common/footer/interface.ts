@@ -3,7 +3,7 @@ export interface IfooterButtonData {
   displayButtonLabel: string | React.ReactNode;
   style?: string;
   fn?: () => void;
-  isDisable?: boolean;
+  isHidden?: boolean;
 }
 
 export interface ICustomFooterProps {

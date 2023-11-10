@@ -30,6 +30,7 @@ interface IMyProfileRoutes {
 
 function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
+  const editSubRoute = useSearchParams().get('edit');
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
@@ -245,7 +246,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?route=form&&edit=search-result`);
+    router.push(`/search?route=${subRoute}&edit=search-result`);
   };
 
   const customInputDialogData = {
@@ -337,10 +338,12 @@ function SearchResultLayout() {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {headerPath === 'Saved Searches' ? (
-            <SavedSearch />
-          ) : headerPath === 'New Search' ? (
+          {headerPath === 'New Search' ||
+          editSubRoute === 'saved-search' ||
+          editSubRoute === 'search-result' ? (
             <AdvanceSearch />
+          ) : headerPath === 'Saved Searches' ? (
+            <SavedSearch />
           ) : (
             <SearchResults data={data} activeTab={activeTab - 1} />
           )}
