@@ -42,6 +42,7 @@ function SearchResultLayout() {
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [removeIndex, setRemoveIndex] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [maxTab, setMaxTab] = useState<number>(0);
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
@@ -213,6 +214,7 @@ function SearchResultLayout() {
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
+        setMaxTab(parseYourSelection.length);
 
         // Always fetch data, even on initial load
         let url = constructUrlParams(
@@ -238,11 +240,22 @@ function SearchResultLayout() {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search')!, activeTab]);
+  }, [localStorage.getItem('Search')!, activeTab, maxTab]);
 
   const handleSearchTab = (index: number, pathName: string) => {
-    setActiveTab(index);
-    setheaderPath(pathName);
+    if (maxTab < 5) {
+      setActiveTab(index);
+      setheaderPath(pathName);
+    } else {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
+            'Max search limit reached. Please remove existing searches'
+          </div>
+        </>
+      );
+    }
   };
 
   const editSearchResult = (activeTab: number) => {
@@ -285,7 +298,9 @@ function SearchResultLayout() {
                     : 'hover:text-solitaireQuaternary'
                 }`}
                 onClick={() => handleSearchTab(0, pathName)}
-                href={`/search?route=${path}`}
+                href={
+                  maxTab === 5 && path === 'form' ? `` : `/search?route=${path}`
+                }
                 key={id}
               >
                 <div

@@ -390,30 +390,37 @@ const SavedSearch = () => {
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
+      console.log('pppppppppppppppppppppppppp', data.length);
+      if (data.length < 5) {
+        if (data?.length) {
+          let localStorageData = [
+            ...data,
+            {
+              saveSearchName: cardClickData[0].name,
+              isSavedSearch: true,
+              queryParams: cardClickData[0].meta_data,
+            },
+          ];
 
-      if (data?.length) {
-        let localStorageData = [
-          ...data,
-          {
-            saveSearchName: cardClickData[0].name,
-            isSavedSearch: true,
-            queryParams: cardClickData[0].meta_data,
-          },
-        ];
+          localStorage.setItem('Search', JSON.stringify(localStorageData));
+          router.push(`/search?route=${data.length + 3}`);
+        } else {
+          let localStorageData = [
+            {
+              saveSearchName: cardClickData[0].name,
+              isSavedSearch: true,
+              queryParams: cardClickData[0].meta_data,
+            },
+          ];
 
-        localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?route=${data.length + 3}`);
+          localStorage.setItem('Search', JSON.stringify(localStorageData));
+          router.push(`/search?route=${3}`);
+        }
       } else {
-        let localStorageData = [
-          {
-            saveSearchName: cardClickData[0].name,
-            isSavedSearch: true,
-            queryParams: cardClickData[0].meta_data,
-          },
-        ];
-
-        localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?route=${3}`);
+        setIsError(true);
+        setErrorText(
+          'Max search limit reached. Please remove existing searches'
+        );
       }
     }
   };
