@@ -1,7 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
-import AdvanceSearch from '@/app/search/form/page';
+
 import Image from 'next/image';
+import AdvanceSearch from '@/app/search/form';
 
 jest.mock('next/image', () => {
   return {

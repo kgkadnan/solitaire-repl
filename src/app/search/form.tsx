@@ -28,7 +28,6 @@ interface QueryParameters {
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
   const searchResult = useAppSelector((store) => store.searchResult);
 
@@ -425,12 +424,9 @@ const AdvanceSearch = () => {
 
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
-    let modifyPreviousSearchData = previousSearch?.previousSearch?.meta_data;
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
 
-    if (modifySearchFrom === 'previous-search' && modifyPreviousSearchData) {
-      setModifySearch(modifyPreviousSearchData);
-    } else if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
+    if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
       setModifySearch(modifysavedSearchData);
     } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
       setModifySearch(modifySearchResult[searchResult.activeTab]?.queryParams);
@@ -614,7 +610,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount > 0) {
+    if (searchCount >= 0) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
@@ -1015,9 +1011,13 @@ const AdvanceSearch = () => {
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
-        (girdleData) => (girdleData.toLowerCase() !== 'all' ? girdleData : '')
+        (girdleData) => girdleData
       );
-      setSelectedKeyToSymbol(filteredGirdleStep);
+      if (selectedKeyToSymbol.length > 0) {
+        setSelectedKeyToSymbol([]);
+      } else {
+        setSelectedKeyToSymbol(filteredGirdleStep);
+      }
     } else {
       handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
     }
@@ -1161,7 +1161,7 @@ const AdvanceSearch = () => {
   // console.log('addsEarc', addSearches[searchResult?.activeTab].isSavedSearch);
 
   const handleSaveAndSearch: any = async () => {
-    if (searchCount > 1) {
+    if (data?.count > 1) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -1251,8 +1251,6 @@ const AdvanceSearch = () => {
             meta_data: updatedMeta[0].queryParams,
             diamond_count: data?.count,
           };
-
-          console.log('updateSaveSearchData', updateSaveSearchData);
 
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
@@ -1386,87 +1384,8 @@ const AdvanceSearch = () => {
   //   }
   // };
 
-  const handleAddSearches = () => {
-    const queryParams = generateQueryParams({
-      selectedShape,
-      selectedColor,
-      selectedWhiteColor,
-      selectedFancyColor,
-      selectedIntensity,
-      selectedOvertone,
-      selectedTinge,
-      selectedTingeIntensity,
-      selectedClarity,
-      selectedCaratRange,
-      caratRangeFrom,
-      caratRangeTo,
-      selectedMake,
-      selectedCut,
-      selectedPolish,
-      selectedSymmetry,
-      selectedFluorescence,
-      selectedCulet,
-      selectedGirdle,
-      selectedKeyToSymbol,
-      selectedLab,
-      selectedHR,
-      selectedBrilliance,
-      selectedLocation,
-      selectedOrigin,
-      priceRangeFrom,
-      priceRangeTo,
-      discountFrom,
-      discountTo,
-      pricePerCaratFrom,
-      pricePerCaratTo,
-      blackTableBI,
-      sideBlackBI,
-      openCrownBI,
-      openTableBI,
-      openPavilionBI,
-      milkyBI,
-      lusterBI,
-      eyeCleanBI,
-      tableInclusionWI,
-      sideInclusionWI,
-      naturalCrownWI,
-      naturalGirdleWI,
-      naturalPavilionWI,
-      surfaceGrainingWI,
-      internalGrainingWI,
-      tablePerFrom,
-      tablePerTo,
-      depthTo,
-      depthFrom,
-      crownAngleFrom,
-      crownAngleTo,
-      lengthFrom,
-      lengthTo,
-      pavilionDepthFrom,
-      pavilionDepthTo,
-      depthPerFrom,
-      depthPerTo,
-      crownHeightFrom,
-      crownHeightTo,
-      widthFrom,
-      widthTo,
-      lowerHalfFrom,
-      lowerHalfTo,
-      ratioFrom,
-      ratioTo,
-      girdlePerFrom,
-      girdlePerTo,
-      pavilionAngleFrom,
-      pavilionAngleTo,
-      starLengthFrom,
-      starLengthTo,
-    });
-
-    setAddSearches([...addSearches, queryParams]);
-  };
-
   const handleSearch = async (isSaved: boolean = false) => {
-    if (searchCount > 1) {
+    if (data?.count > 1) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -2633,7 +2552,7 @@ const AdvanceSearch = () => {
               )}`,
               style: styles.transparent,
               fn: () => {
-                if (searchCount > 1) {
+                if (data?.count < 300 && data?.count > 0) {
                   const activeTab = searchResult?.activeTab;
                   if (activeTab !== undefined) {
                     const isSearchName: boolean =

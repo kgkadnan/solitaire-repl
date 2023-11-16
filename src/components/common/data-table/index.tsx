@@ -40,7 +40,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     checkboxData;
 
   const addToCart = () => {
-    if (sliderData[0]) {
+    if (sliderData[0].diamond_status === 'MemoOut') {
+      console.log('require error message here');
+    } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id],
       })

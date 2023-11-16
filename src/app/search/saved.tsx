@@ -176,25 +176,23 @@ const SavedSearch = () => {
           cardId: item.id,
           cardActionIcon: editIcon,
           cardHeader: (
-            <div className="">
-              <CustomTable
-                tableData={{
-                  tableHeads: [item.name],
-                  bodyData: [
-                    {
-                      desc: (
-                        <div className={styles.parentDivHeaderSectiom}>
-                          <div style={{ marginRight: '80px' }}>
-                            {formatCreatedAt(item.created_at)}
-                          </div>
+            <CustomTable
+              tableData={{
+                tableHeads: [item.name],
+                bodyData: [
+                  {
+                    desc: (
+                      <div className={styles.parentDivHeaderSectiom}>
+                        <div style={{ marginRight: '80px' }}>
+                          {formatCreatedAt(item.created_at)}
                         </div>
-                      ),
-                    },
-                  ],
-                }}
-                tableStyleClasses={searchCardTitle}
-              />
-            </div>
+                      </div>
+                    ),
+                  },
+                ],
+              }}
+              tableStyleClasses={searchCardTitle}
+            />
           ),
           cardContent: cardContent,
         };
@@ -205,7 +203,7 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = () => {
-    if (isCheck.length) {
+    if (isCheck?.length) {
       setIsDialogOpen(true);
     } else {
       setIsError(true);

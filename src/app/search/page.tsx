@@ -1,7 +1,7 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
@@ -21,6 +21,7 @@ import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
+import CustomLoader from '@/components/common/loader';
 
 interface IMyProfileRoutes {
   id: number;
@@ -31,6 +32,7 @@ interface IMyProfileRoutes {
 function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
   const editSubRoute = useSearchParams().get('edit');
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
@@ -55,6 +57,7 @@ function SearchResultLayout() {
       path: 'saved',
     },
   ]);
+
   const computeRouteAndComponentRenderer = () => {
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
@@ -251,7 +254,8 @@ function SearchResultLayout() {
       setDialogContent(
         <>
           <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-            'Max search limit reached. Please remove existing searches'
+            &apos;Max search limit reached. Please remove existing
+            searches&apos;
           </div>
         </>
       );
@@ -360,8 +364,14 @@ function SearchResultLayout() {
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />
+          ) : isLoading ? (
+            <CustomLoader />
           ) : (
-            <SearchResults data={data} activeTab={activeTab - 1} />
+            <SearchResults
+              data={data}
+              activeTab={activeTab - 1}
+              refetch={refetch}
+            />
           )}
         </main>
       </div>
