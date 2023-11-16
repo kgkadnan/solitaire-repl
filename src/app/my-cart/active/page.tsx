@@ -246,7 +246,7 @@ const ActiveMyCart = () => {
 
       {/* Custom Footer */}
       {footerButtonData?.length && (
-        <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+        <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
           {isError && (
             <div className="w-[30%]">
               <p className="text-red-700 text-base ">{errorText}</p>

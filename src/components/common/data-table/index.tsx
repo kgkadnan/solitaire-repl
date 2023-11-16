@@ -28,8 +28,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   checkboxData,
   mainTableStyle,
 }) => {
-  console.log('mainTableStyle', mainTableStyle);
-
   let currentPath = usePathname();
 
   const [sliderData, setSliderData] = useState<Product[]>([]);
