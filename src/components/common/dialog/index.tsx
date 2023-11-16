@@ -12,14 +12,12 @@ export const CustomDialog: React.FC<IDialog> = ({
     setIsOpen(open);
   };
   return (
-    <>
-      <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
-        <DialogContent
-          className={`sm:max-w-[377px] h-[147px] bg-solitaireSecondary text-solitaireTertiary  justify-center  ${dialogStyle?.dialogContent}`}
-        >
-          {dialogContent}
-        </DialogContent>
-      </Dialog>
-    </>
+    <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
+      <DialogContent
+        className={`sm:max-w-[377px] h-[147px] bg-solitaireSecondary text-solitaireTertiary  justify-center  ${dialogStyle?.dialogContent}`}
+      >
+        {dialogContent}
+      </DialogContent>
+    </Dialog>
   );
 };

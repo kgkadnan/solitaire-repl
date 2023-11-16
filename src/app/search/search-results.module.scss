@@ -209,3 +209,12 @@
   justify-content: center;
   gap: 20px;
 }
+
+.tableWrapper {
+  max-height: 65vh; /* Set to 80% of the viewport height */
+  overflow-y: scroll;
+  padding-bottom: 10px;
+  height: calc(
+    100vh - 42vh
+  ); /* This may not be needed, depending on the layout */
+}
