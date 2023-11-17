@@ -50,8 +50,6 @@ const CompareStone = () => {
     });
 
     if (variantIds.length) {
-      console.log('variantIds', variantIds);
-
       addCart({
         variants: variantIds,
       })
