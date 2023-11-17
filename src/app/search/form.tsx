@@ -37,7 +37,7 @@ const AdvanceSearch = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
 
-  const [searchCount, setSearchCount] = useState<number>(-1);
+  const [searchCount, setSearchCount] = useState<number>(-2);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
@@ -632,11 +632,6 @@ const AdvanceSearch = () => {
       setIsError(true);
       setErrorText(error1?.error);
     }
-    // console.log(error, 'error');
-    // else{
-    //   setIsError(true)
-    //   setErrorText(`Please select the stone parameters to make the search.`)
-    // }
     setSearchCount(searchCount + 1);
   }, [data, error]);
 
