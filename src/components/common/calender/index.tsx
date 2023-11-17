@@ -16,14 +16,15 @@ import CalenderIcon from '@public/assets/icons/calender.svg';
 import Image from 'next/image';
 import { CustomDisplayButton } from '../buttons/display-button';
 interface ICustomeCalendarProps {
-  className?:string;
-  date:any;
-  handleDate:(date:any)=>void
+  className?: string;
+  date: any;
+  handleDate: (date: any) => void;
 }
-export const CustomCalender: React.FC<ICustomeCalendarProps> =({
-  className,date,handleDate
-})=> {
-
+export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
+  className,
+  date,
+  handleDate,
+}) => {
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -34,7 +35,7 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> =({
             className={cn(!date && 'text-muted-foreground')}
           >
             <Image src={CalenderIcon} alt="Calender Image" />
-            <p className="text-solitaireTertiary ml-2 text-[16px]">
+            <p className="text-solitaireTertiary ml-2 text-[14px]">
               Filter By Date
             </p>
           </Button>
@@ -86,4 +87,4 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> =({
       </Popover>
     </div>
   );
-}
+};

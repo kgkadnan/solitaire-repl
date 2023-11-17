@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import styles from './saved-search.module.scss';
+import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
@@ -336,7 +336,7 @@ const SavedSearch = () => {
           data-testid={'Select All Checkbox'}
           checked={isCheckAll}
         />
-        <p className="text-solitaireTertiary text-base font-medium">
+        <p className="text-solitaireTertiary text-[14px]">
           {ManageLocales('app.common.header.selectAll')}
         </p>
       </div>

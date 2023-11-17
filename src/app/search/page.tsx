@@ -246,16 +246,16 @@ function SearchResultLayout() {
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: string) => {
-    if (maxTab < 5) {
-      setActiveTab(index);
-      setheaderPath(pathName);
-    } else {
+    if (maxTab === 5 && pathName.toLocaleLowerCase() === 'new search') {
       setIsDialogOpen(true);
       setDialogContent(
         <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-          &apos;Max search limit reached. Please remove existing searches&apos;
+          'Max search limit reached. Please remove existing searches'
         </div>
       );
+    } else {
+      setActiveTab(index);
+      setheaderPath(pathName);
     }
   };
 

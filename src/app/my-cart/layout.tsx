@@ -111,7 +111,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="absolute top-[150px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary py-4">
+        <div className="absolute top-[165px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary">
           {myCartRoutes.map(({ id, pathName, path, count }) => {
             // Check if the current route matches the link's path
             const isActive = currentPath === `/my-cart/${path}`;
