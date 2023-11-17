@@ -20,12 +20,16 @@ import { Product } from '@/app/search/result-interface';
 import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
+import { usePathname } from 'next/navigation';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
+  mainTableStyle,
 }) => {
+  let currentPath = usePathname();
+
   const [sliderData, setSliderData] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
@@ -284,7 +288,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
         setIsOpen={setIsDialogOpen}
       />
       <div className={'flex-grow overflow-y-auto'}>
-        <div className={styles.tableWrapper}>
+        <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
@@ -807,10 +811,12 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           </div>
                                         </div>
                                       </div>
-                                      <div className="sticky bottom-0 bg-solitairePrimary">
-                                        <CustomFooter
-                                          footerButtonData={footerButtonData}
-                                        />
+                                      <div className="sticky bottom-0 bg-solitairePrimary mb-5">
+                                        {currentPath === '/search' && (
+                                          <CustomFooter
+                                            footerButtonData={footerButtonData}
+                                          />
+                                        )}
                                       </div>
                                     </>
                                   );

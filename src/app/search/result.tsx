@@ -703,6 +703,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
             tableRows={rows}
             tableColumns={tableColumns}
             checkboxData={checkboxData}
+            mainTableStyle={styles.tableWrapper}
           />
         ) : (
           <CustomLoader />
