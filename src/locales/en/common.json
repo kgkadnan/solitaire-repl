@@ -193,6 +193,6 @@
   "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
 
   "app.myCart.active": "Active",
-  "app.myCart.outOfStock": "Out of Stock",
+  "app.myCart.soldOut": "Sold Out",
   "app.myCart.memoOut": "Memo-Out"
 }

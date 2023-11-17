@@ -378,21 +378,27 @@ const SavedSearch = () => {
   };
 
   const handleCardClick = (id: string) => {
-    let cardClickData = savedSearchData.filter((items: any) => {
+    let cardClickData: any = savedSearchData.filter((items: any) => {
       return items.id === id;
     });
 
     let url = constructUrlParams(cardClickData[0].meta_data);
+
     setSearchUrl(url);
 
-    if (productData.count < 300) {
+    if (productData.count > 300) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
-      console.log('pppppppppppppppppppppppppp', data.length);
-      if (data.length < 5) {
-        if (data?.length) {
+
+      if (data?.length) {
+        if (data?.length >= 5) {
+          setIsError(true);
+          setErrorText(
+            'Max search limit reached. Please remove existing searches'
+          );
+        } else {
           let localStorageData = [
             ...data,
             {
@@ -404,23 +410,18 @@ const SavedSearch = () => {
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
           router.push(`/search?route=${data.length + 3}`);
-        } else {
-          let localStorageData = [
-            {
-              saveSearchName: cardClickData[0].name,
-              isSavedSearch: true,
-              queryParams: cardClickData[0].meta_data,
-            },
-          ];
-
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?route=${3}`);
         }
       } else {
-        setIsError(true);
-        setErrorText(
-          'Max search limit reached. Please remove existing searches'
-        );
+        let localStorageData = [
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
+
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
+        router.push(`/search?route=${3}`);
       }
     }
   };

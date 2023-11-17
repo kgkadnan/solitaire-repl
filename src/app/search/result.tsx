@@ -651,6 +651,7 @@ const SearchResults = ({ data, activeTab }: any) => {
           tableRows={rows}
           tableColumns={tableColumns}
           checkboxData={checkboxData}
+          mainTableStyle={styles.tableWrapper}
         />
 
         <div className="sticky-bottom bg-solitairePrimary mt-3">
