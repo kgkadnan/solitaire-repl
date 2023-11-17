@@ -1011,18 +1011,60 @@ const AdvanceSearch = () => {
     }
   };
 
+  const compareArrays = (arr1: string[], arr2: string[]) => {
+    // Check if the lengths of the arrays are equal
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+
+    // Convert arrays to sets
+    const set1 = new Set(arr1);
+    const set2 = new Set(arr2);
+
+    // Compare sets
+    for (const value of set1) {
+      if (!set2.has(value)) {
+        return false;
+      }
+    }
+
+    // If the loop completes, sets are equal
+    return true;
+  }
+
   const handleShapeChange = (shape: string) => {
+    let filteredShape: string[] = advanceSearch.shape.map(
+      (data) => data.short_name
+    );
     if (shape.toLowerCase() === 'all') {
-      let filteredShape: string[] = advanceSearch.shape.map(
-        (data) => data.short_name
-      );
+
 
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
       }
     } else {
-      handleFilterChange(shape, selectedShape, setSelectedShape);
+      
+      if (selectedShape.includes('All')) {
+        let filteredSelectedShape: string[] = selectedShape.filter(
+          (data) => data !== 'All' && data !== shape
+        );
+
+        setSelectedShape(filteredSelectedShape);
+      }
+      else if (compareArrays(selectedShape.filter(
+        (data) => data !== 'All'
+      ), filteredShape.filter((data) => data !== 'All'))) {
+console.log("nnnnnnn",filteredShape)
+        setSelectedShape(filteredShape);
+      }
+      
+        else{ handleFilterChange(shape, selectedShape, setSelectedShape)}
+        console.log("test",compareArrays(selectedShape.filter(
+          (data) => data !== 'All'
+        ), filteredShape.filter((data) => data !== 'All')))
+      
+      
     }
   };
 
@@ -1715,8 +1757,7 @@ const AdvanceSearch = () => {
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?route=${
-              JSON.parse(localStorage.getItem('Search')!).length + 2
+            `/search?route=${JSON.parse(localStorage.getItem('Search')!).length + 2
             }`
           );
         }
@@ -1745,18 +1786,15 @@ const AdvanceSearch = () => {
         handleClick={handleChange}
         data={data}
         selectionButtonAllStyles={{
-          selectionButtonStyle: `${styles.selectionButtonStyles} ${
-            className ?? ''
-          }   ${
-            typeof relatedState !== 'string'
+          selectionButtonStyle: `${styles.selectionButtonStyles} ${className ?? ''
+            }   ${typeof relatedState !== 'string'
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
-          }`,
-          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${
-            highlightIndicator &&
+            }`,
+          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${highlightIndicator &&
             relatedState?.includes(data) &&
             styles.colorDataActiveStyle
-          }`,
+            }`,
         }}
       />
     ));
@@ -1784,14 +1822,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                parameter.label === 'Pavilion Angle'
+                  parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                      parameter.label,
-                      e.target.value,
-                      setFromAngle,
-                      setFromError,
-                      toAngle
-                    )
+                    parameter.label,
+                    e.target.value,
+                    setFromAngle,
+                    setFromError,
+                    toAngle
+                  )
                   : ''
               // handleValidate(
               //     parameter.label,
@@ -1816,14 +1854,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                parameter.label === 'Pavilion Angle'
+                  parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                      parameter.label,
-                      e.target.value,
-                      setToAngle,
-                      setFromError,
-                      fromAngle
-                    )
+                    parameter.label,
+                    e.target.value,
+                    setToAngle,
+                    setFromError,
+                    fromAngle
+                  )
                   : ''
               //  handleValidate(
               //     parameter.label,
@@ -1970,11 +2008,9 @@ const AdvanceSearch = () => {
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: `'${
-            inputType === 'from' ? 'From' : 'To'
-          }' value should not be ${
-            inputType === 'from' ? 'greater' : 'less'
-          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+          [inputType]: `'${inputType === 'from' ? 'From' : 'To'
+            }' value should not be ${inputType === 'from' ? 'greater' : 'less'
+            } than '${inputType === 'from' ? 'To' : 'From'}' value`,
         },
       }));
     } else {
@@ -2726,9 +2762,8 @@ const AdvanceSearch = () => {
           <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-500" />
             <p
-              className={`text-${
-                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
-              }-500 text-base`}
+              className={`text-${data?.count < 300 && data?.count > 0 ? 'green' : 'red'
+                }-500 text-base`}
             >
               {!isValidationError && errorText}
             </p>

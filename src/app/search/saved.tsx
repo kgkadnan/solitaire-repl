@@ -382,7 +382,7 @@ const SavedSearch = () => {
     let url = constructUrlParams(cardClickData[0].meta_data);
     setSearchUrl(url);
 
-    if (productData.count < 300) {
+    if (productData?.count < 300) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
