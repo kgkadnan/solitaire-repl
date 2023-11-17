@@ -274,8 +274,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
-  // console.log("reosssss")
-
   const footerButtonData = [
     {
       id: 1,

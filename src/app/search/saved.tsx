@@ -90,16 +90,12 @@ const SavedSearch = () => {
   let router = useRouter();
   const dispatch = useAppDispatch();
 
-  console.log('dateSearchUrl', dateSearchUrl);
-
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     limit,
     offset,
     dateSearchUrl,
     searchByName,
   });
-
-  console.log('data', data);
 
   const { data: productData } = useGetProductCountQuery({
     searchUrl,
