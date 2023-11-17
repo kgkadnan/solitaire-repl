@@ -236,7 +236,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
           'Some stones in your selection are not available, Please modify your selection.'
         );
         setIsError(true);
-        return;
       } else {
         let variantIds = isCheck.map((id) => {
           const selectedRow = rows.find((row) => row.id === id);
