@@ -59,6 +59,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
 
+  const [inputError, setInputError] = useState(false);
+  const [inputErrorContent, setInputErrorContent] = useState('');
+
   let [downloadExcel] = useDownloadExcelMutation();
 
   const [addCart] = useAddCartMutation();
@@ -536,6 +539,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
         .catch((error: any) => {
           console.log('error', error);
+          setInputError(true);
+          setInputErrorContent(
+            'Title already exists. Choose another title to save your search'
+          );
         });
     }
   };
@@ -572,7 +579,11 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   return (
     <>
-      <CustomInputDialog customInputDialogData={customInputDialogData} />
+      <CustomInputDialog
+        customInputDialogData={customInputDialogData}
+        isError={inputError}
+        errorContent={inputErrorContent}
+      />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

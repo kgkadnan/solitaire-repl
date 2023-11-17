@@ -136,6 +136,9 @@ const AdvanceSearch = () => {
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
 
+  const [inputError, setInputError] = useState(false);
+  const [inputErrorContent, setInputErrorContent] = useState('');
+
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -1268,6 +1271,10 @@ const AdvanceSearch = () => {
             })
             .catch((error: any) => {
               console.log('error', error);
+              setInputError(true);
+              setInputErrorContent(
+                'Title already exists. Choose another title to save your search'
+              );
             });
         }
       }
@@ -1276,6 +1283,8 @@ const AdvanceSearch = () => {
       setErrorText('Please select some parameter before initiating search');
     }
   };
+
+  console.log('inputError', inputError);
 
   const validateField = (fieldName: string, fieldValue: string) => {
     const validationResult = priceSchema.safeParse(parseFloat(fieldValue));
@@ -1808,7 +1817,11 @@ const AdvanceSearch = () => {
 
   return (
     <div>
-      <CustomInputDialog customInputDialogData={customInputDialogData} />
+      <CustomInputDialog
+        customInputDialogData={customInputDialogData}
+        isError={inputError}
+        errorContent={inputErrorContent}
+      />
       {showToast && <CustomToast message={toastErrorMessage} />}
 
       <div className={styles.filterSection}>

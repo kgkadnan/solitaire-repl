@@ -11,4 +11,6 @@ export interface IInputDialog {
     displayButtonFunction: (id?: any) => void;
     displayButtonFunctionParameter?: any;
   };
+  isError?: boolean;
+  errorContent?: string;
 }

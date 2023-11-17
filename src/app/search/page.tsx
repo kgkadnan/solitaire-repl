@@ -45,6 +45,10 @@ function SearchResultLayout() {
   const [removeIndex, setRemoveIndex] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maxTab, setMaxTab] = useState<number>(0);
+
+  const [inputError, setInputError] = useState(false);
+  const [inputErrorContent, setInputErrorContent] = useState('');
+
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
@@ -136,6 +140,10 @@ function SearchResultLayout() {
       })
       .catch((error: any) => {
         console.log('error', error);
+        setInputError(true);
+        setInputErrorContent(
+          'Title already exists. Choose another title to save your search'
+        );
       });
   };
 
@@ -277,7 +285,11 @@ function SearchResultLayout() {
 
   return (
     <>
-      <CustomInputDialog customInputDialogData={customInputDialogData} />
+      <CustomInputDialog
+        customInputDialogData={customInputDialogData}
+        isError={inputError}
+        errorContent={inputErrorContent}
+      />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

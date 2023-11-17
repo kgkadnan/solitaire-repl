@@ -8,6 +8,8 @@ import { IInputDialog } from './interface';
 
 export const CustomInputDialog: React.FC<IInputDialog> = ({
   customInputDialogData,
+  isError,
+  errorContent,
 }) => {
   let {
     isOpens,
@@ -23,6 +25,8 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
   const onclose = (open: boolean) => {
     setIsOpen(open);
   };
+
+  console.log('isError', isError);
 
   return (
     <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
@@ -50,6 +54,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
             maxLength={150}
           />
         </div>
+        {isError ? <div className="text-[#983131]">{errorContent}</div> : ''}
         <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
           <CustomDisplayButton
             displayButtonLabel="Cancel"
