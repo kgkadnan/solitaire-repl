@@ -184,7 +184,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       );
     } else if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Select stone to Download Excel.');
+      setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
       performDownloadExcel(isCheck);
     }
@@ -194,13 +194,13 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const CompareStone = () => {
     if (isCheck.length > 10) {
       setIsError(true);
-      setErrorText('*You can compare maximum of ten stones.');
+      setErrorText('You can compare maximum of ten stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('*Select stone to compare.');
+      setErrorText('Please select a stone to perform action');
     } else if (isCheck.length < 2) {
       setIsError(true);
-      setErrorText('*Minimum 2 stone to compare.');
+      setErrorText('Minimum 2 stone to compare.');
     } else {
       let comapreStone = isCheck.map((id) => {
         return rows.find((row) => row.id === id);
@@ -217,10 +217,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
-      setErrorText('*The cart does not allow more than 100 Stones.');
+      setErrorText('The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('*Select stone to add to cart.');
+      setErrorText('Please select a stone to perform action');
     } else {
       let hasMemoOut = isCheck.some((id) => {
         return rows.some(
@@ -264,7 +264,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
               dispatch(notificationBadge(true));
             })
             .catch((error) => {
-              console.log('1111111111111111', error);
               setIsError(true);
               setErrorText(error?.data?.message);
             });
@@ -554,11 +553,20 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const handleUpdateSaveSearch = () => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
     let updateSaveSearchData = {
       name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,
       diamond_count: data?.count,
     };
+
+    yourSelection[activeTab] = {
+      saveSearchName: yourSelection[activeTab]?.saveSearchName,
+      isSavedSearch: true,
+      queryParams: yourSelection[activeTab].queryParams,
+    };
+    localStorage.setItem('Search', JSON.stringify(yourSelection));
+    setYourSelectionData(yourSelection);
     updateSavedSearch(updateSaveSearchData);
   };
 
@@ -569,7 +577,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        dialogStyle={{ dialogContent: '!h-[155px]' }}
       />
 
       <>

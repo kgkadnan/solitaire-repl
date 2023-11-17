@@ -375,20 +375,20 @@ const SavedSearch = () => {
     router.push(`/search?route=saved&edit=saved-search`);
   };
 
-  const handleCardClick = (id: string) => {
+  const handleCardClick = async (id: string) => {
     let cardClickData = savedSearchData.filter((items: any) => {
       return items.id === id;
     });
 
-    let url = constructUrlParams(cardClickData[0].meta_data);
-    setSearchUrl(url);
+    let url = await constructUrlParams(cardClickData[0].meta_data);
+
+    await setSearchUrl(url);
 
     if (productData.count < 300) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
-      console.log('pppppppppppppppppppppppppp', data.length);
       if (data.length < 5) {
         if (data?.length) {
           let localStorageData = [

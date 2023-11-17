@@ -243,7 +243,7 @@ function SearchResultLayout() {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search')!, activeTab, maxTab]);
+  }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     if (maxTab < 5) {
@@ -252,12 +252,9 @@ function SearchResultLayout() {
     } else {
       setIsDialogOpen(true);
       setDialogContent(
-        <>
-          <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-            &apos;Max search limit reached. Please remove existing
-            searches&apos;
-          </div>
-        </>
+        <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
+          &apos;Max search limit reached. Please remove existing searches&apos;
+        </div>
       );
     }
   };

@@ -1,9 +1,10 @@
 'use client';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import SearchIcon from '@public/assets/icons/search-outline.svg?url';
+
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -27,6 +28,7 @@ import {
   NotificationUpdate,
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
+import { CustomDialog } from '../dialog';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('route');
@@ -37,6 +39,9 @@ export const TopNavigationBar = () => {
   );
 
   // let badgeData = notificationBadgeStoreData.status;
+
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const router = useRouter();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
@@ -75,7 +80,6 @@ export const TopNavigationBar = () => {
   ];
 
   let handleRoute = (label: string, link: string) => {
-    localStorage.removeItem('Search');
     router.push(`${link}`);
     topNavData.forEach((navData) => {
       if (navData.label !== label) {
@@ -87,18 +91,48 @@ export const TopNavigationBar = () => {
   const handleButtonClick = (label: string, link: string) => {
     let localData = JSON.parse(localStorage.getItem('Search')!);
 
-    let data = localData?.find(
+    let data = localData?.filter(
       (isSaved: any) => isSaved.isSavedSearch === false
     );
-    if (data && currentRoute === '/search') {
-      let isConfirm = confirm('please save your search before leave');
 
-      if (isConfirm) {
-        return;
-      } else {
-        handleRoute(label, link);
-      }
+    if (data?.length && link !== '/search?route=form') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to save your &quot;Search <br /> Result &quot; for this
+            session?
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                localStorage.removeItem('Search');
+                handleRoute(label, link);
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
+              }}
+            />
+          </div>
+        </>
+      );
+    } else if (data?.length && link === '/search?route=form') {
+      handleRoute(label, link);
     } else {
+      localStorage.removeItem('Search');
       handleRoute(label, link);
     }
   };
@@ -137,77 +171,84 @@ export const TopNavigationBar = () => {
   };
 
   return (
-    <div
-      className={`${styles.topNavigationMainDiv} ${
-        visible ? styles.visible : styles.hidden
-      }`}
-    >
-      <div className="h-[80px] flex justify-end items-center text-solitaireTertiary">
-        <div className="flex items-center gap-14 mr-12">
-          {topNavData.slice(0, 3).map((navData) => (
-            <div key={navData.label}>
-              <CustomDisplayButton
-                displayButtonAllStyle={{
-                  displayButtonStyle: navData.isActive
-                    ? styles.activeHeaderButtonStyle
-                    : styles.headerButtonStyle,
-                  displayLabelStyle: styles.headerButtonLabelStyle,
-                }}
-                displayButtonLabel={navData.label}
-                handleClick={() =>
-                  handleButtonClick(navData.label, navData.link)
-                }
+    <>
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
+      <div
+        className={`${styles.topNavigationMainDiv} ${
+          visible ? styles.visible : styles.hidden
+        }`}
+      >
+        <div className="h-[80px] flex justify-end items-center text-solitaireTertiary">
+          <div className="flex items-center gap-14 mr-12">
+            {topNavData.slice(0, 3).map((navData) => (
+              <div key={navData.label}>
+                <CustomDisplayButton
+                  displayButtonAllStyle={{
+                    displayButtonStyle: navData.isActive
+                      ? styles.activeHeaderButtonStyle
+                      : styles.headerButtonStyle,
+                    displayLabelStyle: styles.headerButtonLabelStyle,
+                  }}
+                  displayButtonLabel={navData.label}
+                  handleClick={() =>
+                    handleButtonClick(navData.label, navData.link)
+                  }
+                />
+              </div>
+            ))}
+            {/* <SearchIcon className={styles.stroke} alt="advance-search" /> */}
+            <Popover>
+              <PopoverTrigger>
+                <CalculatorIcon role="button" className={styles.iconColor} />
+              </PopoverTrigger>
+              <PopoverContent className={styles.popoverContent}>
+                <CustomCalculator />
+              </PopoverContent>
+            </Popover>
+            <CustomSlider
+              sheetContent={
+                <Notification
+                  notificationData={data}
+                  setOffset={setOffset}
+                  offset={offset}
+                  limit={limit}
+                />
+              }
+              sheetTriggenContent={
+                <div onClick={handleNotificationClick}>
+                  <div className={styles.notificationContainer}>
+                    <NotificationIcon
+                      role="button"
+                      className={styles.iconColor}
+                    />
+                    {notificationBadgeStoreData && (
+                      <div className={styles.badge}></div>
+                    )}
+                  </div>
+                </div>
+              }
+              sheetContentStyle={styles.notificationSheetContent}
+            />
+            <div
+              onClick={() => {
+                handleButtonClick('My Account', topNavData[3].link);
+              }}
+            >
+              <MyProfileIcon
+                role="button"
+                // topNavData[3].isActive ?
+                stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
+                // className={styles.iconColor}
               />
             </div>
-          ))}
-          {/* <SearchIcon className={styles.stroke} alt="advance-search" /> */}
-          <Popover>
-            <PopoverTrigger>
-              <CalculatorIcon role="button" className={styles.iconColor} />
-            </PopoverTrigger>
-            <PopoverContent className={styles.popoverContent}>
-              <CustomCalculator />
-            </PopoverContent>
-          </Popover>
-          <CustomSlider
-            sheetContent={
-              <Notification
-                notificationData={data}
-                setOffset={setOffset}
-                offset={offset}
-                limit={limit}
-              />
-            }
-            sheetTriggenContent={
-              <div onClick={handleNotificationClick}>
-                <div className={styles.notificationContainer}>
-                  <NotificationIcon
-                    role="button"
-                    className={styles.iconColor}
-                  />
-                  {notificationBadgeStoreData && (
-                    <div className={styles.badge}></div>
-                  )}
-                </div>
-              </div>
-            }
-            sheetContentStyle={styles.notificationSheetContent}
-          />
-          <div
-            onClick={() => {
-              handleButtonClick('My Account', topNavData[3].link);
-            }}
-          >
-            <MyProfileIcon
-              role="button"
-              // topNavData[3].isActive ?
-              stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
-              // className={styles.iconColor}
-            />
+            <ToggleButton />
           </div>
-          <ToggleButton />
         </div>
       </div>
-    </div>
+    </>
   );
 };

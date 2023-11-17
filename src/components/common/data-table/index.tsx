@@ -137,14 +137,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
     {
       id: 3,
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.footer.addToWhislist'
-      ),
-      style: styles.filled,
-      fn: () => {},
-    },
-    {
-      id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
       fn: addToCart,
@@ -178,13 +170,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       id: '4',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2b'
-      ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
-    },
-    {
-      id: '5',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
       url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
@@ -376,7 +361,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                   </p>
                                 </div>
 
-                                <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                <div className="flex justify-between  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
                                   {displayButtonData
                                     .filter((items) => items.id !== '1') // Filter out items with id '1'
                                     .map((items) => (
@@ -388,7 +373,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           displayButtonAllStyle={{
                                             displayLabelStyle:
                                               activeTab === items.id
-                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1 `
                                                 : styles.headerButtonStyle,
                                           }}
                                           handleClick={() =>
