@@ -272,7 +272,6 @@ const MemoOut = () => {
   };
 
   const deleteStoneHandler = () => {
-    console.log("'''''''''''''''''''''''''''222222222222222", isCheck);
     deleteCart({
       items: isCheck,
     })
@@ -305,9 +304,6 @@ const MemoOut = () => {
       const compareStones = isCheck
         .map((id) => data.items.find((row: any) => row.id === id))
         .map((stone) => stone.product);
-
-      console.log('oldddddddddddddddddddddd', compareStones);
-
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
       router.push('/compare-stone');
     }
