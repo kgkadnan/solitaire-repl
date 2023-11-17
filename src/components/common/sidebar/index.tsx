@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { useCallback, useState } from 'react';
+import { ReactNode, useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
 import CustomImageTile, { IImageTileProps } from '../image-tile';
@@ -16,15 +16,21 @@ import NewArrival from '@public/assets/icons/new-arrival.svg?url';
 import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
+import { CustomDisplayButton } from '../buttons/display-button';
+import { CustomDialog } from '../dialog';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
 
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const subRoute = useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
     router.push('/');
   }, [router]);
+
   const imageData: IImageTileProps[] = [
     {
       src: <Dashboard className={styles.stroke} alt="dashboard" />,
@@ -101,41 +107,95 @@ const SideBar = () => {
   };
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
-  const handleChange = (nav: string, link?: string) => {
-    localStorage.removeItem('Search');
-
+  let handleRoute = (nav: string, link?: string) => {
     router.push(`${link!}`);
     setSelectedNav(() => [nav]);
   };
 
+  const handleChange = (nav: string, link?: string) => {
+    let localData = JSON.parse(localStorage.getItem('Search')!);
+
+    let data = localData?.filter(
+      (isSaved: any) => isSaved.isSavedSearch === false
+    );
+
+    if (data?.length && link !== '/search?route=form') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to save your &quot;Search <br /> Result &quot; for this
+            session?
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                localStorage.removeItem('Search');
+                handleRoute(nav, link);
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
+              }}
+            />
+          </div>
+        </>
+      );
+    } else if (data?.length && link === '/search?route=form') {
+      handleRoute(nav, link);
+    } else {
+      localStorage.removeItem('Search');
+      handleRoute(nav, link);
+    }
+  };
+
   return (
-    <div
-      className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
-    >
+    <>
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div
-        className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
-        onClick={onKGKLogoContainerClick}
+        className={`flex flex-col w-[93px]  bg-solitaireSecondary ${styles.sidebarMainDiv}`}
       >
-        <Image
-          className="mx-auto"
-          alt="KGKlogo"
-          src={KGKlogo}
-          width="42"
-          height="55"
-        />
-      </div>
-      <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
-        <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
-          <CustomImageTile
-            imageTileData={imageData}
-            overriddenStyles={SideBarStyles}
-            selectedTile={selectedNav}
-            handleSelectTile={handleChange}
-            isNavOption={true}
+        <div
+          className={`flex items-center justify-center cursor-pointer gap-[40px] h-[81px] ${styles.kgkIconStyle}`}
+          onClick={onKGKLogoContainerClick}
+        >
+          <Image
+            className="mx-auto"
+            alt="KGKlogo"
+            src={KGKlogo}
+            width="42"
+            height="55"
           />
         </div>
+        <div className={`w-[93px] flex justify-center ${styles.sidebar}`}>
+          <div className="overflow-hidden  h-[100vh] flex flex-row p-[3px] whitespace-normal break-words justify-center bg-solitaireSecondary ">
+            <CustomImageTile
+              imageTileData={imageData}
+              overriddenStyles={SideBarStyles}
+              selectedTile={selectedNav}
+              handleSelectTile={handleChange}
+              isNavOption={true}
+            />
+          </div>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

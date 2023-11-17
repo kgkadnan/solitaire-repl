@@ -1,7 +1,7 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
@@ -17,7 +17,11 @@ import { useAppDispatch } from '@/hooks/hook';
 import { CustomDialog } from '@/components/common/dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
+import CustomLoader from '@/components/common/loader';
 
 interface IMyProfileRoutes {
   id: number;
@@ -28,6 +32,7 @@ interface IMyProfileRoutes {
 function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
   const editSubRoute = useSearchParams().get('edit');
+
   const dispatch = useAppDispatch();
   const router = useRouter();
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
@@ -52,12 +57,13 @@ function SearchResultLayout() {
       path: 'saved',
     },
   ]);
+
   const computeRouteAndComponentRenderer = () => {
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
     else return `Search Results ${parseInt(subRoute!) - 2}`;
   };
-
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
   );
@@ -126,6 +132,7 @@ function SearchResultLayout() {
       .then(() => {
         setIsInputDialogOpen(false);
         closeTheSearchFunction(removeIndex, yourSelection);
+        setSaveSearchName('');
       })
       .catch((error: any) => {
         console.log('error', error);
@@ -145,25 +152,6 @@ function SearchResultLayout() {
           </div>
           <div className="max-w-[450px] flex justify-around align-middle text-solitaireTertiary gap-[25px]">
             <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={async () => {
-                if (yourSelection[removeDataIndex]?.saveSearchName) {
-                  //update logic comes here
-                  console.log('lets update the data here');
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                  closeTheSearchFunction(removeDataIndex, yourSelection);
-                } else {
-                  setIsInputDialogOpen(true);
-                  setIsDialogOpen(false);
-                  setRemoveIndex(removeDataIndex);
-                }
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
               displayButtonLabel="No"
               handleClick={() => {
                 setIsDialogOpen(false);
@@ -171,6 +159,36 @@ function SearchResultLayout() {
               }}
               displayButtonAllStyle={{
                 displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={async () => {
+                if (yourSelection[removeDataIndex]?.saveSearchName.length) {
+                  //update logic comes here
+                  let updateSaveSearchData = {
+                    name: yourSelection[removeDataIndex]?.saveSearchName,
+                    meta_data: yourSelection[removeDataIndex]?.queryParams,
+                    diamond_count: data?.count,
+                  };
+                  updateSavedSearch(updateSaveSearchData)
+                    .unwrap()
+                    .then(() => {
+                      setIsInputDialogOpen(true);
+                      setIsDialogOpen(false);
+                      closeTheSearchFunction(removeDataIndex, yourSelection);
+                    })
+                    .catch((error: any) => {
+                      console.log('error', error);
+                    });
+                } else {
+                  setIsInputDialogOpen(true);
+                  setIsDialogOpen(false);
+                  setRemoveIndex(removeDataIndex);
+                }
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
               }}
             />
           </div>
@@ -187,17 +205,6 @@ function SearchResultLayout() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
-
-  // useEffect(() => {
-  //   let yourSelection = localStorage.getItem('Search');
-  //   if (yourSelection) {
-  //     const parseYourSelection = JSON.parse(yourSelection);
-  //     let url = constructUrlParams(
-  //       parseYourSelection[activeTab - 1]?.queryParams
-  //     );
-  //     setSearchUrl(url);
-  //   }
-  // }, [activeTab]);
 
   useEffect(() => {
     if (subRoute !== 'form' && subRoute !== 'saved')
@@ -236,7 +243,7 @@ function SearchResultLayout() {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search')!, activeTab, maxTab]);
+  }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     if (maxTab < 5) {
@@ -245,11 +252,9 @@ function SearchResultLayout() {
     } else {
       setIsDialogOpen(true);
       setDialogContent(
-        <>
-          <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-            'Max search limit reached. Please remove existing searches'
-          </div>
-        </>
+        <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
+          &apos;Max search limit reached. Please remove existing searches&apos;
+        </div>
       );
     }
   };
@@ -356,8 +361,14 @@ function SearchResultLayout() {
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />
+          ) : isLoading ? (
+            <CustomLoader />
           ) : (
-            <SearchResults data={data} activeTab={activeTab - 1} />
+            <SearchResults
+              data={data}
+              activeTab={activeTab - 1}
+              refetch={refetch}
+            />
           )}
         </main>
       </div>

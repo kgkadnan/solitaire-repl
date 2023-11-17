@@ -5,6 +5,7 @@ import { renderWithProviders } from '@/mock-handlers/test-utils';
 import { setupSetupsavedSearchandlers } from '@/mock-handlers/saved-search';
 import Image from 'next/image';
 
+jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
 jest.mock('next/image', () => {
   return {
     __esModule: true,
@@ -21,7 +22,7 @@ jest.mock('next/image', () => {
       height: number;
       // Add more specific types for other props if needed
       // ...rest: SomeType;
-    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+    }) => <img src={src} alt={alt} width={width} height={height} {...rest} />,
   };
 });
 

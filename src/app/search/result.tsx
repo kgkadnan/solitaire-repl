@@ -19,12 +19,15 @@ import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { IYourSelection, Product, TableColumn } from './result-interface';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation,
+} from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import CustomLoader from '@/components/common/loader';
 
-const SearchResults = ({ data, activeTab }: any) => {
+const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -40,14 +43,12 @@ const SearchResults = ({ data, activeTab }: any) => {
   );
 
   let [addSavedSearch] = useAddSavedSearchMutation();
-
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   //Radio Button
   const [selectedValue, setSelectedValue] = useState('');
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [averageDiscount, setAverageDiscount] = useState(0);
-
-  const [searchUrl, setSearchUrl] = useState('');
 
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -60,11 +61,13 @@ const SearchResults = ({ data, activeTab }: any) => {
 
   let [downloadExcel] = useDownloadExcelMutation();
 
-  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
-    useAddCartMutation();
+  const [addCart] = useAddCartMutation();
 
-  const { data: listingColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+  const {
+    data: listingColumns,
+    error,
+    isLoading,
+  } = useGetManageListingSequenceQuery({});
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -126,10 +129,10 @@ const SearchResults = ({ data, activeTab }: any) => {
             downloadExcelFromBase64(data, fileName);
             setDialogContent(
               <>
-                <div className="max-w-[400px] flex justify-center align-middle">
+                <div className="max-w-[380px] flex justify-center align-middle">
                   <Image src={confirmImage} alt="vector image" />
                 </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
                   Download Excel Successfully
                 </div>
               </>
@@ -181,7 +184,7 @@ const SearchResults = ({ data, activeTab }: any) => {
       );
     } else if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Select stone to Download Excel.');
+      setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
       performDownloadExcel(isCheck);
     }
@@ -191,13 +194,13 @@ const SearchResults = ({ data, activeTab }: any) => {
   const CompareStone = () => {
     if (isCheck.length > 10) {
       setIsError(true);
-      setErrorText('*You can compare maximum of ten stones.');
+      setErrorText('You can compare maximum of ten stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('*Select stone to compare.');
+      setErrorText('Please select a stone to perform action');
     } else if (isCheck.length < 2) {
       setIsError(true);
-      setErrorText('*Minimum 2 stone to compare.');
+      setErrorText('Minimum 2 stone to compare.');
     } else {
       let comapreStone = isCheck.map((id) => {
         return rows.find((row) => row.id === id);
@@ -214,41 +217,59 @@ const SearchResults = ({ data, activeTab }: any) => {
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
-      setErrorText('*The cart does not allow more than 100 Stones.');
+      setErrorText('The cart does not allow more than 100 Stones.');
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('*Select stone to add to cart.');
+      setErrorText('Please select a stone to perform action');
     } else {
-      let variantIds = isCheck.map((id) => {
-        const selectedRow = rows.find((row) => row.id === id);
-        return selectedRow?.variants[0]?.id;
+      let hasMemoOut = isCheck.some((id) => {
+        return rows.some(
+          (row) => row.id == id && row.diamond_status === 'MemoOut'
+        );
       });
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds,
-        })
-          .unwrap()
-          .then(() => {
-            setIsError(false);
-            setErrorText('');
-            setDialogContent(
-              <>
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                  Item Successfully added to cart
-                </div>
-              </>
-            );
-            setIsDialogOpen(true);
-            dispatch(notificationBadge(true));
-          })
-          .catch(() => {
-            console.log('1111111111111111');
-          });
+
+      if (hasMemoOut) {
+        setErrorText(
+          'Some stones in your selection are not available, Please modify your selection.'
+        );
+        setIsError(true);
         setIsCheck([]);
         setIsCheckAll(false);
+        return;
+      } else {
+        let variantIds = isCheck.map((id) => {
+          const selectedRow = rows.find((row) => row.id === id);
+          return selectedRow?.variants[0]?.id;
+        });
+        if (variantIds.length) {
+          addCart({
+            variants: variantIds,
+          })
+            .unwrap()
+            .then((res) => {
+              setIsError(false);
+              setErrorText('');
+              setDialogContent(
+                <>
+                  <div className="w-[350px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
+                  <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
+                    {res?.message}
+                  </div>
+                </>
+              );
+              setIsDialogOpen(true);
+              refetchRow();
+              dispatch(notificationBadge(true));
+            })
+            .catch((error) => {
+              setIsError(true);
+              setErrorText(error?.data?.message);
+            });
+          setIsCheck([]);
+          setIsCheckAll(false);
+        }
       }
     }
   };
@@ -510,6 +531,7 @@ const SearchResults = ({ data, activeTab }: any) => {
           localStorage.setItem('Search', JSON.stringify(parseData));
           setYourSelectionData(parseData);
           setIsInputDialogOpen(false);
+          setSaveSearchName('');
         })
 
         .catch((error: any) => {
@@ -529,6 +551,25 @@ const SearchResults = ({ data, activeTab }: any) => {
     displayButtonLabel2: 'Save',
   };
 
+  const handleUpdateSaveSearch = () => {
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
+    let updateSaveSearchData = {
+      name: yourSelection[activeTab]?.saveSearchName,
+      meta_data: yourSelection[activeTab]?.queryParams,
+      diamond_count: data?.count,
+    };
+
+    yourSelection[activeTab] = {
+      saveSearchName: yourSelection[activeTab]?.saveSearchName,
+      isSavedSearch: true,
+      queryParams: yourSelection[activeTab].queryParams,
+    };
+    localStorage.setItem('Search', JSON.stringify(yourSelection));
+    setYourSelectionData(yourSelection);
+    updateSavedSearch(updateSaveSearchData);
+  };
+
   return (
     <>
       <CustomInputDialog customInputDialogData={customInputDialogData} />
@@ -546,7 +587,11 @@ const SearchResults = ({ data, activeTab }: any) => {
               <p>
                 {ManageLocales('app.searchResult.countBar.pieces')}:
                 <span className="text-solitaireTertiary ml-[5px]">
-                  {`${isCheck.length}/${data?.count ? data?.count : 0}`}
+                  {`${isCheck.length}/${
+                    rows?.length && tableColumns?.length && data?.count
+                      ? data?.count
+                      : 0
+                  }`}
                 </span>
               </p>
               <p>
@@ -569,7 +614,7 @@ const SearchResults = ({ data, activeTab }: any) => {
                   displayButtonLabel={'Save this search'}
                   handleClick={() =>
                     yourSelectionData[activeTab].saveSearchName.length
-                      ? console.log('i"m Here to update')
+                      ? handleUpdateSaveSearch()
                       : setIsInputDialogOpen(true)
                   }
                   displayButtonAllStyle={{
@@ -583,7 +628,12 @@ const SearchResults = ({ data, activeTab }: any) => {
               <CustomSlider
                 sheetTriggenContent={
                   <div className="flex gap-1">
-                    <Image src={sortOutline} alt="sortOutline" width={20} />
+                    <Image
+                      src={sortOutline}
+                      alt="sortOutline"
+                      width={20}
+                      height={5}
+                    />
                     <p className="text-solitaireTertiary">Sort by</p>
                   </div>
                 }
@@ -647,12 +697,17 @@ const SearchResults = ({ data, activeTab }: any) => {
           </div>
         </div>
         {/* <CustomHeader dummyData={headerData} /> */}
-        <CustomDataTable
-          tableRows={rows}
-          tableColumns={tableColumns}
-          checkboxData={checkboxData}
-          mainTableStyle={styles.tableWrapper}
-        />
+
+        {rows?.length && tableColumns?.length ? (
+          <CustomDataTable
+            tableRows={rows}
+            tableColumns={tableColumns}
+            checkboxData={checkboxData}
+            mainTableStyle={styles.tableWrapper}
+          />
+        ) : (
+          <CustomLoader />
+        )}
 
         <div className="sticky-bottom bg-solitairePrimary mt-3">
           <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
