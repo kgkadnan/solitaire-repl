@@ -90,12 +90,16 @@ const SavedSearch = () => {
   let router = useRouter();
   const dispatch = useAppDispatch();
 
+  console.log('dateSearchUrl', dateSearchUrl);
+
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     limit,
     offset,
     dateSearchUrl,
     searchByName,
   });
+
+  console.log('data', data);
 
   const { data: productData } = useGetProductCountQuery({
     searchUrl,
@@ -317,10 +321,10 @@ const SavedSearch = () => {
   const handleDate = (date: IDateRange) => {
     setDate(date);
     setDateSearchUrl(
-      `&startDate=${new Date(date.from)
+      `&start_date=${new Date(date.from)
         .toISOString()
         .replace('T', ' ')
-        .replace('Z', '%2B00')}&endDate=${new Date(date.to)
+        .replace('Z', '%2B00')}&end_date=${new Date(date.to)
         .toISOString()
         .replace('T', ' ')
         .replace('Z', '%2B00')}`

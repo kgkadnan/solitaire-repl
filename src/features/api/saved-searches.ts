@@ -11,8 +11,8 @@ export const savedSearchesApi: any = createApi({
 
   endpoints: (builder) => ({
     getAllSavedSearches: builder.query({
-      query: ({ limit, offset, searchByName }) =>
-        `saved-search?limit=${limit}&offset=${offset}&name=${searchByName}`,
+      query: ({ limit, offset, searchByName, dateSearchUrl }) =>
+        `saved-search?limit=${limit}&offset=${offset}&name=${searchByName}${dateSearchUrl}`,
       providesTags: ['SavedSearch'],
     }),
     getSavedSearchList: builder.query({
