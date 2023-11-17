@@ -1,4 +1,4 @@
-import { StaticImport } from '../my-cart/active/page';
+import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 
 export interface TableColumn {
   label: string;

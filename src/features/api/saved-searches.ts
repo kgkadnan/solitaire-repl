@@ -25,6 +25,7 @@ export const savedSearchesApi: any = createApi({
         method: 'POST',
         body: data,
       }),
+      invalidatesTags: ['SavedSearch'],
     }),
     updateSavedSearch: builder.mutation({
       query: (data) => ({
@@ -32,6 +33,7 @@ export const savedSearchesApi: any = createApi({
         method: 'PUT',
         body: data,
       }),
+      invalidatesTags: ['SavedSearch'],
     }),
     deleteSavedSearch: builder.mutation({
       query: (filter) => ({
