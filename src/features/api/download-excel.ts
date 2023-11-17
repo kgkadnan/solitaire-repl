@@ -6,14 +6,13 @@ export const downloadExcelApi = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
     credentials: 'include',
-    
   }),
   tagTypes: ['downloadExcel'],
 
   endpoints: (builder) => ({
     downloadExcel: builder.mutation({
       query: (filter) => ({
-        url: `exportExcel`,
+        url: `export-excel`,
         method: 'POST', // Use the appropriate HTTP method
         body: filter, // Modify this to match your API's payload
       }),

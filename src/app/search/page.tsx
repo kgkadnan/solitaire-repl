@@ -250,7 +250,7 @@ function SearchResultLayout() {
       setIsDialogOpen(true);
       setDialogContent(
         <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-          'Max search limit reached. Please remove existing searches'
+          Max search limit reached. Please remove existing searches
         </div>
       );
     } else {
