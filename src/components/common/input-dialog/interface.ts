@@ -12,5 +12,8 @@ export interface IInputDialog {
     displayButtonFunctionParameter?: any;
   };
   isError?: boolean;
+  setIsError: Dispatch<SetStateAction<boolean>>;
+  setErrorContent: Dispatch<SetStateAction<string>>;
   errorContent?: string;
+  handleClose: () => void;
 }

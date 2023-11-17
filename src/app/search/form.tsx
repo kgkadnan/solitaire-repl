@@ -37,7 +37,7 @@ const AdvanceSearch = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
 
-  const [searchCount, setSearchCount] = useState<number>(-2);
+  const [searchCount, setSearchCount] = useState<number>(-1);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
@@ -1247,7 +1247,7 @@ const AdvanceSearch = () => {
           let updateSaveSearchData = {
             name: updatedMeta[0].saveSearchName,
             meta_data: updatedMeta[0].queryParams,
-            diamond_count: data?.count,
+            diamond_count: parseInt(data?.count),
           };
 
           updateSavedSearch(updateSaveSearchData)
@@ -1261,7 +1261,7 @@ const AdvanceSearch = () => {
         } else {
           await addSavedSearch({
             name: saveSearchName,
-            diamond_count: data?.count,
+            diamond_count: parseInt(data?.count),
             meta_data: queryParams,
             is_deleted: false,
           })
@@ -1283,8 +1283,6 @@ const AdvanceSearch = () => {
       setErrorText('Please select some parameter before initiating search');
     }
   };
-
-  console.log('inputError', inputError);
 
   const validateField = (fieldName: string, fieldValue: string) => {
     const validationResult = priceSchema.safeParse(parseFloat(fieldValue));
@@ -1804,6 +1802,13 @@ const AdvanceSearch = () => {
     }
   };
 
+  const handleCloseInputDialog = () => {
+    setIsInputDialogOpen(false);
+    setInputError(false);
+    setInputErrorContent('');
+    setSaveSearchName('');
+  };
+
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -1821,6 +1826,9 @@ const AdvanceSearch = () => {
         customInputDialogData={customInputDialogData}
         isError={inputError}
         errorContent={inputErrorContent}
+        setIsError={setInputError}
+        setErrorContent={setInputErrorContent}
+        handleClose={handleCloseInputDialog}
       />
       {showToast && <CustomToast message={toastErrorMessage} />}
 

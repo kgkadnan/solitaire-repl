@@ -128,7 +128,7 @@ function SearchResultLayout() {
 
     await addSavedSearch({
       name: saveSearchName,
-      diamond_count: data?.count,
+      diamond_count: parseInt(data?.count),
       meta_data: yourSelection[removeIndex]?.queryParams,
       is_deleted: false,
     })
@@ -231,7 +231,6 @@ function SearchResultLayout() {
         let url = constructUrlParams(
           parseYourSelection[activeTab - 1]?.queryParams
         );
-
         setSearchUrl(url);
 
         const newRoutes = parseYourSelection
@@ -247,7 +246,25 @@ function SearchResultLayout() {
               )
           );
 
-        setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+        if (parseYourSelection.length) {
+          setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+        } else {
+          console.log('myProfileRoutes', myProfileRoutes);
+          console.log('newRoutes', newRoutes);
+
+          setMyProfileRoutes([
+            {
+              id: 1,
+              pathName: ManageLocales('app.searchResult.header.newSearch'),
+              path: 'form',
+            },
+            {
+              id: 2,
+              pathName: ManageLocales('app.savedSearch.header'),
+              path: 'saved',
+            },
+          ]);
+        }
       }
     };
     fetchMyAPI();
@@ -272,6 +289,12 @@ function SearchResultLayout() {
     router.push(`/search?route=${subRoute}&edit=search-result`);
   };
 
+  const handleCloseInputDialog = () => {
+    setIsInputDialogOpen(false);
+    setInputError(false);
+    setSaveSearchName('');
+  };
+
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -289,6 +312,9 @@ function SearchResultLayout() {
         customInputDialogData={customInputDialogData}
         isError={inputError}
         errorContent={inputErrorContent}
+        setIsError={setInputError}
+        setErrorContent={setInputErrorContent}
+        handleClose={handleCloseInputDialog}
       />
       <CustomDialog
         dialogContent={dialogContent}

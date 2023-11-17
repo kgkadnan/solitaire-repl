@@ -28,7 +28,48 @@ const SideBar = () => {
 
   const subRoute = useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
-    router.push('/');
+    let localData = JSON.parse(localStorage.getItem('Search')!);
+
+    let data = localData?.filter(
+      (isSaved: any) => isSaved.isSavedSearch === false
+    );
+    if (data?.length && currentRoute == '/search') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to save your &quot;Search <br /> Result &quot; for this
+            session?
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                localStorage.removeItem('Search');
+                router.push('/');
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
+              }}
+            />
+          </div>
+        </>
+      );
+    } else {
+      router.push('/');
+    }
   }, [router]);
 
   const imageData: IImageTileProps[] = [
@@ -119,7 +160,8 @@ const SideBar = () => {
       (isSaved: any) => isSaved.isSavedSearch === false
     );
 
-    if (data?.length && link !== '/search?route=form') {
+    // if (data?.length && link !== '/search?route=form') {
+    if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -153,9 +195,11 @@ const SideBar = () => {
           </div>
         </>
       );
-    } else if (data?.length && link === '/search?route=form') {
-      handleRoute(nav, link);
-    } else {
+    }
+    // else if (data?.length && link === '/search?route=form') {
+    //   handleRoute(nav, link);
+    // }
+    else {
       localStorage.removeItem('Search');
       handleRoute(nav, link);
     }

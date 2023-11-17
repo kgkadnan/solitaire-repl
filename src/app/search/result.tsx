@@ -517,7 +517,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
       await addSavedSearch({
         name: saveSearchName,
-        diamond_count: data?.count,
+        diamond_count: parseInt(data?.count),
         meta_data: parseData[activeTab].queryParams,
         is_deleted: false,
       })
@@ -555,13 +555,20 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     displayButtonLabel2: 'Save',
   };
 
+  const handleCloseInputDialog = () => {
+    setIsInputDialogOpen(false);
+    setInputError(false);
+    setInputErrorContent('');
+    setSaveSearchName('');
+  };
+
   const handleUpdateSaveSearch = () => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
     let updateSaveSearchData = {
       name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,
-      diamond_count: data?.count,
+      diamond_count: parseInt(data?.count),
     };
 
     yourSelection[activeTab] = {
@@ -579,7 +586,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       <CustomInputDialog
         customInputDialogData={customInputDialogData}
         isError={inputError}
+        setIsError={setInputError}
+        setErrorContent={setInputErrorContent}
         errorContent={inputErrorContent}
+        handleClose={handleCloseInputDialog}
       />
       <CustomDialog
         dialogContent={dialogContent}

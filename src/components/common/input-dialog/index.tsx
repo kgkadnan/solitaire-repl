@@ -9,7 +9,10 @@ import { IInputDialog } from './interface';
 export const CustomInputDialog: React.FC<IInputDialog> = ({
   customInputDialogData,
   isError,
+  setIsError,
+  setErrorContent,
   errorContent,
+  handleClose,
 }) => {
   let {
     isOpens,
@@ -25,8 +28,6 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
   const onclose = (open: boolean) => {
     setIsOpen(open);
   };
-
-  console.log('isError', isError);
 
   return (
     <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
@@ -44,7 +45,11 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           <CustomInputField
             placeholder="Search Title* (Max 150 characters)"
             type="text"
-            onChange={(e) => setInputvalue(e.target.value)}
+            onChange={(e) => {
+              setErrorContent('');
+              setIsError(false);
+              setInputvalue(e.target.value);
+            }}
             value={inputValue}
             name={name}
             style={{
@@ -59,7 +64,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           <CustomDisplayButton
             displayButtonLabel="Cancel"
             handleClick={() => {
-              setIsOpen(false);
+              handleClose();
             }}
             displayButtonAllStyle={{
               displayButtonStyle: styles.showResultButtonTransparent,
