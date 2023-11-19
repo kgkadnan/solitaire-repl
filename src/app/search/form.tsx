@@ -886,38 +886,34 @@ const AdvanceSearch = () => {
 
     // If the loop completes, sets are equal
     return true;
-  }
+  };
 
   const handleShapeChange = (shape: string) => {
     let filteredShape: string[] = advanceSearch.shape.map(
       (data) => data.short_name
     );
     if (shape.toLowerCase() === 'all') {
-
-
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
       }
     } else {
-      
       if (selectedShape.includes('All')) {
         let filteredSelectedShape: string[] = selectedShape.filter(
           (data) => data !== 'All' && data !== shape
         );
 
         setSelectedShape(filteredSelectedShape);
-      }
-      else if (compareArrays(selectedShape.filter(
-        (data) => data !== 'All'
-      ), filteredShape.filter((data) => data !== 'All' && data !== shape))) {
+      } else if (
+        compareArrays(
+          selectedShape.filter((data) => data !== 'All'),
+          filteredShape.filter((data) => data !== 'All' && data !== shape)
+        )
+      ) {
         setSelectedShape(filteredShape);
+      } else {
+        handleFilterChange(shape, selectedShape, setSelectedShape);
       }
-      
-        else{ handleFilterChange(shape, selectedShape, setSelectedShape)}
-        
-      
-      
     }
   };
 
@@ -1042,18 +1038,45 @@ const AdvanceSearch = () => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
 
-  const handleGirdleStep2Change = (data: string) => {
-    if (data.toLowerCase() === 'all') {
-      let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
-        (girdleData) => girdleData
-      );
-      if (selectedKeyToSymbol.length > 0) {
+  // const handleKeyToSymbolChanges = (data: string) => {
+  //   if (data.toLowerCase() === 'all') {
+  //     let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
+  //       (girdleData) => girdleData
+  //     );
+  //     if (selectedKeyToSymbol.length > 0) {
+  //       setSelectedKeyToSymbol([]);
+  //     } else {
+  //       setSelectedKeyToSymbol(filteredGirdleStep);
+  //     }
+  //   } else {
+  //     handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
+  //   }
+  // };
+
+  const handleKeyToSymbolChange = (comment: string) => {
+  
+    if (comment.toLowerCase() === 'all') {
+      setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
+      if (selectedKeyToSymbol.includes('All')) {
         setSelectedKeyToSymbol([]);
-      } else {
-        setSelectedKeyToSymbol(filteredGirdleStep);
       }
     } else {
-      handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
+      if (selectedKeyToSymbol.includes('All')) {
+        let filteredSelectedShape: string[] = selectedKeyToSymbol.filter(
+          (data) => data !== 'All' && data !== comment
+        );
+
+        setSelectedKeyToSymbol(filteredSelectedShape);
+      } else if (
+        compareArrays(
+          selectedKeyToSymbol.filter((data) => data !== 'All'),
+          advanceSearch.key_to_symbol.filter((data) => data !== 'All' && data !== comment)
+        )
+      ) {
+        setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
+      } else {
+        handleFilterChange(comment, selectedKeyToSymbol, setSelectedKeyToSymbol);
+      }
     }
   };
 
@@ -1191,7 +1214,6 @@ const AdvanceSearch = () => {
     setSelectedLocation([]);
     setSelectedOrigin([]);
   };
-
 
   const handleSaveAndSearch: any = async () => {
     if (data?.count > 1) {
@@ -1536,7 +1558,8 @@ const AdvanceSearch = () => {
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?route=${JSON.parse(localStorage.getItem('Search')!).length + 2
+            `/search?route=${
+              JSON.parse(localStorage.getItem('Search')!).length + 2
             }`
           );
         }
@@ -1565,15 +1588,18 @@ const AdvanceSearch = () => {
         handleClick={handleChange}
         data={data}
         selectionButtonAllStyles={{
-          selectionButtonStyle: `${styles.selectionButtonStyles} ${className ?? ''
-            }   ${typeof relatedState !== 'string'
+          selectionButtonStyle: `${styles.selectionButtonStyles} ${
+            className ?? ''
+          }   ${
+            typeof relatedState !== 'string'
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
-            }`,
-          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${highlightIndicator &&
+          }`,
+          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${
+            highlightIndicator &&
             relatedState?.includes(data) &&
             styles.colorDataActiveStyle
-            }`,
+          }`,
         }}
       />
     ));
@@ -1601,14 +1627,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                  parameter.label === 'Pavilion Angle'
+                parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setFromAngle,
-                    setFromError,
-                    toAngle
-                  )
+                      parameter.label,
+                      e.target.value,
+                      setFromAngle,
+                      setFromError,
+                      toAngle
+                    )
                   : ''
               // handleValidate(
               //     parameter.label,
@@ -1633,14 +1659,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                  parameter.label === 'Pavilion Angle'
+                parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setToAngle,
-                    setFromError,
-                    fromAngle
-                  )
+                      parameter.label,
+                      e.target.value,
+                      setToAngle,
+                      setFromError,
+                      fromAngle
+                    )
                   : ''
               //  handleValidate(
               //     parameter.label,
@@ -1787,9 +1813,11 @@ const AdvanceSearch = () => {
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: `'${inputType === 'from' ? 'From' : 'To'
-            }' value should not be ${inputType === 'from' ? 'greater' : 'less'
-            } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+          [inputType]: `'${
+            inputType === 'from' ? 'From' : 'To'
+          }' value should not be ${
+            inputType === 'from' ? 'greater' : 'less'
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
         },
       }));
     } else {
@@ -2531,7 +2559,7 @@ const AdvanceSearch = () => {
               '',
               styles.activeOtherStyles,
               selectedKeyToSymbol,
-              handleGirdleStep2Change
+              handleKeyToSymbolChange
             )}
           </div>
         </div>
@@ -2541,8 +2569,9 @@ const AdvanceSearch = () => {
           <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-500" />
             <p
-              className={`text-${data?.count < 300 && data?.count > 0 ? 'green' : 'red'
-                }-500 text-base`}
+              className={`text-${
+                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
+              }-500 text-base`}
             >
               {!isValidationError && errorText}
             </p>
