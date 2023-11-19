@@ -9,6 +9,7 @@
   width: 95%;
   border: 0.25px solid hsl(var(--solitaire-quinary));
   border-radius: 10px;
+  cursor: pointer;
 }
 
 /* Card Title */
@@ -80,12 +81,14 @@
   color: #8c7459;
   font-size: 14px;
   font-weight: 500;
+  width: 400px !important;
 }
 
 .tableBody {
   color: hsl(var(--solitaire-tertiary));
   font-size: 14px;
   font-weight: 300;
+  width: 400px !important;
 }
 
 /* Sheet Styling */

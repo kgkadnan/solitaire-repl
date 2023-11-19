@@ -28,7 +28,6 @@ interface QueryParameters {
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const previousSearch = useAppSelector((store) => store.previousSearch);
   const savedSearch = useAppSelector((store) => store.savedSearch);
   const searchResult = useAppSelector((store) => store.searchResult);
 
@@ -38,15 +37,11 @@ const AdvanceSearch = () => {
 
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
 
-  const [searchCount, setSearchCount] = useState<number>(-1);
+  const [searchCount, setSearchCount] = useState<number>(-2);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
-
-  const [savedSearches, setSavedSearches] = useState<any[]>([]);
-
-  const [searchIndex, setSearchIndex] = useState<number>(0);
 
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
@@ -140,8 +135,6 @@ const AdvanceSearch = () => {
   const [showToast, setShowToast] = useState<boolean>(false);
   const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
-
-  const [fieldValidation, setFieldValidation] = useState<string>('');
 
   ///edit functionality
   const searchParams = useSearchParams();
@@ -345,6 +338,7 @@ const AdvanceSearch = () => {
   }
 
   const modifySearchFrom = searchParams.get('edit');
+  const isNewSearch = searchParams.get('route');
 
   function setModifySearch(data: any) {
     //basic_card_details states
@@ -430,157 +424,16 @@ const AdvanceSearch = () => {
 
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
-    let modifyPreviousSearchData = previousSearch?.previousSearch?.meta_data;
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
 
-    if (modifySearchFrom === 'previous-search' && modifyPreviousSearchData) {
-      setModifySearch(modifyPreviousSearchData);
-    } else if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
-      setModifySearch(modifysavedSearchData[savedSearch.activeTab]);
+    if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
+      setModifySearch(modifysavedSearchData);
     } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
       setModifySearch(modifySearchResult[searchResult.activeTab]?.queryParams);
     }
   }, [modifySearchFrom]);
 
   useEffect(() => {
-    // let data: any = JSON.parse(localStorage.getItem('Search')!);
-    // if (
-    //   data?.length !== undefined &&
-    //   data?.length > 0 &&
-    //   data[data?.length - 1] !== undefined
-    // ) {
-    //   let index = data?.length - 1;
-    //   //basic_card_details
-    //   const cut = data[index]?.cut;
-    //   const lab = data[index]?.lab;
-    //   const carat = data[index]?.carat;
-    //   const color = data[index]?.color;
-    //   const culet = data[index]?.culet;
-    //   const shapes = data[index]?.shape;
-    //   const polish = data[index]?.polish;
-    //   const clarity = data[index]?.clarity;
-    //   const location = data[index]?.location;
-    //   const symmetry = data[index]?.symmetry;
-    //   const priceRange = data[index]?.price_range;
-    //   const pricePerCarat = data[index]?.price_per_carat;
-    //   const discount = data[index]?.discount;
-    //   const color_shade = data[index]?.color_shade;
-    //   const color_shade_intensity = data[index]?.color_shade_intensity;
-    //   const overtone = data[index]?.overtone;
-    //   const HA = data[index]?.['H&A'];
-    //   const brilliance = data[index]?.brilliance;
-    //   const fluoroscence = data[index]?.fluoroscence;
-    //   const country_of_origin = data[index]?.country_of_origin;
-    //   //measurements
-    //   const depth = data[index]?.depth;
-    //   const ratio = data[index]?.ratio;
-    //   const width = data[index]?.width;
-    //   const length = data[index]?.length;
-    //   const table_per = data[index]?.['table%'];
-    //   const girdle_per = data[index]?.['girdle%'];
-    //   const depth_per = data[index]?.['depth%'];
-    //   const lower_half = data[index]?.lower_half;
-    //   const crown_angle = data[index]?.crown_angle;
-    //   const star_length = data[index]?.star_length;
-    //   const crown_height = data[index]?.crown_height;
-    //   const pavilion_angle = data[index]?.pavilion_angle;
-    //   const pavilion_depth = data[index]?.pavilion_depth;
-    //   //inclusion_details
-    //   const milky = data[index]?.milky;
-    //   const luster = data[index]?.luster;
-    //   const eye_clean = data[index]?.eye_clean;
-    //   const open_crown = data[index]?.open_crown;
-    //   const open_table = data[index]?.open_table;
-    //   const side_table = data[index]?.side_table;
-    //   const black_table = data[index]?.black_table;
-    //   const natural_crown = data[index]?.natural_crown;
-    //   const open_pavilion = data[index]?.open_pavilion;
-    //   const natural_girdle = data[index]?.natural_girdle;
-    //   const side_inclusion = data[index]?.side_inclusion;
-    //   const table_inclusion = data[index]?.table_inclusion;
-    //   const natural_pavilion = data[index]?.natural_pavilion;
-    //   const surface_graining = data[index]?.surface_graining;
-    //   const internal_graining = data[index]?.internal_graining;
-    //   //other_information
-    //   const girdle = data[index]?.girdle;
-    //   const key_to_symbol = data[index]?.key_to_symbol;
-    //   //basic_card_details states
-    //   shapes && setSelectedShape(shapes);
-    //   carat && setSelectedCaratRange(carat);
-    //   clarity && setSelectedClarity(clarity);
-    //   cut && setSelectedCut(cut);
-    //   lab && setSelectedLab(lab);
-    //   culet && setSelectedCulet(culet);
-    //   polish && setSelectedPolish(polish);
-    //   location && setSelectedLocation(location);
-    //   HA && setSelectedHR(HA);
-    //   symmetry && setSelectedSymmetry(symmetry);
-    //   fluoroscence && setSelectedFluorescence(fluoroscence);
-    //   country_of_origin && setSelectedOrigin(country_of_origin);
-    //   color_shade && setSelectedTinge(color_shade);
-    //   color_shade_intensity && setSelectedTingeIntensity(color_shade_intensity);
-    //   overtone && setSelectedOvertone(overtone);
-    //   brilliance && setSelectedBrilliance(brilliance);
-    //   priceRange && setPriceRangeFrom(priceRange.split('-')[0]);
-    //   priceRange && setPriceRangeTo(priceRange.split('-')[1]);
-    //   discount && setDiscountFrom(discount.split('-')[0]);
-    //   discount && setDiscountTo(discount.split('-')[1]);
-    //   pricePerCarat && setPricePerCaratFrom(pricePerCarat.split('-')[0]);
-    //   pricePerCarat && setPricePerCaratTo(pricePerCarat.split('-')[1]);
-    //   //measurements States
-    //   depth && setDepthFrom(depth.split('-')[0]);
-    //   depth && setDepthTo(depth.split('-')[1]);
-    //   ratio && setRatioFrom(ratio.split('-')[0]);
-    //   ratio && setRatioTo(ratio.split('-')[1]);
-    //   width && setWidthFrom(width.split('-')[0]);
-    //   width && setWidthTo(width.split('-')[1]);
-    //   length && setLengthFrom(length.split('-')[0]);
-    //   length && setLengthTo(length.split('-')[1]);
-    //   table_per && setTablePerFrom(table_per.split('-')[0]);
-    //   table_per && setTablePerTo(table_per.split('-')[1]);
-    //   girdle_per && setGirdlePerFrom(girdle_per.split('-')[0]);
-    //   girdle_per && setGirdlePerTo(girdle_per.split('-')[1]);
-    //   depth_per && setDepthPerFrom(depth_per.split('-')[0]);
-    //   depth_per && setDepthPerTo(depth_per.split('-')[1]);
-    //   lower_half && setLowerHalfFrom(lower_half.split('-')[0]);
-    //   lower_half && setLowerHalfTo(lower_half.split('-')[1]);
-    //   crown_angle && setCrownAngleFrom(crown_angle.split('-')[0]);
-    //   crown_angle && setCrownAngleTo(crown_angle.split('-')[1]);
-    //   star_length && setStarLengthFrom(star_length.split('-')[0]);
-    //   star_length && setStarLengthTo(star_length.split('-')[1]);
-    //   crown_height && setCrownHeightFrom(crown_height.split('-')[0]);
-    //   crown_height && setCrownHeightTo(crown_height.split('-')[1]);
-    //   pavilion_angle && setPavilionAngleFrom(pavilion_angle.split('-')[0]);
-    //   pavilion_angle && setPavilionAngleTo(pavilion_angle.split('-')[1]);
-    //   pavilion_depth && setPavilionDepthFrom(pavilion_depth.split('-')[0]);
-    //   pavilion_depth && setPavilionDepthTo(pavilion_depth.split('-')[1]);
-    //   //inclusion_details States
-    //   milky && setMilkyBI(milky);
-    //   luster && setLusterBI(luster);
-    //   eye_clean && setEyeCleanBI(eye_clean);
-    //   open_crown && setOpenCrownBI(open_crown);
-    //   open_table && setOpenTableBI(open_table);
-    //   side_table && setSideBlackBI(side_table);
-    //   black_table && setBlackTableBI(black_table);
-    //   natural_crown && setNaturalCrownWI(natural_crown);
-    //   open_pavilion && setOpenPavilionBI(open_pavilion);
-    //   natural_girdle && setNaturalGirdleWI(natural_girdle);
-    //   side_inclusion && setSideInclusionWI(side_inclusion);
-    //   table_inclusion && setTableInclusionWI(table_inclusion);
-    //   natural_pavilion && setNaturalPavilionWI(natural_pavilion);
-    //   surface_graining && setSurfaceGrainingWI(surface_graining);
-    //   internal_graining && setInternalGrainingWI(internal_graining);
-    //   //other_information States
-    //   girdle && setSelectedGirdle(girdle);
-    //   key_to_symbol && setSelectedKeyToSymbol(key_to_symbol);
-    //   let popData = data.filter((items: any, dataIndex: number) => {
-    //     return dataIndex !== index;
-    //   });
-    //   setAddSearches(popData);
-    //   // localStorage.removeItem('Search');
-    //   // setAddSearches(data);
-    // }
-
     let data: any = JSON.parse(localStorage.getItem('Search')!);
     if (
       data?.length !== undefined &&
@@ -589,7 +442,15 @@ const AdvanceSearch = () => {
     ) {
       setAddSearches(data);
     }
+
+    // if(modifySearchFrom === "")
   }, []);
+
+  useEffect(() => {
+    if (isNewSearch === 'form') {
+      handleReset();
+    }
+  }, [isNewSearch]);
 
   useEffect(() => {
     const queryParams = generateQueryParams({
@@ -749,7 +610,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount > 0) {
+    if (searchCount >= 0) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
@@ -757,7 +618,7 @@ const AdvanceSearch = () => {
         );
       } else if (data?.count === 0) {
         setIsError(true);
-        setErrorText(`No stones found`);
+        setErrorText(`No stones found, Please modify your search.`);
       } else if (data?.count !== 0) {
         setIsError(true);
         setErrorText(`${data?.count} stones found`);
@@ -771,11 +632,6 @@ const AdvanceSearch = () => {
       setIsError(true);
       setErrorText(error1?.error);
     }
-    // console.log(error, 'error');
-    // else{
-    //   setIsError(true)
-    //   setErrorText(`Please select the stone parameters to make the search.`)
-    // }
     setSearchCount(searchCount + 1);
   }, [data, error]);
 
@@ -1189,9 +1045,13 @@ const AdvanceSearch = () => {
   const handleGirdleStep2Change = (data: string) => {
     if (data.toLowerCase() === 'all') {
       let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
-        (girdleData) => (girdleData.toLowerCase() !== 'all' ? girdleData : '')
+        (girdleData) => girdleData
       );
-      setSelectedKeyToSymbol(filteredGirdleStep);
+      if (selectedKeyToSymbol.length > 0) {
+        setSelectedKeyToSymbol([]);
+      } else {
+        setSelectedKeyToSymbol(filteredGirdleStep);
+      }
     } else {
       handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
     }
@@ -1334,7 +1194,7 @@ const AdvanceSearch = () => {
 
 
   const handleSaveAndSearch: any = async () => {
-    if (searchCount > 1) {
+    if (data?.count > 1) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -1411,23 +1271,21 @@ const AdvanceSearch = () => {
           starLengthTo,
         });
 
-        // if (addSearches.length === 0) {
-        //   setSavedSearches([queryParams]);
-        // }
-
         const activeTab = searchResult?.activeTab;
-        const activeSearch: boolean = addSearches[activeTab]?.isSavedSearch;
+        const activeSearch: boolean =
+          addSearches[activeTab]?.saveSearchName.length;
         if (activeSearch) {
           const updatedMeta = addSearches;
 
           updatedMeta[activeTab].queryParams = queryParams;
 
-          let data = {
+          let updateSaveSearchData = {
             name: updatedMeta[0].saveSearchName,
-            data: updatedMeta[0].queryParams,
+            meta_data: updatedMeta[0].queryParams,
+            diamond_count: data?.count,
           };
 
-          updateSavedSearch(data)
+          updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
               handleSearch(true);
@@ -1436,20 +1294,19 @@ const AdvanceSearch = () => {
               console.log('error', error);
             });
         } else {
-          saveSearchName.length &&
-            (await addSavedSearch({
-              name: saveSearchName,
-              diamond_count: data?.count,
-              meta_data: queryParams,
-              is_deleted: false,
+          await addSavedSearch({
+            name: saveSearchName,
+            diamond_count: data?.count,
+            meta_data: queryParams,
+            is_deleted: false,
+          })
+            .unwrap()
+            .then(() => {
+              handleSearch(true);
             })
-              .unwrap()
-              .then(() => {
-                handleSearch(true);
-              })
-              .catch((error: any) => {
-                console.log('error', error);
-              }));
+            .catch((error: any) => {
+              console.log('error', error);
+            });
         }
       }
     } else {
@@ -1560,87 +1417,8 @@ const AdvanceSearch = () => {
   //   }
   // };
 
-  const handleAddSearches = () => {
-    const queryParams = generateQueryParams({
-      selectedShape,
-      selectedColor,
-      selectedWhiteColor,
-      selectedFancyColor,
-      selectedIntensity,
-      selectedOvertone,
-      selectedTinge,
-      selectedTingeIntensity,
-      selectedClarity,
-      selectedCaratRange,
-      caratRangeFrom,
-      caratRangeTo,
-      selectedMake,
-      selectedCut,
-      selectedPolish,
-      selectedSymmetry,
-      selectedFluorescence,
-      selectedCulet,
-      selectedGirdle,
-      selectedKeyToSymbol,
-      selectedLab,
-      selectedHR,
-      selectedBrilliance,
-      selectedLocation,
-      selectedOrigin,
-      priceRangeFrom,
-      priceRangeTo,
-      discountFrom,
-      discountTo,
-      pricePerCaratFrom,
-      pricePerCaratTo,
-      blackTableBI,
-      sideBlackBI,
-      openCrownBI,
-      openTableBI,
-      openPavilionBI,
-      milkyBI,
-      lusterBI,
-      eyeCleanBI,
-      tableInclusionWI,
-      sideInclusionWI,
-      naturalCrownWI,
-      naturalGirdleWI,
-      naturalPavilionWI,
-      surfaceGrainingWI,
-      internalGrainingWI,
-      tablePerFrom,
-      tablePerTo,
-      depthTo,
-      depthFrom,
-      crownAngleFrom,
-      crownAngleTo,
-      lengthFrom,
-      lengthTo,
-      pavilionDepthFrom,
-      pavilionDepthTo,
-      depthPerFrom,
-      depthPerTo,
-      crownHeightFrom,
-      crownHeightTo,
-      widthFrom,
-      widthTo,
-      lowerHalfFrom,
-      lowerHalfTo,
-      ratioFrom,
-      ratioTo,
-      girdlePerFrom,
-      girdlePerTo,
-      pavilionAngleFrom,
-      pavilionAngleTo,
-      starLengthFrom,
-      starLengthTo,
-    });
-
-    setAddSearches([...addSearches, queryParams]);
-  };
-
   const handleSearch = async (isSaved: boolean = false) => {
-    if (searchCount > 1) {
+    if (data?.count > 1) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -1718,7 +1496,7 @@ const AdvanceSearch = () => {
         });
 
         if (modifySearchFrom === 'saved-search') {
-          if (savedSearch.savedSearch.meta_data[savedSearch.activeTab]) {
+          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
             // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
             updatedMeta[savedSearch.activeTab] = queryParams;
@@ -1732,14 +1510,14 @@ const AdvanceSearch = () => {
           }
         }
 
-        let setDataOnLocalStorage = {
-          saveSearchName,
-          isSavedSearch: isSaved,
-          queryParams,
-        };
-
         if (modifySearchFrom === 'search-result') {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+          let setDataOnLocalStorage = {
+            saveSearchName:
+              modifySearchResult[searchResult.activeTab]?.saveSearchName,
+            isSavedSearch: isSaved,
+            queryParams,
+          };
           if (modifySearchResult[searchResult.activeTab]) {
             const updatedData = [...modifySearchResult];
             updatedData[searchResult.activeTab] = setDataOnLocalStorage;
@@ -1748,6 +1526,11 @@ const AdvanceSearch = () => {
 
           router.push(`/search?route=${searchResult.activeTab + 3}`);
         } else {
+          let setDataOnLocalStorage = {
+            saveSearchName: saveSearchName,
+            isSavedSearch: isSaved,
+            queryParams,
+          };
           localStorage.setItem(
             'Search',
             JSON.stringify([...addSearches, setDataOnLocalStorage])
@@ -2769,40 +2552,56 @@ const AdvanceSearch = () => {
           footerButtonData={[
             {
               id: 1,
+              displayButtonLabel: ManageLocales('app.advanceSearch.cancel'),
+              style: styles.transparent,
+              fn: () => {
+                if (modifySearchFrom === 'saved-search') {
+                  router.push('/search?route=saved');
+                } else if (modifySearchFrom === 'search-result') {
+                  router.push(`/search?route=${searchResult.activeTab + 3}`);
+                }
+              },
+              isHidden:
+                modifySearchFrom !== 'saved-search' &&
+                modifySearchFrom !== 'search-result',
+            },
+            {
+              id: 2,
               displayButtonLabel: ManageLocales('app.advanceSearch.reset'),
               style: styles.transparent,
               fn: handleReset,
             },
             {
-              id: 2,
+              id: 3,
               displayButtonLabel: `${ManageLocales(
                 'app.advanceSearch.saveSearch'
               )}`,
               style: styles.transparent,
               fn: () => {
-                if (searchCount > 1) {
+                if (data?.count < 300 && data?.count > 0) {
                   const activeTab = searchResult?.activeTab;
                   if (activeTab !== undefined) {
-                    const activeSearch: boolean =
-                      addSearches[activeTab]?.saveSearchName;
+                    const isSearchName: boolean =
+                      addSearches[activeTab]?.saveSearchName.length;
+                    const isSaved: boolean =
+                      addSearches[activeTab]?.isSavedSearch.length;
                     // Check if the active search is not null and isSavedSearch is true
-                    if (activeSearch) {
+                    if (isSaved) {
+                      handleSaveAndSearch();
+                    } else if (!isSaved && isSearchName) {
                       handleSaveAndSearch();
                     } else {
                       setIsInputDialogOpen(true);
                     }
                   } else {
                     setIsError(true);
-                    setErrorText(
-                      '*Please select some parameters before initiating a search'
-                    );
+                    setErrorText('Please make a selection to perform action.');
                   }
                 }
               },
-              isDisable: modifySearchFrom === 'saved-search',
             },
             {
-              id: 3,
+              id: 4,
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,

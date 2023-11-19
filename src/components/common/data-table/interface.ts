@@ -10,6 +10,7 @@ export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
   checkboxData: ICheckboxData;
+  mainTableStyle: string;
 }
 
 export interface KeyLabelMapping {

@@ -4,27 +4,78 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation'; // Import the useRouter hook
 import React, { useEffect, useState } from 'react';
 import styles from './my-cart.module.scss';
+import CustomHeader from '@/components/common/header';
+import { useGetCartQuery } from '@/features/api/cart';
 
 function MyCart({ children }: { children: React.ReactNode }) {
   let currentPath = usePathname();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [activeTabCount, setActiveTabCount] = useState(0);
+  const [soldOutCount, setSoldOutCount] = useState(0);
+  const [memoOutCount, setMemoOutCount] = useState(0);
 
-  let myProfileRoutes = [
+  const { data } = useGetCartQuery({});
+
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const activeDiamondItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'Active')
+          .map((row: any) => row.product);
+        setActiveTabCount(activeDiamondItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const soldOutItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'SoldOut')
+          .map((row: any) => row.product);
+
+        setSoldOutCount(soldOutItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const memoOutDiamondItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
+          .map((row: any) => row.product);
+
+        setMemoOutCount(memoOutDiamondItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  let myCartRoutes = [
     {
       id: '1',
       pathName: ManageLocales('app.myCart.active'),
       path: 'active',
+      count: activeTabCount,
     },
     {
       id: '2',
-      pathName: ManageLocales('app.myCart.outOfStock'),
-      path: 'out-of-stock',
+      pathName: ManageLocales('app.myCart.soldOut'),
+      path: 'sold-out',
+      count: soldOutCount,
     },
     {
       id: '3',
       pathName: ManageLocales('Memo-Out'),
       path: 'memo-out',
+      count: memoOutCount,
     },
   ];
 
@@ -41,15 +92,27 @@ function MyCart({ children }: { children: React.ReactNode }) {
     };
   }, [prevScrollPos]);
 
+  //Header Data
+  const headerData = {
+    headerHeading: 'My Cart',
+  };
+
   return (
     <>
+      <div className="sticky top-0 bg-solitairePrimary mt-10 overflow-y-scroll">
+        <CustomHeader
+          data={headerData}
+          mainDivStyle={styles.mainHeaderStyle}
+          visibleStyle={styles.visibleStyle}
+        />
+      </div>
       <div
         className={`${styles.navBar} ${
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="absolute top-[150px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary py-4">
-          {myProfileRoutes.map(({ id, pathName, path }) => {
+        <div className="absolute top-[165px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary">
+          {myCartRoutes.map(({ id, pathName, path, count }) => {
             // Check if the current route matches the link's path
             const isActive = currentPath === `/my-cart/${path}`;
 
@@ -64,7 +127,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
                 key={id}
               >
                 <div className={`${isActive && 'text-solitaireQuaternary'}`}>
-                  {pathName}
+                  {pathName} {count > 0 && `(${count})`}
                 </div>
               </Link>
             );

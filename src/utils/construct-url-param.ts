@@ -16,7 +16,7 @@ export function constructUrlParams(data: any) {
         // For other array values, include them as individual parameters
         data[key].forEach((value: any) => {
           params.push(
-            `${encodeURIComponent(key)}=${encodeURIComponent(value)}`
+            `${encodeURIComponent(key)}[]=${encodeURIComponent(value)}`
           );
         });
       }

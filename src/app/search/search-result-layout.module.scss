@@ -28,3 +28,22 @@
   height: 1.8rem !important;
   color: hsl(var(--solitaire-tertiary));
 }
+
+.showResultButtonTransparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  font-size: 14px !important;
+  border-radius: 5px;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 8px 50px;
+}
+
+.showResultButtonFilled {
+  background-color: #8c7459;
+  border-radius: 5px;
+  font-size: 14px !important;
+  color: #ffffff;
+  font-weight: 300;
+  padding: 8px 50px;
+}

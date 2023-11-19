@@ -19,6 +19,7 @@ const Login = () => {
   const handleLogin = async () => {
     let res: any = await verifyLogin({ email: email, password: password });
     if (res.data.customer) {
+      localStorage.removeItem('Search');
       router.push('/');
     }
   };

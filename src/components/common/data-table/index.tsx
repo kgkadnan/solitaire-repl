@@ -20,12 +20,16 @@ import { Product } from '@/app/search/result-interface';
 import { ICustomDataTableProps, KeyLabelMapping } from './interface';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
+import { usePathname } from 'next/navigation';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
   checkboxData,
+  mainTableStyle,
 }) => {
+  let currentPath = usePathname();
+
   const [sliderData, setSliderData] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState('');
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
@@ -40,7 +44,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     checkboxData;
 
   const addToCart = () => {
-    if (sliderData[0]) {
+    if (sliderData[0].diamond_status === 'MemoOut') {
+      console.log('require error message here');
+    } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id],
       })
@@ -135,14 +141,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
     {
       id: 3,
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.footer.addToWhislist'
-      ),
-      style: styles.filled,
-      fn: () => {},
-    },
-    {
-      id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
       fn: addToCart,
@@ -176,13 +174,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       id: '4',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2b'
-      ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
-    },
-    {
-      id: '5',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
       url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
@@ -297,7 +288,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
         setIsOpen={setIsDialogOpen}
       />
       <div className={'flex-grow overflow-y-auto'}>
-        <div className={styles.tableWrapper}>
+        <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
@@ -374,7 +365,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                   </p>
                                 </div>
 
-                                <div className="flex justify-around  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                <div className="flex justify-between  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
                                   {displayButtonData
                                     .filter((items) => items.id !== '1') // Filter out items with id '1'
                                     .map((items) => (
@@ -386,7 +377,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           displayButtonAllStyle={{
                                             displayLabelStyle:
                                               activeTab === items.id
-                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1 `
                                                 : styles.headerButtonStyle,
                                           }}
                                           handleClick={() =>
@@ -544,10 +535,12 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                   setDiamondDetailImageUrl(``);
                                   setSliderData([tableRows[index]]);
                                 }}
-                                className={` ${
+                                className={`${
                                   column.accessor === 'lot_id' &&
-                                  row.is_memo_out
+                                  row?.diamond_status === 'MemoOut'
                                     ? styles.memoOutBackground
+                                    : row?.in_cart?.length
+                                    ? styles.inCartBackground // Add your inCartBackground class
                                     : 'px-[5px]'
                                 }`}
                               >
@@ -641,7 +634,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                                   {keyLabelMapping[key]}
                                                 </span>
                                                 <br />
-                                                {data[key] ? data[key] : '-'}
+                                                {key === 'amount'
+                                                  ? data?.variants[0]?.prices[0]
+                                                      ?.amount ?? '-'
+                                                  : data[key] ?? '-'}
                                               </div>
                                             )
                                           )}
@@ -815,10 +811,12 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           </div>
                                         </div>
                                       </div>
-                                      <div className="sticky bottom-0 bg-solitairePrimary">
-                                        <CustomFooter
-                                          footerButtonData={footerButtonData}
-                                        />
+                                      <div className="sticky bottom-0 bg-solitairePrimary mb-5">
+                                        {currentPath === '/search' && (
+                                          <CustomFooter
+                                            footerButtonData={footerButtonData}
+                                          />
+                                        )}
                                       </div>
                                     </>
                                   );

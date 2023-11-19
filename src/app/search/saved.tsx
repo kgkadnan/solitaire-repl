@@ -6,7 +6,7 @@ import React, {
   useMemo,
   useState,
 } from 'react';
-import styles from './saved-search.module.scss';
+import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
 import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
@@ -38,6 +38,8 @@ import {
 } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import { constructUrlParams } from '@/utils/construct-url-param';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySavedSearch } from '@/features/saved-search/saved-search';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -86,6 +88,7 @@ const SavedSearch = () => {
   const [errorText, setErrorText] = useState('');
 
   let router = useRouter();
+  const dispatch = useAppDispatch();
 
   const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
     limit,
@@ -173,25 +176,23 @@ const SavedSearch = () => {
           cardId: item.id,
           cardActionIcon: editIcon,
           cardHeader: (
-            <div className="">
-              <CustomTable
-                tableData={{
-                  tableHeads: [item.name],
-                  bodyData: [
-                    {
-                      desc: (
-                        <div className={styles.parentDivHeaderSectiom}>
-                          <div style={{ marginRight: '80px' }}>
-                            {formatCreatedAt(item.created_at)}
-                          </div>
+            <CustomTable
+              tableData={{
+                tableHeads: [item.name],
+                bodyData: [
+                  {
+                    desc: (
+                      <div className={styles.parentDivHeaderSectiom}>
+                        <div style={{ marginRight: '80px' }}>
+                          {formatCreatedAt(item.created_at)}
                         </div>
-                      ),
-                    },
-                  ],
-                }}
-                tableStyleClasses={searchCardTitle}
-              />
-            </div>
+                      </div>
+                    ),
+                  },
+                ],
+              }}
+              tableStyleClasses={searchCardTitle}
+            />
           ),
           cardContent: cardContent,
         };
@@ -202,7 +203,7 @@ const SavedSearch = () => {
 
   //Delete Data
   const handleDelete = () => {
-    if (isCheck.length) {
+    if (isCheck?.length) {
       setIsDialogOpen(true);
     } else {
       setIsError(true);
@@ -314,13 +315,12 @@ const SavedSearch = () => {
   ];
 
   const handleDate = (date: IDateRange) => {
-    console.log('date', date);
     setDate(date);
     setDateSearchUrl(
-      `&startDate=${new Date(date.from)
+      `&start_date=${new Date(date.from)
         .toISOString()
         .replace('T', ' ')
-        .replace('Z', '%2B00')}&endDate=${new Date(date.to)
+        .replace('Z', '%2B00')}&end_date=${new Date(date.to)
         .toISOString()
         .replace('T', ' ')
         .replace('Z', '%2B00')}`
@@ -336,7 +336,7 @@ const SavedSearch = () => {
           data-testid={'Select All Checkbox'}
           checked={isCheckAll}
         />
-        <p className="text-solitaireTertiary text-base font-medium">
+        <p className="text-solitaireTertiary text-[14px]">
           {ManageLocales('app.common.header.selectAll')}
         </p>
       </div>
@@ -357,12 +357,8 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    const savedSearchData = data?.data;
-
-    let specificSavedSearchData = savedSearchData?.savedSearch;
-    setNumberOfPages(
-      Math.ceil(savedSearchData?.count / savedSearchData?.limit)
-    );
+    let specificSavedSearchData = data?.savedSearches;
+    setNumberOfPages(Math.ceil(data?.count / data?.limit));
 
     setSavedSearchData(specificSavedSearchData);
 
@@ -371,28 +367,59 @@ const SavedSearch = () => {
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
-    alert("You have clicked the 'Edit button'");
+    let savedSearchEditData = savedSearchData.filter((items: any) => {
+      return items.id === stone;
+    });
+
+    dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
+    router.push(`/search?route=saved&edit=saved-search`);
   };
 
   const handleCardClick = (id: string) => {
-    let cardClickData = savedSearchData.filter((items: any) => {
+    let cardClickData: any = savedSearchData.filter((items: any) => {
       return items.id === id;
     });
 
     let url = constructUrlParams(cardClickData[0].meta_data);
+
     setSearchUrl(url);
 
-    if (productData?.count < 300) {
+    if (productData?.count > 300) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
 
-      if (data.length) {
-        let abc = [...data, cardClickData[0].meta_data];
-        localStorage.setItem('Search', JSON.stringify(abc));
-        router.push(`/search?route=${data.length + 3}`);
+      if (data?.length) {
+        if (data?.length >= 5) {
+          setIsError(true);
+          setErrorText(
+            'Max search limit reached. Please remove existing searches'
+          );
+        } else {
+          let localStorageData = [
+            ...data,
+            {
+              saveSearchName: cardClickData[0].name,
+              isSavedSearch: true,
+              queryParams: cardClickData[0].meta_data,
+            },
+          ];
+
+          localStorage.setItem('Search', JSON.stringify(localStorageData));
+          router.push(`/search?route=${data.length + 3}`);
+        }
       } else {
+        let localStorageData = [
+          {
+            saveSearchName: cardClickData[0].name,
+            isSavedSearch: true,
+            queryParams: cardClickData[0].meta_data,
+          },
+        ];
+
+        localStorage.setItem('Search', JSON.stringify(localStorageData));
+        router.push(`/search?route=${3}`);
       }
     }
   };
@@ -450,6 +477,7 @@ const SavedSearch = () => {
                     />
 
                     <div
+                      data-testid={'card-id123'}
                       className={`overflow-auto ${styles.mainCardContainer}`}
                       onClick={() => handleCardClick(items.cardId)}
                     >

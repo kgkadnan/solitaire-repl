@@ -6,19 +6,15 @@ import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import React, { useEffect, useState } from 'react';
-import styles from './memo-out.module.scss';
+import styles from './sold-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
-import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 
-const MemoOut = () => {
-  const router = useRouter();
+const OutOfStock = () => {
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [rows, setRows] = useState([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
 
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
@@ -72,73 +68,23 @@ const MemoOut = () => {
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
+        const soldOutItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'SoldOut')
           .map((row: any) => row.product);
 
-        setRows(activeDiamondItems);
+        setRows(soldOutItems);
       }
     };
 
     updateRows();
   }, [data]);
 
-  const handleCompareStone = () => {
-    const maxStones = 10;
-    const minStones = 2;
-
-    if (isCheck.length > maxStones) {
-      setIsError(true);
-      setErrorText(`You can compare a maximum of ${maxStones} stones`);
-    } else if (isCheck.length < minStones) {
-      setIsError(true);
-      setErrorText(`Minimum ${minStones} stones are required to compare`);
-    } else {
-      const compareStones = isCheck
-        .map((id) => data.items.find((row: any) => row.product.id === id))
-        .map((stone) => stone.product);
-
-      localStorage.setItem('compareStone', JSON.stringify(compareStones));
-      router.push('/compare-stone');
-    }
-  };
-
-  const handleShare = () => {
-    setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
-  };
-
-  const handleDownloadExcel = () => {
-    alert('You have click the download excel button');
-  };
-
-  const handleViewSimilarStone = () => {
-    alert('You have click the View Similar Stone');
-  };
+  const handleViewSimilarStone = () => {};
 
   //Footer Button Data
   const footerButtonData = [
     {
-      id: 2,
-      displayButtonLabel: 'Download Excel',
-      style: styles.transparent,
-      fn: handleDownloadExcel,
-    },
-    {
-      id: 3,
-      displayButtonLabel: 'Share',
-      style: styles.transparent,
-      fn: handleShare,
-    },
-    {
-      id: 4,
-      displayButtonLabel: 'Compare Stone',
-      style: styles.transparent,
-      fn: handleCompareStone,
-    },
-
-    {
-      id: 4,
+      id: 1,
       displayButtonLabel: 'View Similar Stone',
       style: styles.filled,
       fn: handleViewSimilarStone,
@@ -161,11 +107,6 @@ const MemoOut = () => {
       {/* Custom Footer */}
       {footerButtonData?.length && (
         <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
-          {isError && (
-            <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
-            </div>
-          )}
           <CustomFooter
             footerButtonData={footerButtonData}
             noBorderTop={styles.paginationContainerStyle}
@@ -176,4 +117,4 @@ const MemoOut = () => {
   );
 };
 
-export default MemoOut;
+export default OutOfStock;
