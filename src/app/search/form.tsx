@@ -1054,15 +1054,12 @@ const AdvanceSearch = () => {
       }
       else if (compareArrays(selectedShape.filter(
         (data) => data !== 'All'
-      ), filteredShape.filter((data) => data !== 'All'))) {
-console.log("nnnnnnn",filteredShape)
+      ), filteredShape.filter((data) => data !== 'All' && data !== shape))) {
         setSelectedShape(filteredShape);
       }
       
         else{ handleFilterChange(shape, selectedShape, setSelectedShape)}
-        console.log("test",compareArrays(selectedShape.filter(
-          (data) => data !== 'All'
-        ), filteredShape.filter((data) => data !== 'All')))
+        
       
       
     }
@@ -1335,7 +1332,6 @@ console.log("nnnnnnn",filteredShape)
     setSelectedOrigin([]);
   };
 
-  // console.log('addsEarc', addSearches[searchResult?.activeTab].isSavedSearch);
 
   const handleSaveAndSearch: any = async () => {
     if (searchCount > 1) {
