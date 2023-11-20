@@ -613,7 +613,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount >= 0) {
+    if (searchCount > 0) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
