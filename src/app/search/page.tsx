@@ -175,6 +175,7 @@ function SearchResultLayout() {
                 if (yourSelection[removeDataIndex]?.saveSearchName.length) {
                   //update logic comes here
                   let updateSaveSearchData = {
+                    id: yourSelection[removeDataIndex]?.id,
                     name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
                     diamond_count: data?.count,
@@ -249,9 +250,6 @@ function SearchResultLayout() {
         if (parseYourSelection.length) {
           setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
         } else {
-          console.log('myProfileRoutes', myProfileRoutes);
-          console.log('newRoutes', newRoutes);
-
           setMyProfileRoutes([
             {
               id: 1,

@@ -45,7 +45,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   let [addSavedSearch] = useAddSavedSearchMutation();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   //Radio Button
-  const [selectedValue, setSelectedValue] = useState('');
+  const [selectedValue, setSelectedValue] = useState<string[]>([]);
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [averageDiscount, setAverageDiscount] = useState(0);
@@ -382,7 +382,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   }, [data]); // Include isEffectExecuted in the dependency array
 
   const handleRadioChange = (radioValue: string) => {
-    setSelectedValue(radioValue);
+    if (radioValue === 'Default') {
+      setSelectedValue([]);
+    }
+    setSelectedValue((prevSelectedValue) => [...prevSelectedValue, radioValue]);
   };
 
   const radioButtonStyles = {
@@ -399,108 +402,108 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     [
       {
         id: '1',
-        value: '1',
+        value: 'Carat - Low to High',
         radioButtonLabel: 'Carat - Low to High',
       },
       {
         id: '2',
-        value: '2',
+        value: 'Carat - High to Low',
         radioButtonLabel: 'Carat - High to Low',
       },
     ],
     [
       {
         id: '3',
-        value: '3',
+        value: 'Clarity - (FL - I3)',
         radioButtonLabel: 'Clarity - (FL - I3)',
       },
       {
         id: '4',
-        value: '4',
+        value: 'Clarity - (I3 - FL)',
         radioButtonLabel: 'Clarity - (I3 - FL)',
       },
     ],
     [
       {
         id: '5',
-        value: '5',
+        value: 'Price - Low to High',
         radioButtonLabel: 'Price - Low to High',
       },
       {
         id: '6',
-        value: '6',
+        value: 'Price - High to Low',
         radioButtonLabel: 'Price - High to Low',
       },
     ],
     [
       {
         id: '7',
-        value: '7',
+        value: 'Discount - Low to High',
         radioButtonLabel: 'Discount - Low to High',
       },
       {
         id: '8',
-        value: '8',
+        value: 'Discount - High to Low',
         radioButtonLabel: 'Discount - High to Low',
       },
     ],
     [
       {
         id: '9',
-        value: '9',
+        value: 'Table Inclusion - (T0 - T3)',
         radioButtonLabel: 'Table Inclusion - (T0 - T3)',
       },
       {
         id: '10',
-        value: '10',
+        value: 'Table Inclusion - (T3 - T0)',
         radioButtonLabel: 'Table Inclusion - (T3 - T0)',
       },
     ],
     [
       {
         id: '11',
-        value: '11',
+        value: 'Fluorescence - (NON - VSTG) ',
         radioButtonLabel: 'Fluorescence - (NON - VSTG) ',
       },
       {
         id: '12',
-        value: '12',
+        value: 'Fluorescence - (VSTG - NON)',
         radioButtonLabel: 'Fluorescence - (VSTG - NON) ',
       },
     ],
     [
       {
         id: '13',
-        value: '13',
+        value: 'Black Table - (B0 - B3)',
         radioButtonLabel: 'Black Table - (B0 - B3) ',
       },
       {
         id: '14',
-        value: '14',
+        value: 'Black Table - (B3 - B0)',
         radioButtonLabel: 'Black Table - (B3 - B0) ',
       },
     ],
     [
       {
         id: '15',
-        value: '15',
+        value: 'Side Black - (SB0 - SB3)',
         radioButtonLabel: 'Side Black - (SB0 - SB3) ',
       },
       {
         id: '16',
-        value: '16',
+        value: 'Side Black - (SB3 - SB0)',
         radioButtonLabel: 'Side Black - (SB3 - SB0) ',
       },
     ],
     [
       {
         id: '17',
-        value: '17',
+        value: 'Table Inclusion - (T0 - T3)',
         radioButtonLabel: 'Table Inclusion - (T0 - T3) ',
       },
       {
         id: '18',
-        value: '18',
+        value: 'Table Inclusion - (T3 - T0)',
         radioButtonLabel: 'Table Inclusion - (T3 - T0) ',
       },
     ],
@@ -520,8 +523,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
         is_deleted: false,
       })
         .unwrap()
-        .then(() => {
+        .then((res: any) => {
           parseData[activeTab] = {
+            id: res?.id,
             saveSearchName,
             isSavedSearch: true,
             queryParams: parseData[activeTab].queryParams,
@@ -564,12 +568,14 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
     let updateSaveSearchData = {
+      id: yourSelection[activeTab]?.id,
       name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,
       diamond_count: parseInt(data?.count),
     };
 
     yourSelection[activeTab] = {
+      id: yourSelection[activeTab]?.id,
       saveSearchName: yourSelection[activeTab]?.saveSearchName,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab].queryParams,
@@ -667,7 +673,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                         radioData={[
                           {
                             id: '0',
-                            value: '0',
+                            value: 'Default',
                             radioButtonLabel: 'Default',
                           },
                         ]}

@@ -22,9 +22,12 @@ import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
 
-interface QueryParameters {
-  [key: string]: string | string[];
-}
+type QueryData = {
+  [key: string]:
+    | string
+    | string[]
+    | Record<string, string | string[] | number[]>;
+};
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -155,9 +158,6 @@ const AdvanceSearch = () => {
     selectedTingeIntensity,
     selectedClarity,
     selectedCaratRange,
-    caratRangeFrom,
-    caratRangeTo,
-    selectedMake,
     selectedCut,
     selectedPolish,
     selectedSymmetry,
@@ -218,7 +218,7 @@ const AdvanceSearch = () => {
     starLengthFrom,
     starLengthTo,
   }: any) {
-    const queryParams: QueryParameters = {};
+    const queryParams: QueryData = {};
 
     selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
     // selectedColor && (queryParams['color'] = selectedColor);
@@ -235,17 +235,25 @@ const AdvanceSearch = () => {
       (queryParams['color_shade_intensity'] = selectedTingeIntensity);
     selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
 
-    let caratValues: string[] = [];
     if (selectedCaratRange && selectedCaratRange.length > 0) {
-      caratValues = selectedCaratRange.map((caratRange: string) => {
-        const caratData = caratRange.split('-');
-        const caratFrom = parseFloat(caratData[0]).toFixed(2);
-        const caratTo = parseFloat(caratData[1]).toFixed(2);
-        return `${caratFrom}-${caratTo}`;
+      const quer: { carat: { lte: number[]; gte: number[] } } = {
+        carat: { lte: [], gte: [] },
+      };
+
+      selectedCaratRange.forEach((range: string) => {
+        // Split each element using the "-" delimiter
+        const [minStr, maxStr] = range.split('-');
+        const min = parseFloat(minStr);
+        const max = parseFloat(maxStr);
+
+        // Update the quer.carat object
+        quer.carat.lte.push(max);
+        quer.carat.gte.push(min);
       });
 
-      caratValues && (queryParams['carat'] = caratValues);
+      queryParams['carat'] = quer.carat;
     }
+
     selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
     selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
     selectedSymmetry?.length !== 0 &&
@@ -266,15 +274,23 @@ const AdvanceSearch = () => {
       (queryParams['origin_country'] = selectedOrigin);
     priceRangeFrom &&
       priceRangeTo &&
-      (queryParams['price_range'] = `${priceRangeFrom}-${priceRangeTo}`);
+      (queryParams['price_range'] = {
+        lte: priceRangeTo,
+        gte: priceRangeFrom,
+      });
+
     discountFrom &&
       discountTo &&
-      (queryParams['discount'] = `${discountFrom}-${discountTo}`);
+      (queryParams['discount'] = {
+        lte: discountTo,
+        gte: discountFrom,
+      });
     pricePerCaratFrom &&
       pricePerCaratTo &&
-      (queryParams[
-        'price_per_carat'
-      ] = `${pricePerCaratFrom}-${pricePerCaratTo}`);
+      (queryParams['price_per_carat'] = {
+        lte: pricePerCaratTo,
+        gte: pricePerCaratFrom,
+      });
     blackTableBI?.length !== 0 && (queryParams['black_table'] = blackTableBI);
     sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
     openCrownBI?.length !== 0 && (queryParams['open_crown'] = openCrownBI);
@@ -301,41 +317,82 @@ const AdvanceSearch = () => {
       (queryParams['internal_graining'] = internalGrainingWI);
     tablePerFrom &&
       tablePerTo &&
-      (queryParams['table_percentage'] = `${tablePerFrom}-${tablePerTo}`);
-    depthFrom && depthTo && (queryParams['depth'] = `${depthTo}-${depthFrom}`);
+      (queryParams['table_percentage'] = {
+        lte: tablePerTo,
+        gte: tablePerFrom,
+      });
+    depthFrom &&
+      depthTo &&
+      (queryParams['depth'] = {
+        lte: depthTo,
+        gte: depthFrom,
+      });
     crownAngleFrom &&
       crownAngleTo &&
-      (queryParams['crown_angle'] = `${crownAngleFrom}-${crownAngleTo}`);
+      (queryParams['crown_angle'] = {
+        lte: crownAngleTo,
+        gte: crownAngleFrom,
+      });
     lengthFrom &&
       lengthTo &&
-      (queryParams['length'] = `${lengthFrom}-${lengthTo}`);
+      (queryParams['length'] = {
+        lte: lengthTo,
+        gte: lengthFrom,
+      });
     pavilionDepthFrom &&
       pavilionDepthTo &&
-      (queryParams[
-        'pavilion_depth'
-      ] = `${pavilionDepthFrom}-${pavilionDepthTo}`);
+      (queryParams['pavilion_depth'] = {
+        lte: pavilionDepthTo,
+        gte: pavilionDepthFrom,
+      });
     depthPerFrom &&
       depthPerTo &&
-      (queryParams['depth_percentage'] = `${depthPerFrom}-${depthPerTo}`);
+      (queryParams['depth_percentage'] = {
+        lte: depthPerTo,
+        gte: depthPerFrom,
+      });
     crownHeightFrom &&
       crownHeightTo &&
-      (queryParams['crown_height'] = `${crownHeightFrom}-${crownHeightTo}`);
-    widthFrom && widthTo && (queryParams['width'] = `${widthFrom}-${widthTo}`);
+      (queryParams['crown_height'] = {
+        lte: crownHeightTo,
+        gte: crownHeightFrom,
+      });
+    widthFrom &&
+      widthTo &&
+      (queryParams['width'] = {
+        lte: widthTo,
+        gte: widthFrom,
+      });
     lowerHalfFrom &&
       lowerHalfTo &&
-      (queryParams['lower_half'] = `${lowerHalfFrom}-${lowerHalfTo}`);
-    ratioFrom && ratioTo && (queryParams['ratio'] = `${ratioFrom}-${ratioTo}`);
+      (queryParams['lower_half'] = {
+        lte: lowerHalfTo,
+        gte: lowerHalfFrom,
+      });
+    ratioFrom &&
+      ratioTo &&
+      (queryParams['ratio'] = {
+        lte: ratioTo,
+        gte: ratioFrom,
+      });
     girdlePerFrom &&
       girdlePerTo &&
-      (queryParams['girdle_percentage'] = `${girdlePerFrom}-${girdlePerTo}`);
+      (queryParams['girdle_percentage'] = {
+        lte: girdlePerTo,
+        gte: girdlePerFrom,
+      });
     pavilionAngleFrom &&
       pavilionAngleTo &&
-      (queryParams[
-        'pavilion_angle'
-      ] = `${pavilionAngleFrom}-${pavilionAngleTo}`);
+      (queryParams['pavilion_angle'] = {
+        lte: pavilionAngleTo,
+        gte: pavilionAngleFrom,
+      });
     starLengthFrom &&
       starLengthTo &&
-      (queryParams['star_length'] = `${starLengthFrom}-${starLengthTo}`);
+      (queryParams['star_length'] = {
+        lte: starLengthTo,
+        gte: starLengthFrom,
+      });
 
     return queryParams;
   }
@@ -1159,7 +1216,7 @@ const AdvanceSearch = () => {
   // console.log('addsEarc', addSearches[searchResult?.activeTab].isSavedSearch);
 
   const handleSaveAndSearch: any = async () => {
-    if (data?.count > 1) {
+    if (data?.count > 0) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -1245,8 +1302,9 @@ const AdvanceSearch = () => {
           updatedMeta[activeTab].queryParams = queryParams;
 
           let updateSaveSearchData = {
-            name: updatedMeta[0].saveSearchName,
-            meta_data: updatedMeta[0].queryParams,
+            id: updatedMeta[activeTab].id,
+            name: updatedMeta[activeTab].saveSearchName,
+            meta_data: updatedMeta[activeTab].queryParams,
             diamond_count: parseInt(data?.count),
           };
 
@@ -1266,8 +1324,8 @@ const AdvanceSearch = () => {
             is_deleted: false,
           })
             .unwrap()
-            .then(() => {
-              handleSearch(true);
+            .then((res: any) => {
+              handleSearch(true, res.id);
             })
             .catch((error: any) => {
               console.log('error', error);
@@ -1386,7 +1444,7 @@ const AdvanceSearch = () => {
   //   }
   // };
 
-  const handleSearch = async (isSaved: boolean = false) => {
+  const handleSearch = async (isSaved: boolean = false, id?: string) => {
     if (data?.count > 1) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
@@ -1482,11 +1540,14 @@ const AdvanceSearch = () => {
         if (modifySearchFrom === 'search-result') {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
+            id: modifySearchResult[searchResult.activeTab]?.id,
             saveSearchName:
-              modifySearchResult[searchResult.activeTab]?.saveSearchName,
+              modifySearchResult[searchResult.activeTab]?.saveSearchName ||
+              saveSearchName,
             isSavedSearch: isSaved,
             queryParams,
           };
+
           if (modifySearchResult[searchResult.activeTab]) {
             const updatedData = [...modifySearchResult];
             updatedData[searchResult.activeTab] = setDataOnLocalStorage;
@@ -1496,6 +1557,7 @@ const AdvanceSearch = () => {
           router.push(`/search?route=${searchResult.activeTab + 3}`);
         } else {
           let setDataOnLocalStorage = {
+            id: id,
             saveSearchName: saveSearchName,
             isSavedSearch: isSaved,
             queryParams,
