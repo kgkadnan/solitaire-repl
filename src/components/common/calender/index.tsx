@@ -34,7 +34,12 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
             // variant={'outline'}
             className={cn(!date && 'text-muted-foreground')}
           >
-            <Image src={CalenderIcon} alt="Calender Image" />
+            <Image
+              src={CalenderIcon}
+              alt="Calender Image"
+              width={24}
+              height={24}
+            />
             <p className="text-solitaireTertiary ml-2 text-[14px]">
               Filter By Date
             </p>

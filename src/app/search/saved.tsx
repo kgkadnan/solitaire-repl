@@ -384,7 +384,7 @@ const SavedSearch = () => {
 
     setSearchUrl(url);
 
-    if (productData.count > 300) {
+    if (productData?.count > 300) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
@@ -477,6 +477,7 @@ const SavedSearch = () => {
                     />
 
                     <div
+                      data-testid={'card-id123'}
                       className={`overflow-auto ${styles.mainCardContainer}`}
                       onClick={() => handleCardClick(items.cardId)}
                     >
