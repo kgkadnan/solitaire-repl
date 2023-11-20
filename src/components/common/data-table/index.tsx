@@ -170,13 +170,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       ),
       url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
     },
-    {
-      id: '4',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.b2b'
-      ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
-    },
   ];
 
   const keyLabelMapping: KeyLabelMapping = {
@@ -365,7 +358,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                   </p>
                                 </div>
 
-                                <div className="flex justify-between  w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto">
+                                <div className="flex w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto justify-center gap-10 ">
                                   {displayButtonData
                                     .filter((items) => items.id !== '1') // Filter out items with id '1'
                                     .map((items) => (
@@ -377,7 +370,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                           displayButtonAllStyle={{
                                             displayLabelStyle:
                                               activeTab === items.id
-                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1 `
+                                                ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
                                                 : styles.headerButtonStyle,
                                           }}
                                           handleClick={() =>
@@ -398,9 +391,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       <Image
                                         src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
                                         alt={``}
-                                        width={350}
-                                        height={350}
-                                        style={{ height: '350px' }}
+                                        width={500}
+                                        height={500}
+                                        style={{ height: '500px' }}
                                       />
                                     )}
                                   {diamondDetailImageUrl &&
@@ -408,16 +401,16 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                       <Image
                                         src={diamondDetailImageUrl}
                                         alt={``}
-                                        width={350}
-                                        height={350}
-                                        style={{ height: '350px' }}
+                                        width={500}
+                                        height={500}
+                                        style={{ height: '500px' }}
                                       />
                                     )}
                                   {diamondDetailIframeUrl &&
                                     !diamondDetailImageUrl && (
                                       <iframe
-                                        width="50%"
-                                        height={350}
+                                        width={500}
+                                        height={500}
                                         frameBorder="0"
                                         src={diamondDetailIframeUrl}
                                       />
@@ -597,9 +590,9 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                               <Image
                                                 src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
                                                 alt={``}
-                                                width={350}
-                                                height={350}
-                                                style={{ height: '350px' }}
+                                                width={450}
+                                                height={450}
+                                                style={{ height: '450px' }}
                                               />
                                             )}
                                           {diamondDetailImageUrl &&
@@ -607,17 +600,17 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                                               <Image
                                                 src={diamondDetailImageUrl}
                                                 alt={``}
-                                                width={350}
-                                                height={350}
-                                                style={{ height: '350px' }}
+                                                width={450}
+                                                height={450}
+                                                style={{ height: '450px' }}
                                               />
                                             )}
 
                                           {diamondDetailIframeUrl &&
                                             !diamondDetailImageUrl && (
                                               <iframe
-                                                width="100%"
-                                                height={350}
+                                                width={450}
+                                                height={450}
                                                 frameBorder="0"
                                                 src={diamondDetailIframeUrl}
                                               />
