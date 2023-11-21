@@ -149,19 +149,36 @@ const SavedSearch = () => {
     };
   }, []);
 
+  const formatRangeData = (data, key) => {
+    const range = data?.meta_data?.[key];
+    if (
+      range &&
+      range.lte &&
+      range.lte.length &&
+      range.gte &&
+      range.gte.length
+    ) {
+      return `${range.gte[0]}-${range.lte[0]}`;
+    }
+    return '-';
+  };
+
   const renderCardData = useCallback(
     (data: any) => {
       return data?.map((item: any) => {
         // Filter the data based on the keyLabelMapping
         const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
-          if (item.meta_data) {
+          if (item.meta_data && !Array.isArray(item.meta_data[key])) {
+            filteredData[keyLabelMapping[key]] = formatRangeData(item, key);
+          } else {
             filteredData[keyLabelMapping[key]] =
               item.meta_data[key] && item.meta_data[key]?.length
                 ? item.meta_data[key]
                 : '-';
           }
         }
+
         const cardContent = (
           <CustomTable
             tableData={{
