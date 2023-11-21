@@ -475,14 +475,14 @@ const SavedSearch = () => {
             </p>
             <div className="flex justify-center">
               <CustomDisplayButton
-                displayButtonLabel="Yes"
+                displayButtonLabel="No"
                 displayButtonAllStyle={{
                   displayButtonStyle: `mr-[25px] ${styles.transparent}`,
                 }}
                 handleClick={deleteStoneHandler}
               />
               <CustomDisplayButton
-                displayButtonLabel="No"
+                displayButtonLabel="Yes"
                 displayButtonAllStyle={{
                   displayButtonStyle: styles.filled,
                 }}
