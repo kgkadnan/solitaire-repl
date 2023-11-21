@@ -149,7 +149,7 @@ const SavedSearch = () => {
     };
   }, []);
 
-  const formatRangeData = (data, key) => {
+  const formatRangeData = (data: any, key: string) => {
     const range = data?.meta_data?.[key];
     if (
       range &&
