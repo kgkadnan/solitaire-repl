@@ -99,7 +99,7 @@ const CompareStone = () => {
 
   const handleClose = (event: React.MouseEvent<HTMLDivElement>, id: string) => {
     const compareStones = JSON.parse(
-      localStorage.getItem('compareStone') || '[]'
+      localStorage.getItem('compareStone') ?? '[]'
     );
 
     const updatedStones = compareStones.filter(

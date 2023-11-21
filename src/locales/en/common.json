@@ -199,7 +199,8 @@
 
   "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
   "app.myDiamonds.MyInvoices": "My Invoices",
-  "app.myDiamonds.PreviousConfirmations": "Previous Confirmations"
+  "app.myDiamonds.PreviousConfirmations": "Previous Confirmations",
+  "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details"
 
 
 }
