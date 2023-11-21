@@ -201,11 +201,48 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles, keyLabelMapping, manySavedsearchButtonStyle]
   );
 
-  //Delete Data
+  // Delete Data
   const handleDelete = () => {
+    const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
+
     if (isCheck?.length) {
-      setIsDialogOpen(true);
+      const matchingData = searchTabData.filter((item1: any, index: number) =>
+        isCheck.some((item2) => {
+          if (item1.id === item2) {
+            item1.position = index + 1;
+            return item1;
+          }
+        })
+      );
+
+      if (matchingData.length > 0) {
+        setIsError(true);
+        const searchNames = matchingData.map(
+          (items: any) => items.saveSearchName
+        );
+        const resultPositions = matchingData.map((items: any) => {
+          return `Search Result ${items.position}`;
+        });
+
+        const errorMessage =
+          matchingData.length > 1
+            ? `Your saved searches ${searchNames.join(
+                ', '
+              )} are already opened in ${resultPositions.join(
+                ', '
+              )} respectively. Please close those tabs and then try deleting it.`
+            : `Your saved search ${searchNames.join(
+                ', '
+              )} is already opened in ${resultPositions.join(
+                ', '
+              )}. Please close the tab and then try deleting it.`;
+
+        setErrorText(errorMessage);
+      } else {
+        setIsDialogOpen(true);
+      }
     } else {
+      setIsDialogOpen(true);
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     }
@@ -403,6 +440,7 @@ const SavedSearch = () => {
               saveSearchName: cardClickData[0].name,
               isSavedSearch: true,
               queryParams: cardClickData[0].meta_data,
+              id: cardClickData[0].id,
             },
           ];
 
@@ -415,6 +453,7 @@ const SavedSearch = () => {
             saveSearchName: cardClickData[0].name,
             isSavedSearch: true,
             queryParams: cardClickData[0].meta_data,
+            id: cardClickData[0].id,
           },
         ];
 
@@ -512,7 +551,7 @@ const SavedSearch = () => {
           {footerButtonData?.length && (
             <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
               {isError && (
-                <div className="w-[30%]">
+                <div className="w-[50%]">
                   <p className="text-red-700 text-base ">{errorText}</p>
                 </div>
               )}

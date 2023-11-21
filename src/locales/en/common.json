@@ -195,5 +195,11 @@
 
   "app.myCart.active": "Active",
   "app.myCart.soldOut": "Sold Out",
-  "app.myCart.memoOut": "Memo-Out"
+  "app.myCart.memoOut": "Memo-Out",
+
+  "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
+  "app.myDiamonds.MyInvoices": "My Invoices",
+  "app.myDiamonds.PreviousConfirmations": "Previous Confirmations"
+
+
 }
