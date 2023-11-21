@@ -95,7 +95,8 @@ export const TopNavigationBar = () => {
       (isSaved: any) => isSaved.isSavedSearch === false
     );
 
-    if (data?.length && link !== '/search?route=form') {
+    // if (data?.length && link !== '/search?route=form') {
+    if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -107,7 +108,7 @@ export const TopNavigationBar = () => {
             <CustomDisplayButton
               displayButtonLabel="No"
               handleClick={() => {
-                localStorage.removeItem('Search');
+                localStorage.setItem('Search', JSON.stringify([]));
                 handleRoute(label, link);
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -129,9 +130,11 @@ export const TopNavigationBar = () => {
           </div>
         </>
       );
-    } else if (data?.length && link === '/search?route=form') {
-      handleRoute(label, link);
-    } else {
+    }
+    // else if (data?.length && link === '/search?route=form') {
+    //   handleRoute(label, link);
+    // }
+    else {
       localStorage.removeItem('Search');
       handleRoute(label, link);
     }

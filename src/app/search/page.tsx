@@ -45,6 +45,10 @@ function SearchResultLayout() {
   const [removeIndex, setRemoveIndex] = useState<number>(0);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maxTab, setMaxTab] = useState<number>(0);
+
+  const [inputError, setInputError] = useState(false);
+  const [inputErrorContent, setInputErrorContent] = useState('');
+
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
@@ -124,7 +128,7 @@ function SearchResultLayout() {
 
     await addSavedSearch({
       name: saveSearchName,
-      diamond_count: data?.count,
+      diamond_count: parseInt(data?.count),
       meta_data: yourSelection[removeIndex]?.queryParams,
       is_deleted: false,
     })
@@ -136,6 +140,10 @@ function SearchResultLayout() {
       })
       .catch((error: any) => {
         console.log('error', error);
+        setInputError(true);
+        setInputErrorContent(
+          'Title already exists. Choose another title to save your search'
+        );
       });
   };
 
@@ -167,6 +175,7 @@ function SearchResultLayout() {
                 if (yourSelection[removeDataIndex]?.saveSearchName.length) {
                   //update logic comes here
                   let updateSaveSearchData = {
+                    id: yourSelection[removeDataIndex]?.id,
                     name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
                     diamond_count: data?.count,
@@ -223,7 +232,6 @@ function SearchResultLayout() {
         let url = constructUrlParams(
           parseYourSelection[activeTab - 1]?.queryParams
         );
-
         setSearchUrl(url);
 
         const newRoutes = parseYourSelection
@@ -239,7 +247,22 @@ function SearchResultLayout() {
               )
           );
 
-        setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+        if (parseYourSelection.length) {
+          setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+        } else {
+          setMyProfileRoutes([
+            {
+              id: 1,
+              pathName: ManageLocales('app.searchResult.header.newSearch'),
+              path: 'form',
+            },
+            {
+              id: 2,
+              pathName: ManageLocales('app.savedSearch.header'),
+              path: 'saved',
+            },
+          ]);
+        }
       }
     };
     fetchMyAPI();
@@ -264,6 +287,12 @@ function SearchResultLayout() {
     router.push(`/search?route=${subRoute}&edit=search-result`);
   };
 
+  const handleCloseInputDialog = () => {
+    setIsInputDialogOpen(false);
+    setInputError(false);
+    setSaveSearchName('');
+  };
+
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -277,7 +306,14 @@ function SearchResultLayout() {
 
   return (
     <>
-      <CustomInputDialog customInputDialogData={customInputDialogData} />
+      <CustomInputDialog
+        customInputDialogData={customInputDialogData}
+        isError={inputError}
+        errorContent={inputErrorContent}
+        setIsError={setInputError}
+        setErrorContent={setInputErrorContent}
+        handleClose={handleCloseInputDialog}
+      />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
