@@ -15,7 +15,7 @@ import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
-import { QueryData, constructUrlParams } from '@/utils/construct-url-param';
+import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 
 import { useAppSelector } from '@/hooks/hook';

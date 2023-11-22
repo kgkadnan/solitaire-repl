@@ -151,6 +151,7 @@ const SavedSearch = () => {
 
   const formatRangeData = (data: any, key: string) => {
     const range = data?.meta_data?.[key];
+
     if (
       range &&
       range.lte &&
@@ -158,7 +159,7 @@ const SavedSearch = () => {
       range.gte &&
       range.gte.length
     ) {
-      return `${range.gte[0]}-${range.lte[0]}`;
+      return `${range.gte}-${range.lte}`;
     }
     return '-';
   };

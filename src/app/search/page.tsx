@@ -386,7 +386,7 @@ function SearchResultLayout() {
       <div
         style={{
           display: 'flex',
-          marginTop: '40px',
+          marginTop: '70px',
           width: '100%',
         }}
       >
