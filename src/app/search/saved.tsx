@@ -497,14 +497,14 @@ const SavedSearch = () => {
                 displayButtonAllStyle={{
                   displayButtonStyle: `mr-[25px] ${styles.transparent}`,
                 }}
-                handleClick={deleteStoneHandler}
+                handleClick={() => setIsDialogOpen(false)}
               />
               <CustomDisplayButton
                 displayButtonLabel="Yes"
                 displayButtonAllStyle={{
                   displayButtonStyle: styles.filled,
                 }}
-                handleClick={() => setIsDialogOpen(false)}
+                handleClick={deleteStoneHandler}
               />
             </div>
           </>
