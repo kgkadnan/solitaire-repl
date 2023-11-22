@@ -1,0 +1,28 @@
+.navBar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: hsl(var(--solitaire-primary));
+  transition: top 0.3s;
+}
+.visible {
+  top: 0;
+}
+
+.hidden {
+  top: -80px;
+}
+
+.mainHeaderStyle {
+  position: fixed;
+  top: 80px;
+  background-color: hsl(var(--solitaire-primary));
+  z-index: 11111;
+  width: 90%;
+  height: 80px;
+}
+
+.visibleStyle {
+  top: 0;
+}
