@@ -1065,94 +1065,57 @@ const AdvanceSearch = () => {
     setSelectedMake(data === selectedMake ? '' : data);
   };
 
+  const handleFilterChangeAndMakeSelection = (
+    data: string,
+    selectedFilter: string[],
+    setSelectedFilter: React.Dispatch<React.SetStateAction<string[]>>,
+    firstCriteria: string[],
+    secondCriteria: string[],
+  ) => {
+    handleFilterChange(data, selectedFilter, setSelectedFilter);
+  
+    let temp: string[] = [...selectedFilter];
+    const index = temp.indexOf(data);
+  
+    if (index !== -1) {
+      temp.splice(index, 1);
+    } else {
+      temp.push(data);
+    }
+    if (
+      temp.toString() === 'EX' &&
+      firstCriteria.toString() === 'EX' &&
+      secondCriteria.toString() === 'EX' 
+    ) {
+      if (selectedFluorescence.toString() === 'NON') {
+        setSelectedMake('3EX-Non');
+      } else {
+        setSelectedMake('3EX');
+      }
+    } else if (
+      (firstCriteria.toString() === 'EX,VG' || firstCriteria.toString() === 'VG,EX') &&
+      (secondCriteria.toString() === 'EX,VG' || secondCriteria.toString() === 'VG,EX') &&
+      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
+    ) {
+      setSelectedMake('3VG+');
+    } else {
+      setSelectedMake('');
+    }
+  };
+  
   const handleCutChange = (data: string) => {
-    handleFilterChange(data, selectedCut, setSelectedCut);
-
-    let temp: string[] = selectedCut
-    const index = temp.indexOf(data);
-    if (index !== -1) {
-      temp.splice(index, 1);
-    } else {
-      temp.push(data);
-    }
-    if (temp.toString() === 'EX' && selectedPolish.toString() === 'EX' && selectedSymmetry.toString() === 'EX') {
-      if (selectedFluorescence.toString() === 'NON') {
-        setSelectedMake('3EX-Non')
-      }
-      else {
-        setSelectedMake('3EX')
-      }
-
-    }
-    else if (
-      (selectedPolish.toString() === 'EX,VG' || selectedPolish.toString() === 'VG,EX') && (selectedSymmetry.toString() === 'EX,VG' || selectedSymmetry.toString() === 'VG,EX') &&
-      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
-    ) {
-      setSelectedMake('3VG+')
-    }
-    else (
-      setSelectedMake('')
-    )
-
+    handleFilterChangeAndMakeSelection(data, selectedCut, setSelectedCut,selectedPolish,selectedSymmetry);
   };
+  
   const handlePolishChange = (data: string) => {
-    handleFilterChange(data, selectedPolish, setSelectedPolish);
-    let temp: string[] = selectedPolish
-    const index = temp.indexOf(data);
-    if (index !== -1) {
-      temp.splice(index, 1);
-    } else {
-      temp.push(data);
-    }
-    if (temp.toString() === 'EX' && selectedCut.toString() === 'EX' && selectedSymmetry.toString() === 'EX') {
-      if (selectedFluorescence.toString() === 'NON') {
-        setSelectedMake('3EX-Non')
-      }
-      else {
-        setSelectedMake('3EX')
-      }
-
-    }
-    else if (
-      (selectedCut.toString() === 'EX,VG' || selectedCut.toString() === 'VG,EX') && (selectedSymmetry.toString() === 'EX,VG' || selectedSymmetry.toString() === 'VG,EX') &&
-      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
-    ) {
-      setSelectedMake('3VG+')
-    }
-    else (
-      setSelectedMake('')
-    )
+    handleFilterChangeAndMakeSelection(data, selectedPolish, setSelectedPolish,selectedCut,selectedSymmetry);
   };
+  
   const handleSymmetryChange = (data: string) => {
-    handleFilterChange(data, selectedSymmetry, setSelectedSymmetry);
-    let temp: string[] = selectedSymmetry
-    const index = temp.indexOf(data);
-    if (index !== -1) {
-      temp.splice(index, 1);
-    } else {
-      temp.push(data);
-    }
-    if (temp.toString() === 'EX' && selectedCut.toString() === 'EX' && selectedPolish.toString() === 'EX') {
-      if (selectedFluorescence.toString() === 'NON') {
-        setSelectedMake('3EX-Non')
-      }
-      else {
-        setSelectedMake('3EX')
-      }
-
-    }
-    else if (
-      (selectedCut.toString() === 'EX,VG' || selectedCut.toString() === 'VG,EX') && (selectedPolish.toString() === 'EX,VG' || selectedPolish.toString() === 'VG,EX') &&
-      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
-    ) {
-      setSelectedMake('3VG+')
-    }
-    else (
-      setSelectedMake('')
-    )
+    handleFilterChangeAndMakeSelection(data, selectedSymmetry, setSelectedSymmetry,selectedCut,selectedPolish);
   };
-
   const handleFluorescenceChange = (data: string) => {
+    handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     let temp: string[] = selectedFluorescence
     const index = temp.indexOf(data);
     if (index !== -1) {
@@ -1170,6 +1133,18 @@ const AdvanceSearch = () => {
       }
 
     }
+    else if (
+      (selectedCut.toString() === 'EX,VG' || selectedCut.toString() === 'VG,EX') &&
+      (selectedPolish.toString() === 'EX,VG' || selectedPolish.toString() === 'VG,EX') &&
+      (selectedSymmetry.toString() === 'EX,VG' || selectedSymmetry.toString() === 'VG,EX') && temp.length===0
+    ) {
+      setSelectedMake('3VG+');
+    }
+    else{
+      setSelectedMake('')
+    }
+    
+
   };
 
   const handleCuletChange = (data: string) => {
@@ -1180,20 +1155,7 @@ const AdvanceSearch = () => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
 
-  // const handleKeyToSymbolChanges = (data: string) => {
-  //   if (data.toLowerCase() === 'all') {
-  //     let filteredGirdleStep: string[] = advanceSearch.key_to_symbol.map(
-  //       (girdleData) => girdleData
-  //     );
-  //     if (selectedKeyToSymbol.length > 0) {
-  //       setSelectedKeyToSymbol([]);
-  //     } else {
-  //       setSelectedKeyToSymbol(filteredGirdleStep);
-  //     }
-  //   } else {
-  //     handleFilterChange(data, selectedKeyToSymbol, setSelectedKeyToSymbol);
-  //   }
-  // };
+
 
   const handleKeyToSymbolChange = (comment: string) => {
 
@@ -1855,8 +1817,8 @@ const AdvanceSearch = () => {
                 overriddenStyles={{ label: styles.labelPlainColor }}
               />
             </div>
-            <div>
-              <>
+            <div className={styles.filterSectionData}>
+              
                 {renderSelectionButtons(
                   data.element_value,
                   '',
@@ -1864,7 +1826,7 @@ const AdvanceSearch = () => {
                   data.state,
                   data.handleChange
                 )}
-              </>
+              
             </div>
           </div>
         ))}
@@ -2266,7 +2228,7 @@ const AdvanceSearch = () => {
             label={ManageLocales('app.advanceSearch.clarity')}
           />
         </div>
-        <div>
+        <div className={styles.filterSectionData}>
           {renderSelectionButtons(
             advanceSearch.clarity,
             '',
@@ -2464,7 +2426,7 @@ const AdvanceSearch = () => {
             label={ManageLocales('app.advanceSearch.origin')}
           />
         </div>
-        <div>
+        <div className={styles.filterSectionData}>
           {renderSelectionButtons(
             advanceSearch.origin,
             styles.countryOriginStyle,
