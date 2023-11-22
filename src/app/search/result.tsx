@@ -50,8 +50,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
 
-  const [confirmStoneData, setconfirmStoneData] = useState<Product[]>([]);
-
   //checkbox states
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
@@ -63,7 +61,19 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   let [addSavedSearch] = useAddSavedSearchMutation();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   //Radio Button
-  const [selectedRadioValue, setSelectedRadioValue] = useState<string[]>([]);
+  const [selectedRadioValue, setSelectedRadioValue] = useState<any[]>([]);
+  const [selectedCaratRadioValue, setSelectedCaratRadioValue] =
+    useState<string>('');
+  const [selectedClarityRadioValue, setSelectedClarityRadioValue] =
+    useState<string>('');
+  const [seletedPriceRadioValue, setseletedPriceRadioValue] =
+    useState<string>('');
+
+  const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
+    useState<string>();
+  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
+
+  const [selectedDefaultValue, setSelectedDefaultValue] = useState<string>('');
 
   const [totalAmount, setTotalAmount] = useState(0);
   const [averageDiscount, setAverageDiscount] = useState(0);
@@ -79,6 +89,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
+
+  const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>();
 
   const [commentValue, setCommentValue] = useState('');
 
@@ -296,44 +309,27 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const handleConfirm = () => {
     if (isCheck.length) {
+      setIsError(false);
+      setErrorText('Please select a stone to perform action.');
+      setIsSliderOpen(true);
       const confirmStone = rows.filter((item) => isCheck.includes(item.id));
-      setconfirmStoneData(confirmStone);
+      setConfirmStoneData(confirmStone);
+    } else {
+      setIsError(true);
+      setErrorText('Please select a stone to perform action.');
     }
   };
 
-  const confirmRadioButtons = [
-    [
-      {
-        id: '1',
-        value: '7 Days',
-        radioButtonLabel: '7 Days ',
-      },
-      {
-        id: '2',
-        value: '30 Days',
-        radioButtonLabel: '30 Days',
-      },
-      {
-        id: '3',
-        value: '60 Days',
-        radioButtonLabel: '60 Days',
-      },
-      {
-        id: '4',
-        value: 'other',
-        radioButtonLabel: <CustomInputField name="days" type="text" />,
-      },
-    ],
-  ];
+  const handleCaratRadioChange = (radioValue: string) => {
+    console.log('rrrrrrrrrrrrrrrrr', radioValue);
+    setSelectedDefaultValue('');
+    setSelectedCaratRadioValue(radioValue);
+  };
 
-  const handleRadioChange = (radioValue: string) => {
-    if (radioValue === 'Default') {
-      setSelectedRadioValue([]);
-    }
-    setSelectedRadioValue((prevSelectedRadioValue) => [
-      ...prevSelectedRadioValue,
-      radioValue,
-    ]);
+  const handleDefaultRadioChange = (radioValue: string) => {
+    console.log('radioValue', radioValue);
+    setSelectedDefaultValue(radioValue);
+    setSelectedCaratRadioValue('');
   };
 
   const handleComment = (event: any) => {
@@ -393,84 +389,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     },
     {
       id: 4,
-      displayButtonLabel: (
-        <CustomSlider
-          sheetContent={
-            <>
-              <div className={styles.diamondDetailHeader}>
-                <p className={`text-solitaireTertiary`}>
-                  {`${ManageLocales('app.searchResult.slider.confirmStone')}`}
-                </p>
-              </div>
-              <div className="border-b border-solitaireSenary mb-5"></div>
-              <div className="px-[50px]">
-                {confirmStoneData.length && (
-                  <CustomDataTable
-                    tableColumns={listingColumns}
-                    tableRows={confirmStoneData}
-                    selectionAllowed={false}
-                    mainTableStyle={styles.tableWrapper}
-                  />
-                )}
-                <div className="mt-5">
-                  <p>
-                    {ManageLocales(
-                      'app.searchResult.slider.confirmStone.paymentTerms'
-                    )}
-                  </p>
-                  {confirmRadioButtons.map((radioData, index) => (
-                    <CustomRadioButton
-                      key={index} // Ensure each component has a unique key
-                      radioData={radioData}
-                      onChange={handleRadioChange}
-                      radioButtonAllStyles={confirmStoneRadioButtonStyle}
-                    />
-                  ))}
-                </div>
-                <div className="mt-5">
-                  {ManageLocales(
-                    'app.searchResult.slider.confirmStone.addComment'
-                  )}
-
-                  <textarea
-                    value={commentValue}
-                    name="textarea"
-                    rows={3}
-                    // placeholder="Write Description (max 1000 characters)"
-                    className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
-                    onChange={handleComment}
-                  />
-                </div>
-
-                <div className="flex text-center justify-center gap-4 mt-3">
-                  <CustomDisplayButton
-                    displayButtonLabel={ManageLocales(
-                      'app.searchResult.slider.confirmStone.cancel'
-                    )}
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.transparent,
-                    }}
-                  />
-                  <CustomDisplayButton
-                    displayButtonLabel={ManageLocales(
-                      'app.searchResult.slider.confirmStone'
-                    )}
-                    displayButtonAllStyle={{
-                      displayButtonStyle: styles.filled,
-                    }}
-                  />
-                </div>
-                <div className="border-b border-solitaireSenary mt-5"></div>
-              </div>
-            </>
-          }
-          // sheetClose={}
-          sheetContentStyle={styles.diamondDetailSheet}
-          sheetTriggenContent={ManageLocales(
-            'app.searchResult.footer.confirmStone'
-          )}
-        />
-      ),
+      displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
       fn: handleConfirm,
     },
@@ -528,114 +447,263 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   }, [data]); // Include isEffectExecuted in the dependency array
 
   const radioDataList = [
-    [
-      {
-        id: '1',
-        value: 'Carat - Low to High',
-        radioButtonLabel: 'Carat - Low to High',
-      },
-      {
-        id: '2',
-        value: 'Carat - High to Low',
-        radioButtonLabel: 'Carat - High to Low',
-      },
-    ],
-    [
-      {
-        id: '3',
-        value: 'Clarity - (FL - I3)',
-        radioButtonLabel: 'Clarity - (FL - I3)',
-      },
-      {
-        id: '4',
-        value: 'Clarity - (I3 - FL)',
-        radioButtonLabel: 'Clarity - (I3 - FL)',
-      },
-    ],
-    [
-      {
-        id: '5',
-        value: 'Price - Low to High',
-        radioButtonLabel: 'Price - Low to High',
-      },
-      {
-        id: '6',
-        value: 'Price - High to Low',
-        radioButtonLabel: 'Price - High to Low',
-      },
-    ],
-    [
-      {
-        id: '7',
-        value: 'Discount - Low to High',
-        radioButtonLabel: 'Discount - Low to High',
-      },
-      {
-        id: '8',
-        value: 'Discount - High to Low',
-        radioButtonLabel: 'Discount - High to Low',
-      },
-    ],
-    [
-      {
-        id: '9',
-        value: 'Table Inclusion - (T0 - T3)',
-        radioButtonLabel: 'Table Inclusion - (T0 - T3)',
-      },
-      {
-        id: '10',
-        value: 'Table Inclusion - (T3 - T0)',
-        radioButtonLabel: 'Table Inclusion - (T3 - T0)',
-      },
-    ],
-    [
-      {
-        id: '11',
-        value: 'Fluorescence - (NON - VSTG) ',
-        radioButtonLabel: 'Fluorescence - (NON - VSTG) ',
-      },
-      {
-        id: '12',
-        value: 'Fluorescence - (VSTG - NON)',
-        radioButtonLabel: 'Fluorescence - (VSTG - NON) ',
-      },
-    ],
-    [
-      {
-        id: '13',
-        value: 'Black Table - (B0 - B3)',
-        radioButtonLabel: 'Black Table - (B0 - B3) ',
-      },
-      {
-        id: '14',
-        value: 'Black Table - (B3 - B0)',
-        radioButtonLabel: 'Black Table - (B3 - B0) ',
-      },
-    ],
-    [
-      {
-        id: '15',
-        value: 'Side Black - (SB0 - SB3)',
-        radioButtonLabel: 'Side Black - (SB0 - SB3) ',
-      },
-      {
-        id: '16',
-        value: 'Side Black - (SB3 - SB0)',
-        radioButtonLabel: 'Side Black - (SB3 - SB0) ',
-      },
-    ],
-    [
-      {
-        id: '17',
-        value: 'Table Inclusion - (T0 - T3)',
-        radioButtonLabel: 'Table Inclusion - (T0 - T3) ',
-      },
-      {
-        id: '18',
-        value: 'Table Inclusion - (T3 - T0)',
-        radioButtonLabel: 'Table Inclusion - (T3 - T0) ',
-      },
-    ],
+    {
+      name: 'Default',
+      handleChange: handleDefaultRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Default',
+          radioButtonLabel: 'Default',
+          checked: selectedDefaultValue == 'Default',
+        },
+      ],
+    },
+
+    {
+      name: 'carat',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Low to High',
+          radioButtonLabel: 'Carat - Low to High',
+          checked: selectedCaratRadioValue == 'Low to High',
+        },
+        {
+          id: '2',
+          value: 'High to Low',
+          radioButtonLabel: 'Carat - High to Low',
+          checked: selectedCaratRadioValue == 'High to Low',
+        },
+      ],
+    },
+    {
+      name: 'clarity',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: '(FL - I3)',
+          radioButtonLabel: 'Clarity - (FL - I3)',
+          checked: selectedClarityRadioValue == '(FL - I3)',
+        },
+        {
+          id: '2',
+          value: '(I3 - FL)',
+          radioButtonLabel: 'Clarity - (I3 - FL)',
+          checked: selectedClarityRadioValue == '(I3 - FL)',
+        },
+      ],
+    },
+    {
+      name: 'price',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Price - Low to High',
+          radioButtonLabel: 'Price - Low to High',
+          checked: seletedPriceRadioValue == 'Price - Low to High',
+        },
+        {
+          id: '2',
+          value: 'Price - High to Low',
+          radioButtonLabel: 'Price - High to Low',
+          checked: seletedPriceRadioValue == 'Price - High to Low',
+        },
+      ],
+    },
+    {
+      name: 'discount',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Discount - Low to High',
+          radioButtonLabel: 'Discount - Low to High',
+          checked: seletedPriceRadioValue == 'Discount - Low to High',
+        },
+        {
+          id: '2',
+          value: 'Discount - High to Low',
+          radioButtonLabel: 'Discount - High to Low',
+          checked: seletedPriceRadioValue == 'Discount - High to Low',
+        },
+      ],
+    },
+    {
+      name: 'Table Inclusion',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Table Inclusion - (T0 - T3)',
+          radioButtonLabel: 'Table Inclusion - (T0 - T3)',
+          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
+        },
+        {
+          id: '2',
+          value: 'Table Inclusion - (T3 - T0)',
+          radioButtonLabel: 'Table Inclusion - (T3 - T0)',
+          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
+        },
+      ],
+    },
+    {
+      name: 'Fluorescence',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Fluorescence - (NON - VSTG)',
+          radioButtonLabel: 'Fluorescence - (NON - VSTG) ',
+          checked: seletedPriceRadioValue == 'Fluorescence - (NON - VSTG)',
+        },
+        {
+          id: '2',
+          value: 'Fluorescence - (VSTG - NON)',
+          radioButtonLabel: 'Fluorescence - (VSTG - NON) ',
+          checked: seletedPriceRadioValue == 'Fluorescence - (VSTG - NON)',
+        },
+      ],
+    },
+    {
+      name: 'Black Table',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Black Table - (B0 - B3)',
+          radioButtonLabel: 'Black Table - (B0 - B3) ',
+          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
+        },
+        {
+          id: '2',
+          value: 'Black Table - (B3 - B0)',
+          radioButtonLabel: 'Black Table - (B3 - B0) ',
+          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
+        },
+      ],
+    },
+    {
+      name: 'Side Black',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Side Black - (SB0 - SB3)',
+          radioButtonLabel: 'Side Black - (SB0 - SB3) ',
+          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
+        },
+        {
+          id: '2',
+          value: 'Side Black - (SB3 - SB0)',
+          radioButtonLabel: 'Side Black - (SB3 - SB0) ',
+          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
+        },
+      ],
+    },
+    {
+      name: 'Table Inclusion',
+      handleChange: handleCaratRadioChange,
+      radioData: [
+        {
+          id: '1',
+          value: 'Table Inclusion - (T0 - T3)',
+          radioButtonLabel: 'Table Inclusion - (T0 - T3) ',
+          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
+        },
+        {
+          id: '2',
+          value: 'Table Inclusion - (T3 - T0)',
+          radioButtonLabel: 'Table Inclusion - (T3 - T0) ',
+          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
+        },
+      ],
+    },
+  ];
+
+  const handleConfirmStoneRadioChange = (value: string) => {
+    setInputError(false);
+    setInputErrorContent('');
+    setSelectedDaysInputValue('');
+    setSelectedRadioDaysValue(value);
+  };
+
+  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = parseFloat(event.target.value);
+
+    if (inputValue >= 121) {
+      setInputError(true);
+      setInputErrorContent('Invalid input.');
+      const formattedValue = event.target.value;
+      setSelectedDaysInputValue(formattedValue);
+    } else if (inputValue) {
+      setInputError(false);
+      setInputErrorContent('');
+      const formattedValue = event.target.value;
+      setSelectedDaysInputValue(formattedValue);
+    } else if (event.target.value === '') {
+      setInputError(false);
+      setInputErrorContent('');
+      // If the input is empty, clear the state
+      setSelectedDaysInputValue('');
+    }
+  };
+
+  const onFocus = () => {
+    handleConfirmStoneRadioChange('other');
+  };
+
+  const confirmRadioButtons = [
+    {
+      name: 'days',
+      handleChange: handleConfirmStoneRadioChange,
+      radioData: [
+        {
+          id: '0',
+          value: '7 Days',
+          radioButtonLabel: '7 Days',
+          checked: selectedRadioDaysValue === '7 Days',
+        },
+        {
+          id: '1',
+          value: '30 Days',
+          radioButtonLabel: '30 Days',
+          checked: selectedRadioDaysValue === '30 Days',
+        },
+        {
+          id: '2',
+          value: '60 Days',
+          radioButtonLabel: '60 Days',
+          checked: selectedRadioDaysValue === '60 Days',
+        },
+        {
+          id: '3',
+          value: 'other',
+          radioButtonLabel: (
+            <>
+              <div className="flex gap-2">
+                <CustomInputField
+                  name="days"
+                  type="number"
+                  // disable={selectedRadioDaysValue !== 'other'}
+                  onChange={handleRadioDayValue}
+                  value={selectedDaysInputValue}
+                  placeholder="Max 120 Days"
+                  style={{ input: 'w-[80px]' }}
+                  onFocus={onFocus}
+                />
+                <div>Days</div>
+              </div>
+              {inputError ? <div>{inputErrorContent}</div> : ''}
+            </>
+          ),
+          checked: selectedRadioDaysValue === 'other',
+        },
+      ],
+    },
   ];
 
   const handleSaveSearch = async () => {
@@ -738,8 +806,91 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setRows(data);
   };
 
+  const onOpenChange = (open: boolean) => {
+    setIsSliderOpen(open);
+  };
+
   return (
     <>
+      <CustomSlider
+        sheetContent={
+          <>
+            <div className={styles.diamondDetailHeader}>
+              <p className={`text-solitaireTertiary`}>
+                {`${ManageLocales('app.searchResult.slider.confirmStone')}`}
+              </p>
+            </div>
+            <div className="border-b border-solitaireSenary mb-5"></div>
+            <div className="px-[50px]">
+              {confirmStoneData?.length && (
+                <CustomDataTable
+                  tableColumns={listingColumns}
+                  tableRows={confirmStoneData}
+                  selectionAllowed={false}
+                  mainTableStyle={styles.tableWrapper}
+                />
+              )}
+              <div className="mt-5">
+                <p>
+                  {ManageLocales(
+                    'app.searchResult.slider.confirmStone.paymentTerms'
+                  )}
+                </p>
+                {confirmRadioButtons.map((radioData, index) => (
+                  <CustomRadioButton
+                    key={index} // Ensure each component has a unique key
+                    radioMetaData={radioData}
+                    radioButtonAllStyles={confirmStoneRadioButtonStyle}
+                  />
+                ))}
+              </div>
+              <div className="mt-5">
+                {ManageLocales(
+                  'app.searchResult.slider.confirmStone.addComment'
+                )}
+
+                <textarea
+                  value={commentValue}
+                  name="textarea"
+                  rows={3}
+                  // placeholder="Write Description (max 1000 characters)"
+                  className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
+                  onChange={handleComment}
+                />
+              </div>
+
+              <div className="flex text-center justify-center gap-4 mt-3">
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.searchResult.slider.confirmStone.cancel'
+                  )}
+                  displayButtonAllStyle={{
+                    displayButtonStyle: styles.transparent,
+                  }}
+                  handleClick={() => {
+                    setInputError(false);
+                    setInputErrorContent('');
+                    setSelectedDaysInputValue('');
+                    onOpenChange(false);
+                  }}
+                />
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.searchResult.slider.confirmStone'
+                  )}
+                  displayButtonAllStyle={{
+                    displayButtonStyle: styles.filled,
+                  }}
+                />
+              </div>
+              <div className="border-b border-solitaireSenary mt-5"></div>
+            </div>
+          </>
+        }
+        sheetContentStyle={styles.diamondDetailSheet}
+        isSliderOpen={isSliderOpen}
+        onOpenChange={onOpenChange}
+      />
       <CustomInputDialog
         customInputDialogData={customInputDialogData}
         isError={inputError}
@@ -821,23 +972,29 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
 
                   <div className={styles.radioButtonMainDiv}>
-                    <CustomRadioButton
-                      radioData={[
+                    {/* <CustomRadioButton
+                      radioMetaData={[
                         {
-                          id: '0',
-                          value: 'Default',
-                          radioButtonLabel: 'Default',
+                          name: 'Default',
+                          handleChange: handleCaratRadioChange,
+                          radioData: [
+                            {
+                              id: '0',
+                              value: 'Default',
+                              radioButtonLabel: 'Default',
+                              checked: selectedDefaultValue === 'Default',
+                            },
+                          ],
                         },
                       ]}
-                      onChange={handleRadioChange}
                       radioButtonAllStyles={radioButtonDefaultStyles}
-                    />
+                    /> */}
 
                     {radioDataList.map((radioData, index) => (
                       <CustomRadioButton
                         key={index} // Ensure each component has a unique key
-                        radioData={radioData}
-                        onChange={handleRadioChange}
+                        radioMetaData={radioData}
+                        // onChange={handleCaratRadioChange}
                         radioButtonAllStyles={radioButtonStyles}
                       />
                     ))}

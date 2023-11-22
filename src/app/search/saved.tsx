@@ -150,15 +150,12 @@ const SavedSearch = () => {
   }, []);
 
   const formatRangeData = (data: any, key: string) => {
-    const range = data?.meta_data?.[key];
-    if (
-      range &&
-      range.lte &&
-      range.lte.length &&
-      range.gte &&
-      range.gte.length
-    ) {
-      return `${range.gte[0]}-${range.lte[0]}`;
+    const range = data;
+
+    console.log('range', range);
+
+    if (range && range.lte && range.gte) {
+      return `${range.gte}-${range.lte}`;
     }
     return '-';
   };
@@ -170,7 +167,19 @@ const SavedSearch = () => {
         const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
           if (item.meta_data && !Array.isArray(item.meta_data[key])) {
-            filteredData[keyLabelMapping[key]] = formatRangeData(item, key);
+            filteredData[keyLabelMapping[key]] = formatRangeData(
+              item.meta_data[key],
+              key
+            );
+          } else if (
+            item.meta_data &&
+            Array.isArray(item.meta_data[key]) &&
+            typeof item.meta_data[key][0] !== 'string'
+          ) {
+            filteredData[keyLabelMapping[key]] = formatRangeData(
+              item.meta_data[key][0],
+              key
+            );
           } else {
             filteredData[keyLabelMapping[key]] =
               item.meta_data[key] && item.meta_data[key]?.length
@@ -507,14 +516,14 @@ const SavedSearch = () => {
                 displayButtonAllStyle={{
                   displayButtonStyle: `mr-[25px] ${styles.transparent}`,
                 }}
-                handleClick={deleteStoneHandler}
+                handleClick={() => setIsDialogOpen(false)}
               />
               <CustomDisplayButton
                 displayButtonLabel="Yes"
                 displayButtonAllStyle={{
                   displayButtonStyle: styles.filled,
                 }}
-                handleClick={() => setIsDialogOpen(false)}
+                handleClick={deleteStoneHandler}
               />
             </div>
           </>

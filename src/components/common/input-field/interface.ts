@@ -16,4 +16,5 @@ export interface InputFieldProps {
   disable?: boolean;
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   maxLength?: number;
+  onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
