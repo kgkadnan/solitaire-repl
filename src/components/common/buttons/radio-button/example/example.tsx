@@ -18,7 +18,7 @@ export const RadioButtonExample = () => {
 
   return (
     <>
-      <CustomRadioButton
+      {/* <CustomRadioButton
         radioData={[
           {
             id: '1',
@@ -33,7 +33,7 @@ export const RadioButtonExample = () => {
         ]}
         onChange={handleRadioChange}
         radioButtonAllStyles={myStyles}
-      />
+      /> */}
     </>
   );
 };

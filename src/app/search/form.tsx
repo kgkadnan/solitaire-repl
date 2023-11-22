@@ -384,8 +384,6 @@ const AdvanceSearch = () => {
     return queryParams;
   }
 
-  console.log('Sdsssadasdsad', selectedCaratRange);
-
   const modifySearchFrom = searchParams.get('edit');
   const isNewSearch = searchParams.get('route');
   function setModifySearch(data: any) {
