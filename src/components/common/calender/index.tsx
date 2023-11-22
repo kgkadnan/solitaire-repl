@@ -83,10 +83,10 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
               displayButtonAllStyle={{ displayButtonStyle: styles.transparent }}
               handleClick={() => handleDate('')}
             />
-            <CustomDisplayButton
+            {/* <CustomDisplayButton
               displayButtonLabel="Close"
               displayButtonAllStyle={{ displayButtonStyle: styles.filled }}
-            />
+            /> */}
           </div>
         </PopoverContent>
       </Popover>

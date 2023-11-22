@@ -149,19 +149,36 @@ const SavedSearch = () => {
     };
   }, []);
 
+  const formatRangeData = (data: any, key: string) => {
+    const range = data?.meta_data?.[key];
+    if (
+      range &&
+      range.lte &&
+      range.lte.length &&
+      range.gte &&
+      range.gte.length
+    ) {
+      return `${range.gte[0]}-${range.lte[0]}`;
+    }
+    return '-';
+  };
+
   const renderCardData = useCallback(
     (data: any) => {
       return data?.map((item: any) => {
         // Filter the data based on the keyLabelMapping
         const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
-          if (item.meta_data) {
+          if (item.meta_data && !Array.isArray(item.meta_data[key])) {
+            filteredData[keyLabelMapping[key]] = formatRangeData(item, key);
+          } else {
             filteredData[keyLabelMapping[key]] =
               item.meta_data[key] && item.meta_data[key]?.length
                 ? item.meta_data[key]
                 : '-';
           }
         }
+
         const cardContent = (
           <CustomTable
             tableData={{
@@ -201,11 +218,48 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles, keyLabelMapping, manySavedsearchButtonStyle]
   );
 
-  //Delete Data
+  // Delete Data
   const handleDelete = () => {
+    const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
+
     if (isCheck?.length) {
-      setIsDialogOpen(true);
+      const matchingData = searchTabData.filter((item1: any, index: number) =>
+        isCheck.some((item2) => {
+          if (item1.id === item2) {
+            item1.position = index + 1;
+            return item1;
+          }
+        })
+      );
+
+      if (matchingData.length > 0) {
+        setIsError(true);
+        const searchNames = matchingData.map(
+          (items: any) => items.saveSearchName
+        );
+        const resultPositions = matchingData.map((items: any) => {
+          return `Search Result ${items.position}`;
+        });
+
+        const errorMessage =
+          matchingData.length > 1
+            ? `Your saved searches ${searchNames.join(
+                ', '
+              )} are already opened in ${resultPositions.join(
+                ', '
+              )} respectively. Please close those tabs and then try deleting it.`
+            : `Your saved search ${searchNames.join(
+                ', '
+              )} is already opened in ${resultPositions.join(
+                ', '
+              )}. Please close the tab and then try deleting it.`;
+
+        setErrorText(errorMessage);
+      } else {
+        setIsDialogOpen(true);
+      }
     } else {
+      setIsDialogOpen(true);
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     }
@@ -403,6 +457,7 @@ const SavedSearch = () => {
               saveSearchName: cardClickData[0].name,
               isSavedSearch: true,
               queryParams: cardClickData[0].meta_data,
+              id: cardClickData[0].id,
             },
           ];
 
@@ -415,6 +470,7 @@ const SavedSearch = () => {
             saveSearchName: cardClickData[0].name,
             isSavedSearch: true,
             queryParams: cardClickData[0].meta_data,
+            id: cardClickData[0].id,
           },
         ];
 
@@ -436,14 +492,14 @@ const SavedSearch = () => {
             </p>
             <div className="flex justify-center">
               <CustomDisplayButton
-                displayButtonLabel="Yes"
+                displayButtonLabel="No"
                 displayButtonAllStyle={{
                   displayButtonStyle: `mr-[25px] ${styles.transparent}`,
                 }}
                 handleClick={deleteStoneHandler}
               />
               <CustomDisplayButton
-                displayButtonLabel="No"
+                displayButtonLabel="Yes"
                 displayButtonAllStyle={{
                   displayButtonStyle: styles.filled,
                 }}
@@ -512,7 +568,7 @@ const SavedSearch = () => {
           {footerButtonData?.length && (
             <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
               {isError && (
-                <div className="w-[30%]">
+                <div className="w-[50%]">
                   <p className="text-red-700 text-base ">{errorText}</p>
                 </div>
               )}

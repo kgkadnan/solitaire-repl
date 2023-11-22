@@ -9,8 +9,9 @@ export interface ICheckboxData {
 export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
-  checkboxData: ICheckboxData;
+  checkboxData?: ICheckboxData;
   mainTableStyle: string;
+  selectionAllowed?: boolean;
 }
 
 export interface KeyLabelMapping {

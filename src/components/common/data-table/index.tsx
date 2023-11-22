@@ -25,8 +25,9 @@ import { usePathname } from 'next/navigation';
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
   tableColumns,
-  checkboxData,
+  checkboxData = {},
   mainTableStyle,
+  selectionAllowed = true,
 }) => {
   let currentPath = usePathname();
 
@@ -38,8 +39,8 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const [addCart] = useAddCartMutation();
-
   let [downloadExcel] = useDownloadExcelMutation();
+
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
 
@@ -285,17 +286,29 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
           <table className={styles.table}>
             <thead className={styles.tableHeader}>
               <tr>
-                <th>
-                  <div className={`flex text-center`}>
-                    <Checkbox
-                      onClick={handleSelectAllCheckbox}
-                      data-testid={'Select All Checkbox'}
-                      checked={isCheckAll}
-                    />
-                  </div>
-                </th>
-                {tableCol?.map((column) => (
-                  <th key={column.accessor} className={`${styles.tableHead}`}>
+                {selectionAllowed && (
+                  <th>
+                    <div className={`flex text-center`}>
+                      <Checkbox
+                        onClick={handleSelectAllCheckbox}
+                        data-testid={'Select All Checkbox'}
+                        checked={isCheckAll}
+                      />
+                    </div>
+                  </th>
+                )}
+
+                {tableCol?.map((column, index) => (
+                  <th
+                    key={column.accessor}
+                    className={`${styles.tableHead}`}
+                    style={{
+                      left: `${
+                        index === 0 && selectionAllowed ? '45px' : '0px'
+                      }`,
+                      position: `${index === 0 ? 'sticky' : 'static'}`,
+                    }}
+                  >
                     {column.label}
                   </th>
                 ))}
@@ -306,17 +319,30 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
                 <tr
                   key={row.id}
                   className={styles.tableRow}
-                  onClick={() => handleClick(row.id)}
+                  onClick={() => handleClick!(row.id)}
                 >
-                  <td>
-                    <CustomCheckBox
-                      data={row.id}
-                      onClick={handleClick}
-                      isChecked={isCheck}
-                    />
-                  </td>
-                  {tableCol?.map((column: any) => (
+                  {selectionAllowed && (
+                    <td>
+                      <CustomCheckBox
+                        data={row.id}
+                        onClick={handleClick!}
+                        isChecked={isCheck}
+                      />
+                    </td>
+                  )}
+
+                  {tableCol?.map((column: any, tableColindex) => (
                     <td
+                      style={{
+                        left: `${
+                          tableColindex === 0 && selectionAllowed
+                            ? '45px'
+                            : '0px'
+                        }`,
+                        position: `${
+                          tableColindex === 0 ? 'sticky' : 'static'
+                        }`,
+                      }}
                       key={`${row.id}-${column.accessor}`}
                       className={`
                     ${styles.tableData}  
