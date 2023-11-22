@@ -150,15 +150,11 @@ const SavedSearch = () => {
   }, []);
 
   const formatRangeData = (data: any, key: string) => {
-    const range = data?.meta_data?.[key];
+    const range = data;
 
-    if (
-      range &&
-      range.lte &&
-      range.lte.length &&
-      range.gte &&
-      range.gte.length
-    ) {
+    console.log('range', range);
+
+    if (range && range.lte && range.gte) {
       return `${range.gte}-${range.lte}`;
     }
     return '-';
@@ -171,7 +167,19 @@ const SavedSearch = () => {
         const filteredData: IFormatedData = {};
         for (const key in keyLabelMapping) {
           if (item.meta_data && !Array.isArray(item.meta_data[key])) {
-            filteredData[keyLabelMapping[key]] = formatRangeData(item, key);
+            filteredData[keyLabelMapping[key]] = formatRangeData(
+              item.meta_data[key],
+              key
+            );
+          } else if (
+            item.meta_data &&
+            Array.isArray(item.meta_data[key]) &&
+            typeof item.meta_data[key][0] !== 'string'
+          ) {
+            filteredData[keyLabelMapping[key]] = formatRangeData(
+              item.meta_data[key][0],
+              key
+            );
           } else {
             filteredData[keyLabelMapping[key]] =
               item.meta_data[key] && item.meta_data[key]?.length
