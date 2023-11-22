@@ -670,7 +670,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount > 0) {
+    if (searchCount !== -1) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
@@ -693,7 +693,7 @@ const AdvanceSearch = () => {
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error]);
+  }, [data, error, errorText]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -1022,8 +1022,7 @@ const AdvanceSearch = () => {
         setSelectedCut(['EX']);
         setSelectedPolish(['EX']);
         setSelectedSymmetry(['EX']);
-      }
-      else {
+      } else {
         setSelectedCut([]);
         setSelectedPolish([]);
         setSelectedSymmetry([]);
@@ -1041,7 +1040,7 @@ const AdvanceSearch = () => {
         setSelectedCut([]);
         setSelectedPolish([]);
         setSelectedSymmetry([]);
-        setSelectedFluorescence([])
+        setSelectedFluorescence([]);
       }
     }
 
@@ -1054,12 +1053,8 @@ const AdvanceSearch = () => {
         setSelectedCut([]);
         setSelectedPolish([]);
         setSelectedSymmetry([]);
-
-
       }
-      setSelectedFluorescence(
-        selectedFluorescence.filter((e) => e !== 'NON')
-      );
+      setSelectedFluorescence(selectedFluorescence.filter((e) => e !== 'NON'));
     }
 
     setSelectedMake(data === selectedMake ? '' : data);
@@ -1070,13 +1065,13 @@ const AdvanceSearch = () => {
     selectedFilter: string[],
     setSelectedFilter: React.Dispatch<React.SetStateAction<string[]>>,
     firstCriteria: string[],
-    secondCriteria: string[],
+    secondCriteria: string[]
   ) => {
     handleFilterChange(data, selectedFilter, setSelectedFilter);
-  
+
     let temp: string[] = [...selectedFilter];
     const index = temp.indexOf(data);
-  
+
     if (index !== -1) {
       temp.splice(index, 1);
     } else {
@@ -1085,7 +1080,7 @@ const AdvanceSearch = () => {
     if (
       temp.toString() === 'EX' &&
       firstCriteria.toString() === 'EX' &&
-      secondCriteria.toString() === 'EX' 
+      secondCriteria.toString() === 'EX'
     ) {
       if (selectedFluorescence.toString() === 'NON') {
         setSelectedMake('3EX-Non');
@@ -1093,8 +1088,10 @@ const AdvanceSearch = () => {
         setSelectedMake('3EX');
       }
     } else if (
-      (firstCriteria.toString() === 'EX,VG' || firstCriteria.toString() === 'VG,EX') &&
-      (secondCriteria.toString() === 'EX,VG' || secondCriteria.toString() === 'VG,EX') &&
+      (firstCriteria.toString() === 'EX,VG' ||
+        firstCriteria.toString() === 'VG,EX') &&
+      (secondCriteria.toString() === 'EX,VG' ||
+        secondCriteria.toString() === 'VG,EX') &&
       (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
     ) {
       setSelectedMake('3VG+');
@@ -1102,49 +1099,68 @@ const AdvanceSearch = () => {
       setSelectedMake('');
     }
   };
-  
+
   const handleCutChange = (data: string) => {
-    handleFilterChangeAndMakeSelection(data, selectedCut, setSelectedCut,selectedPolish,selectedSymmetry);
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedCut,
+      setSelectedCut,
+      selectedPolish,
+      selectedSymmetry
+    );
   };
-  
+
   const handlePolishChange = (data: string) => {
-    handleFilterChangeAndMakeSelection(data, selectedPolish, setSelectedPolish,selectedCut,selectedSymmetry);
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedPolish,
+      setSelectedPolish,
+      selectedCut,
+      selectedSymmetry
+    );
   };
-  
+
   const handleSymmetryChange = (data: string) => {
-    handleFilterChangeAndMakeSelection(data, selectedSymmetry, setSelectedSymmetry,selectedCut,selectedPolish);
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedSymmetry,
+      setSelectedSymmetry,
+      selectedCut,
+      selectedPolish
+    );
   };
   const handleFluorescenceChange = (data: string) => {
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
-    let temp: string[] = selectedFluorescence
+    let temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
     if (index !== -1) {
       temp.splice(index, 1);
     } else {
       temp.push(data);
     }
-    if (selectedPolish.toString() === 'EX' && selectedCut.toString() === 'EX' && selectedSymmetry.toString() === 'EX') {
+    if (
+      selectedPolish.toString() === 'EX' &&
+      selectedCut.toString() === 'EX' &&
+      selectedSymmetry.toString() === 'EX'
+    ) {
       if (temp.toString() === 'NON') {
-
-        setSelectedMake('3EX-Non')
+        setSelectedMake('3EX-Non');
+      } else {
+        setSelectedMake('3EX');
       }
-      else {
-        setSelectedMake('3EX')
-      }
-
-    }
-    else if (
-      (selectedCut.toString() === 'EX,VG' || selectedCut.toString() === 'VG,EX') &&
-      (selectedPolish.toString() === 'EX,VG' || selectedPolish.toString() === 'VG,EX') &&
-      (selectedSymmetry.toString() === 'EX,VG' || selectedSymmetry.toString() === 'VG,EX') && temp.length===0
+    } else if (
+      (selectedCut.toString() === 'EX,VG' ||
+        selectedCut.toString() === 'VG,EX') &&
+      (selectedPolish.toString() === 'EX,VG' ||
+        selectedPolish.toString() === 'VG,EX') &&
+      (selectedSymmetry.toString() === 'EX,VG' ||
+        selectedSymmetry.toString() === 'VG,EX') &&
+      temp.length === 0
     ) {
       setSelectedMake('3VG+');
+    } else {
+      setSelectedMake('');
     }
-    else{
-      setSelectedMake('')
-    }
-    
-
   };
 
   const handleCuletChange = (data: string) => {
@@ -1155,10 +1171,7 @@ const AdvanceSearch = () => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
 
-
-
   const handleKeyToSymbolChange = (comment: string) => {
-
     if (comment.toLowerCase() === 'all') {
       setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       if (selectedKeyToSymbol.includes('All')) {
@@ -1174,12 +1187,18 @@ const AdvanceSearch = () => {
       } else if (
         compareArrays(
           selectedKeyToSymbol.filter((data) => data !== 'All'),
-          advanceSearch.key_to_symbol.filter((data) => data !== 'All' && data !== comment)
+          advanceSearch.key_to_symbol.filter(
+            (data) => data !== 'All' && data !== comment
+          )
         )
       ) {
         setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       } else {
-        handleFilterChange(comment, selectedKeyToSymbol, setSelectedKeyToSymbol);
+        handleFilterChange(
+          comment,
+          selectedKeyToSymbol,
+          setSelectedKeyToSymbol
+        );
       }
     }
   };
@@ -1671,7 +1690,8 @@ const AdvanceSearch = () => {
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?route=${JSON.parse(localStorage.getItem('Search')!).length + 2
+            `/search?route=${
+              JSON.parse(localStorage.getItem('Search')!).length + 2
             }`
           );
         }
@@ -1700,15 +1720,18 @@ const AdvanceSearch = () => {
         handleClick={handleChange}
         data={data}
         selectionButtonAllStyles={{
-          selectionButtonStyle: `${styles.selectionButtonStyles} ${className ?? ''
-            }   ${typeof relatedState !== 'string'
+          selectionButtonStyle: `${styles.selectionButtonStyles} ${
+            className ?? ''
+          }   ${
+            typeof relatedState !== 'string'
               ? relatedState?.includes(data) && activeStyle
               : relatedState === data && activeStyle
-            }`,
-          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${highlightIndicator &&
+          }`,
+          selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${
+            highlightIndicator &&
             relatedState?.includes(data) &&
             styles.colorDataActiveStyle
-            }`,
+          }`,
         }}
       />
     ));
@@ -1736,14 +1759,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                  parameter.label === 'Pavilion Angle'
+                parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setFromAngle,
-                    setFromError,
-                    toAngle
-                  )
+                      parameter.label,
+                      e.target.value,
+                      setFromAngle,
+                      setFromError,
+                      toAngle
+                    )
                   : ''
               // handleValidate(
               //     parameter.label,
@@ -1768,14 +1791,14 @@ const AdvanceSearch = () => {
             onBlur={
               (e) =>
                 parameter.label === 'Crown Angle' ||
-                  parameter.label === 'Pavilion Angle'
+                parameter.label === 'Pavilion Angle'
                   ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setToAngle,
-                    setFromError,
-                    fromAngle
-                  )
+                      parameter.label,
+                      e.target.value,
+                      setToAngle,
+                      setFromError,
+                      fromAngle
+                    )
                   : ''
               //  handleValidate(
               //     parameter.label,
@@ -1818,15 +1841,13 @@ const AdvanceSearch = () => {
               />
             </div>
             <div className={styles.filterSectionData}>
-              
-                {renderSelectionButtons(
-                  data.element_value,
-                  '',
-                  styles.activeOtherStyles,
-                  data.state,
-                  data.handleChange
-                )}
-              
+              {renderSelectionButtons(
+                data.element_value,
+                '',
+                styles.activeOtherStyles,
+                data.state,
+                data.handleChange
+              )}
             </div>
           </div>
         ))}
@@ -1922,9 +1943,11 @@ const AdvanceSearch = () => {
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: `'${inputType === 'from' ? 'From' : 'To'
-            }' value should not be ${inputType === 'from' ? 'greater' : 'less'
-            } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+          [inputType]: `'${
+            inputType === 'from' ? 'From' : 'To'
+          }' value should not be ${
+            inputType === 'from' ? 'greater' : 'less'
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
         },
       }));
     } else {
@@ -2690,8 +2713,9 @@ const AdvanceSearch = () => {
           <div className="w-[40%] flex items-center">
             <span className="hidden  text-green-500" />
             <p
-              className={`text-${data?.count < 300 && data?.count > 0 ? 'green' : 'red'
-                }-500 text-base`}
+              className={`text-${
+                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
+              }-500 text-base`}
             >
               {!isValidationError && errorText}
             </p>
