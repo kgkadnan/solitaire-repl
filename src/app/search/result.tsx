@@ -150,36 +150,30 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     isCheckAll: isCheckAll,
   };
 
-  const performDownloadExcel = (
-    productIds: any[],
-    isEntireSearch?: boolean
-  ) => {
-    if (isEntireSearch) {
-      console.log('isEntireSearch', isEntireSearch);
-    } else {
-      downloadExcel({ productIds })
-        .unwrap()
-        .then((res) => {
-          let { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setDialogContent(
-              <>
-                <div className="max-w-[380px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-            setIsDialogOpen(true);
-          }
-        })
-        .catch((e) => {
-          console.log('error', e);
-        });
-    }
+  const performDownloadExcel = (productIds: any[]) => {
+    downloadExcel({ productIds })
+      .unwrap()
+      .then((res) => {
+        let { data, fileName } = res;
+        if (data) {
+          setDialogContent(
+            <>
+              <div className="max-w-[380px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
+              <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+                Download Excel Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
+          downloadExcelFromBase64(data, fileName);
+        }
+      })
+      .catch((e) => {
+        console.log('error', e);
+      });
+
     setIsCheck([]);
     setIsCheckAll(false);
     setIsError(false);
@@ -187,38 +181,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   //download Excel
   const downloadExcelFunction = () => {
-    if (isCheckAll) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
-            Do you want to all the stones available in search or just selected
-            stones!
-          </div>
-          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
-            <CustomDisplayButton
-              displayButtonLabel="Selected"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                performDownloadExcel(isCheck);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="All"
-              handleClick={() => {
-                setIsDialogOpen(false);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
-              }}
-            />
-          </div>
-        </>
-      );
-    } else if (isCheck.length === 0) {
+    if (isCheck.length === 0) {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
@@ -248,6 +211,19 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       setErrorText('');
     }
   };
+
+  useEffect(() => {
+    if (isDialogOpen) {
+      console.log('isDialogOpen', isDialogOpen);
+      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
+      const timeoutId = setTimeout(() => {
+        setIsDialogOpen(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isDialogOpen]);
 
   //cart
   const addToCart = () => {
