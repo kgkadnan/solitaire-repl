@@ -670,7 +670,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount > 0) {
+    if (searchCount !== -1) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
@@ -693,7 +693,7 @@ const AdvanceSearch = () => {
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error]);
+  }, [data, error, errorText]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -1114,7 +1114,6 @@ const AdvanceSearch = () => {
   // };
 
   const handleKeyToSymbolChange = (comment: string) => {
-  
     if (comment.toLowerCase() === 'all') {
       setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       if (selectedKeyToSymbol.includes('All')) {
@@ -1130,12 +1129,18 @@ const AdvanceSearch = () => {
       } else if (
         compareArrays(
           selectedKeyToSymbol.filter((data) => data !== 'All'),
-          advanceSearch.key_to_symbol.filter((data) => data !== 'All' && data !== comment)
+          advanceSearch.key_to_symbol.filter(
+            (data) => data !== 'All' && data !== comment
+          )
         )
       ) {
         setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       } else {
-        handleFilterChange(comment, selectedKeyToSymbol, setSelectedKeyToSymbol);
+        handleFilterChange(
+          comment,
+          selectedKeyToSymbol,
+          setSelectedKeyToSymbol
+        );
       }
     }
   };
