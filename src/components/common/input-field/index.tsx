@@ -15,6 +15,7 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   disable,
   onBlur,
   maxLength,
+  onFocus,
 }) => {
   return (
     <div className={`${style?.inputMain}`}>
@@ -29,6 +30,7 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
         disabled={disable}
         onBlur={onBlur}
         maxLength={maxLength}
+        onFocus={onFocus}
       />
     </div>
   );

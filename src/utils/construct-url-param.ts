@@ -1,69 +1,51 @@
-// export function constructUrlParams(data: any) {
-//   const params: string[] = [];
+type QueryDataValue = string | number | NestedQuery | NestedQuery[];
 
-//   for (const key in data) {
-//     if (Array.isArray(data[key])) {
-//       if (key === 'carat') {
-//         // If the key is 'carat', process as range values
-//         data[key].forEach((value: any) => {
-//           const [min, max] = value.split('-').map(Number);
-//           if (!isNaN(max))
-//             params.push(`${encodeURIComponent(key)}[lte]=${max}`);
-//           if (!isNaN(min))
-//             params.push(`${encodeURIComponent(key)}[gte]=${min}`);
-//         });
-//       } else {
-//         // For other array values, include them as individual parameters
-//         data[key].forEach((value: any) => {
-//           params.push(
-//             `${encodeURIComponent(key)}[]=${encodeURIComponent(value)}`
-//           );
-//         });
-//       }
-//     } else if (typeof data[key] === 'string' && data[key].includes('-')) {
-//       const [min, max] = data[key].split('-').map(Number);
-//       if (!isNaN(max)) params.push(`${encodeURIComponent(key)}[lte]=${max}`);
-//       if (!isNaN(min)) params.push(`${encodeURIComponent(key)}[gte]=${min}`);
-//     } else {
-//       params.push(
-//         `${encodeURIComponent(key)}=${encodeURIComponent(data[key])}`
-//       );
-//     }
-//   }
-//   return params.join('&');
-// }
+export interface QueryData {
+  [key: string]: QueryDataValue;
+}
 
-type QueryData = {
-  [key: string]:
-    | string
-    | string[]
-    | Record<string, string | string[] | number[]>;
-};
+interface NestedQuery {
+  [key: string]: QueryDataValue;
+}
 
 export function constructUrlParams(data: QueryData): string {
   let queryParams: string[] = [];
+
+  const encodeNested = (
+    prefix: string,
+    nestedData: NestedQuery | NestedQuery[]
+  ) => {
+    if (Array.isArray(nestedData)) {
+      nestedData.forEach((item) => {
+        for (let subKey in item) {
+          if (item.hasOwnProperty(subKey)) {
+            queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
+          }
+        }
+      });
+    } else {
+      for (let subKey in nestedData) {
+        if (nestedData.hasOwnProperty(subKey)) {
+          queryParams.push(`${prefix}[${subKey}]=${nestedData[subKey]}`);
+        }
+      }
+    }
+  };
 
   for (let key in data) {
     if (data.hasOwnProperty(key)) {
       let value = data[key];
 
       if (Array.isArray(value)) {
-        value.forEach((item) => {
-          queryParams.push(`${key}[]=${item}`);
-        });
-      } else if (typeof value === 'object') {
-        for (let subKey in value) {
-          if (value.hasOwnProperty(subKey)) {
-            if (Array.isArray(value[subKey])) {
-              let subArray = value[subKey] as number[];
-              subArray.forEach((subItem) => {
-                queryParams.push(`${key}[${subKey}]=${subItem}`);
-              });
-            } else {
-              queryParams.push(`${key}[${subKey}]=${value[subKey]}`);
-            }
-          }
+        if (key === 'carat') {
+          encodeNested(key, value); // Handle carat separately
+        } else {
+          value.forEach((item) => {
+            queryParams.push(`${key}[]=${item}`);
+          });
         }
+      } else if (typeof value === 'object') {
+        encodeNested(key, value as NestedQuery | NestedQuery[]);
       } else {
         queryParams.push(`${key}=${value}`);
       }

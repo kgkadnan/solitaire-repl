@@ -15,19 +15,12 @@ import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
-import { constructUrlParams } from '@/utils/construct-url-param';
+import { QueryData, constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
-
-type QueryData = {
-  [key: string]:
-    | string
-    | string[]
-    | Record<string, string | string[] | number[]>;
-};
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -142,6 +135,8 @@ const AdvanceSearch = () => {
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
 
+  const [selectedStep, setSelectedStep] = useState('');
+
   ///edit functionality
   const searchParams = useSearchParams();
 
@@ -218,7 +213,7 @@ const AdvanceSearch = () => {
     starLengthFrom,
     starLengthTo,
   }: any) {
-    const queryParams: QueryData = {};
+    const queryParams: any = {};
 
     selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
     // selectedColor && (queryParams['color'] = selectedColor);
@@ -236,22 +231,15 @@ const AdvanceSearch = () => {
     selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
 
     if (selectedCaratRange && selectedCaratRange.length > 0) {
-      const quer: { carat: { lte: number[]; gte: number[] } } = {
-        carat: { lte: [], gte: [] },
-      };
-
-      selectedCaratRange.forEach((range: string) => {
-        // Split each element using the "-" delimiter
+      const caratRanges = selectedCaratRange.map((range: string) => {
         const [minStr, maxStr] = range.split('-');
         const min = parseFloat(minStr);
         const max = parseFloat(maxStr);
 
-        // Update the quer.carat object
-        quer.carat.lte.push(max);
-        quer.carat.gte.push(min);
+        return { lte: max, gte: min };
       });
 
-      queryParams['carat'] = quer.carat;
+      queryParams['carat'] = caratRanges;
     }
 
     selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
@@ -393,17 +381,25 @@ const AdvanceSearch = () => {
         lte: starLengthTo,
         gte: starLengthFrom,
       });
-
     return queryParams;
   }
 
+  console.log('Sdsssadasdsad', selectedCaratRange);
+
   const modifySearchFrom = searchParams.get('edit');
   const isNewSearch = searchParams.get('route');
-
   function setModifySearch(data: any) {
     //basic_card_details states
     data?.shape && setSelectedShape(data?.shape);
-    data?.carat && setSelectedCaratRange(data?.carat);
+    data?.carat &&
+      setSelectedCaratRange(
+        data?.carat.map(
+          (carat: any) => `${carat?.gte.toFixed(2)}-${carat?.lte.toFixed(2)}`
+        )
+      );
+
+    data.carat && setCaratRangeData;
+
     data?.clarity && setSelectedClarity(data?.clarity);
     data?.cut && setSelectedCut(data?.cut);
     data?.lab && setSelectedLab(data?.lab);
@@ -419,46 +415,40 @@ const AdvanceSearch = () => {
       setSelectedTingeIntensity(data?.color_shade_intensity);
     data?.overtone && setSelectedOvertone(data?.overtone);
     data?.brilliance && setSelectedBrilliance(data?.brilliance);
-    data?.priceRange && setPriceRangeFrom(data?.priceRange?.split('-')[0]);
-    data?.priceRange && setPriceRangeTo(data?.priceRange?.split('-')[1]);
-    data?.discount && setDiscountFrom(data?.discount?.split('-')[0]);
-    data?.discount && setDiscountTo(data?.discount?.split('-')[1]);
-    data?.pricePerCarat &&
-      setPricePerCaratFrom(data?.pricePerCarat?.split('-')[0]);
-    data?.pricePerCarat &&
-      setPricePerCaratTo(data?.pricePerCarat?.split('-')[1]);
-    //measurements States
 
-    data?.depth && setDepthFrom(data?.depth?.split('-')[0]);
-    data?.depth && setDepthTo(data?.depth?.split('-')[1]);
-    data?.ratio && setRatioFrom(data?.ratio?.split('-')[0]);
-    data?.ratio && setRatioTo(data?.ratio?.split('-')[1]);
-    data?.width && setWidthFrom(data?.width?.split('-')[0]);
-    data?.width && setWidthTo(data?.width?.split('-')[1]);
-    data?.length && setLengthFrom(data?.length?.split('-')[0]);
-    data?.length && setLengthTo(data?.length?.split('-')[1]);
-    data?.table_per && setTablePerFrom(data?.table_per?.split('-')[0]);
-    data?.table_per && setTablePerTo(data?.table_per?.split('-')[1]);
-    data?.girdle_per && setGirdlePerFrom(data?.girdle_per?.split('-')[0]);
-    data?.girdle_per && setGirdlePerTo(data?.girdle_per?.split('-')[1]);
-    data?.depth_per && setDepthPerFrom(data?.depth_per?.split('-')[0]);
-    data?.depth_per && setDepthPerTo(data?.depth_per?.split('-')[1]);
-    data?.lower_half && setLowerHalfFrom(data?.lower_half?.split('-')[0]);
-    data?.lower_half && setLowerHalfTo(data?.lower_half?.split('-')[1]);
-    data?.crown_angle && setCrownAngleFrom(data?.crown_angle?.split('-')[0]);
-    data?.crown_angle && setCrownAngleTo(data?.crown_angle?.split('-')[1]);
-    data?.star_length && setStarLengthFrom(data?.star_length?.split('-')[0]);
-    data?.star_length && setStarLengthTo(data?.star_length?.split('-')[1]);
-    data?.crown_height && setCrownHeightFrom(data?.crown_height?.split('-')[0]);
-    data?.crown_height && setCrownHeightTo(data?.crown_height?.split('-')[1]);
-    data?.pavilion_angle &&
-      setPavilionAngleFrom(data?.pavilion_angle?.split('-')[0]);
-    data?.pavilion_angle &&
-      setPavilionAngleTo(data?.pavilion_angle?.split('-')[1]);
-    data?.pavilion_depth &&
-      setPavilionDepthFrom(data?.pavilion_depth?.split('-')[0]);
-    data?.pavilion_depth &&
-      setPavilionDepthTo(data?.pavilion_depth?.split('-')[1]);
+    data?.priceRange && setPriceRangeFrom(data?.priceRange?.gte);
+    data?.priceRange && setPriceRangeTo(data?.priceRange?.lte);
+    data?.discount && setDiscountFrom(data?.discount?.gte);
+    data?.discount && setDiscountTo(data?.discount?.lte);
+    data?.pricePerCarat && setPricePerCaratFrom(data?.pricePerCarat?.gte);
+    data?.pricePerCarat && setPricePerCaratTo(data?.pricePerCarat?.lte);
+    //measurements States
+    data?.depth && setDepthFrom(data?.depth?.gte);
+    data?.depth && setDepthTo(data?.depth?.lte);
+    data?.ratio && setRatioFrom(data?.ratio?.gte);
+    data?.ratio && setRatioTo(data?.ratio?.lte);
+    data?.width && setWidthFrom(data?.width?.gte);
+    data?.width && setWidthTo(data?.width?.lte);
+    data?.length && setLengthFrom(data?.length?.gte);
+    data?.length && setLengthTo(data?.length?.lte);
+    data?.table_per && setTablePerFrom(data?.table_per?.gte);
+    data?.table_per && setTablePerTo(data?.table_per?.lte);
+    data?.girdle_per && setGirdlePerFrom(data?.girdle_per?.gte);
+    data?.girdle_per && setGirdlePerTo(data?.girdle_per?.lte);
+    data?.depth_per && setDepthPerFrom(data?.depth_per?.gte);
+    data?.depth_per && setDepthPerTo(data?.depth_per?.lte);
+    data?.lower_half && setLowerHalfFrom(data?.lower_half?.gte);
+    data?.lower_half && setLowerHalfTo(data?.lower_half?.lte);
+    data?.crown_angle && setCrownAngleFrom(data?.crown_angle?.gte);
+    data?.crown_angle && setCrownAngleTo(data?.crown_angle?.lte);
+    data?.star_length && setStarLengthFrom(data?.star_length?.gte);
+    data?.star_length && setStarLengthTo(data?.star_length?.lte);
+    data?.crown_height && setCrownHeightFrom(data?.crown_height?.gte);
+    data?.crown_height && setCrownHeightTo(data?.crown_height?.lte);
+    data?.pavilion_angle && setPavilionAngleFrom(data?.pavilion_angle?.gte);
+    data?.pavilion_angle && setPavilionAngleTo(data?.pavilion_angle?.lte);
+    data?.pavilion_depth && setPavilionDepthFrom(data?.pavilion_depth?.gte);
+    data?.pavilion_depth && setPavilionDepthTo(data?.pavilion_depth?.lte);
 
     //inclusion_details States
     data?.milky && setMilkyBI(data?.milky);
@@ -1013,6 +1003,7 @@ const AdvanceSearch = () => {
     handleFilterChange(data, selectedClarity, setSelectedClarity);
   };
   const handleCaratRangeChange = (data: string) => {
+    console.log('Data', data, selectedCaratRange);
     handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
   };
   // let prevMakeData=""
@@ -1114,7 +1105,6 @@ const AdvanceSearch = () => {
   // };
 
   const handleKeyToSymbolChange = (comment: string) => {
-  
     if (comment.toLowerCase() === 'all') {
       setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       if (selectedKeyToSymbol.includes('All')) {
@@ -1130,12 +1120,18 @@ const AdvanceSearch = () => {
       } else if (
         compareArrays(
           selectedKeyToSymbol.filter((data) => data !== 'All'),
-          advanceSearch.key_to_symbol.filter((data) => data !== 'All' && data !== comment)
+          advanceSearch.key_to_symbol.filter(
+            (data) => data !== 'All' && data !== comment
+          )
         )
       ) {
         setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
       } else {
-        handleFilterChange(comment, selectedKeyToSymbol, setSelectedKeyToSymbol);
+        handleFilterChange(
+          comment,
+          selectedKeyToSymbol,
+          setSelectedKeyToSymbol
+        );
       }
     }
   };
@@ -1199,6 +1195,7 @@ const AdvanceSearch = () => {
   };
 
   const handleReset = () => {
+    setSelectedStep('');
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
@@ -1505,7 +1502,7 @@ const AdvanceSearch = () => {
   // };
 
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
-    if (data?.count > 1) {
+    if (data?.count > 0) {
       if (data?.count < 300 && data?.count > 0) {
         const queryParams = generateQueryParams({
           selectedShape,
@@ -2605,23 +2602,26 @@ const AdvanceSearch = () => {
           />
           <div style={{ margin: '10px' }}>
             <CustomRadioButton
-              radioData={[
-                {
-                  id: '1',
-                  value: '1',
-                  radioButtonLabel: ManageLocales(
-                    'app.advanceSearch.radioLabel1'
-                  ),
+              radioMetaData={{
+                name: 'steps',
+                handleChange: (data: string) => {
+                  setSelectedStep(data);
                 },
-                {
-                  id: '2',
-                  value: '2',
-                  radioButtonLabel: ManageLocales(
-                    'app.advanceSearch.radioLabel2'
-                  ),
-                },
-              ]}
-              onChange={handleGirdleStepChange}
+                radioData: [
+                  {
+                    id: '1',
+                    value: 'Contains',
+                    radioButtonLabel: 'Contains',
+                    checked: selectedStep === 'Contains',
+                  },
+                  {
+                    id: '2',
+                    value: 'Does not contains',
+                    radioButtonLabel: 'Does not contains',
+                    checked: selectedStep === 'Does not contains',
+                  },
+                ],
+              }}
               radioButtonAllStyles={{
                 radioButtonStyle: styles.radioStyle,
                 radioLabelStyle: styles.radioLabel,

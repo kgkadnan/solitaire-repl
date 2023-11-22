@@ -9,6 +9,13 @@ interface IRadioButtonOptionProps {
   radioButtonLabel?: string | ReactNode;
   id: string;
   value: string;
+  checked?: boolean;
+}
+
+interface IRadioButtonMetaProps {
+  name: string;
+  handleChange: (data: string) => void;
+  radioData: IRadioButtonOptionProps[];
 }
 
 // Interface for styling of radio buttons and labels
@@ -21,26 +28,26 @@ interface IRadioButtonStyles {
 
 // Interface for the RadioGroup component's props
 interface IRadioGroupProps {
-  radioData: IRadioButtonOptionProps[];
-  onChange: (radioValue: string) => void;
+  radioMetaData: IRadioButtonMetaProps;
+  // onChange: (radioValue: string) => void;
   radioButtonAllStyles?: IRadioButtonStyles;
 }
 
 // CustomRadioButton component definition
 export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
-  radioData,
-  onChange,
+  radioMetaData,
   radioButtonAllStyles,
 }) => {
   return (
     <>
       {/* RadioGroup component for managing radio buttons */}
       <RadioGroup
-        onValueChange={onChange}
+        onValueChange={radioMetaData?.handleChange}
         className={`${style?.mainRadioButton} ${radioButtonAllStyles?.mainRadioButton}`}
+        name={radioMetaData?.name}
       >
         {/* Map over radioData to render individual radio buttons */}
-        {radioData?.map((items) => {
+        {radioMetaData?.radioData?.map((items) => {
           return (
             <div key={items?.id} className={style?.radioContainerStyle}>
               {/* Radio button item */}
@@ -48,6 +55,7 @@ export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
                 className={radioButtonAllStyles?.radioButtonStyle}
                 value={items?.value}
                 id={items?.id}
+                checked={items?.checked}
               />
               {/* Radio button label */}
               <Label
