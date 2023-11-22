@@ -660,7 +660,7 @@ const AdvanceSearch = () => {
   });
 
   useEffect(() => {
-    if (searchCount > 0) {
+    if (searchCount !== -1) {
       if (data?.count > 300 && data?.count > 0) {
         setIsError(true);
         setErrorText(
@@ -683,7 +683,7 @@ const AdvanceSearch = () => {
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error]);
+  }, [data, error, errorText]);
 
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,

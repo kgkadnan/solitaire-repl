@@ -370,21 +370,26 @@ const SavedSearch = () => {
   ];
 
   const handleDate = (date: IDateRange) => {
-    setDate(date);
-    setDateSearchUrl(
-      `&start_date=${new Date(date.from)
-        .toISOString()
-        .replace('T', ' ')
-        .replace('Z', '%2B00')}&end_date=${new Date(date.to)
-        .toISOString()
-        .replace('T', ' ')
-        .replace('Z', '%2B00')}`
-    );
+    if (!date) {
+      setDateSearchUrl('');
+      setDate(undefined);
+    } else {
+      setDate(date);
+      setDateSearchUrl(
+        `&start_date=${new Date(date?.from)
+          .toISOString()
+          .replace('T', ' ')
+          .replace('Z', '%2B00')}&end_date=${new Date(date.to)
+          .toISOString()
+          .replace('T', ' ')
+          .replace('Z', '%2B00')}`
+      );
+    }
   };
 
   //Header Data
   const savedSearchheaderData = {
-    headerHeading: (
+    headerHeading: savedSearchData?.length ? (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
           onClick={handleSelectAllCheckbox}
@@ -395,6 +400,8 @@ const SavedSearch = () => {
           {ManageLocales('app.common.header.selectAll')}
         </p>
       </div>
+    ) : (
+      ''
     ),
     //Search Data
     handleSearch: handleSearch,
@@ -403,7 +410,11 @@ const SavedSearch = () => {
     suggestions: suggestions,
     headerData: (
       <div className="flex mr-[30px] ">
-        <CustomCalender date={date} handleDate={handleDate} />
+        <CustomCalender
+          date={date}
+          setDateSearchUrl={setDateSearchUrl}
+          handleDate={handleDate}
+        />
       </div>
     ),
     overriddenStyles: {

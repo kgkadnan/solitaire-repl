@@ -3,7 +3,6 @@
 import * as React from 'react';
 import styles from './calender.module.scss';
 import { format, differenceInDays } from 'date-fns';
-import { DateRange } from 'react-day-picker';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 import { Calendar } from '@/components/ui/calendar';
@@ -18,11 +17,13 @@ import { CustomDisplayButton } from '../buttons/display-button';
 interface ICustomeCalendarProps {
   className?: string;
   date: any;
+  setDateSearchUrl: any;
   handleDate: (date: any) => void;
 }
 export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   className,
   date,
+  setDateSearchUrl,
   handleDate,
 }) => {
   return (
@@ -54,9 +55,9 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
             {date?.from ? (
               date.to ? (
                 <>
-                  <div className="text-[14px] tracking-wide mb-2">
+                  {/* <div className="text-[14px] tracking-wide mb-2">
                     {differenceInDays(date.to, date.from)} Days
-                  </div>
+                  </div> */}
                   {format(date.from, 'LLL dd, y')} -{' '}
                   {format(date.to, 'LLL dd, y')}
                 </>
