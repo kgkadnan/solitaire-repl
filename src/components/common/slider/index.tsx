@@ -1,18 +1,18 @@
 import {
   Sheet,
-  SheetClose,
   SheetContent,
   SheetTrigger,
+  SheetClose,
 } from '@/components/ui/sheet';
-import React from 'react';
+import React, { ReactNode } from 'react';
 
 interface ISliderProps {
   sheetTriggerStyle?: string;
-  sheetTriggenContent: React.ReactNode;
+  sheetTriggenContent?: React.ReactNode;
   sheetContentStyle?: string;
   sheetContent: React.ReactNode;
   cardTimeout?: boolean;
-  isSliderOpen?: boolean;
+  sheetClose?: ReactNode;
 }
 
 export const CustomSlider: React.FC<ISliderProps> = ({
@@ -21,23 +21,25 @@ export const CustomSlider: React.FC<ISliderProps> = ({
   sheetContentStyle,
   sheetContent,
   cardTimeout,
-  isSliderOpen,
+  sheetClose,
 }) => {
   return (
-    <>
-      <Sheet open={isSliderOpen}>
-        {!cardTimeout ? (
-          <SheetTrigger className={sheetTriggerStyle}>
-            {sheetTriggenContent}
-          </SheetTrigger>
-        ) : (
-          <div className="w-[95%]">{sheetTriggenContent}</div>
+    <Sheet>
+      {!cardTimeout ? (
+        <SheetTrigger className={sheetTriggerStyle}>
+          {sheetTriggenContent}
+        </SheetTrigger>
+      ) : (
+        <div className="w-[95%]">{sheetTriggenContent}</div>
+      )}
+      <SheetContent className={sheetContentStyle}>
+        {sheetContent}
+        {sheetClose ?? (
+          <SheetClose asChild>
+            <button type="submit">Save changes</button>
+          </SheetClose>
         )}
-
-        <SheetContent className={sheetContentStyle}>
-          {sheetContent}
-        </SheetContent>
-      </Sheet>
-    </>
+      </SheetContent>
+    </Sheet>
   );
 };
