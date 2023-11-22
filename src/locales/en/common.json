@@ -193,6 +193,11 @@
   "app.searchResult.slider.diamondDetail.b2b": "B2B",
   "app.searchResult.slider.diamondDetail.b2bSparkle": "B2B Sparkle",
 
+  "app.searchResult.slider.confirmStone": "Confirm Stone",
+  "app.searchResult.slider.confirmStone.paymentTerms": "Payment Terms* (COD)",
+  "app.searchResult.slider.confirmStone.addComment": "Add Comment",
+  "app.searchResult.slider.confirmStone.cancel": "Cancel",
+
   "app.myCart.active": "Active",
   "app.myCart.soldOut": "Sold Out",
   "app.myCart.memoOut": "Memo-Out",

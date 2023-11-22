@@ -1,12 +1,12 @@
 'use client';
 import { Label } from '@components/ui/label';
 import { RadioGroup, RadioGroupItem } from '@components/ui/radio-group';
-import React from 'react';
+import React, { ReactNode } from 'react';
 import style from './radio-button.module.scss';
 
 // Interface for individual radio button options
 interface IRadioButtonOptionProps {
-  radioButtonLabel: string;
+  radioButtonLabel?: string | ReactNode;
   id: string;
   value: string;
 }
