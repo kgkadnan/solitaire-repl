@@ -45,6 +45,7 @@ const MemoOut = () => {
     if (isCheckAll) {
       setIsCheckAll(false);
     }
+    setIsError(false);
   };
 
   //Selecting All Checkbox Function
@@ -99,7 +100,7 @@ const MemoOut = () => {
         .map((stone) => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
-      router.push('/compare-stone');
+      window.open('/compare-stone', '_blank');
     }
   };
 

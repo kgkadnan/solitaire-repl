@@ -61,6 +61,7 @@ const ActiveMyCart = () => {
     if (isCheckAll) {
       setIsCheckAll(false);
     }
+    setIsError(false);
   };
 
   //Selecting All Checkbox Function

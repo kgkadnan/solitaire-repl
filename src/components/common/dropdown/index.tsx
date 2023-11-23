@@ -1,3 +1,5 @@
+'use client';
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -5,7 +7,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './dropdown.module.scss';
 
 interface IdropdownMenu {
@@ -21,28 +23,38 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
   dropdownTrigger,
   dropdownMenu,
 }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+
+  const handleItemClick = (fn: Function) => {
+    setIsDropdownOpen(false);
+    fn();
+  };
+
   return (
     <div>
       <DropdownMenu>
-        <DropdownMenuTrigger className={styles.transparent}>
+        <DropdownMenuTrigger
+          className={styles.transparent}
+          onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+        >
           {dropdownTrigger}
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
-          {dropdownMenu.map((items) => {
-            return (
+        {isDropdownOpen && (
+          <DropdownMenuContent>
+            {dropdownMenu.map((items) => (
               <div
                 key={items.label}
-                onClick={items.fn}
+                onClick={() => handleItemClick(items.fn)}
                 className="cursor-pointer z-[1112px]"
               >
                 <DropdownMenuLabel className={styles.transparent}>
                   {items.label}
                 </DropdownMenuLabel>
               </div>
-            );
-          })}
-          <DropdownMenuSeparator />
-        </DropdownMenuContent>
+            ))}
+            <DropdownMenuSeparator />
+          </DropdownMenuContent>
+        )}
       </DropdownMenu>
     </div>
   );
