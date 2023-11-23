@@ -90,6 +90,8 @@ const SavedSearch = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const [selectedCard, setSelectedCard] = useState<any>([]);
+  const [isMounted, setIsMounted] = useState(false);
 
   let router = useRouter();
   const dispatch = useAppDispatch();
@@ -490,55 +492,67 @@ const SavedSearch = () => {
     router.push(`/search?route=saved&edit=saved-search`);
   };
 
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isMounted) {
+        if (productData?.count > 300) {
+          setIsError(true);
+          setErrorText(
+            'Please modify your search, the stones exceeds the limit.'
+          );
+        } else {
+          let data: any = JSON.parse(localStorage.getItem('Search')!);
+
+          if (data?.length) {
+            if (data?.length >= 5) {
+              setIsError(true);
+              setErrorText(
+                'Max search limit reached. Please remove existing searches'
+              );
+            } else {
+              let localStorageData = [
+                ...data,
+                {
+                  saveSearchName: selectedCard[0]?.name,
+                  isSavedSearch: true,
+                  queryParams: selectedCard[0].meta_data,
+                  id: selectedCard[0].id,
+                },
+              ];
+
+              localStorage.setItem('Search', JSON.stringify(localStorageData));
+              router.push(`/search?route=${data.length + 3}`);
+            }
+          } else {
+            let localStorageData = [
+              {
+                saveSearchName: selectedCard[0].name,
+                isSavedSearch: true,
+                queryParams: selectedCard[0].meta_data,
+                id: selectedCard[0].id,
+              },
+            ];
+
+            localStorage.setItem('Search', JSON.stringify(localStorageData));
+            router.push(`/search?route=${3}`);
+          }
+        }
+      } else {
+        setIsMounted(true);
+      }
+    };
+
+    fetchData();
+  }, [productData]);
+
   const handleCardClick = (id: string) => {
     let cardClickData: any = savedSearchData.filter((items: any) => {
       return items.id === id;
     });
+    setSelectedCard(cardClickData);
 
     let url = constructUrlParams(cardClickData[0].meta_data);
-
     setSearchUrl(url);
-
-    if (productData?.count > 300) {
-      setIsError(true);
-      setErrorText('Please modify your search, the stones exceeds the limit.');
-    } else {
-      let data: any = JSON.parse(localStorage.getItem('Search')!);
-
-      if (data?.length) {
-        if (data?.length >= 5) {
-          setIsError(true);
-          setErrorText(
-            'Max search limit reached. Please remove existing searches'
-          );
-        } else {
-          let localStorageData = [
-            ...data,
-            {
-              saveSearchName: cardClickData[0].name,
-              isSavedSearch: true,
-              queryParams: cardClickData[0].meta_data,
-              id: cardClickData[0].id,
-            },
-          ];
-
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?route=${data.length + 3}`);
-        }
-      } else {
-        let localStorageData = [
-          {
-            saveSearchName: cardClickData[0].name,
-            isSavedSearch: true,
-            queryParams: cardClickData[0].meta_data,
-            id: cardClickData[0].id,
-          },
-        ];
-
-        localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?route=${3}`);
-      }
-    }
   };
 
   return (
