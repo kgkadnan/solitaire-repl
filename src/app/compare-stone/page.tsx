@@ -212,6 +212,7 @@ const CompareStone = () => {
       updatedIsCheck.push(id);
     }
     setIsCheck(updatedIsCheck);
+    setIsError(false);
   };
 
   return (
