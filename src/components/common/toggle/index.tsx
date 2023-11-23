@@ -17,7 +17,7 @@ export const ToggleButton = () => {
       onClick={() =>
         currentTheme === 'dark' ? setTheme('light') : setTheme('dark')
       }
-      className=""
+      className="w-[30px] h-[15px]"
     >
       Toggle Mode
     </Switch>
