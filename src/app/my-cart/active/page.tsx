@@ -8,13 +8,17 @@ import { CustomDropdown } from '@/components/common/dropdown';
 import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageLocales } from '@/utils/translate';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './active-cart.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 
 import { CustomDialog } from '@/components/common/dialog';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
+import Image from 'next/image';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 
 const ActiveMyCart = () => {
   const router = useRouter();
@@ -25,11 +29,14 @@ const ActiveMyCart = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
   const { data } = useGetCartQuery({});
+
+  let [downloadExcel] = useDownloadExcelMutation();
 
   const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useDeleteCartMutation();
@@ -108,7 +115,8 @@ const ActiveMyCart = () => {
         .map((stone) => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
-      router.push('/compare-stone');
+
+      window.open('/compare-stone', '_blank');
     }
   };
 
@@ -116,6 +124,29 @@ const ActiveMyCart = () => {
     if (isCheck.length) {
       setIsError(false);
       setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <p className="mt-3 px-[50px] text-center">
+            Do you want to Delete the selected Stones?
+          </p>
+          <div className="flex justify-center">
+            <CustomDisplayButton
+              displayButtonLabel="NO"
+              displayButtonAllStyle={{
+                displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+              }}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.filled,
+              }}
+              handleClick={deleteStoneHandler}
+            />
+          </div>
+        </>
+      );
     } else {
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
@@ -135,6 +166,17 @@ const ActiveMyCart = () => {
       .then(() => {
         setIsCheck([]);
         setIsCheckAll(false);
+        setDialogContent(
+          <>
+            <div className="max-w-[380px] flex justify-center align-middle">
+              <Image src={confirmImage} alt="vector image" />
+            </div>
+            <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+              Item successfully deleted from “My Cart”
+            </div>
+          </>
+        );
+        setIsDialogOpen(true);
       })
       .catch((error) => {
         console.log('error', error);
@@ -150,6 +192,82 @@ const ActiveMyCart = () => {
   const handleAppointment = () => {
     setIsError(true);
     setErrorText(`You haven't picked any stones.`);
+  };
+
+  const performDownloadExcel = (
+    productIds: any[],
+    isEntireSearch?: boolean
+  ) => {
+    if (isEntireSearch) {
+      console.log('isEntireSearch', isEntireSearch);
+    } else {
+      downloadExcel({ productIds })
+        .unwrap()
+        .then((res) => {
+          let { data, fileName } = res;
+          if (data) {
+            downloadExcelFromBase64(data, fileName);
+            setDialogContent(
+              <>
+                <div className="max-w-[380px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="vector image" />
+                </div>
+                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+                  Download Excel Successfully
+                </div>
+              </>
+            );
+            setIsDialogOpen(true);
+          }
+        })
+        .catch((e) => {
+          console.log('error', e);
+        });
+    }
+    setIsCheck([]);
+    setIsCheckAll(false);
+    setIsError(false);
+  };
+
+  //download Excel
+  const downloadExcelFunction = () => {
+    if (isCheckAll) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
+            Do you want to all the stones available in search or just selected
+            stones!
+          </div>
+          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
+            <CustomDisplayButton
+              displayButtonLabel="Selected"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                performDownloadExcel(isCheck);
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent,
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="All"
+              handleClick={() => {
+                setIsDialogOpen(false);
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled,
+              }}
+            />
+          </div>
+        </>
+      );
+    } else if (isCheck.length === 0) {
+      setIsError(true);
+      setErrorText('Please select a stone to perform action.');
+    } else if (isCheck.length) {
+      performDownloadExcel(isCheck);
+    }
   };
 
   //Footer Button Data
@@ -170,7 +288,7 @@ const ActiveMyCart = () => {
             },
             {
               label: 'Download Excel',
-              fn: '',
+              fn: downloadExcelFunction,
             },
             {
               label: 'Find Matching Pair',
@@ -209,29 +327,7 @@ const ActiveMyCart = () => {
       <CustomDialog
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}
-        dialogContent={
-          <>
-            <p className="mt-3 px-[50px] text-center">
-              Do you want to Delete the selected Stones?
-            </p>
-            <div className="flex justify-center">
-              <CustomDisplayButton
-                displayButtonLabel="NO"
-                displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
-                }}
-                handleClick={() => setIsDialogOpen(false)}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Yes"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled,
-                }}
-                handleClick={deleteStoneHandler}
-              />
-            </div>
-          </>
-        }
+        dialogContent={dialogContent}
       />
       {rows.length > 0 ? (
         <CustomDataTable
