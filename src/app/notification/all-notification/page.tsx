@@ -1,5 +1,4 @@
 'use client';
-
 import React, { useEffect, useState } from 'react';
 import styles from './all-notification.module.scss';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -12,13 +11,19 @@ import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { INotificationData } from './all-notification-interface';
 import { NotificationParameter } from '@/components/notification/notification-interface';
+import {
+  NOTIFICATION_READ_STATUS,
+  NOTIFICATION_TYPE,
+  NOTIFICATION_UNREAD_STATUS,
+  NOTIFICATION_UNSEEN_STATUS,
+} from '@/constants/constant';
 
 const Notification = () => {
   const [notificationData, setNotificationData] = useState<INotificationData[]>(
     []
   );
 
-  const { data } = useGetAllNotificationQuery({ type: 'APP' });
+  const { data } = useGetAllNotificationQuery({ type: NOTIFICATION_TYPE });
   const [updateNotification] = useUpdateNotificationMutation();
 
   useEffect(() => {
@@ -53,7 +58,7 @@ const Notification = () => {
   const handleNotificationRead = async (category: string) => {
     let filteredData = notificationData
       .filter((item) => item.category === category)
-      .map((item) => ({ id: item.id, status: 'read' }));
+      .map((item) => ({ id: item.id, status: NOTIFICATION_READ_STATUS }));
 
     updateNotification(filteredData);
   };
@@ -66,7 +71,8 @@ const Notification = () => {
             <div key={items.id} className="border-b border-solitaireSenary">
               <div
                 className={`flex justify-between  ${
-                  items.status === 'unread' || items.status === 'unseen'
+                  items.status === NOTIFICATION_UNREAD_STATUS ||
+                  items.status === NOTIFICATION_UNSEEN_STATUS
                     ? styles.notificationCardContainer
                     : styles.readNotification
                 }`}
@@ -75,7 +81,8 @@ const Notification = () => {
                 <div className="flex justify-center items-center">
                   <EllipseIcon
                     className={
-                      items.status === 'unread' || items.status === 'unseen'
+                      items.status === NOTIFICATION_UNREAD_STATUS ||
+                      items.status === NOTIFICATION_UNSEEN_STATUS
                         ? styles.ellipseIconActive
                         : styles.ellipseIconInactive
                     }

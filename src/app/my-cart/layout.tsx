@@ -6,6 +6,11 @@ import React, { useEffect, useState } from 'react';
 import styles from './my-cart.module.scss';
 import CustomHeader from '@/components/common/header';
 import { useGetCartQuery } from '@/features/api/cart';
+import {
+  ACTIVE_STATUS,
+  MEMO_OUT_STATUS,
+  SOLD_OUT_STATUS,
+} from '@/constants/constant';
 
 function MyCart({ children }: { children: React.ReactNode }) {
   let currentPath = usePathname();
@@ -21,7 +26,9 @@ function MyCart({ children }: { children: React.ReactNode }) {
     const updateRows = () => {
       if (data) {
         const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'Active')
+          .filter(
+            (item: any) => item?.product?.diamond_status === ACTIVE_STATUS
+          )
           .map((row: any) => row.product);
         setActiveTabCount(activeDiamondItems?.length);
       }
@@ -34,7 +41,9 @@ function MyCart({ children }: { children: React.ReactNode }) {
     const updateRows = () => {
       if (data) {
         const soldOutItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'SoldOut')
+          .filter(
+            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
+          )
           .map((row: any) => row.product);
 
         setSoldOutCount(soldOutItems?.length);
@@ -48,7 +57,9 @@ function MyCart({ children }: { children: React.ReactNode }) {
     const updateRows = () => {
       if (data) {
         const memoOutDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
+          .filter(
+            (item: any) => item?.product?.diamond_status === MEMO_OUT_STATUS
+          )
           .map((row: any) => row.product);
 
         setMemoOutCount(memoOutDiamondItems?.length);

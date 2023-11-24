@@ -1,19 +1,18 @@
 'use client';
 import React, { useState } from 'react';
 import login from '@public/assets/images/login-screen.png';
-import Image, { StaticImageData } from 'next/image';
+import Image from 'next/image';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomInputField } from '@/components/common/input-field';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import styles from './login.module.scss';
-import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import { useVerifyLoginMutation } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 
 const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-  const [verifyLogin, { data, error, isLoading }] = useVerifyLoginMutation();
+  const [verifyLogin] = useVerifyLoginMutation();
   const router = useRouter();
 
   const handleLogin = async () => {

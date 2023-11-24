@@ -21,6 +21,10 @@ import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { priceSchema } from '@/utils/zod-schema';
+import {
+  MAX_SEARCH_FORM_COUNT,
+  MIN_SEARCH_FORM_COUNT,
+} from '@/constants/constant';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -653,13 +657,16 @@ const AdvanceSearch = () => {
     starLengthTo,
   ]);
 
-  const { data, error, isLoading, refetch } = useGetProductCountQuery({
+  const { data, error } = useGetProductCountQuery({
     searchUrl,
   });
 
   useEffect(() => {
     if (searchCount !== -1) {
-      if (data?.count > 300 && data?.count > 0) {
+      if (
+        data?.count > MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
         setIsError(true);
         setErrorText(
           'Please modify your search, the stones exceeds the limit.'
@@ -1001,7 +1008,6 @@ const AdvanceSearch = () => {
     handleFilterChange(data, selectedClarity, setSelectedClarity);
   };
   const handleCaratRangeChange = (data: string) => {
-    console.log('Data', data, selectedCaratRange);
     handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
   };
   // let prevMakeData=""
@@ -1328,9 +1334,16 @@ const AdvanceSearch = () => {
     setSelectedOrigin([]);
   };
 
+  // const   handleUpdateSaveSearch = () => {
+
+  // }
+
   const handleSaveAndSearch: any = async () => {
-    if (data?.count > 0) {
-      if (data?.count < 300 && data?.count > 0) {
+    if (data?.count > MIN_SEARCH_FORM_COUNT) {
+      if (
+        data?.count < MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
         const queryParams = generateQueryParams({
           selectedShape,
           selectedColor,
@@ -1409,7 +1422,19 @@ const AdvanceSearch = () => {
         const activeTab = searchResult?.activeTab;
         const activeSearch: boolean =
           addSearches[activeTab]?.saveSearchName.length;
-        if (activeSearch) {
+
+        if (modifySearchFrom === 'saved-search') {
+          if (savedSearch?.savedSearch?.meta_data) {
+            let updatedMeta = savedSearch.savedSearch.meta_data;
+            updatedMeta = queryParams;
+            let data = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta,
+            };
+            updateSavedSearch(data);
+            router.push(`/search?route=saved`);
+          }
+        } else if (activeSearch) {
           const updatedMeta = addSearches;
 
           updatedMeta[activeTab].queryParams = queryParams;
@@ -1558,8 +1583,11 @@ const AdvanceSearch = () => {
   // };
 
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
-    if (data?.count > 0) {
-      if (data?.count < 300 && data?.count > 0) {
+    if (data?.count > MIN_SEARCH_FORM_COUNT) {
+      if (
+        data?.count < MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
         const queryParams = generateQueryParams({
           selectedShape,
           selectedColor,
@@ -1634,21 +1662,6 @@ const AdvanceSearch = () => {
           starLengthFrom,
           starLengthTo,
         });
-
-        if (modifySearchFrom === 'saved-search') {
-          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
-            const updatedMeta = [...savedSearch.savedSearch.meta_data];
-            // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
-            updatedMeta[savedSearch.activeTab] = queryParams;
-
-            let data = {
-              id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta,
-            };
-
-            updateSavedSearch(data);
-          }
-        }
 
         if (modifySearchFrom === 'search-result') {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
@@ -2707,7 +2720,10 @@ const AdvanceSearch = () => {
             <span className="hidden  text-green-500" />
             <p
               className={`text-${
-                data?.count < 300 && data?.count > 0 ? 'green' : 'red'
+                data?.count < MAX_SEARCH_FORM_COUNT &&
+                data?.count > MIN_SEARCH_FORM_COUNT
+                  ? 'green'
+                  : 'red'
               }-500 text-base`}
             >
               {!isValidationError && errorText}
@@ -2744,7 +2760,10 @@ const AdvanceSearch = () => {
               )}`,
               style: styles.transparent,
               fn: () => {
-                if (data?.count < 300 && data?.count > 0) {
+                if (
+                  data?.count < MAX_SEARCH_FORM_COUNT &&
+                  data?.count > MIN_SEARCH_FORM_COUNT
+                ) {
                   const activeTab = searchResult?.activeTab;
                   if (activeTab !== undefined) {
                     const isSearchName: boolean =
@@ -2752,7 +2771,9 @@ const AdvanceSearch = () => {
                     const isSaved: boolean =
                       addSearches[activeTab]?.isSavedSearch.length;
                     // Check if the active search is not null and isSavedSearch is true
-                    if (isSaved) {
+                    if (modifySearchFrom === 'saved-search') {
+                      handleSaveAndSearch();
+                    } else if (isSaved) {
                       handleSaveAndSearch();
                     } else if (!isSaved && isSearchName) {
                       handleSaveAndSearch();
@@ -2771,6 +2792,7 @@ const AdvanceSearch = () => {
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
+              isHidden: modifySearchFrom === 'saved-search',
             },
           ]}
           noBorderTop={styles.paginationContainerStyle}
