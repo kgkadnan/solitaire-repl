@@ -17,13 +17,11 @@ import { CustomDisplayButton } from '../buttons/display-button';
 interface ICustomeCalendarProps {
   className?: string;
   date: any;
-  setDateSearchUrl: any;
   handleDate: (date: any) => void;
 }
 export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   className,
   date,
-  setDateSearchUrl,
   handleDate,
 }) => {
   return (

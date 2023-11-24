@@ -1,6 +1,7 @@
 'use client';
 import React, {
   ChangeEvent,
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -44,6 +45,8 @@ import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
 } from '@/constants/constant';
+import Image from 'next/image';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -90,6 +93,7 @@ const SavedSearch = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
   let router = useRouter();
   const dispatch = useAppDispatch();
@@ -263,10 +267,32 @@ const SavedSearch = () => {
 
         setErrorText(errorMessage);
       } else {
+        setDialogContent(
+          <>
+            <p className="text-center mt-3">
+              Do you want to Delete the selected Stones?
+            </p>
+            <div className="flex justify-center">
+              <CustomDisplayButton
+                displayButtonLabel="No"
+                displayButtonAllStyle={{
+                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                }}
+                handleClick={() => setIsDialogOpen(false)}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="Yes"
+                displayButtonAllStyle={{
+                  displayButtonStyle: styles.filled,
+                }}
+                handleClick={deleteStoneHandler}
+              />
+            </div>
+          </>
+        );
         setIsDialogOpen(true);
       }
     } else {
-      setIsDialogOpen(true);
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     }
@@ -277,11 +303,29 @@ const SavedSearch = () => {
   };
 
   const deleteStoneHandler = async () => {
-    await deleteSavedSearch(isCheck);
-    await refetch();
+    await deleteSavedSearch(isCheck)
+      .unwrap()
+      .then(() => {
+        setIsCheck([]);
+        setIsCheckAll(false);
+        setDialogContent(
+          <>
+            <div className="max-w-[380px] flex justify-center align-middle">
+              <Image src={confirmImage} alt="vector image" />
+            </div>
+            <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+              Item successfully deleted from “Saved Search”
+            </div>
+          </>
+        );
+        setIsDialogOpen(true);
+      })
+      .catch((error: Error) => {
+        console.log('error', error);
+      });
     setIsCheck([]);
     setIsCheckAll(false);
-    setIsDialogOpen(false);
+    setIsError(false);
   };
 
   const debouncedSave = useCallback(
@@ -354,6 +398,7 @@ const SavedSearch = () => {
     if (isCheckAll) {
       setIsCheckAll(false);
     }
+    setIsError(false);
   };
 
   //Selecting All Checkbox Function
@@ -416,11 +461,7 @@ const SavedSearch = () => {
     suggestions: suggestions,
     headerData: (
       <div className="flex mr-[30px] ">
-        <CustomCalender
-          date={date}
-          setDateSearchUrl={setDateSearchUrl}
-          handleDate={handleDate}
-        />
+        <CustomCalender date={date} handleDate={handleDate} />
       </div>
     ),
     overriddenStyles: {
@@ -503,29 +544,7 @@ const SavedSearch = () => {
       <CustomDialog
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}
-        dialogContent={
-          <>
-            <p className="text-center mt-3">
-              Do you want to Delete the selected Stones?
-            </p>
-            <div className="flex justify-center">
-              <CustomDisplayButton
-                displayButtonLabel="No"
-                displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
-                }}
-                handleClick={() => setIsDialogOpen(false)}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Yes"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled,
-                }}
-                handleClick={deleteStoneHandler}
-              />
-            </div>
-          </>
-        }
+        dialogContent={dialogContent}
       />
       <div className="container flex flex-col">
         {/* Custom Header */}

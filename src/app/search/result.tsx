@@ -196,7 +196,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       });
 
       localStorage.setItem('compareStone', JSON.stringify(comapreStone));
-      router.push('/compare-stone');
+      window.open('/compare-stone', '_blank');
       setIsError(false);
       setErrorText('');
     }
