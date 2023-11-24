@@ -15,6 +15,15 @@ import { CustomFooter } from '@/components/common/footer';
 import { CustomDialog } from '@/components/common/dialog';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { CustomSlider } from '@/components/common/slider';
+import { CustomInputField } from '@/components/common/input-field';
+import ConfirmStone from '@/components/common/confirm-stone';
+import {
+  MAX_COMPARE_STONE,
+  MAX_DAYS_TO_PAY,
+  MIN_COMPARE_STONE,
+} from '@/constants/constant';
+const MAX_CHARACTERS = 1000;
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import Image from 'next/image';
@@ -31,15 +40,22 @@ const ActiveMyCart = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
+  const [inputError, setInputError] = useState(false);
+  const [inputErrorContent, setInputErrorContent] = useState('');
+  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
+  const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
+    useState<string>();
+  const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+  const [commentValue, setCommentValue] = useState('');
+  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
+
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
   const { data } = useGetCartQuery({});
+  const [deleteCart] = useDeleteCartMutation();
 
   let [downloadExcel] = useDownloadExcelMutation();
-
-  const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
-    useDeleteCartMutation();
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -101,15 +117,14 @@ const ActiveMyCart = () => {
   }, [data]);
 
   const handleCompareStone = () => {
-    const maxStones = 10;
-    const minStones = 2;
-
-    if (isCheck.length > maxStones) {
+    if (isCheck.length > MAX_COMPARE_STONE) {
       setIsError(true);
-      setErrorText(`You can compare a maximum of ${maxStones} stones`);
-    } else if (isCheck.length < minStones) {
+      setErrorText(`You can compare a maximum of ${MAX_COMPARE_STONE} stones`);
+    } else if (isCheck.length < MIN_COMPARE_STONE) {
       setIsError(true);
-      setErrorText(`Minimum ${minStones} stones are required to compare`);
+      setErrorText(
+        `Minimum ${MIN_COMPARE_STONE} stones are required to compare`
+      );
     } else {
       const compareStones = isCheck
         .map((id) => data.items.find((row: any) => row.product.id === id))
@@ -186,13 +201,114 @@ const ActiveMyCart = () => {
   };
 
   const handleConfirm = () => {
-    setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    if (isCheck.length) {
+      setIsError(false);
+      setErrorText('Please select a stone to perform action.');
+      setIsSliderOpen(true);
+      const confirmStone = data.items
+        .filter((row: any) => isCheck.includes(row.product.id))
+        .map((row: any) => row.product);
+
+      setConfirmStoneData(confirmStone);
+    } else {
+      setIsError(true);
+      setErrorText('Please select a stone to perform action.');
+    }
   };
 
   const handleAppointment = () => {
     setIsError(true);
     setErrorText(`You haven't picked any stones.`);
+  };
+  const handleConfirmStoneRadioChange = (value: string) => {
+    setInputError(false);
+    setInputErrorContent('');
+    setSelectedDaysInputValue('');
+    setSelectedRadioDaysValue(value);
+  };
+
+  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = parseFloat(event.target.value);
+
+    if (inputValue > MAX_DAYS_TO_PAY) {
+      setInputError(true);
+      setInputErrorContent('Invalid input.');
+      const formattedValue = event.target.value;
+      setSelectedDaysInputValue(formattedValue);
+    } else if (inputValue) {
+      setInputError(false);
+      setInputErrorContent('');
+      const formattedValue = event.target.value;
+      setSelectedDaysInputValue(formattedValue);
+    } else if (event.target.value === '') {
+      setInputError(false);
+      setInputErrorContent('');
+      // If the input is empty, clear the state
+      setSelectedDaysInputValue('');
+    }
+  };
+
+  const onFocus = () => {
+    handleConfirmStoneRadioChange('other');
+  };
+
+  const confirmRadioButtons = [
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '0',
+      value: '7',
+      label: '7 Days',
+      checked: selectedRadioDaysValue === '7',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '1',
+      value: '30',
+      label: '30 Days',
+      checked: selectedRadioDaysValue === '30',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '2',
+      value: '60',
+      label: '60 Days',
+      checked: selectedRadioDaysValue === '60',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '3',
+      value: 'other',
+      label: (
+        <>
+          <div className="flex gap-2">
+            <CustomInputField
+              name="daysField"
+              type="number"
+              // disable={selectedRadioDaysValue !== 'other'}
+              onChange={handleRadioDayValue}
+              value={selectedDaysInputValue}
+              placeholder="Max 120 Days"
+              style={{ input: 'w-[80px]' }}
+              onFocus={onFocus}
+            />
+            <div>Days</div>
+          </div>
+          {inputError ? <div>{inputErrorContent}</div> : ''}
+        </>
+      ),
+      checked: selectedRadioDaysValue === 'other',
+    },
+  ];
+
+  const handleComment = (event: any) => {
+    let inputValue = event.target.value;
+    if (inputValue.length <= MAX_CHARACTERS) {
+      setCommentValue(inputValue);
+    }
   };
 
   const performDownloadExcel = (
@@ -323,8 +439,30 @@ const ActiveMyCart = () => {
     },
   ];
 
+  const onOpenChange = (open: boolean) => {
+    setIsSliderOpen(open);
+  };
+
   return (
     <>
+      <CustomSlider
+        sheetContent={
+          <ConfirmStone
+            confirmStoneData={confirmStoneData}
+            listingColumns={listingColumns}
+            confirmRadioButtons={confirmRadioButtons}
+            commentValue={commentValue}
+            handleComment={handleComment}
+            setInputError={setInputError}
+            setInputErrorContent={setInputErrorContent}
+            setSelectedDaysInputValue={setSelectedDaysInputValue}
+            onOpenChange={onOpenChange}
+          />
+        }
+        sheetContentStyle={styles.diamondDetailSheet}
+        isSliderOpen={isSliderOpen}
+        onOpenChange={onOpenChange}
+      />
       <CustomDialog
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}

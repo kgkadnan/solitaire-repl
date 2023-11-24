@@ -3,8 +3,7 @@ import React, { useState } from 'react';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import styles from './report-bug.module.scss';
 import { ManageLocales } from '@/utils/translate';
-
-const MAX_CHARACTERS = 1000;
+import { REPORT_BUG_MAX_CHARACTERS } from '@/constants/constant';
 
 const ReportBug = () => {
   const [inputValue, setInputValue] = useState<string>('');
@@ -12,7 +11,7 @@ const ReportBug = () => {
 
   const handleInput = (event: any) => {
     let inputValue = event.target.value;
-    if (inputValue.length <= MAX_CHARACTERS) {
+    if (inputValue.length <= REPORT_BUG_MAX_CHARACTERS) {
       setInputValue(inputValue);
     }
   };

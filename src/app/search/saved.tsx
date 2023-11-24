@@ -41,6 +41,10 @@ import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
+import {
+  MAX_SAVED_SEARCH_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
+} from '@/constants/constant';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 
@@ -134,10 +138,7 @@ const SavedSearch = () => {
   const { data: searchList } = useGetSavedSearchListQuery(search);
 
   // Destructure the mutation function from the hook
-  const [
-    deleteSavedSearch,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useDeleteSavedSearchMutation();
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
 
   const keyLabelMapping: KeyLabelMapping = useMemo(() => {
     return {
@@ -155,9 +156,6 @@ const SavedSearch = () => {
 
   const formatRangeData = (data: any, key: string) => {
     const range = data;
-
-    console.log('range', range);
-
     if (range && range.lte && range.gte) {
       return `${range.gte}-${range.lte}`;
     }
@@ -499,14 +497,14 @@ const SavedSearch = () => {
 
     setSearchUrl(url);
 
-    if (productData?.count > 300) {
+    if (productData?.count > MAX_SAVED_SEARCH_COUNT) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
 
       if (data?.length) {
-        if (data?.length >= 5) {
+        if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
           setIsError(true);
           setErrorText(
             'Max search limit reached. Please remove existing searches'
