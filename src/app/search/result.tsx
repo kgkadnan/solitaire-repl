@@ -27,21 +27,15 @@ import { CustomInputDialog } from '@/components/common/input-dialog';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import CustomLoader from '@/components/common/loader';
 import { CustomInputField } from '@/components/common/input-field';
-const MAX_CHARACTERS = 1000;
+import ConfirmStone from '@/components/common/confirm-stone';
+import { RadioButton } from '@/components/common/custom-input-radio';
+import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/constant';
+
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const radioButtonStyles = {
     radioButtonStyle: styles.radioStyle,
     radioLabelStyle: styles.labelStyle,
     mainRadioButton: styles.mainRadioButtonStyle,
-  };
-  const radioButtonDefaultStyles = {
-    radioButtonStyle: styles.radioStyle,
-    radioLabelStyle: styles.labelStyle,
-  };
-  const confirmStoneRadioButtonStyle = {
-    radioButtonStyle: styles.radioStyle,
-    radioLabelStyle: styles.labelStyle,
-    mainRadioButton: styles.confirmMainRadioButtonStyle,
   };
 
   const router = useRouter();
@@ -91,7 +85,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [inputErrorContent, setInputErrorContent] = useState('');
 
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
-  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>();
+  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
 
   const [commentValue, setCommentValue] = useState('');
 
@@ -99,11 +93,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const [addCart] = useAddCartMutation();
 
-  const {
-    data: listingColumns,
-    error,
-    isLoading,
-  } = useGetManageListingSequenceQuery({});
+  const { data: listingColumns } = useGetManageListingSequenceQuery({});
 
   //specific checkbox
   const handleClick = (id: string) => {
@@ -150,36 +140,30 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     isCheckAll: isCheckAll,
   };
 
-  const performDownloadExcel = (
-    productIds: any[],
-    isEntireSearch?: boolean
-  ) => {
-    if (isEntireSearch) {
-      console.log('isEntireSearch', isEntireSearch);
-    } else {
-      downloadExcel({ productIds })
-        .unwrap()
-        .then((res) => {
-          let { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setDialogContent(
-              <>
-                <div className="max-w-[380px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-            setIsDialogOpen(true);
-          }
-        })
-        .catch((e) => {
-          console.log('error', e);
-        });
-    }
+  const performDownloadExcel = (productIds: any[]) => {
+    downloadExcel({ productIds })
+      .unwrap()
+      .then((res) => {
+        let { data, fileName } = res;
+        if (data) {
+          setDialogContent(
+            <>
+              <div className="max-w-[380px] flex justify-center align-middle">
+                <Image src={confirmImage} alt="vector image" />
+              </div>
+              <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+                Download Excel Successfully
+              </div>
+            </>
+          );
+          setIsDialogOpen(true);
+          downloadExcelFromBase64(data, fileName);
+        }
+      })
+      .catch((e) => {
+        console.log('error', e);
+      });
+
     setIsCheck([]);
     setIsCheckAll(false);
     setIsError(false);
@@ -187,38 +171,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   //download Excel
   const downloadExcelFunction = () => {
-    if (isCheckAll) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
-            Do you want to all the stones available in search or just selected
-            stones!
-          </div>
-          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
-            <CustomDisplayButton
-              displayButtonLabel="Selected"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                performDownloadExcel(isCheck);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="All"
-              handleClick={() => {
-                setIsDialogOpen(false);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
-              }}
-            />
-          </div>
-        </>
-      );
-    } else if (isCheck.length === 0) {
+    if (isCheck.length === 0) {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
@@ -243,11 +196,23 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       });
 
       localStorage.setItem('compareStone', JSON.stringify(comapreStone));
-      router.push('/compare-stone');
+      window.open('/compare-stone', '_blank');
       setIsError(false);
       setErrorText('');
     }
   };
+
+  useEffect(() => {
+    if (isDialogOpen) {
+      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
+      const timeoutId = setTimeout(() => {
+        setIsDialogOpen(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isDialogOpen]);
 
   //cart
   const addToCart = () => {
@@ -307,12 +272,23 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
-  const handleConfirm = () => {
-    if (isCheck.length) {
+  const handleConfirm = (isCheck?: string[]) => {
+    let hasMemoOut = isCheck?.some((id) => {
+      return rows.some(
+        (row) => row.id == id && row.diamond_status === 'MemoOut'
+      );
+    });
+
+    if (hasMemoOut) {
+      setErrorText(
+        'Some stones in your selection are not available, Please modify your selection.'
+      );
+      setIsError(true);
+    } else if (isCheck?.length) {
       setIsError(false);
       setErrorText('Please select a stone to perform action.');
       setIsSliderOpen(true);
-      const confirmStone = rows.filter((item) => isCheck.includes(item.id));
+      const confirmStone = rows.filter((item) => isCheck?.includes(item.id));
       setConfirmStoneData(confirmStone);
     } else {
       setIsError(true);
@@ -327,14 +303,13 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   };
 
   const handleDefaultRadioChange = (radioValue: string) => {
-    console.log('radioValue', radioValue);
     setSelectedDefaultValue(radioValue);
     setSelectedCaratRadioValue('');
   };
 
-  const handleComment = (event: any) => {
+  const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = event.target.value;
-    if (inputValue.length <= MAX_CHARACTERS) {
+    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
       setCommentValue(inputValue);
     }
   };
@@ -391,7 +366,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
       id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
-      fn: handleConfirm,
+      fn: () => handleConfirm(isCheck),
     },
   ];
 
@@ -631,6 +606,35 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setSelectedRadioDaysValue(value);
   };
 
+  const DefaultRadioData = [
+    {
+      name: 'Default',
+      onChange: handleDefaultRadioChange,
+      id: '1',
+      value: 'Default',
+      label: 'Default',
+      checked: selectedDefaultValue == 'Default',
+    },
+  ];
+  const carartRadioData = [
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '1',
+      value: 'Low to High',
+      label: 'Carat - Low to High',
+      checked: selectedCaratRadioValue === 'Low to High',
+    },
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '2',
+      value: 'High to Low',
+      label: 'Carat - High to Low',
+      checked: selectedCaratRadioValue === 'High to Low',
+    },
+  ];
+
   const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = parseFloat(event.target.value);
 
@@ -659,50 +663,56 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const confirmRadioButtons = [
     {
       name: 'days',
-      handleChange: handleConfirmStoneRadioChange,
-      radioData: [
-        {
-          id: '0',
-          value: '7 Days',
-          radioButtonLabel: '7 Days',
-          checked: selectedRadioDaysValue === '7 Days',
-        },
-        {
-          id: '1',
-          value: '30 Days',
-          radioButtonLabel: '30 Days',
-          checked: selectedRadioDaysValue === '30 Days',
-        },
-        {
-          id: '2',
-          value: '60 Days',
-          radioButtonLabel: '60 Days',
-          checked: selectedRadioDaysValue === '60 Days',
-        },
-        {
-          id: '3',
-          value: 'other',
-          radioButtonLabel: (
-            <>
-              <div className="flex gap-2">
-                <CustomInputField
-                  name="days"
-                  type="number"
-                  // disable={selectedRadioDaysValue !== 'other'}
-                  onChange={handleRadioDayValue}
-                  value={selectedDaysInputValue}
-                  placeholder="Max 120 Days"
-                  style={{ input: 'w-[80px]' }}
-                  onFocus={onFocus}
-                />
-                <div>Days</div>
-              </div>
-              {inputError ? <div>{inputErrorContent}</div> : ''}
-            </>
-          ),
-          checked: selectedRadioDaysValue === 'other',
-        },
-      ],
+      onChange: handleConfirmStoneRadioChange,
+      id: '0',
+      value: '7',
+      label: '7 Days',
+      checked: selectedRadioDaysValue === '7',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '1',
+      value: '30',
+      label: '30 Days',
+      checked: selectedRadioDaysValue === '30',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '2',
+      value: '60',
+      label: '60 Days',
+      checked: selectedRadioDaysValue === '60',
+    },
+    {
+      name: 'days',
+      onChange: handleConfirmStoneRadioChange,
+      id: '3',
+      value: 'other',
+      label: (
+        <>
+          <div className="flex gap-2">
+            <CustomInputField
+              name="daysField"
+              type="number"
+              // disable={selectedRadioDaysValue !== 'other'}
+              onChange={handleRadioDayValue}
+              value={selectedDaysInputValue}
+              placeholder="Max 120 Days"
+              style={{ input: 'w-[80px]' }}
+              onFocus={onFocus}
+            />
+            <div>Days</div>
+          </div>
+          {inputError ? (
+            <div className="h-[10px] text-[#983131]">{inputErrorContent}</div>
+          ) : (
+            <div className="h-[10px]" />
+          )}
+        </>
+      ),
+      checked: selectedRadioDaysValue === 'other',
     },
   ];
 
@@ -808,84 +818,26 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const onOpenChange = (open: boolean) => {
     setIsSliderOpen(open);
+    setSelectedRadioDaysValue('');
   };
+
+  const RadioData = [...DefaultRadioData, ...carartRadioData];
 
   return (
     <>
       <CustomSlider
         sheetContent={
-          <>
-            <div className={styles.diamondDetailHeader}>
-              <p className={`text-solitaireTertiary`}>
-                {`${ManageLocales('app.searchResult.slider.confirmStone')}`}
-              </p>
-            </div>
-            <div className="border-b border-solitaireSenary mb-5"></div>
-            <div className="px-[50px]">
-              {confirmStoneData?.length && (
-                <CustomDataTable
-                  tableColumns={listingColumns}
-                  tableRows={confirmStoneData}
-                  selectionAllowed={false}
-                  mainTableStyle={styles.tableWrapper}
-                />
-              )}
-              <div className="mt-5">
-                <p>
-                  {ManageLocales(
-                    'app.searchResult.slider.confirmStone.paymentTerms'
-                  )}
-                </p>
-                {confirmRadioButtons.map((radioData, index) => (
-                  <CustomRadioButton
-                    key={index} // Ensure each component has a unique key
-                    radioMetaData={radioData}
-                    radioButtonAllStyles={confirmStoneRadioButtonStyle}
-                  />
-                ))}
-              </div>
-              <div className="mt-5">
-                {ManageLocales(
-                  'app.searchResult.slider.confirmStone.addComment'
-                )}
-
-                <textarea
-                  value={commentValue}
-                  name="textarea"
-                  rows={3}
-                  // placeholder="Write Description (max 1000 characters)"
-                  className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
-                  onChange={handleComment}
-                />
-              </div>
-
-              <div className="flex text-center justify-center gap-4 mt-3">
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales(
-                    'app.searchResult.slider.confirmStone.cancel'
-                  )}
-                  displayButtonAllStyle={{
-                    displayButtonStyle: styles.transparent,
-                  }}
-                  handleClick={() => {
-                    setInputError(false);
-                    setInputErrorContent('');
-                    setSelectedDaysInputValue('');
-                    onOpenChange(false);
-                  }}
-                />
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales(
-                    'app.searchResult.slider.confirmStone'
-                  )}
-                  displayButtonAllStyle={{
-                    displayButtonStyle: styles.filled,
-                  }}
-                />
-              </div>
-              <div className="border-b border-solitaireSenary mt-5"></div>
-            </div>
-          </>
+          <ConfirmStone
+            confirmStoneData={confirmStoneData}
+            listingColumns={listingColumns}
+            confirmRadioButtons={confirmRadioButtons}
+            commentValue={commentValue}
+            handleComment={handleComment}
+            setInputError={setInputError}
+            setInputErrorContent={setInputErrorContent}
+            setSelectedDaysInputValue={setSelectedDaysInputValue}
+            onOpenChange={onOpenChange}
+          />
         }
         sheetContentStyle={styles.diamondDetailSheet}
         isSliderOpen={isSliderOpen}
@@ -905,7 +857,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
         setIsOpen={setIsDialogOpen}
       />
 
-      <div className="mb-2">
+      <div className="mb-2 mt-[-40px]">
         {/* Count Bar  */}
         <div className="flex justify-between items-center h-7">
           <div className="flex gap-3">
@@ -972,32 +924,23 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
 
                   <div className={styles.radioButtonMainDiv}>
-                    {/* <CustomRadioButton
-                      radioMetaData={[
-                        {
-                          name: 'Default',
-                          handleChange: handleCaratRadioChange,
-                          radioData: [
-                            {
-                              id: '0',
-                              value: 'Default',
-                              radioButtonLabel: 'Default',
-                              checked: selectedDefaultValue === 'Default',
-                            },
-                          ],
-                        },
-                      ]}
-                      radioButtonAllStyles={radioButtonDefaultStyles}
-                    /> */}
+                    {/* {DefaultRadioData.map((radioData, index) => {
+                      return (
+                        <RadioButton
+                          key={index} // Ensure each component has a unique key
+                          radioMetaData={radioData}
+                        />
+                      );
+                    })} */}
 
-                    {radioDataList.map((radioData, index) => (
-                      <CustomRadioButton
-                        key={index} // Ensure each component has a unique key
-                        radioMetaData={radioData}
-                        // onChange={handleCaratRadioChange}
-                        radioButtonAllStyles={radioButtonStyles}
-                      />
-                    ))}
+                    {RadioData.map((radioData, index) => {
+                      return (
+                        <RadioButton
+                          key={index} // Ensure each component has a unique key
+                          radioMetaData={radioData}
+                        />
+                      );
+                    })}
                   </div>
 
                   {/* button */}
@@ -1035,6 +978,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          handleConfirm={handleConfirm}
         />
       ) : (
         <CustomLoader />

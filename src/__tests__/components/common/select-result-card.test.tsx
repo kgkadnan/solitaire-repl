@@ -1,55 +1,52 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import CustomSearchResultCard from '@components/common/search-result-card';
-import Image from 'next/image';
-jest.mock('next/image', () => {
-  return {
-    __esModule: true,
-    default: ({
-      src,
-      alt,
-      width,
-      height,
-      ...rest
-    }: {
-      src: string;
-      alt: string;
-      width: number;
-      height: number;
-      // Add more specific types for other props if needed
-      // ...rest: SomeType;
-    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
-  };
-});
+import { render, fireEvent } from '@testing-library/react';
+import '@testing-library/jest-dom';
+import CustomSearchResultCard, {
+  IImageContainerProps,
+} from '@/components/common/search-result-card';
+
+// Mock the next/image package
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: () => <div>Image Component</div>,
+  StaticImageData: {},
+}));
+
 describe('CustomSearchResultCard', () => {
-  const cardData = {
-    cardId: '1',
-    stone: 'Diamond',
+  const mockCardData: IImageContainerProps['cardData'] = {
+    cardId: '123',
     cardHeader: 'Card Header',
-    cardDescription: 'Card Description',
     cardContent: 'Card Content',
   };
 
-  test('renders card with provided data', () => {
+  test('renders CustomSearchResultCard component', () => {
     const { getByText } = render(
-      <CustomSearchResultCard cardData={cardData} />
+      <CustomSearchResultCard cardData={mockCardData} />
     );
 
-    expect(getByText(/Card Header/i)).toBeInTheDocument();
-    // expect(getByText(/Card Description/i)).toBeInTheDocument();
-    expect(getByText(/Card Content/i)).toBeInTheDocument();
+    expect(getByText('Card Header')).toBeInTheDocument();
+    expect(getByText('Card Content')).toBeInTheDocument();
   });
 
-  // test("calls handleCardAction when icon is clicked", () => {
-  //   const handleCardActionMock = jest.fn();
-  //   const { getByAltText } = render(
-  //     <CustomSearchResultCard
-  //       cardData={cardData}
-  //       handleCardAction={handleCardActionMock}
-  //     />
-  //   );
+  test('renders content in default position when defaultCardPosition is true', () => {
+    const { getByText } = render(
+      <CustomSearchResultCard
+        cardData={mockCardData}
+        defaultCardPosition={true}
+      />
+    );
 
-  //   fireEvent.click(getByAltText("edit"));
-  //   expect(handleCardActionMock).toHaveBeenCalledWith("Diamond");
-  // });
+    expect(getByText('Card Content')).toBeInTheDocument();
+  });
+
+  test('renders content in non-default position when defaultCardPosition is false', () => {
+    const { getByText } = render(
+      <CustomSearchResultCard
+        cardData={mockCardData}
+        defaultCardPosition={false}
+      />
+    );
+
+    expect(getByText('Card Content')).toBeInTheDocument();
+  });
 });

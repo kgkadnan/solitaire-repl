@@ -1,51 +1,80 @@
-import React from 'react';
-import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
-import Image from 'next/image';
+'use client';
+import React, { useEffect, useState } from 'react';
+import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
+import {
+  useCardRecentConfirmationQuery,
+  useGetAllRecentConfirmationQuery,
+} from '@/features/api/my-diamonds/recent-confirmation-slice';
 
 const RecentConfirmation = () => {
+  let myDiamondStatus = 'pending';
+  let fulfillmentStatus = 'not_fulfilled';
+  let paymentStatus = 'awaiting';
+  let fields = 'id,display_id,total';
+  let expand = 'items';
+  let singleExpand = 'items.variant.product';
+
+  const [recentConfirmData, setRecentConfirmData] = useState([]);
+  const [orderId, setOrderId] = useState('');
+  const {
+    data: myDiamondrecentConfirmData,
+    error,
+    isLoading,
+    refetch,
+  } = useCardRecentConfirmationQuery({
+    myDiamondStatus,
+    fulfillmentStatus,
+    paymentStatus,
+    fields,
+    expand,
+  });
+
+  useEffect(() => {
+    setRecentConfirmData(myDiamondrecentConfirmData?.orders);
+  }, [myDiamondrecentConfirmData]);
+
   let data = [
     {
-      orderId: '352146529',
-      date: '25/07/2023',
+      orderId: '987654321',
+      noOfStones: '8',
+      payableAmount: '3150.50 $',
+      created_at: '2023-11-24T07:22:50.354Z',
+      paymentTerm: '14 Days',
+      comment:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed et justo vitae justo efficitur placerat.',
     },
     {
-      orderId: '822148529',
-      date: '28/07/2023',
+      orderId: '123456789',
+      noOfStones: '3',
+      payableAmount: '1500.75 $',
+      created_at: '2023-11-24T07:22:50.354Z',
+      paymentTerm: '10 Days',
+      comment:
+        'Nulla facilisi. Vestibulum auctor tortor vel elit scelerisque, ac aliquet turpis cursus.',
     },
     {
-      orderId: '462146529',
-      date: '30/07/2023',
+      orderId: '456789012',
+      noOfStones: '6',
+      payableAmount: '2480.25 $',
+      created_at: '2023-11-24T07:22:50.354Z',
+      paymentTerm: '21 Days',
+      comment:
+        'Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas.',
     },
   ];
+
+  const { data: test } = useGetAllRecentConfirmationQuery({
+    orderId,
+    singleExpand,
+  });
+  console.log('zzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzzz', test);
+
+  let handleCardClick = (id: string) => {
+    setOrderId(id);
+  };
+
   return (
-    <>
-      {data.map((items: any) => {
-        return (
-          <div
-            key={items.orderId}
-            className="bg-solitaireSecondary w-full h-[80px] flex items-center px-5 rounded-xl cursor-pointer mt-3"
-          >
-            <div className="flex justify-between w-full">
-              <div className="flex gap-[20px]">
-                <p>
-                  Order ID:{' '}
-                  <span className="text-solitaireTertiary">
-                    {items.orderId}
-                  </span>
-                </p>
-                <p>
-                  Date:{' '}
-                  <span className="text-solitaireTertiary">{items.date}</span>
-                </p>
-              </div>
-              <div>
-                <Image src={ChevronImage} alt="chevron image" />
-              </div>
-            </div>
-          </div>
-        );
-      })}
-    </>
+    <MyDiamonds data={recentConfirmData} handleCardClick={handleCardClick} />
   );
 };
 

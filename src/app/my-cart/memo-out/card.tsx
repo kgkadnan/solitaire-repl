@@ -3,7 +3,6 @@
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { CustomFooter } from '@/components/common/footer';
-import CustomHeader from '@/components/common/header';
 import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomTable } from '@/components/common/table';
 import React, { useCallback, useEffect, useState } from 'react';
@@ -23,6 +22,7 @@ import downloadOutline from '@public/assets/icons/download-outline.svg';
 import dna from '@public/assets/icons/ph_dna-light.svg';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
+import { MAX_COMPARE_STONE, MIN_COMPARE_STONE } from '@/constants/constant';
 
 interface KeyLabelMapping {
   [key: string]: string;
@@ -73,8 +73,7 @@ const MemoOut = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data } = useGetCartQuery({});
-  const [deleteCart, { isLoading: updateIsLoading, isError: updateIsError }] =
-    useDeleteCartMutation();
+  const [deleteCart] = useDeleteCartMutation();
 
   const [remainingTime, setRemainingTime] = useState([]);
 
@@ -291,15 +290,14 @@ const MemoOut = () => {
   };
 
   const handleCompareStone = () => {
-    const maxStones = 10;
-    const minStones = 2;
-
-    if (isCheck.length > maxStones) {
+    if (isCheck.length > MAX_COMPARE_STONE) {
       setIsError(true);
-      setErrorText(`You can compare a maximum of ${maxStones} stones`);
-    } else if (isCheck.length < minStones) {
+      setErrorText(`You can compare a maximum of ${MAX_COMPARE_STONE} stones`);
+    } else if (isCheck.length < MIN_COMPARE_STONE) {
       setIsError(true);
-      setErrorText(`Minimum ${minStones} stones are required to compare`);
+      setErrorText(
+        `Minimum ${MIN_COMPARE_STONE} stones are required to compare`
+      );
     } else {
       const compareStones = isCheck
         .map((id) => data.items.find((row: any) => row.id === id))
