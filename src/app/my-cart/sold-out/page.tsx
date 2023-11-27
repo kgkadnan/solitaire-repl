@@ -9,6 +9,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './sold-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { SOLD_OUT_STATUS } from '@/constants/constant';
 
 const OutOfStock = () => {
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
@@ -69,7 +70,9 @@ const OutOfStock = () => {
     const updateRows = () => {
       if (data) {
         const soldOutItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'SoldOut')
+          .filter(
+            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
+          )
           .map((row: any) => row.product);
 
         setRows(soldOutItems);

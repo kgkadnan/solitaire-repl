@@ -1,0 +1,59 @@
+.confirmMainRadioButtonStyle {
+    display: flex !important;
+    justify-content: space-between;
+    margin: 7px 0px;
+  }
+  
+  .radioStyle {
+    color: #8c7459;
+    background-color: #0c1f1f;
+    border-color: #8c7459;
+    margin: 10px;
+  }
+  
+  .labelStyle {
+    color: hsl(var(--solitaire-tertiary));
+  }
+
+  .diamondDetailHeader {
+    color: var(--shadow, #8c7459);
+    font-size: 16px;
+    font-weight: 300;
+    height: 80px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+    padding: 0px 50px;
+    p{
+      color: var(--shadow, #8c7459);
+    }
+  }
+//Footer Button
+.transparent {
+    background-color: transparent;
+    width: 150px;
+    height: 35px;
+    border: 1px solid hsl(var(--solitaire-quaternary));
+    border-radius: 5px;
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 14px !important;
+  }
+  
+  .filled {
+    height: 35px;
+    width: 150px;
+    background-color: #8c7459;
+    color: #ffffff;
+    font-size: 14px !important;
+  }
+
+  .tableWrapper {
+    max-height: 65vh; /* Set to 80% of the viewport height */
+    overflow-y: scroll;
+    padding-bottom: 10px;
+    height: calc(
+      100vh - 45vh
+    ); /* This may not be needed, depending on the layout */
+    
+  }
+

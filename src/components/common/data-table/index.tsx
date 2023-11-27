@@ -28,6 +28,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   checkboxData = {},
   mainTableStyle,
   selectionAllowed = true,
+  handleConfirm,
 }) => {
   let currentPath = usePathname();
 
@@ -138,7 +139,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       id: 2,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.transparent,
-      fn: () => {},
+      fn: () => handleConfirm && handleConfirm([sliderData[0]?.id]),
     },
     {
       id: 3,
@@ -281,6 +282,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
+
       <div className={'flex-grow overflow-y-auto'}>
         <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
           <table className={styles.table}>

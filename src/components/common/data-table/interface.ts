@@ -12,6 +12,7 @@ export interface ICustomDataTableProps {
   checkboxData?: ICheckboxData;
   mainTableStyle: string;
   selectionAllowed?: boolean;
+  handleConfirm?: (isCheck: string[]) => void;
 }
 
 export interface KeyLabelMapping {
