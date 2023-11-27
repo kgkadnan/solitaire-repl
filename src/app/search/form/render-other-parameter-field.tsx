@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './form.module.scss';
 import renderSelectionButtons from './render-selection-button';
 import { ManageLocales } from '@/utils/translate';
-import formStateManagement from './form-state-management';
+import fieldStateManagement from './field-state-management';
 import advanceSearch from '@/constants/advance-search.json';
 import {
   handleBlackTableBIChange,
@@ -34,7 +34,7 @@ interface IRenderOtherParameterData {
   value: IRenderEachOtherParameterData[];
 }
 const renderOtherParameterFields = () => {
-  const { state, setState } = formStateManagement();
+  const { state } = fieldStateManagement();
   const {
     blackTableBI,
     sideBlackBI,

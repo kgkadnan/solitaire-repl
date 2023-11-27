@@ -2,7 +2,7 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styles from './form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
-import formStateManagement from './form-state-management';
+import fieldStateManagement from './field-state-management';
 import advanceSearch from '@/constants/advance-search.json';
 
 interface IRange {
@@ -16,7 +16,7 @@ interface IRenderParameterData {
   range: IRange;
 }
 const renderParameterFields = () => {
-  const { state, setState } = formStateManagement();
+  const { state, setState } = fieldStateManagement();
 
   const {
     tablePerFrom,

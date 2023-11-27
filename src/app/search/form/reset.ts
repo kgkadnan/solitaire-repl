@@ -1,6 +1,6 @@
-import formStateManagement from './form-state-management';
+import fieldStateManagement from './field-state-management';
 
-const { setState } = formStateManagement();
+const { setState } = fieldStateManagement();
 
 const {
   setSelectedShape,

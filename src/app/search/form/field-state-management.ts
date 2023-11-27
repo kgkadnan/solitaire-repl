@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-const formStateManagement = () => {
+import advanceSearch from '@/constants/advance-search.json';
+
+const fieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -79,6 +81,9 @@ const formStateManagement = () => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
   const [starLengthTo, setStarLengthTo] = useState<string>('');
+  const [caratRangeData, setCaratRangeData] = useState<string[]>(
+    advanceSearch.carat.data
+  );
   return {
     state: {
       selectedShape,
@@ -229,6 +234,10 @@ const formStateManagement = () => {
       setStarLengthFrom,
       setStarLengthTo,
     },
+    carat: {
+      caratRangeData: caratRangeData,
+      setCaratRangeData: setCaratRangeData,
+    },
   };
 };
-export default formStateManagement;
+export default fieldStateManagement;

@@ -1,7 +1,11 @@
-import formStateManagement from './form-state-management';
+import fieldStateManagement from './field-state-management';
 import advanceSearch from '@/constants/advance-search.json';
+import validationStateManagement, {
+  Errors,
+} from './validation-state-management';
 
-const { state, setState } = formStateManagement();
+const { state, setState, carat } = fieldStateManagement();
+const { caratRangeData, setCaratRangeData } = carat;
 const {
   selectedShape,
   selectedColor,
@@ -26,14 +30,6 @@ const {
   selectedBrilliance,
   selectedLocation,
   selectedOrigin,
-  priceRangeFrom,
-  priceRangeTo,
-  discountFrom,
-  discountTo,
-  pricePerCaratFrom,
-  pricePerCaratTo,
-  caratRangeFrom,
-  caratRangeTo,
   blackTableBI,
   sideBlackBI,
   openCrownBI,
@@ -49,32 +45,6 @@ const {
   naturalPavilionWI,
   surfaceGrainingWI,
   internalGrainingWI,
-  tablePerFrom,
-  tablePerTo,
-  depthTo,
-  depthFrom,
-  crownAngleFrom,
-  crownAngleTo,
-  lengthFrom,
-  lengthTo,
-  pavilionDepthFrom,
-  pavilionDepthTo,
-  depthPerFrom,
-  depthPerTo,
-  crownHeightFrom,
-  crownHeightTo,
-  widthFrom,
-  widthTo,
-  lowerHalfFrom,
-  lowerHalfTo,
-  ratioFrom,
-  ratioTo,
-  girdlePerFrom,
-  girdlePerTo,
-  pavilionAngleFrom,
-  pavilionAngleTo,
-  starLengthFrom,
-  starLengthTo,
 } = state;
 
 const {
@@ -102,12 +72,6 @@ const {
   setSelectedBrilliance,
   setSelectedLocation,
   setSelectedOrigin,
-  setPriceRangeFrom,
-  setPriceRangeTo,
-  setDiscountFrom,
-  setDiscountTo,
-  setPricePerCaratFrom,
-  setPricePerCaratTo,
   setCaratRangeFrom,
   setCaratRangeTo,
   setBlackTableBI,
@@ -125,33 +89,16 @@ const {
   setNaturalPavilionWI,
   setSurfaceGrainingWI,
   setInternalGrainingWI,
-  setTablePerFrom,
-  setTablePerTo,
-  setDepthTo,
-  setDepthFrom,
-  setCrownAngleFrom,
-  setCrownAngleTo,
-  setLengthFrom,
-  setLengthTo,
-  setPavilionDepthFrom,
-  setPavilionDepthTo,
-  setDepthPerFrom,
-  setDepthPerTo,
-  setCrownHeightFrom,
-  setCrownHeightTo,
-  setWidthFrom,
-  setWidthTo,
-  setLowerHalfFrom,
-  setLowerHalfTo,
-  setRatioFrom,
-  setRatioTo,
-  setGirdlePerFrom,
-  setGirdlePerTo,
-  setPavilionAngleFrom,
-  setPavilionAngleTo,
-  setStarLengthFrom,
-  setStarLengthTo,
 } = setState;
+
+const {
+  setValidationError,
+  setIsInputDialogOpen,
+  setErrors,
+  setInputError,
+  setInputErrorContent,
+  setSaveSearchName,
+} = validationStateManagement();
 
 export const handleBlackTableBIChange = (data: string) => {
   handleFilterChange(data, blackTableBI, setBlackTableBI);
@@ -482,4 +429,106 @@ export const handleOrigin = (data: string) => {
 };
 export const handleGirdleStepChange = (radioValue: string) => {
   setSelectedGirdleStep(radioValue);
+};
+
+export const normalizeValue = (value: string) => {
+  // Normalize user input like "3-3.99" to "3.00-3.99"
+  const caratRange = value.split('-');
+  if (caratRange[0] === '' || caratRange[1] === '') {
+    setValidationError(`Please enter a valid carat range.`);
+    return;
+  } else if (caratRange[0] === '0' || caratRange[1] === '0') {
+    setValidationError('Please enter value between “0.10 to 50”');
+    return;
+  } else if (caratRange[0] > caratRange[1]) {
+    setValidationError(
+      `Carat range cannot be ${caratRange[0]} to ${caratRange[1]}. Please enter a valid carat range.`
+    );
+    return;
+  } else if (caratRange.length === 2) {
+    const caratFrom = parseFloat(caratRange[0]).toFixed(2);
+    const caratTo = parseFloat(caratRange[1]).toFixed(2);
+    return `${caratFrom}-${caratTo}`;
+  }
+  return value;
+};
+export const handleAddCarat = (data: string) => {
+  let Validatedata = normalizeValue(data);
+  if (Validatedata) {
+    if (!caratRangeData.includes(Validatedata)) {
+      setCaratRangeData([...caratRangeData, Validatedata]);
+    }
+    setSelectedCaratRange([...selectedCaratRange, Validatedata]);
+    setCaratRangeFrom('');
+    setCaratRangeTo('');
+  }
+};
+
+export const handleValidate = (
+  key: keyof Errors,
+  inputType: 'from' | 'to',
+  value: any,
+  otherValue: any
+) => {
+  if (value == '' && otherValue == '') {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: { from: null, to: null },
+    }));
+  } else if (value.length === 0) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: {
+        ...prevErrors[key as keyof Errors],
+        [inputType]: `Please enter a value for '${key} from'`,
+      },
+    }));
+    // Handle other error logic as needed
+  } else if (otherValue.length === 0) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: {
+        ...prevErrors[key as keyof Errors],
+        [inputType]: `Please enter a value for '${key} to'`,
+      },
+    }));
+    // Handle other error logic as needed
+  } else if (value > 100 || otherValue > 100) {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: {
+        ...prevErrors[key as keyof Errors],
+        [inputType]: 'Please enter a valid range from 0 to 100',
+      },
+    }));
+    // Handle other error logic as needed
+  } else if (
+    (inputType === 'from' && value > otherValue) ||
+    (inputType === 'to' && +value < otherValue)
+  ) {
+    // Error handling for 'from' value being greater than 'to' value and vice versa
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: {
+        ...prevErrors[key as keyof Errors],
+        [inputType]: `'${
+          inputType === 'from' ? 'From' : 'To'
+        }' value should not be ${
+          inputType === 'from' ? 'greater' : 'less'
+        } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+      },
+    }));
+  } else {
+    setErrors((prevErrors) => ({
+      ...prevErrors,
+      [key]: { from: null, to: null },
+    }));
+    // Handle other error logic as needed
+  }
+};
+export const handleCloseInputDialog = () => {
+  setIsInputDialogOpen(false);
+  setInputError(false);
+  setInputErrorContent('');
+  setSaveSearchName('');
 };

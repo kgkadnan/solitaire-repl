@@ -1,6 +1,6 @@
-import formStateManagement from './form-state-management';
+import fieldStateManagement from './field-state-management';
 
-const { state } = formStateManagement();
+const { state } = fieldStateManagement();
 const {
   selectedShape,
   selectedColor,
