@@ -8,10 +8,8 @@ import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { CustomSlider } from '@/components/common/slider';
-import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import CustomDataTable from '@/components/common/data-table';
 import { useAppDispatch } from '@/hooks/hook';
-import { useRouter } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -32,13 +30,6 @@ import { RadioButton } from '@/components/common/custom-input-radio';
 import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/constant';
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
-  const radioButtonStyles = {
-    radioButtonStyle: styles.radioStyle,
-    radioLabelStyle: styles.labelStyle,
-    mainRadioButton: styles.mainRadioButtonStyle,
-  };
-
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Product[]>([]);
@@ -55,18 +46,28 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   let [addSavedSearch] = useAddSavedSearchMutation();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   //Radio Button
-  const [selectedRadioValue, setSelectedRadioValue] = useState<any[]>([]);
   const [selectedCaratRadioValue, setSelectedCaratRadioValue] =
     useState<string>('');
   const [selectedClarityRadioValue, setSelectedClarityRadioValue] =
     useState<string>('');
-  const [seletedPriceRadioValue, setseletedPriceRadioValue] =
+  const [seletedPriceRadioValue, setSeletedPriceRadioValue] =
+    useState<string>('');
+
+  const [seletedDiscountRadioValue, setSeletedDiscountRadioValue] =
+    useState<string>('');
+  const [seletedTableInclusionRadioValue, setSeletedTableInclusionRadioValue] =
+    useState<string>('');
+  const [seletedFluorescenceRadioValue, setSeletedFluorescenceRadioValue] =
+    useState<string>('');
+  const [seletedBlackTableRadioValue, setSeletedBlackTableRadioValue] =
+    useState<string>('');
+  const [seletedSideBlackRadioValue, setSeletedSideBlackRadioValue] =
     useState<string>('');
 
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
     useState<string>();
-  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
 
+  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
   const [selectedDefaultValue, setSelectedDefaultValue] = useState<string>('');
 
   const [totalAmount, setTotalAmount] = useState(0);
@@ -86,6 +87,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
   const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
+
+  const [isSortBySliderOpen, setIsSortBySliderOpen] = useState(Boolean);
 
   const [commentValue, setCommentValue] = useState('');
 
@@ -296,15 +299,229 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  //Sort By Functions
   const handleCaratRadioChange = (radioValue: string) => {
-    console.log('rrrrrrrrrrrrrrrrr', radioValue);
     setSelectedDefaultValue('');
     setSelectedCaratRadioValue(radioValue);
   };
-
+  const handleClarityRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSelectedClarityRadioValue(radioValue);
+  };
+  const handlePriceRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedPriceRadioValue(radioValue);
+  };
+  const handleDiscountRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedDiscountRadioValue(radioValue);
+  };
+  const handleTableInclusionRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedTableInclusionRadioValue(radioValue);
+  };
+  const handleFluorescenceRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedFluorescenceRadioValue(radioValue);
+  };
+  const handleBlackTableRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedBlackTableRadioValue(radioValue);
+  };
+  const handleSideBlackRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedSideBlackRadioValue(radioValue);
+  };
   const handleDefaultRadioChange = (radioValue: string) => {
-    setSelectedDefaultValue(radioValue);
     setSelectedCaratRadioValue('');
+    setSeletedSideBlackRadioValue('');
+    setSeletedBlackTableRadioValue('');
+    setSeletedTableInclusionRadioValue('');
+    setSeletedDiscountRadioValue('');
+    setSeletedFluorescenceRadioValue('');
+    setSeletedPriceRadioValue('');
+    setSelectedClarityRadioValue('');
+    setSelectedDefaultValue(radioValue);
+  };
+
+  //Sort By Data
+  const DefaultRadioData = [
+    {
+      name: 'Default',
+      onChange: handleDefaultRadioChange,
+      id: '1',
+      value: 'Default',
+      label: 'Default',
+      checked: selectedDefaultValue == 'Default',
+    },
+  ];
+  const carartRadioData = [
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '1',
+      value: 'Low to High',
+      label: 'Carat - Low to High',
+      checked: selectedCaratRadioValue === 'Low to High',
+    },
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '2',
+      value: 'Carat - High to Low',
+      label: 'Carat - High to Low',
+      checked: selectedCaratRadioValue === 'Carat - High to Low',
+    },
+  ];
+  const clarityRadioData = [
+    {
+      name: 'clarity',
+      onChange: handleClarityRadioChange,
+      id: '1',
+      value: 'Clarity - (FL - I3)',
+      label: 'Clarity - (FL - I3)',
+      checked: selectedClarityRadioValue == 'Clarity - (FL - I3)',
+    },
+    {
+      name: 'clarity',
+      onChange: handleClarityRadioChange,
+      id: '2',
+      value: 'Clarity - (I3 - FL)',
+      label: 'Clarity - (I3 - FL)',
+      checked: selectedClarityRadioValue == 'Clarity - (I3 - FL)',
+    },
+  ];
+  const priceRadioData = [
+    {
+      name: 'price',
+      onChange: handlePriceRadioChange,
+      id: '1',
+      value: 'Price - Low to High',
+      label: 'Price - Low to High',
+      checked: seletedPriceRadioValue == 'Price - Low to High',
+    },
+    {
+      name: 'price',
+      onChange: handlePriceRadioChange,
+      id: '2',
+      value: 'Price - High to Low',
+      label: 'Price - High to Low',
+      checked: seletedPriceRadioValue == 'Price - High to Low',
+    },
+  ];
+  const discountRadioData = [
+    {
+      name: 'discount',
+      onChange: handleDiscountRadioChange,
+      id: '1',
+      value: 'Discount - Low to High',
+      label: 'Discount - Low to High',
+      checked: seletedDiscountRadioValue == 'Discount - Low to High',
+    },
+    {
+      name: 'discount',
+      onChange: handleDiscountRadioChange,
+      id: '2',
+      value: 'Discount - High to Low',
+      label: 'Discount - High to Low',
+      checked: seletedDiscountRadioValue == 'Discount - High to Low',
+    },
+  ];
+  const tableInclusionRadioData = [
+    {
+      name: 'Table Inclusion',
+      onChange: handleTableInclusionRadioChange,
+      id: '1',
+      value: 'Table Inclusion - (T0 - T3)',
+      label: 'Table Inclusion - (T0 - T3)',
+      checked: seletedTableInclusionRadioValue == 'Table Inclusion - (T0 - T3)',
+    },
+    {
+      name: 'Table Inclusion',
+      onChange: handleTableInclusionRadioChange,
+      id: '2',
+      value: 'Table Inclusion - (T3 - T0)',
+      label: 'Table Inclusion - (T3 - T0)',
+      checked: seletedTableInclusionRadioValue == 'Table Inclusion - (T3 - T0)',
+    },
+  ];
+  const fluorescenceRadioData = [
+    {
+      name: 'Fluorescence',
+      onChange: handleFluorescenceRadioChange,
+      id: '1',
+      value: 'Fluorescence - (NON - VSTG)',
+      label: 'Fluorescence - (NON - VSTG) ',
+      checked: seletedFluorescenceRadioValue == 'Fluorescence - (NON - VSTG)',
+    },
+    {
+      name: 'Fluorescence',
+      onChange: handleFluorescenceRadioChange,
+      id: '2',
+      value: 'Fluorescence - (VSTG - NON)',
+      label: 'Fluorescence - (VSTG - NON) ',
+      checked: seletedFluorescenceRadioValue == 'Fluorescence - (VSTG - NON)',
+    },
+  ];
+  const blackTableRadioData = [
+    {
+      name: 'Black Table',
+      onChange: handleBlackTableRadioChange,
+      id: '1',
+      value: 'Black Table - (B0 - B3)',
+      label: 'Black Table - (B0 - B3) ',
+      checked: seletedBlackTableRadioValue == 'Black Table - (B0 - B3)',
+    },
+    {
+      name: 'Black Table',
+      onChange: handleBlackTableRadioChange,
+      id: '2',
+      value: 'Black Table - (B3 - B0)',
+      label: 'Black Table - (B3 - B0) ',
+      checked: seletedBlackTableRadioValue == 'Black Table - (B3 - B0)',
+    },
+  ];
+  const sideBlackRadioData = [
+    {
+      name: 'Side Black',
+      onChange: handleSideBlackRadioChange,
+      id: '1',
+      value: 'Side Black - (SB0 - SB3)',
+      label: 'Side Black - (SB0 - SB3) ',
+      checked: seletedSideBlackRadioValue == 'Side Black - (SB0 - SB3)',
+    },
+    {
+      name: 'Side Black',
+      onChange: handleSideBlackRadioChange,
+      id: '2',
+      value: 'Side Black - (SB3 - SB0)',
+      label: 'Side Black - (SB3 - SB0) ',
+      checked: seletedSideBlackRadioValue == 'Side Black - (SB3 - SB0)',
+    },
+  ];
+  const RadioData = [
+    ...DefaultRadioData,
+    ...carartRadioData,
+    ...clarityRadioData,
+    ...priceRadioData,
+    ...discountRadioData,
+    ...tableInclusionRadioData,
+    ...fluorescenceRadioData,
+    ...blackTableRadioData,
+    ...sideBlackRadioData,
+  ];
+  //Sort By Slider State Management
+  const onOpenChangeSortBy = (open: boolean) => {
+    setSelectedDefaultValue('');
+    setSelectedCaratRadioValue('');
+    setSeletedSideBlackRadioValue('');
+    setSeletedBlackTableRadioValue('');
+    setSeletedTableInclusionRadioValue('');
+    setSeletedDiscountRadioValue('');
+    setSeletedFluorescenceRadioValue('');
+    setSeletedPriceRadioValue('');
+    setSelectedClarityRadioValue('');
+    setIsSortBySliderOpen(open);
   };
 
   const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -421,184 +638,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   }, [data]); // Include isEffectExecuted in the dependency array
 
-  const radioDataList = [
-    {
-      name: 'Default',
-      handleChange: handleDefaultRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Default',
-          radioButtonLabel: 'Default',
-          checked: selectedDefaultValue == 'Default',
-        },
-      ],
-    },
-
-    {
-      name: 'carat',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Low to High',
-          radioButtonLabel: 'Carat - Low to High',
-          checked: selectedCaratRadioValue == 'Low to High',
-        },
-        {
-          id: '2',
-          value: 'High to Low',
-          radioButtonLabel: 'Carat - High to Low',
-          checked: selectedCaratRadioValue == 'High to Low',
-        },
-      ],
-    },
-    {
-      name: 'clarity',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: '(FL - I3)',
-          radioButtonLabel: 'Clarity - (FL - I3)',
-          checked: selectedClarityRadioValue == '(FL - I3)',
-        },
-        {
-          id: '2',
-          value: '(I3 - FL)',
-          radioButtonLabel: 'Clarity - (I3 - FL)',
-          checked: selectedClarityRadioValue == '(I3 - FL)',
-        },
-      ],
-    },
-    {
-      name: 'price',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Price - Low to High',
-          radioButtonLabel: 'Price - Low to High',
-          checked: seletedPriceRadioValue == 'Price - Low to High',
-        },
-        {
-          id: '2',
-          value: 'Price - High to Low',
-          radioButtonLabel: 'Price - High to Low',
-          checked: seletedPriceRadioValue == 'Price - High to Low',
-        },
-      ],
-    },
-    {
-      name: 'discount',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Discount - Low to High',
-          radioButtonLabel: 'Discount - Low to High',
-          checked: seletedPriceRadioValue == 'Discount - Low to High',
-        },
-        {
-          id: '2',
-          value: 'Discount - High to Low',
-          radioButtonLabel: 'Discount - High to Low',
-          checked: seletedPriceRadioValue == 'Discount - High to Low',
-        },
-      ],
-    },
-    {
-      name: 'Table Inclusion',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Table Inclusion - (T0 - T3)',
-          radioButtonLabel: 'Table Inclusion - (T0 - T3)',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
-        },
-        {
-          id: '2',
-          value: 'Table Inclusion - (T3 - T0)',
-          radioButtonLabel: 'Table Inclusion - (T3 - T0)',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
-        },
-      ],
-    },
-    {
-      name: 'Fluorescence',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Fluorescence - (NON - VSTG)',
-          radioButtonLabel: 'Fluorescence - (NON - VSTG) ',
-          checked: seletedPriceRadioValue == 'Fluorescence - (NON - VSTG)',
-        },
-        {
-          id: '2',
-          value: 'Fluorescence - (VSTG - NON)',
-          radioButtonLabel: 'Fluorescence - (VSTG - NON) ',
-          checked: seletedPriceRadioValue == 'Fluorescence - (VSTG - NON)',
-        },
-      ],
-    },
-    {
-      name: 'Black Table',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Black Table - (B0 - B3)',
-          radioButtonLabel: 'Black Table - (B0 - B3) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
-        },
-        {
-          id: '2',
-          value: 'Black Table - (B3 - B0)',
-          radioButtonLabel: 'Black Table - (B3 - B0) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
-        },
-      ],
-    },
-    {
-      name: 'Side Black',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Side Black - (SB0 - SB3)',
-          radioButtonLabel: 'Side Black - (SB0 - SB3) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
-        },
-        {
-          id: '2',
-          value: 'Side Black - (SB3 - SB0)',
-          radioButtonLabel: 'Side Black - (SB3 - SB0) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
-        },
-      ],
-    },
-    {
-      name: 'Table Inclusion',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Table Inclusion - (T0 - T3)',
-          radioButtonLabel: 'Table Inclusion - (T0 - T3) ',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
-        },
-        {
-          id: '2',
-          value: 'Table Inclusion - (T3 - T0)',
-          radioButtonLabel: 'Table Inclusion - (T3 - T0) ',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
-        },
-      ],
-    },
-  ];
-
   const handleConfirmStoneRadioChange = (value: string) => {
     setInputError(false);
     setInputErrorContent('');
@@ -606,38 +645,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setSelectedRadioDaysValue(value);
   };
 
-  const DefaultRadioData = [
-    {
-      name: 'Default',
-      onChange: handleDefaultRadioChange,
-      id: '1',
-      value: 'Default',
-      label: 'Default',
-      checked: selectedDefaultValue == 'Default',
-    },
-  ];
-  const carartRadioData = [
-    {
-      name: 'carat',
-      onChange: handleCaratRadioChange,
-      id: '1',
-      value: 'Low to High',
-      label: 'Carat - Low to High',
-      checked: selectedCaratRadioValue === 'Low to High',
-    },
-    {
-      name: 'carat',
-      onChange: handleCaratRadioChange,
-      id: '2',
-      value: 'High to Low',
-      label: 'Carat - High to Low',
-      checked: selectedCaratRadioValue === 'High to Low',
-    },
-  ];
-
   const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = parseFloat(event.target.value);
-
     if (inputValue >= 121) {
       setInputError(true);
       setInputErrorContent('Invalid input.');
@@ -806,7 +815,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   }
 
   const sortData = () => {
-    const sortingOption = selectedRadioValue;
+    const sortingOption = '';
 
     // Assuming there's only one element in the array
     const [key, order] = sortingOption[0].split(' - ');
@@ -820,8 +829,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setIsSliderOpen(open);
     setSelectedRadioDaysValue('');
   };
-
-  const RadioData = [...DefaultRadioData, ...carartRadioData];
 
   return (
     <>
@@ -924,15 +931,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
 
                   <div className={styles.radioButtonMainDiv}>
-                    {/* {DefaultRadioData.map((radioData, index) => {
-                      return (
-                        <RadioButton
-                          key={index} // Ensure each component has a unique key
-                          radioMetaData={radioData}
-                        />
-                      );
-                    })} */}
-
                     {RadioData.map((radioData, index) => {
                       return (
                         <RadioButton
@@ -952,7 +950,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                       displayButtonAllStyle={{
                         displayButtonStyle: styles.transparent,
                       }}
-                      // handleClick={showButtonHandleClick}
+                      handleClick={() => {
+                        onOpenChangeSortBy(false);
+                      }}
                     />
                     <CustomDisplayButton
                       displayButtonLabel={ManageLocales(
@@ -966,6 +966,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
                 </>
               }
+              isSliderOpen={isSortBySliderOpen}
+              onOpenChange={onOpenChangeSortBy}
             />
           </div>
         </div>

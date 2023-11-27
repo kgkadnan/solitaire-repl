@@ -2,7 +2,6 @@ import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode } from 'react';
 import styles from './confirm-stone.module.scss';
 import CustomDataTable from '../data-table';
-import { CustomRadioButton } from '../buttons/radio-button';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { Product, TableColumn } from '@/app/search/result-interface';
 import { RadioButton } from '../custom-input-radio';
@@ -90,9 +89,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               displayButtonStyle: styles.transparent,
             }}
             handleClick={() => {
-              setInputError(false);
-              setInputErrorContent('');
               setSelectedDaysInputValue('');
+              setInputErrorContent('');
+              setInputError(false);
               onOpenChange(false);
             }}
           />
