@@ -3,7 +3,6 @@ import fieldStateManagement from './field-state-management';
 const { state } = fieldStateManagement();
 const {
   selectedShape,
-  selectedColor,
   selectedWhiteColor,
   selectedFancyColor,
   selectedIntensity,
@@ -31,8 +30,6 @@ const {
   discountTo,
   pricePerCaratFrom,
   pricePerCaratTo,
-  caratRangeFrom,
-  caratRangeTo,
   blackTableBI,
   sideBlackBI,
   openCrownBI,
