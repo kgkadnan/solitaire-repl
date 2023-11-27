@@ -555,40 +555,41 @@ const SavedSearch = () => {
             visibleStyle={styles.visibleStyle}
           />
         </div>
-
-        {/* Custom Card and Checkbox map */}
-        {cardData?.length ? (
-          <div className="flex-grow overflow-y-auto min-h-[80vh]">
-            {cardData?.map((items: ICardData) => {
-              return (
-                <div key={items.cardId}>
-                  <div className="flex mt-6">
-                    <CustomCheckBox
-                      data={items.cardId}
-                      onClick={handleClick}
-                      isChecked={isCheck}
-                    />
-
-                    <div
-                      data-testid={'card-id123'}
-                      className={`overflow-auto ${styles.mainCardContainer}`}
-                      onClick={() => handleCardClick(items.cardId)}
-                    >
-                      <CustomSearchResultCard
-                        cardData={items}
-                        overriddenStyles={cardStyles}
-                        defaultCardPosition={false}
-                        handleCardAction={handleEdit}
+        <div className="h-[70vh] overflow-auto">
+          {/* Custom Card and Checkbox map */}
+          {cardData?.length ? (
+            <div className="flex-grow">
+              {cardData?.map((items: ICardData) => {
+                return (
+                  <div key={items.cardId}>
+                    <div className="flex mt-6 ">
+                      <CustomCheckBox
+                        data={items.cardId}
+                        onClick={handleClick}
+                        isChecked={isCheck}
                       />
+
+                      <div
+                        data-testid={'card-id123'}
+                        className={`${styles.mainCardContainer}`}
+                        onClick={() => handleCardClick(items.cardId)}
+                      >
+                        <CustomSearchResultCard
+                          cardData={items}
+                          overriddenStyles={cardStyles}
+                          defaultCardPosition={false}
+                          handleCardAction={handleEdit}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <NoDataFound />
-        )}
+                );
+              })}
+            </div>
+          ) : (
+            <NoDataFound />
+          )}
+        </div>
 
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">
