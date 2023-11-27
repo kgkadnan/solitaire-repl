@@ -205,7 +205,9 @@
   "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
   "app.myDiamonds.MyInvoices": "My Invoices",
   "app.myDiamonds.PreviousConfirmations": "Previous Confirmations",
-  "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details"
+  "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details",
+  "app.myDiamonds.myInvoice.myInvoiceDetail": "My Invoice Details",
+  "app.myDiamonds.previousConfirmation.previousConfirmationDetail": "Previous Confirmation Details"
 
 
 }
