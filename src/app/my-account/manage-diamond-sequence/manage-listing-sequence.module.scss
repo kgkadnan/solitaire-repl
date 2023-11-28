@@ -1,39 +1,59 @@
-.cardManageListingSequence{
-  // width: 320px !important;
-  border: 10px solid hsl(var(--solitaire-primary));
-  border-radius: 15px;
-  background: hsl(var(--solitaire-denary));
-  width: 20%;
+.cardManageListingSequence {
+  width: 330px;
+  height: 30px;
+  margin: 10px;
+  border-radius: 7px;
+  background-color: hsl(var(--solitaire-denary));
   display: flex;
-  flex-direction: row;
-  padding: 5px 0;
+  align-items: center;
+  font-size: 14px;
 }
-// .cardNonManageListingSequence{
-//   // width: 320px !important;
-//   border: 10px solid hsl(var(--solitaire-primary));
-//   border-radius: 15px;
-//   background: hsl(var(--solitaire-denary));
-//   display: block;
-//   width: 20%;
-//   padding: 5px 0;
-// }
 
-.gridUi {
+.lableManageListingSequence {
   display: flex;
-  width: 100%;
-  // justify-content: space-between;
+  margin-left: 10px;
+  font-size: 14px;
+  width: 85%;
+  align-items: center;
+  color: hsl(var(--solitaire-tertiary));
 }
 
-//lable
-.lableManageListingSequence{
-display: flex;
-margin-left: 10px;
-font-size: 14px;
-width: 85%;
-align-items: center;
-color: hsl(var(--solitaire-tertiary));
+/* Media queries */
+@media (max-width: 1200px) {
+  .cardManageListingSequence {
+    width: 180px; /* Adjust the width as needed */
+    font-size: 13px;
+  }
+
+  .lableManageListingSequence {
+    width: 70%; /* Adjust the width as needed */
+    font-size: 13px;
+  }
 }
 
+@media (max-width: 1024px) {
+  .cardManageListingSequence {
+    width: 150px; /* Adjust the width as needed */
+    font-size: 12px;
+  }
+
+  .lableManageListingSequence {
+    width: 70%; /* Adjust the width as needed */
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 768px) {
+  .cardManageListingSequence {
+    width: 100px; /* Adjust the width as needed */
+    font-size: 11px;
+  }
+
+  .lableManageListingSequence {
+    width: 60%; /* Adjust the width as needed */
+    font-size: 11px;
+  }
+}
 
 
 //Footer Button
@@ -46,28 +66,4 @@ color: hsl(var(--solitaire-tertiary));
   background-color: #8c7459;
   color: #ffffff;
   font-size: 14px !important;
-}
-/* Media queries */
-@media (max-width: 1200px) {
-  .lableManageListingSequence {
-    width: 90px;
-    font-size: 14px;
-  }
- 
-}
-
-@media (max-width: 1024px) {
-  .lableManageListingSequence {
-    width: 75px;
-    font-size: 13px;
-  }
- 
-}
-
-@media (max-width: 768px) {
-  .lableManageListingSequence {
-    width: 50px;
-    font-size: 14px;
-  }
-  
 }

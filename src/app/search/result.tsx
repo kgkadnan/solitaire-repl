@@ -1,3 +1,5 @@
+/* The above code is a TypeScript React component called "SearchResults". It is responsible for
+rendering and managing the search results page. */
 'use client';
 import { CustomFooter } from '@/components/common/footer';
 import styles from './search-results.module.scss';
@@ -8,10 +10,8 @@ import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { CustomSlider } from '@/components/common/slider';
-import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import CustomDataTable from '@/components/common/data-table';
 import { useAppDispatch } from '@/hooks/hook';
-import { useRouter } from 'next/navigation';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -32,13 +32,8 @@ import { RadioButton } from '@/components/common/custom-input-radio';
 import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/constant';
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
-  const radioButtonStyles = {
-    radioButtonStyle: styles.radioStyle,
-    radioLabelStyle: styles.labelStyle,
-    mainRadioButton: styles.mainRadioButtonStyle,
-  };
-
-  const router = useRouter();
+  /* The above code is using the `useAppDispatch` hook from the Redux toolkit in a TypeScript React
+  component. It is assigning the returned dispatch function to the `dispatch` constant. */
   const dispatch = useAppDispatch();
 
   const [rows, setRows] = useState<Product[]>([]);
@@ -51,22 +46,26 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [yourSelectionData, setYourSelectionData] = useState<IYourSelection[]>(
     []
   );
-
-  let [addSavedSearch] = useAddSavedSearchMutation();
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  //Radio Button
-  const [selectedRadioValue, setSelectedRadioValue] = useState<any[]>([]);
   const [selectedCaratRadioValue, setSelectedCaratRadioValue] =
     useState<string>('');
   const [selectedClarityRadioValue, setSelectedClarityRadioValue] =
     useState<string>('');
-  const [seletedPriceRadioValue, setseletedPriceRadioValue] =
+  const [seletedPriceRadioValue, setSeletedPriceRadioValue] =
     useState<string>('');
-
+  const [seletedDiscountRadioValue, setSeletedDiscountRadioValue] =
+    useState<string>('');
+  const [seletedTableInclusionRadioValue, setSeletedTableInclusionRadioValue] =
+    useState<string>('');
+  const [seletedFluorescenceRadioValue, setSeletedFluorescenceRadioValue] =
+    useState<string>('');
+  const [seletedBlackTableRadioValue, setSeletedBlackTableRadioValue] =
+    useState<string>('');
+  const [seletedSideBlackRadioValue, setSeletedSideBlackRadioValue] =
+    useState<string>('');
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
     useState<string>();
-  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
 
+  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
   const [selectedDefaultValue, setSelectedDefaultValue] = useState<string>('');
 
   const [totalAmount, setTotalAmount] = useState(0);
@@ -85,17 +84,23 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [inputErrorContent, setInputErrorContent] = useState('');
 
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+
   const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
 
+  const [isSortBySliderOpen, setIsSortBySliderOpen] = useState(Boolean);
   const [commentValue, setCommentValue] = useState('');
 
+  let [addSavedSearch] = useAddSavedSearchMutation();
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [downloadExcel] = useDownloadExcelMutation();
-
   const [addCart] = useAddCartMutation();
-
   const { data: listingColumns } = useGetManageListingSequenceQuery({});
 
-  //specific checkbox
+  /**
+   * The handleClick function updates the isCheck state based on the clicked id and also updates the
+   * isCheckAll state if all rows are selected.
+   * @param {string} id - The `id` parameter is a string that represents the identifier of an item.
+   */
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -117,7 +122,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
-  //Selecting All Checkbox Function
+  /**
+   * The function `handleSelectAllCheckbox` toggles the `isCheckAll` state and updates the `isCheck`
+   * state based on the `rows` array.
+   */
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
 
@@ -127,12 +135,15 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
-  //setting listing columns
+  /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
+`tableColumns` to the value of `listingColumns` when `listingColumns` changes. */
   useEffect(() => {
     setTableColumns(listingColumns);
   }, [listingColumns]);
 
-  //Checkbox Data for Custom Data Table
+  /* The above code is defining an object called `checkboxData` with four properties:
+`handleSelectAllCheckbox`, `handleClick`, `isCheck`, and `isCheckAll`. These properties are likely
+used in a React component to handle checkbox functionality. */
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     handleClick: handleClick,
@@ -140,6 +151,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     isCheckAll: isCheckAll,
   };
 
+  /* The above code is a function called `performDownloadExcel` that takes an array of `productIds` as a
+parameter. */
   const performDownloadExcel = (productIds: any[]) => {
     downloadExcel({ productIds })
       .unwrap()
@@ -169,7 +182,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setIsError(false);
   };
 
-  //download Excel
+  /**
+   * The function `downloadExcelFunction` checks if a stone is selected and performs a download action if
+   * it is.
+   */
   const downloadExcelFunction = () => {
     if (isCheck.length === 0) {
       setIsError(true);
@@ -179,7 +195,11 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
-  //compareStone
+  /**
+   * The function `CompareStone` checks the number of selected stones and performs different actions
+   * based on the number, including displaying error messages or opening a new window to compare the
+   * selected stones.
+   */
   const CompareStone = () => {
     if (isCheck.length > 10) {
       setIsError(true);
@@ -202,6 +222,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /* useEffect hook in a TypeScript React component. It is used to
+handle the logic for closing a dialog box after a certain delay. */
   useEffect(() => {
     if (isDialogOpen) {
       // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
@@ -214,7 +236,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   }, [isDialogOpen]);
 
-  //cart
+  /* The above code is defining a function called `addToCart` in a TypeScript React component. */
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
@@ -272,6 +294,12 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /**
+   * The function `handleConfirm` checks if any selected stones have a status of "MemoOut" and displays
+   * an error message if so, otherwise it opens a slider and sets the selected stones data.
+   * @param {string[]} [isCheck] - An optional array of strings representing the IDs of the stones that
+   * are being checked.
+   */
   const handleConfirm = (isCheck?: string[]) => {
     let hasMemoOut = isCheck?.some((id) => {
       return rows.some(
@@ -296,17 +324,251 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /**
+   * The above code defines multiple functions to handle radio button changes and update corresponding
+   * state values.
+   * @param {string} radioValue - The `radioValue` parameter is a string that represents the selected
+   * value of a radio button.
+   */
   const handleCaratRadioChange = (radioValue: string) => {
-    console.log('rrrrrrrrrrrrrrrrr', radioValue);
     setSelectedDefaultValue('');
     setSelectedCaratRadioValue(radioValue);
   };
-
+  const handleClarityRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSelectedClarityRadioValue(radioValue);
+  };
+  const handlePriceRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedPriceRadioValue(radioValue);
+  };
+  const handleDiscountRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedDiscountRadioValue(radioValue);
+  };
+  const handleTableInclusionRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedTableInclusionRadioValue(radioValue);
+  };
+  const handleFluorescenceRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedFluorescenceRadioValue(radioValue);
+  };
+  const handleBlackTableRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedBlackTableRadioValue(radioValue);
+  };
+  const handleSideBlackRadioChange = (radioValue: string) => {
+    setSelectedDefaultValue('');
+    setSeletedSideBlackRadioValue(radioValue);
+  };
   const handleDefaultRadioChange = (radioValue: string) => {
-    setSelectedDefaultValue(radioValue);
     setSelectedCaratRadioValue('');
+    setSeletedSideBlackRadioValue('');
+    setSeletedBlackTableRadioValue('');
+    setSeletedTableInclusionRadioValue('');
+    setSeletedDiscountRadioValue('');
+    setSeletedFluorescenceRadioValue('');
+    setSeletedPriceRadioValue('');
+    setSelectedClarityRadioValue('');
+    setSelectedDefaultValue(radioValue);
   };
 
+  /* The above code is defining an array of radio button data for sorting options. Each radio button data
+object contains properties such as name, onChange event handler, id, value, label, and checked
+status. These properties are used to render and handle the radio buttons in a React component. The
+code also combines all the radio button data arrays into a single array called RadioData. */
+  //Sort By Data
+  const DefaultRadioData = [
+    {
+      name: 'Default',
+      onChange: handleDefaultRadioChange,
+      id: '1',
+      value: 'Default',
+      label: 'Default',
+      checked: selectedDefaultValue == 'Default',
+    },
+  ];
+  const carartRadioData = [
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '1',
+      value: 'Low to High',
+      label: 'Carat - Low to High',
+      checked: selectedCaratRadioValue === 'Low to High',
+    },
+    {
+      name: 'carat',
+      onChange: handleCaratRadioChange,
+      id: '2',
+      value: 'Carat - High to Low',
+      label: 'Carat - High to Low',
+      checked: selectedCaratRadioValue === 'Carat - High to Low',
+    },
+  ];
+  const clarityRadioData = [
+    {
+      name: 'clarity',
+      onChange: handleClarityRadioChange,
+      id: '1',
+      value: 'Clarity - (FL - I3)',
+      label: 'Clarity - (FL - I3)',
+      checked: selectedClarityRadioValue == 'Clarity - (FL - I3)',
+    },
+    {
+      name: 'clarity',
+      onChange: handleClarityRadioChange,
+      id: '2',
+      value: 'Clarity - (I3 - FL)',
+      label: 'Clarity - (I3 - FL)',
+      checked: selectedClarityRadioValue == 'Clarity - (I3 - FL)',
+    },
+  ];
+  const priceRadioData = [
+    {
+      name: 'price',
+      onChange: handlePriceRadioChange,
+      id: '1',
+      value: 'Price - Low to High',
+      label: 'Price - Low to High',
+      checked: seletedPriceRadioValue == 'Price - Low to High',
+    },
+    {
+      name: 'price',
+      onChange: handlePriceRadioChange,
+      id: '2',
+      value: 'Price - High to Low',
+      label: 'Price - High to Low',
+      checked: seletedPriceRadioValue == 'Price - High to Low',
+    },
+  ];
+  const discountRadioData = [
+    {
+      name: 'discount',
+      onChange: handleDiscountRadioChange,
+      id: '1',
+      value: 'Discount - Low to High',
+      label: 'Discount - Low to High',
+      checked: seletedDiscountRadioValue == 'Discount - Low to High',
+    },
+    {
+      name: 'discount',
+      onChange: handleDiscountRadioChange,
+      id: '2',
+      value: 'Discount - High to Low',
+      label: 'Discount - High to Low',
+      checked: seletedDiscountRadioValue == 'Discount - High to Low',
+    },
+  ];
+  const tableInclusionRadioData = [
+    {
+      name: 'Table Inclusion',
+      onChange: handleTableInclusionRadioChange,
+      id: '1',
+      value: 'Table Inclusion - (T0 - T3)',
+      label: 'Table Inclusion - (T0 - T3)',
+      checked: seletedTableInclusionRadioValue == 'Table Inclusion - (T0 - T3)',
+    },
+    {
+      name: 'Table Inclusion',
+      onChange: handleTableInclusionRadioChange,
+      id: '2',
+      value: 'Table Inclusion - (T3 - T0)',
+      label: 'Table Inclusion - (T3 - T0)',
+      checked: seletedTableInclusionRadioValue == 'Table Inclusion - (T3 - T0)',
+    },
+  ];
+  const fluorescenceRadioData = [
+    {
+      name: 'Fluorescence',
+      onChange: handleFluorescenceRadioChange,
+      id: '1',
+      value: 'Fluorescence - (NON - VSTG)',
+      label: 'Fluorescence - (NON - VSTG) ',
+      checked: seletedFluorescenceRadioValue == 'Fluorescence - (NON - VSTG)',
+    },
+    {
+      name: 'Fluorescence',
+      onChange: handleFluorescenceRadioChange,
+      id: '2',
+      value: 'Fluorescence - (VSTG - NON)',
+      label: 'Fluorescence - (VSTG - NON) ',
+      checked: seletedFluorescenceRadioValue == 'Fluorescence - (VSTG - NON)',
+    },
+  ];
+  const blackTableRadioData = [
+    {
+      name: 'Black Table',
+      onChange: handleBlackTableRadioChange,
+      id: '1',
+      value: 'Black Table - (B0 - B3)',
+      label: 'Black Table - (B0 - B3) ',
+      checked: seletedBlackTableRadioValue == 'Black Table - (B0 - B3)',
+    },
+    {
+      name: 'Black Table',
+      onChange: handleBlackTableRadioChange,
+      id: '2',
+      value: 'Black Table - (B3 - B0)',
+      label: 'Black Table - (B3 - B0) ',
+      checked: seletedBlackTableRadioValue == 'Black Table - (B3 - B0)',
+    },
+  ];
+  const sideBlackRadioData = [
+    {
+      name: 'Side Black',
+      onChange: handleSideBlackRadioChange,
+      id: '1',
+      value: 'Side Black - (SB0 - SB3)',
+      label: 'Side Black - (SB0 - SB3) ',
+      checked: seletedSideBlackRadioValue == 'Side Black - (SB0 - SB3)',
+    },
+    {
+      name: 'Side Black',
+      onChange: handleSideBlackRadioChange,
+      id: '2',
+      value: 'Side Black - (SB3 - SB0)',
+      label: 'Side Black - (SB3 - SB0) ',
+      checked: seletedSideBlackRadioValue == 'Side Black - (SB3 - SB0)',
+    },
+  ];
+  const RadioData = [
+    ...DefaultRadioData,
+    ...carartRadioData,
+    ...clarityRadioData,
+    ...priceRadioData,
+    ...discountRadioData,
+    ...tableInclusionRadioData,
+    ...fluorescenceRadioData,
+    ...blackTableRadioData,
+    ...sideBlackRadioData,
+  ];
+  /**
+   * The function `onOpenChangeSortBy` resets multiple state values and sets the `isSortBySliderOpen`
+   * state based on the `open` parameter.
+   * @param {boolean} open - A boolean value indicating whether the sort by slider should be open or
+   * closed.
+   */
+  const onOpenChangeSortBy = (open: boolean) => {
+    setSelectedDefaultValue('');
+    setSelectedCaratRadioValue('');
+    setSeletedSideBlackRadioValue('');
+    setSeletedBlackTableRadioValue('');
+    setSeletedTableInclusionRadioValue('');
+    setSeletedDiscountRadioValue('');
+    setSeletedFluorescenceRadioValue('');
+    setSeletedPriceRadioValue('');
+    setSelectedClarityRadioValue('');
+    setIsSortBySliderOpen(open);
+  };
+
+  /**
+   * The function `handleComment` updates the comment value based on the input value, but only if the
+   * input value is within a certain character limit.
+   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
+   * event that occurred, such as a change in the input value of an HTML input element.
+   */
   const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
     let inputValue = event.target.value;
     if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
@@ -314,6 +576,12 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /* The above code is defining an array called `footerButtonData` which contains objects representing
+  different buttons for a footer component. Each object has properties such as `id`,
+  `displayButtonLabel`, `style`, and `fn`. The `displayButtonLabel` property can either be a string
+  or a JSX element. The `style` property determines the style of the button (e.g.,
+  `styles.transparent` or `styles.filled`). The `fn` property represents the function to be executed
+  when the button is clicked. */
   const footerButtonData = [
     {
       id: 1,
@@ -370,7 +638,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     },
   ];
 
-  // Function to calculate total amount
+  /* The above code is defining a function called `calculateTotalAmount` using the `useCallback` hook in
+React. This function calculates the total amount based on the selected rows and their corresponding
+variants' prices. */
   const calculateTotalAmount = useCallback(() => {
     let total = 0;
 
@@ -389,7 +659,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     return total;
   }, [isCheck, rows]);
 
-  // Function to calculate average discount
+  /* The above code is a TypeScript React function called `calculateAverageDiscount`. It calculates the
+average discount of selected rows based on the `isCheck` array and `rows` array. */
   const calculateAverageDiscount = useCallback(() => {
     let totalDiscount = 0;
     isCheck.forEach((id) => {
@@ -403,15 +674,20 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     return avgDiscount;
   }, [isCheck, rows]);
 
+  /* The above code is using the useEffect hook in a React component. It is setting up a side effect that
+will be triggered whenever the value of the "isCheck" variable changes. */
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
     setTotalAmount(calculateTotalAmount());
     setAverageDiscount(calculateAverageDiscount());
   }, [calculateTotalAmount, calculateAverageDiscount]);
 
+  /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
+variable changes. */
   useEffect(() => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
-    if (yourSelection) {
+    let selection = localStorage.getItem('Search');
+    if (selection) {
+      let yourSelection = JSON.parse(selection);
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
         setIsCheck([]);
@@ -419,186 +695,14 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
         setRows(data?.products);
       }
     }
-  }, [data]); // Include isEffectExecuted in the dependency array
+  }, [data]);
 
-  const radioDataList = [
-    {
-      name: 'Default',
-      handleChange: handleDefaultRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Default',
-          radioButtonLabel: 'Default',
-          checked: selectedDefaultValue == 'Default',
-        },
-      ],
-    },
-
-    {
-      name: 'carat',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Low to High',
-          radioButtonLabel: 'Carat - Low to High',
-          checked: selectedCaratRadioValue == 'Low to High',
-        },
-        {
-          id: '2',
-          value: 'High to Low',
-          radioButtonLabel: 'Carat - High to Low',
-          checked: selectedCaratRadioValue == 'High to Low',
-        },
-      ],
-    },
-    {
-      name: 'clarity',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: '(FL - I3)',
-          radioButtonLabel: 'Clarity - (FL - I3)',
-          checked: selectedClarityRadioValue == '(FL - I3)',
-        },
-        {
-          id: '2',
-          value: '(I3 - FL)',
-          radioButtonLabel: 'Clarity - (I3 - FL)',
-          checked: selectedClarityRadioValue == '(I3 - FL)',
-        },
-      ],
-    },
-    {
-      name: 'price',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Price - Low to High',
-          radioButtonLabel: 'Price - Low to High',
-          checked: seletedPriceRadioValue == 'Price - Low to High',
-        },
-        {
-          id: '2',
-          value: 'Price - High to Low',
-          radioButtonLabel: 'Price - High to Low',
-          checked: seletedPriceRadioValue == 'Price - High to Low',
-        },
-      ],
-    },
-    {
-      name: 'discount',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Discount - Low to High',
-          radioButtonLabel: 'Discount - Low to High',
-          checked: seletedPriceRadioValue == 'Discount - Low to High',
-        },
-        {
-          id: '2',
-          value: 'Discount - High to Low',
-          radioButtonLabel: 'Discount - High to Low',
-          checked: seletedPriceRadioValue == 'Discount - High to Low',
-        },
-      ],
-    },
-    {
-      name: 'Table Inclusion',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Table Inclusion - (T0 - T3)',
-          radioButtonLabel: 'Table Inclusion - (T0 - T3)',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
-        },
-        {
-          id: '2',
-          value: 'Table Inclusion - (T3 - T0)',
-          radioButtonLabel: 'Table Inclusion - (T3 - T0)',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
-        },
-      ],
-    },
-    {
-      name: 'Fluorescence',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Fluorescence - (NON - VSTG)',
-          radioButtonLabel: 'Fluorescence - (NON - VSTG) ',
-          checked: seletedPriceRadioValue == 'Fluorescence - (NON - VSTG)',
-        },
-        {
-          id: '2',
-          value: 'Fluorescence - (VSTG - NON)',
-          radioButtonLabel: 'Fluorescence - (VSTG - NON) ',
-          checked: seletedPriceRadioValue == 'Fluorescence - (VSTG - NON)',
-        },
-      ],
-    },
-    {
-      name: 'Black Table',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Black Table - (B0 - B3)',
-          radioButtonLabel: 'Black Table - (B0 - B3) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
-        },
-        {
-          id: '2',
-          value: 'Black Table - (B3 - B0)',
-          radioButtonLabel: 'Black Table - (B3 - B0) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
-        },
-      ],
-    },
-    {
-      name: 'Side Black',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Side Black - (SB0 - SB3)',
-          radioButtonLabel: 'Side Black - (SB0 - SB3) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B0 - B3)',
-        },
-        {
-          id: '2',
-          value: 'Side Black - (SB3 - SB0)',
-          radioButtonLabel: 'Side Black - (SB3 - SB0) ',
-          checked: seletedPriceRadioValue == 'Black Table - (B3 - B0)',
-        },
-      ],
-    },
-    {
-      name: 'Table Inclusion',
-      handleChange: handleCaratRadioChange,
-      radioData: [
-        {
-          id: '1',
-          value: 'Table Inclusion - (T0 - T3)',
-          radioButtonLabel: 'Table Inclusion - (T0 - T3) ',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T0 - T3)',
-        },
-        {
-          id: '2',
-          value: 'Table Inclusion - (T3 - T0)',
-          radioButtonLabel: 'Table Inclusion - (T3 - T0) ',
-          checked: seletedPriceRadioValue == 'Table Inclusion - (T3 - T0)',
-        },
-      ],
-    },
-  ];
-
+  /**
+   * The function `handleConfirmStoneRadioChange` updates various state values based on the selected
+   * radio button value.
+   * @param {string} value - The value parameter is a string that represents the selected value from a
+   * radio button.
+   */
   const handleConfirmStoneRadioChange = (value: string) => {
     setInputError(false);
     setInputErrorContent('');
@@ -606,38 +710,14 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setSelectedRadioDaysValue(value);
   };
 
-  const DefaultRadioData = [
-    {
-      name: 'Default',
-      onChange: handleDefaultRadioChange,
-      id: '1',
-      value: 'Default',
-      label: 'Default',
-      checked: selectedDefaultValue == 'Default',
-    },
-  ];
-  const carartRadioData = [
-    {
-      name: 'carat',
-      onChange: handleCaratRadioChange,
-      id: '1',
-      value: 'Low to High',
-      label: 'Carat - Low to High',
-      checked: selectedCaratRadioValue === 'Low to High',
-    },
-    {
-      name: 'carat',
-      onChange: handleCaratRadioChange,
-      id: '2',
-      value: 'High to Low',
-      label: 'Carat - High to Low',
-      checked: selectedCaratRadioValue === 'High to Low',
-    },
-  ];
-
+  /**
+   * The function handles the change event of a radio input and updates the state based on the input
+   * value.
+   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
+   * event that occurred when the radio button value is changed.
+   */
   const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = parseFloat(event.target.value);
-
     if (inputValue >= 121) {
       setInputError(true);
       setInputErrorContent('Invalid input.');
@@ -656,10 +736,18 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /**
+   * The onFocus function calls the handleConfirmStoneRadioChange function with the argument 'other'.
+   */
   const onFocus = () => {
     handleConfirmStoneRadioChange('other');
   };
 
+  /* The above code is defining an array of radio button objects for a form in a TypeScript React
+ component. Each radio button object has properties such as name, onChange event handler, id, value,
+ label, and checked. The radio buttons are used to select a duration (7 days, 30 days, 60 days, or a
+ custom value) and update the selected value in the component's state. The last radio button has a
+ custom label that includes an input field for entering a custom number of days. */
   const confirmRadioButtons = [
     {
       name: 'days',
@@ -716,6 +804,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     },
   ];
 
+  /**
+   * The function `handleSaveSearch` saves search data to localStorage and updates the state with the
+   * saved search information.
+   */
   const handleSaveSearch = async () => {
     // Retrieve the array from localStorage
     const searchData = localStorage.getItem('Search');
@@ -753,6 +845,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   };
 
+  /* The above code is defining an object named `customInputDialogData` with several properties. These
+properties include `isOpens`, `setIsOpen`, `setInputvalue`, `inputValue`, `displayButtonFunction`,
+`label`, `name`, and `displayButtonLabel2`. The purpose of this object is to store data related to a
+custom input dialog in a TypeScript React application. */
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -764,6 +860,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     displayButtonLabel2: 'Save',
   };
 
+  /**
+   * The function handleCloseInputDialog is used to close an input dialog and reset related state
+   * variables.
+   */
   const handleCloseInputDialog = () => {
     setIsInputDialogOpen(false);
     setInputError(false);
@@ -771,6 +871,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setSaveSearchName('');
   };
 
+  /**
+   * The function `handleUpdateSaveSearch` updates the save search data in local storage and calls the
+   * `updateSavedSearch` function.
+   */
   const handleUpdateSaveSearch = () => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
@@ -806,7 +910,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   }
 
   const sortData = () => {
-    const sortingOption = selectedRadioValue;
+    const sortingOption = '';
 
     // Assuming there's only one element in the array
     const [key, order] = sortingOption[0].split(' - ');
@@ -816,12 +920,16 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setRows(data);
   };
 
+  /**
+   * The function `onOpenChange` updates the state variables `isSliderOpen` and `selectedRadioDaysValue`
+   * based on the value of the `open` parameter.
+   * @param {boolean} open - The open parameter is a boolean value that indicates whether the slider is
+   * open or closed.
+   */
   const onOpenChange = (open: boolean) => {
     setIsSliderOpen(open);
     setSelectedRadioDaysValue('');
   };
-
-  const RadioData = [...DefaultRadioData, ...carartRadioData];
 
   return (
     <>
@@ -924,15 +1032,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
 
                   <div className={styles.radioButtonMainDiv}>
-                    {/* {DefaultRadioData.map((radioData, index) => {
-                      return (
-                        <RadioButton
-                          key={index} // Ensure each component has a unique key
-                          radioMetaData={radioData}
-                        />
-                      );
-                    })} */}
-
                     {RadioData.map((radioData, index) => {
                       return (
                         <RadioButton
@@ -952,7 +1051,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                       displayButtonAllStyle={{
                         displayButtonStyle: styles.transparent,
                       }}
-                      // handleClick={showButtonHandleClick}
+                      handleClick={() => {
+                        onOpenChangeSortBy(false);
+                      }}
                     />
                     <CustomDisplayButton
                       displayButtonLabel={ManageLocales(
@@ -966,6 +1067,8 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
                   </div>
                 </>
               }
+              isSliderOpen={isSortBySliderOpen}
+              onOpenChange={onOpenChangeSortBy}
             />
           </div>
         </div>

@@ -19,7 +19,7 @@ import previousSearchReducer from './features/previous-search/previous-search';
 import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
-import { recentConfirmationApi } from './features/api/my-diamonds/recent-confirmation-slice';
+import { myDiamondAPI } from './features/api/my-diamonds/my-diamond';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -37,7 +37,7 @@ const rootReducer = combineReducers({
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
-  [recentConfirmationApi.reducerPath]: recentConfirmationApi.reducer,
+  [myDiamondAPI.reducerPath]: myDiamondAPI.reducer,
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -56,7 +56,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         notificationSettingApi.middleware,
         productApi.middleware,
         loginApi.middleware,
-        recentConfirmationApi.middleware
+        myDiamondAPI.middleware
       ),
     preloadedState,
   });
