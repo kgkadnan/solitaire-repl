@@ -20,23 +20,14 @@ import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
-
-interface PageTitles {
-  [key: string]: string;
-}
-
-interface MyDiamondsProps {
-  data: any;
-  handleCardClick: (id: string) => void;
-  productPageDetail: any;
-}
+import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,
 }) => {
-  console.log();
+  console.log('data', productPageDetail);
 
   const router = usePathname();
   const [rows, setRows] = useState<Product[]>([]);
@@ -65,7 +56,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
 
-    setIsCheck(rows?.map((li: Product) => li.id));
+    setIsCheck(rows?.map((item: Product) => item.id));
     if (isCheckAll) {
       setIsCheck([]);
     }
