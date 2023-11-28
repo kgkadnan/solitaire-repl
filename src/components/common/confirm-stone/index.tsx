@@ -1,31 +1,11 @@
 import { ManageLocales } from '@/utils/translate';
-import React, { ReactNode } from 'react';
+import React from 'react';
 import styles from './confirm-stone.module.scss';
 import CustomDataTable from '../data-table';
 import { CustomDisplayButton } from '../buttons/display-button';
-import { Product, TableColumn } from '@/app/search/result-interface';
 import { RadioButton } from '../custom-input-radio';
-
-interface IconfirmRadioButtons {
-  name: string;
-  onChange: (value: string) => void;
-  id: string;
-  value: string;
-  label: ReactNode | string;
-  checked: boolean;
-}
-
-interface IConfirmStoneProps {
-  confirmStoneData: Product[];
-  listingColumns: TableColumn[];
-  commentValue: string;
-  handleComment: (event: any) => void;
-  setInputError: React.Dispatch<React.SetStateAction<boolean>>;
-  setInputErrorContent: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedDaysInputValue: React.Dispatch<React.SetStateAction<string>>;
-  onOpenChange: (open: boolean) => void;
-  confirmRadioButtons?: IconfirmRadioButtons[];
-}
+import { useConfirmStoneMutation } from '@/features/api/my-diamonds/my-diamond';
+import { IConfirmStoneProps } from './interface';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   confirmStoneData,
@@ -38,6 +18,22 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   onOpenChange,
   confirmRadioButtons,
 }) => {
+  const [confirmStone] = useConfirmStoneMutation();
+
+  const confirmStoneFunction = () => {
+    let variantIds: string[] = [];
+
+    confirmStoneData.forEach((ids) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    if (variantIds.length) {
+      confirmStone({ variants: variantIds })
+        .unwrap()
+        .then((res) => {})
+        .catch((e) => console.log(e));
+    }
+  };
   return (
     <>
       <div className={styles.diamondDetailHeader}>
@@ -101,6 +97,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             )}
             displayButtonAllStyle={{
               displayButtonStyle: styles.filled,
+            }}
+            handleClick={() => {
+              confirmStoneFunction();
             }}
           />
         </div>

@@ -627,8 +627,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   }, [calculateTotalAmount, calculateAverageDiscount]);
 
   useEffect(() => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
-    if (yourSelection) {
+    let selection = localStorage.getItem('Search');
+    if (selection) {
+      let yourSelection = JSON.parse(selection);
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
         setIsCheck([]);
@@ -638,6 +639,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     }
   }, [data]); // Include isEffectExecuted in the dependency array
 
+  console.log('data?.products', rows);
   const handleConfirmStoneRadioChange = (value: string) => {
     setInputError(false);
     setInputErrorContent('');
