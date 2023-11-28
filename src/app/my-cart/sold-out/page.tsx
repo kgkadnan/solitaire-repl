@@ -9,7 +9,7 @@ import React, { useEffect, useState } from 'react';
 import styles from './sold-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
-import { SOLD_OUT_STATUS } from '@/constants/business-logic-constants';
+import { SOLD_OUT_STATUS } from '@/constants/business-logic';
 
 const OutOfStock = () => {
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);

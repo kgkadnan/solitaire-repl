@@ -44,7 +44,7 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
-} from '@/constants/business-logic-constants';
+} from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 

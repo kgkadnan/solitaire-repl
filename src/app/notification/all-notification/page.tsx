@@ -16,7 +16,7 @@ import {
   NOTIFICATION_TYPE,
   NOTIFICATION_UNREAD_STATUS,
   NOTIFICATION_UNSEEN_STATUS,
-} from '@/constants/business-logic-constants';
+} from '@/constants/business-logic';
 
 const Notification = () => {
   const [notificationData, setNotificationData] = useState<INotificationData[]>(

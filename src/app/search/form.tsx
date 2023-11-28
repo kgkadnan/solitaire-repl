@@ -24,7 +24,7 @@ import { priceSchema } from '@/utils/zod-schema';
 import {
   MAX_SEARCH_FORM_COUNT,
   MIN_SEARCH_FORM_COUNT,
-} from '@/constants/business-logic-constants';
+} from '@/constants/business-logic';
 
 const AdvanceSearch = () => {
   const router = useRouter();

@@ -8,7 +8,7 @@ import CustomHeader from '@/components/common/header';
 import {
   NOTIFICATION_TYPE,
   NOTIFICATION_UNREAD_STATUS,
-} from '@/constants/business-logic-constants';
+} from '@/constants/business-logic';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
