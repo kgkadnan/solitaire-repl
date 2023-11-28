@@ -28,7 +28,7 @@
 
 .tableWrapper {
   max-height: 65vh; /* Set to 80% of the viewport height */
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-bottom: 10px;
   height: calc(
     100vh - 45vh

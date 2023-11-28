@@ -29,7 +29,8 @@ export const recentConfirmationApi = createApi({
       providesTags: ['recentConfirmation'],
     }),
     getAllRecentConfirmation: builder.query({
-      query: ({ orderId, singleExpand }) => `/store/orders/${orderId}`,
+      query: ({ orderId, singleExpand }) =>
+        `/store/orders/${orderId}?expand=${singleExpand}`,
       providesTags: ['recentConfirmation'],
     }),
   }),
