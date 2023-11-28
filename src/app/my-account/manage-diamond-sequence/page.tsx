@@ -23,7 +23,7 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
 import CustomLoader from '@/components/common/loader';
 
-const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
+const ManageListingSequence = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
  `useAddManageListingSequenceMutation` from the `@/features/api/manage-listing-sequence` module. */
   const { data } =
@@ -248,4 +248,4 @@ and `nonManageableListings` whenever the `data` variable changes. */
   );
 };
 
-export default ManageDiamondSequence;
+export default ManageListingSequence;

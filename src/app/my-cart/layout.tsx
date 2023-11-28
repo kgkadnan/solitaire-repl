@@ -10,7 +10,7 @@ import {
   ACTIVE_STATUS,
   MEMO_OUT_STATUS,
   SOLD_OUT_STATUS,
-} from '@/constants/constant';
+} from '@/constants/business-logic-constants';
 
 function MyCart({ children }: { children: React.ReactNode }) {
   let currentPath = usePathname();

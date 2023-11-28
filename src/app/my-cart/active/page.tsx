@@ -23,7 +23,7 @@ import {
   MAX_COMPARE_STONE,
   MAX_DAYS_TO_PAY,
   MIN_COMPARE_STONE,
-} from '@/constants/constant';
+} from '@/constants/business-logic-constants';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import Image from 'next/image';

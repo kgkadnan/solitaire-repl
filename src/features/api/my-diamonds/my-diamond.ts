@@ -9,7 +9,7 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // Define the type for the base query function
 type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
-export const myDiamondAPi = createApi({
+export const myDiamondAPI = createApi({
   reducerPath: 'recentConfirmationReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
@@ -48,4 +48,4 @@ export const {
   useCardRecentConfirmationQuery,
   useGetAllRecentConfirmationQuery,
   useConfirmStoneMutation,
-} = myDiamondAPi;
+} = myDiamondAPI;

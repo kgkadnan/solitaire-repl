@@ -25,7 +25,7 @@ import CustomLoader from '@/components/common/loader';
 import {
   LISTING_PAGE_DATA_LIMIT,
   MAX_SEARCH_TAB_LIMIT,
-} from '@/constants/constant';
+} from '@/constants/business-logic-constants';
 
 interface IMyProfileRoutes {
   id: number;
