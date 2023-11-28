@@ -10,7 +10,7 @@ export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
   checkboxData?: ICheckboxData;
-  mainTableStyle: string;
+  mainTableStyle?: string;
   selectionAllowed?: boolean;
   handleConfirm?: (isCheck: string[]) => void;
 }

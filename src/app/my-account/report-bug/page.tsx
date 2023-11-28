@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import styles from './report-bug.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import { REPORT_BUG_MAX_CHARACTERS } from '@/constants/constant';
+import { REPORT_BUG_MAX_CHARACTERS } from '@/constants/business-logic';
 
 const ReportBug = () => {
   const [inputValue, setInputValue] = useState<string>('');

@@ -22,7 +22,10 @@ import downloadOutline from '@public/assets/icons/download-outline.svg';
 import dna from '@public/assets/icons/ph_dna-light.svg';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
-import { MAX_COMPARE_STONE, MIN_COMPARE_STONE } from '@/constants/constant';
+import {
+  MAX_COMPARE_STONE,
+  MIN_COMPARE_STONE,
+} from '@/constants/business-logic';
 
 interface KeyLabelMapping {
   [key: string]: string;

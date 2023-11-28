@@ -10,7 +10,7 @@ import {
   useUpdateNotificationSettingMutation,
 } from '@/features/api/notification-setting';
 import { INotificationSetting } from './setting-interface';
-import { NOTIFICATION_TYPE } from '@/constants/constant';
+import { NOTIFICATION_TYPE } from '@/constants/business-logic';
 
 const NotificationSetting = () => {
   const { data } = useGetAllNotificationSettingQuery({

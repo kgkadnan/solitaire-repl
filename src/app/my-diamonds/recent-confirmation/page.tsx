@@ -4,7 +4,7 @@ import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
 import {
   useCardRecentConfirmationQuery,
   useGetAllRecentConfirmationQuery,
-} from '@/features/api/my-diamonds/recent-confirmation-slice';
+} from '@/features/api/my-diamonds/my-diamond';
 
 const RecentConfirmation = () => {
   let myDiamondStatus = 'pending';
