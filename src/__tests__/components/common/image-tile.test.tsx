@@ -3,27 +3,13 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event'; // For simulating user interactions
 import Round from '@public/assets/images/round.png';
 import CustomImageTile from '@components/common/image-tile';
-import Image from 'next/image';
 
-jest.mock('next/image', () => {
-  return {
-    __esModule: true,
-    default: ({
-      src,
-      alt,
-      width,
-      height,
-      ...rest
-    }: {
-      src: string;
-      alt: string;
-      width: number;
-      height: number;
-      // Add more specific types for other props if needed
-      // ...rest: SomeType;
-    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
-  };
-});
+// Mock the next/image package
+jest.mock('next/image', () => ({
+  __esModule: true,
+  default: () => <div>Image Component</div>,
+  StaticImageData: {},
+}));
 
 describe('CustomImageTile', () => {
   const imageData = [
