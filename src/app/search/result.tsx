@@ -46,18 +46,12 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [yourSelectionData, setYourSelectionData] = useState<IYourSelection[]>(
     []
   );
-
-  let [addSavedSearch] = useAddSavedSearchMutation();
-  const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  //Radio Button
-
   const [selectedCaratRadioValue, setSelectedCaratRadioValue] =
     useState<string>('');
   const [selectedClarityRadioValue, setSelectedClarityRadioValue] =
     useState<string>('');
   const [seletedPriceRadioValue, setSeletedPriceRadioValue] =
     useState<string>('');
-
   const [seletedDiscountRadioValue, setSeletedDiscountRadioValue] =
     useState<string>('');
   const [seletedTableInclusionRadioValue, setSeletedTableInclusionRadioValue] =
@@ -68,7 +62,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     useState<string>('');
   const [seletedSideBlackRadioValue, setSeletedSideBlackRadioValue] =
     useState<string>('');
-
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
     useState<string>();
 
@@ -91,16 +84,16 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   const [inputErrorContent, setInputErrorContent] = useState('');
 
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+
   const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
 
   const [isSortBySliderOpen, setIsSortBySliderOpen] = useState(Boolean);
-
   const [commentValue, setCommentValue] = useState('');
 
+  let [addSavedSearch] = useAddSavedSearchMutation();
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [downloadExcel] = useDownloadExcelMutation();
-
   const [addCart] = useAddCartMutation();
-
   const { data: listingColumns } = useGetManageListingSequenceQuery({});
 
   /**
