@@ -19,18 +19,17 @@ import { CustomSlider } from '@/components/common/slider';
 import { CustomInputField } from '@/components/common/input-field';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
+  CONFIRM_STONE_COMMENT_MAX_CHARACTERS,
   MAX_COMPARE_STONE,
   MAX_DAYS_TO_PAY,
   MIN_COMPARE_STONE,
-} from '@/constants/constant';
-const MAX_CHARACTERS = 1000;
+} from '@/constants/business-logic';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 
 const ActiveMyCart = () => {
-  const router = useRouter();
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [rows, setRows] = useState([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -306,7 +305,7 @@ const ActiveMyCart = () => {
 
   const handleComment = (event: any) => {
     let inputValue = event.target.value;
-    if (inputValue.length <= MAX_CHARACTERS) {
+    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
       setCommentValue(inputValue);
     }
   };

@@ -45,6 +45,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
     checkboxData;
 
+  /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
     if (sliderData[0].diamond_status === 'MemoOut') {
       console.log('require error message here');
@@ -72,6 +73,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     }
   };
 
+  /**
+   * The `downloadExcelFunction` is a function that downloads an Excel file based on the `sliderData` and
+   * displays a success message in a dialog box.
+   */
   const downloadExcelFunction = () => {
     if (sliderData[0]) {
       downloadExcel({
@@ -174,6 +179,11 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     },
   ];
 
+  /* The above code is defining several constant variables that map keys to labels. These mappings are
+used to display labels for specific keys in a user interface. Each constant variable represents a
+different category of labels, such as basic details, measurements, inclusion details, and other
+information. The keys in the mappings correspond to specific data fields, while the values represent
+the labels to be displayed. */
   const keyLabelMapping: KeyLabelMapping = {
     lot_id: 'Stock No',
     shape: 'Shape',
@@ -243,10 +253,22 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     report_comments: 'Report Comments',
   };
 
+  /**
+   * The function `downloadImage` opens a new browser tab with the provided image URL.
+   * @param {string | undefined} imageUrl - The `imageUrl` parameter is a string that represents the URL
+   * of an image that you want to download.
+   */
   const downloadImage = (imageUrl: string | undefined) => {
     window.open(imageUrl, '_blank');
   };
 
+  /**
+   * The `downloadFile` function creates a link element, sets its href and download attributes, appends
+   * it to the document body, triggers a click event on the link, and then removes the link from the
+   * document body.
+   * @param {string} downloadUrl - The `downloadUrl` parameter is a string that represents the URL of the
+   * file that you want to download.
+   */
   const downloadFile = (downloadUrl: string) => {
     const link = document.createElement('a');
     link.href = downloadUrl;
@@ -256,6 +278,13 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     document.body.removeChild(link);
   };
 
+  /**
+   * The function `handleDiamondDetailData` sets the diamond detail iframe URL and image URL based on the
+   * provided parameters and sets the active tab.
+   * @param {string} id - A string representing the id of the diamond detail data.
+   * @param {string | undefined} url - A string representing the URL of an image.
+   * @param {string | undefined} iframeUrl - A string representing the URL of an iframe.
+   */
   const handleDiamondDetailData = (
     id: string,
     url: string | undefined,
@@ -271,6 +300,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
     setActiveTab(id);
   };
 
+  /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns
     ?.filter((column) => !column.is_disabled)
     ?.sort((a, b) => a.sequence - b.sequence);
