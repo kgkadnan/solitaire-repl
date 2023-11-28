@@ -24,9 +24,12 @@ import { CustomDialog } from '@/components/common/dialog';
 import CustomLoader from '@/components/common/loader';
 
 const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
+  /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
+ `useAddManageListingSequenceMutation` from the `@/features/api/manage-listing-sequence` module. */
   const { data } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
   let [addManageListingSequence] = useAddManageListingSequenceMutation();
+
   const [manageableListings, setManageableListings] = useState<TableColumn[]>(
     []
   );
@@ -38,6 +41,8 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  /* The `useEffect` hook in the code snippet is used to set a timeout for closing the dialog box after a
+delay of 3000 milliseconds (3 seconds). */
   useEffect(() => {
     if (isDialogOpen) {
       // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
@@ -52,12 +57,21 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
 
   // const [updateSequence, setUpdateSequence] = useState<TableColumn[]>([]);
 
+  /**
+   * The `sortList` function takes an array of `TableColumn` objects and returns a new array sorted based
+   * on the `sequence` property of each object.
+   * @param {TableColumn[]} list - The `list` parameter is an array of `TableColumn` objects.
+   * @returns The function `sortList` returns a sorted copy of the input list of `TableColumn` objects.
+   * The sorting is based on the `sequence` property of each `TableColumn` object, in ascending order.
+   */
   const sortList = (list: TableColumn[]) => {
     return list
       .slice()
       .sort((first, second) => first.sequence - second.sequence);
   };
 
+  /* The `useEffect` hook in the code snippet is used to update the state variables `manageableListings`
+and `nonManageableListings` whenever the `data` variable changes. */
   useEffect(() => {
     if (data?.length) {
       const nonManageable = data?.filter((item) => item.is_fixed);
@@ -68,6 +82,12 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
     }
   }, [data]);
 
+  /**
+   * The function `handleCheckboxClick` updates the `is_disabled` property of a listing in a list of
+   * manageable listings and then sorts the updated list.
+   * @param {string} id - The `id` parameter is a string that represents the unique identifier of a
+   * listing item.
+   */
   const handleCheckboxClick = (id: string) => {
     const updatedListings = manageableListings.map((item) =>
       item.id === id ? { ...item, is_disabled: !item.is_disabled } : item
@@ -76,6 +96,15 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
     setManageableListings(sortList(updatedListings));
   };
 
+  /**
+   * The `reorderList` function is used to reorder a list of items by moving an item from one position to
+   * another.
+   * @param {number} sourceIndex - The index of the item that is being dragged and moved to a new
+   * position.
+   * @param {number} destinationIndex - The destinationIndex parameter is the index where the dragged
+   * item should be inserted in the updatedList array.
+   * @returns The function does not explicitly return a value.
+   */
   const reorderList = (sourceIndex: number, destinationIndex: number) => {
     if (destinationIndex === sourceIndex) {
       return;
@@ -98,6 +127,10 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
     setManageableListings(updatedWithSequence);
   };
 
+  /**
+   * The handleCancel function filters out fixed items from a list and updates the state with the
+   * filtered list.
+   */
   const handleCancel = () => {
     // Handle cancel action
     const manageable = data.filter((item) => !item.is_fixed);
@@ -105,6 +138,7 @@ const ManageDiamondSequence: React.FC<ManageListingSequenceResponse> = () => {
     setManageableListings(sortList(manageable));
   };
 
+  /* The `handleUpdateDiamondSequence` function is responsible for updating the diamond sequence. */
   const handleUpdateDiamondSequence = () => {
     if (manageableListings?.length) {
       const updatedData = [...nonManageableListings, ...manageableListings];
