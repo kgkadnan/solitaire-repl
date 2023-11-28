@@ -12,43 +12,15 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import fieldStateManagement from './field-state-management';
+import useFieldStateManagement from './field-state-management';
 import { generateQueryParams } from './generate-query-parameter';
-import {
-  handleShapeChange,
-  handleCaratRangeChange,
-  handleColorChange,
-  handleWhiteFilterChange,
-  handleFancyFilterChange,
-  handleIntensityChange,
-  handleOvertoneChange,
-  handleTingeChange,
-  handleTingeIntensityChange,
-  handleClarityChange,
-  handleMakeChange,
-  handleCutChange,
-  handlePolishChange,
-  handleSymmetryChange,
-  handleFluorescenceChange,
-  handleCuletChange,
-  handleLabChange,
-  handleHRChange,
-  handleBrillianceChange,
-  handleLocation,
-  handleOrigin,
-  handleGirdleChange,
-  handleKeyToSymbolChange,
-  handleAddCarat,
-  handleValidate,
-  handleCloseInputDialog,
-} from './handle-change';
 import { handleReset } from './reset';
 import {
   MAX_SEARCH_FORM_COUNT,
   MIN_SEARCH_FORM_COUNT,
 } from '@/constants/constant';
 import { setModifySearch } from './modify-search';
-import validationStateManagement, {
+import useValidationStateManagement, {
   Errors,
 } from './validation-state-management';
 import renderContent from './render-content';
@@ -58,9 +30,10 @@ const AdvanceSearch = () => {
   const savedSearch = useAppSelector((store) => store.savedSearch);
   const searchResult = useAppSelector((store) => store.searchResult);
 
-  //form state
-
-  const { state } = fieldStateManagement();
+  /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
+destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
+used for managing the state of a form field or input element in a React component. */
+  const { state, setState, carat } = useFieldStateManagement();
 
   const {
     isInputDialogOpen,
@@ -83,12 +56,21 @@ const AdvanceSearch = () => {
     setInputErrorContent,
     saveSearchName,
     setSaveSearchName,
-  } = validationStateManagement();
-  ///edit functionality
+    validationError,
+    setValidationError,
+    errors,
+    selectedStep,
+    setErrors,
+  } = useValidationStateManagement();
+
   const searchParams = useSearchParams();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
 
+  /* The above code is written in TypeScript and React. It is retrieving the value of the 'edit'
+parameter from the searchParams object. It is also retrieving the value of the 'route' parameter
+from the searchParams object. The code then assigns the value of 'edit' parameter to the variable
+'modifySearchFrom' and the value of 'route' parameter to the variable 'isNewSearch'. */
   const modifySearchFrom = searchParams.get('edit');
   const isNewSearch = searchParams.get('route');
 
@@ -96,9 +78,13 @@ const AdvanceSearch = () => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
-      setModifySearch(modifysavedSearchData);
+      setModifySearch(modifysavedSearchData, setState, carat);
     } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
-      setModifySearch(modifySearchResult[searchResult.activeTab]?.queryParams);
+      setModifySearch(
+        modifySearchResult[searchResult.activeTab]?.queryParams,
+        setState,
+        carat
+      );
     }
   }, [modifySearchFrom]);
 
@@ -124,7 +110,7 @@ const AdvanceSearch = () => {
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
-    handleReset();
+    handleReset(setState);
   };
 
   useEffect(() => {
@@ -301,6 +287,14 @@ const AdvanceSearch = () => {
     name: 'Save',
     displayButtonLabel2: 'Save',
   };
+
+  const handleCloseInputDialog = () => {
+    setIsInputDialogOpen(false);
+    setInputError(false);
+    setInputErrorContent('');
+    setSaveSearchName('');
+  };
+
   return (
     <div>
       <CustomInputDialog
@@ -311,7 +305,17 @@ const AdvanceSearch = () => {
         setErrorContent={setInputErrorContent}
         handleClose={handleCloseInputDialog}
       />
-      {renderContent()}
+      {renderContent(
+        carat,
+        state,
+        setState,
+        validationError,
+        setValidationError,
+        errors,
+        selectedStep,
+        setSelectedStep,
+        setErrors
+      )}
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
           <div className="w-[40%] flex items-center">
@@ -349,7 +353,7 @@ const AdvanceSearch = () => {
               id: 2,
               displayButtonLabel: ManageLocales('app.advanceSearch.reset'),
               style: styles.transparent,
-              fn: handleReset,
+              fn: () => handleReset(setState),
             },
             {
               id: 3,

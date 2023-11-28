@@ -5,42 +5,26 @@ import { CustomInputField } from '@/components/common/input-field';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
-import {
-  handleShapeChange,
-  handleAddCarat,
-  handleCaratRangeChange,
-  handleColorChange,
-  handleWhiteFilterChange,
-  handleFancyFilterChange,
-  handleIntensityChange,
-  handleOvertoneChange,
-  handleTingeChange,
-  handleTingeIntensityChange,
-  handleClarityChange,
-  handleMakeChange,
-  handleCutChange,
-  handlePolishChange,
-  handleSymmetryChange,
-  handleFluorescenceChange,
-  handleCuletChange,
-  handleLabChange,
-  handleHRChange,
-  handleBrillianceChange,
-  handleLocation,
-  handleOrigin,
-  handleValidate,
-  handleGirdleChange,
-  handleKeyToSymbolChange,
-} from './handle-change';
+
 import renderOtherParameterFields from './render-other-parameter-field';
 import renderParameterFields from './render-parameter-fields';
 import renderSelectionButtons from './render-selection-button';
 import styles from './form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
-import fieldStateManagement from './field-state-management';
-import validationStateManagement from './validation-state-management';
+import { Errors } from './validation-state-management';
+import { handleFilterChange } from './handle-change';
 
-const renderContent = () => {
+const renderContent = (
+  carat: any,
+  state: any,
+  setState: any,
+  validationError: any,
+  setValidationError: any,
+  errors: any,
+  selectedStep: any,
+  setSelectedStep: any,
+  setErrors: any
+) => {
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
     imageTileContainerStyles: styles.imageTileContainerStyles,
@@ -50,8 +34,9 @@ const renderContent = () => {
   };
 
   const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
-  const { carat, state, setState } = fieldStateManagement();
+
   const { caratRangeData, setCaratRangeData } = carat;
+
   const {
     selectedShape,
     selectedColor,
@@ -87,6 +72,30 @@ const renderContent = () => {
   } = state;
 
   const {
+    setSelectedShape,
+    setSelectedColor,
+    setSelectedWhiteColor,
+    setSelectedFancyColor,
+    setSelectedIntensity,
+    setSelectedOvertone,
+    setSelectedTinge,
+    setSelectedTingeIntensity,
+    setSelectedClarity,
+    setSelectedGirdleStep,
+    setSelectedCaratRange,
+    setSelectedMake,
+    setSelectedCut,
+    setSelectedPolish,
+    setSelectedSymmetry,
+    setSelectedFluorescence,
+    setSelectedCulet,
+    setSelectedGirdle,
+    setSelectedKeyToSymbol,
+    setSelectedLab,
+    setSelectedHR,
+    setSelectedBrilliance,
+    setSelectedLocation,
+    setSelectedOrigin,
     setPriceRangeFrom,
     setPriceRangeTo,
     setDiscountFrom,
@@ -97,13 +106,374 @@ const renderContent = () => {
     setCaratRangeTo,
   } = setState;
 
-  const {
-    validationError,
-    setValidationError,
-    errors,
-    selectedStep,
-    setSelectedStep,
-  } = validationStateManagement();
+  const compareArrays = (arr1: string[], arr2: string[]) => {
+    // Check if the lengths of the arrays are equal
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    // Convert arrays to sets
+    const set1 = new Set(arr1);
+    const set2 = new Set(arr2);
+    // Compare sets
+    for (const value of set1) {
+      if (!set2.has(value)) {
+        return false;
+      }
+    }
+    // If the loop completes, sets are equal
+    return true;
+  };
+
+  const handleShapeChange = (shape: string) => {
+    let filteredShape: string[] = advanceSearch.shape.map(
+      (data) => data.short_name
+    );
+    if (shape.toLowerCase() === 'all') {
+      setSelectedShape(filteredShape);
+      if (selectedShape.includes('All')) {
+        setSelectedShape([]);
+      }
+    } else {
+      if (selectedShape.includes('All')) {
+        let filteredSelectedShape: string[] = selectedShape.filter(
+          (data: any) => data !== 'All' && data !== shape
+        );
+        setSelectedShape(filteredSelectedShape);
+      } else if (
+        compareArrays(
+          selectedShape.filter((data: any) => data !== 'All'),
+          filteredShape.filter((data) => data !== 'All' && data !== shape)
+        )
+      ) {
+        setSelectedShape(filteredShape);
+      } else {
+        handleFilterChange(shape, selectedShape, setSelectedShape);
+      }
+    }
+  };
+  const handleColorChange = (data: string) => {
+    if (selectedColor !== data) {
+      setSelectedColor(data);
+    } else {
+      setSelectedColor('');
+    }
+    setSelectedWhiteColor([]);
+    setSelectedFancyColor([]);
+  };
+  const handleWhiteFilterChange = (data: string) => {
+    handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
+  };
+  const handleFancyFilterChange = (data: string) => {
+    handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
+  };
+  const handleIntensityChange = (data: string) => {
+    handleFilterChange(data, selectedIntensity, setSelectedIntensity);
+  };
+  const handleOvertoneChange = (data: string) => {
+    handleFilterChange(data, selectedOvertone, setSelectedOvertone);
+  };
+  const handleTingeChange = (data: string) => {
+    handleFilterChange(data, selectedTinge, setSelectedTinge);
+  };
+  const handleTingeIntensityChange = (data: string) => {
+    handleFilterChange(data, selectedTingeIntensity, setSelectedTingeIntensity);
+  };
+  const handleClarityChange = (data: string) => {
+    handleFilterChange(data, selectedClarity, setSelectedClarity);
+  };
+  const handleCaratRangeChange = (data: string) => {
+    console.log('Data', data, selectedCaratRange);
+    handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
+  };
+
+  const handleMakeChange = (data: string) => {
+    if (data.toLowerCase() === '3ex') {
+      if (data !== selectedMake) {
+        setSelectedCut(['EX']);
+        setSelectedPolish(['EX']);
+        setSelectedSymmetry(['EX']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+      setSelectedFluorescence(
+        selectedFluorescence.filter((e: any) => e !== 'NON')
+      );
+    }
+    if (data.toLowerCase() === '3ex-non') {
+      if (data !== selectedMake) {
+        setSelectedCut(['EX']);
+        setSelectedPolish(['EX']);
+        setSelectedSymmetry(['EX']);
+        setSelectedFluorescence(['NON']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+        setSelectedFluorescence([]);
+      }
+    }
+    if (data.toLowerCase() === '3vg+') {
+      if (data !== selectedMake) {
+        setSelectedCut(['EX', 'VG']);
+        setSelectedPolish(['EX', 'VG']);
+        setSelectedSymmetry(['EX', 'VG']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+      setSelectedFluorescence(
+        selectedFluorescence.filter((e: any) => e !== 'NON')
+      );
+    }
+    setSelectedMake(data === selectedMake ? '' : data);
+  };
+  const handleFilterChangeAndMakeSelection = (
+    data: string,
+    selectedFilter: string[],
+    setSelectedFilter: React.Dispatch<React.SetStateAction<string[]>>,
+    firstCriteria: string[],
+    secondCriteria: string[]
+  ) => {
+    handleFilterChange(data, selectedFilter, setSelectedFilter);
+    let temp: string[] = [...selectedFilter];
+    const index = temp.indexOf(data);
+    if (index !== -1) {
+      temp.splice(index, 1);
+    } else {
+      temp.push(data);
+    }
+    if (
+      temp.toString() === 'EX' &&
+      firstCriteria.toString() === 'EX' &&
+      secondCriteria.toString() === 'EX'
+    ) {
+      if (selectedFluorescence.toString() === 'NON') {
+        setSelectedMake('3EX-Non');
+      } else {
+        setSelectedMake('3EX');
+      }
+    } else if (
+      (firstCriteria.toString() === 'EX,VG' ||
+        firstCriteria.toString() === 'VG,EX') &&
+      (secondCriteria.toString() === 'EX,VG' ||
+        secondCriteria.toString() === 'VG,EX') &&
+      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
+    ) {
+      setSelectedMake('3VG+');
+    } else {
+      setSelectedMake('');
+    }
+  };
+  const handleCutChange = (data: string) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedCut,
+      setSelectedCut,
+      selectedPolish,
+      selectedSymmetry
+    );
+  };
+  const handlePolishChange = (data: string) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedPolish,
+      setSelectedPolish,
+      selectedCut,
+      selectedSymmetry
+    );
+  };
+  const handleSymmetryChange = (data: string) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedSymmetry,
+      setSelectedSymmetry,
+      selectedCut,
+      selectedPolish
+    );
+  };
+  const handleFluorescenceChange = (data: string) => {
+    handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
+    let temp: string[] = selectedFluorescence;
+    const index = temp.indexOf(data);
+    if (index !== -1) {
+      temp.splice(index, 1);
+    } else {
+      temp.push(data);
+    }
+    if (
+      selectedPolish.toString() === 'EX' &&
+      selectedCut.toString() === 'EX' &&
+      selectedSymmetry.toString() === 'EX'
+    ) {
+      if (temp.toString() === 'NON') {
+        setSelectedMake('3EX-Non');
+      } else {
+        setSelectedMake('3EX');
+      }
+    } else if (
+      (selectedCut.toString() === 'EX,VG' ||
+        selectedCut.toString() === 'VG,EX') &&
+      (selectedPolish.toString() === 'EX,VG' ||
+        selectedPolish.toString() === 'VG,EX') &&
+      (selectedSymmetry.toString() === 'EX,VG' ||
+        selectedSymmetry.toString() === 'VG,EX') &&
+      temp.length === 0
+    ) {
+      setSelectedMake('3VG+');
+    } else {
+      setSelectedMake('');
+    }
+  };
+  const handleCuletChange = (data: string) => {
+    handleFilterChange(data, selectedCulet, setSelectedCulet);
+  };
+  const handleGirdleChange = (data: string) => {
+    handleFilterChange(data, selectedGirdle, setSelectedGirdle);
+  };
+  const handleKeyToSymbolChange = (comment: string) => {
+    if (comment.toLowerCase() === 'all') {
+      setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
+      if (selectedKeyToSymbol.includes('All')) {
+        setSelectedKeyToSymbol([]);
+      }
+    } else {
+      if (selectedKeyToSymbol.includes('All')) {
+        let filteredSelectedShape: string[] = selectedKeyToSymbol.filter(
+          (data: any) => data !== 'All' && data !== comment
+        );
+        setSelectedKeyToSymbol(filteredSelectedShape);
+      } else if (
+        compareArrays(
+          selectedKeyToSymbol.filter((data: any) => data !== 'All'),
+          advanceSearch.key_to_symbol.filter(
+            (data) => data !== 'All' && data !== comment
+          )
+        )
+      ) {
+        setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
+      } else {
+        handleFilterChange(
+          comment,
+          selectedKeyToSymbol,
+          setSelectedKeyToSymbol
+        );
+      }
+    }
+  };
+  const handleLabChange = (data: string) => {
+    handleFilterChange(data, selectedLab, setSelectedLab);
+  };
+  const handleHRChange = (data: string) => {
+    handleFilterChange(data, selectedHR, setSelectedHR);
+  };
+  const handleBrillianceChange = (data: string) => {
+    handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
+  };
+  const handleLocation = (data: string) => {
+    handleFilterChange(data, selectedLocation, setSelectedLocation);
+  };
+  const handleOrigin = (data: string) => {
+    handleFilterChange(data, selectedOrigin, setSelectedOrigin);
+  };
+
+  const normalizeValue = (value: string) => {
+    // Normalize user input like "3-3.99" to "3.00-3.99"
+    const caratRange = value.split('-');
+    if (caratRange[0] === '' || caratRange[1] === '') {
+      setValidationError(`Please enter a valid carat range.`);
+      return;
+    } else if (caratRange[0] === '0' || caratRange[1] === '0') {
+      setValidationError('Please enter value between “0.10 to 50”');
+      return;
+    } else if (caratRange[0] > caratRange[1]) {
+      setValidationError(
+        `Carat range cannot be ${caratRange[0]} to ${caratRange[1]}. Please enter a valid carat range.`
+      );
+      return;
+    } else if (caratRange.length === 2) {
+      const caratFrom = parseFloat(caratRange[0]).toFixed(2);
+      const caratTo = parseFloat(caratRange[1]).toFixed(2);
+      return `${caratFrom}-${caratTo}`;
+    }
+    return value;
+  };
+  const handleAddCarat = (data: string) => {
+    let Validatedata = normalizeValue(data);
+    if (Validatedata) {
+      if (!caratRangeData.includes(Validatedata)) {
+        setCaratRangeData([...caratRangeData, Validatedata]);
+      }
+      setSelectedCaratRange([...selectedCaratRange, Validatedata]);
+      setCaratRangeFrom('');
+      setCaratRangeTo('');
+    }
+  };
+
+  const handleValidate = (
+    key: keyof Errors,
+    inputType: 'from' | 'to',
+    value: any,
+    otherValue: any
+  ) => {
+    if (value == '' && otherValue == '') {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
+    } else if (value.length === 0) {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} from'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (otherValue.length === 0) {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `Please enter a value for '${key} to'`,
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (value > 100 || otherValue > 100) {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: 'Please enter a valid range from 0 to 100',
+        },
+      }));
+      // Handle other error logic as needed
+    } else if (
+      (inputType === 'from' && value > otherValue) ||
+      (inputType === 'to' && +value < otherValue)
+    ) {
+      // Error handling for 'from' value being greater than 'to' value and vice versa
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: {
+          ...prevErrors[key as keyof Errors],
+          [inputType]: `'${
+            inputType === 'from' ? 'From' : 'To'
+          }' value should not be ${
+            inputType === 'from' ? 'greater' : 'less'
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
+        },
+      }));
+    } else {
+      setErrors((prevErrors: any) => ({
+        ...prevErrors,
+        [key]: { from: null, to: null },
+      }));
+      // Handle other error logic as needed
+    }
+  };
 
   return (
     <>
@@ -680,7 +1050,7 @@ const renderContent = () => {
         <div
           className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
         >
-          {renderParameterFields()}
+          {renderParameterFields(state, setState)}
         </div>
       </div>
       <div className={styles.filterSection}>
@@ -696,7 +1066,7 @@ const renderContent = () => {
         </div>
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
-            {renderOtherParameterFields()}
+            {renderOtherParameterFields(state, setState)}
           </div>
         </div>
       </div>

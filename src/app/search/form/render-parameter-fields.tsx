@@ -2,7 +2,6 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import React, { Dispatch, SetStateAction, useState } from 'react';
 import styles from './form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
-import fieldStateManagement from './field-state-management';
 import advanceSearch from '@/constants/advance-search.json';
 
 interface IRange {
@@ -15,9 +14,7 @@ interface IRenderParameterData {
   label: string;
   range: IRange;
 }
-const renderParameterFields = () => {
-  const { state, setState } = fieldStateManagement();
-
+const renderParameterFields = (state: any, setState: any) => {
   const {
     tablePerFrom,
     tablePerTo,
@@ -139,10 +136,18 @@ const renderParameterFields = () => {
     value: '',
   };
 
-  const [fromError, setFromError] = useState(initialErrorState);
+  // const [fromError, setFromError] = useState(initialErrorState);
 
-  const [fromAngle, setFromAngle] = useState('');
-  const [toAngle, setToAngle] = useState('');
+  const fromError = '';
+  const setFromError = '';
+
+  // const [fromAngle, setFromAngle] = useState('');
+  let fromAngle = '';
+  let setFromAngle = '';
+  // const [toAngle, setToAngle] = useState('');
+
+  let toAngle = '';
+  let setToAngle = '';
 
   const handleAngle = (
     key: string,
@@ -253,8 +258,10 @@ const renderParameterFields = () => {
           }
         />
       </div>
-      {fromError.key === parameter.label && (
-        <div className={styles.validationMessage}>{fromError.value}</div>
+      {/* {fromError.key === parameter.label && ( */}
+      {fromError === parameter.label && (
+        <div className={styles.validationMessage}>{fromError}</div>
+        // <div className={styles.validationMessage}>{fromError.value}</div>
       )}
     </div>
   ));

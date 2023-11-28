@@ -1,7 +1,8 @@
-import  { useState } from 'react';
+import React from 'react';
+import { useState } from 'react';
 import advanceSearch from '@/constants/advance-search.json';
 
-const fieldStateManagement = () => {
+const useFieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
@@ -240,4 +241,4 @@ const fieldStateManagement = () => {
     },
   };
 };
-export default fieldStateManagement;
+export default useFieldStateManagement;

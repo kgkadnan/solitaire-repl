@@ -1,11 +1,13 @@
 import { useState } from 'react';
+
 export interface Errors {
   discount: { from: string | null; to: string | null };
   price_range: { from: string | null; to: string | null };
   price_per_carat: { from: string | null; to: string | null };
   // Add more input groups here if needed
 }
-const validationStateManagement = () => {
+
+const useValidationStateManagement = () => {
   const [validationError, setValidationError] = useState('');
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [searchCount, setSearchCount] = useState<number>(-1);
@@ -26,6 +28,7 @@ const validationStateManagement = () => {
     price_per_carat: { from: null, to: null },
     // Add more input groups here if needed
   });
+
   return {
     validationError,
     setValidationError,
@@ -55,7 +58,9 @@ const validationStateManagement = () => {
     setInputError,
     inputErrorContent,
     setInputErrorContent,
-    saveSearchName, setSaveSearchName
+    saveSearchName,
+    setSaveSearchName,
   };
 };
-export default validationStateManagement;
+
+export default useValidationStateManagement;

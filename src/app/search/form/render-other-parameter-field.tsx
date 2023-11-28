@@ -3,25 +3,8 @@ import React from 'react';
 import styles from './form.module.scss';
 import renderSelectionButtons from './render-selection-button';
 import { ManageLocales } from '@/utils/translate';
-import fieldStateManagement from './field-state-management';
 import advanceSearch from '@/constants/advance-search.json';
-import {
-  handleBlackTableBIChange,
-  handleSideBlackBIChange,
-  handleOpenCrownBIChange,
-  handleOpenTableBIChange,
-  handleOpenPavilionBIChange,
-  handleMilkyBIChange,
-  handleLusterBIChange,
-  handleEyeCleanBIChange,
-  handleTableInclusionWIChange,
-  handleSideInclusionWIChange,
-  handleNaturalCrownWIChange,
-  handleNaturalGirdleWIChange,
-  handleNaturalPavilionWIChange,
-  handleSurfaceGrainingIChange,
-  handleinternalGrainingWIChange,
-} from './handle-change';
+import { handleFilterChange } from './handle-change';
 
 interface IRenderEachOtherParameterData {
   element_key: string;
@@ -33,8 +16,7 @@ interface IRenderOtherParameterData {
   key: string;
   value: IRenderEachOtherParameterData[];
 }
-const renderOtherParameterFields = () => {
-  const { state } = fieldStateManagement();
+const renderOtherParameterFields = (state: any, setState: any) => {
   const {
     blackTableBI,
     sideBlackBI,
@@ -52,6 +34,69 @@ const renderOtherParameterFields = () => {
     surfaceGrainingWI,
     internalGrainingWI,
   } = state;
+  const {
+    setBlackTableBI,
+    setSideBlackBI,
+    setOpenCrownBI,
+    setOpenTableBI,
+    setOpenPavilionBI,
+    setMilkyBI,
+    setLusterBI,
+    setEyeCleanBI,
+    setTableInclusionWI,
+    setSideInclusionWI,
+    setNaturalCrownWI,
+    setNaturalGirdleWI,
+    setNaturalPavilionWI,
+    setSurfaceGrainingWI,
+    setInternalGrainingWI,
+  } = setState;
+
+  const handleBlackTableBIChange = (data: string) => {
+    handleFilterChange(data, blackTableBI, setBlackTableBI);
+  };
+  const handleSideBlackBIChange = (data: string) => {
+    handleFilterChange(data, sideBlackBI, setSideBlackBI);
+  };
+  const handleOpenCrownBIChange = (data: string) => {
+    handleFilterChange(data, openCrownBI, setOpenCrownBI);
+  };
+  const handleOpenTableBIChange = (data: string) => {
+    handleFilterChange(data, openTableBI, setOpenTableBI);
+  };
+  const handleOpenPavilionBIChange = (data: string) => {
+    handleFilterChange(data, openPavilionBI, setOpenPavilionBI);
+  };
+  const handleMilkyBIChange = (data: string) => {
+    handleFilterChange(data, milkyBI, setMilkyBI);
+  };
+  const handleLusterBIChange = (data: string) => {
+    handleFilterChange(data, lusterBI, setLusterBI);
+  };
+  const handleEyeCleanBIChange = (data: string) => {
+    handleFilterChange(data, eyeCleanBI, setEyeCleanBI);
+  };
+  const handleTableInclusionWIChange = (data: string) => {
+    handleFilterChange(data, tableInclusionWI, setTableInclusionWI);
+  };
+  const handleSideInclusionWIChange = (data: string) => {
+    handleFilterChange(data, sideInclusionWI, setSideInclusionWI);
+  };
+  const handleNaturalCrownWIChange = (data: string) => {
+    handleFilterChange(data, naturalCrownWI, setNaturalCrownWI);
+  };
+  const handleNaturalGirdleWIChange = (data: string) => {
+    handleFilterChange(data, naturalGirdleWI, setNaturalGirdleWI);
+  };
+  const handleNaturalPavilionWIChange = (data: string) => {
+    handleFilterChange(data, naturalPavilionWI, setNaturalPavilionWI);
+  };
+  const handleSurfaceGrainingIChange = (data: string) => {
+    handleFilterChange(data, surfaceGrainingWI, setSurfaceGrainingWI);
+  };
+  const handleinternalGrainingWIChange = (data: string) => {
+    handleFilterChange(data, internalGrainingWI, setInternalGrainingWI);
+  };
 
   let otherParameterDataState = [
     {
