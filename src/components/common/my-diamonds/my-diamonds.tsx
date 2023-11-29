@@ -138,7 +138,12 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   };
 
   const myDiamondsFooter = [
-    { id: 1, displayButtonLabel: 'Download Excel', style: styles.transparent },
+    {
+      id: 1,
+      displayButtonLabel: 'Download Excel',
+      style: styles.transparent,
+      fn: downloadExcelFunction,
+    },
     { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled },
   ];
 
@@ -208,6 +213,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       </div>
     );
   };
+
   return (
     <>
       <CustomDialog
