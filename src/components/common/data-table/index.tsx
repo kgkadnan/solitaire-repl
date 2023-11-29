@@ -347,7 +347,7 @@ the labels to be displayed. */
               </tr>
             </thead>
             <tbody className={styles.tableBody}>
-              {tableRows?.map((row: any, index: number) => (
+              {tableRows.map((row: any, index: number) => (
                 <tr
                   key={row.id}
                   className={styles.tableRow}
@@ -901,9 +901,8 @@ the labels to be displayed. */
                           </a>
                         </div>
                       ) : column.accessor === 'amount' ? (
-                        562
-                      ) : // row.variants[0].prices[0].amount
-                      row[column.accessor as keyof Product] !== null ? (
+                        row.variants[0].prices[0].amount
+                      ) : row[column.accessor as keyof Product] !== null ? (
                         row[column.accessor as keyof Product]
                       ) : (
                         '-'
