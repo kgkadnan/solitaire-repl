@@ -901,8 +901,9 @@ the labels to be displayed. */
                           </a>
                         </div>
                       ) : column.accessor === 'amount' ? (
-                        row.variants[0].prices[0].amount
-                      ) : row[column.accessor as keyof Product] !== null ? (
+                        562
+                      ) : // row.variants[0].prices[0].amount
+                      row[column.accessor as keyof Product] !== null ? (
                         row[column.accessor as keyof Product]
                       ) : (
                         '-'

@@ -29,7 +29,7 @@ import CustomLoader from '@/components/common/loader';
 import { CustomInputField } from '@/components/common/input-field';
 import ConfirmStone from '@/components/common/confirm-stone';
 import { RadioButton } from '@/components/common/custom-input-radio';
-import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/constant';
+import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   /* The above code is using the `useAppDispatch` hook from the Redux toolkit in a TypeScript React
