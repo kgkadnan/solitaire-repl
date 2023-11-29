@@ -14,8 +14,8 @@ export const formatCreatedAt = (createdAt: any) => {
     hour12: true,
   });
 
-  const formattedDate = dateFormatter.format(createdAtDate);
-  const formattedTime = timeFormatter.format(createdAtDate);
+  const formattedDate = dateFormatter?.format(createdAtDate);
+  const formattedTime = timeFormatter?.format(createdAtDate);
 
   return `${formattedDate} | ${formattedTime}`;
 };

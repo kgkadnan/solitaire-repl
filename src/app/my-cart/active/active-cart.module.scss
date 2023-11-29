@@ -29,7 +29,7 @@
 
 .tableWrapper {
   max-height: 65vh; /* Set to 80% of the viewport height */
-  overflow-y: scroll;
+  overflow-y: auto;
   padding-bottom: 10px;
   height: calc(
     100vh - 45vh
@@ -52,14 +52,13 @@
   margin: 7px 0px;
 }
 
-
 .diamondDetailSheet {
   background-color: hsl(var(--solitaire-primary));
   z-index: 1111;
   max-width: 100% !important;
   // padding-right: 50px;
   // padding-left: 50px;
-  padding:  0rem 0rem 0rem !important; 
+  padding: 0rem 0rem 0rem !important;
 }
 
 .diamondDetailHeader {
@@ -71,8 +70,7 @@
   display: flex;
   align-items: center;
   padding: 0px 50px;
-  p{
+  p {
     color: var(--shadow, #8c7459);
   }
 }
-
