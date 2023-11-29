@@ -1,7 +1,6 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation'; // Import the useRouter hook
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import CustomHeader from '@/components/common/header';
 import styles from './my-diamonds.module.scss';
@@ -17,7 +16,7 @@ import { IDateRange } from '../search/saved-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
 
 function MyDiamonds() {
-  let currentPath = usePathname();
+  // State variables for handling scroll, date, search, and data
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [date, setDate] = useState<DateRange | undefined>();
@@ -31,12 +30,44 @@ function MyDiamonds() {
   const [activeTab, setActiveTab] = useState<string>('Recent Confirmations');
   const [dateSearchUrl, setDateSearchUrl] = useState('');
 
+  // Define routes for different tabs in My Diamonds
+  let myDiamondsRoutes = [
+    {
+      id: '1',
+      pathName: ManageLocales('app.myDiamonds.RecentConfirmations'),
+      count: recentConfirmData?.length,
+    },
+    {
+      id: '2',
+      pathName: ManageLocales('app.myDiamonds.MyInvoices'),
+      count: 12,
+    },
+    {
+      id: '3',
+      pathName: ManageLocales('app.myDiamonds.PreviousConfirmations'),
+      count: 2,
+    },
+  ];
+
+  //Header Data
+  const headerData = {
+    headerHeading: 'My Diamonds',
+  };
+
+  // Style for the search input
+  let searchInputStyle = {
+    searchInput: styles.headerInputStyle,
+    searchInputMain: 'relative',
+  };
+
+  // Query parameters for API request
   let myDiamondStatus = 'pending';
   let fulfillmentStatus = 'not_fulfilled';
   let paymentStatus = 'awaiting';
   let fields = 'id,display_id,total';
   let expand = 'items';
 
+  // Fetch recent confirmation data
   const { data: myDiamondrecentConfirmData } = useCardRecentConfirmationQuery({
     myDiamondStatus,
     fulfillmentStatus,
@@ -46,44 +77,14 @@ function MyDiamonds() {
     dateSearchUrl,
   });
 
-  useEffect(() => {
-    setRecentConfirmData(myDiamondrecentConfirmData?.orders);
-    setFilteredData(recentConfirmData);
-  }, [myDiamondrecentConfirmData]);
-
-  let myDiamondsRoutes = [
-    {
-      id: '1',
-      pathName: ManageLocales('app.myDiamonds.RecentConfirmations'),
-    },
-    {
-      id: '2',
-      pathName: ManageLocales('app.myDiamonds.MyInvoices'),
-    },
-    {
-      id: '3',
-      pathName: ManageLocales('app.myDiamonds.PreviousConfirmations'),
-    },
-  ];
-
+  // Handle scroll events to show/hide the header
   const handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
   };
 
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [prevScrollPos]);
-
-  //Header Data
-  const headerData = {
-    headerHeading: 'My Diamonds',
-  };
-
+  // Handle date selection in the calendar
   const handleDate = (date: IDateRange) => {
     const fromDate = date?.from?.toISOString().split('T')[0];
     const toDate = date?.to?.toISOString().split('T')[0];
@@ -97,11 +98,7 @@ function MyDiamonds() {
     }
   };
 
-  let searchInputStyle = {
-    searchInput: styles.headerInputStyle,
-    searchInputMain: 'relative',
-  };
-
+  // Handle search input change
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setSearch(inputValue);
@@ -115,15 +112,31 @@ function MyDiamonds() {
     setFilteredData(filtered || originalData);
   };
 
+  // Handle tab click to set the active tab and page render check
+  const handleClick = (pathName: string) => {
+    setActiveTab(pathName);
+    setPageRenderCheck(pathName);
+  };
+
+  // useEffect to update originalData and filteredData when recentConfirmData changes
   useEffect(() => {
     setOriginalData(recentConfirmData);
     setFilteredData(recentConfirmData);
   }, [recentConfirmData]);
 
-  const handleClick = (pathName: string) => {
-    setActiveTab(pathName);
-    setPageRenderCheck(pathName);
-  };
+  // useEffect to update recentConfirmData when myDiamondrecentConfirmData changes
+  useEffect(() => {
+    setRecentConfirmData(myDiamondrecentConfirmData?.orders);
+    setFilteredData(recentConfirmData);
+  }, [myDiamondrecentConfirmData]);
+
+  // useEffect to add/remove scroll event listener
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [prevScrollPos]);
 
   return (
     <>
@@ -141,7 +154,7 @@ function MyDiamonds() {
       >
         <div className="absolute top-[160px] left-[122px] flex items-start justify-between w-[90%] bg-solitairePrimary pt-2">
           <div className="flex gap-[40px]">
-            {myDiamondsRoutes.map(({ id, pathName }) => {
+            {myDiamondsRoutes.map(({ id, pathName, count }) => {
               return (
                 <Link
                   className={`flex flex-row p-2.5 items-center justify-center text-solitaireTertiary ${
@@ -159,6 +172,7 @@ function MyDiamonds() {
                     }`}
                   >
                     {pathName}
+                    {count > 0 && ` (${count})`}
                   </div>
                 </Link>
               );
@@ -174,15 +188,9 @@ function MyDiamonds() {
                 style={searchInputStyle}
                 value={search}
                 onChange={handleSearch}
-                placeholder={
-                  currentPath === '/my-diamonds/recent-confirmation'
-                    ? ManageLocales(
-                        'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
-                      )
-                    : ManageLocales(
-                        'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
-                      )
-                }
+                placeholder={ManageLocales(
+                  'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
+                )}
               />
             </div>
             <div className="flex mr-[30px] ">

@@ -27,8 +27,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   productPageDetail,
   check,
 }) => {
-  console.log('xxxxxxxxxxxxxxxxxxxxxx', productPageDetail);
-
+  // Define the main MyDiamonds component
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -38,15 +37,19 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
+  // Fetch product page table columns
   const { data: productTableColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
+  // Download Excel API
   let [downloadExcel] = useDownloadExcelMutation();
 
+  // useEffect to update data when productPageDetail changes
   useEffect(() => {
     setRows(productPageDetail?.items?.map((items: any) => items.product) || []);
   }, [productPageDetail]);
 
+  // useEffect to update tableColumns when productTableColumns changes
   useEffect(() => {
     setTableColumns(productTableColumns);
   }, [productTableColumns]);
@@ -61,7 +64,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     }
   };
 
-  //specific checkbox
+  // Function to handle clicking on a specific checkbox
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -84,7 +87,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setIsError(false);
   };
 
-  //Checkbox Data for Custom Data Table
+  // Object containing checkbox data for Custom Data Table
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     handleClick: handleClick,
@@ -92,6 +95,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     isCheckAll: isCheckAll,
   };
 
+  // Function to perform downloading Excel
   const performDownloadExcel = (
     productIds: any[],
     isEntireSearch?: boolean
@@ -127,7 +131,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setIsError(false);
   };
 
-  //download Excel
+  // Function to handle downloading Excel
   const downloadExcelFunction = () => {
     if (isCheck.length > 1 && isCheckAll) {
       performDownloadExcel(isCheck);
@@ -139,6 +143,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     }
   };
 
+  // Data for footer buttons
   const myDiamondsFooter = [
     {
       id: 1,
@@ -149,6 +154,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled },
   ];
 
+  // Function to render footer buttons
   const renderFooterButtons = () => (
     <CustomFooter
       footerButtonData={
@@ -160,6 +166,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     />
   );
 
+  // Page titles Data
   const pageTitles: PageTitles = {
     'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
@@ -168,13 +175,14 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       'app.myDiamonds.previousConfirmation.previousConfirmationDetail',
   };
 
+  // Function to render page title
   const renderPageTitle = (currentPage: string | undefined) => {
     const pageTitle = currentPage ? pageTitles[currentPage] : null;
     return pageTitle ? <p>{ManageLocales(pageTitle)}</p> : null;
   };
 
-  const renderTableRow = (items: any) => {
-    // Determine the key for each row based on 'id' or 'invoiceNo'
+  // Function to render individual Card
+  const renderMyDiamondCard = (items: any) => {
     const rowKey = items.display_id ? items.display_id : items.invoiceNo;
     return (
       <div
@@ -182,7 +190,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         className="bg-solitaireSecondary w-full h-[80px] flex items-center px-5 rounded-xl cursor-pointer mt-3"
         onClick={() => handleCardClick(items.id)}
       >
-        {/* Add the content inside the row */}
+        {/* Add the content inside the card */}
         <div className="flex justify-between w-full">
           <div className="flex gap-[20px]">
             <p>
@@ -230,7 +238,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             sheetTriggenContent={
               data?.length ? (
                 data?.map((items: any) => {
-                  return renderTableRow(items);
+                  return renderMyDiamondCard(items);
                 })
               ) : (
                 <NoDataFound />

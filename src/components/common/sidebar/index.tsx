@@ -135,8 +135,8 @@ const SideBar = () => {
     {
       src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
       title: ManageLocales('app.sideNav.myDiamonds'),
-      link: '/my-diamonds/recent-confirmation',
-      isActive: currentRoute === '/my-diamonds/recent-confirmation',
+      link: '/my-diamonds',
+      isActive: currentRoute === '/my-diamonds',
     },
   ];
 
