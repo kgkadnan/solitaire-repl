@@ -27,6 +27,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   productPageDetail,
   check,
 }) => {
+  console.log('xxxxxxxxxxxxxxxxxxxxxx', productPageDetail);
+
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -241,10 +243,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                   {renderPageTitle(check)}
                 </div>
 
-                <div className="flex border-b border-solitaireSenary h-[180px]">
+                <div className="flex border-b border-solitaireSenary h-[180px] mb-3">
                   <div className="w-[50%]">
                     <div className="flex mb-1">
-                      <p className="w-[30%]">
+                      <p className="w-[25%]">
                         {check === 'recent-confirmation'
                           ? 'Order ID : '
                           : 'Invoice Number : '}
@@ -259,14 +261,14 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     </div>
 
                     <div className="flex mb-1">
-                      <p className="w-[30%]">No. of Stones :</p>
+                      <p className="w-[25%]">No. of Stones :</p>
                       <span className="text-solitaireTertiary">
                         {productPageDetail?.items?.length}
                       </span>
                     </div>
                     {productPageDetail?.total && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Payable Amount :</p>
+                        <p className="w-[25%]">Payable Amount :</p>
                         <span className="text-solitaireTertiary">
                           {`${productPageDetail?.total} $`}
                         </span>
@@ -274,7 +276,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.paidAmount && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Paid Amount :</p>
+                        <p className="w-[25%]">Paid Amount :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.paidAmount}
                         </span>
@@ -282,7 +284,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.trackingId && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Tracking ID :</p>
+                        <p className="w-[25%]">Tracking ID :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.trackingId}
                         </span>
@@ -290,7 +292,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.trackOrder && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Track Order :</p>
+                        <p className="w-[25%]">Track Order :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.trackOrder}
                         </span>
@@ -298,12 +300,26 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.created_at && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Date & Time :</p>
+                        <p className="w-[25%]">Date & Time :</p>
                         <span className="text-solitaireTertiary">
                           {formatCreatedAt(productPageDetail?.created_at)}
                         </span>
                       </div>
                     )}
+                    <div className="flex mb-1">
+                      <p className="w-[25%]">Payment Terms :</p>
+                      <span className="text-solitaireTertiary">
+                        {productPageDetail?.payment_term}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex w-[50%]">
+                    <p className="pr-10">Comments:</p>
+                    <span className="text-solitaireTertiary">
+                      {productPageDetail?.comments?.length
+                        ? productPageDetail?.comments
+                        : '-'}
+                    </span>
                   </div>
                 </div>
                 {rows?.length > 0 ? (
