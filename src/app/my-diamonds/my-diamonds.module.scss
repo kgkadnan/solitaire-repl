@@ -26,3 +26,37 @@
 .visibleStyle {
   top: 0;
 }
+
+.headerInputStyle {
+  width: 250px;
+  font-size: 16px;
+  color: hsl(var(--solitaire-tertiary));
+}
+.headerInputStyle ::placeholder {
+  color: hsl(var(--solitaire-senary));
+}
+
+/* Media queries */
+/* Small screens */
+@media (max-width: 767px) {
+  .headerInputStyle {
+    width: 150px;
+    font-size: 14px;
+  }
+}
+
+/* Medium screens */
+@media (min-width: 768px) and (max-width: 1023px) {
+  .headerInputStyle {
+    width: 200px;
+    font-size: 14px;
+  }
+}
+
+/* Large screens */
+@media (min-width: 1024px) {
+  .headerInputStyle {
+    width: 250px;
+    font-size: 14px;
+  }
+}

@@ -4,13 +4,7 @@ rendering and managing the search results page. */
 import { CustomFooter } from '@/components/common/footer';
 import styles from './search-results.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import React, {
-  ReactNode,
-  SetStateAction,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import Image from 'next/image';
@@ -203,11 +197,11 @@ parameter. */
     setTableColumns(listingColumns);
   }, [listingColumns]);
   /**
-   * The function `CompareStone` checks the number of selected stones and performs different actions
+   * The function `compareStone` checks the number of selected stones and performs different actions
    * based on the number, including displaying error messages or opening a new window to compare the
    * selected stones.
    */
-  const CompareStone = () => {
+  const compareStone = () => {
     if (isCheck.length > 10) {
       setIsError(true);
       setErrorText('You can compare maximum of ten stones.');
@@ -385,7 +379,7 @@ handle the logic for closing a dialog box after a certain delay. */
 object contains properties such as name, onChange event handler, id, value, label, and checked
 status. These properties are used to render and handle the radio buttons in a React component. The
 code also combines all the radio button data arrays into a single array called RadioData. */
-  //Sort By Data
+
   const DefaultRadioData = [
     {
       name: 'Default',
@@ -542,7 +536,6 @@ code also combines all the radio button data arrays into a single array called R
       checked: selectedSideBlackRadioValue == 'side_black - High to Low',
     },
   ];
-
   const RadioData = [
     ...DefaultRadioData,
     ...carartRadioData,
@@ -587,6 +580,13 @@ code also combines all the radio button data arrays into a single array called R
     ]),
   };
 
+  /**
+   * Sorts an array of products based on a specified order and key.
+   * @param {any[]} data - The array of products to sort.
+   * @param {string} order - The order in which to sort the products ('low to high' or 'high to low').
+   * @param {string} key - The key to use for sorting the products.
+   * @returns {any[]} - The sorted array of products.
+   */
   const sortProducts = (data: any, order: string, key: string) =>
     [...data].sort((a, b) => {
       const customSortFunction = customSortFunctions[key];
@@ -608,6 +608,10 @@ code also combines all the radio button data arrays into a single array called R
       }
     });
 
+  /**
+   * Sorts the data based on the selected sorting options.
+   * @returns None
+   */
   const sortData = () => {
     const sortingOptions = [
       seletedTableInclusionRadioValue,
@@ -668,6 +672,11 @@ code also combines all the radio button data arrays into a single array called R
     setIsSortBySliderOpen(open);
   };
 
+  /**
+   * Handles the cancel action by resetting the selected radio values to their previous state
+   * or clearing them if there is no previous state. Also closes the sort by dropdown.
+   * @returns None
+   */
   const handleCancel = () => {
     if (previousRadioState) {
       setSeletedTableInclusionRadioValue(
@@ -751,7 +760,7 @@ code also combines all the radio button data arrays into a single array called R
             },
             {
               label: 'Compare Stone',
-              fn: CompareStone,
+              fn: compareStone,
             },
           ]}
         />
@@ -1049,33 +1058,33 @@ variable changes. */
       <CustomSlider
         sheetContent={
           <ConfirmStone
-            confirmStoneData={confirmStoneData}
-            listingColumns={listingColumns}
-            confirmRadioButtons={confirmRadioButtons}
+            onOpenChange={onOpenChange}
             commentValue={commentValue}
             handleComment={handleComment}
             setInputError={setInputError}
+            listingColumns={listingColumns}
+            confirmStoneData={confirmStoneData}
+            confirmRadioButtons={confirmRadioButtons}
             setInputErrorContent={setInputErrorContent}
             setSelectedDaysInputValue={setSelectedDaysInputValue}
-            onOpenChange={onOpenChange}
           />
         }
-        sheetContentStyle={styles.diamondDetailSheet}
         isSliderOpen={isSliderOpen}
         onOpenChange={onOpenChange}
+        sheetContentStyle={styles.diamondDetailSheet}
       />
       <CustomInputDialog
-        customInputDialogData={customInputDialogData}
         isError={inputError}
         setIsError={setInputError}
-        setErrorContent={setInputErrorContent}
         errorContent={inputErrorContent}
         handleClose={handleCloseInputDialog}
+        setErrorContent={setInputErrorContent}
+        customInputDialogData={customInputDialogData}
       />
       <CustomDialog
-        dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        dialogContent={dialogContent}
       />
 
       <div className="mb-2 mt-[-40px]">

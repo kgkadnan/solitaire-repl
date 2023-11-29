@@ -203,7 +203,9 @@
   "app.myCart.memoOut": "Memo-Out",
 
   "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
+  "app.myDiamonds.RecentConfirmations.header.searchByOrderId": "Search by Order ID",
   "app.myDiamonds.MyInvoices": "My Invoices",
+  "app.myDiamonds.MyInvoices.header.searchByInvoiceId": "Search by Invoice ID",
   "app.myDiamonds.PreviousConfirmations": "Previous Confirmations",
   "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details"
 }
