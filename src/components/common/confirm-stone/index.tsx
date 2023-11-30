@@ -17,18 +17,41 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   setSelectedDaysInputValue,
   onOpenChange,
   confirmRadioButtons,
+  inputError,
+  selectedDaysInputValue,
+  selectedRadioDaysValue,
 }) => {
   const [confirmStone] = useConfirmStoneMutation();
 
+  /**
+   * Function to confirm a stone by calling the `confirmStone` API endpoint.
+   * It retrieves the variant IDs from the `confirmStoneData` array and adds them to the `variantIds` array.
+   * If the `variantIds` array is not empty and there is no `inputError`, it calls the `confirmStone` function with the appropriate parameters.
+   * Finally, it handles the promise returned by `confirmStone`, logging any errors to the console.
+   * @returns None
+   */
   const confirmStoneFunction = () => {
     let variantIds: string[] = [];
 
     confirmStoneData.forEach((ids) => {
       variantIds.push(ids.variants[0].id);
     });
-
-    if (variantIds.length) {
-      confirmStone({ variants: variantIds })
+    console.log(
+      'inputError',
+      inputError,
+      commentValue,
+      selectedDaysInputValue,
+      selectedRadioDaysValue
+    );
+    if (variantIds.length && !inputError) {
+      confirmStone({
+        variants: variantIds,
+        comments: commentValue,
+        payment_term:
+          selectedDaysInputValue.length > 0
+            ? selectedDaysInputValue
+            : selectedRadioDaysValue,
+      })
         .unwrap()
         .then((res) => {})
         .catch((e) => console.log(e));

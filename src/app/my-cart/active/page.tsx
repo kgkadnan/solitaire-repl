@@ -13,7 +13,6 @@ import styles from './active-cart.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 
 import { CustomDialog } from '@/components/common/dialog';
-import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import { CustomInputField } from '@/components/common/input-field';
@@ -447,6 +446,7 @@ const ActiveMyCart = () => {
       <CustomSlider
         sheetContent={
           <ConfirmStone
+            inputError={inputError}
             confirmStoneData={confirmStoneData}
             listingColumns={cartTableColumns}
             confirmRadioButtons={confirmRadioButtons}
@@ -454,8 +454,10 @@ const ActiveMyCart = () => {
             handleComment={handleComment}
             setInputError={setInputError}
             setInputErrorContent={setInputErrorContent}
+            selectedDaysInputValue={selectedDaysInputValue}
             setSelectedDaysInputValue={setSelectedDaysInputValue}
             onOpenChange={onOpenChange}
+            selectedRadioDaysValue={selectedRadioDaysValue}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}

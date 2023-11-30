@@ -20,4 +20,7 @@ export interface IConfirmStoneProps {
   setSelectedDaysInputValue: React.Dispatch<React.SetStateAction<string>>;
   onOpenChange: (open: boolean) => void;
   confirmRadioButtons?: IconfirmRadioButtons[];
+  inputError: boolean;
+  selectedDaysInputValue: string;
+  selectedRadioDaysValue?: string;
 }
