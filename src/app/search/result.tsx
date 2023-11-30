@@ -24,7 +24,6 @@ import {
   useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import CustomLoader from '@/components/common/loader';
 import { CustomInputField } from '@/components/common/input-field';
 import ConfirmStone from '@/components/common/confirm-stone';
