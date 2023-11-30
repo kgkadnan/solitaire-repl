@@ -23,7 +23,7 @@ const PreviousConfirmation = () => {
     },
   ];
 
-  return <MyDiamonds data={data} />;
+  return <div>Previous Confirmation</div>;
 };
 
 export default PreviousConfirmation;
