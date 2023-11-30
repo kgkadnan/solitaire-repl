@@ -10,10 +10,29 @@ export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
   checkboxData?: ICheckboxData;
-  mainTableStyle: string;
+  mainTableStyle?: string;
   selectionAllowed?: boolean;
+  handleConfirm?: (isCheck: string[]) => void;
 }
 
 export interface KeyLabelMapping {
   [key: string]: string;
+}
+
+export interface ITheadProps {
+  selectionAllowed: boolean;
+  handleSelectAllCheckbox?: () => void;
+  isCheckAll?: boolean;
+  tableCol: TableColumn[];
+}
+
+export interface ITbodyProps {
+  tableRows: Product[];
+  selectionAllowed: boolean;
+  handleClick?: (id: string) => void;
+  isCheck?: string[];
+  tableCol: TableColumn[];
+  setDialogContent: any;
+  setIsDialogOpen: any;
+  handleConfirm?: (isCheck: string[]) => void;
 }

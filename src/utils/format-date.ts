@@ -3,9 +3,9 @@ export const formatCreatedAt = (createdAt: any) => {
   const createdAtDate = new Date(createdAt);
 
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
-    year: 'numeric',
-    month: '2-digit',
     day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
   });
 
   const timeFormatter = new Intl.DateTimeFormat('en-US', {
@@ -14,8 +14,8 @@ export const formatCreatedAt = (createdAt: any) => {
     hour12: true,
   });
 
-  const formattedDate = dateFormatter.format(createdAtDate);
-  const formattedTime = timeFormatter.format(createdAtDate);
+  const formattedDate = dateFormatter?.format(createdAtDate);
+  const formattedTime = timeFormatter?.format(createdAtDate);
 
   return `${formattedDate} | ${formattedTime}`;
 };

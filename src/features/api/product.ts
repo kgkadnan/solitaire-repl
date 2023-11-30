@@ -28,7 +28,7 @@ export const productApi = createApi({
     }),
     getProductCount: builder.query({
       query: ({ searchUrl = '' }) => ({
-        url: `/store/products?limit=1&expand=collection&fields=id${
+        url: `/store/products?limit=1&expand=variants&fields=id${
           searchUrl !== '' ? '&' + searchUrl : ''
         }`,
       }),

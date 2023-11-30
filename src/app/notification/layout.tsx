@@ -5,13 +5,17 @@ import { usePathname } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import { useGetAllNotificationQuery } from '@/features/api/notification';
 import CustomHeader from '@/components/common/header';
+import {
+  NOTIFICATION_TYPE,
+  NOTIFICATION_UNREAD_STATUS,
+} from '@/constants/business-logic';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const path = usePathname();
 
   const [notificationSettingData, setNotificationSettingData] = useState([]);
 
-  const { data } = useGetAllNotificationQuery({ type: 'APP' });
+  const { data } = useGetAllNotificationQuery({ type: NOTIFICATION_TYPE });
 
   useEffect(() => {
     setNotificationSettingData(data?.data);
@@ -19,8 +23,9 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
 
   const unreadCount =
     notificationSettingData &&
-    notificationSettingData.filter((item: any) => item.status === 'unread')
-      .length;
+    notificationSettingData.filter(
+      (item: any) => item.status === NOTIFICATION_UNREAD_STATUS
+    ).length;
 
   let notificationHeader = {
     headerHeading: (

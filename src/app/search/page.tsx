@@ -9,7 +9,7 @@ import EditIcon from '@public/assets/icons/edit.svg';
 import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
-import AdvanceSearch from './form';
+import AdvanceSearch from './form/form';
 import SavedSearch from './saved';
 import SearchResults from './result';
 import { modifySearchResult } from '@/features/search-result/search-result';
@@ -22,6 +22,10 @@ import {
   useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
 import CustomLoader from '@/components/common/loader';
+import {
+  LISTING_PAGE_DATA_LIMIT,
+  MAX_SEARCH_TAB_LIMIT,
+} from '@/constants/business-logic';
 
 interface IMyProfileRoutes {
   id: number;
@@ -72,9 +76,9 @@ function SearchResultLayout() {
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
-  let { data, error, isLoading, refetch } = useGetAllProductQuery({
+  let { data, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
-    limit: 300,
+    limit: LISTING_PAGE_DATA_LIMIT,
     url: searchUrl,
   });
 
@@ -269,7 +273,10 @@ function SearchResultLayout() {
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: string) => {
-    if (maxTab === 5 && pathName.toLocaleLowerCase() === 'new search') {
+    if (
+      maxTab === MAX_SEARCH_TAB_LIMIT &&
+      pathName.toLocaleLowerCase() === 'new search'
+    ) {
       setIsDialogOpen(true);
       setDialogContent(
         <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
@@ -386,7 +393,7 @@ function SearchResultLayout() {
       <div
         style={{
           display: 'flex',
-          marginTop: '70px',
+          marginTop: '78px',
           width: '100%',
         }}
       >

@@ -10,9 +10,12 @@ import {
   useUpdateNotificationSettingMutation,
 } from '@/features/api/notification-setting';
 import { INotificationSetting } from './setting-interface';
+import { NOTIFICATION_TYPE } from '@/constants/business-logic';
 
 const NotificationSetting = () => {
-  const { data } = useGetAllNotificationSettingQuery({ type: 'APP' });
+  const { data } = useGetAllNotificationSettingQuery({
+    type: NOTIFICATION_TYPE,
+  });
   const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
   const [settings, setSettings] = useState<INotificationSetting>({
     type: '',
@@ -20,7 +23,7 @@ const NotificationSetting = () => {
   });
 
   useEffect(() => {
-    setSettings({ type: 'APP', subscription: data?.data });
+    setSettings({ type: NOTIFICATION_TYPE, subscription: data?.data });
   }, [data]);
 
   const toggleHandler = async (category: string) => {

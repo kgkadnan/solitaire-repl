@@ -147,7 +147,7 @@ export interface Product {
   carat: number | null;
   discount: number;
   price_range: string | null;
-  price_per_carat: string | null;
+  price_per_carat: number | null;
   girdle_percentage: number | null;
   pavilion_angle: number | null;
   star_length: number | null;

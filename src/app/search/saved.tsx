@@ -1,6 +1,7 @@
 'use client';
 import React, {
   ChangeEvent,
+  ReactNode,
   useCallback,
   useEffect,
   useMemo,
@@ -40,6 +41,12 @@ import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
+import {
+  MAX_SAVED_SEARCH_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
+} from '@/constants/business-logic';
+import Image from 'next/image';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -86,6 +93,7 @@ const SavedSearch = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
   let router = useRouter();
   const dispatch = useAppDispatch();
@@ -130,10 +138,7 @@ const SavedSearch = () => {
   const { data: searchList } = useGetSavedSearchListQuery(search);
 
   // Destructure the mutation function from the hook
-  const [
-    deleteSavedSearch,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useDeleteSavedSearchMutation();
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
 
   const keyLabelMapping: KeyLabelMapping = useMemo(() => {
     return {
@@ -151,9 +156,6 @@ const SavedSearch = () => {
 
   const formatRangeData = (data: any, key: string) => {
     const range = data;
-
-    console.log('range', range);
-
     if (range && range.lte && range.gte) {
       return `${range.gte}-${range.lte}`;
     }
@@ -265,10 +267,32 @@ const SavedSearch = () => {
 
         setErrorText(errorMessage);
       } else {
+        setDialogContent(
+          <>
+            <p className="text-center mt-3">
+              Do you want to Delete the selected Stones?
+            </p>
+            <div className="flex justify-center">
+              <CustomDisplayButton
+                displayButtonLabel="No"
+                displayButtonAllStyle={{
+                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                }}
+                handleClick={() => setIsDialogOpen(false)}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="Yes"
+                displayButtonAllStyle={{
+                  displayButtonStyle: styles.filled,
+                }}
+                handleClick={deleteStoneHandler}
+              />
+            </div>
+          </>
+        );
         setIsDialogOpen(true);
       }
     } else {
-      setIsDialogOpen(true);
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     }
@@ -279,11 +303,29 @@ const SavedSearch = () => {
   };
 
   const deleteStoneHandler = async () => {
-    await deleteSavedSearch(isCheck);
-    await refetch();
+    await deleteSavedSearch(isCheck)
+      .unwrap()
+      .then(() => {
+        setIsCheck([]);
+        setIsCheckAll(false);
+        setDialogContent(
+          <>
+            <div className="max-w-[380px] flex justify-center align-middle">
+              <Image src={confirmImage} alt="vector image" />
+            </div>
+            <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
+              Item successfully deleted from “Saved Search”
+            </div>
+          </>
+        );
+        setIsDialogOpen(true);
+      })
+      .catch((error: Error) => {
+        console.log('error', error);
+      });
     setIsCheck([]);
     setIsCheckAll(false);
-    setIsDialogOpen(false);
+    setIsError(false);
   };
 
   const debouncedSave = useCallback(
@@ -331,6 +373,8 @@ const SavedSearch = () => {
   };
 
   const handleSuggestionClick = (suggestion: string) => {
+    setIsCheck([]);
+    setIsCheckAll(false);
     setSearch(suggestion);
     setSearchByName(suggestion);
     setSuggestions([]);
@@ -356,6 +400,7 @@ const SavedSearch = () => {
     if (isCheckAll) {
       setIsCheckAll(false);
     }
+    setIsError(false);
   };
 
   //Selecting All Checkbox Function
@@ -418,11 +463,7 @@ const SavedSearch = () => {
     suggestions: suggestions,
     headerData: (
       <div className="flex mr-[30px] ">
-        <CustomCalender
-          date={date}
-          setDateSearchUrl={setDateSearchUrl}
-          handleDate={handleDate}
-        />
+        <CustomCalender date={date} handleDate={handleDate} />
       </div>
     ),
     overriddenStyles: {
@@ -458,14 +499,14 @@ const SavedSearch = () => {
 
     setSearchUrl(url);
 
-    if (productData?.count > 300) {
+    if (productData?.count > MAX_SAVED_SEARCH_COUNT) {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
       let data: any = JSON.parse(localStorage.getItem('Search')!);
 
       if (data?.length) {
-        if (data?.length >= 5) {
+        if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
           setIsError(true);
           setErrorText(
             'Max search limit reached. Please remove existing searches'
@@ -505,29 +546,7 @@ const SavedSearch = () => {
       <CustomDialog
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}
-        dialogContent={
-          <>
-            <p className="text-center mt-3">
-              Do you want to Delete the selected Stones?
-            </p>
-            <div className="flex justify-center">
-              <CustomDisplayButton
-                displayButtonLabel="No"
-                displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
-                }}
-                handleClick={() => setIsDialogOpen(false)}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Yes"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled,
-                }}
-                handleClick={deleteStoneHandler}
-              />
-            </div>
-          </>
-        }
+        dialogContent={dialogContent}
       />
       <div className="container flex flex-col">
         {/* Custom Header */}
@@ -538,40 +557,41 @@ const SavedSearch = () => {
             visibleStyle={styles.visibleStyle}
           />
         </div>
-
-        {/* Custom Card and Checkbox map */}
-        {cardData?.length ? (
-          <div className="flex-grow overflow-y-auto min-h-[80vh]">
-            {cardData?.map((items: ICardData) => {
-              return (
-                <div key={items.cardId}>
-                  <div className="flex mt-6">
-                    <CustomCheckBox
-                      data={items.cardId}
-                      onClick={handleClick}
-                      isChecked={isCheck}
-                    />
-
-                    <div
-                      data-testid={'card-id123'}
-                      className={`overflow-auto ${styles.mainCardContainer}`}
-                      onClick={() => handleCardClick(items.cardId)}
-                    >
-                      <CustomSearchResultCard
-                        cardData={items}
-                        overriddenStyles={cardStyles}
-                        defaultCardPosition={false}
-                        handleCardAction={handleEdit}
+        <div className="h-[70vh] overflow-auto">
+          {/* Custom Card and Checkbox map */}
+          {cardData?.length ? (
+            <div className="flex-grow">
+              {cardData?.map((items: ICardData) => {
+                return (
+                  <div key={items.cardId}>
+                    <div className="flex mt-6 ">
+                      <CustomCheckBox
+                        data={items.cardId}
+                        onClick={handleClick}
+                        isChecked={isCheck}
                       />
+
+                      <div
+                        data-testid={'card-id123'}
+                        className={`${styles.mainCardContainer}`}
+                        onClick={() => handleCardClick(items.cardId)}
+                      >
+                        <CustomSearchResultCard
+                          cardData={items}
+                          overriddenStyles={cardStyles}
+                          defaultCardPosition={false}
+                          handleCardAction={handleEdit}
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
-        ) : (
-          <NoDataFound />
-        )}
+                );
+              })}
+            </div>
+          ) : (
+            <NoDataFound />
+          )}
+        </div>
 
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">

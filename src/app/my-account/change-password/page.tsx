@@ -32,10 +32,7 @@ const ChangePassword = () => {
     setConfirmPasswordVisible(true);
   };
 
-  const [
-    ChangePassword,
-    { isLoading: updateIsLoading, isError: updateIsError },
-  ] = useChangePasswordMutation();
+  const [ChangePassword] = useChangePasswordMutation();
 
   const handleChangePassword = async () => {
     await ChangePassword({

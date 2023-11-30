@@ -134,7 +134,7 @@
   padding: 0px 10px;
 }
 .selectionButtonStyles {
-  border: 0.25px solid #5d6a6a;
+  border: 0.25px solid rgb(93, 106, 106);
 }
 
 .labelDefaultStyle {
@@ -193,6 +193,12 @@
 .radioButtonMainDiv {
   padding: 1.5rem 1.5rem 3.5rem;
 }
+.radioButtonMainDiv :nth-child(1){
+  margin-bottom: 16px;
+}
+.radioButtonMainDiv :nth-child(2n+3){
+  margin-bottom: 14px;
+}
 
 .showResultButtonStyle {
   background-color: #8c7459;
@@ -216,10 +222,7 @@
   gap: 20px;
 }
 
-
-
 //Confirm Stone Slider
-
 .tableWrapper {
   max-height: 65vh; /* Set to 80% of the viewport height */
   overflow-y: scroll;
@@ -229,15 +232,6 @@
   ); /* This may not be needed, depending on the layout */
   
 }
-.confirmTableWrapper {
-  max-height: 65vh; /* Set to 80% of the viewport height */
-  overflow-y: scroll;
-  padding-bottom: 10px;
-  height: calc(
-    100vh - 45vh
-  ); /* This may not be needed, depending on the layout */
-
-}
 
 .diamondDetailSheet {
   background-color: hsl(var(--solitaire-primary));
@@ -246,17 +240,4 @@
   // padding-right: 50px;
   // padding-left: 50px;
   padding:  0rem 0rem 0rem !important; 
-}
-.diamondDetailHeader {
-  color: var(--shadow, #8c7459);
-  font-size: 16px;
-  font-weight: 300;
-  height: 80px;
-  letter-spacing: 1px;
-  display: flex;
-  align-items: center;
-  padding: 0px 50px;
-  p{
-    color: var(--shadow, #8c7459);
-  }
 }
