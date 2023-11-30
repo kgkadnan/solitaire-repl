@@ -347,7 +347,7 @@ the labels to be displayed. */
               </tr>
             </thead>
             <tbody className={styles.tableBody}>
-              {tableRows?.map((row: any, index: number) => (
+              {tableRows.map((row: any, index: number) => (
                 <tr
                   key={row.id}
                   className={styles.tableRow}

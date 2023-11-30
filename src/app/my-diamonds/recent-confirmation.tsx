@@ -1,44 +1,29 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
-import {
-  useCardRecentConfirmationQuery,
-  useGetAllRecentConfirmationQuery,
-} from '@/features/api/my-diamonds/my-diamond';
+import { useGetAllRecentConfirmationQuery } from '@/features/api/my-diamonds/my-diamond';
 
-const RecentConfirmation = () => {
-  let myDiamondStatus = 'pending';
-  let fulfillmentStatus = 'not_fulfilled';
-  let paymentStatus = 'awaiting';
-  let fields = 'id,display_id,total';
-  let expand = 'items';
+const RecentConfirmation = ({ recentConfirmData }: any) => {
+  // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
 
-  const [recentConfirmData, setRecentConfirmData] = useState([]);
+  // State variables to manage data and UI state
   const [recentConfirmationDetail, setRecentConfirmationDetail] = useState([]);
   const [orderId, setOrderId] = useState('');
+  let recentConfirmationCheck = 'recent-confirmation';
 
-  const { data: myDiamondrecentConfirmData } = useCardRecentConfirmationQuery({
-    myDiamondStatus,
-    fulfillmentStatus,
-    paymentStatus,
-    fields,
-    expand,
-  });
-
-  useEffect(() => {
-    setRecentConfirmData(myDiamondrecentConfirmData?.orders);
-  }, [myDiamondrecentConfirmData]);
-
+  // Fetch recent confirmation data using a API
   const { data: productData } = useGetAllRecentConfirmationQuery({
     orderId,
     singleExpand,
   });
 
+  // useEffect to update recentConfirmationDetail when productData changes
   useEffect(() => {
     setRecentConfirmationDetail(productData?.order);
   }, [productData, recentConfirmationDetail]);
 
+  // Function to handle clicking on a card and set the orderId
   let handleCardClick = (id: string) => {
     setOrderId(id);
   };
@@ -48,6 +33,7 @@ const RecentConfirmation = () => {
       data={recentConfirmData}
       handleCardClick={handleCardClick}
       productPageDetail={recentConfirmationDetail}
+      check={recentConfirmationCheck}
     />
   );
 };

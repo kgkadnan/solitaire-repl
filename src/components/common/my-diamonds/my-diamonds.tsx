@@ -7,7 +7,6 @@ import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
 import Image from 'next/image';
 import styles from './my-diamonds.module.scss';
 import { CustomFooter } from '../footer';
-import { usePathname } from 'next/navigation';
 import { formatCreatedAt } from '@/utils/format-date';
 import { formatDate } from '@/utils/format-date-only';
 import CustomDataTable from '../data-table';
@@ -15,21 +14,20 @@ import { Product, TableColumn } from '@/app/search/result-interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../no-data-found';
-import { CustomDisplayButton } from '../buttons/display-button';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
 import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
+import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,
+  check,
 }) => {
-  console.log('data', productPageDetail);
-
-  const router = usePathname();
+  // Define the main MyDiamonds component
   const [rows, setRows] = useState<Product[]>([]);
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -39,15 +37,19 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
+  // Fetch product page table columns
   const { data: productTableColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
+  // Download Excel API
   let [downloadExcel] = useDownloadExcelMutation();
 
+  // useEffect to update data when productPageDetail changes
   useEffect(() => {
     setRows(productPageDetail?.items?.map((items: any) => items.product) || []);
   }, [productPageDetail]);
 
+  // useEffect to update tableColumns when productTableColumns changes
   useEffect(() => {
     setTableColumns(productTableColumns);
   }, [productTableColumns]);
@@ -62,7 +64,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     }
   };
 
-  //specific checkbox
+  // Function to handle clicking on a specific checkbox
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -85,7 +87,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setIsError(false);
   };
 
-  //Checkbox Data for Custom Data Table
+  // Object containing checkbox data for Custom Data Table
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     handleClick: handleClick,
@@ -93,6 +95,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     isCheckAll: isCheckAll,
   };
 
+  // Function to perform downloading Excel
   const performDownloadExcel = (
     productIds: any[],
     isEntireSearch?: boolean
@@ -128,39 +131,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setIsError(false);
   };
 
-  //download Excel
+  // Function to handle downloading Excel
   const downloadExcelFunction = () => {
-    if (isCheckAll) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
-            Do you want to all the stones available in search or just selected
-            stones!
-          </div>
-          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
-            <CustomDisplayButton
-              displayButtonLabel="Selected"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                performDownloadExcel(isCheck);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="All"
-              handleClick={() => {
-                setIsDialogOpen(false);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
-              }}
-            />
-          </div>
-        </>
-      );
+    if (isCheck.length > 1 && isCheckAll) {
+      performDownloadExcel(isCheck);
     } else if (isCheck.length === 0) {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
@@ -169,6 +143,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     }
   };
 
+  // Data for footer buttons
   const myDiamondsFooter = [
     {
       id: 1,
@@ -179,10 +154,11 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled },
   ];
 
+  // Function to render footer buttons
   const renderFooterButtons = () => (
     <CustomFooter
       footerButtonData={
-        router === '/my-diamonds/recent-confirmation'
+        check === 'recent-confirmation'
           ? [myDiamondsFooter[0]]
           : myDiamondsFooter
       }
@@ -190,36 +166,39 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     />
   );
 
+  // Page titles Data
   const pageTitles: PageTitles = {
-    '/my-diamonds/recent-confirmation':
+    'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
-    '/my-diamonds/my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
-    '/my-diamonds/previous-confirmation':
+    'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
+    'previous-confirmation':
       'app.myDiamonds.previousConfirmation.previousConfirmationDetail',
   };
 
-  const renderPageTitle = (router: string) => {
-    const pageTitle = pageTitles[router];
+  // Function to render page title
+  const renderPageTitle = (currentPage: string | undefined) => {
+    const pageTitle = currentPage ? pageTitles[currentPage] : null;
     return pageTitle ? <p>{ManageLocales(pageTitle)}</p> : null;
   };
 
-  const renderTableRow = (items: any) => {
-    // Determine the key for each row based on 'id' or 'invoiceNo'
-    const rowKey = items.id ? items.id : items.invoiceNo;
-
+  // Function to render individual Card
+  const renderMyDiamondCard = (items: any) => {
+    const rowKey = items.display_id ? items.display_id : items.invoiceNo;
     return (
       <div
         key={rowKey}
         className="bg-solitaireSecondary w-full h-[80px] flex items-center px-5 rounded-xl cursor-pointer mt-3"
         onClick={() => handleCardClick(items.id)}
       >
-        {/* Add the content inside the row */}
+        {/* Add the content inside the card */}
         <div className="flex justify-between w-full">
           <div className="flex gap-[20px]">
             <p>
-              {items.id ? 'Order ID: ' : 'Invoice No: '}
+              {check === 'recent-confirmation' ? 'Order ID: ' : 'Invoice No: '}
               <span className="text-solitaireTertiary">
-                {items.id ? items.id.toUpperCase() : items.invoiceNo}
+                {items.display_id
+                  ? formatNumberWithLeadingZeros(items.display_id)
+                  : items.invoiceNo}
               </span>
             </p>
             {items.trackOrder && (
@@ -256,39 +235,48 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         <div>
           <CustomSlider
             sheetTriggerStyle="w-full"
-            sheetTriggenContent={data?.map((items: any) => {
-              return renderTableRow(items);
-            })}
+            sheetTriggenContent={
+              data?.length ? (
+                data?.map((items: any) => {
+                  return renderMyDiamondCard(items);
+                })
+              ) : (
+                <NoDataFound />
+              )
+            }
             sheetContentStyle={styles.sheetContentStyle}
             sheetContent={
               <>
                 <div className="border-b border-solitaireSenary h-[80px] flex items-center mb-5">
-                  {renderPageTitle(router)}
+                  {renderPageTitle(check)}
                 </div>
 
-                <div className="flex border-b border-solitaireSenary h-[180px]">
+                <div className="flex border-b border-solitaireSenary h-[180px] mb-3">
                   <div className="w-[50%]">
                     <div className="flex mb-1">
-                      <p className="w-[30%]">
-                        {router === '/my-diamonds/recent-confirmation'
+                      <p className="w-[25%]">
+                        {check === 'recent-confirmation'
                           ? 'Order ID : '
                           : 'Invoice Number : '}
                       </p>
                       <span className="text-solitaireTertiary">
-                        {router === '/my-diamonds/recent-confirmation'
-                          ? productPageDetail?.id?.toUpperCase()
+                        {check === 'recent-confirmation'
+                          ? formatNumberWithLeadingZeros(
+                              productPageDetail?.display_id
+                            )
                           : 'items?.invoiceNo'}
                       </span>
                     </div>
+
                     <div className="flex mb-1">
-                      <p className="w-[30%]">No. of Stones :</p>
+                      <p className="w-[25%]">No. of Stones :</p>
                       <span className="text-solitaireTertiary">
                         {productPageDetail?.items?.length}
                       </span>
                     </div>
                     {productPageDetail?.total && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Payable Amount :</p>
+                        <p className="w-[25%]">Payable Amount :</p>
                         <span className="text-solitaireTertiary">
                           {`${productPageDetail?.total} $`}
                         </span>
@@ -296,7 +284,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.paidAmount && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Paid Amount :</p>
+                        <p className="w-[25%]">Paid Amount :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.paidAmount}
                         </span>
@@ -304,7 +292,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.trackingId && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Tracking ID :</p>
+                        <p className="w-[25%]">Tracking ID :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.trackingId}
                         </span>
@@ -312,7 +300,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.trackOrder && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Track Order :</p>
+                        <p className="w-[25%]">Track Order :</p>
                         <span className="text-solitaireTertiary">
                           {productPageDetail?.trackOrder}
                         </span>
@@ -320,25 +308,27 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     )}
                     {productPageDetail?.created_at && (
                       <div className="flex mb-1">
-                        <p className="w-[30%]">Date & Time :</p>
+                        <p className="w-[25%]">Date & Time :</p>
                         <span className="text-solitaireTertiary">
                           {formatCreatedAt(productPageDetail?.created_at)}
                         </span>
                       </div>
                     )}
-                    {/* <div className="flex mb-1">
-                            <p className="w-[30%]">Payment Terms :</p>
-                            <span className="text-solitaireTertiary">
-                              {items.paymentTerm}
-                            </span>
-                          </div> */}
+                    <div className="flex mb-1">
+                      <p className="w-[25%]">Payment Terms :</p>
+                      <span className="text-solitaireTertiary">
+                        {productPageDetail?.payment_term}
+                      </span>
+                    </div>
                   </div>
-                  {/* <div className="flex w-[50%]">
-                          <p className="pr-10">Comments:</p>
-                          <span className="text-solitaireTertiary">
-                            {items.comment.length ? items.comment : '-'}
-                          </span>
-                        </div> */}
+                  <div className="flex w-[50%]">
+                    <p className="pr-10">Comments:</p>
+                    <span className="text-solitaireTertiary">
+                      {productPageDetail?.comments?.length
+                        ? productPageDetail?.comments
+                        : '-'}
+                    </span>
+                  </div>
                 </div>
                 {rows?.length > 0 ? (
                   <CustomDataTable
