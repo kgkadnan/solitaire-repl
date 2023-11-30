@@ -1,4 +1,4 @@
-import { Product, TableColumn } from '@/app/search/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { ReactNode } from 'react';
 
 export interface IconfirmRadioButtons {

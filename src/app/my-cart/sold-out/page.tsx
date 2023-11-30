@@ -1,7 +1,7 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';

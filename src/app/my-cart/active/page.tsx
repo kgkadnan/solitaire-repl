@@ -1,7 +1,7 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDropdown } from '@/components/common/dropdown';
