@@ -1,10 +1,10 @@
 import { CustomInputlabel } from '@/components/common/input-label';
 import React from 'react';
-import styles from './form.module.scss';
+import styles from '../form.module.scss';
 import renderSelectionButtons from './render-selection-button';
 import { ManageLocales } from '@/utils/translate';
 import advanceSearch from '@/constants/advance-search.json';
-import { handleFilterChange } from './handle-change';
+import { handleFilterChange } from '../helpers/handle-change';
 
 interface IRenderEachOtherParameterData {
   element_key: string;
@@ -16,7 +16,7 @@ interface IRenderOtherParameterData {
   key: string;
   value: IRenderEachOtherParameterData[];
 }
-const renderOtherParameterFields = (state: any, setState: any) => {
+const renderInclusionField = (state: any, setState: any) => {
   const {
     blackTableBI,
     sideBlackBI,
@@ -219,4 +219,4 @@ const renderOtherParameterFields = (state: any, setState: any) => {
   ));
 };
 
-export default renderOtherParameterFields;
+export default renderInclusionField;

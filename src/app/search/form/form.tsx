@@ -12,18 +12,18 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import useFieldStateManagement from './field-state-management';
-import { generateQueryParams } from './generate-query-parameter';
-import { handleReset } from './reset';
+import useFieldStateManagement from './hooks/field-state-management';
+import { generateQueryParams } from './helpers/generate-query-parameter';
+import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
   MIN_SEARCH_FORM_COUNT,
-} from '@/constants/constant';
-import { setModifySearch } from './modify-search';
+} from '@/constants/business-logic';
+import { setModifySearch } from './helpers/modify-search';
 import useValidationStateManagement, {
   Errors,
-} from './validation-state-management';
-import renderContent from './render-content';
+} from './hooks/validation-state-management';
+import renderContent from './components/render-form-field';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -133,10 +133,10 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         setErrorText(
           'Please modify your search, the stones exceeds the limit.'
         );
-      } else if (data?.count === 0) {
+      } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
         setIsError(true);
         setErrorText(`No stones found, Please modify your search.`);
-      } else if (data?.count !== 0) {
+      } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
         setIsError(true);
         setErrorText(`${data?.count} stones found`);
       } else {

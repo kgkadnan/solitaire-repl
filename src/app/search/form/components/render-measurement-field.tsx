@@ -1,6 +1,6 @@
 import { CustomInputlabel } from '@/components/common/input-label';
 import React, { Dispatch, SetStateAction, useState } from 'react';
-import styles from './form.module.scss';
+import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
 
@@ -8,13 +8,13 @@ interface IRange {
   start: number;
   end: number;
 }
-interface IRenderParameterData {
+interface IRenderMeasurementData {
   parameterState: string[];
   setParameterState: Dispatch<SetStateAction<string>>[];
   label: string;
   range: IRange;
 }
-const renderParameterFields = (state: any, setState: any) => {
+const renderMeasurementField = (state: any, setState: any) => {
   const {
     tablePerFrom,
     tablePerTo,
@@ -186,7 +186,7 @@ const renderParameterFields = (state: any, setState: any) => {
     return '';
   }
 
-  return parameterData.map((parameter: IRenderParameterData) => (
+  return parameterData.map((parameter: IRenderMeasurementData) => (
     <div key={parameter.label} className={styles.parameterContainer}>
       <CustomInputlabel
         htmlfor="text"
@@ -267,4 +267,4 @@ const renderParameterFields = (state: any, setState: any) => {
   ));
 };
 
-export default renderParameterFields;
+export default renderMeasurementField;

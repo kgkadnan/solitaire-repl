@@ -6,13 +6,13 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
 
-import renderOtherParameterFields from './render-other-parameter-field';
-import renderParameterFields from './render-parameter-fields';
+import renderOtherParameterFields from './render-inclusion-field';
+import renderParameterFields from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
-import styles from './form.module.scss';
+import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
-import { Errors } from './validation-state-management';
-import { handleFilterChange } from './handle-change';
+import { Errors } from '../hooks/validation-state-management';
+import { handleFilterChange } from '../helpers/handle-change';
 
 const renderContent = (
   carat: any,
