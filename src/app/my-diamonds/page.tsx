@@ -68,7 +68,7 @@ function MyDiamonds() {
   let expand = 'items';
 
   // Fetch recent confirmation data
-  const { data: myDiamondrecentConfirmData } = useCardRecentConfirmationQuery({
+  const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
     myDiamondStatus,
     fulfillmentStatus,
     paymentStatus,
@@ -124,11 +124,11 @@ function MyDiamonds() {
     setFilteredData(recentConfirmData);
   }, [recentConfirmData]);
 
-  // useEffect to update recentConfirmData when myDiamondrecentConfirmData changes
+  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
-    setRecentConfirmData(myDiamondrecentConfirmData?.orders);
+    setRecentConfirmData(myDiamondRecentConfirmData?.orders);
     setFilteredData(recentConfirmData);
-  }, [myDiamondrecentConfirmData]);
+  }, [myDiamondRecentConfirmData]);
 
   // useEffect to add/remove scroll event listener
   useEffect(() => {
