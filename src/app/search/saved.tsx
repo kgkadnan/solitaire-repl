@@ -373,6 +373,8 @@ const SavedSearch = () => {
   };
 
   const handleSuggestionClick = (suggestion: string) => {
+    setIsCheck([]);
+    setIsCheckAll(false);
     setSearch(suggestion);
     setSearchByName(suggestion);
     setSuggestions([]);

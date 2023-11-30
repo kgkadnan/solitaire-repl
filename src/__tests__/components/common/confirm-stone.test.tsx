@@ -4,6 +4,7 @@ import React from 'react';
 import { render, fireEvent, logDOM } from '@testing-library/react';
 import ConfirmStone from '@/components/common/confirm-stone';
 import userEvent from '@testing-library/user-event';
+import { boolean } from 'zod';
 
 // Mock the translation function
 jest.mock('@/utils/translate', () => ({
@@ -31,6 +32,9 @@ describe('ConfirmStone Component', () => {
           checked: true,
         },
       ],
+      inputError: false,
+      selectedDaysInputValue: '',
+      selectedRadioDaysValue: '',
     };
 
     const { container } = render(<ConfirmStone {...props} />);
@@ -58,6 +62,9 @@ describe('ConfirmStone Component', () => {
           checked: true,
         },
       ],
+      inputError: false,
+      selectedDaysInputValue: '',
+      selectedRadioDaysValue: '',
     };
 
     const { getByTestId } = render(<ConfirmStone {...props} />);

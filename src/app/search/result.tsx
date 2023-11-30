@@ -669,7 +669,42 @@ code also combines all the radio button data arrays into a single array called R
    * closed.
    */
   const onOpenChangeSortBy = (open: boolean) => {
+    if (previousRadioState) {
+      setSortByRadioStates();
+    }
     setIsSortBySliderOpen(open);
+  };
+
+  /**
+   * Sets the state of various radio buttons based on the previous radio state.
+   * @returns None
+   */
+  const setSortByRadioStates = () => {
+    setSeletedTableInclusionRadioValue(
+      previousRadioState.selectedTableInclusionRadioValue || ''
+    );
+    setSelectedDefaultValue(previousRadioState.selectedDefaultValue || '');
+    setSelectedPriceRadioValue(
+      previousRadioState.selectedPriceRadioValue || ''
+    );
+    setSelectedCaratRadioValue(
+      previousRadioState.selectedCaratRadioValue || ''
+    );
+    setSelectedDiscountRadioValue(
+      previousRadioState.selectedDiscountRadioValue || ''
+    );
+    setSelectedFluorescenceRadioValue(
+      previousRadioState.selectedFluorescenceRadioValue || ''
+    );
+    setSelectedBlackTableRadioValue(
+      previousRadioState.selectedBlackTableRadioValue || ''
+    );
+    setSelectedSideBlackRadioValue(
+      previousRadioState.selectedSideBlackRadioValue || ''
+    );
+    setSelectedClarityRadioValue(
+      previousRadioState.selectedClarityRadioValue || ''
+    );
   };
 
   /**
@@ -679,31 +714,8 @@ code also combines all the radio button data arrays into a single array called R
    */
   const handleCancel = () => {
     if (previousRadioState) {
-      setSeletedTableInclusionRadioValue(
-        previousRadioState.selectedTableInclusionRadioValue || ''
-      );
-      setSelectedDefaultValue(previousRadioState.selectedDefaultValue || '');
-      setSelectedPriceRadioValue(
-        previousRadioState.selectedPriceRadioValue || ''
-      );
-      setSelectedCaratRadioValue(
-        previousRadioState.selectedCaratRadioValue || ''
-      );
-      setSelectedDiscountRadioValue(
-        previousRadioState.selectedDiscountRadioValue || ''
-      );
-      setSelectedFluorescenceRadioValue(
-        previousRadioState.selectedFluorescenceRadioValue || ''
-      );
-      setSelectedBlackTableRadioValue(
-        previousRadioState.selectedBlackTableRadioValue || ''
-      );
-      setSelectedSideBlackRadioValue(
-        previousRadioState.selectedSideBlackRadioValue || ''
-      );
-      setSelectedClarityRadioValue(
-        previousRadioState.selectedClarityRadioValue || ''
-      );
+      setSortByRadioStates();
+      onOpenChangeSortBy(false);
       // Add more properties if needed
     } else {
       setSelectedClarityRadioValue('');
@@ -1058,6 +1070,7 @@ variable changes. */
       <CustomSlider
         sheetContent={
           <ConfirmStone
+            inputError={inputError}
             onOpenChange={onOpenChange}
             commentValue={commentValue}
             handleComment={handleComment}
@@ -1066,6 +1079,8 @@ variable changes. */
             confirmStoneData={confirmStoneData}
             confirmRadioButtons={confirmRadioButtons}
             setInputErrorContent={setInputErrorContent}
+            selectedRadioDaysValue={selectedRadioDaysValue}
+            selectedDaysInputValue={selectedDaysInputValue}
             setSelectedDaysInputValue={setSelectedDaysInputValue}
           />
         }
