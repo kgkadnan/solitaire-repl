@@ -229,7 +229,7 @@ export const Tbody: React.FC<ITbodyProps> = ({
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows.map((row: any, index: number) => (
+      {tableRows?.map((row: any, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}
