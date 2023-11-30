@@ -9,7 +9,7 @@ import EditIcon from '@public/assets/icons/edit.svg';
 import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
-import AdvanceSearch from './form';
+import AdvanceSearch from './form/form';
 import SavedSearch from './saved';
 import SearchResults from './result';
 import { modifySearchResult } from '@/features/search-result/search-result';
