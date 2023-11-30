@@ -113,7 +113,7 @@ const MyInvoices = () => {
     },
   ];
 
-  return <MyDiamonds data={data} />;
+  return <div>My Invoice Page</div>;
 };
 
 export default MyInvoices;
