@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
@@ -16,55 +16,83 @@ import { useAddCartMutation } from '@/features/api/cart';
 import { Product } from '../search/result-interface';
 import { IDifferValue, IKeyLabelMapping } from './compare-stone-interface';
 import { FILE_URLS } from '@/constants/business-logic';
+import { CustomDialog } from '@/components/common/dialog';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import { useAppDispatch } from '@/hooks/hook';
+import { notificationBadge } from '@/features/notification/notification-slice';
 
 const CompareStone = () => {
+  // Initialize necessary state variables
+  const dispatch = useAppDispatch();
   const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
-
-  useEffect(() => {
-    let compareStoneStoreData: Product[] = JSON.parse(
-      localStorage.getItem('compareStone')!
-    );
-
-    setCompareStoneData(compareStoneStoreData);
-  }, []);
-
+  const [dialogContent, setDialogContent] = useState<ReactNode>();
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isCheck, setIsCheck] = useState<string[]>([]);
-
   const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const [errorText, setErrorText] = useState<string>('');
+  // Initialize state for displaying differences in stone properties
+  const [showDifferences, setShowDifferences] = useState(false);
+  const [compareValues, setCompareValues] = useState({});
 
+  // UseMutation to add items to the cart
   const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
     useAddCartMutation();
 
+  // Handle adding items to the cart
   const handleAddToCart = () => {
-    let variantIds = isCheck?.map((id: string) => {
-      const compareStoneCheck: Product | {} =
-        compareStoneData.find((compareStone: Product) => {
-          return compareStone?.id === id;
-        }) ?? {};
+    if (!isCheck.length) {
+      setIsError(true);
+      setErrorText(`You haven't picked any stones.`);
+    } else {
+      // Extract variant IDs for selected stones
+      let variantIds = isCheck?.map((id: string) => {
+        const compareStoneCheck: Product | {} =
+          compareStoneData.find((compareStone: Product) => {
+            return compareStone?.id === id;
+          }) ?? {};
 
-      if (compareStoneCheck && 'variants' in compareStoneCheck) {
-        return compareStoneCheck.variants[0]?.id;
-      }
+        if (compareStoneCheck && 'variants' in compareStoneCheck) {
+          return compareStoneCheck.variants[0]?.id;
+        }
 
-      return null;
-    });
+        return null;
+      });
 
-    if (variantIds.length) {
-      addCart({
-        variants: variantIds,
-      })
-        .unwrap()
-        .then(() => {
-          console.log('hhhhhhhhhhhhhhhhhhhhh');
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds,
         })
-        .catch(() => {
-          console.log('1111111111111111');
-        });
-      setIsCheck([]);
+          .unwrap()
+          .then((res) => {
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setErrorText('');
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="w-[350px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="vector image" />
+                </div>
+                <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
+                  {res?.message}
+                </div>
+              </>
+            );
+            dispatch(notificationBadge(true));
+          })
+          .catch((error) => {
+            // On error, set error state and error message
+            setIsError(true);
+            setErrorText(error?.data?.message);
+          });
+        // Clear the selected checkboxes
+        setIsCheck([]);
+      }
     }
   };
 
+  // Define footer buttons for the compare stone component
   const compareStoneFooter = [
     {
       id: 1,
@@ -89,7 +117,6 @@ const CompareStone = () => {
       ),
     },
     { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
-    { id: 3, displayButtonLabel: 'Add to Wishlist', style: styles.filled },
     {
       id: 4,
       displayButtonLabel: 'Add to Cart',
@@ -98,26 +125,7 @@ const CompareStone = () => {
     },
   ];
 
-  const handleClose = (event: React.MouseEvent<HTMLDivElement>, id: string) => {
-    const compareStones = JSON.parse(
-      localStorage.getItem('compareStone') ?? '[]'
-    );
-
-    const updatedStones = compareStones.filter(
-      (stone: Product) => stone.id !== id
-    );
-
-    localStorage.setItem('compareStone', JSON.stringify(updatedStones));
-
-    const filterData = compareStoneData.filter(
-      (item: Product) => item.id !== id
-    );
-    setCompareStoneData(filterData);
-  };
-
-  const [showDifferences, setShowDifferences] = useState(false);
-  const [compareValues, setCompareValues] = useState({});
-
+  // Define key-label mapping for stone properties
   const keyLabelMapping: IKeyLabelMapping = {
     id: 'id',
     shape: 'Shape',
@@ -150,6 +158,25 @@ const CompareStone = () => {
     luster: 'Luster',
   };
 
+  // Handle closing a compare stone item
+  const handleClose = (event: React.MouseEvent<HTMLDivElement>, id: string) => {
+    const compareStones = JSON.parse(
+      localStorage.getItem('compareStone') ?? '[]'
+    );
+
+    const updatedStones = compareStones.filter(
+      (stone: Product) => stone.id !== id
+    );
+
+    localStorage.setItem('compareStone', JSON.stringify(updatedStones));
+
+    const filterData = compareStoneData.filter(
+      (item: Product) => item.id !== id
+    );
+    setCompareStoneData(filterData);
+  };
+
+  // Handle change in show differences checkbox
   const handleShowDifferencesChange = () => {
     // Check if "Select All Checkbox" is checked and there are differences
     if (!showDifferences) {
@@ -183,6 +210,7 @@ const CompareStone = () => {
     }
     setShowDifferences(!showDifferences);
   };
+
   //Header Data
   const headerData = {
     headerHeading: ManageLocales('app.compareStone.heading'),
@@ -203,7 +231,7 @@ const CompareStone = () => {
     },
   };
 
-  //specific checkbox
+  // Define a specific checkbox click handler
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -216,8 +244,21 @@ const CompareStone = () => {
     setIsError(false);
   };
 
+  // UseEffect to fetch and set compareStoneData from local storage
+  useEffect(() => {
+    let compareStoneStoreData: Product[] = JSON.parse(
+      localStorage.getItem('compareStone')!
+    );
+    setCompareStoneData(compareStoneStoreData);
+  }, []);
+
   return (
     <div className={styles.comparestoneContainer}>
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
         <CustomHeader
           data={headerData}

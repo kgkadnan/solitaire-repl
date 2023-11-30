@@ -31,6 +31,7 @@ import ConfirmStone from '@/components/common/confirm-stone';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
 // Define a type for the radio state
+import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   /* The above code is using the `useAppDispatch` hook from the Redux toolkit in a TypeScript React
@@ -148,37 +149,6 @@ used in a React component to handle checkbox functionality. */
     isCheckAll: isCheckAll,
   };
 
-  /* The above code is a function called `performDownloadExcel` that takes an array of `productIds` as a
-parameter. */
-  const performDownloadExcel = (productIds: any[]) => {
-    downloadExcel({ productIds })
-      .unwrap()
-      .then((res) => {
-        let { data, fileName } = res;
-        if (data) {
-          setDialogContent(
-            <>
-              <div className="max-w-[380px] flex justify-center align-middle">
-                <Image src={confirmImage} alt="vector image" />
-              </div>
-              <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully
-              </div>
-            </>
-          );
-          setIsDialogOpen(true);
-          downloadExcelFromBase64(data, fileName);
-        }
-      })
-      .catch((e) => {
-        console.log('error', e);
-      });
-
-    setIsCheck([]);
-    setIsCheckAll(false);
-    setIsError(false);
-  };
-
   /**
    * The function `downloadExcelFunction` checks if a stone is selected and performs a download action if
    * it is.
@@ -188,7 +158,15 @@ parameter. */
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
-      performDownloadExcel(isCheck);
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError,
+      });
     }
   };
   /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
