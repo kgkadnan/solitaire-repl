@@ -24,12 +24,14 @@ export const myDiamondAPI = createApi({
         paymentStatus,
         fields,
         expand,
+        dateSearchUrl,
       }) =>
-        `/store/customers/me/orders?status=${myDiamondStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}`,
+        `/store/customers/me/orders?status=${myDiamondStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}&${dateSearchUrl}`,
       providesTags: ['myDiamond'],
     }),
     getAllRecentConfirmation: builder.query({
-      query: ({ orderId, singleExpand }) => `/store/orders/${orderId}`,
+      query: ({ orderId, singleExpand }) =>
+        `/store/orders/${orderId}?expand=${singleExpand}`,
       providesTags: ['myDiamond'],
     }),
 

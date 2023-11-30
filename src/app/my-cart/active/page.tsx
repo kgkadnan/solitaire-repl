@@ -48,7 +48,7 @@ const ActiveMyCart = () => {
   const [commentValue, setCommentValue] = useState('');
   const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
 
-  const { data: listingColumns } =
+  const { data: cartTableColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
   const { data } = useGetCartQuery({});
@@ -98,8 +98,8 @@ const ActiveMyCart = () => {
   };
 
   useEffect(() => {
-    setTableColumns(listingColumns);
-  }, [listingColumns]);
+    setTableColumns(cartTableColumns);
+  }, [cartTableColumns]);
 
   useEffect(() => {
     const updateRows = () => {
@@ -448,7 +448,7 @@ const ActiveMyCart = () => {
         sheetContent={
           <ConfirmStone
             confirmStoneData={confirmStoneData}
-            listingColumns={listingColumns}
+            listingColumns={cartTableColumns}
             confirmRadioButtons={confirmRadioButtons}
             commentValue={commentValue}
             handleComment={handleComment}
