@@ -26,6 +26,7 @@ import {
   measurementsLabelMapping,
   otherInformationsLabelMapping,
 } from './lable-mapping';
+import { FILE_URLS, GIA_LINK } from '@/constants/business-logic';
 
 export const Tbody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -161,7 +162,10 @@ export const Tbody: React.FC<ITbodyProps> = ({
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.giaCertificate'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`,
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        sliderData[0]?.certificate_number ?? ''
+      )}`,
     },
 
     {
@@ -169,14 +173,17 @@ export const Tbody: React.FC<ITbodyProps> = ({
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.diamondVideo'
       ),
-      iframeUrl: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=${sliderData[0]?.lot_id}&autoPlay=1`,
+      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`,
     },
     {
       id: '3',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.diamondImage'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`,
+      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`,
     },
   ];
   const footerButtonData = [
@@ -323,7 +330,10 @@ export const Tbody: React.FC<ITbodyProps> = ({
                           {diamondDetailImageUrl.length === 0 &&
                             diamondDetailIframeUrl.length === 0 && (
                               <Image
-                                src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.lot_id}/still.jpg`}
+                                src={`${FILE_URLS.IMG.replace(
+                                  '***',
+                                  sliderData[0]?.lot_id ?? ''
+                                )}`}
                                 alt={``}
                                 width={500}
                                 height={500}
@@ -407,7 +417,10 @@ export const Tbody: React.FC<ITbodyProps> = ({
                         <div className={styles.sliderData}>
                           {sliderData[0] && (
                             <Image
-                              src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`}
+                              src={`${FILE_URLS.CERT_FILE.replace(
+                                '***',
+                                sliderData[0]?.certificate_number ?? ''
+                              )}`}
                               alt={``}
                               width={500}
                               height={0}
@@ -436,7 +449,10 @@ export const Tbody: React.FC<ITbodyProps> = ({
                             }}
                             handleClick={() => {
                               downloadImage(
-                                `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.certificate_number}.jpeg`
+                                `${FILE_URLS.CERT_FILE.replace(
+                                  '***',
+                                  sliderData[0]?.certificate_number ?? ''
+                                )}`
                               );
                             }}
                           />
@@ -520,7 +536,10 @@ export const Tbody: React.FC<ITbodyProps> = ({
                                   {!diamondDetailImageUrl.length &&
                                     !diamondDetailIframeUrl.length && (
                                       <Image
-                                        src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                        src={`${FILE_URLS.IMG.replace(
+                                          '***',
+                                          sliderData[0]?.lot_id ?? ''
+                                        )}`}
                                         alt={``}
                                         width={450}
                                         height={450}
@@ -589,13 +608,9 @@ export const Tbody: React.FC<ITbodyProps> = ({
                                     height={20}
                                   />
                                 </div>
-                                <div
-                                  onClick={() => {
-                                    window.open(
-                                      `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
-                                      '_blank'
-                                    );
-                                  }}
+                                <a
+                                  href={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`}
+                                  target="_blank"
                                   className="cursor-pointer"
                                 >
                                   <Image
@@ -604,7 +619,7 @@ export const Tbody: React.FC<ITbodyProps> = ({
                                     width={25}
                                     height={20}
                                   />
-                                </div>
+                                </a>
                               </div>
                               <div className="border-b border-solitaireQuaternary"></div>
                               <div>
@@ -735,10 +750,7 @@ export const Tbody: React.FC<ITbodyProps> = ({
                   onClick={(e) => e.stopPropagation()}
                   className="border-b border-solitaireQuaternary border-solid"
                 >
-                  <a
-                    href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
-                    target="_blank"
-                  >
+                  <a href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
                     {row.rpt_number !== null ? row.rpt_number : '-'}
                   </a>
                 </div>
@@ -747,10 +759,7 @@ export const Tbody: React.FC<ITbodyProps> = ({
                   onClick={(e) => e.stopPropagation()}
                   className="border-b border-solitaireQuaternary border-solid"
                 >
-                  <a
-                    href={`https://www.gia.edu/report-check?reportno=${row.rpt_number}`}
-                    target="_blank"
-                  >
+                  <a href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
                     {row.lab}
                   </a>
                 </div>

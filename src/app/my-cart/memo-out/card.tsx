@@ -23,6 +23,7 @@ import dna from '@public/assets/icons/ph_dna-light.svg';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import {
+  FILE_URLS,
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE,
 } from '@/constants/business-logic';
@@ -364,7 +365,10 @@ const MemoOut = () => {
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.giaCertificate'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/${sliderData[0]?.product?.certificate_number}.jpeg`,
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        sliderData[0]?.product?.certificate_number ?? ''
+      )}`,
     },
 
     {
@@ -372,28 +376,40 @@ const MemoOut = () => {
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.diamondVideo'
       ),
-      iframeUrl: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=${sliderData[0]?.product?.lot_id}&autoPlay=1`,
+      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
+        '***',
+        sliderData[0]?.product?.lot_id ?? ''
+      )}`,
     },
     {
       id: '3',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.diamondImage'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        sliderData[0]?.product?.lot_id ?? ''
+      )}`,
     },
     {
       id: '4',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2b'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        sliderData[0]?.product?.lot_id ?? ''
+      )}`,
     },
     {
       id: '5',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
-      url: `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${sliderData[0]?.product?.lot_id}/still.jpg`,
+      url: `${FILE_URLS.IMG.replace(
+        '***',
+        sliderData[0]?.product?.lot_id ?? ''
+      )}`,
     },
   ];
 
@@ -646,7 +662,10 @@ const MemoOut = () => {
                                     {!diamondDetailImageUrl.length &&
                                       !diamondDetailIframeUrl.length && (
                                         <Image
-                                          src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${data?.lot_id}/still.jpg`}
+                                          src={`${FILE_URLS.IMG.replace(
+                                            '***',
+                                            data?.lot_id ?? ''
+                                          )}`}
                                           alt={``}
                                           width={350}
                                           height={350}
@@ -714,13 +733,9 @@ const MemoOut = () => {
                                       height={20}
                                     />
                                   </div>
-                                  <div
-                                    onClick={() => {
-                                      window.open(
-                                        `https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`,
-                                        '_blank'
-                                      );
-                                    }}
+                                  <a
+                                    href={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`}
+                                    target="_blank"
                                     className="cursor-pointer"
                                   >
                                     <Image
@@ -729,7 +744,7 @@ const MemoOut = () => {
                                       width={25}
                                       height={20}
                                     />
-                                  </div>
+                                  </a>
                                 </div>
                                 <div className="border-b border-solitaireQuaternary"></div>
                                 <div>

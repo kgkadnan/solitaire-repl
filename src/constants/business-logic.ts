@@ -23,3 +23,13 @@ export const MAX_SAVED_SEARCH_COUNT = 300;
 export const MAX_SEARCH_TAB_LIMIT = 5;
 
 export const LISTING_PAGE_DATA_LIMIT = 300;
+
+export const FILE_URLS = {
+  IMG: 'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/***/still.jpg',
+  CERT_FILE:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/***.jpeg',
+  VIDEO_FILE:
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***&autoPlay=1',
+};
+
+export const GIA_LINK = 'https://www.gia.edu/report-check?reportno=';

@@ -15,6 +15,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useAddCartMutation } from '@/features/api/cart';
 import { Product } from '../search/result-interface';
 import { IDifferValue, IKeyLabelMapping } from './compare-stone-interface';
+import { FILE_URLS } from '@/constants/business-logic';
 
 const CompareStone = () => {
   const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
@@ -289,7 +290,10 @@ const CompareStone = () => {
                         >
                           <Image
                             className={styles.diamondImage}
-                            src={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/imaged/${items?.lot_id}/still.jpg`}
+                            src={`${FILE_URLS.IMG.replace(
+                              '***',
+                              items?.lot_id ?? ''
+                            )}`}
                             alt="Diamond Image"
                             width={180}
                             height={200}
