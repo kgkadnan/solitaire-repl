@@ -14,9 +14,7 @@ import { Product, TableColumn } from '@/app/search/result-interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../no-data-found';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
 import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
@@ -142,7 +140,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
     'previous-confirmation':
-      'app.myDiamonds.previousConfirmation.previousConfirmationDetail',
+      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails',
   };
 
   // Function to render page title
@@ -153,7 +151,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   // Function to render individual Card
   const renderMyDiamondCard = (items: any) => {
-    const rowKey = items.display_id ? items.display_id : items.invoiceNo;
+    const rowKey = items.display_id ? items.display_id : items.invoice_id;
     return (
       <div
         key={rowKey}
@@ -166,9 +164,9 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             <p>
               {check === 'recent-confirmation' ? 'Order ID: ' : 'Invoice No: '}
               <span className="text-solitaireTertiary">
-                {items.display_id
-                  ? formatNumberWithLeadingZeros(items.display_id)
-                  : items.invoiceNo}
+                {items.invoice_id
+                  ? items.invoice_id
+                  : formatNumberWithLeadingZeros(items.display_id)}
               </span>
             </p>
             {items.trackOrder && (
@@ -234,7 +232,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                           ? formatNumberWithLeadingZeros(
                               productPageDetail?.display_id
                             )
-                          : 'items?.invoiceNo'}
+                          : productPageDetail?.invoice_id}
                       </span>
                     </div>
 

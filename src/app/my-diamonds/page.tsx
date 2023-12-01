@@ -8,9 +8,13 @@ import { CustomCalender } from '@/components/common/calender';
 import { DateRange } from 'react-day-picker';
 import { SearchIcon } from 'lucide-react';
 import { CustomSearchInputField } from '@/components/common/search-input';
-import { useCardRecentConfirmationQuery } from '@/features/api/my-diamonds/my-diamond';
+import {
+  useCardMyInvoiceQuery,
+  useCardPreviousConfirmationQuery,
+  useCardRecentConfirmationQuery,
+} from '@/features/api/my-diamonds/my-diamond';
 import RecentConfirmation from './recent-confirmation';
-import MyInvoices from './my-invoices/page';
+import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation/page';
 import { IDateRange } from '../search/saved-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
@@ -29,6 +33,7 @@ function MyDiamonds() {
   );
   const [activeTab, setActiveTab] = useState<string>('Recent Confirmations');
   const [dateSearchUrl, setDateSearchUrl] = useState('');
+  const [myInvoiceData, setMyInvoiceData] = useState([]);
 
   // Define routes for different tabs in My Diamonds
   let myDiamondsRoutes = [
@@ -40,7 +45,7 @@ function MyDiamonds() {
     {
       id: '2',
       pathName: ManageLocales('app.myDiamonds.MyInvoices'),
-      count: 12,
+      count: myInvoiceData?.length,
     },
     {
       id: '3',
@@ -66,6 +71,8 @@ function MyDiamonds() {
   let paymentStatus = 'awaiting';
   let fields = 'id,display_id,total';
   let expand = 'items';
+  let invoiceStatus = 'available';
+  let previousConfirmStatus = 'completed';
 
   // Fetch recent confirmation data
   const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
@@ -76,6 +83,19 @@ function MyDiamonds() {
     expand,
     dateSearchUrl,
   });
+
+  // Make an additional API call with invoiceStatus set to available
+  const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
+    myDiamondStatus,
+    invoiceStatus,
+  });
+
+  // Make an additional API call with previousConfirmStatus set to completed
+  const { data: previousConfirmationData } = useCardPreviousConfirmationQuery({
+    previousConfirmStatus,
+  });
+
+  console.log('previousConfirmationData', previousConfirmationData);
 
   // Handle scroll events to show/hide the header
   const handleScroll = () => {
@@ -129,6 +149,11 @@ function MyDiamonds() {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
     setFilteredData(recentConfirmData);
   }, [myDiamondRecentConfirmData]);
+
+  // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
+  useEffect(() => {
+    setMyInvoiceData(myDiamondPendingInvoiceData?.orders);
+  }, [myDiamondPendingInvoiceData]);
 
   // useEffect to add/remove scroll event listener
   useEffect(() => {
@@ -210,7 +235,7 @@ function MyDiamonds() {
           {pageRenderCheck === 'Recent Confirmations' ? (
             <RecentConfirmation recentConfirmData={filteredData} />
           ) : pageRenderCheck === 'My Invoices' ? (
-            <MyInvoices />
+            <MyInvoices myInvoiceData={myInvoiceData} />
           ) : (
             <PreviousConfirmation />
           )}

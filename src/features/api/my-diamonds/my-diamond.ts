@@ -34,7 +34,19 @@ export const myDiamondAPI = createApi({
         `/store/orders/${orderId}?expand=${singleExpand}`,
       providesTags: ['myDiamond'],
     }),
+    cardMyInvoice: builder.query({
+      query: ({ myDiamondStatus, invoiceStatus }) =>
+        `/store/customers/me/orders?status=${myDiamondStatus}&invoice_status=${invoiceStatus}`,
+      providesTags: ['myDiamond'],
+    }),
+    cardPreviousConfirmation: builder.query({
+      query: ({ previousConfirmationData }) => {
+        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', previousConfirmationData);
 
+        // `/store/customers/me/orders?status=${previousConfirmationData}`,
+        // providesTags: ['myDiamond'],
+      },
+    }),
     confirmStone: builder.mutation({
       query: (data) => ({
         url: `confirm-stone`,
@@ -48,6 +60,8 @@ export const myDiamondAPI = createApi({
 
 export const {
   useCardRecentConfirmationQuery,
+  useCardMyInvoiceQuery,
+  useCardPreviousConfirmationQuery,
   useGetAllRecentConfirmationQuery,
   useConfirmStoneMutation,
 } = myDiamondAPI;
