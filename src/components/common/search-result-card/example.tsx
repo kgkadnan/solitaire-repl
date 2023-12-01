@@ -6,7 +6,7 @@ import overriddenStyles from './example.module.scss';
 
 const SearchResultCardExample = () => {
   const cardData = {
-    cardId: '1',
+    id: '1',
     cardIcon: Edit,
     cardhandleIcon: Edit,
     cardHeader: <p style={{ color: 'red' }}>header</p>,
