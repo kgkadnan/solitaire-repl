@@ -1,12 +1,12 @@
-import React, { useState } from 'react';
-import { Product } from '../result-interface';
+import { Product } from '@/app/search/result/result-interface';
+import { useState } from 'react';
 
-export const UseConfirmStoneStateManagement = () => {
+export const useConfirmStoneStateManagement = () => {
   const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
   const [commentValue, setCommentValue] = useState('');
   const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
-    useState<string>();
+    useState<string>('');
   return {
     confirmStoneState: {
       confirmStoneData,

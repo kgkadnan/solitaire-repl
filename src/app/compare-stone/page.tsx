@@ -32,8 +32,7 @@ const CompareStone = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  const [addCart, { isLoading: updateIsLoading, isError: updateIsError }] =
-    useAddCartMutation();
+  const [addCart] = useAddCartMutation();
 
   const handleAddToCart = () => {
     let variantIds = isCheck?.map((id: string) => {

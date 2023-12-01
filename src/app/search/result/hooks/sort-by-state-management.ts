@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const UseSortByStateManagement = () => {
+export const useSortByStateManagement = () => {
   const [selectedCaratRadioValue, setSelectedCaratRadioValue] =
     useState<string>('');
   const [selectedClarityRadioValue, setSelectedClarityRadioValue] =

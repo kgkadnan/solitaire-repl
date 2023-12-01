@@ -1,17 +1,27 @@
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styles from '../search-results.module.scss';
 import { CustomSlider } from '@/components/common/slider';
 import Image from 'next/image';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import { RadioButton } from '@/components/common/custom-input-radio';
-import { UseSortByStateManagement } from '../hooks/sort-by-state-management';
 import { sortProducts } from '../helpers/sort-produts';
+import { ISortBySetState, ISortByState, Product } from '../result-interface';
 
-const SortBy: React.FC<any> = ({ rows, setRows }) => {
-  const { sortByState, sortBySetState } = UseSortByStateManagement();
+interface ISrotByProps {
+  rows: Product[];
+  setRows: Dispatch<SetStateAction<Product[]>>;
+  sortByState: ISortByState;
+  sortBySetState: ISortBySetState;
+}
 
+const SortBy: React.FC<ISrotByProps> = ({
+  rows,
+  setRows,
+  sortByState,
+  sortBySetState,
+}) => {
   const {
     selectedCaratRadioValue,
     selectedClarityRadioValue,

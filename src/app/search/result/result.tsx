@@ -2,70 +2,57 @@
 rendering and managing the search results page. */
 'use client';
 import styles from './search-results.module.scss';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { CustomSlider } from '@/components/common/slider';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { Product, TableColumn } from './result-interface';
+import { Product } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import CustomLoader from '@/components/common/loader';
-import { CustomInputField } from '@/components/common/input-field';
 import ConfirmStone from '@/components/common/confirm-stone';
-import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
-import { UseSortByStateManagement } from './hooks/sort-by-state-management';
-import { UseErrorStateManagement } from './hooks/error-state-management';
-import { UseConfirmStoneStateManagement } from './hooks/confirm-stone-state-management';
-import { UseCheckboxStateManagement } from './hooks/checkbox-state-management';
-import { UseModalStateManagement } from './hooks/modal-state-management';
-import { UseCommonDtateManagement } from './hooks/common-state-management';
-import { ResultHeader } from './components/Result-header';
 import { ResultFooter } from './components/result-footer';
+import { ResultHeader } from './components/result-header';
+import { useSortByStateManagement } from './hooks/sort-by-state-management';
+import { useErrorStateManagement } from './hooks/error-state-management';
+import { useCheckboxStateManagement } from './hooks/checkbox-state-management';
+import { useModalStateManagement } from './hooks/modal-state-management';
+import { useCommonDtateManagement } from './hooks/common-state-management';
+import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 // Define a type for the radio state
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
-  const { sortByState } = UseSortByStateManagement();
+  const { sortByState, sortBySetState } = useSortByStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { confirmStoneState, confirmStoneSetState } =
+    useConfirmStoneStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { commonSetState, commonState } = useCommonDtateManagement();
 
   const { refetchDataToDefault } = sortByState;
-
-  const { errorState, errorSetState } = UseErrorStateManagement();
   const { inputError, inputErrorContent } = errorState;
   const { setIsError, setErrorText, setInputError, setInputErrorContent } =
     errorSetState;
 
-  const { confirmStoneState, confirmStoneSetState } =
-    UseConfirmStoneStateManagement();
-  const {
-    confirmStoneData,
-    commentValue,
-    selectedDaysInputValue,
-    selectedRadioDaysValue,
-  } = confirmStoneState;
-  const {
-    setConfirmStoneData,
-    setCommentValue,
-    setSelectedDaysInputValue,
-    setSelectedRadioDaysValue,
-  } = confirmStoneSetState;
-
-  const { checkboxState, checkboxSetState } = UseCheckboxStateManagement();
+  const { setConfirmStoneData, setSelectedRadioDaysValue } =
+    confirmStoneSetState;
   const { isCheck, isCheckAll } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-
-  const { modalState, modalSetState } = UseModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
     modalState;
   const { setIsDialogOpen, setIsInputDialogOpen, setIsSliderOpen } =
     modalSetState;
-
-  const { commonSetState } = UseCommonDtateManagement();
-  const { setYourSelectionData, setTotalAmount, setAverageDiscount } =
-    commonSetState;
-
-  const [rows, setRows] = useState<Product[]>([]);
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const {
+    setYourSelectionData,
+    setTotalAmount,
+    setAverageDiscount,
+    setRows,
+    setTableColumns,
+    setSaveSearchName,
+  } = commonSetState;
+  const { rows, tableColumns, saveSearchName } = commonState;
 
   let [addSavedSearch] = useAddSavedSearchMutation();
   const { data: listingColumns } = useGetManageListingSequenceQuery({});
@@ -83,7 +70,6 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     } else {
       updatedIsCheck.push(id);
     }
-
     setIsCheck(updatedIsCheck);
 
     if (updatedIsCheck.length === rows?.length) {
@@ -144,7 +130,7 @@ handle the logic for closing a dialog box after a certain delay. */
    * @param {string[]} [isCheck] - An optional array of strings representing the IDs of the stones that
    * are being checked.
    */
-  const handleConfirm = (isCheck?: string[]) => {
+  const handleConfirm = (isCheck: string[]) => {
     let hasMemoOut = isCheck?.some((id) => {
       return rows.some(
         (row) => row.id == id && row.diamond_status === 'MemoOut'
@@ -165,19 +151,6 @@ handle the logic for closing a dialog box after a certain delay. */
     } else {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
-    }
-  };
-
-  /**
-   * The function `handleComment` updates the comment value based on the input value, but only if the
-   * input value is within a certain character limit.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred, such as a change in the input value of an HTML input element.
-   */
-  const handleComment = (event: React.ChangeEvent<HTMLInputElement>) => {
-    let inputValue = event.target.value;
-    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
-      setCommentValue(inputValue);
     }
   };
 
@@ -239,113 +212,6 @@ variable changes. */
       }
     }
   }, [data, refetchDataToDefault]);
-
-  /**
-   * The function `handleConfirmStoneRadioChange` updates various state values based on the selected
-   * radio button value.
-   * @param {string} value - The value parameter is a string that represents the selected value from a
-   * radio button.
-   */
-  const handleConfirmStoneRadioChange = (value: string) => {
-    setInputError(false);
-    setInputErrorContent('');
-    setSelectedDaysInputValue('');
-    setSelectedRadioDaysValue(value);
-  };
-
-  /**
-   * The function handles the change event of a radio input and updates the state based on the input
-   * value.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred when the radio button value is changed.
-   */
-  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(event.target.value);
-    if (inputValue >= 121) {
-      setInputError(true);
-      setInputErrorContent('Invalid input.');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (inputValue) {
-      setInputError(false);
-      setInputErrorContent('');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (event.target.value === '') {
-      setInputError(false);
-      setInputErrorContent('');
-      // If the input is empty, clear the state
-      setSelectedDaysInputValue('');
-    }
-  };
-
-  /**
-   * The onFocus function calls the handleConfirmStoneRadioChange function with the argument 'other'.
-   */
-  const onFocus = () => {
-    handleConfirmStoneRadioChange('other');
-  };
-
-  /* The above code is defining an array of radio button objects for a form in a TypeScript React
- component. Each radio button object has properties such as name, onChange event handler, id, value,
- label, and checked. The radio buttons are used to select a duration (7 days, 30 days, 60 days, or a
- custom value) and update the selected value in the component's state. The last radio button has a
- custom label that includes an input field for entering a custom number of days. */
-  const confirmRadioButtons = [
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '0',
-      value: '7',
-      label: '7 Days',
-      checked: selectedRadioDaysValue === '7',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '1',
-      value: '30',
-      label: '30 Days',
-      checked: selectedRadioDaysValue === '30',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '2',
-      value: '60',
-      label: '60 Days',
-      checked: selectedRadioDaysValue === '60',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '3',
-      value: 'other',
-      label: (
-        <>
-          <div className="flex gap-2">
-            <CustomInputField
-              name="daysField"
-              type="number"
-              // disable={selectedRadioDaysValue !== 'other'}
-              onChange={handleRadioDayValue}
-              value={selectedDaysInputValue}
-              placeholder="Max 120 Days"
-              style={{ input: 'w-[80px]' }}
-              onFocus={onFocus}
-            />
-            <div>Days</div>
-          </div>
-          {inputError ? (
-            <div className="h-[10px] text-[#983131]">{inputErrorContent}</div>
-          ) : (
-            <div className="h-[10px]" />
-          )}
-        </>
-      ),
-      checked: selectedRadioDaysValue === 'other',
-    },
-  ];
 
   /**
    * The function `handleSaveSearch` saves search data to localStorage and updates the state with the
@@ -426,18 +292,12 @@ variable changes. */
       <CustomSlider
         sheetContent={
           <ConfirmStone
-            inputError={inputError}
+            errorState={errorState}
+            errorSetState={errorSetState}
             onOpenChange={onOpenChange}
-            commentValue={commentValue}
-            handleComment={handleComment}
-            setInputError={setInputError}
+            confirmStoneState={confirmStoneState}
+            confirmStoneSetState={confirmStoneSetState}
             listingColumns={listingColumns}
-            confirmStoneData={confirmStoneData}
-            confirmRadioButtons={confirmRadioButtons}
-            setInputErrorContent={setInputErrorContent}
-            selectedRadioDaysValue={selectedRadioDaysValue}
-            selectedDaysInputValue={selectedDaysInputValue}
-            setSelectedDaysInputValue={setSelectedDaysInputValue}
           />
         }
         isSliderOpen={isSliderOpen}
@@ -461,9 +321,12 @@ variable changes. */
       <ResultHeader
         activeTab={activeTab}
         data={data}
-        rows={rows}
-        tableColumns={tableColumns}
-        setRows={setRows}
+        checkboxState={checkboxState}
+        modalSetState={modalSetState}
+        commonSetState={commonSetState}
+        commonState={commonState}
+        sortBySetState={sortBySetState}
+        sortByState={sortByState}
       />
 
       {rows?.length && tableColumns?.length ? (
@@ -478,7 +341,16 @@ variable changes. */
         <CustomLoader />
       )}
 
-      <ResultFooter rows={rows} refetchRow={refetchRow} />
+      <ResultFooter
+        rows={rows}
+        refetchRow={refetchRow}
+        modalSetState={modalSetState}
+        checkboxState={checkboxState}
+        checkboxSetState={checkboxSetState}
+        errorSetState={errorSetState}
+        errorState={errorState}
+        confirmStoneSetState={confirmStoneSetState}
+      />
     </>
   );
 };

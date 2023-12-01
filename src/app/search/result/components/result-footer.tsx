@@ -1,24 +1,30 @@
 import { CustomFooter } from '@/components/common/footer';
 import React from 'react';
 import styles from '../search-results.module.scss';
-import { UseErrorStateManagement } from '../hooks/error-state-management';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { UseCheckboxStateManagement } from '../hooks/checkbox-state-management';
-import { UseCommonDtateManagement } from '../hooks/common-state-management';
-import { UseModalStateManagement } from '../hooks/modal-state-management';
+
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { Product } from '../result-interface';
+import { IResultFooterProps, Product } from '../result-interface';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
-import { UseConfirmStoneStateManagement } from '../hooks/confirm-stone-state-management';
+import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
-export const ResultFooter: React.FC<any> = ({ rows, refetchRow }) => {
+export const ResultFooter: React.FC<IResultFooterProps> = ({
+  rows,
+  refetchRow,
+  modalSetState,
+  checkboxState,
+  checkboxSetState,
+  errorSetState,
+  errorState,
+  confirmStoneSetState,
+}) => {
   /* The above code is using the `useAppDispatch` hook from the Redux toolkit in a TypeScript React
   component. It is assigning the returned dispatch function to the `dispatch` constant. */
   const dispatch = useAppDispatch();
@@ -26,38 +32,19 @@ export const ResultFooter: React.FC<any> = ({ rows, refetchRow }) => {
   let [downloadExcel] = useDownloadExcelMutation();
   const [addCart] = useAddCartMutation();
 
-  const { errorState, errorSetState } = UseErrorStateManagement();
   const { isError, errorText } = errorState;
   const { setIsError, setErrorText } = errorSetState;
-
-  const { checkboxState, checkboxSetState } = UseCheckboxStateManagement();
-  const { isCheck, isCheckAll } = checkboxState;
+  const { setDialogContent, setIsDialogOpen, setIsSliderOpen } = modalSetState;
+  const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-
-  const { commonState, commonSetState } = UseCommonDtateManagement();
-  const { yourSelectionData, totalAmount, averageDiscount } = commonState;
-  const { setYourSelectionData, setTotalAmount, setAverageDiscount } =
-    commonSetState;
-
-  const { modalState, modalSetState } = UseModalStateManagement();
-  const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
-    modalState;
-  const {
-    setDialogContent,
-    setIsDialogOpen,
-    setIsInputDialogOpen,
-    setIsSliderOpen,
-  } = modalSetState;
-
-  const { confirmStoneSetState } = UseConfirmStoneStateManagement();
   const { setConfirmStoneData } = confirmStoneSetState;
 
   /* The above code is a function called `performDownloadExcel` that takes an array of `productIds` as a
 parameter. */
-  const performDownloadExcel = (productIds: any[]) => {
+  const performDownloadExcel = (productIds: string[]) => {
     downloadExcel({ productIds })
       .unwrap()
-      .then((res: any) => {
+      .then((res) => {
         let { data, fileName } = res;
         if (data) {
           setDialogContent(
@@ -111,7 +98,7 @@ parameter. */
       setIsError(true);
       setErrorText('Minimum 2 stone to compare.');
     } else {
-      let comapreStone = isCheck.map((id) => {
+      let comapreStone = isCheck.map((id: string) => {
         return rows.find((row: Product) => row.id === id);
       });
 
@@ -131,7 +118,7 @@ parameter. */
       setIsError(true);
       setErrorText('Please select a stone to perform action');
     } else {
-      let hasMemoOut = isCheck.some((id) => {
+      let hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
           (row: Product) => row.id == id && row.diamond_status === 'MemoOut'
         );
@@ -143,7 +130,7 @@ parameter. */
         );
         setIsError(true);
       } else {
-        let variantIds = isCheck.map((id) => {
+        let variantIds = isCheck.map((id: string) => {
           const selectedRow = rows.find((row: Product) => row.id === id);
           return selectedRow?.variants[0]?.id;
         });
@@ -180,37 +167,6 @@ parameter. */
     }
   };
 
-  /**
-   * The function `handleConfirm` checks if any selected stones have a status of "MemoOut" and displays
-   * an error message if so, otherwise it opens a slider and sets the selected stones data.
-   * @param {string[]} [isCheck] - An optional array of strings representing the IDs of the stones that
-   * are being checked.
-   */
-  const handleConfirm = (isCheck?: string[]) => {
-    let hasMemoOut = isCheck?.some((id) => {
-      return rows.some(
-        (row: Product) => row.id == id && row.diamond_status === 'MemoOut'
-      );
-    });
-
-    if (hasMemoOut) {
-      setErrorText(
-        'Some stones in your selection are not available, Please modify your selection.'
-      );
-      setIsError(true);
-    } else if (isCheck?.length) {
-      setIsError(false);
-      setErrorText('Please select a stone to perform action.');
-      setIsSliderOpen(true);
-      const confirmStone = rows.filter(
-        (item: Product) => isCheck?.includes(item.id)
-      );
-      setConfirmStoneData(confirmStone);
-    } else {
-      setIsError(true);
-      setErrorText('Please select a stone to perform action.');
-    }
-  };
   const footerButtonData = [
     {
       id: 1,
@@ -263,7 +219,15 @@ parameter. */
       id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
-      fn: () => handleConfirm(isCheck),
+      fn: () =>
+        handleConfirmStone(
+          isCheck,
+          rows,
+          setErrorText,
+          setIsError,
+          setIsSliderOpen,
+          setConfirmStoneData
+        ),
     },
   ];
 

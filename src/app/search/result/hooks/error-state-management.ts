@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export const UseErrorStateManagement = () => {
+export const useErrorStateManagement = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [inputError, setInputError] = useState(false);

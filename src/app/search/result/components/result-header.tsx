@@ -1,30 +1,34 @@
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import React from 'react';
-import SortBy from './Sort-by';
+import SortBy from './sort-by';
 import { ManageLocales } from '@/utils/translate';
 import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
-import { UseCheckboxStateManagement } from '../hooks/checkbox-state-management';
-import { UseModalStateManagement } from '../hooks/modal-state-management';
-import { UseCommonDtateManagement } from '../hooks/common-state-management';
+import { IResultHeaderProps } from '../result-interface';
 
-export const ResultHeader: React.FC<any> = ({
+export const ResultHeader: React.FC<IResultHeaderProps> = ({
   activeTab,
   data,
-  rows,
-  tableColumns,
-  setRows,
+  checkboxState,
+  modalSetState,
+  commonSetState,
+  commonState,
+  sortBySetState,
+  sortByState,
 }) => {
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
-  const { checkboxState } = UseCheckboxStateManagement();
   const { isCheck } = checkboxState;
 
-  const { modalSetState } = UseModalStateManagement();
   const { setIsInputDialogOpen } = modalSetState;
 
-  const { commonState, commonSetState } = UseCommonDtateManagement();
-  const { yourSelectionData, totalAmount, averageDiscount } = commonState;
-  const { setYourSelectionData } = commonSetState;
+  const {
+    yourSelectionData,
+    totalAmount,
+    averageDiscount,
+    rows,
+    tableColumns,
+  } = commonState;
+  const { setYourSelectionData, setRows } = commonSetState;
 
   /**
    * The function `handleUpdateSaveSearch` updates the save search data in local storage and calls the
@@ -96,7 +100,12 @@ export const ResultHeader: React.FC<any> = ({
             ''
           )}
 
-          <SortBy rows={rows} setRows={setRows} />
+          <SortBy
+            rows={rows}
+            setRows={setRows}
+            sortBySetState={sortBySetState}
+            sortByState={sortByState}
+          />
         </div>
       </div>
     </div>
