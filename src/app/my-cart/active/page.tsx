@@ -11,7 +11,6 @@ import { ManageLocales } from '@/utils/translate';
 import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './active-cart.module.scss';
 import { CustomFooter } from '@/components/common/footer';
-
 import { CustomDialog } from '@/components/common/dialog';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
@@ -21,15 +20,16 @@ import {
   MIN_COMPARE_STONE,
 } from '@/constants/business-logic';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
 import { useErrorStateManagement } from '@/app/search/result/hooks/error-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
 const ActiveMyCart = () => {
+  // State variables for managing component state
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [rows, setRows] = useState([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
@@ -46,15 +46,20 @@ const ActiveMyCart = () => {
   const { setConfirmStoneData } = confirmStoneSetState;
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
 
+  // Fetching table columns for managing listing sequence
   const { data: cartTableColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
+  // Fetching cart data
   const { data } = useGetCartQuery({});
+
+  // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
 
+  // Mutation for downloading Excel data
   let [downloadExcel] = useDownloadExcelMutation();
 
-  //specific checkbox
+  // Handle individual checkbox click
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -66,6 +71,7 @@ const ActiveMyCart = () => {
 
     setIsCheck(updatedIsCheck);
 
+    // Update the "Select All" checkbox status
     if (updatedIsCheck.length === rows?.length) {
       setIsCheckAll(true);
     } else {
@@ -77,7 +83,7 @@ const ActiveMyCart = () => {
     setIsError(false);
   };
 
-  //Selecting All Checkbox Function
+  // Handle "Select All" checkbox click
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
 
@@ -87,7 +93,7 @@ const ActiveMyCart = () => {
     }
   };
 
-  //Checkbox Data for Custom Data Table
+  // Data for Custom Data Table checkboxes
   let checkboxData = {
     handleSelectAllCheckbox: handleSelectAllCheckbox,
     handleClick: handleClick,
@@ -95,25 +101,9 @@ const ActiveMyCart = () => {
     isCheckAll: isCheckAll,
   };
 
-  useEffect(() => {
-    setTableColumns(cartTableColumns);
-  }, [cartTableColumns]);
-
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'Active')
-          .map((row: any) => row.product);
-
-        setRows(activeDiamondItems);
-      }
-    };
-
-    updateRows();
-  }, [data]);
-
+  // Handle the comparison of selected stones
   const handleCompareStone = () => {
+    // Check the number of selected stones
     if (isCheck.length > MAX_COMPARE_STONE) {
       setIsError(true);
       setErrorText(`You can compare a maximum of ${MAX_COMPARE_STONE} stones`);
@@ -123,6 +113,7 @@ const ActiveMyCart = () => {
         `Minimum ${MIN_COMPARE_STONE} stones are required to compare`
       );
     } else {
+      // Get the data of selected stones and open a new window for comparison
       const compareStones = isCheck
         .map((id) => data.items.find((row: any) => row.product.id === id))
         .map((stone) => stone.product);
@@ -133,6 +124,7 @@ const ActiveMyCart = () => {
     }
   };
 
+  // Handle the deletion of selected stones
   const handleDelete = () => {
     if (isCheck.length) {
       setIsError(false);
@@ -166,6 +158,7 @@ const ActiveMyCart = () => {
     }
   };
 
+  // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
     let itemsId = isCheck.map((id) => {
       const selectedRow = data.items.find((row: any) => row.product.id === id);
@@ -202,83 +195,24 @@ const ActiveMyCart = () => {
     setErrorText(`You haven't picked any stones.`);
   };
 
-  const performDownloadExcel = (
-    productIds: any[],
-    isEntireSearch?: boolean
-  ) => {
-    if (isEntireSearch) {
-      console.log('isEntireSearch', isEntireSearch);
-    } else {
-      downloadExcel({ productIds })
-        .unwrap()
-        .then((res) => {
-          let { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setDialogContent(
-              <>
-                <div className="max-w-[380px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-            setIsDialogOpen(true);
-          }
-        })
-        .catch((e) => {
-          console.log('error', e);
-        });
-    }
-    setIsCheck([]);
-    setIsCheckAll(false);
-    setIsError(false);
-  };
-
-  //download Excel
+  // Handle download of Excel based on user selection (All or Selected)
   const downloadExcelFunction = () => {
-    if (isCheckAll) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="max-w-[330px] flex justify-center text-center align-middle text-solitaireTertiary">
-            Do you want to all the stones available in search or just selected
-            stones!
-          </div>
-          <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary">
-            <CustomDisplayButton
-              displayButtonLabel="Selected"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                performDownloadExcel(isCheck);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="All"
-              handleClick={() => {
-                setIsDialogOpen(false);
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
-              }}
-            />
-          </div>
-        </>
-      );
-    } else if (isCheck.length === 0) {
+    if (isCheck.length === 0) {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
-      performDownloadExcel(isCheck);
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError,
+      });
     }
   };
-
-  //Footer Button Data
+  // Configuration for footer buttons
   const footerButtonData = [
     {
       id: 1,
@@ -338,9 +272,30 @@ const ActiveMyCart = () => {
     },
   ];
 
+  // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {
     setIsSliderOpen(open);
   };
+
+  // Effect hook to update table columns when they change
+  useEffect(() => {
+    setTableColumns(cartTableColumns);
+  }, [cartTableColumns]);
+
+  // Effect hook to update rows when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const activeDiamondItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'Active')
+          .map((row: any) => row.product);
+
+        setRows(activeDiamondItems);
+      }
+    };
+
+    updateRows();
+  }, [data]);
 
   return (
     <>

@@ -20,6 +20,7 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
 import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
+import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -95,54 +96,23 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     isCheckAll: isCheckAll,
   };
 
-  // Function to perform downloading Excel
-  const performDownloadExcel = (
-    productIds: any[],
-    isEntireSearch?: boolean
-  ) => {
-    if (isEntireSearch) {
-      console.log('isEntireSearch', isEntireSearch);
-    } else {
-      downloadExcel({ productIds })
-        .unwrap()
-        .then((res) => {
-          let { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setIsDialogOpen(true);
-            setDialogContent(
-              <>
-                <div className="max-w-[380px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-          }
-        })
-        .catch((e) => {
-          console.log('error', e);
-        });
-    }
-    setIsCheck([]);
-    setIsCheckAll(false);
-    setIsError(false);
-  };
-
   // Function to handle downloading Excel
   const downloadExcelFunction = () => {
-    if (isCheck.length > 1 && isCheckAll) {
-      performDownloadExcel(isCheck);
-    } else if (isCheck.length === 0) {
+    if (isCheck.length === 0) {
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
-      performDownloadExcel(isCheck);
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError,
+      });
     }
   };
-
   // Data for footer buttons
   const myDiamondsFooter = [
     {
@@ -188,7 +158,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       <div
         key={rowKey}
         className="bg-solitaireSecondary w-full h-[80px] flex items-center px-5 rounded-xl cursor-pointer mt-3"
-        onClick={() => handleCardClick(items.id)}
+        onClick={() => handleCardClick(items?.id)}
       >
         {/* Add the content inside the card */}
         <div className="flex justify-between w-full">

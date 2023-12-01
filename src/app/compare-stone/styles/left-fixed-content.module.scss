@@ -1,0 +1,23 @@
+.compareStoneLeftFixed {
+  width: 200px;
+  height: 200px;
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  font-size: 18px;
+  font-weight: 500;
+  background-color: hsl(var(--solitaire-secondary));
+  color: hsl(var(--solitaire-quaternary));
+}
+
+.compareDiamondKeys {
+  background-color: hsl(var(--solitaire-secondary));
+  font-size: 14px;
+  line-height: 30px;
+  padding-left: 40px;
+  color: hsl(var(--solitaire-quaternary));
+}

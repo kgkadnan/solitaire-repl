@@ -17,9 +17,11 @@ const OutOfStock = () => {
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
 
+  // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
+  // Fetching cart data
   const { data } = useGetCartQuery({});
 
   //specific checkbox
@@ -62,10 +64,25 @@ const OutOfStock = () => {
     isCheckAll: isCheckAll,
   };
 
+  // View Similar Stone handler
+  const handleViewSimilarStone = () => {};
+
+  //Footer Button Data
+  const footerButtonData = [
+    {
+      id: 1,
+      displayButtonLabel: 'View Similar Stone',
+      style: styles.filled,
+      fn: handleViewSimilarStone,
+    },
+  ];
+
+  // Effect hook to update table columns when listingColumns change
   useEffect(() => {
     setTableColumns(listingColumns);
   }, [listingColumns]);
 
+  // Effect hook to update rows when cart data changes
   useEffect(() => {
     const updateRows = () => {
       if (data) {
@@ -81,18 +98,6 @@ const OutOfStock = () => {
 
     updateRows();
   }, [data]);
-
-  const handleViewSimilarStone = () => {};
-
-  //Footer Button Data
-  const footerButtonData = [
-    {
-      id: 1,
-      displayButtonLabel: 'View Similar Stone',
-      style: styles.filled,
-      fn: handleViewSimilarStone,
-    },
-  ];
 
   return (
     <>

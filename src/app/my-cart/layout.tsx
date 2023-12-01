@@ -13,62 +13,25 @@ import {
 } from '@/constants/business-logic';
 
 function MyCart({ children }: { children: React.ReactNode }) {
+  // Get the current pathname using the usePathname hook
   let currentPath = usePathname();
+  // State variables for handling scroll visibility
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  // State variables for counting items in different cart statuses
   const [activeTabCount, setActiveTabCount] = useState(0);
   const [soldOutCount, setSoldOutCount] = useState(0);
   const [memoOutCount, setMemoOutCount] = useState(0);
 
+  // Header data for CustomHeader component
+  const headerData = {
+    headerHeading: 'My Cart',
+  };
+
+  // Fetch cart data using the useGetCartQuery hook
   const { data } = useGetCartQuery({});
 
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const activeDiamondItems = data.items
-          .filter(
-            (item: any) => item?.product?.diamond_status === ACTIVE_STATUS
-          )
-          .map((row: any) => row.product);
-        setActiveTabCount(activeDiamondItems?.length);
-      }
-    };
-
-    updateRows();
-  }, [data]);
-
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const soldOutItems = data.items
-          .filter(
-            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
-          )
-          .map((row: any) => row.product);
-
-        setSoldOutCount(soldOutItems?.length);
-      }
-    };
-
-    updateRows();
-  }, [data]);
-
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const memoOutDiamondItems = data.items
-          .filter(
-            (item: any) => item?.product?.diamond_status === MEMO_OUT_STATUS
-          )
-          .map((row: any) => row.product);
-
-        setMemoOutCount(memoOutDiamondItems?.length);
-      }
-    };
-
-    updateRows();
-  }, [data]);
-
+  // Define routes for different tabs in My Cart
   let myCartRoutes = [
     {
       id: '1',
@@ -90,23 +53,70 @@ function MyCart({ children }: { children: React.ReactNode }) {
     },
   ];
 
+  // Handle scroll events to show/hide the navigation bar
   const handleScroll = () => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
     setPrevScrollPos(currentScrollPos);
   };
 
+  // useEffect to update active tab count when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const activeDiamondItems = data.items
+          .filter(
+            (item: any) => item?.product?.diamond_status === ACTIVE_STATUS
+          )
+          .map((row: any) => row.product);
+        setActiveTabCount(activeDiamondItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  // useEffect to update sold out count when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const soldOutItems = data.items
+          .filter(
+            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
+          )
+          .map((row: any) => row.product);
+
+        setSoldOutCount(soldOutItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  // useEffect to update memo out count when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const memoOutDiamondItems = data.items
+          .filter(
+            (item: any) => item?.product?.diamond_status === MEMO_OUT_STATUS
+          )
+          .map((row: any) => row.product);
+
+        setMemoOutCount(memoOutDiamondItems?.length);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
+  // Attach scroll event listener when the component mounts
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
-
-  //Header Data
-  const headerData = {
-    headerHeading: 'My Cart',
-  };
 
   return (
     <>

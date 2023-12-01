@@ -5,27 +5,36 @@ import { Product, TableColumn } from '@/app/search/result/result-interface';
 import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './memo-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
-import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { CustomDialog } from '@/components/common/dialog';
+import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
 const MemoOut = () => {
-  const router = useRouter();
+  // State variables
   const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
   const [rows, setRows] = useState([]);
   const [isCheck, setIsCheck] = useState<string[]>([]);
   const [isCheckAll, setIsCheckAll] = useState(false);
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
+  // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
+  // Fetching cart data
   const { data } = useGetCartQuery({});
 
-  //specific checkbox
+  // Mutation for downloading Excel data
+  let [downloadExcel] = useDownloadExcelMutation();
+
+  // Checkbox click handler
   const handleClick = (id: string) => {
     let updatedIsCheck = [...isCheck];
 
@@ -48,7 +57,7 @@ const MemoOut = () => {
     setIsError(false);
   };
 
-  //Selecting All Checkbox Function
+  // Selecting All Checkbox Function
   const handleSelectAllCheckbox = () => {
     setIsCheckAll(!isCheckAll);
 
@@ -66,24 +75,7 @@ const MemoOut = () => {
     isCheckAll: isCheckAll,
   };
 
-  useEffect(() => {
-    setTableColumns(listingColumns);
-  }, [listingColumns]);
-
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
-          .map((row: any) => row.product);
-
-        setRows(activeDiamondItems);
-      }
-    };
-
-    updateRows();
-  }, [data]);
-
+  // Compare Stone handler
   const handleCompareStone = () => {
     const maxStones = 10;
     const minStones = 2;
@@ -104,15 +96,31 @@ const MemoOut = () => {
     }
   };
 
+  // Share handler
   const handleShare = () => {
     setIsError(true);
     setErrorText(`You haven't picked any stones.`);
   };
 
-  const handleDownloadExcel = () => {
-    alert('You have click the download excel button');
+  // Handle download of Excel based on user selection (All or Selected)
+  const downloadExcelFunction = () => {
+    if (isCheck.length === 0) {
+      setIsError(true);
+      setErrorText('Please select a stone to perform action.');
+    } else if (isCheck.length) {
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError,
+      });
+    }
   };
 
+  // View Similar Stone handler
   const handleViewSimilarStone = () => {
     alert('You have click the View Similar Stone');
   };
@@ -123,7 +131,7 @@ const MemoOut = () => {
       id: 2,
       displayButtonLabel: 'Download Excel',
       style: styles.transparent,
-      fn: handleDownloadExcel,
+      fn: downloadExcelFunction,
     },
     {
       id: 3,
@@ -146,8 +154,33 @@ const MemoOut = () => {
     },
   ];
 
+  // Effect hook to update table columns when listingColumns change
+  useEffect(() => {
+    setTableColumns(listingColumns);
+  }, [listingColumns]);
+
+  // Effect hook to update rows when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const activeDiamondItems = data.items
+          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
+          .map((row: any) => row.product);
+
+        setRows(activeDiamondItems);
+      }
+    };
+
+    updateRows();
+  }, [data]);
+
   return (
     <>
+      <CustomDialog
+        setIsOpen={setIsDialogOpen}
+        isOpens={isDialogOpen}
+        dialogContent={dialogContent}
+      />
       {rows.length > 0 ? (
         <CustomDataTable
           tableRows={rows}
