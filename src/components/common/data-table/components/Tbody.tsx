@@ -2,43 +2,47 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { usePathname } from 'next/navigation';
 import { Product } from '@/app/search/result/result-interface';
-import { CustomSlider } from '../slider';
-import { CustomDisplayButton } from '../buttons/display-button';
+import { CustomSlider } from '../../slider';
+import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import dna from '@public/assets/icons/ph_dna-light.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
-import { CustomFooter } from '../footer';
-import { CustomDropdown } from '../dropdown';
+import { CustomFooter } from '../../footer';
+import { CustomDropdown } from '../../dropdown';
 import { useAddCartMutation } from '@/features/api/cart';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { CustomCheckBox } from '../checkbox';
+import { CustomCheckBox } from '../../checkbox';
 import Image from 'next/image';
 import certficateOutline from '@public/assets/icons/ph_certificate-light.svg';
 import imageOutline from '@public/assets/icons/image-outline.svg';
-import { ITbodyProps } from './interface';
+import { ITbodyProps } from '../interface';
 import { useState } from 'react';
-import styles from './custom-table.module.scss';
+import styles from '../custom-table.module.scss';
 import {
   basicDetailsLabelMapping,
   inclusionDetailsLabelMapping,
   keyLabelMapping,
   measurementsLabelMapping,
   otherInformationsLabelMapping,
-} from './lable-mapping';
+} from '../lable-mapping';
 import { FILE_URLS, GIA_LINK } from '@/constants/business-logic';
+import { handleCheckboxClick } from '../../checkbox/helper/handle-checkbox-click';
 
 export const Tbody: React.FC<ITbodyProps> = ({
   tableRows,
   selectionAllowed,
-  handleClick,
-  isCheck,
+  checkboxData,
   tableCol,
   setDialogContent,
   setIsDialogOpen,
   handleConfirm,
 }) => {
   let currentPath = usePathname();
+
+  const { checkboxState, checkboxSetState, setIsError } = checkboxData;
+  const { isCheck, isCheckAll } = checkboxState;
+  const { setIsCheckAll, setIsCheck } = checkboxSetState;
 
   const [sliderData, setSliderData] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState('');
@@ -240,14 +244,28 @@ export const Tbody: React.FC<ITbodyProps> = ({
         <tr
           key={row.id}
           className={styles.tableRow}
-          onClick={() => handleClick!(row.id)}
+          onClick={() => {
+            handleCheckboxClick!({
+              id: row.id,
+              isCheck,
+              setIsCheck,
+              setIsCheckAll,
+              isCheckAll,
+              data: tableRows,
+              setIsError,
+            });
+          }}
         >
           {selectionAllowed && (
             <td>
               <CustomCheckBox
                 data={row.id}
-                onClick={handleClick!}
                 isChecked={isCheck}
+                setIsCheck={setIsCheck}
+                setIsCheckAll={setIsCheckAll}
+                isCheckAll={isCheckAll}
+                row={tableRows}
+                setIsError={setIsError}
               />
             </td>
           )}

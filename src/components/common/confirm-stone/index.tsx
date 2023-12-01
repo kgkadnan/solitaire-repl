@@ -7,7 +7,7 @@ import { RadioButton } from '../custom-input-radio';
 import { useConfirmStoneMutation } from '@/features/api/my-diamonds/my-diamond';
 import { IConfirmStoneProps } from './interface';
 import { CustomInputField } from '../input-field';
-import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
+import { handleComment } from './helper/handle-comment';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -148,7 +148,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * Finally, it handles the promise returned by `confirmStone`, logging any errors to the console.
    * @returns None
    */
-  const confirmStoneFunction = () => {
+  const confirmStoneApiCall = () => {
     let variantIds: string[] = [];
 
     confirmStoneData.forEach((ids: any) => {
@@ -168,19 +168,6 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
         .unwrap()
         .then((res) => {})
         .catch((e) => console.log(e));
-    }
-  };
-
-  /**
-   * The function `handleComment` updates the comment value based on the input value, but only if the
-   * input value is within a certain character limit.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred, such as a change in the input value of an HTML input element.
-   */
-  const handleComment = (event: any) => {
-    let inputValue = event.target.value;
-    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
-      setCommentValue(inputValue);
     }
   };
 
@@ -222,7 +209,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             data-testid="addComment"
             // placeholder="Write Description"
             className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
-            onChange={handleComment}
+            onChange={(e) => handleComment(e, setCommentValue)}
           />
         </div>
 
@@ -249,7 +236,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               displayButtonStyle: styles.filled,
             }}
             handleClick={() => {
-              confirmStoneFunction();
+              confirmStoneApiCall();
             }}
           />
         </div>

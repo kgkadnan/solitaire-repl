@@ -286,7 +286,7 @@ export interface IYourSelection {
 }
 
 export interface IResultHeaderProps {
-  activeTab: any;
+  activeTab: number;
   data: any;
   checkboxState: ICheckboxState;
   modalSetState: IModalSetState;
@@ -294,6 +294,18 @@ export interface IResultHeaderProps {
   commonState: ICommonState;
   sortBySetState: ISortBySetState;
   sortByState: ISortByState;
+  dataTableSetState: IDataTableSetState;
+  dataTableState: IDataTableState;
+}
+
+export interface IDataTableSetState {
+  setRows: Dispatch<SetStateAction<Product[]>>;
+  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
+}
+
+export interface IDataTableState {
+  rows: Product[];
+  tableColumns: TableColumn[];
 }
 
 export interface IResultFooterProps {
@@ -359,8 +371,6 @@ export interface ICommonSetState {
   setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
   setTotalAmount: Dispatch<SetStateAction<number>>;
   setAverageDiscount: Dispatch<SetStateAction<number>>;
-  setRows: Dispatch<SetStateAction<Product[]>>;
-  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
   setSaveSearchName: Dispatch<SetStateAction<string>>;
 }
 
@@ -368,8 +378,6 @@ export interface ICommonState {
   yourSelectionData: IYourSelection[];
   totalAmount: number;
   averageDiscount: number;
-  rows: Product[];
-  tableColumns: TableColumn[];
   saveSearchName: string;
 }
 export interface ISortBySetState {
