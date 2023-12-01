@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useEffect, useState } from 'react';
-import styles from './compare-stone-styles/compare-stone.module.scss';
+import styles from './styles/compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
 import Image from 'next/image';

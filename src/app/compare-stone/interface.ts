@@ -7,7 +7,7 @@ export interface IDifferValue {
   [key: string]: string | number | string[] | number[] | null;
 }
 
-export interface RightSideContentProps {
+export interface IRightSideContentProps {
   compareStoneData: Product[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
@@ -18,14 +18,14 @@ export interface RightSideContentProps {
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export interface LeftSideContentProps {
+export interface ILeftSideContentProps {
   compareStoneData: Product[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   compareValues: IKeyLabelMapping;
 }
 
-export interface ShowDifferencesChangeProps {
+export interface IShowDifferencesChangeProps {
   compareStoneData: Product[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;

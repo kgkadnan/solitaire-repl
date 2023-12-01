@@ -1,9 +1,5 @@
 import { Product } from '../../search/result-interface';
-import {
-  IDifferValue,
-  IKeyLabelMapping,
-  ShowDifferencesChangeProps,
-} from '../compare-stone-interface';
+import { IDifferValue, IShowDifferencesChangeProps } from '../interface';
 
 export const handleShowDifferencesChange = ({
   compareStoneData,
@@ -11,7 +7,7 @@ export const handleShowDifferencesChange = ({
   keyLabelMapping,
   setCompareValues,
   setShowDifferences,
-}: ShowDifferencesChangeProps) => {
+}: IShowDifferencesChangeProps) => {
   // Check if "Select All Checkbox" is checked and there are differences
   if (!showDifferences) {
     const propertiesToKeep: string[] = Object.keys(keyLabelMapping);

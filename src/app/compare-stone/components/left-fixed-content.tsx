@@ -1,13 +1,13 @@
 import { ManageLocales } from '@/utils/translate';
-import styles from '../compare-stone-styles/left-fixed-content.module.scss';
-import { LeftSideContentProps } from '../compare-stone-interface';
+import styles from '../styles/left-fixed-content.module.scss';
+import { ILeftSideContentProps } from '../interface';
 
 export function LeftFixedContent({
   compareStoneData,
   showDifferences,
   keyLabelMapping,
   compareValues,
-}: LeftSideContentProps) {
+}: ILeftSideContentProps) {
   return (
     <>
       <p
