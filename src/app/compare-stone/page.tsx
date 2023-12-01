@@ -11,7 +11,6 @@ import { CustomDropdown } from '@/components/common/dropdown';
 import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAddCartMutation } from '@/features/api/cart';
-import { Product } from '../search/result-interface';
 import { CustomDialog } from '@/components/common/dialog';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useAppDispatch } from '@/hooks/hook';
@@ -20,6 +19,7 @@ import { RightSideContent } from './components/right-side-content';
 import { LeftFixedContent } from './components/left-fixed-content';
 import { keyLabelMapping } from './helpers/key-label';
 import { handleShowDifferencesChange } from './helpers/handle-show-difference-function';
+import { Product } from '../search/result/result-interface';
 
 const CompareStone = () => {
   // Initialize necessary state variables

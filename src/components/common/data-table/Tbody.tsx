@@ -1,7 +1,7 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { usePathname } from 'next/navigation';
-import { Product } from '@/app/search/result-interface';
+import { Product } from '@/app/search/result/result-interface';
 import { CustomSlider } from '../slider';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';

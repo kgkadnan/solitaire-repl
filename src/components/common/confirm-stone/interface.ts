@@ -1,4 +1,11 @@
-import { Product, TableColumn } from '@/app/search/result-interface';
+import {
+  IConfirmStoneSetState,
+  IConfirmStoneState,
+  IErrorSetState,
+  IErrorState,
+  Product,
+  TableColumn,
+} from '@/app/search/result/result-interface';
 import { ReactNode } from 'react';
 
 export interface IconfirmRadioButtons {
@@ -11,16 +18,10 @@ export interface IconfirmRadioButtons {
 }
 
 export interface IConfirmStoneProps {
-  confirmStoneData: Product[];
   listingColumns: TableColumn[];
-  commentValue: string;
-  handleComment: (event: any) => void;
-  setInputError: React.Dispatch<React.SetStateAction<boolean>>;
-  setInputErrorContent: React.Dispatch<React.SetStateAction<string>>;
-  setSelectedDaysInputValue: React.Dispatch<React.SetStateAction<string>>;
+  errorState: IErrorState;
+  errorSetState: IErrorSetState;
   onOpenChange: (open: boolean) => void;
-  confirmRadioButtons?: IconfirmRadioButtons[];
-  inputError: boolean;
-  selectedDaysInputValue: string;
-  selectedRadioDaysValue?: string;
+  confirmStoneState: IConfirmStoneState;
+  confirmStoneSetState: IConfirmStoneSetState;
 }
