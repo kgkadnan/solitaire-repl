@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { renderWithProviders } from '@/mock-handlers/test-utils';
-import SearchResults from '@/app/search/result';
+import SearchResults from '@/app/search/result/result';
 import {
   fireEvent,
   logDOM,

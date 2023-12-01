@@ -1,4 +1,3 @@
-import React from 'react';
 import { useState } from 'react';
 import advanceSearch from '@/constants/advance-search.json';
 

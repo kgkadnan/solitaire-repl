@@ -10,7 +10,7 @@ import { CustomFooter } from '../footer';
 import { formatCreatedAt } from '@/utils/format-date';
 import { formatDate } from '@/utils/format-date-only';
 import CustomDataTable from '../data-table';
-import { Product, TableColumn } from '@/app/search/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../no-data-found';

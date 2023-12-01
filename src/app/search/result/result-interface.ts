@@ -1,4 +1,5 @@
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface TableColumn {
   label: string;
@@ -282,4 +283,121 @@ export interface IYourSelection {
   saveSearchName: string;
   isSavedSearch: boolean;
   queryParams: string[];
+}
+
+export interface IResultHeaderProps {
+  activeTab: any;
+  data: any;
+  checkboxState: ICheckboxState;
+  modalSetState: IModalSetState;
+  commonSetState: ICommonSetState;
+  commonState: ICommonState;
+  sortBySetState: ISortBySetState;
+  sortByState: ISortByState;
+}
+
+export interface IResultFooterProps {
+  rows: Product[];
+  refetchRow: any;
+  modalSetState: IModalSetState;
+  checkboxState: ICheckboxState;
+  checkboxSetState: ICheckboxSetState;
+  errorSetState: IErrorSetState;
+  errorState: IErrorState;
+  confirmStoneSetState: IConfirmStoneSetState;
+}
+
+/**
+ * Interfaces for managing state.
+ */
+export interface IModalSetState {
+  setDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface ICheckboxState {
+  isCheck: string[];
+  isCheckAll: boolean;
+}
+
+export interface ICheckboxSetState {
+  setIsCheck: Dispatch<SetStateAction<string[]>>;
+  setIsCheckAll: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface IErrorSetState {
+  setIsError: Dispatch<SetStateAction<boolean>>;
+  setErrorText: Dispatch<SetStateAction<string>>;
+  setInputError: Dispatch<SetStateAction<boolean>>;
+  setInputErrorContent: Dispatch<SetStateAction<string>>;
+}
+
+export interface IErrorState {
+  isError: boolean;
+  errorText: string;
+  inputError: boolean;
+  inputErrorContent: string;
+}
+
+export interface IConfirmStoneSetState {
+  setConfirmStoneData: Dispatch<SetStateAction<Product[]>>;
+  setCommentValue: Dispatch<SetStateAction<string>>;
+  setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
+  setSelectedRadioDaysValue: Dispatch<SetStateAction<string>>;
+}
+
+export interface IConfirmStoneState {
+  confirmStoneData: Product[];
+  commentValue: string;
+  selectedDaysInputValue: string;
+  selectedRadioDaysValue: string;
+}
+
+export interface ICommonSetState {
+  setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
+  setTotalAmount: Dispatch<SetStateAction<number>>;
+  setAverageDiscount: Dispatch<SetStateAction<number>>;
+  setRows: Dispatch<SetStateAction<Product[]>>;
+  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
+  setSaveSearchName: Dispatch<SetStateAction<string>>;
+}
+
+export interface ICommonState {
+  yourSelectionData: IYourSelection[];
+  totalAmount: number;
+  averageDiscount: number;
+  rows: Product[];
+  tableColumns: TableColumn[];
+  saveSearchName: string;
+}
+export interface ISortBySetState {
+  setSelectedCaratRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedClarityRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedPriceRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedDiscountRadioValue: Dispatch<SetStateAction<string>>;
+  setSeletedTableInclusionRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedFluorescenceRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedBlackTableRadioValue: Dispatch<SetStateAction<string>>;
+  setSelectedSideBlackRadioValue: Dispatch<SetStateAction<string>>;
+  setRefetchDataToDefault: Dispatch<SetStateAction<boolean>>;
+  setSelectedDefaultValue: Dispatch<SetStateAction<string>>;
+  setPreviousRadioState: Dispatch<SetStateAction<any>>;
+  setIsSortBySliderOpen: Dispatch<SetStateAction<boolean>>;
+}
+
+export interface ISortByState {
+  selectedCaratRadioValue: string;
+  selectedClarityRadioValue: string;
+  selectedBlackTableRadioValue: string;
+  selectedSideBlackRadioValue: string;
+  selectedDefaultValue: string;
+  selectedDiscountRadioValue: string;
+  selectedFluorescenceRadioValue: string;
+  seletedTableInclusionRadioValue: string;
+  selectedPriceRadioValue: string;
+  refetchDataToDefault: boolean;
+  previousRadioState: any;
+  isSortBySliderOpen: boolean;
 }

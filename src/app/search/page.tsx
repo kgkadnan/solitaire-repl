@@ -11,7 +11,7 @@ import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
 import AdvanceSearch from './form/form';
 import SavedSearch from './saved';
-import SearchResults from './result';
+import SearchResults from './result/result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
 import { CustomDialog } from '@/components/common/dialog';

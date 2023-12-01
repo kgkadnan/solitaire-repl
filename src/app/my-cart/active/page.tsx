@@ -1,7 +1,7 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDropdown } from '@/components/common/dropdown';
@@ -14,18 +14,19 @@ import { CustomFooter } from '@/components/common/footer';
 import { CustomDialog } from '@/components/common/dialog';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
-import { CustomInputField } from '@/components/common/input-field';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
-  CONFIRM_STONE_COMMENT_MAX_CHARACTERS,
   MAX_COMPARE_STONE,
-  MAX_DAYS_TO_PAY,
   MIN_COMPARE_STONE,
 } from '@/constants/business-logic';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
+
+import { useErrorStateManagement } from '@/app/search/result/hooks/error-state-management';
+import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
+import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
 const ActiveMyCart = () => {
   // State variables for managing component state
@@ -37,14 +38,13 @@ const ActiveMyCart = () => {
   const [errorText, setErrorText] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
-  const [inputError, setInputError] = useState(false);
-  const [inputErrorContent, setInputErrorContent] = useState('');
-  const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
-  const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
-    useState<string>();
+
+  const { confirmStoneState, confirmStoneSetState } =
+    useConfirmStoneStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
+
+  const { setConfirmStoneData } = confirmStoneSetState;
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
-  const [commentValue, setCommentValue] = useState('');
-  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
 
   // Fetching table columns for managing listing sequence
   const { data: cartTableColumns } =
@@ -190,123 +190,9 @@ const ActiveMyCart = () => {
     setIsDialogOpen(false);
   };
 
-  // Handle the confirmation of selected stones
-  const handleConfirm = () => {
-    if (isCheck.length) {
-      setIsError(false);
-      setErrorText('Please select a stone to perform action.');
-      setIsSliderOpen(true);
-      const confirmStone = data.items
-        .filter((row: any) => isCheck.includes(row.product.id))
-        .map((row: any) => row.product);
-
-      setConfirmStoneData(confirmStone);
-    } else {
-      setIsError(true);
-      setErrorText('Please select a stone to perform action.');
-    }
-  };
-
-  // Handle the appointment action
   const handleAppointment = () => {
     setIsError(true);
     setErrorText(`You haven't picked any stones.`);
-  };
-
-  // Handle changes in the confirmation radio buttons
-  const handleConfirmStoneRadioChange = (value: string) => {
-    setInputError(false);
-    setInputErrorContent('');
-    setSelectedDaysInputValue('');
-    setSelectedRadioDaysValue(value);
-  };
-
-  // Handle changes in the "Other" radio button input
-  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(event.target.value);
-
-    if (inputValue > MAX_DAYS_TO_PAY) {
-      setInputError(true);
-      setInputErrorContent('Invalid input.');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (inputValue) {
-      setInputError(false);
-      setInputErrorContent('');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (event.target.value === '') {
-      setInputError(false);
-      setInputErrorContent('');
-      // If the input is empty, clear the state
-      setSelectedDaysInputValue('');
-    }
-  };
-
-  // Handle onFocus event for confirming stone radio buttons
-  const onFocus = () => {
-    handleConfirmStoneRadioChange('other');
-  };
-
-  // Configuration for confirming stone radio buttons
-  const confirmRadioButtons = [
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '0',
-      value: '7',
-      label: '7 Days',
-      checked: selectedRadioDaysValue === '7',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '1',
-      value: '30',
-      label: '30 Days',
-      checked: selectedRadioDaysValue === '30',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '2',
-      value: '60',
-      label: '60 Days',
-      checked: selectedRadioDaysValue === '60',
-    },
-    {
-      name: 'days',
-      onChange: handleConfirmStoneRadioChange,
-      id: '3',
-      value: 'other',
-      label: (
-        <>
-          <div className="flex gap-2">
-            <CustomInputField
-              name="daysField"
-              type="number"
-              // disable={selectedRadioDaysValue !== 'other'}
-              onChange={handleRadioDayValue}
-              value={selectedDaysInputValue}
-              placeholder="Max 120 Days"
-              style={{ input: 'w-[80px]' }}
-              onFocus={onFocus}
-            />
-            <div>Days</div>
-          </div>
-          {inputError ? <div>{inputErrorContent}</div> : ''}
-        </>
-      ),
-      checked: selectedRadioDaysValue === 'other',
-    },
-  ];
-
-  // Handle input change for confirming stone comment
-  const handleComment = (event: any) => {
-    let inputValue = event.target.value;
-    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
-      setCommentValue(inputValue);
-    }
   };
 
   // Handle download of Excel based on user selection (All or Selected)
@@ -374,7 +260,15 @@ const ActiveMyCart = () => {
       id: 3,
       displayButtonLabel: 'Confirm Stone',
       style: styles.filled,
-      fn: handleConfirm,
+      fn: () =>
+        handleConfirmStone(
+          isCheck,
+          rows,
+          setErrorText,
+          setIsError,
+          setIsSliderOpen,
+          setConfirmStoneData
+        ),
     },
   ];
 
@@ -408,18 +302,12 @@ const ActiveMyCart = () => {
       <CustomSlider
         sheetContent={
           <ConfirmStone
-            inputError={inputError}
-            confirmStoneData={confirmStoneData}
-            listingColumns={cartTableColumns}
-            confirmRadioButtons={confirmRadioButtons}
-            commentValue={commentValue}
-            handleComment={handleComment}
-            setInputError={setInputError}
-            setInputErrorContent={setInputErrorContent}
-            selectedDaysInputValue={selectedDaysInputValue}
-            setSelectedDaysInputValue={setSelectedDaysInputValue}
+            errorState={errorState}
+            errorSetState={errorSetState}
             onOpenChange={onOpenChange}
-            selectedRadioDaysValue={selectedRadioDaysValue}
+            confirmStoneState={confirmStoneState}
+            confirmStoneSetState={confirmStoneSetState}
+            listingColumns={cartTableColumns}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}
