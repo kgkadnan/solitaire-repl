@@ -1,7 +1,6 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
 import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
@@ -12,17 +11,24 @@ import { NoDataFound } from '@/components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { CustomDialog } from '@/components/common/dialog';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
+import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 
 const MemoOut = () => {
   // State variables
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [rows, setRows] = useState([]);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState(false);
+
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck } = checkboxState;
+  const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
+
+  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+
+  const { rows, tableColumns } = dataTableState;
+  const { setRows, setTableColumns } = dataTableSetState;
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
@@ -34,45 +40,11 @@ const MemoOut = () => {
   // Mutation for downloading Excel data
   let [downloadExcel] = useDownloadExcelMutation();
 
-  // Checkbox click handler
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
-
-    setIsCheck(updatedIsCheck);
-
-    if (updatedIsCheck.length === rows?.length) {
-      setIsCheckAll(true);
-    } else {
-      setIsCheckAll(false);
-    }
-    if (isCheckAll) {
-      setIsCheckAll(false);
-    }
-    setIsError(false);
-  };
-
-  // Selecting All Checkbox Function
-  const handleSelectAllCheckbox = () => {
-    setIsCheckAll(!isCheckAll);
-
-    setIsCheck(rows?.map((li: Product) => li.id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
-  };
-
   //Checkbox Data for Custom Data Table
   let checkboxData = {
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    handleClick: handleClick,
-    isCheck: isCheck,
-    isCheckAll: isCheckAll,
+    checkboxState,
+    checkboxSetState,
+    setIsError,
   };
 
   // Compare Stone handler

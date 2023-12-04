@@ -9,8 +9,6 @@ export const Example = () => {
     console.log('id', id);
   };
   return (
-    <div>
-      <CustomCheckBox data={data.id} onClick={handleClick} />
-    </div>
+    <div>{/* <CustomCheckBox data={data.id} onClick={handleClick} /> */}</div>
   );
 };

@@ -44,14 +44,6 @@ export const myDiamondAPI = createApi({
         `/store/customers/me/orders?status=${previousConfirmStatus}&${dateSearchUrl}`,
       providesTags: ['myDiamond'],
     }),
-    confirmStone: builder.mutation({
-      query: (data) => ({
-        url: `confirm-stone`,
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['myDiamond'],
-    }),
   }),
 });
 
@@ -60,5 +52,4 @@ export const {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
   useGetProductDetailsQuery,
-  useConfirmStoneMutation,
 } = myDiamondAPI;

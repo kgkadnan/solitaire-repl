@@ -1,7 +1,7 @@
 import { StaticImageData } from 'next/image';
 
 export interface ICardData {
-  cardId: string;
+  id: string;
   cardActionIcon: StaticImageData;
   cardHeader: React.ReactNode;
   cardContent: React.ReactNode;

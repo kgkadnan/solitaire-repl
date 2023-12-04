@@ -2,8 +2,8 @@ import React, { ReactNode, useState } from 'react';
 import styles from './custom-table.module.scss';
 import { CustomDialog } from '../dialog';
 import { ICustomDataTableProps } from './interface';
-import { Thead } from './Thead';
-import { Tbody } from './Tbody';
+import { Thead } from './components/Thead';
+import { Tbody } from './components/Tbody';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
@@ -15,9 +15,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
 }) => {
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const { handleSelectAllCheckbox, handleClick, isCheck, isCheckAll } =
-    checkboxData;
 
   /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns
@@ -37,15 +34,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
           <table className={styles.table}>
             <Thead
               selectionAllowed={selectionAllowed}
-              handleSelectAllCheckbox={handleSelectAllCheckbox}
-              isCheckAll={isCheckAll}
+              checkboxData={checkboxData}
               tableCol={tableCol}
+              rows={tableRows}
             />
             <Tbody
               tableRows={tableRows}
               selectionAllowed={selectionAllowed}
-              handleClick={handleClick}
-              isCheck={isCheck}
+              checkboxData={checkboxData}
               tableCol={tableCol}
               setDialogContent={setDialogContent}
               setIsDialogOpen={setIsDialogOpen}

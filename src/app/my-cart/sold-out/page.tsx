@@ -10,12 +10,16 @@ import styles from './sold-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { SOLD_OUT_STATUS } from '@/constants/business-logic';
+import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 
 const OutOfStock = () => {
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [rows, setRows] = useState([]);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState(false);
+  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+
+  const { rows, tableColumns } = dataTableState;
+  const { setRows, setTableColumns } = dataTableSetState;
+
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
@@ -24,44 +28,11 @@ const OutOfStock = () => {
   // Fetching cart data
   const { data } = useGetCartQuery({});
 
-  //specific checkbox
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
-
-    setIsCheck(updatedIsCheck);
-
-    if (updatedIsCheck.length === rows?.length) {
-      setIsCheckAll(true);
-    } else {
-      setIsCheckAll(false);
-    }
-    if (isCheckAll) {
-      setIsCheckAll(false);
-    }
-  };
-
-  //Selecting All Checkbox Function
-  const handleSelectAllCheckbox = () => {
-    setIsCheckAll(!isCheckAll);
-
-    setIsCheck(rows?.map((li: Product) => li.id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
-  };
-
   //Checkbox Data for Custom Data Table
   let checkboxData = {
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    handleClick: handleClick,
-    isCheck: isCheck,
-    isCheckAll: isCheckAll,
+    checkboxState,
+    checkboxSetState,
+    // setIsError,
   };
 
   // View Similar Stone handler
