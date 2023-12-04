@@ -24,7 +24,7 @@ import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
-import { useErrorStateManagement } from '@/app/search/result/hooks/error-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
