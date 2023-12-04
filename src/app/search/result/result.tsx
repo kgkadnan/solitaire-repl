@@ -252,6 +252,7 @@ variable changes. */
    * open or closed.
    */
   const onOpenChange = (open: boolean) => {
+    setIsError(false);
     setIsSliderOpen(open);
     setSelectedRadioDaysValue('');
   };

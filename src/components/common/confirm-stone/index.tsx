@@ -24,8 +24,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
 
-  const { inputError, inputErrorContent } = errorState;
-  const { setInputError, setInputErrorContent } = errorSetState;
+  const { inputError, inputErrorContent, errorText, isError } = errorState;
+  const { setInputError, setInputErrorContent, setErrorText, setIsError } =
+    errorSetState;
   const {
     confirmStoneData,
     commentValue,
@@ -46,6 +47,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * radio button.
    */
   const handleConfirmStoneRadioChange = (value: string) => {
+    setIsError(false);
+    setErrorText('');
     setInputError(false);
     setInputErrorContent('');
     setSelectedDaysInputValue('');
@@ -176,7 +179,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
         })
         .catch((e) => console.log(e));
     } else {
-      // setInputError('Please fill in all fields');
+      setIsError(true);
+      setErrorText('This Is a Mandotry Field');
     }
   };
 
@@ -198,9 +202,16 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           />
         )}
         <div className="mt-5">
-          <p>
-            {ManageLocales('app.searchResult.slider.confirmStone.paymentTerms')}
-          </p>
+          <div className="flex text-center items-center gap-2">
+            <p>
+              {ManageLocales(
+                'app.searchResult.slider.confirmStone.paymentTerms'
+              )}
+            </p>
+            {isError && (
+              <p className="text-red-700 text-xs font-bold">{errorText}</p>
+            )}
+          </div>
 
           <div className="flex justify-between mt-2">
             {confirmRadioButtons?.map((radioData: any, index: number) => (

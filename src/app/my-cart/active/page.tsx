@@ -245,6 +245,7 @@ const ActiveMyCart = () => {
 
   // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {
+    setIsError(false);
     setIsSliderOpen(open);
   };
 

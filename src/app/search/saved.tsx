@@ -102,7 +102,7 @@ const SavedSearch = () => {
   let router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
+  const { data } = useGetAllSavedSearchesQuery({
     limit,
     offset,
     dateSearchUrl,
