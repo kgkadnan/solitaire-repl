@@ -1,4 +1,4 @@
-import { Product } from '../search/result-interface';
+import { Product } from "../search/result/result-interface";
 
 export interface IKeyLabelMapping {
   [key: string]: string | number;

@@ -2,9 +2,9 @@ import Image from 'next/image';
 import CloseButton from '@public/assets/icons/close-outline.svg?url';
 import styles from '../styles/right-side-content.module.scss';
 import { FILE_URLS } from '@/constants/business-logic';
-import { Product } from '../../search/result-interface';
 import { IRightSideContentProps } from '../interface';
 import { CustomCheckBox } from '@/components/common/checkbox';
+import { Product } from '@/app/search/result/result-interface';
 
 export function RightSideContent({
   compareStoneData,

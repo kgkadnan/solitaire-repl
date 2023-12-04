@@ -1,4 +1,4 @@
-import { Product } from '../../search/result-interface';
+import { Product } from '@/app/search/result/result-interface';
 import { IDifferValue, IShowDifferencesChangeProps } from '../interface';
 
 export const handleShowDifferencesChange = ({
