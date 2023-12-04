@@ -19,33 +19,30 @@ export const myDiamondAPI = createApi({
   endpoints: (builder) => ({
     cardRecentConfirmation: builder.query({
       query: ({
-        myDiamondStatus,
+        resentConfiramtionStatus,
         fulfillmentStatus,
         paymentStatus,
         fields,
         expand,
         dateSearchUrl,
       }) =>
-        `/store/customers/me/orders?status=${myDiamondStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}&${dateSearchUrl}`,
+        `/store/customers/me/orders?status=${resentConfiramtionStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}&${dateSearchUrl}`,
       providesTags: ['myDiamond'],
     }),
-    getAllRecentConfirmation: builder.query({
-      query: ({ orderId, singleExpand }) =>
-        `/store/orders/${orderId}?expand=${singleExpand}`,
+    getProductDetails: builder.query({
+      query: ({ id, singleExpand }) =>
+        `/store/orders/${id}?expand=${singleExpand}`,
       providesTags: ['myDiamond'],
     }),
     cardMyInvoice: builder.query({
-      query: ({ myDiamondStatus, invoiceStatus }) =>
-        `/store/customers/me/orders?status=${myDiamondStatus}&invoice_status=${invoiceStatus}`,
+      query: ({ myDiamondStatus, invoiceStatus, dateSearchUrl }) =>
+        `/store/customers/me/orders?status=${myDiamondStatus}&invoice_status=${invoiceStatus}&${dateSearchUrl}`,
       providesTags: ['myDiamond'],
     }),
     cardPreviousConfirmation: builder.query({
-      query: ({ previousConfirmationData }) => {
-        console.log('xxxxxxxxxxxxxxxxxxxxxxxxxxxx', previousConfirmationData);
-
-        // `/store/customers/me/orders?status=${previousConfirmationData}`,
-        // providesTags: ['myDiamond'],
-      },
+      query: ({ previousConfirmStatus, dateSearchUrl }) =>
+        `/store/customers/me/orders?status=${previousConfirmStatus}&${dateSearchUrl}`,
+      providesTags: ['myDiamond'],
     }),
     confirmStone: builder.mutation({
       query: (data) => ({
@@ -62,6 +59,6 @@ export const {
   useCardRecentConfirmationQuery,
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
-  useGetAllRecentConfirmationQuery,
+  useGetProductDetailsQuery,
   useConfirmStoneMutation,
 } = myDiamondAPI;

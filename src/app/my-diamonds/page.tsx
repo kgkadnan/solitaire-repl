@@ -15,7 +15,7 @@ import {
 } from '@/features/api/my-diamonds/my-diamond';
 import RecentConfirmation from './recent-confirmation';
 import MyInvoices from './my-invoice';
-import PreviousConfirmation from './previous-confirmation/page';
+import PreviousConfirmation from './previous-confirmation';
 import { IDateRange } from '../search/saved-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
 
@@ -28,12 +28,13 @@ function MyDiamonds() {
   const [recentConfirmData, setRecentConfirmData] = useState([]);
   const [originalData, setOriginalData] = useState(recentConfirmData);
   const [filteredData, setFilteredData] = useState(recentConfirmData);
-  const [pageRenderCheck, setPageRenderCheck] = useState<string>(
-    'Recent Confirmations'
-  );
   const [activeTab, setActiveTab] = useState<string>('Recent Confirmations');
   const [dateSearchUrl, setDateSearchUrl] = useState('');
   const [myInvoiceData, setMyInvoiceData] = useState([]);
+  const [previousConfirmData, setPreviousConfirmData] = useState([]);
+  const [myDiamondStatus, setMyDiamondStatus] = useState('');
+  const [invoiceStatus, setInvoiceStatus] = useState('');
+  const [previousConfirmStatus, setPreviousConfirmStatus] = useState('');
 
   // Define routes for different tabs in My Diamonds
   let myDiamondsRoutes = [
@@ -50,7 +51,7 @@ function MyDiamonds() {
     {
       id: '3',
       pathName: ManageLocales('app.myDiamonds.PreviousConfirmations'),
-      count: 2,
+      count: previousConfirmData?.length,
     },
   ];
 
@@ -66,17 +67,15 @@ function MyDiamonds() {
   };
 
   // Query parameters for API request
-  let myDiamondStatus = 'pending';
+  let resentConfiramtionStatus = 'pending';
   let fulfillmentStatus = 'not_fulfilled';
   let paymentStatus = 'awaiting';
   let fields = 'id,display_id,total';
   let expand = 'items';
-  let invoiceStatus = 'available';
-  let previousConfirmStatus = 'completed';
 
   // Fetch recent confirmation data
   const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
-    myDiamondStatus,
+    resentConfiramtionStatus,
     fulfillmentStatus,
     paymentStatus,
     fields,
@@ -84,18 +83,18 @@ function MyDiamonds() {
     dateSearchUrl,
   });
 
-  // Make an additional API call with invoiceStatus set to available
+  // Fetch my-invoice data
   const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
     myDiamondStatus,
     invoiceStatus,
+    dateSearchUrl,
   });
 
-  // Make an additional API call with previousConfirmStatus set to completed
+  // Fetch previous-confiramtion-data
   const { data: previousConfirmationData } = useCardPreviousConfirmationQuery({
     previousConfirmStatus,
+    dateSearchUrl,
   });
-
-  console.log('previousConfirmationData', previousConfirmationData);
 
   // Handle scroll events to show/hide the header
   const handleScroll = () => {
@@ -123,19 +122,39 @@ function MyDiamonds() {
     const inputValue = e.target.value;
     setSearch(inputValue);
 
-    // Filter orders based on the search input
+    // Determine the field to search based on the active tab
+    const searchField =
+      activeTab === 'Recent Confirmations' ? 'display_id' : 'invoice_id';
+
+    // Filter orders based on the search input and the selected tab
     const filtered = originalData?.filter((items: any) => {
-      let convertToPad = formatNumberWithLeadingZeros(items?.display_id);
+      let convertToPad =
+        activeTab === 'Recent Confirmations'
+          ? formatNumberWithLeadingZeros(items?.[searchField])
+          : items?.[searchField];
       return String(convertToPad).includes(inputValue);
     });
 
     setFilteredData(filtered || originalData);
   };
 
+  const handleInvoice = () => {
+    setMyDiamondStatus('pending');
+    setInvoiceStatus('available');
+  };
+
+  const handlePreviousConfirmation = () => {
+    setPreviousConfirmStatus('completed');
+  };
+
   // Handle tab click to set the active tab and page render check
   const handleClick = (pathName: string) => {
     setActiveTab(pathName);
-    setPageRenderCheck(pathName);
+    if (pathName === 'My Invoices') {
+      handleInvoice();
+    } else if (pathName === 'Previous Confirmations') {
+      handlePreviousConfirmation();
+    }
   };
 
   // useEffect to update originalData and filteredData when recentConfirmData changes
@@ -153,7 +172,13 @@ function MyDiamonds() {
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
     setMyInvoiceData(myDiamondPendingInvoiceData?.orders);
+    // setOriginalData(myDiamondPendingInvoiceData?.orders);
   }, [myDiamondPendingInvoiceData]);
+
+  useEffect(() => {
+    setPreviousConfirmData(previousConfirmationData?.orders);
+    // setOriginalData(myDiamondPendingInvoiceData?.orders);
+  }, [previousConfirmationData]);
 
   // useEffect to add/remove scroll event listener
   useEffect(() => {
@@ -213,9 +238,15 @@ function MyDiamonds() {
                 style={searchInputStyle}
                 value={search}
                 onChange={handleSearch}
-                placeholder={ManageLocales(
-                  'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
-                )}
+                placeholder={
+                  activeTab === 'Recent Confirmations'
+                    ? ManageLocales(
+                        'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
+                      )
+                    : ManageLocales(
+                        'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
+                      )
+                }
               />
             </div>
             <div className="flex mr-[30px] ">
@@ -232,12 +263,12 @@ function MyDiamonds() {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {pageRenderCheck === 'Recent Confirmations' ? (
+          {activeTab === 'Recent Confirmations' ? (
             <RecentConfirmation recentConfirmData={filteredData} />
-          ) : pageRenderCheck === 'My Invoices' ? (
+          ) : activeTab === 'My Invoices' ? (
             <MyInvoices myInvoiceData={myInvoiceData} />
           ) : (
-            <PreviousConfirmation />
+            <PreviousConfirmation previousConfirmData={previousConfirmData} />
           )}
         </main>
       </div>

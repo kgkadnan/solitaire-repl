@@ -111,6 +111,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       });
     }
   };
+
   // Data for footer buttons
   const myDiamondsFooter = [
     {
@@ -139,7 +140,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
-    'previous-confirmation':
+    'previous-confirmations':
       'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails',
   };
 
@@ -244,17 +245,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     </div>
                     {productPageDetail?.total && (
                       <div className="flex mb-1">
-                        <p className="w-[25%]">Payable Amount :</p>
+                        <p className="w-[25%]">
+                          {check === 'previous-confirmations'
+                            ? 'Paid Amount :'
+                            : 'Payable Amount :'}
+                        </p>
                         <span className="text-solitaireTertiary">
                           {`${productPageDetail?.total} $`}
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.paidAmount && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Paid Amount :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.paidAmount}
                         </span>
                       </div>
                     )}
