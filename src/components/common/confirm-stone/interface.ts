@@ -6,7 +6,7 @@ import {
   Product,
   TableColumn,
 } from '@/app/search/result/result-interface';
-import { ReactNode } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface IconfirmRadioButtons {
   name: string;
@@ -24,4 +24,6 @@ export interface IConfirmStoneProps {
   onOpenChange: (open: boolean) => void;
   confirmStoneState: IConfirmStoneState;
   confirmStoneSetState: IConfirmStoneSetState;
+  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setDialogContent: Dispatch<SetStateAction<ReactNode>>;
 }

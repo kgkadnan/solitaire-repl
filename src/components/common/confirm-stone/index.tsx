@@ -4,10 +4,13 @@ import styles from './confirm-stone.module.scss';
 import CustomDataTable from '../data-table';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { RadioButton } from '../custom-input-radio';
-import { useConfirmStoneMutation } from '@/features/api/my-diamonds/my-diamond';
 import { IConfirmStoneProps } from './interface';
 import { CustomInputField } from '../input-field';
 import { handleComment } from './helper/handle-comment';
+import { handleRadioDayValue } from './helper/handle-radio-day-value';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import Image from 'next/image';
+import { useConfirmProductMutation } from '@/features/api/product';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -16,8 +19,10 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   onOpenChange,
   confirmStoneState,
   confirmStoneSetState,
+  setDialogContent,
+  setIsDialogOpen,
 }) => {
-  const [confirmStone] = useConfirmStoneMutation();
+  const [confirmProduct] = useConfirmProductMutation();
 
   const { inputError, inputErrorContent } = errorState;
   const { setInputError, setInputErrorContent } = errorSetState;
@@ -33,32 +38,6 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     setSelectedDaysInputValue,
     setSelectedRadioDaysValue,
   } = confirmStoneSetState;
-
-  /**
-   * The function handles the change event of a radio input and updates the state based on the input
-   * value.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred when the radio button value is changed.
-   */
-  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(event.target.value);
-    if (inputValue >= 121) {
-      setInputError(true);
-      setInputErrorContent('Invalid input.');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (inputValue) {
-      setInputError(false);
-      setInputErrorContent('');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (event.target.value === '') {
-      setInputError(false);
-      setInputErrorContent('');
-      // If the input is empty, clear the state
-      setSelectedDaysInputValue('');
-    }
-  };
 
   /**
    * The function `handleConfirmStoneRadioChange` updates various state values based on the selected
@@ -122,7 +101,14 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               name="daysField"
               type="number"
               // disable={selectedRadioDaysValue !== 'other'}
-              onChange={handleRadioDayValue}
+              onChange={(e) =>
+                handleRadioDayValue({
+                  event: e,
+                  setInputError,
+                  setSelectedDaysInputValue,
+                  setInputErrorContent,
+                })
+              }
               value={selectedDaysInputValue}
               placeholder="Max 120 Days"
               style={{ input: 'w-[80px]' }}
@@ -155,8 +141,11 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       variantIds.push(ids.variants[0].id);
     });
 
-    if (variantIds.length && !inputError) {
-      confirmStone({
+    if (
+      (variantIds.length && !inputError && selectedRadioDaysValue.length) ||
+      selectedDaysInputValue.length
+    ) {
+      confirmProduct({
         variants: variantIds,
         comments: commentValue,
         payment_term: parseInt(
@@ -166,8 +155,28 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
         ),
       })
         .unwrap()
-        .then((res) => {})
+        .then((res) => {
+          if (res) {
+            setSelectedDaysInputValue('');
+            setInputErrorContent('');
+            setInputError(false);
+            onOpenChange(false);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="max-w-[400px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="confirmImage" />
+                </div>
+                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                  {variantIds.length} Stone Successfully Confirmed
+                </div>
+              </>
+            );
+          }
+        })
         .catch((e) => console.log(e));
+    } else {
+      // setInputError('Please fill in all fields');
     }
   };
 

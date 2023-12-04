@@ -19,7 +19,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
 }) => {
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
-  const { isCheck } = checkboxState;
+  const { isCheck } = checkboxState ?? {};
   const { rows, tableColumns } = dataTableState;
   const { setRows } = dataTableSetState;
   const { setIsInputDialogOpen } = modalSetState;

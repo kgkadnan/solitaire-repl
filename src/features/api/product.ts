@@ -34,7 +34,19 @@ export const productApi = createApi({
       }),
       providesTags: ['Product'],
     }),
+    confirmProduct: builder.mutation({
+      query: (data) => ({
+        url: `confirm-stone`,
+        method: 'POST',
+        body: data,
+      }),
+      invalidatesTags: ['Product'],
+    }),
   }),
 });
 
-export const { useGetAllProductQuery, useGetProductCountQuery } = productApi;
+export const {
+  useGetAllProductQuery,
+  useGetProductCountQuery,
+  useConfirmProductMutation,
+} = productApi;

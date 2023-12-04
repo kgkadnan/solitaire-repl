@@ -7,7 +7,6 @@ import { CustomSlider } from '@/components/common/slider';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { Product } from './result-interface';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import CustomLoader from '@/components/common/loader';
@@ -43,17 +42,20 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const { setConfirmStoneData, setSelectedRadioDaysValue } =
     confirmStoneSetState;
-  const { isCheck, isCheckAll } = checkboxState;
+  const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
     modalState;
-  const { setIsDialogOpen, setIsInputDialogOpen, setIsSliderOpen } =
-    modalSetState;
+  const {
+    setIsDialogOpen,
+    setIsInputDialogOpen,
+    setIsSliderOpen,
+    setDialogContent,
+  } = modalSetState;
   const {
     setYourSelectionData,
     setTotalAmount,
     setAverageDiscount,
-
     setSaveSearchName,
   } = commonSetState;
 
@@ -265,6 +267,8 @@ variable changes. */
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={listingColumns}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
           />
         }
         isSliderOpen={isSliderOpen}

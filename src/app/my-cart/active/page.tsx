@@ -279,6 +279,8 @@ const ActiveMyCart = () => {
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={cartTableColumns}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}

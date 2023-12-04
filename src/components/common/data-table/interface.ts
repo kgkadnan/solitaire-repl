@@ -1,19 +1,20 @@
-import { Product, TableColumn } from '@/app/search/result/result-interface';
+import {
+  ICheckboxSetState,
+  ICheckboxState,
+  Product,
+  TableColumn,
+} from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
 
 export interface ICheckboxData {
-  handleSelectAllCheckbox: () => void;
-  handleClick: (id: string) => void;
-  isCheck: string[]; // You might want to replace 'any' with a more specific type
-  isCheckAll: boolean;
-  setIsCheck: Dispatch<SetStateAction<string[]>>;
-  setIsCheckAll: Dispatch<SetStateAction<boolean>>;
-  setIsError: Dispatch<SetStateAction<boolean>>;
+  checkboxState?: ICheckboxState;
+  checkboxSetState?: ICheckboxSetState;
+  setIsError?: Dispatch<SetStateAction<boolean>>;
 }
 export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
-  checkboxData?: any;
+  checkboxData?: ICheckboxData;
   mainTableStyle?: string;
   selectionAllowed?: boolean;
   handleConfirm?: (isCheck: string[]) => void;
@@ -25,7 +26,7 @@ export interface KeyLabelMapping {
 
 export interface ITheadProps {
   selectionAllowed: boolean;
-  checkboxData: any;
+  checkboxData?: ICheckboxData;
   tableCol: TableColumn[];
   rows: Product[];
 }
@@ -39,5 +40,5 @@ export interface ITbodyProps {
   setDialogContent: any;
   setIsDialogOpen: any;
   handleConfirm?: (isCheck: string[]) => void;
-  checkboxData: any;
+  checkboxData?: ICheckboxData;
 }

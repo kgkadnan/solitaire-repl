@@ -40,9 +40,9 @@ export const Tbody: React.FC<ITbodyProps> = ({
 }) => {
   let currentPath = usePathname();
 
-  const { checkboxState, checkboxSetState, setIsError } = checkboxData;
-  const { isCheck, isCheckAll } = checkboxState;
-  const { setIsCheckAll, setIsCheck } = checkboxSetState;
+  const { checkboxState, checkboxSetState, setIsError } = checkboxData ?? {};
+  const { isCheck, isCheckAll } = checkboxState ?? {};
+  const { setIsCheckAll, setIsCheck } = checkboxSetState ?? {};
 
   const [sliderData, setSliderData] = useState<Product[]>([]);
   const [activeTab, setActiveTab] = useState('');
@@ -245,22 +245,28 @@ export const Tbody: React.FC<ITbodyProps> = ({
           key={row.id}
           className={styles.tableRow}
           onClick={() => {
-            handleCheckboxClick!({
-              id: row.id,
-              isCheck,
-              setIsCheck,
-              setIsCheckAll,
-              isCheckAll,
-              data: tableRows,
-              setIsError,
-            });
+            isCheck &&
+              setIsCheck &&
+              setIsCheckAll &&
+              isCheckAll &&
+              tableRows &&
+              setIsError &&
+              handleCheckboxClick({
+                id: row.id,
+                isCheck,
+                setIsCheck,
+                setIsCheckAll,
+                isCheckAll,
+                data: tableRows,
+                setIsError,
+              });
           }}
         >
           {selectionAllowed && (
             <td>
               <CustomCheckBox
                 data={row.id}
-                isChecked={isCheck}
+                isChecked={isCheck ? isCheck : []}
                 setIsCheck={setIsCheck}
                 setIsCheckAll={setIsCheckAll}
                 isCheckAll={isCheckAll}
