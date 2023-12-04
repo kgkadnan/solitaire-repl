@@ -24,9 +24,14 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
 
-  const { inputError, inputErrorContent, errorText, isError } = errorState;
-  const { setInputError, setInputErrorContent, setErrorText, setIsError } =
-    errorSetState;
+  const { inputError, inputErrorContent, sliderErrorText, isSliderError } =
+    errorState;
+  const {
+    setInputError,
+    setInputErrorContent,
+    setSliderErrorText,
+    setIsSliderError,
+  } = errorSetState;
   const {
     confirmStoneData,
     commentValue,
@@ -47,8 +52,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * radio button.
    */
   const handleConfirmStoneRadioChange = (value: string) => {
-    setIsError(false);
-    setErrorText('');
+    setIsSliderError(false);
+    setSliderErrorText('');
     setInputError(false);
     setInputErrorContent('');
     setSelectedDaysInputValue('');
@@ -179,8 +184,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
         })
         .catch((e) => console.log(e));
     } else {
-      setIsError(true);
-      setErrorText('This Is a Mandotry Field');
+      setIsSliderError(true);
+      setSliderErrorText('This Is a Mandotry Field');
     }
   };
 
@@ -208,8 +213,10 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
                 'app.searchResult.slider.confirmStone.paymentTerms'
               )}
             </p>
-            {isError && (
-              <p className="text-red-700 text-xs font-bold">{errorText}</p>
+            {isSliderError && (
+              <p className="text-red-700 text-xs font-bold">
+                {sliderErrorText}
+              </p>
             )}
           </div>
 

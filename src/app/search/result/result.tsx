@@ -37,8 +37,13 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const { refetchDataToDefault } = sortByState;
   const { inputError, inputErrorContent } = errorState;
-  const { setIsError, setErrorText, setInputError, setInputErrorContent } =
-    errorSetState;
+  const {
+    setIsError,
+    setErrorText,
+    setInputError,
+    setInputErrorContent,
+    setIsSliderError,
+  } = errorSetState;
 
   const { setConfirmStoneData, setSelectedRadioDaysValue } =
     confirmStoneSetState;
@@ -214,7 +219,6 @@ variable changes. */
         })
 
         .catch((error: any) => {
-          console.log('error', error);
           setInputError(true);
           setInputErrorContent(
             'Title already exists. Choose another title to save your search'
@@ -252,7 +256,7 @@ variable changes. */
    * open or closed.
    */
   const onOpenChange = (open: boolean) => {
-    setIsError(false);
+    setIsSliderError(false);
     setIsSliderOpen(open);
     setSelectedRadioDaysValue('');
   };

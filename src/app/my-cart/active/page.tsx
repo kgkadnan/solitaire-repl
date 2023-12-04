@@ -33,17 +33,18 @@ import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/c
 const ActiveMyCart = () => {
   // State variables for managing component state
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck, isCheckAll } = checkboxState;
-
+  const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
   const { confirmStoneState, confirmStoneSetState } =
     useConfirmStoneStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
+
+  const { isError, errorText } = errorState;
+  const { setErrorText, setIsSliderError, setIsError } = errorSetState;
 
   const { setConfirmStoneData } = confirmStoneSetState;
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
@@ -245,7 +246,7 @@ const ActiveMyCart = () => {
 
   // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {
-    setIsError(false);
+    setIsSliderError(false);
     setIsSliderOpen(open);
   };
 

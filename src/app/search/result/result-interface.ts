@@ -344,6 +344,8 @@ export interface IErrorSetState {
   setErrorText: Dispatch<SetStateAction<string>>;
   setInputError: Dispatch<SetStateAction<boolean>>;
   setInputErrorContent: Dispatch<SetStateAction<string>>;
+  setIsSliderError: Dispatch<SetStateAction<boolean>>;
+  setSliderErrorText: Dispatch<SetStateAction<string>>;
 }
 
 export interface IErrorState {
@@ -351,6 +353,8 @@ export interface IErrorState {
   errorText: string;
   inputError: boolean;
   inputErrorContent: string;
+  isSliderError: boolean;
+  sliderErrorText: string;
 }
 
 export interface IConfirmStoneSetState {
