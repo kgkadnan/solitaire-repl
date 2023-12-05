@@ -1,17 +1,17 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
 import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './sold-out.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { SOLD_OUT_STATUS } from '@/constants/business-logic';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 
 const OutOfStock = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -20,6 +20,7 @@ const OutOfStock = () => {
   const { setRows, setTableColumns } = dataTableSetState;
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { errorSetState } = useErrorStateManagement();
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
@@ -32,7 +33,6 @@ const OutOfStock = () => {
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    // setIsError,
   };
 
   // View Similar Stone handler
@@ -78,6 +78,7 @@ const OutOfStock = () => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          errorSetState={errorSetState}
         />
       ) : (
         <NoDataFound />

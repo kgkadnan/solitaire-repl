@@ -413,3 +413,15 @@ export interface ISortByState {
   previousRadioState: any;
   isSortBySliderOpen: boolean;
 }
+
+export interface IHandleSaveSearch {
+  addSavedSearch: any;
+  saveSearchName: string;
+  activeTab: number;
+  data: any;
+  setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
+  setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setSaveSearchName: Dispatch<SetStateAction<string>>;
+  setInputError: Dispatch<SetStateAction<boolean>>;
+  setInputErrorContent: Dispatch<SetStateAction<string>>;
+}

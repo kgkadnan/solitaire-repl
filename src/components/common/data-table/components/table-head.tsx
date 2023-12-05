@@ -3,15 +3,16 @@ import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '../../checkbox/helper/handle-select-all-checkbox';
 
-export const Thead: React.FC<ITheadProps> = ({
+export const TableHead: React.FC<ITheadProps> = ({
   selectionAllowed,
   checkboxData,
   tableCol,
   rows,
 }) => {
-  const { checkboxState, checkboxSetState } = checkboxData || {};
-  const { isCheckAll } = checkboxState || {};
-  const { setIsCheckAll, setIsCheck } = checkboxSetState || {};
+  const { checkboxState, checkboxSetState } = checkboxData ?? {};
+  const { isCheckAll } = checkboxState ?? {};
+  const { setIsCheckAll, setIsCheck } = checkboxSetState ?? {};
+
   return (
     <thead className={styles.tableHeader}>
       <tr>
@@ -20,9 +21,6 @@ export const Thead: React.FC<ITheadProps> = ({
             <div className={`flex text-center`}>
               <Checkbox
                 onClick={() =>
-                  setIsCheckAll &&
-                  isCheckAll &&
-                  setIsCheck &&
                   handleSelectAllCheckbox({
                     setIsCheckAll,
                     isCheckAll,

@@ -1,9 +1,9 @@
-import React, { ReactNode, useState } from 'react';
+import React from 'react';
 import styles from './custom-table.module.scss';
 import { CustomDialog } from '../dialog';
 import { ICustomDataTableProps } from './interface';
-import { Thead } from './components/Thead';
-import { Tbody } from './components/Tbody';
+import { TableHead } from './components/table-head';
+import { TableBody } from './components/table-body';
 
 const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   tableRows,
@@ -12,9 +12,13 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   mainTableStyle,
   selectionAllowed = true,
   handleConfirm,
+  errorSetState,
+  confirmStoneSetState,
+  modalSetState,
+  modalState,
 }) => {
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { dialogContent, isDialogOpen } = modalState ?? {};
+  const { setIsDialogOpen } = modalSetState ?? {};
 
   /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns
@@ -32,20 +36,21 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
       <div className={'flex-grow overflow-y-auto'}>
         <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
           <table className={styles.table}>
-            <Thead
+            <TableHead
               selectionAllowed={selectionAllowed}
               checkboxData={checkboxData}
               tableCol={tableCol}
               rows={tableRows}
             />
-            <Tbody
+            <TableBody
               tableRows={tableRows}
               selectionAllowed={selectionAllowed}
               checkboxData={checkboxData}
               tableCol={tableCol}
-              setDialogContent={setDialogContent}
-              setIsDialogOpen={setIsDialogOpen}
               handleConfirm={handleConfirm}
+              errorSetState={errorSetState}
+              confirmStoneSetState={confirmStoneSetState}
+              modalSetState={modalSetState}
             />
           </table>
         </div>
