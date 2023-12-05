@@ -331,19 +331,21 @@ function SearchResultLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
+        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
           {myProfileRoutes.map(({ id, pathName, path }: any) => {
             // Check if the current route matches the link's path
             return path === 'form' || path === 'saved' ? (
               <Link
-                className={`flex flex-row p-2.5  text-solitaireTertiary ${
+                className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
                   headerPath === pathName
                     ? ''
                     : 'hover:text-solitaireQuaternary'
                 }`}
                 onClick={() => handleSearchTab(0, pathName)}
                 href={
-                  maxTab === 5 && path === 'form' ? `` : `/search?route=${path}`
+                  maxTab === MAX_SEARCH_TAB_LIMIT && path === 'form'
+                    ? ``
+                    : `/search?route=${path}`
                 }
                 key={id}
               >
@@ -356,16 +358,14 @@ function SearchResultLayout() {
                 </div>
               </Link>
             ) : (
-              <div
-                className={`flex items-center cursor-pointer gap-[8px] rounded-sm `}
-              >
+              <div className={`flex items-center cursor-pointer  rounded-sm `}>
                 {activeTab === parseInt(path) - 2 && (
                   <div onClick={() => editSearchResult(activeTab)}>
                     <Image src={EditIcon} alt="Edit Icon" />
                   </div>
                 )}
                 <Link
-                  className={`flex flex-row p-2.5  text-solitaireTertiary ${
+                  className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
                     headerPath === pathName
                       ? ''
                       : 'hover:text-solitaireQuaternary'
