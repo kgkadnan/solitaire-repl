@@ -70,7 +70,7 @@ const SideBar = () => {
     } else {
       router.push('/');
     }
-  }, [router]);
+  }, [router, currentRoute]);
 
   const imageData: IImageTileProps[] = [
     {

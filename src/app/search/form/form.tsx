@@ -86,7 +86,13 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         carat
       );
     }
-  }, [modifySearchFrom]);
+  }, [
+    modifySearchFrom,
+    carat,
+    savedSearch?.savedSearch?.meta_data,
+    searchResult.activeTab,
+    setState
+  ]);
 
   useEffect(() => {
     let data: any = JSON.parse(localStorage.getItem('Search')!);
@@ -97,27 +103,33 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
     ) {
       setAddSearches(data);
     }
-  }, []);
+  }, [setAddSearches]);
 
   useEffect(() => {
+    const handleFormReset = () => {
+      setSelectedStep('');
+      setSearchCount(0);
+      setIsError(false);
+      setErrorText('');
+      handleReset(setState);
+    };
     if (isNewSearch === 'form') {
       handleFormReset();
     }
-  }, [isNewSearch]);
-
-  const handleFormReset = () => {
-    setSelectedStep('');
-    setSearchCount(0);
-    setIsError(false);
-    setErrorText('');
-    handleReset(setState);
-  };
+  }, [
+    isNewSearch,
+    setErrorText,
+    setIsError,
+    setSearchCount,
+    setSelectedStep,
+    setState
+  ]);
 
   useEffect(() => {
     const queryParams = generateQueryParams(state);
     // Construct your search URL here
     !isValidationError && setSearchUrl(constructUrlParams(queryParams));
-  }, [state]);
+  }, [state, isValidationError, setSearchUrl]);
 
   const { data, error } = useGetProductCountQuery({
     searchUrl
@@ -150,7 +162,15 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error, errorText]);
+  }, [
+    data,
+    error,
+    errorText,
+    searchCount,
+    setErrorText,
+    setIsError,
+    setSearchCount
+  ]);
 
   const handleSaveAndSearch: any = async () => {
     if (data?.count > MIN_SEARCH_FORM_COUNT) {

@@ -61,7 +61,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   // useEffect to update tableColumns when productTableColumns changes
   useEffect(() => {
     setTableColumns(productTableColumns);
-  }, [productTableColumns]);
+  }, [productTableColumns, setTableColumns]);
 
   // Object containing checkbox data for Custom Data Table
   let checkboxData = {

@@ -73,7 +73,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 `tableColumns` to the value of `listingColumns` when `listingColumns` changes. */
   useEffect(() => {
     setTableColumns(listingColumns);
-  }, [listingColumns]);
+  }, [listingColumns, setTableColumns]);
   /* useEffect hook in a TypeScript React component. It is used to
 handle the logic for closing a dialog box after a certain delay. */
   useEffect(() => {
@@ -86,7 +86,7 @@ handle the logic for closing a dialog box after a certain delay. */
       // Cleanup the timeout when the component unmounts or when isDialogOpen changes
       return () => clearTimeout(timeoutId);
     }
-  }, [isDialogOpen]);
+  }, [isDialogOpen, setIsDialogOpen]);
 
   /* The above code is defining a function called `calculateTotalAmount` using the `useCallback` hook in
 React. This function calculates the total amount based on the selected rows and their corresponding
@@ -130,7 +130,12 @@ will be triggered whenever the value of the 'isCheck' variable changes. */
     // Update total amount and average discount whenever isCheck changes
     setTotalAmount(calculateTotalAmount());
     setAverageDiscount(calculateAverageDiscount());
-  }, [calculateTotalAmount, calculateAverageDiscount]);
+  }, [
+    calculateTotalAmount,
+    calculateAverageDiscount,
+    setAverageDiscount,
+    setTotalAmount
+  ]);
 
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
@@ -145,7 +150,14 @@ variable changes. */
         setRows(data?.products);
       }
     }
-  }, [data, refetchDataToDefault]);
+  }, [
+    data,
+    refetchDataToDefault,
+    setIsCheck,
+    setIsCheckAll,
+    setRows,
+    setYourSelectionData
+  ]);
 
   const customInputDialogData = {
     isOpens: isInputDialogOpen,

@@ -30,14 +30,6 @@ export const Notification: React.FC<NotificationProps> = ({
     NotificationItem[]
   >([]);
 
-  useEffect(() => {
-    if (offset === 0 && notificationData) {
-      setStoreNotificationData(notificationData.data);
-    } else if (offset > 0) {
-      storeMyNotificationData();
-    }
-  }, [notificationData, offset]);
-
   const storeMyNotificationData = useCallback(() => {
     if (offset > 0) {
       const newNotificationData: NotificationItem[] = (
@@ -54,7 +46,20 @@ export const Notification: React.FC<NotificationProps> = ({
         ...newNotificationData
       ]);
     }
-  }, [notificationData]);
+  }, [notificationData, offset, storeNotificationData]);
+
+  useEffect(() => {
+    if (offset === 0 && notificationData) {
+      setStoreNotificationData(notificationData.data);
+    } else if (offset > 0) {
+      storeMyNotificationData();
+    }
+  }, [
+    notificationData,
+    offset,
+    setStoreNotificationData,
+    storeMyNotificationData
+  ]);
 
   function stringWithHTMLReplacement(
     template: string,

@@ -111,7 +111,6 @@ function MyDiamonds() {
     }
   );
 
-
   // Handle date selection in the calendar
   const handleDate = (date: IDateRange) => {
     const fromDate = date?.from?.toISOString().split('T')[0];
@@ -176,7 +175,7 @@ function MyDiamonds() {
   useEffect(() => {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
     setFilteredData(recentConfirmData);
-  }, [myDiamondRecentConfirmData,setFilteredData,recentConfirmData]);
+  }, [myDiamondRecentConfirmData, setFilteredData, recentConfirmData]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
@@ -191,12 +190,12 @@ function MyDiamonds() {
 
   // useEffect to add/remove scroll event listener
   useEffect(() => {
-      // Handle scroll events to show/hide the header
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setVisible(prevScrollPos > currentScrollPos);
-    setPrevScrollPos(currentScrollPos);
-  };
+    // Handle scroll events to show/hide the header
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos);
+      setPrevScrollPos(currentScrollPos);
+    };
 
     window.addEventListener('scroll', handleScroll);
     return () => {

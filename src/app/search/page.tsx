@@ -2,7 +2,7 @@
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import EditIcon from '@public/assets/icons/edit.svg';
@@ -52,6 +52,8 @@ function SearchResultLayout() {
 
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
+  const storedSearch = localStorage.getItem('Search')!;
+  const currentPathname = usePathname();
 
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
@@ -66,11 +68,11 @@ function SearchResultLayout() {
     }
   ]);
 
-  const computeRouteAndComponentRenderer = () => {
+  const computeRouteAndComponentRenderer = useCallback(() => {
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!) - 2}`;
-  };
+    else return `Search Results ${parseInt(subRoute!, 10) - 2}`;
+  }, [subRoute]);
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
@@ -84,13 +86,7 @@ function SearchResultLayout() {
 
   useEffect(() => {
     setheaderPath(computeRouteAndComponentRenderer());
-  }, [subRoute]);
-
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setVisible(prevScrollPos > currentScrollPos);
-    setPrevScrollPos(currentScrollPos);
-  };
+  }, [subRoute, computeRouteAndComponentRenderer]);
 
   const closeTheSearchFunction = (
     removeDataIndex: number,
@@ -128,7 +124,7 @@ function SearchResultLayout() {
   };
 
   const handleCloseAndSave = async () => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    let yourSelection = JSON.parse(storedSearch);
 
     await addSavedSearch({
       name: saveSearchName,
@@ -152,7 +148,7 @@ function SearchResultLayout() {
   };
 
   const closeSearch = (removeDataIndex: number) => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    let yourSelection = JSON.parse(storedSearch);
 
     if (!yourSelection[removeDataIndex].isSavedSearch) {
       setIsDialogOpen(true);
@@ -213,6 +209,11 @@ function SearchResultLayout() {
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos);
+      setPrevScrollPos(currentScrollPos);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -226,7 +227,7 @@ function SearchResultLayout() {
 
   useEffect(() => {
     let fetchMyAPI = async () => {
-      let yourSelection = localStorage.getItem('Search');
+      let yourSelection = storedSearch;
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
@@ -270,7 +271,7 @@ function SearchResultLayout() {
       }
     };
     fetchMyAPI();
-  }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
+  }, [storedSearch, activeTab, maxTab, currentPathname, myProfileRoutes]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     if (

@@ -53,14 +53,18 @@ import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/han
 
 const SavedSearch = () => {
   // Style classes and variables
-  const tableStyles = {
-    tableHeaderStyle: styles.tableHeader,
-    tableBodyStyle: styles.tableBody
-  };
-  const searchCardTitle = {
-    tableHeaderStyle: styles.SearchCardTitle,
-    tableBodyStyle: styles.SearchDateTime
-  };
+  const tableStyles = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.tableHeader,
+      tableBodyStyle: styles.tableBody
+    };
+  }, []);
+  const searchCardTitle = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.SearchCardTitle,
+      tableBodyStyle: styles.SearchDateTime
+    };
+  }, []);
   const cardStyles = {
     cardContainerStyle: styles.searchCardContainer
   };
@@ -230,7 +234,7 @@ const SavedSearch = () => {
         };
       });
     },
-    [searchCardTitle, tableStyles, keyLabelMapping, manySavedsearchButtonStyle]
+    [searchCardTitle, tableStyles, keyLabelMapping]
   );
 
   // Delete Data
@@ -454,7 +458,7 @@ const SavedSearch = () => {
     setSavedSearchData(specificSavedSearchData);
 
     setCardData(renderCardData(specificSavedSearchData));
-  }, [data, limit, offset]);
+  }, [data, limit, offset, renderCardData]);
 
   // Function to handle edit action
   const handleEdit = (stone: string) => {
