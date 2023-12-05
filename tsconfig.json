@@ -14,6 +14,7 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
+    "noImplicitAny": true,
     "plugins": [
       {
         "name": "next"
@@ -26,9 +27,8 @@
       "@app/*": ["src/app/*"],
       "@lib/*": ["src/lib/*"],
       "@public/*": ["public/*"],
-      "@public1/*": ["public/*"]
     }
   },
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/loading.tsx", "src/app/not-found.js"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }
