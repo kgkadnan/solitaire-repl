@@ -13,10 +13,15 @@ const RecentConfirmation = ({ recentConfirmData }: any) => {
   let recentConfirmationCheck = 'recent-confirmation';
 
   // Fetch recent confirmation data using a API
-  const { data: productData } = useGetProductDetailsQuery({
-    id,
-    singleExpand,
-  });
+  const { data: productData } = useGetProductDetailsQuery(
+    {
+      id,
+      singleExpand,
+    },
+    {
+      skip: !id,
+    }
+  );
 
   // useEffect to update recentConfirmationDetail when productData changes
   useEffect(() => {
