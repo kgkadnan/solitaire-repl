@@ -13,7 +13,7 @@ export interface ICheckboxData {
 export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
-  checkboxData?: ICheckboxData;
+  checkboxData?: any;
   mainTableStyle?: string;
   selectionAllowed?: boolean;
   handleConfirm?: (isCheck: string[]) => void;

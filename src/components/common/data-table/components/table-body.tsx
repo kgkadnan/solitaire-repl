@@ -18,7 +18,7 @@ import { DetailCertificateSlider } from './detail-certificate-slider';
 import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
 
-export const Tbody: React.FC<ITbodyProps> = ({
+export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
   selectionAllowed,
   checkboxData,
@@ -39,7 +39,7 @@ export const Tbody: React.FC<ITbodyProps> = ({
   const { dataTableBodyState, dataTableBodySetState } =
     useDataTableBodyStateManagement();
 
-  const { sliderData } = dataTableBodyState ?? {};
+  const { sliderData } = dataTableBodyState!;
 
   const [addCart] = useAddCartMutation();
   let [downloadExcel] = useDownloadExcelMutation();
@@ -200,21 +200,15 @@ export const Tbody: React.FC<ITbodyProps> = ({
           key={row.id}
           className={styles.tableRow}
           onClick={() => {
-            isCheck &&
-              setIsCheck &&
-              setIsCheckAll &&
-              isCheckAll &&
-              tableRows &&
-              setIsError &&
-              handleCheckboxClick({
-                id: row.id,
-                isCheck,
-                setIsCheck,
-                setIsCheckAll,
-                isCheckAll,
-                data: tableRows,
-                setIsError,
-              });
+            handleCheckboxClick({
+              id: row.id,
+              isCheck,
+              setIsCheck,
+              setIsCheckAll,
+              isCheckAll,
+              data: tableRows,
+              setIsError,
+            });
           }}
         >
           {selectionAllowed && (
