@@ -68,7 +68,15 @@ const EmailNotification = () => {
                 <p className="text-solitaireTertiary text-base  font-thin">
                   {id}. {notificationName}
                 </p>
-                <CustomCheckBox data={id} onClick={handleCheckbox} />
+                {/* <CustomCheckBox
+                  data={id}
+                  isChecked={isCheck}
+                  setIsCheck={setIsCheck}
+                  setIsCheckAll={setIsCheckAll}
+                  isCheckAll={isCheckAll}
+                  row={tableRows}
+                  setIsError={setIsError}
+                /> */}
               </div>
             );
           })}

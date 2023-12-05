@@ -14,13 +14,14 @@ import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../no-data-found';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '../dialog';
 import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
+import { useDataTableStateManagement } from '../data-table/hooks/data-table-state-management';
+import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -29,14 +30,21 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   check,
 }) => {
   // Define the main MyDiamonds component
-  const [rows, setRows] = useState<Product[]>([]);
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errorText, setErrorText] = useState<string>('');
+
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck } = checkboxState;
+  const { setIsCheck, setIsCheckAll } = checkboxSetState;
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { isError, errorText } = errorState;
+  const { setIsError, setErrorText } = errorSetState;
+
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
+
+  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+  const { rows, tableColumns } = dataTableState;
+  const { setRows, setTableColumns } = dataTableSetState;
 
   // Fetch product page table columns
   const { data: productTableColumns } =
@@ -55,45 +63,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setTableColumns(productTableColumns);
   }, [productTableColumns]);
 
-  //Selecting All Checkbox Function
-  const handleSelectAllCheckbox = () => {
-    setIsCheckAll(!isCheckAll);
-
-    setIsCheck(rows?.map((item: Product) => item.id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
-  };
-
-  // Function to handle clicking on a specific checkbox
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
-
-    setIsCheck(updatedIsCheck);
-
-    if (updatedIsCheck.length === rows?.length) {
-      setIsCheckAll(true);
-    } else {
-      setIsCheckAll(false);
-    }
-    if (isCheckAll) {
-      setIsCheckAll(false);
-    }
-    setIsError(false);
-  };
-
   // Object containing checkbox data for Custom Data Table
   let checkboxData = {
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    handleClick: handleClick,
-    isCheck: isCheck,
-    isCheckAll: isCheckAll,
+    checkboxState,
+    checkboxSetState,
   };
 
   // Function to handle downloading Excel
@@ -113,6 +86,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       });
     }
   };
+
   // Data for footer buttons
   const myDiamondsFooter = [
     {
@@ -141,8 +115,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
-    'previous-confirmation':
-      'app.myDiamonds.previousConfirmation.previousConfirmationDetail',
+    'previous-confirmations':
+      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails',
   };
 
   // Function to render page title
@@ -153,7 +127,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   // Function to render individual Card
   const renderMyDiamondCard = (items: any) => {
-    const rowKey = items.display_id ? items.display_id : items.invoiceNo;
+    const rowKey = items.display_id ? items.display_id : items.invoice_id;
     return (
       <div
         key={rowKey}
@@ -166,9 +140,9 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             <p>
               {check === 'recent-confirmation' ? 'Order ID: ' : 'Invoice No: '}
               <span className="text-solitaireTertiary">
-                {items.display_id
-                  ? formatNumberWithLeadingZeros(items.display_id)
-                  : items.invoiceNo}
+                {items.invoice_id
+                  ? items.invoice_id
+                  : formatNumberWithLeadingZeros(items.display_id)}
               </span>
             </p>
             {items.trackOrder && (
@@ -234,7 +208,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                           ? formatNumberWithLeadingZeros(
                               productPageDetail?.display_id
                             )
-                          : 'items?.invoiceNo'}
+                          : productPageDetail?.invoice_id}
                       </span>
                     </div>
 
@@ -246,17 +220,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     </div>
                     {productPageDetail?.total && (
                       <div className="flex mb-1">
-                        <p className="w-[25%]">Payable Amount :</p>
+                        <p className="w-[25%]">
+                          {check === 'previous-confirmations'
+                            ? 'Paid Amount :'
+                            : 'Payable Amount :'}
+                        </p>
                         <span className="text-solitaireTertiary">
                           {`${productPageDetail?.total} $`}
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.paidAmount && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Paid Amount :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.paidAmount}
                         </span>
                       </div>
                     )}
@@ -306,6 +276,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     tableColumns={tableColumns}
                     checkboxData={checkboxData}
                     mainTableStyle={styles.tableWrapper}
+                    errorSetState={errorSetState}
                   />
                 ) : (
                   <NoDataFound />

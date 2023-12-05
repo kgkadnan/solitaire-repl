@@ -286,7 +286,7 @@ export interface IYourSelection {
 }
 
 export interface IResultHeaderProps {
-  activeTab: any;
+  activeTab: number;
   data: any;
   checkboxState: ICheckboxState;
   modalSetState: IModalSetState;
@@ -294,6 +294,18 @@ export interface IResultHeaderProps {
   commonState: ICommonState;
   sortBySetState: ISortBySetState;
   sortByState: ISortByState;
+  dataTableSetState: IDataTableSetState;
+  dataTableState: IDataTableState;
+}
+
+export interface IDataTableSetState {
+  setRows: Dispatch<SetStateAction<Product[]>>;
+  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
+}
+
+export interface IDataTableState {
+  rows: Product[];
+  tableColumns: TableColumn[];
 }
 
 export interface IResultFooterProps {
@@ -332,6 +344,8 @@ export interface IErrorSetState {
   setErrorText: Dispatch<SetStateAction<string>>;
   setInputError: Dispatch<SetStateAction<boolean>>;
   setInputErrorContent: Dispatch<SetStateAction<string>>;
+  setIsSliderError: Dispatch<SetStateAction<boolean>>;
+  setSliderErrorText: Dispatch<SetStateAction<string>>;
 }
 
 export interface IErrorState {
@@ -339,6 +353,8 @@ export interface IErrorState {
   errorText: string;
   inputError: boolean;
   inputErrorContent: string;
+  isSliderError: boolean;
+  sliderErrorText: string;
 }
 
 export interface IConfirmStoneSetState {
@@ -359,8 +375,6 @@ export interface ICommonSetState {
   setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
   setTotalAmount: Dispatch<SetStateAction<number>>;
   setAverageDiscount: Dispatch<SetStateAction<number>>;
-  setRows: Dispatch<SetStateAction<Product[]>>;
-  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
   setSaveSearchName: Dispatch<SetStateAction<string>>;
 }
 
@@ -368,8 +382,6 @@ export interface ICommonState {
   yourSelectionData: IYourSelection[];
   totalAmount: number;
   averageDiscount: number;
-  rows: Product[];
-  tableColumns: TableColumn[];
   saveSearchName: string;
 }
 export interface ISortBySetState {
@@ -400,4 +412,16 @@ export interface ISortByState {
   refetchDataToDefault: boolean;
   previousRadioState: any;
   isSortBySliderOpen: boolean;
+}
+
+export interface IHandleSaveSearch {
+  addSavedSearch: any;
+  saveSearchName: string;
+  activeTab: number;
+  data: any;
+  setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
+  setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setSaveSearchName: Dispatch<SetStateAction<string>>;
+  setInputError: Dispatch<SetStateAction<boolean>>;
+  setInputErrorContent: Dispatch<SetStateAction<string>>;
 }

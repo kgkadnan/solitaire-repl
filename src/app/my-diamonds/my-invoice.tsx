@@ -1,16 +1,15 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+'use-client';
 import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
+import React, { useEffect, useState } from 'react';
 
-const RecentConfirmation = ({ recentConfirmData }: any) => {
+const MyInvoices = ({ myInvoiceData }: any) => {
+  const [id, setId] = useState('');
+  const [myInvoiceDetail, setMyInvoiceDetail] = useState([]);
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
 
-  // State variables to manage data and UI state
-  const [recentConfirmationDetail, setRecentConfirmationDetail] = useState([]);
-  const [id, setId] = useState('');
-  let recentConfirmationCheck = 'recent-confirmation';
+  let myInvoices = 'my-invoices';
 
   // Fetch recent confirmation data using a API
   const { data: productData } = useGetProductDetailsQuery(
@@ -25,22 +24,21 @@ const RecentConfirmation = ({ recentConfirmData }: any) => {
 
   // useEffect to update recentConfirmationDetail when productData changes
   useEffect(() => {
-    setRecentConfirmationDetail(productData?.order);
-  }, [productData, recentConfirmationDetail]);
+    setMyInvoiceDetail(productData?.order);
+  }, [productData, myInvoiceDetail]);
 
-  // Function to handle clicking on a card and set the orderId
+  // Function to handle clicking on a card and set the Invoice ID
   let handleCardClick = (id: string) => {
     setId(id);
   };
-
   return (
     <MyDiamonds
-      data={recentConfirmData}
+      data={myInvoiceData}
       handleCardClick={handleCardClick}
-      productPageDetail={recentConfirmationDetail}
-      check={recentConfirmationCheck}
+      productPageDetail={myInvoiceDetail}
+      check={myInvoices}
     />
   );
 };
 
-export default RecentConfirmation;
+export default MyInvoices;

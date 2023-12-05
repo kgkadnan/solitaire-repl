@@ -20,14 +20,19 @@ import { LeftFixedContent } from './components/left-fixed-content';
 import { keyLabelMapping } from './helpers/key-label';
 import { handleShowDifferencesChange } from './helpers/handle-show-difference-function';
 import { Product } from '../search/result/result-interface';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 
 const CompareStone = () => {
   // Initialize necessary state variables
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck } = checkboxState;
+  const { setIsCheck } = checkboxSetState;
+
   const dispatch = useAppDispatch();
   const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
+
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState<string>('');
   // Initialize state for displaying differences in stone properties

@@ -17,7 +17,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const cardData = {
-  cardId: '1',
+  id: '1',
   cardIcon: Edit,
   cardhandleIcon: Edit,
   cardHeader: <p>header</p>,

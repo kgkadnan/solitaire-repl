@@ -1,6 +1,16 @@
 import { Product } from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
 
+/**
+ * Handles the confirmation of selected stones.
+ * @param {string[]} isCheck - An array of IDs representing the selected stones.
+ * @param {Product[]} rows - An array of Product objects representing all available stones.
+ * @param {Dispatch<SetStateAction<string>>} setErrorText - A state setter function for the error text.
+ * @param {Dispatch<SetStateAction<boolean>>} setIsError - A state setter function for the error flag.
+ * @param {Dispatch<SetStateAction<boolean>>} setIsSliderOpen - A state setter function for the slider flag.
+ * @param {Dispatch<SetStateAction<Product[]>>} setConfirmStoneData - A state setter function for the confirmed stones data.
+ * @returns None
+ */
 export const handleConfirmStone = (
   isCheck: string[],
   rows: Product[],

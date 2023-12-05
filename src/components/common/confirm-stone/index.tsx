@@ -4,10 +4,13 @@ import styles from './confirm-stone.module.scss';
 import CustomDataTable from '../data-table';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { RadioButton } from '../custom-input-radio';
-import { useConfirmStoneMutation } from '@/features/api/my-diamonds/my-diamond';
 import { IConfirmStoneProps } from './interface';
 import { CustomInputField } from '../input-field';
-import { CONFIRM_STONE_COMMENT_MAX_CHARACTERS } from '@/constants/business-logic';
+import { handleComment } from './helper/handle-comment';
+import { handleRadioDayValue } from './helper/handle-radio-day-value';
+import confirmImage from '@public/assets/icons/confirmation.svg';
+import Image from 'next/image';
+import { useConfirmProductMutation } from '@/features/api/product';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -16,11 +19,19 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   onOpenChange,
   confirmStoneState,
   confirmStoneSetState,
+  setDialogContent,
+  setIsDialogOpen,
 }) => {
-  const [confirmStone] = useConfirmStoneMutation();
+  const [confirmProduct] = useConfirmProductMutation();
 
-  const { inputError, inputErrorContent } = errorState;
-  const { setInputError, setInputErrorContent } = errorSetState;
+  const { inputError, inputErrorContent, sliderErrorText, isSliderError } =
+    errorState;
+  const {
+    setInputError,
+    setInputErrorContent,
+    setSliderErrorText,
+    setIsSliderError,
+  } = errorSetState;
   const {
     confirmStoneData,
     commentValue,
@@ -35,38 +46,14 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   } = confirmStoneSetState;
 
   /**
-   * The function handles the change event of a radio input and updates the state based on the input
-   * value.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred when the radio button value is changed.
-   */
-  const handleRadioDayValue = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = parseFloat(event.target.value);
-    if (inputValue >= 121) {
-      setInputError(true);
-      setInputErrorContent('Invalid input.');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (inputValue) {
-      setInputError(false);
-      setInputErrorContent('');
-      const formattedValue = event.target.value;
-      setSelectedDaysInputValue(formattedValue);
-    } else if (event.target.value === '') {
-      setInputError(false);
-      setInputErrorContent('');
-      // If the input is empty, clear the state
-      setSelectedDaysInputValue('');
-    }
-  };
-
-  /**
    * The function `handleConfirmStoneRadioChange` updates various state values based on the selected
    * radio button value.
    * @param {string} value - The value parameter is a string that represents the selected value from a
    * radio button.
    */
   const handleConfirmStoneRadioChange = (value: string) => {
+    setIsSliderError(false);
+    setSliderErrorText('');
     setInputError(false);
     setInputErrorContent('');
     setSelectedDaysInputValue('');
@@ -122,7 +109,14 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               name="daysField"
               type="number"
               // disable={selectedRadioDaysValue !== 'other'}
-              onChange={handleRadioDayValue}
+              onChange={(e) =>
+                handleRadioDayValue({
+                  event: e,
+                  setInputError,
+                  setSelectedDaysInputValue,
+                  setInputErrorContent,
+                })
+              }
               value={selectedDaysInputValue}
               placeholder="Max 120 Days"
               style={{ input: 'w-[80px]' }}
@@ -148,15 +142,18 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * Finally, it handles the promise returned by `confirmStone`, logging any errors to the console.
    * @returns None
    */
-  const confirmStoneFunction = () => {
+  const confirmStoneApiCall = () => {
     let variantIds: string[] = [];
 
     confirmStoneData.forEach((ids: any) => {
       variantIds.push(ids.variants[0].id);
     });
 
-    if (variantIds.length && !inputError) {
-      confirmStone({
+    if (
+      (variantIds.length && !inputError && selectedRadioDaysValue.length) ||
+      selectedDaysInputValue.length
+    ) {
+      confirmProduct({
         variants: variantIds,
         comments: commentValue,
         payment_term: parseInt(
@@ -166,21 +163,29 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
         ),
       })
         .unwrap()
-        .then((res) => {})
+        .then((res) => {
+          if (res) {
+            setSelectedDaysInputValue('');
+            setInputErrorContent('');
+            setInputError(false);
+            onOpenChange(false);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="max-w-[400px] flex justify-center align-middle">
+                  <Image src={confirmImage} alt="confirmImage" />
+                </div>
+                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                  {variantIds.length} Stone Successfully Confirmed
+                </div>
+              </>
+            );
+          }
+        })
         .catch((e) => console.log(e));
-    }
-  };
-
-  /**
-   * The function `handleComment` updates the comment value based on the input value, but only if the
-   * input value is within a certain character limit.
-   * @param event - The event parameter is of type React.ChangeEvent<HTMLInputElement>. It represents the
-   * event that occurred, such as a change in the input value of an HTML input element.
-   */
-  const handleComment = (event: any) => {
-    let inputValue = event.target.value;
-    if (inputValue.length <= CONFIRM_STONE_COMMENT_MAX_CHARACTERS) {
-      setCommentValue(inputValue);
+    } else {
+      setIsSliderError(true);
+      setSliderErrorText('This Is a Mandotry Field');
     }
   };
 
@@ -199,12 +204,22 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             tableRows={confirmStoneData}
             selectionAllowed={false}
             mainTableStyle={styles.tableWrapper}
+            errorSetState={errorSetState}
           />
         )}
         <div className="mt-5">
-          <p>
-            {ManageLocales('app.searchResult.slider.confirmStone.paymentTerms')}
-          </p>
+          <div className="flex text-center items-center gap-2">
+            <p>
+              {ManageLocales(
+                'app.searchResult.slider.confirmStone.paymentTerms'
+              )}
+            </p>
+            {isSliderError && (
+              <p className="text-red-700 text-xs font-bold">
+                {sliderErrorText}
+              </p>
+            )}
+          </div>
 
           <div className="flex justify-between mt-2">
             {confirmRadioButtons?.map((radioData: any, index: number) => (
@@ -222,7 +237,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             data-testid="addComment"
             // placeholder="Write Description"
             className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
-            onChange={handleComment}
+            onChange={(e) => handleComment(e, setCommentValue)}
           />
         </div>
 
@@ -249,7 +264,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               displayButtonStyle: styles.filled,
             }}
             handleClick={() => {
-              confirmStoneFunction();
+              confirmStoneApiCall();
             }}
           />
         </div>
