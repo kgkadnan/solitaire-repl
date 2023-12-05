@@ -46,7 +46,8 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
     } else if (event.key === 'Enter') {
       event.preventDefault();
       if (suggestions && suggestions.length > 0) {
-        handleSuggestionClick(suggestions[selectedSuggestionIndex]);
+        handleSuggestionClick(value);
+        // handleSuggestionClick(suggestions[selectedSuggestionIndex]);
       }
       // else if (!suggestions.length && value?.length) {
       //   handleSuggestionClick(value);

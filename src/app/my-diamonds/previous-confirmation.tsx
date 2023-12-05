@@ -1,16 +1,19 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+
 import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
+import React, { useEffect, useState } from 'react';
 
-const RecentConfirmation = ({ recentConfirmData }: any) => {
+const PreviousConfirmation = ({ previousConfirmData }: any) => {
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
 
   // State variables to manage data and UI state
-  const [recentConfirmationDetail, setRecentConfirmationDetail] = useState([]);
+  const [previousConfirmationDetail, setPreviousConfirmationDetail] = useState(
+    []
+  );
   const [id, setId] = useState('');
-  let recentConfirmationCheck = 'recent-confirmation';
+  let previousConfirmation = 'previous-confirmations';
 
   // Fetch recent confirmation data using a API
   const { data: productData } = useGetProductDetailsQuery(
@@ -25,22 +28,22 @@ const RecentConfirmation = ({ recentConfirmData }: any) => {
 
   // useEffect to update recentConfirmationDetail when productData changes
   useEffect(() => {
-    setRecentConfirmationDetail(productData?.order);
-  }, [productData, recentConfirmationDetail]);
+    setPreviousConfirmationDetail(productData?.order);
+  }, [productData, setPreviousConfirmationDetail]);
 
-  // Function to handle clicking on a card and set the orderId
+  // Function to handle clicking on a card and set the Invoice ID
   let handleCardClick = (id: string) => {
     setId(id);
   };
 
   return (
     <MyDiamonds
-      data={recentConfirmData}
+      data={previousConfirmData}
       handleCardClick={handleCardClick}
-      productPageDetail={recentConfirmationDetail}
-      check={recentConfirmationCheck}
+      productPageDetail={previousConfirmationDetail}
+      check={previousConfirmation}
     />
   );
 };
 
-export default RecentConfirmation;
+export default PreviousConfirmation;
