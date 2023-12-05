@@ -333,6 +333,14 @@
         "start": 0,
         "end": 100
       }
+    },
+
+    {
+      "label": "Girdle",
+      "range": {
+        "start": 0,
+        "end": 100
+      }
     }
   ],
   "other_parameter": [

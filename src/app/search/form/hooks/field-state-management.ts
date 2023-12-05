@@ -19,7 +19,7 @@ const useFieldStateManagement = () => {
   const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
     []
   );
-  const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
+  const [selectedCulet, setSelectedCulet] = useState<string>('');
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);

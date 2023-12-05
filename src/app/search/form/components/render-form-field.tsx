@@ -13,6 +13,7 @@ import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
+import { CustomSelect } from '@/components/common/select';
 
 const renderContent = (
   carat: any,
@@ -339,7 +340,7 @@ const renderContent = (
     }
   };
   const handleCuletChange = (data: string) => {
-    handleFilterChange(data, selectedCulet, setSelectedCulet);
+    setSelectedCulet(data);
   };
   const handleGirdleChange = (data: string) => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
@@ -485,6 +486,16 @@ const renderContent = (
       // Handle other error logic as needed
     }
   };
+
+  let CuletData = [
+    { id: 1, value: 'None' },
+    { id: 2, value: 'Pointed' },
+    { id: 3, value: 'Very Small' },
+    { id: 4, value: 'Small' },
+    { id: 5, value: 'Med' },
+    { id: 7, value: 'Linear' },
+    { id: 8, value: 'Large' },
+  ];
 
   return (
     <>
@@ -924,23 +935,6 @@ const renderContent = (
           </div>
         </div>
       </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.Culet')}
-          />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            advanceSearch.culet,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedCulet,
-            handleCuletChange
-          )}
-        </div>
-      </div>
       <div className="flex gap-[20px]">
         <div className={styles.filterSection}>
           <div className={styles.filterSectionLabel}>
@@ -1078,7 +1072,6 @@ const renderContent = (
         </div>
       </div>
       <div className={styles.filterSection}>
-        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
@@ -1090,10 +1083,21 @@ const renderContent = (
           className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
         >
           {renderParameterFields(state, setState)}
+          <div className="mt-[52px]">
+            <CustomSelect
+              data={CuletData}
+              onChange={handleCuletChange}
+              placeholder="Culet"
+              style={{
+                selectTrigger: styles.dropdownHeader,
+                selectContent: styles.dropdownData,
+                selectElement: styles.selectElement,
+              }}
+            />
+          </div>
         </div>
       </div>
       <div className={styles.filterSection}>
-        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
