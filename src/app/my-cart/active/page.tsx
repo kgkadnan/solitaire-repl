@@ -70,7 +70,6 @@ const ActiveMyCart = () => {
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    setIsError,
   };
 
   // Handle the comparison of selected stones
@@ -300,6 +299,7 @@ const ActiveMyCart = () => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          errorSetState={errorSetState}
         />
       ) : (
         <NoDataFound />

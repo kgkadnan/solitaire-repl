@@ -21,6 +21,7 @@ import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZer
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
 import { useDataTableStateManagement } from '../data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -31,10 +32,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   // Define the main MyDiamonds component
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck, isCheckAll } = checkboxState;
+  const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const [isError, setIsError] = useState<boolean>(false);
-  const [errorText, setErrorText] = useState<string>('');
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { isError, errorText } = errorState;
+  const { setIsError, setErrorText } = errorSetState;
+
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
@@ -63,7 +67,6 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    setIsError,
   };
 
   // Function to handle downloading Excel
@@ -276,6 +279,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     tableColumns={tableColumns}
                     checkboxData={checkboxData}
                     mainTableStyle={styles.tableWrapper}
+                    errorSetState={errorSetState}
                   />
                 ) : (
                   <NoDataFound />

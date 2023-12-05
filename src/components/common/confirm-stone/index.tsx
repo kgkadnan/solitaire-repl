@@ -204,6 +204,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             tableRows={confirmStoneData}
             selectionAllowed={false}
             mainTableStyle={styles.tableWrapper}
+            errorSetState={errorSetState}
           />
         )}
         <div className="mt-5">

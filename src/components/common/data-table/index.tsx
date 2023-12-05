@@ -12,9 +12,13 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   mainTableStyle,
   selectionAllowed = true,
   handleConfirm,
+  errorSetState,
+  confirmStoneSetState,
+  modalSetState,
+  modalState,
 }) => {
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { dialogContent, isDialogOpen } = modalState ?? {};
+  const { setIsDialogOpen } = modalSetState ?? {};
 
   /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns
@@ -43,9 +47,10 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               selectionAllowed={selectionAllowed}
               checkboxData={checkboxData}
               tableCol={tableCol}
-              setDialogContent={setDialogContent}
-              setIsDialogOpen={setIsDialogOpen}
               handleConfirm={handleConfirm}
+              errorSetState={errorSetState}
+              confirmStoneSetState={confirmStoneSetState}
+              modalSetState={modalSetState}
             />
           </table>
         </div>
