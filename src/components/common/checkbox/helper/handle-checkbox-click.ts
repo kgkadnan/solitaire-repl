@@ -4,10 +4,10 @@ import { Dispatch, SetStateAction } from 'react';
 
 interface IHandleCheckBoxClick {
   id: string;
-  isCheck: string[];
-  setIsCheck: Dispatch<SetStateAction<string[]>>;
-  setIsCheckAll: Dispatch<SetStateAction<boolean>>;
-  isCheckAll: boolean;
+  isCheck?: string[];
+  setIsCheck?: Dispatch<SetStateAction<string[]>>;
+  setIsCheckAll?: Dispatch<SetStateAction<boolean>>;
+  isCheckAll?: boolean;
   data: any;
   setIsError: Dispatch<SetStateAction<boolean>>;
 }
@@ -21,7 +21,7 @@ export const handleCheckboxClick = ({
   data,
   setIsError,
 }: IHandleCheckBoxClick) => {
-  let updatedIsCheck = [...isCheck];
+  let updatedIsCheck = [...isCheck!];
 
   if (updatedIsCheck.includes(id)) {
     updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
@@ -29,7 +29,7 @@ export const handleCheckboxClick = ({
     updatedIsCheck.push(id);
   }
 
-  setIsCheck(updatedIsCheck);
+  setIsCheck?.(updatedIsCheck);
 
   // Update the "Select All" checkbox status
   if (setIsCheckAll) {

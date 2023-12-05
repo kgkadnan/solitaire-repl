@@ -20,6 +20,7 @@ import { useCommonDtateManagement } from './hooks/common-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { handleSaveSearch } from './helpers/handle-save-search';
 // Define a type for the radio state
 
 const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
@@ -37,16 +38,10 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   const { refetchDataToDefault } = sortByState;
   const { inputError, inputErrorContent } = errorState;
-  const {
-    setIsError,
-    setErrorText,
-    setInputError,
-    setInputErrorContent,
-    setIsSliderError,
-  } = errorSetState;
+  const { setInputError, setInputErrorContent, setIsSliderError } =
+    errorSetState;
 
-  const { setConfirmStoneData, setSelectedRadioDaysValue } =
-    confirmStoneSetState;
+  const { setSelectedRadioDaysValue } = confirmStoneSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
@@ -69,14 +64,9 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
   let [addSavedSearch] = useAddSavedSearchMutation();
   const { data: listingColumns } = useGetManageListingSequenceQuery({});
 
-  /* The above code is defining an object called `checkboxData` with four properties:
-`handleSelectAllCheckbox`, `handleClick`, `isCheck`, and `isCheckAll`. These properties are likely
-used in a React component to handle checkbox functionality. */
-  // Data for Custom Data Table checkboxes
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    setIsError,
   };
 
   /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
@@ -97,36 +87,6 @@ handle the logic for closing a dialog box after a certain delay. */
       return () => clearTimeout(timeoutId);
     }
   }, [isDialogOpen]);
-
-  /**
-   * The function `handleConfirm` checks if any selected stones have a status of "MemoOut" and displays
-   * an error message if so, otherwise it opens a slider and sets the selected stones data.
-   * @param {string[]} [isCheck] - An optional array of strings representing the IDs of the stones that
-   * are being checked.
-   */
-  const handleConfirm = (isCheck: string[]) => {
-    let hasMemoOut = isCheck?.some((id) => {
-      return rows.some(
-        (row) => row.id == id && row.diamond_status === 'MemoOut'
-      );
-    });
-
-    if (hasMemoOut) {
-      setErrorText(
-        'Some stones in your selection are not available, Please modify your selection.'
-      );
-      setIsError(true);
-    } else if (isCheck?.length) {
-      setIsError(false);
-      setErrorText('Please select a stone to perform action.');
-      setIsSliderOpen(true);
-      const confirmStone = rows.filter((item) => isCheck?.includes(item.id));
-      setConfirmStoneData(confirmStone);
-    } else {
-      setIsError(true);
-      setErrorText('Please select a stone to perform action.');
-    }
-  };
 
   /* The above code is defining a function called `calculateTotalAmount` using the `useCallback` hook in
 React. This function calculates the total amount based on the selected rows and their corresponding
@@ -187,52 +147,24 @@ variable changes. */
     }
   }, [data, refetchDataToDefault]);
 
-  /**
-   * The function `handleSaveSearch` saves search data to localStorage and updates the state with the
-   * saved search information.
-   */
-  const handleSaveSearch = async () => {
-    // Retrieve the array from localStorage
-    const searchData = localStorage.getItem('Search');
-
-    if (searchData !== null) {
-      const parseData = JSON.parse(searchData) || [];
-
-      await addSavedSearch({
-        name: saveSearchName,
-        diamond_count: parseInt(data?.count),
-        meta_data: parseData[activeTab].queryParams,
-        is_deleted: false,
-      })
-        .unwrap()
-        .then((res: any) => {
-          parseData[activeTab] = {
-            id: res?.id,
-            saveSearchName,
-            isSavedSearch: true,
-            queryParams: parseData[activeTab].queryParams,
-          };
-          localStorage.setItem('Search', JSON.stringify(parseData));
-          setYourSelectionData(parseData);
-          setIsInputDialogOpen(false);
-          setSaveSearchName('');
-        })
-
-        .catch((error: any) => {
-          setInputError(true);
-          setInputErrorContent(
-            'Title already exists. Choose another title to save your search'
-          );
-        });
-    }
-  };
-
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
     setInputvalue: setSaveSearchName,
     inputValue: saveSearchName,
-    displayButtonFunction: handleSaveSearch,
+    displayButtonFunction: () => {
+      handleSaveSearch({
+        addSavedSearch,
+        saveSearchName,
+        activeTab,
+        data,
+        setYourSelectionData,
+        setIsInputDialogOpen,
+        setSaveSearchName,
+        setInputError,
+        setInputErrorContent,
+      });
+    },
     label: 'Save And Search',
     name: 'save',
     displayButtonLabel2: 'Save',
@@ -313,7 +245,10 @@ variable changes. */
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
-          handleConfirm={handleConfirm}
+          errorSetState={errorSetState}
+          confirmStoneSetState={confirmStoneSetState}
+          modalSetState={modalSetState}
+          modalState={modalState}
         />
       ) : (
         <CustomLoader />
