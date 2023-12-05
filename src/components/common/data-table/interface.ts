@@ -1,10 +1,11 @@
 import {
-  ICheckboxSetState,
-  ICheckboxState,
+  IErrorSetState,
   Product,
   TableColumn,
 } from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
+import { ICheckboxSetState, ICheckboxState } from '../checkbox/interface';
+import { IConfirmStoneSetState } from '../confirm-stone/interface';
 
 export interface ICheckboxData {
   checkboxState?: ICheckboxState;
@@ -16,9 +17,8 @@ export interface ICustomDataTableProps {
   checkboxData?: any;
   mainTableStyle?: string;
   selectionAllowed?: boolean;
-  handleConfirm?: (isCheck: string[]) => void;
-  errorSetState?: any;
-  confirmStoneSetState?: any;
+  errorSetState?: IErrorSetState;
+  confirmStoneSetState?: IConfirmStoneSetState;
   modalSetState?: any;
   modalState?: any;
 }
@@ -40,7 +40,6 @@ export interface ITbodyProps {
   handleClick?: (id: string) => void;
   isCheck?: string[];
   tableCol: TableColumn[];
-  handleConfirm?: (isCheck: string[]) => void;
   checkboxData?: ICheckboxData;
   errorSetState?: any;
   confirmStoneSetState?: any;

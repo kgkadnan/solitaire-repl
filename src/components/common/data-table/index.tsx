@@ -11,7 +11,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   checkboxData = {},
   mainTableStyle,
   selectionAllowed = true,
-  handleConfirm,
   errorSetState,
   confirmStoneSetState,
   modalSetState,
@@ -47,7 +46,6 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
               selectionAllowed={selectionAllowed}
               checkboxData={checkboxData}
               tableCol={tableCol}
-              handleConfirm={handleConfirm}
               errorSetState={errorSetState}
               confirmStoneSetState={confirmStoneSetState}
               modalSetState={modalSetState}

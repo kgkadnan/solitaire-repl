@@ -1,3 +1,8 @@
+import {
+  ICheckboxSetState,
+  ICheckboxState,
+} from '@/components/common/checkbox/interface';
+import { IConfirmStoneSetState } from '@/components/common/confirm-stone/interface';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
@@ -285,6 +290,18 @@ export interface IYourSelection {
   queryParams: string[];
 }
 
+interface IData {
+  count: number;
+  limit: number;
+  offset: number;
+  products: Product[];
+}
+export interface ISearchResultsProps {
+  data: IData;
+  activeTab: number;
+  refetch: any;
+}
+
 export interface IResultHeaderProps {
   activeTab: number;
   data: any;
@@ -319,24 +336,11 @@ export interface IResultFooterProps {
   confirmStoneSetState: IConfirmStoneSetState;
 }
 
-/**
- * Interfaces for managing state.
- */
 export interface IModalSetState {
   setDialogContent: Dispatch<SetStateAction<ReactNode>>;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
-}
-
-export interface ICheckboxState {
-  isCheck: string[];
-  isCheckAll: boolean;
-}
-
-export interface ICheckboxSetState {
-  setIsCheck: Dispatch<SetStateAction<string[]>>;
-  setIsCheckAll: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IErrorSetState {
@@ -355,20 +359,6 @@ export interface IErrorState {
   inputErrorContent: string;
   isSliderError: boolean;
   sliderErrorText: string;
-}
-
-export interface IConfirmStoneSetState {
-  setConfirmStoneData: Dispatch<SetStateAction<Product[]>>;
-  setCommentValue: Dispatch<SetStateAction<string>>;
-  setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
-  setSelectedRadioDaysValue: Dispatch<SetStateAction<string>>;
-}
-
-export interface IConfirmStoneState {
-  confirmStoneData: Product[];
-  commentValue: string;
-  selectedDaysInputValue: string;
-  selectedRadioDaysValue: string;
 }
 
 export interface ICommonSetState {

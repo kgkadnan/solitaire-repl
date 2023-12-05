@@ -1,6 +1,6 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
+import { TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -175,8 +175,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.transparent,
       fn: () =>
-        handleConfirmStone &&
-        handleConfirmStone(
+        handleConfirmStone?.(
           [sliderData[0]?.id],
           tableRows,
           setErrorText,
@@ -193,29 +192,89 @@ export const TableBody: React.FC<ITbodyProps> = ({
     },
   ];
 
+  const handleRowClick = (row: any) => {
+    handleCheckboxClick({
+      id: row.id,
+      isCheck,
+      setIsCheck,
+      setIsCheckAll,
+      isCheckAll,
+      data: tableRows,
+      setIsError,
+    });
+  };
+
+  const renderCellContent = (column: TableColumn, row: any, index: number) => {
+    switch (column.accessor) {
+      case 'details':
+        return (
+          <div
+            className="flex items-center gap-2"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <DetailImageSlider
+              dataTableBodyState={dataTableBodyState}
+              dataTableBodySetState={dataTableBodySetState}
+              tableRows={tableRows}
+              index={index}
+              switchButtonTabs={switchButtonTabs}
+              row={row}
+            />
+            <DetailCertificateSlider
+              dataTableBodyState={dataTableBodyState}
+              dataTableBodySetState={dataTableBodySetState}
+              row={row}
+              tableRows={tableRows}
+              index={index}
+            />
+          </div>
+        );
+      case 'lot_id':
+        return (
+          <div onClick={(e) => e.stopPropagation()}>
+            <DiamondDetailSlider
+              dataTableBodyState={dataTableBodyState}
+              dataTableBodySetState={dataTableBodySetState}
+              tableRows={tableRows}
+              index={index}
+              switchButtonTabs={switchButtonTabs}
+              row={row}
+              column={column}
+              footerButtonData={footerButtonData}
+            />
+          </div>
+        );
+      case 'lab':
+        return (
+          <a
+            href={`${GIA_LINK}${row.rpt_number}`}
+            target="_blank"
+            className="border-b border-solitaireQuaternary border-solid"
+            onClick={(e) => e.stopPropagation()}
+          >
+            {row[column.accessor] !== null ? row[column.accessor] : '-'}
+          </a>
+        );
+      case 'amount':
+        return row.variants[0].prices[0].amount;
+      default:
+        return row[column.accessor] !== null ? row[column.accessor] : '-';
+    }
+  };
+
   return (
     <tbody className={styles.tableBody}>
       {tableRows?.map((row: any, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}
-          onClick={() => {
-            handleCheckboxClick({
-              id: row.id,
-              isCheck,
-              setIsCheck,
-              setIsCheckAll,
-              isCheckAll,
-              data: tableRows,
-              setIsError,
-            });
-          }}
+          onClick={() => handleRowClick(row)}
         >
           {selectionAllowed && (
             <td>
               <CustomCheckBox
                 data={row.id}
-                isChecked={isCheck ? isCheck : []}
+                isChecked={isCheck ?? []}
                 setIsCheck={setIsCheck}
                 setIsCheckAll={setIsCheckAll}
                 isCheckAll={isCheckAll}
@@ -234,75 +293,9 @@ export const TableBody: React.FC<ITbodyProps> = ({
                 position: `${tableColindex === 0 ? 'sticky' : 'static'}`,
               }}
               key={`${row.id}-${column.accessor}`}
-              className={`
-            ${styles.tableData}  
-           
-           cursor-pointer
-          `}
+              className={`${styles.tableData} cursor-pointer`}
             >
-              {column.accessor === 'details' ? (
-                <div
-                  className="flex items-center gap-2"
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  <DetailImageSlider
-                    dataTableBodyState={dataTableBodyState}
-                    dataTableBodySetState={dataTableBodySetState}
-                    tableRows={tableRows}
-                    index={index}
-                    switchButtonTabs={switchButtonTabs}
-                    row={row}
-                  />
-                  <DetailCertificateSlider
-                    dataTableBodyState={dataTableBodyState}
-                    dataTableBodySetState={dataTableBodySetState}
-                    row={row}
-                    tableRows={tableRows}
-                    index={index}
-                  />
-                </div>
-              ) : column.accessor === 'lot_id' ? (
-                <div
-                  onClick={(e) => {
-                    e.stopPropagation();
-                  }}
-                >
-                  <DiamondDetailSlider
-                    dataTableBodyState={dataTableBodyState}
-                    dataTableBodySetState={dataTableBodySetState}
-                    tableRows={tableRows}
-                    index={index}
-                    switchButtonTabs={switchButtonTabs}
-                    row={row}
-                    column={column}
-                    footerButtonData={footerButtonData}
-                  />
-                </div>
-              ) : column.accessor === 'rpt_number' ? (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="border-b border-solitaireQuaternary border-solid"
-                >
-                  <a href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
-                    {row.rpt_number !== null ? row.rpt_number : '-'}
-                  </a>
-                </div>
-              ) : column.accessor === 'lab' ? (
-                <div
-                  onClick={(e) => e.stopPropagation()}
-                  className="border-b border-solitaireQuaternary border-solid"
-                >
-                  <a href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
-                    {row.lab}
-                  </a>
-                </div>
-              ) : column.accessor === 'amount' ? (
-                row.variants[0].prices[0].amount
-              ) : row[column.accessor as keyof Product] !== null ? (
-                row[column.accessor as keyof Product]
-              ) : (
-                '-'
-              )}
+              {renderCellContent(column, row, index)}
             </td>
           ))}
         </tr>

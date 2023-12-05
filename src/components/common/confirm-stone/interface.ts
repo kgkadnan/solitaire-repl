@@ -1,12 +1,24 @@
 import {
-  IConfirmStoneSetState,
-  IConfirmStoneState,
   IErrorSetState,
   IErrorState,
   Product,
   TableColumn,
 } from '@/app/search/result/result-interface';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
+
+export interface IConfirmStoneSetState {
+  setConfirmStoneData: Dispatch<SetStateAction<Product[]>>;
+  setCommentValue: Dispatch<SetStateAction<string>>;
+  setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
+  setSelectedRadioDaysValue: Dispatch<SetStateAction<string>>;
+}
+
+export interface IConfirmStoneState {
+  confirmStoneData: Product[];
+  commentValue: string;
+  selectedDaysInputValue: string;
+  selectedRadioDaysValue: string;
+}
 
 export interface IconfirmRadioButtons {
   name: string;
