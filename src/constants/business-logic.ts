@@ -6,6 +6,8 @@ export const MIN_COMPARE_STONE = 2;
 
 export const MAX_DAYS_TO_PAY = 120;
 
+export const PAGINATION_INTITAL_LIMMIT = 50;
+
 export const SOLD_OUT_STATUS = 'SoldOut';
 export const ACTIVE_STATUS = 'Active';
 export const MEMO_OUT_STATUS = 'MemoOut';

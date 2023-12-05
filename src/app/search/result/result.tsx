@@ -2,7 +2,7 @@
 rendering and managing the search results page. */
 'use client';
 import styles from './search-results.module.scss';
-import React, { useCallback, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { CustomSlider } from '@/components/common/slider';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDialog } from '@/components/common/dialog';
@@ -21,9 +21,16 @@ import { useConfirmStoneStateManagement } from '@/components/common/confirm-ston
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { handleSaveSearch } from './helpers/handle-save-search';
+import { calculateTotalAmount } from './helpers/calculate-total-amount';
+import { calculateAverageDiscount } from './helpers/calculate-average-discount';
+import { ISearchResultsProps } from './result-interface';
 // Define a type for the radio state
 
-const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
+const SearchResults = ({
+  data,
+  activeTab,
+  refetch: refetchRow,
+}: ISearchResultsProps) => {
   const { sortByState, sortBySetState } = useSortByStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
@@ -88,49 +95,11 @@ handle the logic for closing a dialog box after a certain delay. */
     }
   }, [isDialogOpen]);
 
-  /* The above code is defining a function called `calculateTotalAmount` using the `useCallback` hook in
-React. This function calculates the total amount based on the selected rows and their corresponding
-variants' prices. */
-  const calculateTotalAmount = useCallback(() => {
-    let total = 0;
-
-    isCheck.forEach((id) => {
-      const selectedRow = rows.find((row) => row.id === id);
-      if (selectedRow) {
-        const variant = selectedRow.variants.find(
-          (variant) => variant.prices.length > 0
-        );
-        if (variant) {
-          total += variant.prices[0].amount;
-        }
-      }
-    });
-
-    return total;
-  }, [isCheck, rows]);
-
-  /* The above code is a TypeScript React function called `calculateAverageDiscount`. It calculates the
-average discount of selected rows based on the `isCheck` array and `rows` array. */
-  const calculateAverageDiscount = useCallback(() => {
-    let totalDiscount = 0;
-    isCheck.forEach((id) => {
-      const selectedRow = rows.find((row) => row.id === id);
-      if (selectedRow) {
-        totalDiscount += selectedRow?.discount;
-      }
-    });
-    // Calculate average discount
-    const avgDiscount = isCheck.length > 0 ? totalDiscount / isCheck.length : 0;
-    return avgDiscount;
-  }, [isCheck, rows]);
-
-  /* The above code is using the useEffect hook in a React component. It is setting up a side effect that
-will be triggered whenever the value of the "isCheck" variable changes. */
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
-    setTotalAmount(calculateTotalAmount());
-    setAverageDiscount(calculateAverageDiscount());
-  }, [calculateTotalAmount, calculateAverageDiscount]);
+    setTotalAmount(calculateTotalAmount({ isCheck, rows }));
+    setAverageDiscount(calculateAverageDiscount({ isCheck, rows }));
+  }, [isCheck]);
 
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
@@ -248,7 +217,6 @@ variable changes. */
           errorSetState={errorSetState}
           confirmStoneSetState={confirmStoneSetState}
           modalSetState={modalSetState}
-          modalState={modalState}
         />
       ) : (
         <CustomLoader />
