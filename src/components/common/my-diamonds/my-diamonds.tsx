@@ -86,6 +86,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       });
     }
   };
+
   // Data for footer buttons
   const myDiamondsFooter = [
     {
@@ -114,8 +115,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
-    'previous-confirmation':
-      'app.myDiamonds.previousConfirmation.previousConfirmationDetail',
+    'previous-confirmations':
+      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails',
   };
 
   // Function to render page title
@@ -126,7 +127,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   // Function to render individual Card
   const renderMyDiamondCard = (items: any) => {
-    const rowKey = items.display_id ? items.display_id : items.invoiceNo;
+    const rowKey = items.display_id ? items.display_id : items.invoice_id;
     return (
       <div
         key={rowKey}
@@ -139,9 +140,9 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             <p>
               {check === 'recent-confirmation' ? 'Order ID: ' : 'Invoice No: '}
               <span className="text-solitaireTertiary">
-                {items.display_id
-                  ? formatNumberWithLeadingZeros(items.display_id)
-                  : items.invoiceNo}
+                {items.invoice_id
+                  ? items.invoice_id
+                  : formatNumberWithLeadingZeros(items.display_id)}
               </span>
             </p>
             {items.trackOrder && (
@@ -207,7 +208,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                           ? formatNumberWithLeadingZeros(
                               productPageDetail?.display_id
                             )
-                          : 'items?.invoiceNo'}
+                          : productPageDetail?.invoice_id}
                       </span>
                     </div>
 
@@ -219,17 +220,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                     </div>
                     {productPageDetail?.total && (
                       <div className="flex mb-1">
-                        <p className="w-[25%]">Payable Amount :</p>
+                        <p className="w-[25%]">
+                          {check === 'previous-confirmations'
+                            ? 'Paid Amount :'
+                            : 'Payable Amount :'}
+                        </p>
                         <span className="text-solitaireTertiary">
                           {`${productPageDetail?.total} $`}
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.paidAmount && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Paid Amount :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.paidAmount}
                         </span>
                       </div>
                     )}
