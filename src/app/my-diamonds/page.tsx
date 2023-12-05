@@ -74,27 +74,42 @@ function MyDiamonds() {
   let expand = 'items';
 
   // Fetch recent confirmation data
-  const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
-    resentConfiramtionStatus,
-    fulfillmentStatus,
-    paymentStatus,
-    fields,
-    expand,
-    dateSearchUrl,
-  });
+  const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery(
+    {
+      resentConfiramtionStatus,
+      fulfillmentStatus,
+      paymentStatus,
+      fields,
+      expand,
+      dateSearchUrl,
+    },
+    {
+      skip: activeTab !== 'Recent Confirmations',
+    }
+  );
 
   // Fetch my-invoice data
-  const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
-    myDiamondStatus,
-    invoiceStatus,
-    dateSearchUrl,
-  });
+  const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery(
+    {
+      myDiamondStatus,
+      invoiceStatus,
+      dateSearchUrl,
+    },
+    {
+      skip: activeTab !== 'My Invoices',
+    }
+  );
 
   // Fetch previous-confiramtion-data
-  const { data: previousConfirmationData } = useCardPreviousConfirmationQuery({
-    previousConfirmStatus,
-    dateSearchUrl,
-  });
+  const { data: previousConfirmationData } = useCardPreviousConfirmationQuery(
+    {
+      previousConfirmStatus,
+      dateSearchUrl,
+    },
+    {
+      skip: activeTab !== 'Previous Confirmations',
+    }
+  );
 
   // Handle scroll events to show/hide the header
   const handleScroll = () => {
