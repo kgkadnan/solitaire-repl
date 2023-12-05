@@ -3,10 +3,13 @@ import { useState } from 'react';
 export const useErrorStateManagement = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
+
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
+
   const [isSliderError, setIsSliderError] = useState(false);
   const [sliderErrorText, setSliderErrorText] = useState('');
+
   return {
     errorState: {
       isError,

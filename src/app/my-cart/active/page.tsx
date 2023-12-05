@@ -1,7 +1,6 @@
 'use client';
 
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDropdown } from '@/components/common/dropdown';
@@ -70,7 +69,6 @@ const ActiveMyCart = () => {
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    setIsError,
   };
 
   // Handle the comparison of selected stones
@@ -300,6 +298,7 @@ const ActiveMyCart = () => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          errorSetState={errorSetState}
         />
       ) : (
         <NoDataFound />

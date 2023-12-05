@@ -13,6 +13,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 
 const MemoOut = () => {
   // State variables
@@ -20,8 +21,11 @@ const MemoOut = () => {
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { isError, errorText } = errorState;
+  const { setIsError, setErrorText } = errorSetState;
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
@@ -44,7 +48,6 @@ const MemoOut = () => {
   let checkboxData = {
     checkboxState,
     checkboxSetState,
-    setIsError,
   };
 
   // Compare Stone handler
@@ -159,6 +162,7 @@ const MemoOut = () => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          errorSetState={errorSetState}
         />
       ) : (
         <NoDataFound />

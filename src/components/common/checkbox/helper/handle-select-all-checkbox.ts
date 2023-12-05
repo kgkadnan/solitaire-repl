@@ -4,9 +4,9 @@ import { Dispatch, SetStateAction } from 'react';
 
 //Selecting All Checkbox Function
 interface IhandleSelectAllCheckbox {
-  setIsCheck: Dispatch<SetStateAction<string[]>>;
-  setIsCheckAll: Dispatch<SetStateAction<boolean>>;
-  isCheckAll: boolean;
+  setIsCheck?: Dispatch<SetStateAction<string[]>>;
+  setIsCheckAll?: Dispatch<SetStateAction<boolean>>;
+  isCheckAll?: boolean;
   data: Product[] | ICardData[];
 }
 
@@ -16,10 +16,10 @@ export const handleSelectAllCheckbox = ({
   setIsCheck,
   data,
 }: IhandleSelectAllCheckbox) => {
-  setIsCheckAll(!isCheckAll);
+  setIsCheckAll?.(!isCheckAll);
 
-  setIsCheck(data?.map((item: Product | ICardData) => item.id));
+  setIsCheck?.(data?.map((item: Product | ICardData) => item.id));
   if (isCheckAll) {
-    setIsCheck([]);
+    setIsCheck?.([]);
   }
 };
