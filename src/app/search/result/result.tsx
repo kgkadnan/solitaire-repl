@@ -217,7 +217,6 @@ variable changes. */
           errorSetState={errorSetState}
           confirmStoneSetState={confirmStoneSetState}
           modalSetState={modalSetState}
-          modalState={modalState}
         />
       ) : (
         <CustomLoader />

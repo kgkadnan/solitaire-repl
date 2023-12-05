@@ -31,7 +31,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { isCheck, isCheckAll } = checkboxState ?? {};
   const { setIsCheckAll, setIsCheck } = checkboxSetState ?? {};
 
-  const { setErrorText, setIsError } = errorSetState ?? {};
+  const { setErrorText, setIsError } = errorSetState;
   const { setConfirmStoneData } = confirmStoneSetState ?? {};
   const { setIsDialogOpen, setIsSliderOpen, setDialogContent } =
     modalSetState ?? {};
@@ -54,7 +54,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       })
         .unwrap()
         .then(() => {
-          setDialogContent(
+          setDialogContent?.(
             <>
               <div className="max-w-[400px] flex justify-center align-middle">
                 <Image src={confirmImage} alt="vector image" />
@@ -64,7 +64,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
               </div>
             </>
           );
-          setIsDialogOpen(true);
+          setIsDialogOpen?.(true);
         })
         .catch(() => {
           console.log('1111111111111111');
@@ -86,7 +86,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
           let { data, fileName } = res;
           if (data) {
             downloadExcelFromBase64(data, fileName);
-            setDialogContent(
+            setDialogContent?.(
               <>
                 <div className="max-w-[400px] flex justify-center align-middle">
                   <Image src={confirmImage} alt="vector image" />
@@ -96,7 +96,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
                 </div>
               </>
             );
-            setIsDialogOpen(true);
+            setIsDialogOpen?.(true);
           }
         })
         .catch((error) => {

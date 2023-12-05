@@ -1,5 +1,6 @@
 import {
   IErrorSetState,
+  IModalSetState,
   Product,
   TableColumn,
 } from '@/app/search/result/result-interface';
@@ -14,13 +15,12 @@ export interface ICheckboxData {
 export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
-  checkboxData?: any;
+  checkboxData?: ICheckboxData;
   mainTableStyle?: string;
   selectionAllowed?: boolean;
-  errorSetState?: IErrorSetState;
+  errorSetState: IErrorSetState;
   confirmStoneSetState?: IConfirmStoneSetState;
   modalSetState?: any;
-  modalState?: any;
 }
 
 export interface KeyLabelMapping {
@@ -41,7 +41,7 @@ export interface ITbodyProps {
   isCheck?: string[];
   tableCol: TableColumn[];
   checkboxData?: ICheckboxData;
-  errorSetState?: any;
+  errorSetState: IErrorSetState;
   confirmStoneSetState?: any;
   modalSetState?: any;
 }
