@@ -6,7 +6,6 @@ export const generateQueryParams = (state: any) => {
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
-    selectedTingeIntensity,
     selectedClarity,
     selectedCaratRange,
     selectedCut,
@@ -68,13 +67,14 @@ export const generateQueryParams = (state: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
+    selectedColor,
   } = state;
 
   const queryParams: any = {};
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
-  // selectedColor && (queryParams['color'] = selectedColor);
-  selectedWhiteColor?.length !== 0 &&
-    (queryParams['color'] = selectedWhiteColor);
+  selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
+  // selectedWhiteColor?.length !== 0 &&
+  //   (queryParams['color'] = selectedWhiteColor);
   selectedFancyColor?.length !== 0 &&
     (queryParams['fancy'] = selectedFancyColor);
   selectedIntensity?.length !== 0 &&
@@ -82,8 +82,6 @@ export const generateQueryParams = (state: any) => {
   selectedOvertone?.length !== 0 &&
     (queryParams['overtone'] = selectedOvertone);
   selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
-  selectedTingeIntensity?.length !== 0 &&
-    (queryParams['color_shade_intensity'] = selectedTingeIntensity);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
     const caratRanges = selectedCaratRange.map((range: string) => {

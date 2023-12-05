@@ -35,8 +35,6 @@ const renderContent = (
 
   const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
 
-  const { caratRangeData, setCaratRangeData } = carat;
-
   const {
     selectedShape,
     selectedColor,
@@ -45,7 +43,6 @@ const renderContent = (
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
-    selectedTingeIntensity,
     selectedClarity,
     selectedCaratRange,
     selectedMake,
@@ -79,7 +76,6 @@ const renderContent = (
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedTinge,
-    setSelectedTingeIntensity,
     setSelectedClarity,
     setSelectedGirdleStep,
     setSelectedCaratRange,
@@ -152,13 +148,7 @@ const renderContent = (
     }
   };
   const handleColorChange = (data: string) => {
-    if (selectedColor !== data) {
-      setSelectedColor(data);
-    } else {
-      setSelectedColor('');
-    }
-    setSelectedWhiteColor([]);
-    setSelectedFancyColor([]);
+    handleFilterChange(data, selectedColor, setSelectedColor);
   };
   const handleWhiteFilterChange = (data: string) => {
     handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
@@ -175,9 +165,6 @@ const renderContent = (
   const handleTingeChange = (data: string) => {
     handleFilterChange(data, selectedTinge, setSelectedTinge);
   };
-  const handleTingeIntensityChange = (data: string) => {
-    handleFilterChange(data, selectedTingeIntensity, setSelectedTingeIntensity);
-  };
   const handleClarityChange = (data: string) => {
     handleFilterChange(data, selectedClarity, setSelectedClarity);
   };
@@ -187,6 +174,8 @@ const renderContent = (
   };
 
   const handleMakeChange = (data: string) => {
+    console.log('ssssssssssssssssssssss', data);
+
     if (data.toLowerCase() === '3ex') {
       if (data !== selectedMake) {
         setSelectedCut(['EX']);
@@ -198,15 +187,15 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: any) => e !== 'NON')
+        selectedFluorescence.filter((e: any) => e !== 'None')
       );
     }
-    if (data.toLowerCase() === '3ex-non') {
+    if (data.toLowerCase() === '3ex+none') {
       if (data !== selectedMake) {
         setSelectedCut(['EX']);
         setSelectedPolish(['EX']);
         setSelectedSymmetry(['EX']);
-        setSelectedFluorescence(['NON']);
+        setSelectedFluorescence(['None']);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -214,7 +203,7 @@ const renderContent = (
         setSelectedFluorescence([]);
       }
     }
-    if (data.toLowerCase() === '3vg+') {
+    if (data.toLowerCase() === '3vg+ex') {
       if (data !== selectedMake) {
         setSelectedCut(['EX', 'VG']);
         setSelectedPolish(['EX', 'VG']);
@@ -225,8 +214,30 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: any) => e !== 'NON')
+        selectedFluorescence.filter((e: any) => e !== 'None')
       );
+    }
+    if (data.toLowerCase() === '3g') {
+      if (data !== selectedMake) {
+        setSelectedCut(['G']);
+        setSelectedPolish(['G']);
+        setSelectedSymmetry(['G']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+    }
+    if (data.toLowerCase() === '3f') {
+      if (data !== selectedMake) {
+        setSelectedCut(['F']);
+        setSelectedPolish(['F']);
+        setSelectedSymmetry(['F']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
     }
     setSelectedMake(data === selectedMake ? '' : data);
   };
@@ -250,8 +261,8 @@ const renderContent = (
       firstCriteria.toString() === 'EX' &&
       secondCriteria.toString() === 'EX'
     ) {
-      if (selectedFluorescence.toString() === 'NON') {
-        setSelectedMake('3EX-Non');
+      if (selectedFluorescence.toString() === 'None') {
+        setSelectedMake('3EX+None');
       } else {
         setSelectedMake('3EX');
       }
@@ -262,7 +273,7 @@ const renderContent = (
         secondCriteria.toString() === 'VG,EX') &&
       (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
     ) {
-      setSelectedMake('3VG+');
+      setSelectedMake('3VG+EX');
     } else {
       setSelectedMake('');
     }
@@ -308,8 +319,8 @@ const renderContent = (
       selectedCut.toString() === 'EX' &&
       selectedSymmetry.toString() === 'EX'
     ) {
-      if (temp.toString() === 'NON') {
-        setSelectedMake('3EX-Non');
+      if (temp.toString() === 'None') {
+        setSelectedMake('3EX+None');
       } else {
         setSelectedMake('3EX');
       }
@@ -322,7 +333,7 @@ const renderContent = (
         selectedSymmetry.toString() === 'VG,EX') &&
       temp.length === 0
     ) {
-      setSelectedMake('3VG+');
+      setSelectedMake('3VG+EX');
     } else {
       setSelectedMake('');
     }
@@ -400,13 +411,13 @@ const renderContent = (
     }
     return value;
   };
+
   const handleAddCarat = (data: string) => {
-    let Validatedata = normalizeValue(data);
-    if (Validatedata) {
-      if (!caratRangeData.includes(Validatedata)) {
-        setCaratRangeData([...caratRangeData, Validatedata]);
+    let validatedData = normalizeValue(data);
+    if (validatedData) {
+      if (!selectedCaratRange.includes(validatedData)) {
+        setSelectedCaratRange([...selectedCaratRange, validatedData]);
       }
-      setSelectedCaratRange([...selectedCaratRange, Validatedata]);
       setCaratRangeFrom('');
       setCaratRangeTo('');
     }
@@ -499,17 +510,14 @@ const renderContent = (
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.caratRange')}
+            label={ManageLocales('app.advanceSearch.carat')}
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
         <div
           className={`${styles.filterSectionData} ${styles.caratRangeFilter}`}
         >
-          <div
-            className={`${styles.filterSection} ${styles.rangeFilter}`}
-            style={{ width: '420px' }}
-          >
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
             <div>
               <div className="flex gap-5">
                 <CustomInputField
@@ -560,25 +568,59 @@ const renderContent = (
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.addCartButtonStyles} ${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCarat}`,
               }}
             />
+            <div className="ml-2 flex">
+              {renderSelectionButtons(
+                selectedCaratRange,
+                '',
+                '',
+                [],
+                handleCaratRangeChange
+              )}
+            </div>
           </div>
           <div className="text-red-500 text-xs ml-2 ">
             {validationError && validationError}
           </div>
-          <div>
-            {renderSelectionButtons(
-              caratRangeData,
-              '',
-              styles.activeOtherStyles,
-              selectedCaratRange,
-              handleCaratRangeChange
-            )}
-          </div>
         </div>
       </div>
       <div className={styles.filterSection}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
+            label={ManageLocales('app.advanceSearch.clarity')}
+          />
+        </div>
+        <div className={styles.filterSectionData}>
+          {renderSelectionButtons(
+            advanceSearch.clarity,
+            '',
+            styles.activeOtherStyles,
+            selectedClarity,
+            handleClarityChange
+          )}
+        </div>
+      </div>
+      <div className={styles.filterSection}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
+            label={ManageLocales('app.advanceSearch.color')}
+          />
+        </div>
+        <div className={styles.filterSectionData}>
+          {renderSelectionButtons(
+            advanceSearch.color,
+            '',
+            styles.activeOtherStyles,
+            selectedColor,
+            handleColorChange
+          )}
+        </div>
+      </div>
+      {/* <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
@@ -620,7 +662,7 @@ const renderContent = (
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
       {selectedColor.includes('Fancy') && (
         <>
           <div className={styles.filterSection}>
@@ -665,57 +707,6 @@ const renderContent = (
           </div>
         </>
       )}
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.colorShade')}
-          />
-        </div>
-        <div className={styles.filterSectionData}>
-          {renderSelectionButtons(
-            advanceSearch.color_shade,
-            '',
-            styles.activeOtherStyles,
-            selectedTinge,
-            handleTingeChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.colorShadeIntensity')}
-          />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            advanceSearch.color_shade_intensity,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedTingeIntensity,
-            handleTingeIntensityChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.clarity')}
-          />
-        </div>
-        <div className={styles.filterSectionData}>
-          {renderSelectionButtons(
-            advanceSearch.clarity,
-            '',
-            styles.activeOtherStyles,
-            selectedClarity,
-            handleClarityChange
-          )}
-        </div>
-      </div>
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -805,30 +796,13 @@ const renderContent = (
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.Culet')}
-          />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            advanceSearch.culet,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedCulet,
-            handleCuletChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
             label={ManageLocales('app.advanceSearch.lab')}
           />
         </div>
         <div className={styles.filterSectionData}>
           {renderSelectionButtons(
             advanceSearch.lab,
-            styles.commonSelectionStyle,
+            styles.countryOriginStyle,
             styles.activeOtherStyles,
             selectedLab,
             handleLabChange
@@ -907,135 +881,200 @@ const renderContent = (
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.discount')}
+            label={ManageLocales('app.advanceSearch.Shade')}
           />
         </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="discountFrom"
-            onChange={(e) => {
-              setDiscountFrom(e.target.value);
-              handleValidate('discount', 'from', e.target.value, discountTo);
-            }}
-            value={discountFrom}
-            placeholder={ManageLocales('app.advanceSearch.from')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="discountTo"
-            onChange={(e) => {
-              setDiscountTo(e.target.value);
-              handleValidate('discount', 'to', e.target.value, discountFrom);
-            }}
-            value={discountTo}
-            placeholder={ManageLocales('app.advanceSearch.to')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
+        <div>
+          <div style={{ margin: '10px' }}>
+            <CustomRadioButton
+              radioMetaData={{
+                name: 'steps',
+                handleChange: (data: string) => {
+                  setSelectedStep(data);
+                },
+                radioData: [
+                  {
+                    id: '1',
+                    value: 'Contains',
+                    radioButtonLabel: 'Contains',
+                    checked: selectedStep === 'Contains',
+                  },
+                  {
+                    id: '2',
+                    value: 'Does not contains',
+                    radioButtonLabel: 'Does not contains',
+                    checked: selectedStep === 'Does not contains',
+                  },
+                ],
+              }}
+              radioButtonAllStyles={{
+                radioButtonStyle: styles.radioStyle,
+                radioLabelStyle: styles.radioLabel,
+              }}
+            />
+          </div>
+          <div className={styles.filterSectionData}>
+            {renderSelectionButtons(
+              advanceSearch.color_shade,
+              '',
+              styles.activeOtherStyles,
+              selectedTinge,
+              handleTingeChange
+            )}
+          </div>
         </div>
-        {/* {fromError.key === 'discount' && ( */}
-        <div className={styles.validationMessage}>
-          {errors?.discount.from ?? errors?.discount.to}
-        </div>
-        {/* )} */}
       </div>
       <div className={styles.filterSection}>
-        {' '}
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.priceRange')}
+            label={ManageLocales('app.advanceSearch.Culet')}
           />
         </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="priceRangeFrom"
-            onChange={(e) => {
-              setPriceRangeFrom(e.target.value);
-            }}
-            value={priceRangeFrom}
-            placeholder={ManageLocales('app.advanceSearch.from')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="priceRangeTo"
-            onChange={(e) => {
-              setPriceRangeTo(e.target.value);
-              handleValidate(
-                'price_range',
-                'to',
-                e.target.value,
-                priceRangeFrom
-              );
-            }}
-            value={priceRangeTo}
-            placeholder={ManageLocales('app.advanceSearch.to')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
+        <div>
+          {renderSelectionButtons(
+            advanceSearch.culet,
+            styles.commonSelectionStyle,
+            styles.activeOtherStyles,
+            selectedCulet,
+            handleCuletChange
+          )}
         </div>
-        {validationError}
       </div>
-      <div className={styles.filterSection}>
-        {' '}
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.pricePerCarat')}
-          />
+      <div className="flex gap-[20px]">
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label={ManageLocales('app.advanceSearch.discount')}
+            />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="discountFrom"
+              onChange={(e) => {
+                setDiscountFrom(e.target.value);
+                handleValidate('discount', 'from', e.target.value, discountTo);
+              }}
+              value={discountFrom}
+              placeholder={ManageLocales('app.advanceSearch.from')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="discountTo"
+              onChange={(e) => {
+                setDiscountTo(e.target.value);
+                handleValidate('discount', 'to', e.target.value, discountFrom);
+              }}
+              value={discountTo}
+              placeholder={ManageLocales('app.advanceSearch.to')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+          </div>
+          {/* {fromError.key === 'discount' && ( */}
+          <div className={styles.validationMessage}>
+            {errors?.discount.from ?? errors?.discount.to}
+          </div>
+          {/* )} */}
         </div>
-        <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-          <CustomInputField
-            // style={className}
-            type="number"
-            name="pricePerCaratFrom"
-            onChange={(e) => {
-              setPricePerCaratFrom(e.target.value);
-              handleValidate(
-                'price_per_carat',
-                'from',
-                e.target.value,
-                pricePerCaratTo
-              );
-            }}
-            value={pricePerCaratFrom}
-            placeholder={ManageLocales('app.advanceSearch.from')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
-          <CustomInputField
-            type="number"
-            name="pricePerCaratTo"
-            onChange={(e) => {
-              setPricePerCaratTo(e.target.value);
-              handleValidate(
-                'price_per_carat',
-                'to',
-                e.target.value,
-                pricePerCaratFrom
-              );
-            }}
-            value={pricePerCaratTo}
-            placeholder={ManageLocales('app.advanceSearch.to')}
-            style={{
-              input: styles.inputFieldStyles,
-            }}
-          />
+        <div className={styles.filterSection}>
+          {' '}
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label={ManageLocales('app.advanceSearch.pricePerCarat')}
+            />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="pricePerCaratFrom"
+              onChange={(e) => {
+                setPricePerCaratFrom(e.target.value);
+                handleValidate(
+                  'price_per_carat',
+                  'from',
+                  e.target.value,
+                  pricePerCaratTo
+                );
+              }}
+              value={pricePerCaratFrom}
+              placeholder={ManageLocales('app.advanceSearch.from')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              type="number"
+              name="pricePerCaratTo"
+              onChange={(e) => {
+                setPricePerCaratTo(e.target.value);
+                handleValidate(
+                  'price_per_carat',
+                  'to',
+                  e.target.value,
+                  pricePerCaratFrom
+                );
+              }}
+              value={pricePerCaratTo}
+              placeholder={ManageLocales('app.advanceSearch.to')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+          </div>
+        </div>
+        <div className={styles.filterSection}>
+          <div className={styles.filterSectionLabel}>
+            <CustomInputlabel
+              htmlfor="text"
+              label={ManageLocales('app.advanceSearch.amountRange')}
+            />
+          </div>
+          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="priceRangeFrom"
+              onChange={(e) => {
+                setPriceRangeFrom(e.target.value);
+              }}
+              value={priceRangeFrom}
+              placeholder={ManageLocales('app.advanceSearch.from')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+            <CustomInputField
+              // style={className}
+              type="number"
+              name="priceRangeTo"
+              onChange={(e) => {
+                setPriceRangeTo(e.target.value);
+                handleValidate(
+                  'price_range',
+                  'to',
+                  e.target.value,
+                  priceRangeFrom
+                );
+              }}
+              value={priceRangeTo}
+              placeholder={ManageLocales('app.advanceSearch.to')}
+              style={{
+                input: styles.inputFieldStyles,
+              }}
+            />
+          </div>
+          {validationError}
         </div>
       </div>
       <div className={styles.filterSection}>
@@ -1075,7 +1114,7 @@ const renderContent = (
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
             htmlfor="text"
-            label={ManageLocales('app.advanceSearch.girdle')}
+            label={ManageLocales('app.advanceSearch.keyToSymbol')}
             overriddenStyles={{ label: styles.specificFilterAlign }}
           />
         </div>
@@ -1083,7 +1122,7 @@ const renderContent = (
           style={{ display: 'flex', flexDirection: 'column' }}
           className={styles.filterSectionData}
         >
-          <div className={styles.filterSectionData}>
+          {/* <div className={styles.filterSectionData}>
             <div
               className={`${styles.filterSection} ${styles.filterWrapSection}`}
             >
@@ -1095,12 +1134,8 @@ const renderContent = (
                 handleGirdleChange
               )}
             </div>
-          </div>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.step1')}
-            overriddenStyles={{ label: styles.stepStyle }}
-          />
+          </div> */}
+
           <div style={{ margin: '10px' }}>
             <CustomRadioButton
               radioMetaData={{
@@ -1129,11 +1164,7 @@ const renderContent = (
               }}
             />
           </div>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.step2')}
-            overriddenStyles={{ label: styles.stepStyle }}
-          />
+
           <div
             className={`${styles.filterSection} ${styles.filterWrapSection}`}
             style={{ display: 'flex', flexWrap: 'wrap' }}
