@@ -9,7 +9,7 @@ import { useGetCartQuery } from '@/features/api/cart';
 import {
   ACTIVE_STATUS,
   MEMO_OUT_STATUS,
-  SOLD_OUT_STATUS,
+  SOLD_OUT_STATUS
 } from '@/constants/business-logic';
 
 function MyCart({ children }: { children: React.ReactNode }) {
@@ -25,7 +25,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
 
   // Header data for CustomHeader component
   const headerData = {
-    headerHeading: 'My Cart',
+    headerHeading: 'My Cart'
   };
 
   // Fetch cart data using the useGetCartQuery hook
@@ -37,28 +37,21 @@ function MyCart({ children }: { children: React.ReactNode }) {
       id: '1',
       pathName: ManageLocales('app.myCart.active'),
       path: 'active',
-      count: activeTabCount,
+      count: activeTabCount
     },
     {
       id: '2',
       pathName: ManageLocales('app.myCart.soldOut'),
       path: 'sold-out',
-      count: soldOutCount,
+      count: soldOutCount
     },
     {
       id: '3',
       pathName: ManageLocales('Memo-Out'),
       path: 'memo-out',
-      count: memoOutCount,
-    },
+      count: memoOutCount
+    }
   ];
-
-  // Handle scroll events to show/hide the navigation bar
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setVisible(prevScrollPos > currentScrollPos);
-    setPrevScrollPos(currentScrollPos);
-  };
 
   // useEffect to update active tab count when cart data changes
   useEffect(() => {
@@ -112,6 +105,12 @@ function MyCart({ children }: { children: React.ReactNode }) {
 
   // Attach scroll event listener when the component mounts
   useEffect(() => {
+    // Handle scroll events to show/hide the navigation bar
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos);
+      setPrevScrollPos(currentScrollPos);
+    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -159,7 +158,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
         style={{
           display: 'flex',
           marginTop: '70px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>{children}</main>

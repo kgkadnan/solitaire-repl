@@ -13,7 +13,7 @@ export const handleSaveSearch = async ({
   setIsInputDialogOpen,
   setSaveSearchName,
   setInputError,
-  setInputErrorContent,
+  setInputErrorContent
 }: IHandleSaveSearch) => {
   // Retrieve the array from localStorage
   const searchData = localStorage.getItem('Search');
@@ -25,7 +25,7 @@ export const handleSaveSearch = async ({
       name: saveSearchName,
       diamond_count: parseInt(data?.count),
       meta_data: parseData[activeTab].queryParams,
-      is_deleted: false,
+      is_deleted: false
     })
       .unwrap()
       .then((res: any) => {
@@ -33,7 +33,7 @@ export const handleSaveSearch = async ({
           id: res?.id,
           saveSearchName,
           isSavedSearch: true,
-          queryParams: parseData[activeTab].queryParams,
+          queryParams: parseData[activeTab].queryParams
         };
         localStorage.setItem('Search', JSON.stringify(parseData));
         setYourSelectionData(parseData);

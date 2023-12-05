@@ -5,9 +5,9 @@ const meta = {
   title: 'components/DisplayButton',
   component: CustomDisplayButton,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomDisplayButton>;
 
 export default meta;
@@ -15,13 +15,13 @@ type Story = StoryObj<typeof meta>;
 
 const classes = {
   displayButtonStyle: 'p-5',
-  displayLabelStyle: 'text-rose-900',
+  displayLabelStyle: 'text-rose-900'
 };
 
 export const DisplayButtonStory: Story = {
   args: {
     displayButtonLabel: '25 Stones',
     displayButtonAllStyle: classes,
-    handleClick: () => {},
-  },
+    handleClick: () => {}
+  }
 };

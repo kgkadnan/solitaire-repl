@@ -51,7 +51,7 @@ const SideBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
+                displayButtonStyle: styles.showResultButtonTransparent
               }}
             />
             <CustomDisplayButton
@@ -61,7 +61,7 @@ const SideBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
+                displayButtonStyle: styles.showResultButtonFilled
               }}
             />
           </div>
@@ -77,43 +77,43 @@ const SideBar = () => {
       src: <Dashboard className={styles.stroke} alt="dashboard" />,
       title: ManageLocales('app.sideNav.dashboard'),
       link: '/',
-      isActive: currentRoute === '/',
+      isActive: currentRoute === '/'
     },
     {
       src: <NewArrival className={styles.fill} alt="new-arrival" />,
       title: ManageLocales('app.sideNav.newArrival'),
       link: '/new-arrival',
-      isActive: currentRoute === '/new-arrival',
+      isActive: currentRoute === '/new-arrival'
     },
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
       link: '/search?route=form',
-      isActive: currentRoute === '/search' && subRoute === 'form',
+      isActive: currentRoute === '/search' && subRoute === 'form'
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
       title: ManageLocales('app.sideNav.matchPair'),
       link: '/match-pair',
-      isActive: currentRoute === '/match-pair',
+      isActive: currentRoute === '/match-pair'
     },
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
       link: '/search?route=saved',
-      isActive: currentRoute === '/search' && subRoute === 'saved',
+      isActive: currentRoute === '/search' && subRoute === 'saved'
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
       link: '/my-cart/active',
-      isActive: currentRoute === '/my-cart/active',
+      isActive: currentRoute === '/my-cart/active'
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,
       title: ManageLocales('app.sideNav.layouts'),
       link: '/layouts',
-      isActive: currentRoute === '/layouts',
+      isActive: currentRoute === '/layouts'
     },
     {
       src: (
@@ -124,27 +124,27 @@ const SideBar = () => {
       ),
       title: ManageLocales('app.sideNav.recentConfirmations'),
       link: '/recent-confiramtion',
-      isActive: currentRoute === '/recent-confiramtion',
+      isActive: currentRoute === '/recent-confiramtion'
     },
     {
       src: <Appointment className={styles.stroke} alt="appointments" />,
       title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
-      isActive: currentRoute === '/appointments',
+      isActive: currentRoute === '/appointments'
     },
     {
       src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
       title: ManageLocales('app.sideNav.myDiamonds'),
       link: '/my-diamonds',
-      isActive: currentRoute === '/my-diamonds',
-    },
+      isActive: currentRoute === '/my-diamonds'
+    }
   ];
 
   const SideBarStyles = {
     imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
-    activeIndicatorStyles: styles.activeIndicatorStyles,
+    activeIndicatorStyles: styles.activeIndicatorStyles
   };
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
@@ -179,7 +179,7 @@ const SideBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
+                displayButtonStyle: styles.showResultButtonTransparent
               }}
             />
             <CustomDisplayButton
@@ -189,7 +189,7 @@ const SideBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
+                displayButtonStyle: styles.showResultButtonFilled
               }}
             />
           </div>

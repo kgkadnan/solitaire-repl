@@ -19,8 +19,8 @@ export const handleConfirmStone = (
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>,
   setConfirmStoneData: Dispatch<SetStateAction<Product[]>>
 ) => {
-  let hasMemoOut = isCheck?.some((id) => {
-    return rows.some((row) => row.id == id && row.diamond_status === 'MemoOut');
+  let hasMemoOut = isCheck?.some(id => {
+    return rows.some(row => row.id == id && row.diamond_status === 'MemoOut');
   });
 
   if (hasMemoOut) {
@@ -32,7 +32,7 @@ export const handleConfirmStone = (
     setIsError(false);
     setErrorText('Please select a stone to perform action.');
     setIsSliderOpen(true);
-    const confirmStone = rows.filter((item) => isCheck?.includes(item.id));
+    const confirmStone = rows.filter(item => isCheck?.includes(item.id));
     setConfirmStoneData(confirmStone);
   } else {
     setIsError(true);

@@ -8,7 +8,7 @@ describe('CustomSelect Component', () => {
   const mockData = [
     { id: 1, value: 'Option 1' },
     { id: 2, value: 'Option 2' },
-    { id: 3, value: 'Option 3' },
+    { id: 3, value: 'Option 3' }
   ];
 
   afterEach(() => {
@@ -27,7 +27,7 @@ describe('CustomSelect Component', () => {
   test('should render options', async () => {
     const mockData = [
       { id: 1, value: 'Option 1' },
-      { id: 2, value: 'Option 2' },
+      { id: 2, value: 'Option 2' }
       // ... more mock data
     ];
 
@@ -35,8 +35,8 @@ describe('CustomSelect Component', () => {
       <CustomSelect placeholder="Select an option" data={mockData} />
     );
 
-    // Target the combo box trigger element by its role "button"
-    // Target the combo box trigger element by its role "button"
+    // Target the combo box trigger element by its role 'button'
+    // Target the combo box trigger element by its role 'button'
     const optionTrigger = getByRole('combobox')?.querySelector(
       'span'
     ) as HTMLElement;
@@ -49,31 +49,31 @@ describe('CustomSelect Component', () => {
     // await waitFor(async () => {
     //   for (const item of mockData) {
     //     const optionElement = await queryByText(item.value);
-    //     console.log("optionElement", optionElement);
+    //     console.log('optionElement', optionElement);
     //     expect(optionElement).toBeInTheDocument();
     //   }
     // });
 
-    // expect(getByRole("option", { name: "option-1" })).toBeInTheDocument();
-    // expect(getByRole("option", { name: "option-2" })).toBeInTheDocument();
+    // expect(getByRole('option', { name: 'option-1' })).toBeInTheDocument();
+    // expect(getByRole('option', { name: 'option-2' })).toBeInTheDocument();
     // Add in however many options you have
   });
 });
 
-// test("renders placeholder and options correctly", () => {
+// test('renders placeholder and options correctly', () => {
 //   const { getByText, getByRole, queryByText } = render(
-//     <CustomSelect data={mockData} placeholder="Select an option" />
+//     <CustomSelect data={mockData} placeholder='Select an option' />
 //   );
 
-//   const placeholderElement = getByText("Select an option");
-//   console.log("placeholderElement", placeholderElement);
+//   const placeholderElement = getByText('Select an option');
+//   console.log('placeholderElement', placeholderElement);
 //   expect(placeholderElement).toBeInTheDocument();
 
 //   userEvent.click(placeholderElement);
 
 //   mockData.forEach((item) => {
 //     const optionElement = queryByText(item.value);
-//     console.log("option", optionElement);
+//     console.log('option', optionElement);
 //     // expect(optionElement).toBeInTheDocument();
 //   });
 // });

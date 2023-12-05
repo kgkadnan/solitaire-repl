@@ -14,7 +14,7 @@ describe('CustomDisplayButton Component', () => {
         handleClick={onItemClick}
         displayButtonAllStyle={{
           displayButtonStyle: 'custom-button-style',
-          displayLabelStyle: 'custom-label-style',
+          displayLabelStyle: 'custom-label-style'
         }}
         color="blue"
       />

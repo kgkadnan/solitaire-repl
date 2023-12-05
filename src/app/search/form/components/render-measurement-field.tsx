@@ -41,7 +41,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     pavilionAngleFrom,
     pavilionAngleTo,
     starLengthFrom,
-    starLengthTo,
+    starLengthTo
   } = state;
 
   const {
@@ -70,62 +70,62 @@ const renderMeasurementField = (state: any, setState: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo,
+    setStarLengthTo
   } = setState;
 
   let parameterDataState = [
     {
       parameterState: [tablePerFrom, tablePerTo],
-      setParameterState: [setTablePerFrom, setTablePerTo],
+      setParameterState: [setTablePerFrom, setTablePerTo]
     },
     {
       parameterState: [depthPerFrom, depthPerTo],
-      setParameterState: [setDepthPerFrom, setDepthPerTo],
+      setParameterState: [setDepthPerFrom, setDepthPerTo]
     },
     {
       parameterState: [ratioFrom, ratioTo],
-      setParameterState: [setRatioFrom, setRatioTo],
+      setParameterState: [setRatioFrom, setRatioTo]
     },
     {
       parameterState: [lengthFrom, lengthTo],
-      setParameterState: [setLengthFrom, setLengthTo],
+      setParameterState: [setLengthFrom, setLengthTo]
     },
     {
       parameterState: [widthFrom, widthTo],
-      setParameterState: [setWidthFrom, setWidthTo],
+      setParameterState: [setWidthFrom, setWidthTo]
     },
     {
       parameterState: [depthFrom, depthTo],
-      setParameterState: [setDepthFrom, setDepthTo],
+      setParameterState: [setDepthFrom, setDepthTo]
     },
     {
       parameterState: [crownAngleFrom, crownAngleTo],
-      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+      setParameterState: [setCrownAngleFrom, setCrownAngleTo]
     },
     {
       parameterState: [crownHeightFrom, crownHeightTo],
-      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
+      setParameterState: [setCrownHeightFrom, setCrownHeightTo]
     },
     {
       parameterState: [girdlePerFrom, girdlePerTo],
-      setParameterState: [setGirdlePerFrom, setGirdlePerTo],
+      setParameterState: [setGirdlePerFrom, setGirdlePerTo]
     },
     {
       parameterState: [pavilionAngleFrom, pavilionAngleTo],
-      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
+      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo]
     },
     {
       parameterState: [pavilionDepthFrom, pavilionDepthTo],
-      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
+      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo]
     },
     {
       parameterState: [lowerHalfFrom, lowerHalfTo],
-      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+      setParameterState: [setLowerHalfFrom, setLowerHalfTo]
     },
     {
       parameterState: [starLengthFrom, starLengthTo],
-      setParameterState: [setStarLengthFrom, setStarLengthTo],
-    },
+      setParameterState: [setStarLengthFrom, setStarLengthTo]
+    }
   ];
   let parameterData = parameterDataState.map((parameter, index) => {
     return { ...parameter, ...advanceSearch.parameter[index] };
@@ -133,7 +133,7 @@ const renderMeasurementField = (state: any, setState: any) => {
 
   const initialErrorState = {
     key: '',
-    value: '',
+    value: ''
   };
 
   // const [fromError, setFromError] = useState(initialErrorState);
@@ -197,15 +197,15 @@ const renderMeasurementField = (state: any, setState: any) => {
         <CustomInputField
           type="number"
           name={`${parameter.parameterState[0]}`}
-          onChange={(e) => {
+          onChange={e => {
             parameter.setParameterState[0](e.target.value);
           }}
           value={parameter.parameterState[0]}
           style={{
-            input: styles.inputFieldStyles,
+            input: styles.inputFieldStyles
           }}
           onBlur={
-            (e) =>
+            e =>
               parameter.label === 'Crown Angle' ||
               parameter.label === 'Pavilion Angle'
                 ? handleAngle(
@@ -229,15 +229,15 @@ const renderMeasurementField = (state: any, setState: any) => {
         <CustomInputField
           type="number"
           name={`${parameter.parameterState[1]}`}
-          onChange={(e) => {
+          onChange={e => {
             parameter.setParameterState[1](e.target.value);
           }}
           value={parameter.parameterState[1]}
           style={{
-            input: styles.inputFieldStyles,
+            input: styles.inputFieldStyles
           }}
           onBlur={
-            (e) =>
+            e =>
               parameter.label === 'Crown Angle' ||
               parameter.label === 'Pavilion Angle'
                 ? handleAngle(

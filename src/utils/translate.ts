@@ -23,7 +23,7 @@ export function ManageLocales(key: string) {
 
   const translations: any = {
     en,
-    fr,
+    fr
   };
   return translations[locale][key] || key;
 }

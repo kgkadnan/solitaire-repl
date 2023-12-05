@@ -19,7 +19,7 @@ const inter = Inter({ subsets: ['latin'] });
 // };
 
 export default function RootLayout({
-  children,
+  children
 }: {
   children: React.ReactNode;
 }) {
@@ -41,7 +41,7 @@ export default function RootLayout({
                     display: 'flex',
                     justifyContent: 'right',
                     marginTop: '110px',
-                    padding: '0px 30px',
+                    padding: '0px 30px'
                   }}
                 >
                   <main

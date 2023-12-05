@@ -14,14 +14,14 @@ import {
   NotificationItem,
   NotificationParameter,
   NotificationProps,
-  NotificationUpdate,
+  NotificationUpdate
 } from './notification-interface';
 
 export const Notification: React.FC<NotificationProps> = ({
   notificationData,
   setOffset,
   offset,
-  limit,
+  limit
 }) => {
   const router = useRouter();
 
@@ -43,15 +43,15 @@ export const Notification: React.FC<NotificationProps> = ({
       const newNotificationData: NotificationItem[] = (
         notificationData?.data ?? []
       ).filter(
-        (newItem) =>
+        newItem =>
           !storeNotificationData.some(
-            (existingItem) => newItem.id === existingItem.id
+            existingItem => newItem.id === existingItem.id
           )
       );
 
       setStoreNotificationData([
         ...storeNotificationData,
-        ...newNotificationData,
+        ...newNotificationData
       ]);
     }
   }, [notificationData]);
@@ -98,7 +98,7 @@ export const Notification: React.FC<NotificationProps> = ({
     let notificationMapData = storeNotificationData.map(
       (item: NotificationItem) => ({
         id: item.id,
-        status: 'read',
+        status: 'read'
       })
     );
 
@@ -127,7 +127,7 @@ export const Notification: React.FC<NotificationProps> = ({
                   displayButtonLabel="View All"
                   displayButtonAllStyle={{
                     displayButtonStyle: styles.viewAllButton,
-                    displayLabelStyle: styles.viewAllLabel,
+                    displayLabelStyle: styles.viewAllLabel
                   }}
                   handleClick={() =>
                     router.push('/notification/all-notification')
@@ -188,7 +188,7 @@ export const Notification: React.FC<NotificationProps> = ({
             <CustomDisplayButton
               displayButtonLabel="Load More"
               displayButtonAllStyle={{
-                displayButtonStyle: styles.loadMoreButton,
+                displayButtonStyle: styles.loadMoreButton
               }}
               handleClick={loadMoreItems}
             />

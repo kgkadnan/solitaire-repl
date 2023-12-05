@@ -1,6 +1,6 @@
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import React from 'react';
-import styles from '../form.module.scss'
+import styles from '../form.module.scss';
 const renderSelectionButtons = (
   data: string[],
   className?: string,
@@ -27,7 +27,7 @@ const renderSelectionButtons = (
           highlightIndicator &&
           relatedState?.includes(data) &&
           styles.colorDataActiveStyle
-        }`,
+        }`
       }}
     />
   ));

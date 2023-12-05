@@ -14,7 +14,7 @@ describe('My-cart component', () => {
     expect(screen.getByText(/select all/i)).toBeInTheDocument();
   });
 
-  test("toggles 'Select All' checkbox correctly", () => {
+  test('toggles Select All checkbox correctly', () => {
     // Find the 'Select All' checkbox
     const selectAllCheckbox = screen.getByTestId('Select All Checkbox');
 
@@ -26,7 +26,7 @@ describe('My-cart component', () => {
 
     // Check if all checkboxes are checked
     waitFor(() => {
-      checkboxes.forEach((checkbox) => {
+      checkboxes.forEach(checkbox => {
         expect(checkbox.ariaChecked).toBe(true);
       });
     });
@@ -35,7 +35,7 @@ describe('My-cart component', () => {
 
     // Check if all checkboxes are unchecked
     waitFor(() => {
-      checkboxes.forEach((checkbox) => {
+      checkboxes.forEach(checkbox => {
         expect(checkbox.ariaChecked).toBe(false);
       });
     });

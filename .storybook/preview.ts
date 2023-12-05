@@ -11,9 +11,9 @@ const preview: Preview = {
     controls: {
       matchers: {
         color: /(background|color)$/i,
-        date: /Date$/,
-      },
-    },
+        date: /Date$/
+      }
+    }
   },
 
   decorators: [
@@ -22,11 +22,11 @@ const preview: Preview = {
     withThemeByClassName({
       themes: {
         light: 'light',
-        dark: 'dark',
+        dark: 'dark'
       },
-      defaultTheme: 'light',
-    }),
-  ],
+      defaultTheme: 'light'
+    })
+  ]
 };
 
 export default preview;

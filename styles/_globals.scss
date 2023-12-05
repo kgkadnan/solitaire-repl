@@ -47,8 +47,8 @@
     --solitaire-senary: 0, 0%, 60%, 1; //Carbon 3
     --solitaire-septenary: 32, 22%, 45%, 1; //shadow
     --solitaire-octonary: 0, 0%, 84%, 1; //Carbon 1
-    --solitaire-nonary:  0, 0%, 84%, 1; // Custom
-    --solitaire-denary:  0, 0%, 84%, 1; // Custom
+    --solitaire-nonary: 0, 0%, 84%, 1; // Custom
+    --solitaire-denary: 0, 0%, 84%, 1; // Custom
     --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
 
     //border -color
@@ -122,35 +122,32 @@
   body {
     @apply bg-solitairePrimary text-foreground;
 
- 
-  /* width */
-  ::-webkit-scrollbar {
-    width: 6px !important;
-    height: 6px;
-  }
+    /* width */
+    ::-webkit-scrollbar {
+      width: 6px !important;
+      height: 6px;
+    }
 
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background-color: hsl(var(--solitaire-senary));
-    border-radius: 10px;
-  }
+    /* Track */
+    ::-webkit-scrollbar-track {
+      background-color: hsl(var(--solitaire-senary));
+      border-radius: 10px;
+    }
 
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background: hsl(var(--solitaire-tertiary));
-    border-radius: 10px;
-  }
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: hsl(var(--solitaire-tertiary));
+      border-radius: 10px;
+    }
 
-  /* Pointer cursor on hover */
-  ::-webkit-scrollbar-thumb:hover {
-    cursor: pointer !important;
-  }
+    /* Pointer cursor on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      cursor: pointer !important;
+    }
 
-
-  ::-webkit-scrollbar-thumb:active {
-
-    cursor: grabbing !important;
-  }
+    ::-webkit-scrollbar-thumb:active {
+      cursor: grabbing !important;
+    }
 
     font-size: 14px;
     font-family: 'Manrope, sans-serif' !important;

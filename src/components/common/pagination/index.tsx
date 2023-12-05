@@ -13,7 +13,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
   optionLimits,
   handleResultsPerPageChange,
   handlePageClick,
-  paginationStyle,
+  paginationStyle
 }) => {
   const pagesToShow = 3; // Number of pages to show in the range
 
@@ -28,7 +28,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
   let customSelectStyle = {
     selectTrigger: styles.selectTrigger,
     selectContent: styles.selectContent,
-    selectElement: styles.selectElement,
+    selectElement: styles.selectElement
   };
 
   return (
@@ -62,7 +62,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
               stroke:
                 currentPage === 0
                   ? 'hsl(var(--solitaire-senary))'
-                  : 'hsl(var(--solitaire-tertiary))',
+                  : 'hsl(var(--solitaire-tertiary))'
             }}
           />
         </div>
@@ -82,7 +82,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
             </>
           )}
 
-          {pageRange.map((page) => (
+          {pageRange.map(page => (
             <span
               key={page}
               onClick={() => handlePageClick(page)}
@@ -118,7 +118,7 @@ const CustomPagination: React.FC<ICustomPaginationProps> = ({
               stroke:
                 currentPage === totalPages - 1
                   ? 'hsl(var(--solitaire-senary))'
-                  : 'hsl(var(--solitaire-tertiary))',
+                  : 'hsl(var(--solitaire-tertiary))'
             }}
           />
         </div>

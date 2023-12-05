@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useMemo,
-  useState,
+  useState
 } from 'react';
 import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
@@ -21,7 +21,7 @@ import CustomPagination from '@/components/common/pagination';
 import {
   useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
-  useGetSavedSearchListQuery,
+  useGetSavedSearchListQuery
 } from '@/features/api/saved-searches';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
@@ -35,7 +35,7 @@ import {
   IDateRange,
   IFormatedData,
   ISavedSearchData,
-  Item,
+  Item
 } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import { constructUrlParams } from '@/utils/construct-url-param';
@@ -43,7 +43,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
+  MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
@@ -55,19 +55,19 @@ const SavedSearch = () => {
   // Style classes and variables
   const tableStyles = {
     tableHeaderStyle: styles.tableHeader,
-    tableBodyStyle: styles.tableBody,
+    tableBodyStyle: styles.tableBody
   };
   const searchCardTitle = {
     tableHeaderStyle: styles.SearchCardTitle,
-    tableBodyStyle: styles.SearchDateTime,
+    tableBodyStyle: styles.SearchDateTime
   };
   const cardStyles = {
-    cardContainerStyle: styles.searchCardContainer,
+    cardContainerStyle: styles.searchCardContainer
   };
 
   const manySavedsearchButtonStyle = {
     displayButtonStyle: styles.manySavedSearchButton,
-    displayLabelStyle: styles.manySavedSearchLabel,
+    displayLabelStyle: styles.manySavedSearchLabel
   };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
@@ -106,11 +106,11 @@ const SavedSearch = () => {
     limit,
     offset,
     dateSearchUrl,
-    searchByName,
+    searchByName
   });
 
   const { data: productData } = useGetProductCountQuery({
-    searchUrl,
+    searchUrl
   });
 
   const handleResultsPerPageChange = useCallback(
@@ -136,7 +136,7 @@ const SavedSearch = () => {
 
   let optionLimits = [
     { id: 1, value: '50' },
-    { id: 2, value: '100' },
+    { id: 2, value: '100' }
   ];
 
   const { data: searchList } = useGetSavedSearchListQuery(search);
@@ -154,7 +154,7 @@ const SavedSearch = () => {
       polish: 'polish',
       symmetry: 'Symmetry',
       price_range: 'Price Range',
-      discount: 'Discount',
+      discount: 'Discount'
     };
   }, []);
 
@@ -198,7 +198,7 @@ const SavedSearch = () => {
           <CustomTable
             tableData={{
               tableHeads: Object.keys(filteredData),
-              bodyData: [Object.values(filteredData)],
+              bodyData: [Object.values(filteredData)]
             }}
             tableStyleClasses={tableStyles}
           />
@@ -219,14 +219,14 @@ const SavedSearch = () => {
                           {formatCreatedAt(item.created_at)}
                         </div>
                       </div>
-                    ),
-                  },
-                ],
+                    )
+                  }
+                ]
               }}
               tableStyleClasses={searchCardTitle}
             />
           ),
-          cardContent: cardContent,
+          cardContent: cardContent
         };
       });
     },
@@ -239,7 +239,7 @@ const SavedSearch = () => {
 
     if (isCheck?.length) {
       const matchingData = searchTabData.filter((item1: any, index: number) =>
-        isCheck.some((item2) => {
+        isCheck.some(item2 => {
           if (item1.id === item2) {
             item1.position = index + 1;
             return item1;
@@ -280,14 +280,14 @@ const SavedSearch = () => {
               <CustomDisplayButton
                 displayButtonLabel="No"
                 displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                  displayButtonStyle: `mr-[25px] ${styles.transparent}`
                 }}
                 handleClick={() => setIsDialogOpen(false)}
               />
               <CustomDisplayButton
                 displayButtonLabel="Yes"
                 displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled,
+                  displayButtonStyle: styles.filled
                 }}
                 handleClick={deleteStoneHandler}
               />
@@ -365,10 +365,7 @@ const SavedSearch = () => {
     setSearch(inputValue);
 
     // Use the debounce function to wrap the debouncedSave function
-    const delayedSave = debounce(
-      (inputValue) => debouncedSave(inputValue),
-      1000
-    );
+    const delayedSave = debounce(inputValue => debouncedSave(inputValue), 1000);
     delayedSave(inputValue);
 
     if (inputValue.length < 1) {
@@ -390,8 +387,8 @@ const SavedSearch = () => {
       id: 1,
       displayButtonLabel: ManageLocales('app.savedSearch.delete'),
       style: styles.filled,
-      fn: handleDelete,
-    },
+      fn: handleDelete
+    }
   ];
 
   const handleDate = (date: IDateRange) => {
@@ -422,7 +419,7 @@ const SavedSearch = () => {
               setIsCheckAll,
               isCheckAll,
               setIsCheck,
-              data: cardData,
+              data: cardData
             })
           }
           data-testid={'Select All Checkbox'}
@@ -446,8 +443,8 @@ const SavedSearch = () => {
       </div>
     ),
     overriddenStyles: {
-      headerDataStyles: 'flex items-center',
-    },
+      headerDataStyles: 'flex items-center'
+    }
   };
 
   useEffect(() => {
@@ -497,8 +494,8 @@ const SavedSearch = () => {
               saveSearchName: cardClickData[0].name,
               isSavedSearch: true,
               queryParams: cardClickData[0].meta_data,
-              id: cardClickData[0].id,
-            },
+              id: cardClickData[0].id
+            }
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
@@ -510,8 +507,8 @@ const SavedSearch = () => {
             saveSearchName: cardClickData[0].name,
             isSavedSearch: true,
             queryParams: cardClickData[0].meta_data,
-            id: cardClickData[0].id,
-          },
+            id: cardClickData[0].id
+          }
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));

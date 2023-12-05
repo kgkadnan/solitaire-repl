@@ -2,7 +2,7 @@ import {
   ICheckboxSetState,
   ICheckboxState,
   Product,
-  TableColumn,
+  TableColumn
 } from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
 

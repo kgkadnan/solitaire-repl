@@ -16,19 +16,19 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
   tableRows,
   index,
   switchButtonTabs,
-  row,
+  row
 }) => {
   const {
     sliderData,
     activeTab,
     diamondDetailImageUrl,
-    diamondDetailIframeUrl,
+    diamondDetailIframeUrl
   } = dataTableBodyState;
   const {
     setSliderData,
     setActiveTab,
     setDiamondDetailImageUrl,
-    setDiamondDetailIframeUrl,
+    setDiamondDetailIframeUrl
   } = dataTableBodySetState;
 
   return (
@@ -68,7 +68,7 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
                       displayLabelStyle:
                         activeTab === items.id
                           ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
-                          : styles.headerButtonStyle,
+                          : styles.headerButtonStyle
                     }}
                     handleClick={() =>
                       handleSwitchImageUrl(
@@ -125,7 +125,7 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
                 'app.searchResult.slider.giaCertificate.share'
               )}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
+                displayButtonStyle: styles.transparent
               }}
               // handleClick={showButtonHandleClick}
             />
@@ -134,7 +134,7 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
                 'app.searchResult.slider.giaCertificate.download'
               )}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.filled,
+                displayButtonStyle: styles.filled
               }}
               handleClick={() => {
                 diamondDetailImageUrl.length &&

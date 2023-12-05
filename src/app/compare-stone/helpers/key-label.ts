@@ -30,5 +30,5 @@ export const keyLabelMapping: IKeyLabelMapping = {
   origin_country: 'Origin',
   star_length: 'S/L',
   girdle_percentage: 'Girdle%',
-  luster: 'Luster',
+  luster: 'Luster'
 };

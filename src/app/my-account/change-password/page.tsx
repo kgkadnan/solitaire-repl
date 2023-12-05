@@ -38,7 +38,7 @@ const ChangePassword = () => {
     await ChangePassword({
       new_password: newPassword,
       confirm_password: confirmPassword,
-      password: currentPassword,
+      password: currentPassword
     });
     setCurrentPassword('');
     setCurrentPasswordError('');
@@ -62,10 +62,10 @@ const ChangePassword = () => {
               placeholder="Current Password"
               style={{
                 inputMain: style.inputContainerStyles,
-                input: style.inputStyles,
+                input: style.inputStyles
               }}
               value={currentPassword}
-              onChange={(e) => {
+              onChange={e => {
                 setCurrentPassword(e.target.value);
                 !validatePassword(e.target.value)
                   ? setCurrentPasswordError('invalid new password')
@@ -88,9 +88,9 @@ const ChangePassword = () => {
               placeholder="New Password"
               style={{
                 inputMain: style.inputContainerStyles,
-                input: style.inputStyles,
+                input: style.inputStyles
               }}
-              onChange={(e) => {
+              onChange={e => {
                 setNewPassword(e.target.value);
                 !validatePassword(e.target.value)
                   ? setNewPasswordError('invalid new password')
@@ -113,9 +113,9 @@ const ChangePassword = () => {
               placeholder="Confirm Password"
               style={{
                 inputMain: style.inputContainerStyles,
-                input: style.inputStyles,
+                input: style.inputStyles
               }}
-              onChange={(e) => {
+              onChange={e => {
                 setConfirmPassword(e.target.value);
                 !validatePassword(e.target.value)
                   ? setConfirmPasswordError('invalid confirm password')
@@ -140,14 +140,14 @@ const ChangePassword = () => {
               id: 1,
               displayButtonLabel: ManageLocales('app.changePassword'),
               style: style.filled,
-              fn: handleChangePassword,
+              fn: handleChangePassword
             },
             {
               id: 2,
               displayButtonLabel: ManageLocales('app.changePassword.cancel'),
               style: style.transparent,
-              fn: handleCancel,
-            },
+              fn: handleCancel
+            }
           ]}
         />
       </div>

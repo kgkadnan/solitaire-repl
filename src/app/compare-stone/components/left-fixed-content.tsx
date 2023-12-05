@@ -6,7 +6,7 @@ export function LeftFixedContent({
   compareStoneData,
   showDifferences,
   keyLabelMapping,
-  compareValues,
+  compareValues
 }: ILeftSideContentProps) {
   return (
     <>
@@ -28,12 +28,12 @@ export function LeftFixedContent({
         </div>
         <div>
           {!showDifferences
-            ? Object.keys(keyLabelMapping).map((key) => (
+            ? Object.keys(keyLabelMapping).map(key => (
                 <div key={key}>
                   <span>{key !== 'id' && keyLabelMapping[key]}</span>
                 </div>
               ))
-            : Object.keys(compareValues).map((key) => (
+            : Object.keys(compareValues).map(key => (
                 <div key={key}>
                   <span>{key !== 'id' && keyLabelMapping[key]}</span>
                 </div>

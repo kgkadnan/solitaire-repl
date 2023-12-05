@@ -9,7 +9,7 @@ import { Calendar } from '@/components/ui/calendar';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '@/components/ui/popover';
 import CalenderIcon from '@public/assets/icons/calender.svg';
 import Image from 'next/image';
@@ -22,7 +22,7 @@ interface ICustomeCalendarProps {
 export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   className,
   date,
-  handleDate,
+  handleDate
 }) => {
   return (
     <div className={cn('grid gap-2', className)}>
@@ -53,7 +53,7 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
             {date?.from ? (
               date.to ? (
                 <>
-                  {/* <div className="text-[14px] tracking-wide mb-2">
+                  {/* <div className='text-[14px] tracking-wide mb-2'>
                     {differenceInDays(date.to, date.from)} Days
                   </div> */}
                   {format(date.from, 'LLL dd, y')} -{' '}
@@ -83,7 +83,7 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
               handleClick={() => handleDate('')}
             />
             {/* <CustomDisplayButton
-              displayButtonLabel="Close"
+              displayButtonLabel='Close'
               displayButtonAllStyle={{ displayButtonStyle: styles.filled }}
             /> */}
           </div>

@@ -15,14 +15,14 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   errorSetState,
   confirmStoneSetState,
   modalSetState,
-  modalState,
+  modalState
 }) => {
   const { dialogContent, isDialogOpen } = modalState ?? {};
   const { setIsDialogOpen } = modalSetState ?? {};
 
   /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns
-    ?.filter((column) => !column.is_disabled)
+    ?.filter(column => !column.is_disabled)
     ?.sort((a, b) => a.sequence - b.sequence);
 
   return (

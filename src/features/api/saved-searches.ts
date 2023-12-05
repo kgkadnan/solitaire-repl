@@ -5,45 +5,45 @@ export const savedSearchesApi: any = createApi({
   reducerPath: 'savedSearchReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }),
   tagTypes: ['SavedSearch'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllSavedSearches: builder.query({
       query: ({ limit, offset, searchByName, dateSearchUrl }) =>
         `saved-search?limit=${limit}&offset=${offset}&name=${searchByName}${dateSearchUrl}`,
-      providesTags: ['SavedSearch'],
+      providesTags: ['SavedSearch']
     }),
     getSavedSearchList: builder.query({
-      query: (searchByName) => `saved-search-list?name=${searchByName}`,
-      providesTags: ['SavedSearch'],
+      query: searchByName => `saved-search-list?name=${searchByName}`,
+      providesTags: ['SavedSearch']
     }),
     addSavedSearch: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `saved-search`,
         method: 'POST',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['SavedSearch'],
+      invalidatesTags: ['SavedSearch']
     }),
     updateSavedSearch: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `saved-search`,
         method: 'PUT',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['SavedSearch'],
+      invalidatesTags: ['SavedSearch']
     }),
     deleteSavedSearch: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `saved-search`,
         method: 'DELETE',
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['SavedSearch'],
-    }),
-  }),
+      invalidatesTags: ['SavedSearch']
+    })
+  })
 });
 
 export const {
@@ -51,5 +51,5 @@ export const {
   useUpdateSavedSearchMutation,
   useGetSavedSearchListQuery,
   useAddSavedSearchMutation,
-  useDeleteSavedSearchMutation,
+  useDeleteSavedSearchMutation
 } = savedSearchesApi;

@@ -13,13 +13,13 @@ export const useDataTableBodyStateManagement = () => {
       sliderData,
       activeTab,
       diamondDetailImageUrl,
-      diamondDetailIframeUrl,
+      diamondDetailIframeUrl
     },
     dataTableBodySetState: {
       setSliderData,
       setActiveTab,
       setDiamondDetailImageUrl,
-      setDiamondDetailIframeUrl,
-    },
+      setDiamondDetailIframeUrl
+    }
   };
 };

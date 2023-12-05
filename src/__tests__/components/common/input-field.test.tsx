@@ -7,7 +7,7 @@ const mockProps = {
   value: 'Hello',
   name: 'inputName',
   onChange: jest.fn(),
-  placeholder: 'Enter value',
+  placeholder: 'Enter value'
 };
 
 describe('Render Input Field Component', () => {

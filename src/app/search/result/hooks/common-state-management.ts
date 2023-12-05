@@ -14,13 +14,13 @@ export const useCommonDtateManagement = () => {
       totalAmount,
       averageDiscount,
 
-      saveSearchName,
+      saveSearchName
     },
     commonSetState: {
       setYourSelectionData,
       setTotalAmount,
       setAverageDiscount,
-      setSaveSearchName,
-    },
+      setSaveSearchName
+    }
   };
 };

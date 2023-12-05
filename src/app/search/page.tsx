@@ -19,12 +19,12 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import {
   useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation,
+  useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import CustomLoader from '@/components/common/loader';
 import {
   LISTING_PAGE_DATA_LIMIT,
-  MAX_SEARCH_TAB_LIMIT,
+  MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 
 interface IMyProfileRoutes {
@@ -57,13 +57,13 @@ function SearchResultLayout() {
     {
       id: 1,
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'form',
+      path: 'form'
     },
     {
       id: 2,
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved',
-    },
+      path: 'saved'
+    }
   ]);
 
   const computeRouteAndComponentRenderer = () => {
@@ -79,7 +79,7 @@ function SearchResultLayout() {
   let { data, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
     limit: LISTING_PAGE_DATA_LIMIT,
-    url: searchUrl,
+    url: searchUrl
   });
 
   useEffect(() => {
@@ -134,7 +134,7 @@ function SearchResultLayout() {
       name: saveSearchName,
       diamond_count: parseInt(data?.count),
       meta_data: yourSelection[removeIndex]?.queryParams,
-      is_deleted: false,
+      is_deleted: false
     })
       .unwrap()
       .then(() => {
@@ -170,7 +170,7 @@ function SearchResultLayout() {
                 closeTheSearchFunction(removeDataIndex, yourSelection);
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
+                displayButtonStyle: styles.showResultButtonTransparent
               }}
             />
             <CustomDisplayButton
@@ -182,7 +182,7 @@ function SearchResultLayout() {
                     id: yourSelection[removeDataIndex]?.id,
                     name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
-                    diamond_count: data?.count,
+                    diamond_count: data?.count
                   };
                   updateSavedSearch(updateSaveSearchData)
                     .unwrap()
@@ -201,7 +201,7 @@ function SearchResultLayout() {
                 }
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
+                displayButtonStyle: styles.showResultButtonFilled
               }}
             />
           </div>
@@ -242,12 +242,12 @@ function SearchResultLayout() {
           .map((data: any, index: number) => ({
             id: index + 3,
             pathName: `Search Results ${index + 1}`,
-            path: index + 3,
+            path: index + 3
           }))
           .filter(
             (newRoute: any) =>
               !myProfileRoutes.some(
-                (existingRoute) => existingRoute.path === newRoute.path
+                existingRoute => existingRoute.path === newRoute.path
               )
           );
 
@@ -258,13 +258,13 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: ManageLocales('app.searchResult.header.newSearch'),
-              path: 'form',
+              path: 'form'
             },
             {
               id: 2,
               pathName: ManageLocales('app.savedSearch.header'),
-              path: 'saved',
-            },
+              path: 'saved'
+            }
           ]);
         }
       }
@@ -308,7 +308,7 @@ function SearchResultLayout() {
     displayButtonFunction: handleCloseAndSave,
     label: 'Save and close this search',
     name: 'Save',
-    displayButtonLabel2: 'Save',
+    displayButtonLabel2: 'Save'
   };
 
   return (
@@ -394,7 +394,7 @@ function SearchResultLayout() {
         style={{
           display: 'flex',
           marginTop: '78px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>

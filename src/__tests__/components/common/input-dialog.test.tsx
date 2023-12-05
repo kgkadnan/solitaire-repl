@@ -13,7 +13,7 @@ describe('CustomInputDialog', () => {
     inputValue: 'Initial Value',
     setInputvalue: jest.fn(),
     displayButtonLabel2: 'Submit',
-    displayButtonFunction: jest.fn(),
+    displayButtonFunction: jest.fn()
   };
 
   test('renders CustomInputDialog component', () => {
@@ -58,7 +58,7 @@ describe('CustomInputDialog', () => {
   test('does not handle Submit button click when inputValue is empty', () => {
     const mockCustomInputDialogDataEmpty = {
       ...customInputDialogData,
-      inputValue: '',
+      inputValue: ''
     };
     render(
       <CustomInputDialog

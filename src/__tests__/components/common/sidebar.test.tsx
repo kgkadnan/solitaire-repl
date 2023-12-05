@@ -19,7 +19,7 @@ describe('Check SideBar component', () => {
     // Ensure the router was updated:
     expect(mockRouter).toMatchObject({
       asPath: '/',
-      pathname: '/',
+      pathname: '/'
     });
   });
   test('handles image tile click', () => {

@@ -7,11 +7,11 @@ import { ICustomFooterProps } from './interface';
 
 export const CustomFooter: React.FC<ICustomFooterProps> = ({
   footerButtonData,
-  noBorderTop,
+  noBorderTop
 }) => {
   return (
     <div className={`${styles.footerParentDiv} ${noBorderTop}`}>
-      {footerButtonData?.map((item) => {
+      {footerButtonData?.map(item => {
         if (item?.isHidden) {
           return null;
         }
@@ -21,7 +21,7 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
               displayButtonLabel={item?.displayButtonLabel}
               displayButtonAllStyle={{
                 displayButtonStyle: `${styles.footerButton} ${item?.style}`,
-                displayLabelStyle: styles.footerButtonLabel,
+                displayLabelStyle: styles.footerButtonLabel
               }}
               handleClick={item?.fn}
             />

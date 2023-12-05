@@ -36,7 +36,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
     overriddenStyles,
     selectedTile,
     handleSelectTile,
-    isNavOption = false,
+    isNavOption = false
   } = imageProps;
 
   const [hoveredTile, setHoveredTile] = useState<string | null>(null);

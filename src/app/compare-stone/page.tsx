@@ -65,10 +65,10 @@ const CompareStone = () => {
       // If there are variant IDs, add to the cart
       if (variantIds.length) {
         addCart({
-          variants: variantIds,
+          variants: variantIds
         })
           .unwrap()
-          .then((res) => {
+          .then(res => {
             // On success, show confirmation dialog and update badge
             setIsError(false);
             setErrorText('');
@@ -85,7 +85,7 @@ const CompareStone = () => {
             );
             dispatch(notificationBadge(true));
           })
-          .catch((error) => {
+          .catch(error => {
             // On error, set error state and error message
             setIsError(true);
             setErrorText(error?.data?.message);
@@ -106,27 +106,27 @@ const CompareStone = () => {
           dropdownMenu={[
             {
               label: 'Share',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Download Excel',
-              fn: () => {},
+              fn: () => {}
             },
             {
               label: 'Find Matching Pair',
-              fn: '',
-            },
+              fn: ''
+            }
           ]}
         />
-      ),
+      )
     },
     { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
     {
       id: 4,
       displayButtonLabel: 'Add to Cart',
       style: styles.filled,
-      fn: handleAddToCart,
-    },
+      fn: handleAddToCart
+    }
   ];
 
   // Updated function type
@@ -166,7 +166,7 @@ const CompareStone = () => {
               showDifferences,
               keyLabelMapping,
               setCompareValues,
-              setShowDifferences,
+              setShowDifferences
             })
           }
           data-testid={'Select All Checkbox'}
@@ -174,8 +174,8 @@ const CompareStone = () => {
       </div>
     ),
     overriddenStyles: {
-      headerDataStyles: `flex items-end`,
-    },
+      headerDataStyles: `flex items-end`
+    }
   };
 
   // Define a specific checkbox click handler
@@ -183,7 +183,7 @@ const CompareStone = () => {
     let updatedIsCheck = [...isCheck];
 
     if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+      updatedIsCheck = updatedIsCheck.filter(item => item !== id);
     } else {
       updatedIsCheck.push(id);
     }

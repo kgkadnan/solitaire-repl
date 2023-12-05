@@ -28,8 +28,8 @@ export const CustomCalculator = () => {
         { id: 7, value: 'Marquise' },
         { id: 8, value: 'Oval' },
         { id: 9, value: 'Heart' },
-        { id: 10, value: 'Radiant' },
-      ],
+        { id: 10, value: 'Radiant' }
+      ]
     },
     {
       id: 2,
@@ -46,8 +46,8 @@ export const CustomCalculator = () => {
         { id: 8, value: 'K' },
         { id: 9, value: 'L' },
         { id: 10, value: 'M' },
-        { id: 11, value: 'N' },
-      ],
+        { id: 11, value: 'N' }
+      ]
     },
     {
       id: 3,
@@ -64,9 +64,9 @@ export const CustomCalculator = () => {
         { id: 8, value: 'S13' },
         { id: 9, value: '11' },
         { id: 10, value: '12' },
-        { id: 11, value: '13' },
-      ],
-    },
+        { id: 11, value: '13' }
+      ]
+    }
   ];
 
   // Data for list pricing
@@ -74,13 +74,13 @@ export const CustomCalculator = () => {
     {
       id: 1,
       label: '$/CT',
-      pricingValue: 30,
+      pricingValue: 30
     },
     {
       id: 2,
       label: '$ Total',
-      pricingValue: 30,
-    },
+      pricingValue: 30
+    }
   ];
 
   // Data for your pricing
@@ -88,13 +88,13 @@ export const CustomCalculator = () => {
     {
       id: 1,
       label: '$/CT',
-      pricingValue: 30,
+      pricingValue: 30
     },
     {
       id: 2,
       label: '$ Total',
-      pricingValue: 30,
-    },
+      pricingValue: 30
+    }
   ];
 
   return (
@@ -123,14 +123,14 @@ export const CustomCalculator = () => {
               name="carat"
               style={{
                 input: styles.calculatorInput,
-                inputMain: styles.calculatorInputMain,
+                inputMain: styles.calculatorInputMain
               }}
             />
           </div>
 
           {/* Label Data */}
           <div className="flex">
-            {labelData.map((items) => {
+            {labelData.map(items => {
               return (
                 <div key={items.id}>
                   <div className={styles.inputAndLabel}>
@@ -144,7 +144,7 @@ export const CustomCalculator = () => {
                       placeholder={items.placeholder}
                       style={{
                         selectTrigger: styles.selectTrigger,
-                        selectContent: styles.selectcontent,
+                        selectContent: styles.selectcontent
                       }}
                     />
                   </div>
@@ -163,7 +163,7 @@ export const CustomCalculator = () => {
             <p className={styles.priceHeading}>
               {ManageLocales('app.topNav.listPrice')}
             </p>
-            {listPricingData.map((items) => {
+            {listPricingData.map(items => {
               return (
                 <div key={items.id}>
                   <CustomInputlabel
@@ -184,7 +184,7 @@ export const CustomCalculator = () => {
             <p className={styles.priceHeading}>
               {ManageLocales('app.topNav.yourPrice')}
             </p>
-            {yourPricingData.map((items) => {
+            {yourPricingData.map(items => {
               return (
                 <div key={items.id}>
                   <CustomInputlabel

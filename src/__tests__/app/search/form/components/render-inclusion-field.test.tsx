@@ -7,7 +7,7 @@ describe('renderInclusionField', () => {
   test('should render inclusion fields with correct labels and handle changes', () => {
     const state = {
       blackTableBI: [],
-      sideBlackBI: [],
+      sideBlackBI: []
       // Add other state properties with initial values as needed
     };
 
@@ -18,8 +18,5 @@ describe('renderInclusionField', () => {
     // Check if each label is rendered
     expect(screen.getByText(/Black Inclusion/i)).toBeInTheDocument();
     expect(screen.getByText(/White Inclusion/i)).toBeInTheDocument();
-
-    
-
   });
 });

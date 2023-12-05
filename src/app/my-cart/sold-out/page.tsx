@@ -32,7 +32,7 @@ const OutOfStock = () => {
   //Checkbox Data for Custom Data Table
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   // View Similar Stone handler
@@ -44,14 +44,14 @@ const OutOfStock = () => {
       id: 1,
       displayButtonLabel: 'View Similar Stone',
       style: styles.filled,
-      fn: handleViewSimilarStone,
-    },
+      fn: handleViewSimilarStone
+    }
   ];
 
   // Effect hook to update table columns when listingColumns change
   useEffect(() => {
     setTableColumns(listingColumns);
-  }, [listingColumns]);
+  }, [listingColumns, setTableColumns]);
 
   // Effect hook to update rows when cart data changes
   useEffect(() => {
@@ -68,7 +68,7 @@ const OutOfStock = () => {
     };
 
     updateRows();
-  }, [data]);
+  }, [data, setRows]);
 
   return (
     <>

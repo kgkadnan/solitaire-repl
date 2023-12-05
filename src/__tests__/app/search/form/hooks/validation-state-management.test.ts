@@ -1,4 +1,6 @@
-import useValidationStateManagement, { Errors } from '@/app/search/form/hooks/validation-state-management';
+import useValidationStateManagement, {
+  Errors
+} from '@/app/search/form/hooks/validation-state-management';
 import { renderHook, act } from '@testing-library/react-hooks';
 
 describe('useValidationStateManagement', () => {
@@ -37,7 +39,7 @@ describe('useValidationStateManagement', () => {
     const mockErrors: Errors = {
       discount: { from: 'Invalid from', to: 'Invalid to' },
       price_range: { from: null, to: 'Invalid to' },
-      price_per_carat: { from: 'Invalid from', to: null },
+      price_per_carat: { from: 'Invalid from', to: null }
     };
 
     // Act and update errors state

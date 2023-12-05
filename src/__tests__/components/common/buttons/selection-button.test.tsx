@@ -13,7 +13,7 @@ describe('CustomSelectionButton Component', () => {
         selectionButtonLabel="selection Button"
         handleClick={onItemClick}
         selectionButtonAllStyles={{
-          selectionButtonStyle: 'selection-button-style',
+          selectionButtonStyle: 'selection-button-style'
         }}
         data="data"
       />

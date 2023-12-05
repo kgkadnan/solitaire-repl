@@ -47,7 +47,7 @@ const MemoOut = () => {
   //Checkbox Data for Custom Data Table
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   // Compare Stone handler
@@ -63,8 +63,8 @@ const MemoOut = () => {
       setErrorText(`Minimum ${minStones} stones are required to compare`);
     } else {
       const compareStones = isCheck
-        .map((id) => data.items.find((row: any) => row.product.id === id))
-        .map((stone) => stone.product);
+        .map(id => data.items.find((row: any) => row.product.id === id))
+        .map(stone => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
       window.open('/compare-stone', '_blank');
@@ -90,7 +90,7 @@ const MemoOut = () => {
         setIsDialogOpen,
         setIsCheck,
         setIsCheckAll,
-        setIsError,
+        setIsError
       });
     }
   };
@@ -106,33 +106,33 @@ const MemoOut = () => {
       id: 2,
       displayButtonLabel: 'Download Excel',
       style: styles.transparent,
-      fn: downloadExcelFunction,
+      fn: downloadExcelFunction
     },
     {
       id: 3,
       displayButtonLabel: 'Share',
       style: styles.transparent,
-      fn: handleShare,
+      fn: handleShare
     },
     {
       id: 4,
       displayButtonLabel: 'Compare Stone',
       style: styles.transparent,
-      fn: handleCompareStone,
+      fn: handleCompareStone
     },
 
     {
       id: 4,
       displayButtonLabel: 'View Similar Stone',
       style: styles.filled,
-      fn: handleViewSimilarStone,
-    },
+      fn: handleViewSimilarStone
+    }
   ];
 
   // Effect hook to update table columns when listingColumns change
   useEffect(() => {
     setTableColumns(listingColumns);
-  }, [listingColumns]);
+  }, [listingColumns, setTableColumns]);
 
   // Effect hook to update rows when cart data changes
   useEffect(() => {
@@ -147,7 +147,7 @@ const MemoOut = () => {
     };
 
     updateRows();
-  }, [data]);
+  }, [data, setRows]);
 
   return (
     <>

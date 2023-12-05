@@ -32,12 +32,12 @@ export const performDownloadExcel = async ({
   setIsDialogOpen,
   setIsCheck,
   setIsCheckAll,
-  setIsError,
+  setIsError
 }: DownloadExcelFunctionProps) => {
   try {
     // Explicitly type res to include unwrap method
     const res: DownloadExcelApiResponse = await downloadExcelApi({
-      productIds,
+      productIds
     });
 
     const { data, fileName } = res.data;

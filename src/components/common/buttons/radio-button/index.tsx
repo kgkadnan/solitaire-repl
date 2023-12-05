@@ -36,7 +36,7 @@ interface IRadioGroupProps {
 // CustomRadioButton component definition
 export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
   radioMetaData,
-  radioButtonAllStyles,
+  radioButtonAllStyles
 }) => {
   return (
     <>
@@ -47,7 +47,7 @@ export const CustomRadioButton: React.FC<IRadioGroupProps> = ({
         name={radioMetaData?.name}
       >
         {/* Map over radioData to render individual radio buttons */}
-        {radioMetaData?.radioData?.map((items) => {
+        {radioMetaData?.radioData?.map(items => {
           return (
             <div key={items?.id} className={style?.radioContainerStyle}>
               {/* Radio button item */}

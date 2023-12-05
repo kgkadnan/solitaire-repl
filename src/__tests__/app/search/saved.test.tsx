@@ -28,7 +28,7 @@ describe('SavedSearch Component', () => {
     fireEvent.change(searchInput, { target: { value: 'R2' } });
   });
 
-  test("toggles 'Select All' checkbox correctly", () => {
+  test('toggles Select All checkbox correctly', () => {
     // Find the 'Select All' checkbox
     const selectAllCheckbox = screen.getByTestId('Select All Checkbox');
 
@@ -40,7 +40,7 @@ describe('SavedSearch Component', () => {
 
     // Check if all checkboxes are checked
     waitFor(() => {
-      checkboxes.forEach((checkbox) => {
+      checkboxes.forEach(checkbox => {
         expect(checkbox.ariaChecked).toBe(true);
       });
     });
@@ -49,7 +49,7 @@ describe('SavedSearch Component', () => {
 
     // Check if all checkboxes are unchecked
     waitFor(() => {
-      checkboxes.forEach((checkbox) => {
+      checkboxes.forEach(checkbox => {
         expect(checkbox.ariaChecked).toBe(false);
       });
     });

@@ -1,4 +1,4 @@
-/* The above code is a TypeScript React component called "SearchResults". It is responsible for
+/* The above code is a TypeScript React component called 'SearchResults'. It is responsible for
 rendering and managing the search results page. */
 'use client';
 import styles from './search-results.module.scss';
@@ -50,13 +50,13 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent,
+    setDialogContent
   } = modalSetState;
   const {
     setYourSelectionData,
     setTotalAmount,
     setAverageDiscount,
-    setSaveSearchName,
+    setSaveSearchName
   } = commonSetState;
 
   const { saveSearchName } = commonState;
@@ -66,7 +66,7 @@ const SearchResults = ({ data, activeTab, refetch: refetchRow }: any) => {
 
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
@@ -94,11 +94,11 @@ variants' prices. */
   const calculateTotalAmount = useCallback(() => {
     let total = 0;
 
-    isCheck.forEach((id) => {
-      const selectedRow = rows.find((row) => row.id === id);
+    isCheck.forEach(id => {
+      const selectedRow = rows.find(row => row.id === id);
       if (selectedRow) {
         const variant = selectedRow.variants.find(
-          (variant) => variant.prices.length > 0
+          variant => variant.prices.length > 0
         );
         if (variant) {
           total += variant.prices[0].amount;
@@ -113,8 +113,8 @@ variants' prices. */
 average discount of selected rows based on the `isCheck` array and `rows` array. */
   const calculateAverageDiscount = useCallback(() => {
     let totalDiscount = 0;
-    isCheck.forEach((id) => {
-      const selectedRow = rows.find((row) => row.id === id);
+    isCheck.forEach(id => {
+      const selectedRow = rows.find(row => row.id === id);
       if (selectedRow) {
         totalDiscount += selectedRow?.discount;
       }
@@ -125,7 +125,7 @@ average discount of selected rows based on the `isCheck` array and `rows` array.
   }, [isCheck, rows]);
 
   /* The above code is using the useEffect hook in a React component. It is setting up a side effect that
-will be triggered whenever the value of the "isCheck" variable changes. */
+will be triggered whenever the value of the 'isCheck' variable changes. */
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
     setTotalAmount(calculateTotalAmount());
@@ -162,12 +162,12 @@ variable changes. */
         setIsInputDialogOpen,
         setSaveSearchName,
         setInputError,
-        setInputErrorContent,
+        setInputErrorContent
       });
     },
     label: 'Save And Search',
     name: 'save',
-    displayButtonLabel2: 'Save',
+    displayButtonLabel2: 'Save'
   };
 
   /**

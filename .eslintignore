@@ -1,0 +1,13 @@
+# .eslintignore
+
+# Ignore build and output directories
+.next/
+out/
+
+# Ignore node_modules directory
+node_modules/
+
+# Ignore test files
+**/*.test.ts
+**/*.test.tsx
+**/*.spec.js

@@ -5,29 +5,28 @@ export const notificationApi = createApi({
   reducerPath: 'notificationReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
-   
+    credentials: 'include'
   }),
   tagTypes: ['notification'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllNotification: builder.query({
-      query: (args) => ({
+      query: args => ({
         url: `store/all-notification`,
         method: 'GET',
-        params: { ...args },
+        params: { ...args }
       }),
-      providesTags: ['notification'],
+      providesTags: ['notification']
     }),
     updateNotification: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `store/notification`,
         method: 'PUT', // Use the appropriate HTTP method
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['notification'],
-    }),
-  }),
+      invalidatesTags: ['notification']
+    })
+  })
 });
 
 export const { useGetAllNotificationQuery, useUpdateNotificationMutation } =

@@ -22,7 +22,7 @@ export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
   selectionButtonLabel,
   handleClick,
   selectionButtonAllStyles,
-  data,
+  data
 }) => {
   return (
     <>
