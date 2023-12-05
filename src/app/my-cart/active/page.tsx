@@ -24,18 +24,18 @@ import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { performDownloadExcel } from '@/utils/performDownloadExcel';
 
-import { useErrorStateManagement } from '@/app/search/result/hooks/error-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
+import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 
 const ActiveMyCart = () => {
   // State variables for managing component state
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
-  const [rows, setRows] = useState([]);
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState(false);
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck } = checkboxState;
+  const { setIsCheck, setIsCheckAll } = checkboxSetState;
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
@@ -43,8 +43,15 @@ const ActiveMyCart = () => {
     useConfirmStoneStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
 
+  const { isError, errorText } = errorState;
+  const { setErrorText, setIsSliderError, setIsError } = errorSetState;
+
   const { setConfirmStoneData } = confirmStoneSetState;
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+
+  const { rows, tableColumns } = dataTableState;
+  const { setRows, setTableColumns } = dataTableSetState;
 
   // Fetching table columns for managing listing sequence
   const { data: cartTableColumns } =
@@ -59,46 +66,10 @@ const ActiveMyCart = () => {
   // Mutation for downloading Excel data
   let [downloadExcel] = useDownloadExcelMutation();
 
-  // Handle individual checkbox click
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
-
-    setIsCheck(updatedIsCheck);
-
-    // Update the "Select All" checkbox status
-    if (updatedIsCheck.length === rows?.length) {
-      setIsCheckAll(true);
-    } else {
-      setIsCheckAll(false);
-    }
-    if (isCheckAll) {
-      setIsCheckAll(false);
-    }
-    setIsError(false);
-  };
-
-  // Handle "Select All" checkbox click
-  const handleSelectAllCheckbox = () => {
-    setIsCheckAll(!isCheckAll);
-
-    setIsCheck(rows?.map((li: Product) => li.id));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
-  };
-
   // Data for Custom Data Table checkboxes
   let checkboxData = {
-    handleSelectAllCheckbox: handleSelectAllCheckbox,
-    handleClick: handleClick,
-    isCheck: isCheck,
-    isCheckAll: isCheckAll,
+    checkboxState,
+    checkboxSetState,
   };
 
   // Handle the comparison of selected stones
@@ -274,6 +245,7 @@ const ActiveMyCart = () => {
 
   // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {
+    setIsSliderError(false);
     setIsSliderOpen(open);
   };
 
@@ -308,6 +280,8 @@ const ActiveMyCart = () => {
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={cartTableColumns}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}
@@ -325,6 +299,7 @@ const ActiveMyCart = () => {
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
+          errorSetState={errorSetState}
         />
       ) : (
         <NoDataFound />

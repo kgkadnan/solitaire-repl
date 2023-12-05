@@ -14,21 +14,18 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
   commonState,
   sortBySetState,
   sortByState,
+  dataTableState,
+  dataTableSetState,
 }) => {
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
-  const { isCheck } = checkboxState;
-
+  const { isCheck } = checkboxState ?? {};
+  const { rows, tableColumns } = dataTableState;
+  const { setRows } = dataTableSetState;
   const { setIsInputDialogOpen } = modalSetState;
 
-  const {
-    yourSelectionData,
-    totalAmount,
-    averageDiscount,
-    rows,
-    tableColumns,
-  } = commonState;
-  const { setYourSelectionData, setRows } = commonSetState;
+  const { yourSelectionData, totalAmount, averageDiscount } = commonState;
+  const { setYourSelectionData } = commonSetState;
 
   /**
    * The function `handleUpdateSaveSearch` updates the save search data in local storage and calls the

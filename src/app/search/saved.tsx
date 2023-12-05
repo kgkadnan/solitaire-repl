@@ -17,7 +17,7 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
-import { Checkbox } from '@/components/ui/checkbox';
+
 import {
   useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
@@ -47,6 +47,9 @@ import {
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { Checkbox } from '@/components/ui/checkbox';
+import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -83,8 +86,9 @@ const SavedSearch = () => {
   const [cardData, setCardData] = useState<ICardData[]>([]);
 
   //checkbox states
-  const [isCheck, setIsCheck] = useState<string[]>([]);
-  const [isCheckAll, setIsCheckAll] = useState(false);
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck, isCheckAll } = checkboxState;
+  const { setIsCheck, setIsCheckAll } = checkboxSetState;
 
   //Search Bar States
   const [search, setSearch] = useState<string>('');
@@ -98,7 +102,7 @@ const SavedSearch = () => {
   let router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { data, error, isLoading, refetch } = useGetAllSavedSearchesQuery({
+  const { data } = useGetAllSavedSearchesQuery({
     limit,
     offset,
     dateSearchUrl,
@@ -201,7 +205,7 @@ const SavedSearch = () => {
         );
 
         return {
-          cardId: item.id,
+          id: item.id,
           cardActionIcon: editIcon,
           cardHeader: (
             <CustomTable
@@ -380,38 +384,6 @@ const SavedSearch = () => {
     setSuggestions([]);
   };
 
-  //specific checkbox
-  const handleClick = (id: string) => {
-    let updatedIsCheck = [...isCheck];
-
-    if (updatedIsCheck.includes(id)) {
-      updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
-    } else {
-      updatedIsCheck.push(id);
-    }
-
-    setIsCheck(updatedIsCheck);
-
-    if (updatedIsCheck.length === cardData?.length) {
-      setIsCheckAll(true);
-    } else {
-      setIsCheckAll(false);
-    }
-    if (isCheckAll) {
-      setIsCheckAll(false);
-    }
-    setIsError(false);
-  };
-
-  //Selecting All Checkbox Function
-  const handleSelectAllCheckbox = () => {
-    setIsCheckAll(!isCheckAll);
-    setIsCheck(cardData?.map((li) => li.cardId));
-    if (isCheckAll) {
-      setIsCheck([]);
-    }
-  };
-
   //Footer Button Data
   const footerButtonData = [
     {
@@ -445,7 +417,14 @@ const SavedSearch = () => {
     headerHeading: savedSearchData?.length ? (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
-          onClick={handleSelectAllCheckbox}
+          onClick={() =>
+            handleSelectAllCheckbox({
+              setIsCheckAll,
+              isCheckAll,
+              setIsCheck,
+              data: cardData,
+            })
+          }
           data-testid={'Select All Checkbox'}
           checked={isCheckAll}
         />
@@ -563,18 +542,22 @@ const SavedSearch = () => {
             <div className="flex-grow">
               {cardData?.map((items: ICardData) => {
                 return (
-                  <div key={items.cardId}>
+                  <div key={items.id}>
                     <div className="flex mt-6 ">
                       <CustomCheckBox
-                        data={items.cardId}
-                        onClick={handleClick}
+                        data={items.id}
                         isChecked={isCheck}
+                        setIsCheck={setIsCheck}
+                        setIsCheckAll={setIsCheckAll}
+                        isCheckAll={isCheckAll}
+                        row={cardData}
+                        setIsError={setIsError}
                       />
 
                       <div
                         data-testid={'card-id123'}
                         className={`${styles.mainCardContainer}`}
-                        onClick={() => handleCardClick(items.cardId)}
+                        onClick={() => handleCardClick(items.id)}
                       >
                         <CustomSearchResultCard
                           cardData={items}

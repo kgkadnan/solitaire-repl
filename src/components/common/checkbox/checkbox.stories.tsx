@@ -24,7 +24,8 @@ const CheckboxWithHooks = () => {
       setIsCheck(isCheck.filter((item) => item !== id));
     }
   };
-  return <CustomCheckBox data="1" onClick={handleClick} isChecked={isCheck} />;
+  return '';
+  //  <CustomCheckBox data="1" onClick={handleClick} isChecked={isCheck} />;
 };
 
 export const Primary: Story = {

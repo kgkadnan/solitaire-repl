@@ -17,7 +17,7 @@ export interface ISearchCardStyleProps {
 }
 
 export interface ICardDataProps {
-  cardId: string;
+  id: string;
   stone?: string;
   cardHeader: React.ReactNode;
   cardActionIcon?: StaticImageData;
@@ -44,7 +44,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardDescription,
     cardContent,
     stone = '',
-    cardId,
+    id,
     unBlurHeader,
   } = card.cardData;
   const {
@@ -63,7 +63,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
 
   const handleClickEvent = (event: any) => {
     event.stopPropagation();
-    handleCardAction(cardId);
+    handleCardAction(id);
   };
 
   return (
@@ -75,7 +75,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
       >
         <Card
           className={`${style.cardContainer} ${cardContainerStyle} ${cardHeaderContainerStyle}  `}
-          data-testid={`card-${cardId}`}
+          data-testid={`card-${id}`}
         >
           <CardHeader className={`${style.cardHeaderContainer} `}>
             <div className={`${style.cardHeaderText} `}>

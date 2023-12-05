@@ -34,20 +34,10 @@ export const myDiamondAPI = createApi({
         `/store/orders/${orderId}?expand=${singleExpand}`,
       providesTags: ['myDiamond'],
     }),
-
-    confirmStone: builder.mutation({
-      query: (data) => ({
-        url: `confirm-stone`,
-        method: 'POST',
-        body: data,
-      }),
-      invalidatesTags: ['myDiamond'],
-    }),
   }),
 });
 
 export const {
   useCardRecentConfirmationQuery,
   useGetAllRecentConfirmationQuery,
-  useConfirmStoneMutation,
 } = myDiamondAPI;
