@@ -89,13 +89,11 @@ function SearchResultLayout() {
       replaceSubrouteWithSearchResult
     ) {
       let isRouteExist =
-        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 3];
+        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
         return 'No Data Found';
       } else {
-        return `Search Results ${
-          parseInt(replaceSubrouteWithSearchResult!) - 2
-        }`;
+        return `Search Results ${parseInt(replaceSubrouteWithSearchResult!)}`;
       }
     } else if (
       (masterRoute === '/search' &&
@@ -143,20 +141,21 @@ function SearchResultLayout() {
     for (let i = 2; i < updateMyProfileRoute.length; i++) {
       updateMyProfileRoute[i].id = i + 1;
       updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
-      updateMyProfileRoute[i].path = i + 1;
+      updateMyProfileRoute[i].path = i - 1;
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
       router.push(`search?query=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 3}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 1}`);
       setheaderPath(`Search Results ${removeDataIndex + 1}`);
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 2}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex}`);
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
+
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
     setMyProfileRoutes(updateMyProfileRoute);
   };
@@ -259,7 +258,7 @@ function SearchResultLayout() {
         `${SEARCH_RESULT}-`,
         ''
       );
-      setActiveTab(parseInt(replaceSubrouteWithSearchResult!) - 2);
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
     }
   }, [subRoute]);
 
@@ -281,7 +280,7 @@ function SearchResultLayout() {
           .map((data: any, index: number) => ({
             id: index + 3,
             pathName: `Search Results ${index + 1}`,
-            path: index + 3,
+            path: index + 1,
           }))
           .filter(
             (newRoute: any) =>
@@ -398,7 +397,7 @@ function SearchResultLayout() {
               </Link>
             ) : (
               <div className={`flex items-center cursor-pointer  rounded-sm `}>
-                {activeTab === parseInt(path) - 2 && (
+                {activeTab === parseInt(path) && (
                   <div onClick={() => editSearchResult(activeTab)}>
                     <Image src={EditIcon} alt="Edit Icon" />
                   </div>
@@ -409,7 +408,7 @@ function SearchResultLayout() {
                       ? ''
                       : 'hover:text-solitaireQuaternary'
                   }`}
-                  onClick={() => handleSearchTab(parseInt(path) - 2, pathName)}
+                  onClick={() => handleSearchTab(parseInt(path), pathName)}
                   href={`/search?query=${SEARCH_RESULT}-${path}`}
                   key={id}
                 >
@@ -421,7 +420,7 @@ function SearchResultLayout() {
                     {pathName}
                   </div>
                 </Link>
-                <div onClick={() => closeSearch(parseInt(path) - 3)}>
+                <div onClick={() => closeSearch(parseInt(path) - 1)}>
                   <CloseOutline stroke="#8C7459" />
                 </div>
               </div>

@@ -257,7 +257,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             localStorage.setItem('Search', JSON.stringify(updatedData));
           }
           router.push(
-            `/search?query=${SEARCH_RESULT}-${searchResult.activeTab + 3}`
+            `/search?query=${SEARCH_RESULT}-${searchResult.activeTab + 1}`
           );
         } else {
           let setDataOnLocalStorage = {
@@ -272,7 +272,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
           );
           router.push(
             `/search?query=${SEARCH_RESULT}-${
-              JSON.parse(localStorage.getItem('Search')!).length + 2
+              JSON.parse(localStorage.getItem('Search')!).length
             }`
           );
         }

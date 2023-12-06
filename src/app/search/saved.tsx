@@ -506,7 +506,7 @@ const SavedSearch = () => {
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 3}`);
+          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 1}`);
         }
       } else {
         let localStorageData = [
@@ -519,7 +519,7 @@ const SavedSearch = () => {
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?query=${SEARCH_RESULT}-${3}`);
+        router.push(`/search?query=${SEARCH_RESULT}-${1}`);
       }
     }
   };
