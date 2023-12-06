@@ -29,7 +29,7 @@ import { ISearchResultsProps } from './result-interface';
 const SearchResults = ({
   data,
   activeTab,
-  refetch: refetchRow,
+  refetch: refetchRow
 }: ISearchResultsProps) => {
   const { sortByState, sortBySetState } = useSortByStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -99,10 +99,14 @@ handle the logic for closing a dialog box after a certain delay. */
     // Update total amount and average discount whenever isCheck changes
     setTotalAmount(calculateTotalAmount({ isCheck, rows }));
     setAverageDiscount(calculateAverageDiscount({ isCheck, rows }));
-  }, [isCheck,rows, calculateTotalAmount,
+  }, [
+    isCheck,
+    rows,
+    calculateTotalAmount,
     calculateAverageDiscount,
     setAverageDiscount,
-    setTotalAmount]);
+    setTotalAmount
+  ]);
 
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */

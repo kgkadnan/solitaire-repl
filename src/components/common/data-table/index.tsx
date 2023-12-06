@@ -12,7 +12,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   selectionAllowed = true,
   errorSetState,
   confirmStoneSetState,
-  modalSetState,
+  modalSetState
 }) => {
   /* The above code is filtering and sorting an array of table columns. */
   let tableCol = tableColumns

@@ -200,7 +200,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       setIsCheckAll,
       isCheckAll,
       data: tableRows,
-      setIsError,
+      setIsError
     });
   };
 
@@ -210,7 +210,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
         return (
           <div
             className="flex items-center gap-2"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <DetailImageSlider
               dataTableBodyState={dataTableBodyState}
@@ -231,7 +231,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
         );
       case 'lot_id':
         return (
-          <div onClick={(e) => e.stopPropagation()}>
+          <div onClick={e => e.stopPropagation()}>
             <DiamondDetailSlider
               dataTableBodyState={dataTableBodyState}
               dataTableBodySetState={dataTableBodySetState}
@@ -250,7 +250,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
             href={`${GIA_LINK}${row.rpt_number}`}
             target="_blank"
             className="border-b border-solitaireQuaternary border-solid"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {row[column.accessor] !== null ? row[column.accessor] : '-'}
           </a>

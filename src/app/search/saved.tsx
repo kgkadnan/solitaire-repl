@@ -44,7 +44,7 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
-  PAGINATION_INTITAL_LIMMIT,
+  PAGINATION_INTITAL_LIMMIT
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
@@ -54,7 +54,7 @@ import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/han
 
 let optionLimits = [
   { id: 1, value: '50' },
-  { id: 2, value: '100' },
+  { id: 2, value: '100' }
 ];
 const SavedSearch = () => {
   // Style classes and variables
