@@ -43,7 +43,8 @@ import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  PAGINATION_INTITAL_LIMMIT,
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
@@ -51,6 +52,10 @@ import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/c
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 
+let optionLimits = [
+  { id: 1, value: '50' },
+  { id: 2, value: '100' },
+];
 const SavedSearch = () => {
   // Style classes and variables
   const tableStyles = useMemo(() => {
@@ -75,7 +80,7 @@ const SavedSearch = () => {
   };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(50); // You can set the initial value here
+  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -98,10 +103,12 @@ const SavedSearch = () => {
   const [search, setSearch] = useState<string>('');
   const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
+
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
 
   let router = useRouter();
   const dispatch = useAppDispatch();
@@ -122,7 +129,7 @@ const SavedSearch = () => {
       const newResultsPerPage = parseInt(event, 10);
       setLimit(newResultsPerPage);
       setOffset(0);
-      setCurrentPage(0); // Reset current page when changing results per page
+      0; // Reset current page when changing results per page
       setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
     },
     [data?.count]
@@ -137,11 +144,6 @@ const SavedSearch = () => {
       setCurrentPage(page);
     }
   };
-
-  let optionLimits = [
-    { id: 1, value: '50' },
-    { id: 2, value: '100' }
-  ];
 
   const { data: searchList } = useGetSavedSearchListQuery(search);
 
@@ -454,9 +456,7 @@ const SavedSearch = () => {
   useEffect(() => {
     let specificSavedSearchData = data?.savedSearches;
     setNumberOfPages(Math.ceil(data?.count / data?.limit));
-
     setSavedSearchData(specificSavedSearchData);
-
     setCardData(renderCardData(specificSavedSearchData));
   }, [data, limit, offset, renderCardData]);
 
@@ -579,14 +579,16 @@ const SavedSearch = () => {
 
         {/* Custom Footer */}
         <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-          <CustomPagination
-            currentPage={currentPage}
-            totalPages={numberOfPages}
-            resultsPerPage={limit}
-            optionLimits={optionLimits}
-            handlePageClick={handlePageClick}
-            handleResultsPerPageChange={handleResultsPerPageChange}
-          />
+          {data?.count > 0 && (
+            <CustomPagination
+              currentPage={currentPage}
+              totalPages={numberOfPages}
+              resultsPerPage={limit}
+              optionLimits={optionLimits}
+              handlePageClick={handlePageClick}
+              handleResultsPerPageChange={handleResultsPerPageChange}
+            />
+          )}
 
           {/* Custom Footer */}
           {footerButtonData?.length && (

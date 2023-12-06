@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './pagination.module.scss'; // Import your CSS module
 import ChevronBack from '@public/assets/icons/chevron-back-circle-outline.svg?url';
 import ChevronForward from '@public/assets/icons/chevron-forward-circle-outline.svg?url';
-import { CustomSelect, ISelectData } from '../select';
+import { CustomSelect } from '../select';
 import { ManageLocales } from '@/utils/translate';
 import { ICustomPaginationProps } from './interface';
 

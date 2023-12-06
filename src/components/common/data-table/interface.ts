@@ -1,10 +1,12 @@
 import {
-  ICheckboxSetState,
-  ICheckboxState,
+  IErrorSetState,
+  IModalSetState,
   Product,
   TableColumn
 } from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
+import { ICheckboxSetState, ICheckboxState } from '../checkbox/interface';
+import { IConfirmStoneSetState } from '../confirm-stone/interface';
 
 export interface ICheckboxData {
   checkboxState?: ICheckboxState;
@@ -13,14 +15,12 @@ export interface ICheckboxData {
 export interface ICustomDataTableProps {
   tableRows: Product[];
   tableColumns: TableColumn[];
-  checkboxData?: any;
+  checkboxData?: ICheckboxData;
   mainTableStyle?: string;
   selectionAllowed?: boolean;
-  handleConfirm?: (isCheck: string[]) => void;
-  errorSetState?: any;
-  confirmStoneSetState?: any;
+  errorSetState: IErrorSetState;
+  confirmStoneSetState?: IConfirmStoneSetState;
   modalSetState?: any;
-  modalState?: any;
 }
 
 export interface KeyLabelMapping {
@@ -40,9 +40,8 @@ export interface ITbodyProps {
   handleClick?: (id: string) => void;
   isCheck?: string[];
   tableCol: TableColumn[];
-  handleConfirm?: (isCheck: string[]) => void;
   checkboxData?: ICheckboxData;
-  errorSetState?: any;
+  errorSetState: IErrorSetState;
   confirmStoneSetState?: any;
   modalSetState?: any;
 }
