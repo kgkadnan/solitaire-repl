@@ -76,19 +76,30 @@ function SearchResultLayout() {
   const computeRouteAndComponentRenderer = () => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
+    let replaceSubrouteWithSearchResult = subRoute?.replace(
+      `${SEARCH_RESULT}-`,
+      ''
+    );
+
     if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
     else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
     else if (
       subRoute !== `${SAVED_SEARCHES}` &&
       subRoute !== `${NEW_SEARCH}` &&
-      subRoute
+      replaceSubrouteWithSearchResult
     ) {
-      let isRouteExist = yourSelection[parseInt(subRoute) - 3];
+      let isRouteExist =
+        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 3];
       if (isRouteExist === undefined) {
         return 'No Data Found';
-      } else return `Search Results ${parseInt(subRoute!) - 2}`;
+      } else {
+        return `Search Results ${
+          parseInt(replaceSubrouteWithSearchResult!) - 2
+        }`;
+      }
     } else if (
-      (masterRoute === '/search' && subRoute?.length === 0) ||
+      (masterRoute === '/search' &&
+        replaceSubrouteWithSearchResult?.length === 0) ||
       subRoute === null
     ) {
       return 'New Search';
@@ -138,11 +149,11 @@ function SearchResultLayout() {
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
       router.push(`search?query=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?query=${removeDataIndex + 3}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 3}`);
       setheaderPath(`Search Results ${removeDataIndex + 1}`);
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?query=${removeDataIndex + 2}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 2}`);
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
@@ -243,8 +254,13 @@ function SearchResultLayout() {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`)
-      setActiveTab(parseInt(subRoute!) - 2);
+    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
+      let replaceSubrouteWithSearchResult = subRoute?.replace(
+        `${SEARCH_RESULT}-`,
+        ''
+      );
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!) - 2);
+    }
   }, [subRoute]);
 
   useEffect(() => {
@@ -394,7 +410,7 @@ function SearchResultLayout() {
                       : 'hover:text-solitaireQuaternary'
                   }`}
                   onClick={() => handleSearchTab(parseInt(path) - 2, pathName)}
-                  href={`/search?query=${path}`}
+                  href={`/search?query=${SEARCH_RESULT}-${path}`}
                   key={id}
                 >
                   <div

@@ -51,7 +51,10 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
-import { SAVED_SEARCHES } from '@/constants/application-constants/search-page';
+import {
+  SAVED_SEARCHES,
+  SEARCH_RESULT,
+} from '@/constants/application-constants/search-page';
 
 let optionLimits = [
   { id: 1, value: '50' },
@@ -503,7 +506,7 @@ const SavedSearch = () => {
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?query=${data.length + 3}`);
+          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 3}`);
         }
       } else {
         let localStorageData = [
@@ -516,7 +519,7 @@ const SavedSearch = () => {
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?query=${3}`);
+        router.push(`/search?query=${SEARCH_RESULT}-${3}`);
       }
     }
   };
