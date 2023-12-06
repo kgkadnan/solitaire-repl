@@ -30,8 +30,10 @@ import {
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const savedSearch = useAppSelector(store => store.savedSearch);
-  const searchResult = useAppSelector(store => store.searchResult);
+  const savedSearch: any = useAppSelector(store => store.savedSearch);
+  const searchResult: any = useAppSelector(store => store.searchResult);
+
+  console.log('searchResult', searchResult);
 
   /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
@@ -162,7 +164,8 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
-        const activeTab = searchResult?.activeTab;
+        const activeTab: number = searchResult?.activeTab;
+
         const activeSearch: boolean =
           addSearches[activeTab]?.saveSearchName.length;
 
