@@ -155,13 +155,13 @@ const renderContent = (
     handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
   };
   const handleFancyFilterChange = (data: string) => {
-    handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
+    setSelectedFancyColor(data);
   };
   const handleIntensityChange = (data: string) => {
-    handleFilterChange(data, selectedIntensity, setSelectedIntensity);
+    setSelectedIntensity(data);
   };
   const handleOvertoneChange = (data: string) => {
-    handleFilterChange(data, selectedOvertone, setSelectedOvertone);
+    setSelectedOvertone(data);
   };
   const handleTingeChange = (data: string) => {
     handleFilterChange(data, selectedTinge, setSelectedTinge);
@@ -170,13 +170,10 @@ const renderContent = (
     handleFilterChange(data, selectedClarity, setSelectedClarity);
   };
   const handleCaratRangeChange = (data: string) => {
-    console.log('Data', data, selectedCaratRange);
     handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
   };
 
   const handleMakeChange = (data: string) => {
-    console.log('ssssssssssssssssssssss', data);
-
     if (data.toLowerCase() === '3ex') {
       if (data !== selectedMake) {
         setSelectedCut(['EX']);
@@ -342,6 +339,7 @@ const renderContent = (
   const handleCuletChange = (data: string) => {
     setSelectedCulet(data);
   };
+
   const handleGirdleChange = (data: string) => {
     handleFilterChange(data, selectedGirdle, setSelectedGirdle);
   };
@@ -497,6 +495,64 @@ const renderContent = (
     { id: 8, value: 'Large' },
   ];
 
+  let intensityData = [
+    { id: 1, value: 'Faint' },
+    { id: 2, value: 'Very Light' },
+    { id: 3, value: 'Light' },
+    { id: 4, value: 'Fancy' },
+    { id: 5, value: 'Fancy Deep' },
+    { id: 6, value: 'Fancy Intense' },
+    { id: 7, value: 'Fancy Vivid' },
+  ];
+
+  let fancyColorData = [
+    { id: 1, value: 'Yellow' },
+    { id: 2, value: 'Grey' },
+    { id: 3, value: 'Blue' },
+    { id: 4, value: 'Green' },
+    { id: 5, value: 'Cognac' },
+    { id: 6, value: 'Champagne' },
+    { id: 7, value: 'Purple' },
+    { id: 8, value: 'Violet' },
+    { id: 9, value: 'Chameleon' },
+    { id: 10, value: 'Pink' },
+    { id: 11, value: 'Black' },
+    { id: 12, value: 'Brown' },
+    { id: 13, value: 'Red' },
+    { id: 14, value: 'Orange' },
+    { id: 15, value: 'Light Yellow' },
+    { id: 16, value: 'Other' },
+  ];
+
+  let overtoneData = [
+    { id: 1, value: 'Black' },
+    { id: 2, value: 'Purplish' },
+    { id: 3, value: 'Purple' },
+    { id: 4, value: 'Green' },
+    { id: 5, value: 'Red' },
+    { id: 6, value: 'Chameleon' },
+    { id: 7, value: 'Bluish' },
+    { id: 8, value: 'Blue' },
+    { id: 9, value: 'Pink' },
+    { id: 10, value: 'Brownish' },
+    { id: 11, value: 'Orangy' },
+    { id: 12, value: 'Greyish' },
+    { id: 13, value: 'Brown' },
+    { id: 14, value: 'Orange' },
+    { id: 15, value: 'Pinkish' },
+    { id: 16, value: 'Greenish' },
+    { id: 17, value: 'Yellowish' },
+    { id: 18, value: 'Grey' },
+    { id: 19, value: 'Violetish' },
+    { id: 20, value: 'Yellow' },
+    { id: 21, value: 'Redish' },
+    { id: 22, value: 'Champagne' },
+    { id: 23, value: 'Cognac' },
+    { id: 24, value: 'None' },
+    { id: 25, value: 'Light Brown' },
+    { id: 26, value: 'Brownish Orangy' },
+  ];
+
   return (
     <>
       {' '}
@@ -631,6 +687,46 @@ const renderContent = (
           )}
         </div>
       </div>
+      <div className={`mb-2 ${styles.filterSection}`}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
+            label={ManageLocales('app.advanceSearch.fancy')}
+          />
+        </div>
+        <div className={`flex ${styles.filterSectionData}`}>
+          <CustomSelect
+            data={fancyColorData}
+            onChange={handleFancyFilterChange}
+            placeholder="Fancy Color"
+            style={{
+              selectTrigger: styles.fancyDropdownHeader,
+              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
+              selectElement: styles.selectElement,
+            }}
+          />
+          <CustomSelect
+            data={intensityData}
+            onChange={handleIntensityChange}
+            placeholder={ManageLocales('app.advanceSearch.intensity')}
+            style={{
+              selectTrigger: styles.fancyDropdownHeader,
+              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
+              selectElement: styles.selectElement,
+            }}
+          />
+          <CustomSelect
+            data={overtoneData}
+            onChange={handleOvertoneChange}
+            placeholder={ManageLocales('app.advanceSearch.overtone')}
+            style={{
+              selectTrigger: styles.fancyDropdownHeader,
+              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
+              selectElement: styles.selectElement,
+            }}
+          />
+        </div>
+      </div>
       {/* <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -674,7 +770,7 @@ const renderContent = (
           </div>
         </div>
       </div> */}
-      {selectedColor.includes('Fancy') && (
+      {/* {selectedColor.includes('Fancy') && (
         <>
           <div className={styles.filterSection}>
             <div className={styles.filterSectionLabel}>
@@ -717,7 +813,7 @@ const renderContent = (
             </div>
           </div>
         </>
-      )}
+      )} */}
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel

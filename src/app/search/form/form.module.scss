@@ -15,7 +15,6 @@
   margin: 0 16px;
   display: flex;
   flex-direction: column;
-  align-items: center;
 }
 
 .imageTileImageStyles {
@@ -171,6 +170,13 @@
   color: hsl(var(--solitaire-tertiary));
 }
 
+.fancyDropdownHeader {
+  padding-left: 2px;
+  margin-right: 80px;
+  border-bottom: 0.5px solid #8c7459;
+  color: hsl(var(--solitaire-tertiary));
+}
+
 .dropdownData {
   background-color: hsl(var(--solitaire-secondary));
   color: hsl(var(--solitaire-tertiary));
@@ -178,6 +184,10 @@
 
 .dropdownData:hover {
   background-color: hsl(var(--solitaire-secondary));
+}
+
+.selectElement {
+  height: 20%;
 }
 
 .selectElement:hover {
@@ -281,7 +291,7 @@
 }
 
 .selectionButtonStyles {
-  border: 0.25px solid #5d6a6a;
+  border: 0.25px solid #354444;
 }
 
 .addCartButtonStyles {
@@ -299,7 +309,7 @@
   font-weight: 300;
 }
 .activeOtherStyles {
-  border: 1px solid #8c7459;
+  background-color: #8c7459;
 }
 
 .paginationContainerStyle {
