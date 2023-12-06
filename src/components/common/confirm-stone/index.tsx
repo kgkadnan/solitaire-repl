@@ -222,8 +222,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           </div>
 
           <div className="flex justify-between mt-2">
-            {confirmRadioButtons?.map((radioData: any, index: number) => (
-              <RadioButton radioMetaData={radioData} key={index} />
+            {confirmRadioButtons?.map((radioData: any) => (
+              <RadioButton radioMetaData={radioData} key={radioData?.id} />
             ))}
           </div>
         </div>

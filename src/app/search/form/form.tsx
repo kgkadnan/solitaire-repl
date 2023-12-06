@@ -33,8 +33,6 @@ const AdvanceSearch = () => {
   const savedSearch: any = useAppSelector(store => store.savedSearch);
   const searchResult: any = useAppSelector(store => store.searchResult);
 
-  console.log('searchResult', searchResult);
-
   /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
 used for managing the state of a form field or input element in a React component. */
