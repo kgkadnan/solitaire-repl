@@ -13,9 +13,9 @@ const computeTransalation = (key: string, locale: string) => {
     fr
   };
 
-  if (locale == 'en') {
+  if (locale === 'en') {
     translations = allTranslations.en[key] || key;
-  } else if ((locale = 'fr')) {
+  } else if (locale === 'fr') {
     translations = allTranslations.fr[key] || key;
   } else {
     translations = key;
@@ -25,5 +25,5 @@ const computeTransalation = (key: string, locale: string) => {
 };
 
 export function ManageLocales(key: string, locale?: string) {
-  return computeTransalation(key,locale || 'en');
+  return computeTransalation(key, locale || 'en');
 }

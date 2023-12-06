@@ -1,5 +1,5 @@
 const validatePassword = (input: string) => {
-  let passwordRegex =
+  const passwordRegex =
     /^(?=.*\d)(?=.*[!@#$%^&*()_+{}|:;<>,.?~])(?=.*[a-zA-Z]).{8,}$/;
 
   if (input.match(passwordRegex)) {

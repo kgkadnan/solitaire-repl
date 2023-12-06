@@ -10,7 +10,6 @@ interface DownloadExcelApiResponse {
   };
 }
 
-
 interface DownloadExcelFunctionProps {
   productIds: string[];
   downloadExcelApi: any;
