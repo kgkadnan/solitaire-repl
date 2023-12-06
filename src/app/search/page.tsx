@@ -30,6 +30,7 @@ import { NoDataFound } from '@/components/common/no-data-found';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
+  SEARCH_RESULT,
 } from '@/constants/application-constants/search-page';
 
 interface IMyProfileRoutes {
@@ -313,7 +314,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?query=${subRoute}&edit=search-result`);
+    router.push(`/search?query=${subRoute}&edit=${SEARCH_RESULT}`);
   };
 
   const handleCloseInputDialog = () => {
@@ -422,7 +423,7 @@ function SearchResultLayout() {
         <main style={{ width: '98%', minHeight: '70vh' }}>
           {headerPath === 'New Search' ||
           editSubRoute === `${SAVED_SEARCHES}` ||
-          editSubRoute === 'search-result' ? (
+          editSubRoute === `${SEARCH_RESULT}` ? (
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />

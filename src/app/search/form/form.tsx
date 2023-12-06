@@ -27,6 +27,7 @@ import renderContent from './components/render-form-field';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
+  SEARCH_RESULT,
 } from '@/constants/application-constants/search-page';
 
 const AdvanceSearch = () => {
@@ -83,7 +84,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (modifySearchFrom === `${SAVED_SEARCHES}` && modifysavedSearchData) {
       setModifySearch(modifysavedSearchData, setState, carat);
-    } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
+    } else if (modifySearchFrom === `${SEARCH_RESULT}` && modifySearchResult) {
       setModifySearch(
         modifySearchResult[searchResult.activeTab]?.queryParams,
         setState,
@@ -240,7 +241,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             updateSavedSearch(data);
           }
         }
-        if (modifySearchFrom === 'search-result') {
+        if (modifySearchFrom === `${SEARCH_RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
             id: modifySearchResult[searchResult.activeTab]?.id,
@@ -345,13 +346,13 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               fn: () => {
                 if (modifySearchFrom === `${SAVED_SEARCHES}`) {
                   router.push(`/search?query=${SAVED_SEARCHES}`);
-                } else if (modifySearchFrom === 'search-result') {
+                } else if (modifySearchFrom === `${SEARCH_RESULT}`) {
                   router.push(`/search?query=${searchResult.activeTab + 3}`);
                 }
               },
               isHidden:
                 modifySearchFrom !== `${SAVED_SEARCHES}` &&
-                modifySearchFrom !== 'search-result',
+                modifySearchFrom !== `${SEARCH_RESULT}`,
             },
             {
               id: 2,
