@@ -18,6 +18,7 @@ import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation';
 import { IDateRange } from '../search/saved-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
+import { PAGINATION_INTITAL_LIMMIT } from '@/constants/business-logic';
 
 function MyDiamonds() {
   // State variables for handling scroll, date, search, and data
@@ -35,6 +36,8 @@ function MyDiamonds() {
   const [myDiamondStatus, setMyDiamondStatus] = useState('');
   const [invoiceStatus, setInvoiceStatus] = useState('');
   const [previousConfirmStatus, setPreviousConfirmStatus] = useState('');
+  const [offset, setOffset] = useState(0);
+  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT);
 
   // Define routes for different tabs in My Diamonds
   let myDiamondsRoutes = [
@@ -103,6 +106,8 @@ function MyDiamonds() {
   // Fetch previous-confiramtion-data
   const { data: previousConfirmationData } = useCardPreviousConfirmationQuery(
     {
+      limit,
+      offset,
       previousConfirmStatus,
       dateSearchUrl,
     },
@@ -283,7 +288,12 @@ function MyDiamonds() {
           ) : activeTab === 'My Invoices' ? (
             <MyInvoices myInvoiceData={myInvoiceData} />
           ) : (
-            <PreviousConfirmation previousConfirmData={previousConfirmData} />
+            <PreviousConfirmation
+              previousConfirmData={previousConfirmData}
+              setOffset={setOffset}
+              setLimit={setLimit}
+              limit={limit}
+            />
           )}
         </main>
       </div>

@@ -4,7 +4,12 @@ import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
 import React, { useEffect, useState } from 'react';
 
-const PreviousConfirmation = ({ previousConfirmData }: any) => {
+const PreviousConfirmation = ({
+  previousConfirmData,
+  setOffset,
+  setLimit,
+  limit,
+}: any) => {
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
 
@@ -42,6 +47,9 @@ const PreviousConfirmation = ({ previousConfirmData }: any) => {
       handleCardClick={handleCardClick}
       productPageDetail={previousConfirmationDetail}
       check={previousConfirmation}
+      setOffset={setOffset}
+      setLimit={setLimit}
+      limit={limit}
     />
   );
 };
