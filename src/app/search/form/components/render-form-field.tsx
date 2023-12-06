@@ -1024,13 +1024,17 @@ const renderContent = (
                   {
                     id: '1',
                     value: 'Contains',
-                    radioButtonLabel: 'Contains',
+                    radioButtonLabel: ManageLocales(
+                      'app.advanceSearch.radioLabel1'
+                    ),
                     checked: selectedStep === 'Contains'
                   },
                   {
                     id: '2',
                     value: 'Does not contains',
-                    radioButtonLabel: 'Does not contains',
+                    radioButtonLabel: ManageLocales(
+                      'app.advanceSearch.radioLabel2'
+                    ),
                     checked: selectedStep === 'Does not contains'
                   }
                 ]
