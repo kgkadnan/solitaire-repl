@@ -8,7 +8,7 @@
     "semi": ["error", "always"],
 
     // Avoiding any Type
-    // "@typescript-eslint/no-explicit-any": ["error", { "ignoreRestArgs": true }],
+    "@typescript-eslint/no-explicit-any": ["error", { "ignoreRestArgs": true }],
 
     /// -----------------------------------------------------
     // //  Explicit Return Types (Optional)
