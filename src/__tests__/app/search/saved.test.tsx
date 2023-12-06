@@ -1,8 +1,8 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import SavedSearch from '@/app/search/saved';
-import { renderWithProviders } from '@/mock-handlers/test-utils';
-import { setupSetupsavedSearchandlers } from '@/mock-handlers/saved-search';
+import { renderWithProviders } from '@/__tests__/mock-handlers/test-utils';
+import { setupSetupsavedSearchandlers } from '@/__tests__/mock-handlers/saved-search';
 import { act } from 'react-dom/test-utils';
 
 jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));

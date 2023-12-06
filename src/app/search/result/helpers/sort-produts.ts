@@ -10,7 +10,7 @@ const customSortFunctions: Record<string, Function> = {
     'Faint',
     'Medium',
     'Strong',
-    'Very Strong',
+    'Very Strong'
   ]),
   side_black: customSortOrder(['SBO', 'SBPP', 'SB1', 'SB2', 'SB3']),
   black_table: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),
