@@ -2,7 +2,7 @@
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './search-result-layout.module.scss';
 import CloseOutline from '@public/assets/icons/close-outline.svg?url';
 import EditIcon from '@public/assets/icons/edit.svg';
@@ -19,12 +19,12 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import {
   useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation
+  useUpdateSavedSearchMutation,
 } from '@/features/api/saved-searches';
 import CustomLoader from '@/components/common/loader';
 import {
   LISTING_PAGE_DATA_LIMIT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
 } from '@/constants/business-logic';
 
 interface IMyProfileRoutes {
@@ -52,27 +52,25 @@ function SearchResultLayout() {
 
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
-  const storedSearch = localStorage.getItem('Search')!;
-  const currentPathname = usePathname();
 
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'form'
+      path: 'form',
     },
     {
       id: 2,
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved'
-    }
+      path: 'saved',
+    },
   ]);
 
-  const computeRouteAndComponentRenderer = useCallback(() => {
+  const computeRouteAndComponentRenderer = () => {
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!, 10) - 2}`;
-  }, [subRoute]);
+    else return `Search Results ${parseInt(subRoute!) - 2}`;
+  };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
     computeRouteAndComponentRenderer()
@@ -81,12 +79,18 @@ function SearchResultLayout() {
   let { data, isLoading, refetch } = useGetAllProductQuery({
     offset: 0,
     limit: LISTING_PAGE_DATA_LIMIT,
-    url: searchUrl
+    url: searchUrl,
   });
 
   useEffect(() => {
     setheaderPath(computeRouteAndComponentRenderer());
-  }, [subRoute, computeRouteAndComponentRenderer]);
+  }, [subRoute]);
+
+  const handleScroll = () => {
+    const currentScrollPos = window.pageYOffset;
+    setVisible(prevScrollPos > currentScrollPos);
+    setPrevScrollPos(currentScrollPos);
+  };
 
   const closeTheSearchFunction = (
     removeDataIndex: number,
@@ -124,13 +128,13 @@ function SearchResultLayout() {
   };
 
   const handleCloseAndSave = async () => {
-    let yourSelection = JSON.parse(storedSearch);
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
     await addSavedSearch({
       name: saveSearchName,
       diamond_count: parseInt(data?.count),
       meta_data: yourSelection[removeIndex]?.queryParams,
-      is_deleted: false
+      is_deleted: false,
     })
       .unwrap()
       .then(() => {
@@ -148,7 +152,7 @@ function SearchResultLayout() {
   };
 
   const closeSearch = (removeDataIndex: number) => {
-    let yourSelection = JSON.parse(storedSearch);
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
     if (!yourSelection[removeDataIndex].isSavedSearch) {
       setIsDialogOpen(true);
@@ -166,7 +170,7 @@ function SearchResultLayout() {
                 closeTheSearchFunction(removeDataIndex, yourSelection);
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
+                displayButtonStyle: styles.showResultButtonTransparent,
               }}
             />
             <CustomDisplayButton
@@ -178,7 +182,7 @@ function SearchResultLayout() {
                     id: yourSelection[removeDataIndex]?.id,
                     name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
-                    diamond_count: data?.count
+                    diamond_count: data?.count,
                   };
                   updateSavedSearch(updateSaveSearchData)
                     .unwrap()
@@ -197,7 +201,7 @@ function SearchResultLayout() {
                 }
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
+                displayButtonStyle: styles.showResultButtonFilled,
               }}
             />
           </div>
@@ -209,11 +213,6 @@ function SearchResultLayout() {
   };
 
   useEffect(() => {
-    const handleScroll = () => {
-      const currentScrollPos = window.pageYOffset;
-      setVisible(prevScrollPos > currentScrollPos);
-      setPrevScrollPos(currentScrollPos);
-    };
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -227,7 +226,7 @@ function SearchResultLayout() {
 
   useEffect(() => {
     let fetchMyAPI = async () => {
-      let yourSelection = storedSearch;
+      let yourSelection = localStorage.getItem('Search');
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
@@ -243,12 +242,12 @@ function SearchResultLayout() {
           .map((data: any, index: number) => ({
             id: index + 3,
             pathName: `Search Results ${index + 1}`,
-            path: index + 3
+            path: index + 3,
           }))
           .filter(
             (newRoute: any) =>
               !myProfileRoutes.some(
-                existingRoute => existingRoute.path === newRoute.path
+                (existingRoute) => existingRoute.path === newRoute.path
               )
           );
 
@@ -259,19 +258,19 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: ManageLocales('app.searchResult.header.newSearch'),
-              path: 'form'
+              path: 'form',
             },
             {
               id: 2,
               pathName: ManageLocales('app.savedSearch.header'),
-              path: 'saved'
-            }
+              path: 'saved',
+            },
           ]);
         }
       }
     };
     fetchMyAPI();
-  }, [storedSearch, activeTab, maxTab, currentPathname, myProfileRoutes]);
+  }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: string) => {
     if (
@@ -309,7 +308,7 @@ function SearchResultLayout() {
     displayButtonFunction: handleCloseAndSave,
     label: 'Save and close this search',
     name: 'Save',
-    displayButtonLabel2: 'Save'
+    displayButtonLabel2: 'Save',
   };
 
   return (
@@ -395,7 +394,7 @@ function SearchResultLayout() {
         style={{
           display: 'flex',
           marginTop: '78px',
-          width: '100%'
+          width: '100%',
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
