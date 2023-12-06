@@ -4,13 +4,13 @@ const customSortOrder = (orderArray: string[]) => (a: string, b: string) =>
 const customSortFunctions: Record<string, Function> = {
   table_inclusion: customSortOrder(['T0', 'T1', 'B1', 'T2', 'T3']),
   fluorescence: customSortOrder([
-    'NON',
-    'FNT',
-    'VSL',
-    'MED',
-    'STG',
-    'SLT',
-    'VSTG'
+    'None',
+    'Very Slight',
+    'Slight',
+    'Faint',
+    'Medium',
+    'Strong',
+    'Very Strong',
   ]),
   side_black: customSortOrder(['SBO', 'SBPP', 'SB1', 'SB2', 'SB3']),
   black_table: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),

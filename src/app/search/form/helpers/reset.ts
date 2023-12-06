@@ -7,7 +7,6 @@ export const handleReset = (setState: any) => {
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedTinge,
-    setSelectedTingeIntensity,
     setSelectedClarity,
     setSelectedGirdleStep,
     setSelectedCaratRange,
@@ -79,7 +78,6 @@ export const handleReset = (setState: any) => {
   setSelectedIntensity([]);
   setSelectedOvertone([]);
   setSelectedTinge([]);
-  setSelectedTingeIntensity([]);
   setSelectedClarity([]);
   setSelectedCaratRange([]);
   setSelectedMake('');

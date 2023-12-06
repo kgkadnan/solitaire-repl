@@ -153,8 +153,8 @@ const SavedSearch = () => {
   const keyLabelMapping: KeyLabelMapping = useMemo(() => {
     return {
       shape: 'Shape',
-      color: 'color',
       carat: 'carat',
+      color: 'color',
       clarity: 'clarity',
       cut: 'cut',
       polish: 'polish',
