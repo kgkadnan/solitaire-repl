@@ -53,7 +53,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 import {
   SAVED_SEARCHES,
-  SEARCH_RESULT,
+  SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
 
 let optionLimits = [
@@ -471,7 +471,7 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?query=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
+    router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
   const handleCardClick = (id: string) => {
@@ -507,7 +507,7 @@ const SavedSearch = () => {
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 1}`);
+          router.push(`/search?active-tab=${SEARCH_RESULT}-${data.length + 1}`);
         }
       } else {
         let localStorageData = [
@@ -520,7 +520,7 @@ const SavedSearch = () => {
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?query=${SEARCH_RESULT}-${1}`);
+        router.push(`/search?active-tab=${SEARCH_RESULT}-${1}`);
       }
     }
   };
