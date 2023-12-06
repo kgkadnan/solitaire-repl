@@ -199,8 +199,8 @@
   "app.searchResult.slider.confirmStone.cancel": "Cancel",
 
   "app.myCart.active": "Active",
-  "app.myCart.soldOut": "Sold",
-  "app.myCart.memoOut": "Memo",
+  "app.myCart.sold": "Sold",
+  "app.myCart.memo": "Memo",
 
   "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
   "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details",

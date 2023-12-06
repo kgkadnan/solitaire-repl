@@ -1,5 +1,5 @@
 // Function to format the created_at date
-export const formatCreatedAt = (createdAt: any) => {
+export const formatCreatedAt = (createdAt: Date) => {
   const createdAtDate = new Date(createdAt);
 
   const dateFormatter = new Intl.DateTimeFormat('en-US', {

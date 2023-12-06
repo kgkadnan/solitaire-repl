@@ -20,8 +20,8 @@ function MyCart({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(true);
   // State variables for counting items in different cart statuses
   const [activeTabCount, setActiveTabCount] = useState(0);
-  const [soldOutCount, setSoldOutCount] = useState(0);
-  const [memoOutCount, setMemoOutCount] = useState(0);
+  const [soldCount, setSoldCount] = useState(0);
+  const [memoCount, setMemoCount] = useState(0);
 
   // Header data for CustomHeader component
   const headerData = {
@@ -41,15 +41,15 @@ function MyCart({ children }: { children: React.ReactNode }) {
     },
     {
       id: '2',
-      pathName: ManageLocales('app.myCart.soldOut'),
-      path: 'sold-out',
-      count: soldOutCount
+      pathName: ManageLocales('app.myCart.sold'),
+      path: 'sold',
+      count: soldCount
     },
     {
       id: '3',
-      pathName: ManageLocales('Memo-Out'),
-      path: 'memo-out',
-      count: memoOutCount
+      pathName: ManageLocales('app.myCart.memo'),
+      path: 'memo',
+      count: memoCount
     }
   ];
 
@@ -79,7 +79,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
           )
           .map((row: any) => row.product);
 
-        setSoldOutCount(soldOutItems?.length);
+        setSoldCount(soldOutItems?.length);
       }
     };
 
@@ -96,7 +96,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
           )
           .map((row: any) => row.product);
 
-        setMemoOutCount(memoOutDiamondItems?.length);
+        setMemoCount(memoOutDiamondItems?.length);
       }
     };
 

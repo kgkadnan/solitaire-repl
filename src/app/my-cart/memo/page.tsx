@@ -5,7 +5,7 @@ import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import React, { ReactNode, useEffect, useState } from 'react';
-import styles from './memo-out.module.scss';
+import styles from './memo.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';

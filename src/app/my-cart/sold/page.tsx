@@ -5,7 +5,7 @@ import CustomDataTable from '@/components/common/data-table';
 import { useGetCartQuery } from '@/features/api/cart';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import React, { useEffect } from 'react';
-import styles from './sold-out.module.scss';
+import styles from './sold.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { SOLD_OUT_STATUS } from '@/constants/business-logic';

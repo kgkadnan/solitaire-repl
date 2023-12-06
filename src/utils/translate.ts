@@ -1,29 +1,29 @@
-// import en from '../locales/en/common.json';
-// import fr from '../locales/fr/common.json';
-// import { useSearchParams } from 'next/navigation';
-
-// export function ManageLocales(key: string) {
-//   const searchParams = useSearchParams();
-//   const languageCode = searchParams.get('lang');
-
-//   const locale: string = languageCode || 'en';
-//   const translations: any = {
-//     en,
-//     fr,
-//   };
-//   return translations[locale][key] || key;
-// }
-
 import en from '../locales/en/common.json';
 import fr from '../locales/fr/common.json';
 
-export function ManageLocales(key: string) {
-  // const locale:string = useSelector((state:any) => state.language?.selectedLanguage) || 'en';
-  const locale: string = 'en';
+interface Translations {
+  en: Record<string, string>;
+  fr: Record<string, string>;
+}
 
-  const translations: any = {
+const computeTransalation = (key: string, locale: string) => {
+  let translations: string;
+  const allTranslations: Translations = {
     en,
     fr
   };
-  return translations[locale][key] || key;
+
+  if (locale == 'en') {
+    translations = allTranslations.en[key] || key;
+  } else if ((locale = 'fr')) {
+    translations = allTranslations.fr[key] || key;
+  } else {
+    translations = key;
+  }
+
+  return translations;
+};
+
+export function ManageLocales(key: string, locale?: string) {
+  return computeTransalation(key,locale || 'en');
 }
