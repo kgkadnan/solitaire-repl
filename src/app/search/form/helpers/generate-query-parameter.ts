@@ -73,8 +73,6 @@ export const generateQueryParams = (state: any) => {
   const queryParams: any = {};
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
   selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
-  // selectedWhiteColor?.length !== 0 &&
-  //   (queryParams['color'] = selectedWhiteColor);
   selectedFancyColor?.length !== 0 &&
     (queryParams['fancy'] = selectedFancyColor);
   selectedIntensity?.length !== 0 &&
