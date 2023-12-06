@@ -3,7 +3,6 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
-import SearchIcon from '@public/assets/icons/search-outline.svg?url';
 
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
@@ -29,6 +28,12 @@ import {
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
+
+export interface ISavedSearch {
+  saveSearchName: string;
+  isSavedSearch: boolean;
+  queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
+}
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('route');
@@ -47,7 +52,7 @@ export const TopNavigationBar = () => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   const [offset, setOffset] = useState(0);
-  let limit = 11;
+  const limit = 11;
   const { data } = useGetAllNotificationQuery({
     type: 'APP',
     offset,
@@ -79,7 +84,7 @@ export const TopNavigationBar = () => {
     }
   ];
 
-  let handleRoute = (label: string, link: string) => {
+  const handleRoute = (label: string, link: string) => {
     router.push(`${link}`);
     topNavData.forEach(navData => {
       if (navData.label !== label) {
@@ -89,10 +94,10 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData:ISavedSearch[] = JSON.parse(localStorage.getItem('Search')!);
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
     // if (data?.length && link !== '/search?route=form') {
@@ -156,7 +161,7 @@ export const TopNavigationBar = () => {
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    let notificationMapData = data?.data?.map((item: NotificationItem) => ({
+    const notificationMapData = data?.data?.map((item: NotificationItem) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread'
     }));

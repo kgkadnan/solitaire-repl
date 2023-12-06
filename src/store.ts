@@ -6,7 +6,6 @@ import {
 
 import { notificationSettingApi } from './features/api/notification-setting';
 import { savedSearchesApi } from './features/api/saved-searches';
-import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
 import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
@@ -15,7 +14,6 @@ import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
 import searchResultReducer from './features/search-result/search-result';
 import searchListReducer from './features/search/search-list';
-import previousSearchReducer from './features/previous-search/previous-search';
 import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
@@ -25,14 +23,12 @@ const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
-  previousSearch: previousSearchReducer,
   savedSearch: savedSearchReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [changePasswordApi.reducerPath]: changePasswordApi.reducer,
-  [previousSearchApi.reducerPath]: previousSearchApi.reducer,
   [notificationApi.reducerPath]: notificationApi.reducer,
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
@@ -46,7 +42,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
     middleware: getDefaultMiddleware =>
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
-        previousSearchApi.middleware,
         manageListingSequenceApi.middleware,
         changePasswordApi.middleware,
         downloadExcelApi.middleware,

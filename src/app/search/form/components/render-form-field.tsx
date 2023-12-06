@@ -1,4 +1,4 @@
-import { CustomRadioButton } from '@/components/common/buttons/radio-button';
+// import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import CustomImageTile from '@/components/common/image-tile';
 import { CustomInputField } from '@/components/common/input-field';
@@ -993,7 +993,7 @@ const renderContent = (
         </div>
         <div>
           <div style={{ margin: '10px' }}>
-            <CustomRadioButton
+            {/* <CustomRadioButton
               radioMetaData={{
                 name: 'steps',
                 handleChange: (data: string) => {
@@ -1018,7 +1018,7 @@ const renderContent = (
                 radioButtonStyle: styles.radioStyle,
                 radioLabelStyle: styles.radioLabel
               }}
-            />
+            /> */}
           </div>
           <div className={styles.filterSectionData}>
             {renderSelectionButtons(
@@ -1237,7 +1237,7 @@ const renderContent = (
           </div> */}
 
           <div style={{ margin: '10px' }}>
-            <CustomRadioButton
+            {/* <CustomRadioButton
               radioMetaData={{
                 name: 'steps',
                 handleChange: (data: string) => {
@@ -1262,7 +1262,7 @@ const renderContent = (
                 radioButtonStyle: styles.radioStyle,
                 radioLabelStyle: styles.radioLabel
               }}
-            />
+            /> */}
           </div>
 
           <div
