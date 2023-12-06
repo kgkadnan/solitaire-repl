@@ -27,6 +27,10 @@ import {
   MAX_SEARCH_TAB_LIMIT,
 } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
+import {
+  NEW_SEARCH,
+  SAVED_SEARCHES,
+} from '@/constants/application-constants/search-page';
 
 interface IMyProfileRoutes {
   id: number;
@@ -35,7 +39,7 @@ interface IMyProfileRoutes {
 }
 
 function SearchResultLayout() {
-  const subRoute = useSearchParams().get('route');
+  const subRoute = useSearchParams().get('query');
   const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
 
@@ -59,21 +63,25 @@ function SearchResultLayout() {
     {
       id: 1,
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'form',
+      path: `${NEW_SEARCH}`,
     },
     {
       id: 2,
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved',
+      path: `${SAVED_SEARCHES}`,
     },
   ]);
 
   const computeRouteAndComponentRenderer = () => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    if (subRoute === 'saved') return 'Saved Searches';
-    else if (subRoute === 'form') return 'New Search';
-    else if (subRoute !== 'saved' && subRoute !== 'form' && subRoute) {
+    if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
+    else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
+    else if (
+      subRoute !== `${SAVED_SEARCHES}` &&
+      subRoute !== `${NEW_SEARCH}` &&
+      subRoute
+    ) {
       let isRouteExist = yourSelection[parseInt(subRoute) - 3];
       if (isRouteExist === undefined) {
         return 'No Data Found';
@@ -127,13 +135,13 @@ function SearchResultLayout() {
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?route=form`);
+      router.push(`search?query=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?route=${removeDataIndex + 3}`);
+      router.push(`/search?query=${removeDataIndex + 3}`);
       setheaderPath(`Search Results ${removeDataIndex + 1}`);
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?route=${removeDataIndex + 2}`);
+      router.push(`/search?query=${removeDataIndex + 2}`);
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
@@ -234,7 +242,7 @@ function SearchResultLayout() {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    if (subRoute !== 'form' && subRoute !== 'saved')
+    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`)
       setActiveTab(parseInt(subRoute!) - 2);
   }, [subRoute]);
 
@@ -272,12 +280,12 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: ManageLocales('app.searchResult.header.newSearch'),
-              path: 'form',
+              path: `${NEW_SEARCH}`,
             },
             {
               id: 2,
               pathName: ManageLocales('app.savedSearch.header'),
-              path: 'saved',
+              path: `${SAVED_SEARCHES}`,
             },
           ]);
         }
@@ -305,7 +313,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?route=${subRoute}&edit=search-result`);
+    router.push(`/search?query=${subRoute}&edit=search-result`);
   };
 
   const handleCloseInputDialog = () => {
@@ -348,7 +356,7 @@ function SearchResultLayout() {
         <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
           {myProfileRoutes.map(({ id, pathName, path }: any) => {
             // Check if the current route matches the link's path
-            return path === 'form' || path === 'saved' ? (
+            return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}` ? (
               <Link
                 className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
                   headerPath === pathName
@@ -357,9 +365,9 @@ function SearchResultLayout() {
                 }`}
                 onClick={() => handleSearchTab(0, pathName)}
                 href={
-                  maxTab === MAX_SEARCH_TAB_LIMIT && path === 'form'
+                  maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
                     ? ``
-                    : `/search?route=${path}`
+                    : `/search?query=${path}`
                 }
                 key={id}
               >
@@ -385,7 +393,7 @@ function SearchResultLayout() {
                       : 'hover:text-solitaireQuaternary'
                   }`}
                   onClick={() => handleSearchTab(parseInt(path) - 2, pathName)}
-                  href={`/search?route=${path}`}
+                  href={`/search?query=${path}`}
                   key={id}
                 >
                   <div
@@ -413,7 +421,7 @@ function SearchResultLayout() {
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
           {headerPath === 'New Search' ||
-          editSubRoute === 'saved-search' ||
+          editSubRoute === `${SAVED_SEARCHES}` ||
           editSubRoute === 'search-result' ? (
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (

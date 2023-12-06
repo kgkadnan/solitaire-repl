@@ -29,6 +29,7 @@ import {
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
+import { NEW_SEARCH } from '@/constants/application-constants/search-page';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('route');
@@ -64,8 +65,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: '/search?route=form',
-      isActive: currentRoute === '/search' && subRoute === 'form',
+      link: `/search?query=${NEW_SEARCH}`,
+      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`,
     },
     {
       label: ManageLocales('app.topNav.myCart'),
@@ -95,7 +96,7 @@ export const TopNavigationBar = () => {
       (isSaved: any) => isSaved.isSavedSearch === false
     );
 
-    // if (data?.length && link !== '/search?route=form') {
+    // if (data?.length && link !== '/search?query=form') {
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
@@ -131,7 +132,7 @@ export const TopNavigationBar = () => {
         </>
       );
     }
-    // else if (data?.length && link === '/search?route=form') {
+    // else if (data?.length && link === '/search?query=form') {
     //   handleRoute(label, link);
     // }
     else {
