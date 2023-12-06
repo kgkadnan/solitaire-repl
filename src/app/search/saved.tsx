@@ -51,6 +51,10 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
+import {
+  SAVED_SEARCHES,
+  SEARCH_RESULT,
+} from '@/constants/application-constants/search-page';
 
 let optionLimits = [
   { id: 1, value: '50' },
@@ -467,7 +471,7 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?route=saved&edit=saved-search`);
+    router.push(`/search?query=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
   const handleCardClick = (id: string) => {
@@ -503,7 +507,7 @@ const SavedSearch = () => {
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?route=${data.length + 3}`);
+          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 1}`);
         }
       } else {
         let localStorageData = [
@@ -516,7 +520,7 @@ const SavedSearch = () => {
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?route=${3}`);
+        router.push(`/search?query=${SEARCH_RESULT}-${1}`);
       }
     }
   };

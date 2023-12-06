@@ -414,10 +414,10 @@ code also combines all the radio button data arrays into a single array called R
           </div>
 
           <div className={styles.radioButtonMainDiv}>
-            {RadioData.map((radioData, index) => {
+            {RadioData.map(radioData => {
               return (
                 <RadioButton
-                  key={index} // Ensure each component has a unique key
+                  key={radioData.id} // Ensure each component has a unique key
                   radioMetaData={radioData}
                 />
               );
