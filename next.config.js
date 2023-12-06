@@ -2,7 +2,7 @@
 const nextConfig = {
   webpack(config) {
     // Grab the existing rule that handles SVG imports
-    const fileLoaderRule = config.module.rules.find((rule) =>
+    const fileLoaderRule = config.module.rules.find(rule =>
       rule.test?.test?.('.svg')
     );
 
@@ -11,14 +11,14 @@ const nextConfig = {
       {
         ...fileLoaderRule,
         test: /\.svg$/i,
-        resourceQuery: { not: /url/ }, // exclude if *.svg?url
+        resourceQuery: { not: /url/ } // exclude if *.svg?url
       },
       // Convert all other *.svg imports to React components
       {
         test: /\.svg$/i,
         issuer: /\.[jt]sx?$/,
         resourceQuery: /url/, // *.svg?url
-        use: ['@svgr/webpack'],
+        use: ['@svgr/webpack']
       }
     );
 
@@ -29,14 +29,11 @@ const nextConfig = {
   },
   i18n: {
     locales: ['en', 'fr'],
-    defaultLocale: 'en',
+    defaultLocale: 'en'
   },
   images: {
-    domains: ['api.kgk.live', 'storageweweb.blob.core.windows.net'], // Add 'api.kgk.live' to the list of allowed domains
-  },
-  // typescript: {
-  //   ignoreBuildErrors: true,
-  // },
+    domains: ['api.kgk.live', 'storageweweb.blob.core.windows.net'] // Add 'api.kgk.live' to the list of allowed domains
+  }
 };
 
 module.exports = nextConfig;

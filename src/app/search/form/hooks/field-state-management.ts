@@ -151,7 +151,7 @@ const useFieldStateManagement = () => {
       pavilionAngleFrom,
       pavilionAngleTo,
       starLengthFrom,
-      starLengthTo,
+      starLengthTo
     },
     setState: {
       setSelectedShape,
@@ -225,12 +225,12 @@ const useFieldStateManagement = () => {
       setPavilionAngleFrom,
       setPavilionAngleTo,
       setStarLengthFrom,
-      setStarLengthTo,
+      setStarLengthTo
     },
     carat: {
       caratRangeData: caratRangeData,
-      setCaratRangeData: setCaratRangeData,
-    },
+      setCaratRangeData: setCaratRangeData
+    }
   };
 };
 export default useFieldStateManagement;

@@ -7,11 +7,11 @@ export const useCheckboxStateManagement = () => {
   return {
     checkboxState: {
       isCheck,
-      isCheckAll,
+      isCheckAll
     },
     checkboxSetState: {
       setIsCheck,
-      setIsCheckAll,
-    },
+      setIsCheckAll
+    }
   };
 };

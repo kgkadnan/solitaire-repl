@@ -17,7 +17,7 @@ export const useErrorStateManagement = () => {
       inputError,
       inputErrorContent,
       isSliderError,
-      sliderErrorText,
+      sliderErrorText
     },
     errorSetState: {
       setIsError,
@@ -25,7 +25,7 @@ export const useErrorStateManagement = () => {
       setInputError,
       setInputErrorContent,
       setIsSliderError,
-      setSliderErrorText,
-    },
+      setSliderErrorText
+    }
   };
 };

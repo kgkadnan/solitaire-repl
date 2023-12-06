@@ -24,10 +24,10 @@ const PreviousConfirmation = ({
   const { data: productData } = useGetProductDetailsQuery(
     {
       id,
-      singleExpand,
+      singleExpand
     },
     {
-      skip: !id,
+      skip: !id
     }
   );
 

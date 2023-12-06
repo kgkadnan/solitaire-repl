@@ -1,20 +1,20 @@
 import React from 'react';
 
-import { renderWithProviders } from '@/mock-handlers/test-utils';
+import { renderWithProviders } from '@/__tests__/mock-handlers/test-utils';
 import SearchResults from '@/app/search/result/result';
 import {
   fireEvent,
   logDOM,
   logRoles,
   screen,
-  waitFor,
+  waitFor
 } from '@testing-library/react';
-import { setupSetupSearchResultHandlers } from '@/mock-handlers/search-result';
+import { setupSetupSearchResultHandlers } from '@/__tests__/mock-handlers/search-result';
 
 describe('Render Search Result Page', () => {
   jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
   jest.mock('next/router', () => ({
-    usePathname: jest.fn().mockReturnValue('/mocked-path'),
+    usePathname: jest.fn().mockReturnValue('/mocked-path')
   }));
   // Common test setup
   beforeEach(() => {
@@ -55,7 +55,7 @@ describe('Render Search Result Page', () => {
             fullname: 'Emerald',
             id: '2',
             created_at: '2023-10-29T17:08:05.625Z',
-            updated_at: '2023-10-29T17:08:05.625Z',
+            updated_at: '2023-10-29T17:08:05.625Z'
           },
           cut: null,
           polish: 'EX',
@@ -116,8 +116,8 @@ describe('Render Search Result Page', () => {
           diamond_status: 'Active',
           in_cart: [
             {
-              id: 'item_01HFB690E6YXK9JEFH25FRK0BS',
-            },
+              id: 'item_01HFB690E6YXK9JEFH25FRK0BS'
+            }
           ],
           collection: null,
           images: [
@@ -127,8 +127,8 @@ describe('Render Search Result Page', () => {
               updated_at: '2023-10-31T15:49:58.791Z',
               deleted_at: null,
               url: 'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/7478304962.Jpeg',
-              metadata: null,
-            },
+              metadata: null
+            }
           ],
           options: [
             {
@@ -148,10 +148,10 @@ describe('Render Search Result Page', () => {
                   value: 'diamond',
                   option_id: 'opt_01HE36XX0PAWH7XR3N409ERAMT',
                   variant_id: 'variant_01HE36XX15BG1R5HW6TGCTQ4J6',
-                  metadata: null,
-                },
-              ],
-            },
+                  metadata: null
+                }
+              ]
+            }
           ],
           profiles: [
             {
@@ -161,8 +161,8 @@ describe('Render Search Result Page', () => {
               deleted_at: null,
               name: 'Default Shipping Profile',
               type: 'default',
-              metadata: null,
-            },
+              metadata: null
+            }
           ],
           tags: [],
           type: null,
@@ -200,8 +200,8 @@ describe('Render Search Result Page', () => {
                   value: 'diamond',
                   option_id: 'opt_01HE36XX0PAWH7XR3N409ERAMT',
                   variant_id: 'variant_01HE36XX15BG1R5HW6TGCTQ4J6',
-                  metadata: null,
-                },
+                  metadata: null
+                }
               ],
               prices: [
                 {
@@ -216,8 +216,8 @@ describe('Render Search Result Page', () => {
                   price_list_id: null,
                   region_id: null,
                   price_list: null,
-                  variant_id: 'variant_01HE36XX15BG1R5HW6TGCTQ4J6',
-                },
+                  variant_id: 'variant_01HE36XX15BG1R5HW6TGCTQ4J6'
+                }
               ],
               original_price: null,
               calculated_price: null,
@@ -225,14 +225,14 @@ describe('Render Search Result Page', () => {
               calculated_price_incl_tax: null,
               original_tax: null,
               calculated_tax: null,
-              tax_rates: null,
-            },
-          ],
-        },
+              tax_rates: null
+            }
+          ]
+        }
       ],
       count: 1,
       offset: 0,
-      limit: 300,
+      limit: 300
     };
     const refetch = jest.fn();
     const localStorageMock = {
@@ -245,11 +245,11 @@ describe('Render Search Result Page', () => {
               shape: ['EM'],
               clarity: ['SI1'],
               symmetry: ['VG'],
-              black_table: ['BPP'],
-            },
-          },
+              black_table: ['BPP']
+            }
+          }
         ])
-      ),
+      )
     };
     Object.defineProperty(window, 'localStorage', { value: localStorageMock });
     setupSetupSearchResultHandlers();

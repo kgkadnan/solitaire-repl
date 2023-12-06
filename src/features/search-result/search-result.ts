@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState: any = {
-  activeTab: '',
+const initialState = {
+  activeTab: ''
 };
 
 const searchResultSlice = createSlice({
@@ -8,11 +8,11 @@ const searchResultSlice = createSlice({
   initialState,
   reducers: {
     modifySearchResult: (state, { payload }) => {
-      let { activeTab } = payload;
+      const { activeTab } = payload;
       state.activeTab = activeTab;
       return state;
-    },
-  },
+    }
+  }
 });
 
 export const { modifySearchResult } = searchResultSlice.actions;

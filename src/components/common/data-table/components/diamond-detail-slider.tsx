@@ -17,7 +17,7 @@ import {
   inclusionDetailsLabelMapping,
   keyLabelMapping,
   measurementsLabelMapping,
-  otherInformationsLabelMapping,
+  otherInformationsLabelMapping
 } from '../lable-mapping';
 
 export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
@@ -28,20 +28,20 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   row,
   column,
   switchButtonTabs,
-  footerButtonData,
+  footerButtonData
 }) => {
   let currentPath = usePathname();
   const {
     sliderData,
     activeTab,
     diamondDetailImageUrl,
-    diamondDetailIframeUrl,
+    diamondDetailIframeUrl
   } = dataTableBodyState;
   const {
     setSliderData,
     setActiveTab,
     setDiamondDetailImageUrl,
-    setDiamondDetailIframeUrl,
+    setDiamondDetailIframeUrl
   } = dataTableBodySetState;
 
   return (
@@ -93,7 +93,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                               displayLabelStyle:
                                 activeTab === items.id
                                   ? styles.activeHeaderButtonStyle
-                                  : styles.headerButtonStyle,
+                                  : styles.headerButtonStyle
                             }}
                             handleClick={() =>
                               handleSwitchImageUrl(
@@ -145,7 +145,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                     )}
                   </div>
                   <div className="">
-                    {Object.keys(keyLabelMapping).map((key) => (
+                    {Object.keys(keyLabelMapping).map(key => (
                       <div key={key} className="text-solitaireTertiary py-1">
                         <span className="text-xs">{keyLabelMapping[key]}</span>
                         <br />
@@ -199,7 +199,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           'app.searchResult.slider.diamondDetail.basicDetails'
                         )} `}
                       </p>
-                      {Object.keys(basicDetailsLabelMapping).map((key) => (
+                      {Object.keys(basicDetailsLabelMapping).map(key => (
                         <div
                           key={key}
                           className="text-solitaireTertiary py-1 flex "
@@ -219,7 +219,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           'app.searchResult.slider.diamondDetail.measurements'
                         )} `}
                       </p>
-                      {Object.keys(measurementsLabelMapping).map((key) => (
+                      {Object.keys(measurementsLabelMapping).map(key => (
                         <div
                           key={key}
                           className="text-solitaireTertiary py-1 flex"
@@ -237,7 +237,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           'app.searchResult.slider.diamondDetail.inclusionDetails'
                         )} `}
                       </p>
-                      {Object.keys(inclusionDetailsLabelMapping).map((key) => (
+                      {Object.keys(inclusionDetailsLabelMapping).map(key => (
                         <div
                           key={key}
                           className="text-solitaireTertiary py-1 flex"
@@ -257,7 +257,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           'app.searchResult.slider.diamondDetail.otherInformations'
                         )} `}
                       </p>
-                      {Object.keys(otherInformationsLabelMapping).map((key) => (
+                      {Object.keys(otherInformationsLabelMapping).map(key => (
                         <div
                           key={key}
                           className="text-solitaireTertiary py-1 flex"

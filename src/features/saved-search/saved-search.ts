@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState: any = {};
+const initialState = {};
 
 const savedSearchSlice = createSlice({
   name: 'savedSearch',
@@ -8,8 +8,8 @@ const savedSearchSlice = createSlice({
     modifySavedSearch: (state, { payload }) => {
       state = payload;
       return state;
-    },
-  },
+    }
+  }
 });
 
 export const { modifySavedSearch } = savedSearchSlice.actions;

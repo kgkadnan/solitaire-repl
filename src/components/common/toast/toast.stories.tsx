@@ -6,9 +6,9 @@ const meta = {
   title: 'components/Toast',
   component: CustomToast,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomToast>;
 
 export default meta;
@@ -16,13 +16,13 @@ type Story = StoryObj<typeof meta>;
 
 export const ToastWithMessage: Story = {
   args: {
-    message: 'test',
-  },
+    message: 'test'
+  }
 };
 
 export const ToastWithMessageAndIcon: Story = {
   args: {
     message: 'test',
-    icon: Error,
-  },
+    icon: Error
+  }
 };

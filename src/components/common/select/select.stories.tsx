@@ -5,7 +5,7 @@ const meta: Meta<typeof CustomSelect> = {
   title: 'components/Select',
   component: CustomSelect,
 
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomSelect>;
 
 export default meta;
@@ -17,12 +17,12 @@ export const Primary: Story = {
     data: [
       { id: 1, value: 'Dubai' },
       { id: 2, value: 'India' },
-      { id: 3, value: 'Belgium' },
+      { id: 3, value: 'Belgium' }
     ],
     style: {
       selectContent: 'w-[20px]',
-      selectTrigger: '',
+      selectTrigger: ''
     },
-    placeholder: 'Select an Option',
-  },
+    placeholder: 'Select an Option'
+  }
 };

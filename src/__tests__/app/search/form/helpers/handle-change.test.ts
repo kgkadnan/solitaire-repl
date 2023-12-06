@@ -4,7 +4,7 @@ describe('handleFilterChange', () => {
   test('should add and remove filters correctly', () => {
     // Initial state
     let selectedFilters = ['filter1', 'filter2'];
-    
+
     // Mock setSelectedFilters function
     const setSelectedFilters = jest.fn();
 

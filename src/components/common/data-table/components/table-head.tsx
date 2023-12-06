@@ -7,7 +7,7 @@ export const TableHead: React.FC<ITheadProps> = ({
   selectionAllowed,
   checkboxData,
   tableCol,
-  rows,
+  rows
 }) => {
   const { checkboxState, checkboxSetState } = checkboxData ?? {};
   const { isCheckAll } = checkboxState ?? {};
@@ -25,7 +25,7 @@ export const TableHead: React.FC<ITheadProps> = ({
                     setIsCheckAll,
                     isCheckAll,
                     setIsCheck,
-                    data: rows,
+                    data: rows
                   })
                 }
                 data-testid={'Select All Checkbox'}
@@ -41,7 +41,7 @@ export const TableHead: React.FC<ITheadProps> = ({
             className={`${styles.tableHead}`}
             style={{
               left: `${index === 0 && selectionAllowed ? '45px' : '0px'}`,
-              position: `${index === 0 ? 'sticky' : 'static'}`,
+              position: `${index === 0 ? 'sticky' : 'static'}`
             }}
           >
             {column.label}

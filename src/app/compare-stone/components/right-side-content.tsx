@@ -14,7 +14,7 @@ export function RightSideContent({
   handleClick,
   handleClose,
   setIsError,
-  setErrorText,
+  setErrorText
 }: IRightSideContentProps) {
   return (
     <>
@@ -38,7 +38,7 @@ export function RightSideContent({
               </div>
               <div
                 className={styles.closeButton}
-                onClick={(event) =>
+                onClick={event =>
                   compareStoneData.length > 2
                     ? handleClose(event, items.id)
                     : (setIsError(true),
@@ -68,10 +68,10 @@ export function RightSideContent({
               </div>
             </div>
             {!showDifferences
-              ? Object.keys(keyLabelMapping).map((key) => (
+              ? Object.keys(keyLabelMapping).map(key => (
                   <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
                 ))
-              : Object.keys(compareValues).map((key) => (
+              : Object.keys(compareValues).map(key => (
                   <div key={key}>{key !== 'id' ? diamond[key] || '-' : ''}</div>
                 ))}
           </div>

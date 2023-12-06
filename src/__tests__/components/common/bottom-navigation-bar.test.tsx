@@ -14,10 +14,10 @@ describe('bottom-Navigation-Bar Component', () => {
       'About Us',
       'Contact Us',
       'Privacy Policy',
-      'Terms & Conditions',
+      'Terms & Conditions'
     ];
 
-    labels.forEach((label) => {
+    labels.forEach(label => {
       expect(screen.getByText(new RegExp(label))).toBeInTheDocument();
     });
 
@@ -28,14 +28,14 @@ describe('bottom-Navigation-Bar Component', () => {
 
   test('handles button clicks and navigation', () => {
     const buttons = screen.getAllByRole('button', {
-      name: /about us|contact us|privacy policy|terms & conditions/i,
+      name: /about us|contact us|privacy policy|terms & conditions/i
     });
 
     // Simulate button clicks and verify navigation
-    buttons.forEach((button) => {
+    buttons.forEach(button => {
       fireEvent.click(button);
       expect(mockRouter).toMatchObject({
-        asPath: /about us|contact us|privacy policy|terms & conditions/i,
+        asPath: /about us|contact us|privacy policy|terms & conditions/i
       });
     });
   });

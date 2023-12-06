@@ -31,7 +31,7 @@ export const FILE_URLS = {
   CERT_FILE:
     'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/Cert/***.jpeg',
   VIDEO_FILE:
-    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***&autoPlay=1',
+    'https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/V360Mini5/Vision360.html?d=***&autoPlay=1'
 };
 
 export const GIA_LINK = 'https://www.gia.edu/report-check?reportno=';

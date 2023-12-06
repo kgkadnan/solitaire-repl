@@ -2,7 +2,7 @@ import {
   IErrorSetState,
   IModalSetState,
   Product,
-  TableColumn,
+  TableColumn
 } from '@/app/search/result/result-interface';
 import { Dispatch, SetStateAction } from 'react';
 import { ICheckboxSetState, ICheckboxState } from '../checkbox/interface';

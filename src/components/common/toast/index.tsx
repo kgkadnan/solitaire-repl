@@ -12,7 +12,7 @@ interface ICustomToast {
 }
 export const CustomToast: React.FC<ICustomToast> = ({
   message,
-  icon = Error,
+  icon = Error
 }) => {
   const notify = useCallback(
     () =>
@@ -26,7 +26,7 @@ export const CustomToast: React.FC<ICustomToast> = ({
           bodyClassName: style.toastCloseButton,
           closeButton: false,
           hideProgressBar: true,
-          icon: icon,
+          icon: icon
         }
       ),
     [icon, message]

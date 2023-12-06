@@ -6,21 +6,20 @@ export const changePasswordApi = createApi({
   reducerPath: 'changePasswordReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
-   
+    credentials: 'include'
   }),
   tagTypes: ['changePassword'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     ChangePassword: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `change-password`,
         method: 'POST',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['changePassword'],
-    }),
-  }),
+      invalidatesTags: ['changePassword']
+    })
+  })
 });
 
 export const { useChangePasswordMutation } = changePasswordApi;

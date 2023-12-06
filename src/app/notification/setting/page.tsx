@@ -7,19 +7,19 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import { formatCassing } from '@/utils/format-cassing';
 import {
   useGetAllNotificationSettingQuery,
-  useUpdateNotificationSettingMutation,
+  useUpdateNotificationSettingMutation
 } from '@/features/api/notification-setting';
 import { INotificationSetting } from './setting-interface';
 import { NOTIFICATION_TYPE } from '@/constants/business-logic';
 
 const NotificationSetting = () => {
   const { data } = useGetAllNotificationSettingQuery({
-    type: NOTIFICATION_TYPE,
+    type: NOTIFICATION_TYPE
   });
   const [updateNotificationSetting] = useUpdateNotificationSettingMutation();
   const [settings, setSettings] = useState<INotificationSetting>({
     type: '',
-    subscription: [],
+    subscription: []
   });
 
   useEffect(() => {
@@ -28,18 +28,18 @@ const NotificationSetting = () => {
 
   const toggleHandler = async (category: string) => {
     // Toggle the individual setting
-    setSettings((prevSettings) => {
+    setSettings(prevSettings => {
       const updatedSettings = {
         ...prevSettings,
-        subscription: prevSettings.subscription.map((setting) => {
+        subscription: prevSettings.subscription.map(setting => {
           if (setting.category === category) {
             return {
               ...setting,
-              is_subscribed: !setting.is_subscribed,
+              is_subscribed: !setting.is_subscribed
             };
           }
           return setting;
-        }),
+        })
       };
 
       updateNotificationSetting(updatedSettings);
@@ -50,7 +50,7 @@ const NotificationSetting = () => {
 
   return (
     <div className={styles.notificationSettingContainer}>
-      {settings?.subscription?.map((setting) => {
+      {settings?.subscription?.map(setting => {
         const key = setting?.category;
         return (
           <div key={key} className="border-b border-solitaireSenary">
@@ -72,7 +72,7 @@ const NotificationSetting = () => {
                   overriddenStyles={{
                     label: setting.is_subscribed
                       ? styles.toggleOn
-                      : styles.toggleOff,
+                      : styles.toggleOff
                   }}
                 />
               </div>

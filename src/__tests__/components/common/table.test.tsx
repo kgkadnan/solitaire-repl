@@ -7,8 +7,8 @@ describe('CustomTable component', () => {
     tableHeads: ['Name', 'Age', 'City'],
     bodyData: [
       { Name: 'John', Age: 25, City: 'New York' },
-      { Name: 'Jane', Age: 30, City: 'Los Angeles' },
-    ],
+      { Name: 'Jane', Age: 30, City: 'Los Angeles' }
+    ]
   };
 
   // Common test setup
@@ -18,7 +18,7 @@ describe('CustomTable component', () => {
         tableData={sampleTableData}
         tableStyleClasses={{
           tableHeaderStyle: 'custom-header-style',
-          tableBodyStyle: 'custom-body-style',
+          tableBodyStyle: 'custom-body-style'
         }}
       />
     );
@@ -26,19 +26,19 @@ describe('CustomTable component', () => {
 
   test('renders CustomTable component correctly', () => {
     // Check if table headers and body data are rendered
-    const tableHeaders = sampleTableData.tableHeads.map((header) =>
+    const tableHeaders = sampleTableData.tableHeads.map(header =>
       screen.getByText(header)
     );
-    const tableBodyCells = sampleTableData.bodyData.map((data) =>
-      Object.values(data).map((value) => screen.getByText(value.toString()))
+    const tableBodyCells = sampleTableData.bodyData.map(data =>
+      Object.values(data).map(value => screen.getByText(value.toString()))
     );
 
-    tableHeaders.forEach((header) => {
+    tableHeaders.forEach(header => {
       expect(header).toBeInTheDocument();
     });
 
-    tableBodyCells.forEach((cellRow) => {
-      cellRow.forEach((cell) => {
+    tableBodyCells.forEach(cellRow => {
+      cellRow.forEach(cell => {
         expect(cell).toBeInTheDocument();
       });
     });
@@ -46,19 +46,19 @@ describe('CustomTable component', () => {
 
   test('applies tableHeaderStyle and tableBodyStyle classes', () => {
     // Check if table headers have the custom-header-style class
-    const tableHeaders = sampleTableData.tableHeads.map((header) =>
+    const tableHeaders = sampleTableData.tableHeads.map(header =>
       screen.getByText(header)
     );
-    tableHeaders.forEach((header) => {
+    tableHeaders.forEach(header => {
       expect(header).toHaveClass('custom-header-style');
     });
 
     // Check if table body cells have the custom-body-style class
-    const tableBodyCells = sampleTableData.bodyData.map((data) =>
-      Object.values(data).map((value) => screen.getByText(value.toString()))
+    const tableBodyCells = sampleTableData.bodyData.map(data =>
+      Object.values(data).map(value => screen.getByText(value.toString()))
     );
-    tableBodyCells.forEach((cellRow) => {
-      cellRow.forEach((cell) => {
+    tableBodyCells.forEach(cellRow => {
+      cellRow.forEach(cell => {
         expect(cell).toHaveClass('custom-body-style');
       });
     });

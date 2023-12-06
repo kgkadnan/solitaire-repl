@@ -18,7 +18,7 @@ export const useDataTableStateManagement = () => {
       sliderData,
       activeTab,
       diamondDetailImageUrl,
-      diamondDetailIframeUrl,
+      diamondDetailIframeUrl
     },
     dataTableSetState: {
       setRows,
@@ -26,7 +26,7 @@ export const useDataTableStateManagement = () => {
       setSliderData,
       setActiveTab,
       setDiamondDetailImageUrl,
-      setDiamondDetailIframeUrl,
-    },
+      setDiamondDetailIframeUrl
+    }
   };
 };

@@ -16,7 +16,7 @@ import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
   MAX_COMPARE_STONE,
-  MIN_COMPARE_STONE,
+  MIN_COMPARE_STONE
 } from '@/constants/business-logic';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import Image from 'next/image';
@@ -68,7 +68,7 @@ const ActiveMyCart = () => {
   // Data for Custom Data Table checkboxes
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   // Handle the comparison of selected stones
@@ -85,8 +85,8 @@ const ActiveMyCart = () => {
     } else {
       // Get the data of selected stones and open a new window for comparison
       const compareStones = isCheck
-        .map((id) => data.items.find((row: any) => row.product.id === id))
-        .map((stone) => stone.product);
+        .map(id => data.items.find((row: any) => row.product.id === id))
+        .map(stone => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
 
@@ -108,14 +108,14 @@ const ActiveMyCart = () => {
             <CustomDisplayButton
               displayButtonLabel="NO"
               displayButtonAllStyle={{
-                displayButtonStyle: `mr-[25px] ${styles.transparent}`,
+                displayButtonStyle: `mr-[25px] ${styles.transparent}`
               }}
               handleClick={() => setIsDialogOpen(false)}
             />
             <CustomDisplayButton
               displayButtonLabel="Yes"
               displayButtonAllStyle={{
-                displayButtonStyle: styles.filled,
+                displayButtonStyle: styles.filled
               }}
               handleClick={deleteStoneHandler}
             />
@@ -130,13 +130,13 @@ const ActiveMyCart = () => {
 
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
-    let itemsId = isCheck.map((id) => {
+    let itemsId = isCheck.map(id => {
       const selectedRow = data.items.find((row: any) => row.product.id === id);
       return selectedRow?.id;
     });
 
     deleteCart({
-      items: itemsId,
+      items: itemsId
     })
       .unwrap()
       .then(() => {
@@ -154,7 +154,7 @@ const ActiveMyCart = () => {
         );
         setIsDialogOpen(true);
       })
-      .catch((error) => {
+      .catch(error => {
         console.log('error', error);
       });
     setIsDialogOpen(false);
@@ -178,7 +178,7 @@ const ActiveMyCart = () => {
         setIsDialogOpen,
         setIsCheck,
         setIsCheckAll,
-        setIsError,
+        setIsError
       });
     }
   };
@@ -196,35 +196,35 @@ const ActiveMyCart = () => {
           dropdownMenu={[
             {
               label: 'Share',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Download Excel',
-              fn: downloadExcelFunction,
+              fn: downloadExcelFunction
             },
             {
               label: 'Find Matching Pair',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Compare Stone',
-              fn: handleCompareStone,
-            },
+              fn: handleCompareStone
+            }
           ]}
         />
-      ),
+      )
     },
     {
       id: 2,
       displayButtonLabel: 'Book Appointment',
       style: styles.transparent,
-      fn: handleAppointment,
+      fn: handleAppointment
     },
     {
       id: 2,
       displayButtonLabel: 'Delete',
       style: styles.transparent,
-      fn: handleDelete,
+      fn: handleDelete
     },
     {
       id: 3,
@@ -238,8 +238,8 @@ const ActiveMyCart = () => {
           setIsError,
           setIsSliderOpen,
           setConfirmStoneData
-        ),
-    },
+        )
+    }
   ];
 
   // Handle change in the slider's open state
@@ -251,7 +251,7 @@ const ActiveMyCart = () => {
   // Effect hook to update table columns when they change
   useEffect(() => {
     setTableColumns(cartTableColumns);
-  }, [cartTableColumns]);
+  }, [cartTableColumns, setTableColumns]);
 
   // Effect hook to update rows when cart data changes
   useEffect(() => {
@@ -266,7 +266,7 @@ const ActiveMyCart = () => {
     };
 
     updateRows();
-  }, [data]);
+  }, [data, setRows]);
 
   return (
     <>

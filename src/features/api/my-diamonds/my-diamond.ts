@@ -1,7 +1,7 @@
 import {
   createApi,
   fetchBaseQuery,
-  BaseQueryFn,
+  BaseQueryFn
 } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,10 +13,10 @@ export const myDiamondAPI = createApi({
   reducerPath: 'recentConfirmationReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }) as BaseQuery,
   tagTypes: ['myDiamond'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     cardRecentConfirmation: builder.query({
       query: ({
         resentConfiramtionStatus,
@@ -24,32 +24,32 @@ export const myDiamondAPI = createApi({
         paymentStatus,
         fields,
         expand,
-        dateSearchUrl,
+        dateSearchUrl
       }) =>
         `/store/customers/me/orders?status=${resentConfiramtionStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}&${dateSearchUrl}`,
-      providesTags: ['myDiamond'],
+      providesTags: ['myDiamond']
     }),
     getProductDetails: builder.query({
       query: ({ id, singleExpand }) =>
         `/store/orders/${id}?expand=${singleExpand}`,
-      providesTags: ['myDiamond'],
+      providesTags: ['myDiamond']
     }),
     cardMyInvoice: builder.query({
       query: ({ myDiamondStatus, invoiceStatus, dateSearchUrl }) =>
         `/store/customers/me/orders?status=${myDiamondStatus}&invoice_status=${invoiceStatus}&${dateSearchUrl}`,
-      providesTags: ['myDiamond'],
+      providesTags: ['myDiamond']
     }),
     cardPreviousConfirmation: builder.query({
       query: ({ limit, offset, previousConfirmStatus, dateSearchUrl }) =>
         `/store/customers/me/orders?limit=${limit}&offset=${offset}&status=${previousConfirmStatus}&${dateSearchUrl}`,
-      providesTags: ['myDiamond'],
-    }),
-  }),
+      providesTags: ['myDiamond']
+    })
+  })
 });
 
 export const {
   useCardRecentConfirmationQuery,
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
-  useGetProductDetailsQuery,
+  useGetProductDetailsQuery
 } = myDiamondAPI;

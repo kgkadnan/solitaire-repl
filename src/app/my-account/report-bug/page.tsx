@@ -30,17 +30,17 @@ const ReportBug = () => {
       label: ManageLocales('app.myaccount.reportBug.report'),
       fn: report,
       selectionButtonAllStyles: {
-        selectionButtonStyle: styles.filled,
-      },
+        selectionButtonStyle: styles.filled
+      }
     },
     {
       id: '2',
       label: ManageLocales('app.myaccount.reportBug.reset'),
       fn: reset,
       selectionButtonAllStyles: {
-        selectionButtonStyle: styles.transparent,
-      },
-    },
+        selectionButtonStyle: styles.transparent
+      }
+    }
   ];
 
   return (

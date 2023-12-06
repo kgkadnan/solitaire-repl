@@ -2,7 +2,7 @@ import {
   IErrorSetState,
   IErrorState,
   Product,
-  TableColumn,
+  TableColumn
 } from '@/app/search/result/result-interface';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 

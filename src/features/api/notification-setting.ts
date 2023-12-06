@@ -5,32 +5,31 @@ export const notificationSettingApi = createApi({
   reducerPath: 'notificationSettingReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
-   
+    credentials: 'include'
   }),
   tagTypes: ['notificationSetting'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllNotificationSetting: builder.query({
-      query: (args) => ({
+      query: args => ({
         url: `store/subscription`,
         method: 'GET',
-        params: { ...args },
+        params: { ...args }
       }),
-      providesTags: ['notificationSetting'],
+      providesTags: ['notificationSetting']
     }),
     updateNotificationSetting: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `store/manage-subscription`,
         method: 'PUT', // Use the appropriate HTTP method
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['notificationSetting'],
-    }),
-  }),
+      invalidatesTags: ['notificationSetting']
+    })
+  })
 });
 
 export const {
   useGetAllNotificationSettingQuery,
-  useUpdateNotificationSettingMutation,
+  useUpdateNotificationSettingMutation
 } = notificationSettingApi;

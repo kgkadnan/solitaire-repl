@@ -25,7 +25,7 @@ const useValidationStateManagement = () => {
   const [errors, setErrors] = useState<Errors>({
     discount: { from: null, to: null },
     price_range: { from: null, to: null },
-    price_per_carat: { from: null, to: null },
+    price_per_carat: { from: null, to: null }
     // Add more input groups here if needed
   });
 
@@ -59,7 +59,7 @@ const useValidationStateManagement = () => {
     inputErrorContent,
     setInputErrorContent,
     saveSearchName,
-    setSaveSearchName,
+    setSaveSearchName
   };
 };
 

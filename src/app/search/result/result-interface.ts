@@ -1,6 +1,6 @@
 import {
   ICheckboxSetState,
-  ICheckboxState,
+  ICheckboxState
 } from '@/components/common/checkbox/interface';
 import { IConfirmStoneSetState } from '@/components/common/confirm-stone/interface';
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';

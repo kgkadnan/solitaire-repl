@@ -27,7 +27,7 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
   onChange,
   placeholder,
   suggestions,
-  handleSuggestionClick,
+  handleSuggestionClick
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
@@ -36,12 +36,12 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
     if (event.key === 'ArrowDown') {
       event.preventDefault();
       setSelectedSuggestionIndex(
-        (prevIndex) => (prevIndex + 1) % suggestions?.length
+        prevIndex => (prevIndex + 1) % suggestions?.length
       );
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
       setSelectedSuggestionIndex(
-        (prevIndex) => (prevIndex - 1 + suggestions.length) % suggestions.length
+        prevIndex => (prevIndex - 1 + suggestions.length) % suggestions.length
       );
     } else if (event.key === 'Enter') {
       event.preventDefault();

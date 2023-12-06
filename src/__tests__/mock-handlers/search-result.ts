@@ -5,14 +5,14 @@ import { server } from '.';
 
 const searchResultHandler = [
   rest.get('/customer-manage-listing-sequence', (req, res, ctx) => {
-    let listingColumns = [
+    const listingColumns = [
       {
         label: 'Stock No',
         accessor: 'lot_id',
         sequence: 1,
         is_fixed: true,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ6XD0G39M0EN687CK2',
+        id: 'cus_ma-lis-seq_01HF9GYYZ6XD0G39M0EN687CK2'
       },
       {
         label: 'Details',
@@ -20,7 +20,7 @@ const searchResultHandler = [
         sequence: 2,
         is_fixed: true,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ6S7M6AHY61CG90VXQ',
+        id: 'cus_ma-lis-seq_01HF9GYYZ6S7M6AHY61CG90VXQ'
       },
       {
         label: 'Shape',
@@ -28,7 +28,7 @@ const searchResultHandler = [
         sequence: 3,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ66EN9QCVM94SXAQQJ',
+        id: 'cus_ma-lis-seq_01HF9GYYZ66EN9QCVM94SXAQQJ'
       },
       {
         label: 'CSI',
@@ -36,7 +36,7 @@ const searchResultHandler = [
         sequence: 6,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ6W60FCCYSGQ8P2DKQ',
+        id: 'cus_ma-lis-seq_01HF9GYYZ6W60FCCYSGQ8P2DKQ'
       },
       {
         label: 'Carat',
@@ -44,7 +44,7 @@ const searchResultHandler = [
         sequence: 7,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ68CT77SBFSBQ88M6H',
+        id: 'cus_ma-lis-seq_01HF9GYYZ68CT77SBFSBQ88M6H'
       },
       {
         label: 'Clarity',
@@ -52,7 +52,7 @@ const searchResultHandler = [
         sequence: 8,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ6NVD1SE5FJF68ZVVS',
+        id: 'cus_ma-lis-seq_01HF9GYYZ6NVD1SE5FJF68ZVVS'
       },
       {
         label: 'Discount%',
@@ -60,7 +60,7 @@ const searchResultHandler = [
         sequence: 9,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ6B8NJAAWS2AMBWT0C',
+        id: 'cus_ma-lis-seq_01HF9GYYZ6B8NJAAWS2AMBWT0C'
       },
       {
         label: 'Price/Carat',
@@ -68,7 +68,7 @@ const searchResultHandler = [
         sequence: 10,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ75RAGA2ZX1XR4Y12V',
+        id: 'cus_ma-lis-seq_01HF9GYYZ75RAGA2ZX1XR4Y12V'
       },
       {
         label: 'Amount($)',
@@ -76,7 +76,7 @@ const searchResultHandler = [
         sequence: 11,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ71HVAAYPRJA8132KE',
+        id: 'cus_ma-lis-seq_01HF9GYYZ71HVAAYPRJA8132KE'
       },
       {
         label: 'Cut',
@@ -84,7 +84,7 @@ const searchResultHandler = [
         sequence: 12,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ7RZDRTD3TE2M5EMRY',
+        id: 'cus_ma-lis-seq_01HF9GYYZ7RZDRTD3TE2M5EMRY'
       },
       {
         label: 'Polish.',
@@ -92,7 +92,7 @@ const searchResultHandler = [
         sequence: 13,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ7CSR19Z297Z1ZDC67',
+        id: 'cus_ma-lis-seq_01HF9GYYZ7CSR19Z297Z1ZDC67'
       },
       {
         label: 'Symmetry.',
@@ -100,7 +100,7 @@ const searchResultHandler = [
         sequence: 14,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ7YP19ZCTJZVHAFQPD',
+        id: 'cus_ma-lis-seq_01HF9GYYZ7YP19ZCTJZVHAFQPD'
       },
       {
         label: 'FLS',
@@ -108,7 +108,7 @@ const searchResultHandler = [
         sequence: 15,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ795R2YSP618J3T2Z2',
+        id: 'cus_ma-lis-seq_01HF9GYYZ795R2YSP618J3T2Z2'
       },
       {
         label: 'Ratio',
@@ -116,7 +116,7 @@ const searchResultHandler = [
         sequence: 16,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ7VM4T24BTXHC4WCPK',
+        id: 'cus_ma-lis-seq_01HF9GYYZ7VM4T24BTXHC4WCPK'
       },
       {
         label: 'LAB',
@@ -124,7 +124,7 @@ const searchResultHandler = [
         sequence: 17,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ7J9J467TFG6MN83VF',
+        id: 'cus_ma-lis-seq_01HF9GYYZ7J9J467TFG6MN83VF'
       },
       {
         label: 'Location',
@@ -132,7 +132,7 @@ const searchResultHandler = [
         sequence: 18,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ83CSW7FGDYR2M156K',
+        id: 'cus_ma-lis-seq_01HF9GYYZ83CSW7FGDYR2M156K'
       },
       {
         label: 'RAP($)',
@@ -140,7 +140,7 @@ const searchResultHandler = [
         sequence: 19,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ84ENFJ4XT4S4HZ920',
+        id: 'cus_ma-lis-seq_01HF9GYYZ84ENFJ4XT4S4HZ920'
       },
       {
         label: 'TBL%',
@@ -148,7 +148,7 @@ const searchResultHandler = [
         sequence: 20,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8AZRKE3P4ESY9Y72W',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8AZRKE3P4ESY9Y72W'
       },
       {
         label: 'DEP%',
@@ -156,7 +156,7 @@ const searchResultHandler = [
         sequence: 21,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8JG204MAFYRDF84R6',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8JG204MAFYRDF84R6'
       },
       {
         label: 'Length',
@@ -164,7 +164,7 @@ const searchResultHandler = [
         sequence: 22,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8JPKZMRJ24C35YSAP',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8JPKZMRJ24C35YSAP'
       },
       {
         label: 'Width',
@@ -172,7 +172,7 @@ const searchResultHandler = [
         sequence: 23,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8NMSF8P1XRRSQ1BTJ',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8NMSF8P1XRRSQ1BTJ'
       },
       {
         label: 'Depth',
@@ -180,7 +180,7 @@ const searchResultHandler = [
         sequence: 24,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8244ZDZ41WBXTAJ7S',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8244ZDZ41WBXTAJ7S'
       },
       {
         label: 'Milky',
@@ -188,7 +188,7 @@ const searchResultHandler = [
         sequence: 25,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ8BW3JMYB916XTFE0Z',
+        id: 'cus_ma-lis-seq_01HF9GYYZ8BW3JMYB916XTFE0Z'
       },
       {
         label: 'Luster',
@@ -196,7 +196,7 @@ const searchResultHandler = [
         sequence: 26,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9ACR7CQ6WN32Q3C36',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9ACR7CQ6WN32Q3C36'
       },
       {
         label: 'TB',
@@ -204,7 +204,7 @@ const searchResultHandler = [
         sequence: 27,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9FVZKSZNVYMT80BSR',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9FVZKSZNVYMT80BSR'
       },
       {
         label: 'SB',
@@ -212,7 +212,7 @@ const searchResultHandler = [
         sequence: 28,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9BK8JNTKXGZ7HXTGK',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9BK8JNTKXGZ7HXTGK'
       },
       {
         label: 'TI',
@@ -220,7 +220,7 @@ const searchResultHandler = [
         sequence: 29,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9JMTZRGGFE6SNVPWN',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9JMTZRGGFE6SNVPWN'
       },
       {
         label: 'SI',
@@ -228,7 +228,7 @@ const searchResultHandler = [
         sequence: 30,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9QAWC63KNSTZ2TJER',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9QAWC63KNSTZ2TJER'
       },
       {
         label: 'Girdle',
@@ -236,7 +236,7 @@ const searchResultHandler = [
         sequence: 31,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ91M6D42RXKMRA002R',
+        id: 'cus_ma-lis-seq_01HF9GYYZ91M6D42RXKMRA002R'
       },
       {
         label: 'Culet',
@@ -244,7 +244,7 @@ const searchResultHandler = [
         sequence: 32,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ983FVA5AC8AW8GQF4',
+        id: 'cus_ma-lis-seq_01HF9GYYZ983FVA5AC8AW8GQF4'
       },
       {
         label: 'C/A',
@@ -252,7 +252,7 @@ const searchResultHandler = [
         sequence: 33,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ9PP12A2Y20QX3A19E',
+        id: 'cus_ma-lis-seq_01HF9GYYZ9PP12A2Y20QX3A19E'
       },
       {
         label: 'C/H',
@@ -260,7 +260,7 @@ const searchResultHandler = [
         sequence: 34,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZ97CJMJ2GTA24AGRWF',
+        id: 'cus_ma-lis-seq_01HF9GYYZ97CJMJ2GTA24AGRWF'
       },
       {
         label: 'P/A',
@@ -268,7 +268,7 @@ const searchResultHandler = [
         sequence: 35,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZAF2KAX3Q08G5MXAVB',
+        id: 'cus_ma-lis-seq_01HF9GYYZAF2KAX3Q08G5MXAVB'
       },
       {
         label: 'P/D',
@@ -276,7 +276,7 @@ const searchResultHandler = [
         sequence: 36,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZAD584JQZJTMYCN3BJ',
+        id: 'cus_ma-lis-seq_01HF9GYYZAD584JQZJTMYCN3BJ'
       },
       {
         label: 'H&A',
@@ -284,7 +284,7 @@ const searchResultHandler = [
         sequence: 37,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZATWPKT3PP7SQDEW7F',
+        id: 'cus_ma-lis-seq_01HF9GYYZATWPKT3PP7SQDEW7F'
       },
       {
         label: 'Comments',
@@ -292,7 +292,7 @@ const searchResultHandler = [
         sequence: 38,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZADW9CSSBC374WX62F',
+        id: 'cus_ma-lis-seq_01HF9GYYZADW9CSSBC374WX62F'
       },
       {
         label: 'Key to Symbols',
@@ -300,7 +300,7 @@ const searchResultHandler = [
         sequence: 39,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZAFX0KK6NRH1001ECG',
+        id: 'cus_ma-lis-seq_01HF9GYYZAFX0KK6NRH1001ECG'
       },
       {
         label: 'Tracr Id',
@@ -308,12 +308,12 @@ const searchResultHandler = [
         sequence: 40,
         is_fixed: false,
         is_disabled: false,
-        id: 'cus_ma-lis-seq_01HF9GYYZAD5JXX8WKXSP6ZPQG',
-      },
+        id: 'cus_ma-lis-seq_01HF9GYYZAD5JXX8WKXSP6ZPQG'
+      }
     ];
 
     return res(ctx.json(listingColumns));
-  }),
+  })
 ];
 
 export const setupSetupSearchResultHandlers = () => {
