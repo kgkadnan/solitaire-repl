@@ -5,7 +5,7 @@ import { server } from '.';
 
 const searchResultHandler = [
   rest.get('/customer-manage-listing-sequence', (req, res, ctx) => {
-    let listingColumns = [
+    const listingColumns = [
       {
         label: 'Stock No',
         accessor: 'lot_id',

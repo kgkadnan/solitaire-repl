@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState: any = {
+const initialState = {
   status: false
 };
 

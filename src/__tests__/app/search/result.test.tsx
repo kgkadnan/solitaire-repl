@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { renderWithProviders } from '@/mock-handlers/test-utils';
+import { renderWithProviders } from '@/__tests__/mock-handlers/test-utils';
 import SearchResults from '@/app/search/result/result';
 import {
   fireEvent,
@@ -9,7 +9,7 @@ import {
   screen,
   waitFor
 } from '@testing-library/react';
-import { setupSetupSearchResultHandlers } from '@/mock-handlers/search-result';
+import { setupSetupSearchResultHandlers } from '@/__tests__/mock-handlers/search-result';
 
 describe('Render Search Result Page', () => {
   jest.mock('next/navigation', () => jest.requireActual('next-router-mock'));
