@@ -14,6 +14,7 @@ import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import { CustomSelect } from '@/components/common/select';
+import { RadioButton } from '@/components/common/custom-input-radio';
 
 const renderContent = (
   carat: any,
@@ -340,9 +341,6 @@ const renderContent = (
     setSelectedCulet(data);
   };
 
-  const handleGirdleChange = (data: string) => {
-    handleFilterChange(data, selectedGirdle, setSelectedGirdle);
-  };
   const handleKeyToSymbolChange = (comment: string) => {
     if (comment.toLowerCase() === 'all') {
       setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
@@ -421,6 +419,29 @@ const renderContent = (
       setCaratRangeTo('');
     }
   };
+
+  let RadioData = [
+    {
+      name: 'steps',
+      onChange: (data: string) => {
+        setSelectedStep(data);
+      },
+      id: '1',
+      value: 'Contains',
+      label: 'Contains',
+      checked: selectedStep == 'Contains'
+    },
+    {
+      name: 'steps',
+      onChange: (data: string) => {
+        setSelectedStep(data);
+      },
+      id: '2',
+      value: 'Does not contains',
+      label: 'Does not contains',
+      checked: selectedStep == 'Does not contains'
+    }
+  ];
 
   const handleValidate = (
     key: keyof Errors,
@@ -1003,13 +1024,17 @@ const renderContent = (
                   {
                     id: '1',
                     value: 'Contains',
-                    radioButtonLabel: 'Contains',
+                    radioButtonLabel: ManageLocales(
+                      'app.advanceSearch.radioLabel1'
+                    ),
                     checked: selectedStep === 'Contains'
                   },
                   {
                     id: '2',
                     value: 'Does not contains',
-                    radioButtonLabel: 'Does not contains',
+                    radioButtonLabel: ManageLocales(
+                      'app.advanceSearch.radioLabel2'
+                    ),
                     checked: selectedStep === 'Does not contains'
                   }
                 ]
@@ -1236,33 +1261,12 @@ const renderContent = (
             </div>
           </div> */}
 
-          <div style={{ margin: '10px' }}>
-            <CustomRadioButton
-              radioMetaData={{
-                name: 'steps',
-                handleChange: (data: string) => {
-                  setSelectedStep(data);
-                },
-                radioData: [
-                  {
-                    id: '1',
-                    value: 'Contains',
-                    radioButtonLabel: 'Contains',
-                    checked: selectedStep === 'Contains'
-                  },
-                  {
-                    id: '2',
-                    value: 'Does not contains',
-                    radioButtonLabel: 'Does not contains',
-                    checked: selectedStep === 'Does not contains'
-                  }
-                ]
-              }}
-              radioButtonAllStyles={{
-                radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel
-              }}
-            />
+          <div style={{ margin: '10px' }} className="flex gap-3">
+            {RadioData.map(radioData => {
+              return (
+                <RadioButton key={radioData.id} radioMetaData={radioData} />
+              );
+            })}
           </div>
 
           <div

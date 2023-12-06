@@ -33,9 +33,6 @@ function MyDiamonds() {
   const [dateSearchUrl, setDateSearchUrl] = useState('');
   const [myInvoiceData, setMyInvoiceData] = useState([]);
   const [previousConfirmData, setPreviousConfirmData] = useState([]);
-  const [myDiamondStatus, setMyDiamondStatus] = useState('');
-  const [invoiceStatus, setInvoiceStatus] = useState('');
-  const [previousConfirmStatus, setPreviousConfirmStatus] = useState('');
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT);
 
@@ -75,46 +72,34 @@ function MyDiamonds() {
   let paymentStatus = 'awaiting';
   let fields = 'id,display_id,total';
   let expand = 'items';
+  let myDiamondStatus = 'pending';
+  let invoiceStatus = 'available';
+  let previousConfirmStatus = 'completed';
 
   // Fetch recent confirmation data
-  const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery(
-    {
-      resentConfiramtionStatus,
-      fulfillmentStatus,
-      paymentStatus,
-      fields,
-      expand,
-      dateSearchUrl
-    },
-    {
-      skip: activeTab !== 'Recent Confirmations'
-    }
-  );
+  const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
+    resentConfiramtionStatus,
+    fulfillmentStatus,
+    paymentStatus,
+    fields,
+    expand,
+    dateSearchUrl
+  });
 
   // Fetch my-invoice data
-  const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery(
-    {
-      myDiamondStatus,
-      invoiceStatus,
-      dateSearchUrl
-    },
-    {
-      skip: activeTab !== 'My Invoices'
-    }
-  );
+  const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
+    myDiamondStatus,
+    invoiceStatus,
+    dateSearchUrl
+  });
 
   // Fetch previous-confiramtion-data
-  const { data: previousConfirmationData } = useCardPreviousConfirmationQuery(
-    {
-      limit,
-      offset,
-      previousConfirmStatus,
-      dateSearchUrl
-    },
-    {
-      skip: activeTab !== 'Previous Confirmations'
-    }
-  );
+  const { data: previousConfirmationData } = useCardPreviousConfirmationQuery({
+    limit,
+    offset,
+    previousConfirmStatus,
+    dateSearchUrl
+  });
 
   // Handle date selection in the calendar
   const handleDate = (date: IDateRange) => {
@@ -151,23 +136,9 @@ function MyDiamonds() {
     setFilteredData(filtered || originalData);
   };
 
-  const handleInvoice = () => {
-    setMyDiamondStatus('pending');
-    setInvoiceStatus('available');
-  };
-
-  const handlePreviousConfirmation = () => {
-    setPreviousConfirmStatus('completed');
-  };
-
   // Handle tab click to set the active tab and page render check
   const handleClick = (pathName: string) => {
     setActiveTab(pathName);
-    if (pathName === 'My Invoices') {
-      handleInvoice();
-    } else if (pathName === 'Previous Confirmations') {
-      handlePreviousConfirmation();
-    }
   };
 
   // useEffect to update originalData and filteredData when recentConfirmData changes
@@ -185,12 +156,10 @@ function MyDiamonds() {
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
     setMyInvoiceData(myDiamondPendingInvoiceData?.orders);
-    // setOriginalData(myDiamondPendingInvoiceData?.orders);
   }, [myDiamondPendingInvoiceData]);
 
   useEffect(() => {
     setPreviousConfirmData(previousConfirmationData?.orders);
-    // setOriginalData(myDiamondPendingInvoiceData?.orders);
   }, [previousConfirmationData]);
 
   // useEffect to add/remove scroll event listener

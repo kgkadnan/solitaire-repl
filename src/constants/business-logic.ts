@@ -22,7 +22,7 @@ export const MIN_SEARCH_FORM_COUNT = 0;
 
 export const MAX_SAVED_SEARCH_COUNT = 300;
 
-export const MAX_SEARCH_TAB_LIMIT = 5;
+export const MAX_SEARCH_TAB_LIMIT = 10;
 
 export const LISTING_PAGE_DATA_LIMIT = 300;
 

@@ -26,6 +26,12 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
+import { NoDataFound } from '@/components/common/no-data-found';
+import {
+  NEW_SEARCH,
+  SAVED_SEARCHES,
+  SEARCH_RESULT
+} from '@/constants/application-constants/search-page';
 
 interface IMyProfileRoutes {
   id: number;
@@ -34,7 +40,8 @@ interface IMyProfileRoutes {
 }
 
 function SearchResultLayout() {
-  const subRoute = useSearchParams().get('route');
+  const subRoute = useSearchParams().get('query');
+  const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
 
   const dispatch = useAppDispatch();
@@ -57,19 +64,44 @@ function SearchResultLayout() {
     {
       id: 1,
       pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: 'form'
+      path: `${NEW_SEARCH}`
     },
     {
       id: 2,
       pathName: ManageLocales('app.savedSearch.header'),
-      path: 'saved'
+      path: `${SAVED_SEARCHES}`
     }
   ]);
 
   const computeRouteAndComponentRenderer = () => {
-    if (subRoute === 'saved') return 'Saved Searches';
-    else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!) - 2}`;
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
+    let replaceSubrouteWithSearchResult = subRoute?.replace(
+      `${SEARCH_RESULT}-`,
+      ''
+    );
+
+    if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
+    else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
+    else if (
+      subRoute !== `${SAVED_SEARCHES}` &&
+      subRoute !== `${NEW_SEARCH}` &&
+      replaceSubrouteWithSearchResult
+    ) {
+      let isRouteExist =
+        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
+      if (isRouteExist === undefined) {
+        return 'No Data Found';
+      } else {
+        return `Search Results ${parseInt(replaceSubrouteWithSearchResult!)}`;
+      }
+    } else if (
+      (masterRoute === '/search' &&
+        replaceSubrouteWithSearchResult?.length === 0) ||
+      subRoute === null
+    ) {
+      return 'New Search';
+    }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
@@ -109,20 +141,21 @@ function SearchResultLayout() {
     for (let i = 2; i < updateMyProfileRoute.length; i++) {
       updateMyProfileRoute[i].id = i + 1;
       updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
-      updateMyProfileRoute[i].path = i + 1;
+      updateMyProfileRoute[i].path = i - 1;
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?route=form`);
+      router.push(`search?query=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?route=${removeDataIndex + 3}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 1}`);
       setheaderPath(`Search Results ${removeDataIndex + 1}`);
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?route=${removeDataIndex + 2}`);
+      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex}`);
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
+
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
     setMyProfileRoutes(updateMyProfileRoute);
   };
@@ -220,8 +253,13 @@ function SearchResultLayout() {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    if (subRoute !== 'form' && subRoute !== 'saved')
-      setActiveTab(parseInt(subRoute!) - 2);
+    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
+      let replaceSubrouteWithSearchResult = subRoute?.replace(
+        `${SEARCH_RESULT}-`,
+        ''
+      );
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
+    }
   }, [subRoute]);
 
   useEffect(() => {
@@ -242,7 +280,7 @@ function SearchResultLayout() {
           .map((data: any, index: number) => ({
             id: index + 3,
             pathName: `Search Results ${index + 1}`,
-            path: index + 3
+            path: index + 1
           }))
           .filter(
             (newRoute: any) =>
@@ -258,12 +296,12 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: ManageLocales('app.searchResult.header.newSearch'),
-              path: 'form'
+              path: `${NEW_SEARCH}`
             },
             {
               id: 2,
               pathName: ManageLocales('app.savedSearch.header'),
-              path: 'saved'
+              path: `${SAVED_SEARCHES}`
             }
           ]);
         }
@@ -291,7 +329,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?route=${subRoute}&edit=search-result`);
+    router.push(`/search?query=${subRoute}&edit=${SEARCH_RESULT}`);
   };
 
   const handleCloseInputDialog = () => {
@@ -331,19 +369,21 @@ function SearchResultLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3">
+        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
           {myProfileRoutes.map(({ id, pathName, path }: any) => {
             // Check if the current route matches the link's path
-            return path === 'form' || path === 'saved' ? (
+            return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}` ? (
               <Link
-                className={`flex flex-row p-2.5  text-solitaireTertiary ${
+                className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
                   headerPath === pathName
                     ? ''
                     : 'hover:text-solitaireQuaternary'
                 }`}
                 onClick={() => handleSearchTab(0, pathName)}
                 href={
-                  maxTab === 5 && path === 'form' ? `` : `/search?route=${path}`
+                  maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
+                    ? ``
+                    : `/search?query=${path}`
                 }
                 key={id}
               >
@@ -356,22 +396,20 @@ function SearchResultLayout() {
                 </div>
               </Link>
             ) : (
-              <div
-                className={`flex items-center cursor-pointer gap-[8px] rounded-sm `}
-              >
-                {activeTab === parseInt(path) - 2 && (
+              <div className={`flex items-center cursor-pointer  rounded-sm `}>
+                {activeTab === parseInt(path) && (
                   <div onClick={() => editSearchResult(activeTab)}>
                     <Image src={EditIcon} alt="Edit Icon" />
                   </div>
                 )}
                 <Link
-                  className={`flex flex-row p-2.5  text-solitaireTertiary ${
+                  className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
                     headerPath === pathName
                       ? ''
                       : 'hover:text-solitaireQuaternary'
                   }`}
-                  onClick={() => handleSearchTab(parseInt(path) - 2, pathName)}
-                  href={`/search?route=${path}`}
+                  onClick={() => handleSearchTab(parseInt(path), pathName)}
+                  href={`/search?query=${SEARCH_RESULT}-${path}`}
                   key={id}
                 >
                   <div
@@ -382,7 +420,7 @@ function SearchResultLayout() {
                     {pathName}
                   </div>
                 </Link>
-                <div onClick={() => closeSearch(parseInt(path) - 3)}>
+                <div onClick={() => closeSearch(parseInt(path) - 1)}>
                   <CloseOutline stroke="#8C7459" />
                 </div>
               </div>
@@ -399,13 +437,15 @@ function SearchResultLayout() {
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
           {headerPath === 'New Search' ||
-          editSubRoute === 'saved-search' ||
-          editSubRoute === 'search-result' ? (
+          editSubRoute === `${SAVED_SEARCHES}` ||
+          editSubRoute === `${SEARCH_RESULT}` ? (
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />
           ) : isLoading ? (
             <CustomLoader />
+          ) : headerPath === 'No Data Found' ? (
+            <NoDataFound />
           ) : (
             <SearchResults
               data={data}

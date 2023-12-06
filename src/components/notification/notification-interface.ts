@@ -11,8 +11,8 @@ export interface NotificationItem {
   category: string;
   sub_category: string;
   id: string;
-  created_at: string;
-  updated_at: string;
+  created_at: Date;
+  updated_at: Date;
 }
 
 interface NotificationData {
