@@ -79,6 +79,7 @@ const SearchResults = ({
   /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
 `tableColumns` to the value of `listingColumns` when `listingColumns` changes. */
   useEffect(() => {
+    console.log('he;;;;');
     setTableColumns(listingColumns);
   }, [listingColumns, setTableColumns]);
   /* useEffect hook in a TypeScript React component. It is used to
