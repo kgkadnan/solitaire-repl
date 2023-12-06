@@ -7,9 +7,9 @@ const meta = {
   title: 'Components/ImageTile',
   component: CustomImageTile,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomImageTile>;
 
 export default meta;
@@ -18,22 +18,22 @@ type Story = StoryObj<typeof meta>;
 const imageData: IImageTileProps[] = [
   {
     src: Round,
-    title: 'Round',
+    title: 'Round'
   },
   {
     src: Round,
-    title: 'Pear',
+    title: 'Pear'
   },
   {
     src: Round,
-    title: 'Emerald',
-  },
+    title: 'Emerald'
+  }
 ];
 
 export const ImageTile: Story = {
   args: {
     imageTileData: imageData,
     selectedTile: ['Pear'],
-    handleSelectTile: () => {},
-  },
+    handleSelectTile: () => {}
+  }
 };

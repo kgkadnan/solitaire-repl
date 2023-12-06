@@ -26,8 +26,8 @@ const customSortFunctions: Record<string, Function> = {
     'SI3',
     'I1',
     'I2',
-    'I3',
-  ]),
+    'I3'
+  ])
 };
 
 /**

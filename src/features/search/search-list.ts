@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState: any = {
-  searchesData: false,
+  searchesData: false
 };
 
 const SearchListSlice = createSlice({
@@ -9,8 +9,8 @@ const SearchListSlice = createSlice({
   reducers: {
     searchList: (state, { payload }) => {
       state.searchesData = payload;
-    },
-  },
+    }
+  }
 });
 
 export const { searchList } = SearchListSlice.actions;

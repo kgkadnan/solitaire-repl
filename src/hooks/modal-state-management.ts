@@ -11,13 +11,13 @@ export const useModalStateManagement = () => {
       dialogContent,
       isDialogOpen,
       isInputDialogOpen,
-      isSliderOpen,
+      isSliderOpen
     },
     modalSetState: {
       setDialogContent,
       setIsDialogOpen,
       setIsInputDialogOpen,
-      setIsSliderOpen,
-    },
+      setIsSliderOpen
+    }
   };
 };

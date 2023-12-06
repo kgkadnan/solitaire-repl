@@ -8,7 +8,7 @@ test('renders custom checkbox correctly', () => {
     data: '1',
     onClick: jest.fn(),
     isChecked: ['1'],
-    style: 'bg-solitaireQuaternary',
+    style: 'bg-solitaireQuaternary'
   };
 
   const { getByTestId } = render(<CustomCheckBox {...mockProps} />);
@@ -26,7 +26,7 @@ test('handles checkbox click', () => {
     data: '2',
     onClick: jest.fn(),
     isChecked: ['Option 1'],
-    style: 'bg-solitaireQuaternary',
+    style: 'bg-solitaireQuaternary'
   };
 
   const { getByTestId } = render(<CustomCheckBox {...mockProps} />);

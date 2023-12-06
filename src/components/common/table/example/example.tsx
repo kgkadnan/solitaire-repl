@@ -10,14 +10,14 @@ export const TableExample = () => {
         invoice: 'INV001',
         paymentStatus: 'Paid',
         totalAmount: '$250.00',
-        paymentMethod: 'Credit Card',
-      },
-    ],
+        paymentMethod: 'Credit Card'
+      }
+    ]
   };
 
   const tableAllStyle = {
     tableHeaderStyle: style.tableHead,
-    tableBodyStyle: style.tablebody,
+    tableBodyStyle: style.tablebody
   };
 
   return (

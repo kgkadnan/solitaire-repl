@@ -5,7 +5,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@components/ui/table';
 import React from 'react';
 
@@ -31,9 +31,8 @@ interface ITableProps {
 // CustomTable component definition
 export const CustomTable: React.FC<ITableProps> = ({
   tableData,
-  tableStyleClasses,
+  tableStyleClasses
 }) => {
-
   // Destructure styles from the props
   const { tableHeaderStyle, tableBodyStyle, tableStyle } = tableStyleClasses;
   return (

@@ -7,7 +7,7 @@ module.exports = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     '@storybook/addon-onboarding',
-    '@storybook/addon-interactions',
+    '@storybook/addon-interactions'
     // {
     //   name: '@storybook/addon-styling',
     //   options: {},
@@ -15,19 +15,19 @@ module.exports = {
   ],
   framework: {
     name: '@storybook/nextjs',
-    options: {},
+    options: {}
   },
   docs: {
-    autodocs: 'tag',
+    autodocs: 'tag'
   },
   parameters: {
     backgrounds: {
       default: 'light',
       values: [
         { name: 'light', value: '#ffffff' },
-        { name: 'dark', value: '#333333' },
-      ],
-    },
+        { name: 'dark', value: '#333333' }
+      ]
+    }
   },
 
   // Add framework configuration if applicable
@@ -39,16 +39,16 @@ module.exports = {
   // },
 
   // Custom webpack configuration
-  webpackFinal: async (config) => {
+  webpackFinal: async config => {
     config.resolve.alias = {
       ...config.resolve.alias,
-      '@': path.resolve(__dirname, '../src'),
+      '@': path.resolve(__dirname, '../src')
     };
 
     // Modify Webpack configuration further if needed
 
     return config;
-  },
+  }
 
   // Custom managerWebpack configuration
   // managerWebpack: async (config) => {

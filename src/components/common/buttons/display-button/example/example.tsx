@@ -6,11 +6,11 @@ import { CustomDisplayButton } from '..';
 
 export const DisplayButtonExample = () => {
   const handleClick = () => {
-    console.log("It'sworing");
+    console.log('Its sworing');
   };
   const classes = {
     displayButtonStyle: style?.button,
-    displayLabelStyle: style?.label,
+    displayLabelStyle: style?.label
   };
   return (
     <>

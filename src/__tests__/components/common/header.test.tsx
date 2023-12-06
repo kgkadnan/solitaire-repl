@@ -19,7 +19,7 @@ jest.mock('next/image', () => {
       height: number;
       // Add more specific types for other props if needed
       // ...rest: SomeType;
-    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />,
+    }) => <Image src={src} alt={alt} width={width} height={height} {...rest} />
   };
 });
 
@@ -30,7 +30,7 @@ describe('CustomHeader component', () => {
     handleSearch: jest.fn(),
     searchValue: 'Test Value',
     handleSuggestionClick: jest.fn(),
-    suggestions: ['Suggestion 1', 'Suggestion 2'],
+    suggestions: ['Suggestion 1', 'Suggestion 2']
   };
 
   test('renders correctly with provided data', () => {

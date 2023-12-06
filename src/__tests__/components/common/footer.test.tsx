@@ -5,7 +5,7 @@ import { CustomFooter } from '@components/common/footer';
 describe('CustomFooter component', () => {
   const footerButtonData: any = [
     { id: 1, displayButtonLabel: 'Button 1' },
-    { id: 2, displayButtonLabel: 'Button 2' },
+    { id: 2, displayButtonLabel: 'Button 2' }
   ];
 
   test('renders correctly with provided data', () => {

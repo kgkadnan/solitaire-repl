@@ -26,8 +26,8 @@ test('displays a custom toast when the component mounts', async () => {
     expect(require('react-toastify').toast).toHaveBeenCalledWith(
       expect.objectContaining({
         body: expect.objectContaining({
-          props: { children: message },
-        }),
+          props: { children: message }
+        })
       })
     );
   });

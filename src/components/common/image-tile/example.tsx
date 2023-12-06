@@ -7,26 +7,26 @@ const ImageTileExample = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const handleChange = (shape: string) => {
     if (selectedShape.includes(shape)) {
-      setSelectedShape((prevSelectedShape) =>
-        prevSelectedShape.filter((selected) => selected !== shape)
+      setSelectedShape(prevSelectedShape =>
+        prevSelectedShape.filter(selected => selected !== shape)
       );
     } else {
-      setSelectedShape((prevSelectedShape) => [...prevSelectedShape, shape]);
+      setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
     }
   };
   const imageData: IImageTileProps[] = [
     {
       src: Round,
-      title: 'Round',
+      title: 'Round'
     },
     {
       src: Round,
-      title: 'Pear',
+      title: 'Pear'
     },
     {
       src: Round,
-      title: 'Emerald',
-    },
+      title: 'Emerald'
+    }
   ];
   return (
     <CustomImageTile

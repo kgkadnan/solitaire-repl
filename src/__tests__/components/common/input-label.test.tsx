@@ -8,7 +8,7 @@ describe('CustomInputlabel', () => {
     const mockProps = {
       htmlfor: 'mockInput',
       label: 'Test Label',
-      overriddenStyles: { label: 'text-solitaireQuaternary' },
+      overriddenStyles: { label: 'text-solitaireQuaternary' }
     };
 
     // Render the component with the mock props
@@ -28,7 +28,7 @@ describe('CustomInputlabel', () => {
     // Mock props for the component without overridden style
     const mockProps = {
       htmlfor: 'mockInput',
-      label: 'Test Label',
+      label: 'Test Label'
     };
 
     // Render the component with the mock props

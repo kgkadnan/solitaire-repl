@@ -6,11 +6,11 @@ interface ICalculateAverageDiscount {
 }
 export function calculateAverageDiscount({
   isCheck,
-  rows,
+  rows
 }: ICalculateAverageDiscount) {
   let totalDiscount = 0;
-  isCheck.forEach((id) => {
-    const selectedRow = rows.find((row) => row.id === id);
+  isCheck.forEach(id => {
+    const selectedRow = rows.find(row => row.id === id);
     if (selectedRow) {
       totalDiscount += selectedRow?.discount;
     }

@@ -6,7 +6,7 @@ const meta: Meta<typeof CustomCheckBox> = {
   title: 'components/Checkbox',
   component: CustomCheckBox,
   argTypes: {},
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomCheckBox>;
 
 export default meta;
@@ -21,20 +21,20 @@ const CheckboxWithHooks = () => {
     let value = e.target.getAttribute('data-state');
     setIsCheck([...isCheck, id]);
     if (value?.toLowerCase() === 'checked') {
-      setIsCheck(isCheck.filter((item) => item !== id));
+      setIsCheck(isCheck.filter(item => item !== id));
     }
   };
   return '';
-  //  <CustomCheckBox data="1" onClick={handleClick} isChecked={isCheck} />;
+  //  <CustomCheckBox data='1' onClick={handleClick} isChecked={isCheck} />;
 };
 
 export const Primary: Story = {
-  render: () => <CheckboxWithHooks />,
+  render: () => <CheckboxWithHooks />
 };
 
 export const Secondary: Story = {
   args: {
     data: '1',
-    style: 'text-solitaireQuaternary',
-  },
+    style: 'text-solitaireQuaternary'
+  }
 };

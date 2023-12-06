@@ -10,19 +10,14 @@ interface DownloadExcelApiResponse {
   };
 }
 
-interface DownloadExcelApiResult {
-  (args: { productIds: string[] }): Promise<DownloadExcelApiResponse>;
-  unwrap(): Promise<DownloadExcelApiResponse>;
-}
-
 interface DownloadExcelFunctionProps {
   productIds: string[];
   downloadExcelApi: any;
-  setDialogContent?: Dispatch<SetStateAction<ReactNode>> | null;
-  setIsDialogOpen?: Dispatch<SetStateAction<boolean>> | null;
-  setIsCheck?: Dispatch<SetStateAction<any[]>> | null;
-  setIsCheckAll?: Dispatch<SetStateAction<boolean>> | null;
-  setIsError?: Dispatch<SetStateAction<boolean>> | null;
+  setDialogContent?: Dispatch<SetStateAction<ReactNode>>;
+  setIsDialogOpen?: Dispatch<SetStateAction<boolean>>;
+  setIsCheck?: Dispatch<SetStateAction<string[]>>;
+  setIsCheckAll?: Dispatch<SetStateAction<boolean>>;
+  setIsError?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const performDownloadExcel = async ({
@@ -32,12 +27,12 @@ export const performDownloadExcel = async ({
   setIsDialogOpen,
   setIsCheck,
   setIsCheckAll,
-  setIsError,
+  setIsError
 }: DownloadExcelFunctionProps) => {
   try {
     // Explicitly type res to include unwrap method
     const res: DownloadExcelApiResponse = await downloadExcelApi({
-      productIds,
+      productIds
     });
 
     const { data, fileName } = res.data;

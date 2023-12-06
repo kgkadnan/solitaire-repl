@@ -25,7 +25,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   tableCol,
   errorSetState,
   confirmStoneSetState,
-  modalSetState,
+  modalSetState
 }) => {
   const { checkboxState, checkboxSetState } = checkboxData ?? {};
   const { isCheck, isCheckAll } = checkboxState ?? {};
@@ -50,7 +50,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       console.log('require error message here');
     } else if (sliderData[0]) {
       addCart({
-        variants: [sliderData[0]?.variants[0].id],
+        variants: [sliderData[0]?.variants[0].id]
       })
         .unwrap()
         .then(() => {
@@ -79,10 +79,10 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const downloadExcelFunction = () => {
     if (sliderData[0]) {
       downloadExcel({
-        productIds: sliderData[0].id,
+        productIds: sliderData[0].id
       })
         .unwrap()
-        .then((res) => {
+        .then(res => {
           let { data, fileName } = res;
           if (data) {
             downloadExcelFromBase64(data, fileName);
@@ -99,7 +99,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
             setIsDialogOpen?.(true);
           }
         })
-        .catch((error) => {
+        .catch(error => {
           console.log('error', error);
         });
     }
@@ -114,7 +114,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       url: `${FILE_URLS.CERT_FILE.replace(
         '***',
         sliderData[0]?.certificate_number ?? ''
-      )}`,
+      )}`
     },
 
     {
@@ -125,15 +125,15 @@ export const TableBody: React.FC<ITbodyProps> = ({
       iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
         '***',
         sliderData[0]?.lot_id ?? ''
-      )}`,
+      )}`
     },
     {
       id: '3',
       displayButtonLabel: ManageLocales(
         'app.searchResult.slider.diamondDetail.diamondImage'
       ),
-      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`,
-    },
+      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
+    }
   ];
 
   const footerButtonData = [
@@ -145,30 +145,30 @@ export const TableBody: React.FC<ITbodyProps> = ({
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
+                displayButtonStyle: styles.transparent
               }}
             />
           }
           dropdownMenu={[
             {
               label: 'Share',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Download Excel',
-              fn: () => downloadExcelFunction(),
+              fn: () => downloadExcelFunction()
             },
             {
               label: 'Find Matching Pair',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Compare Stone',
-              fn: '',
-            },
+              fn: ''
+            }
           ]}
         />
-      ),
+      )
     },
     {
       id: 2,
@@ -182,14 +182,14 @@ export const TableBody: React.FC<ITbodyProps> = ({
           setIsError,
           setIsSliderOpen,
           setConfirmStoneData
-        ),
+        )
     },
     {
       id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: addToCart,
-    },
+      fn: addToCart
+    }
   ];
 
   const handleRowClick = (row: any) => {
@@ -200,7 +200,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       setIsCheckAll,
       isCheckAll,
       data: tableRows,
-      setIsError,
+      setIsError
     });
   };
 
@@ -210,7 +210,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
         return (
           <div
             className="flex items-center gap-2"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             <DetailImageSlider
               dataTableBodyState={dataTableBodyState}
@@ -231,7 +231,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
         );
       case 'lot_id':
         return (
-          <div onClick={(e) => e.stopPropagation()}>
+          <div onClick={e => e.stopPropagation()}>
             <DiamondDetailSlider
               dataTableBodyState={dataTableBodyState}
               dataTableBodySetState={dataTableBodySetState}
@@ -250,7 +250,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
             href={`${GIA_LINK}${row.rpt_number}`}
             target="_blank"
             className="border-b border-solitaireQuaternary border-solid"
-            onClick={(e) => e.stopPropagation()}
+            onClick={e => e.stopPropagation()}
           >
             {row[column.accessor] !== null ? row[column.accessor] : '-'}
           </a>
@@ -290,7 +290,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
                 left: `${
                   tableColindex === 0 && selectionAllowed ? '45px' : '0px'
                 }`,
-                position: `${tableColindex === 0 ? 'sticky' : 'static'}`,
+                position: `${tableColindex === 0 ? 'sticky' : 'static'}`
               }}
               key={`${row.id}-${column.accessor}`}
               className={`${styles.tableData} cursor-pointer`}

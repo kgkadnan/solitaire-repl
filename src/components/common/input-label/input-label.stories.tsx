@@ -5,7 +5,7 @@ const meta: Meta<typeof CustomInputlabel> = {
   title: 'components/InputLabel',
   component: CustomInputlabel,
   argTypes: {},
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomInputlabel>;
 
 export default meta;
@@ -17,7 +17,7 @@ export const Primary: Story = {
     htmlfor: 'id',
     label: 'Enter Password',
     overriddenStyles: {
-      label: 'text-solitaireQuaternary',
-    },
-  },
+      label: 'text-solitaireQuaternary'
+    }
+  }
 };

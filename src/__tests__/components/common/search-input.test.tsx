@@ -9,7 +9,7 @@ const mockProps = {
   onChange: jest.fn(),
   placeholder: 'Enter value',
   suggestions: ['suggestion1', 'suggestion2', 'suggestion3'],
-  handleSuggestionClick: jest.fn(),
+  handleSuggestionClick: jest.fn()
 };
 
 describe('Render Input Field Component', () => {
@@ -55,7 +55,7 @@ describe('Render Input Field Component', () => {
     fireEvent.focus(inputField);
 
     // Check if suggestions dropdown is displayed
-    mockProps.suggestions.forEach((suggestion) => {
+    mockProps.suggestions.forEach(suggestion => {
       expect(getByText(suggestion)).toBeInTheDocument();
     });
 

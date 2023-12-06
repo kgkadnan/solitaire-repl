@@ -12,7 +12,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
   setIsError,
   setErrorContent,
   errorContent,
-  handleClose,
+  handleClose
 }) => {
   let {
     isOpens,
@@ -22,7 +22,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
     inputValue,
     setInputvalue,
     displayButtonLabel2,
-    displayButtonFunction,
+    displayButtonFunction
   } = customInputDialogData;
 
   const onclose = (open: boolean) => {
@@ -45,7 +45,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           <CustomInputField
             placeholder="Search Title* (Max 150 characters)"
             type="text"
-            onChange={(e) => {
+            onChange={e => {
               setErrorContent('');
               setIsError(false);
               setInputvalue(e.target.value);
@@ -54,7 +54,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
             name={name}
             style={{
               inputMain: 'w-full',
-              input: styles.input,
+              input: styles.input
             }}
             maxLength={150}
           />
@@ -67,7 +67,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
               handleClose();
             }}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonTransparent,
+              displayButtonStyle: styles.showResultButtonTransparent
             }}
           />
           <CustomDisplayButton
@@ -76,7 +76,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
               inputValue.length > 0 && displayButtonFunction();
             }}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonFilled,
+              displayButtonStyle: styles.showResultButtonFilled
             }}
           />
         </div>

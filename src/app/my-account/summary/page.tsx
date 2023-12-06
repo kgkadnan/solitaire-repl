@@ -15,7 +15,7 @@ const Summary = () => {
       address: 'KGK Group, Bharat Diamond Bourse, BKC D block, 2nd floor 207',
       contactNo: '+919108766432',
       whatsAppNo: '+919108766432',
-      email: 'rajeevsinha@mail.com',
+      email: 'rajeevsinha@mail.com'
     },
     {
       name: 'Mr. Rajeev Sinha',
@@ -23,8 +23,8 @@ const Summary = () => {
       address: 'KGK Group, Bharat Diamond Bourse, BKC D block, 2nd floor 207',
       contactNo: '+919108766432',
       whatsAppNo: '+919108766432',
-      email: 'rajeevsinha@mail.com',
-    },
+      email: 'rajeevsinha@mail.com'
+    }
   ];
   return (
     <>
@@ -54,7 +54,7 @@ const Summary = () => {
         />
         <div className={style.keyAccount}>Key Account Manager</div>
         <div className={style.keyAccountManagerCardContainer}>
-          {keyManagerAccounts.map((manager) => {
+          {keyManagerAccounts.map(manager => {
             return (
               <div
                 className={`${style.personalCard} ${style.keyAccountManagerCard}`}
@@ -71,7 +71,10 @@ const Summary = () => {
                   <p>{manager.address}</p>
                 </div>
                 <div className={style.keyAccountManagerSocials}>
-                  <a href={`tel:${manager.contactNo}`} className={style.socials}>
+                  <a
+                    href={`tel:${manager.contactNo}`}
+                    className={style.socials}
+                  >
                     {' '}
                     <div className={style.iconSpace}>
                       <Phone alt="Phone" />

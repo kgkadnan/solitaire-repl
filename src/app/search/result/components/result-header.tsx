@@ -15,7 +15,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
   sortBySetState,
   sortByState,
   dataTableState,
-  dataTableSetState,
+  dataTableSetState
 }) => {
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
@@ -38,14 +38,14 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
       id: yourSelection[activeTab]?.id,
       name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,
-      diamond_count: parseInt(data?.count),
+      diamond_count: parseInt(data?.count)
     };
 
     yourSelection[activeTab] = {
       id: yourSelection[activeTab]?.id,
       saveSearchName: yourSelection[activeTab]?.saveSearchName,
       isSavedSearch: true,
-      queryParams: yourSelection[activeTab].queryParams,
+      queryParams: yourSelection[activeTab].queryParams
     };
     localStorage.setItem('Search', JSON.stringify(yourSelection));
     setYourSelectionData(yourSelection);
@@ -90,7 +90,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
                   : setIsInputDialogOpen(true)
               }
               displayButtonAllStyle={{
-                displayLabelStyle: `text-solitaireTertiary cursor-pointer`,
+                displayLabelStyle: `text-solitaireTertiary cursor-pointer`
               }}
             />
           ) : (

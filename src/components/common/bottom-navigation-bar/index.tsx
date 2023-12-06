@@ -12,20 +12,20 @@ export const BottomNavigationBar = () => {
   const bottomNavData = [
     {
       label: ManageLocales('app.bottomNav.aboutUs'),
-      link: '',
+      link: ''
     },
     {
       label: ManageLocales('app.bottomNav.contactUs'),
-      link: '',
+      link: ''
     },
     {
       label: ManageLocales('app.bottomNav.privacyPolicy'),
-      link: '',
+      link: ''
     },
     {
       label: ManageLocales('app.bottomNav.terms'),
-      link: '',
-    },
+      link: ''
+    }
   ];
 
   const handleButtonClick = (label: string, link: string) => {
@@ -39,7 +39,7 @@ export const BottomNavigationBar = () => {
         className={`h-[112px] bg-solitaireSecondary flex justify-between pl-32 ${styles.mainBottomNavtionain}`}
       >
         <div className="flex items-center gap-14">
-          {bottomNavData.map((bottomNavData) => (
+          {bottomNavData.map(bottomNavData => (
             <div key={bottomNavData.label}>
               <CustomDisplayButton
                 displayButtonAllStyle={{
@@ -47,7 +47,7 @@ export const BottomNavigationBar = () => {
                     activeButton === bottomNavData.label
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
-                  displayLabelStyle: styles.footerLabel,
+                  displayLabelStyle: styles.footerLabel
                 }}
                 displayButtonLabel={bottomNavData.label}
                 handleClick={() =>
@@ -61,7 +61,7 @@ export const BottomNavigationBar = () => {
           <CustomDisplayButton
             displayButtonAllStyle={{
               displayButtonStyle: styles.copyRightButton,
-              displayLabelStyle: styles.footerLabel,
+              displayLabelStyle: styles.footerLabel
             }}
             displayButtonLabel="Copyright © 2022 KGK Live. All rights reserved. "
           />

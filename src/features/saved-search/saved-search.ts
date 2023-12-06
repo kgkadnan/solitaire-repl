@@ -8,8 +8,8 @@ const savedSearchSlice = createSlice({
     modifySavedSearch: (state, { payload }) => {
       state = payload;
       return state;
-    },
-  },
+    }
+  }
 });
 
 export const { modifySavedSearch } = savedSearchSlice.actions;

@@ -26,7 +26,7 @@ const CustomPaginationExample = () => {
 
   let optionLimits = [
     { id: 1, value: '1' },
-    { id: 2, value: '10' },
+    { id: 2, value: '10' }
   ];
   return (
     <CustomPagination

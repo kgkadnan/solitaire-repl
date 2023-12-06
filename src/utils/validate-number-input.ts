@@ -1,9 +1,7 @@
 // validationUtils.js
 
-function validateNumberInput(input: any) {
-  const inputValue = input.value;
-
-  if (!/^[0-9]*\.?[0-9]*$/.test(inputValue)) {
+function validateNumberInput(input: string) {
+  if (!/^[0-9]*\.?[0-9]*$/.test(input)) {
     return false;
   }
 

@@ -6,30 +6,30 @@ export const manageListingSequenceApi = createApi({
   reducerPath: 'manageListingSequenceReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }),
   tagTypes: ['manageListingSequence'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     addManageListingSequence: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `customer-manage-listing-sequence`,
         method: 'POST',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['manageListingSequence'],
+      invalidatesTags: ['manageListingSequence']
     }),
     getManageListingSequence: builder.query({
       query: () => ({
         url: `customer-manage-listing-sequence`,
-        method: 'GET',
+        method: 'GET'
       }),
-      providesTags: ['manageListingSequence'],
-    }),
-  }),
+      providesTags: ['manageListingSequence']
+    })
+  })
 });
 
 export const {
   useAddManageListingSequenceMutation,
-  useGetManageListingSequenceQuery,
+  useGetManageListingSequenceQuery
 } = manageListingSequenceApi;
