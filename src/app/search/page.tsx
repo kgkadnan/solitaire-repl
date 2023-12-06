@@ -26,6 +26,7 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MAX_SEARCH_TAB_LIMIT,
 } from '@/constants/business-logic';
+import { NoDataFound } from '@/components/common/no-data-found';
 
 interface IMyProfileRoutes {
   id: number;
@@ -35,6 +36,7 @@ interface IMyProfileRoutes {
 
 function SearchResultLayout() {
   const subRoute = useSearchParams().get('route');
+  const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
 
   const dispatch = useAppDispatch();
@@ -67,9 +69,21 @@ function SearchResultLayout() {
   ]);
 
   const computeRouteAndComponentRenderer = () => {
+    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
     if (subRoute === 'saved') return 'Saved Searches';
     else if (subRoute === 'form') return 'New Search';
-    else return `Search Results ${parseInt(subRoute!) - 2}`;
+    else if (subRoute !== 'saved' && subRoute !== 'form' && subRoute) {
+      let isRouteExist = yourSelection[parseInt(subRoute) - 3];
+      if (isRouteExist === undefined) {
+        return 'No Data Found';
+      } else return `Search Results ${parseInt(subRoute!) - 2}`;
+    } else if (
+      (masterRoute === '/search' && subRoute?.length === 0) ||
+      subRoute === null
+    ) {
+      return 'New Search';
+    }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   const [headerPath, setheaderPath] = useState(
@@ -406,6 +420,8 @@ function SearchResultLayout() {
             <SavedSearch />
           ) : isLoading ? (
             <CustomLoader />
+          ) : headerPath === 'No Data Found' ? (
+            <NoDataFound />
           ) : (
             <SearchResults
               data={data}
