@@ -95,7 +95,9 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    const localData:ISavedSearch[] = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
     const data = localData?.filter(
       (isSaved: ISavedSearch) => isSaved.isSavedSearch === false

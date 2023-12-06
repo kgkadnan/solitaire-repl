@@ -13,7 +13,7 @@ export const CustomCalculator = () => {
   const [count, setCount] = useState<number>(0);
 
   // Data for labels and dropdowns
-  let labelData = [
+  const labelData = [
     {
       id: 1,
       label: ManageLocales('app.advanceSearch.shape'),
@@ -70,7 +70,7 @@ export const CustomCalculator = () => {
   ];
 
   // Data for list pricing
-  let listPricingData = [
+  const listPricingData = [
     {
       id: 1,
       label: '$/CT',
@@ -84,7 +84,7 @@ export const CustomCalculator = () => {
   ];
 
   // Data for your pricing
-  let yourPricingData = [
+  const yourPricingData = [
     {
       id: 1,
       label: '$/CT',

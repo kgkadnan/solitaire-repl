@@ -15,7 +15,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   modalSetState
 }) => {
   /* The above code is filtering and sorting an array of table columns. */
-  let tableCol = tableColumns
+  const tableCol = tableColumns
     ?.filter(column => !column.is_disabled)
     ?.sort((a, b) => a.sequence - b.sequence);
 

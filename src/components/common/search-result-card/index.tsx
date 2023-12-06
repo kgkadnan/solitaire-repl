@@ -43,7 +43,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardActionIcon,
     cardDescription,
     cardContent,
-    stone = '',
     id,
     unBlurHeader
   } = card.cardData;

@@ -30,7 +30,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   switchButtonTabs,
   footerButtonData
 }) => {
-  let currentPath = usePathname();
+  const currentPath = usePathname();
   const {
     sliderData,
     activeTab,

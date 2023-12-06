@@ -53,7 +53,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 import {
   SAVED_SEARCHES,
-  SEARCH_RESULT,
+  SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
 
 let optionLimits = [

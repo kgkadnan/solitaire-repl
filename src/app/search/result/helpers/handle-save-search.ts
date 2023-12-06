@@ -41,7 +41,7 @@ export const handleSaveSearch = async ({
         setSaveSearchName('');
       })
 
-      .catch((error: any) => {
+      .catch(() => {
         setInputError(true);
         setInputErrorContent(
           'Title already exists. Choose another title to save your search'

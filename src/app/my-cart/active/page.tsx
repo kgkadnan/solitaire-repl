@@ -15,6 +15,7 @@ import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
+  ACTIVE_STATUS,
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE
 } from '@/constants/business-logic';
@@ -28,6 +29,7 @@ import { useConfirmStoneStateManagement } from '@/components/common/confirm-ston
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { Product } from '@/app/search/result/result-interface';
 
 const ActiveMyCart = () => {
   // State variables for managing component state
@@ -63,10 +65,10 @@ const ActiveMyCart = () => {
   const [deleteCart] = useDeleteCartMutation();
 
   // Mutation for downloading Excel data
-  let [downloadExcel] = useDownloadExcelMutation();
+  const [downloadExcel] = useDownloadExcelMutation();
 
   // Data for Custom Data Table checkboxes
-  let checkboxData = {
+  const checkboxData = {
     checkboxState,
     checkboxSetState
   };
@@ -85,7 +87,9 @@ const ActiveMyCart = () => {
     } else {
       // Get the data of selected stones and open a new window for comparison
       const compareStones = isCheck
-        .map(id => data.items.find((row: any) => row.product.id === id))
+        .map(id =>
+          data.items.find((row: { product: Product }) => row.product.id === id)
+        )
         .map(stone => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
@@ -130,8 +134,10 @@ const ActiveMyCart = () => {
 
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
-    let itemsId = isCheck.map(id => {
-      const selectedRow = data.items.find((row: any) => row.product.id === id);
+    const itemsId = isCheck.map(id => {
+      const selectedRow = data.items.find(
+        (row: { product: Product }) => row.product.id === id
+      );
       return selectedRow?.id;
     });
 
@@ -258,8 +264,11 @@ const ActiveMyCart = () => {
     const updateRows = () => {
       if (data) {
         const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'Active')
-          .map((row: any) => row.product);
+          .filter(
+            (item: { product: Product }) =>
+              item?.product?.diamond_status === ACTIVE_STATUS
+          )
+          .map((row: { product: Product }) => row.product);
 
         setRows(activeDiamondItems);
       }

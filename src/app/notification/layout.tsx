@@ -27,7 +27,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
       (item: any) => item.status === NOTIFICATION_UNREAD_STATUS
     ).length;
 
-  let notificationHeader = {
+  const notificationHeader = {
     headerHeading: (
       <p>
         {ManageLocales('app.notification.notifications')}

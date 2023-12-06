@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import style from './image-tile.module.scss';
 
@@ -13,11 +13,11 @@ export interface IImageTileStyleProps {
   imageTileIsNav?: string;
 }
 export interface IImageTileProps {
-  src: string | StaticImageData | any;
+  src: string | StaticImageData | object;
   title: string;
   link?: string;
-  short_name?: any;
-  isActive?: any;
+  short_name?: string;
+  isActive?: boolean;
 }
 
 export interface IImageContainerProps {
@@ -48,7 +48,8 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
       {imageTileData.map((tileData: IImageTileProps) => {
         const { src, title, link, short_name, isActive } = tileData;
 
-        const isTileActive = isActive || selectedTile?.includes(short_name);
+        const isTileActive =
+          isActive || (short_name && selectedTile?.includes(short_name));
         return (
           <div
             key={`image-tile-data-${title}`}
@@ -63,7 +64,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
             onClick={() => {
               link
                 ? handleSelectTile?.(title, link)
-                : handleSelectTile?.(short_name);
+                : short_name && handleSelectTile?.(short_name);
             }}
           >
             {typeof src === 'string' ? (
@@ -78,7 +79,7 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
               <div
                 className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
               >
-                {src}
+                {src as ReactNode}
               </div>
             )}
 

@@ -12,6 +12,7 @@ import { SOLD_OUT_STATUS } from '@/constants/business-logic';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import { Product } from '@/app/search/result/result-interface';
 
 const OutOfStock = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -30,7 +31,7 @@ const OutOfStock = () => {
   const { data } = useGetCartQuery({});
 
   //Checkbox Data for Custom Data Table
-  let checkboxData = {
+  const checkboxData = {
     checkboxState,
     checkboxSetState
   };
@@ -59,9 +60,10 @@ const OutOfStock = () => {
       if (data) {
         const soldOutItems = data.items
           .filter(
-            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
+            (item: { product: Product }) =>
+              item?.product?.diamond_status === SOLD_OUT_STATUS
           )
-          .map((row: any) => row.product);
+          .map((row: { product: Product }) => row.product);
 
         setRows(soldOutItems);
       }

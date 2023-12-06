@@ -1,6 +1,6 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { TableColumn } from '@/app/search/result/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -42,7 +42,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { sliderData } = dataTableBodyState!;
 
   const [addCart] = useAddCartMutation();
-  let [downloadExcel] = useDownloadExcelMutation();
+  const [downloadExcel] = useDownloadExcelMutation();
 
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
@@ -83,7 +83,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       })
         .unwrap()
         .then(res => {
-          let { data, fileName } = res;
+          const { data, fileName } = res;
           if (data) {
             downloadExcelFromBase64(data, fileName);
             setDialogContent?.(
@@ -105,7 +105,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   };
 
-  let switchButtonTabs = [
+  const switchButtonTabs = [
     {
       id: '1',
       displayButtonLabel: ManageLocales(
@@ -192,7 +192,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   ];
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Product) => {
     handleCheckboxClick({
       id: row.id,
       isCheck,
@@ -264,7 +264,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows?.map((row: any, index: number) => (
+      {tableRows?.map((row: Product, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}
