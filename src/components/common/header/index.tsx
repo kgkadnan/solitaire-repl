@@ -30,14 +30,14 @@ interface ICustomHeaderProps {
 const CustomHeader: React.FC<ICustomHeaderProps> = ({
   data,
   mainDivStyle,
-  visibleStyle,
+  visibleStyle
 }) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
   //input style
   let searchInputStyle = {
     searchInput: styles.headerInputStyle,
-    searchInputMain: 'relative',
+    searchInputMain: 'relative'
   };
 
   const handleScroll = useCallback(() => {

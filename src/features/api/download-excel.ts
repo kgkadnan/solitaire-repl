@@ -5,20 +5,20 @@ export const downloadExcelApi = createApi({
   reducerPath: 'downloadExcelReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }),
   tagTypes: ['downloadExcel'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     downloadExcel: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `export-excel`,
         method: 'POST', // Use the appropriate HTTP method
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['downloadExcel'],
-    }),
-  }),
+      invalidatesTags: ['downloadExcel']
+    })
+  })
 });
 
 export const { useDownloadExcelMutation } = downloadExcelApi;

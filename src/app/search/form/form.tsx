@@ -6,7 +6,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/translate';
 import {
   useAddSavedSearchMutation,
-  useUpdateSavedSearchMutation,
+  useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
@@ -17,23 +17,21 @@ import { generateQueryParams } from './helpers/generate-query-parameter';
 import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
-  MIN_SEARCH_FORM_COUNT,
+  MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import { setModifySearch } from './helpers/modify-search';
-import useValidationStateManagement, {
-  Errors,
-} from './hooks/validation-state-management';
+import useValidationStateManagement from './hooks/validation-state-management';
 import renderContent from './components/render-form-field';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
-  SEARCH_RESULT,
+  SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const savedSearch = useAppSelector((store) => store.savedSearch);
-  const searchResult = useAppSelector((store) => store.searchResult);
+  const savedSearch = useAppSelector(store => store.savedSearch);
+  const searchResult = useAppSelector(store => store.searchResult);
 
   /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
@@ -65,7 +63,7 @@ used for managing the state of a form field or input element in a React componen
     setValidationError,
     errors,
     selectedStep,
-    setErrors,
+    setErrors
   } = useValidationStateManagement();
 
   const searchParams = useSearchParams();
@@ -125,7 +123,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
   }, [state]);
 
   const { data, error } = useGetProductCountQuery({
-    searchUrl,
+    searchUrl
   });
 
   useEffect(() => {
@@ -174,7 +172,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             updatedMeta = queryParams;
             let data = {
               id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta,
+              meta_data: updatedMeta
             };
             updateSavedSearch(data);
             router.push(`/search?query=${SAVED_SEARCHES}`);
@@ -186,7 +184,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             id: updatedMeta[activeTab].id,
             name: updatedMeta[activeTab].saveSearchName,
             meta_data: updatedMeta[activeTab].queryParams,
-            diamond_count: parseInt(data?.count),
+            diamond_count: parseInt(data?.count)
           };
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
@@ -201,7 +199,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             name: saveSearchName,
             diamond_count: parseInt(data?.count),
             meta_data: queryParams,
-            is_deleted: false,
+            is_deleted: false
           })
             .unwrap()
             .then((res: any) => {
@@ -236,7 +234,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             updatedMeta[savedSearch.activeTab] = queryParams;
             let data = {
               id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta,
+              meta_data: updatedMeta
             };
             updateSavedSearch(data);
           }
@@ -249,7 +247,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               modifySearchResult[searchResult.activeTab]?.saveSearchName ||
               saveSearchName,
             isSavedSearch: isSaved,
-            queryParams,
+            queryParams
           };
           if (modifySearchResult[searchResult.activeTab]) {
             const updatedData = [...modifySearchResult];
@@ -264,7 +262,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             id: id,
             saveSearchName: saveSearchName,
             isSavedSearch: isSaved,
-            queryParams,
+            queryParams
           };
           localStorage.setItem(
             'Search',
@@ -292,7 +290,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
     displayButtonFunction: handleSaveAndSearch,
     label: 'Save And Search',
     name: 'Save',
-    displayButtonLabel2: 'Save',
+    displayButtonLabel2: 'Save'
   };
 
   const handleCloseInputDialog = () => {
@@ -358,13 +356,13 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               },
               isHidden:
                 modifySearchFrom !== `${SAVED_SEARCHES}` &&
-                modifySearchFrom !== `${SEARCH_RESULT}`,
+                modifySearchFrom !== `${SEARCH_RESULT}`
             },
             {
               id: 2,
               displayButtonLabel: ManageLocales('app.advanceSearch.reset'),
               style: styles.transparent,
-              fn: () => handleReset(setState),
+              fn: () => handleReset(setState)
             },
             {
               id: 3,
@@ -398,15 +396,15 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
                     setErrorText('Please make a selection to perform action.');
                   }
                 }
-              },
+              }
             },
             {
               id: 4,
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
-              isHidden: modifySearchFrom === `${SAVED_SEARCHES}`,
-            },
+              isHidden: modifySearchFrom === `${SAVED_SEARCHES}`
+            }
           ]}
           noBorderTop={styles.paginationContainerStyle}
         />

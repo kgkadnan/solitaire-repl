@@ -1,7 +1,7 @@
 import {
   PreloadedState,
   combineReducers,
-  configureStore,
+  configureStore
 } from '@reduxjs/toolkit';
 
 import { notificationSettingApi } from './features/api/notification-setting';
@@ -37,13 +37,13 @@ const rootReducer = combineReducers({
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
-  [myDiamondAPI.reducerPath]: myDiamondAPI.reducer,
+  [myDiamondAPI.reducerPath]: myDiamondAPI.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
   return configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) =>
+    middleware: getDefaultMiddleware =>
       // adding the api middleware enables caching, invalidation, polling and other features of `rtk-query`
       getDefaultMiddleware().concat(
         previousSearchApi.middleware,
@@ -58,7 +58,7 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         loginApi.middleware,
         myDiamondAPI.middleware
       ),
-    preloadedState,
+    preloadedState
   });
 };
 

@@ -8,28 +8,28 @@ import CustomImageTile from '@components/common/image-tile';
 jest.mock('next/image', () => ({
   __esModule: true,
   default: () => <div>Image Component</div>,
-  StaticImageData: {},
+  StaticImageData: {}
 }));
 
 describe('CustomImageTile', () => {
   const imageData = [
     {
       src: Round,
-      title: 'Round',
+      title: 'Round'
     },
     {
       src: Round,
-      title: 'Pear',
+      title: 'Pear'
     },
     {
       src: Round,
-      title: 'Emerald',
-    },
+      title: 'Emerald'
+    }
   ];
 
   const overriddenStyles = {
     imageTileMainContainerStyles: 'custom-main-container',
-    imageTileContainerStyles: 'custom-container',
+    imageTileContainerStyles: 'custom-container'
   };
 
   const handleSelectTileMock = jest.fn();
@@ -72,7 +72,7 @@ describe('CustomImageTile', () => {
     );
 
     // Click on the Pear tile
-    imageData.map(async (items) => {
+    imageData.map(async items => {
       const pearTile = screen.getByText(items.title);
       await userEvent.click(pearTile);
 

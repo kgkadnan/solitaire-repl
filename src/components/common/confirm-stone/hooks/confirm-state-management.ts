@@ -12,14 +12,14 @@ export const useConfirmStoneStateManagement = () => {
       confirmStoneData,
       commentValue,
       selectedDaysInputValue,
-      selectedRadioDaysValue,
+      selectedRadioDaysValue
     },
 
     confirmStoneSetState: {
       setConfirmStoneData,
       setCommentValue,
       setSelectedDaysInputValue,
-      setSelectedRadioDaysValue,
-    },
+      setSelectedRadioDaysValue
+    }
   };
 };

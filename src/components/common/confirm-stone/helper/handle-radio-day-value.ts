@@ -17,7 +17,7 @@ export const handleRadioDayValue = ({
   event,
   setInputError,
   setSelectedDaysInputValue,
-  setInputErrorContent,
+  setInputErrorContent
 }: IhandleRadioDayValue) => {
   const inputValue = parseFloat(event.target.value);
   if (inputValue >= 121) {

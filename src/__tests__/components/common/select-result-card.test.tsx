@@ -2,21 +2,21 @@ import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import CustomSearchResultCard, {
-  IImageContainerProps,
+  IImageContainerProps
 } from '@/components/common/search-result-card';
 
 // Mock the next/image package
 jest.mock('next/image', () => ({
   __esModule: true,
   default: () => <div>Image Component</div>,
-  StaticImageData: {},
+  StaticImageData: {}
 }));
 
 describe('CustomSearchResultCard', () => {
   const mockCardData: IImageContainerProps['cardData'] = {
     cardId: '123',
     cardHeader: 'Card Header',
-    cardContent: 'Card Content',
+    cardContent: 'Card Content'
   };
 
   test('renders CustomSearchResultCard component', () => {

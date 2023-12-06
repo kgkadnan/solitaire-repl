@@ -7,7 +7,6 @@ export const handleReset = (setState: any) => {
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedTinge,
-    setSelectedTingeIntensity,
     setSelectedClarity,
     setSelectedGirdleStep,
     setSelectedCaratRange,
@@ -70,7 +69,7 @@ export const handleReset = (setState: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo,
+    setStarLengthTo
   } = setState;
   setSelectedShape([]);
   setSelectedColor('');
@@ -79,7 +78,6 @@ export const handleReset = (setState: any) => {
   setSelectedIntensity([]);
   setSelectedOvertone([]);
   setSelectedTinge([]);
-  setSelectedTingeIntensity([]);
   setSelectedClarity([]);
   setSelectedCaratRange([]);
   setSelectedMake('');

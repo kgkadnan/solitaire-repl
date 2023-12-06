@@ -23,7 +23,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   setIsCheckAll,
   isCheckAll,
   row,
-  setIsError,
+  setIsError
 }) => {
   return (
     <div className="flex items-center text-center space-x-2">
@@ -40,7 +40,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
             setIsCheckAll,
             isCheckAll,
             data: row,
-            setIsError,
+            setIsError
           })
         }
         className={`${styles.defaultCheckbox} ${style} `}

@@ -4,7 +4,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@components/ui/select';
 
 import React from 'react';
@@ -32,7 +32,7 @@ export const CustomSelect: React.FC<ISelectProps> = ({
   data,
   placeholder,
   style,
-  onChange,
+  onChange
 }) => {
   return (
     <Select onValueChange={onChange}>
@@ -47,7 +47,7 @@ export const CustomSelect: React.FC<ISelectProps> = ({
         className={`${styles.defaultselectcontent} ${style?.selectContent}`}
         data-testid="option"
       >
-        {data.map((item) => (
+        {data.map(item => (
           <SelectItem
             key={item.id}
             value={item.value}

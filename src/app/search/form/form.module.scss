@@ -1,319 +1,317 @@
 .imageTileMainContainerStyles {
-    display: flex;
-    background-color: transparent;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-  
-  .imageTileContainerStyles {
-    width: 64px;
-    height: 75px;
-    padding: 5px;
-    border-radius: 2px;
-    align-items: center;
-    border: 1px solid transparent;
-    margin: 0 16px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .imageTileImageStyles {
-    width: 30px;
-    height: 30px;
-    margin: auto;
-  }
-  
-  .imageTileLabelStyles {
-    font-size: 12px;
-    color: hsl(var(--solitaire-tertiary));
-    padding-top: 9px;
-    text-align: center;
-  }
-  
-  .activeIndicatorStyles {
-    border: 1px solid #8c7459;
-    border-radius: 2px;
-  }
-  
-  .label {
-    font-size: 16px;
-  }
-  
-  .dividerLine {
-    height: 5px;
-    border: 0px solid hsl(var(--solitaire-quaternary));
-    border-top-width: 1px;
-  }
-  
-  .filterSectionLabel {
-    width: 10%;
-    height: auto;
-    display: flex;
-  }
-  
-  .filterSection {
-    display: flex;
-    padding: 5px 0px;
-  }
-  
-  .filterSectionData {
-    width: 90%;
-  }
-  
-  .colorFilterStyles {
-    border-radius: 30px;
-    width: 100px;
-  }
-  
-  .whiteColorFilterStyle {
-    width: 45px;
-  }
-  
-  .commonSelectionStyle {
-    width: 120px;
-  }
-  
-  .filterWrapSection {
-    display: flex;
-    flex-wrap: wrap;
-  }
-  
-  .otherParameterContainer {
-    width: 50%;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
-  
-  .otherParameterHeader {
-    margin-top: 20px;
-    padding-bottom: 30px;
-    font-weight: normal;
-  }
-  
-  .otherParameterTitle {
-    width: 20%;
-  }
-  
-  .labelPlainColor {
-    color: hsl(var(--solitaire-tertiary));
-    font-weight: normal;
-    font-size: 14px;
-  }
-  
-  .otherParameterDataContainer {
-    padding: 0px;
-    align-items: center;
-  }
-  
-  .radioStyle {
-    border: 1px solid hsl(var(--solitaire-tertiary));
-    color: hsl(var(--solitaire-quaternary));
-    border-color: hsl(var(--solitaire-quaternary));
-    margin: 10px;
-  }
-  
-  .radioLabel {
-    color: hsl(var(--solitaire-tertiary));
-    font-weight: normal;
-    padding: 15px 5px;
-  }
-  
-  .caratRangeFilter {
-    display: flex;
-    flex-direction: column;
-  }
-  
-  .inputFieldStyles {
-    width: 100px;
-    height: 40px;
-  }
-  
-  .parameterFilter {
-    // width: 25%;
-    justify-content: space-between;
-  }
-  
-  .parameterContainer {
-    width: 220px;
-    margin-right: 20px;
-    margin-top: 30px;
-  }
-  
-  .parameterLabel {
-    color: hsl(var(--solitaire-tertiary));
-    font-size: 12px;
-    display: flex;
-    align-items: flex-end;
-  }
-  
-  .rangeFilter {
-    display: flex;
-    width: 220px;
-    justify-content: space-between;
-    margin-left: 10px;
-  }
-  
-  .addCarat {
-    border: 1px solid #8c7459;
-    color: hsl(var(--solitaire-tertiary));
-    padding: 0px 30px;
-  }
-  
-  .specificFilterAlign {
-    margin-top: 20px;
-    align-items: start;
-    font-size: 14px;
-  }
-  
-  .dropdownHeader {
-    padding-left: 2px;
-    width: 200px;
-    border-bottom: 0.5px solid #8c7459;
-    color: hsl(var(--solitaire-tertiary));
-  }
-  
-  .dropdownData {
-    background-color: hsl(var(--solitaire-secondary));
-    color: hsl(var(--solitaire-tertiary));
-  }
-  
-  .dropdownData:hover {
-    background-color: hsl(var(--solitaire-secondary));
-  }
-  
-  .selectElement:hover {
-    background-color: hsl(var(--solitaire-senary));
-  }
-  
-  .advanceSearchHeader {
-    display: flex;
-    justify-content: space-between;
-    padding: 30px 0px;
-  }
-  
-  .activeColorStyles {
-    background-color: #8c7459;
-    border: none;
-    // color: red
-  }
-  
-  .stepStyle {
-    color: hsl(var(--solitaire-tertiary));
-    font-size: 14px;
-    text-decoration: underline;
-    padding-bottom: 2px;
-    text-decoration-color: #8c7459;
-  }
-  
-  .colorDataActiveStyle {
-    color: white;
-  }
-  
-  //Footer Button
-  .transparent {
-    background-color: transparent;
-    border: 1px solid #8c7459;
-    font-size: 14px !important;
-  }
-  
-  .filled {
-    font-size: 14px !important;
-    background-color: #8c7459;
-  }
-  
-  .anotherSearch {
-    width: 195px;
-  }
-  
-  .labelContainer {
-    display: flex;
-    padding-right: 10px;
-    // width: 200px;
-  }
-  
-  .tooltipContainerStyles {
-    width: 100%;
-  }
-  .yourSelectionContainer {
-    width: calc(100% - 200px);
-  }
-  .yourSelectionHeader {
-    width: 100%;
-  }
-  
-  .yourSelectionToolTipStyles {
-    display: flex;
-    justify-content: right;
-  }
-  
-  .yourSelectionTooltipContentStyle {
-    width: 113%;
-    display: flex;
-    flex-wrap: wrap;
-    white-space: pre-wrap;
-    margin-left: -7%;
-  }
-  
-  .yourSelectionSubContainer {
-    width: 33%;
-    display: flex;
-    text-align: left;
-  }
-  
-  .yourSelectionMainContainer {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    width: 100%;
-    padding-top: 20px;
-  }
-  
-  .yourSelectionContentContainer {
-    width: 100%;
-  }
-  
-  .yourSelectionTooltipHeader {
-    font-weight: 600;
-  }
-  
-  .yourSelectionInHeader {
-    display: flex;
-    color: hsl(var(--solitaire-tertiary));
-  }
-  
-  .yourSelectionInHeaderElement {
-    padding: 0px 10px;
-  }
-  
-  .countryOriginStyle {
-    width: fit-content;
-  }
-  
-  .selectionButtonStyles {
-    border: 0.25px solid #5d6a6a;
-  }
-  
-  .addCartButtonStyles {
-    border: 0.25px solid hsl(var(--solitaire-quaternary));
-  }
-  
-  .labelDefaultStyle {
-    color: hsl(var(--solitaire-tertiary));
-  }
-  
-  .validationMessage {
-    color: red;
-    font-size: 12px;
-    text-align: center;
-    font-weight: 300;
-  }
-  .activeOtherStyles {
-    border: 1px solid #8c7459;
-  }
-  
-  .paginationContainerStyle {
-    border: none !important ;
-  }
-  
+  display: flex;
+  background-color: transparent;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.imageTileContainerStyles {
+  width: 64px;
+  height: 75px;
+  padding: 5px;
+  border-radius: 2px;
+  align-items: center;
+  border: 1px solid transparent;
+  margin: 0 16px;
+  display: flex;
+  flex-direction: column;
+}
+
+.imageTileImageStyles {
+  width: 30px;
+  height: 30px;
+  margin: auto;
+}
+
+.imageTileLabelStyles {
+  font-size: 12px;
+  color: hsl(var(--solitaire-tertiary));
+  padding-top: 9px;
+  text-align: center;
+}
+
+.activeIndicatorStyles {
+  border: 1px solid #8c7459;
+  border-radius: 2px;
+}
+
+.label {
+  font-size: 16px;
+}
+
+.dividerLine {
+  height: 5px;
+  border: 0px solid hsl(var(--solitaire-quaternary));
+  border-top-width: 1px;
+}
+
+.filterSectionLabel {
+  width: 10%;
+  height: auto;
+  display: flex;
+}
+
+.filterSection {
+  display: flex;
+  padding: 5px 0px;
+}
+
+.filterSectionData {
+  width: 90%;
+}
+
+.colorFilterStyles {
+  border-radius: 30px;
+  width: 100px;
+}
+
+.whiteColorFilterStyle {
+  width: 45px;
+}
+
+.commonSelectionStyle {
+  width: 120px;
+}
+
+.filterWrapSection {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.otherParameterContainer {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.otherParameterHeader {
+  margin-top: 20px;
+  padding-bottom: 30px;
+  font-weight: normal;
+}
+
+.otherParameterTitle {
+  width: 20%;
+}
+
+.labelPlainColor {
+  color: hsl(var(--solitaire-tertiary));
+  font-weight: normal;
+  font-size: 14px;
+}
+
+.otherParameterDataContainer {
+  padding: 0px;
+  align-items: center;
+}
+
+.radioStyle {
+  border: 1px solid hsl(var(--solitaire-tertiary));
+  color: hsl(var(--solitaire-quaternary));
+  border-color: hsl(var(--solitaire-quaternary));
+  margin: 10px;
+}
+
+.radioLabel {
+  color: hsl(var(--solitaire-tertiary));
+  font-weight: normal;
+  padding: 15px 5px;
+}
+
+.caratRangeFilter {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputFieldStyles {
+  width: 100px;
+  height: 40px;
+}
+
+.parameterFilter {
+  // width: 25%;
+  justify-content: space-between;
+}
+
+.parameterContainer {
+  width: 220px;
+  margin-right: 20px;
+  margin-top: 30px;
+}
+
+.parameterLabel {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 12px;
+  display: flex;
+  align-items: flex-end;
+}
+
+.rangeFilter {
+  margin-left: 10px;
+}
+
+.addCarat {
+  border: 1px solid #8c7459;
+  color: hsl(var(--solitaire-tertiary));
+  padding: 0px 30px;
+}
+
+.specificFilterAlign {
+  margin-top: 20px;
+  align-items: start;
+  font-size: 14px;
+}
+
+.dropdownHeader {
+  padding-left: 2px;
+  width: 200px;
+  border-bottom: 0.5px solid #8c7459;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.fancyDropdownHeader {
+  padding-left: 2px;
+  margin-right: 80px;
+  border-bottom: 0.5px solid #8c7459;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.dropdownData {
+  background-color: hsl(var(--solitaire-secondary));
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.dropdownData:hover {
+  background-color: hsl(var(--solitaire-secondary));
+}
+
+.selectElement {
+  height: 20%;
+}
+
+.selectElement:hover {
+  background-color: hsl(var(--solitaire-senary));
+}
+
+.advanceSearchHeader {
+  display: flex;
+  justify-content: space-between;
+  padding: 30px 0px;
+}
+
+.activeColorStyles {
+  background-color: #8c7459;
+  border: none;
+  // color: red
+}
+
+.colorDataActiveStyle {
+  color: white;
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  font-size: 14px !important;
+}
+
+.filled {
+  font-size: 14px !important;
+  background-color: #8c7459;
+}
+
+.anotherSearch {
+  width: 195px;
+}
+
+.labelContainer {
+  display: flex;
+  padding-right: 10px;
+  // width: 200px;
+}
+
+.tooltipContainerStyles {
+  width: 100%;
+}
+.yourSelectionContainer {
+  width: calc(100% - 200px);
+}
+.yourSelectionHeader {
+  width: 100%;
+}
+
+.yourSelectionToolTipStyles {
+  display: flex;
+  justify-content: right;
+}
+
+.yourSelectionTooltipContentStyle {
+  width: 113%;
+  display: flex;
+  flex-wrap: wrap;
+  white-space: pre-wrap;
+  margin-left: -7%;
+}
+
+.yourSelectionSubContainer {
+  width: 33%;
+  display: flex;
+  text-align: left;
+}
+
+.yourSelectionMainContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  width: 100%;
+  padding-top: 20px;
+}
+
+.yourSelectionContentContainer {
+  width: 100%;
+}
+
+.yourSelectionTooltipHeader {
+  font-weight: 600;
+}
+
+.yourSelectionInHeader {
+  display: flex;
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.yourSelectionInHeaderElement {
+  padding: 0px 10px;
+}
+
+.countryOriginStyle {
+  width: fit-content;
+}
+
+.selectionButtonStyles {
+  border: 0.25px solid #354444;
+}
+
+.addCartButtonStyles {
+  border: 0.25px solid hsl(var(--solitaire-quaternary));
+}
+
+.labelDefaultStyle {
+  color: hsl(var(--solitaire-tertiary));
+}
+
+.validationMessage {
+  color: red;
+  font-size: 12px;
+  text-align: center;
+  font-weight: 300;
+}
+.activeOtherStyles {
+  background-color: #8c7459;
+}
+
+.paginationContainerStyle {
+  border: none !important ;
+}

@@ -3,13 +3,13 @@ fetches data from an API endpoint using the `useGetManageListingSequenceQuery` h
 non-manageable and manageable listings in separate sections. The manageable listings can be
 reordered using drag and drop functionality provided by the `react-beautiful-dnd-grid` library. The
 component also allows the user to enable or disable listings using checkboxes. The updated sequence
-can be saved by clicking the "Update Sequence" button, and the changes are sent to the server using
+can be saved by clicking the 'Update Sequence' button, and the changes are sent to the server using
 the `useAddManageListingSequenceMutation` */
 'use client';
 import React, { ReactNode, useEffect, useState } from 'react';
 import {
   useAddManageListingSequenceMutation,
-  useGetManageListingSequenceQuery,
+  useGetManageListingSequenceQuery
 } from '@/features/api/manage-listing-sequence';
 import { ListManager } from 'react-beautiful-dnd-grid';
 import { ManageListingSequenceResponse } from './interface';
@@ -74,8 +74,8 @@ delay of 3000 milliseconds (3 seconds). */
 and `nonManageableListings` whenever the `data` variable changes. */
   useEffect(() => {
     if (data?.length) {
-      const nonManageable = data?.filter((item) => item.is_fixed);
-      const manageable = data?.filter((item) => !item.is_fixed);
+      const nonManageable = data?.filter(item => item.is_fixed);
+      const manageable = data?.filter(item => !item.is_fixed);
 
       setManageableListings(sortList(manageable));
       setNonManageableListings(nonManageable);
@@ -89,7 +89,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
    * listing item.
    */
   const handleCheckboxClick = (id: string) => {
-    const updatedListings = manageableListings.map((item) =>
+    const updatedListings = manageableListings.map(item =>
       item.id === id ? { ...item, is_disabled: !item.is_disabled } : item
     );
 
@@ -121,7 +121,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
     // Update the sequence values based on the new order
     const updatedWithSequence = updatedList.map((item, index) => ({
       ...item,
-      sequence: index + nonManageableListings.length + 1,
+      sequence: index + nonManageableListings.length + 1
     }));
 
     setManageableListings(updatedWithSequence);
@@ -133,7 +133,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
    */
   const handleCancel = () => {
     // Handle cancel action
-    const manageable = data.filter((item) => !item.is_fixed);
+    const manageable = data.filter(item => !item.is_fixed);
 
     setManageableListings(sortList(manageable));
   };
@@ -172,7 +172,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
         'app.myaccount.diamondSequence.footer.updateSequence'
       ),
       style: styles.filled,
-      fn: handleUpdateDiamondSequence,
+      fn: handleUpdateDiamondSequence
     },
     {
       id: 2,
@@ -180,8 +180,8 @@ and `nonManageableListings` whenever the `data` variable changes. */
         'app.myaccount.diamondSequence.footer.cancel'
       ),
       style: styles.transparent,
-      fn: handleCancel,
-    },
+      fn: handleCancel
+    }
   ];
 
   return (

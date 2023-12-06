@@ -1,3 +1,88 @@
 {
-  "extends": ["next/core-web-vitals", "plugin:storybook/recommended"]
+  "extends": [
+    "next/core-web-vitals",
+    "plugin:storybook/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended"
+  ],
+  "plugins": ["prettier", "@typescript-eslint"],
+
+  "rules": {
+    //  Code Style
+    // "indent": ["error", 2],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }],
+    "semi": ["error", "always"],
+
+    // Avoiding any Type
+    "@typescript-eslint/no-explicit-any": ["error"],
+
+    /// -----------------------------------------------------
+    // //  Explicit Return Types (Optional)
+    // "@typescript-eslint/explicit-function-return-type": [
+    //   "error",
+    //   { "allowExpressions": true }
+    // ],
+
+    // //  Avoid Unused Variables and Imports
+    // "no-unused-vars": "error",
+    // "@typescript-eslint/no-unused-vars": [
+    //   "error",
+    //   { "argsIgnorePattern": "^_" }
+    // ],
+    // "no-unused-expressions": ["error", { "allowTernary": true }],
+
+    // // Nullish Coalescing and Optional Chaining
+    // "@typescript-eslint/no-non-null-assertion": "error",
+    // "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
+    // "no-extra-boolean-cast": "off",
+    // "@typescript-eslint/no-extra-non-null-assertion": "error",
+    // "@typescript-eslint/prefer-optional-chain": "error",
+    // "@typescript-eslint/prefer-nullish-coalescing": "error",
+
+    // //  Interface Naming Conventions
+    // "@typescript-eslint/interface-name-prefix": [
+    //   "error",
+    //   { "prefixWithI": "always" }
+    // ],
+
+    // //  Immutable Data Structures (Example rule: you may need additional rules based on your needs)
+    // "immutable/no-mutation": "error",
+
+    // //  Enforce Strict Equality (=== and !==)
+    // "eqeqeq": ["error", "always", { "null": "ignore" }],
+
+    // //  Ban Unsafe Type Conversions (Example rule: you may need additional rules based on your needs)
+    // "@typescript-eslint/no-unsafe-member-access": "error",
+    // "@typescript-eslint/no-unsafe-assignment": "error",
+    // "@typescript-eslint/no-unsafe-call": "error",
+    // "@typescript-eslint/no-unsafe-return": "error",
+
+    // // 11. Interface Naming Conventions
+    // "@typescript-eslint/naming-convention": [
+    //   "error",
+    //   {
+    //     "selector": "interface",
+    //     "format": ["PascalCase"],
+    //     "custom": {
+    //       "regex": "^I[A-Z]",
+    //       "match": true
+    //     }
+    //   }
+    // ],
+
+    // -----------------------------------------------------------
+    // Prettier formatting
+    "prettier/prettier": [
+      "error",
+      {
+        "endOfLine": "auto",
+        "printWidth": 80,
+        "singleQuote": true,
+        "semi": true,
+        "tabWidth": 2,
+        "trailingComma": "none",
+        "arrowParens": "avoid"
+      }
+    ]
+  }
 }

@@ -15,10 +15,10 @@ const MyInvoices = ({ myInvoiceData }: any) => {
   const { data: productData } = useGetProductDetailsQuery(
     {
       id,
-      singleExpand,
+      singleExpand
     },
     {
-      skip: !id,
+      skip: !id
     }
   );
 

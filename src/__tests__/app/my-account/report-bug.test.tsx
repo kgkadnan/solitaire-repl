@@ -16,7 +16,7 @@ describe('ReportBug Component', () => {
 
     // Simulate typing in the textarea
     fireEvent.change(textarea, {
-      target: { value: 'This is a test bug report.' },
+      target: { value: 'This is a test bug report.' }
     });
 
     // Check if the input value has been updated

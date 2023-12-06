@@ -13,19 +13,19 @@ import { ManageLocales } from '@/utils/translate';
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from '@/components/ui/popover';
 import { CustomCalculator } from '@/components/calculator';
 import { CustomSlider } from '../slider';
 import {
   useGetAllNotificationQuery,
-  useUpdateNotificationMutation,
+  useUpdateNotificationMutation
 } from '@/features/api/notification';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import {
   NotificationItem,
-  NotificationUpdate,
+  NotificationUpdate
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
@@ -36,7 +36,7 @@ export const TopNavigationBar = () => {
 
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(
-    (store) => store.notificationBadge.status
+    store => store.notificationBadge.status
   );
 
   // let badgeData = notificationBadgeStoreData.status;
@@ -52,7 +52,7 @@ export const TopNavigationBar = () => {
   const { data } = useGetAllNotificationQuery({
     type: 'APP',
     offset,
-    limit,
+    limit
   });
 
   const [updateNotification] = useUpdateNotificationMutation();
@@ -61,28 +61,28 @@ export const TopNavigationBar = () => {
     {
       label: ManageLocales('app.topNav.forYou'),
       link: '/',
-      isActive: currentRoute === '/',
+      isActive: currentRoute === '/'
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
       link: `/search?query=${NEW_SEARCH}`,
-      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`,
+      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
     },
     {
       label: ManageLocales('app.topNav.myCart'),
       link: '/my-cart/active',
-      isActive: currentRoute === '/my-cart/active',
+      isActive: currentRoute === '/my-cart/active'
     },
     {
       label: ManageLocales('app.topNav.myAccount'),
       link: '/my-account/summary',
-      isActive: currentRoute === '/my-account/summary',
-    },
+      isActive: currentRoute === '/my-account/summary'
+    }
   ];
 
   let handleRoute = (label: string, link: string) => {
     router.push(`${link}`);
-    topNavData.forEach((navData) => {
+    topNavData.forEach(navData => {
       if (navData.label !== label) {
         navData.isActive = false;
       }
@@ -115,7 +115,7 @@ export const TopNavigationBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent,
+                displayButtonStyle: styles.showResultButtonTransparent
               }}
             />
             <CustomDisplayButton
@@ -125,7 +125,7 @@ export const TopNavigationBar = () => {
                 setDialogContent('');
               }}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled,
+                displayButtonStyle: styles.showResultButtonFilled
               }}
             />
           </div>
@@ -159,7 +159,7 @@ export const TopNavigationBar = () => {
 
     let notificationMapData = data?.data?.map((item: NotificationItem) => ({
       id: item.id,
-      status: item.status === 'read' ? 'read' : 'unread',
+      status: item.status === 'read' ? 'read' : 'unread'
     }));
 
     const unreadNotifications: NotificationUpdate[] =
@@ -188,14 +188,14 @@ export const TopNavigationBar = () => {
       >
         <div className="h-[80px] flex justify-end items-center text-solitaireTertiary">
           <div className="flex items-center gap-14 mr-12">
-            {topNavData.slice(0, 3).map((navData) => (
+            {topNavData.slice(0, 3).map(navData => (
               <div key={navData.label}>
                 <CustomDisplayButton
                   displayButtonAllStyle={{
                     displayButtonStyle: navData.isActive
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
-                    displayLabelStyle: styles.headerButtonLabelStyle,
+                    displayLabelStyle: styles.headerButtonLabelStyle
                   }}
                   displayButtonLabel={navData.label}
                   handleClick={() =>
@@ -204,7 +204,7 @@ export const TopNavigationBar = () => {
                 />
               </div>
             ))}
-            {/* <SearchIcon className={styles.stroke} alt="advance-search" /> */}
+            {/* <SearchIcon className={styles.stroke} alt='advance-search' /> */}
             <Popover>
               <PopoverTrigger>
                 <CalculatorIcon role="button" className={styles.iconColor} />

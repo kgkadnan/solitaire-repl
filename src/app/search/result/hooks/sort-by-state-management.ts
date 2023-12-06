@@ -36,7 +36,7 @@ export const useSortByStateManagement = () => {
       selectedPriceRadioValue,
       refetchDataToDefault,
       previousRadioState,
-      isSortBySliderOpen,
+      isSortBySliderOpen
     },
 
     sortBySetState: {
@@ -51,7 +51,7 @@ export const useSortByStateManagement = () => {
       setRefetchDataToDefault,
       setSelectedDefaultValue,
       setPreviousRadioState,
-      setIsSortBySliderOpen,
-    },
+      setIsSortBySliderOpen
+    }
   };
 };

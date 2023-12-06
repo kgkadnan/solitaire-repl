@@ -11,7 +11,7 @@ import { CustomSearchInputField } from '@/components/common/search-input';
 import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
-  useCardRecentConfirmationQuery,
+  useCardRecentConfirmationQuery
 } from '@/features/api/my-diamonds/my-diamond';
 import RecentConfirmation from './recent-confirmation';
 import MyInvoices from './my-invoice';
@@ -41,29 +41,29 @@ function MyDiamonds() {
     {
       id: '1',
       pathName: ManageLocales('app.myDiamonds.RecentConfirmations'),
-      count: recentConfirmData?.length,
+      count: recentConfirmData?.length
     },
     {
       id: '2',
       pathName: ManageLocales('app.myDiamonds.MyInvoices'),
-      count: myInvoiceData?.length,
+      count: myInvoiceData?.length
     },
     {
       id: '3',
       pathName: ManageLocales('app.myDiamonds.PreviousConfirmations'),
-      count: previousConfirmData?.length,
-    },
+      count: previousConfirmData?.length
+    }
   ];
 
   //Header Data
   const headerData = {
-    headerHeading: 'My Diamonds',
+    headerHeading: 'My Diamonds'
   };
 
   // Style for the search input
   let searchInputStyle = {
     searchInput: styles.headerInputStyle,
-    searchInputMain: 'relative',
+    searchInputMain: 'relative'
   };
 
   // Query parameters for API request
@@ -81,10 +81,10 @@ function MyDiamonds() {
       paymentStatus,
       fields,
       expand,
-      dateSearchUrl,
+      dateSearchUrl
     },
     {
-      skip: activeTab !== 'Recent Confirmations',
+      skip: activeTab !== 'Recent Confirmations'
     }
   );
 
@@ -93,10 +93,10 @@ function MyDiamonds() {
     {
       myDiamondStatus,
       invoiceStatus,
-      dateSearchUrl,
+      dateSearchUrl
     },
     {
-      skip: activeTab !== 'My Invoices',
+      skip: activeTab !== 'My Invoices'
     }
   );
 
@@ -104,19 +104,12 @@ function MyDiamonds() {
   const { data: previousConfirmationData } = useCardPreviousConfirmationQuery(
     {
       previousConfirmStatus,
-      dateSearchUrl,
+      dateSearchUrl
     },
     {
-      skip: activeTab !== 'Previous Confirmations',
+      skip: activeTab !== 'Previous Confirmations'
     }
   );
-
-  // Handle scroll events to show/hide the header
-  const handleScroll = () => {
-    const currentScrollPos = window.pageYOffset;
-    setVisible(prevScrollPos > currentScrollPos);
-    setPrevScrollPos(currentScrollPos);
-  };
 
   // Handle date selection in the calendar
   const handleDate = (date: IDateRange) => {
@@ -182,7 +175,7 @@ function MyDiamonds() {
   useEffect(() => {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
     setFilteredData(recentConfirmData);
-  }, [myDiamondRecentConfirmData]);
+  }, [myDiamondRecentConfirmData, setFilteredData, recentConfirmData]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
@@ -197,6 +190,13 @@ function MyDiamonds() {
 
   // useEffect to add/remove scroll event listener
   useEffect(() => {
+    // Handle scroll events to show/hide the header
+    const handleScroll = () => {
+      const currentScrollPos = window.pageYOffset;
+      setVisible(prevScrollPos > currentScrollPos);
+      setPrevScrollPos(currentScrollPos);
+    };
+
     window.addEventListener('scroll', handleScroll);
     return () => {
       window.removeEventListener('scroll', handleScroll);
@@ -274,7 +274,7 @@ function MyDiamonds() {
         style={{
           display: 'flex',
           marginTop: '70px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>

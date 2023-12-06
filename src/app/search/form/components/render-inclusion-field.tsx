@@ -32,7 +32,7 @@ const renderInclusionField = (state: any, setState: any) => {
     naturalGirdleWI,
     naturalPavilionWI,
     surfaceGrainingWI,
-    internalGrainingWI,
+    internalGrainingWI
   } = state;
   const {
     setBlackTableBI,
@@ -49,7 +49,7 @@ const renderInclusionField = (state: any, setState: any) => {
     setNaturalGirdleWI,
     setNaturalPavilionWI,
     setSurfaceGrainingWI,
-    setInternalGrainingWI,
+    setInternalGrainingWI
   } = setState;
 
   const handleBlackTableBIChange = (data: string) => {
@@ -104,71 +104,71 @@ const renderInclusionField = (state: any, setState: any) => {
       value: [
         {
           handleChange: handleBlackTableBIChange,
-          state: blackTableBI,
+          state: blackTableBI
         },
         {
           handleChange: handleSideBlackBIChange,
-          state: sideBlackBI,
+          state: sideBlackBI
         },
         {
           handleChange: handleOpenCrownBIChange,
-          state: openCrownBI,
+          state: openCrownBI
         },
         {
           handleChange: handleOpenTableBIChange,
-          state: openTableBI,
+          state: openTableBI
         },
         {
           handleChange: handleOpenPavilionBIChange,
-          state: openPavilionBI,
+          state: openPavilionBI
         },
         {
           handleChange: handleMilkyBIChange,
-          state: milkyBI,
+          state: milkyBI
         },
         {
           handleChange: handleLusterBIChange,
-          state: lusterBI,
+          state: lusterBI
         },
         {
           handleChange: handleEyeCleanBIChange,
-          state: eyeCleanBI,
-        },
-      ],
+          state: eyeCleanBI
+        }
+      ]
     },
     {
       key: ManageLocales('app.advanceSearch.whiteInclusion'),
       value: [
         {
           handleChange: handleTableInclusionWIChange,
-          state: tableInclusionWI,
+          state: tableInclusionWI
         },
         {
           handleChange: handleSideInclusionWIChange,
-          state: sideInclusionWI,
+          state: sideInclusionWI
         },
         {
           handleChange: handleNaturalCrownWIChange,
-          state: naturalCrownWI,
+          state: naturalCrownWI
         },
         {
           handleChange: handleNaturalGirdleWIChange,
-          state: naturalGirdleWI,
+          state: naturalGirdleWI
         },
         {
           handleChange: handleNaturalPavilionWIChange,
-          state: naturalPavilionWI,
+          state: naturalPavilionWI
         },
         {
           handleChange: handleSurfaceGrainingIChange,
-          state: surfaceGrainingWI,
+          state: surfaceGrainingWI
         },
         {
           handleChange: handleinternalGrainingWIChange,
-          state: internalGrainingWI,
-        },
-      ],
-    },
+          state: internalGrainingWI
+        }
+      ]
+    }
   ];
   let otherParameterData = otherParameterDataState.map((other, otherIndex) => {
     return {
@@ -176,9 +176,9 @@ const renderInclusionField = (state: any, setState: any) => {
       value: other.value.map((data, valueIndex) => {
         return {
           ...data,
-          ...advanceSearch.other_parameter[otherIndex].value[valueIndex],
+          ...advanceSearch.other_parameter[otherIndex].value[valueIndex]
         };
-      }),
+      })
     };
   });
 
@@ -192,7 +192,7 @@ const renderInclusionField = (state: any, setState: any) => {
         label={other.key}
         overriddenStyles={{ label: styles.otherParameterHeader }}
       />
-      {other.value.map((data) => (
+      {other.value.map(data => (
         <div
           className={`${styles.filterSection} ${styles.otherParameterDataContainer} `}
           key={`${other.key}-${data.element_key}`}

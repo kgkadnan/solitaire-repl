@@ -12,40 +12,40 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const [visible, setVisible] = useState(true);
 
   let myAccountHeader = {
-    headerHeading: ManageLocales('app.myProfile.heading'),
+    headerHeading: ManageLocales('app.myProfile.heading')
   };
 
   let myProfileRoutes = [
     {
       id: '1',
       pathName: ManageLocales('app.myProfile.summary'),
-      path: 'summary',
+      path: 'summary'
     },
     {
       id: '2',
       pathName: ManageLocales('app.myProfile.kyc'),
-      path: 'kyc',
+      path: 'kyc'
     },
     {
       id: '3',
       pathName: ManageLocales('app.myProfile.changePassword'),
-      path: 'change-password',
+      path: 'change-password'
     },
     {
       id: '4',
       pathName: ManageLocales('app.myProfile.ManageListingSequence'),
-      path: 'manage-diamond-sequence', // Corrected the path name
+      path: 'manage-diamond-sequence' // Corrected the path name
     },
     {
       id: '5',
       pathName: ManageLocales('app.myProfile.emailNotification'),
-      path: 'email-notification',
+      path: 'email-notification'
     },
     {
       id: '6',
       pathName: ManageLocales('app.myProfile.reportBug'),
-      path: 'report-bug',
-    },
+      path: 'report-bug'
+    }
   ];
 
   const handleScroll = useCallback(() => {
@@ -102,7 +102,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
         style={{
           display: 'flex',
           marginTop: '70px',
-          width: '100%',
+          width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>{children}</main>

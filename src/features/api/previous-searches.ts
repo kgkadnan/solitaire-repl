@@ -1,7 +1,7 @@
 import {
   createApi,
   fetchBaseQuery,
-  BaseQueryFn,
+  BaseQueryFn
 } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,42 +13,41 @@ export const previousSearchApi = createApi({
   reducerPath: 'previousSearchReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
-   
+    credentials: 'include'
   }) as BaseQuery,
   tagTypes: ['PreviousSearch'],
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllPreviousSearches: builder.query({
       query: ({ limit, offset, searchUrl = '', searchByName }) => ({
         url: `previous-search?limit=${limit}&offset=${offset}&name=${searchByName}${searchUrl}`,
-        method: 'GET',
+        method: 'GET'
       }),
-      providesTags: ['PreviousSearch'],
+      providesTags: ['PreviousSearch']
     }),
     getPreviousSearchList: builder.query({
-      query: (searchByName) => `previous-search-list?name=${searchByName}`,
-      providesTags: ['PreviousSearch'],
+      query: searchByName => `previous-search-list?name=${searchByName}`,
+      providesTags: ['PreviousSearch']
     }),
     getSpecificPrevious: builder.query({
       query: ({ id }) => `previous-search?id=${id}`,
-      providesTags: ['PreviousSearch'],
+      providesTags: ['PreviousSearch']
     }),
     addPreviousSearch: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `previous-search`,
         method: 'POST',
-        body: data,
-      }),
+        body: data
+      })
     }),
     deletePreviousSearch: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `previous-search`,
         method: 'DELETE', // Use the appropriate HTTP method
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['PreviousSearch'],
-    }),
-  }),
+      invalidatesTags: ['PreviousSearch']
+    })
+  })
 });
 
 export const {
@@ -56,5 +55,5 @@ export const {
   useGetSpecificPreviousQuery,
   useGetPreviousSearchListQuery,
   useAddPreviousSearchMutation,
-  useDeletePreviousSearchMutation,
+  useDeletePreviousSearchMutation
 } = previousSearchApi;

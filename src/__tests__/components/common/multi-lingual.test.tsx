@@ -15,20 +15,20 @@ test('LanguageSelector component dispatches SET_LANGUAGE action', () => {
     </Provider>
   );
 
-  // Click the "English" button
+  // Click the 'English' button
   fireEvent.click(getByText('English'));
 
   // Expect that the SET_LANGUAGE action was dispatched with 'en' payload
   const actions = store.getActions();
   expect(actions).toEqual([{ type: 'SET_LANGUAGE', payload: 'en' }]);
 
-  // Click the "French" button
+  // Click the 'French' button
   fireEvent.click(getByText('French'));
 
   // Expect that the SET_LANGUAGE action was dispatched with 'fr' payload
   const updatedActions = store.getActions();
   expect(updatedActions).toEqual([
     { type: 'SET_LANGUAGE', payload: 'en' },
-    { type: 'SET_LANGUAGE', payload: 'fr' },
+    { type: 'SET_LANGUAGE', payload: 'fr' }
   ]);
 });

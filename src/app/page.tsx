@@ -12,7 +12,7 @@ export default function Home() {
           fontSize: '100px',
           display: 'flex',
           justifyContent: 'center',
-          marginTop: '180px',
+          marginTop: '180px'
         }}
       >
         Welcome to KGK live 2.O
@@ -22,7 +22,7 @@ export default function Home() {
           fontSize: '30px',
           display: 'flex',
           justifyContent: 'center',
-          marginTop: '20px',
+          marginTop: '20px'
         }}
       >
         Building Digital Diamond Platform

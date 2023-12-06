@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState: any = {
-  previousSearch: [],
+  previousSearch: []
 };
 
 const previousSearchSlice = createSlice({
@@ -10,8 +10,8 @@ const previousSearchSlice = createSlice({
     modifyPreviousSearch: (state, { payload }) => {
       state.previousSearch = payload;
       return state;
-    },
-  },
+    }
+  }
 });
 
 export const { modifyPreviousSearch } = previousSearchSlice.actions;

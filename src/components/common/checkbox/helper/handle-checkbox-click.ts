@@ -19,19 +19,19 @@ export const handleCheckboxClick = ({
   setIsCheckAll,
   isCheckAll,
   data,
-  setIsError,
+  setIsError
 }: IHandleCheckBoxClick) => {
   let updatedIsCheck = [...isCheck!];
 
   if (updatedIsCheck.includes(id)) {
-    updatedIsCheck = updatedIsCheck.filter((item) => item !== id);
+    updatedIsCheck = updatedIsCheck.filter(item => item !== id);
   } else {
     updatedIsCheck.push(id);
   }
 
   setIsCheck?.(updatedIsCheck);
 
-  // Update the "Select All" checkbox status
+  // Update the 'Select All' checkbox status
   if (setIsCheckAll) {
     if (updatedIsCheck.length === data?.length) {
       setIsCheckAll(true);

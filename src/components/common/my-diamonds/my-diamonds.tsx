@@ -26,7 +26,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,
-  check,
+  check
 }) => {
   // Define the main MyDiamonds component
 
@@ -55,17 +55,17 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   // useEffect to update data when productPageDetail changes
   useEffect(() => {
     setRows(productPageDetail?.items?.map((items: any) => items.product) || []);
-  }, [productPageDetail]);
+  }, [productPageDetail, setRows]);
 
   // useEffect to update tableColumns when productTableColumns changes
   useEffect(() => {
     setTableColumns(productTableColumns);
-  }, [productTableColumns]);
+  }, [productTableColumns, setTableColumns]);
 
   // Object containing checkbox data for Custom Data Table
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   // Function to handle downloading Excel
@@ -81,7 +81,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         setIsDialogOpen,
         setIsCheck,
         setIsCheckAll,
-        setIsError,
+        setIsError
       });
     }
   };
@@ -92,9 +92,9 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       id: 1,
       displayButtonLabel: 'Download Excel',
       style: styles.transparent,
-      fn: downloadExcelFunction,
+      fn: downloadExcelFunction
     },
-    { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled },
+    { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled }
   ];
 
   // Function to render footer buttons
@@ -115,7 +115,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
     'previous-confirmations':
-      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails',
+      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails'
   };
 
   // Function to render page title

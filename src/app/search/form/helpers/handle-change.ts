@@ -5,12 +5,12 @@ export const handleFilterChange = (
 ) => {
   if (selectedFilters.includes(filterData)) {
     setSelectedFilters((prevSelectedColors: any[]) =>
-      prevSelectedColors.filter((selected) => selected !== filterData)
+      prevSelectedColors.filter(selected => selected !== filterData)
     );
   } else {
     setSelectedFilters((prevSelectedColors: any) => [
       ...prevSelectedColors,
-      filterData,
+      filterData
     ]);
   }
 };

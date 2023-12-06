@@ -39,7 +39,7 @@ const Login = () => {
           width: '40vw',
           backgroundColor: 'black',
           flexDirection: 'column',
-          gap: '20px',
+          gap: '20px'
         }}
       >
         <CustomInputlabel
@@ -52,20 +52,20 @@ const Login = () => {
           name={'email'}
           placeholder="Email"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={e => setEmail(e.target.value)}
         />
         <CustomInputField
           type={'password'}
           name={'password'}
           placeholder="Password"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={e => setPassword(e.target.value)}
         />
         <CustomDisplayButton
           displayButtonLabel={'Login'}
           displayButtonAllStyle={{
             displayButtonStyle: styles.loginButton,
-            displayLabelStyle: styles.loginButtonText,
+            displayLabelStyle: styles.loginButtonText
           }}
           handleClick={handleLogin}
         />

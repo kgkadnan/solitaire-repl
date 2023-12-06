@@ -5,9 +5,9 @@ const meta = {
   title: 'components/SelectionButton',
   component: CustomSelectionButton,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomSelectionButton>;
 
 export default meta;
@@ -15,13 +15,13 @@ type Story = StoryObj<typeof meta>;
 
 const classes = {
   selectionButtonStyle: 'p-1',
-  selectionButtonLabelStyle: 'bg-green-600',
+  selectionButtonLabelStyle: 'bg-green-600'
 };
 
 export const SelectionButtonStory: Story = {
   args: {
     selectionButtonAllStyles: classes,
     selectionButtonLabel: 'Selection button',
-    handleClick: () => {},
-  },
+    handleClick: () => {}
+  }
 };

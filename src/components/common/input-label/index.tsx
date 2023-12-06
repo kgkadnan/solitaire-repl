@@ -15,7 +15,7 @@ interface InputLabelProps {
 export const CustomInputlabel: React.FC<InputLabelProps> = ({
   htmlfor,
   label,
-  overriddenStyles,
+  overriddenStyles
 }) => {
   return (
     <>

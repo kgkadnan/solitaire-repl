@@ -1,4 +1,4 @@
-/* The above code is a TypeScript React component called "SearchResults". It is responsible for
+/* The above code is a TypeScript React component called 'SearchResults'. It is responsible for
 rendering and managing the search results page. */
 'use client';
 import styles from './search-results.module.scss';
@@ -29,7 +29,7 @@ import { ISearchResultsProps } from './result-interface';
 const SearchResults = ({
   data,
   activeTab,
-  refetch: refetchRow,
+  refetch: refetchRow
 }: ISearchResultsProps) => {
   const { sortByState, sortBySetState } = useSortByStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -57,13 +57,13 @@ const SearchResults = ({
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent,
+    setDialogContent
   } = modalSetState;
   const {
     setYourSelectionData,
     setTotalAmount,
     setAverageDiscount,
-    setSaveSearchName,
+    setSaveSearchName
   } = commonSetState;
 
   const { saveSearchName } = commonState;
@@ -73,14 +73,14 @@ const SearchResults = ({
 
   let checkboxData = {
     checkboxState,
-    checkboxSetState,
+    checkboxSetState
   };
 
   /* The above code is using the `useEffect` hook in a React component. It is setting the state variable
 `tableColumns` to the value of `listingColumns` when `listingColumns` changes. */
   useEffect(() => {
     setTableColumns(listingColumns);
-  }, [listingColumns]);
+  }, [listingColumns, setTableColumns]);
   /* useEffect hook in a TypeScript React component. It is used to
 handle the logic for closing a dialog box after a certain delay. */
   useEffect(() => {
@@ -93,13 +93,20 @@ handle the logic for closing a dialog box after a certain delay. */
       // Cleanup the timeout when the component unmounts or when isDialogOpen changes
       return () => clearTimeout(timeoutId);
     }
-  }, [isDialogOpen]);
+  }, [isDialogOpen, setIsDialogOpen]);
 
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
     setTotalAmount(calculateTotalAmount({ isCheck, rows }));
     setAverageDiscount(calculateAverageDiscount({ isCheck, rows }));
-  }, [isCheck]);
+  }, [
+    isCheck,
+    rows,
+    calculateTotalAmount,
+    calculateAverageDiscount,
+    setAverageDiscount,
+    setTotalAmount
+  ]);
 
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
@@ -114,7 +121,14 @@ variable changes. */
         setRows(data?.products);
       }
     }
-  }, [data, refetchDataToDefault]);
+  }, [
+    data,
+    refetchDataToDefault,
+    setIsCheck,
+    setIsCheckAll,
+    setRows,
+    setYourSelectionData
+  ]);
 
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
@@ -131,12 +145,12 @@ variable changes. */
         setIsInputDialogOpen,
         setSaveSearchName,
         setInputError,
-        setInputErrorContent,
+        setInputErrorContent
       });
     },
     label: 'Save And Search',
     name: 'save',
-    displayButtonLabel2: 'Save',
+    displayButtonLabel2: 'Save'
   };
 
   /**

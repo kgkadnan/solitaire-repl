@@ -10,7 +10,7 @@ export function downloadExcelFromBase64(
   }
   const byteArray = new Uint8Array(byteNumbers);
   const blob = new Blob([byteArray], {
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
   });
 
   // Create URL for the Blob

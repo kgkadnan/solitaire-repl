@@ -11,7 +11,7 @@ const SearchResultCardExample = () => {
     cardhandleIcon: Edit,
     cardHeader: <p style={{ color: 'red' }}>header</p>,
     cardDescription: <p>desc</p>,
-    cardContent: <ImageTileExample />,
+    cardContent: <ImageTileExample />
   };
   return (
     <CustomSearchResultCard cardData={cardData} defaultCardPosition={false} />

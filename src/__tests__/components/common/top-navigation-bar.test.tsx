@@ -4,7 +4,7 @@ import {
   fireEvent,
   render,
   screen,
-  waitFor,
+  waitFor
 } from '@testing-library/react';
 import mockRouter from 'next-router-mock';
 
@@ -21,24 +21,24 @@ describe('Top-Navigation-Bar Component', () => {
       'Advance Search',
       'Previous Search',
       'Wishlist',
-      'My Cart',
+      'My Cart'
     ];
 
-    labels.forEach((label) => {
+    labels.forEach(label => {
       expect(screen.getByText(new RegExp(label))).toBeInTheDocument();
     });
   });
 
   test('handles button clicks and navigation', () => {
     const buttons = screen.getAllByRole('button', {
-      name: /for you|advance search|previous search|wishlist|my cart/i,
+      name: /for you|advance search|previous search|wishlist|my cart/i
     });
 
     // Simulate button clicks and verify navigation
-    buttons.forEach((button) => {
+    buttons.forEach(button => {
       fireEvent.click(button);
       expect(mockRouter).toMatchObject({
-        asPath: /for you|advance search|previous search|wishlist|my cart/i,
+        asPath: /for you|advance search|previous search|wishlist|my cart/i
       });
     });
   });
@@ -49,7 +49,7 @@ describe('Top-Navigation-Bar Component', () => {
     // Mock the addEventListener and removeEventListener methods
     window.addEventListener = jest.fn();
     window.removeEventListener = jest.fn();
-
+    let expectedFunction = jest.fn();
     // Simulate scrolling down
     act(() => {
       fireEvent.scroll(window, { target: { pageYOffset: 100 } });

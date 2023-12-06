@@ -14,7 +14,7 @@ export const CustomSideScrollable: React.FC<ISideScrollableProps> = ({
   leftFixedStyle,
   leftFixedContent,
   rightSideStyle,
-  rightSideContent,
+  rightSideContent
 }) => {
   return (
     <div className="flex">

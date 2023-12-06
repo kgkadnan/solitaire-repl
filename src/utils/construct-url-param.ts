@@ -16,7 +16,7 @@ export function constructUrlParams(data: QueryData): string {
     nestedData: NestedQuery | NestedQuery[]
   ) => {
     if (Array.isArray(nestedData)) {
-      nestedData.forEach((item) => {
+      nestedData.forEach(item => {
         for (let subKey in item) {
           if (item.hasOwnProperty(subKey)) {
             queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
@@ -40,7 +40,7 @@ export function constructUrlParams(data: QueryData): string {
         if (key === 'carat') {
           encodeNested(key, value); // Handle carat separately
         } else {
-          value.forEach((item) => {
+          value.forEach(item => {
             queryParams.push(`${key}[]=${item}`);
           });
         }

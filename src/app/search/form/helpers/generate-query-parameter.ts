@@ -6,7 +6,6 @@ export const generateQueryParams = (state: any) => {
     selectedIntensity,
     selectedOvertone,
     selectedTinge,
-    selectedTingeIntensity,
     selectedClarity,
     selectedCaratRange,
     selectedCut,
@@ -68,13 +67,12 @@ export const generateQueryParams = (state: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
+    selectedColor,
   } = state;
 
   const queryParams: any = {};
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
-  // selectedColor && (queryParams['color'] = selectedColor);
-  selectedWhiteColor?.length !== 0 &&
-    (queryParams['color'] = selectedWhiteColor);
+  selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
   selectedFancyColor?.length !== 0 &&
     (queryParams['fancy'] = selectedFancyColor);
   selectedIntensity?.length !== 0 &&
@@ -82,8 +80,6 @@ export const generateQueryParams = (state: any) => {
   selectedOvertone?.length !== 0 &&
     (queryParams['overtone'] = selectedOvertone);
   selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
-  selectedTingeIntensity?.length !== 0 &&
-    (queryParams['color_shade_intensity'] = selectedTingeIntensity);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
     const caratRanges = selectedCaratRange.map((range: string) => {
@@ -116,19 +112,19 @@ export const generateQueryParams = (state: any) => {
     priceRangeTo &&
     (queryParams['price_range'] = {
       lte: priceRangeTo,
-      gte: priceRangeFrom,
+      gte: priceRangeFrom
     });
   discountFrom &&
     discountTo &&
     (queryParams['discount'] = {
       lte: discountTo,
-      gte: discountFrom,
+      gte: discountFrom
     });
   pricePerCaratFrom &&
     pricePerCaratTo &&
     (queryParams['price_per_carat'] = {
       lte: pricePerCaratTo,
-      gte: pricePerCaratFrom,
+      gte: pricePerCaratFrom
     });
   blackTableBI?.length !== 0 && (queryParams['black_table'] = blackTableBI);
   sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
@@ -158,79 +154,79 @@ export const generateQueryParams = (state: any) => {
     tablePerTo &&
     (queryParams['table_percentage'] = {
       lte: tablePerTo,
-      gte: tablePerFrom,
+      gte: tablePerFrom
     });
   depthFrom &&
     depthTo &&
     (queryParams['depth'] = {
       lte: depthTo,
-      gte: depthFrom,
+      gte: depthFrom
     });
   crownAngleFrom &&
     crownAngleTo &&
     (queryParams['crown_angle'] = {
       lte: crownAngleTo,
-      gte: crownAngleFrom,
+      gte: crownAngleFrom
     });
   lengthFrom &&
     lengthTo &&
     (queryParams['length'] = {
       lte: lengthTo,
-      gte: lengthFrom,
+      gte: lengthFrom
     });
   pavilionDepthFrom &&
     pavilionDepthTo &&
     (queryParams['pavilion_depth'] = {
       lte: pavilionDepthTo,
-      gte: pavilionDepthFrom,
+      gte: pavilionDepthFrom
     });
   depthPerFrom &&
     depthPerTo &&
     (queryParams['depth_percentage'] = {
       lte: depthPerTo,
-      gte: depthPerFrom,
+      gte: depthPerFrom
     });
   crownHeightFrom &&
     crownHeightTo &&
     (queryParams['crown_height'] = {
       lte: crownHeightTo,
-      gte: crownHeightFrom,
+      gte: crownHeightFrom
     });
   widthFrom &&
     widthTo &&
     (queryParams['width'] = {
       lte: widthTo,
-      gte: widthFrom,
+      gte: widthFrom
     });
   lowerHalfFrom &&
     lowerHalfTo &&
     (queryParams['lower_half'] = {
       lte: lowerHalfTo,
-      gte: lowerHalfFrom,
+      gte: lowerHalfFrom
     });
   ratioFrom &&
     ratioTo &&
     (queryParams['ratio'] = {
       lte: ratioTo,
-      gte: ratioFrom,
+      gte: ratioFrom
     });
   girdlePerFrom &&
     girdlePerTo &&
     (queryParams['girdle_percentage'] = {
       lte: girdlePerTo,
-      gte: girdlePerFrom,
+      gte: girdlePerFrom
     });
   pavilionAngleFrom &&
     pavilionAngleTo &&
     (queryParams['pavilion_angle'] = {
       lte: pavilionAngleTo,
-      gte: pavilionAngleFrom,
+      gte: pavilionAngleFrom
     });
   starLengthFrom &&
     starLengthTo &&
     (queryParams['star_length'] = {
       lte: starLengthTo,
-      gte: starLengthFrom,
+      gte: starLengthFrom
     });
   return queryParams;
 };

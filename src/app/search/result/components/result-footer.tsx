@@ -23,7 +23,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   checkboxSetState,
   errorSetState,
   errorState,
-  confirmStoneSetState,
+  confirmStoneSetState
 }) => {
   /* The above code is using the `useAppDispatch` hook from the Redux toolkit in a TypeScript React
   component. It is assigning the returned dispatch function to the `dispatch` constant. */
@@ -44,7 +44,7 @@ parameter. */
   const performDownloadExcel = (productIds: string[]) => {
     downloadExcel({ productIds })
       .unwrap()
-      .then((res) => {
+      .then(res => {
         let { data, fileName } = res;
         if (data) {
           setDialogContent(
@@ -136,10 +136,10 @@ parameter. */
         });
         if (variantIds.length) {
           addCart({
-            variants: variantIds,
+            variants: variantIds
           })
             .unwrap()
-            .then((res) => {
+            .then(res => {
               setIsError(false);
               setErrorText('');
               setDialogContent(
@@ -176,30 +176,30 @@ parameter. */
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
+                displayButtonStyle: styles.transparent
               }}
             />
           }
           dropdownMenu={[
             {
               label: 'Share',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Download Excel',
-              fn: downloadExcelFunction,
+              fn: downloadExcelFunction
             },
             {
               label: 'Find Matching Pair',
-              fn: '',
+              fn: ''
             },
             {
               label: 'Compare Stone',
-              fn: compareStone,
-            },
+              fn: compareStone
+            }
           ]}
         />
-      ),
+      )
     },
     {
       id: 2,
@@ -207,13 +207,13 @@ parameter. */
         'app.searchResult.footer.bookAppointment'
       ),
       style: styles.transparent,
-      fn: () => {},
+      fn: () => {}
     },
     {
       id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
-      fn: addToCart,
+      fn: addToCart
     },
     {
       id: 4,
@@ -227,8 +227,8 @@ parameter. */
           setIsError,
           setIsSliderOpen,
           setConfirmStoneData
-        ),
-    },
+        )
+    }
   ];
 
   return (

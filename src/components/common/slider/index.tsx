@@ -2,7 +2,7 @@ import {
   Sheet,
   SheetContent,
   SheetTrigger,
-  SheetClose,
+  SheetClose
 } from '@/components/ui/sheet';
 import React, { ReactNode } from 'react';
 
@@ -23,7 +23,7 @@ export const CustomSlider: React.FC<ISliderProps> = ({
   sheetContent,
   cardTimeout,
   onOpenChange,
-  isSliderOpen,
+  isSliderOpen
 }) => {
   return (
     <Sheet onOpenChange={onOpenChange} open={isSliderOpen}>

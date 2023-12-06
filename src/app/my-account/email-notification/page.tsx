@@ -10,22 +10,22 @@ let EmailNotificationData = [
     id: '1',
     notificationName: ManageLocales(
       'app.myaccount.emailNotification.newArrival'
-    ),
+    )
   },
   {
     id: '2',
-    notificationName: ManageLocales('app.myaccount.emailNotification.bidToBuy'),
+    notificationName: ManageLocales('app.myaccount.emailNotification.bidToBuy')
   },
   {
     id: '3',
-    notificationName: ManageLocales('app.myaccount.emailNotification.forYou'),
+    notificationName: ManageLocales('app.myaccount.emailNotification.forYou')
   },
   {
     id: '4',
     notificationName: ManageLocales(
       'app.myaccount.emailNotification.newsletter'
-    ),
-  },
+    )
+  }
 ];
 
 const EmailNotification = () => {
@@ -42,7 +42,7 @@ const EmailNotification = () => {
         'app.myaccount.emailNotification.footer.save'
       ),
       style: styles.transparent,
-      fn: handleSave,
+      fn: handleSave
     },
     {
       id: 1,
@@ -50,8 +50,8 @@ const EmailNotification = () => {
         'app.myaccount.emailNotification.footer.cancel'
       ),
       style: styles.filled,
-      fn: handleCancel,
-    },
+      fn: handleCancel
+    }
   ];
 
   return (

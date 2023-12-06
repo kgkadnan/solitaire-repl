@@ -5,7 +5,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import EllipseIcon from '@public/assets/icons/ellipse.svg?url';
 import {
   useGetAllNotificationQuery,
-  useUpdateNotificationMutation,
+  useUpdateNotificationMutation
 } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '@/components/common/no-data-found';
@@ -15,7 +15,7 @@ import {
   NOTIFICATION_READ_STATUS,
   NOTIFICATION_TYPE,
   NOTIFICATION_UNREAD_STATUS,
-  NOTIFICATION_UNSEEN_STATUS,
+  NOTIFICATION_UNSEEN_STATUS
 } from '@/constants/business-logic';
 
 const Notification = () => {
@@ -57,8 +57,8 @@ const Notification = () => {
 
   const handleNotificationRead = async (category: string) => {
     let filteredData = notificationData
-      .filter((item) => item.category === category)
-      .map((item) => ({ id: item.id, status: NOTIFICATION_READ_STATUS }));
+      .filter(item => item.category === category)
+      .map(item => ({ id: item.id, status: NOTIFICATION_READ_STATUS }));
 
     updateNotification(filteredData);
   };
@@ -66,7 +66,7 @@ const Notification = () => {
   return (
     <div className={styles.showAllNotificationContainer}>
       {notificationData?.length > 0 ? (
-        notificationData?.map((items) => {
+        notificationData?.map(items => {
           return (
             <div key={items.id} className="border-b border-solitaireSenary">
               <div
@@ -110,7 +110,7 @@ const Notification = () => {
                         : ''
                     }
                     displayButtonAllStyle={{
-                      displayButtonStyle: styles.transparent,
+                      displayButtonStyle: styles.transparent
                     }}
                   />
                 </div>
