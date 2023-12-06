@@ -9,9 +9,6 @@ const useFieldStateManagement = () => {
   const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
   const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
-  const [selectedTingeIntensity, setSelectedTingeIntensity] = useState<
-    string[]
-  >([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
@@ -22,7 +19,7 @@ const useFieldStateManagement = () => {
   const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
     []
   );
-  const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
+  const [selectedCulet, setSelectedCulet] = useState<string>('');
   const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
@@ -81,9 +78,7 @@ const useFieldStateManagement = () => {
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
   const [starLengthTo, setStarLengthTo] = useState<string>('');
-  const [caratRangeData, setCaratRangeData] = useState<string[]>(
-    advanceSearch.carat.data
-  );
+  const [caratRangeData, setCaratRangeData] = useState<string[]>();
   return {
     state: {
       selectedShape,
@@ -93,7 +88,6 @@ const useFieldStateManagement = () => {
       selectedIntensity,
       selectedOvertone,
       selectedTinge,
-      selectedTingeIntensity,
       selectedClarity,
       selectedCaratRange,
       selectedMake,
@@ -167,7 +161,6 @@ const useFieldStateManagement = () => {
       setSelectedIntensity,
       setSelectedOvertone,
       setSelectedTinge,
-      setSelectedTingeIntensity,
       setSelectedClarity,
       setSelectedGirdleStep,
       setSelectedCaratRange,

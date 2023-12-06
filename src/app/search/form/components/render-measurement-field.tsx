@@ -42,6 +42,8 @@ const renderMeasurementField = (state: any, setState: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
+    girdleFrom,
+    girdleTo,
   } = state;
 
   const {
@@ -71,6 +73,8 @@ const renderMeasurementField = (state: any, setState: any) => {
     setPavilionAngleTo,
     setStarLengthFrom,
     setStarLengthTo,
+    setGirdleFrom,
+    setGirdleTo,
   } = setState;
 
   let parameterDataState = [
@@ -125,6 +129,10 @@ const renderMeasurementField = (state: any, setState: any) => {
     {
       parameterState: [starLengthFrom, starLengthTo],
       setParameterState: [setStarLengthFrom, setStarLengthTo],
+    },
+    {
+      parameterState: [girdleFrom, girdleTo],
+      setParameterState: [setGirdleFrom, setGirdleTo],
     },
   ];
   let parameterData = parameterDataState.map((parameter, index) => {

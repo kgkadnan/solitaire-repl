@@ -87,8 +87,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
   data?.country_of_origin && setSelectedOrigin(data?.country_of_origin);
   data?.color_shade && setSelectedTinge(data?.color_shade);
-  data?.color_shade_intensity &&
-    setSelectedTingeIntensity(data?.color_shade_intensity);
   data?.overtone && setSelectedOvertone(data?.overtone);
   data?.brilliance && setSelectedBrilliance(data?.brilliance);
   data?.priceRange && setPriceRangeFrom(data?.priceRange?.gte);
