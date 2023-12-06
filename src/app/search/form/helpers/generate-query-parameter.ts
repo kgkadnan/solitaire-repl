@@ -67,7 +67,7 @@ export const generateQueryParams = (state: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
-    selectedColor,
+    selectedColor
   } = state;
 
   const queryParams: any = {};

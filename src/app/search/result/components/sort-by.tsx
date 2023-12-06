@@ -216,7 +216,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Fluorescence - Low to High',
       label: 'Fluorescence - (None - Very Strong) ',
-      checked: selectedFluorescenceRadioValue == 'Fluorescence - Low to High',
+      checked: selectedFluorescenceRadioValue == 'Fluorescence - Low to High'
     },
     {
       name: 'Fluorescence',
@@ -224,8 +224,8 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'Fluorescence - High to Low',
       label: 'Fluorescence - (Very Strong - None) ',
-      checked: selectedFluorescenceRadioValue == 'Fluorescence - High to Low',
-    },
+      checked: selectedFluorescenceRadioValue == 'Fluorescence - High to Low'
+    }
   ];
   const blackTableRadioData = [
     {

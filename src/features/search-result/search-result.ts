@@ -1,5 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState: any = {
+const initialState = {
   activeTab: ''
 };
 
@@ -8,7 +8,7 @@ const searchResultSlice = createSlice({
   initialState,
   reducers: {
     modifySearchResult: (state, { payload }) => {
-      let { activeTab } = payload;
+      const { activeTab } = payload;
       state.activeTab = activeTab;
       return state;
     }

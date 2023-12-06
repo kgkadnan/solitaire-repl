@@ -492,7 +492,7 @@ const renderContent = (
     { id: 4, value: 'Small' },
     { id: 5, value: 'Med' },
     { id: 7, value: 'Linear' },
-    { id: 8, value: 'Large' },
+    { id: 8, value: 'Large' }
   ];
 
   let intensityData = [
@@ -502,7 +502,7 @@ const renderContent = (
     { id: 4, value: 'Fancy' },
     { id: 5, value: 'Fancy Deep' },
     { id: 6, value: 'Fancy Intense' },
-    { id: 7, value: 'Fancy Vivid' },
+    { id: 7, value: 'Fancy Vivid' }
   ];
 
   let fancyColorData = [
@@ -521,7 +521,7 @@ const renderContent = (
     { id: 13, value: 'Red' },
     { id: 14, value: 'Orange' },
     { id: 15, value: 'Light Yellow' },
-    { id: 16, value: 'Other' },
+    { id: 16, value: 'Other' }
   ];
 
   let overtoneData = [
@@ -550,7 +550,7 @@ const renderContent = (
     { id: 23, value: 'Cognac' },
     { id: 24, value: 'None' },
     { id: 25, value: 'Light Brown' },
-    { id: 26, value: 'Brownish Orangy' },
+    { id: 26, value: 'Brownish Orangy' }
   ];
 
   return (
@@ -635,7 +635,7 @@ const renderContent = (
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCarat}`
               }}
             />
             <div className="ml-2 flex">
@@ -702,7 +702,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
           <CustomSelect
@@ -712,7 +712,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
           <CustomSelect
@@ -722,7 +722,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
         </div>
@@ -1044,28 +1044,28 @@ const renderContent = (
               // style={className}
               type="number"
               name="discountFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setDiscountFrom(e.target.value);
                 handleValidate('discount', 'from', e.target.value, discountTo);
               }}
               value={discountFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               // style={className}
               type="number"
               name="discountTo"
-              onChange={(e) => {
+              onChange={e => {
                 setDiscountTo(e.target.value);
                 handleValidate('discount', 'to', e.target.value, discountFrom);
               }}
               value={discountTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1088,7 +1088,7 @@ const renderContent = (
               // style={className}
               type="number"
               name="pricePerCaratFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setPricePerCaratFrom(e.target.value);
                 handleValidate(
                   'price_per_carat',
@@ -1100,13 +1100,13 @@ const renderContent = (
               value={pricePerCaratFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               type="number"
               name="pricePerCaratTo"
-              onChange={(e) => {
+              onChange={e => {
                 setPricePerCaratTo(e.target.value);
                 handleValidate(
                   'price_per_carat',
@@ -1118,7 +1118,7 @@ const renderContent = (
               value={pricePerCaratTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1135,20 +1135,20 @@ const renderContent = (
               // style={className}
               type="number"
               name="priceRangeFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setPriceRangeFrom(e.target.value);
               }}
               value={priceRangeFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               // style={className}
               type="number"
               name="priceRangeTo"
-              onChange={(e) => {
+              onChange={e => {
                 setPriceRangeTo(e.target.value);
                 handleValidate(
                   'price_range',
@@ -1160,7 +1160,7 @@ const renderContent = (
               value={priceRangeTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1187,7 +1187,7 @@ const renderContent = (
               style={{
                 selectTrigger: styles.dropdownHeader,
                 selectContent: styles.dropdownData,
-                selectElement: styles.selectElement,
+                selectElement: styles.selectElement
               }}
             />
           </div>
@@ -1248,19 +1248,19 @@ const renderContent = (
                     id: '1',
                     value: 'Contains',
                     radioButtonLabel: 'Contains',
-                    checked: selectedStep === 'Contains',
+                    checked: selectedStep === 'Contains'
                   },
                   {
                     id: '2',
                     value: 'Does not contains',
                     radioButtonLabel: 'Does not contains',
-                    checked: selectedStep === 'Does not contains',
-                  },
-                ],
+                    checked: selectedStep === 'Does not contains'
+                  }
+                ]
               }}
               radioButtonAllStyles={{
                 radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel,
+                radioLabelStyle: styles.radioLabel
               }}
             />
           </div>
