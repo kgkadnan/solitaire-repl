@@ -75,7 +75,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
         (carat: any) => `${carat?.gte.toFixed(2)}-${carat?.lte.toFixed(2)}`
       )
     );
-  data.carat && setCaratRangeData;
+  data?.carat && setCaratRangeData;
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);
   data?.lab && setSelectedLab(data?.lab);

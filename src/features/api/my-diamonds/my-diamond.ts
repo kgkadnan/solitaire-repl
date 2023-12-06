@@ -40,8 +40,8 @@ export const myDiamondAPI = createApi({
       providesTags: ['myDiamond']
     }),
     cardPreviousConfirmation: builder.query({
-      query: ({ previousConfirmStatus, dateSearchUrl }) =>
-        `/store/customers/me/orders?status=${previousConfirmStatus}&${dateSearchUrl}`,
+      query: ({ limit, offset, previousConfirmStatus, dateSearchUrl }) =>
+        `/store/customers/me/orders?limit=${limit}&offset=${offset}&status=${previousConfirmStatus}&${dateSearchUrl}`,
       providesTags: ['myDiamond']
     })
   })

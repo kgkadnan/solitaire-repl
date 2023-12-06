@@ -20,15 +20,18 @@ import {
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import { setModifySearch } from './helpers/modify-search';
-import useValidationStateManagement, {
-  Errors
-} from './hooks/validation-state-management';
+import useValidationStateManagement from './hooks/validation-state-management';
 import renderContent from './components/render-form-field';
+import {
+  NEW_SEARCH,
+  SAVED_SEARCHES,
+  SEARCH_RESULT
+} from '@/constants/application-constants/search-page';
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const savedSearch = useAppSelector(store => store.savedSearch);
-  const searchResult = useAppSelector(store => store.searchResult);
+  const savedSearch: any = useAppSelector(store => store.savedSearch);
+  const searchResult: any = useAppSelector(store => store.searchResult);
 
   /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
@@ -77,9 +80,9 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
-    if (modifySearchFrom === 'saved-search' && modifysavedSearchData) {
+    if (modifySearchFrom === `${SAVED_SEARCHES}` && modifysavedSearchData) {
       setModifySearch(modifysavedSearchData, setState, carat);
-    } else if (modifySearchFrom === 'search-result' && modifySearchResult) {
+    } else if (modifySearchFrom === `${SEARCH_RESULT}` && modifySearchResult) {
       setModifySearch(
         modifySearchResult[searchResult.activeTab]?.queryParams,
         setState,
@@ -100,7 +103,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
   }, []);
 
   useEffect(() => {
-    if (isNewSearch === 'form') {
+    if (isNewSearch === `${NEW_SEARCH}`) {
       handleFormReset();
     }
   }, [isNewSearch]);
@@ -159,11 +162,12 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
-        const activeTab = searchResult?.activeTab;
+        const activeTab: number = searchResult?.activeTab;
+
         const activeSearch: boolean =
           addSearches[activeTab]?.saveSearchName.length;
 
-        if (modifySearchFrom === 'saved-search') {
+        if (modifySearchFrom === `${SAVED_SEARCHES}`) {
           if (savedSearch?.savedSearch?.meta_data) {
             let updatedMeta = savedSearch.savedSearch.meta_data;
             updatedMeta = queryParams;
@@ -172,7 +176,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               meta_data: updatedMeta
             };
             updateSavedSearch(data);
-            router.push(`/search?route=saved`);
+            router.push(`/search?query=${SAVED_SEARCHES}`);
           }
         } else if (activeSearch) {
           const updatedMeta = addSearches;
@@ -224,7 +228,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
-        if (modifySearchFrom === 'saved-search') {
+        if (modifySearchFrom === `${SAVED_SEARCHES}`) {
           if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
             // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
@@ -236,7 +240,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             updateSavedSearch(data);
           }
         }
-        if (modifySearchFrom === 'search-result') {
+        if (modifySearchFrom === `${SEARCH_RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
             id: modifySearchResult[searchResult.activeTab]?.id,
@@ -251,7 +255,9 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             updatedData[searchResult.activeTab] = setDataOnLocalStorage;
             localStorage.setItem('Search', JSON.stringify(updatedData));
           }
-          router.push(`/search?route=${searchResult.activeTab + 3}`);
+          router.push(
+            `/search?query=${SEARCH_RESULT}-${searchResult.activeTab + 1}`
+          );
         } else {
           let setDataOnLocalStorage = {
             id: id,
@@ -264,8 +270,8 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?route=${
-              JSON.parse(localStorage.getItem('Search')!).length + 2
+            `/search?query=${SEARCH_RESULT}-${
+              JSON.parse(localStorage.getItem('Search')!).length
             }`
           );
         }
@@ -339,15 +345,19 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               displayButtonLabel: ManageLocales('app.advanceSearch.cancel'),
               style: styles.transparent,
               fn: () => {
-                if (modifySearchFrom === 'saved-search') {
-                  router.push('/search?route=saved');
-                } else if (modifySearchFrom === 'search-result') {
-                  router.push(`/search?route=${searchResult.activeTab + 3}`);
+                if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+                  router.push(`/search?query=${SAVED_SEARCHES}`);
+                } else if (modifySearchFrom === `${SEARCH_RESULT}`) {
+                  router.push(
+                    `/search?query=${SEARCH_RESULT}-${
+                      searchResult.activeTab + 3
+                    }`
+                  );
                 }
               },
               isHidden:
-                modifySearchFrom !== 'saved-search' &&
-                modifySearchFrom !== 'search-result'
+                modifySearchFrom !== `${SAVED_SEARCHES}` &&
+                modifySearchFrom !== `${SEARCH_RESULT}`
             },
             {
               id: 2,
@@ -373,7 +383,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
                     const isSaved: boolean =
                       addSearches[activeTab]?.isSavedSearch.length;
                     // Check if the active search is not null and isSavedSearch is true
-                    if (modifySearchFrom === 'saved-search') {
+                    if (modifySearchFrom === `${SAVED_SEARCHES}`) {
                       handleSaveAndSearch();
                     } else if (isSaved) {
                       handleSaveAndSearch();
@@ -394,7 +404,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               displayButtonLabel: ManageLocales('app.advanceSearch.search'),
               style: styles.filled,
               fn: handleSearch,
-              isHidden: modifySearchFrom === 'saved-search'
+              isHidden: modifySearchFrom === `${SAVED_SEARCHES}`
             }
           ]}
           noBorderTop={styles.paginationContainerStyle}

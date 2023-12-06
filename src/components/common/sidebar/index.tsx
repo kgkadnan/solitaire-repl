@@ -19,6 +19,10 @@ import { ManageLocales } from '@/utils/translate';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
 import { ISavedSearch } from '../top-navigation-bar';
+import {
+  NEW_SEARCH,
+  SAVED_SEARCHES
+} from '@/constants/application-constants/search-page';
 
 const SideBar = () => {
   const router = useRouter();
@@ -89,8 +93,8 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: '/search?route=form',
-      isActive: currentRoute === '/search' && subRoute === 'form'
+      link: `/search?query=${NEW_SEARCH}`,
+      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -101,8 +105,8 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: '/search?route=saved',
-      isActive: currentRoute === '/search' && subRoute === 'saved'
+      link: `/search?query=${SAVED_SEARCHES}`,
+      isActive: currentRoute === '/search' && subRoute === `${SAVED_SEARCHES}`
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
@@ -161,7 +165,7 @@ const SideBar = () => {
       (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
-    // if (data?.length && link !== '/search?route=form') {
+    // if (data?.length && link !== `/search?query=${NEW_SEARCH}`) {
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
@@ -197,7 +201,7 @@ const SideBar = () => {
         </>
       );
     }
-    // else if (data?.length && link === '/search?route=form') {
+    // else if (data?.length && link === `/search?query=${NEW_SEARCH}`) {
     //   handleRoute(nav, link);
     // }
     else {
