@@ -31,7 +31,7 @@ const renderContent = (
     imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
-    activeIndicatorStyles: styles.activeIndicatorStyles,
+    activeIndicatorStyles: styles.activeIndicatorStyles
   };
 
   const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
@@ -66,7 +66,7 @@ const renderContent = (
     pricePerCaratFrom,
     pricePerCaratTo,
     caratRangeFrom,
-    caratRangeTo,
+    caratRangeTo
   } = state;
 
   const {
@@ -100,7 +100,7 @@ const renderContent = (
     setPricePerCaratFrom,
     setPricePerCaratTo,
     setCaratRangeFrom,
-    setCaratRangeTo,
+    setCaratRangeTo
   } = setState;
 
   const compareArrays = (arr1: string[], arr2: string[]) => {
@@ -123,7 +123,7 @@ const renderContent = (
 
   const handleShapeChange = (shape: string) => {
     let filteredShape: string[] = advanceSearch.shape.map(
-      (data) => data.short_name
+      data => data.short_name
     );
     if (shape.toLowerCase() === 'all') {
       setSelectedShape(filteredShape);
@@ -139,7 +139,7 @@ const renderContent = (
       } else if (
         compareArrays(
           selectedShape.filter((data: any) => data !== 'All'),
-          filteredShape.filter((data) => data !== 'All' && data !== shape)
+          filteredShape.filter(data => data !== 'All' && data !== shape)
         )
       ) {
         setSelectedShape(filteredShape);
@@ -359,7 +359,7 @@ const renderContent = (
         compareArrays(
           selectedKeyToSymbol.filter((data: any) => data !== 'All'),
           advanceSearch.key_to_symbol.filter(
-            (data) => data !== 'All' && data !== comment
+            data => data !== 'All' && data !== comment
           )
         )
       ) {
@@ -390,7 +390,7 @@ const renderContent = (
   };
 
   const normalizeValue = (value: string) => {
-    // Normalize user input like "3-3.99" to "3.00-3.99"
+    // Normalize user input like '3-3.99' to '3.00-3.99'
     const caratRange = value.split('-');
     if (caratRange[0] === '' || caratRange[1] === '') {
       setValidationError(`Please enter a valid carat range.`);
@@ -431,15 +431,15 @@ const renderContent = (
     if (value == '' && otherValue == '') {
       setErrors((prevErrors: any) => ({
         ...prevErrors,
-        [key]: { from: null, to: null },
+        [key]: { from: null, to: null }
       }));
     } else if (value.length === 0) {
       setErrors((prevErrors: any) => ({
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: `Please enter a value for '${key} from'`,
-        },
+          [inputType]: `Please enter a value for '${key} from'`
+        }
       }));
       // Handle other error logic as needed
     } else if (otherValue.length === 0) {
@@ -447,8 +447,8 @@ const renderContent = (
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: `Please enter a value for '${key} to'`,
-        },
+          [inputType]: `Please enter a value for '${key} to'`
+        }
       }));
       // Handle other error logic as needed
     } else if (value > 100 || otherValue > 100) {
@@ -456,8 +456,8 @@ const renderContent = (
         ...prevErrors,
         [key]: {
           ...prevErrors[key as keyof Errors],
-          [inputType]: 'Please enter a valid range from 0 to 100',
-        },
+          [inputType]: 'Please enter a valid range from 0 to 100'
+        }
       }));
       // Handle other error logic as needed
     } else if (
@@ -473,13 +473,13 @@ const renderContent = (
             inputType === 'from' ? 'From' : 'To'
           }' value should not be ${
             inputType === 'from' ? 'greater' : 'less'
-          } than '${inputType === 'from' ? 'To' : 'From'}' value`,
-        },
+          } than '${inputType === 'from' ? 'To' : 'From'}' value`
+        }
       }));
     } else {
       setErrors((prevErrors: any) => ({
         ...prevErrors,
-        [key]: { from: null, to: null },
+        [key]: { from: null, to: null }
       }));
       // Handle other error logic as needed
     }
@@ -492,7 +492,7 @@ const renderContent = (
     { id: 4, value: 'Small' },
     { id: 5, value: 'Med' },
     { id: 7, value: 'Linear' },
-    { id: 8, value: 'Large' },
+    { id: 8, value: 'Large' }
   ];
 
   let intensityData = [
@@ -502,7 +502,7 @@ const renderContent = (
     { id: 4, value: 'Fancy' },
     { id: 5, value: 'Fancy Deep' },
     { id: 6, value: 'Fancy Intense' },
-    { id: 7, value: 'Fancy Vivid' },
+    { id: 7, value: 'Fancy Vivid' }
   ];
 
   let fancyColorData = [
@@ -521,7 +521,7 @@ const renderContent = (
     { id: 13, value: 'Red' },
     { id: 14, value: 'Orange' },
     { id: 15, value: 'Light Yellow' },
-    { id: 16, value: 'Other' },
+    { id: 16, value: 'Other' }
   ];
 
   let overtoneData = [
@@ -550,7 +550,7 @@ const renderContent = (
     { id: 23, value: 'Cognac' },
     { id: 24, value: 'None' },
     { id: 25, value: 'Light Brown' },
-    { id: 26, value: 'Brownish Orangy' },
+    { id: 26, value: 'Brownish Orangy' }
   ];
 
   return (
@@ -591,7 +591,7 @@ const renderContent = (
                   // style={className}
                   type="number"
                   name="caratRangeFrom"
-                  onChange={(e) => {
+                  onChange={e => {
                     if (regexPattern.test(e.target.value)) {
                       setValidationError('');
                       setCaratRangeFrom(e.target.value);
@@ -604,14 +604,14 @@ const renderContent = (
                   value={caratRangeFrom}
                   placeholder={ManageLocales('app.advanceSearch.from')}
                   style={{
-                    input: styles.inputFieldStyles,
+                    input: styles.inputFieldStyles
                   }}
                 />
                 <CustomInputField
                   // style={className}
                   type="number"
                   name="caratRangeTO"
-                  onChange={(e) => {
+                  onChange={e => {
                     // Use a regular expression to allow only numbers with up to two decimal places
                     if (regexPattern.test(e.target.value)) {
                       setCaratRangeTo(e.target.value);
@@ -625,7 +625,7 @@ const renderContent = (
                   value={caratRangeTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
                   style={{
-                    input: styles.inputFieldStyles,
+                    input: styles.inputFieldStyles
                   }}
                 />
               </div>
@@ -635,7 +635,7 @@ const renderContent = (
               data={`${caratRangeFrom}-${caratRangeTo}`}
               handleClick={handleAddCarat}
               selectionButtonAllStyles={{
-                selectionButtonStyle: `${styles.addCarat}`,
+                selectionButtonStyle: `${styles.addCarat}`
               }}
             />
             <div className="ml-2 flex">
@@ -702,7 +702,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
           <CustomSelect
@@ -712,7 +712,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
           <CustomSelect
@@ -722,7 +722,7 @@ const renderContent = (
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement,
+              selectElement: styles.selectElement
             }}
           />
         </div>
@@ -1006,7 +1006,7 @@ const renderContent = (
                     radioButtonLabel: ManageLocales(
                       'app.advanceSearch.radioLabel1'
                     ),
-                    checked: selectedStep === 'Contains',
+                    checked: selectedStep === 'Contains'
                   },
                   {
                     id: '2',
@@ -1014,13 +1014,13 @@ const renderContent = (
                     radioButtonLabel: ManageLocales(
                       'app.advanceSearch.radioLabel2'
                     ),
-                    checked: selectedStep === 'Does not contains',
-                  },
-                ],
+                    checked: selectedStep === 'Does not contains'
+                  }
+                ]
               }}
               radioButtonAllStyles={{
                 radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel,
+                radioLabelStyle: styles.radioLabel
               }}
             />
           </div>
@@ -1048,28 +1048,28 @@ const renderContent = (
               // style={className}
               type="number"
               name="discountFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setDiscountFrom(e.target.value);
                 handleValidate('discount', 'from', e.target.value, discountTo);
               }}
               value={discountFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               // style={className}
               type="number"
               name="discountTo"
-              onChange={(e) => {
+              onChange={e => {
                 setDiscountTo(e.target.value);
                 handleValidate('discount', 'to', e.target.value, discountFrom);
               }}
               value={discountTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1092,7 +1092,7 @@ const renderContent = (
               // style={className}
               type="number"
               name="pricePerCaratFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setPricePerCaratFrom(e.target.value);
                 handleValidate(
                   'price_per_carat',
@@ -1104,13 +1104,13 @@ const renderContent = (
               value={pricePerCaratFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               type="number"
               name="pricePerCaratTo"
-              onChange={(e) => {
+              onChange={e => {
                 setPricePerCaratTo(e.target.value);
                 handleValidate(
                   'price_per_carat',
@@ -1122,7 +1122,7 @@ const renderContent = (
               value={pricePerCaratTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1139,20 +1139,20 @@ const renderContent = (
               // style={className}
               type="number"
               name="priceRangeFrom"
-              onChange={(e) => {
+              onChange={e => {
                 setPriceRangeFrom(e.target.value);
               }}
               value={priceRangeFrom}
               placeholder={ManageLocales('app.advanceSearch.from')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
             <CustomInputField
               // style={className}
               type="number"
               name="priceRangeTo"
-              onChange={(e) => {
+              onChange={e => {
                 setPriceRangeTo(e.target.value);
                 handleValidate(
                   'price_range',
@@ -1164,7 +1164,7 @@ const renderContent = (
               value={priceRangeTo}
               placeholder={ManageLocales('app.advanceSearch.to')}
               style={{
-                input: styles.inputFieldStyles,
+                input: styles.inputFieldStyles
               }}
             />
           </div>
@@ -1191,7 +1191,7 @@ const renderContent = (
               style={{
                 selectTrigger: styles.dropdownHeader,
                 selectContent: styles.dropdownData,
-                selectElement: styles.selectElement,
+                selectElement: styles.selectElement
               }}
             />
           </div>
@@ -1254,7 +1254,7 @@ const renderContent = (
                     radioButtonLabel: ManageLocales(
                       'app.advanceSearch.radioLabel1'
                     ),
-                    checked: selectedStep === 'Contains',
+                    checked: selectedStep === 'Contains'
                   },
                   {
                     id: '2',
@@ -1262,13 +1262,13 @@ const renderContent = (
                     radioButtonLabel: ManageLocales(
                       'app.advanceSearch.radioLabel2'
                     ),
-                    checked: selectedStep === 'Does not contains',
-                  },
-                ],
+                    checked: selectedStep === 'Does not contains'
+                  }
+                ]
               }}
               radioButtonAllStyles={{
                 radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel,
+                radioLabelStyle: styles.radioLabel
               }}
             />
           </div>

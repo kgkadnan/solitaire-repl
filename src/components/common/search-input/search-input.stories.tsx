@@ -6,7 +6,7 @@ const meta: Meta<typeof CustomSearchInputField> = {
   title: 'components/SearchInputField',
   component: CustomSearchInputField,
   argTypes: {},
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomSearchInputField>;
 
 export default meta;
@@ -30,15 +30,15 @@ const InputWithHooks = () => {
 };
 
 export const Primary: Story = {
-  render: () => <InputWithHooks />,
+  render: () => <InputWithHooks />
 };
 
 export const Secondary: Story = {
   args: {
     type: 'text',
-    placeholder: 'Search by name',
+    placeholder: 'Search by name'
     // style: {
     //   input: 'text-solitaireQuaternary',
     // },
-  },
+  }
 };

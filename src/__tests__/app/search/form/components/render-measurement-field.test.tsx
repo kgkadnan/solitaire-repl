@@ -7,7 +7,7 @@ describe('renderMeasurementField', () => {
   test('should render measurement fields with correct labels and handle changes', () => {
     const state = {
       tablePerFrom: '',
-      tablePerTo: '',
+      tablePerTo: ''
     };
 
     const setState = jest.fn(); // Mock setState function

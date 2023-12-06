@@ -51,11 +51,11 @@ function Calendar({
         day_range_middle:
           'aria-selected:bg-[#354444] aria-selected:text-accent-foreground',
         day_hidden: 'invisible',
-        ...classNames,
+        ...classNames
       }}
       components={{
         IconLeft: ({ ...props }) => <ChevronLeft className="h-4 w-4" />,
-        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />,
+        IconRight: ({ ...props }) => <ChevronRight className="h-4 w-4" />
       }}
       {...props}
     />

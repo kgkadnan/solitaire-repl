@@ -65,7 +65,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo,
+    setStarLengthTo
   } = setState;
 
   data?.shape && setSelectedShape(data?.shape);

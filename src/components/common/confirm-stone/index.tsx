@@ -20,7 +20,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   confirmStoneState,
   confirmStoneSetState,
   setDialogContent,
-  setIsDialogOpen,
+  setIsDialogOpen
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
 
@@ -30,19 +30,19 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     setInputError,
     setInputErrorContent,
     setSliderErrorText,
-    setIsSliderError,
+    setIsSliderError
   } = errorSetState;
   const {
     confirmStoneData,
     commentValue,
     selectedDaysInputValue,
-    selectedRadioDaysValue,
+    selectedRadioDaysValue
   } = confirmStoneState;
 
   const {
     setCommentValue,
     setSelectedDaysInputValue,
-    setSelectedRadioDaysValue,
+    setSelectedRadioDaysValue
   } = confirmStoneSetState;
 
   /**
@@ -79,7 +79,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       id: '0',
       value: '7',
       label: '7 Days',
-      checked: selectedRadioDaysValue === '7',
+      checked: selectedRadioDaysValue === '7'
     },
     {
       name: 'days',
@@ -87,7 +87,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       id: '1',
       value: '30',
       label: '30 Days',
-      checked: selectedRadioDaysValue === '30',
+      checked: selectedRadioDaysValue === '30'
     },
     {
       name: 'days',
@@ -95,7 +95,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       id: '2',
       value: '60',
       label: '60 Days',
-      checked: selectedRadioDaysValue === '60',
+      checked: selectedRadioDaysValue === '60'
     },
     {
       name: 'days',
@@ -109,12 +109,12 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               name="daysField"
               type="number"
               // disable={selectedRadioDaysValue !== 'other'}
-              onChange={(e) =>
+              onChange={e =>
                 handleRadioDayValue({
                   event: e,
                   setInputError,
                   setSelectedDaysInputValue,
-                  setInputErrorContent,
+                  setInputErrorContent
                 })
               }
               value={selectedDaysInputValue}
@@ -131,8 +131,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           )}
         </>
       ),
-      checked: selectedRadioDaysValue === 'other',
-    },
+      checked: selectedRadioDaysValue === 'other'
+    }
   ];
 
   /**
@@ -160,10 +160,10 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           selectedDaysInputValue.length > 0
             ? selectedDaysInputValue
             : selectedRadioDaysValue
-        ),
+        )
       })
         .unwrap()
-        .then((res) => {
+        .then(res => {
           if (res) {
             setSelectedDaysInputValue('');
             setInputErrorContent('');
@@ -182,7 +182,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             );
           }
         })
-        .catch((e) => console.log(e));
+        .catch(e => console.log(e));
     } else {
       setIsSliderError(true);
       setSliderErrorText('This Is a Mandotry Field');
@@ -235,9 +235,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             name="textarea"
             rows={3}
             data-testid="addComment"
-            // placeholder="Write Description"
+            // placeholder='Write Description'
             className="w-full bg-solitaireOctonary text-solitaireTertiary rounded-xl resize-none focus:outline-none p-2 placeholder:text-solitaireSenary mt-2"
-            onChange={(e) => handleComment(e, setCommentValue)}
+            onChange={e => handleComment(e, setCommentValue)}
           />
         </div>
 
@@ -247,7 +247,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               'app.searchResult.slider.confirmStone.cancel'
             )}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.transparent,
+              displayButtonStyle: styles.transparent
             }}
             handleClick={() => {
               setSelectedDaysInputValue('');
@@ -261,7 +261,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               'app.searchResult.slider.confirmStone'
             )}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.filled,
+              displayButtonStyle: styles.filled
             }}
             handleClick={() => {
               confirmStoneApiCall();

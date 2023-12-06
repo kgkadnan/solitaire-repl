@@ -6,33 +6,32 @@ export const cartApi = createApi({
   reducerPath: 'cartReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
-    
+    credentials: 'include'
   }),
   tagTypes: ['cart'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     addCart: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `cart`,
         method: 'POST',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['cart'],
+      invalidatesTags: ['cart']
     }),
     getCart: builder.query({
       query: () => `cart`,
-      providesTags: ['cart'],
+      providesTags: ['cart']
     }),
     deleteCart: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `cart`,
         method: 'DELETE',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['cart'],
-    }),
-  }),
+      invalidatesTags: ['cart']
+    })
+  })
 });
 
 export const { useAddCartMutation, useGetCartQuery, useDeleteCartMutation } =

@@ -5,9 +5,9 @@ const meta = {
   title: 'components/Table',
   component: CustomTable,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomTable>;
 
 export default meta;
@@ -20,19 +20,19 @@ const tableData = {
       invoice: 'INV001',
       paymentStatus: 'Paid',
       totalAmount: '$250.00',
-      paymentMethod: 'Credit Card',
-    },
-  ],
+      paymentMethod: 'Credit Card'
+    }
+  ]
 };
 
 const classes = {
   tableHeaderStyle: 'text-sky-400',
-  tableBodyStyle: 'text-blue-400',
+  tableBodyStyle: 'text-blue-400'
 };
 
 export const TableStory: Story = {
   args: {
     tableData: tableData,
-    tableStyleClasses: classes,
-  },
+    tableStyleClasses: classes
+  }
 };

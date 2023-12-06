@@ -10,8 +10,8 @@ describe('CustomDropdown component', () => {
     dropdownMenu: [
       { label: 'Option 1', fn: jest.fn() },
       { label: 'Option 2', fn: jest.fn() },
-      { label: 'Option 3', fn: jest.fn() },
-    ],
+      { label: 'Option 3', fn: jest.fn() }
+    ]
   };
 
   test('renders dropdown trigger and menu items', async () => {
@@ -25,7 +25,7 @@ describe('CustomDropdown component', () => {
 
     // Use waitFor to wait for the dropdown menu to be present in the DOM
     await waitFor(() => {
-      dropdownData.dropdownMenu.forEach((menuItem) => {
+      dropdownData.dropdownMenu.forEach(menuItem => {
         // Check if the element is present before using toBeInTheDocument
         const foundElement = screen.queryByText(menuItem.label);
 

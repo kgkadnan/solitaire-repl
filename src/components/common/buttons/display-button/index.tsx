@@ -24,7 +24,7 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
   displayButtonAllStyle,
   handleClick,
   color,
-  isDisable,
+  isDisable
 }) => {
   return (
     <>

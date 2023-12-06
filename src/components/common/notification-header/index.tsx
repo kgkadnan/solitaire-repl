@@ -11,12 +11,12 @@ const CustomNotificationHeader = () => {
   const cardDetailHeaderData = [
     {
       label: 'Notifications',
-      link: '/notification/all-notification',
+      link: '/notification/all-notification'
     },
     {
       label: 'Notifications Settings',
-      link: '/notification/setting',
-    },
+      link: '/notification/setting'
+    }
   ];
 
   const handleButtonClick = (link: string) => {
@@ -27,7 +27,7 @@ const CustomNotificationHeader = () => {
     <>
       <div className={styles.showAllNotificationContainer}>
         <div className="flex items-center gap-14 ">
-          {cardDetailHeaderData.map((cardDetails) => {
+          {cardDetailHeaderData.map(cardDetails => {
             const isActive = currentPath === cardDetails.link;
             return (
               <div key={cardDetails.label}>
@@ -36,7 +36,7 @@ const CustomNotificationHeader = () => {
                     displayButtonStyle: isActive
                       ? styles.activeHeaderButtonStyle
                       : styles.headerButtonStyle,
-                    displayLabelStyle: styles.headerButtonLabelStyle,
+                    displayLabelStyle: styles.headerButtonLabelStyle
                   }}
                   displayButtonLabel={cardDetails.label}
                   handleClick={() => handleButtonClick(cardDetails.link)}

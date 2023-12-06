@@ -6,7 +6,7 @@ const meta: Meta<typeof CustomInputField> = {
   title: 'components/InputField',
   component: CustomInputField,
   argTypes: {},
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomInputField>;
 
 export default meta;
@@ -30,7 +30,7 @@ const InputWithHooks = () => {
 };
 
 export const Primary: Story = {
-  render: () => <InputWithHooks />,
+  render: () => <InputWithHooks />
 };
 
 export const Secondary: Story = {
@@ -39,7 +39,7 @@ export const Secondary: Story = {
     placeholder: 'Enter Password',
     name: 'password',
     style: {
-      input: 'text-solitaireQuaternary',
-    },
-  },
+      input: 'text-solitaireQuaternary'
+    }
+  }
 };

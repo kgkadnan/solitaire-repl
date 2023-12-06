@@ -11,12 +11,19 @@ describe('renderSelectionButtons', () => {
     // Render the component
     const { getByText } = render(
       <div>
-        {renderSelectionButtons(data, 'testClassName', 'activeStyle', 'Option2', handleChange, true)}
+        {renderSelectionButtons(
+          data,
+          'testClassName',
+          'activeStyle',
+          'Option2',
+          handleChange,
+          true
+        )}
       </div>
     );
 
     // Assertions
-    data.forEach((option) => {
+    data.forEach(option => {
       const optionButton = getByText(option);
       expect(optionButton).toBeInTheDocument();
 

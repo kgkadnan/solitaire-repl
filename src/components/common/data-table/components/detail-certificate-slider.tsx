@@ -13,7 +13,7 @@ export const DetailCertificateSlider: React.FC<IDetailCertificateSlider> = ({
   dataTableBodySetState,
   tableRows,
   index,
-  row,
+  row
 }) => {
   const { sliderData } = dataTableBodyState;
   const { setSliderData } = dataTableBodySetState;
@@ -66,7 +66,7 @@ export const DetailCertificateSlider: React.FC<IDetailCertificateSlider> = ({
                 'app.searchResult.slider.giaCertificate.share'
               )}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent,
+                displayButtonStyle: styles.transparent
               }}
               // handleClick={showButtonHandleClick}
             />
@@ -75,7 +75,7 @@ export const DetailCertificateSlider: React.FC<IDetailCertificateSlider> = ({
                 'app.searchResult.slider.giaCertificate.download'
               )}
               displayButtonAllStyle={{
-                displayButtonStyle: styles.filled,
+                displayButtonStyle: styles.filled
               }}
               handleClick={() => {
                 handleDownloadImage(

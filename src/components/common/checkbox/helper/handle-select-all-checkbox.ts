@@ -14,7 +14,7 @@ export const handleSelectAllCheckbox = ({
   setIsCheckAll,
   isCheckAll,
   setIsCheck,
-  data,
+  data
 }: IhandleSelectAllCheckbox) => {
   setIsCheckAll?.(!isCheckAll);
 

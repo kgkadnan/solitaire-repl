@@ -5,7 +5,7 @@ import {
   DropdownMenuContent,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu';
 import React, { useState } from 'react';
 import styles from './dropdown.module.scss';
@@ -21,7 +21,7 @@ export interface IDropdownData {
 
 export const CustomDropdown: React.FC<IDropdownData> = ({
   dropdownTrigger,
-  dropdownMenu,
+  dropdownMenu
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -41,7 +41,7 @@ export const CustomDropdown: React.FC<IDropdownData> = ({
         </DropdownMenuTrigger>
         {isDropdownOpen && (
           <DropdownMenuContent>
-            {dropdownMenu.map((items) => (
+            {dropdownMenu.map(items => (
               <div
                 key={items.label}
                 onClick={() => handleItemClick(items.fn)}

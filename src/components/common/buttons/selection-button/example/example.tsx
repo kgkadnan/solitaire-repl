@@ -6,12 +6,12 @@ import style from './example.module.scss';
 
 const SelectionButtonExample = () => {
   const handleClick = () => {
-    console.log("It'sworing");
+    console.log('Its sworing');
   };
 
   const myStyle = {
     selectionButtonStyle: style.buttonStyle,
-    selectionButtonLabelStyle: style.labelStyle,
+    selectionButtonLabelStyle: style.labelStyle
   };
 
   return (

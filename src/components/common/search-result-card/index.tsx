@@ -6,7 +6,7 @@ import {
   CardHeader,
   CardTitle,
   CardDescription,
-  CardContent,
+  CardContent
 } from '@components/ui/card';
 
 export interface ISearchCardStyleProps {
@@ -45,20 +45,20 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardContent,
     stone = '',
     id,
-    unBlurHeader,
+    unBlurHeader
   } = card.cardData;
   const {
     overriddenStyles = {},
     handleCardAction = () => {},
     defaultCardPosition = true,
     isBlur = false, // Default value is set to false
-    blurContent,
+    blurContent
   } = card;
   const {
     cardContainerStyle,
     cardHeaderContainerStyle,
     cardTitleStyle,
-    cardActionIconStyle,
+    cardActionIconStyle
   } = overriddenStyles;
 
   const handleClickEvent = (event: any) => {

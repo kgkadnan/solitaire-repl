@@ -9,7 +9,7 @@ export interface INotificationData {
   category: string;
   sub_category: string;
   status: string;
-  created_at: string;
+  created_at: Date;
   has_cta: boolean;
   external_link: string;
   redirect_identifier: string[];

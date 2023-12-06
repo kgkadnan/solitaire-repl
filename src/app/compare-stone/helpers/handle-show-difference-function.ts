@@ -6,15 +6,15 @@ export const handleShowDifferencesChange = ({
   showDifferences,
   keyLabelMapping,
   setCompareValues,
-  setShowDifferences,
+  setShowDifferences
 }: IShowDifferencesChangeProps) => {
-  // Check if "Select All Checkbox" is checked and there are differences
+  // Check if 'Select All Checkbox' is checked and there are differences
   if (!showDifferences) {
     const propertiesToKeep: string[] = Object.keys(keyLabelMapping);
     // Create a new array with filtered data
     const filteredData = compareStoneData.map((item: Product) => {
       let filteredItem: Product | any = {} as Product;
-      propertiesToKeep.forEach((prop) => {
+      propertiesToKeep.forEach(prop => {
         filteredItem[prop] = item[prop as keyof Product];
       });
       return filteredItem;

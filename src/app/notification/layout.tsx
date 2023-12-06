@@ -7,7 +7,7 @@ import { useGetAllNotificationQuery } from '@/features/api/notification';
 import CustomHeader from '@/components/common/header';
 import {
   NOTIFICATION_TYPE,
-  NOTIFICATION_UNREAD_STATUS,
+  NOTIFICATION_UNREAD_STATUS
 } from '@/constants/business-logic';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
@@ -35,7 +35,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
           unreadCount > 0 &&
           `(${unreadCount})`}
       </p>
-    ),
+    )
   };
 
   return (
@@ -51,7 +51,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
       <div
         style={{
           display: 'flex',
-          width: '100%',
+          width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>{children}</main>

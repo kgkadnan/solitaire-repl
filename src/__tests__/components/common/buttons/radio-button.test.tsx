@@ -8,7 +8,7 @@ describe('RadioButton Component', () => {
   // Sample radio data for testing
   const sampleRadioData = [
     { radioButtonLabel: 'Option 1', id: 'option1', value: 'option1Value' },
-    { radioButtonLabel: 'Option 2', id: 'option2', value: 'option2Value' },
+    { radioButtonLabel: 'Option 2', id: 'option2', value: 'option2Value' }
     // Add more sample data as needed
   ];
 
@@ -20,7 +20,7 @@ describe('RadioButton Component', () => {
         onChange={onChangeMock}
         radioButtonAllStyles={{
           radioButtonStyle: 'custom-radio-button-style',
-          radioLabelStyle: 'custom-radio-label-style',
+          radioLabelStyle: 'custom-radio-label-style'
         }}
       />
     );

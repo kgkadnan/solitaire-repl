@@ -69,7 +69,7 @@ export const handleReset = (setState: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo,
+    setStarLengthTo
   } = setState;
   setSelectedShape([]);
   setSelectedColor('');

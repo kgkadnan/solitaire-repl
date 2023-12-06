@@ -33,7 +33,7 @@ describe('Pagination test', () => {
         resultsPerPage={5}
         optionLimits={[
           { id: 1, value: '5' },
-          { id: 2, value: '10' },
+          { id: 2, value: '10' }
         ]}
         handleResultsPerPageChange={() => {}}
       />

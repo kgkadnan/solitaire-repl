@@ -9,38 +9,38 @@ interface NestedQuery {
 }
 
 export function constructUrlParams(data: QueryData): string {
-  let queryParams: string[] = [];
+  const queryParams: string[] = [];
 
   const encodeNested = (
     prefix: string,
     nestedData: NestedQuery | NestedQuery[]
   ) => {
     if (Array.isArray(nestedData)) {
-      nestedData.forEach((item) => {
-        for (let subKey in item) {
-          if (item.hasOwnProperty(subKey)) {
+      nestedData.forEach(item => {
+        for (const subKey in item) {
+          if (subKey in item) {
             queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
           }
         }
       });
     } else {
-      for (let subKey in nestedData) {
-        if (nestedData.hasOwnProperty(subKey)) {
+      for (const subKey in nestedData) {
+        if (subKey in nestedData) {
           queryParams.push(`${prefix}[${subKey}]=${nestedData[subKey]}`);
         }
       }
     }
   };
 
-  for (let key in data) {
-    if (data.hasOwnProperty(key)) {
-      let value = data[key];
+  for (const key in data) {
+    if (key in data) {
+      const value = data[key];
 
       if (Array.isArray(value)) {
         if (key === 'carat') {
           encodeNested(key, value); // Handle carat separately
         } else {
-          value.forEach((item) => {
+          value.forEach(item => {
             queryParams.push(`${key}[]=${item}`);
           });
         }
@@ -52,6 +52,6 @@ export function constructUrlParams(data: QueryData): string {
     }
   }
 
-  let queryString = queryParams.join('&');
+  const queryString = queryParams.join('&');
   return queryString;
 }

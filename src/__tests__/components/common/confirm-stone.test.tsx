@@ -8,7 +8,7 @@ import { boolean } from 'zod';
 
 // Mock the translation function
 jest.mock('@/utils/translate', () => ({
-  ManageLocales: (key: any) => key, // Replace with your actual translation logic
+  ManageLocales: (key: any) => key // Replace with your actual translation logic
 }));
 
 describe('ConfirmStone Component', () => {
@@ -29,12 +29,12 @@ describe('ConfirmStone Component', () => {
           id: '1',
           value: 'Test',
           label: 'Test Label',
-          checked: true,
-        },
+          checked: true
+        }
       ],
       inputError: false,
       selectedDaysInputValue: '',
-      selectedRadioDaysValue: '',
+      selectedRadioDaysValue: ''
     };
 
     const { container } = render(<ConfirmStone {...props} />);
@@ -59,12 +59,12 @@ describe('ConfirmStone Component', () => {
           id: '1',
           value: 'Test',
           label: 'Test Label',
-          checked: true,
-        },
+          checked: true
+        }
       ],
       inputError: false,
       selectedDaysInputValue: '',
-      selectedRadioDaysValue: '',
+      selectedRadioDaysValue: ''
     };
 
     const { getByTestId } = render(<ConfirmStone {...props} />);

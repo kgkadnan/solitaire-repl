@@ -11,7 +11,7 @@ export const Example = () => {
   };
 
   const className = {
-    input: styles.input,
+    input: styles.input
   };
   return (
     <>

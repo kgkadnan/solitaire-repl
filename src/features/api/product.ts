@@ -1,7 +1,7 @@
 import {
   createApi,
   fetchBaseQuery,
-  BaseQueryFn,
+  BaseQueryFn
 } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,40 +13,40 @@ export const productApi = createApi({
   reducerPath: 'productReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }) as BaseQuery,
   tagTypes: ['Product'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     getAllProduct: builder.query({
       query: ({ offset, limit, url }) => ({
         // query: ({ url }) => ({
-        url: `/store/products?limit=${limit}&offset=${offset}&${url}`,
+        url: `/store/products?limit=${limit}&offset=${offset}&${url}`
         // url: `/store/products?${url}`,
       }),
-      providesTags: ['Product'],
+      providesTags: ['Product']
     }),
     getProductCount: builder.query({
       query: ({ searchUrl = '' }) => ({
         url: `/store/products?limit=1&expand=variants&fields=id${
           searchUrl !== '' ? '&' + searchUrl : ''
-        }`,
+        }`
       }),
-      providesTags: ['Product'],
+      providesTags: ['Product']
     }),
     confirmProduct: builder.mutation({
-      query: (data) => ({
+      query: data => ({
         url: `confirm-stone`,
         method: 'POST',
-        body: data,
+        body: data
       }),
-      invalidatesTags: ['Product'],
-    }),
-  }),
+      invalidatesTags: ['Product']
+    })
+  })
 });
 
 export const {
   useGetAllProductQuery,
   useGetProductCountQuery,
-  useConfirmProductMutation,
+  useConfirmProductMutation
 } = productApi;

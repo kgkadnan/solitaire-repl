@@ -8,7 +8,7 @@ describe('Tooltip Component', () => {
 
   // Define the tooltipStyles prop
   const tooltipStyles = {
-    tooltipContainerStyles: 'custom-container-style',
+    tooltipContainerStyles: 'custom-container-style'
   };
 
   // Common test setup
@@ -46,7 +46,7 @@ describe('Tooltip Component', () => {
     const tooltipElement = <button>Hover me</button>;
     const content = 'Tooltip Content';
     const tooltipStyles = {
-      tooltipContainerStyles: 'custom-container-style',
+      tooltipContainerStyles: 'custom-container-style'
     };
 
     const { container } = render(

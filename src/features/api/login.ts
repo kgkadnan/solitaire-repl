@@ -1,7 +1,7 @@
 import {
   createApi,
   fetchBaseQuery,
-  BaseQueryFn,
+  BaseQueryFn
 } from '@reduxjs/toolkit/query/react';
 
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -13,20 +13,20 @@ export const loginApi = createApi({
   reducerPath: 'loginReducer',
   baseQuery: fetchBaseQuery({
     baseUrl: apiURL,
-    credentials: 'include',
+    credentials: 'include'
   }) as BaseQuery,
   tagTypes: ['Login'],
 
-  endpoints: (builder) => ({
+  endpoints: builder => ({
     verifyLogin: builder.mutation({
-      query: (filter) => ({
+      query: filter => ({
         url: `/store/auth`,
         method: 'POST', // Use the appropriate HTTP method
-        body: filter, // Modify this to match your API's payload
+        body: filter // Modify this to match your API's payload
       }),
-      invalidatesTags: ['Login'],
-    }),
-  }),
+      invalidatesTags: ['Login']
+    })
+  })
 });
 
 export const { useVerifyLoginMutation } = loginApi;

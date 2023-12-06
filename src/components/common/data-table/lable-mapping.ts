@@ -12,7 +12,7 @@ export const keyLabelMapping: KeyLabelMapping = {
   color: 'Color',
   clarity: 'Clarity',
   discount: 'Discount',
-  amount: 'Amt($)',
+  amount: 'Amt($)'
 };
 export const basicDetailsLabelMapping: KeyLabelMapping = {
   lot_id: 'Stock No.',
@@ -34,7 +34,7 @@ export const basicDetailsLabelMapping: KeyLabelMapping = {
   country_origin: 'Country of Origin',
   location: 'Location',
   type_certificate: 'Type 2 Certificate',
-  inscription: 'Laser Inscription',
+  inscription: 'Laser Inscription'
 };
 export const measurementsLabelMapping: KeyLabelMapping = {
   table_percentage: 'Table%',
@@ -49,7 +49,7 @@ export const measurementsLabelMapping: KeyLabelMapping = {
   pavilion_angle: 'Pavilion Angle',
   pavilion_depth: 'Pavilion Depth',
   lower_half: 'Lower Half',
-  star_length: 'Star Length',
+  star_length: 'Star Length'
 };
 export const inclusionDetailsLabelMapping: KeyLabelMapping = {
   black_table: 'Table Black',
@@ -66,10 +66,10 @@ export const inclusionDetailsLabelMapping: KeyLabelMapping = {
   natural_girdle: 'Natural Girdle',
   natural_pavilion: 'Natural Pavilion',
   surface_graining: 'Surface Graining',
-  internal_graining: 'Internal Graining',
+  internal_graining: 'Internal Graining'
 };
 export const otherInformationsLabelMapping: KeyLabelMapping = {
   girdle: 'Girdle',
   key_to_symbbol: 'Key to Symbol',
-  report_comments: 'Report Comments',
+  report_comments: 'Report Comments'
 };

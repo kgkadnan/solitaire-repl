@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
-const initialState: any = {
-  status: false,
+const initialState = {
+  status: false
 };
 
 const NotificationSlice = createSlice({
@@ -9,8 +9,8 @@ const NotificationSlice = createSlice({
   reducers: {
     notificationBadge: (state, { payload }) => {
       state.status = payload;
-    },
-  },
+    }
+  }
 });
 
 export const { notificationBadge } = NotificationSlice.actions;

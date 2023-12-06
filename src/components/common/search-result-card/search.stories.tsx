@@ -8,9 +8,9 @@ const meta = {
   title: 'Components/SearchResultCard',
   component: CustomSearchResultCard,
   parameters: {
-    layout: 'centered',
+    layout: 'centered'
   },
-  tags: ['autodocs'],
+  tags: ['autodocs']
 } satisfies Meta<typeof CustomSearchResultCard>;
 
 export default meta;
@@ -22,18 +22,18 @@ const cardData = {
   cardhandleIcon: Edit,
   cardHeader: <p>header</p>,
   cardDescription: <p>desc</p>,
-  cardContent: <ImageTileExample />,
+  cardContent: <ImageTileExample />
 };
 
 export const DefaultCustomSearchResultCard: Story = {
   args: {
-    cardData: cardData,
-  },
+    cardData: cardData
+  }
 };
 
 export const VariationCustomSearchResultCard: Story = {
   args: {
     cardData: cardData,
-    defaultCardPosition: false,
-  },
+    defaultCardPosition: false
+  }
 };
