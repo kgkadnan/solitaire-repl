@@ -7,4 +7,7 @@ export interface MyDiamondsProps {
   handleCardClick: (id: string) => void;
   productPageDetail?: any;
   check?: string;
+  setOffset: (offset: number) => void;
+  setLimit: (limit: number) => void;
+  limit: number;
 }

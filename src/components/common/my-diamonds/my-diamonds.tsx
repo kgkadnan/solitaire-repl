@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import { CustomSlider } from '../slider';
 import { ManageLocales } from '@/utils/translate';
 import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
@@ -21,15 +21,18 @@ import { performDownloadExcel } from '@/utils/performDownloadExcel';
 import { useDataTableStateManagement } from '../data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import CustomPagination from '../pagination';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,
-  check
+  check,
+  setOffset,
+  setLimit,
+  limit
 }) => {
   // Define the main MyDiamonds component
-
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
@@ -44,6 +47,15 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, tableColumns } = dataTableState;
   const { setRows, setTableColumns } = dataTableSetState;
+
+  //pagination states
+  const [currentPage, setCurrentPage] = useState(0);
+  const [numberOfPages, setNumberOfPages] = useState(0);
+
+  let optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' }
+  ];
 
   // Fetch product page table columns
   const { data: productTableColumns } =
@@ -166,6 +178,27 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       </div>
     );
   };
+
+  const handlePageClick = (page: number) => {
+    if (page >= 0 && page <= numberOfPages) {
+      const offset = page * limit;
+      setIsCheck([]);
+      setIsCheckAll(false);
+      setOffset(offset);
+      setCurrentPage(page);
+    }
+  };
+
+  const handleResultsPerPageChange = useCallback(
+    (event: string) => {
+      const newResultsPerPage: number = parseInt(event, 10);
+      setLimit(newResultsPerPage);
+      setOffset(0);
+      // Reset current page when changing results per page
+      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+    },
+    [data?.count]
+  );
 
   return (
     <>
@@ -294,6 +327,20 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
           />
         </div>
       </div>
+      {check === 'previous-confirmations' && (
+        <div className="sticky bottom-6 bg-solitairePrimary mt-3">
+          {/* {data?.count > 0 && ( */}
+          <CustomPagination
+            currentPage={currentPage}
+            totalPages={numberOfPages}
+            resultsPerPage={limit}
+            optionLimits={optionLimits}
+            handlePageClick={handlePageClick}
+            handleResultsPerPageChange={handleResultsPerPageChange}
+          />
+          {/* )} */}
+        </div>
+      )}
     </>
   );
 };
