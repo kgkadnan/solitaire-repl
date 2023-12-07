@@ -5,19 +5,25 @@ export const useModalStateManagement = () => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [isSliderOpen, setIsSliderOpen] = useState(false);
+  const [modalContent, setModalContent] = useState<ReactNode>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   return {
     modalState: {
       dialogContent,
       isDialogOpen,
       isInputDialogOpen,
-      isSliderOpen
+      isSliderOpen,
+      modalContent,
+      isModalOpen
     },
     modalSetState: {
       setDialogContent,
       setIsDialogOpen,
       setIsInputDialogOpen,
-      setIsSliderOpen
+      setIsSliderOpen,
+      setModalContent,
+      setIsModalOpen
     }
   };
 };

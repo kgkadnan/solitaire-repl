@@ -21,9 +21,10 @@ import { useConfirmStoneStateManagement } from '@/components/common/confirm-ston
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { handleSaveSearch } from './helpers/handle-save-search';
-import { calculateTotalAmount } from './helpers/calculate-total-amount';
-import { calculateAverageDiscount } from './helpers/calculate-average-discount';
+import { calculateTotal } from './helpers/product-total-calculations';
+import { calculateAverage } from './helpers/average-calculations';
 import { ISearchResultsProps } from './result-interface';
+import { CustomModal } from '@/components/common/modal';
 // Define a type for the radio state
 
 const SearchResults = ({
@@ -51,19 +52,28 @@ const SearchResults = ({
   const { setSelectedRadioDaysValue } = confirmStoneSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
-    modalState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isInputDialogOpen,
+    isSliderOpen,
+    isModalOpen,
+    modalContent
+  } = modalState;
   const {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent
+    setDialogContent,
+    setIsModalOpen
   } = modalSetState;
   const {
     setYourSelectionData,
     setTotalAmount,
     setAverageDiscount,
-    setSaveSearchName
+    setSaveSearchName,
+    setProductTotalCarats,
+    setAveragePricePerCarat
   } = commonSetState;
 
   const { saveSearchName } = commonState;
@@ -97,13 +107,19 @@ handle the logic for closing a dialog box after a certain delay. */
 
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
-    setTotalAmount(calculateTotalAmount({ isCheck, rows }));
-    setAverageDiscount(calculateAverageDiscount({ isCheck, rows }));
+    setTotalAmount(calculateTotal({ isCheck, rows, type: 'amount' }));
+    setAveragePricePerCarat(
+      calculateAverage({ isCheck, rows, property: 'price_per_carat' })
+    );
+    setAverageDiscount(
+      calculateAverage({ isCheck, rows, property: 'discount' })
+    );
+    setProductTotalCarats(calculateTotal({ isCheck, rows, type: 'carat' }));
   }, [
     isCheck,
     rows,
-    calculateTotalAmount,
-    calculateAverageDiscount,
+    calculateTotal,
+    calculateAverage,
     setAverageDiscount,
     setTotalAmount
   ]);
@@ -207,6 +223,12 @@ variable changes. */
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
       />
 
       <ResultHeader

@@ -341,6 +341,8 @@ export interface IModalSetState {
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
+  setModalContent: Dispatch<SetStateAction<ReactNode>>;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IErrorSetState {
@@ -365,6 +367,7 @@ export interface ICommonSetState {
   setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
   setTotalAmount: Dispatch<SetStateAction<number>>;
   setAverageDiscount: Dispatch<SetStateAction<number>>;
+  setProductTotalCarats: Dispatch<SetStateAction<number>>;
   setSaveSearchName: Dispatch<SetStateAction<string>>;
 }
 
@@ -372,6 +375,8 @@ export interface ICommonState {
   yourSelectionData: IYourSelection[];
   totalAmount: number;
   averageDiscount: number;
+  productTotalCarats: number;
+  averagePricePerCarat: number;
   saveSearchName: string;
 }
 export interface ISortBySetState {

@@ -460,7 +460,7 @@ console.log("dateSearchUrl",dateSearchUrl)
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?query=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
+    router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
   const handleCardClick = (id: string) => {
@@ -498,7 +498,7 @@ console.log("dateSearchUrl",dateSearchUrl)
           ];
 
           localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?query=${SEARCH_RESULT}-${data.length + 1}`);
+          router.push(`/search?active-tab=${SEARCH_RESULT}-${data.length + 1}`);
         }
       } else {
         let localStorageData = [
@@ -511,7 +511,7 @@ console.log("dateSearchUrl",dateSearchUrl)
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?query=${SEARCH_RESULT}-${1}`);
+        router.push(`/search?active-tab=${SEARCH_RESULT}-${1}`);
       }
     }
   };
