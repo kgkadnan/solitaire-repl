@@ -119,9 +119,9 @@ handle the logic for closing a dialog box after a certain delay. */
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
   useEffect(() => {
-    let selection = localStorage.getItem('Search');
+    const selection = localStorage.getItem('Search');
     if (selection) {
-      let yourSelection = JSON.parse(selection);
+      const yourSelection = JSON.parse(selection);
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
         setIsCheck([]);

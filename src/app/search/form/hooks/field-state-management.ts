@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import advanceSearch from '@/constants/advance-search.json';
 
 const useFieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);

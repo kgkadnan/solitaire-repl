@@ -1,7 +1,6 @@
 export const generateQueryParams = (state: any) => {
   const {
     selectedShape,
-    selectedWhiteColor,
     selectedFancyColor,
     selectedIntensity,
     selectedOvertone,

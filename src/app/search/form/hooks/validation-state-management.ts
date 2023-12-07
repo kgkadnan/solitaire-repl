@@ -1,3 +1,4 @@
+import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import { useState } from 'react';
 
 export interface Errors {
@@ -16,8 +17,6 @@ const useValidationStateManagement = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   const [addSearches, setAddSearches] = useState<any[]>([]);
-  const [showToast, setShowToast] = useState<boolean>(false);
-  const [toastErrorMessage, setToastErrorMessage] = useState<string>('');
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
@@ -48,10 +47,6 @@ const useValidationStateManagement = () => {
     setErrorText,
     addSearches,
     setAddSearches,
-    showToast,
-    setShowToast,
-    toastErrorMessage,
-    setToastErrorMessage,
     isValidationError,
     setIsValidationError,
     inputError,

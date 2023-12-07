@@ -29,7 +29,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   component. It is assigning the returned dispatch function to the `dispatch` constant. */
   const dispatch = useAppDispatch();
 
-  let [downloadExcel] = useDownloadExcelMutation();
+  const [downloadExcel] = useDownloadExcelMutation();
   const [addCart] = useAddCartMutation();
 
   const { isError, errorText } = errorState;
@@ -45,7 +45,7 @@ parameter. */
     downloadExcel({ productIds })
       .unwrap()
       .then(res => {
-        let { data, fileName } = res;
+        const { data, fileName } = res;
         if (data) {
           setDialogContent(
             <>
@@ -98,7 +98,7 @@ parameter. */
       setIsError(true);
       setErrorText('Minimum 2 stone to compare.');
     } else {
-      let comapreStone = isCheck.map((id: string) => {
+      const comapreStone = isCheck.map((id: string) => {
         return rows.find((row: Product) => row.id === id);
       });
 
@@ -118,7 +118,7 @@ parameter. */
       setIsError(true);
       setErrorText('Please select a stone to perform action');
     } else {
-      let hasMemoOut = isCheck.some((id: string) => {
+      const hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
           (row: Product) => row.id == id && row.diamond_status === 'MemoOut'
         );
@@ -130,7 +130,7 @@ parameter. */
         );
         setIsError(true);
       } else {
-        let variantIds = isCheck.map((id: string) => {
+        const variantIds = isCheck.map((id: string) => {
           const selectedRow = rows.find((row: Product) => row.id === id);
           return selectedRow?.variants[0]?.id;
         });

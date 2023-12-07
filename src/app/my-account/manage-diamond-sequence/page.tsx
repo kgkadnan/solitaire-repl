@@ -28,7 +28,7 @@ const ManageListingSequence = () => {
  `useAddManageListingSequenceMutation` from the `@/features/api/manage-listing-sequence` module. */
   const { data } =
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
-  let [addManageListingSequence] = useAddManageListingSequenceMutation();
+  const [addManageListingSequence] = useAddManageListingSequenceMutation();
 
   const [manageableListings, setManageableListings] = useState<TableColumn[]>(
     []

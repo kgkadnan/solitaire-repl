@@ -6,7 +6,6 @@ import {
 
 import { notificationSettingApi } from './features/api/notification-setting';
 import { savedSearchesApi } from './features/api/saved-searches';
-import { previousSearchApi } from './features/api/previous-searches';
 import { notificationApi } from './features/api/notification';
 import { productApi } from './features/api/product';
 import { loginApi } from './features/api/login';
@@ -24,14 +23,12 @@ const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
-
   savedSearch: savedSearchReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,
   [savedSearchesApi.reducerPath]: savedSearchesApi.reducer,
   [cartApi.reducerPath]: cartApi.reducer,
   [changePasswordApi.reducerPath]: changePasswordApi.reducer,
-
   [notificationApi.reducerPath]: notificationApi.reducer,
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,

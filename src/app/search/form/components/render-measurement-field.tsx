@@ -1,5 +1,5 @@
 import { CustomInputlabel } from '@/components/common/input-label';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
@@ -77,7 +77,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     setGirdleTo
   } = setState;
 
-  let parameterDataState = [
+  const parameterDataState = [
     {
       parameterState: [tablePerFrom, tablePerTo],
       setParameterState: [setTablePerFrom, setTablePerTo]
@@ -135,7 +135,7 @@ const renderMeasurementField = (state: any, setState: any) => {
       setParameterState: [setGirdleFrom, setGirdleTo]
     }
   ];
-  let parameterData = parameterDataState.map((parameter, index) => {
+  const parameterData = parameterDataState.map((parameter, index) => {
     return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
@@ -150,12 +150,12 @@ const renderMeasurementField = (state: any, setState: any) => {
   const setFromError = '';
 
   // const [fromAngle, setFromAngle] = useState('');
-  let fromAngle = '';
-  let setFromAngle = '';
+  const fromAngle = '';
+  const setFromAngle = '';
   // const [toAngle, setToAngle] = useState('');
 
-  let toAngle = '';
-  let setToAngle = '';
+  const toAngle = '';
+  const setToAngle = '';
 
   const handleAngle = (
     key: string,

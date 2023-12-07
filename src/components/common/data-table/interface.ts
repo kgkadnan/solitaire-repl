@@ -1,10 +1,9 @@
 import {
   IErrorSetState,
-  IModalSetState,
   Product,
   TableColumn
 } from '@/app/search/result/result-interface';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ICheckboxSetState, ICheckboxState } from '../checkbox/interface';
 import { IConfirmStoneSetState } from '../confirm-stone/interface';
 
@@ -20,7 +19,12 @@ export interface ICustomDataTableProps {
   selectionAllowed?: boolean;
   errorSetState: IErrorSetState;
   confirmStoneSetState?: IConfirmStoneSetState;
-  modalSetState?: any;
+  modalSetState?: {
+    setDialogContent: Dispatch<SetStateAction<ReactNode | undefined>>;
+    setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
+    setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
+    setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
+  };
 }
 
 export interface KeyLabelMapping {

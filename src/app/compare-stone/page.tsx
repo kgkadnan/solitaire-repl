@@ -49,8 +49,8 @@ const CompareStone = () => {
       setErrorText(`You haven't picked any stones.`);
     } else {
       // Extract variant IDs for selected stones
-      let variantIds = isCheck?.map((id: string) => {
-        const compareStoneCheck: Product | {} =
+      const variantIds = isCheck?.map((id: string) => {
+        const compareStoneCheck: Product | object =
           compareStoneData.find((compareStone: Product) => {
             return compareStone?.id === id;
           }) ?? {};

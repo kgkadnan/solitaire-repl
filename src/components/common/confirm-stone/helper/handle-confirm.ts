@@ -19,7 +19,7 @@ export const handleConfirmStone = (
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>,
   setConfirmStoneData: Dispatch<SetStateAction<Product[]>>
 ) => {
-  let hasMemoOut = isCheck?.some(id => {
+  const hasMemoOut = isCheck?.some(id => {
     return rows.some(row => row.id == id && row.diamond_status === 'MemoOut');
   });
 

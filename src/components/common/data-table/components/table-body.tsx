@@ -1,6 +1,6 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { TableColumn } from '@/app/search/result/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -161,7 +161,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   ];
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Product) => {
     handleCheckboxClick({
       id: row.id,
       isCheck,
@@ -232,7 +232,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows?.map((row: any, index: number) => (
+      {tableRows?.map((row: Product, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}

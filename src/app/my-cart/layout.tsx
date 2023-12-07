@@ -11,10 +11,11 @@ import {
   MEMO_OUT_STATUS,
   SOLD_OUT_STATUS
 } from '@/constants/business-logic';
+import { Product } from '../search/result/result-interface';
 
 function MyCart({ children }: { children: React.ReactNode }) {
   // Get the current pathname using the usePathname hook
-  let currentPath = usePathname();
+  const currentPath = usePathname();
   // State variables for handling scroll visibility
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
@@ -32,7 +33,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
   const { data } = useGetCartQuery({});
 
   // Define routes for different tabs in My Cart
-  let myCartRoutes = [
+  const myCartRoutes = [
     {
       id: '1',
       pathName: ManageLocales('app.myCart.active'),
@@ -59,9 +60,10 @@ function MyCart({ children }: { children: React.ReactNode }) {
       if (data) {
         const activeDiamondItems = data.items
           .filter(
-            (item: any) => item?.product?.diamond_status === ACTIVE_STATUS
+            (item: { product: Product }) =>
+              item?.product?.diamond_status === ACTIVE_STATUS
           )
-          .map((row: any) => row.product);
+          .map((row: { product: Product }) => row.product);
         setActiveTabCount(activeDiamondItems?.length);
       }
     };
@@ -75,9 +77,10 @@ function MyCart({ children }: { children: React.ReactNode }) {
       if (data) {
         const soldOutItems = data.items
           .filter(
-            (item: any) => item?.product?.diamond_status === SOLD_OUT_STATUS
+            (item: { product: Product }) =>
+              item?.product?.diamond_status === SOLD_OUT_STATUS
           )
-          .map((row: any) => row.product);
+          .map((row: { product: Product }) => row.product);
 
         setSoldCount(soldOutItems?.length);
       }
