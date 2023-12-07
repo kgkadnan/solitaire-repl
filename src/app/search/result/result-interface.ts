@@ -367,6 +367,7 @@ export interface ICommonSetState {
   setYourSelectionData: Dispatch<SetStateAction<IYourSelection[]>>;
   setTotalAmount: Dispatch<SetStateAction<number>>;
   setAverageDiscount: Dispatch<SetStateAction<number>>;
+  setProductTotalCarats: Dispatch<SetStateAction<number>>;
   setSaveSearchName: Dispatch<SetStateAction<string>>;
 }
 
@@ -374,6 +375,8 @@ export interface ICommonState {
   yourSelectionData: IYourSelection[];
   totalAmount: number;
   averageDiscount: number;
+  productTotalCarats: number;
+  averagePricePerCarat: number;
   saveSearchName: string;
 }
 export interface ISortBySetState {

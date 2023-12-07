@@ -102,7 +102,11 @@ const CompareStone = () => {
       id: 1,
       displayButtonLabel: (
         <CustomDropdown
-          dropdownTrigger={<CustomDisplayButton displayButtonLabel="More" />}
+          dropdownTrigger={
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
+            />
+          }
           dropdownMenu={[
             {
               label: 'Share',
