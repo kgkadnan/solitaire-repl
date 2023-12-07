@@ -318,9 +318,7 @@ code also combines all the radio button data arrays into a single array called R
           order: order.toLowerCase().trim()
         }));
       if (validSortingOptions.length > 0) {
-        console.log('Before sorting:', rows);
         const sortedData = validSortingOptions.reduce((acc, { key, order }) => {
-          console.log('Sorting with key:', key, 'and order:', order);
           return sortProducts(acc, order, key);
         }, rows);
         setRows(sortedData);
