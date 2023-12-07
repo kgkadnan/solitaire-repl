@@ -4,7 +4,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedShape,
     setSelectedOvertone,
     setSelectedTinge,
-    setSelectedTingeIntensity,
     setSelectedClarity,
     setSelectedCaratRange,
     setSelectedCut,

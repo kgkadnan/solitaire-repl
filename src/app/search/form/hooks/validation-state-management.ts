@@ -1,4 +1,3 @@
-import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import { useState } from 'react';
 
 export interface Errors {
