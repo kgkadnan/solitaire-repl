@@ -78,7 +78,6 @@ const SavedSearch = () => {
     cardContainerStyle: styles.searchCardContainer
   };
 
-
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT); // You can set the initial value here
@@ -165,7 +164,7 @@ const SavedSearch = () => {
     };
   }, []);
 
-  const formatRangeData = (data: {lte:number,gte:number}) => {
+  const formatRangeData = (data: { lte: number; gte: number }) => {
     const range = data;
     if (range && range.lte && range.gte) {
       return `${range.gte}-${range.lte}`;
@@ -182,7 +181,6 @@ const SavedSearch = () => {
           if (item.meta_data && !Array.isArray(item.meta_data[key])) {
             filteredData[keyLabelMapping[key]] = formatRangeData(
               item.meta_data[key]
-              
             );
           } else if (
             item.meta_data &&
@@ -471,9 +469,11 @@ const SavedSearch = () => {
   };
 
   const handleCardClick = (id: string) => {
-    const cardClickData: any = savedSearchData.filter((items: ISavedSearchData) => {
-      return items.id === id;
-    });
+    const cardClickData: any = savedSearchData.filter(
+      (items: ISavedSearchData) => {
+        return items.id === id;
+      }
+    );
 
     const url = constructUrlParams(cardClickData[0].meta_data);
 

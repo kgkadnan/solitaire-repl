@@ -1,4 +1,3 @@
-
 type QueryDataValue = string | number | NestedQuery | NestedQuery[];
 
 export interface QueryData {
@@ -9,7 +8,7 @@ interface NestedQuery {
   [key: string]: QueryDataValue;
 }
 
-export function constructUrlParams(data: QueryData ): string {
+export function constructUrlParams(data: QueryData): string {
   const queryParams: string[] = [];
 
   const encodeNested = (

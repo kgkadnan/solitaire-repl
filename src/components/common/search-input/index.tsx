@@ -48,7 +48,6 @@ export const CustomSearchInputField: React.FC<InputFieldProps> = ({
       if (suggestions && suggestions.length > 0) {
         handleSuggestionClick(value);
       }
-      
     }
   };
 

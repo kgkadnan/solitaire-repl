@@ -67,7 +67,6 @@ const renderContent = (
   const {
     setSelectedShape,
     setSelectedColor,
-    setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
