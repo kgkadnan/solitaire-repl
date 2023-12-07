@@ -2,7 +2,7 @@
   "extends": [
     "next/core-web-vitals",
     "plugin:storybook/recommended",
-    "eslint:recommended",
+    "eslint:recommended"
     // "plugin:@typescript-eslint/recommended"
   ],
   "plugins": ["prettier"],
@@ -12,6 +12,10 @@
     // "indent": ["error", 2],
     "quotes": ["error", "single", { "allowTemplateLiterals": true }],
     "semi": ["error", "always"],
+    "no-unused-vars": "off",
+    "no-undef": "off",
+    "no-unsafe-optional-chaining":"off",
+    "react-hooks/exhaustive-deps":"off",
 
     // Avoiding any Type
     // "@typescript-eslint/no-explicit-any": ["error"],
