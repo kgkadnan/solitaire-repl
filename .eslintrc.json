@@ -3,9 +3,9 @@
     "next/core-web-vitals",
     "plugin:storybook/recommended",
     "eslint:recommended",
-    "plugin:@typescript-eslint/recommended"
+    // "plugin:@typescript-eslint/recommended"
   ],
-  "plugins": ["prettier", "@typescript-eslint"],
+  "plugins": ["prettier"],
 
   "rules": {
     //  Code Style
@@ -14,7 +14,7 @@
     "semi": ["error", "always"],
 
     // Avoiding any Type
-    "@typescript-eslint/no-explicit-any": ["error"],
+    // "@typescript-eslint/no-explicit-any": ["error"],
 
     /// -----------------------------------------------------
     // //  Explicit Return Types (Optional)

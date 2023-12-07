@@ -13,7 +13,7 @@ export const handleShowDifferencesChange = ({
     const propertiesToKeep: string[] = Object.keys(keyLabelMapping);
     // Create a new array with filtered data
     const filteredData = compareStoneData.map((item: Product) => {
-      let filteredItem: Product | any = {} as Product;
+      const filteredItem: Product | any = {} as Product;
       propertiesToKeep.forEach(prop => {
         filteredItem[prop] = item[prop as keyof Product];
       });
@@ -25,7 +25,7 @@ export const handleShowDifferencesChange = ({
 
     // Iterate over the properties in the first object
     for (const key in filteredData[0]) {
-      if (filteredData[0].hasOwnProperty(key)) {
+      if (key in filteredData[0]) {
         // Compare values for the current key in all objects
         const values = filteredData.map((item: any) => item[key]);
 

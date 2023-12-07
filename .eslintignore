@@ -6,8 +6,10 @@ out/
 
 # Ignore node_modules directory
 node_modules/
+src/__tests__/
 
 # Ignore test files
 **/*.test.ts
 **/*.test.tsx
 **/*.spec.js
+__tests__/

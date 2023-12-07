@@ -22,6 +22,7 @@ import { useDataTableStateManagement } from '../data-table/hooks/data-table-stat
 import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import CustomPagination from '../pagination';
+import Link from 'next/link';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -156,11 +157,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                   : formatNumberWithLeadingZeros(items.display_id)}
               </span>
             </p>
-            {items.trackOrder && (
-              <p>
+            {items?.delivery?.tracking_id && (
+              <p onClick={e => e.stopPropagation()}>
                 Track Order:{' '}
-                <span className="text-solitaireTertiary">
-                  {items.trackOrder}
+                <span className="text-solitaireTertiary border-b  border-solitaireQuaternary">
+                  <Link href={items?.delivery?.link} target="_blank">
+                    Track your order here
+                  </Link>
                 </span>
               </p>
             )}
@@ -181,10 +184,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
-      const offset = page * limit;
+      const offset =  page * limit!;
       setIsCheck([]);
       setIsCheckAll(false);
-      setOffset(offset);
+       setOffset!(offset);
       setCurrentPage(page);
     }
   };
@@ -192,8 +195,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage: number = parseInt(event, 10);
-      setLimit(newResultsPerPage);
-      setOffset(0);
+      setLimit!(newResultsPerPage);
+      setOffset!(0);
       // Reset current page when changing results per page
       setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
     },
@@ -268,11 +271,16 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                         </span>
                       </div>
                     )}
-                    {productPageDetail?.trackOrder && (
+                    {productPageDetail?.delivery && (
                       <div className="flex mb-1">
                         <p className="w-[25%]">Track Order :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.trackOrder}
+                        <span className="text-solitaireTertiary border-b  border-solitaireQuaternary">
+                          <Link
+                            href={productPageDetail?.delivery?.link}
+                            target="_blank"
+                          >
+                            Track your order here
+                          </Link>
                         </span>
                       </div>
                     )}
@@ -331,7 +339,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
-            resultsPerPage={limit}
+            resultsPerPage={limit!}
             optionLimits={optionLimits}
             handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}

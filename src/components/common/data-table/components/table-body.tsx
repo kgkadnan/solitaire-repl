@@ -1,6 +1,6 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { TableColumn } from '@/app/search/result/result-interface';
+import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -10,7 +10,7 @@ import { CustomCheckBox } from '../../checkbox';
 import Image from 'next/image';
 import { ITbodyProps } from '../interface';
 import styles from '../custom-table.module.scss';
-import { FILE_URLS, GIA_LINK } from '@/constants/business-logic';
+import { GIA_LINK } from '@/constants/business-logic';
 import { handleCheckboxClick } from '../../checkbox/helper/handle-checkbox-click';
 import { useDataTableBodyStateManagement } from '../hooks/data-table-body-state-management';
 import { DetailImageSlider } from './detail-image-slider';
@@ -42,7 +42,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { sliderData } = dataTableBodyState!;
 
   const [addCart] = useAddCartMutation();
-  let [downloadExcel] = useDownloadExcelMutation();
+  const [downloadExcel] = useDownloadExcelMutation();
 
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
@@ -83,7 +83,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       })
         .unwrap()
         .then(res => {
-          let { data, fileName } = res;
+          const { data, fileName } = res;
           if (data) {
             downloadExcelFromBase64(data, fileName);
             setDialogContent?.(
@@ -104,37 +104,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
         });
     }
   };
-
-  let switchButtonTabs = [
-    {
-      id: '1',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.giaCertificate'
-      ),
-      url: `${FILE_URLS.CERT_FILE.replace(
-        '***',
-        sliderData[0]?.certificate_number ?? ''
-      )}`
-    },
-
-    {
-      id: '2',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondVideo'
-      ),
-      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
-        '***',
-        sliderData[0]?.lot_id ?? ''
-      )}`
-    },
-    {
-      id: '3',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondImage'
-      ),
-      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
-    }
-  ];
 
   const footerButtonData = [
     {
@@ -192,7 +161,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   ];
 
-  const handleRowClick = (row: any) => {
+  const handleRowClick = (row: Product) => {
     handleCheckboxClick({
       id: row.id,
       isCheck,
@@ -217,7 +186,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
             />
             <DetailCertificateSlider
@@ -237,10 +205,10 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
               column={column}
               footerButtonData={footerButtonData}
+              modalSetState={modalSetState}
             />
           </div>
         );
@@ -264,7 +232,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows?.map((row: any, index: number) => (
+      {tableRows?.map((row: Product, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}

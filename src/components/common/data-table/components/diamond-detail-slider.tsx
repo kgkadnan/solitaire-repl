@@ -10,7 +10,6 @@ import { FILE_URLS } from '@/constants/business-logic';
 import { CustomFooter } from '../../footer';
 import styles from '../custom-table.module.scss';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
-import dna from '@public/assets/icons/ph_dna-light.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
 import {
   basicDetailsLabelMapping,
@@ -27,10 +26,10 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   index,
   row,
   column,
-  switchButtonTabs,
-  footerButtonData
+  footerButtonData,
+  modalSetState
 }) => {
-  let currentPath = usePathname();
+  const currentPath = usePathname();
   const {
     sliderData,
     activeTab,
@@ -43,6 +42,92 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
     setDiamondDetailImageUrl,
     setDiamondDetailIframeUrl
   } = dataTableBodySetState;
+
+  const { setModalContent, setIsModalOpen } = modalSetState ?? {};
+
+  const switchButtonTabs = [
+    {
+      id: '1',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondImage'
+      ),
+      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
+    },
+
+    {
+      id: '2',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondVideo'
+      ),
+      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`
+    },
+    {
+      id: '3',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.giaCertificate'
+      ),
+      url: `${FILE_URLS.CERT_FILE.replace(
+        '***',
+        sliderData[0]?.certificate_number ?? ''
+      )}`
+    },
+    {
+      id: '4',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.b2bSparkle'
+      ),
+      iframeUrl: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`
+    }
+  ];
+
+  const dnaImages = [
+    {
+      id: 1,
+      url: `${FILE_URLS.HEART.replace('***', sliderData[0]?.lot_id ?? '')}`,
+      altText: 'Heart Image',
+      displayName: ManageLocales('app.searchResult.slider.diamondDetail.heart')
+    },
+    {
+      id: 2,
+      url: `${FILE_URLS.ARROW.replace('***', sliderData[0]?.lot_id ?? '')}`,
+      altText: 'Arrow Image',
+      displayName: ManageLocales('app.searchResult.slider.diamondDetail.arrow')
+    },
+    {
+      id: 3,
+      url: `${FILE_URLS.ASET.replace('***', sliderData[0]?.lot_id ?? '')}`,
+      altText: 'Aset Image',
+      displayName: ManageLocales('app.searchResult.slider.diamondDetail.aset')
+    },
+    {
+      id: 4,
+      url: `${FILE_URLS.IDEAL.replace('***', sliderData[0]?.lot_id ?? '')}`,
+      altText: 'Ideal Image',
+      displayName: ManageLocales('app.searchResult.slider.diamondDetail.ideal')
+    },
+    {
+      id: 5,
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`,
+      altText: 'Fluorescence Image',
+      displayName: ManageLocales(
+        'app.searchResult.slider.diamondDetail.fluorescence'
+      )
+    }
+  ];
+
+  const openModal = (url: string, altText: string) => {
+    setIsModalOpen(true);
+    setModalContent(<Image src={url} alt={altText} width={900} height={500} />);
+  };
 
   return (
     <CustomSlider
@@ -76,7 +161,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
             </p>
           </div>
           <div className="border-b border-solitaireQuaternary mt-5"></div>
-          {sliderData.map((data: Product | any) => {
+          {sliderData.map((data: Product) => {
             return (
               <>
                 <div
@@ -173,13 +258,13 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                       height={20}
                     />
                   </div>
-                  <a
+                  {/* <a
                     href={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`}
                     target="_blank"
                     className="cursor-pointer"
                   >
                     <Image src={dna} alt="dna" width={25} height={20} />
-                  </a>
+                  </a> */}
                 </div>
                 <div className="border-b border-solitaireQuaternary"></div>
                 <div>
@@ -273,7 +358,32 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                     </div>
                   </div>
                 </div>
-                <div className="sticky bottom-0 bg-solitairePrimary mb-5">
+                <div className="border-b border-solitaireQuaternary mt-3"></div>
+                <div className="flex my-5 gap-3 overflow-x-scroll">
+                  {dnaImages.map(({ url, altText, displayName, id }) => {
+                    return (
+                      <div key={id} className="w-[30%]">
+                        <div className="text-center pb-3">
+                          <p>{displayName}</p>
+                        </div>
+
+                        <div
+                          onClick={() => openModal(url, altText)}
+                          className="w-[100%]"
+                        >
+                          <Image
+                            src={url}
+                            alt={altText}
+                            width={250}
+                            height={150}
+                            style={{ height: '200px', maxWidth: '250px' }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                <div className="sticky bottom-0 bg-solitaireSecondary mb-5">
                   {currentPath === '/search' && (
                     <CustomFooter footerButtonData={footerButtonData} />
                   )}

@@ -40,7 +40,7 @@ interface IMyProfileRoutes {
 }
 
 function SearchResultLayout() {
-  const subRoute = useSearchParams().get('query');
+  const subRoute = useSearchParams().get('active-tab');
   const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
 
@@ -145,13 +145,13 @@ function SearchResultLayout() {
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?query=${NEW_SEARCH}`);
+      router.push(`search?active-tab=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex + 1}`);
+      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex + 1}`);
       setheaderPath(`Search Results ${removeDataIndex + 1}`);
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?query=${SEARCH_RESULT}-${removeDataIndex}`);
+      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex}`);
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
@@ -329,7 +329,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?query=${subRoute}&edit=${SEARCH_RESULT}`);
+    router.push(`/search?active-tab=${subRoute}&edit=${SEARCH_RESULT}`);
   };
 
   const handleCloseInputDialog = () => {
@@ -383,7 +383,7 @@ function SearchResultLayout() {
                 href={
                   maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
                     ? ``
-                    : `/search?query=${path}`
+                    : `/search?active-tab=${path}`
                 }
                 key={id}
               >
@@ -409,7 +409,7 @@ function SearchResultLayout() {
                       : 'hover:text-solitaireQuaternary'
                   }`}
                   onClick={() => handleSearchTab(parseInt(path), pathName)}
-                  href={`/search?query=${SEARCH_RESULT}-${path}`}
+                  href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
                   key={id}
                 >
                   <div
