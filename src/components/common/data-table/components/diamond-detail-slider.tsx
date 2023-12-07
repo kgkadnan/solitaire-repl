@@ -43,7 +43,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
     setDiamondDetailIframeUrl
   } = dataTableBodySetState;
 
-  const { setModalContent, setIsModalOpen } = modalSetState;
+  const { setModalContent, setIsModalOpen } = modalSetState ?? {};
 
   const switchButtonTabs = [
     {
@@ -161,7 +161,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
             </p>
           </div>
           <div className="border-b border-solitaireQuaternary mt-5"></div>
-          {sliderData.map((data: Product | any) => {
+          {sliderData.map((data: Product) => {
             return (
               <>
                 <div
@@ -359,21 +359,24 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                   </div>
                 </div>
                 <div className="border-b border-solitaireQuaternary mt-3"></div>
-                <div className="flex my-5 gap-5 ">
+                <div className="flex my-5 gap-3 overflow-x-scroll">
                   {dnaImages.map(({ url, altText, displayName, id }) => {
                     return (
-                      <div key={id}>
+                      <div key={id} className="w-[30%]">
                         <div className="text-center pb-3">
                           <p>{displayName}</p>
                         </div>
 
-                        <div onClick={() => openModal(url, altText)}>
+                        <div
+                          onClick={() => openModal(url, altText)}
+                          className="w-[100%]"
+                        >
                           <Image
                             src={url}
                             alt={altText}
                             width={250}
                             height={150}
-                            style={{ height: '200px' }}
+                            style={{ height: '200px', maxWidth: '250px' }}
                           />
                         </div>
                       </div>

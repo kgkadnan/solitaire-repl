@@ -12,7 +12,6 @@ export const CustomModal: React.FC<ICustomModal> = ({
     setIsOpen(open);
   };
 
-  console.log('dialogContent', dialogContent);
   return (
     <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
       <DialogContent
