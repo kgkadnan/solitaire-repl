@@ -19,11 +19,14 @@ interface ICustomeCalendarProps {
   date: any;
   handleDate: (date: any) => void;
 }
+
 export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   className,
   date,
   handleDate
 }) => {
+  console.log(date,"ll")
+
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
