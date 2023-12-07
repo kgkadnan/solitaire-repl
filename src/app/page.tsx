@@ -1,12 +1,12 @@
 'use client';
 
-import { getLogger } from 'logging/log-util';
+// import { getLogger } from 'logging/log-util';
 
 export default function Home() {
-  const logger = getLogger('home');
-  logger.error('a error message from _app');
-  logger.debug('a debug message from _app');
-  logger.info('a info message from _app');
+  // const logger = getLogger('home');
+  // logger.error('a error message from _app');
+  // logger.debug('a debug message from _app');
+  // logger.info('a info message from _app');
 
   return (
     <>

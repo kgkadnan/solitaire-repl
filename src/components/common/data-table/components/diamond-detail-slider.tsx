@@ -161,7 +161,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
             </p>
           </div>
           <div className="border-b border-solitaireQuaternary mt-5"></div>
-          {sliderData.map((data: Product) => {
+          {sliderData.map((data: Product | any) => {
             return (
               <>
                 <div
@@ -383,7 +383,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                     );
                   })}
                 </div>
-                <div className="sticky bottom-0 bg-solitaireSecondary mb-5">
+                <div className="sticky bottom-0 bg-solitairePrimary mb-5">
                   {currentPath === '/search' && (
                     <CustomFooter footerButtonData={footerButtonData} />
                   )}
