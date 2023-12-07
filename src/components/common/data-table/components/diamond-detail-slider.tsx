@@ -161,7 +161,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
             </p>
           </div>
           <div className="border-b border-solitaireQuaternary mt-5"></div>
-          {sliderData.map((data: Product) => {
+          {sliderData.map((data: any) => {
             return (
               <>
                 <div
