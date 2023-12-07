@@ -21,8 +21,8 @@ import { useConfirmStoneStateManagement } from '@/components/common/confirm-ston
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { handleSaveSearch } from './helpers/handle-save-search';
-import { calculateTotal } from './helpers/totalCalculations';
-import { calculateAverage } from './helpers/averageCalculations';
+import { calculateTotal } from './helpers/product-total-calculations';
+import { calculateAverage } from './helpers/average-calculations';
 import { ISearchResultsProps } from './result-interface';
 import { CustomModal } from '@/components/common/modal';
 // Define a type for the radio state
@@ -72,7 +72,7 @@ const SearchResults = ({
     setTotalAmount,
     setAverageDiscount,
     setSaveSearchName,
-    setTotalCarats,
+    setProductTotalCarats,
     setAveragePricePerCarat
   } = commonSetState;
 
@@ -114,7 +114,7 @@ handle the logic for closing a dialog box after a certain delay. */
     setAverageDiscount(
       calculateAverage({ isCheck, rows, property: 'discount' })
     );
-    setTotalCarats(calculateTotal({ isCheck, rows, type: 'carat' }));
+    setProductTotalCarats(calculateTotal({ isCheck, rows, type: 'carat' }));
   }, [
     isCheck,
     rows,

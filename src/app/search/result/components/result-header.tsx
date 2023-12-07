@@ -28,7 +28,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
     yourSelectionData,
     totalAmount,
     averageDiscount,
-    totalCarats,
+    productTotalCarats,
     averagePricePerCarat
   } = commonState;
   const { setYourSelectionData } = commonSetState;
@@ -76,7 +76,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
           <p>
             {ManageLocales('app.searchResult.countBar.totalCarats')}:
             <span className="text-solitaireTertiary ml-[5px]">
-              {totalCarats.toFixed(2)}
+              {productTotalCarats.toFixed(2)}
             </span>
           </p>
           <p>

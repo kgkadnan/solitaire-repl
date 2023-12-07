@@ -8,13 +8,13 @@ export const useCommonDtateManagement = () => {
   const [totalAmount, setTotalAmount] = useState(0);
   const [averageDiscount, setAverageDiscount] = useState(0);
   const [averagePricePerCarat, setAveragePricePerCarat] = useState(0);
-  const [totalCarats, setTotalCarats] = useState(0);
+  const [productTotalCarats, setProductTotalCarats] = useState(0);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
   return {
     commonState: {
       yourSelectionData,
       totalAmount,
-      totalCarats,
+      productTotalCarats,
       averageDiscount,
       averagePricePerCarat,
       saveSearchName
@@ -23,7 +23,7 @@ export const useCommonDtateManagement = () => {
       setYourSelectionData,
       setTotalAmount,
       setAverageDiscount,
-      setTotalCarats,
+      setProductTotalCarats,
       setSaveSearchName,
       setAveragePricePerCarat
     }
