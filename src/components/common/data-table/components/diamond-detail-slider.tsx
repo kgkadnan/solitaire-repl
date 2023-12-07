@@ -383,7 +383,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                     );
                   })}
                 </div>
-                <div className="sticky bottom-0 bg-solitaireSecondary mb-5">
+                <div className="sticky bottom-0 bg-solitairePrimary mb-5">
                   {currentPath === '/search' && (
                     <CustomFooter footerButtonData={footerButtonData} />
                   )}
