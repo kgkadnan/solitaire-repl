@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { ReactNode, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
 import CustomImageTile, { IImageTileProps } from '../image-tile';
@@ -23,16 +23,18 @@ import {
   NEW_SEARCH,
   SAVED_SEARCHES
 } from '@/constants/application-constants/search-page';
-import { Product } from '@/app/search/result/result-interface';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
 
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { modalState, modalSetState } = useModalStateManagement();
 
-  const subRoute = useSearchParams().get('route');
+  const { setDialogContent, setIsDialogOpen } = modalSetState;
+  const { dialogContent, isDialogOpen } = modalState;
+
+  const subRoute = useSearchParams().get('active-tab');
   const onKGKLogoContainerClick = useCallback(() => {
     const localData: ISavedSearch[] = JSON.parse(
       localStorage.getItem('Search')!
