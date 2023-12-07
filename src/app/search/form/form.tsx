@@ -379,10 +379,10 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
                 ) {
                   const activeTab = searchResult?.activeTab;
                   if (activeTab !== undefined) {
-                    const isSearchName: boolean =
+                    const isSearchName: number =
                       addSearches[activeTab]?.saveSearchName.length;
                     const isSaved: boolean =
-                      addSearches[activeTab]?.isSavedSearch.length;
+                      addSearches[activeTab]?.isSavedSearch;
                     // Check if the active search is not null and isSavedSearch is true
                     if (modifySearchFrom === `${SAVED_SEARCHES}`) {
                       handleSaveAndSearch();

@@ -16,7 +16,7 @@ const useValidationStateManagement = () => {
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
-  const [addSearches, setAddSearches] = useState<ISavedSearch[]>([]);
+  const [addSearches, setAddSearches] = useState<any[]>([]);
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
