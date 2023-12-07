@@ -37,7 +37,7 @@ export interface ISavedSearch {
 import { NEW_SEARCH } from '@/constants/application-constants/search-page';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
-  const subRoute = useSearchParams().get('route');
+  const subRoute = useSearchParams().get('active-tab');
 
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(

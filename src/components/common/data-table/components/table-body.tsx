@@ -10,7 +10,7 @@ import { CustomCheckBox } from '../../checkbox';
 import Image from 'next/image';
 import { ITbodyProps } from '../interface';
 import styles from '../custom-table.module.scss';
-import { FILE_URLS, GIA_LINK } from '@/constants/business-logic';
+import { GIA_LINK } from '@/constants/business-logic';
 import { handleCheckboxClick } from '../../checkbox/helper/handle-checkbox-click';
 import { useDataTableBodyStateManagement } from '../hooks/data-table-body-state-management';
 import { DetailImageSlider } from './detail-image-slider';
