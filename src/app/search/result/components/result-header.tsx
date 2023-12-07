@@ -24,7 +24,13 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
   const { setRows } = dataTableSetState;
   const { setIsInputDialogOpen } = modalSetState;
 
-  const { yourSelectionData, totalAmount, averageDiscount } = commonState;
+  const {
+    yourSelectionData,
+    totalAmount,
+    averageDiscount,
+    totalCarats,
+    averagePricePerCarat
+  } = commonState;
   const { setYourSelectionData } = commonSetState;
 
   /**
@@ -68,9 +74,21 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
             </span>
           </p>
           <p>
+            {ManageLocales('app.searchResult.countBar.totalCarats')}:
+            <span className="text-solitaireTertiary ml-[5px]">
+              {totalCarats.toFixed(2)}
+            </span>
+          </p>
+          <p>
             {ManageLocales('app.searchResult.countBar.totalAvgDis')}:
             <span className="text-solitaireTertiary ml-[5px]">
               {averageDiscount.toFixed(2)}
+            </span>
+          </p>
+          <p>
+            {ManageLocales('app.searchResult.countBar.averagePricePerCarat')}:
+            <span className="text-solitaireTertiary ml-[5px]">
+              ${averagePricePerCarat.toFixed(2)}
             </span>
           </p>
           <p>

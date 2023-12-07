@@ -209,16 +209,14 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       />
       <div className="mb-[50px] h-[70vh] overflow-auto">
         <div>
+          {!data?.length && <NoDataFound />}
           <CustomSlider
             sheetTriggerStyle="w-full"
             sheetTriggenContent={
-              data?.length ? (
-                data?.map((items: any) => {
-                  return renderMyDiamondCard(items);
-                })
-              ) : (
-                <NoDataFound />
-              )
+              data?.length &&
+              data?.map((items: any) => {
+                return renderMyDiamondCard(items);
+              })
             }
             sheetContentStyle={styles.sheetContentStyle}
             sheetContent={
