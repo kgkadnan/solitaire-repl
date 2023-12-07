@@ -184,10 +184,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
-      const offset =  page * limit!;
+      const offset = page * limit!;
       setIsCheck([]);
       setIsCheckAll(false);
-       setOffset!(offset);
+      setOffset!(offset);
       setCurrentPage(page);
     }
   };

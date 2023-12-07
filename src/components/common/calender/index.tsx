@@ -25,7 +25,7 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   date,
   handleDate
 }) => {
-  console.log(date,"ll")
+  console.log(date, 'll');
 
   return (
     <div className={cn('grid gap-2', className)}>

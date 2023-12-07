@@ -124,7 +124,7 @@ const SavedSearch = () => {
   const { data: productData } = useGetProductCountQuery({
     searchUrl
   });
-console.log("dateSearchUrl",dateSearchUrl)
+  console.log('dateSearchUrl', dateSearchUrl);
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -403,7 +403,10 @@ console.log("dateSearchUrl",dateSearchUrl)
     } else {
       setDate(date);
       setDateSearchUrl(
-        `&start_date=${convertDateToUTC(date.from)}&end_date=${convertDateToUTC(date.to,true)}`
+        `&start_date=${convertDateToUTC(date.from)}&end_date=${convertDateToUTC(
+          date.to,
+          true
+        )}`
       );
     }
   };
