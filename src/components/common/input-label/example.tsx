@@ -5,7 +5,7 @@ import styles from './example.module.scss';
 
 export const Example = () => {
   //example
-  let className = {
+  const className = {
     label: styles.label
   };
 

@@ -23,6 +23,7 @@ import {
   NEW_SEARCH,
   SAVED_SEARCHES
 } from '@/constants/application-constants/search-page';
+import { Product } from '@/app/search/result/result-interface';
 
 const SideBar = () => {
   const router = useRouter();

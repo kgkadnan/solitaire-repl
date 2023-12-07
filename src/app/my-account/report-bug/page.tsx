@@ -7,24 +7,24 @@ import { REPORT_BUG_MAX_CHARACTERS } from '@/constants/business-logic';
 
 const ReportBug = () => {
   const [inputValue, setInputValue] = useState<string>('');
-  const [reportBug, setReportBug] = useState<string>('');
+  const [, setReportBug] = useState<string>('');
 
   const handleInput = (event: any) => {
-    let inputValue = event.target.value;
+    const inputValue = event.target.value;
     if (inputValue.length <= REPORT_BUG_MAX_CHARACTERS) {
       setInputValue(inputValue);
     }
   };
 
-  let report = () => {
+  const report = () => {
     setReportBug(inputValue);
   };
 
-  let reset = () => {
+  const reset = () => {
     setInputValue('');
   };
 
-  let selectionButtons = [
+  const selectionButtons = [
     {
       id: '1',
       label: ManageLocales('app.myaccount.reportBug.report'),

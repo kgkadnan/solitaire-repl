@@ -27,11 +27,16 @@ import {
   SAVED_SEARCHES,
   SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
+import { ISavedSearch } from '@/components/common/top-navigation-bar';
 
 const AdvanceSearch = () => {
   const router = useRouter();
-  const savedSearch: any = useAppSelector(store => store.savedSearch);
-  const searchResult: any = useAppSelector(store => store.searchResult);
+  const savedSearch: any = useAppSelector(
+    (store: { savedSearch: any }) => store.savedSearch
+  );
+  const searchResult: any = useAppSelector(
+    (store: { searchResult: any }) => store.searchResult
+  );
 
   /* The above code is a TypeScript React code snippet. It is using the `useFieldStateManagement` hook to
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
@@ -92,12 +97,9 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
   }, [modifySearchFrom]);
 
   useEffect(() => {
-    let data: any = JSON.parse(localStorage.getItem('Search')!);
-    if (
-      data?.length !== undefined &&
-      data?.length > 0 &&
-      data[data?.length - 1] !== undefined
-    ) {
+    let data: ISavedSearch[] | [] =
+      JSON.parse(localStorage.getItem('Search')!) || [];
+    if (data?.length > 0 && data[data?.length - 1]) {
       setAddSearches(data);
     }
   }, []);
@@ -164,7 +166,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         const queryParams = generateQueryParams(state);
         const activeTab: number = searchResult?.activeTab;
 
-        const activeSearch: boolean =
+        const activeSearch: number =
           addSearches[activeTab]?.saveSearchName.length;
 
         if (modifySearchFrom === `${SAVED_SEARCHES}`) {
@@ -312,7 +314,6 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
         handleClose={handleCloseInputDialog}
       />
       {renderContent(
-        carat,
         state,
         setState,
         validationError,

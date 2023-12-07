@@ -1,11 +1,10 @@
 'use client';
-import { CustomCheckBox } from '@/components/common/checkbox';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
 import styles from './email-notification.module.scss';
 
-let EmailNotificationData = [
+const EmailNotificationData = [
   {
     id: '1',
     notificationName: ManageLocales(
@@ -31,9 +30,6 @@ let EmailNotificationData = [
 const EmailNotification = () => {
   const handleSave = () => {};
   const handleCancel = () => {};
-
-  //checkbox function
-  const handleCheckbox = (e: any) => {};
 
   const footerButtonData = [
     {

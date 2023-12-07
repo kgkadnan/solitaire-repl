@@ -7,15 +7,15 @@ import React, { useCallback, useEffect, useState } from 'react';
 import styles from './my-account.module.scss';
 
 function MyAccountLayout({ children }: { children: React.ReactNode }) {
-  let currentPath = usePathname();
+  const currentPath = usePathname();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
 
-  let myAccountHeader = {
+  const myAccountHeader = {
     headerHeading: ManageLocales('app.myProfile.heading')
   };
 
-  let myProfileRoutes = [
+  const myProfileRoutes = [
     {
       id: '1',
       pathName: ManageLocales('app.myProfile.summary'),
