@@ -33,10 +33,12 @@ const SideBar = () => {
 
   const subRoute = useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
@@ -159,7 +161,9 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    const localData:ISavedSearch[] = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
     const data = localData?.filter(
       (isSaved: ISavedSearch) => isSaved.isSavedSearch === false

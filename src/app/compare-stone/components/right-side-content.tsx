@@ -3,7 +3,7 @@ import CloseButton from '@public/assets/icons/close-outline.svg?url';
 import styles from '../styles/right-side-content.module.scss';
 import { FILE_URLS } from '@/constants/business-logic';
 import { Checkbox } from '@/components/ui/checkbox';
-import { IRightSideContentProps } from '../interface';
+import { IKeyLabelMapping, IRightSideContentProps } from '../interface';
 import { Product } from '@/app/search/result/result-interface';
 
 export function RightSideContent({

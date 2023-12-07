@@ -23,7 +23,7 @@ interface IStyle {
 
 interface ISelectProps {
   data: ISelectData[];
-  onChange?: any;
+  onChange?: (data: string) => void;
   placeholder?: string | number;
   style?: IStyle;
 }

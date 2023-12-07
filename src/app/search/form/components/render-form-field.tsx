@@ -152,9 +152,7 @@ const renderContent = (
   const handleColorChange = (data: string) => {
     handleFilterChange(data, selectedColor, setSelectedColor);
   };
-  const handleWhiteFilterChange = (data: string) => {
-    handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
-  };
+
   const handleFancyFilterChange = (data: string) => {
     setSelectedFancyColor(data);
   };
