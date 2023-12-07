@@ -12,7 +12,7 @@ interface RadioButtonProps {
 }
 
 export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
-  let { label, value, name, checked, onChange } = radioMetaData;
+  const { label, value, name, checked, onChange } = radioMetaData;
 
   const handleInputChange = () => {
     onChange(value);

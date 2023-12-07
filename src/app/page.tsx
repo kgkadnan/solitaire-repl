@@ -1,9 +1,5 @@
 'use client';
 
-import { RadioButton } from '@/components/common/custom-input-radio';
-import { CustomInputField } from '@/components/common/input-field';
-import { useState } from 'react';
-
 export default function Home() {
   return (
     <>
@@ -27,8 +23,6 @@ export default function Home() {
       >
         Building Digital Diamond Platform
       </h1>
-      {/* <h1>{ManageLocales('app.welcome')}</h1>
-      <LanguageSwitcher /> */}
     </>
   );
 }

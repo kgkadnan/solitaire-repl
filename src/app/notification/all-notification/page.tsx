@@ -56,7 +56,7 @@ const Notification = () => {
   }
 
   const handleNotificationRead = async (category: string) => {
-    let filteredData = notificationData
+    const filteredData = notificationData
       .filter(item => item.category === category)
       .map(item => ({ id: item.id, status: NOTIFICATION_READ_STATUS }));
 

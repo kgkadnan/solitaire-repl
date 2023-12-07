@@ -43,7 +43,6 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardActionIcon,
     cardDescription,
     cardContent,
-    stone = '',
     id,
     unBlurHeader
   } = card.cardData;
@@ -61,7 +60,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
     cardActionIconStyle
   } = overriddenStyles;
 
-  const handleClickEvent = (event: any) => {
+  const handleClickEvent: React.MouseEventHandler<HTMLImageElement> = event => {
     event.stopPropagation();
     handleCardAction(id);
   };

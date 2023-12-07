@@ -14,7 +14,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
   errorContent,
   handleClose
 }) => {
-  let {
+  const {
     isOpens,
     setIsOpen,
     label,

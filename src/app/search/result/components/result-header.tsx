@@ -32,9 +32,9 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
    * `updateSavedSearch` function.
    */
   const handleUpdateSaveSearch = () => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    let updateSaveSearchData = {
+    const updateSaveSearchData = {
       id: yourSelection[activeTab]?.id,
       name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,

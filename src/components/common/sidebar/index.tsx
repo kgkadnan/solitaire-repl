@@ -18,10 +18,12 @@ import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
+import { ISavedSearch } from '../top-navigation-bar';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES
 } from '@/constants/application-constants/search-page';
+import { Product } from '@/app/search/result/result-interface';
 
 const SideBar = () => {
   const router = useRouter();
@@ -32,10 +34,12 @@ const SideBar = () => {
 
   const subRoute = useSearchParams().get('route');
   const onKGKLogoContainerClick = useCallback(() => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
@@ -152,16 +156,18 @@ const SideBar = () => {
   };
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
-  let handleRoute = (nav: string, link?: string) => {
+  const handleRoute = (nav: string, link?: string) => {
     router.push(`${link!}`);
     setSelectedNav(() => [nav]);
   };
 
   const handleChange = (nav: string, link?: string) => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
     // if (data?.length && link !== `/search?query=${NEW_SEARCH}`) {

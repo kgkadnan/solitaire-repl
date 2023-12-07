@@ -53,10 +53,10 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 import {
   SAVED_SEARCHES,
-  SEARCH_RESULT,
+  SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
 
-let optionLimits = [
+const optionLimits = [
   { id: 1, value: '50' },
   { id: 2, value: '100' }
 ];
@@ -78,10 +78,6 @@ const SavedSearch = () => {
     cardContainerStyle: styles.searchCardContainer
   };
 
-  const manySavedsearchButtonStyle = {
-    displayButtonStyle: styles.manySavedSearchButton,
-    displayLabelStyle: styles.manySavedSearchLabel
-  };
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
   const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT); // You can set the initial value here
@@ -114,7 +110,7 @@ const SavedSearch = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  let router = useRouter();
+  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const { data } = useGetAllSavedSearchesQuery({
@@ -168,7 +164,7 @@ const SavedSearch = () => {
     };
   }, []);
 
-  const formatRangeData = (data: any, key: string) => {
+  const formatRangeData = (data: { lte: number; gte: number }) => {
     const range = data;
     if (range && range.lte && range.gte) {
       return `${range.gte}-${range.lte}`;
@@ -184,8 +180,7 @@ const SavedSearch = () => {
         for (const key in keyLabelMapping) {
           if (item.meta_data && !Array.isArray(item.meta_data[key])) {
             filteredData[keyLabelMapping[key]] = formatRangeData(
-              item.meta_data[key],
-              key
+              item.meta_data[key]
             );
           } else if (
             item.meta_data &&
@@ -193,8 +188,7 @@ const SavedSearch = () => {
             typeof item.meta_data[key][0] !== 'string'
           ) {
             filteredData[keyLabelMapping[key]] = formatRangeData(
-              item.meta_data[key][0],
-              key
+              item.meta_data[key][0]
             );
           } else {
             filteredData[keyLabelMapping[key]] =
@@ -371,7 +365,7 @@ const SavedSearch = () => {
   };
 
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    let inputValue = e.target.value;
+    const inputValue = e.target.value;
     setSearch(inputValue);
 
     // Use the debounce function to wrap the debouncedSave function
@@ -475,11 +469,13 @@ const SavedSearch = () => {
   };
 
   const handleCardClick = (id: string) => {
-    let cardClickData: any = savedSearchData.filter((items: any) => {
-      return items.id === id;
-    });
+    const cardClickData: any = savedSearchData.filter(
+      (items: ISavedSearchData) => {
+        return items.id === id;
+      }
+    );
 
-    let url = constructUrlParams(cardClickData[0].meta_data);
+    const url = constructUrlParams(cardClickData[0].meta_data);
 
     setSearchUrl(url);
 
@@ -487,7 +483,7 @@ const SavedSearch = () => {
       setIsError(true);
       setErrorText('Please modify your search, the stones exceeds the limit.');
     } else {
-      let data: any = JSON.parse(localStorage.getItem('Search')!);
+      const data: any = JSON.parse(localStorage.getItem('Search')!);
 
       if (data?.length) {
         if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
@@ -496,7 +492,7 @@ const SavedSearch = () => {
             'Max search limit reached. Please remove existing searches'
           );
         } else {
-          let localStorageData = [
+          const localStorageData = [
             ...data,
             {
               saveSearchName: cardClickData[0].name,

@@ -1,10 +1,5 @@
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-  SheetClose
-} from '@/components/ui/sheet';
-import React, { ReactNode } from 'react';
+import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import React from 'react';
 
 interface ISliderProps {
   sheetTriggerStyle?: string;

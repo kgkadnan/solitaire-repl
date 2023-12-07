@@ -184,10 +184,10 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
-      const offset = page * limit;
+      const offset =  page * limit!;
       setIsCheck([]);
       setIsCheckAll(false);
-      setOffset(offset);
+       setOffset!(offset);
       setCurrentPage(page);
     }
   };
@@ -195,8 +195,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage: number = parseInt(event, 10);
-      setLimit(newResultsPerPage);
-      setOffset(0);
+      setLimit!(newResultsPerPage);
+      setOffset!(0);
       // Reset current page when changing results per page
       setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
     },
@@ -341,7 +341,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
-            resultsPerPage={limit}
+            resultsPerPage={limit!}
             optionLimits={optionLimits}
             handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}

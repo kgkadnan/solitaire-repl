@@ -1,4 +1,4 @@
-import { CustomRadioButton } from '@/components/common/buttons/radio-button';
+// import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import CustomImageTile from '@/components/common/image-tile';
 import { CustomInputField } from '@/components/common/input-field';
@@ -17,7 +17,6 @@ import { CustomSelect } from '@/components/common/select';
 import { RadioButton } from '@/components/common/custom-input-radio';
 
 const renderContent = (
-  carat: any,
   state: any,
   setState: any,
   validationError: any,
@@ -41,9 +40,6 @@ const renderContent = (
     selectedShape,
     selectedColor,
     selectedWhiteColor,
-    selectedFancyColor,
-    selectedIntensity,
-    selectedOvertone,
     selectedTinge,
     selectedClarity,
     selectedCaratRange,
@@ -52,8 +48,6 @@ const renderContent = (
     selectedPolish,
     selectedSymmetry,
     selectedFluorescence,
-    selectedCulet,
-    selectedGirdle,
     selectedKeyToSymbol,
     selectedLab,
     selectedHR,
@@ -73,13 +67,11 @@ const renderContent = (
   const {
     setSelectedShape,
     setSelectedColor,
-    setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
     setSelectedTinge,
     setSelectedClarity,
-    setSelectedGirdleStep,
     setSelectedCaratRange,
     setSelectedMake,
     setSelectedCut,
@@ -87,7 +79,6 @@ const renderContent = (
     setSelectedSymmetry,
     setSelectedFluorescence,
     setSelectedCulet,
-    setSelectedGirdle,
     setSelectedKeyToSymbol,
     setSelectedLab,
     setSelectedHR,
@@ -123,7 +114,7 @@ const renderContent = (
   };
 
   const handleShapeChange = (shape: string) => {
-    let filteredShape: string[] = advanceSearch.shape.map(
+    const filteredShape: string[] = advanceSearch.shape.map(
       data => data.short_name
     );
     if (shape.toLowerCase() === 'all') {
@@ -133,7 +124,7 @@ const renderContent = (
       }
     } else {
       if (selectedShape.includes('All')) {
-        let filteredSelectedShape: string[] = selectedShape.filter(
+        const filteredSelectedShape: string[] = selectedShape.filter(
           (data: any) => data !== 'All' && data !== shape
         );
         setSelectedShape(filteredSelectedShape);
@@ -152,9 +143,7 @@ const renderContent = (
   const handleColorChange = (data: string) => {
     handleFilterChange(data, selectedColor, setSelectedColor);
   };
-  const handleWhiteFilterChange = (data: string) => {
-    handleFilterChange(data, selectedWhiteColor, setSelectedWhiteColor);
-  };
+
   const handleFancyFilterChange = (data: string) => {
     setSelectedFancyColor(data);
   };
@@ -186,7 +175,7 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: any) => e !== 'None')
+        selectedFluorescence.filter((e: string) => e !== 'None')
       );
     }
     if (data.toLowerCase() === '3ex+none') {
@@ -213,7 +202,7 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: any) => e !== 'None')
+        selectedFluorescence.filter((e: string) => e !== 'None')
       );
     }
     if (data.toLowerCase() === '3g') {
@@ -248,7 +237,7 @@ const renderContent = (
     secondCriteria: string[]
   ) => {
     handleFilterChange(data, selectedFilter, setSelectedFilter);
-    let temp: string[] = [...selectedFilter];
+    const temp: string[] = [...selectedFilter];
     const index = temp.indexOf(data);
     if (index !== -1) {
       temp.splice(index, 1);
@@ -306,7 +295,7 @@ const renderContent = (
   };
   const handleFluorescenceChange = (data: string) => {
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
-    let temp: string[] = selectedFluorescence;
+    const temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
     if (index !== -1) {
       temp.splice(index, 1);
@@ -350,12 +339,12 @@ const renderContent = (
     } else {
       if (selectedKeyToSymbol.includes('All')) {
         let filteredSelectedShape: string[] = selectedKeyToSymbol.filter(
-          (data: any) => data !== 'All' && data !== comment
+          (data: string) => data !== 'All' && data !== comment
         );
         setSelectedKeyToSymbol(filteredSelectedShape);
       } else if (
         compareArrays(
-          selectedKeyToSymbol.filter((data: any) => data !== 'All'),
+          selectedKeyToSymbol.filter((data: string) => data !== 'All'),
           advanceSearch.key_to_symbol.filter(
             data => data !== 'All' && data !== comment
           )
@@ -410,7 +399,7 @@ const renderContent = (
   };
 
   const handleAddCarat = (data: string) => {
-    let validatedData = normalizeValue(data);
+    const validatedData = normalizeValue(data);
     if (validatedData) {
       if (!selectedCaratRange.includes(validatedData)) {
         setSelectedCaratRange([...selectedCaratRange, validatedData]);
@@ -420,7 +409,7 @@ const renderContent = (
     }
   };
 
-  let RadioData = [
+  const RadioData = [
     {
       name: 'steps',
       onChange: (data: string) => {
@@ -506,7 +495,7 @@ const renderContent = (
     }
   };
 
-  let CuletData = [
+  const CuletData = [
     { id: 1, value: 'None' },
     { id: 2, value: 'Pointed' },
     { id: 3, value: 'Very Small' },
@@ -516,7 +505,7 @@ const renderContent = (
     { id: 8, value: 'Large' }
   ];
 
-  let intensityData = [
+  const intensityData = [
     { id: 1, value: 'Faint' },
     { id: 2, value: 'Very Light' },
     { id: 3, value: 'Light' },
@@ -526,7 +515,7 @@ const renderContent = (
     { id: 7, value: 'Fancy Vivid' }
   ];
 
-  let fancyColorData = [
+  const fancyColorData = [
     { id: 1, value: 'Yellow' },
     { id: 2, value: 'Grey' },
     { id: 3, value: 'Blue' },
@@ -545,7 +534,7 @@ const renderContent = (
     { id: 16, value: 'Other' }
   ];
 
-  let overtoneData = [
+  const overtoneData = [
     { id: 1, value: 'Black' },
     { id: 2, value: 'Purplish' },
     { id: 3, value: 'Purple' },
@@ -1014,7 +1003,7 @@ const renderContent = (
         </div>
         <div>
           <div style={{ margin: '10px' }}>
-            <CustomRadioButton
+            {/* <CustomRadioButton
               radioMetaData={{
                 name: 'steps',
                 handleChange: (data: string) => {
@@ -1043,7 +1032,7 @@ const renderContent = (
                 radioButtonStyle: styles.radioStyle,
                 radioLabelStyle: styles.radioLabel
               }}
-            />
+            /> */}
           </div>
           <div className={styles.filterSectionData}>
             {renderSelectionButtons(
