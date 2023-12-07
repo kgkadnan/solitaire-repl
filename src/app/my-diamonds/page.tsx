@@ -4,8 +4,7 @@ import Link from 'next/link';
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import CustomHeader from '@/components/common/header';
 import styles from './my-diamonds.module.scss';
-import { CustomCalender } from '@/components/common/calender';
-import { DateRange } from 'react-day-picker';
+import CalenderIcon from '@public/assets/icons/calender.svg';
 import { SearchIcon } from 'lucide-react';
 import { CustomSearchInputField } from '@/components/common/search-input';
 import {
@@ -16,25 +15,42 @@ import {
 import RecentConfirmation from './recent-confirmation';
 import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation';
-import { IDateRange } from '../search/saved-interface';
-import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
-import { PAGINATION_INTITAL_LIMMIT } from '@/constants/business-logic';
+import {
+  MAX_RECENT_CONFIRMATION_COUNT,
+  PAGINATION_INTITAL_LIMMIT
+} from '@/constants/business-logic';
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@radix-ui/react-popover';
+import Image from 'next/image';
+import { RadioButton } from '@components/common/custom-input-radio';
 
 function MyDiamonds() {
   // State variables for handling scroll, date, search, and data
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [search, setSearch] = useState<string>('');
+  const [recentConfiramtionSearchUrl, setRecentConfiramtionSearchUrl] =
+    useState<string>('');
+  const [myInvoiceSearchUrl, setMyInvoiceSearchUrl] = useState<string>('');
+  const [previousConfirmationSearchUrl, setPreviousConfirmationSearchUrl] =
+    useState<string>('');
   const [recentConfirmData, setRecentConfirmData] = useState([]);
-  const [originalData, setOriginalData] = useState(recentConfirmData);
-  const [filteredData, setFilteredData] = useState(recentConfirmData);
   const [activeTab, setActiveTab] = useState<string>('Recent Confirmations');
-  const [dateSearchUrl, setDateSearchUrl] = useState('');
   const [myInvoiceData, setMyInvoiceData] = useState([]);
   const [previousConfirmData, setPreviousConfirmData] = useState([]);
   const [offset, setOffset] = useState(0);
   const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT);
+  const [recentConfirmationSelectedDays, setRecentConfirmationSelectedDays] =
+    useState<string>('');
+  const [search, setsearch] = useState<string>('');
+  const [myInvoiceSelectedDays, setMyInvoiceSelectedDays] =
+    useState<string>('');
+  const [
+    previousConfirmationSelectedDays,
+    setPreviousConfirmationSelectedDays
+  ] = useState<string>('');
 
   // Define routes for different tabs in My Diamonds
   let myDiamondsRoutes = [
@@ -75,6 +91,8 @@ function MyDiamonds() {
   let myDiamondStatus = 'pending';
   let invoiceStatus = 'available';
   let previousConfirmStatus = 'completed';
+  let recentConfirmlimit = MAX_RECENT_CONFIRMATION_COUNT;
+  let myInvoicelimit = MAX_RECENT_CONFIRMATION_COUNT;
 
   // Fetch recent confirmation data
   const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
@@ -83,14 +101,18 @@ function MyDiamonds() {
     paymentStatus,
     fields,
     expand,
-    dateSearchUrl
+    recentConfiramtionSearchUrl,
+    recentConfirmlimit,
+    recentConfirmationSelectedDays
   });
 
   // Fetch my-invoice data
   const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
     myDiamondStatus,
     invoiceStatus,
-    dateSearchUrl
+    myInvoiceSearchUrl,
+    myInvoicelimit,
+    myInvoiceSelectedDays
   });
 
   // Fetch previous-confiramtion-data
@@ -98,42 +120,85 @@ function MyDiamonds() {
     limit,
     offset,
     previousConfirmStatus,
-    dateSearchUrl
+    previousConfirmationSearchUrl,
+    previousConfirmationSelectedDays
   });
+  const handleMyDiamondsRadioChange = (value: string) => {
+    const calculateDaysAgo = (days: number) => {
+      const dateAgo = new Date();
+      dateAgo.setDate(dateAgo.getDate() - days);
+      return dateAgo.toISOString();
+    };
 
-  // Handle date selection in the calendar
-  const handleDate = (date: IDateRange) => {
-    const fromDate = date?.from?.toISOString().split('T')[0];
-    const toDate = date?.to?.toISOString().split('T')[0];
+    let selectedDays: string = '';
 
-    if (!date) {
-      setDateSearchUrl('');
-      setDate(undefined);
-    } else {
-      setDate(date);
-      setDateSearchUrl(`created_at[gt]=${fromDate}&created_at[lt]=${toDate}`);
+    if (value === '7') {
+      selectedDays = calculateDaysAgo(7);
+    } else if (value === '30') {
+      selectedDays = calculateDaysAgo(30);
+    } else if (value === '90') {
+      selectedDays = calculateDaysAgo(90);
+    }
+
+    switch (activeTab) {
+      case 'Recent Confirmations':
+        setRecentConfirmationSelectedDays(selectedDays);
+        break;
+      case 'My Invoices':
+        setMyInvoiceSelectedDays(selectedDays);
+        break;
+      default:
+        setPreviousConfirmationSelectedDays(selectedDays);
+        break;
     }
   };
+
+  const myDiamondsRadioButtons = [
+    {
+      name: 'days',
+      onChange: handleMyDiamondsRadioChange,
+      id: '1',
+      value: '7',
+      label: 'Last Week',
+      checked: false
+    },
+    {
+      name: 'days',
+      onChange: handleMyDiamondsRadioChange,
+      id: '2',
+      value: '30',
+      label: 'Last Month',
+      checked: false
+    },
+    {
+      name: 'days',
+      onChange: handleMyDiamondsRadioChange,
+      id: '3',
+      value: '90',
+      label: 'Last 3 Months',
+      checked: true
+    }
+  ];
 
   // Handle search input change
   const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
-    setSearch(inputValue);
 
-    // Determine the field to search based on the active tab
-    const searchField =
-      activeTab === 'Recent Confirmations' ? 'display_id' : 'invoice_id';
+    setsearch(inputValue);
 
-    // Filter orders based on the search input and the selected tab
-    const filtered = originalData?.filter((items: any) => {
-      let convertToPad =
-        activeTab === 'Recent Confirmations'
-          ? formatNumberWithLeadingZeros(items?.[searchField])
-          : items?.[searchField];
-      return String(convertToPad).includes(inputValue);
-    });
-
-    setFilteredData(filtered || originalData);
+    if (!inputValue.length) {
+      setRecentConfiramtionSearchUrl('');
+      setMyInvoiceSearchUrl('');
+      setPreviousConfirmationSearchUrl('');
+    } else {
+      if (activeTab === 'Recent Confirmations') {
+        setRecentConfiramtionSearchUrl(`display_id=${inputValue}`);
+      } else if (activeTab === 'My Invoices') {
+        setMyInvoiceSearchUrl(`invoice_id=${inputValue}`);
+      } else {
+        setPreviousConfirmationSearchUrl(`invoice_id=${inputValue}`);
+      }
+    }
   };
 
   // Handle tab click to set the active tab and page render check
@@ -141,17 +206,10 @@ function MyDiamonds() {
     setActiveTab(pathName);
   };
 
-  // useEffect to update originalData and filteredData when recentConfirmData changes
-  useEffect(() => {
-    setOriginalData(recentConfirmData);
-    setFilteredData(recentConfirmData);
-  }, [recentConfirmData]);
-
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
-    setFilteredData(recentConfirmData);
-  }, [myDiamondRecentConfirmData, setFilteredData, recentConfirmData]);
+  }, [myDiamondRecentConfirmData, recentConfirmData]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
@@ -238,8 +296,32 @@ function MyDiamonds() {
                 }
               />
             </div>
-            <div className="flex mr-[30px] ">
-              <CustomCalender date={date} handleDate={handleDate} />
+            <div className="flex">
+              <Popover>
+                <PopoverTrigger className="flex justify-center mt-3 ml-5">
+                  <Image
+                    src={CalenderIcon}
+                    alt="Calender Image"
+                    width={24}
+                    height={24}
+                  />
+                  <p className="text-solitaireTertiary ml-2 text-[14px]">
+                    Filter By Days
+                  </p>
+                </PopoverTrigger>
+                <PopoverContent className={styles.popoverContent}>
+                  <div className="">
+                    {myDiamondsRadioButtons?.map((radioData: any) => (
+                      <div className="mb-3" key={radioData.id}>
+                        <RadioButton
+                          radioMetaData={radioData}
+                          key={radioData?.id}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
           </div>
         </div>
@@ -253,7 +335,7 @@ function MyDiamonds() {
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
           {activeTab === 'Recent Confirmations' ? (
-            <RecentConfirmation recentConfirmData={filteredData} />
+            <RecentConfirmation recentConfirmData={recentConfirmData} />
           ) : activeTab === 'My Invoices' ? (
             <MyInvoices myInvoiceData={myInvoiceData} />
           ) : (
