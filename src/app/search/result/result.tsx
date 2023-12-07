@@ -24,6 +24,7 @@ import { handleSaveSearch } from './helpers/handle-save-search';
 import { calculateTotalAmount } from './helpers/calculate-total-amount';
 import { calculateAverageDiscount } from './helpers/calculate-average-discount';
 import { ISearchResultsProps } from './result-interface';
+import { CustomModal } from '@/components/common/modal';
 // Define a type for the radio state
 
 const SearchResults = ({
@@ -51,13 +52,20 @@ const SearchResults = ({
   const { setSelectedRadioDaysValue } = confirmStoneSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
-    modalState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isInputDialogOpen,
+    isSliderOpen,
+    isModalOpen,
+    modalContent
+  } = modalState;
   const {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent
+    setDialogContent,
+    setIsModalOpen
   } = modalSetState;
   const {
     setYourSelectionData,
@@ -207,6 +215,12 @@ variable changes. */
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
       />
 
       <ResultHeader

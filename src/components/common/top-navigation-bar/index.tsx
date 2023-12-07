@@ -70,7 +70,7 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: `/search?query=${NEW_SEARCH}`,
+      link: `/search?active-tab=${NEW_SEARCH}`,
       isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
     },
     {
@@ -103,7 +103,7 @@ export const TopNavigationBar = () => {
       (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
-    // if (data?.length && link !== '/search?query=form') {
+    // if (data?.length && link !== '/search?active-tab=form') {
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
@@ -139,7 +139,7 @@ export const TopNavigationBar = () => {
         </>
       );
     }
-    // else if (data?.length && link === '/search?query=form') {
+    // else if (data?.length && link === '/search?active-tab=form') {
     //   handleRoute(label, link);
     // }
     else {

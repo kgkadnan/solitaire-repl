@@ -15,7 +15,6 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
   dataTableBodySetState,
   tableRows,
   index,
-  switchButtonTabs,
   row
 }) => {
   const {
@@ -31,12 +30,40 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
     setDiamondDetailIframeUrl
   } = dataTableBodySetState;
 
+  const switchButtonTabs = [
+    {
+      id: '1',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondImage'
+      ),
+      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
+    },
+
+    {
+      id: '2',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.diamondVideo'
+      ),
+      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`
+    },
+    {
+      id: '3',
+      displayButtonLabel: ManageLocales(
+        'app.searchResult.slider.diamondDetail.b2b'
+      ),
+      iframeUrl: `${FILE_URLS.B2B.replace('***', sliderData[0]?.lot_id ?? '')}`
+    }
+  ];
+
   return (
     <CustomSlider
       sheetTriggenContent={
         <div
           onClick={() => {
-            setActiveTab('3');
+            setActiveTab('1');
             setSliderData([tableRows[index]]);
             setDiamondDetailIframeUrl('');
             setDiamondDetailImageUrl('');
@@ -58,31 +85,29 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
           </div>
 
           <div className="flex w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto justify-center gap-10 ">
-            {switchButtonTabs
-              .filter((items: any) => items.id !== '1') // Filter out items with id '1'
-              .map((items: any) => (
-                <div key={items.id} className="">
-                  <CustomDisplayButton
-                    displayButtonLabel={items.displayButtonLabel}
-                    displayButtonAllStyle={{
-                      displayLabelStyle:
-                        activeTab === items.id
-                          ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
-                          : styles.headerButtonStyle
-                    }}
-                    handleClick={() =>
-                      handleSwitchImageUrl(
-                        items.id,
-                        items.url,
-                        items.iframeUrl,
-                        setDiamondDetailIframeUrl,
-                        setDiamondDetailImageUrl,
-                        setActiveTab
-                      )
-                    }
-                  />
-                </div>
-              ))}
+            {switchButtonTabs.map((items: any) => (
+              <div key={items.id} className="">
+                <CustomDisplayButton
+                  displayButtonLabel={items.displayButtonLabel}
+                  displayButtonAllStyle={{
+                    displayLabelStyle:
+                      activeTab === items.id
+                        ? `${styles.activeHeaderButtonStyle} border-b border-solitaireQuaternary pb-1`
+                        : styles.headerButtonStyle
+                  }}
+                  handleClick={() =>
+                    handleSwitchImageUrl(
+                      items.id,
+                      items.url,
+                      items.iframeUrl,
+                      setDiamondDetailIframeUrl,
+                      setDiamondDetailImageUrl,
+                      setActiveTab
+                    )
+                  }
+                />
+              </div>
+            ))}
           </div>
 
           <div className={styles.stoneSliderData}>

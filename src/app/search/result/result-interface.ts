@@ -341,6 +341,8 @@ export interface IModalSetState {
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
+  setModalContent: Dispatch<SetStateAction<ReactNode>>;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IErrorSetState {

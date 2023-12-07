@@ -96,7 +96,7 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: `/search?query=${NEW_SEARCH}`,
+      link: `/search?active-tab=${NEW_SEARCH}`,
       isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
     },
     {
@@ -108,7 +108,7 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: `/search?query=${SAVED_SEARCHES}`,
+      link: `/search?active-tab=${SAVED_SEARCHES}`,
       isActive: currentRoute === '/search' && subRoute === `${SAVED_SEARCHES}`
     },
     {
@@ -170,7 +170,7 @@ const SideBar = () => {
       (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
-    // if (data?.length && link !== `/search?query=${NEW_SEARCH}`) {
+    // if (data?.length && link !== `/search?active-tab=${NEW_SEARCH}`) {
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
       setDialogContent(
@@ -206,7 +206,7 @@ const SideBar = () => {
         </>
       );
     }
-    // else if (data?.length && link === `/search?query=${NEW_SEARCH}`) {
+    // else if (data?.length && link === `/search?active-tab=${NEW_SEARCH}`) {
     //   handleRoute(nav, link);
     // }
     else {

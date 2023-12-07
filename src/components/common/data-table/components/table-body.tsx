@@ -105,37 +105,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   };
 
-  const switchButtonTabs = [
-    {
-      id: '1',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.giaCertificate'
-      ),
-      url: `${FILE_URLS.CERT_FILE.replace(
-        '***',
-        sliderData[0]?.certificate_number ?? ''
-      )}`
-    },
-
-    {
-      id: '2',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondVideo'
-      ),
-      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
-        '***',
-        sliderData[0]?.lot_id ?? ''
-      )}`
-    },
-    {
-      id: '3',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondImage'
-      ),
-      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
-    }
-  ];
-
   const footerButtonData = [
     {
       id: 1,
@@ -217,7 +186,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
             />
             <DetailCertificateSlider
@@ -237,10 +205,10 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
               column={column}
               footerButtonData={footerButtonData}
+              modalSetState={modalSetState}
             />
           </div>
         );

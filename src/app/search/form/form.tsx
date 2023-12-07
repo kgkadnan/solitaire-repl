@@ -178,7 +178,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               meta_data: updatedMeta
             };
             updateSavedSearch(data);
-            router.push(`/search?query=${SAVED_SEARCHES}`);
+            router.push(`/search?active-tab=${SAVED_SEARCHES}`);
           }
         } else if (activeSearch) {
           const updatedMeta = addSearches;
@@ -258,7 +258,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             localStorage.setItem('Search', JSON.stringify(updatedData));
           }
           router.push(
-            `/search?query=${SEARCH_RESULT}-${searchResult.activeTab + 1}`
+            `/search?active-tab=${SEARCH_RESULT}-${searchResult.activeTab + 1}`
           );
         } else {
           let setDataOnLocalStorage = {
@@ -272,7 +272,7 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?query=${SEARCH_RESULT}-${
+            `/search?active-tab=${SEARCH_RESULT}-${
               JSON.parse(localStorage.getItem('Search')!).length
             }`
           );
@@ -347,10 +347,10 @@ from the searchParams object. The code then assigns the value of 'edit' paramete
               style: styles.transparent,
               fn: () => {
                 if (modifySearchFrom === `${SAVED_SEARCHES}`) {
-                  router.push(`/search?query=${SAVED_SEARCHES}`);
+                  router.push(`/search?active-tab=${SAVED_SEARCHES}`);
                 } else if (modifySearchFrom === `${SEARCH_RESULT}`) {
                   router.push(
-                    `/search?query=${SEARCH_RESULT}-${
+                    `/search?active-tab=${SEARCH_RESULT}-${
                       searchResult.activeTab + 3
                     }`
                   );
