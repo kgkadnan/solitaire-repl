@@ -22,6 +22,7 @@ import { useDataTableStateManagement } from '../data-table/hooks/data-table-stat
 import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import CustomPagination from '../pagination';
+import Link from 'next/link';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -156,11 +157,13 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                   : formatNumberWithLeadingZeros(items.display_id)}
               </span>
             </p>
-            {items.trackOrder && (
-              <p>
+            {items?.delivery?.tracking_id && (
+              <p onClick={e => e.stopPropagation()}>
                 Track Order:{' '}
-                <span className="text-solitaireTertiary">
-                  {items.trackOrder}
+                <span className="text-solitaireTertiary border-b  border-solitaireQuaternary">
+                  <Link href={items?.delivery?.link} target="_blank">
+                    Track your order here
+                  </Link>
                 </span>
               </p>
             )}
@@ -270,11 +273,16 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                         </span>
                       </div>
                     )}
-                    {productPageDetail?.trackOrder && (
+                    {productPageDetail?.delivery && (
                       <div className="flex mb-1">
                         <p className="w-[25%]">Track Order :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.trackOrder}
+                        <span className="text-solitaireTertiary border-b  border-solitaireQuaternary">
+                          <Link
+                            href={productPageDetail?.delivery?.link}
+                            target="_blank"
+                          >
+                            Track your order here
+                          </Link>
                         </span>
                       </div>
                     )}
