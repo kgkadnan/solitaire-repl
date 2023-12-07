@@ -14,7 +14,7 @@
     "semi": ["error", "always"],
 
     // Avoiding any Type
-    "@typescript-eslint/no-explicit-any": ["error"],
+    // "@typescript-eslint/no-explicit-any": ["error"],
 
     /// -----------------------------------------------------
     // //  Explicit Return Types (Optional)
