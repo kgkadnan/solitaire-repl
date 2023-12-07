@@ -42,7 +42,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { sliderData } = dataTableBodyState!;
 
   const [addCart] = useAddCartMutation();
-  let [downloadExcel] = useDownloadExcelMutation();
+  const [downloadExcel] = useDownloadExcelMutation();
 
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
@@ -83,7 +83,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       })
         .unwrap()
         .then(res => {
-          let { data, fileName } = res;
+          const { data, fileName } = res;
           if (data) {
             downloadExcelFromBase64(data, fileName);
             setDialogContent?.(
@@ -104,37 +104,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
         });
     }
   };
-
-  let switchButtonTabs = [
-    {
-      id: '1',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.giaCertificate'
-      ),
-      url: `${FILE_URLS.CERT_FILE.replace(
-        '***',
-        sliderData[0]?.certificate_number ?? ''
-      )}`
-    },
-
-    {
-      id: '2',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondVideo'
-      ),
-      iframeUrl: `${FILE_URLS.VIDEO_FILE.replace(
-        '***',
-        sliderData[0]?.lot_id ?? ''
-      )}`
-    },
-    {
-      id: '3',
-      displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.diamondImage'
-      ),
-      url: `${FILE_URLS.IMG.replace('***', sliderData[0]?.lot_id ?? '')}`
-    }
-  ];
 
   const footerButtonData = [
     {
@@ -217,7 +186,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
             />
             <DetailCertificateSlider
@@ -237,10 +205,10 @@ export const TableBody: React.FC<ITbodyProps> = ({
               dataTableBodySetState={dataTableBodySetState}
               tableRows={tableRows}
               index={index}
-              switchButtonTabs={switchButtonTabs}
               row={row}
               column={column}
               footerButtonData={footerButtonData}
+              modalSetState={modalSetState}
             />
           </div>
         );

@@ -78,7 +78,6 @@ export interface IDetailImageSlider {
   dataTableBodySetState: IDataTableBodySetState;
   tableRows: Product[];
   index: number;
-  switchButtonTabs: IswitchButtonTabs[];
   row: Product;
 }
 
@@ -87,8 +86,8 @@ export interface IDiamondDetailSlider {
   dataTableBodySetState: IDataTableBodySetState;
   tableRows: Product[];
   index: number;
-  switchButtonTabs: IswitchButtonTabs[];
   row: any;
   footerButtonData: any;
   column: TableColumn;
+  modalSetState: IModalSetState;
 }

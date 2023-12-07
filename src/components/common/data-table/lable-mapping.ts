@@ -16,7 +16,7 @@ export const keyLabelMapping: KeyLabelMapping = {
 };
 export const basicDetailsLabelMapping: KeyLabelMapping = {
   lot_id: 'Stock No.',
-  rpt_number: 'Report No.',
+  // rpt_number: 'Report No.',
   shape: 'Shape',
   carat: 'Carat',
   color: 'Color',
