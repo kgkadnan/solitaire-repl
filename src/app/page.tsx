@@ -1,10 +1,13 @@
 'use client';
 
-import { RadioButton } from '@/components/common/custom-input-radio';
-import { CustomInputField } from '@/components/common/input-field';
-import { useState } from 'react';
+import { getLogger } from 'logging/log-util';
 
 export default function Home() {
+  const logger = getLogger('home');
+  logger.error('a error message from _app');
+  logger.debug('a debug message from _app');
+  logger.info('a info message from _app');
+
   return (
     <>
       <h1
