@@ -36,6 +36,18 @@
   color: hsl(var(--solitaire-senary));
 }
 
+.popoverContent {
+  background-color: hsl(var(--solitaire-secondary));
+  z-index: 1111;
+  width: 200px;
+  height: 120px;
+  margin-right: 80px;
+  margin-top: 10px;
+  border-radius: 5px;
+  padding: 10px;
+  letter-spacing: 1px;
+}
+
 /* Media queries */
 /* Small screens */
 @media (max-width: 767px) {

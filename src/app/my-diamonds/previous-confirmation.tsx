@@ -8,7 +8,7 @@ const PreviousConfirmation = ({
   previousConfirmData,
   setOffset,
   setLimit,
-  limit,
+  limit
 }: any) => {
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
