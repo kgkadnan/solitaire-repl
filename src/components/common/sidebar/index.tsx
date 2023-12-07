@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, usePathname, useSearchParams } from 'next/navigation';
-import { ReactNode, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 import KGKlogo from '@public/assets/icons/vector.svg';
 import Image from 'next/image';
 import CustomImageTile, { IImageTileProps } from '../image-tile';
@@ -18,24 +18,30 @@ import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
+import { ISavedSearch } from '../top-navigation-bar';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES
 } from '@/constants/application-constants/search-page';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
 
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const { modalState, modalSetState } = useModalStateManagement();
 
-  const subRoute = useSearchParams().get('route');
+  const { setDialogContent, setIsDialogOpen } = modalSetState;
+  const { dialogContent, isDialogOpen } = modalState;
+
+  const subRoute = useSearchParams().get('active-tab');
   const onKGKLogoContainerClick = useCallback(() => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
     if (data?.length && currentRoute == '/search') {
       setIsDialogOpen(true);
@@ -152,16 +158,18 @@ const SideBar = () => {
   };
   const [selectedNav, setSelectedNav] = useState<string[]>([]);
 
-  let handleRoute = (nav: string, link?: string) => {
+  const handleRoute = (nav: string, link?: string) => {
     router.push(`${link!}`);
     setSelectedNav(() => [nav]);
   };
 
   const handleChange = (nav: string, link?: string) => {
-    let localData = JSON.parse(localStorage.getItem('Search')!);
+    const localData: ISavedSearch[] = JSON.parse(
+      localStorage.getItem('Search')!
+    );
 
-    let data = localData?.filter(
-      (isSaved: any) => isSaved.isSavedSearch === false
+    const data = localData?.filter(
+      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
     );
 
     // if (data?.length && link !== `/search?active-tab=${NEW_SEARCH}`) {

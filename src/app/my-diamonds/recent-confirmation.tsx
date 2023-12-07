@@ -5,12 +5,12 @@ import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond
 
 const RecentConfirmation = ({ recentConfirmData }: any) => {
   // Define query parameters for API request
-  let singleExpand = 'items.variant.product%2Citems.variant.prices';
+  const singleExpand = 'items.variant.product%2Citems.variant.prices';
 
   // State variables to manage data and UI state
   const [recentConfirmationDetail, setRecentConfirmationDetail] = useState([]);
   const [id, setId] = useState('');
-  let recentConfirmationCheck = 'recent-confirmation';
+  const recentConfirmationCheck = 'recent-confirmation';
 
   // Fetch recent confirmation data using a API
   const { data: productData } = useGetProductDetailsQuery(
@@ -29,7 +29,7 @@ const RecentConfirmation = ({ recentConfirmData }: any) => {
   }, [productData, recentConfirmationDetail]);
 
   // Function to handle clicking on a card and set the orderId
-  let handleCardClick = (id: string) => {
+  const handleCardClick = (id: string) => {
     setId(id);
   };
 

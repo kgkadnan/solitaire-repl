@@ -240,3 +240,11 @@
   // padding-left: 50px;
   padding: 0rem 0rem 0rem !important;
 }
+
+
+.modalStyle{
+  max-width: 1000px;
+  height: 87vh;
+  z-index: 1200;
+  color: hsl(var(--solitaire-tertiary));
+}

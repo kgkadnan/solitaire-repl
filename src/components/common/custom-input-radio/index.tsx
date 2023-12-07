@@ -5,17 +5,17 @@ interface RadioButtonProps {
   radioMetaData: {
     label: string | ReactNode;
     value: string;
-    checked: boolean;
+    checked?: boolean;
     onChange: (value: string) => void;
     name: string;
   };
 }
 
 export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
-  let { label, value, name, checked, onChange } = radioMetaData;
+  const { label, value, name, checked, onChange } = radioMetaData;
 
-  const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    onChange(event.target.value)!;
+  const handleInputChange = () => {
+    onChange(value);
   };
 
   return (
@@ -24,7 +24,7 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
         <input
           type="radio"
           id={value}
-          name={name} // Add the name attribute for radio buttons
+          name={name}
           value={value}
           checked={checked}
           onChange={handleInputChange}

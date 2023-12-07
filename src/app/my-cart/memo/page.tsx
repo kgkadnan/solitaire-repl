@@ -14,6 +14,7 @@ import { performDownloadExcel } from '@/utils/performDownloadExcel';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import { Product } from '@/app/search/result/result-interface';
 
 const MemoOut = () => {
   // State variables
@@ -63,7 +64,9 @@ const MemoOut = () => {
       setErrorText(`Minimum ${minStones} stones are required to compare`);
     } else {
       const compareStones = isCheck
-        .map(id => data.items.find((row: any) => row.product.id === id))
+        .map(id =>
+          data.items.find((row: { product: Product }) => row.product.id === id)
+        )
         .map(stone => stone.product);
 
       localStorage.setItem('compareStone', JSON.stringify(compareStones));
@@ -139,8 +142,11 @@ const MemoOut = () => {
     const updateRows = () => {
       if (data) {
         const activeDiamondItems = data.items
-          .filter((item: any) => item?.product?.diamond_status === 'MemoOut')
-          .map((row: any) => row.product);
+          .filter(
+            (item: { product: Product }) =>
+              item?.product?.diamond_status === 'MemoOut'
+          )
+          .map((row: { product: Product }) => row.product);
 
         setRows(activeDiamondItems);
       }

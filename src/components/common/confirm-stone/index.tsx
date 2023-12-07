@@ -143,7 +143,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * @returns None
    */
   const confirmStoneApiCall = () => {
-    let variantIds: string[] = [];
+    const variantIds: string[] = [];
 
     confirmStoneData.forEach((ids: any) => {
       variantIds.push(ids.variants[0].id);

@@ -15,34 +15,32 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   modalSetState
 }) => {
   /* The above code is filtering and sorting an array of table columns. */
-  let tableCol = tableColumns
+  const tableCol = tableColumns
     ?.filter(column => !column.is_disabled)
     ?.sort((a, b) => a.sequence - b.sequence);
 
   return (
-    <>
-      <div className={'flex-grow overflow-y-auto'}>
-        <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
-          <table className={styles.table}>
-            <TableHead
-              selectionAllowed={selectionAllowed}
-              checkboxData={checkboxData}
-              tableCol={tableCol}
-              rows={tableRows}
-            />
-            <TableBody
-              tableRows={tableRows}
-              selectionAllowed={selectionAllowed}
-              checkboxData={checkboxData}
-              tableCol={tableCol}
-              errorSetState={errorSetState}
-              confirmStoneSetState={confirmStoneSetState}
-              modalSetState={modalSetState}
-            />
-          </table>
-        </div>
+    <div className={'flex-grow overflow-y-auto'}>
+      <div className={`${styles.tableWrapper} ${mainTableStyle}`}>
+        <table className={styles.table}>
+          <TableHead
+            selectionAllowed={selectionAllowed}
+            checkboxData={checkboxData}
+            tableCol={tableCol}
+            rows={tableRows}
+          />
+          <TableBody
+            tableRows={tableRows}
+            selectionAllowed={selectionAllowed}
+            checkboxData={checkboxData}
+            tableCol={tableCol}
+            errorSetState={errorSetState}
+            confirmStoneSetState={confirmStoneSetState}
+            modalSetState={modalSetState}
+          />
+        </table>
       </div>
-    </>
+    </div>
   );
 };
 

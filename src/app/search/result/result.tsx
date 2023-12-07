@@ -24,6 +24,7 @@ import { handleSaveSearch } from './helpers/handle-save-search';
 import { calculateTotalAmount } from './helpers/calculate-total-amount';
 import { calculateAverageDiscount } from './helpers/calculate-average-discount';
 import { ISearchResultsProps } from './result-interface';
+import { CustomModal } from '@/components/common/modal';
 // Define a type for the radio state
 
 const SearchResults = ({
@@ -51,13 +52,20 @@ const SearchResults = ({
   const { setSelectedRadioDaysValue } = confirmStoneSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const { dialogContent, isDialogOpen, isInputDialogOpen, isSliderOpen } =
-    modalState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isInputDialogOpen,
+    isSliderOpen,
+    isModalOpen,
+    modalContent
+  } = modalState;
   const {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent
+    setDialogContent,
+    setIsModalOpen
   } = modalSetState;
   const {
     setYourSelectionData,
@@ -68,10 +76,10 @@ const SearchResults = ({
 
   const { saveSearchName } = commonState;
 
-  let [addSavedSearch] = useAddSavedSearchMutation();
+  const [addSavedSearch] = useAddSavedSearchMutation();
   const { data: listingColumns } = useGetManageListingSequenceQuery({});
 
-  let checkboxData = {
+  const checkboxData = {
     checkboxState,
     checkboxSetState
   };
@@ -111,9 +119,9 @@ handle the logic for closing a dialog box after a certain delay. */
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
   useEffect(() => {
-    let selection = localStorage.getItem('Search');
+    const selection = localStorage.getItem('Search');
     if (selection) {
-      let yourSelection = JSON.parse(selection);
+      const yourSelection = JSON.parse(selection);
       setYourSelectionData(yourSelection);
       if (data?.products?.length) {
         setIsCheck([]);
@@ -207,6 +215,12 @@ variable changes. */
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
       />
 
       <ResultHeader
