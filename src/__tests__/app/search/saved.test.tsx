@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import SavedSearch from '@/app/search/saved';
+import SavedSearch from '@/app/search/saved/saved';
 import { renderWithProviders } from '@/__tests__/mock-handlers/test-utils';
 import { setupSetupsavedSearchandlers } from '@/__tests__/mock-handlers/saved-search';
 import { act } from 'react-dom/test-utils';

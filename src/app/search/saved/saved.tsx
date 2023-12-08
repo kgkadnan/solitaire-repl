@@ -25,7 +25,6 @@ import {
 } from '@/features/api/saved-searches';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
-import { DateRange } from 'react-day-picker';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
@@ -43,23 +42,21 @@ import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
-  PAGINATION_INTITAL_LIMMIT
+  MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
 import {
   SAVED_SEARCHES,
   SEARCH_RESULT
 } from '@/constants/application-constants/search-page';
+import { useCommonStateManagement } from './hooks/state-management';
+import { formatRangeData } from './helpers/format-range-date';
+import { handleDelete } from './helpers/handle-delete';
+import { handleSearch } from './helpers/debounce';
 
-const optionLimits = [
-  { id: 1, value: '50' },
-  { id: 2, value: '100' }
-];
 const SavedSearch = () => {
   // Style classes and variables
   const tableStyles = useMemo(() => {
@@ -78,37 +75,53 @@ const SavedSearch = () => {
     cardContainerStyle: styles.searchCardContainer
   };
 
-  //pagination states
-  const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT); // You can set the initial value here
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [offset, setOffset] = useState(0);
+  const optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' }
+  ];
 
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [dateSearchUrl, setDateSearchUrl] = useState('');
-  const [searchUrl, setSearchUrl] = useState('');
+  const { commonState, commonSetState } = useCommonStateManagement();
 
-  //Data
-  const [savedSearchData, setSavedSearchData] = useState<ISavedSearchData[]>(
-    []
-  );
-  const [cardData, setCardData] = useState<ICardData[]>([]);
-
-  //checkbox states
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck, isCheckAll } = checkboxState;
-  const { setIsCheck, setIsCheckAll } = checkboxSetState;
-
-  //Search Bar States
-  const [search, setSearch] = useState<string>('');
-  const [searchByName, setSearchByName] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const {
+    currentPage,
+    limit,
+    numberOfPages,
+    offset,
+    date,
+    dateSearchUrl,
+    searchUrl,
+    savedSearchData,
+    cardData,
+    isCheck,
+    setIsCheck,
+    search,
+    searchByName,
+    suggestions,
+    isDialogOpen,
+    dialogContent,
+    isError,
+    errorText
+  } = commonState;
+  const {
+    setCurrentPage,
+    setLimit,
+    setNumberOfPages,
+    setOffset,
+    setDate,
+    setDateSearchUrl,
+    setSearchUrl,
+    setSavedSearchData,
+    setCardData,
+    isCheckAll,
+    setIsCheckAll,
+    setSearch,
+    setSearchByName,
+    setSuggestions,
+    setIsDialogOpen,
+    setDialogContent,
+    setIsError,
+    setErrorText
+  } = commonSetState;
 
   const router = useRouter();
   const dispatch = useAppDispatch();
@@ -163,14 +176,6 @@ const SavedSearch = () => {
       discount: 'Discount'
     };
   }, []);
-
-  const formatRangeData = (data: { lte: number; gte: number }) => {
-    const range = data;
-    if (range && range.lte && range.gte) {
-      return `${range.gte}-${range.lte}`;
-    }
-    return '-';
-  };
 
   const renderCardData = useCallback(
     (data: any) => {
@@ -237,79 +242,6 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles, keyLabelMapping]
   );
 
-  // Delete Data
-  const handleDelete = () => {
-    const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
-
-    if (isCheck?.length) {
-      const matchingData = searchTabData.filter((item1: any, index: number) =>
-        isCheck.some(item2 => {
-          if (item1.id === item2) {
-            item1.position = index + 1;
-            return item1;
-          }
-        })
-      );
-
-      if (matchingData.length > 0) {
-        setIsError(true);
-        const searchNames = matchingData.map(
-          (items: any) => items.saveSearchName
-        );
-        const resultPositions = matchingData.map((items: any) => {
-          return `Search Result ${items.position}`;
-        });
-
-        const errorMessage =
-          matchingData.length > 1
-            ? `Your saved searches ${searchNames.join(
-                ', '
-              )} are already opened in ${resultPositions.join(
-                ', '
-              )} respectively. Please close those tabs and then try deleting it.`
-            : `Your saved search ${searchNames.join(
-                ', '
-              )} is already opened in ${resultPositions.join(
-                ', '
-              )}. Please close the tab and then try deleting it.`;
-
-        setErrorText(errorMessage);
-      } else {
-        setDialogContent(
-          <>
-            <p className="text-center mt-3">
-              Do you want to Delete the selected Stones?
-            </p>
-            <div className="flex justify-center">
-              <CustomDisplayButton
-                displayButtonLabel="No"
-                displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`
-                }}
-                handleClick={() => setIsDialogOpen(false)}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Yes"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled
-                }}
-                handleClick={deleteStoneHandler}
-              />
-            </div>
-          </>
-        );
-        setIsDialogOpen(true);
-      }
-    } else {
-      setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
-    }
-
-    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
   const deleteStoneHandler = async () => {
     await deleteSavedSearch(isCheck)
       .unwrap()
@@ -353,30 +285,6 @@ const SavedSearch = () => {
     [searchList]
   );
 
-  const debounce = <T extends any[]>(
-    fn: (...args: T) => void,
-    delay: number
-  ) => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: T) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => fn(...args), delay);
-    };
-  };
-
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setSearch(inputValue);
-
-    // Use the debounce function to wrap the debouncedSave function
-    const delayedSave = debounce(inputValue => debouncedSave(inputValue), 1000);
-    delayedSave(inputValue);
-
-    if (inputValue.length < 1) {
-      setSearchByName('');
-    }
-  };
-
   const handleSuggestionClick = (suggestion: string) => {
     setIsCheck([]);
     setIsCheckAll(false);
@@ -391,7 +299,19 @@ const SavedSearch = () => {
       id: 1,
       displayButtonLabel: ManageLocales('app.savedSearch.delete'),
       style: styles.filled,
-      fn: handleDelete
+      fn: () =>
+        handleDelete({
+          isCheck,
+          setIsError,
+          setErrorText,
+          setDialogContent,
+          setIsDialogOpen,
+          deleteStoneHandler,
+          numberOfPages,
+          data,
+          setCurrentPage,
+          currentPage
+        })
     }
   ];
 
@@ -437,7 +357,8 @@ const SavedSearch = () => {
       ''
     ),
     //Search Data
-    handleSearch: handleSearch,
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) =>
+      handleSearch({ e, setSearch, debouncedSave, setSearchByName }),
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,

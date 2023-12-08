@@ -43,6 +43,10 @@ export interface IInclusionDetails {
   internal_graining: string[];
 }
 
+export interface KeyLabelMapping {
+  [key: string]: string;
+}
+
 export interface IOtherInformation {
   [key: string]: string[] | string;
   girdle: string[];
