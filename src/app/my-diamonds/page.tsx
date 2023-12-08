@@ -17,7 +17,7 @@ import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation';
 import {
   MAX_RECENT_CONFIRMATION_COUNT,
-  PAGINATION_INTITAL_LIMMIT
+  PAGINATION_INTITAL_LIMIT
 } from '@/constants/business-logic';
 import {
   Popover,
@@ -41,7 +41,7 @@ function MyDiamonds() {
   const [myInvoiceData, setMyInvoiceData] = useState([]);
   const [previousConfirmData, setPreviousConfirmData] = useState([]);
   const [offset, setOffset] = useState(0);
-  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT);
+  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMIT);
   const [recentConfirmationSelectedDays, setRecentConfirmationSelectedDays] =
     useState<string>('');
   const [search, setsearch] = useState<string>('');

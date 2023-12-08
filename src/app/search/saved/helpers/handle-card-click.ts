@@ -22,6 +22,7 @@ export const handleCardClick = (
   );
 
   const url = constructUrlParams(cardClickData[0].meta_data);
+
   setSearchUrl(url);
 
   if (productDataCount > MAX_SAVED_SEARCH_COUNT) {

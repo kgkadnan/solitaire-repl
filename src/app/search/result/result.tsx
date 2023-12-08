@@ -16,7 +16,7 @@ import { ResultHeader } from './components/result-header';
 import { useSortByStateManagement } from './hooks/sort-by-state-management';
 import { useErrorStateManagement } from '../../../hooks/error-state-management';
 import { useModalStateManagement } from '../../../hooks/modal-state-management';
-import { useCommonDtateManagement } from './hooks/common-state-management';
+import { useCommonStateManagement } from './hooks/common-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
@@ -28,6 +28,7 @@ import { CustomModal } from '@/components/common/modal';
 // Define a type for the radio state
 
 const SearchResults = ({
+  searchUrl,
   data,
   activeTab,
   refetch: refetchRow
@@ -38,7 +39,7 @@ const SearchResults = ({
   const { confirmStoneState, confirmStoneSetState } =
     useConfirmStoneStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
-  const { commonSetState, commonState } = useCommonDtateManagement();
+  const { commonSetState, commonState } = useCommonStateManagement();
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
 
   const { rows, tableColumns } = dataTableState;
@@ -231,43 +232,43 @@ variable changes. */
         modalStyle={styles.modalStyle}
       />
 
-      <ResultHeader
-        activeTab={activeTab}
-        data={data}
-        checkboxState={checkboxState}
-        modalSetState={modalSetState}
-        commonSetState={commonSetState}
-        commonState={commonState}
-        sortBySetState={sortBySetState}
-        sortByState={sortByState}
-        dataTableState={dataTableState}
-        dataTableSetState={dataTableSetState}
-      />
-
-      {rows?.length && tableColumns?.length ? (
-        <CustomDataTable
-          tableRows={rows}
-          tableColumns={tableColumns}
-          checkboxData={checkboxData}
-          mainTableStyle={styles.tableWrapper}
-          errorSetState={errorSetState}
-          confirmStoneSetState={confirmStoneSetState}
-          modalSetState={modalSetState}
-        />
+      {searchUrl && rows?.length && tableColumns?.length ? (
+        <>
+          <ResultHeader
+            activeTab={activeTab}
+            data={data}
+            checkboxState={checkboxState}
+            modalSetState={modalSetState}
+            commonSetState={commonSetState}
+            commonState={commonState}
+            sortBySetState={sortBySetState}
+            sortByState={sortByState}
+            dataTableState={dataTableState}
+            dataTableSetState={dataTableSetState}
+          />
+          <CustomDataTable
+            tableRows={rows}
+            tableColumns={tableColumns}
+            checkboxData={checkboxData}
+            mainTableStyle={styles.tableWrapper}
+            errorSetState={errorSetState}
+            confirmStoneSetState={confirmStoneSetState}
+            modalSetState={modalSetState}
+          />
+          <ResultFooter
+            rows={rows}
+            refetchRow={refetchRow}
+            modalSetState={modalSetState}
+            checkboxState={checkboxState}
+            checkboxSetState={checkboxSetState}
+            errorSetState={errorSetState}
+            errorState={errorState}
+            confirmStoneSetState={confirmStoneSetState}
+          />
+        </>
       ) : (
         <CustomLoader />
       )}
-
-      <ResultFooter
-        rows={rows}
-        refetchRow={refetchRow}
-        modalSetState={modalSetState}
-        checkboxState={checkboxState}
-        checkboxSetState={checkboxSetState}
-        errorSetState={errorSetState}
-        errorState={errorState}
-        confirmStoneSetState={confirmStoneSetState}
-      />
     </>
   );
 };

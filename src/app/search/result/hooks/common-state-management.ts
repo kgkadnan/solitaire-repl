@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { IYourSelection } from '../result-interface';
 
-export const useCommonDtateManagement = () => {
+export const useCommonStateManagement = () => {
   const [yourSelectionData, setYourSelectionData] = useState<IYourSelection[]>(
     []
   );

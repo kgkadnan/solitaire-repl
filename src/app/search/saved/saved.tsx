@@ -91,17 +91,24 @@ const SavedSearch = () => {
   const dispatch = useAppDispatch();
 
   // Fetching saved search data
-  const { data } = useGetAllSavedSearchesQuery({
-    limit,
-    offset,
-    dateSearchUrl,
-    searchByName
-  });
+  const { data } = useGetAllSavedSearchesQuery(
+    {
+      limit,
+      offset,
+      dateSearchUrl,
+      searchByName
+    },
+    {
+      skip: date && (!date.from || !date.to)
+    }
+  );
 
-  // Fetching product data
-  const { data: productData } = useGetProductCountQuery({
-    searchUrl
-  });
+  const { data: productData } = useGetProductCountQuery(
+    {
+      searchUrl
+    },
+    { skip: !searchUrl }
+  );
 
   const { data: searchList } = useGetSavedSearchListQuery(search);
 
@@ -121,7 +128,6 @@ const SavedSearch = () => {
     };
   }, []);
 
-  // Handler for changing results per page
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -433,7 +439,7 @@ const SavedSearch = () => {
                             setSearchUrl,
                             setIsError,
                             setErrorText,
-                            productData.count,
+                            productData?.count,
                             router
                           )
                         }

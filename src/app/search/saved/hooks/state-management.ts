@@ -1,12 +1,12 @@
-import { PAGINATION_INTITAL_LIMMIT } from '@/constants/business-logic';
 import { ReactNode, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ISavedSearchData } from '../saved-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { PAGINATION_INTITAL_LIMIT } from '@/constants/business-logic';
 
 export const useCommonStateManagement = () => {
   const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT);
+  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMIT);
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 

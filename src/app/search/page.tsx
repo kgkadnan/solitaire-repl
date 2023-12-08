@@ -108,12 +108,16 @@ function SearchResultLayout() {
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
-  let { data, isLoading, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: LISTING_PAGE_DATA_LIMIT,
-    url: searchUrl
-  });
-
+  let { data, isLoading, refetch } = useGetAllProductQuery(
+    {
+      offset: 0,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      url: searchUrl
+    },
+    {
+      skip: !searchUrl
+    }
+  );
   useEffect(() => {
     setheaderPath(computeRouteAndComponentRenderer());
   }, [subRoute]);
@@ -175,8 +179,7 @@ function SearchResultLayout() {
         closeTheSearchFunction(removeIndex, yourSelection);
         setSaveSearchName('');
       })
-      .catch((error: any) => {
-        console.log('error', error);
+      .catch(() => {
         setInputError(true);
         setInputErrorContent(
           'Title already exists. Choose another title to save your search'
@@ -447,6 +450,7 @@ function SearchResultLayout() {
             <NoDataFound />
           ) : (
             <SearchResults
+              searchUrl={searchUrl}
               data={data}
               activeTab={activeTab - 1}
               refetch={refetch}

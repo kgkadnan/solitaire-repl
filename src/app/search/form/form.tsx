@@ -114,35 +114,46 @@ used for managing the state of a form field or input element in a React componen
     handleReset(setState);
   };
 
+  const { data, error } = useGetProductCountQuery(
+    {
+      searchUrl
+    },
+    {
+      skip: !searchUrl
+    }
+  );
   useEffect(() => {
     const queryParams = generateQueryParams(state);
     // Construct your search URL here
-    !isValidationError && setSearchUrl(constructUrlParams(queryParams));
+    if (!isValidationError) {
+      setSearchUrl(constructUrlParams(queryParams));
+    }
   }, [state]);
-
-  const { data, error } = useGetProductCountQuery({
-    searchUrl
-  });
 
   useEffect(() => {
     if (searchCount !== -1) {
-      if (
-        data?.count > MAX_SEARCH_FORM_COUNT &&
-        data?.count > MIN_SEARCH_FORM_COUNT
-      ) {
-        setIsError(true);
-        setErrorText(
-          'Please modify your search, the stones exceeds the limit.'
-        );
-      } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
-        setIsError(true);
-        setErrorText(`No stones found, Please modify your search.`);
-      } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
-        setIsError(true);
-        setErrorText(`${data?.count} stones found`);
+      if (searchUrl) {
+        if (
+          data?.count > MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          setIsError(true);
+          setErrorText(
+            'Please modify your search, the stones exceeds the limit.'
+          );
+        } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          setErrorText(`No stones found, Please modify your search.`);
+        } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          setErrorText(`${data?.count} stones found`);
+        } else {
+          setIsError(false);
+          setErrorText('');
+        }
       } else {
-        setIsError(false);
-        setErrorText('');
+        setIsError(true);
+        setErrorText('Please select some parameter before initiating search');
       }
     }
     if (error) {
@@ -151,10 +162,10 @@ used for managing the state of a form field or input element in a React componen
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error, errorText]);
+  }, [data, error, errorText, searchUrl]);
 
   const handleSaveAndSearch: any = async () => {
-    if (data?.count > MIN_SEARCH_FORM_COUNT) {
+    if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
         data?.count > MIN_SEARCH_FORM_COUNT
@@ -220,7 +231,7 @@ used for managing the state of a form field or input element in a React componen
   };
 
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
-    if (data?.count > MIN_SEARCH_FORM_COUNT) {
+    if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
         data?.count > MIN_SEARCH_FORM_COUNT
@@ -308,6 +319,7 @@ used for managing the state of a form field or input element in a React componen
         setErrorContent={setInputErrorContent}
         handleClose={handleCloseInputDialog}
       />
+
       {renderContent(
         state,
         setState,
@@ -324,6 +336,7 @@ used for managing the state of a form field or input element in a React componen
             <span className="hidden  text-green-500" />
             <p
               className={`text-${
+                searchUrl &&
                 data?.count < MAX_SEARCH_FORM_COUNT &&
                 data?.count > MIN_SEARCH_FORM_COUNT
                   ? 'green'
@@ -386,7 +399,7 @@ used for managing the state of a form field or input element in a React componen
                     } else if (!isSaved && isSearchName) {
                       handleSaveAndSearch();
                     } else {
-                      setIsInputDialogOpen(true);
+                      searchUrl && setIsInputDialogOpen(true);
                     }
                   } else {
                     setIsError(true);
