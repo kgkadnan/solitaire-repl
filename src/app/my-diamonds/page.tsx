@@ -17,6 +17,7 @@ import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation';
 import {
   MAX_RECENT_CONFIRMATION_COUNT,
+  MAX_my_INVOICE_LIMIT_COUNT,
   PAGINATION_INTITAL_LIMIT
 } from '@/constants/business-logic';
 import {
@@ -84,22 +85,18 @@ function MyDiamonds() {
 
   // Query parameters for API request
   let resentConfiramtionStatus = 'pending';
-  let fulfillmentStatus = 'not_fulfilled';
-  let paymentStatus = 'awaiting';
-  let fields = 'id,display_id,total';
+  let resentConfiramtionInvoiceStatus = 'pending';
   let expand = 'items';
-  let myDiamondStatus = 'pending';
-  let invoiceStatus = 'available';
+  let myInvoiceStatus = 'pending';
+  let myInvoiceInvoiceStatus = 'available';
   let previousConfirmStatus = 'completed';
   let recentConfirmlimit = MAX_RECENT_CONFIRMATION_COUNT;
-  let myInvoicelimit = MAX_RECENT_CONFIRMATION_COUNT;
+  let myInvoicelimit = MAX_my_INVOICE_LIMIT_COUNT;
 
   // Fetch recent confirmation data
   const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
     resentConfiramtionStatus,
-    fulfillmentStatus,
-    paymentStatus,
-    fields,
+    resentConfiramtionInvoiceStatus,
     expand,
     recentConfiramtionSearchUrl,
     recentConfirmlimit,
@@ -108,8 +105,8 @@ function MyDiamonds() {
 
   // Fetch my-invoice data
   const { data: myDiamondPendingInvoiceData } = useCardMyInvoiceQuery({
-    myDiamondStatus,
-    invoiceStatus,
+    myInvoiceStatus,
+    myInvoiceInvoiceStatus,
     myInvoiceSearchUrl,
     myInvoicelimit,
     myInvoiceSelectedDays
@@ -159,24 +156,24 @@ function MyDiamonds() {
       onChange: handleMyDiamondsRadioChange,
       id: '1',
       value: '7',
-      label: 'Last Week',
-      checked: false
+      label: 'Last Week'
+      // checked: false
     },
     {
       name: 'days',
       onChange: handleMyDiamondsRadioChange,
       id: '2',
       value: '30',
-      label: 'Last Month',
-      checked: false
+      label: 'Last Month'
+      // checked: false
     },
     {
       name: 'days',
       onChange: handleMyDiamondsRadioChange,
       id: '3',
       value: '90',
-      label: 'Last 3 Months',
-      checked: true
+      label: 'Last 3 Months'
+      // checked: true
     }
   ];
 
