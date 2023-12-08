@@ -238,7 +238,7 @@ parameter. */
           <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-md">
             xxxxxxx
           </span>
-          <p className="text-solitaireTertiary text-sm">Memo - Out</p>
+          <p className="text-solitaireTertiary text-sm">Memo</p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-md">

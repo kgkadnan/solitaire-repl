@@ -74,9 +74,9 @@ function SearchResultLayout() {
   ]);
 
   const computeRouteAndComponentRenderer = () => {
-    let yourSelection = JSON.parse(localStorage.getItem('Search')!);
+    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    let replaceSubrouteWithSearchResult = subRoute?.replace(
+    const replaceSubrouteWithSearchResult = subRoute?.replace(
       `${SEARCH_RESULT}-`,
       ''
     );
@@ -88,7 +88,7 @@ function SearchResultLayout() {
       subRoute !== `${NEW_SEARCH}` &&
       replaceSubrouteWithSearchResult
     ) {
-      let isRouteExist =
+      const isRouteExist =
         yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
         return 'No Data Found';
@@ -211,7 +211,7 @@ function SearchResultLayout() {
               handleClick={async () => {
                 if (yourSelection[removeDataIndex]?.saveSearchName.length) {
                   //update logic comes here
-                  let updateSaveSearchData = {
+                  const updateSaveSearchData = {
                     id: yourSelection[removeDataIndex]?.id,
                     name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
@@ -254,7 +254,7 @@ function SearchResultLayout() {
 
   useEffect(() => {
     if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
-      let replaceSubrouteWithSearchResult = subRoute?.replace(
+      const replaceSubrouteWithSearchResult = subRoute?.replace(
         `${SEARCH_RESULT}-`,
         ''
       );
@@ -263,15 +263,15 @@ function SearchResultLayout() {
   }, [subRoute]);
 
   useEffect(() => {
-    let fetchMyAPI = async () => {
-      let yourSelection = localStorage.getItem('Search');
+    const fetchMyAPI = async () => {
+      const yourSelection = localStorage.getItem('Search');
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
         setMaxTab(parseYourSelection.length);
 
         // Always fetch data, even on initial load
-        let url = constructUrlParams(
+        const url = constructUrlParams(
           parseYourSelection[activeTab - 1]?.queryParams
         );
         setSearchUrl(url);

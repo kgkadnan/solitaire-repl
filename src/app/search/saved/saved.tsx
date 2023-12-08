@@ -56,6 +56,7 @@ import { useCommonStateManagement } from './hooks/state-management';
 import { formatRangeData } from './helpers/format-range-date';
 import { handleDelete } from './helpers/handle-delete';
 import { handleSearch } from './helpers/debounce';
+import { convertDateToUTC } from '@/utils/convert-date-to-utc';
 
 const SavedSearch = () => {
   // Style classes and variables
@@ -136,7 +137,7 @@ const SavedSearch = () => {
   const { data: productData } = useGetProductCountQuery({
     searchUrl
   });
-
+  console.log('dateSearchUrl', dateSearchUrl);
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -322,13 +323,10 @@ const SavedSearch = () => {
     } else {
       setDate(date);
       setDateSearchUrl(
-        `&start_date=${new Date(date?.from)
-          .toISOString()
-          .replace('T', ' ')
-          .replace('Z', '%2B00')}&end_date=${new Date(date.to)
-          .toISOString()
-          .replace('T', ' ')
-          .replace('Z', '%2B00')}`
+        `&start_date=${convertDateToUTC(date.from)}&end_date=${convertDateToUTC(
+          date.to,
+          true
+        )}`
       );
     }
   };

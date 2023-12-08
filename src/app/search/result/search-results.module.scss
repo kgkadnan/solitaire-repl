@@ -234,15 +234,14 @@
 
 .diamondDetailSheet {
   background-color: hsl(var(--solitaire-primary));
-  z-index: 1111;
+  // z-index: 1200;
   max-width: 100% !important;
   // padding-right: 50px;
   // padding-left: 50px;
   padding: 0rem 0rem 0rem !important;
 }
 
-
-.modalStyle{
+.modalStyle {
   max-width: 1000px;
   height: 87vh;
   z-index: 1200;
