@@ -20,15 +20,13 @@ export const myDiamondAPI = createApi({
     cardRecentConfirmation: builder.query({
       query: ({
         resentConfiramtionStatus,
-        fulfillmentStatus,
-        paymentStatus,
-        fields,
+        resentConfiramtionInvoiceStatus,
         expand,
         recentConfiramtionSearchUrl,
         recentConfirmlimit,
         recentConfirmationSelectedDays
       }) =>
-        `/store/customers/me/orders?status=${resentConfiramtionStatus}&fulfillment_status=${fulfillmentStatus}&payment_status=${paymentStatus}&fields=${fields}&expand=${expand}&${recentConfiramtionSearchUrl}&limit=${recentConfirmlimit}&created_at[gte]=${recentConfirmationSelectedDays}`,
+        `/store/customers/me/orders?status=${resentConfiramtionStatus}&invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${recentConfiramtionSearchUrl}&limit=${recentConfirmlimit}&created_at[gte]=${recentConfirmationSelectedDays}`,
       providesTags: ['myDiamond']
     }),
     getProductDetails: builder.query({
@@ -38,13 +36,13 @@ export const myDiamondAPI = createApi({
     }),
     cardMyInvoice: builder.query({
       query: ({
-        myDiamondStatus,
-        invoiceStatus,
+        myInvoiceStatus,
+        myInvoiceInvoiceStatus,
         myInvoiceSearchUrl,
         myInvoicelimit,
         myInvoiceSelectedDays
       }) =>
-        `/store/customers/me/orders?status=${myDiamondStatus}&invoice_status=${invoiceStatus}&${myInvoiceSearchUrl}&limit=${myInvoicelimit}&created_at[gte]=${myInvoiceSelectedDays}`,
+        `/store/customers/me/orders?status=${myInvoiceStatus}&invoice_status=${myInvoiceInvoiceStatus}&${myInvoiceSearchUrl}&limit=${myInvoicelimit}&created_at[gte]=${myInvoiceSelectedDays}`,
       providesTags: ['myDiamond']
     }),
     cardPreviousConfirmation: builder.query({

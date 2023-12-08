@@ -21,7 +21,8 @@ export const MAX_SEARCH_FORM_COUNT = 300;
 export const MIN_SEARCH_FORM_COUNT = 0;
 
 export const MAX_SAVED_SEARCH_COUNT = 300;
-export const MAX_RECENT_CONFIRMATION_COUNT = 300;
+export const MAX_RECENT_CONFIRMATION_COUNT = 50;
+export const MAX_MY_INVOICE_LIMIT_COUNT = 50;
 
 export const MAX_SEARCH_TAB_LIMIT = 10;
 
