@@ -180,11 +180,12 @@ used for managing the state of a form field or input element in a React componen
           if (savedSearch?.savedSearch?.meta_data) {
             let updatedMeta = savedSearch.savedSearch.meta_data;
             updatedMeta = queryParams;
-            let data = {
+            let updateSavedData = {
               id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta
+              meta_data: updatedMeta,
+              diamond_count: parseInt(data?.count)
             };
-            updateSavedSearch(data);
+            updateSavedSearch(updateSavedData);
             router.push(`/search?active-tab=${SAVED_SEARCHES}`);
           }
         } else if (activeSearch) {
@@ -192,7 +193,6 @@ used for managing the state of a form field or input element in a React componen
           updatedMeta[activeTab].queryParams = queryParams;
           let updateSaveSearchData = {
             id: updatedMeta[activeTab].id,
-            name: updatedMeta[activeTab].saveSearchName,
             meta_data: updatedMeta[activeTab].queryParams,
             diamond_count: parseInt(data?.count)
           };
@@ -240,7 +240,6 @@ used for managing the state of a form field or input element in a React componen
         if (modifySearchFrom === `${SAVED_SEARCHES}`) {
           if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
             const updatedMeta = [...savedSearch.savedSearch.meta_data];
-            // updatedMeta[savedSearch.activeTab] = prepareSearchParam();
             updatedMeta[savedSearch.activeTab] = queryParams;
             let data = {
               id: savedSearch.savedSearch.id,

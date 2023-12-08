@@ -1,5 +1,5 @@
 import { Product } from '@/app/search/result/result-interface';
-import { ICardData } from '@/app/search/saved-interface';
+import { ICardData } from '@/app/search/saved/saved-interface';
 import { Dispatch, SetStateAction } from 'react';
 
 //Selecting All Checkbox Function

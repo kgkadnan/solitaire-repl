@@ -1,15 +1,7 @@
 'use client';
-import React, {
-  ChangeEvent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
-import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
@@ -17,7 +9,6 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
-
 import {
   useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
@@ -25,95 +16,81 @@ import {
 } from '@/features/api/saved-searches';
 import { formatCreatedAt } from '@/utils/format-date';
 import { CustomCalender } from '@/components/common/calender';
-import { DateRange } from 'react-day-picker';
 import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import {
-  ICardData,
-  IDateRange,
-  IFormatedData,
-  ISavedSearchData,
-  Item
-} from './saved-interface';
+import { ICardData, IDateRange, IFormatedData, Item } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
-import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
-import {
-  MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT,
-  PAGINATION_INTITAL_LIMIT
-} from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
-import {
-  SAVED_SEARCHES,
-  SEARCH_RESULT
-} from '@/constants/application-constants/search-page';
+import { SAVED_SEARCHES } from '@/constants/application-constants/search-page';
+import { useCommonStateManagement } from './hooks/state-management';
+import { formatRangeData } from './helpers/format-range-date';
+import { handleDelete } from './helpers/handle-delete';
+import { handleSearch } from './helpers/debounce';
 import { convertDateToUTC } from '@/utils/convert-date-to-utc';
+import { handleCardClick } from './helpers/handle-card-click';
 
-const optionLimits = [
-  { id: 1, value: '50' },
-  { id: 2, value: '100' }
-];
 const SavedSearch = () => {
-  // Style classes and variables
-  const tableStyles = useMemo(() => {
-    return {
-      tableHeaderStyle: styles.tableHeader,
-      tableBodyStyle: styles.tableBody
-    };
-  }, []);
-  const searchCardTitle = useMemo(() => {
-    return {
-      tableHeaderStyle: styles.SearchCardTitle,
-      tableBodyStyle: styles.SearchDateTime
-    };
-  }, []);
-  const cardStyles = {
-    cardContainerStyle: styles.searchCardContainer
-  };
+  // State management hooks
+  const { commonState, commonSetState } = useCommonStateManagement();
 
-  //pagination states
-  const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMIT); // You can set the initial value here
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const [offset, setOffset] = useState(0);
+  // Destructuring commonState and commonSetState
+  const {
+    currentPage,
+    limit,
+    numberOfPages,
+    offset,
+    date,
+    dateSearchUrl,
+    searchUrl,
+    savedSearchData,
+    cardData,
+    isCheck,
+    setIsCheck,
+    search,
+    searchByName,
+    suggestions,
+    isDialogOpen,
+    dialogContent,
+    isError,
+    errorText
+  } = commonState;
+  const {
+    setCurrentPage,
+    setLimit,
+    setNumberOfPages,
+    setOffset,
+    setDate,
+    setDateSearchUrl,
+    setSearchUrl,
+    setSavedSearchData,
+    setCardData,
+    isCheckAll,
+    setIsCheckAll,
+    setSearch,
+    setSearchByName,
+    setSuggestions,
+    setIsDialogOpen,
+    setDialogContent,
+    setIsError,
+    setErrorText
+  } = commonSetState;
 
-  const [date, setDate] = useState<DateRange | undefined>();
-  const [dateSearchUrl, setDateSearchUrl] = useState('');
-  const [searchUrl, setSearchUrl] = useState('');
-
-  //Data
-  const [savedSearchData, setSavedSearchData] = useState<ISavedSearchData[]>(
-    []
-  );
-  const [cardData, setCardData] = useState<ICardData[]>([]);
-
-  //checkbox states
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck, isCheckAll } = checkboxState;
-  const { setIsCheck, setIsCheckAll } = checkboxSetState;
-
-  //Search Bar States
-  const [search, setSearch] = useState<string>('');
-  const [searchByName, setSearchByName] = useState<string>('');
-  const [suggestions, setSuggestions] = useState<string[]>([]);
-
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState('');
+  const optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' }
+  ];
 
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  // Fetching saved search data
   const { data } = useGetAllSavedSearchesQuery(
     {
       limit,
@@ -132,6 +109,25 @@ const SavedSearch = () => {
     },
     { skip: !searchUrl }
   );
+
+  const { data: searchList } = useGetSavedSearchListQuery(search);
+
+  // Mutation for deleting items from the saved search
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+
+  const tableStyles = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.tableHeader,
+      tableBodyStyle: styles.tableBody
+    };
+  }, []);
+  const searchCardTitle = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.SearchCardTitle,
+      tableBodyStyle: styles.SearchDateTime
+    };
+  }, []);
+
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -143,6 +139,7 @@ const SavedSearch = () => {
     [data?.count]
   );
 
+  // Handler for clicking on pagination page number
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
       const offset = page * limit;
@@ -153,11 +150,7 @@ const SavedSearch = () => {
     }
   };
 
-  const { data: searchList } = useGetSavedSearchListQuery(search);
-
-  // Destructure the mutation function from the hook
-  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
-
+  // Mapping data keys and table column labels
   const keyLabelMapping: KeyLabelMapping = useMemo(() => {
     return {
       shape: 'Shape',
@@ -172,14 +165,7 @@ const SavedSearch = () => {
     };
   }, []);
 
-  const formatRangeData = (data: { lte: number; gte: number }) => {
-    const range = data;
-    if (range && range.lte && range.gte) {
-      return `${range.gte}-${range.lte}`;
-    }
-    return '-';
-  };
-
+  // Function to format and render card data
   const renderCardData = useCallback(
     (data: any) => {
       return data?.map((item: any) => {
@@ -245,79 +231,7 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles, keyLabelMapping]
   );
 
-  // Delete Data
-  const handleDelete = () => {
-    const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
-
-    if (isCheck?.length) {
-      const matchingData = searchTabData.filter((item1: any, index: number) =>
-        isCheck.some(item2 => {
-          if (item1.id === item2) {
-            item1.position = index + 1;
-            return item1;
-          }
-        })
-      );
-
-      if (matchingData.length > 0) {
-        setIsError(true);
-        const searchNames = matchingData.map(
-          (items: any) => items.saveSearchName
-        );
-        const resultPositions = matchingData.map((items: any) => {
-          return `Search Result ${items.position}`;
-        });
-
-        const errorMessage =
-          matchingData.length > 1
-            ? `Your saved searches ${searchNames.join(
-                ', '
-              )} are already opened in ${resultPositions.join(
-                ', '
-              )} respectively. Please close those tabs and then try deleting it.`
-            : `Your saved search ${searchNames.join(
-                ', '
-              )} is already opened in ${resultPositions.join(
-                ', '
-              )}. Please close the tab and then try deleting it.`;
-
-        setErrorText(errorMessage);
-      } else {
-        setDialogContent(
-          <>
-            <p className="text-center mt-3">
-              Do you want to Delete the selected Stones?
-            </p>
-            <div className="flex justify-center">
-              <CustomDisplayButton
-                displayButtonLabel="No"
-                displayButtonAllStyle={{
-                  displayButtonStyle: `mr-[25px] ${styles.transparent}`
-                }}
-                handleClick={() => setIsDialogOpen(false)}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Yes"
-                displayButtonAllStyle={{
-                  displayButtonStyle: styles.filled
-                }}
-                handleClick={deleteStoneHandler}
-              />
-            </div>
-          </>
-        );
-        setIsDialogOpen(true);
-      }
-    } else {
-      setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
-    }
-
-    if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
-      setCurrentPage(currentPage - 1);
-    }
-  };
-
+  // Handler for deleting saved searches
   const deleteStoneHandler = async () => {
     await deleteSavedSearch(isCheck)
       .unwrap()
@@ -344,6 +258,7 @@ const SavedSearch = () => {
     setIsError(false);
   };
 
+  // Debounced search function
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
@@ -361,30 +276,7 @@ const SavedSearch = () => {
     [searchList]
   );
 
-  const debounce = <T extends any[]>(
-    fn: (...args: T) => void,
-    delay: number
-  ) => {
-    let timeoutId: NodeJS.Timeout;
-    return (...args: T) => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => fn(...args), delay);
-    };
-  };
-
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
-    const inputValue = e.target.value;
-    setSearch(inputValue);
-
-    // Use the debounce function to wrap the debouncedSave function
-    const delayedSave = debounce(inputValue => debouncedSave(inputValue), 1000);
-    delayedSave(inputValue);
-
-    if (inputValue.length < 1) {
-      setSearchByName('');
-    }
-  };
-
+  // Handler for suggestion click
   const handleSuggestionClick = (suggestion: string) => {
     setIsCheck([]);
     setIsCheckAll(false);
@@ -399,10 +291,23 @@ const SavedSearch = () => {
       id: 1,
       displayButtonLabel: ManageLocales('app.savedSearch.delete'),
       style: styles.filled,
-      fn: handleDelete
+      fn: () =>
+        handleDelete({
+          isCheck,
+          setIsError,
+          setErrorText,
+          setDialogContent,
+          setIsDialogOpen,
+          deleteStoneHandler,
+          numberOfPages,
+          data,
+          setCurrentPage,
+          currentPage
+        })
     }
   ];
 
+  // Handler for date filter change
   const handleDate = (date: IDateRange) => {
     if (!date) {
       setDateSearchUrl('');
@@ -416,6 +321,14 @@ const SavedSearch = () => {
         )}`
       );
     }
+  };
+
+  // Handler for clearing search input
+  const handleClearInput = () => {
+    setSearch('');
+    setIsCheck([]);
+    setSearchByName('');
+    setIsCheckAll(false);
   };
 
   //Header Data
@@ -442,10 +355,19 @@ const SavedSearch = () => {
       ''
     ),
     //Search Data
-    handleSearch: handleSearch,
+    handleSearch: (e: React.ChangeEvent<HTMLInputElement>) =>
+      handleSearch({
+        e,
+        setSearch,
+        debouncedSave,
+        setSearchByName,
+        setIsCheck,
+        setIsCheckAll
+      }),
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    handleClearInput: handleClearInput,
     headerData: (
       <div className="flex mr-[30px] ">
         <CustomCalender date={date} handleDate={handleDate} />
@@ -471,59 +393,6 @@ const SavedSearch = () => {
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
     router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
-  };
-
-  const handleCardClick = (id: string) => {
-    const cardClickData: any = savedSearchData.filter(
-      (items: ISavedSearchData) => {
-        return items.id === id;
-      }
-    );
-
-    const url = constructUrlParams(cardClickData[0].meta_data);
-
-    setSearchUrl(url);
-
-    if (productData?.count > MAX_SAVED_SEARCH_COUNT) {
-      setIsError(true);
-      setErrorText('Please modify your search, the stones exceeds the limit.');
-    } else {
-      const data: any = JSON.parse(localStorage.getItem('Search')!);
-
-      if (data?.length) {
-        if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
-          setIsError(true);
-          setErrorText(
-            'Max search limit reached. Please remove existing searches'
-          );
-        } else {
-          const localStorageData = [
-            ...data,
-            {
-              saveSearchName: cardClickData[0].name,
-              isSavedSearch: true,
-              queryParams: cardClickData[0].meta_data,
-              id: cardClickData[0].id
-            }
-          ];
-
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?active-tab=${SEARCH_RESULT}-${data.length + 1}`);
-        }
-      } else {
-        let localStorageData = [
-          {
-            saveSearchName: cardClickData[0].name,
-            isSavedSearch: true,
-            queryParams: cardClickData[0].meta_data,
-            id: cardClickData[0].id
-          }
-        ];
-
-        localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?active-tab=${SEARCH_RESULT}-${1}`);
-      }
-    }
   };
 
   return (
@@ -563,11 +432,23 @@ const SavedSearch = () => {
                       <div
                         data-testid={'card-id123'}
                         className={`${styles.mainCardContainer}`}
-                        onClick={() => handleCardClick(items.id)}
+                        onClick={() =>
+                          handleCardClick(
+                            items.id,
+                            savedSearchData,
+                            setSearchUrl,
+                            setIsError,
+                            setErrorText,
+                            productData?.count,
+                            router
+                          )
+                        }
                       >
                         <CustomSearchResultCard
                           cardData={items}
-                          overriddenStyles={cardStyles}
+                          overriddenStyles={{
+                            cardContainerStyle: styles.searchCardContainer
+                          }}
                           defaultCardPosition={false}
                           handleCardAction={handleEdit}
                         />
@@ -594,8 +475,6 @@ const SavedSearch = () => {
               handleResultsPerPageChange={handleResultsPerPageChange}
             />
           )}
-
-          {/* Custom Footer */}
           {footerButtonData?.length && (
             <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
               {isError && (

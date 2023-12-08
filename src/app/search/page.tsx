@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
 import AdvanceSearch from './form/form';
-import SavedSearch from './saved';
+import SavedSearch from './saved/saved';
 import SearchResults from './result/result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
@@ -216,7 +216,6 @@ function SearchResultLayout() {
                   //update logic comes here
                   const updateSaveSearchData = {
                     id: yourSelection[removeDataIndex]?.id,
-                    name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
                     diamond_count: data?.count
                   };
