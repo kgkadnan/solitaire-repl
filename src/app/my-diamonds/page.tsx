@@ -17,7 +17,7 @@ import MyInvoices from './my-invoice';
 import PreviousConfirmation from './previous-confirmation';
 import {
   MAX_RECENT_CONFIRMATION_COUNT,
-  MAX_my_INVOICE_LIMIT_COUNT,
+  MAX_MY_INVOICE_LIMIT_COUNT,
   PAGINATION_INTITAL_LIMIT
 } from '@/constants/business-logic';
 import {
@@ -91,7 +91,7 @@ function MyDiamonds() {
   let myInvoiceInvoiceStatus = 'available';
   let previousConfirmStatus = 'completed';
   let recentConfirmlimit = MAX_RECENT_CONFIRMATION_COUNT;
-  let myInvoicelimit = MAX_my_INVOICE_LIMIT_COUNT;
+  let myInvoicelimit = MAX_MY_INVOICE_LIMIT_COUNT;
 
   // Fetch recent confirmation data
   const { data: myDiamondRecentConfirmData } = useCardRecentConfirmationQuery({
