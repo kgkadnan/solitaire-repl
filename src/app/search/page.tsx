@@ -213,7 +213,6 @@ function SearchResultLayout() {
                   //update logic comes here
                   const updateSaveSearchData = {
                     id: yourSelection[removeDataIndex]?.id,
-                    name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
                     diamond_count: data?.count
                   };

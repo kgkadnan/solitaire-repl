@@ -7,17 +7,21 @@ const debounce = <T extends any[]>(fn: (...args: T) => void, delay: number) => {
 };
 
 interface HandleSearchProps {
-  e: React.ChangeEvent<HTMLInputElement>; // Adjust the type accordingly
+  e: React.ChangeEvent<HTMLInputElement>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  debouncedSave: any; // Adjust the type accordingly
+  debouncedSave: any;
   setSearchByName: React.Dispatch<React.SetStateAction<string>>;
+  setIsCheck: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsCheckAll: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const handleSearch = ({
   e,
   setSearch,
   debouncedSave,
-  setSearchByName
+  setSearchByName,
+  setIsCheck,
+  setIsCheckAll
 }: HandleSearchProps) => {
   const inputValue = e.target.value;
   setSearch(inputValue);
@@ -28,5 +32,7 @@ export const handleSearch = ({
 
   if (inputValue.length < 1) {
     setSearchByName('');
+    setIsCheck([]);
+    setIsCheckAll(false);
   }
 };

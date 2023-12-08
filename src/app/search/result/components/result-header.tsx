@@ -42,7 +42,6 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
 
     const updateSaveSearchData = {
       id: yourSelection[activeTab]?.id,
-      name: yourSelection[activeTab]?.saveSearchName,
       meta_data: yourSelection[activeTab]?.queryParams,
       diamond_count: parseInt(data?.count)
     };

@@ -137,7 +137,7 @@ const SavedSearch = () => {
   const { data: productData } = useGetProductCountQuery({
     searchUrl
   });
-  console.log('dateSearchUrl', dateSearchUrl);
+
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -331,6 +331,13 @@ const SavedSearch = () => {
     }
   };
 
+  const handleClearInput = () => {
+    setSearch('');
+    setIsCheck([]);
+    setSearchByName('');
+    setIsCheckAll(false);
+  };
+
   //Header Data
   const savedSearchheaderData = {
     headerHeading: savedSearchData?.length ? (
@@ -356,10 +363,18 @@ const SavedSearch = () => {
     ),
     //Search Data
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) =>
-      handleSearch({ e, setSearch, debouncedSave, setSearchByName }),
+      handleSearch({
+        e,
+        setSearch,
+        debouncedSave,
+        setSearchByName,
+        setIsCheck,
+        setIsCheckAll
+      }),
     searchValue: search,
     handleSuggestionClick: handleSuggestionClick,
     suggestions: suggestions,
+    handleClearInput: handleClearInput,
     headerData: (
       <div className="flex mr-[30px] ">
         <CustomCalender date={date} handleDate={handleDate} />

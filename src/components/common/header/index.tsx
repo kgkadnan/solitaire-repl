@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useCallback, useEffect, useState } from 'react';
 import SearchIcon from '@public/assets/icons/search-outline-shadow.svg?url';
+import ClearIcon from '@public/assets/icons/close-outline.svg?url';
 import styles from './header.module.scss';
 import { CustomSearchInputField } from '../search-input';
 import { ManageLocales } from '@/utils/translate';
@@ -19,6 +20,7 @@ export interface IHeaderData {
   suggestions?: string[];
   headerData?: React.ReactNode;
   overriddenStyles?: IHeaderDataStyle;
+  handleClearInput?: (e: any) => void;
 }
 
 interface ICustomHeaderProps {
@@ -69,7 +71,7 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
       >
         {/* Search Input Field*/}
         {data?.handleSearch ? (
-          <div className="flex  gap-[15px]">
+          <div className="flex  gap-[5px]">
             <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
             <CustomSearchInputField
               type="text"
@@ -81,6 +83,11 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
               handleSuggestionClick={data.handleSuggestionClick}
               suggestions={data.suggestions}
             />
+            {data.handleClearInput && (
+              <div className="cursor-pointer" onClick={data.handleClearInput}>
+                <ClearIcon className="stroke-solitaireQuaternary mt-[10px]" />
+              </div>
+            )}
           </div>
         ) : (
           <></>
