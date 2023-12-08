@@ -297,6 +297,7 @@ interface IData {
   products: Product[];
 }
 export interface ISearchResultsProps {
+  searchUrl: string;
   data: IData;
   activeTab: number;
   refetch: any;
