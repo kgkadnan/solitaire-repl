@@ -40,7 +40,6 @@ describe('CustomSelect Component', () => {
     const optionTrigger = getByRole('combobox')?.querySelector(
       'span'
     ) as HTMLElement;
-    console.log('optionTrigger', optionTrigger);
 
     // Simulate clicking the combo box trigger to open the dropdown
     userEvent.click(optionTrigger);

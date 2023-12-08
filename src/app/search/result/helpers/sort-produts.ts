@@ -39,7 +39,6 @@ const customSortFunctions: Record<string, Function> = {
  */
 export const sortProducts = (data: any, order: string, key: string) =>
   [...data].sort((a, b) => {
-    console.log('customSortFunction');
     const customSortFunction = customSortFunctions[key];
     if (order === 'low to high' && customSortFunction) {
       return customSortFunction(a[key], b[key]);

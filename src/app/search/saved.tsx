@@ -44,7 +44,7 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT,
-  PAGINATION_INTITAL_LIMMIT
+  PAGINATION_INTITAL_LIMIT
 } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
@@ -81,7 +81,7 @@ const SavedSearch = () => {
 
   //pagination states
   const [currentPage, setCurrentPage] = useState(0);
-  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMMIT); // You can set the initial value here
+  const [limit, setLimit] = useState(PAGINATION_INTITAL_LIMIT); // You can set the initial value here
   const [numberOfPages, setNumberOfPages] = useState(0);
   const [offset, setOffset] = useState(0);
 
@@ -114,17 +114,24 @@ const SavedSearch = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
 
-  const { data } = useGetAllSavedSearchesQuery({
-    limit,
-    offset,
-    dateSearchUrl,
-    searchByName
-  });
+  const { data } = useGetAllSavedSearchesQuery(
+    {
+      limit,
+      offset,
+      dateSearchUrl,
+      searchByName
+    },
+    {
+      skip: date && (!date.from || !date.to)
+    }
+  );
 
-  const { data: productData } = useGetProductCountQuery({
-    searchUrl
-  });
-  console.log('dateSearchUrl', dateSearchUrl);
+  const { data: productData } = useGetProductCountQuery(
+    {
+      searchUrl
+    },
+    { skip: !searchUrl }
+  );
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
