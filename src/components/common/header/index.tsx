@@ -71,8 +71,8 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
       >
         {/* Search Input Field*/}
         {data?.handleSearch ? (
-          <div className="flex  gap-[5px]">
-            <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
+          <div className="flex">
+            <SearchIcon className="stroke-solitaireQuaternary mt-[10px] mr-2" />
             <CustomSearchInputField
               type="text"
               name="Search"
@@ -84,14 +84,18 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
               suggestions={data.suggestions}
             />
             {data.handleClearInput && (
-              <div className="cursor-pointer" onClick={data.handleClearInput}>
-                <ClearIcon className="stroke-solitaireQuaternary mt-[10px]" />
+              <div
+                className="cursor-pointer border-b border-solitaireQuaternary"
+                onClick={data.handleClearInput}
+              >
+                <ClearIcon className="stroke-solitaireQuaternary mt-[10px] " />
               </div>
             )}
           </div>
         ) : (
           <></>
         )}
+
         {/* Select All checkbox */}
         {data?.headerData && (
           <div className={`${data.overriddenStyles?.headerDataStyles}`}>

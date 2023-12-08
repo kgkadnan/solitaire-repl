@@ -1,15 +1,7 @@
 'use client';
-import React, {
-  ChangeEvent,
-  ReactNode,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState
-} from 'react';
+import React, { useCallback, useEffect, useMemo } from 'react';
 import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
-import { CustomDisplayButton } from '@components/common/buttons/display-button';
 import editIcon from '@public/assets/icons/edit.svg';
 import CustomHeader from '@/components/common/header';
 import { CustomCheckBox } from '@/components/common/checkbox';
@@ -17,7 +9,6 @@ import CustomSearchResultCard from '@/components/common/search-result-card';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import CustomPagination from '@/components/common/pagination';
-
 import {
   useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
@@ -29,60 +20,27 @@ import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import {
-  ICardData,
-  IDateRange,
-  IFormatedData,
-  ISavedSearchData,
-  Item
-} from './saved-interface';
+import { ICardData, IDateRange, IFormatedData, Item } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
-import { constructUrlParams } from '@/utils/construct-url-param';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
-import {
-  MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
-} from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
-import {
-  SAVED_SEARCHES,
-  SEARCH_RESULT
-} from '@/constants/application-constants/search-page';
+import { SAVED_SEARCHES } from '@/constants/application-constants/search-page';
 import { useCommonStateManagement } from './hooks/state-management';
 import { formatRangeData } from './helpers/format-range-date';
 import { handleDelete } from './helpers/handle-delete';
 import { handleSearch } from './helpers/debounce';
 import { convertDateToUTC } from '@/utils/convert-date-to-utc';
+import { handleCardClick } from './helpers/handle-card-click';
 
 const SavedSearch = () => {
-  // Style classes and variables
-  const tableStyles = useMemo(() => {
-    return {
-      tableHeaderStyle: styles.tableHeader,
-      tableBodyStyle: styles.tableBody
-    };
-  }, []);
-  const searchCardTitle = useMemo(() => {
-    return {
-      tableHeaderStyle: styles.SearchCardTitle,
-      tableBodyStyle: styles.SearchDateTime
-    };
-  }, []);
-  const cardStyles = {
-    cardContainerStyle: styles.searchCardContainer
-  };
-
-  const optionLimits = [
-    { id: 1, value: '50' },
-    { id: 2, value: '100' }
-  ];
-
+  // State management hooks
   const { commonState, commonSetState } = useCommonStateManagement();
 
+  // Destructuring commonState and commonSetState
   const {
     currentPage,
     limit,
@@ -124,9 +82,15 @@ const SavedSearch = () => {
     setErrorText
   } = commonSetState;
 
+  const optionLimits = [
+    { id: 1, value: '50' },
+    { id: 2, value: '100' }
+  ];
+
   const router = useRouter();
   const dispatch = useAppDispatch();
 
+  // Fetching saved search data
   const { data } = useGetAllSavedSearchesQuery({
     limit,
     offset,
@@ -134,10 +98,30 @@ const SavedSearch = () => {
     searchByName
   });
 
+  // Fetching product data
   const { data: productData } = useGetProductCountQuery({
     searchUrl
   });
 
+  const { data: searchList } = useGetSavedSearchListQuery(search);
+
+  // Mutation for deleting items from the saved search
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+
+  const tableStyles = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.tableHeader,
+      tableBodyStyle: styles.tableBody
+    };
+  }, []);
+  const searchCardTitle = useMemo(() => {
+    return {
+      tableHeaderStyle: styles.SearchCardTitle,
+      tableBodyStyle: styles.SearchDateTime
+    };
+  }, []);
+
+  // Handler for changing results per page
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
       const newResultsPerPage = parseInt(event, 10);
@@ -149,6 +133,7 @@ const SavedSearch = () => {
     [data?.count]
   );
 
+  // Handler for clicking on pagination page number
   const handlePageClick = (page: number) => {
     if (page >= 0 && page <= numberOfPages) {
       const offset = page * limit;
@@ -159,11 +144,7 @@ const SavedSearch = () => {
     }
   };
 
-  const { data: searchList } = useGetSavedSearchListQuery(search);
-
-  // Destructure the mutation function from the hook
-  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
-
+  // Mapping data keys and table column labels
   const keyLabelMapping: KeyLabelMapping = useMemo(() => {
     return {
       shape: 'Shape',
@@ -178,6 +159,7 @@ const SavedSearch = () => {
     };
   }, []);
 
+  // Function to format and render card data
   const renderCardData = useCallback(
     (data: any) => {
       return data?.map((item: any) => {
@@ -243,6 +225,7 @@ const SavedSearch = () => {
     [searchCardTitle, tableStyles, keyLabelMapping]
   );
 
+  // Handler for deleting saved searches
   const deleteStoneHandler = async () => {
     await deleteSavedSearch(isCheck)
       .unwrap()
@@ -269,6 +252,7 @@ const SavedSearch = () => {
     setIsError(false);
   };
 
+  // Debounced search function
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
@@ -286,6 +270,7 @@ const SavedSearch = () => {
     [searchList]
   );
 
+  // Handler for suggestion click
   const handleSuggestionClick = (suggestion: string) => {
     setIsCheck([]);
     setIsCheckAll(false);
@@ -316,6 +301,7 @@ const SavedSearch = () => {
     }
   ];
 
+  // Handler for date filter change
   const handleDate = (date: IDateRange) => {
     if (!date) {
       setDateSearchUrl('');
@@ -331,6 +317,7 @@ const SavedSearch = () => {
     }
   };
 
+  // Handler for clearing search input
   const handleClearInput = () => {
     setSearch('');
     setIsCheck([]);
@@ -402,59 +389,6 @@ const SavedSearch = () => {
     router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
-  const handleCardClick = (id: string) => {
-    const cardClickData: any = savedSearchData.filter(
-      (items: ISavedSearchData) => {
-        return items.id === id;
-      }
-    );
-
-    const url = constructUrlParams(cardClickData[0].meta_data);
-
-    setSearchUrl(url);
-
-    if (productData?.count > MAX_SAVED_SEARCH_COUNT) {
-      setIsError(true);
-      setErrorText('Please modify your search, the stones exceeds the limit.');
-    } else {
-      const data: any = JSON.parse(localStorage.getItem('Search')!);
-
-      if (data?.length) {
-        if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
-          setIsError(true);
-          setErrorText(
-            'Max search limit reached. Please remove existing searches'
-          );
-        } else {
-          const localStorageData = [
-            ...data,
-            {
-              saveSearchName: cardClickData[0].name,
-              isSavedSearch: true,
-              queryParams: cardClickData[0].meta_data,
-              id: cardClickData[0].id
-            }
-          ];
-
-          localStorage.setItem('Search', JSON.stringify(localStorageData));
-          router.push(`/search?active-tab=${SEARCH_RESULT}-${data.length + 1}`);
-        }
-      } else {
-        let localStorageData = [
-          {
-            saveSearchName: cardClickData[0].name,
-            isSavedSearch: true,
-            queryParams: cardClickData[0].meta_data,
-            id: cardClickData[0].id
-          }
-        ];
-
-        localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?active-tab=${SEARCH_RESULT}-${1}`);
-      }
-    }
-  };
-
   return (
     <>
       <CustomDialog
@@ -492,11 +426,23 @@ const SavedSearch = () => {
                       <div
                         data-testid={'card-id123'}
                         className={`${styles.mainCardContainer}`}
-                        onClick={() => handleCardClick(items.id)}
+                        onClick={() =>
+                          handleCardClick(
+                            items.id,
+                            savedSearchData,
+                            setSearchUrl,
+                            setIsError,
+                            setErrorText,
+                            productData.count,
+                            router
+                          )
+                        }
                       >
                         <CustomSearchResultCard
                           cardData={items}
-                          overriddenStyles={cardStyles}
+                          overriddenStyles={{
+                            cardContainerStyle: styles.searchCardContainer
+                          }}
                           defaultCardPosition={false}
                           handleCardAction={handleEdit}
                         />
@@ -523,8 +469,6 @@ const SavedSearch = () => {
               handleResultsPerPageChange={handleResultsPerPageChange}
             />
           )}
-
-          {/* Custom Footer */}
           {footerButtonData?.length && (
             <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
               {isError && (
