@@ -333,7 +333,7 @@ const SavedSearch = () => {
 
   //Header Data
   const savedSearchheaderData = {
-    headerHeading: savedSearchData?.length ? (
+    headerHeading: (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
           onClick={() =>
@@ -351,8 +351,6 @@ const SavedSearch = () => {
           {ManageLocales('app.common.header.selectAll')}
         </p>
       </div>
-    ) : (
-      ''
     ),
     //Search Data
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) =>

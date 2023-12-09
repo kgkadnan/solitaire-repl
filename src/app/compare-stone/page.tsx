@@ -209,6 +209,7 @@ const CompareStone = () => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        data-testid={'success-indicator'}
       />
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
         <CustomHeader
@@ -248,7 +249,12 @@ const CompareStone = () => {
       <div className="sticky bottom-0 flex border-t-2 border-solitaireSenary items-center justify-between">
         {isError && (
           <div className="w-[30%]">
-            <p className="text-red-700 text-base ">{errorText}</p>
+            <p
+              data-testid={'error-indicator'}
+              className="text-red-700 text-base "
+            >
+              {errorText}
+            </p>
           </div>
         )}
         <CustomFooter
