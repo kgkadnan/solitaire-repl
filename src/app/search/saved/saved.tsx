@@ -393,6 +393,18 @@ const SavedSearch = () => {
     router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
+  useEffect(() => {
+    if (isDialogOpen) {
+      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
+      const timeoutId = setTimeout(() => {
+        setIsDialogOpen(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isDialogOpen, setIsDialogOpen]);
+
   return (
     <>
       <CustomDialog
