@@ -60,7 +60,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
                 <Image src={confirmImage} alt="vector image" />
               </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully
+                Item successfully added to cart
               </div>
             </>
           );
