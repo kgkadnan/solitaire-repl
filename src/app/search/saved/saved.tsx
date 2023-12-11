@@ -333,7 +333,7 @@ const SavedSearch = () => {
 
   //Header Data
   const savedSearchheaderData = {
-    headerHeading: savedSearchData?.length ? (
+    headerHeading: (
       <div className="flex items-center gap-[10px] bottom-0">
         <Checkbox
           onClick={() =>
@@ -351,8 +351,6 @@ const SavedSearch = () => {
           {ManageLocales('app.common.header.selectAll')}
         </p>
       </div>
-    ) : (
-      ''
     ),
     //Search Data
     handleSearch: (e: React.ChangeEvent<HTMLInputElement>) =>
@@ -394,6 +392,18 @@ const SavedSearch = () => {
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
     router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
+
+  useEffect(() => {
+    if (isDialogOpen) {
+      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
+      const timeoutId = setTimeout(() => {
+        setIsDialogOpen(false);
+      }, 3000);
+
+      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isDialogOpen, setIsDialogOpen]);
 
   return (
     <>
