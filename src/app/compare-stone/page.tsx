@@ -48,50 +48,65 @@ const CompareStone = () => {
       setIsError(true);
       setErrorText(`You haven't picked any stones.`);
     } else {
-      // Extract variant IDs for selected stones
-      const variantIds = isCheck?.map((id: string) => {
-        const compareStoneCheck: Product | object =
-          compareStoneData.find((compareStone: Product) => {
-            return compareStone?.id === id;
-          }) ?? {};
-
-        if (compareStoneCheck && 'variants' in compareStoneCheck) {
-          return compareStoneCheck.variants[0]?.id;
-        }
-
-        return null;
+      const hasMemoOut = isCheck.some((id: string) => {
+        return compareStoneData.some(
+          (compareStoneData: Product) =>
+            compareStoneData.id == id &&
+            compareStoneData.diamond_status === 'MemoOut'
+        );
       });
 
-      // If there are variant IDs, add to the cart
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds
-        })
-          .unwrap()
-          .then(res => {
-            // On success, show confirmation dialog and update badge
-            setIsError(false);
-            setErrorText('');
-            setIsDialogOpen(true);
-            setDialogContent(
-              <>
-                <div className="w-[350px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
-                  {res?.message}
-                </div>
-              </>
-            );
-            dispatch(notificationBadge(true));
+      if (hasMemoOut) {
+        setErrorText(
+          'Some stones in your selection are not available, Please modify your selection.'
+        );
+        setIsError(true);
+      } else {
+        // Extract variant IDs for selected stones
+        const variantIds = isCheck?.map((id: string) => {
+          const compareStoneCheck: Product | object =
+            compareStoneData.find((compareStone: Product) => {
+              return compareStone?.id === id;
+            }) ?? {};
+
+          if (compareStoneCheck && 'variants' in compareStoneCheck) {
+            return compareStoneCheck.variants[0]?.id;
+          }
+
+          return null;
+        });
+
+        // If there are variant IDs, add to the cart
+        if (variantIds.length) {
+          addCart({
+            variants: variantIds
           })
-          .catch(error => {
-            // On error, set error state and error message
-            setIsError(true);
-            setErrorText(error?.data?.message);
-          });
-        // Clear the selected checkboxes
-        setIsCheck([]);
+            .unwrap()
+            .then(res => {
+              // On success, show confirmation dialog and update badge
+              setIsError(false);
+              setErrorText('');
+              setIsDialogOpen(true);
+              setDialogContent(
+                <>
+                  <div className="w-[350px] flex justify-center align-middle">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
+                  <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
+                    {res?.message}
+                  </div>
+                </>
+              );
+              dispatch(notificationBadge(true));
+            })
+            .catch(error => {
+              // On error, set error state and error message
+              setIsError(true);
+              setErrorText(error?.data?.message);
+            });
+          // Clear the selected checkboxes
+          setIsCheck([]);
+        }
       }
     }
   };

@@ -155,7 +155,7 @@ function SearchResultLayout() {
       setheaderPath(`Search Results ${removeDataIndex}`);
       setActiveTab(removeDataIndex);
     }
-
+    refetch();
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
     setMyProfileRoutes(updateMyProfileRoute);
   };
@@ -322,6 +322,7 @@ function SearchResultLayout() {
         </div>
       );
     } else {
+      refetch();
       setActiveTab(index);
       setheaderPath(pathName);
     }

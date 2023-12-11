@@ -36,7 +36,7 @@ export const productApi = createApi({
     }),
     confirmProduct: builder.mutation({
       query: data => ({
-        url: `confirm-stone`,
+        url: `/store/products/confirm`,
         method: 'POST',
         body: data
       }),

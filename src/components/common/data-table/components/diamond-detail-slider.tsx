@@ -206,7 +206,6 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           alt={``}
                           width={450}
                           height={450}
-                          style={{ height: '450px' }}
                         />
                       )}
                     {diamondDetailImageUrl && !diamondDetailIframeUrl && (
@@ -215,7 +214,6 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                         alt={``}
                         width={450}
                         height={450}
-                        style={{ height: '450px' }}
                       />
                     )}
 
@@ -231,8 +229,10 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                   </div>
                   <div className="">
                     {Object.keys(keyLabelMapping).map(key => (
-                      <div key={key} className="text-solitaireTertiary py-1">
-                        <span className="text-xs">{keyLabelMapping[key]}</span>
+                      <div key={key} className="text-solitaireQuaternary py-1">
+                        <span className="text-xs text-solitaireTertiary">
+                          {keyLabelMapping[key]}
+                        </span>
                         <br />
                         {key === 'amount'
                           ? data?.variants[0]?.prices[0]?.amount ?? '-'

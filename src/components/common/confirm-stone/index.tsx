@@ -9,6 +9,7 @@ import { CustomInputField } from '../input-field';
 import { handleComment } from './helper/handle-comment';
 import { handleRadioDayValue } from './helper/handle-radio-day-value';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import errorImage from '@public/assets/icons/error.svg';
 import Image from 'next/image';
 import { useConfirmProductMutation } from '@/features/api/product';
 
@@ -156,7 +157,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       confirmProduct({
         variants: variantIds,
         comments: commentValue,
-        payment_term: parseInt(
+        payterm: parseInt(
           selectedDaysInputValue.length > 0
             ? selectedDaysInputValue
             : selectedRadioDaysValue
@@ -182,7 +183,24 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             );
           }
         })
-        .catch(e => console.log(e));
+        .catch(e => {
+          setSelectedDaysInputValue('');
+          setInputErrorContent('');
+          setInputError(false);
+          onOpenChange(false);
+          setIsDialogOpen(true);
+          setDialogContent(
+            <>
+              <div className="max-w-[400px] flex justify-center align-middle items-center">
+                <Image src={errorImage} alt="errorImage" />
+                <p>Error!</p>
+              </div>
+              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+                {e.message}
+              </div>
+            </>
+          );
+        });
     } else {
       setIsSliderError(true);
       setSliderErrorText('This Is a Mandotry Field');
