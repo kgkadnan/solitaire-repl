@@ -10,7 +10,7 @@ import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { CustomDialog } from '@/components/common/dialog';
-import { performDownloadExcel } from '@/utils/performDownloadExcel';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';

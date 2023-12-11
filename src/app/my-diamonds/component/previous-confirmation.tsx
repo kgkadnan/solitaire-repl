@@ -1,15 +1,16 @@
 'use client';
 
-import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
+import { MyDiamonds } from '@/app/my-diamonds/component/my-diamond/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
 import React, { useEffect, useState } from 'react';
+import { PreviousConfirmationProps } from '../interface/previous-confirmation-interface';
 
-const PreviousConfirmation = ({
+const PreviousConfirmation: React.FC<PreviousConfirmationProps> = ({
   previousConfirmData,
   setOffset,
   setLimit,
   limit
-}: any) => {
+}) => {
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
 

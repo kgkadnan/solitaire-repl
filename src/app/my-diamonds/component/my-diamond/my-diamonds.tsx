@@ -1,28 +1,25 @@
 'use client';
 
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
-import { CustomSlider } from '../slider';
-import { ManageLocales } from '@/utils/translate';
+import { CustomSlider } from '../../../../components/common/slider';
 import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
 import Image from 'next/image';
 import styles from './my-diamonds.module.scss';
-import { CustomFooter } from '../footer';
-import { formatCreatedAt } from '@/utils/format-date';
 import { formatDate } from '@/utils/format-date-only';
-import CustomDataTable from '../data-table';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { NoDataFound } from '../no-data-found';
+import { NoDataFound } from '../../../../components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { CustomDialog } from '../dialog';
-import { MyDiamondsProps, PageTitles } from './my-diamonds-interface';
-import { formatNumberWithLeadingZeros } from '@/utils/formatNumberWithLeadingZeros';
-import { performDownloadExcel } from '@/utils/performDownloadExcel';
-import { useDataTableStateManagement } from '../data-table/hooks/data-table-state-management';
-import { useCheckboxStateManagement } from '../checkbox/hooks/checkbox-state-management';
+import { CustomDialog } from '../../../../components/common/dialog';
+import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
+import { useDataTableStateManagement } from '../../../../components/common/data-table/hooks/data-table-state-management';
+import { useCheckboxStateManagement } from '../../../../components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
-import CustomPagination from '../pagination';
+import CustomPagination from '../../../../components/common/pagination';
 import Link from 'next/link';
+import { MyDiamondsProps } from '../../interface/my-diamonds-interface';
+import { MyDiamondsSheetContent } from './sheet-content';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -97,44 +94,6 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         setIsError
       });
     }
-  };
-
-  // Data for footer buttons
-  const myDiamondsFooter = [
-    {
-      id: 1,
-      displayButtonLabel: 'Download Excel',
-      style: styles.transparent,
-      fn: downloadExcelFunction
-    },
-    { id: 2, displayButtonLabel: 'Download Invoice', style: styles.filled }
-  ];
-
-  // Function to render footer buttons
-  const renderFooterButtons = () => (
-    <CustomFooter
-      footerButtonData={
-        check === 'recent-confirmation'
-          ? [myDiamondsFooter[0]]
-          : myDiamondsFooter
-      }
-      noBorderTop={styles.paginationContainerStyle}
-    />
-  );
-
-  // Page titles Data
-  const pageTitles: PageTitles = {
-    'recent-confirmation':
-      'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
-    'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',
-    'previous-confirmations':
-      'app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails'
-  };
-
-  // Function to render page title
-  const renderPageTitle = (currentPage: string | undefined) => {
-    const pageTitle = currentPage ? pageTitles[currentPage] : null;
-    return pageTitle ? <p>{ManageLocales(pageTitle)}</p> : null;
   };
 
   // Function to render individual Card
@@ -235,112 +194,17 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             }
             sheetContentStyle={styles.sheetContentStyle}
             sheetContent={
-              <>
-                <div className="border-b border-solitaireSenary h-[80px] flex items-center mb-5">
-                  {renderPageTitle(check)}
-                </div>
-
-                <div className="flex border-b border-solitaireSenary h-[180px] mb-3">
-                  <div className="w-[50%]">
-                    <div className="flex mb-1">
-                      <p className="w-[25%]">
-                        {check === 'recent-confirmation'
-                          ? 'Order ID : '
-                          : 'Invoice Number : '}
-                      </p>
-                      <span className="text-solitaireTertiary">
-                        {check === 'recent-confirmation'
-                          ? formatNumberWithLeadingZeros(
-                              productPageDetail?.display_id
-                            )
-                          : productPageDetail?.invoice_id}
-                      </span>
-                    </div>
-
-                    <div className="flex mb-1">
-                      <p className="w-[25%]">No. of Stones :</p>
-                      <span className="text-solitaireTertiary">
-                        {productPageDetail?.items?.length}
-                      </span>
-                    </div>
-                    {productPageDetail?.total && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">
-                          {check === 'previous-confirmations'
-                            ? 'Paid Amount :'
-                            : 'Payable Amount :'}
-                        </p>
-                        <span className="text-solitaireTertiary">
-                          {`${productPageDetail?.total} $`}
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.trackingId && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Tracking ID :</p>
-                        <span className="text-solitaireTertiary">
-                          {productPageDetail?.trackingId}
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.delivery && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Track Order :</p>
-                        <span className="text-solitaireTertiary border-b  border-solitaireQuaternary">
-                          <Link
-                            href={productPageDetail?.delivery?.link}
-                            target="_blank"
-                          >
-                            Track your order here
-                          </Link>
-                        </span>
-                      </div>
-                    )}
-                    {productPageDetail?.created_at && (
-                      <div className="flex mb-1">
-                        <p className="w-[25%]">Date & Time :</p>
-                        <span className="text-solitaireTertiary">
-                          {formatCreatedAt(productPageDetail?.created_at)}
-                        </span>
-                      </div>
-                    )}
-                    <div className="flex mb-1">
-                      <p className="w-[25%]">Payment Terms :</p>
-                      <span className="text-solitaireTertiary">
-                        {productPageDetail?.payment_term}
-                      </span>
-                    </div>
-                  </div>
-                  <div className="flex w-[50%]">
-                    <p className="pr-10">Comments:</p>
-                    <span className="text-solitaireTertiary">
-                      {productPageDetail?.comments?.length
-                        ? productPageDetail?.comments
-                        : '-'}
-                    </span>
-                  </div>
-                </div>
-                {rows?.length > 0 ? (
-                  <CustomDataTable
-                    tableRows={rows}
-                    tableColumns={tableColumns}
-                    checkboxData={checkboxData}
-                    mainTableStyle={styles.tableWrapper}
-                    errorSetState={errorSetState}
-                  />
-                ) : (
-                  <NoDataFound />
-                )}
-
-                <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
-                  {isError && (
-                    <div className="w-[50%]">
-                      <p className="text-red-700 text-base ">{errorText}</p>
-                    </div>
-                  )}
-                  {renderFooterButtons()}
-                </div>
-              </>
+              <MyDiamondsSheetContent
+                check={check}
+                productPageDetail={productPageDetail}
+                rows={rows}
+                tableColumns={tableColumns}
+                checkboxData={checkboxData}
+                errorSetState={errorSetState}
+                isError={isError}
+                errorText={errorText}
+                downloadExcelFunction={downloadExcelFunction}
+              />
             }
           />
         </div>
