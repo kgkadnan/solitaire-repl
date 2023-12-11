@@ -10,7 +10,7 @@ import Image from 'next/image';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetAllProductQuery } from '@/features/api/product';
 import AdvanceSearch from './form/form';
-import SavedSearch from './saved';
+import SavedSearch from './saved/saved';
 import SearchResults from './result/result';
 import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
@@ -108,12 +108,16 @@ function SearchResultLayout() {
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
-  let { data, isLoading, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: LISTING_PAGE_DATA_LIMIT,
-    url: searchUrl
-  });
-
+  let { data, isLoading, refetch } = useGetAllProductQuery(
+    {
+      offset: 0,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      url: searchUrl
+    },
+    {
+      skip: !searchUrl
+    }
+  );
   useEffect(() => {
     setheaderPath(computeRouteAndComponentRenderer());
   }, [subRoute]);
@@ -175,8 +179,7 @@ function SearchResultLayout() {
         closeTheSearchFunction(removeIndex, yourSelection);
         setSaveSearchName('');
       })
-      .catch((error: any) => {
-        console.log('error', error);
+      .catch(() => {
         setInputError(true);
         setInputErrorContent(
           'Title already exists. Choose another title to save your search'
@@ -213,7 +216,6 @@ function SearchResultLayout() {
                   //update logic comes here
                   const updateSaveSearchData = {
                     id: yourSelection[removeDataIndex]?.id,
-                    name: yourSelection[removeDataIndex]?.saveSearchName,
                     meta_data: yourSelection[removeDataIndex]?.queryParams,
                     diamond_count: data?.count
                   };
@@ -449,6 +451,7 @@ function SearchResultLayout() {
             <NoDataFound />
           ) : (
             <SearchResults
+              searchUrl={searchUrl}
               data={data}
               activeTab={activeTab - 1}
               refetch={refetch}

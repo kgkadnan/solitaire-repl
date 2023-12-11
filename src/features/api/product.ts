@@ -20,9 +20,7 @@ export const productApi = createApi({
   endpoints: builder => ({
     getAllProduct: builder.query({
       query: ({ offset, limit, url }) => ({
-        // query: ({ url }) => ({
         url: `/store/products?limit=${limit}&offset=${offset}&${url}`
-        // url: `/store/products?${url}`,
       }),
       providesTags: ['Product']
     }),

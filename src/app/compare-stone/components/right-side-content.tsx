@@ -3,7 +3,7 @@ import CloseButton from '@public/assets/icons/close-outline.svg?url';
 import styles from '../styles/right-side-content.module.scss';
 import { FILE_URLS } from '@/constants/business-logic';
 import { Checkbox } from '@/components/ui/checkbox';
-import { IKeyLabelMapping, IRightSideContentProps } from '../interface';
+import { IRightSideContentProps } from '../interface';
 import { Product } from '@/app/search/result/result-interface';
 
 export function RightSideContent({
@@ -34,10 +34,14 @@ export function RightSideContent({
                 height={200}
               />
               <div className={styles.compareStoneCheckbox}>
-                <Checkbox onClick={() => handleClick(items.id)} />
+                <Checkbox
+                  onClick={() => handleClick(items.id)}
+                  data-testid={'compare stone checkbox'}
+                />
               </div>
               <div
                 className={styles.closeButton}
+                data-testid={'Remove Stone'}
                 onClick={event =>
                   compareStoneData.length > 2
                     ? handleClose(event, items.id)
@@ -61,10 +65,10 @@ export function RightSideContent({
           >
             <div className="sticky top-[200px] w-full bg-solitaireSecondary">
               <div className="">
-                <p>{diamond.discount}</p>
+                <p>{diamond?.discount}</p>
               </div>
               <div className="">
-                <p>{diamond.variants[0].prices[0].amount}</p>
+                <p>{diamond?.variants?.[0]?.prices?.[0]?.amount}</p>
               </div>
             </div>
             {!showDifferences

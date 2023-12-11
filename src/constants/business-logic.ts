@@ -6,7 +6,7 @@ export const MIN_COMPARE_STONE = 2;
 
 export const MAX_DAYS_TO_PAY = 120;
 
-export const PAGINATION_INTITAL_LIMMIT = 50;
+export const PAGINATION_INTITAL_LIMIT = 50;
 
 export const SOLD_OUT_STATUS = 'SoldOut';
 export const ACTIVE_STATUS = 'Active';
@@ -21,7 +21,8 @@ export const MAX_SEARCH_FORM_COUNT = 300;
 export const MIN_SEARCH_FORM_COUNT = 0;
 
 export const MAX_SAVED_SEARCH_COUNT = 300;
-export const MAX_RECENT_CONFIRMATION_COUNT = 300;
+export const MAX_RECENT_CONFIRMATION_COUNT = 50;
+export const MAX_MY_INVOICE_LIMIT_COUNT = 50;
 
 export const MAX_SEARCH_TAB_LIMIT = 10;
 
