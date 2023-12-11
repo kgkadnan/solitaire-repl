@@ -9,6 +9,22 @@ const apiURL = process.env.NEXT_PUBLIC_API_URL;
 // Define the type for the base query function
 type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
+export interface RecentConfirmationQueryResult {
+  count: number;
+  offset: number;
+  limit: number;
+  orders: any;
+}
+
+interface RecentConfirmationQueryParams {
+  resentConfiramtionStatus: string;
+  resentConfiramtionInvoiceStatus: string;
+  expand: string;
+  recentConfiramtionSearchUrl: string;
+  recentConfirmlimit: number;
+  recentConfirmationSelectedDays: string;
+}
+
 export const myDiamondAPI = createApi({
   reducerPath: 'recentConfirmationReducer',
   baseQuery: fetchBaseQuery({
@@ -17,7 +33,10 @@ export const myDiamondAPI = createApi({
   }) as BaseQuery,
   tagTypes: ['myDiamond'],
   endpoints: builder => ({
-    cardRecentConfirmation: builder.query({
+    cardRecentConfirmation: builder.query<
+      RecentConfirmationQueryResult,
+      RecentConfirmationQueryParams
+    >({
       query: ({
         resentConfiramtionStatus,
         resentConfiramtionInvoiceStatus,
@@ -27,7 +46,26 @@ export const myDiamondAPI = createApi({
         recentConfirmationSelectedDays
       }) =>
         `/store/customers/me/orders?status=${resentConfiramtionStatus}&invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${recentConfiramtionSearchUrl}&limit=${recentConfirmlimit}&created_at[gte]=${recentConfirmationSelectedDays}`,
-      providesTags: ['myDiamond']
+      providesTags: ['myDiamond'],
+      transformResponse: (response: RecentConfirmationQueryResult) => {
+        // Perform type-checking or mapping here if needed
+        if (
+          response &&
+          typeof response === 'object' &&
+          'count' in response &&
+          'limit' in response &&
+          'offset' in response &&
+          'orders' in response &&
+          Array.isArray(response.orders) && // Ensure orders is an array
+          response.orders.every(order => !('limit' in order))
+        ) {
+          return response;
+        } else {
+          // Type-check failed, handle the error or return a default value
+          console.error('Invalid response format for cardRecentConfirmation');
+          return {} as RecentConfirmationQueryResult;
+        }
+      }
     }),
     getProductDetails: builder.query({
       query: ({ id, singleExpand }) =>
