@@ -89,7 +89,7 @@ function SearchResultLayout() {
       replaceSubrouteWithSearchResult
     ) {
       const isRouteExist =
-        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
+        yourSelection?.[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
         return 'No Data Found';
       } else {
@@ -352,6 +352,27 @@ function SearchResultLayout() {
     displayButtonLabel2: 'Save'
   };
 
+  const handleCloseResultTabs = () => {
+    localStorage.removeItem('Search');
+    setMyProfileRoutes([
+      {
+        id: 1,
+        pathName: ManageLocales('app.searchResult.header.newSearch'),
+        path: `${NEW_SEARCH}`
+      },
+      {
+        id: 2,
+        pathName: ManageLocales('app.savedSearch.header'),
+        path: `${SAVED_SEARCHES}`
+      }
+    ]);
+    router.push(`/search?active-tab=${NEW_SEARCH}`);
+  };
+
+  const testRoute = (path: string) => {
+    return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}`;
+  };
+
   return (
     <>
       <CustomInputDialog
@@ -372,65 +393,94 @@ function SearchResultLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
-          {myProfileRoutes.map(({ id, pathName, path }: any) => {
-            // Check if the current route matches the link's path
-            return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}` ? (
-              <Link
-                className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                  headerPath === pathName
-                    ? ''
-                    : 'hover:text-solitaireQuaternary'
-                }`}
-                onClick={() => handleSearchTab(0, pathName)}
-                href={
-                  maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
-                    ? ``
-                    : `/search?active-tab=${path}`
-                }
-                key={id}
-              >
-                <div
-                  className={`${
-                    headerPath === pathName && 'text-solitaireQuaternary'
-                  }`}
-                >
-                  {pathName}
-                </div>
-              </Link>
-            ) : (
-              <div className={`flex items-center cursor-pointer  rounded-sm `}>
-                {activeTab === parseInt(path) && (
-                  <div onClick={() => editSearchResult(activeTab)}>
-                    <Image src={EditIcon} alt="Edit Icon" />
-                  </div>
-                )}
-                <Link
-                  className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                    headerPath === pathName
-                      ? ''
-                      : 'hover:text-solitaireQuaternary'
-                  }`}
-                  onClick={() => handleSearchTab(parseInt(path), pathName)}
-                  href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
-                  key={id}
-                >
-                  <div
-                    className={`${
-                      headerPath === pathName && 'text-solitaireQuaternary'
+        <div className="border-b border-solid  border-solitaireSenary items-center absolute top-[80px] left-[122px] flex flex-row  w-[93%] justify-between  bg-solitairePrimary pb-3 pt-3 text-[13px] gap-[20px]">
+          <div className="flex ">
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                testRoute(path) && (
+                  <Link
+                    className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary min-w-[110px] ${
+                      headerPath === pathName
+                        ? ''
+                        : 'hover:text-solitaireQuaternary'
                     }`}
+                    onClick={() => handleSearchTab(0, pathName)}
+                    href={
+                      maxTab === MAX_SEARCH_TAB_LIMIT &&
+                      path === `${NEW_SEARCH}`
+                        ? ``
+                        : `/search?active-tab=${path}`
+                    }
+                    key={id}
                   >
-                    {pathName}
+                    <div
+                      className={`${
+                        headerPath === pathName && 'text-solitaireQuaternary'
+                      }`}
+                    >
+                      {pathName}
+                    </div>
+                  </Link>
+                )
+              );
+            })}
+          </div>
+          <div className="overflow-x-auto flex gap-[10px]">
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                !testRoute(path) && (
+                  <div
+                    className={`flex items-center cursor-pointer  rounded-sm  min-w-[175px]`}
+                  >
+                    <div className="w-[24px]">
+                      {activeTab === parseInt(path) && (
+                        <div onClick={() => editSearchResult(activeTab)}>
+                          <Image src={EditIcon} alt="Edit Icon" />
+                        </div>
+                      )}
+                    </div>
+                    <Link
+                      className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
+                        headerPath === pathName
+                          ? ''
+                          : 'hover:text-solitaireQuaternary'
+                      }`}
+                      onClick={() => handleSearchTab(parseInt(path), pathName)}
+                      href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
+                      key={id}
+                    >
+                      <div
+                        className={`${
+                          headerPath === pathName && 'text-solitaireQuaternary'
+                        }`}
+                      >
+                        {pathName}
+                      </div>
+                    </Link>
+                    <div onClick={() => closeSearch(parseInt(path) - 1)}>
+                      <CloseOutline stroke="#8C7459" />
+                    </div>
                   </div>
-                </Link>
-                <div onClick={() => closeSearch(parseInt(path) - 1)}>
-                  <CloseOutline stroke="#8C7459" />
-                </div>
-              </div>
-            );
-          })}
+                )
+              );
+            })}
+          </div>
+          <div className="w-[150px]">
+            <CustomDisplayButton
+              displayButtonLabel="Close Results"
+              displayButtonAllStyle={{
+                displayLabelStyle: styles.closeResultButton
+              }}
+              handleClick={() => {
+                handleCloseResultTabs();
+              }}
+            />
+          </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',

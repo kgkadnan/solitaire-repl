@@ -45,10 +45,10 @@ const ManageListingSequence = () => {
 delay of 3000 milliseconds (3 seconds). */
   useEffect(() => {
     if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
+      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
       const timeoutId = setTimeout(() => {
         setIsDialogOpen(false);
-      }, 3000);
+      }, 5000);
 
       // Cleanup the timeout when the component unmounts or when isDialogOpen changes
       return () => clearTimeout(timeoutId);
