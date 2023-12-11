@@ -5,12 +5,13 @@ import {
   PageTitles
 } from '../../interface/my-diamonds-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
-import { Link } from 'lucide-react';
+
 import { formatCreatedAt } from '@/utils/format-date';
 import CustomDataTable from '@/components/common/data-table';
 import { NoDataFound } from '@/components/common/no-data-found';
 import styles from './my-diamonds.module.scss';
 import { CustomFooter } from '@/components/common/footer';
+import Link from 'next/link';
 
 export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
   check,
