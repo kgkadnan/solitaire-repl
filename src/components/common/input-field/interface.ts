@@ -1,4 +1,4 @@
-import { ChangeEvent } from 'react';
+import { ChangeEvent, KeyboardEventHandler } from 'react';
 
 export interface IInputStyle {
   input?: string;
@@ -17,4 +17,5 @@ export interface InputFieldProps {
   onBlur?: (event: ChangeEvent<HTMLInputElement>) => void;
   maxLength?: number;
   onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
+  onKeyDown?: KeyboardEventHandler<HTMLInputElement> | undefined;
 }
