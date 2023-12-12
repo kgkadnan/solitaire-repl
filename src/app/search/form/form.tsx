@@ -47,6 +47,7 @@ used for managing the state of a form field or input element in a React componen
     isInputDialogOpen,
     setIsInputDialogOpen,
     setSelectedStep,
+    setSelectedShadeContain,
     searchCount,
     setSearchCount,
     searchUrl,
@@ -68,6 +69,7 @@ used for managing the state of a form field or input element in a React componen
     setValidationError,
     errors,
     selectedStep,
+    selectedShadeContain,
     setErrors
   } = useValidationStateManagement();
 
@@ -108,6 +110,7 @@ used for managing the state of a form field or input element in a React componen
 
   const handleFormReset = () => {
     setSelectedStep('');
+    setSelectedShadeContain('');
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
@@ -328,6 +331,8 @@ used for managing the state of a form field or input element in a React componen
         errors,
         selectedStep,
         setSelectedStep,
+        selectedShadeContain,
+        setSelectedShadeContain,
         setErrors
       )}
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">

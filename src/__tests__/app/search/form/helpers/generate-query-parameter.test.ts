@@ -4,7 +4,6 @@ describe('generateQueryParams', () => {
   test('should generate the correct query parameters based on the provided state', () => {
     const state = {
       selectedShape: 'round',
-      selectedWhiteColor: 'D',
       selectedFancyColor: 'blue',
       selectedIntensity: 'strong',
       selectedOvertone: 'pink',
