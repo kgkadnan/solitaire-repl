@@ -218,6 +218,7 @@ const CompareStone = () => {
     setCompareStoneData(compareStoneStoreData);
   }, []);
 
+  // UseEffect to close the dialog box
   useEffect(() => {
     if (isDialogOpen) {
       // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)

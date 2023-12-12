@@ -9,7 +9,7 @@ import Image from 'next/image';
 import React from 'react';
 import styles from '../my-diamonds.module.scss';
 import CalenderIcon from '@public/assets/icons/calender.svg';
-import { IFilterByDaysProps } from '../my-diamonds-interface';
+import { IFilterByDaysProps } from '../interface/my-diamonds-interface';
 
 export const FilterByDays: React.FC<IFilterByDaysProps> = ({
   activeTab,
@@ -17,7 +17,9 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
   setMyInvoiceSelectedDays,
   setPreviousConfirmationSelectedDays
 }) => {
+  //Handles the change of radio button and sets the selected days based on the value.
   const handleMyDiamondsRadioChange = (value: string) => {
+    //Calculates the date a certain number of days ago from the current date.
     const calculateDaysAgo = (days: number) => {
       const dateAgo = new Date();
       dateAgo.setDate(dateAgo.getDate() - days);
@@ -34,6 +36,7 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
       selectedDays = calculateDaysAgo(90);
     }
 
+    // Set selected days based on the active tab
     switch (activeTab) {
       case 'Recent Confirmations':
         setRecentConfirmationSelectedDays(selectedDays);
@@ -47,6 +50,7 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
     }
   };
 
+  // Data for the radio buttons
   const myDiamondsRadioButtons = [
     {
       name: 'days',
@@ -76,20 +80,25 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
 
   return (
     <div className="flex">
+      {/* Popover for displaying radio buttons */}
       <Popover>
         <PopoverTrigger className="flex justify-center mt-3 ml-5">
+          {/* Calendar icon */}
           <Image
             src={CalenderIcon}
             alt="Calender Image"
             width={24}
             height={24}
           />
+          {/* Label for the filter */}
           <p className="text-solitaireTertiary ml-2 text-[14px]">
             Filter By Days
           </p>
         </PopoverTrigger>
+        {/* Popover content with radio buttons */}
         <PopoverContent className={styles.popoverContent}>
           <div className="">
+            {/* Mapping through radio button data and rendering RadioButton component */}
             {myDiamondsRadioButtons?.map((radioData: any) => (
               <div className="mb-3" key={radioData.id}>
                 <RadioButton radioMetaData={radioData} key={radioData?.id} />

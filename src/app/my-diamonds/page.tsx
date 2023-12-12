@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CustomHeader from '@/components/common/header';
 import styles from './my-diamonds.module.scss';
 import {
@@ -12,8 +12,7 @@ import MyInvoices from './component/my-invoice';
 import PreviousConfirmation from './component/previous-confirmation';
 import {
   MAX_RECENT_CONFIRMATION_COUNT,
-  MAX_MY_INVOICE_LIMIT_COUNT,
-  PAGINATION_INTITAL_LIMIT
+  MAX_MY_INVOICE_LIMIT_COUNT
 } from '@/constants/business-logic';
 import { FilterByDays } from './component/filter-by-days';
 import { Tabs } from './component/tabs';
