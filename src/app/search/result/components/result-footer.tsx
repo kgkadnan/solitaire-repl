@@ -14,6 +14,7 @@ import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -39,36 +40,6 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const { setConfirmStoneData } = confirmStoneSetState;
 
-  /* The above code is a function called `performDownloadExcel` that takes an array of `productIds` as a
-parameter. */
-  const performDownloadExcel = (productIds: string[]) => {
-    downloadExcel({ productIds })
-      .unwrap()
-      .then(res => {
-        const { data, fileName } = res;
-        if (data) {
-          setDialogContent(
-            <>
-              <div className="max-w-[380px] flex justify-center align-middle">
-                <Image src={confirmImage} alt="vector image" />
-              </div>
-              <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully
-              </div>
-            </>
-          );
-          setIsDialogOpen(true);
-          downloadExcelFromBase64(data, fileName);
-        }
-      })
-      .catch((e: any) => {
-        console.log('error', e);
-      });
-
-    setIsCheck([]);
-    setIsCheckAll(false);
-    setIsError(false);
-  };
   /**
    * The function `downloadExcelFunction` checks if a stone is selected and performs a download action if
    * it is.
@@ -78,7 +49,15 @@ parameter. */
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
-      performDownloadExcel(isCheck);
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError
+      });
     }
   };
 
