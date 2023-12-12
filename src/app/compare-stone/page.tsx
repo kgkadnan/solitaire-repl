@@ -223,7 +223,7 @@ const CompareStone = () => {
       // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
       const timeoutId = setTimeout(() => {
         setIsDialogOpen(false);
-      }, 5000);
+      }, 3500);
 
       // Cleanup the timeout when the component unmounts or when isDialogOpen changes
       return () => clearTimeout(timeoutId);
