@@ -704,7 +704,7 @@ const renderContent = (
             label={ManageLocales('app.advanceSearch.fancy')}
           />
         </div>
-        <div className={`flex ${styles.filterSectionData}`}>
+        <div className={`flex ${styles.filterSectionData}`} style={{paddingLeft:"10px"}}>
           <CustomSelect
             data={fancyColorData}
             onChange={handleFancyFilterChange}
@@ -1045,140 +1045,163 @@ const renderContent = (
           </div>
         </div>
       </div>
-      <div className="flex gap-[20px]">
-        <div className={styles.filterSection}>
-          <div className={styles.filterSectionLabel}>
-            <CustomInputlabel
-              htmlfor="text"
-              label={ManageLocales('app.advanceSearch.discount')}
-            />
-          </div>
-          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="discountFrom"
-              onChange={e => {
-                setDiscountFrom(e.target.value);
-                handleValidate('discount', 'from', e.target.value, discountTo);
-              }}
-              value={discountFrom}
-              placeholder={ManageLocales('app.advanceSearch.from')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="discountTo"
-              onChange={e => {
-                setDiscountTo(e.target.value);
-                handleValidate('discount', 'to', e.target.value, discountFrom);
-              }}
-              value={discountTo}
-              placeholder={ManageLocales('app.advanceSearch.to')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
-          </div>
-          {/* {fromError.key === 'discount' && ( */}
-          <div className={styles.validationMessage}>
-            {errors?.discount.from ?? errors?.discount.to}
-          </div>
-          {/* )} */}
+      <div className={styles.filterSection}>
+        <div className={styles.filterSectionLabel}>
+          <CustomInputlabel
+            htmlfor="text"
+            label={ManageLocales('app.advanceSearch.discount')}
+          />
         </div>
-        <div className={styles.filterSection}>
-          {' '}
-          <div className={styles.filterSectionLabel}>
-            <CustomInputlabel
-              htmlfor="text"
-              label={ManageLocales('app.advanceSearch.pricePerCarat')}
-            />
+        <div
+          className={`${styles.filterSectionData}`}
+          style={{ display: 'flex',justifyContent:"space-between" }}
+        >
+          <div style={{ width: '18%' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <CustomInputField
+                type="number"
+                name="discountFrom"
+                onChange={e => {
+                  setDiscountFrom(e.target.value);
+                  handleValidate(
+                    'discount',
+                    'from',
+                    e.target.value,
+                    discountTo
+                  );
+                }}
+                value={discountFrom}
+                placeholder={ManageLocales('app.advanceSearch.from')}
+                style={{
+                  input: styles.inputFieldStyles
+                }}
+              />
+              <CustomInputField
+                // style={className}
+                type="number"
+                name="discountTo"
+                onChange={e => {
+                  setDiscountTo(e.target.value);
+                  handleValidate(
+                    'discount',
+                    'to',
+                    e.target.value,
+                    discountFrom
+                  );
+                }}
+                value={discountTo}
+                placeholder={ManageLocales('app.advanceSearch.to')}
+                style={{
+                  input: styles.inputFieldStyles
+                }}
+              />
+            </div>
+            <div className={styles.validationMessage}>
+              {errors?.discount.from ?? errors?.discount.to}
+            </div>
           </div>
-          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="pricePerCaratFrom"
-              onChange={e => {
-                setPricePerCaratFrom(e.target.value);
-                handleValidate(
-                  'price_per_carat',
-                  'from',
-                  e.target.value,
-                  pricePerCaratTo
-                );
-              }}
-              value={pricePerCaratFrom}
-              placeholder={ManageLocales('app.advanceSearch.from')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
-            <CustomInputField
-              type="number"
-              name="pricePerCaratTo"
-              onChange={e => {
-                setPricePerCaratTo(e.target.value);
-                handleValidate(
-                  'price_per_carat',
-                  'to',
-                  e.target.value,
-                  pricePerCaratFrom
-                );
-              }}
-              value={pricePerCaratTo}
-              placeholder={ManageLocales('app.advanceSearch.to')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
+          <div
+            style={{
+              display: 'flex',
+              width: '30%',
+              justifyContent: 'space-between'
+            }}
+          >
+            {' '}
+            <div  className={styles.filterSectionLabel} style={{ width: '40%' }}>
+              <CustomInputlabel
+                htmlfor="text"
+                label={ManageLocales('app.advanceSearch.pricePerCarat')}
+              />
+            </div>
+            <div style={{ width: '60%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <CustomInputField
+                  // style={className}
+                  type="number"
+                  name="pricePerCaratFrom"
+                  onChange={e => {
+                    setPricePerCaratFrom(e.target.value);
+                    handleValidate(
+                      'price_per_carat',
+                      'from',
+                      e.target.value,
+                      pricePerCaratTo
+                    );
+                  }}
+                  value={pricePerCaratFrom}
+                  placeholder={ManageLocales('app.advanceSearch.from')}
+                  style={{
+                    input: styles.inputFieldStyles
+                  }}
+                />
+                <CustomInputField
+                  type="number"
+                  name="pricePerCaratTo"
+                  onChange={e => {
+                    setPricePerCaratTo(e.target.value);
+                    handleValidate(
+                      'price_per_carat',
+                      'to',
+                      e.target.value,
+                      pricePerCaratFrom
+                    );
+                  }}
+                  value={pricePerCaratTo}
+                  placeholder={ManageLocales('app.advanceSearch.to')}
+                  style={{
+                    input: styles.inputFieldStyles
+                  }}
+                />
+              </div>
+            </div>
           </div>
-        </div>
-        <div className={styles.filterSection}>
-          <div className={styles.filterSectionLabel}>
-            <CustomInputlabel
-              htmlfor="text"
-              label={ManageLocales('app.advanceSearch.amountRange')}
-            />
+          <div style={{ width: '30%',display:"flex" }}>
+            <div className={styles.filterSectionLabel} style={{width:"40%"}}>
+              <CustomInputlabel
+                htmlfor="text"
+                label={ManageLocales('app.advanceSearch.amountRange')}
+              />
+            </div>
+            <div style={{width:"60%"}}>
+            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+              <CustomInputField
+                // style={className}
+                type="number"
+                name="priceRangeFrom"
+                onChange={e => {
+                  setPriceRangeFrom(e.target.value);
+                }}
+                value={priceRangeFrom}
+                placeholder={ManageLocales('app.advanceSearch.from')}
+                style={{
+                  input: styles.inputFieldStyles
+                }}
+              />
+              <CustomInputField
+                // style={className}
+                type="number"
+                name="priceRangeTo"
+                onChange={e => {
+                  setPriceRangeTo(e.target.value);
+                  handleValidate(
+                    'price_range',
+                    'to',
+                    e.target.value,
+                    priceRangeFrom
+                  );
+                }}
+                value={priceRangeTo}
+                placeholder={ManageLocales('app.advanceSearch.to')}
+                style={{
+                  input: styles.inputFieldStyles
+                }}
+              />
+            </div>
+            
+            {validationError}
+            </div>
           </div>
-          <div className={`${styles.filterSection} ${styles.rangeFilter}`}>
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="priceRangeFrom"
-              onChange={e => {
-                setPriceRangeFrom(e.target.value);
-              }}
-              value={priceRangeFrom}
-              placeholder={ManageLocales('app.advanceSearch.from')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
-            <CustomInputField
-              // style={className}
-              type="number"
-              name="priceRangeTo"
-              onChange={e => {
-                setPriceRangeTo(e.target.value);
-                handleValidate(
-                  'price_range',
-                  'to',
-                  e.target.value,
-                  priceRangeFrom
-                );
-              }}
-              value={priceRangeTo}
-              placeholder={ManageLocales('app.advanceSearch.to')}
-              style={{
-                input: styles.inputFieldStyles
-              }}
-            />
-          </div>
-          {validationError}
         </div>
       </div>
       <div className={styles.filterSection}>
