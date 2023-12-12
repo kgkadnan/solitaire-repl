@@ -1,4 +1,6 @@
+// Define a function to generate query parameters based on the provided state
 export const generateQueryParams = (state: any) => {
+  // Destructure values from the state object
   const {
     selectedShape,
     selectedFancyColor,
@@ -69,7 +71,10 @@ export const generateQueryParams = (state: any) => {
     selectedColor
   } = state;
 
+  // Initialize an empty object to store query parameters
   const queryParams: any = {};
+
+  // Check if a specific property exists in the state and add it to the queryParams object
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
   selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
   selectedFancyColor?.length !== 0 &&
