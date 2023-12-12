@@ -134,7 +134,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
       sheetTriggenContent={
         <div
           onClick={() => {
-            setActiveTab('3');
+            setActiveTab('1');
             setDiamondDetailIframeUrl('');
             setDiamondDetailImageUrl(``);
             setSliderData([tableRows[index]]);
@@ -168,7 +168,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                   key={data.id}
                   className="flex items-center justify-between my-5 px-10"
                 >
-                  <div className="">
+                  <div className="w-[145px]">
                     {switchButtonTabs.map((items: IswitchButtonTabs) => {
                       return (
                         <div key={items.id} className="">
@@ -206,6 +206,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           alt={``}
                           width={450}
                           height={450}
+                          style={{ height: '450px', width: '450px' }}
                         />
                       )}
                     {diamondDetailImageUrl && !diamondDetailIframeUrl && (
@@ -214,6 +215,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                         alt={``}
                         width={450}
                         height={450}
+                        style={{ height: '450px', width: '450px' }}
                       />
                     )}
 
@@ -223,7 +225,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                         height={450}
                         frameBorder="0"
                         src={diamondDetailIframeUrl}
-                        className="mr-[37px]"
+                        // className="mr-[37px]"
                       />
                     )}
                   </div>
@@ -258,13 +260,6 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                       height={20}
                     />
                   </div>
-                  {/* <a
-                    href={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`}
-                    target="_blank"
-                    className="cursor-pointer"
-                  >
-                    <Image src={dna} alt="dna" width={25} height={20} />
-                  </a> */}
                 </div>
                 <div className="border-b border-solitaireQuaternary"></div>
                 <div>
