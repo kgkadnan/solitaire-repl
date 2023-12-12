@@ -25,7 +25,7 @@ import renderContent from './components/render-form-field';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
-  SEARCH_RESULT
+  RESULT
 } from '@/constants/application-constants/search-page';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
 
@@ -101,7 +101,7 @@ used for managing the state of a form field or input element in a React componen
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (modifySearchFrom === `${SAVED_SEARCHES}` && modifysavedSearchData) {
       setModifySearch(modifysavedSearchData, setState, carat);
-    } else if (modifySearchFrom === `${SEARCH_RESULT}` && modifySearchResult) {
+    } else if (modifySearchFrom === `${RESULT}` && modifySearchResult) {
       setModifySearch(
         modifySearchResult[searchResult.activeTab]?.queryParams,
         setState,
@@ -265,7 +265,7 @@ used for managing the state of a form field or input element in a React componen
             updateSavedSearch(data);
           }
         }
-        if (modifySearchFrom === `${SEARCH_RESULT}`) {
+        if (modifySearchFrom === `${RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
             id: modifySearchResult[searchResult.activeTab]?.id,
@@ -281,7 +281,7 @@ used for managing the state of a form field or input element in a React componen
             localStorage.setItem('Search', JSON.stringify(updatedData));
           }
           router.push(
-            `/search?active-tab=${SEARCH_RESULT}-${searchResult.activeTab + 1}`
+            `/search?active-tab=${RESULT}-${searchResult.activeTab + 1}`
           );
         } else {
           let setDataOnLocalStorage = {
@@ -295,7 +295,7 @@ used for managing the state of a form field or input element in a React componen
             JSON.stringify([...addSearches, setDataOnLocalStorage])
           );
           router.push(
-            `/search?active-tab=${SEARCH_RESULT}-${
+            `/search?active-tab=${RESULT}-${
               JSON.parse(localStorage.getItem('Search')!).length
             }`
           );
@@ -377,17 +377,15 @@ used for managing the state of a form field or input element in a React componen
               fn: () => {
                 if (modifySearchFrom === `${SAVED_SEARCHES}`) {
                   router.push(`/search?active-tab=${SAVED_SEARCHES}`);
-                } else if (modifySearchFrom === `${SEARCH_RESULT}`) {
+                } else if (modifySearchFrom === `${RESULT}`) {
                   router.push(
-                    `/search?active-tab=${SEARCH_RESULT}-${
-                      searchResult.activeTab + 3
-                    }`
+                    `/search?active-tab=${RESULT}-${searchResult.activeTab + 3}`
                   );
                 }
               },
               isHidden:
                 modifySearchFrom !== `${SAVED_SEARCHES}` &&
-                modifySearchFrom !== `${SEARCH_RESULT}`
+                modifySearchFrom !== `${RESULT}`
             },
             {
               id: 2,
