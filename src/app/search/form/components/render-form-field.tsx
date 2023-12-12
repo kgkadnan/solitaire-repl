@@ -6,7 +6,7 @@ import { ManageLocales } from '@/utils/translate';
 import React from 'react';
 
 import renderOtherParameterFields from './render-inclusion-field';
-import renderParameterFields from './render-measurement-field';
+import renderMeasurementField from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
 import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
@@ -61,7 +61,8 @@ const renderContent = (
     pricePerCaratFrom,
     pricePerCaratTo,
     caratRangeFrom,
-    caratRangeTo
+    caratRangeTo,
+    selectedFancyColor
   } = state;
 
   const {
@@ -144,21 +145,28 @@ const renderContent = (
 
   // Function to handle color change based on user selection
   const handleColorChange = (data: string) => {
+    setSelectedFancyColor([])
+    setSelectedIntensity([])
+    setSelectedOvertone([])
     handleFilterChange(data, selectedColor, setSelectedColor);
+    
   };
 
   // Function to handle fancy color filter change based on user selection
   const handleFancyFilterChange = (data: string) => {
-    setSelectedFancyColor(data);
+    setSelectedColor([])
+    handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
+    
   };
-
   // Function to handle intensity change based on user selection
   const handleIntensityChange = (data: string) => {
+    setSelectedColor([])
     setSelectedIntensity(data);
   };
 
   // Function to handle overtone change based on user selection
   const handleOvertoneChange = (data: string) => {
+    setSelectedColor([])
     setSelectedOvertone(data);
   };
 
@@ -700,7 +708,7 @@ const renderContent = (
           <CustomSelect
             data={advanceSearch.fancyColor}
             onChange={handleFancyFilterChange}
-            placeholder={ManageLocales('app.advanceSearch.fancyColor')}
+            placeholder={selectedFancyColor?.length ? selectedFancyColor : ManageLocales('app.advanceSearch.fancyColor')}
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
@@ -1099,7 +1107,7 @@ const renderContent = (
         <div
           className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
         >
-          {renderParameterFields(state, setState)}
+          {renderMeasurementField(state, setState)}
           <div className="mt-[52px]">
             <CustomSelect
               data={advanceSearch.culet}

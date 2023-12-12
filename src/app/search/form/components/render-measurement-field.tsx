@@ -201,7 +201,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     <div
       key={parameter.label}
       className={styles.parameterContainer}
-      style={{ paddingLeft: '10px' }}
+      style={{ paddingLeft: '10px', width:"22%",justifyContent:"space-between"}}
     >
       <CustomInputlabel
         htmlfor="text"
