@@ -4,6 +4,7 @@ import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
 
+// Define interfaces for the component props
 interface IRange {
   start: number;
   end: number;
@@ -15,6 +16,7 @@ interface IRenderMeasurementData {
   range: IRange;
 }
 const renderMeasurementField = (state: any, setState: any) => {
+  // Destructure state variables
   const {
     tablePerFrom,
     tablePerTo,
@@ -77,6 +79,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     setGirdleTo
   } = setState;
 
+  // Define an array of objects representing measurement parameters and their state management functions
   const parameterDataState = [
     {
       parameterState: [tablePerFrom, tablePerTo],
@@ -135,28 +138,27 @@ const renderMeasurementField = (state: any, setState: any) => {
       setParameterState: [setGirdleFrom, setGirdleTo]
     }
   ];
+
+  // Map the parameterDataState to create an array of objects with additional data from advanceSearch
   const parameterData = parameterDataState.map((parameter, index) => {
     return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
+  // Initialize error state
   const initialErrorState = {
     key: '',
     value: ''
   };
 
-  // const [fromError, setFromError] = useState(initialErrorState);
-
+  // Initialize variables for angle input validation
   const fromError = '';
   const setFromError = '';
-
-  // const [fromAngle, setFromAngle] = useState('');
   const fromAngle = '';
   const setFromAngle = '';
-  // const [toAngle, setToAngle] = useState('');
-
   const toAngle = '';
   const setToAngle = '';
 
+  // Define a function to handle angle input validation
   const handleAngle = (
     key: string,
     value: string,
@@ -182,6 +184,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     }
   };
 
+  // Define a function for validating angle input
   function validateAngle(value: string, min: number, max: number) {
     const numValue = parseInt(value);
 
@@ -212,25 +215,17 @@ const renderMeasurementField = (state: any, setState: any) => {
           style={{
             input: styles.inputFieldStyles
           }}
-          onBlur={
-            e =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setFromAngle,
-                    setFromError,
-                    toAngle
-                  )
-                : ''
-            // handleValidate(
-            //     parameter.label,
-            //     e.target.value,
-            //     setFromValue,
-            //     setFromError,
-            //     toValue
-            //   )
+          onBlur={e =>
+            parameter.label === 'Crown Angle' ||
+            parameter.label === 'Pavilion Angle'
+              ? handleAngle(
+                  parameter.label,
+                  e.target.value,
+                  setFromAngle,
+                  setFromError,
+                  toAngle
+                )
+              : ''
           }
         />
         <div className={styles.parameterLabel}>to</div>
@@ -244,32 +239,22 @@ const renderMeasurementField = (state: any, setState: any) => {
           style={{
             input: styles.inputFieldStyles
           }}
-          onBlur={
-            e =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setToAngle,
-                    setFromError,
-                    fromAngle
-                  )
-                : ''
-            //  handleValidate(
-            //     parameter.label,
-            //     e.target.value,
-            //     setToValue,
-            //     setFromError,
-            //     fromValue
-            //   )
+          onBlur={e =>
+            parameter.label === 'Crown Angle' ||
+            parameter.label === 'Pavilion Angle'
+              ? handleAngle(
+                  parameter.label,
+                  e.target.value,
+                  setToAngle,
+                  setFromError,
+                  fromAngle
+                )
+              : ''
           }
         />
       </div>
-      {/* {fromError.key === parameter.label && ( */}
       {fromError === parameter.label && (
         <div className={styles.validationMessage}>{fromError}</div>
-        // <div className={styles.validationMessage}>{fromError.value}</div>
       )}
     </div>
   ));

@@ -3,7 +3,6 @@ import { useState } from 'react';
 const useFieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
   const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
   const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
@@ -82,7 +81,6 @@ const useFieldStateManagement = () => {
     state: {
       selectedShape,
       selectedColor,
-      selectedWhiteColor,
       selectedFancyColor,
       selectedIntensity,
       selectedOvertone,
@@ -155,7 +153,6 @@ const useFieldStateManagement = () => {
     setState: {
       setSelectedShape,
       setSelectedColor,
-      setSelectedWhiteColor,
       setSelectedFancyColor,
       setSelectedIntensity,
       setSelectedOvertone,

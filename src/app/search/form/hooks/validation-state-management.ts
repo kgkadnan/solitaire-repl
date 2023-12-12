@@ -20,6 +20,7 @@ const useValidationStateManagement = () => {
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
   const [selectedStep, setSelectedStep] = useState('');
+  const [selectedShadeContain, setSelectedShadeContain] = useState('');
   const [errors, setErrors] = useState<Errors>({
     discount: { from: null, to: null },
     price_range: { from: null, to: null },
@@ -36,6 +37,8 @@ const useValidationStateManagement = () => {
     setErrors,
     selectedStep,
     setSelectedStep,
+    selectedShadeContain,
+    setSelectedShadeContain,
     searchCount,
     setSearchCount,
     searchUrl,

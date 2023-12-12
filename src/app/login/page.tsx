@@ -9,7 +9,9 @@ import styles from './login.module.scss';
 import { useVerifyLoginMutation } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 
+// Define the Login component
 const Login = () => {
+  // State variables for email, password, and error handling
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [verifyLogin] = useVerifyLoginMutation();
@@ -17,12 +19,15 @@ const Login = () => {
   const [errorText, setErrorText] = useState<string>('');
   const router = useRouter();
 
+  // Handle the login logic
   const handleLogin = async () => {
     let res: any = await verifyLogin({ email: email, password: password });
     if (res.error) {
+      // Display error message if login fails
       setIsError(true);
       setErrorText(res.error.data.message);
     } else {
+      // Redirect to home page if login is successful
       if (res.data.customer) {
         localStorage.removeItem('Search');
         router.push('/');
@@ -30,24 +35,28 @@ const Login = () => {
     }
   };
 
+  // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       handleLogin();
     }
   };
 
+  // Handle input changes for email
   const handleEmailInput = (e: any) => {
     setEmail(e.target.value);
     setIsError(false);
     setErrorText('');
   };
 
+  // Handle input changes for password
   const handlePasswordInput = (e: any) => {
     setPassword(e.target.value);
     setIsError(false);
     setErrorText('');
   };
 
+  // JSX rendering for the Login component
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
@@ -68,11 +77,13 @@ const Login = () => {
           gap: '20px'
         }}
       >
+        {/* Custom label for the Login section */}
         <CustomInputlabel
           htmlfor={''}
           label={'Login'}
           overriddenStyles={{ label: styles.labelStyles }}
         />
+        {/* Input field for email */}
         <CustomInputField
           type={'email'}
           name={'email'}
@@ -81,6 +92,7 @@ const Login = () => {
           onChange={handleEmailInput}
           onKeyDown={handleKeyDown}
         />
+        {/* Input field for password */}
         <CustomInputField
           type={'password'}
           name={'password'}
@@ -89,10 +101,11 @@ const Login = () => {
           onChange={handlePasswordInput}
           onKeyDown={handleKeyDown}
         />
+        {/* Display error message if there is an error */}
         <div className="h-6">
           {isError ? <div className="text-red-600">{errorText}</div> : ''}
         </div>
-
+        {/* Button to trigger the login action */}
         <CustomDisplayButton
           displayButtonLabel={'Login'}
           displayButtonAllStyle={{
@@ -105,4 +118,5 @@ const Login = () => {
     </div>
   );
 };
+
 export default Login;

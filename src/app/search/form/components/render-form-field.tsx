@@ -1,4 +1,3 @@
-// import { CustomRadioButton } from '@/components/common/buttons/radio-button';
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import CustomImageTile from '@/components/common/image-tile';
 import { CustomInputField } from '@/components/common/input-field';
@@ -24,6 +23,8 @@ const renderContent = (
   errors: any,
   selectedStep: any,
   setSelectedStep: any,
+  selectedShadeContain: any,
+  setSelectedShadeContain: any,
   setErrors: any
 ) => {
   const imageTileStyles = {
@@ -39,7 +40,6 @@ const renderContent = (
   const {
     selectedShape,
     selectedColor,
-    selectedWhiteColor,
     selectedTinge,
     selectedClarity,
     selectedCaratRange,
@@ -113,6 +113,7 @@ const renderContent = (
     return true;
   };
 
+  // Function to handle shape change based on user selection
   const handleShapeChange = (shape: string) => {
     const filteredShape: string[] = advanceSearch.shape.map(
       data => data.short_name
@@ -140,29 +141,43 @@ const renderContent = (
       }
     }
   };
+
+  // Function to handle color change based on user selection
   const handleColorChange = (data: string) => {
     handleFilterChange(data, selectedColor, setSelectedColor);
   };
 
+  // Function to handle fancy color filter change based on user selection
   const handleFancyFilterChange = (data: string) => {
     setSelectedFancyColor(data);
   };
+
+  // Function to handle intensity change based on user selection
   const handleIntensityChange = (data: string) => {
     setSelectedIntensity(data);
   };
+
+  // Function to handle overtone change based on user selection
   const handleOvertoneChange = (data: string) => {
     setSelectedOvertone(data);
   };
+
+  // Function to handle tinge change based on user selection
   const handleTingeChange = (data: string) => {
     handleFilterChange(data, selectedTinge, setSelectedTinge);
   };
+
+  // Function to handle clarity change based on user selection
   const handleClarityChange = (data: string) => {
     handleFilterChange(data, selectedClarity, setSelectedClarity);
   };
+
+  // Function to handle carat range change based on user selection
   const handleCaratRangeChange = (data: string) => {
     handleFilterChange(data, selectedCaratRange, setSelectedCaratRange);
   };
 
+  // Function to handle make change based on user selection
   const handleMakeChange = (data: string) => {
     if (data.toLowerCase() === '3ex') {
       if (data !== selectedMake) {
@@ -229,6 +244,8 @@ const renderContent = (
     }
     setSelectedMake(data === selectedMake ? '' : data);
   };
+
+  // Function to handle filter change and make selection based on user input
   const handleFilterChangeAndMakeSelection = (
     data: string,
     selectedFilter: string[],
@@ -266,6 +283,8 @@ const renderContent = (
       setSelectedMake('');
     }
   };
+
+  // Function to handle filter changes and cut selection based on user input
   const handleCutChange = (data: string) => {
     handleFilterChangeAndMakeSelection(
       data,
@@ -275,6 +294,8 @@ const renderContent = (
       selectedSymmetry
     );
   };
+
+  // Function to handle filter changes and polish selection based on user input
   const handlePolishChange = (data: string) => {
     handleFilterChangeAndMakeSelection(
       data,
@@ -284,6 +305,8 @@ const renderContent = (
       selectedSymmetry
     );
   };
+
+  // Function to handle filter changes and symmetry selection based on user input
   const handleSymmetryChange = (data: string) => {
     handleFilterChangeAndMakeSelection(
       data,
@@ -293,6 +316,8 @@ const renderContent = (
       selectedPolish
     );
   };
+
+  // Function to handle filter changes and fluorescence selection based on user input
   const handleFluorescenceChange = (data: string) => {
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     const temp: string[] = selectedFluorescence;
@@ -326,10 +351,13 @@ const renderContent = (
       setSelectedMake('');
     }
   };
+
+  // Function to handle filter changes and culet selection based on user input
   const handleCuletChange = (data: string) => {
     setSelectedCulet(data);
   };
 
+  // Functions to handle additional filter changes (key to symbol, lab, HR, brilliance, location, origin)
   const handleKeyToSymbolChange = (comment: string) => {
     if (comment.toLowerCase() === 'all') {
       setSelectedKeyToSymbol(advanceSearch.key_to_symbol);
@@ -376,6 +404,7 @@ const renderContent = (
     handleFilterChange(data, selectedOrigin, setSelectedOrigin);
   };
 
+  // Function to normalize carat range values
   const normalizeValue = (value: string) => {
     // Normalize user input like '3-3.99' to '3.00-3.99'
     const caratRange = value.split('-');
@@ -398,6 +427,7 @@ const renderContent = (
     return value;
   };
 
+  // Function to handle adding carat range
   const handleAddCarat = (data: string) => {
     const validatedData = normalizeValue(data);
     if (validatedData) {
@@ -409,6 +439,7 @@ const renderContent = (
     }
   };
 
+  // Radio data for step selection
   const RadioData = [
     {
       name: 'steps',
@@ -417,7 +448,7 @@ const renderContent = (
       },
       id: '1',
       value: 'Contains',
-      label: 'Contains',
+      label: ManageLocales('app.advanceSearch.radioLabel1'),
       checked: selectedStep == 'Contains'
     },
     {
@@ -427,11 +458,36 @@ const renderContent = (
       },
       id: '2',
       value: 'Does not contains',
-      label: 'Does not contains',
+      label: ManageLocales('app.advanceSearch.radioLabel2'),
       checked: selectedStep == 'Does not contains'
     }
   ];
 
+  //Radio data for shape selection
+  const shapeRadioData = [
+    {
+      name: 'steps',
+      onChange: (data: string) => {
+        setSelectedShadeContain(data);
+      },
+      id: '1',
+      value: 'Should Contain',
+      label: ManageLocales('app.advanceSearch.radioLabel1'),
+      checked: selectedShadeContain == 'Should Contain'
+    },
+    {
+      name: 'steps',
+      onChange: (data: string) => {
+        setSelectedShadeContain(data);
+      },
+      id: '2',
+      value: 'Should Not Contain',
+      label: ManageLocales('app.advanceSearch.radioLabel2'),
+      checked: selectedShadeContain == 'Should Not Contain'
+    }
+  ];
+
+  // Function to handle validation errors
   const handleValidate = (
     key: keyof Errors,
     inputType: 'from' | 'to',
@@ -494,74 +550,6 @@ const renderContent = (
       // Handle other error logic as needed
     }
   };
-
-  const CuletData = [
-    { id: 1, value: 'None' },
-    { id: 2, value: 'Pointed' },
-    { id: 3, value: 'Very Small' },
-    { id: 4, value: 'Small' },
-    { id: 5, value: 'Med' },
-    { id: 7, value: 'Linear' },
-    { id: 8, value: 'Large' }
-  ];
-
-  const intensityData = [
-    { id: 1, value: 'Faint' },
-    { id: 2, value: 'Very Light' },
-    { id: 3, value: 'Light' },
-    { id: 4, value: 'Fancy' },
-    { id: 5, value: 'Fancy Deep' },
-    { id: 6, value: 'Fancy Intense' },
-    { id: 7, value: 'Fancy Vivid' }
-  ];
-
-  const fancyColorData = [
-    { id: 1, value: 'Yellow' },
-    { id: 2, value: 'Grey' },
-    { id: 3, value: 'Blue' },
-    { id: 4, value: 'Green' },
-    { id: 5, value: 'Cognac' },
-    { id: 6, value: 'Champagne' },
-    { id: 7, value: 'Purple' },
-    { id: 8, value: 'Violet' },
-    { id: 9, value: 'Chameleon' },
-    { id: 10, value: 'Pink' },
-    { id: 11, value: 'Black' },
-    { id: 12, value: 'Brown' },
-    { id: 13, value: 'Red' },
-    { id: 14, value: 'Orange' },
-    { id: 15, value: 'Light Yellow' },
-    { id: 16, value: 'Other' }
-  ];
-
-  const overtoneData = [
-    { id: 1, value: 'Black' },
-    { id: 2, value: 'Purplish' },
-    { id: 3, value: 'Purple' },
-    { id: 4, value: 'Green' },
-    { id: 5, value: 'Red' },
-    { id: 6, value: 'Chameleon' },
-    { id: 7, value: 'Bluish' },
-    { id: 8, value: 'Blue' },
-    { id: 9, value: 'Pink' },
-    { id: 10, value: 'Brownish' },
-    { id: 11, value: 'Orangy' },
-    { id: 12, value: 'Greyish' },
-    { id: 13, value: 'Brown' },
-    { id: 14, value: 'Orange' },
-    { id: 15, value: 'Pinkish' },
-    { id: 16, value: 'Greenish' },
-    { id: 17, value: 'Yellowish' },
-    { id: 18, value: 'Grey' },
-    { id: 19, value: 'Violetish' },
-    { id: 20, value: 'Yellow' },
-    { id: 21, value: 'Redish' },
-    { id: 22, value: 'Champagne' },
-    { id: 23, value: 'Cognac' },
-    { id: 24, value: 'None' },
-    { id: 25, value: 'Light Brown' },
-    { id: 26, value: 'Brownish Orangy' }
-  ];
 
   return (
     <>
@@ -706,9 +694,9 @@ const renderContent = (
         </div>
         <div className={`flex ${styles.filterSectionData}`}>
           <CustomSelect
-            data={fancyColorData}
+            data={advanceSearch.fancyColor}
             onChange={handleFancyFilterChange}
-            placeholder="Fancy Color"
+            placeholder={ManageLocales('app.advanceSearch.fancyColor')}
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
@@ -716,7 +704,7 @@ const renderContent = (
             }}
           />
           <CustomSelect
-            data={intensityData}
+            data={advanceSearch.intensity}
             onChange={handleIntensityChange}
             placeholder={ManageLocales('app.advanceSearch.intensity')}
             style={{
@@ -726,7 +714,7 @@ const renderContent = (
             }}
           />
           <CustomSelect
-            data={overtoneData}
+            data={advanceSearch.overtone}
             onChange={handleOvertoneChange}
             placeholder={ManageLocales('app.advanceSearch.overtone')}
             style={{
@@ -737,93 +725,6 @@ const renderContent = (
           />
         </div>
       </div>
-      {/* <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.color')}
-            overriddenStyles={{ label: styles.specificFilterAlign }}
-          />
-        </div>
-        <div className={styles.filterSectionData}>
-          <div className={styles.filterSection}>
-            {renderSelectionButtons(
-              advanceSearch.color,
-              styles.colorFilterStyles,
-              styles.activeColorStyles,
-              selectedColor,
-              handleColorChange,
-              true
-            )}
-          </div>
-          <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div>
-              {selectedColor.includes('White') &&
-                renderSelectionButtons(
-                  advanceSearch.white,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedWhiteColor,
-                  handleWhiteFilterChange
-                )}
-            </div>
-            <div>
-              {selectedColor.includes('Fancy') &&
-                renderSelectionButtons(
-                  advanceSearch.fancy,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedFancyColor,
-                  handleFancyFilterChange
-                )}
-            </div>
-          </div>
-        </div>
-      </div> */}
-      {/* {selectedColor.includes('Fancy') && (
-        <>
-          <div className={styles.filterSection}>
-            <div className={styles.filterSectionLabel}>
-              <CustomInputlabel
-                htmlfor="text"
-                label={ManageLocales('app.advanceSearch.intensity')}
-              />
-            </div>
-            <div
-              className={`${styles.filterSection} ${styles.filterSectionData}`}
-            >
-              {renderSelectionButtons(
-                advanceSearch.intensity,
-                '',
-                styles.activeOtherStyles,
-                selectedIntensity,
-                handleIntensityChange
-              )}
-            </div>
-          </div>
-          <div className={styles.filterSection}>
-            <div className={styles.filterSectionLabel}>
-              <CustomInputlabel
-                htmlfor="text"
-                label={ManageLocales('app.advanceSearch.overtone')}
-              />
-            </div>
-            <div className={styles.filterSectionData}>
-              <div
-                className={`${styles.filterSection} ${styles.filterWrapSection}`}
-              >
-                {renderSelectionButtons(
-                  advanceSearch.overtone,
-                  '',
-                  styles.activeOtherStyles,
-                  selectedOvertone,
-                  handleOvertoneChange
-                )}
-              </div>
-            </div>
-          </div>
-        </>
-      )} */}
       <div className={styles.filterSection}>
         <div className={styles.filterSectionLabel}>
           <CustomInputlabel
@@ -1002,37 +903,12 @@ const renderContent = (
           />
         </div>
         <div>
-          <div style={{ margin: '10px' }}>
-            {/* <CustomRadioButton
-              radioMetaData={{
-                name: 'steps',
-                handleChange: (data: string) => {
-                  setSelectedStep(data);
-                },
-                radioData: [
-                  {
-                    id: '1',
-                    value: 'Contains',
-                    radioButtonLabel: ManageLocales(
-                      'app.advanceSearch.radioLabel1'
-                    ),
-                    checked: selectedStep === 'Contains'
-                  },
-                  {
-                    id: '2',
-                    value: 'Does not contains',
-                    radioButtonLabel: ManageLocales(
-                      'app.advanceSearch.radioLabel2'
-                    ),
-                    checked: selectedStep === 'Does not contains'
-                  }
-                ]
-              }}
-              radioButtonAllStyles={{
-                radioButtonStyle: styles.radioStyle,
-                radioLabelStyle: styles.radioLabel
-              }}
-            /> */}
+          <div className="flex gap-3" style={{ margin: '10px' }}>
+            {shapeRadioData.map(radioData => {
+              return (
+                <RadioButton key={radioData.id} radioMetaData={radioData} />
+              );
+            })}
           </div>
           <div className={styles.filterSectionData}>
             {renderSelectionButtons(
@@ -1195,7 +1071,7 @@ const renderContent = (
           {renderParameterFields(state, setState)}
           <div className="mt-[52px]">
             <CustomSelect
-              data={CuletData}
+              data={advanceSearch.culet}
               onChange={handleCuletChange}
               placeholder="Culet"
               style={{
@@ -1236,20 +1112,6 @@ const renderContent = (
           style={{ display: 'flex', flexDirection: 'column' }}
           className={styles.filterSectionData}
         >
-          {/* <div className={styles.filterSectionData}>
-            <div
-              className={`${styles.filterSection} ${styles.filterWrapSection}`}
-            >
-              {renderSelectionButtons(
-                advanceSearch.girdle,
-                '',
-                styles.activeOtherStyles,
-                selectedGirdle,
-                handleGirdleChange
-              )}
-            </div>
-          </div> */}
-
           <div style={{ margin: '10px' }} className="flex gap-3">
             {RadioData.map(radioData => {
               return (

@@ -104,43 +104,6 @@
   "polish": ["Ideal", "EX", "VG", "G", "F"],
   "symmetry": ["Ideal", "EX", "VG", "G", "F"],
 
-  "intensity": [
-    "Faint",
-    "Light",
-    "Fancy light",
-    "Fancy",
-    "Fancy dark",
-    "Fancy intense",
-    "Fancy vivid",
-    "Fancy deep",
-    "Very light"
-  ],
-  "overtone": [
-    "None",
-    "Yellow",
-    "Yellowish",
-    "Pink",
-    "Pinkish",
-    "Blue",
-    "Bluish",
-    "Red",
-    "Reddish",
-    "Green",
-    "Greenish",
-    "Purple",
-    "Purplish",
-    "Orange",
-    "Orangy",
-    "Gray",
-    "Grayish",
-    "Black",
-    "Brown",
-    "Brownish",
-    "Violetish",
-    "White",
-    "W-x Light Brown",
-    "Brownish Orangy"
-  ],
   "color_shade": [
     "None",
     "Mixed",
@@ -180,7 +143,6 @@
     "Strong",
     "Very Strong"
   ],
-  "culet": ["NON", "Minor", "Medium"],
   "lab": [
     "GIA",
     "GIA DOR",
@@ -432,5 +394,69 @@
       "start": 0,
       "end": 100
     }
-  }
+  },
+  "culet": [
+    { "id": 1, "value": "None" },
+    { "id": 2, "value": "Pointed" },
+    { "id": 3, "value": "Very Small" },
+    { "id": 4, "value": "Small" },
+    { "id": 5, "value": "Med" },
+    { "id": 7, "value": "Linear" },
+    { "id": 8, "value": "Large" }
+  ],
+  "intensity": [
+    { "id": 1, "value": "Faint" },
+    { "id": 2, "value": "Very Light" },
+    { "id": 3, "value": "Light" },
+    { "id": 4, "value": "Fancy" },
+    { "id": 5, "value": "Fancy Deep" },
+    { "id": 6, "value": "Fancy Intense" },
+    { "id": 7, "value": "Fancy Vivid" }
+  ],
+  "fancyColor": [
+    { "id": 1, "value": "Yellow" },
+    { "id": 2, "value": "Grey" },
+    { "id": 3, "value": "Blue" },
+    { "id": 4, "value": "Green" },
+    { "id": 5, "value": "Cognac" },
+    { "id": 6, "value": "Champagne" },
+    { "id": 7, "value": "Purple" },
+    { "id": 8, "value": "Violet" },
+    { "id": 9, "value": "Chameleon" },
+    { "id": 10, "value": "Pink" },
+    { "id": 11, "value": "Black" },
+    { "id": 12, "value": "Brown" },
+    { "id": 13, "value": "Red" },
+    { "id": 14, "value": "Orange" },
+    { "id": 15, "value": "Light Yellow" },
+    { "id": 16, "value": "Other" }
+  ],
+  "overtone": [
+    { "id": 1, "value": "Black" },
+    { "id": 2, "value": "Purplish" },
+    { "id": 3, "value": "Purple" },
+    { "id": 4, "value": "Green" },
+    { "id": 5, "value": "Red" },
+    { "id": 6, "value": "Chameleon" },
+    { "id": 7, "value": "Bluish" },
+    { "id": 8, "value": "Blue" },
+    { "id": 9, "value": "Pink" },
+    { "id": 10, "value": "Brownish" },
+    { "id": 11, "value": "Orangy" },
+    { "id": 12, "value": "Greyish" },
+    { "id": 13, "value": "Brown" },
+    { "id": 14, "value": "Orange" },
+    { "id": 15, "value": "Pinkish" },
+    { "id": 16, "value": "Greenish" },
+    { "id": 17, "value": "Yellowish" },
+    { "id": 18, "value": "Grey" },
+    { "id": 19, "value": "Violetish" },
+    { "id": 20, "value": "Yellow" },
+    { "id": 21, "value": "Redish" },
+    { "id": 22, "value": "Champagne" },
+    { "id": 23, "value": "Cognac" },
+    { "id": 24, "value": "None" },
+    { "id": 25, "value": "Light Brown" },
+    { "id": 26, "value": "Brownish Orangy" }
+  ]
 }
