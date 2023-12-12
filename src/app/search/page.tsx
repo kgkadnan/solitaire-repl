@@ -30,7 +30,7 @@ import { NoDataFound } from '@/components/common/no-data-found';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
-  SEARCH_RESULT
+  RESULT
 } from '@/constants/application-constants/search-page';
 
 interface IMyProfileRoutes {
@@ -40,6 +40,11 @@ interface IMyProfileRoutes {
     fullName: string;
   };
   path: string | number;
+}
+
+interface IPathName {
+  shortName: string;
+  fullName: string;
 }
 
 function SearchResultLayout() {
@@ -87,10 +92,7 @@ function SearchResultLayout() {
   const computeRouteAndComponentRenderer = () => {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    const replaceSubrouteWithSearchResult = subRoute?.replace(
-      `${SEARCH_RESULT}-`,
-      ''
-    );
+    const replaceSubrouteWithSearchResult = subRoute?.replace(`${RESULT}-`, '');
 
     if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
     else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
@@ -164,14 +166,15 @@ function SearchResultLayout() {
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
       router.push(`search?active-tab=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex + 1}`);
+      router.push(`/search?active-tab=${RESULT}-${removeDataIndex + 1}`);
+
       setheaderPath({
         shortName: `R ${removeDataIndex + 1}`,
         fullName: `Result ${removeDataIndex + 1}`
       });
       setActiveTab(removeDataIndex + 1);
     } else {
-      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex}`);
+      router.push(`/search?active-tab=${RESULT}-${removeDataIndex}`);
 
       setheaderPath({
         shortName: `R ${removeDataIndex}`,
@@ -277,7 +280,7 @@ function SearchResultLayout() {
   useEffect(() => {
     if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
       const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${SEARCH_RESULT}-`,
+        `${RESULT}-`,
         ''
       );
       setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
@@ -342,7 +345,7 @@ function SearchResultLayout() {
     fetchMyAPI();
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
-  const handleSearchTab = (index: number, pathName: any) => {
+  const handleSearchTab = (index: number, pathName: IPathName) => {
     if (
       maxTab === MAX_SEARCH_TAB_LIMIT &&
       pathName.fullName.toLocaleLowerCase() === 'new search'
@@ -362,7 +365,7 @@ function SearchResultLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?active-tab=${subRoute}&edit=${SEARCH_RESULT}`);
+    router.push(`/search?active-tab=${subRoute}&edit=${RESULT}`);
   };
 
   const handleCloseInputDialog = () => {
@@ -499,7 +502,7 @@ function SearchResultLayout() {
                           : 'hover:text-solitaireQuaternary'
                       }`}
                       onClick={() => handleSearchTab(parseInt(path), pathName)}
-                      href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
+                      href={`/search?active-tab=${RESULT}-${path}`}
                       key={id}
                     >
                       <div
@@ -523,17 +526,19 @@ function SearchResultLayout() {
               );
             })}
           </div>
-          <div className="w-[150px]">
-            <CustomDisplayButton
-              displayButtonLabel="Close Results"
-              displayButtonAllStyle={{
-                displayLabelStyle: styles.closeResultButton
-              }}
-              handleClick={() => {
-                handleCloseResultTabs();
-              }}
-            />
-          </div>
+          {JSON.parse(localStorage.getItem('Search')!).length > 0 && (
+            <div className="w-[150px]">
+              <CustomDisplayButton
+                displayButtonLabel="Close Results"
+                displayButtonAllStyle={{
+                  displayLabelStyle: styles.closeResultButton
+                }}
+                handleClick={() => {
+                  handleCloseResultTabs();
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
 
@@ -547,7 +552,7 @@ function SearchResultLayout() {
         <main style={{ width: '98%', minHeight: '70vh' }}>
           {headerPath === 'New Search' ||
           editSubRoute === `${SAVED_SEARCHES}` ||
-          editSubRoute === `${SEARCH_RESULT}` ? (
+          editSubRoute === `${RESULT}` ? (
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />

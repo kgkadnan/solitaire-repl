@@ -107,7 +107,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
                   : setIsInputDialogOpen(true)
               }
               displayButtonAllStyle={{
-                displayLabelStyle: `text-solitaireTertiary cursor-pointer`
+                displayLabelStyle: `text-solitaireQuaternary border-b border-solid border-solitaireQuaternary cursor-pointer`
               }}
             />
           ) : (
