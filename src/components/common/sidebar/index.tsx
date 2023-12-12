@@ -36,50 +36,7 @@ const SideBar = () => {
 
   const subRoute = useSearchParams().get('active-tab');
   const onKGKLogoContainerClick = useCallback(() => {
-    const localData: ISavedSearch[] = JSON.parse(
-      localStorage.getItem('Search')!
-    );
-
-    const data = localData?.filter(
-      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
-    );
-    if (data?.length && currentRoute == '/search') {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to save your &quot;Search <br /> Result &quot; for this
-            session?
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                localStorage.removeItem('Search');
-                router.push('/');
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    } else {
-      router.push('/');
-    }
+    router.push('/');
   }, [router, currentRoute]);
 
   const imageData: IImageTileProps[] = [
@@ -164,57 +121,7 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    const localData: ISavedSearch[] = JSON.parse(
-      localStorage.getItem('Search')!
-    );
-
-    const data = localData?.filter(
-      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
-    );
-
-    // if (data?.length && link !== `/search?active-tab=${NEW_SEARCH}`) {
-    if (data?.length && currentRoute == '/search') {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to save your &quot;Search <br /> Result &quot; for this
-            session?
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                localStorage.removeItem('Search');
-                handleRoute(nav, link);
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    }
-    // else if (data?.length && link === `/search?active-tab=${NEW_SEARCH}`) {
-    //   handleRoute(nav, link);
-    // }
-    else {
-      localStorage.removeItem('Search');
-      handleRoute(nav, link);
-    }
+    handleRoute(nav, link);
   };
 
   return (

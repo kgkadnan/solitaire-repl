@@ -35,7 +35,10 @@ import {
 
 interface IMyProfileRoutes {
   id: number;
-  pathName: string;
+  pathName: {
+    shortName: string;
+    fullName: string;
+  };
   path: string | number;
 }
 
@@ -60,15 +63,23 @@ function SearchResultLayout() {
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
 
+  const [viewPort, setViewPort] = useState<boolean>(true);
+
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
-      pathName: ManageLocales('app.searchResult.header.newSearch'),
+      pathName: {
+        shortName: ManageLocales('app.searchResult.header.newSearch'),
+        fullName: ManageLocales('app.searchResult.header.newSearch')
+      },
       path: `${NEW_SEARCH}`
     },
     {
       id: 2,
-      pathName: ManageLocales('app.savedSearch.header'),
+      pathName: {
+        shortName: ManageLocales('app.savedSearch.header'),
+        fullName: ManageLocales('app.savedSearch.header')
+      },
       path: `${SAVED_SEARCHES}`
     }
   ]);
@@ -89,22 +100,21 @@ function SearchResultLayout() {
       replaceSubrouteWithSearchResult
     ) {
       const isRouteExist =
-        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
+        yourSelection?.[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
         return 'No Data Found';
       } else {
-        return `Search Results ${parseInt(replaceSubrouteWithSearchResult!)}`;
+        return `Result ${parseInt(replaceSubrouteWithSearchResult!)}`;
       }
     } else if (
-      (masterRoute === '/search' &&
-        replaceSubrouteWithSearchResult?.length === 0) ||
-      subRoute === null
+      masterRoute === '/search' &&
+      (replaceSubrouteWithSearchResult?.length === 0 || subRoute === null)
     ) {
       return 'New Search';
     }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  const [headerPath, setheaderPath] = useState(
+  const [headerPath, setheaderPath] = useState<any>(
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
@@ -144,7 +154,10 @@ function SearchResultLayout() {
 
     for (let i = 2; i < updateMyProfileRoute.length; i++) {
       updateMyProfileRoute[i].id = i + 1;
-      updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
+      updateMyProfileRoute[i].pathName = {
+        shortName: `R ${i - 1}`,
+        fullName: `Result ${i - 1}`
+      };
       updateMyProfileRoute[i].path = i - 1;
     }
 
@@ -152,11 +165,18 @@ function SearchResultLayout() {
       router.push(`search?active-tab=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
       router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex + 1}`);
-      setheaderPath(`Search Results ${removeDataIndex + 1}`);
+      setheaderPath({
+        shortName: `R ${removeDataIndex + 1}`,
+        fullName: `Result ${removeDataIndex + 1}`
+      });
       setActiveTab(removeDataIndex + 1);
     } else {
       router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex}`);
-      setheaderPath(`Search Results ${removeDataIndex}`);
+
+      setheaderPath({
+        shortName: `R ${removeDataIndex}`,
+        fullName: `Result ${removeDataIndex}`
+      });
       setActiveTab(removeDataIndex);
     }
     refetch();
@@ -281,7 +301,11 @@ function SearchResultLayout() {
         const newRoutes = parseYourSelection
           .map((data: any, index: number) => ({
             id: index + 3,
-            pathName: `Search Results ${index + 1}`,
+            pathName: {
+              shortName: `R ${index + 1}`,
+              fullName: `Result ${index + 1}`
+            },
+
             path: index + 1
           }))
           .filter(
@@ -297,12 +321,18 @@ function SearchResultLayout() {
           setMyProfileRoutes([
             {
               id: 1,
-              pathName: ManageLocales('app.searchResult.header.newSearch'),
+              pathName: {
+                shortName: ManageLocales('app.searchResult.header.newSearch'),
+                fullName: ManageLocales('app.searchResult.header.newSearch')
+              },
               path: `${NEW_SEARCH}`
             },
             {
               id: 2,
-              pathName: ManageLocales('app.savedSearch.header'),
+              pathName: {
+                shortName: ManageLocales('app.savedSearch.header'),
+                fullName: ManageLocales('app.savedSearch.header')
+              },
               path: `${SAVED_SEARCHES}`
             }
           ]);
@@ -312,10 +342,10 @@ function SearchResultLayout() {
     fetchMyAPI();
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
-  const handleSearchTab = (index: number, pathName: string) => {
+  const handleSearchTab = (index: number, pathName: any) => {
     if (
       maxTab === MAX_SEARCH_TAB_LIMIT &&
-      pathName.toLocaleLowerCase() === 'new search'
+      pathName.fullName.toLocaleLowerCase() === 'new search'
     ) {
       setIsDialogOpen(true);
       setDialogContent(
@@ -352,6 +382,39 @@ function SearchResultLayout() {
     displayButtonLabel2: 'Save'
   };
 
+  const handleCloseResultTabs = () => {
+    localStorage.removeItem('Search');
+    setMyProfileRoutes([
+      {
+        id: 1,
+        pathName: {
+          shortName: ManageLocales('app.searchResult.header.newSearch'),
+          fullName: ManageLocales('app.searchResult.header.newSearch')
+        },
+        path: `${NEW_SEARCH}`
+      },
+      {
+        id: 2,
+        pathName: {
+          shortName: ManageLocales('app.savedSearch.header'),
+          fullName: ManageLocales('app.savedSearch.header')
+        },
+        path: `${SAVED_SEARCHES}`
+      }
+    ]);
+    router.push(`/search?active-tab=${NEW_SEARCH}`);
+  };
+
+  const isRoute = (path: string) => {
+    return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}`;
+  };
+
+  useEffect(() => {
+    const isViewPortGreater =
+      (window.innerWidth - 400) / (myProfileRoutes.length - 2) > 140;
+    setViewPort(isViewPortGreater);
+  }, [myProfileRoutes]);
+
   return (
     <>
       <CustomInputDialog
@@ -372,65 +435,108 @@ function SearchResultLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
-          {myProfileRoutes.map(({ id, pathName, path }: any) => {
-            // Check if the current route matches the link's path
-            return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}` ? (
-              <Link
-                className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                  headerPath === pathName
-                    ? ''
-                    : 'hover:text-solitaireQuaternary'
-                }`}
-                onClick={() => handleSearchTab(0, pathName)}
-                href={
-                  maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
-                    ? ``
-                    : `/search?active-tab=${path}`
-                }
-                key={id}
-              >
-                <div
-                  className={`${
-                    headerPath === pathName && 'text-solitaireQuaternary'
-                  }`}
-                >
-                  {pathName}
-                </div>
-              </Link>
-            ) : (
-              <div className={`flex items-center cursor-pointer  rounded-sm `}>
-                {activeTab === parseInt(path) && (
-                  <div onClick={() => editSearchResult(activeTab)}>
-                    <Image src={EditIcon} alt="Edit Icon" />
-                  </div>
-                )}
-                <Link
-                  className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                    headerPath === pathName
-                      ? ''
-                      : 'hover:text-solitaireQuaternary'
-                  }`}
-                  onClick={() => handleSearchTab(parseInt(path), pathName)}
-                  href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
-                  key={id}
-                >
-                  <div
-                    className={`${
-                      headerPath === pathName && 'text-solitaireQuaternary'
+        <div className="border-b border-solid  border-solitaireSenary items-center absolute top-[80px] left-[122px] flex flex-row  w-[93%] justify-between  bg-solitairePrimary pb-3 pt-3 text-[13px] gap-[20px]">
+          <div className="flex ">
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                isRoute(path) && (
+                  <Link
+                    className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary min-w-[110px] ${
+                      headerPath === pathName.fullName
+                        ? ''
+                        : 'hover:text-solitaireQuaternary'
                     }`}
+                    onClick={() => handleSearchTab(0, pathName)}
+                    href={
+                      maxTab === MAX_SEARCH_TAB_LIMIT &&
+                      path === `${NEW_SEARCH}`
+                        ? ``
+                        : `/search?active-tab=${path}`
+                    }
+                    key={id}
                   >
-                    {pathName}
+                    <div
+                      className={`${
+                        headerPath === pathName.fullName &&
+                        'text-solitaireQuaternary'
+                      }`}
+                    >
+                      {pathName.fullName}
+                    </div>
+                  </Link>
+                )
+              );
+            })}
+          </div>
+          <div className=" flex " style={{ width: '100%' }}>
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                !isRoute(path) && (
+                  <div
+                    className={`flex items-center cursor-pointer  rounded-sm `}
+                    style={{
+                      minWidth:
+                        (window.innerWidth - 500) /
+                          (myProfileRoutes.length - 2) >
+                        170
+                          ? '8%'
+                          : '5%'
+                    }}
+                  >
+                    <div className="w-[24px]">
+                      {activeTab === parseInt(path) && (
+                        <div onClick={() => editSearchResult(activeTab)}>
+                          <Image src={EditIcon} alt="Edit Icon" />
+                        </div>
+                      )}
+                    </div>
+                    <Link
+                      className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
+                        headerPath === pathName.fullName
+                          ? ''
+                          : 'hover:text-solitaireQuaternary'
+                      }`}
+                      onClick={() => handleSearchTab(parseInt(path), pathName)}
+                      href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
+                      key={id}
+                    >
+                      <div
+                        className={`${
+                          headerPath === pathName.fullName &&
+                          'text-solitaireQuaternary'
+                        }`}
+                      >
+                        {viewPort
+                          ? pathName.fullName
+                          : activeTab === parseInt(path)
+                          ? pathName.fullName
+                          : pathName.shortName}
+                      </div>
+                    </Link>
+                    <div onClick={() => closeSearch(parseInt(path) - 1)}>
+                      <CloseOutline stroke="#8C7459" />
+                    </div>
                   </div>
-                </Link>
-                <div onClick={() => closeSearch(parseInt(path) - 1)}>
-                  <CloseOutline stroke="#8C7459" />
-                </div>
-              </div>
-            );
-          })}
+                )
+              );
+            })}
+          </div>
+          <div className="w-[150px]">
+            <CustomDisplayButton
+              displayButtonLabel="Close Results"
+              displayButtonAllStyle={{
+                displayLabelStyle: styles.closeResultButton
+              }}
+              handleClick={() => {
+                handleCloseResultTabs();
+              }}
+            />
+          </div>
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',

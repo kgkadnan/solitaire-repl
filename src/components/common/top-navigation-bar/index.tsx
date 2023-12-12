@@ -44,8 +44,6 @@ export const TopNavigationBar = () => {
     store => store.notificationBadge.status
   );
 
-  // let badgeData = notificationBadgeStoreData.status;
-
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -95,57 +93,7 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    const localData: ISavedSearch[] = JSON.parse(
-      localStorage.getItem('Search')!
-    );
-
-    const data = localData?.filter(
-      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
-    );
-
-    // if (data?.length && link !== '/search?active-tab=form') {
-    if (data?.length && currentRoute == '/search') {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to save your &quot;Search <br /> Result &quot; for this
-            session?
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                localStorage.setItem('Search', JSON.stringify([]));
-                handleRoute(label, link);
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    }
-    // else if (data?.length && link === '/search?active-tab=form') {
-    //   handleRoute(label, link);
-    // }
-    else {
-      localStorage.removeItem('Search');
-      handleRoute(label, link);
-    }
+    handleRoute(label, link);
   };
 
   const handleScroll = useCallback(() => {
