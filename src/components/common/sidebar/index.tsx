@@ -16,9 +16,8 @@ import NewArrival from '@public/assets/icons/new-arrival.svg?url';
 import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
-import { ISavedSearch } from '../top-navigation-bar';
+
 import {
   NEW_SEARCH,
   SAVED_SEARCHES
