@@ -12,7 +12,7 @@ import { SOLD_OUT_STATUS } from '@/constants/business-logic';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
-import { Product } from '@/app/search/result/result-interface';
+import { ProductItem } from '../interface';
 
 const OutOfStock = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -58,12 +58,12 @@ const OutOfStock = () => {
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const soldOutItems = data.items
+        const soldOutItems = data?.cart?.items
           .filter(
-            (item: { product: Product }) =>
+            (item: ProductItem) =>
               item?.product?.diamond_status === SOLD_OUT_STATUS
           )
-          .map((row: { product: Product }) => row.product);
+          .map((row: ProductItem) => row.product);
 
         setRows(soldOutItems);
       }

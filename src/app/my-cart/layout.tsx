@@ -11,7 +11,7 @@ import {
   MEMO_OUT_STATUS,
   SOLD_OUT_STATUS
 } from '@/constants/business-logic';
-import { Product } from '../search/result/result-interface';
+import { ProductItem } from './interface';
 
 function MyCart({ children }: { children: React.ReactNode }) {
   // Get the current pathname using the usePathname hook
@@ -58,51 +58,50 @@ function MyCart({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems = data.items
+        const activeDiamondItems = data?.cart?.items
           .filter(
-            (item: { product: Product }) =>
+            (item: ProductItem) =>
               item?.product?.diamond_status === ACTIVE_STATUS
           )
-          .map((row: { product: Product }) => row.product);
+          .map((row: ProductItem) => row?.product);
+
         setActiveTabCount(activeDiamondItems?.length);
       }
     };
-
     updateRows();
   }, [data]);
 
-  // useEffect to update sold out count when cart data changes
+  // // useEffect to update sold out count when cart data changes
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const soldOutItems = data.items
+        const soldOutItems = data?.cart?.items
           .filter(
-            (item: { product: Product }) =>
+            (item: ProductItem) =>
               item?.product?.diamond_status === SOLD_OUT_STATUS
           )
-          .map((row: { product: Product }) => row.product);
+          .map((row: ProductItem) => row?.product);
 
         setSoldCount(soldOutItems?.length);
       }
     };
-
     updateRows();
   }, [data]);
 
-  // useEffect to update memo out count when cart data changes
+  // // useEffect to update memo out count when cart data changes
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const memoOutDiamondItems = data.items
+        const memoOutDiamondItems = data?.cart?.items
           .filter(
-            (item: any) => item?.product?.diamond_status === MEMO_OUT_STATUS
+            (item: ProductItem) =>
+              item?.product?.diamond_status === MEMO_OUT_STATUS
           )
-          .map((row: any) => row.product);
+          .map((row: ProductItem) => row?.product);
 
         setMemoCount(memoOutDiamondItems?.length);
       }
     };
-
     updateRows();
   }, [data]);
 

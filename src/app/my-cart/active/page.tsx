@@ -30,6 +30,7 @@ import { handleConfirmStone } from '@/components/common/confirm-stone/helper/han
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { Product } from '@/app/search/result/result-interface';
+import { ProductItem } from '../interface';
 
 const ActiveMyCart = () => {
   // State variables for managing component state
@@ -87,8 +88,11 @@ const ActiveMyCart = () => {
     } else {
       // Get the data of selected stones and open a new window for comparison
       const compareStones = isCheck
-        .map(id =>
-          data.items.find((row: { product: Product }) => row.product.id === id)
+        .map(
+          id =>
+            data?.cart?.items.find(
+              (row: { product: Product }) => row.product.id === id
+            )
         )
         .map(stone => stone.product);
 
@@ -135,9 +139,10 @@ const ActiveMyCart = () => {
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
     const itemsId = isCheck.map(id => {
-      const selectedRow = data.items.find(
-        (row: { product: Product }) => row.product.id === id
+      const selectedRow = data.cart.items.find(
+        (row: ProductItem) => row.product.id === id
       );
+
       return selectedRow?.id;
     });
 
@@ -263,12 +268,12 @@ const ActiveMyCart = () => {
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems = data.items
+        const activeDiamondItems = data?.cart?.items
           .filter(
-            (item: { product: Product }) =>
+            (item: ProductItem) =>
               item?.product?.diamond_status === ACTIVE_STATUS
           )
-          .map((row: { product: Product }) => row.product);
+          .map((row: ProductItem) => row?.product);
 
         setRows(activeDiamondItems);
       }

@@ -15,6 +15,7 @@ import { useDataTableStateManagement } from '@/components/common/data-table/hook
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { Product } from '@/app/search/result/result-interface';
+import { ProductItem } from '../interface';
 
 const MemoOut = () => {
   // State variables
@@ -65,7 +66,7 @@ const MemoOut = () => {
     } else {
       const compareStones = isCheck
         .map(id =>
-          data.items.find((row: { product: Product }) => row.product.id === id)
+          data.cart.items.find((row: ProductItem) => row.product.id === id)
         )
         .map(stone => stone.product);
 
@@ -141,12 +142,11 @@ const MemoOut = () => {
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems = data.items
+        const activeDiamondItems = data.cart.items
           .filter(
-            (item: { product: Product }) =>
-              item?.product?.diamond_status === 'MemoOut'
+            (item: ProductItem) => item?.product?.diamond_status === 'MemoOut'
           )
-          .map((row: { product: Product }) => row.product);
+          .map((row: ProductItem) => row.product);
 
         setRows(activeDiamondItems);
       }
