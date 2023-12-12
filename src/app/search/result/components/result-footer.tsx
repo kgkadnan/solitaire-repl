@@ -14,6 +14,7 @@ import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -39,36 +40,6 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const { setConfirmStoneData } = confirmStoneSetState;
 
-  /* The above code is a function called `performDownloadExcel` that takes an array of `productIds` as a
-parameter. */
-  const performDownloadExcel = (productIds: string[]) => {
-    downloadExcel({ productIds })
-      .unwrap()
-      .then(res => {
-        const { data, fileName } = res;
-        if (data) {
-          setDialogContent(
-            <>
-              <div className="max-w-[380px] flex justify-center align-middle">
-                <Image src={confirmImage} alt="vector image" />
-              </div>
-              <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully
-              </div>
-            </>
-          );
-          setIsDialogOpen(true);
-          downloadExcelFromBase64(data, fileName);
-        }
-      })
-      .catch((e: any) => {
-        console.log('error', e);
-      });
-
-    setIsCheck([]);
-    setIsCheckAll(false);
-    setIsError(false);
-  };
   /**
    * The function `downloadExcelFunction` checks if a stone is selected and performs a download action if
    * it is.
@@ -78,7 +49,15 @@ parameter. */
       setIsError(true);
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
-      performDownloadExcel(isCheck);
+      performDownloadExcel({
+        productIds: isCheck,
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError
+      });
     }
   };
 
@@ -235,13 +214,13 @@ parameter. */
     <div className="sticky-bottom bg-solitairePrimary mt-3">
       <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
         <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-sm">
+          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-[2px]">
             0000000000
           </span>
           <p className="text-solitaireTertiary text-sm">Memo</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-sm">
+          <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-[2px]">
             0000000000
           </span>
           <p className="text-solitaireTertiary text-sm">In Cart</p>

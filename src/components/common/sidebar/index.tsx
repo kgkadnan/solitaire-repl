@@ -30,7 +30,7 @@ const SideBar = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const { setDialogContent, setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen } = modalSetState;
   const { dialogContent, isDialogOpen } = modalState;
 
   const subRoute = useSearchParams().get('active-tab');
