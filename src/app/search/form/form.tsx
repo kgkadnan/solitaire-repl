@@ -31,6 +31,8 @@ import { ISavedSearch } from '@/components/common/top-navigation-bar';
 
 const AdvanceSearch = () => {
   const router = useRouter();
+
+  // Selectors for data from Redux store
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
   );
@@ -43,6 +45,7 @@ destructure and assign the `state`, `setState`, and `carat` variables. These var
 used for managing the state of a form field or input element in a React component. */
   const { state, setState, carat } = useFieldStateManagement();
 
+  // Hooks for managing validation and other UI states
   const {
     isInputDialogOpen,
     setIsInputDialogOpen,
@@ -74,12 +77,25 @@ used for managing the state of a form field or input element in a React componen
   } = useValidationStateManagement();
 
   const searchParams = useSearchParams();
+
+  // Mutations for API interactions
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
 
+  const { data, error } = useGetProductCountQuery(
+    {
+      searchUrl
+    },
+    {
+      skip: !searchUrl
+    }
+  );
+
+  // Check if the search form is in 'edit' mode
   const modifySearchFrom = searchParams.get('edit');
   const isNewSearch = searchParams.get('active-tab');
 
+  // Load saved search data when component mounts
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
@@ -94,6 +110,7 @@ used for managing the state of a form field or input element in a React componen
     }
   }, [modifySearchFrom]);
 
+  //Load saved searches from local storage when component mounts
   useEffect(() => {
     let data: ISavedSearch[] | [] =
       JSON.parse(localStorage.getItem('Search')!) || [];
@@ -102,6 +119,7 @@ used for managing the state of a form field or input element in a React componen
     }
   }, []);
 
+  // Reset form when a new search is initiated
   useEffect(() => {
     if (isNewSearch === `${NEW_SEARCH}`) {
       handleFormReset();
@@ -117,14 +135,7 @@ used for managing the state of a form field or input element in a React componen
     handleReset(setState);
   };
 
-  const { data, error } = useGetProductCountQuery(
-    {
-      searchUrl
-    },
-    {
-      skip: !searchUrl
-    }
-  );
+  // Update search URL when form state changes
   useEffect(() => {
     const queryParams = generateQueryParams(state);
     // Construct your search URL here
@@ -133,6 +144,7 @@ used for managing the state of a form field or input element in a React componen
     }
   }, [state]);
 
+  //Handle search count and errors
   useEffect(() => {
     if (searchCount !== -1) {
       if (searchUrl) {
@@ -167,6 +179,7 @@ used for managing the state of a form field or input element in a React componen
     setSearchCount(searchCount + 1);
   }, [data, error, errorText, searchUrl]);
 
+  // Function: Save and search
   const handleSaveAndSearch: any = async () => {
     if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
@@ -233,6 +246,7 @@ used for managing the state of a form field or input element in a React componen
     }
   };
 
+  // Function: Handle search
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
     if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
@@ -294,6 +308,7 @@ used for managing the state of a form field or input element in a React componen
     }
   };
 
+  // Data for custom input dialog
   const customInputDialogData = {
     isOpens: isInputDialogOpen,
     setIsOpen: setIsInputDialogOpen,
@@ -305,6 +320,7 @@ used for managing the state of a form field or input element in a React componen
     displayButtonLabel2: 'Save'
   };
 
+  // Function: Close input dialog
   const handleCloseInputDialog = () => {
     setIsInputDialogOpen(false);
     setInputError(false);

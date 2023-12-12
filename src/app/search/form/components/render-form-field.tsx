@@ -463,6 +463,7 @@ const renderContent = (
     }
   ];
 
+  //Radio data for shape selection
   const shapeRadioData = [
     {
       name: 'steps',
