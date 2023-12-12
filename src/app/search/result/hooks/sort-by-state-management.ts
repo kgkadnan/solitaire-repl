@@ -19,7 +19,8 @@ export const useSortByStateManagement = () => {
     useState<string>('');
 
   const [refetchDataToDefault, setRefetchDataToDefault] = useState(false);
-  const [selectedDefaultValue, setSelectedDefaultValue] = useState<string>('');
+  const [selectedDefaultValue, setSelectedDefaultValue] =
+    useState<string>('Default');
   const [previousRadioState, setPreviousRadioState] = useState<any>(null);
   const [isSortBySliderOpen, setIsSortBySliderOpen] = useState(Boolean);
 

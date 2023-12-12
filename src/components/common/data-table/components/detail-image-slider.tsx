@@ -52,9 +52,12 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
     {
       id: '3',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.b2b'
+        'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
-      iframeUrl: `${FILE_URLS.B2B.replace('***', sliderData[0]?.lot_id ?? '')}`
+      iframeUrl: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`
     }
   ];
 

@@ -4,7 +4,7 @@ import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
-import { SEARCH_RESULT } from '@/constants/application-constants/search-page';
+import { RESULT } from '@/constants/application-constants/search-page';
 
 //Handles the click event on a saved search card.
 export const handleCardClick = (
@@ -54,7 +54,7 @@ export const handleCardClick = (
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?active-tab=${SEARCH_RESULT}-${data.length + 1}`);
+        router.push(`/search?active-tab=${RESULT}-${data.length + 1}`);
       }
     } else {
       // If no data in local storage, create a new entry and navigate to the search result page
@@ -68,7 +68,7 @@ export const handleCardClick = (
       ];
 
       localStorage.setItem('Search', JSON.stringify(localStorageData));
-      router.push(`/search?active-tab=${SEARCH_RESULT}-${1}`);
+      router.push(`/search?active-tab=${RESULT}-${1}`);
     }
   }
 };
