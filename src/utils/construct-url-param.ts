@@ -39,6 +39,7 @@ export function constructUrlParams(data: QueryData): string {
       if (Array.isArray(value)) {
         if (key === 'carat') {
           encodeNested(key, value); // Handle carat separately
+          //test
         } else {
           value.forEach(item => {
             queryParams.push(`${key}[]=${item}`);
