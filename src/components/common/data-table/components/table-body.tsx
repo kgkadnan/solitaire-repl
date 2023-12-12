@@ -1,5 +1,4 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
@@ -159,7 +158,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     switch (column.accessor) {
       case 'details':
         return (
-          <div
+          <button
             className="flex items-center gap-2"
             onClick={e => e.stopPropagation()}
           >
@@ -177,11 +176,11 @@ export const TableBody: React.FC<ITbodyProps> = ({
               tableRows={tableRows}
               index={index}
             />
-          </div>
+          </button>
         );
       case 'lot_id':
         return (
-          <div onClick={e => e.stopPropagation()}>
+          <button onClick={e => e.stopPropagation()}>
             <DiamondDetailSlider
               dataTableBodyState={dataTableBodyState}
               dataTableBodySetState={dataTableBodySetState}
@@ -192,7 +191,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
               footerButtonData={footerButtonData}
               modalSetState={modalSetState}
             />
-          </div>
+          </button>
         );
       case 'lab':
         return (

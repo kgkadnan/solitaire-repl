@@ -8,7 +8,6 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { IResultFooterProps, Product } from '../result-interface';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';

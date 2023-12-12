@@ -526,7 +526,7 @@ function SearchResultLayout() {
               );
             })}
           </div>
-          {JSON.parse(localStorage.getItem('Search')!).length > 0 && (
+          {JSON.parse(localStorage.getItem('Search')!)?.length > 0 && (
             <div className="w-[150px]">
               <CustomDisplayButton
                 displayButtonLabel="Close Results"
