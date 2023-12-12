@@ -602,7 +602,7 @@ const renderContent = (
                   value={caratRangeFrom}
                   placeholder={ManageLocales('app.advanceSearch.from')}
                   style={{
-                    input: styles.inputFieldStyles
+                    input: `${styles.inputFieldStyles} ${styles.caratInputFieldStyles}`
                   }}
                 />
                 <CustomInputField
@@ -623,7 +623,7 @@ const renderContent = (
                   value={caratRangeTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
                   style={{
-                    input: styles.inputFieldStyles
+                    input: `${styles.inputFieldStyles} ${styles.caratInputFieldStyles}`
                   }}
                 />
               </div>
