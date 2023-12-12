@@ -464,7 +464,7 @@ const renderContent = (
   ];
 
   //Radio data for shape selection
-  const shapeRadioData = [
+  const shadeRadio = [
     {
       name: 'steps',
       onChange: (data: string) => {
@@ -642,7 +642,8 @@ const renderContent = (
                 '',
                 '',
                 [],
-                handleCaratRangeChange
+                handleCaratRangeChange,
+                true
               )}
             </div>
           </div>
@@ -692,7 +693,10 @@ const renderContent = (
             label={ManageLocales('app.advanceSearch.fancy')}
           />
         </div>
-        <div className={`flex ${styles.filterSectionData}`} style={{paddingLeft:"10px"}}>
+        <div
+          className={`flex ${styles.filterSectionData}`}
+          style={{ paddingLeft: '10px' }}
+        >
           <CustomSelect
             data={advanceSearch.fancyColor}
             onChange={handleFancyFilterChange}
@@ -902,9 +906,9 @@ const renderContent = (
             label={ManageLocales('app.advanceSearch.Shade')}
           />
         </div>
-        <div  className={styles.filterSectionData}>
+        <div className={styles.filterSectionData}>
           <div className="flex gap-3" style={{ margin: '10px' }}>
-            {shapeRadioData.map(radioData => {
+            {shadeRadio.map(radioData => {
               return (
                 <RadioButton key={radioData.id} radioMetaData={radioData} />
               );
@@ -930,7 +934,11 @@ const renderContent = (
         </div>
         <div
           className={`${styles.filterSectionData}`}
-          style={{ display: 'flex',justifyContent:"space-between",paddingLeft:"10px"}}
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            paddingLeft: '10px'
+          }}
         >
           <div style={{ width: '18%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
@@ -984,7 +992,7 @@ const renderContent = (
             }}
           >
             {' '}
-            <div  className={styles.filterSectionLabel} style={{ width: '40%' }}>
+            <div className={styles.filterSectionLabel} style={{ width: '40%' }}>
               <CustomInputlabel
                 htmlfor="text"
                 label={ManageLocales('app.advanceSearch.pricePerCarat')}
@@ -1032,50 +1040,50 @@ const renderContent = (
               </div>
             </div>
           </div>
-          <div style={{ width: '30%',display:"flex" }}>
-            <div className={styles.filterSectionLabel} style={{width:"40%"}}>
+          <div style={{ width: '30%', display: 'flex' }}>
+            <div className={styles.filterSectionLabel} style={{ width: '40%' }}>
               <CustomInputlabel
                 htmlfor="text"
                 label={ManageLocales('app.advanceSearch.amountRange')}
               />
             </div>
-            <div style={{width:"60%"}}>
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <CustomInputField
-                // style={className}
-                type="number"
-                name="priceRangeFrom"
-                onChange={e => {
-                  setPriceRangeFrom(e.target.value);
-                }}
-                value={priceRangeFrom}
-                placeholder={ManageLocales('app.advanceSearch.from')}
-                style={{
-                  input: styles.inputFieldStyles
-                }}
-              />
-              <CustomInputField
-                // style={className}
-                type="number"
-                name="priceRangeTo"
-                onChange={e => {
-                  setPriceRangeTo(e.target.value);
-                  handleValidate(
-                    'price_range',
-                    'to',
-                    e.target.value,
-                    priceRangeFrom
-                  );
-                }}
-                value={priceRangeTo}
-                placeholder={ManageLocales('app.advanceSearch.to')}
-                style={{
-                  input: styles.inputFieldStyles
-                }}
-              />
-            </div>
-            
-            {validationError}
+            <div style={{ width: '60%' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <CustomInputField
+                  // style={className}
+                  type="number"
+                  name="priceRangeFrom"
+                  onChange={e => {
+                    setPriceRangeFrom(e.target.value);
+                  }}
+                  value={priceRangeFrom}
+                  placeholder={ManageLocales('app.advanceSearch.from')}
+                  style={{
+                    input: styles.inputFieldStyles
+                  }}
+                />
+                <CustomInputField
+                  // style={className}
+                  type="number"
+                  name="priceRangeTo"
+                  onChange={e => {
+                    setPriceRangeTo(e.target.value);
+                    handleValidate(
+                      'price_range',
+                      'to',
+                      e.target.value,
+                      priceRangeFrom
+                    );
+                  }}
+                  value={priceRangeTo}
+                  placeholder={ManageLocales('app.advanceSearch.to')}
+                  style={{
+                    input: styles.inputFieldStyles
+                  }}
+                />
+              </div>
+
+              {validationError}
             </div>
           </div>
         </div>

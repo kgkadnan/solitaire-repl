@@ -192,7 +192,7 @@ const renderInclusionField = (state: any, setState: any) => {
     <div
       key={`other-parameter-${other.key}`}
       className={`${styles.otherParameterContainer}`}
-      style={{paddingLeft:"10px"}}
+      style={{ paddingLeft: '10px' }}
     >
       <CustomInputlabel
         htmlfor="text"
@@ -211,7 +211,7 @@ const renderInclusionField = (state: any, setState: any) => {
               overriddenStyles={{ label: styles.labelPlainColor }}
             />
           </div>
-          <div className={`${styles.filterSectionData}`} >
+          <div className={`${styles.filterSectionData}`}>
             {renderSelectionButtons(
               data.element_value,
               '',
