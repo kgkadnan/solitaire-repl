@@ -214,13 +214,13 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     <div className="sticky-bottom bg-solitairePrimary mt-3">
       <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
         <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-sm">
+          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-[2px]">
             0000000000
           </span>
           <p className="text-solitaireTertiary text-sm">Memo</p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-sm">
+          <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-[2px]">
             0000000000
           </span>
           <p className="text-solitaireTertiary text-sm">In Cart</p>
