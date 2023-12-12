@@ -198,7 +198,7 @@ const renderMeasurementField = (state: any, setState: any) => {
   }
 
   return parameterData.map((parameter: IRenderMeasurementData) => (
-    <div key={parameter.label} className={styles.parameterContainer}>
+    <div key={parameter.label} className={styles.parameterContainer} style={{paddingLeft:"10px"}}>
       <CustomInputlabel
         htmlfor="text"
         label={parameter.label}

@@ -191,7 +191,8 @@ const renderInclusionField = (state: any, setState: any) => {
   return otherParameterData.map((other: IRenderOtherParameterData) => (
     <div
       key={`other-parameter-${other.key}`}
-      className={styles.otherParameterContainer}
+      className={`${styles.otherParameterContainer}`}
+      style={{paddingLeft:"10px"}}
     >
       <CustomInputlabel
         htmlfor="text"
@@ -200,7 +201,7 @@ const renderInclusionField = (state: any, setState: any) => {
       />
       {other.value.map(data => (
         <div
-          className={`${styles.filterSection} ${styles.otherParameterDataContainer} `}
+          className={`${styles.filterSection} ${styles.otherParameterDataContainer}`}
           key={`${other.key}-${data.element_key}`}
         >
           <div className={`${styles.otherParameterTitle}`}>
@@ -210,7 +211,7 @@ const renderInclusionField = (state: any, setState: any) => {
               overriddenStyles={{ label: styles.labelPlainColor }}
             />
           </div>
-          <div className={styles.filterSectionData}>
+          <div className={`${styles.filterSectionData}`} >
             {renderSelectionButtons(
               data.element_value,
               '',

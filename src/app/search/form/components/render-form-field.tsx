@@ -902,7 +902,7 @@ const renderContent = (
             label={ManageLocales('app.advanceSearch.Shade')}
           />
         </div>
-        <div>
+        <div  className={styles.filterSectionData}>
           <div className="flex gap-3" style={{ margin: '10px' }}>
             {shapeRadioData.map(radioData => {
               return (
@@ -910,7 +910,7 @@ const renderContent = (
               );
             })}
           </div>
-          <div className={styles.filterSectionData}>
+          <div>
             {renderSelectionButtons(
               advanceSearch.color_shade,
               '',
@@ -930,7 +930,7 @@ const renderContent = (
         </div>
         <div
           className={`${styles.filterSectionData}`}
-          style={{ display: 'flex',justifyContent:"space-between" }}
+          style={{ display: 'flex',justifyContent:"space-between",paddingLeft:"10px"}}
         >
           <div style={{ width: '18%' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
