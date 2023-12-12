@@ -13,15 +13,41 @@ const Login = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [verifyLogin] = useVerifyLoginMutation();
+  const [isError, setIsError] = useState(false);
+  const [errorText, setErrorText] = useState<string>('');
   const router = useRouter();
 
   const handleLogin = async () => {
     let res: any = await verifyLogin({ email: email, password: password });
-    if (res.data.customer) {
-      localStorage.removeItem('Search');
-      router.push('/');
+    if (res.error) {
+      setIsError(true);
+      setErrorText(res.error.data.message);
+    } else {
+      if (res.data.customer) {
+        localStorage.removeItem('Search');
+        router.push('/');
+      }
     }
   };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleLogin();
+    }
+  };
+
+  const handleEmailInput = (e: any) => {
+    setEmail(e.target.value);
+    setIsError(false);
+    setErrorText('');
+  };
+
+  const handlePasswordInput = (e: any) => {
+    setPassword(e.target.value);
+    setIsError(false);
+    setErrorText('');
+  };
+
   return (
     <div style={{ display: 'flex', flexDirection: 'row' }}>
       <div>
@@ -52,15 +78,21 @@ const Login = () => {
           name={'email'}
           placeholder="Email"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={e => setEmail(e.target.value)}
+          onChange={handleEmailInput}
+          onKeyDown={handleKeyDown}
         />
         <CustomInputField
           type={'password'}
           name={'password'}
           placeholder="Password"
           style={{ input: styles.input, inputMain: styles.inputContainer }}
-          onChange={e => setPassword(e.target.value)}
+          onChange={handlePasswordInput}
+          onKeyDown={handleKeyDown}
         />
+        <div className="h-6">
+          {isError ? <div className="text-red-600">{errorText}</div> : ''}
+        </div>
+
         <CustomDisplayButton
           displayButtonLabel={'Login'}
           displayButtonAllStyle={{

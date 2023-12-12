@@ -19,3 +19,29 @@ export interface IFilterByDaysProps {
   setMyInvoiceSelectedDays: (selectedDays: string) => void;
   setPreviousConfirmationSelectedDays: (selectedDays: string) => void;
 }
+
+export interface PageTitles {
+  [key: string]: string;
+}
+
+export interface MyDiamondsProps {
+  data: any;
+  handleCardClick: (id: string) => void;
+  productPageDetail?: any;
+  check?: string;
+  setOffset?: (offset: number) => void;
+  setLimit?: (limit: number) => void;
+  limit?: number;
+}
+
+export interface MyDiamondsSheetContentProps {
+  check: string | undefined;
+  productPageDetail: any;
+  rows: any[];
+  tableColumns: any[];
+  checkboxData: any;
+  errorSetState: any;
+  isError: boolean;
+  errorText: string;
+  downloadExcelFunction: () => void;
+}
