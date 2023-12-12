@@ -8,7 +8,6 @@ import SavedSearch from '@public/assets/icons/bookmark-outline.svg?url';
 import Appointment from '@public/assets/icons/calendar-clear-outline.svg?url';
 import MyCart from '@public/assets/icons/cart-outline.svg?url';
 import AdvanceSearch from '@public/assets/icons/search-outline.svg?url';
-import RecentConfirmation from '@public/assets/icons/checkmark-circle-outline.svg?url';
 import Layout from '@public/assets/icons/layout.svg?url';
 import MatchPair from '@public/assets/icons/match-pair.svg?url';
 import MyDiamond from '@public/assets/icons/my-diamond.svg?url';
@@ -16,9 +15,7 @@ import NewArrival from '@public/assets/icons/new-arrival.svg?url';
 import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
-import { ISavedSearch } from '../top-navigation-bar';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES
@@ -83,27 +80,16 @@ const SideBar = () => {
       isActive: currentRoute === '/layouts'
     },
     {
-      src: (
-        <RecentConfirmation
-          className={styles.stroke}
-          alt="recent-confiramtion"
-        />
-      ),
-      title: ManageLocales('app.sideNav.recentConfirmations'),
-      link: '/recent-confiramtion',
-      isActive: currentRoute === '/recent-confiramtion'
+      src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
+      title: ManageLocales('app.sideNav.myDiamonds'),
+      link: '/my-diamonds',
+      isActive: currentRoute === '/my-diamonds'
     },
     {
       src: <Appointment className={styles.stroke} alt="appointments" />,
       title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
       isActive: currentRoute === '/appointments'
-    },
-    {
-      src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
-      title: ManageLocales('app.sideNav.myDiamonds'),
-      link: '/my-diamonds',
-      isActive: currentRoute === '/my-diamonds'
     }
   ];
 
