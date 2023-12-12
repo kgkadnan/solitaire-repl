@@ -132,7 +132,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   return (
     <CustomSlider
       sheetTriggenContent={
-        <div
+        <button
           onClick={() => {
             setActiveTab('1');
             setDiamondDetailIframeUrl('');
@@ -148,7 +148,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
           }`}
         >
           {row[column.accessor as keyof Product]}
-        </div>
+        </button>
       }
       sheetContentStyle={styles.diamondDetailSheet}
       sheetContent={
