@@ -143,6 +143,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * Finally, it handles the promise returned by `confirmStone`, logging any errors to the console.
    * @returns None
    */
+
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
 
@@ -150,22 +151,46 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       variantIds.push(ids.variants[0].id);
     });
 
-    if (
-      (variantIds.length && !inputError && selectedRadioDaysValue.length) ||
-      selectedDaysInputValue.length
-    ) {
-      confirmProduct({
-        variants: variantIds,
-        comments: commentValue,
-        payterm: parseInt(
-          selectedDaysInputValue.length > 0
-            ? selectedDaysInputValue
-            : selectedRadioDaysValue
-        )
-      })
-        .unwrap()
-        .then(res => {
-          if (res) {
+    if (!inputError) {
+      if (
+        variantIds.length &&
+        ((selectedRadioDaysValue.length &&
+          selectedRadioDaysValue !== 'other' &&
+          !selectedDaysInputValue.length) ||
+          (selectedRadioDaysValue === 'other' && selectedDaysInputValue.length))
+      ) {
+        confirmProduct({
+          variants: variantIds,
+          comments: commentValue,
+          payment_term: parseInt(
+            selectedDaysInputValue.length > 0
+              ? selectedDaysInputValue
+              : selectedRadioDaysValue
+          )
+        })
+          .unwrap()
+          .then(res => {
+            if (res) {
+              setCommentValue('');
+              setSelectedDaysInputValue('');
+              setInputErrorContent('');
+              setInputError(false);
+              onOpenChange(false);
+              setIsDialogOpen(true);
+              setDialogContent(
+                <>
+                  <div className="max-w-[400px] flex justify-center ">
+                    <Image src={confirmImage} alt="confirmImage" />
+                  </div>
+                  <div className="max-w-[400px] flex justify-center text-solitaireTertiary">
+                    {variantIds.length} Stone Successfully Confirmed
+                  </div>
+                </>
+              );
+            }
+          })
+          .catch(e => {
+            setCommentValue('');
             setSelectedDaysInputValue('');
             setInputErrorContent('');
             setInputError(false);
@@ -173,37 +198,20 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             setIsDialogOpen(true);
             setDialogContent(
               <>
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="confirmImage" />
+                <div className=" flex justify-center align-middle items-center">
+                  <Image src={errorImage} alt="errorImage" />
+                  <p>Error!</p>
                 </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                  {variantIds.length} Stone Successfully Confirmed
+                <div className="text-center text-solitaireTertiary">
+                  {e.data.message}
                 </div>
               </>
             );
-          }
-        })
-        .catch(e => {
-          setSelectedDaysInputValue('');
-          setInputErrorContent('');
-          setInputError(false);
-          onOpenChange(false);
-          setIsDialogOpen(true);
-          setDialogContent(
-            <>
-              <div className="max-w-[400px] flex justify-center align-middle items-center">
-                <Image src={errorImage} alt="errorImage" />
-                <p>Error!</p>
-              </div>
-              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                {e.message}
-              </div>
-            </>
-          );
-        });
-    } else {
-      setIsSliderError(true);
-      setSliderErrorText('This Is a Mandotry Field');
+          });
+      } else {
+        setIsSliderError(true);
+        setSliderErrorText('This Is a Mandotry Field');
+      }
     }
   };
 

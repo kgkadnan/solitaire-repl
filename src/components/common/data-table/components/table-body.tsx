@@ -53,14 +53,14 @@ export const TableBody: React.FC<ITbodyProps> = ({
         variants: [sliderData[0]?.variants[0].id]
       })
         .unwrap()
-        .then(() => {
+        .then(res => {
           setDialogContent?.(
             <>
               <div className="max-w-[400px] flex justify-center align-middle">
                 <Image src={confirmImage} alt="vector image" />
               </div>
               <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Item successfully added to cart
+                {res?.message}
               </div>
             </>
           );
@@ -129,10 +129,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
             },
             {
               label: 'Find Matching Pair',
-              fn: ''
-            },
-            {
-              label: 'Compare Stone',
               fn: ''
             }
           ]}

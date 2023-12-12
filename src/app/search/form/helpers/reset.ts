@@ -2,7 +2,6 @@ export const handleReset = (setState: any) => {
   const {
     setSelectedShape,
     setSelectedColor,
-    setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
@@ -73,7 +72,6 @@ export const handleReset = (setState: any) => {
   } = setState;
   setSelectedShape([]);
   setSelectedColor('');
-  setSelectedWhiteColor([]);
   setSelectedFancyColor([]);
   setSelectedIntensity([]);
   setSelectedOvertone([]);
