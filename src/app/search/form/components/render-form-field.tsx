@@ -12,6 +12,8 @@ import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import { CustomSelect } from '@/components/common/select';
+import { RadioButton } from '@/components/common/custom-input-radio';
+import Select, { StylesConfig } from 'react-select';
 
 const renderContent = (
   state: any,
@@ -58,7 +60,8 @@ const renderContent = (
     pricePerCaratTo,
     caratRangeFrom,
     caratRangeTo,
-    selectedFancyColor
+    selectedFancyColor,
+    selectedOvertone
   } = state;
 
   const {
@@ -147,20 +150,39 @@ const renderContent = (
   };
 
   // Function to handle fancy color filter change based on user selection
-  const handleFancyFilterChange = (data: string) => {
+  const handleFancyFilterChange = (selectedOption: any) => {
     setSelectedColor([]);
-    handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
+    setSelectedFancyColor([]);
+    selectedOption.map((data: any) => {
+      setSelectedFancyColor((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data.value
+      ]);
+    });
   };
   // Function to handle intensity change based on user selection
-  const handleIntensityChange = (data: string) => {
+  const handleIntensityChange = (selectedOption: any) => {
+    console.log('selectedOption', selectedOption);
     setSelectedColor([]);
-    setSelectedIntensity(data);
+    setSelectedIntensity([]);
+    selectedOption.map((data: any) => {
+      setSelectedIntensity((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data.value
+      ]);
+    });
   };
 
   // Function to handle overtone change based on user selection
-  const handleOvertoneChange = (data: string) => {
+  const handleOvertoneChange = (selectedOption: any) => {
     setSelectedColor([]);
-    setSelectedOvertone(data);
+    setSelectedOvertone([]);
+    selectedOption.map((data: any) => {
+      setSelectedOvertone((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data.value
+      ]);
+    });
   };
 
   // Function to handle tinge change based on user selection
@@ -523,6 +545,92 @@ const renderContent = (
     }
   };
 
+  const customStyles = {
+    option: (defaultStyles: any, state: any) => ({
+      ...defaultStyles,
+      color: state.isSelected ? '#212529' : '#fff',
+      backgroundColor: 'bg-solitairePrimary',
+      border: '1px solid '
+    }),
+
+    control: (defaultStyles: any) => ({
+      ...defaultStyles,
+      backgroundColor: 'bg-solitairePrimary',
+      border: '1px solid ',
+
+      boxShadow: 'none'
+    })
+    // singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: '#fff' })
+  };
+  interface ColourOption {
+    readonly value: string;
+    readonly label: string;
+  }
+
+  const colourStyles: StylesConfig<ColourOption, true> = {
+    control: styles => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+
+      backgroundColor: ' hsl(var(--solitaire-primary))',
+      borderRadius: 'none',
+      border: 'none',
+      borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
+      // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
+      outline: '1px solid hsl(var(--solitaire-primary))',
+      width: '100%',
+      ':hover': {
+        border: 'none',
+        borderBottom: '1px solid hsl(var(--solitaire-quaternary))'
+      }
+    }),
+    placeholder: styles => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))'
+    }),
+    menuList: styles => ({
+      ...styles,
+      backgroundColor: 'hsl(var(--solitaire-denary))',
+      height: '20vh'
+    }),
+    option: styles => {
+      return {
+        ...styles,
+
+        backgroundColor: 'hsl(var(--solitaire-denary))',
+        color: 'hsl(var(--solitaire-tertiary))',
+
+        ':active': {
+          ...styles[':active'],
+          backgroundColor: 'hsl(var(--solitaire-denary))'
+        },
+        ':hover': {
+          backgroundColor: 'hsl(var(--solitaire-secondary))',
+          color: 'hsl(var(--solitaire-tertiary))'
+        }
+      };
+    },
+    multiValue: styles => {
+      return {
+        ...styles,
+        backgroundColor: 'hsl(var(--solitaire-primary))'
+      };
+    },
+    multiValueLabel: styles => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      backgroundColor: 'hsl(var(--solitaire-primary))'
+    }),
+    multiValueRemove: styles => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      ':hover': {
+        backgroundColor: 'hsl(var(--solitaire-primary))',
+        color: 'hsl(var(--solitaire-tertiary))'
+      }
+    })
+  };
+
   return (
     <>
       {' '}
@@ -666,10 +774,40 @@ const renderContent = (
           />
         </div>
         <div
-          className={`flex ${styles.filterSectionData}`}
+          className={`flex justify-between w-full ${styles.filterSectionData}`}
           style={{ paddingLeft: '10px' }}
         >
-          <CustomSelect
+          <div className="w-[30%]">
+            <Select
+              options={advanceSearch.fancyColor}
+              onChange={handleFancyFilterChange}
+              placeholder={ManageLocales('app.advanceSearch.fancyColor')}
+              styles={colourStyles}
+              isMulti
+              closeMenuOnSelect={false}
+            />
+          </div>
+          <div className="w-[30%]">
+            <Select
+              options={advanceSearch.intensity}
+              onChange={handleIntensityChange}
+              placeholder={ManageLocales('app.advanceSearch.intensity')}
+              styles={colourStyles}
+              isMulti
+              closeMenuOnSelect={false}
+            />
+          </div>
+          <div className="w-[30%]">
+            <Select
+              options={advanceSearch.overtone}
+              onChange={handleOvertoneChange}
+              placeholder={ManageLocales('app.advanceSearch.overtone')}
+              styles={colourStyles}
+              isMulti
+              closeMenuOnSelect={false}
+            />
+          </div>
+          {/* <CustomSelect
             data={advanceSearch.fancyColor}
             onChange={handleFancyFilterChange}
             placeholder={
@@ -702,7 +840,7 @@ const renderContent = (
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
               selectElement: styles.selectElement
             }}
-          />
+          /> */}
         </div>
       </div>
       <div className={styles.filterSection}>
