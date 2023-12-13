@@ -1,13 +1,14 @@
 import { CustomSelectionButton } from '@/components/common/buttons/selection-button';
 import React from 'react';
 import styles from '../form.module.scss';
+
 const renderSelectionButtons = (
   data: string[],
   className?: string,
   activeStyle?: string,
   relatedState?: string | string[],
   handleChange?: (change: string) => void,
-  highlightIndicator?: boolean
+  caratButtonIdentifier?: boolean
 ) => {
   return data.map((data: string) => (
     <CustomSelectionButton
@@ -23,12 +24,9 @@ const renderSelectionButtons = (
             ? relatedState?.includes(data) && activeStyle
             : relatedState === data && activeStyle
         }`,
-        selectionButtonLabelStyle: `${styles.labelDefaultStyle} ${
-          highlightIndicator &&
-          relatedState?.includes(data) &&
-          styles.colorDataActiveStyle
-        }`
+        selectionButtonLabelStyle: `${styles.labelDefaultStyle}`
       }}
+      caratButtonIdentifier={caratButtonIdentifier}
     />
   ));
 };
