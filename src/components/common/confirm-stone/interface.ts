@@ -38,4 +38,5 @@ export interface IConfirmStoneProps {
   confirmStoneSetState: IConfirmStoneSetState;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  refetch: any;
 }

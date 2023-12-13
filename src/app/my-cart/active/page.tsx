@@ -60,7 +60,7 @@ const ActiveMyCart = () => {
     useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
   // Fetching cart data
-  const { data } = useGetCartQuery({});
+  const { data, refetch } = useGetCartQuery({});
 
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -308,6 +308,7 @@ const ActiveMyCart = () => {
             listingColumns={cartTableColumns}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            refetch={refetch}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}
