@@ -33,7 +33,7 @@ const renderContent = (
     imageTileContainerStyles: styles.imageTileContainerStyles,
     imageTileImageStyles: styles.imageTileImageStyles,
     imageTileLabelStyles: styles.imageTileLabelStyles,
-    activeIndicatorStyles: styles.activeIndicatorStyles
+    activeIndicatorStyles: styles.activeOtherStyles
   };
 
   const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
@@ -753,8 +753,8 @@ const renderContent = (
               {renderSelectionButtons(
                 selectedCaratRange,
                 '',
-                '',
-                [],
+                styles.activeOtherStyles,
+                selectedCaratRange,
                 handleCaratRangeChange,
                 true
               )}
@@ -1064,7 +1064,7 @@ const renderContent = (
           <div>
             {renderSelectionButtons(
               advanceSearch.color_shade,
-              '',
+              styles.commonSelectionStyle,
               styles.activeOtherStyles,
               selectedTinge,
               handleTingeChange
