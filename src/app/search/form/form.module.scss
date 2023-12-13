@@ -319,3 +319,9 @@
 .paginationContainerStyle {
   border: none !important ;
 }
+
+.multiSelectDropdown {
+  color: hsl(var(--solitaire-tertiary));
+  background-color: hsl(var(--solitaire-secondary));
+  height: 20%;
+}

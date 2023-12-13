@@ -128,6 +128,7 @@ export const TopNavigationBar = () => {
 
     setOffset(0);
   };
+  console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', topNavData[3]);
 
   return (
     <>
@@ -162,7 +163,9 @@ export const TopNavigationBar = () => {
             {/* <SearchIcon className={styles.stroke} alt='advance-search' /> */}
             <Popover>
               <PopoverTrigger>
-                <CalculatorIcon role="button" className={styles.iconColor} />
+                <div className={styles.headerIconStyle}>
+                  <CalculatorIcon role="button" className={styles.iconColor} />
+                </div>
               </PopoverTrigger>
               <PopoverContent className={styles.popoverContent}>
                 <CustomCalculator />
@@ -179,7 +182,9 @@ export const TopNavigationBar = () => {
               }
               sheetTriggenContent={
                 <div onClick={handleNotificationClick}>
-                  <div className={styles.notificationContainer}>
+                  <div
+                    className={`${styles.notificationContainer} ${styles.headerIconStyle}`}
+                  >
                     <NotificationIcon
                       role="button"
                       className={styles.iconColor}
@@ -196,10 +201,14 @@ export const TopNavigationBar = () => {
               onClick={() => {
                 handleButtonClick('My Account', topNavData[3].link);
               }}
+              className={`${styles.headerIconStyle}`}
             >
               <MyProfileIcon
                 role="button"
                 stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
+                className={
+                  topNavData[3].isActive ? styles.activeIcon : styles.iconColor
+                }
               />
             </div>
             <ToggleButton />
