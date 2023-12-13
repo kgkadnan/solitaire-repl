@@ -50,7 +50,7 @@ export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
             }}
             className="pl-[10px]"
           >
-            <CloseOutline stroke="#8C7459" />
+            <CloseOutline stroke="white" />
           </div>
         )}
       </Button>
