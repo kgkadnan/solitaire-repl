@@ -11,8 +11,6 @@ import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
-import { CustomSelect } from '@/components/common/select';
-import { RadioButton } from '@/components/common/custom-input-radio';
 import Select, { StylesConfig } from 'react-select';
 
 const renderContent = (

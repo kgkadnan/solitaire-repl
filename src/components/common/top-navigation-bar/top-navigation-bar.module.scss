@@ -34,10 +34,9 @@
 .iconColor {
   stroke: hsl(var(--solitaire-tertiary));
 }
-.activeIcon{
+.activeIcon {
   stroke: hsl(var(--solitaire-quaternary));
 }
-
 
 .headerIconStyle:hover .iconColor {
   stroke: hsl(var(--solitaire-quaternary));
