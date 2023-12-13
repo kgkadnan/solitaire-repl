@@ -24,7 +24,7 @@ interface IStyle {
 interface ISelectProps {
   data: ISelectData[];
   onChange?: (event: string) => void;
-  placeholder?: string | string[];
+  placeholder?: string | number;
   style?: IStyle;
 }
 
@@ -40,8 +40,7 @@ export const CustomSelect: React.FC<ISelectProps> = ({
         className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
         data-testid="select"
       >
-        {/* <SelectValue placeholder={typeof placeholder === 'string' ? placeholder : placeholder?.toString() } /> */}
-        <SelectValue placeholder={'pppp'} />
+1        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
       <SelectContent
