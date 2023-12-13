@@ -426,7 +426,7 @@ const SavedSearch = () => {
         <div className="h-[70vh] overflow-auto">
           {/* Custom Card and Checkbox map */}
           {cardData?.length ? (
-            <div className="flex-grow">
+            <div className="flex-grow mt-[50px]">
               {cardData?.map((items: ICardData) => {
                 return (
                   <div key={items.id}>
