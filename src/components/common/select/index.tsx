@@ -40,7 +40,7 @@ export const CustomSelect: React.FC<ISelectProps> = ({
         className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
         data-testid="select"
       >
-        1 <SelectValue placeholder={placeholder} />
+        <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
       <SelectContent
