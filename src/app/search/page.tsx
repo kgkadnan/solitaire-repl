@@ -438,7 +438,7 @@ function SearchResultLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary items-center absolute top-[80px] left-[122px] flex flex-row  w-[93%] justify-between  bg-solitairePrimary pb-3 pt-3 text-[13px] gap-[20px]">
+        <div className="border-b border-solid  border-solitaireSenary items-center absolute top-[80px] left-[122px] flex flex-row  w-[90%] justify-between  bg-solitairePrimary pb-3 pt-3 text-[13px] gap-[20px] h-[80px]">
           <div className="flex ">
             {myProfileRoutes.map(({ id, pathName, path }: any) => {
               // Check if the current route matches the link's path
@@ -527,7 +527,7 @@ function SearchResultLayout() {
             })}
           </div>
           {JSON.parse(localStorage.getItem('Search')!)?.length > 0 && (
-            <div className="w-[150px]">
+            <div className="w-[120px]">
               <CustomDisplayButton
                 displayButtonLabel="Close Results"
                 displayButtonAllStyle={{
@@ -545,7 +545,7 @@ function SearchResultLayout() {
       <div
         style={{
           display: 'flex',
-          marginTop: '78px',
+          marginTop: '60px',
           width: '100%'
         }}
       >
