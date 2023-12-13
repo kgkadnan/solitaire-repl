@@ -13,7 +13,7 @@ export interface IImageTileStyleProps {
   imageTileIsNav?: string;
 }
 export interface IImageTileProps {
-  src: string | StaticImageData | object;
+  src?: string | StaticImageData | object;
   title: string;
   link?: string;
   short_name?: string;
