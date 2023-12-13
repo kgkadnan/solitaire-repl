@@ -259,6 +259,7 @@
   margin-left: -7%;
 }
 
+
 .yourSelectionSubContainer {
   width: 33%;
   display: flex;
@@ -318,4 +319,12 @@
 
 .paginationContainerStyle {
   border: none !important ;
+}
+
+
+
+.multiSelectDropdown{
+  color: hsl(var(--solitaire-tertiary));
+  background-color: hsl(var(--solitaire-secondary));
+  height: 20%;
 }
