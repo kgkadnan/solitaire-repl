@@ -35,15 +35,13 @@ export const CustomSelect: React.FC<ISelectProps> = ({
   onChange
 }) => {
   return (
-    
     <Select onValueChange={onChange}>
-     
       <SelectTrigger
         className={`${styles.defaultselectTrigger} ${style?.selectTrigger}`}
         data-testid="select"
       >
         {/* <SelectValue placeholder={typeof placeholder === 'string' ? placeholder : placeholder?.toString() } /> */}
-        <SelectValue placeholder={"pppp"}/>
+        <SelectValue placeholder={'pppp'} />
       </SelectTrigger>
 
       <SelectContent
@@ -56,10 +54,7 @@ export const CustomSelect: React.FC<ISelectProps> = ({
             value={item.value}
             className={`${style?.selectElement}`}
           >
-            <>
-            {console.log("oooooooooo",placeholder)}
-            </>
-            {  item.value}
+            {item.value}
           </SelectItem>
         ))}
       </SelectContent>

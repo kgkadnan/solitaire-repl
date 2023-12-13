@@ -48,7 +48,7 @@ export const CustomSelectionButton: React.FC<ISelectionButtonProps> = ({
             onClick={() => {
               handleClick!(data!);
             }}
-            className='pl-[10px]'
+            className="pl-[10px]"
           >
             <CloseOutline stroke="#8C7459" />
           </div>

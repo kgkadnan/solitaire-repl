@@ -145,28 +145,26 @@ const renderContent = (
 
   // Function to handle color change based on user selection
   const handleColorChange = (data: string) => {
-    setSelectedFancyColor([])
-    setSelectedIntensity([])
-    setSelectedOvertone([])
+    setSelectedFancyColor([]);
+    setSelectedIntensity([]);
+    setSelectedOvertone([]);
     handleFilterChange(data, selectedColor, setSelectedColor);
-    
   };
 
   // Function to handle fancy color filter change based on user selection
   const handleFancyFilterChange = (data: string) => {
-    setSelectedColor([])
+    setSelectedColor([]);
     handleFilterChange(data, selectedFancyColor, setSelectedFancyColor);
-    
   };
   // Function to handle intensity change based on user selection
   const handleIntensityChange = (data: string) => {
-    setSelectedColor([])
+    setSelectedColor([]);
     setSelectedIntensity(data);
   };
 
   // Function to handle overtone change based on user selection
   const handleOvertoneChange = (data: string) => {
-    setSelectedColor([])
+    setSelectedColor([]);
     setSelectedOvertone(data);
   };
 
@@ -708,7 +706,11 @@ const renderContent = (
           <CustomSelect
             data={advanceSearch.fancyColor}
             onChange={handleFancyFilterChange}
-            placeholder={selectedFancyColor?.length ? selectedFancyColor : ManageLocales('app.advanceSearch.fancyColor')}
+            placeholder={
+              selectedFancyColor?.length
+                ? selectedFancyColor
+                : ManageLocales('app.advanceSearch.fancyColor')
+            }
             style={{
               selectTrigger: styles.fancyDropdownHeader,
               selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
