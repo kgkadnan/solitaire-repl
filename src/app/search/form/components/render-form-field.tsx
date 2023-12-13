@@ -4,7 +4,6 @@ import { CustomInputField } from '@/components/common/input-field';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
-
 import renderOtherParameterFields from './render-inclusion-field';
 import renderMeasurementField from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
@@ -12,8 +11,6 @@ import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
-import { CustomSelect } from '@/components/common/select';
-import { RadioButton } from '@/components/common/custom-input-radio';
 import Select, { StylesConfig } from 'react-select';
 
 const renderContent = (
@@ -24,8 +21,6 @@ const renderContent = (
   errors: any,
   selectedStep: any,
   setSelectedStep: any,
-  selectedShadeContain: any,
-  setSelectedShadeContain: any,
   setErrors: any
 ) => {
   const imageTileStyles = {
@@ -81,7 +76,6 @@ const renderContent = (
     setSelectedPolish,
     setSelectedSymmetry,
     setSelectedFluorescence,
-    setSelectedCulet,
     setSelectedKeyToSymbol,
     setSelectedLab,
     setSelectedHR,
@@ -379,11 +373,6 @@ const renderContent = (
     }
   };
 
-  // Function to handle filter changes and culet selection based on user input
-  const handleCuletChange = (data: string) => {
-    setSelectedCulet(data);
-  };
-
   // Functions to handle additional filter changes (key to symbol, lab, HR, brilliance, location, origin)
   const handleKeyToSymbolChange = (comment: string) => {
     if (comment.toLowerCase() === 'all') {
@@ -487,30 +476,6 @@ const renderContent = (
       value: 'Does not contains',
       label: ManageLocales('app.advanceSearch.radioLabel2'),
       checked: selectedStep == 'Does not contains'
-    }
-  ];
-
-  //Radio data for shape selection
-  const shadeRadio = [
-    {
-      name: 'steps',
-      onChange: (data: string) => {
-        setSelectedShadeContain(data);
-      },
-      id: '1',
-      value: 'Should Contain',
-      label: ManageLocales('app.advanceSearch.radioLabel1'),
-      checked: selectedShadeContain == 'Should Contain'
-    },
-    {
-      name: 'steps',
-      onChange: (data: string) => {
-        setSelectedShadeContain(data);
-      },
-      id: '2',
-      value: 'Should Not Contain',
-      label: ManageLocales('app.advanceSearch.radioLabel2'),
-      checked: selectedShadeContain == 'Should Not Contain'
     }
   ];
 
@@ -1054,17 +1019,10 @@ const renderContent = (
           />
         </div>
         <div className={styles.filterSectionData}>
-          <div className="flex gap-3" style={{ margin: '10px' }}>
-            {shadeRadio.map(radioData => {
-              return (
-                <RadioButton key={radioData.id} radioMetaData={radioData} />
-              );
-            })}
-          </div>
           <div>
             {renderSelectionButtons(
               advanceSearch.color_shade,
-              styles.commonSelectionStyle,
+              `${styles.commonSelectionStyle} ${styles.shadeSelectionStyle}`,
               styles.activeOtherStyles,
               selectedTinge,
               handleTingeChange
@@ -1245,20 +1203,9 @@ const renderContent = (
         </div>
         <div
           className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
+          style={{ display: 'flex', justifyContent: 'flex-start' }}
         >
           {renderMeasurementField(state, setState)}
-          <div className="mt-[52px]">
-            <CustomSelect
-              data={advanceSearch.culet}
-              onChange={handleCuletChange}
-              placeholder="Culet"
-              style={{
-                selectTrigger: styles.dropdownHeader,
-                selectContent: styles.dropdownData,
-                selectElement: styles.selectElement
-              }}
-            />
-          </div>
         </div>
       </div>
       <div className={styles.filterSection}>
@@ -1290,14 +1237,6 @@ const renderContent = (
           style={{ display: 'flex', flexDirection: 'column' }}
           className={styles.filterSectionData}
         >
-          <div style={{ margin: '10px' }} className="flex gap-3">
-            {RadioData.map(radioData => {
-              return (
-                <RadioButton key={radioData.id} radioMetaData={radioData} />
-              );
-            })}
-          </div>
-
           <div
             className={`${styles.filterSection} ${styles.filterWrapSection}`}
             style={{ display: 'flex', flexWrap: 'wrap' }}
