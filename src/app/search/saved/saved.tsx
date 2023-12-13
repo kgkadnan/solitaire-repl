@@ -213,7 +213,9 @@ const SavedSearch = () => {
                   {
                     desc: (
                       <div className={styles.parentDivHeaderSectiom}>
-                        <div style={{ marginRight: '80px' }}>
+                        <div
+                          style={{ marginRight: '80px', paddingLeft: '20px' }}
+                        >
                           {formatCreatedAt(item.created_at)}
                         </div>
                       </div>

@@ -3,6 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
+import { CustomSelect } from '@/components/common/select';
 
 // Define interfaces for the component props
 interface IRange {
@@ -76,7 +77,8 @@ const renderMeasurementField = (state: any, setState: any) => {
     setStarLengthFrom,
     setStarLengthTo,
     setGirdleFrom,
-    setGirdleTo
+    setGirdleTo,
+    setSelectedCulet
   } = setState;
 
   // Define an array of objects representing measurement parameters and their state management functions
@@ -197,75 +199,97 @@ const renderMeasurementField = (state: any, setState: any) => {
     return '';
   }
 
-  return parameterData.map((parameter: IRenderMeasurementData) => (
-    <div
-      key={parameter.label}
-      className={styles.parameterContainer}
-      style={{
-        paddingLeft: '10px',
-        width: '22%',
-        justifyContent: 'space-between'
-      }}
-    >
-      <CustomInputlabel
-        htmlfor="text"
-        label={parameter.label}
-        overriddenStyles={{ label: styles.labelPlainColor }}
-      />
-      <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
-        <CustomInputField
-          type="number"
-          name={`${parameter.parameterState[0]}`}
-          onChange={e => {
-            parameter.setParameterState[0](e.target.value);
-          }}
-          value={parameter.parameterState[0]}
+  // Function to handle filter changes and culet selection based on user input
+  const handleCuletChange = (data: string) => {
+    setSelectedCulet(data);
+  };
+
+  const culetField = () => {
+    return (
+      <div className={styles.parameterContainer}>
+        <CustomSelect
+          data={advanceSearch.culet}
+          onChange={handleCuletChange}
+          placeholder="Culet"
           style={{
-            input: styles.inputFieldStyles
+            selectTrigger: styles.dropdownHeader,
+            selectContent: styles.dropdownData,
+            selectElement: styles.selectElement
           }}
-          onBlur={e =>
-            parameter.label === 'Crown Angle' ||
-            parameter.label === 'Pavilion Angle'
-              ? handleAngle(
-                  parameter.label,
-                  e.target.value,
-                  setFromAngle,
-                  setFromError,
-                  toAngle
-                )
-              : ''
-          }
-        />
-        <div className={styles.parameterLabel}>to</div>
-        <CustomInputField
-          type="number"
-          name={`${parameter.parameterState[1]}`}
-          onChange={e => {
-            parameter.setParameterState[1](e.target.value);
-          }}
-          value={parameter.parameterState[1]}
-          style={{
-            input: styles.inputFieldStyles
-          }}
-          onBlur={e =>
-            parameter.label === 'Crown Angle' ||
-            parameter.label === 'Pavilion Angle'
-              ? handleAngle(
-                  parameter.label,
-                  e.target.value,
-                  setToAngle,
-                  setFromError,
-                  fromAngle
-                )
-              : ''
-          }
         />
       </div>
-      {fromError === parameter.label && (
-        <div className={styles.validationMessage}>{fromError}</div>
-      )}
-    </div>
-  ));
-};
+    );
+  };
 
+  const measurementFields = () => {
+    return parameterData.map((parameter: IRenderMeasurementData) => (
+      <div key={parameter.label} className={styles.parameterContainer}>
+        <CustomInputlabel
+          htmlfor="text"
+          label={parameter.label}
+          overriddenStyles={{ label: styles.labelPlainColor }}
+        />
+        <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
+          <CustomInputField
+            type="number"
+            name={`${parameter.parameterState[0]}`}
+            onChange={e => {
+              parameter.setParameterState[0](e.target.value);
+            }}
+            value={parameter.parameterState[0]}
+            style={{
+              input: styles.inputFieldStyles
+            }}
+            onBlur={e =>
+              parameter.label === 'Crown Angle' ||
+              parameter.label === 'Pavilion Angle'
+                ? handleAngle(
+                    parameter.label,
+                    e.target.value,
+                    setFromAngle,
+                    setFromError,
+                    toAngle
+                  )
+                : ''
+            }
+          />
+          <div className={styles.parameterLabel}>to</div>
+          <CustomInputField
+            type="number"
+            name={`${parameter.parameterState[1]}`}
+            onChange={e => {
+              parameter.setParameterState[1](e.target.value);
+            }}
+            value={parameter.parameterState[1]}
+            style={{
+              input: styles.inputFieldStyles
+            }}
+            onBlur={e =>
+              parameter.label === 'Crown Angle' ||
+              parameter.label === 'Pavilion Angle'
+                ? handleAngle(
+                    parameter.label,
+                    e.target.value,
+                    setToAngle,
+                    setFromError,
+                    fromAngle
+                  )
+                : ''
+            }
+          />
+        </div>
+        {fromError === parameter.label && (
+          <div className={styles.validationMessage}>{fromError}</div>
+        )}
+      </div>
+    ));
+  };
+
+  return (
+    <>
+      {measurementFields()}
+      {culetField()}
+    </>
+  );
+};
 export default renderMeasurementField;

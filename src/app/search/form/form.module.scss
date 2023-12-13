@@ -15,6 +15,7 @@
   margin: 10px 16px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 }
 
 .imageTileImageStyles {
@@ -71,6 +72,9 @@
 
 .commonSelectionStyle {
   width: 120px;
+}
+.shadeSelectionStyle {
+  width: 140px;
 }
 
 .filterWrapSection {
@@ -134,14 +138,15 @@
 }
 
 .parameterFilter {
-  // width: 25%;
   justify-content: space-between;
-  padding: 10px 0px;
 }
 
 .parameterContainer {
-  margin-right: 20px;
+  margin-right: 40px;
   margin-top: 30px;
+  padding-left: 10px;
+  width: 20%;
+  justify-content: space-between;
 }
 
 .parameterLabel {
@@ -314,6 +319,7 @@
 }
 .activeOtherStyles {
   background-color: #8c7459;
+  cursor: pointer;
 }
 
 .paginationContainerStyle {
