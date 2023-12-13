@@ -13,19 +13,19 @@ export const cartApi = createApi({
   endpoints: builder => ({
     addCart: builder.mutation({
       query: data => ({
-        url: `cart`,
+        url: `store/customers/me/cart`,
         method: 'POST',
         body: data
       }),
       invalidatesTags: ['cart']
     }),
     getCart: builder.query({
-      query: () => `cart`,
+      query: () => `store/customers/me/cart`,
       providesTags: ['cart']
     }),
     deleteCart: builder.mutation({
       query: data => ({
-        url: `cart`,
+        url: `store/customers/me/cart`,
         method: 'DELETE',
         body: data
       }),

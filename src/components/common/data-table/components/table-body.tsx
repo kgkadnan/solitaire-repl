@@ -1,5 +1,4 @@
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
 import { Product, TableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
@@ -17,6 +16,7 @@ import { DetailImageSlider } from './detail-image-slider';
 import { DetailCertificateSlider } from './detail-certificate-slider';
 import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
 
 export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -78,30 +78,15 @@ export const TableBody: React.FC<ITbodyProps> = ({
    */
   const downloadExcelFunction = () => {
     if (sliderData[0]) {
-      downloadExcel({
-        productIds: sliderData[0].id
-      })
-        .unwrap()
-        .then(res => {
-          const { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setDialogContent?.(
-              <>
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-            setIsDialogOpen?.(true);
-          }
-        })
-        .catch(error => {
-          console.log('error', error);
-        });
+      performDownloadExcel({
+        productIds: [sliderData[0].id],
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError
+      });
     }
   };
 
@@ -173,7 +158,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     switch (column.accessor) {
       case 'details':
         return (
-          <div
+          <button
             className="flex items-center gap-2"
             onClick={e => e.stopPropagation()}
           >
@@ -191,11 +176,11 @@ export const TableBody: React.FC<ITbodyProps> = ({
               tableRows={tableRows}
               index={index}
             />
-          </div>
+          </button>
         );
       case 'lot_id':
         return (
-          <div onClick={e => e.stopPropagation()}>
+          <button onClick={e => e.stopPropagation()}>
             <DiamondDetailSlider
               dataTableBodyState={dataTableBodyState}
               dataTableBodySetState={dataTableBodySetState}
@@ -206,7 +191,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
               footerButtonData={footerButtonData}
               modalSetState={modalSetState}
             />
-          </div>
+          </button>
         );
       case 'lab':
         return (

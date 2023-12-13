@@ -166,25 +166,25 @@ function SearchResultLayout() {
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
       router.push(`search?active-tab=${NEW_SEARCH}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?active-tab=${RESULT}-${removeDataIndex + 1}`);
-
       setheaderPath({
         shortName: `R ${removeDataIndex + 1}`,
         fullName: `Result ${removeDataIndex + 1}`
       });
       setActiveTab(removeDataIndex + 1);
-    } else {
-      router.push(`/search?active-tab=${RESULT}-${removeDataIndex}`);
 
+      router.push(`/search?active-tab=${RESULT}-${removeDataIndex + 1}`);
+    } else {
       setheaderPath({
         shortName: `R ${removeDataIndex}`,
         fullName: `Result ${removeDataIndex}`
       });
       setActiveTab(removeDataIndex);
+      router.push(`/search?active-tab=${RESULT}-${removeDataIndex}`);
     }
-    refetch();
+
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
     setMyProfileRoutes(updateMyProfileRoute);
+    refetch();
   };
 
   const handleCloseAndSave = async () => {
@@ -526,7 +526,7 @@ function SearchResultLayout() {
               );
             })}
           </div>
-          {JSON.parse(localStorage.getItem('Search')!).length > 0 && (
+          {JSON.parse(localStorage.getItem('Search')!)?.length > 0 && (
             <div className="w-[150px]">
               <CustomDisplayButton
                 displayButtonLabel="Close Results"
