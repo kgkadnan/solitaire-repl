@@ -128,7 +128,6 @@ export const TopNavigationBar = () => {
 
     setOffset(0);
   };
-  console.log('aaaaaaaaaaaaaaaaaaaaaaaaa', topNavData[3]);
 
   return (
     <>
