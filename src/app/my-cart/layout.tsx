@@ -159,7 +159,7 @@ function MyCart({ children }: { children: React.ReactNode }) {
       <div
         style={{
           display: 'flex',
-          marginTop: '70px',
+          marginTop: '50px',
           width: '100%'
         }}
       >

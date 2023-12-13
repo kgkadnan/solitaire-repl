@@ -3,19 +3,17 @@
   top: 0;
   left: 0;
   width: 100%;
-  background-color: hsl(var(--solitaire-primary));
+  background-color: hsl(var(--solitaire-secondary));
   z-index: 1000;
-  transition: top 0.3s;
-  border-bottom: 1px solid hsl(var(--solitaire-border));
-  box-shadow: 0px 1px 10px 0px rgba(0, 0, 0, 0.25);
+  transition: transform 0.5s ease-in-out;
 }
 
 .visible {
-  top: 0;
+  transform: translateY(0);
 }
 
 .hidden {
-  top: -80px;
+  transform: translateY(-100%);
 }
 
 .headerButtonStyle {
