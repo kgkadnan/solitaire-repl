@@ -17,6 +17,7 @@ import { generateQueryParams } from './helpers/generate-query-parameter';
 import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import { setModifySearch } from './helpers/modify-search';
@@ -248,6 +249,13 @@ used for managing the state of a form field or input element in a React componen
 
   // Function: Handle search
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
+    if(JSON.parse(localStorage.getItem('Search')!)?.length >= MAX_SEARCH_TAB_LIMIT){
+      setIsError(true);
+      setErrorText(
+        'Max search limit reached. Please remove existing searches'
+      );
+    }
+    else{
     if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
@@ -306,6 +314,7 @@ used for managing the state of a form field or input element in a React componen
       setIsError(true);
       setErrorText('Please select some parameter before initiating search');
     }
+  }
   };
 
   // Data for custom input dialog
