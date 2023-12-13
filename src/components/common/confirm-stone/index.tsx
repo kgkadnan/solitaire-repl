@@ -21,7 +21,8 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   confirmStoneState,
   confirmStoneSetState,
   setDialogContent,
-  setIsDialogOpen
+  setIsDialogOpen,
+  refetch
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
 
@@ -177,6 +178,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               setInputError(false);
               onOpenChange(false);
               setIsDialogOpen(true);
+              refetch();
               setDialogContent(
                 <>
                   <div className="max-w-[400px] flex justify-center ">
