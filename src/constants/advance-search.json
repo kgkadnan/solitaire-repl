@@ -99,13 +99,14 @@
     "Other",
     "Light Yellow"
   ],
-  "make": ["3EX", "3EX+None", "3VG+EX", "3G", "3F"],
-  "cut": ["Ideal", "EX", "VG", "G", "F"],
-  "polish": ["Ideal", "EX", "VG", "G", "F"],
-  "symmetry": ["Ideal", "EX", "VG", "G", "F"],
+  "make": ["3EX", "3EX+NON", "3VG+EX", "3G", "3F"],
+  "cut": ["EX", "VG", "G", "F"],
+  "polish": ["EX", "VG", "G", "F"],
+  "symmetry": ["EX", "VG", "G", "F"],
 
   "color_shade": [
     "None",
+    "White",
     "Mixed",
     "Yellow",
     "Brown",
@@ -134,26 +135,8 @@
     "I3"
   ],
   "color": ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N-Z"],
-  "fluorescence": [
-    "None",
-    "Very Slight",
-    "Slight",
-    "Faint",
-    "Medium",
-    "Strong",
-    "Very Strong"
-  ],
-  "lab": [
-    "GIA",
-    "GIA DOR",
-    "DBIOD",
-    "FOREVERMARK",
-    "HRD",
-    "IGI",
-    "NGTC",
-    "KGK GRADING"
-  ],
-  "brilliance": ["EX", "VG", "G"],
+  "fluorescence": ["NON", "VSL", "SLT", "FNT", "MED", "STG", "VSTG"],
+  "lab": ["GIA", "GIA DOR", "DBIOD", "FM", "HRD", "IGI", "NGTC", "KGK GRADING"],
   "location": ["BEL", "DUB", "IND", "ISR", "USA"],
   "origin": [
     "Angola",
@@ -311,27 +294,27 @@
       "value": [
         {
           "element_key": "Black Table",
-          "element_value": ["BO", "BPP", "B1", "B2", "B3"]
+          "element_value": ["B0", "BPP", "B1", "B2", "B3"]
         },
         {
           "element_key": "Side Table",
-          "element_value": ["SBO", "SBPP", "SB1", "SB2", "SB3"]
+          "element_value": ["SB0", "SBPP", "SB1", "SB2", "SB3"]
         },
         {
           "element_key": "Open Crown",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Open Table",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Open Pavilion",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Milky",
-          "element_value": ["MO", "M1", "M2", "M3"]
+          "element_value": ["M0", "M1", "M2", "M3"]
         },
         {
           "element_key": "Luster",
@@ -339,7 +322,7 @@
         },
         {
           "element_key": "Eye Clean",
-          "element_value": ["Yes", "No", "B"]
+          "element_value": ["Y", "N", "B"]
         }
       ]
     },
@@ -348,11 +331,11 @@
       "value": [
         {
           "element_key": "Table Inclusion",
-          "element_value": ["TO", "T1", "T2", "T3"]
+          "element_value": ["T0", "T1", "T2", "T3"]
         },
         {
           "element_key": "Side Inclusion",
-          "element_value": ["SO", "S1", "S2", "S3"]
+          "element_value": ["S0", "S1", "S2", "S3"]
         },
         {
           "element_key": "Natural Crown",
@@ -368,11 +351,11 @@
         },
         {
           "element_key": "Surface Graining",
-          "element_value": ["GO", "G1", "G2", "G3"]
+          "element_value": ["G0", "G1", "G2", "G3"]
         },
         {
           "element_key": "Internal Graining",
-          "element_value": ["IGO", "IG1", "IG2", "IG3"]
+          "element_value": ["IG0", "IG1", "IG2", "IG3"]
         }
       ]
     }
@@ -405,58 +388,40 @@
     { "id": 8, "value": "Large", "label": "Large" }
   ],
   "intensity": [
-    { "id": 1, "value": "Faint", "label": "Faint" },
-    { "id": 2, "value": "Very Light", "label": "Very Light" },
-    { "id": 3, "value": "Light", "label": "Light" },
-    { "id": 4, "value": "Fancy", "label": "Fancy" },
-    { "id": 5, "value": "Fancy Deep", "label": "Fancy Deep" },
-    { "id": 6, "value": "Fancy Intense", "label": "Fancy Intense" },
-    { "id": 7, "value": "Fancy Vivid", "label": "Fancy Vivid" }
+    "Faint",
+    "Very Light",
+    "Light",
+    "Fancy",
+    "Fancy Light",
+    "Fancy Dark",
+    "Fancy Intense",
+    "Fancy Vivid",
+    "Fancy Deep"
   ],
-  "fancyColor": [
-    { "id": 1, "value": "Yellow", "label": "Yellow" },
-    { "id": 2, "value": "Grey", "label": "Grey" },
-    { "id": 3, "value": "Blue", "label": "Blue" },
-    { "id": 4, "value": "Green", "label": "Green" },
-    { "id": 5, "value": "Cognac", "label": "Cognac" },
-    { "id": 6, "value": "Champagne", "label": "Champagne" },
-    { "id": 7, "value": "Purple", "label": "Purple" },
-    { "id": 8, "value": "Violet", "label": "Violet" },
-    { "id": 9, "value": "Chameleon", "label": "Chameleon" },
-    { "id": 10, "value": "Pink", "label": "Pink" },
-    { "id": 11, "value": "Black", "label": "Black" },
-    { "id": 12, "value": "Brown", "label": "Brown" },
-    { "id": 13, "value": "Red", "label": "Red" },
-    { "id": 14, "value": "Orange", "label": "Orange" },
-    { "id": 15, "value": "Light Yellow", "label": "Light Yellow" },
-    { "id": 16, "value": "Other", "label": "Other" }
-  ],
+
   "overtone": [
-    { "id": 1, "value": "Black", "label": "Black" },
-    { "id": 2, "value": "Purplish", "label": "Purplish" },
-    { "id": 3, "value": "Purple", "label": "Purple" },
-    { "id": 4, "value": "Green", "label": "Green" },
-    { "id": 5, "value": "Red", "label": "Red" },
-    { "id": 6, "value": "Chameleon", "label": "Chameleon" },
-    { "id": 7, "value": "Bluish", "label": "Bluish" },
-    { "id": 8, "value": "Blue", "label": "Blue" },
-    { "id": 9, "value": "Pink", "label": "Pink" },
-    { "id": 10, "value": "Brownish", "label": "Brownish" },
-    { "id": 11, "value": "Orangy", "label": "Orangy" },
-    { "id": 12, "value": "Greyish", "label": "Greyish" },
-    { "id": 13, "value": "Brown", "label": "Brown" },
-    { "id": 14, "value": "Orange", "label": "Orange" },
-    { "id": 15, "value": "Pinkish", "label": "Pinkish" },
-    { "id": 16, "value": "Greenish", "label": "Greenish" },
-    { "id": 17, "value": "Yellowish", "label": "Yellowish" },
-    { "id": 18, "value": "Grey", "label": "Grey" },
-    { "id": 19, "value": "Violetish", "label": "Violetish" },
-    { "id": 20, "value": "Yellow", "label": "Yellow" },
-    { "id": 21, "value": "Redish", "label": "Redish" },
-    { "id": 22, "value": "Champagne", "label": "Champagne" },
-    { "id": 23, "value": "Cognac", "label": "Cognac" },
-    { "id": 24, "value": "None", "label": "None" },
-    { "id": 25, "value": "Light Brown", "label": "Light Brown" },
-    { "id": 26, "value": "Brownish Orangy", "label": "Brownish Orangy" }
+    "None",
+    "Yellow",
+    "Yellowish",
+    "Pink",
+    "Pinkish",
+    "Blue",
+    "Bluish",
+    "Red",
+    "Reddish",
+    "Green",
+    "Greenish",
+    "Purple",
+    "Purplish",
+    "Orange",
+    "Orangy",
+    "Grey",
+    "Greyish",
+    "Black",
+    "Brown",
+    "Brownish",
+    "Violetish",
+    "Light Brown",
+    "Brownish Orangy"
   ]
 }

@@ -17,6 +17,7 @@ import { generateQueryParams } from './helpers/generate-query-parameter';
 import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import { setModifySearch } from './helpers/modify-search';
@@ -181,130 +182,151 @@ used for managing the state of a form field or input element in a React componen
 
   // Function: Save and search
   const handleSaveAndSearch: any = async () => {
-    if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
-      if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
-        data?.count > MIN_SEARCH_FORM_COUNT
-      ) {
-        const queryParams = generateQueryParams(state);
-        const activeTab: number = searchResult?.activeTab;
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${RESULT}` &&
+      modifySearchFrom !== `${SAVED_SEARCHES}`
+    ) {
+      setIsError(true);
+      setErrorText('Max search limit reached. Please remove existing searches');
+    } else {
+      if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+        if (
+          data?.count < MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          const queryParams = generateQueryParams(state);
+          const activeTab: number = searchResult?.activeTab;
 
-        const activeSearch: number =
-          addSearches[activeTab]?.saveSearchName.length;
+          const activeSearch: number =
+            addSearches[activeTab]?.saveSearchName.length;
 
-        if (modifySearchFrom === `${SAVED_SEARCHES}`) {
-          if (savedSearch?.savedSearch?.meta_data) {
-            let updatedMeta = savedSearch.savedSearch.meta_data;
-            updatedMeta = queryParams;
-            let updateSavedData = {
-              id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta,
+          if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+            if (savedSearch?.savedSearch?.meta_data) {
+              let updatedMeta = savedSearch.savedSearch.meta_data;
+              updatedMeta = queryParams;
+              let updateSavedData = {
+                id: savedSearch.savedSearch.id,
+                meta_data: updatedMeta,
+                diamond_count: parseInt(data?.count)
+              };
+              updateSavedSearch(updateSavedData);
+              router.push(`/search?active-tab=${SAVED_SEARCHES}`);
+            }
+          } else if (activeSearch) {
+            const updatedMeta = addSearches;
+            updatedMeta[activeTab].queryParams = queryParams;
+            let updateSaveSearchData = {
+              id: updatedMeta[activeTab].id,
+              meta_data: updatedMeta[activeTab].queryParams,
               diamond_count: parseInt(data?.count)
             };
-            updateSavedSearch(updateSavedData);
-            router.push(`/search?active-tab=${SAVED_SEARCHES}`);
+            updateSavedSearch(updateSaveSearchData)
+              .unwrap()
+              .then(() => {
+                handleSearch(true);
+              })
+              .catch((error: any) => {
+                console.log('error', error);
+              });
+          } else {
+            await addSavedSearch({
+              name: saveSearchName,
+              diamond_count: parseInt(data?.count),
+              meta_data: queryParams,
+              is_deleted: false
+            })
+              .unwrap()
+              .then((res: any) => {
+                handleSearch(true, res.id);
+              })
+              .catch((error: any) => {
+                console.log('error', error);
+                setInputError(true);
+                setInputErrorContent(
+                  'Title already exists. Choose another title to save your search'
+                );
+              });
           }
-        } else if (activeSearch) {
-          const updatedMeta = addSearches;
-          updatedMeta[activeTab].queryParams = queryParams;
-          let updateSaveSearchData = {
-            id: updatedMeta[activeTab].id,
-            meta_data: updatedMeta[activeTab].queryParams,
-            diamond_count: parseInt(data?.count)
-          };
-          updateSavedSearch(updateSaveSearchData)
-            .unwrap()
-            .then(() => {
-              handleSearch(true);
-            })
-            .catch((error: any) => {
-              console.log('error', error);
-            });
-        } else {
-          await addSavedSearch({
-            name: saveSearchName,
-            diamond_count: parseInt(data?.count),
-            meta_data: queryParams,
-            is_deleted: false
-          })
-            .unwrap()
-            .then((res: any) => {
-              handleSearch(true, res.id);
-            })
-            .catch((error: any) => {
-              console.log('error', error);
-              setInputError(true);
-              setInputErrorContent(
-                'Title already exists. Choose another title to save your search'
-              );
-            });
         }
+      } else {
+        setIsError(true);
+        setErrorText('Please select some parameter before initiating search');
       }
-    } else {
-      setIsError(true);
-      setErrorText('Please select some parameter before initiating search');
     }
   };
 
   // Function: Handle search
   const handleSearch = async (isSaved: boolean = false, id?: string) => {
-    if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
-      if (
-        data?.count < MAX_SEARCH_FORM_COUNT &&
-        data?.count > MIN_SEARCH_FORM_COUNT
-      ) {
-        const queryParams = generateQueryParams(state);
-        if (modifySearchFrom === `${SAVED_SEARCHES}`) {
-          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
-            const updatedMeta = [...savedSearch.savedSearch.meta_data];
-            updatedMeta[savedSearch.activeTab] = queryParams;
-            let data = {
-              id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta
-            };
-            updateSavedSearch(data);
-          }
-        }
-        if (modifySearchFrom === `${RESULT}`) {
-          let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
-          let setDataOnLocalStorage = {
-            id: modifySearchResult[searchResult.activeTab]?.id,
-            saveSearchName:
-              modifySearchResult[searchResult.activeTab]?.saveSearchName ||
-              saveSearchName,
-            isSavedSearch: isSaved,
-            queryParams
-          };
-          if (modifySearchResult[searchResult.activeTab]) {
-            const updatedData = [...modifySearchResult];
-            updatedData[searchResult.activeTab] = setDataOnLocalStorage;
-            localStorage.setItem('Search', JSON.stringify(updatedData));
-          }
-          router.push(
-            `/search?active-tab=${RESULT}-${searchResult.activeTab + 1}`
-          );
-        } else {
-          let setDataOnLocalStorage = {
-            id: id,
-            saveSearchName: saveSearchName,
-            isSavedSearch: isSaved,
-            queryParams
-          };
-          localStorage.setItem(
-            'Search',
-            JSON.stringify([...addSearches, setDataOnLocalStorage])
-          );
-          router.push(
-            `/search?active-tab=${RESULT}-${
-              JSON.parse(localStorage.getItem('Search')!).length
-            }`
-          );
-        }
-        // return;
-      }
-    } else {
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${RESULT}`
+    ) {
       setIsError(true);
-      setErrorText('Please select some parameter before initiating search');
+      setErrorText('Max search limit reached. Please remove existing searches');
+    } else {
+      if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+        if (
+          data?.count < MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          const queryParams = generateQueryParams(state);
+          if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+            if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
+              const updatedMeta = [...savedSearch.savedSearch.meta_data];
+              updatedMeta[savedSearch.activeTab] = queryParams;
+              let data = {
+                id: savedSearch.savedSearch.id,
+                meta_data: updatedMeta
+              };
+              updateSavedSearch(data);
+            }
+          }
+          if (modifySearchFrom === `${RESULT}`) {
+            let modifySearchResult = JSON.parse(
+              localStorage.getItem('Search')!
+            );
+            let setDataOnLocalStorage = {
+              id: modifySearchResult[searchResult.activeTab]?.id,
+              saveSearchName:
+                modifySearchResult[searchResult.activeTab]?.saveSearchName ||
+                saveSearchName,
+              isSavedSearch: isSaved,
+              queryParams
+            };
+            if (modifySearchResult[searchResult.activeTab]) {
+              const updatedData = [...modifySearchResult];
+              updatedData[searchResult.activeTab] = setDataOnLocalStorage;
+              localStorage.setItem('Search', JSON.stringify(updatedData));
+            }
+            router.push(
+              `/search?active-tab=${RESULT}-${searchResult.activeTab + 1}`
+            );
+          } else {
+            let setDataOnLocalStorage = {
+              id: id,
+              saveSearchName: saveSearchName,
+              isSavedSearch: isSaved,
+              queryParams
+            };
+            localStorage.setItem(
+              'Search',
+              JSON.stringify([...addSearches, setDataOnLocalStorage])
+            );
+            router.push(
+              `/search?active-tab=${RESULT}-${
+                JSON.parse(localStorage.getItem('Search')!).length
+              }`
+            );
+          }
+          // return;
+        }
+      } else {
+        setIsError(true);
+        setErrorText('Please select some parameter before initiating search');
+      }
     }
   };
 
@@ -399,28 +421,42 @@ used for managing the state of a form field or input element in a React componen
               style: styles.transparent,
               fn: () => {
                 if (
-                  data?.count < MAX_SEARCH_FORM_COUNT &&
-                  data?.count > MIN_SEARCH_FORM_COUNT
+                  JSON.parse(localStorage.getItem('Search')!)?.length >=
+                    MAX_SEARCH_TAB_LIMIT &&
+                  modifySearchFrom !== `${RESULT}` &&
+                  modifySearchFrom !== `${SAVED_SEARCHES}`
                 ) {
-                  const activeTab = searchResult?.activeTab;
-                  if (activeTab !== undefined) {
-                    const isSearchName: number =
-                      addSearches[activeTab]?.saveSearchName.length;
-                    const isSaved: boolean =
-                      addSearches[activeTab]?.isSavedSearch;
-                    // Check if the active search is not null and isSavedSearch is true
-                    if (modifySearchFrom === `${SAVED_SEARCHES}`) {
-                      handleSaveAndSearch();
-                    } else if (isSaved) {
-                      handleSaveAndSearch();
-                    } else if (!isSaved && isSearchName) {
-                      handleSaveAndSearch();
+                  setIsError(true);
+                  setErrorText(
+                    'Max search limit reached. Please remove existing searches'
+                  );
+                } else {
+                  if (
+                    data?.count < MAX_SEARCH_FORM_COUNT &&
+                    data?.count > MIN_SEARCH_FORM_COUNT
+                  ) {
+                    const activeTab = searchResult?.activeTab;
+                    if (activeTab !== undefined) {
+                      const isSearchName: number =
+                        addSearches[activeTab]?.saveSearchName.length;
+                      const isSaved: boolean =
+                        addSearches[activeTab]?.isSavedSearch;
+                      // Check if the active search is not null and isSavedSearch is true
+                      if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+                        handleSaveAndSearch();
+                      } else if (isSaved) {
+                        handleSaveAndSearch();
+                      } else if (!isSaved && isSearchName) {
+                        handleSaveAndSearch();
+                      } else {
+                        searchUrl && setIsInputDialogOpen(true);
+                      }
                     } else {
-                      searchUrl && setIsInputDialogOpen(true);
+                      setIsError(true);
+                      setErrorText(
+                        'Please make a selection to perform action.'
+                      );
                     }
-                  } else {
-                    setIsError(true);
-                    setErrorText('Please make a selection to perform action.');
                   }
                 }
               }

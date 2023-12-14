@@ -22,10 +22,7 @@ import {
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import CustomLoader from '@/components/common/loader';
-import {
-  LISTING_PAGE_DATA_LIMIT,
-  MAX_SEARCH_TAB_LIMIT
-} from '@/constants/business-logic';
+import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
 import {
   NEW_SEARCH,
@@ -346,21 +343,9 @@ function SearchResultLayout() {
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
   const handleSearchTab = (index: number, pathName: IPathName) => {
-    if (
-      maxTab === MAX_SEARCH_TAB_LIMIT &&
-      pathName.fullName.toLocaleLowerCase() === 'new search'
-    ) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-          Max search limit reached. Please remove existing searches
-        </div>
-      );
-    } else {
-      refetch();
-      setActiveTab(index);
-      setheaderPath(pathName);
-    }
+    setActiveTab(index);
+    setheaderPath(pathName);
+    refetch();
   };
 
   const editSearchResult = (activeTab: number) => {
@@ -451,12 +436,7 @@ function SearchResultLayout() {
                         : 'hover:text-solitaireQuaternary'
                     }`}
                     onClick={() => handleSearchTab(0, pathName)}
-                    href={
-                      maxTab === MAX_SEARCH_TAB_LIMIT &&
-                      path === `${NEW_SEARCH}`
-                        ? ``
-                        : `/search?active-tab=${path}`
-                    }
+                    href={`/search?active-tab=${path}`}
                     key={id}
                   >
                     <div

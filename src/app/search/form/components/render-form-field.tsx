@@ -11,7 +11,7 @@ import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
-import Select, { StylesConfig } from 'react-select';
+import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
 
 const renderContent = (
@@ -211,15 +211,15 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: string) => e !== 'None')
+        selectedFluorescence.filter((e: string) => e !== 'NON')
       );
     }
-    if (data.toLowerCase() === '3ex+none') {
+    if (data.toLowerCase() === '3ex+non') {
       if (data !== selectedMake) {
         setSelectedCut(['EX']);
         setSelectedPolish(['EX']);
         setSelectedSymmetry(['EX']);
-        setSelectedFluorescence(['None']);
+        setSelectedFluorescence(['NON']);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -238,7 +238,7 @@ const renderContent = (
         setSelectedSymmetry([]);
       }
       setSelectedFluorescence(
-        selectedFluorescence.filter((e: string) => e !== 'None')
+        selectedFluorescence.filter((e: string) => e !== 'NON')
       );
     }
     if (data.toLowerCase() === '3g') {
@@ -287,8 +287,8 @@ const renderContent = (
       firstCriteria.toString() === 'EX' &&
       secondCriteria.toString() === 'EX'
     ) {
-      if (selectedFluorescence.toString() === 'None') {
-        setSelectedMake('3EX+None');
+      if (selectedFluorescence.toString() === 'NON') {
+        setSelectedMake('3EX+NON');
       } else {
         setSelectedMake('3EX');
       }
@@ -353,8 +353,8 @@ const renderContent = (
       selectedCut.toString() === 'EX' &&
       selectedSymmetry.toString() === 'EX'
     ) {
-      if (temp.toString() === 'None') {
-        setSelectedMake('3EX+None');
+      if (temp.toString() === 'NON') {
+        setSelectedMake('3EX+NON');
       } else {
         setSelectedMake('3EX');
       }
@@ -455,30 +455,6 @@ const renderContent = (
     }
   };
 
-  // Radio data for step selection
-  const RadioData = [
-    {
-      name: 'steps',
-      onChange: (data: string) => {
-        setSelectedStep(data);
-      },
-      id: '1',
-      value: 'Contains',
-      label: ManageLocales('app.advanceSearch.radioLabel1'),
-      checked: selectedStep == 'Contains'
-    },
-    {
-      name: 'steps',
-      onChange: (data: string) => {
-        setSelectedStep(data);
-      },
-      id: '2',
-      value: 'Does not contains',
-      label: ManageLocales('app.advanceSearch.radioLabel2'),
-      checked: selectedStep == 'Does not contains'
-    }
-  ];
-
   // Function to handle validation errors
   const handleValidate = (
     key: keyof Errors,
@@ -541,6 +517,12 @@ const renderContent = (
       }));
       // Handle other error logic as needed
     }
+  };
+
+  const computeDropdownField = (fieldData: string[]) => {
+    return fieldData.map(data => {
+      return { value: data, label: data };
+    });
   };
 
   return (
@@ -691,7 +673,7 @@ const renderContent = (
         >
           <div className="w-[30%]">
             <Select
-              options={advanceSearch.fancyColor}
+              options={computeDropdownField(advanceSearch.fancy)}
               onChange={handleFancyFilterChange}
               placeholder={ManageLocales('app.advanceSearch.fancyColor')}
               styles={colourStyles}
@@ -701,7 +683,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
-              options={advanceSearch.intensity}
+              options={computeDropdownField(advanceSearch.intensity)}
               onChange={handleIntensityChange}
               placeholder={ManageLocales('app.advanceSearch.intensity')}
               styles={colourStyles}
@@ -711,7 +693,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
-              options={advanceSearch.overtone}
+              options={computeDropdownField(advanceSearch.overtone)}
               onChange={handleOvertoneChange}
               placeholder={ManageLocales('app.advanceSearch.overtone')}
               styles={colourStyles}
@@ -854,40 +836,6 @@ const renderContent = (
             styles.activeOtherStyles,
             selectedLab,
             handleLabChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.HA')}
-          />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            advanceSearch.brilliance,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedHR,
-            handleHRChange
-          )}
-        </div>
-      </div>
-      <div className={styles.filterSection}>
-        <div className={styles.filterSectionLabel}>
-          <CustomInputlabel
-            htmlfor="text"
-            label={ManageLocales('app.advanceSearch.brilliance')}
-          />
-        </div>
-        <div>
-          {renderSelectionButtons(
-            advanceSearch.brilliance,
-            styles.commonSelectionStyle,
-            styles.activeOtherStyles,
-            selectedBrilliance,
-            handleBrillianceChange
           )}
         </div>
       </div>
