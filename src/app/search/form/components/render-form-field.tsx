@@ -160,7 +160,6 @@ const renderContent = (
   };
   // Function to handle intensity change based on user selection
   const handleIntensityChange = (selectedOption: any) => {
-    console.log('selectedOption', selectedOption);
     setSelectedColor([]);
     setSelectedIntensity([]);
     selectedOption.map((data: any) => {
@@ -594,10 +593,8 @@ const renderContent = (
     option: styles => {
       return {
         ...styles,
-
         backgroundColor: 'hsl(var(--solitaire-denary))',
         color: 'hsl(var(--solitaire-tertiary))',
-
         ':active': {
           ...styles[':active'],
           backgroundColor: 'hsl(var(--solitaire-denary))'

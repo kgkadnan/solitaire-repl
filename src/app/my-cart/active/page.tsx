@@ -1,105 +1,64 @@
 'use client';
 
-import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import CustomDataTable from '@/components/common/data-table';
 import { CustomDropdown } from '@/components/common/dropdown';
-import { useDeleteCartMutation, useGetCartQuery } from '@/features/api/cart';
-import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import { useDeleteCartMutation } from '@/features/api/cart';
 import { ManageLocales } from '@/utils/translate';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import styles from './active-cart.module.scss';
 import { CustomFooter } from '@/components/common/footer';
-import { CustomDialog } from '@/components/common/dialog';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
-  ACTIVE_STATUS,
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE
 } from '@/constants/business-logic';
-import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { performDownloadExcel } from '@/utils/perform-download-excel';
 
-import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
-import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
-import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
-import { Product } from '@/app/search/result/result-interface';
-import { ProductItem } from '../interface';
 
-const ActiveMyCart = () => {
+import { ProductItem } from '../interface';
+import { Product } from '@/app/search/result/result-interface';
+
+const ActiveMyCart = ({
+  tableColumns,
+  activeCartRows,
+  refetch,
+  checkboxState,
+  checkboxSetState,
+  downloadExcelFunction,
+  errorSetState,
+  errorState,
+  modalSetState
+}: any) => {
   // State variables for managing component state
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
 
   const { confirmStoneState, confirmStoneSetState } =
     useConfirmStoneStateManagement();
-  const { errorState, errorSetState } = useErrorStateManagement();
 
   const { isError, errorText } = errorState;
   const { setErrorText, setIsSliderError, setIsError } = errorSetState;
 
   const { setConfirmStoneData } = confirmStoneSetState;
+
   const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
-  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
-
-  const { rows, tableColumns } = dataTableState;
-  const { setRows, setTableColumns } = dataTableSetState;
-
-  // Fetching table columns for managing listing sequence
-  const { data: cartTableColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
-
-  // Fetching cart data
-  const { data, refetch } = useGetCartQuery({});
 
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
-
-  // Mutation for downloading Excel data
-  const [downloadExcel] = useDownloadExcelMutation();
 
   // Data for Custom Data Table checkboxes
   const checkboxData = {
     checkboxState,
     checkboxSetState
-  };
-
-  // Handle the comparison of selected stones
-  const handleCompareStone = () => {
-    // Check the number of selected stones
-    if (isCheck.length > MAX_COMPARE_STONE) {
-      setIsError(true);
-      setErrorText(`You can compare a maximum of ${MAX_COMPARE_STONE} stones`);
-    } else if (isCheck.length < MIN_COMPARE_STONE) {
-      setIsError(true);
-      setErrorText(
-        `Minimum ${MIN_COMPARE_STONE} stones are required to compare`
-      );
-    } else {
-      // Get the data of selected stones and open a new window for comparison
-      const compareStones = isCheck
-        .map(
-          id =>
-            data?.cart?.items.find(
-              (row: { product: Product }) => row.product.id === id
-            )
-        )
-        .map(stone => stone.product);
-
-      localStorage.setItem('compareStone', JSON.stringify(compareStones));
-
-      window.open('/compare-stone', '_blank');
-    }
   };
 
   // Handle the deletion of selected stones
@@ -136,11 +95,32 @@ const ActiveMyCart = () => {
     }
   };
 
+  // Compare Stone handler
+  const handleCompareStone = () => {
+    const maxStones = MAX_COMPARE_STONE;
+    const minStones = MIN_COMPARE_STONE;
+
+    if (isCheck.length > maxStones) {
+      setIsError(true);
+      setErrorText(`You can compare a maximum of ${maxStones} stones`);
+    } else if (isCheck.length < minStones) {
+      setIsError(true);
+      setErrorText(`Minimum ${minStones} stones are required to compare`);
+    } else {
+      const comapreStones = isCheck.map((id: string) => {
+        return activeCartRows.find((row: Product) => row.id === id);
+      });
+
+      localStorage.setItem('compareStone', JSON.stringify(comapreStones));
+      window.open('/compare-stone', '_blank');
+    }
+  };
+
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
-    const itemsId = isCheck.map(id => {
-      const selectedRow = data.cart.items.find(
-        (row: ProductItem) => row.product.id === id
+    const itemsId = isCheck.map((id: any) => {
+      const selectedRow = activeCartRows.find(
+        (row: ProductItem) => row.id === id
       );
 
       return selectedRow?.id;
@@ -176,23 +156,6 @@ const ActiveMyCart = () => {
     setErrorText(`You haven't picked any stones.`);
   };
 
-  // Handle download of Excel based on user selection (All or Selected)
-  const downloadExcelFunction = () => {
-    if (isCheck.length === 0) {
-      setIsError(true);
-      setErrorText('Please select a stone to perform action.');
-    } else if (isCheck.length) {
-      performDownloadExcel({
-        productIds: isCheck,
-        downloadExcelApi: downloadExcel,
-        setDialogContent,
-        setIsDialogOpen,
-        setIsCheck,
-        setIsCheckAll,
-        setIsError
-      });
-    }
-  };
   // Configuration for footer buttons
   const footerButtonData = [
     {
@@ -244,7 +207,7 @@ const ActiveMyCart = () => {
       fn: () =>
         handleConfirmStone(
           isCheck,
-          rows,
+          activeCartRows,
           setErrorText,
           setIsError,
           setIsSliderOpen,
@@ -259,42 +222,6 @@ const ActiveMyCart = () => {
     setIsSliderOpen(open);
   };
 
-  // Effect hook to update table columns when they change
-  useEffect(() => {
-    setTableColumns(cartTableColumns);
-  }, [cartTableColumns, setTableColumns]);
-
-  // Effect hook to update rows when cart data changes
-  useEffect(() => {
-    const updateRows = () => {
-      if (data) {
-        const activeDiamondItems = data?.cart?.items
-          .filter(
-            (item: ProductItem) =>
-              item?.product?.diamond_status === ACTIVE_STATUS
-          )
-          .map((row: ProductItem) => row?.product);
-
-        setRows(activeDiamondItems);
-      }
-    };
-
-    updateRows();
-  }, [data, setRows]);
-
-  // Effect hook to close the dialog box
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
-
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
-
   return (
     <>
       <CustomSlider
@@ -305,7 +232,7 @@ const ActiveMyCart = () => {
             onOpenChange={onOpenChange}
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
-            listingColumns={cartTableColumns}
+            listingColumns={tableColumns}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
             refetch={refetch}
@@ -315,14 +242,10 @@ const ActiveMyCart = () => {
         isSliderOpen={isSliderOpen}
         onOpenChange={onOpenChange}
       />
-      <CustomDialog
-        setIsOpen={setIsDialogOpen}
-        isOpens={isDialogOpen}
-        dialogContent={dialogContent}
-      />
-      {rows.length > 0 ? (
+
+      {activeCartRows.length > 0 ? (
         <CustomDataTable
-          tableRows={rows}
+          tableRows={activeCartRows}
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}

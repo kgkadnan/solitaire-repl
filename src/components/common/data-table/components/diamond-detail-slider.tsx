@@ -11,6 +11,7 @@ import { CustomFooter } from '../../footer';
 import styles from '../custom-table.module.scss';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
+
 import {
   basicDetailsLabelMapping,
   inclusionDetailsLabelMapping,
@@ -18,6 +19,7 @@ import {
   measurementsLabelMapping,
   otherInformationsLabelMapping
 } from '../lable-mapping';
+import { useState } from 'react';
 
 export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   dataTableBodyState,

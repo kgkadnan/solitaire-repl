@@ -11,7 +11,7 @@ interface DownloadExcelApiResponse {
 }
 
 interface DownloadExcelFunctionProps {
-  productIds: string[];
+  products: string[];
   downloadExcelApi: any;
   setDialogContent?: Dispatch<SetStateAction<ReactNode>>;
   setIsDialogOpen?: Dispatch<SetStateAction<boolean>>;
@@ -21,7 +21,7 @@ interface DownloadExcelFunctionProps {
 }
 
 export const performDownloadExcel = async ({
-  productIds,
+  products,
   downloadExcelApi,
   setDialogContent,
   setIsDialogOpen,
@@ -32,7 +32,7 @@ export const performDownloadExcel = async ({
   try {
     // Explicitly type res to include unwrap method
     const res: DownloadExcelApiResponse = await downloadExcelApi({
-      productIds
+      products
     });
 
     const { data, fileName } = res.data;
