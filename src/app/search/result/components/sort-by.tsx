@@ -232,17 +232,17 @@ code also combines all the radio button data arrays into a single array called R
       name: 'Black Table',
       onChange: handleBlackTableRadioChange,
       id: '1',
-      value: 'black_table - Low to High',
+      value: 'table_black - Low to High',
       label: 'Black Table - (B0 - B3) ',
-      checked: selectedBlackTableRadioValue == 'black_table - Low to High'
+      checked: selectedBlackTableRadioValue == 'table_black - Low to High'
     },
     {
       name: 'Black Table',
       onChange: handleBlackTableRadioChange,
       id: '2',
-      value: 'black_table - High to Low',
+      value: 'table_black - High to Low',
       label: 'Black Table - (B3 - B0) ',
-      checked: selectedBlackTableRadioValue == 'black_table - High to Low'
+      checked: selectedBlackTableRadioValue == 'table_black - High to Low'
     }
   ];
   const sideBlackRadioData = [

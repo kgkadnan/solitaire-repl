@@ -37,11 +37,11 @@ interface Product {
   intensity: string;
   ha: string | null;
   brilliance: string | null;
-  black_table: string;
+  table_black: string;
   side_black: string;
-  open_crown: string;
-  open_pavilion: string;
-  open_table: string;
+  crown_open: string;
+  pavilion_open: string;
+  table_open: string;
   milky: string;
   luster: string;
   eye_clean: string;
@@ -62,7 +62,7 @@ interface Product {
   depth_percentage: number | null;
   table_percentage: number;
   crown_angle: number;
-  pavilion_depth: number;
+  pavilion_height: number;
   crown_height: number;
   lower_half: number;
   ratio: number;

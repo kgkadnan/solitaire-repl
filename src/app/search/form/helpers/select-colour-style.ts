@@ -28,7 +28,8 @@ export const colourStyles: StylesConfig<ColourOption, true> = {
   }),
   placeholder: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))'
+    color: 'hsl(var(--solitaire-tertiary))',
+    border:"none"
   }),
   menuList: styles => ({
     ...styles,
@@ -42,10 +43,12 @@ export const colourStyles: StylesConfig<ColourOption, true> = {
       color: 'hsl(var(--solitaire-tertiary))',
       ':active': {
         ...styles[':active'],
+        border:"none",
         backgroundColor: 'hsl(var(--solitaire-denary))'
       },
       ':hover': {
         backgroundColor: 'hsl(var(--solitaire-secondary))',
+        border:"none",
         color: 'hsl(var(--solitaire-tertiary))'
       }
     };

@@ -182,7 +182,7 @@ export const generateQueryParams = (state: any) => {
     });
   pavilionDepthFrom &&
     pavilionDepthTo &&
-    (queryParams['pavilion_depth'] = {
+    (queryParams['pavilion_height'] = {
       lte: pavilionDepthTo,
       gte: pavilionDepthFrom
     });

@@ -37,26 +37,26 @@ export const basicDetailsLabelMapping: KeyLabelMapping = {
   inscription: 'Laser Inscription'
 };
 export const measurementsLabelMapping: KeyLabelMapping = {
-  table_percentage: 'Table%',
-  depth_percentage: 'Depth%',
+  table_percentage: 'Table %',
+  depth_percentage: 'Depth %',
   ratio: 'Ratio',
   length: 'Length',
   width: 'Width',
   depth: 'Depth',
   crown_angle: 'Crown Angle',
   crown_height: 'Crown Height',
-  girdle_percentage: 'Girdle%',
+  girdle_percentage: 'Girdle %',
   pavilion_angle: 'Pavilion Angle',
-  pavilion_depth: 'Pavilion Depth',
+  pavilion_height: 'Pavilion Height',
   lower_half: 'Lower Half',
   star_length: 'Star Length'
 };
 export const inclusionDetailsLabelMapping: KeyLabelMapping = {
-  black_table: 'Table Black',
+  table_black: 'Table Black',
   side_black: 'Black Side',
-  open_crown: 'Crown Open',
-  open_table: 'Table Open',
-  open_pavilion: 'Pavilion Open',
+  crown_open: 'Crown Open',
+  table_open: 'Table Open',
+  pavilion_open: 'Pavilion Open',
   milky: 'Milky',
   luster: 'Luster',
   eye_clean: 'Eye Clean',
