@@ -378,7 +378,15 @@
       "end": 100
     }
   },
-  "culet": ["None", "Pointed", "Very Small", "Medium", "Small", "Large"],
+  "culet": [
+    { "id": 1, "value": "None", "label": "None" },
+    { "id": 2, "value": "Pointed", "label": "Pointed" },
+    { "id": 3, "value": "Very Small", "label": "Very Small" },
+    { "id": 4, "value": "Small", "label": "Small" },
+    { "id": 5, "value": "Med", "label": "Med" },
+    { "id": 7, "value": "Linear", "label": "Linear" },
+    { "id": 8, "value": "Large", "label": "Large" }
+  ],
   "intensity": [
     "Faint",
     "Very Light",

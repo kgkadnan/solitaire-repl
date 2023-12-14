@@ -49,7 +49,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
       setErrorText('Please select a stone to perform action.');
     } else if (isCheck.length) {
       performDownloadExcel({
-        productIds: isCheck,
+        products: isCheck,
         downloadExcelApi: downloadExcel,
         setDialogContent,
         setIsDialogOpen,

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles/compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
@@ -21,6 +21,14 @@ import { keyLabelMapping } from './helpers/key-label';
 import { handleShowDifferencesChange } from './helpers/handle-show-difference-function';
 import { Product } from '../search/result/result-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { CustomSlider } from '@/components/common/slider';
+import ConfirmStone from '@/components/common/confirm-stone';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
+import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
+import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
 const CompareStone = () => {
   // Initialize necessary state variables
@@ -28,19 +36,33 @@ const CompareStone = () => {
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
 
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { dialogContent, isDialogOpen, isSliderOpen } = modalState;
+
+  const { setDialogContent, setIsDialogOpen, setIsSliderOpen } = modalSetState;
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText, setIsSliderError } = errorSetState;
+  const { isError, errorText } = errorState;
+
+  const { confirmStoneState, confirmStoneSetState } =
+    useConfirmStoneStateManagement();
+
+  const { setConfirmStoneData } = confirmStoneSetState;
+
   const dispatch = useAppDispatch();
   const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
-  const [dialogContent, setDialogContent] = useState<ReactNode>();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState<string>('');
   // Initialize state for displaying differences in stone properties
   const [showDifferences, setShowDifferences] = useState(false);
   const [compareValues, setCompareValues] = useState({});
 
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
+
+  // Fetching table columns for managing listing sequence
+  const { data: listingColumns } =
+    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
 
   // Handle adding items to the cart
   const handleAddToCart = () => {
@@ -139,7 +161,20 @@ const CompareStone = () => {
         />
       )
     },
-    { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
+    {
+      id: 2,
+      displayButtonLabel: 'Confirm Stone',
+      style: styles.transparent,
+      fn: () =>
+        handleConfirmStone(
+          isCheck,
+          compareStoneData,
+          setErrorText,
+          setIsError,
+          setIsSliderOpen,
+          setConfirmStoneData
+        )
+    },
     {
       id: 4,
       displayButtonLabel: 'Add to Cart',
@@ -231,8 +266,31 @@ const CompareStone = () => {
     }
   }, [isDialogOpen, setIsDialogOpen]);
 
+  // Handle change in the slider's open state
+  const onOpenChange = (open: boolean) => {
+    setIsSliderError(false);
+    setIsSliderOpen(open);
+  };
+
   return (
     <div className={styles.comparestoneContainer}>
+      <CustomSlider
+        sheetContent={
+          <ConfirmStone
+            errorState={errorState}
+            errorSetState={errorSetState}
+            onOpenChange={onOpenChange}
+            confirmStoneState={confirmStoneState}
+            confirmStoneSetState={confirmStoneSetState}
+            listingColumns={listingColumns}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
+          />
+        }
+        sheetContentStyle={styles.diamondDetailSheet}
+        isSliderOpen={isSliderOpen}
+        onOpenChange={onOpenChange}
+      />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

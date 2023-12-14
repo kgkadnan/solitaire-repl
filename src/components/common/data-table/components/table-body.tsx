@@ -79,7 +79,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const downloadExcelFunction = () => {
     if (sliderData[0]) {
       performDownloadExcel({
-        productIds: [sliderData[0].id],
+        products: [sliderData[0].id],
         downloadExcelApi: downloadExcel,
         setDialogContent,
         setIsDialogOpen,

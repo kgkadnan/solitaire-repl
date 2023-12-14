@@ -4,7 +4,8 @@ import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
 import { CustomSelect } from '@/components/common/select';
-
+import Select, { StylesConfig } from 'react-select';
+import { colourStyles } from '../helpers/select-colour-style';
 // Define interfaces for the component props
 interface IRange {
   start: number;
@@ -200,22 +201,18 @@ const renderMeasurementField = (state: any, setState: any) => {
   }
 
   // Function to handle filter changes and culet selection based on user input
-  const handleCuletChange = (data: string) => {
-    setSelectedCulet(data);
+  const handleCuletChange = (data: any) => {
+    setSelectedCulet(data.value);
   };
 
   const culetField = () => {
     return (
       <div className={styles.parameterContainer}>
-        <CustomSelect
-          data={advanceSearch.culet}
+        <Select
+          options={advanceSearch.culet}
           onChange={handleCuletChange}
-          placeholder="Culet"
-          style={{
-            selectTrigger: styles.dropdownHeader,
-            selectContent: styles.dropdownData,
-            selectElement: styles.selectElement
-          }}
+          placeholder={'Culet'}
+          styles={colourStyles}
         />
       </div>
     );
