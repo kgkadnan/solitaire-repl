@@ -319,7 +319,9 @@ function SearchResultLayout() {
 
         if (parseYourSelection.length) {
           setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
-          refetch();
+          if (isLoading) {
+            refetch();
+          }
         } else {
           setMyProfileRoutes([
             {
@@ -349,7 +351,7 @@ function SearchResultLayout() {
   const handleSearchTab = (index: number, pathName: IPathName) => {
     setActiveTab(index);
     setheaderPath(pathName);
-    refetch();
+    console.log('pathName', pathName);
   };
 
   const editSearchResult = (activeTab: number) => {
