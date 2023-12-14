@@ -4,7 +4,6 @@ export interface Errors {
   discount: { from: string | null; to: string | null };
   price_range: { from: string | null; to: string | null };
   price_per_carat: { from: string | null; to: string | null };
-  // Add more input groups here if needed
 }
 
 const useValidationStateManagement = () => {
