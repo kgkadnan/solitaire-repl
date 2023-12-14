@@ -178,7 +178,6 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               setInputError(false);
               onOpenChange(false);
               setIsDialogOpen(true);
-              refetch();
               setDialogContent(
                 <>
                   <div className="max-w-[400px] flex justify-center ">
@@ -189,6 +188,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
                   </div>
                 </>
               );
+              refetch();
             }
           })
           .catch(e => {
