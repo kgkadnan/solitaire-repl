@@ -416,7 +416,7 @@ const SavedSearch = () => {
       />
       <div className="container flex flex-col">
         {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3">
+        <div className="sticky top-0 bg-solitairePrimary mt-3 mb-[1px]">
           <CustomHeader
             data={savedSearchheaderData}
             mainDivStyle={styles.mainHeaderStyle}

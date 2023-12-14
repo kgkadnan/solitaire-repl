@@ -119,18 +119,18 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.crown_height && setCrownHeightTo(data?.crown_height?.lte);
   data?.pavilion_angle && setPavilionAngleFrom(data?.pavilion_angle?.gte);
   data?.pavilion_angle && setPavilionAngleTo(data?.pavilion_angle?.lte);
-  data?.pavilion_depth && setPavilionDepthFrom(data?.pavilion_depth?.gte);
-  data?.pavilion_depth && setPavilionDepthTo(data?.pavilion_depth?.lte);
+  data?.pavilion_height && setPavilionDepthFrom(data?.pavilion_height?.gte);
+  data?.pavilion_height && setPavilionDepthTo(data?.pavilion_height?.lte);
   //inclusion_details States
   data?.milky && setMilkyBI(data?.milky);
   data?.luster && setLusterBI(data?.luster);
   data?.eye_clean && setEyeCleanBI(data?.eye_clean);
-  data?.open_crown && setOpenCrownBI(data?.open_crown);
-  data?.open_table && setOpenTableBI(data?.open_table);
+  data?.crown_open && setOpenCrownBI(data?.crown_open);
+  data?.table_open && setOpenTableBI(data?.table_open);
   data?.side_table && setSideBlackBI(data?.side_table);
-  data?.black_table && setBlackTableBI(data?.black_table);
+  data?.table_black && setBlackTableBI(data?.table_black);
   data?.natural_crown && setNaturalCrownWI(data?.natural_crown);
-  data?.open_pavilion && setOpenPavilionBI(data?.open_pavilion);
+  data?.pavilion_open && setOpenPavilionBI(data?.pavilion_open);
   data?.natural_girdle && setNaturalGirdleWI(data?.natural_girdle);
   data?.side_inclusion && setSideInclusionWI(data?.side_inclusion);
   data?.table_inclusion && setTableInclusionWI(data?.table_inclusion);
