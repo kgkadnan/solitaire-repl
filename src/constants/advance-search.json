@@ -396,13 +396,13 @@
     }
   },
   "culet": [
-    { "id": 1, "value": "None" },
-    { "id": 2, "value": "Pointed" },
-    { "id": 3, "value": "Very Small" },
-    { "id": 4, "value": "Small" },
-    { "id": 5, "value": "Med" },
-    { "id": 7, "value": "Linear" },
-    { "id": 8, "value": "Large" }
+    { "id": 1, "value": "None", "label": "None" },
+    { "id": 2, "value": "Pointed", "label": "Pointed" },
+    { "id": 3, "value": "Very Small", "label": "Very Small" },
+    { "id": 4, "value": "Small", "label": "Small" },
+    { "id": 5, "value": "Med", "label": "Med" },
+    { "id": 7, "value": "Linear", "label": "Linear" },
+    { "id": 8, "value": "Large", "label": "Large" }
   ],
   "intensity": [
     { "id": 1, "value": "Faint", "label": "Faint" },
