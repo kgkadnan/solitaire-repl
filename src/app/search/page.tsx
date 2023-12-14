@@ -540,8 +540,6 @@ function SearchResultLayout() {
             <AdvanceSearch />
           ) : headerPath === 'Saved Searches' ? (
             <SavedSearch />
-          ) : isLoading ? (
-            <CustomLoader />
           ) : headerPath === 'No Data Found' ? (
             <NoDataFound />
           ) : (
