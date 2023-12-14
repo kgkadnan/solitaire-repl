@@ -153,22 +153,22 @@ code also combines all the radio button data arrays into a single array called R
       checked: selectedClarityRadioValue == 'Clarity - High to Low'
     }
   ];
-  const priceRadioData = [
+  const amountRadioData = [
     {
-      name: 'price',
+      name: 'Amount',
       onChange: handlePriceRadioChange,
       id: '1',
-      value: 'Price - Low to High',
-      label: 'Price - Low to High',
-      checked: selectedPriceRadioValue == 'Price - Low to High'
+      value: 'Amount - Low to High',
+      label: 'Amount - Low to High',
+      checked: selectedPriceRadioValue == 'Amount - Low to High'
     },
     {
-      name: 'price',
+      name: 'Amount',
       onChange: handlePriceRadioChange,
       id: '2',
-      value: 'Price - High to Low',
-      label: 'Price - High to Low',
-      checked: selectedPriceRadioValue == 'Price - High to Low'
+      value: 'Amount - High to Low',
+      label: 'Amount - High to Low',
+      checked: selectedPriceRadioValue == 'Amount - High to Low'
     }
   ];
   const discountRadioData = [
@@ -267,7 +267,7 @@ code also combines all the radio button data arrays into a single array called R
     ...DefaultRadioData,
     ...carartRadioData,
     ...clarityRadioData,
-    ...priceRadioData,
+    ...amountRadioData,
     ...discountRadioData,
     ...tableInclusionRadioData,
     ...fluorescenceRadioData,

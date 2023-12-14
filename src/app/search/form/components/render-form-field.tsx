@@ -12,6 +12,7 @@ import advanceSearch from '@/constants/advance-search.json';
 import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import Select, { StylesConfig } from 'react-select';
+import { colourStyles } from '../helpers/select-colour-style';
 
 const renderContent = (
   state: any,
@@ -540,90 +541,6 @@ const renderContent = (
       }));
       // Handle other error logic as needed
     }
-  };
-
-  const customStyles = {
-    option: (defaultStyles: any, state: any) => ({
-      ...defaultStyles,
-      color: state.isSelected ? '#212529' : '#fff',
-      backgroundColor: 'bg-solitairePrimary',
-      border: '1px solid '
-    }),
-
-    control: (defaultStyles: any) => ({
-      ...defaultStyles,
-      backgroundColor: 'bg-solitairePrimary',
-      border: '1px solid ',
-
-      boxShadow: 'none'
-    })
-    // singleValue: (defaultStyles: any) => ({ ...defaultStyles, color: '#fff' })
-  };
-  interface ColourOption {
-    readonly value: string;
-    readonly label: string;
-  }
-
-  const colourStyles: StylesConfig<ColourOption, true> = {
-    control: styles => ({
-      ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
-
-      backgroundColor: ' hsl(var(--solitaire-primary))',
-      borderRadius: 'none',
-      border: 'none',
-      borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-      // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-      outline: '1px solid hsl(var(--solitaire-primary))',
-      width: '100%',
-      ':hover': {
-        border: 'none',
-        borderBottom: '1px solid hsl(var(--solitaire-quaternary))'
-      }
-    }),
-    placeholder: styles => ({
-      ...styles,
-      color: 'hsl(var(--solitaire-tertiary))'
-    }),
-    menuList: styles => ({
-      ...styles,
-      backgroundColor: 'hsl(var(--solitaire-denary))',
-      height: '20vh'
-    }),
-    option: styles => {
-      return {
-        ...styles,
-        backgroundColor: 'hsl(var(--solitaire-denary))',
-        color: 'hsl(var(--solitaire-tertiary))',
-        ':active': {
-          ...styles[':active'],
-          backgroundColor: 'hsl(var(--solitaire-denary))'
-        },
-        ':hover': {
-          backgroundColor: 'hsl(var(--solitaire-secondary))',
-          color: 'hsl(var(--solitaire-tertiary))'
-        }
-      };
-    },
-    multiValue: styles => {
-      return {
-        ...styles,
-        backgroundColor: 'hsl(var(--solitaire-primary))'
-      };
-    },
-    multiValueLabel: styles => ({
-      ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
-      backgroundColor: 'hsl(var(--solitaire-primary))'
-    }),
-    multiValueRemove: styles => ({
-      ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
-      ':hover': {
-        backgroundColor: 'hsl(var(--solitaire-primary))',
-        color: 'hsl(var(--solitaire-tertiary))'
-      }
-    })
   };
 
   return (
