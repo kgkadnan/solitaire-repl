@@ -172,12 +172,6 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           .unwrap()
           .then(res => {
             if (res) {
-              setCommentValue('');
-              setSelectedDaysInputValue('');
-              setInputErrorContent('');
-              setInputError(false);
-              onOpenChange(false);
-              setIsDialogOpen(true);
               setDialogContent(
                 <>
                   <div className="max-w-[400px] flex justify-center ">
@@ -188,6 +182,12 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
                   </div>
                 </>
               );
+              setCommentValue('');
+              setSelectedDaysInputValue('');
+              setInputErrorContent('');
+              setInputError(false);
+              onOpenChange(false);
+              setIsDialogOpen(true);
               refetch();
             }
           })

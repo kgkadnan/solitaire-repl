@@ -213,7 +213,9 @@ const SavedSearch = () => {
                   {
                     desc: (
                       <div className={styles.parentDivHeaderSectiom}>
-                        <div style={{ marginRight: '80px' }}>
+                        <div
+                          style={{ marginRight: '80px', paddingLeft: '20px' }}
+                        >
                           {formatCreatedAt(item.created_at)}
                         </div>
                       </div>
@@ -424,7 +426,7 @@ const SavedSearch = () => {
         <div className="h-[70vh] overflow-auto">
           {/* Custom Card and Checkbox map */}
           {cardData?.length ? (
-            <div className="flex-grow">
+            <div className="flex-grow mt-[50px]">
               {cardData?.map((items: ICardData) => {
                 return (
                   <div key={items.id}>

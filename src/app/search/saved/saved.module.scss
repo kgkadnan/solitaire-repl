@@ -29,6 +29,7 @@
   color: hsl(var(--solitaire-tertiary));
   font-size: 16px;
   font-weight: 500;
+  padding-left: 20px;
 }
 
 /* Date and Time */
@@ -244,7 +245,7 @@
 
 .mainHeaderStyle {
   position: fixed;
-  top: 146px;
+  top: 160px;
   background-color: hsl(var(--solitaire-primary));
   z-index: 11111;
   width: 90%;
@@ -253,5 +254,5 @@
 }
 
 .visibleStyle {
-  top: 66px;
+  top: 80px;
 }

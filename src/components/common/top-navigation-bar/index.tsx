@@ -204,6 +204,7 @@ export const TopNavigationBar = () => {
             >
               <MyProfileIcon
                 role="button"
+                stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
                 className={
                   topNavData[3].isActive ? styles.activeIcon : styles.iconColor
                 }

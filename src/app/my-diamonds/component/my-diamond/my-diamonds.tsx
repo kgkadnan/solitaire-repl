@@ -181,7 +181,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         isOpens={isDialogOpen}
         dialogContent={dialogContent}
       />
-      <div className="mb-[50px] h-[70vh] overflow-auto">
+      <div className=" h-[70vh] overflow-auto">
         <div>
           {!data?.length && <NoDataFound />}
           <CustomSlider

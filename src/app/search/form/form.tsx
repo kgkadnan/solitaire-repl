@@ -161,14 +161,14 @@ used for managing the state of a form field or input element in a React componen
           setErrorText(`No stones found, Please modify your search.`);
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(`${data?.count} stones found`);
+          data?.count && setErrorText(`${data?.count} stones found`);
         } else {
           setIsError(false);
           setErrorText('');
         }
       } else {
-        setIsError(true);
-        setErrorText('Please select some parameter before initiating search');
+        setIsError(false);
+        setErrorText('');
       }
     }
     if (error) {
@@ -177,7 +177,7 @@ used for managing the state of a form field or input element in a React componen
       setErrorText(error1?.error);
     }
     setSearchCount(searchCount + 1);
-  }, [data, error, errorText, searchUrl]);
+  }, [data, error, searchUrl]);
 
   // Function: Save and search
   const handleSaveAndSearch: any = async () => {
@@ -347,8 +347,6 @@ used for managing the state of a form field or input element in a React componen
         errors,
         selectedStep,
         setSelectedStep,
-        selectedShadeContain,
-        setSelectedShadeContain,
         setErrors
       )}
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
