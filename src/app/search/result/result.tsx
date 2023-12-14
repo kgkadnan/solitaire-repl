@@ -232,43 +232,37 @@ variable changes. */
         modalStyle={styles.modalStyle}
       />
 
-      {searchUrl && rows?.length && tableColumns?.length ? (
-        <>
-          <ResultHeader
-            activeTab={activeTab}
-            data={data}
-            checkboxState={checkboxState}
-            modalSetState={modalSetState}
-            commonSetState={commonSetState}
-            commonState={commonState}
-            sortBySetState={sortBySetState}
-            sortByState={sortByState}
-            dataTableState={dataTableState}
-            dataTableSetState={dataTableSetState}
-          />
-          <CustomDataTable
-            tableRows={rows}
-            tableColumns={tableColumns}
-            checkboxData={checkboxData}
-            mainTableStyle={styles.tableWrapper}
-            errorSetState={errorSetState}
-            confirmStoneSetState={confirmStoneSetState}
-            modalSetState={modalSetState}
-          />
-          <ResultFooter
-            rows={rows}
-            refetchRow={refetchRow}
-            modalSetState={modalSetState}
-            checkboxState={checkboxState}
-            checkboxSetState={checkboxSetState}
-            errorSetState={errorSetState}
-            errorState={errorState}
-            confirmStoneSetState={confirmStoneSetState}
-          />
-        </>
-      ) : (
-        <CustomLoader />
-      )}
+      <ResultHeader
+        activeTab={activeTab}
+        data={data}
+        checkboxState={checkboxState}
+        modalSetState={modalSetState}
+        commonSetState={commonSetState}
+        commonState={commonState}
+        sortBySetState={sortBySetState}
+        sortByState={sortByState}
+        dataTableState={dataTableState}
+        dataTableSetState={dataTableSetState}
+      />
+      <CustomDataTable
+        tableRows={rows}
+        tableColumns={tableColumns}
+        checkboxData={checkboxData}
+        mainTableStyle={styles.tableWrapper}
+        errorSetState={errorSetState}
+        confirmStoneSetState={confirmStoneSetState}
+        modalSetState={modalSetState}
+      />
+      <ResultFooter
+        rows={rows}
+        refetchRow={refetchRow}
+        modalSetState={modalSetState}
+        checkboxState={checkboxState}
+        checkboxSetState={checkboxSetState}
+        errorSetState={errorSetState}
+        errorState={errorState}
+        confirmStoneSetState={confirmStoneSetState}
+      />
     </>
   );
 };
