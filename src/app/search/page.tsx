@@ -171,7 +171,6 @@ function SearchResultLayout() {
 
       router.push(`/search?active-tab=${RESULT}-${removeDataIndex + 1}`);
     } else {
-      console.log('hrehrhehrhe22222r');
       setheaderPath({
         shortName: `R ${removeDataIndex}`,
         fullName: `Result ${removeDataIndex}`
@@ -233,7 +232,6 @@ function SearchResultLayout() {
               displayButtonLabel="Yes"
               handleClick={async () => {
                 if (yourSelection[removeDataIndex]?.saveSearchName.length) {
-                  console.log('iom here');
                   //update logic comes here
                   const updateSaveSearchData = {
                     id: yourSelection[removeDataIndex]?.id,
@@ -251,7 +249,6 @@ function SearchResultLayout() {
                       console.log('error', error);
                     });
                 } else {
-                  console.log('iom here 22');
                   setIsInputDialogOpen(true);
                   setIsDialogOpen(false);
                   setRemoveIndex(removeDataIndex);
@@ -275,6 +272,11 @@ function SearchResultLayout() {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
+
+  useEffect(() => {
+    console.log('jkasdhfjkashdjklhskadjhjk');
+    if (searchUrl) refetch();
+  }, [searchUrl]);
 
   useEffect(() => {
     if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
@@ -351,7 +353,6 @@ function SearchResultLayout() {
   const handleSearchTab = (index: number, pathName: IPathName) => {
     setActiveTab(index);
     setheaderPath(pathName);
-    console.log('pathName', pathName);
   };
 
   const editSearchResult = (activeTab: number) => {
