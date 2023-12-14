@@ -18,7 +18,7 @@ const useFieldStateManagement = () => {
     []
   );
   const [selectedCulet, setSelectedCulet] = useState<string>('');
-  const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
+
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedHR, setSelectedHR] = useState<string[]>([]);
@@ -72,6 +72,8 @@ const useFieldStateManagement = () => {
   const [ratioTo, setRatioTo] = useState<string>('');
   const [girdlePerFrom, setGirdlePerFrom] = useState<string>('');
   const [girdlePerTo, setGirdlePerTo] = useState<string>('');
+  const [girdleFrom, setGirdleFrom] = useState<string>('');
+  const [girdleTo, setGirdleTo] = useState<string>('');
   const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>('');
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
@@ -79,6 +81,8 @@ const useFieldStateManagement = () => {
   const [caratRangeData, setCaratRangeData] = useState<string[]>();
   return {
     state: {
+      girdleFrom,
+      girdleTo,
       selectedShape,
       selectedColor,
       selectedFancyColor,
@@ -93,7 +97,6 @@ const useFieldStateManagement = () => {
       selectedSymmetry,
       selectedFluorescence,
       selectedCulet,
-      selectedGirdle,
       selectedKeyToSymbol,
       selectedLab,
       selectedHR,
@@ -151,6 +154,8 @@ const useFieldStateManagement = () => {
       starLengthTo
     },
     setState: {
+      setGirdleFrom,
+      setGirdleTo,
       setSelectedShape,
       setSelectedColor,
       setSelectedFancyColor,
@@ -166,7 +171,6 @@ const useFieldStateManagement = () => {
       setSelectedSymmetry,
       setSelectedFluorescence,
       setSelectedCulet,
-      setSelectedGirdle,
       setSelectedKeyToSymbol,
       setSelectedLab,
       setSelectedHR,

@@ -15,7 +15,6 @@ export const handleReset = (setState: any) => {
     setSelectedSymmetry,
     setSelectedFluorescence,
     setSelectedCulet,
-    setSelectedGirdle,
     setSelectedKeyToSymbol,
     setSelectedLab,
     setSelectedHR,
@@ -68,7 +67,9 @@ export const handleReset = (setState: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo
+    setStarLengthTo,
+    setGirdleFrom,
+    setGirdleTo
   } = setState;
   setSelectedShape([]);
   setSelectedColor('');
@@ -136,7 +137,6 @@ export const handleReset = (setState: any) => {
   setSelectedLocation([]);
   setSelectedOrigin([]);
   setSelectedCulet([]);
-  setSelectedGirdle([]);
-  setSelectedKeyToSymbol([]);
+  setGirdleFrom([]), setGirdleTo([]), setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
 };

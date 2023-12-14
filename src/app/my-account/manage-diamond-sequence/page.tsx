@@ -38,6 +38,8 @@ const ManageListingSequence = () => {
     TableColumn[]
   >([]);
 
+  console.log('nonManageableListings', nonManageableListings);
+
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
@@ -191,51 +193,64 @@ and `nonManageableListings` whenever the `data` variable changes. */
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      {manageableListings.length && nonManageableListings.length ? (
+      {data?.length ? (
         <>
-          <div>
-            <h1 className="text-solitaireTertiary ml-2">
-              {ManageLocales(
-                'app.myProfile.ManageListingSequence.NonManageableEntities'
-              )}
-            </h1>
-            <div className="flex">
-              {nonManageableListings.map(({ id, label }, index) => (
-                <div key={id} className={`${styles.cardManageListingSequence}`}>
-                  <div className={`${styles.lableManageListingSequence}`}>
-                    {`${index + 1}. ${label}`}
-                  </div>
+          {nonManageableListings?.length && (
+            <>
+              <div>
+                <h1 className="text-solitaireTertiary ml-2">
+                  {ManageLocales(
+                    'app.myProfile.ManageListingSequence.NonManageableEntities'
+                  )}
+                </h1>
+                <div className="flex">
+                  {nonManageableListings.map(({ id, label }, index) => (
+                    <div
+                      key={id}
+                      className={`${styles.cardManageListingSequence}`}
+                    >
+                      <div className={`${styles.lableManageListingSequence}`}>
+                        {`${index + 1}. ${label}`}
+                      </div>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-          </div>
-          <hr className=" border-solitaireSenary mx-2 my-3" />
-          <h1 className="text-solitaireTertiary ml-2">
-            {ManageLocales(
-              'app.myProfile.ManageListingSequence.ManageableEntities'
-            )}{' '}
-          </h1>
-          <div className="flex-grow min-h-[52vh]">
-            <ListManager
-              items={manageableListings}
-              direction="horizontal"
-              maxItems={5}
-              render={({ label, id, is_disabled, sequence }) => (
-                <div className={`${styles.cardManageListingSequence} `}>
-                  <div className={`${styles.lableManageListingSequence}`}>
-                    {`${sequence}. ${label}`}
-                  </div>
-                  <div className="flex items-center">
-                    <Checkbox
-                      onClick={() => handleCheckboxClick(id)}
-                      checked={!is_disabled}
-                    />
-                  </div>
-                </div>
-              )}
-              onDragEnd={reorderList}
-            />
-          </div>
+              </div>
+              <hr className=" border-solitaireSenary mx-2 my-3" />
+            </>
+          )}
+
+          {manageableListings?.length && (
+            <>
+              {' '}
+              <h1 className="text-solitaireTertiary ml-2">
+                {ManageLocales(
+                  'app.myProfile.ManageListingSequence.ManageableEntities'
+                )}{' '}
+              </h1>
+              <div className="flex-grow min-h-[52vh]">
+                <ListManager
+                  items={manageableListings}
+                  direction="horizontal"
+                  maxItems={5}
+                  render={({ label, id, is_disabled, sequence }) => (
+                    <div className={`${styles.cardManageListingSequence} `}>
+                      <div className={`${styles.lableManageListingSequence}`}>
+                        {`${sequence}. ${label}`}
+                      </div>
+                      <div className="flex items-center">
+                        <Checkbox
+                          onClick={() => handleCheckboxClick(id)}
+                          checked={!is_disabled}
+                        />
+                      </div>
+                    </div>
+                  )}
+                  onDragEnd={reorderList}
+                />
+              </div>
+            </>
+          )}
         </>
       ) : (
         <CustomLoader />

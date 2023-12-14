@@ -378,6 +378,9 @@
       "lte": 999999
     }
   },
+
+  "girdle": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK "],
+
   "culet": [
     { "id": 1, "value": "None", "label": "None" },
     { "id": 2, "value": "Pointed", "label": "Pointed" },
@@ -387,6 +390,7 @@
     { "id": 7, "value": "Linear", "label": "Linear" },
     { "id": 8, "value": "Large", "label": "Large" }
   ],
+
   "intensity": [
     "Faint",
     "Very Light",

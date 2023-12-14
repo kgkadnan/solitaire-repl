@@ -296,13 +296,51 @@ const renderMeasurementField = (
 
   const culetField = () => {
     return (
-      <div className={styles.parameterContainer}>
+      <div className={`${styles.parameterContainer} pt-6`}>
         <Select
           options={advanceSearch.culet}
           onChange={handleCuletChange}
           placeholder={'Culet'}
           styles={colourStyles}
         />
+      </div>
+    );
+  };
+
+  const computeDropdownField = (fieldData: string[]) => {
+    return fieldData.map(data => {
+      return { value: data, label: data };
+    });
+  };
+
+  const handleGirdleFrom = (data: any) => {
+    setGirdleFrom(data.value);
+  };
+  const handleGirdleTo = (data: any) => {
+    setGirdleTo(data.value);
+  };
+
+  const girdle = () => {
+    return (
+      <div className={styles.parameterContainer}>
+        <CustomInputlabel
+          htmlfor="text"
+          label={'Girdle'}
+          overriddenStyles={{ label: styles.labelPlainColor }}
+        />
+        <div className={`${styles.filterSectio}  ${styles.parameterFilter}`}>
+          <Select
+            options={computeDropdownField(advanceSearch.girdle)}
+            onChange={handleGirdleFrom}
+            styles={colourStyles}
+          />
+          <div className={styles.parameterLabel}>to</div>
+          <Select
+            options={computeDropdownField(advanceSearch.girdle)}
+            onChange={handleGirdleTo}
+            styles={colourStyles}
+          />
+        </div>
       </div>
     );
   };
@@ -364,6 +402,7 @@ const renderMeasurementField = (
   return (
     <>
       {measurementFields()}
+      {girdle()}
       {culetField()}
     </>
   );
