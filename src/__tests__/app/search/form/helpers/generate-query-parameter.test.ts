@@ -16,7 +16,6 @@ describe('generateQueryParams', () => {
       selectedSymmetry: 'very_good',
       selectedFluorescence: 'strong_blue',
       selectedCulet: 'none',
-      selectedGirdle: 'thin_to_medium',
       selectedKeyToSymbol: 'GIA',
       selectedLab: 'IGI',
       selectedHR: 'yes',

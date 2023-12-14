@@ -14,11 +14,9 @@ export const generateQueryParams = (state: any) => {
     selectedSymmetry,
     selectedFluorescence,
     selectedCulet,
-    selectedGirdle,
     selectedKeyToSymbol,
     selectedLab,
-    selectedHR,
-    selectedBrilliance,
+
     selectedLocation,
     selectedOrigin,
     priceRangeFrom,
@@ -68,7 +66,9 @@ export const generateQueryParams = (state: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
-    selectedColor
+    selectedColor,
+    girdleTo,
+    girdleFrom
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -101,7 +101,6 @@ export const generateQueryParams = (state: any) => {
   selectedFluorescence?.length !== 0 &&
     (queryParams['fluorescence'] = selectedFluorescence);
   selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
-  selectedGirdle?.length !== 0 && (queryParams['girdle'] = selectedGirdle);
   selectedKeyToSymbol?.length !== 0 &&
     (queryParams['key_to_symbol'] = selectedKeyToSymbol);
   selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
@@ -151,6 +150,12 @@ export const generateQueryParams = (state: any) => {
     (queryParams['surface_graining'] = surfaceGrainingWI);
   internalGrainingWI?.length !== 0 &&
     (queryParams['internal_graining'] = internalGrainingWI);
+  girdleTo.length &&
+    girdleFrom.length &&
+    (queryParams['girdle'] = {
+      lte: girdleTo,
+      gte: girdleFrom
+    });
   tablePerFrom &&
     tablePerTo &&
     (queryParams['table_percentage'] = {

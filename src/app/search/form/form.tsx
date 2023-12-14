@@ -73,7 +73,6 @@ used for managing the state of a form field or input element in a React componen
     setValidationError,
     errors,
     selectedStep,
-    selectedShadeContain,
     setErrors
   } = useValidationStateManagement();
 

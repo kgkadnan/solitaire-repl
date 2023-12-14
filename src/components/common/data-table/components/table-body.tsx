@@ -207,7 +207,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
       case 'amount':
         return row.variants[0].prices[0].amount;
       default:
-        return row[column.accessor] !== null ? row[column.accessor] : '-';
+        return row[column.accessor] ?? '-';
     }
   };
 
