@@ -200,7 +200,7 @@ const searchResultHandler = [
       },
       {
         label: 'TB',
-        accessor: 'black_table',
+        accessor: 'table_black',
         sequence: 27,
         is_fixed: false,
         is_disabled: false,
@@ -272,7 +272,7 @@ const searchResultHandler = [
       },
       {
         label: 'P/D',
-        accessor: 'pavilion_depth',
+        accessor: 'pavilion_height',
         sequence: 36,
         is_fixed: false,
         is_disabled: false,

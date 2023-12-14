@@ -13,7 +13,7 @@ const customSortFunctions: Record<string, Function> = {
     'Very Strong'
   ]),
   side_black: customSortOrder(['SBO', 'SBPP', 'SB1', 'SB2', 'SB3']),
-  black_table: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),
+  table_black: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),
   clarity: customSortOrder([
     'FL',
     'IF',
