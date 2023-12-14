@@ -95,15 +95,14 @@ const renderContent = (
   } = setState;
 
   const {
-    discountError,
     setDiscountError,
-    pricePerCaratError,
     setPricePerCaratError,
-    amountRangeError,
     setAmountRangeError,
-    caratError,
     setCaratError
   } = errorSetState;
+
+  const { discountError, pricePerCaratError, amountRangeError, caratError } =
+    errorState;
 
   const compareArrays = (arr1: string[], arr2: string[]) => {
     // Check if the lengths of the arrays are equal
@@ -576,14 +575,13 @@ const renderContent = (
                   type="number"
                   name="caratRangeFrom"
                   onChange={e => {
-                    if (regexPattern.test(e.target.value)) {
-                      setValidationError('');
-                      setCaratRangeFrom(e.target.value);
-                    } else {
-                      setValidationError(
-                        'Please enter value between “0.01 to 50”'
-                      );
-                    }
+                    setCaratRangeFrom(e.target.value);
+                    handleNumericRange({
+                      from: e.target.value,
+                      to: caratRangeTo,
+                      setErrorState: setCaratError,
+                      rangeCondition: advanceSearch.carat.range
+                    });
                   }}
                   value={caratRangeFrom}
                   placeholder={ManageLocales('app.advanceSearch.from')}
@@ -596,15 +594,13 @@ const renderContent = (
                   type="number"
                   name="caratRangeTO"
                   onChange={e => {
-                    // Use a regular expression to allow only numbers with up to two decimal places
-                    if (regexPattern.test(e.target.value)) {
-                      setCaratRangeTo(e.target.value);
-                      setValidationError('');
-                    } else {
-                      setValidationError(
-                        'Please enter value between “0.10 to 50”'
-                      );
-                    }
+                    setCaratRangeTo(e.target.value);
+                    handleNumericRange({
+                      from: caratRangeFrom,
+                      to: e.target.value,
+                      setErrorState: setCaratError,
+                      rangeCondition: advanceSearch.carat.range
+                    });
                   }}
                   value={caratRangeTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
@@ -612,6 +608,9 @@ const renderContent = (
                     input: `${styles.inputFieldStyles} ${styles.caratInputFieldStyles}`
                   }}
                 />
+              </div>
+              <div className={styles.validationMessage}>
+                {caratError && caratError}
               </div>
             </div>
             <CustomSelectionButton
@@ -895,7 +894,7 @@ const renderContent = (
                   handleNumericRange({
                     from: e.target.value,
                     to: discountTo,
-                    setErrorState: discountError,
+                    setErrorState: setDiscountError,
                     rangeCondition: advanceSearch.discount.range
                   });
                 }}
@@ -914,7 +913,7 @@ const renderContent = (
                   handleNumericRange({
                     from: discountFrom,
                     to: e.target.value,
-                    setErrorState: discountError,
+                    setErrorState: setDiscountError,
                     rangeCondition: advanceSearch.discount.range
                   });
                 }}
