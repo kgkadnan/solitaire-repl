@@ -181,110 +181,110 @@
   ],
   "carat": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 100
     }
   },
   "parameter": [
     {
-      "label": "Table%",
+      "label": "Table %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
-      "label": "Depth%",
+      "label": "Depth %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Ratio",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Length",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Width",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Depth",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Crown Angle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 360
       }
     },
     {
       "label": "Crown Height",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
-      "label": "Girdle%",
+      "label": "Girdle %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Pavilion Angle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 360
       }
     },
     {
       "label": "Pavilion Height",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Lower Half",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Star Length",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Girdle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     }
   ],
@@ -362,20 +362,20 @@
   ],
   "discount": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 100
     }
   },
-  "price": {
+  "amount_range": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 999999
     }
   },
   "price_per_carat": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 999999
     }
   },
   "culet": [

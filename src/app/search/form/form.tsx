@@ -29,6 +29,7 @@ import {
   RESULT
 } from '@/constants/application-constants/search-page';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
+import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -45,6 +46,7 @@ const AdvanceSearch = () => {
 destructure and assign the `state`, `setState`, and `carat` variables. These variables are likely
 used for managing the state of a form field or input element in a React component. */
   const { state, setState, carat } = useFieldStateManagement();
+  const { errorState, errorSetState } = useNumericFieldValidation();
 
   // Hooks for managing validation and other UI states
   const {
@@ -72,8 +74,6 @@ used for managing the state of a form field or input element in a React componen
     validationError,
     setValidationError,
     errors,
-    selectedStep,
-    selectedShadeContain,
     setErrors
   } = useValidationStateManagement();
 
@@ -367,9 +367,9 @@ used for managing the state of a form field or input element in a React componen
         validationError,
         setValidationError,
         errors,
-        selectedStep,
-        setSelectedStep,
-        setErrors
+        setErrors,
+        errorState,
+        errorSetState
       )}
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
