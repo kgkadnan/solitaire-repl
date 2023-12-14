@@ -47,7 +47,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
     if (sliderData[0].diamond_status === MEMO_OUT_STATUS) {
-      console.log('memo out');
     } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id]
