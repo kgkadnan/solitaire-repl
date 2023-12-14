@@ -101,12 +101,8 @@ const renderContent = (
     setCaratError
   } = errorSetState;
 
-  const {
-    discountError,
-    pricePerCaratError,
-    amountRangeError,
-    caratError,
-  } = errorState;
+  const { discountError, pricePerCaratError, amountRangeError, caratError } =
+    errorState;
 
   const compareArrays = (arr1: string[], arr2: string[]) => {
     // Check if the lengths of the arrays are equal
@@ -598,15 +594,13 @@ const renderContent = (
                   type="number"
                   name="caratRangeTO"
                   onChange={e => {
-                  
-
                     setCaratRangeTo(e.target.value);
-                  handleNumericRange({
-                    from: caratRangeFrom,
-                    to: e.target.value,
-                    setErrorState: setCaratError,
-                    rangeCondition: advanceSearch.carat.range
-                  });
+                    handleNumericRange({
+                      from: caratRangeFrom,
+                      to: e.target.value,
+                      setErrorState: setCaratError,
+                      rangeCondition: advanceSearch.carat.range
+                    });
                   }}
                   value={caratRangeTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
@@ -616,8 +610,8 @@ const renderContent = (
                 />
               </div>
               <div className={styles.validationMessage}>
-              {caratError && caratError}
-            </div>
+                {caratError && caratError}
+              </div>
             </div>
             <CustomSelectionButton
               selectionButtonLabel={ManageLocales('app.advanceSearch.addCarat')}

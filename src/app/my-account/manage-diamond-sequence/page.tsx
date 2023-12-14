@@ -38,7 +38,6 @@ const ManageListingSequence = () => {
     TableColumn[]
   >([]);
 
-
   const [dialogContent, setDialogContent] = useState<ReactNode>();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
