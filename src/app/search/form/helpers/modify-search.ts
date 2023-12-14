@@ -11,7 +11,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedSymmetry,
     setSelectedFluorescence,
     setSelectedCulet,
-    setSelectedGirdle,
     setSelectedKeyToSymbol,
     setSelectedLab,
     setSelectedHR,
@@ -64,7 +63,9 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo
+    setStarLengthTo,
+    setGirdleFrom,
+    setGirdleTo
   } = setState;
 
   data?.shape && setSelectedShape(data?.shape);
@@ -138,6 +139,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.surface_graining && setSurfaceGrainingWI(data?.surface_graining);
   data?.internal_graining && setInternalGrainingWI(data?.internal_graining);
   //other_information States
-  data?.girdle && setSelectedGirdle(data?.girdle);
+  data?.girdle && setGirdleFrom(data?.length?.gte);
+  data?.girdle && setGirdleTo(data?.length?.lte);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
 };
