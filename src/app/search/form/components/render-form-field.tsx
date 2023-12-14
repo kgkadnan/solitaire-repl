@@ -13,6 +13,7 @@ import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
+import { handleNumericRange } from '../helpers/handle-input-range-validation';
 
 const renderContent = (
   state: any,
@@ -20,9 +21,9 @@ const renderContent = (
   validationError: any,
   setValidationError: any,
   errors: any,
-  selectedStep: any,
-  setSelectedStep: any,
-  setErrors: any
+  setErrors: any,
+  errorState: any,
+  errorSetState: any
 ) => {
   const imageTileStyles = {
     imageTileMainContainerStyles: styles.imageTileMainContainerStyles,
@@ -92,6 +93,17 @@ const renderContent = (
     setCaratRangeFrom,
     setCaratRangeTo
   } = setState;
+
+  const {
+    discountError,
+    setDiscountError,
+    pricePerCaratError,
+    setPricePerCaratError,
+    amountRangeError,
+    setAmountRangeError,
+    caratError,
+    setCaratError
+  } = errorSetState;
 
   const compareArrays = (arr1: string[], arr2: string[]) => {
     // Check if the lengths of the arrays are equal
@@ -701,40 +713,6 @@ const renderContent = (
               closeMenuOnSelect={false}
             />
           </div>
-          {/* <CustomSelect
-            data={advanceSearch.fancyColor}
-            onChange={handleFancyFilterChange}
-            placeholder={
-              selectedFancyColor?.length
-                ? selectedFancyColor
-                : ManageLocales('app.advanceSearch.fancyColor')
-            }
-            style={{
-              selectTrigger: styles.fancyDropdownHeader,
-              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement
-            }}
-          />
-          <CustomSelect
-            data={advanceSearch.intensity}
-            onChange={handleIntensityChange}
-            placeholder={ManageLocales('app.advanceSearch.intensity')}
-            style={{
-              selectTrigger: styles.fancyDropdownHeader,
-              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement
-            }}
-          />
-          <CustomSelect
-            data={advanceSearch.overtone}
-            onChange={handleOvertoneChange}
-            placeholder={ManageLocales('app.advanceSearch.overtone')}
-            style={{
-              selectTrigger: styles.fancyDropdownHeader,
-              selectContent: `h-[25vh] overflow-auto ${styles.dropdownData}`,
-              selectElement: styles.selectElement
-            }}
-          /> */}
         </div>
       </div>
       <div className={styles.filterSection}>
@@ -914,12 +892,12 @@ const renderContent = (
                 name="discountFrom"
                 onChange={e => {
                   setDiscountFrom(e.target.value);
-                  handleValidate(
-                    'discount',
-                    'from',
-                    e.target.value,
-                    discountTo
-                  );
+                  handleNumericRange({
+                    from: e.target.value,
+                    to: discountTo,
+                    setErrorState: discountError,
+                    rangeCondition: advanceSearch.discount.range
+                  });
                 }}
                 value={discountFrom}
                 placeholder={ManageLocales('app.advanceSearch.from')}
@@ -933,12 +911,12 @@ const renderContent = (
                 name="discountTo"
                 onChange={e => {
                   setDiscountTo(e.target.value);
-                  handleValidate(
-                    'discount',
-                    'to',
-                    e.target.value,
-                    discountFrom
-                  );
+                  handleNumericRange({
+                    from: discountFrom,
+                    to: e.target.value,
+                    setErrorState: discountError,
+                    rangeCondition: advanceSearch.discount.range
+                  });
                 }}
                 value={discountTo}
                 placeholder={ManageLocales('app.advanceSearch.to')}
@@ -948,7 +926,7 @@ const renderContent = (
               />
             </div>
             <div className={styles.validationMessage}>
-              {errors?.discount.from ?? errors?.discount.to}
+              {discountError && discountError}
             </div>
           </div>
           <div
@@ -973,12 +951,12 @@ const renderContent = (
                   name="pricePerCaratFrom"
                   onChange={e => {
                     setPricePerCaratFrom(e.target.value);
-                    handleValidate(
-                      'price_per_carat',
-                      'from',
-                      e.target.value,
-                      pricePerCaratTo
-                    );
+                    handleNumericRange({
+                      from: e.target.value,
+                      to: pricePerCaratTo,
+                      setErrorState: setPricePerCaratError,
+                      rangeCondition: advanceSearch.price_per_carat.range
+                    });
                   }}
                   value={pricePerCaratFrom}
                   placeholder={ManageLocales('app.advanceSearch.from')}
@@ -991,12 +969,12 @@ const renderContent = (
                   name="pricePerCaratTo"
                   onChange={e => {
                     setPricePerCaratTo(e.target.value);
-                    handleValidate(
-                      'price_per_carat',
-                      'to',
-                      e.target.value,
-                      pricePerCaratFrom
-                    );
+                    handleNumericRange({
+                      from: pricePerCaratFrom,
+                      to: e.target.value,
+                      setErrorState: setPricePerCaratError,
+                      rangeCondition: advanceSearch.price_per_carat.range
+                    });
                   }}
                   value={pricePerCaratTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1004,6 +982,9 @@ const renderContent = (
                     input: styles.inputFieldStyles
                   }}
                 />
+              </div>
+              <div className={styles.validationMessage}>
+                {pricePerCaratError && pricePerCaratError}
               </div>
             </div>
           </div>
@@ -1022,6 +1003,12 @@ const renderContent = (
                   name="priceRangeFrom"
                   onChange={e => {
                     setPriceRangeFrom(e.target.value);
+                    handleNumericRange({
+                      from: e.target.value,
+                      to: priceRangeTo,
+                      setErrorState: setAmountRangeError,
+                      rangeCondition: advanceSearch.amount_range.range
+                    });
                   }}
                   value={priceRangeFrom}
                   placeholder={ManageLocales('app.advanceSearch.from')}
@@ -1035,12 +1022,12 @@ const renderContent = (
                   name="priceRangeTo"
                   onChange={e => {
                     setPriceRangeTo(e.target.value);
-                    handleValidate(
-                      'price_range',
-                      'to',
-                      e.target.value,
-                      priceRangeFrom
-                    );
+                    handleNumericRange({
+                      from: priceRangeFrom,
+                      to: e.target.value,
+                      setErrorState: setAmountRangeError,
+                      rangeCondition: advanceSearch.amount_range.range
+                    });
                   }}
                   value={priceRangeTo}
                   placeholder={ManageLocales('app.advanceSearch.to')}
@@ -1050,7 +1037,9 @@ const renderContent = (
                 />
               </div>
 
-              {validationError}
+              <div className={styles.validationMessage}>
+                {amountRangeError && amountRangeError}
+              </div>
             </div>
           </div>
         </div>
@@ -1067,7 +1056,7 @@ const renderContent = (
           className={`${styles.filterSectionData} ${styles.filterWrapSection} `}
           style={{ display: 'flex', justifyContent: 'flex-start' }}
         >
-          {renderMeasurementField(state, setState)}
+          {renderMeasurementField(state, setState, errorState, errorSetState)}
         </div>
       </div>
       <div className={styles.filterSection}>
