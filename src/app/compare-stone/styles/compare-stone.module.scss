@@ -50,3 +50,13 @@
 .visibleStyle {
   top: 0;
 }
+
+
+.diamondDetailSheet {
+  background-color: hsl(var(--solitaire-primary));
+  // z-index: 1200;
+  max-width: 100% !important;
+  // padding-right: 50px;
+  // padding-left: 50px;
+  padding: 0rem 0rem 0rem !important;
+}

@@ -160,7 +160,6 @@ const renderContent = (
   };
   // Function to handle intensity change based on user selection
   const handleIntensityChange = (selectedOption: any) => {
-    console.log('selectedOption', selectedOption);
     setSelectedColor([]);
     setSelectedIntensity([]);
     selectedOption.map((data: any) => {

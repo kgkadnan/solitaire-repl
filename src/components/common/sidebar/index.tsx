@@ -70,8 +70,8 @@ const SideBar = () => {
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
-      link: '/my-cart/active',
-      isActive: currentRoute === '/my-cart/active'
+      link: `/my-cart?active-tab=active`,
+      isActive: currentRoute === '/my-cart'
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,

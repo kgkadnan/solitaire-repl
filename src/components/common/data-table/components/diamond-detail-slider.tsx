@@ -368,18 +368,12 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           onClick={() => openModal(url, altText)}
                           className="w-[100%]"
                         >
-                          {/* <Image
+                          <Image
                             src={url}
                             alt={altText}
                             width={250}
                             height={150}
                             style={{ height: '200px', maxWidth: '250px' }}
-                          /> */}
-                          <OptimizedImageWithFallback
-                            src={url}
-                            alt={altText}
-                            width={250}
-                            height={150}
                           />
                         </div>
                       </div>
@@ -399,30 +393,3 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
     />
   );
 };
-
-function OptimizedImageWithFallback({
-  src,
-  alt,
-  fallBackSrc = '',
-  width,
-  height
-}: any) {
-  const [imageError, setImageError] = useState(false);
-  return (
-    <div
-      style={{
-        border: '1px solid black',
-        position: 'relative'
-      }}
-    >
-      <Image
-        src={imageError ? fallBackSrc : src}
-        alt={alt}
-        width={width}
-        height={height}
-        objectFit="cover"
-        onError={() => setImageError(true)}
-      />
-    </div>
-  );
-}

@@ -12,7 +12,7 @@ export const downloadExcelApi = createApi({
   endpoints: builder => ({
     downloadExcel: builder.mutation({
       query: filter => ({
-        url: `export-excel`,
+        url: `/store/products/export-excel`,
         method: 'POST', // Use the appropriate HTTP method
         body: filter // Modify this to match your API's payload
       }),

@@ -188,7 +188,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               setInputError(false);
               onOpenChange(false);
               setIsDialogOpen(true);
-              refetch();
+              if (refetch) {
+                refetch();
+              }
             }
           })
           .catch(e => {
@@ -205,7 +207,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
                   <p>Error!</p>
                 </div>
                 <div className="text-center text-solitaireTertiary">
-                  {e.data.message}
+                  {e?.data?.message}
                 </div>
               </>
             );
@@ -278,6 +280,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               displayButtonStyle: styles.transparent
             }}
             handleClick={() => {
+              setSelectedRadioDaysValue('');
               setSelectedDaysInputValue('');
               setInputErrorContent('');
               setInputError(false);
