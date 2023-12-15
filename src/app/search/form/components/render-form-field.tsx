@@ -33,8 +33,6 @@ const renderContent = (
     activeIndicatorStyles: styles.activeOtherStyles
   };
 
-  const regexPattern = new RegExp(/^\d*\.?\d{0,2}$/);
-
   const {
     selectedShape,
     selectedColor,
@@ -418,12 +416,7 @@ const renderContent = (
   const handleLabChange = (data: string) => {
     handleFilterChange(data, selectedLab, setSelectedLab);
   };
-  const handleHRChange = (data: string) => {
-    handleFilterChange(data, selectedHR, setSelectedHR);
-  };
-  const handleBrillianceChange = (data: string) => {
-    handleFilterChange(data, selectedBrilliance, setSelectedBrilliance);
-  };
+
   const handleLocation = (data: string) => {
     handleFilterChange(data, selectedLocation, setSelectedLocation);
   };
@@ -463,70 +456,6 @@ const renderContent = (
       }
       setCaratRangeFrom('');
       setCaratRangeTo('');
-    }
-  };
-
-  // Function to handle validation errors
-  const handleValidate = (
-    key: keyof Errors,
-    inputType: 'from' | 'to',
-    value: any,
-    otherValue: any
-  ) => {
-    if (value == '' && otherValue == '') {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: { from: null, to: null }
-      }));
-    } else if (value.length === 0) {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: {
-          ...prevErrors[key as keyof Errors],
-          [inputType]: `Please enter a value for '${key} from'`
-        }
-      }));
-      // Handle other error logic as needed
-    } else if (otherValue.length === 0) {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: {
-          ...prevErrors[key as keyof Errors],
-          [inputType]: `Please enter a value for '${key} to'`
-        }
-      }));
-      // Handle other error logic as needed
-    } else if (value > 100 || otherValue > 100) {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: {
-          ...prevErrors[key as keyof Errors],
-          [inputType]: 'Please enter a valid range from 0 to 100'
-        }
-      }));
-      // Handle other error logic as needed
-    } else if (
-      (inputType === 'from' && value > otherValue) ||
-      (inputType === 'to' && +value < otherValue)
-    ) {
-      // Error handling for 'from' value being greater than 'to' value and vice versa
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: {
-          ...prevErrors[key as keyof Errors],
-          [inputType]: `'${
-            inputType === 'from' ? 'From' : 'To'
-          }' value should not be ${
-            inputType === 'from' ? 'greater' : 'less'
-          } than '${inputType === 'from' ? 'To' : 'From'}' value`
-        }
-      }));
-    } else {
-      setErrors((prevErrors: any) => ({
-        ...prevErrors,
-        [key]: { from: null, to: null }
-      }));
-      // Handle other error logic as needed
     }
   };
 

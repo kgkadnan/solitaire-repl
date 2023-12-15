@@ -21,13 +21,14 @@ import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import CustomLoader from '@/components/common/loader';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
 import {
   NEW_SEARCH,
   SAVED_SEARCHES,
-  RESULT
+  RESULT,
+  SAVED_SEARCH_HEADER,
+  NEW_SEARCH_HEADER
 } from '@/constants/application-constants/search-page';
 
 interface IMyProfileRoutes {
@@ -91,8 +92,16 @@ function SearchResultLayout() {
 
     const replaceSubrouteWithSearchResult = subRoute?.replace(`${RESULT}-`, '');
 
-    if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
-    else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
+    if (subRoute === `${SAVED_SEARCHES}`)
+      return {
+        shortName: `${SAVED_SEARCH_HEADER}`,
+        fullName: `${SAVED_SEARCH_HEADER}`
+      };
+    else if (subRoute === `${NEW_SEARCH}`)
+      return {
+        shortName: `${NEW_SEARCH_HEADER}`,
+        fullName: `${NEW_SEARCH_HEADER}`
+      };
     else if (
       subRoute !== `${SAVED_SEARCHES}` &&
       subRoute !== `${NEW_SEARCH}` &&
@@ -101,15 +110,24 @@ function SearchResultLayout() {
       const isRouteExist =
         yourSelection?.[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
-        return 'No Data Found';
+        return {
+          shortName: `No Data Found`,
+          fullName: `No Data Found`
+        };
       } else {
-        return `Result ${parseInt(replaceSubrouteWithSearchResult!)}`;
+        return {
+          shortName: `R ${parseInt(replaceSubrouteWithSearchResult!)}`,
+          fullName: `Result ${parseInt(replaceSubrouteWithSearchResult!)}`
+        };
       }
     } else if (
       masterRoute === '/search' &&
       (replaceSubrouteWithSearchResult?.length === 0 || subRoute === null)
     ) {
-      return 'New Search';
+      return {
+        shortName: `${NEW_SEARCH_HEADER}`,
+        fullName: `${NEW_SEARCH_HEADER}`
+      };
     }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
@@ -274,7 +292,6 @@ function SearchResultLayout() {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    console.log('jkasdhfjkashdjklhskadjhjk');
     if (searchUrl) refetch();
   }, [searchUrl]);
 
@@ -329,16 +346,16 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: {
-                shortName: ManageLocales('app.searchResult.header.newSearch'),
-                fullName: ManageLocales('app.searchResult.header.newSearch')
+                shortName: `${NEW_SEARCH_HEADER}`,
+                fullName: `${NEW_SEARCH_HEADER}`
               },
               path: `${NEW_SEARCH}`
             },
             {
               id: 2,
               pathName: {
-                shortName: ManageLocales('app.savedSearch.header'),
-                fullName: ManageLocales('app.savedSearch.header')
+                shortName: `${SAVED_SEARCH_HEADER}`,
+                fullName: `${SAVED_SEARCH_HEADER}`
               },
               path: `${SAVED_SEARCHES}`
             }
@@ -383,16 +400,16 @@ function SearchResultLayout() {
       {
         id: 1,
         pathName: {
-          shortName: ManageLocales('app.searchResult.header.newSearch'),
-          fullName: ManageLocales('app.searchResult.header.newSearch')
+          shortName: `${NEW_SEARCH_HEADER}`,
+          fullName: `${NEW_SEARCH_HEADER}`
         },
         path: `${NEW_SEARCH}`
       },
       {
         id: 2,
         pathName: {
-          shortName: ManageLocales('app.savedSearch.header'),
-          fullName: ManageLocales('app.savedSearch.header')
+          shortName: `${SAVED_SEARCH_HEADER}`,
+          fullName: `${SAVED_SEARCH_HEADER}`
         },
         path: `${SAVED_SEARCHES}`
       }
@@ -438,7 +455,7 @@ function SearchResultLayout() {
                 isRoute(path) && (
                   <Link
                     className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary min-w-[110px] ${
-                      headerPath === pathName.fullName
+                      headerPath.fullName === pathName.fullName
                         ? ''
                         : 'hover:text-solitaireQuaternary'
                     }`}
@@ -448,7 +465,7 @@ function SearchResultLayout() {
                   >
                     <div
                       className={`${
-                        headerPath === pathName.fullName &&
+                        headerPath.fullName === pathName.fullName &&
                         'text-solitaireQuaternary'
                       }`}
                     >
@@ -484,7 +501,7 @@ function SearchResultLayout() {
                     </div>
                     <Link
                       className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                        headerPath === pathName.fullName
+                        headerPath.fullName === pathName.fullName
                           ? ''
                           : 'hover:text-solitaireQuaternary'
                       }`}
@@ -494,7 +511,7 @@ function SearchResultLayout() {
                     >
                       <div
                         className={`${
-                          headerPath === pathName.fullName &&
+                          headerPath.fullName === pathName.fullName &&
                           'text-solitaireQuaternary'
                         }`}
                       >
@@ -537,13 +554,13 @@ function SearchResultLayout() {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {headerPath === 'New Search' ||
+          {headerPath.fullName === `${NEW_SEARCH_HEADER}` ||
           editSubRoute === `${SAVED_SEARCHES}` ||
           editSubRoute === `${RESULT}` ? (
             <AdvanceSearch />
-          ) : headerPath === 'Saved Searches' ? (
+          ) : headerPath.fullName === `${SAVED_SEARCH_HEADER}` ? (
             <SavedSearch />
-          ) : headerPath === 'No Data Found' ? (
+          ) : headerPath.fullName === 'No Data Found' ? (
             <NoDataFound />
           ) : (
             <SearchResults
