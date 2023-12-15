@@ -15,7 +15,7 @@ export const handleNumericRange = ({
   const parsedTo = parseFloat(to);
 
   if (isNaN(parsedFrom) || isNaN(parsedTo)) {
-    setErrorState('Please provide valid numeric values for "From" and "To".');
+    setErrorState('Please enter both "From" and "To".');
     return;
   }
 
