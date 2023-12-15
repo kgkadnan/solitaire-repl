@@ -60,7 +60,7 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           />
         </div>
 
-        <div className="text-[#983131] h-1">{isError && errorContent}</div>
+        <div className="text-red-500 h-1">{isError && errorContent}</div>
 
         <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
           <CustomDisplayButton
