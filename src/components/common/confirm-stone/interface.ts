@@ -1,6 +1,7 @@
 import {
   IErrorSetState,
   IErrorState,
+  IModalSetState,
   Product,
   TableColumn
 } from '@/app/search/result/result-interface';
@@ -38,5 +39,6 @@ export interface IConfirmStoneProps {
   confirmStoneSetState: IConfirmStoneSetState;
   setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
   setDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  modalSetState?: IModalSetState;
   refetch?: any;
 }

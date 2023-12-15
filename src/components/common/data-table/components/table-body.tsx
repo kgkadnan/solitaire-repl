@@ -77,6 +77,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
    * displays a success message in a dialog box.
    */
   const downloadExcelFunction = () => {
+    console.log('jererererer');
     if (sliderData[0]) {
       performDownloadExcel({
         products: [sliderData[0].id],

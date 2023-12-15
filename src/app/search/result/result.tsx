@@ -206,6 +206,7 @@ variable changes. */
             listingColumns={listingColumns}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            modalSetState={modalSetState}
           />
         }
         isSliderOpen={isSliderOpen}

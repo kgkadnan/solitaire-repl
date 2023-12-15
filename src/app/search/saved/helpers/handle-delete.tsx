@@ -72,7 +72,7 @@ export const handleDelete = ({
       setDialogContent(
         <>
           <p className="text-center mt-3">
-            Do you want to Delete the selected Stones?
+            Do you want to delete the selected Saved Search?
           </p>
           <div className="flex justify-center">
             <CustomDisplayButton
