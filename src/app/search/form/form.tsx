@@ -373,7 +373,7 @@ used for managing the state of a form field or input element in a React componen
       )}
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
-          <div className="w-[40%] flex items-center">
+          <div className="w-[50%] flex items-center">
             <span className="hidden  text-green-500" />
             <p
               className={`text-${
