@@ -9,7 +9,7 @@ export const colourStyles: StylesConfig<ColourOption, true> = {
   control: styles => ({
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
-    zIndex: 100,
+
     backgroundColor: ' hsl(var(--solitaire-primary))',
     borderRadius: 'none',
     border: 'none',

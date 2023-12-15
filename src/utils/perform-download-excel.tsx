@@ -37,7 +37,6 @@ export const performDownloadExcel = async ({
 
     const { data, fileName } = res.data;
 
-    console.log('setDialogContent', setDialogContent);
     if (data && setDialogContent) {
       downloadExcelFromBase64(data, fileName);
 
@@ -47,7 +46,6 @@ export const performDownloadExcel = async ({
       if (setIsError) setIsError(false);
 
       if (setDialogContent) {
-        console.log('hererere');
         setDialogContent(
           <>
             <div className="max-w-[380px] flex justify-center align-middle">
