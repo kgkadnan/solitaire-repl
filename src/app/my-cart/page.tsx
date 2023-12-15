@@ -8,9 +8,7 @@ import CustomHeader from '@/components/common/header';
 import { useGetCartQuery } from '@/features/api/cart';
 import {
   ACTIVE_STATUS,
-  MAX_COMPARE_STONE,
   MEMO_OUT_STATUS,
-  MIN_COMPARE_STONE,
   SOLD_OUT_STATUS
 } from '@/constants/business-logic';
 import { ProductItem } from './interface';
@@ -26,12 +24,11 @@ import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/c
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { Product } from '../search/result/result-interface';
+
 import { NoDataFound } from '@/components/common/no-data-found';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
-  const currentPath = usePathname();
 
   const subRoute = useSearchParams().get('active-tab');
   const computeRouteAndComponentRenderer = () => {
@@ -65,7 +62,7 @@ function MyCart() {
    * @returns None
    */
   const [memoRows, setMemoRows] = useState([]);
-  const [activeCartRows, setActiveCartRows] = useState([]);
+
   const [soldOutRows, setSoldOutRows] = useState([]);
 
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -138,7 +135,6 @@ function MyCart() {
           .map((row: ProductItem) => row?.product);
 
         setActiveTabCount(activeDiamondItems?.length);
-        setActiveCartRows(activeDiamondItems);
       }
     };
     updateRows();
@@ -299,7 +295,6 @@ function MyCart() {
           ) : headerPath === 'active' ? (
             <ActiveMyCart
               tableColumns={tableColumns}
-              activeCartRows={activeCartRows}
               refetch={refetch}
               downloadExcelFunction={downloadExcelFunction}
               errorSetState={errorSetState}
@@ -307,6 +302,7 @@ function MyCart() {
               checkboxState={checkboxState}
               checkboxSetState={checkboxSetState}
               modalSetState={modalSetState}
+              data={data}
             />
           ) : headerPath === 'no data found' ? (
             <NoDataFound />
