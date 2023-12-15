@@ -22,6 +22,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   confirmStoneSetState,
   setDialogContent,
   setIsDialogOpen,
+  modalSetState,
   refetch
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
@@ -235,6 +236,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             selectionAllowed={false}
             mainTableStyle={styles.tableWrapper}
             errorSetState={errorSetState}
+            modalSetState={modalSetState}
           />
         )}
         <div className="mt-5">

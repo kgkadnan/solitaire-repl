@@ -235,6 +235,7 @@ const ActiveMyCart = ({
             listingColumns={tableColumns}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            modalSetState={modalSetState}
             refetch={refetch}
           />
         }

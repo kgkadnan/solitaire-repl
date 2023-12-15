@@ -285,6 +285,7 @@ const CompareStone = () => {
             listingColumns={listingColumns}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            modalSetState={modalSetState}
           />
         }
         sheetContentStyle={styles.diamondDetailSheet}

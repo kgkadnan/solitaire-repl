@@ -19,7 +19,6 @@ import {
   measurementsLabelMapping,
   otherInformationsLabelMapping
 } from '../lable-mapping';
-import { useState } from 'react';
 
 export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   dataTableBodyState,
@@ -128,7 +127,15 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
 
   const openModal = (url: string, altText: string) => {
     setIsModalOpen(true);
-    setModalContent(<Image src={url} alt={altText} width={900} height={500} />);
+    setModalContent(
+      <Image
+        src={url}
+        alt={altText}
+        style={{ width: '100%', height: '100%' }}
+        width={100}
+        height={100}
+      />
+    );
   };
 
   return (
