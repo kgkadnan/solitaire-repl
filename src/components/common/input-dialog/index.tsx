@@ -59,7 +59,9 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
             maxLength={150}
           />
         </div>
-        {isError ? <div className="text-[#983131]">{errorContent}</div> : ''}
+
+        <div className="text-[#983131] h-1">{isError && errorContent}</div>
+
         <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
           <CustomDisplayButton
             displayButtonLabel="Cancel"
@@ -73,7 +75,13 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
           <CustomDisplayButton
             displayButtonLabel={displayButtonLabel2}
             handleClick={() => {
-              inputValue.length > 0 && displayButtonFunction();
+              if (inputValue.length > 0) {
+                displayButtonFunction();
+              } else {
+                console.log('helelelel');
+                setErrorContent('Please enter name');
+                setIsError(true);
+              }
             }}
             displayButtonAllStyle={{
               displayButtonStyle: styles.showResultButtonFilled
