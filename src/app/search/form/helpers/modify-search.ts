@@ -139,7 +139,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.surface_graining && setSurfaceGrainingWI(data?.surface_graining);
   data?.internal_graining && setInternalGrainingWI(data?.internal_graining);
   //other_information States
-  data?.girdle && setGirdleFrom(data?.length?.gte);
-  data?.girdle && setGirdleTo(data?.length?.lte);
+  data?.girdle && setGirdleFrom(data?.girdle?.gte);
+  data?.girdle && setGirdleTo(data?.girdle?.lte);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
 };

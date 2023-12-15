@@ -298,7 +298,7 @@ const renderMeasurementField = (
     return (
       <div className={`${styles.parameterContainer} pt-6`}>
         <Select
-          options={advanceSearch.culet}
+          options={computeDropdownField(advanceSearch.culet)}
           onChange={handleCuletChange}
           placeholder={'Culet'}
           styles={colourStyles}

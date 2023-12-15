@@ -236,6 +236,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             selectionAllowed={false}
             mainTableStyle={styles.tableWrapper}
             errorSetState={errorSetState}
+            confirmStoneSetState={confirmStoneSetState}
             modalSetState={modalSetState}
           />
         )}

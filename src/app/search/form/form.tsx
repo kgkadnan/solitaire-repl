@@ -173,9 +173,8 @@ used for managing the state of a form field or input element in a React componen
       }
     }
     if (error) {
-      let error1: any = error;
       setIsError(true);
-      setErrorText(error1?.error);
+      setErrorText('Something went wrong');
     }
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl]);

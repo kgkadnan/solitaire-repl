@@ -11,6 +11,7 @@ import { CustomFooter } from '../../footer';
 import styles from '../custom-table.module.scss';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
+import NoImageFound from '@public/assets/images/no-image-icon-23485.png';
 
 import {
   basicDetailsLabelMapping,
@@ -19,6 +20,7 @@ import {
   measurementsLabelMapping,
   otherInformationsLabelMapping
 } from '../lable-mapping';
+import { useState } from 'react';
 
 export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   dataTableBodyState,
@@ -371,19 +373,26 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           <p>{displayName}</p>
                         </div>
 
-                        <div
+                        {/* <div
                           onClick={() => openModal(url, altText)}
                           className="w-[100%]"
-                        >
-                          <Image
+                        > */}
+                        {/* <Image
                             src={url}
                             alt={altText}
                             width={250}
                             height={150}
                             style={{ height: '200px', maxWidth: '250px' }}
-                          />
-                        </div>
+                          /> */}
+                        <OptimizedImageWithFallback
+                          src={url}
+                          alt={altText}
+                          width={250}
+                          height={150}
+                          openModal={openModal}
+                        />
                       </div>
+                      // </div>
                     );
                   })}
                 </div>
@@ -400,3 +409,33 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
     />
   );
 };
+
+function OptimizedImageWithFallback({
+  src,
+  alt,
+  fallBackSrc = NoImageFound,
+  width,
+  height,
+  openModal
+}: any) {
+  const [imageError, setImageError] = useState(false);
+  return (
+    <div
+      style={{
+        border: '1px solid black',
+        position: 'relative'
+      }}
+      onClick={() => !imageError && openModal(src, alt)}
+      className="w-[100%]"
+    >
+      <Image
+        src={imageError ? fallBackSrc : src}
+        alt={alt}
+        width={width}
+        height={height}
+        style={{ height: '200px', maxWidth: '250px' }}
+        onError={() => setImageError(true)}
+      />
+    </div>
+  );
+}
