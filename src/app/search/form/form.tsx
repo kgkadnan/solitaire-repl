@@ -133,7 +133,7 @@ used for managing the state of a form field or input element in a React componen
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
-    handleReset(setState);
+    handleReset(setState, errorSetState);
   };
 
   // Update search URL when form state changes
@@ -412,7 +412,7 @@ used for managing the state of a form field or input element in a React componen
               id: 2,
               displayButtonLabel: ManageLocales('app.advanceSearch.reset'),
               style: styles.transparent,
-              fn: () => handleReset(setState)
+              fn: () => handleReset(setState, errorSetState)
             },
             {
               id: 3,

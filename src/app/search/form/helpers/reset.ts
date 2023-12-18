@@ -1,4 +1,4 @@
-export const handleReset = (setState: any) => {
+export const handleReset = (setState: any, errorSetState: any) => {
   const {
     setSelectedShape,
     setSelectedColor,
@@ -71,6 +71,28 @@ export const handleReset = (setState: any) => {
     setGirdleFrom,
     setGirdleTo
   } = setState;
+
+  const {
+    setTablePerError,
+    setDepthPerError,
+    setRatioError,
+    setLengthError,
+    setWidthError,
+    setDepthError,
+    setCrownAngleError,
+    setCrownHeightError,
+    setGirdlePerError,
+    setPavilionAngleError,
+    setPavilionHeightError,
+    setLowerHalfError,
+    setStarLengthError,
+    setGirdleError,
+    setCaratError,
+    setDiscountError,
+    setPricePerCaratError,
+    setAmountRangeError
+  } = errorSetState;
+
   setSelectedShape([]);
   setSelectedColor('');
   setSelectedFancyColor([]);
@@ -141,4 +163,24 @@ export const handleReset = (setState: any) => {
   setGirdleTo('');
   setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
+
+  //Empty Error States
+  setTablePerError('');
+  setDepthPerError('');
+  setRatioError('');
+  setLengthError('');
+  setWidthError('');
+  setDepthError('');
+  setCrownAngleError('');
+  setCrownHeightError('');
+  setGirdlePerError('');
+  setPavilionAngleError('');
+  setPavilionHeightError('');
+  setLowerHalfError('');
+  setStarLengthError('');
+  setGirdleError('');
+  setCaratError('');
+  setDiscountError('');
+  setPricePerCaratError('');
+  setAmountRangeError('');
 };

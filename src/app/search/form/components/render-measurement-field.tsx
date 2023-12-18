@@ -238,8 +238,6 @@ const renderMeasurementField = (
     setSelectedCulet(data.value);
   };
 
-  console.log('girdlefrom', girdleFrom);
-
   const culetField = () => {
     return (
       <div className={`${styles.parameterContainer} pt-6`}>

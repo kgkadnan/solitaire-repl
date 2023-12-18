@@ -9,7 +9,6 @@ import renderMeasurementField from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
 import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
-import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
