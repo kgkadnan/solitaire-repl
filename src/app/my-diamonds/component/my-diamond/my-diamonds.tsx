@@ -72,6 +72,12 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     setTableColumns(productTableColumns);
   }, [productTableColumns, setTableColumns]);
 
+  useEffect(() => {
+    if (check === 'previous-confirmations') {
+      limit && setNumberOfPages(Math.ceil(data?.length / limit));
+    }
+  }, [data, limit]);
+
   // Object containing checkbox data for Custom Data Table
   let checkboxData = {
     checkboxState,
@@ -181,7 +187,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
         isOpens={isDialogOpen}
         dialogContent={dialogContent}
       />
-      <div className=" h-[70vh] overflow-auto">
+      <div className={`h-[70vh] overflow-auto  mb-[30px] ${styles.scrollBar}`}>
         <div>
           {!data?.length && <NoDataFound />}
           <CustomSlider
@@ -211,7 +217,6 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
       </div>
       {check === 'previous-confirmations' && (
         <div className="sticky bottom-6 bg-solitairePrimary mt-3">
-          {/* {data?.count > 0 && ( */}
           <CustomPagination
             currentPage={currentPage}
             totalPages={numberOfPages}
@@ -220,7 +225,6 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
             handlePageClick={handlePageClick}
             handleResultsPerPageChange={handleResultsPerPageChange}
           />
-          {/* )} */}
         </div>
       )}
     </>

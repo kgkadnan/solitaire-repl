@@ -256,3 +256,11 @@
 .visibleStyle {
   top: 80px;
 }
+
+.scrollBar {
+  overflow-y: scroll;
+}
+
+.scrollBar::-webkit-scrollbar {
+  display: none;
+}

@@ -5,6 +5,7 @@ import { SearchIcon } from 'lucide-react';
 import React, { ChangeEvent, useState } from 'react';
 import styles from '../my-diamonds.module.scss';
 import { IHeaderSearchBarProps } from '../interface/my-diamonds-interface';
+import ClearIcon from '@public/assets/icons/close-outline.svg?url';
 
 export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   activeTab,
@@ -16,26 +17,16 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   const [search, setsearch] = useState<string>('');
 
   //  Handles the change of the search input.
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleSearch = (e: any) => {
     const inputValue = e.target.value;
 
     // Update the search input value
     setsearch(inputValue);
 
-    // Reset search URLs if the input is empty
-    if (!inputValue.length) {
+    if (!inputValue) {
       setRecentConfiramtionSearchUrl('');
       setMyInvoiceSearchUrl('');
       setPreviousConfirmationSearchUrl('');
-    } else {
-      // Set search URLs based on the active tab
-      if (activeTab === 'Recent Confirmations') {
-        setRecentConfiramtionSearchUrl(`display_id=${inputValue}`);
-      } else if (activeTab === 'My Invoices') {
-        setMyInvoiceSearchUrl(`invoice_id=${inputValue}`);
-      } else {
-        setPreviousConfirmationSearchUrl(`invoice_id=${inputValue}`);
-      }
     }
   };
 
@@ -44,10 +35,31 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
     searchInput: styles.headerInputStyle,
     searchInputMain: 'relative'
   };
+
+  // Handle Enter key press for login
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+      if (activeTab === 'Recent Confirmations') {
+        setRecentConfiramtionSearchUrl(`display_id=${search}`);
+      } else if (activeTab === 'My Invoices') {
+        setMyInvoiceSearchUrl(`invoice_id=${search}`);
+      } else {
+        setPreviousConfirmationSearchUrl(`invoice_id=${search}`);
+      }
+    }
+  };
+
+  const handleClearInput = () => {
+    setsearch('');
+    setRecentConfiramtionSearchUrl('');
+    setMyInvoiceSearchUrl('');
+    setPreviousConfirmationSearchUrl('');
+  };
   return (
-    <div className="flex gap-[15px]">
+    <div className="flex">
       {/* Search icon */}
-      <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
+      <SearchIcon className="stroke-solitaireQuaternary mt-[10px] mr-[15px]" />
       {/* CustomSearchInputField component for the search input */}
       <CustomSearchInputField
         type="text"
@@ -55,6 +67,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
         style={searchInputStyle}
         value={search}
         onChange={handleSearch}
+        handleKeyPress={handleKeyDown}
         placeholder={
           // Dynamic placeholder based on the active tab
           activeTab === 'Recent Confirmations'
@@ -66,6 +79,13 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
               )
         }
       />
+
+      <div
+        className="cursor-pointer border-b border-solitaireQuaternary"
+        onClick={handleClearInput}
+      >
+        <ClearIcon className="stroke-solitaireQuaternary mt-[10px] " />
+      </div>
     </div>
   );
 };

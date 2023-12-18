@@ -33,7 +33,7 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
         data-testid="display-button"
         className={`${style?.defaultStyle} ${displayButtonAllStyle?.displayButtonStyle}`}
         onClick={() => {
-          handleClick!(color!);
+          handleClick && handleClick(color!);
         }}
         disabled={isDisable}
       >
