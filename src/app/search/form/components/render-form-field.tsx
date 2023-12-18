@@ -255,6 +255,7 @@ const renderContent = (
         setSelectedCut(['G']);
         setSelectedPolish(['G']);
         setSelectedSymmetry(['G']);
+        setSelectedFluorescence([]);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -266,6 +267,7 @@ const renderContent = (
         setSelectedCut(['F']);
         setSelectedPolish(['F']);
         setSelectedSymmetry(['F']);
+        setSelectedFluorescence([]);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -309,6 +311,18 @@ const renderContent = (
       (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
     ) {
       setSelectedMake('3VG+EX');
+    } else if (
+      temp.toString() === 'G' &&
+      firstCriteria.toString() === 'G' &&
+      secondCriteria.toString() === 'G'
+    ) {
+      setSelectedMake('3G');
+    } else if (
+      temp.toString() === 'F' &&
+      firstCriteria.toString() === 'F' &&
+      secondCriteria.toString() === 'F'
+    ) {
+      setSelectedMake('3F');
     } else {
       setSelectedMake('');
     }
@@ -352,6 +366,7 @@ const renderContent = (
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     const temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
+    console.log('temp', temp);
     if (index !== -1) {
       temp.splice(index, 1);
     } else {
@@ -377,6 +392,21 @@ const renderContent = (
       temp.length === 0
     ) {
       setSelectedMake('3VG+EX');
+    } else if (
+      selectedCut.toString() === 'G' &&
+      selectedPolish.toString() === 'G' &&
+      selectedSymmetry.toString() === 'G' &&
+      temp.length == 0
+    ) {
+      setSelectedMake('3G');
+      console.log('herere');
+    } else if (
+      selectedCut.toString() === 'F' &&
+      selectedPolish.toString() === 'F' &&
+      selectedSymmetry.toString() === 'F' &&
+      temp.length == 0
+    ) {
+      setSelectedMake('3F');
     } else {
       setSelectedMake('');
     }
