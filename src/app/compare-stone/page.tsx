@@ -47,7 +47,6 @@ const CompareStone = () => {
   } = modalState;
 
   const {
-    setDialogContent,
     setIsDialogOpen,
     setIsSliderOpen,
     setPersistDialogContent,

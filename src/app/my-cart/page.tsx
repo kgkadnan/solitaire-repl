@@ -26,6 +26,7 @@ import { performDownloadExcel } from '@/utils/perform-download-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
 import { NoDataFound } from '@/components/common/no-data-found';
+import { CustomModal } from '@/components/common/modal';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
@@ -75,11 +76,17 @@ function MyCart() {
     dialogContent,
     isDialogOpen,
     isPersistDialogOpen,
-    persistDialogContent
+    persistDialogContent,
+    isModalOpen,
+    modalContent
   } = modalState;
 
-  const { setDialogContent, setIsDialogOpen, setIsPersistDialogOpen } =
-    modalSetState;
+  const {
+    setDialogContent,
+    setIsDialogOpen,
+    setIsPersistDialogOpen,
+    setIsModalOpen
+  } = modalSetState;
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
@@ -288,6 +295,12 @@ function MyCart() {
             isOpens={isDialogOpen}
             dialogContent={dialogContent}
           />
+          <CustomModal
+            isOpens={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            dialogContent={modalContent}
+            modalStyle={styles.modalStyle}
+          />
           <CustomDialog
             isOpens={isPersistDialogOpen}
             setIsOpen={setIsPersistDialogOpen}
@@ -302,6 +315,7 @@ function MyCart() {
               errorState={errorState}
               checkboxState={checkboxState}
               checkboxSetState={checkboxSetState}
+              modalSetState={modalSetState}
             />
           ) : headerPath === 'active' ? (
             <ActiveMyCart
@@ -313,6 +327,7 @@ function MyCart() {
               checkboxState={checkboxState}
               checkboxSetState={checkboxSetState}
               modalSetState={modalSetState}
+              modalState={modalState}
               data={data}
             />
           ) : headerPath === 'no data found' ? (
@@ -324,6 +339,7 @@ function MyCart() {
               errorSetState={errorSetState}
               checkboxSetState={checkboxSetState}
               checkboxState={checkboxState}
+              modalSetState={modalSetState}
             />
           )}
         </main>

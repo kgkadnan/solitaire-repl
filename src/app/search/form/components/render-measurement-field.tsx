@@ -86,6 +86,7 @@ const renderMeasurementField = (
     setStarLengthTo,
     setGirdleFrom,
     setGirdleTo,
+
     setSelectedCulet
   } = setState;
 
@@ -224,10 +225,6 @@ const renderMeasurementField = (
       setParameterState: [setStarLengthFrom, setStarLengthTo],
       errorSetState: setStarLengthError,
       errorState: starLengthError
-    },
-    {
-      parameterState: [girdleFrom, girdleTo],
-      setParameterState: [setGirdleFrom, setGirdleTo]
     }
   ];
 
@@ -236,63 +233,12 @@ const renderMeasurementField = (
     return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
-  // Initialize error state
-  const initialErrorState = {
-    key: '',
-    value: ''
-  };
-
-  // Initialize variables for angle input validation
-  const fromError = '';
-  const setFromError = '';
-  const fromAngle = '';
-  const setFromAngle = '';
-  const toAngle = '';
-  const setToAngle = '';
-
-  // Define a function to handle angle input validation
-  const handleAngle = (
-    key: string,
-    value: string,
-    setAngle: any,
-    setError: any,
-    otherValue: any
-  ) => {
-    const error = validateAngle(value, 0, 360);
-
-    if (
-      value.length > 0 &&
-      otherValue !== '' &&
-      value !== '' &&
-      parseInt(value) < parseInt(otherValue)
-    ) {
-      setError({ key, value: 'Please enter a valid range from 0 to 360' });
-    } else {
-      setError(initialErrorState);
-    }
-    setAngle(value);
-    if (error) {
-      setError({ key, value: error });
-    }
-  };
-
-  // Define a function for validating angle input
-  function validateAngle(value: string, min: number, max: number) {
-    const numValue = parseInt(value);
-
-    if (
-      value.length > 0 &&
-      (value === '' || numValue < min || numValue > max)
-    ) {
-      return 'Please enter a valid range from 0 to 100';
-    }
-    return '';
-  }
-
   // Function to handle filter changes and culet selection based on user input
   const handleCuletChange = (data: any) => {
     setSelectedCulet(data.value);
   };
+
+  console.log('girdlefrom', girdleFrom);
 
   const culetField = () => {
     return (

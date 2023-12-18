@@ -22,7 +22,8 @@ export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
   errorSetState,
   isError,
   errorText,
-  downloadExcelFunction
+  downloadExcelFunction,
+  modalSetState
 }) => {
   // Data for footer buttons
   const myDiamondsFooter = [
@@ -149,6 +150,7 @@ export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
           errorSetState={errorSetState}
+          modalSetState={modalSetState}
         />
       ) : (
         <NoDataFound />

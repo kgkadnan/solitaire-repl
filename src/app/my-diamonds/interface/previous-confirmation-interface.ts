@@ -1,3 +1,5 @@
+import { IModalSetState } from '@/app/search/result/result-interface';
+
 interface Customer {
   cart_id: string;
   id: string;
@@ -65,4 +67,5 @@ export interface PreviousConfirmationProps {
   setOffset: (offset: number) => void;
   setLimit: (limit: number) => void;
   limit: number;
+  modalSetState: IModalSetState;
 }

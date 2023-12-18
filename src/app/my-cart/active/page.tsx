@@ -34,18 +34,23 @@ const ActiveMyCart = ({
   errorSetState,
   errorState,
   modalSetState,
-  data
+  data,
+  modalState
 }: any) => {
   // State variables for managing component state
 
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
 
+  const { isSliderOpen } = modalState;
+
   const {
     setIsDialogOpen,
     setDialogContent,
     setPersistDialogContent,
-    setIsPersistDialogOpen
+    setIsPersistDialogOpen,
+    setIsModalOpen,
+    setIsSliderOpen
   } = modalSetState;
 
   const { confirmStoneState, confirmStoneSetState } =
@@ -56,7 +61,6 @@ const ActiveMyCart = ({
 
   const { setConfirmStoneData } = confirmStoneSetState;
 
-  const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
   const [activeCartRows, setActiveCartRows] = useState([]);
 
   // Mutation for deleting items from the cart
@@ -278,6 +282,7 @@ const ActiveMyCart = ({
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
           errorSetState={errorSetState}
+          modalSetState={modalSetState}
         />
       ) : (
         <NoDataFound />

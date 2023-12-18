@@ -137,6 +137,8 @@ export const handleReset = (setState: any) => {
   setSelectedLocation([]);
   setSelectedOrigin([]);
   setSelectedCulet([]);
-  setGirdleFrom([]), setGirdleTo([]), setSelectedKeyToSymbol([]);
+  setGirdleFrom('');
+  setGirdleTo('');
+  setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
 };
