@@ -450,12 +450,16 @@ const renderContent = (
   // Function to handle adding carat range
   const handleAddCarat = (data: string) => {
     const validatedData = normalizeValue(data);
-    if (validatedData) {
+
+    if (validatedData && selectedCaratRange.length < 5) {
+      setCaratError('');
       if (!selectedCaratRange.includes(validatedData)) {
         setSelectedCaratRange([...selectedCaratRange, validatedData]);
       }
       setCaratRangeFrom('');
       setCaratRangeTo('');
+    } else {
+      setCaratError('Max upto 5 carat can be added');
     }
   };
 
