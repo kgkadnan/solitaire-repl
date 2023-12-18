@@ -251,6 +251,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             errorSetState={errorSetState}
             confirmStoneSetState={confirmStoneSetState}
             modalSetState={modalSetState}
+            confirmStoneState={confirmStoneState}
           />
         )}
         <div className="mt-5">

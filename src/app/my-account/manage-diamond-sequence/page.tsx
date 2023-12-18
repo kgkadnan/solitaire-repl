@@ -202,13 +202,13 @@ and `nonManageableListings` whenever the `data` variable changes. */
                   )}
                 </h1>
                 <div className="flex">
-                  {nonManageableListings.map(({ id, label }, index) => (
+                  {nonManageableListings.map(({ id, short_label }, index) => (
                     <div
                       key={id}
                       className={`${styles.cardManageListingSequence}`}
                     >
                       <div className={`${styles.lableManageListingSequence}`}>
-                        {`${index + 1}. ${label}`}
+                        {`${index + 1}. ${short_label}`}
                       </div>
                     </div>
                   ))}
@@ -231,10 +231,10 @@ and `nonManageableListings` whenever the `data` variable changes. */
                   items={manageableListings}
                   direction="horizontal"
                   maxItems={5}
-                  render={({ label, id, is_disabled, sequence }) => (
+                  render={({ short_label, id, is_disabled, sequence }) => (
                     <div className={`${styles.cardManageListingSequence} `}>
                       <div className={`${styles.lableManageListingSequence}`}>
-                        {`${sequence}. ${label}`}
+                        {`${sequence}. ${short_label}`}
                       </div>
                       <div className="flex items-center">
                         <Checkbox

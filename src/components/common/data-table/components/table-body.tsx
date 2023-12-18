@@ -26,6 +26,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   tableCol,
   errorSetState,
   confirmStoneSetState,
+  confirmStoneState,
   modalSetState
 }) => {
   const { checkboxState, checkboxSetState } = checkboxData ?? {};
@@ -33,7 +34,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { setIsCheckAll, setIsCheck } = checkboxSetState ?? {};
 
   const { setErrorText, setIsError } = errorSetState;
-  const { setConfirmStoneData } = confirmStoneSetState ?? {};
+  const { setConfirmStoneData, setIsComeFromConfirmStone } =
+    confirmStoneSetState ?? {};
   const {
     setIsDialogOpen,
     setIsSliderOpen,
@@ -132,7 +134,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
         />
       )
     },
-    {
+    // Conditionally include this block only if isComeFromConfirmStone is false
+    !confirmStoneState?.isComeFromConfirmStone && {
       id: 2,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.transparent,
@@ -143,7 +146,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
           setErrorText,
           setIsError,
           setIsSliderOpen,
-          setConfirmStoneData
+          setConfirmStoneData,
+          setIsComeFromConfirmStone
         )
     },
     {

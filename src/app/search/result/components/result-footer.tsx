@@ -44,7 +44,8 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   } = modalSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
-  const { setConfirmStoneData } = confirmStoneSetState;
+  const { setConfirmStoneData, setIsComeFromConfirmStone } =
+    confirmStoneSetState;
 
   /**
    * The function `downloadExcelFunction` checks if a stone is selected and performs a download action if
@@ -217,7 +218,8 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
           setErrorText,
           setIsError,
           setIsSliderOpen,
-          setConfirmStoneData
+          setConfirmStoneData,
+          setIsComeFromConfirmStone
         )
     }
   ];

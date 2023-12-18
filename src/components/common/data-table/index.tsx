@@ -12,6 +12,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
   selectionAllowed = true,
   errorSetState,
   confirmStoneSetState,
+  confirmStoneState,
   modalSetState
 }) => {
   /* The above code is filtering and sorting an array of table columns. */
@@ -37,6 +38,7 @@ const CustomDataTable: React.FC<ICustomDataTableProps> = ({
             errorSetState={errorSetState}
             confirmStoneSetState={confirmStoneSetState}
             modalSetState={modalSetState}
+            confirmStoneState={confirmStoneState}
           />
         </table>
       </div>

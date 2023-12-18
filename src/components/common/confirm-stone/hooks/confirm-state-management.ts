@@ -7,19 +7,22 @@ export const useConfirmStoneStateManagement = () => {
   const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =
     useState<string>('');
+  const [isComeFromConfirmStone, setIsComeFromConfirmStone] = useState(false);
   return {
     confirmStoneState: {
       confirmStoneData,
       commentValue,
       selectedDaysInputValue,
-      selectedRadioDaysValue
+      selectedRadioDaysValue,
+      isComeFromConfirmStone
     },
 
     confirmStoneSetState: {
       setConfirmStoneData,
       setCommentValue,
       setSelectedDaysInputValue,
-      setSelectedRadioDaysValue
+      setSelectedRadioDaysValue,
+      setIsComeFromConfirmStone
     }
   };
 };

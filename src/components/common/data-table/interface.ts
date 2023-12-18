@@ -6,7 +6,10 @@ import {
 } from '@/app/search/result/result-interface';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 import { ICheckboxSetState, ICheckboxState } from '../checkbox/interface';
-import { IConfirmStoneSetState } from '../confirm-stone/interface';
+import {
+  IConfirmStoneSetState,
+  IConfirmStoneState
+} from '../confirm-stone/interface';
 
 export interface ICheckboxData {
   checkboxState?: ICheckboxState;
@@ -26,6 +29,7 @@ export interface ICustomDataTableProps {
     setIsInputDialogOpen: Dispatch<SetStateAction<boolean>>;
     setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
   };
+  confirmStoneState?: IConfirmStoneState;
 }
 
 export interface KeyLabelMapping {
@@ -49,6 +53,7 @@ export interface ITbodyProps {
   errorSetState: IErrorSetState;
   confirmStoneSetState?: any;
   modalSetState?: any;
+  confirmStoneState?: IConfirmStoneState;
 }
 export interface IswitchButtonTabs {
   id: string;

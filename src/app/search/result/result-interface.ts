@@ -8,6 +8,7 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface TableColumn {
   label: string;
+  short_label: string;
   accessor: string;
   sequence: number;
   is_fixed: boolean;

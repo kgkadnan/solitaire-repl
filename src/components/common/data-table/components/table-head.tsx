@@ -44,7 +44,7 @@ export const TableHead: React.FC<ITheadProps> = ({
               position: `${index === 0 ? 'sticky' : 'static'}`
             }}
           >
-            {column.label}
+            {column.short_label}
           </th>
         ))}
       </tr>
