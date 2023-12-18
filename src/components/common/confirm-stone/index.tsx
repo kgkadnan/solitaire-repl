@@ -12,6 +12,7 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import errorImage from '@public/assets/icons/error.svg';
 import Image from 'next/image';
 import { useConfirmProductMutation } from '@/features/api/product';
+import Link from 'next/link';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -20,12 +21,17 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   onOpenChange,
   confirmStoneState,
   confirmStoneSetState,
-  setDialogContent,
-  setIsDialogOpen,
   modalSetState,
   refetch
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
+
+  const {
+    setDialogContent,
+    setIsDialogOpen,
+    setIsPersistDialogOpen,
+    setPersistDialogContent
+  } = modalSetState;
 
   const { inputError, inputErrorContent, sliderErrorText, isSliderError } =
     errorState;
@@ -173,22 +179,29 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
           .unwrap()
           .then(res => {
             if (res) {
-              setDialogContent(
-                <>
-                  <div className="max-w-[400px] flex justify-center ">
+              setIsPersistDialogOpen(true);
+              setPersistDialogContent(
+                <div className="text-center  flex flex-col justify-center items-center ">
+                  <div className="w-[350px] flex justify-center items-center mb-3">
                     <Image src={confirmImage} alt="confirmImage" />
                   </div>
-                  <div className="max-w-[400px] flex justify-center text-solitaireTertiary">
+                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
                     {variantIds.length} Stone Successfully Confirmed
                   </div>
-                </>
+                  <Link
+                    href={'/my-diamonds'}
+                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+                  >
+                    Go to “My Diamonds”
+                  </Link>
+                </div>
               );
               setCommentValue('');
               setSelectedDaysInputValue('');
               setInputErrorContent('');
               setInputError(false);
               onOpenChange(false);
-              setIsDialogOpen(true);
+
               if (refetch) {
                 refetch();
               }

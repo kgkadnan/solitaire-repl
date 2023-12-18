@@ -37,8 +37,6 @@ export interface IConfirmStoneProps {
   onOpenChange: (open: boolean) => void;
   confirmStoneState: IConfirmStoneState;
   confirmStoneSetState: IConfirmStoneSetState;
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
-  setDialogContent: Dispatch<SetStateAction<ReactNode>>;
-  modalSetState?: IModalSetState;
+  modalSetState: IModalSetState;
   refetch?: any;
 }

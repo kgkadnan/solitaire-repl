@@ -35,10 +35,37 @@ import { handleDelete } from './helpers/handle-delete';
 import { handleSearch } from './helpers/debounce';
 import { convertDateToUTC } from '@/utils/convert-date-to-utc';
 import { handleCardClick } from './helpers/handle-card-click';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 
 const SavedSearch = () => {
   // State management hooks
   const { commonState, commonSetState } = useCommonStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
+
+  //checkbox states
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck, isCheckAll } = checkboxState;
+  const { setIsCheck, setIsCheckAll } = checkboxSetState;
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { isError, errorText } = errorState;
+  const { setIsError, setErrorText } = errorSetState;
+
+  const {
+    setDialogContent,
+    setIsDialogOpen,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState;
+
+  const {
+    dialogContent,
+    isDialogOpen,
+    persistDialogContent,
+    isPersistDialogOpen
+  } = modalState;
 
   // Destructuring commonState and commonSetState
   const {
@@ -51,16 +78,11 @@ const SavedSearch = () => {
     searchUrl,
     savedSearchData,
     cardData,
-    isCheck,
-    setIsCheck,
     search,
     searchByName,
-    suggestions,
-    isDialogOpen,
-    dialogContent,
-    isError,
-    errorText
+    suggestions
   } = commonState;
+
   const {
     setCurrentPage,
     setLimit,
@@ -71,15 +93,9 @@ const SavedSearch = () => {
     setSearchUrl,
     setSavedSearchData,
     setCardData,
-    isCheckAll,
-    setIsCheckAll,
     setSearch,
     setSearchByName,
-    setSuggestions,
-    setIsDialogOpen,
-    setDialogContent,
-    setIsError,
-    setErrorText
+    setSuggestions
   } = commonSetState;
 
   const optionLimits = [
@@ -298,8 +314,8 @@ const SavedSearch = () => {
           isCheck,
           setIsError,
           setErrorText,
-          setDialogContent,
-          setIsDialogOpen,
+          setPersistDialogContent,
+          setIsPersistDialogOpen,
           deleteStoneHandler,
           numberOfPages,
           data,
@@ -413,6 +429,11 @@ const SavedSearch = () => {
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomDialog
+        isOpens={isPersistDialogOpen}
+        setIsOpen={setIsPersistDialogOpen}
+        dialogContent={persistDialogContent}
       />
       <div className="container flex flex-col">
         {/* Custom Header */}

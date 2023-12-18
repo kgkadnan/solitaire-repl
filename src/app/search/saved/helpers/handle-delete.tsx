@@ -5,8 +5,10 @@ interface HandleDeleteProps {
   isCheck: string[];
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
-  setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setPersistDialogContent: React.Dispatch<
+    React.SetStateAction<React.ReactNode>
+  >;
+  setIsPersistDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   deleteStoneHandler: () => void;
   numberOfPages: number;
   data: any;
@@ -19,8 +21,8 @@ export const handleDelete = ({
   isCheck,
   setIsError,
   setErrorText,
-  setDialogContent,
-  setIsDialogOpen,
+  setPersistDialogContent,
+  setIsPersistDialogOpen,
   deleteStoneHandler,
   numberOfPages,
   data,
@@ -69,7 +71,7 @@ export const handleDelete = ({
       setErrorText(errorMessage);
     } else {
       // Display confirmation dialog for stone deletion
-      setDialogContent(
+      setPersistDialogContent(
         <>
           <p className="text-center mt-3">
             Do you want to delete the selected Saved Search?
@@ -80,7 +82,7 @@ export const handleDelete = ({
               displayButtonAllStyle={{
                 displayButtonStyle: `mr-[25px] ${styles.transparent}`
               }}
-              handleClick={() => setIsDialogOpen(false)}
+              handleClick={() => setIsPersistDialogOpen(false)}
             />
             <CustomDisplayButton
               displayButtonLabel="Yes"
@@ -92,7 +94,7 @@ export const handleDelete = ({
           </div>
         </>
       );
-      setIsDialogOpen(true);
+      setIsPersistDialogOpen(true);
     }
   } else {
     // Display error if no stones are selected for deletion

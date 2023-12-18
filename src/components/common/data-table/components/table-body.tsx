@@ -17,6 +17,7 @@ import { DetailCertificateSlider } from './detail-certificate-slider';
 import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
+import Link from 'next/link';
 
 export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -33,8 +34,13 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   const { setErrorText, setIsError } = errorSetState;
   const { setConfirmStoneData } = confirmStoneSetState ?? {};
-  const { setIsDialogOpen, setIsSliderOpen, setDialogContent } =
-    modalSetState ?? {};
+  const {
+    setIsDialogOpen,
+    setIsSliderOpen,
+    setDialogContent,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState ?? {};
 
   const { dataTableBodyState, dataTableBodySetState } =
     useDataTableBodyStateManagement();
@@ -54,17 +60,23 @@ export const TableBody: React.FC<ITbodyProps> = ({
       })
         .unwrap()
         .then(res => {
-          setDialogContent?.(
-            <>
-              <div className="max-w-[400px] flex justify-center align-middle">
+          setPersistDialogContent?.(
+            <div className="text-center  flex flex-col justify-center items-center ">
+              <div className="w-[350px] flex justify-center items-center mb-3">
                 <Image src={confirmImage} alt="vector image" />
               </div>
-              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
+              <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
                 {res?.message}
               </div>
-            </>
+              <Link
+                href={'/my-cart?active-tab=active'}
+                className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+              >
+                Go To Cart
+              </Link>
+            </div>
           );
-          setIsDialogOpen?.(true);
+          setIsPersistDialogOpen?.(true);
         })
         .catch(() => {
           console.log('1111111111111111');

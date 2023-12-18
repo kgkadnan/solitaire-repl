@@ -14,6 +14,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
+import Link from 'next/link';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -34,7 +35,13 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
 
   const { isError, errorText } = errorState;
   const { setIsError, setErrorText } = errorSetState;
-  const { setDialogContent, setIsDialogOpen, setIsSliderOpen } = modalSetState;
+  const {
+    setDialogContent,
+    setIsDialogOpen,
+    setIsSliderOpen,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState;
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
   const { setConfirmStoneData } = confirmStoneSetState;
@@ -120,19 +127,25 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
             .then(res => {
               setIsError(false);
               setErrorText('');
-              setDialogContent(
-                <>
-                  <div className="w-[350px] flex justify-center align-middle">
+              setPersistDialogContent(
+                <div className="text-center  flex flex-col justify-center items-center ">
+                  <div className="w-[350px] flex justify-center items-center mb-3">
                     <Image src={confirmImage} alt="vector image" />
                   </div>
-                  <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
+                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
                     {res?.message}
                   </div>
-                </>
+                  <Link
+                    href={'/my-cart?active-tab=active'}
+                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+                  >
+                    Go To Cart
+                  </Link>
+                </div>
               );
-              setIsDialogOpen(true);
-              refetchRow();
+              setIsPersistDialogOpen(true);
               dispatch(notificationBadge(true));
+              refetchRow();
             })
             .catch((error: any) => {
               setIsError(true);

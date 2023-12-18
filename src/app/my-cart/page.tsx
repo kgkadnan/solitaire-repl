@@ -1,7 +1,7 @@
 'use client';
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation'; // Import the useRouter hook
+import { useSearchParams } from 'next/navigation'; // Import the useRouter hook
 import React, { useEffect, useState } from 'react';
 import styles from './my-cart.module.scss';
 import CustomHeader from '@/components/common/header';
@@ -71,9 +71,15 @@ function MyCart() {
   const { setTableColumns } = dataTableSetState;
 
   const { modalState, modalSetState } = useModalStateManagement();
-  const { dialogContent, isDialogOpen } = modalState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isPersistDialogOpen,
+    persistDialogContent
+  } = modalState;
 
-  const { setDialogContent, setIsDialogOpen } = modalSetState;
+  const { setDialogContent, setIsDialogOpen, setIsPersistDialogOpen } =
+    modalSetState;
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
@@ -281,6 +287,11 @@ function MyCart() {
             setIsOpen={setIsDialogOpen}
             isOpens={isDialogOpen}
             dialogContent={dialogContent}
+          />
+          <CustomDialog
+            isOpens={isPersistDialogOpen}
+            setIsOpen={setIsPersistDialogOpen}
+            dialogContent={persistDialogContent}
           />
           {headerPath === 'memo' ? (
             <MemoOut

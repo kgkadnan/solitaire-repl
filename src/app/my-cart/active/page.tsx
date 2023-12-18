@@ -41,7 +41,12 @@ const ActiveMyCart = ({
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
 
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const {
+    setIsDialogOpen,
+    setDialogContent,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState;
 
   const { confirmStoneState, confirmStoneSetState } =
     useConfirmStoneStateManagement();
@@ -84,8 +89,8 @@ const ActiveMyCart = ({
   const handleDelete = () => {
     if (isCheck.length) {
       setIsError(false);
-      setIsDialogOpen(true);
-      setDialogContent(
+      setIsPersistDialogOpen(true);
+      setPersistDialogContent(
         <>
           <p className="mt-3 px-[50px] text-center">
             Do you want to Delete the selected Stones?
@@ -96,7 +101,7 @@ const ActiveMyCart = ({
               displayButtonAllStyle={{
                 displayButtonStyle: `mr-[25px] ${styles.transparent}`
               }}
-              handleClick={() => setIsDialogOpen(false)}
+              handleClick={() => setIsPersistDialogOpen(false)}
             />
             <CustomDisplayButton
               displayButtonLabel="Yes"
@@ -137,6 +142,7 @@ const ActiveMyCart = ({
 
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
+    setIsPersistDialogOpen(false);
     const activeDiamondItems = data?.cart?.items.filter(
       (item: ProductItem) => item?.product?.diamond_status === ACTIVE_STATUS
     );
@@ -256,8 +262,6 @@ const ActiveMyCart = ({
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={tableColumns}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
             modalSetState={modalSetState}
             refetch={refetch}
           />
