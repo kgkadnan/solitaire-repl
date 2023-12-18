@@ -349,6 +349,8 @@ used for managing the state of a form field or input element in a React componen
     setSaveSearchName('');
   };
 
+  const handleAddDemand = () => {};
+
   return (
     <div>
       <CustomInputDialog
@@ -417,7 +419,10 @@ used for managing the state of a form field or input element in a React componen
               displayButtonLabel: `${ManageLocales(
                 'app.advanceSearch.saveSearch'
               )}`,
-              style: styles.transparent,
+              style:
+                modifySearchFrom === `${SAVED_SEARCHES}`
+                  ? styles.filled
+                  : styles.transparent,
               fn: () => {
                 if (
                   JSON.parse(localStorage.getItem('Search')!)?.length >=
@@ -460,13 +465,28 @@ used for managing the state of a form field or input element in a React componen
                 }
               }
             },
-            {
-              id: 4,
-              displayButtonLabel: ManageLocales('app.advanceSearch.search'),
-              style: styles.filled,
-              fn: handleSearch,
-              isHidden: modifySearchFrom === `${SAVED_SEARCHES}`
-            }
+            ...(data?.count !== MIN_SEARCH_FORM_COUNT
+              ? [
+                  {
+                    id: 4,
+                    displayButtonLabel: ManageLocales(
+                      'app.advanceSearch.search'
+                    ),
+                    style: styles.filled,
+                    fn: handleSearch,
+                    isHidden: modifySearchFrom === `${SAVED_SEARCHES}`
+                  }
+                ]
+              : [
+                  {
+                    id: 4,
+                    displayButtonLabel: ManageLocales(
+                      'app.advanceSearch.addDemand'
+                    ),
+                    style: styles.filled,
+                    fn: handleAddDemand
+                  }
+                ])
           ]}
           noBorderTop={styles.paginationContainerStyle}
         />
