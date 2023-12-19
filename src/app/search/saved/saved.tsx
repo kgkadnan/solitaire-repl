@@ -444,7 +444,7 @@ const SavedSearch = () => {
             visibleStyle={styles.visibleStyle}
           />
         </div>
-        <div className="h-[70vh] overflow-auto">
+        <div className={`h-[70vh] ${styles.scrollBar} mb-[10px]`}>
           {/* Custom Card and Checkbox map */}
           {cardData?.length ? (
             <div className="flex-grow mt-[50px]">
