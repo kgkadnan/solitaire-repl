@@ -170,7 +170,6 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   return (
     <>
-      
       <div className={`h-[70vh] overflow-auto  mb-[30px] ${styles.scrollBar}`}>
         <div>
           {!data?.length && <NoDataFound />}
