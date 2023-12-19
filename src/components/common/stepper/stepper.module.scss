@@ -1,0 +1,55 @@
+/* styles/Stepper.module.css */
+.stepperContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .circularSteps {
+    display: flex;
+    position: relative;
+  }
+  
+  .step {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+    cursor: pointer;
+    font-weight: bold;
+    position: relative;
+  }
+  
+  .step::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -15px; /* Half of the step width */
+    width: 15px;
+    height: 2px;
+    background-color: #ccc;
+  }
+  
+  .step:first-child::before {
+    display: none; /* Remove the line before the first step */
+  }
+  
+  .activeStep {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .stepContent {
+    margin: 20px 0;
+  }
+  
+  .navigationButtons {
+    display: flex;
+    justify-content: space-between;
+    width: 300px;
+  }
+  

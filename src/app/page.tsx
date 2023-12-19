@@ -1,6 +1,37 @@
 'use client';
 
+import Stepper from "@/components/common/stepper";
+import { StepperStatus } from "@/constants/enums/stepper-status";
+import { useState } from "react";
+
 // import { getLogger } from 'logging/log-util';
+const [currentStep, setCurrentStep] = useState(0);
+const nextStep = () => {
+  if (currentStep < steps.length - 1) {
+    setCurrentStep(currentStep + 1);
+  }
+};
+
+const prevStep = () => {
+  if (currentStep > 0) {
+    setCurrentStep(currentStep - 1);
+  }
+};
+const steps = [{
+  label:"Personal Details",
+  data:<div>This is step 1</div>,
+  setState:setCurrentStep,
+  state:currentStep,
+  prevStep:prevStep,
+  nextStep:nextStep,
+  status:StepperStatus.NOT_STARTED,
+  styles:{},
+
+
+}
+];
+
+
 
 export default function Home() {
   // const logger = getLogger('home');
@@ -30,6 +61,8 @@ export default function Home() {
       >
         Building Digital Diamond Platform
       </h1>
+      <Stepper steps={steps} />
+
     </>
   );
 }
