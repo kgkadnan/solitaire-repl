@@ -130,7 +130,7 @@ export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
           <div className="flex mb-1">
             <p className="w-[25%]">Payment Terms :</p>
             <span className="text-solitaireTertiary">
-              {productPageDetail?.payment_term}
+              {`${productPageDetail?.payment_term} Days`}
             </span>
           </div>
         </div>

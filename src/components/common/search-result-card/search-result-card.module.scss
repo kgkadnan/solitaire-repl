@@ -7,7 +7,6 @@
 .cardHeaderText {
   display: flex !important;
   justify-content: space-between;
-  // gap: 50px;
   align-items: center;
 }
 
@@ -17,16 +16,12 @@
 }
 
 .cardActionIcon {
-  height: 24px;
-  width: 24px;
-  margin: 8px;
+  height: 32px;
+  width: 32px;
+  margin: 10px;
+  padding: 5px;
 }
 
-// .cardIcon {
-//     height: 20px;
-//     width: 20px;
-//     margin-right: 10px;
-// }
 .mainContainer {
   border-radius: 10px;
   background-color: hsl(var(--solitaire-secondary));
@@ -68,11 +63,6 @@
   z-index: 1;
 }
 
-.cardContainerWithContent {
-  position: relative; /* Establish a positioning context for the content */
-  z-index: -1111;
-}
-
 .filled {
   background-color: #8c7459;
   padding: 8px 30px;
@@ -87,8 +77,4 @@
   border: 1px solid #ccc;
   padding: 20px;
   transition: filter 0.3s ease-in-out;
-}
-
-.blur {
-  filter: blur(8px);
 }

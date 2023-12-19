@@ -41,3 +41,11 @@
 .paginationContainerStyle {
   border: none !important ;
 }
+
+.scrollBar {
+  overflow-y: scroll;
+}
+
+.scrollBar::-webkit-scrollbar {
+  display: none;
+}
