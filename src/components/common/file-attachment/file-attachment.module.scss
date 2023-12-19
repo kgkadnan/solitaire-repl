@@ -1,0 +1,30 @@
+.label {
+  color: hsl(var(--solitaire-tertiary));
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.format {
+  color: hsl(var(--solitaire-senary));
+  font-size: 14px;
+  font-weight: 400;
+}
+.errorFormat {
+  color: red;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.errorlabel {
+  color: red;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.stroke {
+  stroke: hsl(var(--solitaire-quaternary));
+}
+
+.errorStroke {
+  stroke: red;
+}
