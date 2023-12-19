@@ -11,7 +11,8 @@ const OutOfStock = ({
   soldOutRows,
   checkboxState,
   checkboxSetState,
-  errorSetState
+  errorSetState,
+  modalSetState
 }: any) => {
   //Checkbox Data for Custom Data Table
   const checkboxData = {
@@ -41,6 +42,7 @@ const OutOfStock = ({
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
           errorSetState={errorSetState}
+          modalSetState={modalSetState}
         />
       ) : (
         <NoDataFound />

@@ -84,7 +84,7 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
       sheetContent={
         <>
           <div className={styles.sheetMainHeading}>
-            <p>{ManageLocales('app.searchResult.slider.stoneImage.image')}</p>
+            <p>{ManageLocales('app.searchResult.slider.images.asset')}</p>
           </div>
 
           <div className="flex w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto justify-center gap-10 ">

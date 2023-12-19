@@ -5,13 +5,14 @@ import CustomDataTable from '@/components/common/data-table';
 import { CustomDropdown } from '@/components/common/dropdown';
 import { useDeleteCartMutation } from '@/features/api/cart';
 import { ManageLocales } from '@/utils/translate';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './active-cart.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
 import {
+  ACTIVE_STATUS,
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE
 } from '@/constants/business-logic';
@@ -26,21 +27,31 @@ import { Product } from '@/app/search/result/result-interface';
 
 const ActiveMyCart = ({
   tableColumns,
-  activeCartRows,
   refetch,
   checkboxState,
   checkboxSetState,
   downloadExcelFunction,
   errorSetState,
   errorState,
-  modalSetState
+  modalSetState,
+  data,
+  modalState
 }: any) => {
   // State variables for managing component state
 
   const { isCheck } = checkboxState;
   const { setIsCheck, setIsCheckAll } = checkboxSetState;
 
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { isSliderOpen } = modalState;
+
+  const {
+    setIsDialogOpen,
+    setDialogContent,
+    setPersistDialogContent,
+    setIsPersistDialogOpen,
+    setIsModalOpen,
+    setIsSliderOpen
+  } = modalSetState;
 
   const { confirmStoneState, confirmStoneSetState } =
     useConfirmStoneStateManagement();
@@ -50,7 +61,7 @@ const ActiveMyCart = ({
 
   const { setConfirmStoneData } = confirmStoneSetState;
 
-  const [isSliderOpen, setIsSliderOpen] = useState(Boolean);
+  const [activeCartRows, setActiveCartRows] = useState([]);
 
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -61,12 +72,29 @@ const ActiveMyCart = ({
     checkboxSetState
   };
 
+  // useEffect to update active tab count when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const activeDiamondItems = data?.cart?.items
+          .filter(
+            (item: ProductItem) =>
+              item?.product?.diamond_status === ACTIVE_STATUS
+          )
+          .map((row: ProductItem) => row?.product);
+
+        setActiveCartRows(activeDiamondItems);
+      }
+    };
+    updateRows();
+  }, [data]);
+
   // Handle the deletion of selected stones
   const handleDelete = () => {
     if (isCheck.length) {
       setIsError(false);
-      setIsDialogOpen(true);
-      setDialogContent(
+      setIsPersistDialogOpen(true);
+      setPersistDialogContent(
         <>
           <p className="mt-3 px-[50px] text-center">
             Do you want to Delete the selected Stones?
@@ -77,7 +105,7 @@ const ActiveMyCart = ({
               displayButtonAllStyle={{
                 displayButtonStyle: `mr-[25px] ${styles.transparent}`
               }}
-              handleClick={() => setIsDialogOpen(false)}
+              handleClick={() => setIsPersistDialogOpen(false)}
             />
             <CustomDisplayButton
               displayButtonLabel="Yes"
@@ -118,9 +146,14 @@ const ActiveMyCart = ({
 
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
+    setIsPersistDialogOpen(false);
+    const activeDiamondItems = data?.cart?.items.filter(
+      (item: ProductItem) => item?.product?.diamond_status === ACTIVE_STATUS
+    );
+
     const itemsId = isCheck.map((id: any) => {
-      const selectedRow = activeCartRows.find(
-        (row: ProductItem) => row.id === id
+      const selectedRow = activeDiamondItems.find(
+        (row: ProductItem) => row.product.id === id
       );
 
       return selectedRow?.id;
@@ -233,8 +266,6 @@ const ActiveMyCart = ({
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={tableColumns}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
             modalSetState={modalSetState}
             refetch={refetch}
           />
@@ -251,6 +282,7 @@ const ActiveMyCart = ({
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
           errorSetState={errorSetState}
+          modalSetState={modalSetState}
         />
       ) : (
         <NoDataFound />

@@ -12,6 +12,7 @@ export interface IConfirmStoneSetState {
   setCommentValue: Dispatch<SetStateAction<string>>;
   setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
   setSelectedRadioDaysValue: Dispatch<SetStateAction<string>>;
+  setIsComeFromConfirmStone: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IConfirmStoneState {
@@ -19,6 +20,7 @@ export interface IConfirmStoneState {
   commentValue: string;
   selectedDaysInputValue: string;
   selectedRadioDaysValue: string;
+  isComeFromConfirmStone: boolean;
 }
 
 export interface IconfirmRadioButtons {
@@ -37,8 +39,6 @@ export interface IConfirmStoneProps {
   onOpenChange: (open: boolean) => void;
   confirmStoneState: IConfirmStoneState;
   confirmStoneSetState: IConfirmStoneSetState;
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
-  setDialogContent: Dispatch<SetStateAction<ReactNode>>;
-  modalSetState?: IModalSetState;
+  modalSetState: IModalSetState;
   refetch?: any;
 }

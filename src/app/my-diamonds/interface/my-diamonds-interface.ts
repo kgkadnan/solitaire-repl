@@ -1,3 +1,5 @@
+import { IModalSetState } from '@/app/search/result/result-interface';
+
 export interface IHeaderSearchBarProps {
   activeTab: string;
   setRecentConfiramtionSearchUrl: (url: string) => void;
@@ -32,6 +34,7 @@ export interface MyDiamondsProps {
   setOffset?: (offset: number) => void;
   setLimit?: (limit: number) => void;
   limit?: number;
+  modalSetState: IModalSetState;
 }
 
 export interface MyDiamondsSheetContentProps {
@@ -44,4 +47,5 @@ export interface MyDiamondsSheetContentProps {
   isError: boolean;
   errorText: string;
   downloadExcelFunction: () => void;
+  modalSetState?: IModalSetState;
 }

@@ -9,7 +9,6 @@ import renderMeasurementField from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
 import styles from '../form.module.scss';
 import advanceSearch from '@/constants/advance-search.json';
-import { Errors } from '../hooks/validation-state-management';
 import { handleFilterChange } from '../helpers/handle-change';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
@@ -255,6 +254,7 @@ const renderContent = (
         setSelectedCut(['G']);
         setSelectedPolish(['G']);
         setSelectedSymmetry(['G']);
+        setSelectedFluorescence([]);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -266,6 +266,7 @@ const renderContent = (
         setSelectedCut(['F']);
         setSelectedPolish(['F']);
         setSelectedSymmetry(['F']);
+        setSelectedFluorescence([]);
       } else {
         setSelectedCut([]);
         setSelectedPolish([]);
@@ -309,6 +310,18 @@ const renderContent = (
       (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
     ) {
       setSelectedMake('3VG+EX');
+    } else if (
+      temp.toString() === 'G' &&
+      firstCriteria.toString() === 'G' &&
+      secondCriteria.toString() === 'G'
+    ) {
+      setSelectedMake('3G');
+    } else if (
+      temp.toString() === 'F' &&
+      firstCriteria.toString() === 'F' &&
+      secondCriteria.toString() === 'F'
+    ) {
+      setSelectedMake('3F');
     } else {
       setSelectedMake('');
     }
@@ -352,6 +365,7 @@ const renderContent = (
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     const temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
+    console.log('temp', temp);
     if (index !== -1) {
       temp.splice(index, 1);
     } else {
@@ -377,6 +391,21 @@ const renderContent = (
       temp.length === 0
     ) {
       setSelectedMake('3VG+EX');
+    } else if (
+      selectedCut.toString() === 'G' &&
+      selectedPolish.toString() === 'G' &&
+      selectedSymmetry.toString() === 'G' &&
+      temp.length == 0
+    ) {
+      setSelectedMake('3G');
+      console.log('herere');
+    } else if (
+      selectedCut.toString() === 'F' &&
+      selectedPolish.toString() === 'F' &&
+      selectedSymmetry.toString() === 'F' &&
+      temp.length == 0
+    ) {
+      setSelectedMake('3F');
     } else {
       setSelectedMake('');
     }
@@ -450,12 +479,16 @@ const renderContent = (
   // Function to handle adding carat range
   const handleAddCarat = (data: string) => {
     const validatedData = normalizeValue(data);
-    if (validatedData) {
+
+    if (validatedData && selectedCaratRange.length < 5) {
+      setCaratError('');
       if (!selectedCaratRange.includes(validatedData)) {
         setSelectedCaratRange([...selectedCaratRange, validatedData]);
       }
       setCaratRangeFrom('');
       setCaratRangeTo('');
+    } else {
+      setCaratError('Max upto 5 carat can be added');
     }
   };
 

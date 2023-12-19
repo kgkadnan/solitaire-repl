@@ -29,6 +29,7 @@ import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequ
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
+import Link from 'next/link';
 
 const CompareStone = () => {
   // Initialize necessary state variables
@@ -37,9 +38,20 @@ const CompareStone = () => {
   const { setIsCheck } = checkboxSetState;
 
   const { modalState, modalSetState } = useModalStateManagement();
-  const { dialogContent, isDialogOpen, isSliderOpen } = modalState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isSliderOpen,
+    isPersistDialogOpen,
+    persistDialogContent
+  } = modalState;
 
-  const { setDialogContent, setIsDialogOpen, setIsSliderOpen } = modalSetState;
+  const {
+    setIsDialogOpen,
+    setIsSliderOpen,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState;
 
   const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText, setIsSliderError } = errorSetState;
@@ -108,16 +120,22 @@ const CompareStone = () => {
               // On success, show confirmation dialog and update badge
               setIsError(false);
               setErrorText('');
-              setIsDialogOpen(true);
-              setDialogContent(
-                <>
-                  <div className="w-[350px] flex justify-center align-middle">
+              setIsPersistDialogOpen(true);
+              setPersistDialogContent(
+                <div className="text-center  flex flex-col justify-center items-center ">
+                  <div className="w-[350px] flex justify-center items-center mb-3">
                     <Image src={confirmImage} alt="vector image" />
                   </div>
-                  <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
+                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
                     {res?.message}
                   </div>
-                </>
+                  <Link
+                    href={'/my-cart?active-tab=active'}
+                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+                  >
+                    Go To Cart
+                  </Link>
+                </div>
               );
               dispatch(notificationBadge(true));
             })
@@ -283,8 +301,6 @@ const CompareStone = () => {
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={listingColumns}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
             modalSetState={modalSetState}
           />
         }
@@ -297,6 +313,11 @@ const CompareStone = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
+      />
+      <CustomDialog
+        isOpens={isPersistDialogOpen}
+        setIsOpen={setIsPersistDialogOpen}
+        dialogContent={persistDialogContent}
       />
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
         <CustomHeader

@@ -59,14 +59,17 @@ const SearchResults = ({
     isInputDialogOpen,
     isSliderOpen,
     isModalOpen,
-    modalContent
+    modalContent,
+    persistDialogContent,
+    isPersistDialogOpen
   } = modalState;
   const {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
     setDialogContent,
-    setIsModalOpen
+    setIsModalOpen,
+    setIsPersistDialogOpen
   } = modalSetState;
   const {
     setYourSelectionData,
@@ -204,8 +207,6 @@ variable changes. */
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={listingColumns}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
             modalSetState={modalSetState}
           />
         }
@@ -225,6 +226,11 @@ variable changes. */
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomDialog
+        isOpens={isPersistDialogOpen}
+        setIsOpen={setIsPersistDialogOpen}
+        dialogContent={persistDialogContent}
       />
       <CustomModal
         isOpens={isModalOpen}

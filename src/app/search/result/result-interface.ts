@@ -8,6 +8,7 @@ import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface TableColumn {
   label: string;
+  short_label: string;
   accessor: string;
   sequence: number;
   is_fixed: boolean;
@@ -344,6 +345,8 @@ export interface IModalSetState {
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
   setModalContent: Dispatch<SetStateAction<ReactNode>>;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setPersistDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  setIsPersistDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IErrorSetState {
