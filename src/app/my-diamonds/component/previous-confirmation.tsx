@@ -9,7 +9,8 @@ const PreviousConfirmation: React.FC<PreviousConfirmationProps> = ({
   previousConfirmData,
   setOffset,
   setLimit,
-  limit
+  limit,
+  modalSetState
 }) => {
   // Define query parameters for API request
   let singleExpand = 'items.variant.product%2Citems.variant.prices';
@@ -51,6 +52,7 @@ const PreviousConfirmation: React.FC<PreviousConfirmationProps> = ({
       setOffset={setOffset}
       setLimit={setLimit}
       limit={limit}
+      modalSetState={modalSetState}
     />
   );
 };

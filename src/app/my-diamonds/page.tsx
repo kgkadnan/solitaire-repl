@@ -18,10 +18,32 @@ import { FilterByDays } from './component/filter-by-days';
 import { Tabs } from './component/tabs';
 import { HeaderSearchBar } from './component/header-search-bar';
 import { useCommonStateManagement } from './hooks/state-management';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { CustomDialog } from '@/components/common/dialog';
+import { CustomModal } from '@/components/common/modal';
 
 const MyDiamonds = () => {
   const { commonState, commonSetState } = useCommonStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
 
+  const {
+    dialogContent,
+    isDialogOpen,
+    isInputDialogOpen,
+    isSliderOpen,
+    isModalOpen,
+    modalContent,
+    persistDialogContent,
+    isPersistDialogOpen
+  } = modalState;
+  const {
+    setIsDialogOpen,
+    setIsInputDialogOpen,
+    setIsSliderOpen,
+    setDialogContent,
+    setIsModalOpen,
+    setIsPersistDialogOpen
+  } = modalSetState;
   const {
     prevScrollPos,
     visible,
@@ -128,6 +150,18 @@ const MyDiamonds = () => {
     };
   }, [prevScrollPos]);
 
+  useEffect(() => {
+    if (isDialogOpen) {
+      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+      const timeoutId = setTimeout(() => {
+        setIsDialogOpen(false);
+      }, 3500);
+
+      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+      return () => clearTimeout(timeoutId);
+    }
+  }, [isDialogOpen, setIsDialogOpen]);
+
   return (
     <>
       <div className="sticky top-0 bg-solitairePrimary mt-10 overflow-y-scroll">
@@ -180,16 +214,34 @@ const MyDiamonds = () => {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
+          <CustomDialog
+            setIsOpen={setIsDialogOpen}
+            isOpens={isDialogOpen}
+            dialogContent={dialogContent}
+          />
+          <CustomModal
+            isOpens={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            dialogContent={modalContent}
+            modalStyle={styles.modalStyle}
+          />
           {activeTab === 'Recent Confirmations' ? (
-            <RecentConfirmation recentConfirmData={recentConfirmData} />
+            <RecentConfirmation
+              recentConfirmData={recentConfirmData}
+              modalSetState={modalSetState}
+            />
           ) : activeTab === 'My Invoices' ? (
-            <MyInvoices myInvoiceData={myInvoiceData} />
+            <MyInvoices
+              myInvoiceData={myInvoiceData}
+              modalSetState={modalSetState}
+            />
           ) : (
             <PreviousConfirmation
               previousConfirmData={previousConfirmData}
               setOffset={setOffset}
               setLimit={setLimit}
               limit={limit}
+              modalSetState={modalSetState}
             />
           )}
         </main>

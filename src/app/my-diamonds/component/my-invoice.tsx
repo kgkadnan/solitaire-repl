@@ -3,10 +3,12 @@ import { MyDiamonds } from '@/app/my-diamonds/component/my-diamond/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
 import React, { useEffect, useState } from 'react';
 import { IMyInvoice } from '../interface/my-invoice-interface';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
-const MyInvoices: React.FC<{ myInvoiceData: IMyInvoice[] }> = ({
-  myInvoiceData
-}) => {
+const MyInvoices: React.FC<{
+  myInvoiceData: IMyInvoice[];
+  modalSetState: IModalSetState;
+}> = ({ myInvoiceData, modalSetState }) => {
   const [id, setId] = useState('');
   const [myInvoiceDetail, setMyInvoiceDetail] = useState([]);
   // Define query parameters for API request
@@ -40,6 +42,7 @@ const MyInvoices: React.FC<{ myInvoiceData: IMyInvoice[] }> = ({
       handleCardClick={handleCardClick}
       productPageDetail={myInvoiceDetail}
       check={myInvoices}
+      modalSetState={modalSetState}
     />
   );
 };

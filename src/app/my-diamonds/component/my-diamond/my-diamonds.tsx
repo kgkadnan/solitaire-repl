@@ -10,7 +10,7 @@ import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-
 import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../../../../components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { CustomDialog } from '../../../../components/common/dialog';
+
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import { useDataTableStateManagement } from '../../../../components/common/data-table/hooks/data-table-state-management';
@@ -28,7 +28,8 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   check,
   setOffset,
   setLimit,
-  limit
+  limit,
+  modalSetState
 }) => {
   // Define the main MyDiamonds component
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
@@ -39,8 +40,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const { isError, errorText } = errorState;
   const { setIsError, setErrorText } = errorSetState;
 
-  const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
 
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, tableColumns } = dataTableState;
@@ -168,25 +168,9 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
     [data?.count]
   );
 
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
-
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
-
   return (
     <>
-      <CustomDialog
-        setIsOpen={setIsDialogOpen}
-        isOpens={isDialogOpen}
-        dialogContent={dialogContent}
-      />
+      
       <div className={`h-[70vh] overflow-auto  mb-[30px] ${styles.scrollBar}`}>
         <div>
           {!data?.length && <NoDataFound />}
@@ -210,6 +194,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
                 isError={isError}
                 errorText={errorText}
                 downloadExcelFunction={downloadExcelFunction}
+                modalSetState={modalSetState}
               />
             }
           />

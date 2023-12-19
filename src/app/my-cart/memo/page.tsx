@@ -20,7 +20,8 @@ const MemoOut = ({
   errorSetState,
   errorState,
   checkboxState,
-  checkboxSetState
+  checkboxSetState,
+  modalSetState
 }: any) => {
   // State variables
 
@@ -104,6 +105,7 @@ const MemoOut = ({
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
           errorSetState={errorSetState}
+          modalSetState={modalSetState}
         />
       ) : (
         <NoDataFound />
