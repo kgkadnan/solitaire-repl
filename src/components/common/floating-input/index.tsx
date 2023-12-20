@@ -1,5 +1,7 @@
-import React, { KeyboardEventHandler } from 'react';
+import React, { KeyboardEventHandler, useState } from 'react';
 import styles from './floating-input.module.scss';
+import EyeSlash from '@public/assets/icons/eye-off-outline.svg?url';
+import Eye from '@public/assets/icons/eye-outline.svg?url';
 
 interface FloatingLabelInputProps {
   label: string;
@@ -9,6 +11,7 @@ interface FloatingLabelInputProps {
   onKeyDown?: KeyboardEventHandler<HTMLInputElement> | undefined;
   value: string | number;
   errorText?: string;
+  showPassword?: boolean;
 }
 
 export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
@@ -18,12 +21,19 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   name,
   onKeyDown,
   value,
-  errorText
+  errorText,
+  showPassword = false
 }) => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(prev => !prev);
+  };
+
   return (
     <div className="relative z-0 w-[500px]">
       <input
-        type={type}
+        type={showPassword && isPasswordVisible ? 'text' : type}
         name={name}
         className={`${
           !errorText ? styles.input : styles.errorInput
@@ -41,7 +51,15 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
       >
         {label}
       </label>
-      <div style={{ color: '#983131' }} className=" flex text-left h-[5px]">
+      {showPassword && (
+        <div
+          className="absolute right-1 top-2 cursor-pointer"
+          onClick={togglePasswordVisibility}
+        >
+          {isPasswordVisible ? <EyeSlash /> : <Eye />}
+        </div>
+      )}
+      <div style={{ color: '#983131' }} className="flex text-left h-[5px]">
         {errorText}
       </div>
     </div>
