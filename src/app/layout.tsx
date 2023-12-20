@@ -25,7 +25,11 @@ export default function RootLayout({
 }) {
   const path = usePathname();
   const showHeader =
-    path === '/login' || path === '/forgot-password' ? false : true;
+    path === '/login' ||
+    path === '/forgot-password' ||
+    path === '/reset-password'
+      ? false
+      : true;
 
   return (
     <html lang="en">
