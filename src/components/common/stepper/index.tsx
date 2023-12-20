@@ -2,6 +2,7 @@
 import { ReactNode } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomDisplayButton } from '../buttons/display-button';
+import buttonStyles from '@components/common/footer/footer.module.scss';
 
 interface IStepper {
   label: string;
@@ -14,13 +15,17 @@ interface IStepperProps {
   setState: any;
   prevStep: () => void;
   nextStep: () => void;
+  prevLabel?:string;
+  nextLabel?:string
 }
 const Stepper: React.FC<IStepperProps> = ({
   stepper,
   state,
   setState,
   prevStep,
-  nextStep
+  nextStep,
+  prevLabel='Back',
+  nextLabel='Save and Next'
 }) => {
   return (
     <div className={styles.stepperContainer}>
@@ -44,20 +49,24 @@ const Stepper: React.FC<IStepperProps> = ({
       <div>{stepper[state].data}</div>
       <div className={styles.navigationButtons}>
       <CustomDisplayButton
-              displayButtonLabel={"Back"}
-              // displayButtonAllStyle={{
-              //   displayButtonStyle: `${styles.footerButton}`,
-              //   displayLabelStyle: styles.footerButtonLabel
-              // }}
+              displayButtonLabel={prevLabel}
+              displayButtonAllStyle={{
+                displayButtonStyle: `${buttonStyles.footerButton} ${styles.transparent}`,
+                displayLabelStyle: buttonStyles.footerButtonLabel
+              }}
               isDisable={state === 0}
               handleClick={prevStep}
             />
-        {/* <button onClick={prevStep} >
-          Previous
-        </button> */}
-        <button onClick={nextStep} disabled={state === stepper.length - 1}>
-          Next
-        </button>
+         <CustomDisplayButton
+              displayButtonLabel={nextLabel}
+              displayButtonAllStyle={{
+                displayButtonStyle: `${buttonStyles.footerButton} ${styles.filled}`,
+                displayLabelStyle: buttonStyles.footerButtonLabel
+              }}
+              isDisable={state === stepper.length - 1}
+              handleClick={nextStep}
+            />
+        
       </div>
     </div>
   );
