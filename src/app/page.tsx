@@ -26,12 +26,12 @@ export default function Home() {
     },
     {
       label: 'Personal Details',
-      data: <div>This is step 1</div>,
+      data: <div>This is step 2</div>,
       status: StepperStatus.NOT_STARTED
     },
     {
-      label: 'Personal Details',
-      data: <div>This is step 1</div>,
+      label: 'Personal Details5',
+      data: <div>This is step 3</div>,
       status: StepperStatus.NOT_STARTED
     }
   ];
