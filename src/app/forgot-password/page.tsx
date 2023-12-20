@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { ManageLocales } from '@/utils/translate';
 
 const ForgotPassword = () => {
   const [value, setValue] = useState('');
@@ -29,14 +30,14 @@ const ForgotPassword = () => {
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
-              label={'Forgot Password'}
+              label={ManageLocales('app.forgotpassword')}
               overriddenStyles={{
                 label: 'text-solitaireQuaternary text-[48px] font-semibold'
               }}
             />
             <div className="">
               <p className="text-solitaireTertiary">
-                Please enter your registered phone number to reset password
+                {ManageLocales('app.forgotpassword.message')}
               </p>
             </div>
           </div>
@@ -44,7 +45,7 @@ const ForgotPassword = () => {
           {/* Input field for email */}
           <div className="flex flex-col gap-[40px]">
             <FloatingLabelInput
-              label="Mobile Number"
+              label={ManageLocales('app.forgotpassword.mobileNumber')}
               onChange={handleMobileNumber}
               type="number"
               name="number"
@@ -64,7 +65,7 @@ const ForgotPassword = () => {
               {/* Button to trigger the login action */}
 
               <CustomDisplayButton
-                displayButtonLabel={'Send OTP'}
+                displayButtonLabel={ManageLocales('app.forgotpassword.sendOtp')}
                 displayButtonAllStyle={{
                   displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
                   displayLabelStyle:

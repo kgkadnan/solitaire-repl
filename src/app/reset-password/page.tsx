@@ -6,6 +6,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
+import { ManageLocales } from '@/utils/translate';
 
 const ResetPassword = () => {
   // State variables for email, password, and error handling
@@ -15,6 +16,7 @@ const ResetPassword = () => {
 
   const handleResetPassword = () => {
     if (resetPassword === resetConfirmPassword) {
+      console.log('Complete');
     } else {
       setComparePasswordError('Password and confirm password must match');
     }
@@ -45,7 +47,7 @@ const ResetPassword = () => {
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
-              label={'Reset Password'}
+              label={ManageLocales('app.resetPassword.resetPassword')}
               overriddenStyles={{
                 label: 'text-solitaireQuaternary text-[48px] font-semibold'
               }}
@@ -55,28 +57,32 @@ const ResetPassword = () => {
           {/* Input field for email */}
           <div className="flex flex-col gap-[40px]">
             <FloatingLabelInput
-              label="Password*"
+              label={ManageLocales('app.resetPassword.password')}
               onChange={handlePasswordInput}
               type="password"
               name="password"
               onKeyDown={handleKeyDown}
               value={resetPassword}
               errorText={comparePasswordError}
+              showPassword={true}
             />
             {/* Input field for password */}
             <FloatingLabelInput
-              label="Confirm Password*"
+              label={ManageLocales('app.resetPassword.confirmPassword')}
               onChange={handleConfirmPasswordInput}
               type="Password"
               name="Password"
               onKeyDown={handleKeyDown}
               value={resetConfirmPassword}
               errorText={comparePasswordError}
+              showPassword={true}
             />
 
             <div>
               <CustomDisplayButton
-                displayButtonLabel={'Reset Password'}
+                displayButtonLabel={ManageLocales(
+                  'app.resetPassword.resetPassword'
+                )}
                 displayButtonAllStyle={{
                   displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
                   displayLabelStyle:
