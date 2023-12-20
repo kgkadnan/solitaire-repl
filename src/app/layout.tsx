@@ -24,7 +24,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   const path = usePathname();
-  const showHeader = path === '/login' ? false : true;
+  const showHeader =
+    path === '/login' || path === '/forgot-password' ? false : true;
 
   return (
     <html lang="en">
