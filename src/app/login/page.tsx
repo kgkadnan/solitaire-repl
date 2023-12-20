@@ -9,6 +9,11 @@ import UserAuthenticationLayout from '@/components/common/user-authentication-la
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
+import {
+  EMAIL_REGEX,
+  PASSWORD_REGEX,
+  PHONE_REGEX
+} from '@/constants/validation-regex/regex';
 
 // Define the Login component
 const Login = () => {
@@ -58,13 +63,13 @@ const Login = () => {
   // Function to validate email format
   const isEmailValid = (email: string) => {
     // Regular expression for basic email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const emailRegex = EMAIL_REGEX;
     return emailRegex.test(email);
   };
 
   // Function to validate phone number format
   const isPhoneNumberValid = (number: string) => {
-    const phoneRegex = /^(?:\+\d{1,3})?\d{1,15}$/;
+    const phoneRegex = PHONE_REGEX;
     return phoneRegex.test(number);
   };
 
@@ -92,8 +97,7 @@ const Login = () => {
     setPassword(enteredPassword);
 
     // Check if the entered password is valid
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+{}\[\]:;<>,.?~\\-])[\w!@#$%^&*()_+{}\[\]:;<>,.?~\\-]{8,}$/;
+    const passwordRegex = PASSWORD_REGEX;
 
     if (passwordRegex.test(enteredPassword)) {
       setIsError(false);
