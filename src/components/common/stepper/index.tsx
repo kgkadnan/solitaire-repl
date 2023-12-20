@@ -5,47 +5,48 @@ import styles from './stepper.module.scss'; // Import your CSS module
 interface IStepper{
   label:string;
   data:ReactNode;
-  setState:any;
-  state:number;
-  prevStep:()=>void;
-  nextStep:()=>void;
   status:string;
-  customStyles:any,
 }
 interface IStepperProps{
-  stepper:IStepper[]
+  stepper:IStepper[];
+  state:number;
+  setState:any;
+  prevStep:()=>void;
+  nextStep:()=>void;
 }
-const Stepper:React.FC<IStepperProps> = ({stepper}) => {
+const Stepper:React.FC<IStepperProps> = ({stepper,state,setState,prevStep,nextStep}) => {
 
 
   return (
     <div className={styles.stepperContainer}>
-      {stepper.map((step:any, index:number) => (
-        <>
       <div className={styles.circularSteps}>
+      {stepper.map((step:any, index:number) => (
+      
+      <div>
         
           <div
             key={index}
-            className={`${styles.step} ${index === step.state ? styles.activeStep : ''}`}
-            onClick={() => step.setState(index)}
+            className={`${styles.step} ${index === state ? styles.activeStep : ''}`}
+            onClick={() => setState(index)}
           >
-            {index + 1}
+            {index + 1} 
           </div>
+          <div>{step.label}</div>
     
-      <div className={styles.stepContent}>
-        {step.currentStep}
-      </div>
-      <div className={styles.navigationButtons}>
-        <button onClick={step.prevStep} disabled={step.state === 0}>
+     </div>
+     
+   
+      
+          ))}
+             </div>
+           <div className={styles.navigationButtons}>
+        <button onClick={prevStep} disabled={state === 0}>
           Previous
         </button>
-        <button onClick={step.nextStep} disabled={step.state === stepper.length - 1}>
+        <button onClick={nextStep} disabled={state === stepper.length - 1}>
           Next
         </button>
       </div>
-      </div>
-      </>
-          ))}
     </div>
   );
 };

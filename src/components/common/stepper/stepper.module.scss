@@ -31,7 +31,8 @@
     left: -15px; /* Half of the step width */
     width: 15px;
     height: 2px;
-    background-color: #ccc;
+    background-color: red;
+    color:red
   }
   
   .step:first-child::before {
@@ -39,7 +40,7 @@
   }
   
   .activeStep {
-    background-color: #007bff;
+    background-color: hsl(var(--solitaire-quaternary));
     color: #fff;
   }
   

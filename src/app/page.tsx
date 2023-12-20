@@ -1,36 +1,40 @@
 'use client';
 
-import Stepper from "@/components/common/stepper";
-import { StepperStatus } from "@/constants/enums/stepper-status";
-import { useState } from "react";
-
-const [currentStep, setCurrentStep] = useState<number>(0);
-const nextStep = () => {
-  if (currentStep < steps.length - 1) {
-    setCurrentStep(currentStep + 1);
-  }
-};
-
-const prevStep = () => {
-  if (currentStep > 0) {
-    setCurrentStep(currentStep - 1);
-  }
-};
-const steps = [{
-  label:"Personal Details",
-  data:<div>This is step 1</div>,
-  setState:setCurrentStep,
-  state:currentStep,
-  prevStep:prevStep,
-  nextStep:nextStep,
-  status:StepperStatus.NOT_STARTED,
-  customStyles:{},
-}
-];
-
-
+import Stepper from '@/components/common/stepper';
+import { StepperStatus } from '@/constants/enums/stepper-status';
+import { useState } from 'react';
 
 export default function Home() {
+  const [currentStep, setCurrentStep] = useState<number>(0);
+
+  const nextStep = () => {
+    if (currentStep < steps.length - 1) {
+      setCurrentStep(currentStep + 1);
+    }
+  };
+
+  const prevStep = () => {
+    if (currentStep > 0) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+  const steps = [
+    {
+      label: 'Personal Details',
+      data: <div>This is step 1</div>,
+      status: StepperStatus.NOT_STARTED
+    },
+    {
+      label: 'Personal Details',
+      data: <div>This is step 1</div>,
+      status: StepperStatus.NOT_STARTED
+    },
+    {
+      label: 'Personal Details',
+      data: <div>This is step 1</div>,
+      status: StepperStatus.NOT_STARTED
+    }
+  ];
   // const logger = getLogger('home');
   // logger.error('a error message from _app');
   // logger.debug('a debug message from _app');
@@ -58,8 +62,13 @@ export default function Home() {
       >
         Building Digital Diamond Platform
       </h1>
-      <Stepper stepper={steps} />
-
+      <Stepper
+        stepper={steps}
+        state={currentStep}
+        setState={setCurrentStep}
+        prevStep={prevStep}
+        nextStep={nextStep}
+      />
     </>
   );
 }
