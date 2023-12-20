@@ -3,6 +3,19 @@
   border-bottom: 1px solid hsl(var(--solitaire-quaternary));
 }
 
+.errorInput {
+  color: hsl(var(--solitaire-tertiary));
+  border-bottom: 1px solid #983131;
+}
+
 .label {
   color: hsl(var(--solitaire-senary));
+  display: flex;
+  justify-content: left;
+}
+
+.errorLabel {
+  color: #983131;
+  display: flex;
+  justify-content: left;
 }
