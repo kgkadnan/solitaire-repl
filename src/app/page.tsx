@@ -4,8 +4,7 @@ import Stepper from "@/components/common/stepper";
 import { StepperStatus } from "@/constants/enums/stepper-status";
 import { useState } from "react";
 
-// import { getLogger } from 'logging/log-util';
-const [currentStep, setCurrentStep] = useState(0);
+const [currentStep, setCurrentStep] = useState<number>(0);
 const nextStep = () => {
   if (currentStep < steps.length - 1) {
     setCurrentStep(currentStep + 1);
@@ -25,9 +24,7 @@ const steps = [{
   prevStep:prevStep,
   nextStep:nextStep,
   status:StepperStatus.NOT_STARTED,
-  styles:{},
-
-
+  customStyles:{},
 }
 ];
 
@@ -61,7 +58,7 @@ export default function Home() {
       >
         Building Digital Diamond Platform
       </h1>
-      <Stepper steps={steps} />
+      <Stepper stepper={steps} />
 
     </>
   );
