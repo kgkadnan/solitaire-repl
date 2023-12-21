@@ -223,5 +223,26 @@
   "app.myDiamonds.myInvoice.myInvoiceDetail": "Invoices Details",
   "app.myDiamonds.MyInvoices.header.searchByInvoiceId": "Search by Invoice ID",
   "app.myDiamonds.PreviousConfirmations": "Previous Confirmations",
-  "app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails": "Previous Confirmation Details"
+  "app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails": "Previous Confirmation Details",
+
+  "app.login": "Login",
+  "app.login.welcomeMessage": "Welcome back! Please login to your account",
+  "app.login.forgotPassword": "Forgot Password?",
+  "app.login.newUser": "New User ?",
+  "app.login.register": " Register",
+  "app.login.emailAndNumber": "Email / Mobile Number",
+  "app.login.password": "Password",
+
+  "app.confirmationScreen.message": "Your account has been successfully created!",
+  "app.confirmationScreen.exploreWebsite": "Explore Website",
+  "app.confirmationScreen.finishKycProcess": "Finish KYC Process",
+
+  "app.forgotpassword": "Forgot Password",
+  "app.forgotpassword.message": "Please enter your registered phone number to reset password",
+  "app.forgotpassword.mobileNumber": "Mobile Number",
+  "app.forgotpassword.sendOtp": "Send OTP",
+
+  "app.resetPassword.resetPassword": "Reset Password",
+  "app.resetPassword.password": "Password*",
+  "app.resetPassword.confirmPassword": "Confirm Password*"
 }
