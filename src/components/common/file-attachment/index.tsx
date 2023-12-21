@@ -11,10 +11,9 @@ import greenCheckMarkOutline from '@public/assets/icons/green-checkmark-circle-o
 import CustomMenuBar from '../menu-bar';
 import eyeOutline from '@public/assets/icons/eye-outline.svg';
 import deleteSvg from '@public/assets/icons/delete.svg';
-import { useModalStateManagement } from '@/hooks/modal-state-management';
-import { CustomModal } from '../modal';
-import pdf from '@public/assets/icons/pdf.svg';
+import errorImage from '@public/assets/icons/error.svg';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
+import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -26,10 +25,6 @@ const ALLOWED_FILE_TYPES = {
 };
 
 // Function to convert bytes to megabytes
-function bytesToMB(bytes: number) {
-  return (bytes / (1024 * 1024)).toFixed(3); // Keep it rounded to 3 decimal places
-}
-
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 interface IFileAttachements {
@@ -42,6 +37,7 @@ interface IFileAttachements {
   setSelectedFile: any;
   selectedFile: any;
   MAX_FILE: number;
+  modalSetState: any;
 }
 
 const FileAttachements: React.FC<IFileAttachements> = ({
@@ -53,10 +49,9 @@ const FileAttachements: React.FC<IFileAttachements> = ({
   setIsFileUploaded,
   setSelectedFile,
   selectedFile,
-  MAX_FILE
+  MAX_FILE,
+  modalSetState
 }) => {
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { isModalOpen, modalContent } = modalState;
   const { setIsModalOpen, setModalContent } = modalSetState;
 
   const dropzoneStyle = {
@@ -88,76 +83,24 @@ const FileAttachements: React.FC<IFileAttachements> = ({
     maxFiles: MAX_FILE
   });
 
-  const handlePreview = () => {
-    setIsModalOpen(true);
-    setModalContent(
-      <>
-        {selectedFile.map((file: any) => {
-          const path = file.path;
-          const fileExtension = path.slice(
-            ((path.lastIndexOf('.') - 1) >>> 0) + 2
-          );
-          return (
-            <>
-              {file.type === 'application/pdf' ? (
-                <iframe
-                  src={file.preview}
-                  style={{ width: '100%', height: '500px' }}
-                  title="PDF Preview"
-                ></iframe>
-              ) : (
-                // fileExtension == ('docx' || 'doc') ? (
-                //   <FileViewer
-                //     fileType={fileExtension}
-                //     filePath={file.preview}
-                //     className={'h-[60vh]'}
-                //   />
-                // ) :
-                <Image
-                  key={file.name}
-                  src={file.preview}
-                  alt={file.name}
-                  width="0"
-                  height="0"
-                  sizes="100vw"
-                  className="w-full h-[60vh]"
-                />
-              )}
-              <div className="flex items-center gap-1">
-                {fileExtension == 'pdf' ? (
-                  <Image src={pdf} alt="pdf" width={24} height={24} />
-                ) : (
-                  ''
-                )}
-                <p>
-                  {file.name} | {`${bytesToMB(file.size)}MB`}
-                </p>
-              </div>
-            </>
-          );
-        })}
-      </>
-    );
-  };
-
-  const handleDelete = () => {
-    console.log('delete');
+  const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
+    const newFiles = [...selectedFile];
+    newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
+    setSelectedFile(newFiles);
+    setIsFileUploaded(false);
   };
 
   return (
     <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full ">
-      <CustomModal
-        isOpens={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        dialogContent={modalContent}
-        modalStyle={styles.modalStyle}
-      />
       <div {...getRootProps()} style={dropzoneStyle}>
-        <DocumentOutline
-          className={`${
-            fileRejections.length ? styles.errorStroke : styles.stroke
-          } w-[10%]`}
-        />
+        <div className="w-[10%] flex items-start">
+          {!fileRejections.length ? (
+            <DocumentOutline className={`${styles.stroke}`} />
+          ) : (
+            <Image src={errorImage} alt="errorImage" width={40} />
+          )}
+        </div>
+
         {selectedFile.length < MAX_FILE && (
           <input {...getInputProps()} name="attachment" />
         )}
@@ -199,75 +142,88 @@ const FileAttachements: React.FC<IFileAttachements> = ({
           {uploadProgress > 0 && (
             <Progress value={uploadProgress} className={'flex-none'} />
           )}
-          {(!isFileUploaded || !selectedFile.length) && (
-            <p
-              className={
-                fileRejections.length ? styles.errorFormat : styles.format
-              }
-            >
-              Format: pdf, doc, jpeg | Max File Size: 100 mb
-            </p>
-          )}
+          {(!isFileUploaded || !selectedFile.length) &&
+            (!fileRejections.length ? (
+              <p
+                className={
+                  fileRejections.length ? styles.errorFormat : styles.format
+                }
+              >
+                Format: pdf, doc, jpeg | Max File Size: 100 mb
+              </p>
+            ) : (
+              <p
+                className={styles.errorFormat}
+                key={fileRejections[0].errors[0].code}
+              >
+                {fileRejections[0].errors[0].code}
+              </p>
+            ))}
         </div>
         <div className="flex flex-col items-end w-[10%]">
           {uploadProgress > 0 ? (
             <p className="text-[14px]">{`${uploadProgress}%`}</p>
+          ) : !isFileUploaded ? (
+            <AttachOutline
+              className={
+                fileRejections.length ? styles.errorStroke : styles.stroke
+              }
+            />
           ) : (
-            !isFileUploaded && (
-              <AttachOutline
-                className={
-                  fileRejections.length ? styles.errorStroke : styles.stroke
-                }
-              />
-            )
+            <div onClick={e => e.stopPropagation()}>
+              {isFileUploaded && (
+                <CustomMenuBar
+                  menuTrigger={
+                    <Image
+                      src={ellipsisVertical}
+                      alt="ellipsisVertical"
+                      className="cursor-pointer "
+                      height={30}
+                      width={30}
+                    />
+                  }
+                  menuItem={[
+                    {
+                      label: 'Preview',
+                      id: '1',
+                      svg: (
+                        <Image
+                          src={eyeOutline}
+                          alt="eyeOutline"
+                          width={24}
+                          height={24}
+                        />
+                      ),
+                      onSelect: () =>
+                        handlePreview({
+                          setIsModalOpen,
+                          setModalContent,
+                          selectedFile
+                        })
+                    },
+                    {
+                      label: 'Delete',
+                      id: '2',
+                      svg: (
+                        <Image
+                          src={deleteSvg}
+                          alt="deleteSvg"
+                          width={24}
+                          height={24}
+                        />
+                      ),
+                      onSelect: () =>
+                        handleDelete({ selectedFile, setIsFileUploaded })
+                    }
+                  ]}
+                  menuTriggerStyle={styles.menuTriggerStyle}
+                  menuItemStyle={styles.menuItemStyle}
+                  menuContentStyle={styles.menuContentStyle}
+                />
+              )}
+            </div>
           )}
         </div>
-      </div>
-      <div>
-        {isFileUploaded && (
-          <CustomMenuBar
-            menuTrigger={
-              <Image
-                src={ellipsisVertical}
-                alt="ellipsisVertical"
-                className="cursor-pointer mr-[17px]"
-                height={30}
-                width={30}
-              />
-            }
-            menuItem={[
-              {
-                label: 'Preview',
-                id: '1',
-                svg: (
-                  <Image
-                    src={eyeOutline}
-                    alt="eyeOutline"
-                    width={24}
-                    height={24}
-                  />
-                ),
-                onSelect: handlePreview
-              },
-              {
-                label: 'Delete',
-                id: '2',
-                svg: (
-                  <Image
-                    src={deleteSvg}
-                    alt="deleteSvg"
-                    width={24}
-                    height={24}
-                  />
-                ),
-                onSelect: handleDelete
-              }
-            ]}
-            menuTriggerStyle={styles.menuTriggerStyle}
-            menuItemStyle={styles.menuItemStyle}
-            menuContentStyle={styles.menuContentStyle}
-          />
-        )}
       </div>
     </div>
   );

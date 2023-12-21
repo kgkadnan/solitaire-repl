@@ -7,6 +7,12 @@ import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload
 import greenCheckMarkOutline from '@public/assets/icons/green-checkmark-circle-outline.svg';
 import { Progress } from '@/components/ui/progress';
 import styles from './download-and-upload.module.scss';
+import CustomMenuBar from '../menu-bar';
+import eyeOutline from '@public/assets/icons/eye-outline.svg';
+import deleteSvg from '@public/assets/icons/delete.svg';
+import errorImage from '@public/assets/icons/error.svg';
+import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
+import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': [],
@@ -15,6 +21,10 @@ const ALLOWED_FILE_TYPES = {
 };
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
+function bytesToMB(bytes: number) {
+  return (bytes / (1024 * 1024)).toFixed(3); // Keep it rounded to 3 decimal places
+}
+
 export const DownloadAndUpload = ({
   uploadProgress,
   isFileUploaded,
@@ -22,8 +32,11 @@ export const DownloadAndUpload = ({
   setIsFileUploaded,
   setSelectedFile,
   selectedFile,
-  MAX_FILE
+  MAX_FILE,
+  modalSetState
 }: any) => {
+  const { setIsModalOpen, setModalContent } = modalSetState;
+
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
       acceptedFiles,
@@ -51,6 +64,13 @@ export const DownloadAndUpload = ({
     document.body.removeChild(link); // Remove the link from the document
   };
 
+  const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
+    const newFiles = [...selectedFile];
+    newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
+    setSelectedFile(newFiles);
+    setIsFileUploaded(false);
+  };
+
   return (
     <>
       <div
@@ -73,16 +93,17 @@ export const DownloadAndUpload = ({
 
       <div
         {...getRootProps()}
-        className="w-[45%] bg-solitaireSecondary h-[12vh] rounded-[10px] flex flex-col justify-evenly items-center p-3 cursor-pointer"
+        className="flex flex-col justify-evenly  h-[12vh] rounded-[10px]   bg-solitaireSecondary items-center p-3 cursor-pointer w-[45%]"
       >
         {selectedFile.length < MAX_FILE && (
           <input {...getInputProps()} name="attachment" />
         )}
-        <UploadOutline
-          className={`${
-            fileRejections.length ? styles.errorStroke : styles.stroke
-          }`}
-        />
+
+        {!fileRejections.length ? (
+          <UploadOutline className={`${styles.stroke}`} />
+        ) : (
+          <Image src={errorImage} alt="errorImage" width={30} />
+        )}
         <h1
           className={`${
             fileRejections.length ? styles.errorlabel : styles.label
@@ -90,8 +111,9 @@ export const DownloadAndUpload = ({
         >
           {ManageLocales('app.myProfile.kyc.upload')}
         </h1>
+
         {selectedFile.length > 0 && uploadProgress === 0 && isFileUploaded && (
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 justify-evenly w-full">
             {selectedFile.map((file: any) => (
               <div key={file.path} className="flex items-center gap-2">
                 <Image
@@ -103,6 +125,58 @@ export const DownloadAndUpload = ({
                 <p>{file.path}</p>
               </div>
             ))}
+            <div onClick={e => e.stopPropagation()}>
+              {isFileUploaded && (
+                <CustomMenuBar
+                  menuTrigger={
+                    <Image
+                      src={ellipsisVertical}
+                      alt="ellipsisVertical"
+                      className="cursor-pointer"
+                      height={20}
+                      width={20}
+                    />
+                  }
+                  menuItem={[
+                    {
+                      label: 'Preview',
+                      id: '1',
+                      svg: (
+                        <Image
+                          src={eyeOutline}
+                          alt="eyeOutline"
+                          width={24}
+                          height={24}
+                        />
+                      ),
+                      onSelect: () =>
+                        handlePreview({
+                          setIsModalOpen,
+                          setModalContent,
+                          selectedFile
+                        })
+                    },
+                    {
+                      label: 'Delete',
+                      id: '2',
+                      svg: (
+                        <Image
+                          src={deleteSvg}
+                          alt="deleteSvg"
+                          width={24}
+                          height={24}
+                        />
+                      ),
+                      onSelect: () =>
+                        handleDelete({ selectedFile, setIsFileUploaded })
+                    }
+                  ]}
+                  menuTriggerStyle={styles.menuTriggerStyle}
+                  menuItemStyle={styles.menuItemStyle}
+                  menuContentStyle={styles.menuContentStyle}
+                />
+              )}
+            </div>
           </div>
         )}
 
@@ -115,15 +189,23 @@ export const DownloadAndUpload = ({
           </div>
         )}
 
-        {(!isFileUploaded || !selectedFile.length) && (
-          <p
-            className={`${
-              fileRejections.length ? styles.errorFormat : styles.format
-            }`}
-          >
-            Upload the filled KYC form here | Max file size: 100 mb
-          </p>
-        )}
+        {(!isFileUploaded || !selectedFile.length) &&
+          (!fileRejections.length ? (
+            <p
+              className={
+                fileRejections.length ? styles.errorFormat : styles.format
+              }
+            >
+              Upload the filled KYC form here | Max file size: 100 mb
+            </p>
+          ) : (
+            <p
+              className={styles.errorFormat}
+              key={fileRejections[0].errors[0].code}
+            >
+              {fileRejections[0].errors[0].code}
+            </p>
+          ))}
       </div>
     </>
   );

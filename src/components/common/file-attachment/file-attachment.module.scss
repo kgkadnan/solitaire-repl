@@ -10,13 +10,13 @@
   font-weight: 400;
 }
 .errorFormat {
-  color: red;
+  color: #983131;
   font-size: 14px;
   font-weight: 400;
 }
 
 .errorlabel {
-  color: red;
+  color: #983131;
   font-size: 14px;
   text-transform: capitalize;
 }
@@ -25,8 +25,9 @@
   stroke: hsl(var(--solitaire-quaternary));
 }
 
-.errorStroke {
-  stroke: red;
+.errorFill {
+  fill: #983131;
+  width: 100%;
 }
 
 .menuTriggerStyle{

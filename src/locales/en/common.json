@@ -139,6 +139,7 @@
   "app.myProfile.kyc.attachments": "Attachments",
   "app.myProfile.kyc.companyDocuments": "Company Documents",
   "app.myProfile.kyc.companyOwnerDocuments": "Company Owner Documents",
+  "app.myProfile.kyc.photoId": "Photo ID of person/s authorised to collect goods",
   "app.myProfile.kyc.download": "Download",
   "app.myProfile.kyc.upload": "Upload",
 

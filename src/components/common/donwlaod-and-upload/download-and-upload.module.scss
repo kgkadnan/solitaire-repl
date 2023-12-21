@@ -1,23 +1,24 @@
 .label {
     color: hsl(var(--solitaire-tertiary));
-    font-size: 14px;
+    font-size: 16px;
     text-transform: capitalize;
   }
   
   .format {
-    color: hsl(var(--solitaire-senary));
+    color: hsl(var(--solitaire-tertiary));
     font-size: 14px;
     font-weight: 400;
+    font-weight: 100;
   }
   .errorFormat {
-    color: red;
+    color: #983131;
     font-size: 14px;
     font-weight: 400;
   }
   
   .errorlabel {
-    color: red;
-    font-size: 14px;
+    color: #983131;
+    font-size: 16px;
     text-transform: capitalize;
   }
   
@@ -26,7 +27,7 @@
   }
   
   .errorStroke {
-    stroke: red;
+    stroke: #983131;
   }
   
   .menuTriggerStyle{

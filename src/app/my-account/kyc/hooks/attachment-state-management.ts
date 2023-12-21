@@ -59,12 +59,30 @@ const useAttachmentsStateManagement = () => {
 
   // State for Photo ID of Person
   const [
-    uploadPhotoIdOfPersonCardProgress,
-    setUploadPhotoIdOfPersonCardProgress
+    uploadPhotoIdOfPerson1CardProgress,
+    setUploadPhotoIdOfPerson1CardProgress
   ] = useState(0);
-  const [isPhotoIdOfPersonFileUploaded, setIsPhotoIdOfPersonFileUploaded] =
+  const [isPhotoIdOfPerson1FileUploaded, setIsPhotoIdOfPerson1FileUploaded] =
     useState(false);
-  const [photoIdOfPersonSelectedFile, setPhotoIdOfPersonSelectedFile] =
+  const [photoIdOfPerson1SelectedFile, setPhotoIdOfPerson1SelectedFile] =
+    useState([]);
+
+  const [
+    uploadPhotoIdOfPerson2CardProgress,
+    setUploadPhotoIdOfPerson2CardProgress
+  ] = useState(0);
+  const [isPhotoIdOfPerson2FileUploaded, setIsPhotoIdOfPerson2FileUploaded] =
+    useState(false);
+  const [photoIdOfPerson2SelectedFile, setPhotoIdOfPerson2SelectedFile] =
+    useState([]);
+
+  const [
+    uploadPhotoIdOfPerson3CardProgress,
+    setUploadPhotoIdOfPerson3CardProgress
+  ] = useState(0);
+  const [isPhotoIdOfPerson3FileUploaded, setIsPhotoIdOfPerson3FileUploaded] =
+    useState(false);
+  const [photoIdOfPerson3SelectedFile, setPhotoIdOfPerson3SelectedFile] =
     useState([]);
 
   // Combined state object for all attachments
@@ -109,10 +127,20 @@ const useAttachmentsStateManagement = () => {
       isUploaded: isPassportFileUploaded,
       selectedFile: passportSelectedFile
     },
-    photoIdOfPerson: {
-      uploadProgress: uploadPhotoIdOfPersonCardProgress,
-      isUploaded: isPhotoIdOfPersonFileUploaded,
-      selectedFile: photoIdOfPersonSelectedFile
+    photoIdOfPerson1: {
+      uploadProgress: uploadPhotoIdOfPerson1CardProgress,
+      isUploaded: isPhotoIdOfPerson1FileUploaded,
+      selectedFile: photoIdOfPerson1SelectedFile
+    },
+    photoIdOfPerson2: {
+      uploadProgress: uploadPhotoIdOfPerson2CardProgress,
+      isUploaded: isPhotoIdOfPerson2FileUploaded,
+      selectedFile: photoIdOfPerson2SelectedFile
+    },
+    photoIdOfPerson3: {
+      uploadProgress: uploadPhotoIdOfPerson3CardProgress,
+      isUploaded: isPhotoIdOfPerson3FileUploaded,
+      selectedFile: photoIdOfPerson3SelectedFile
     }
   };
 
@@ -158,10 +186,20 @@ const useAttachmentsStateManagement = () => {
       setIsUploaded: setIsPassportFileUploaded,
       setSelectedFile: setPassportSelectedFile
     },
-    setPhotoIdOfPerson: {
-      setProgress: setUploadPhotoIdOfPersonCardProgress,
-      setIsUploaded: setIsPhotoIdOfPersonFileUploaded,
-      setSelectedFile: setPhotoIdOfPersonSelectedFile
+    setPhotoIdOfPerson1: {
+      setProgress: setUploadPhotoIdOfPerson1CardProgress,
+      setIsUploaded: setIsPhotoIdOfPerson1FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson1SelectedFile
+    },
+    setPhotoIdOfPerson2: {
+      setProgress: setUploadPhotoIdOfPerson2CardProgress,
+      setIsUploaded: setIsPhotoIdOfPerson2FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson2SelectedFile
+    },
+    setPhotoIdOfPerson3: {
+      setProgress: setUploadPhotoIdOfPerson3CardProgress,
+      setIsUploaded: setIsPhotoIdOfPerson3FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson3SelectedFile
     }
   };
 

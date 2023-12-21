@@ -7,6 +7,9 @@ import { ManageLocales } from '@/utils/translate';
 import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
 import useAttachmentsStateManagement from './hooks/attachment-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { CustomModal } from '@/components/common/modal';
+import styles from './attachment.module.scss';
 
 const Kyc = () => {
   const {
@@ -51,10 +54,20 @@ const Kyc = () => {
         isUploaded: isPassportFileUploaded,
         selectedFile: passportSelectedFile
       },
-      photoIdOfPerson: {
-        uploadProgress: uploadPhotoIdOfPersonCardProgress,
-        isUploaded: isPhotoIdOfPersonFileUploaded,
-        selectedFile: photoIdOfPersonSelectedFile
+      photoIdOfPerson1: {
+        uploadProgress: uploadPhotoIdOfPerson1CardProgress,
+        isUploaded: isPhotoIdOfPerson1FileUploaded,
+        selectedFile: photoIdOfPerson1SelectedFile
+      },
+      photoIdOfPerson2: {
+        uploadProgress: uploadPhotoIdOfPerson2CardProgress,
+        isUploaded: isPhotoIdOfPerson2FileUploaded,
+        selectedFile: photoIdOfPerson2SelectedFile
+      },
+      photoIdOfPerson3: {
+        uploadProgress: uploadPhotoIdOfPerson3CardProgress,
+        isUploaded: isPhotoIdOfPerson3FileUploaded,
+        selectedFile: photoIdOfPerson3SelectedFile
       }
       // Add more types as needed
     },
@@ -99,10 +112,20 @@ const Kyc = () => {
         setIsUploaded: setIsPassportFileUploaded,
         setSelectedFile: setPassportSelectedFile
       },
-      setPhotoIdOfPerson: {
-        setProgress: setUploadPhotoIdOfPersonCardProgress,
-        setIsUploaded: setIsPhotoIdOfPersonFileUploaded,
-        setSelectedFile: setPhotoIdOfPersonSelectedFile
+      setPhotoIdOfPerson1: {
+        setProgress: setUploadPhotoIdOfPerson1CardProgress,
+        setIsUploaded: setIsPhotoIdOfPerson1FileUploaded,
+        setSelectedFile: setPhotoIdOfPerson1SelectedFile
+      },
+      setPhotoIdOfPerson2: {
+        setProgress: setUploadPhotoIdOfPerson2CardProgress,
+        setIsUploaded: setIsPhotoIdOfPerson2FileUploaded,
+        setSelectedFile: setPhotoIdOfPerson2SelectedFile
+      },
+      setPhotoIdOfPerson3: {
+        setProgress: setUploadPhotoIdOfPerson3CardProgress,
+        setIsUploaded: setIsPhotoIdOfPerson3FileUploaded,
+        setSelectedFile: setPhotoIdOfPerson3SelectedFile
       }
       // Add more types as needed
     }
@@ -111,6 +134,10 @@ const Kyc = () => {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [uploadFilePreview, setUploadFilePreview] = useState([]);
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isModalOpen, modalContent } = modalState;
+  const { setIsModalOpen } = modalSetState;
 
   const companyDocument = [
     {
@@ -210,18 +237,45 @@ const Kyc = () => {
       setSelectedFile: setPassportSelectedFile,
       selectedFile: passportSelectedFile,
       MAX_FILE: 1
+    }
+  ];
+
+  const photoId = [
+    {
+      id: '1',
+      label: 'Photo ID 1',
+      isRequired: false,
+      uploadProgress: uploadPhotoIdOfPerson1CardProgress,
+      isFileUploaded: isPhotoIdOfPerson1FileUploaded,
+      setUploadProgress: setUploadPhotoIdOfPerson1CardProgress,
+      setIsFileUploaded: setIsPhotoIdOfPerson1FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson1SelectedFile,
+      selectedFile: photoIdOfPerson1SelectedFile,
+      MAX_FILE: 1
+    },
+    {
+      id: '2',
+      label: 'Photo ID 2',
+      isRequired: false,
+      uploadProgress: uploadPhotoIdOfPerson2CardProgress,
+      isFileUploaded: isPhotoIdOfPerson2FileUploaded,
+      setUploadProgress: setUploadPhotoIdOfPerson2CardProgress,
+      setIsFileUploaded: setIsPhotoIdOfPerson2FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson2SelectedFile,
+      selectedFile: photoIdOfPerson2SelectedFile,
+      MAX_FILE: 1
     },
     {
       id: '3',
-      label: 'Photo ID of person/s authorised to collect goods',
+      label: 'Photo ID 3',
       isRequired: false,
-      uploadProgress: uploadPhotoIdOfPersonCardProgress,
-      isFileUploaded: isPhotoIdOfPersonFileUploaded,
-      setUploadProgress: setUploadPhotoIdOfPersonCardProgress,
-      setIsFileUploaded: setIsPhotoIdOfPersonFileUploaded,
-      setSelectedFile: setPhotoIdOfPersonSelectedFile,
-      selectedFile: photoIdOfPersonSelectedFile,
-      MAX_FILE: 3
+      uploadProgress: uploadPhotoIdOfPerson3CardProgress,
+      isFileUploaded: isPhotoIdOfPerson3FileUploaded,
+      setUploadProgress: setUploadPhotoIdOfPerson3CardProgress,
+      setIsFileUploaded: setIsPhotoIdOfPerson3FileUploaded,
+      setSelectedFile: setPhotoIdOfPerson3SelectedFile,
+      selectedFile: photoIdOfPerson3SelectedFile,
+      MAX_FILE: 1
     }
   ];
 
@@ -229,6 +283,12 @@ const Kyc = () => {
 
   return (
     <div>
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
+      />
       <div className="w-full flex justify-between pb-5">
         <DownloadAndUpload
           uploadProgress={uploadProgress}
@@ -238,6 +298,7 @@ const Kyc = () => {
           setSelectedFile={setUploadFilePreview}
           selectedFile={uploadFilePreview}
           MAX_FILE={1}
+          modalSetState={modalSetState}
         />
       </div>
       <hr className="border-1 border-solitaireSenary" />
@@ -278,6 +339,7 @@ const Kyc = () => {
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
                     MAX_FILE={MAX_FILE}
+                    modalSetState={modalSetState}
                   />
                 );
               }
@@ -314,6 +376,42 @@ const Kyc = () => {
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
                     MAX_FILE={MAX_FILE}
+                    modalSetState={modalSetState}
+                  />
+                );
+              }
+            )}
+          </div>
+          <h1 className="text-solitaireTertiary my-3">
+            {ManageLocales('app.myProfile.kyc.photoId')}
+          </h1>
+          <div className="flex flex-col gap-[20px]">
+            {photoId.map(
+              ({
+                id,
+                label,
+                isRequired,
+                uploadProgress,
+                isFileUploaded,
+                setUploadProgress,
+                setIsFileUploaded,
+                setSelectedFile,
+                selectedFile,
+                MAX_FILE
+              }) => {
+                return (
+                  <FileAttachements
+                    key={id}
+                    lable={label}
+                    isRequired={isRequired}
+                    uploadProgress={uploadProgress}
+                    isFileUploaded={isFileUploaded}
+                    setUploadProgress={setUploadProgress}
+                    setIsFileUploaded={setIsFileUploaded}
+                    setSelectedFile={setSelectedFile}
+                    selectedFile={selectedFile}
+                    MAX_FILE={MAX_FILE}
+                    modalSetState={modalSetState}
                   />
                 );
               }

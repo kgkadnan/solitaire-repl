@@ -7,15 +7,11 @@ export const handleFileupload = async ({
   try {
     if (acceptedFiles.length) {
       setIsFileUploaded(false);
-      console.log('acceptedFiles', acceptedFiles);
-      setSelectedFile((prevFiles: any) => [
-        ...prevFiles,
-        ...acceptedFiles.map((file: any) =>
-          Object.assign(file, {
-            preview: URL.createObjectURL(file)
-          })
-        )
-      ]);
+
+      acceptedFiles.forEach((file: any) => {
+        setSelectedFile((prevState: any) => [...prevState, file]);
+      });
+
       const simulateUpload = async () => {
         return new Promise<void>(resolve => {
           setTimeout(() => {
@@ -24,7 +20,7 @@ export const handleFileupload = async ({
         });
       };
       setUploadProgress(0);
-      for (let i = 0; i <= 100; i += 10) {
+      for (let i = 0; i <= 100; i += 50) {
         setUploadProgress(i);
         await simulateUpload(); // Simulate a delay between progress updates
       }

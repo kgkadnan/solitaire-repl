@@ -11,7 +11,7 @@ interface IMenuItem {
   label: string;
   id: string;
   svg?: ReactNode;
-  onSelect?: () => void;
+  onSelect?: any;
 }
 
 interface ICustomMenuBar {
