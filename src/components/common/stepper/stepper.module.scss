@@ -8,12 +8,14 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  width: 300px;
 }
 
 .circularSteps {
   display: flex;
   position: relative;
   justify-content: space-between;
+  align-items: center;
 }
 
 .step {
@@ -48,7 +50,7 @@
   align-items:flex-end;
   display: flex;
   justify-content: space-between;
-  width: 350px;
+  width: 100%;
 }
 
 
@@ -75,4 +77,17 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+.stepLabel{
+  color: #fff;
+  padding-top: 10px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.stepLine {
+  height: 2px;
+  width: 30%; /* Adjust based on your layout */
+  background-color: #ccc;
+  margin: 10px 0; /* Adjust to position the line correctly */
 }
