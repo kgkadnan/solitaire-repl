@@ -28,10 +28,8 @@ const Stepper: React.FC<IStepperProps> = ({
   prevLabel = 'Back',
   nextLabel = 'Save and Next'
 }) => {
-
-  const [stepperData,setStepperData]=useState<IStepper[]>(stepper)
+  const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
   const footerButtonData = (state: number) => {
-  
     return [
       {
         id: 1,
@@ -57,7 +55,7 @@ const Stepper: React.FC<IStepperProps> = ({
       }
       return step;
     });
-  
+
     // Update the state with the new array
     setStepperData(updatedStepper);
   };
@@ -71,9 +69,13 @@ const Stepper: React.FC<IStepperProps> = ({
               <div
                 key={index}
                 className={`${styles.step} ${
-                  step.status === StepperStatus.COMPLETED ? styles.completedStep :
-                  step.status === StepperStatus.INPROGRESS ?  styles.activeStep :
-                  step.status === StepperStatus.REJECTED ? styles.rejectedStep :  ''
+                  step.status === StepperStatus.COMPLETED
+                    ? styles.completedStep
+                    : step.status === StepperStatus.INPROGRESS
+                    ? styles.activeStep
+                    : step.status === StepperStatus.REJECTED
+                    ? styles.rejectedStep
+                    : ''
                 }`}
                 onClick={() => handleStepperStep(index)}
               >
