@@ -16,6 +16,8 @@
     "no-undef": "off",
     "no-unsafe-optional-chaining": "off",
     "react-hooks/exhaustive-deps": "off",
+    "no-useless-escape": "off",
+
 
     // Avoiding any Type
     // "@typescript-eslint/no-explicit-any": ["error"],

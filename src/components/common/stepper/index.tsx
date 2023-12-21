@@ -1,9 +1,8 @@
 // components/Stepper.js
-import { ReactNode } from 'react';
+import { ReactNode, useState } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
-import { CustomDisplayButton } from '../buttons/display-button';
-import buttonStyles from '@components/common/footer/footer.module.scss';
 import { CustomFooter } from '../footer';
+import { StepperStatus } from '@/constants/enums/stepper-status';
 
 interface IStepper {
   label: string;
@@ -29,7 +28,10 @@ const Stepper: React.FC<IStepperProps> = ({
   prevLabel = 'Back',
   nextLabel = 'Save and Next'
 }) => {
+
+  const [stepperData,setStepperData]=useState<IStepper[]>(stepper)
   const footerButtonData = (state: number) => {
+  
     return [
       {
         id: 1,
@@ -47,27 +49,42 @@ const Stepper: React.FC<IStepperProps> = ({
       }
     ];
   };
+  const handleStepperStep = (activeStep: number) => {
+    setState(activeStep);
+    const updatedStepper = stepperData.map((step, index) => {
+      if (index === activeStep) {
+        return { ...step, status: StepperStatus.INPROGRESS };
+      }
+      return step;
+    });
+  
+    // Update the state with the new array
+    setStepperData(updatedStepper);
+  };
+
   return (
     <div className={styles.stepperContainer}>
       <div className={styles.circularSteps}>
-        {stepper.map((step: any, index: number) => (
+        {stepperData.map((step: any, index: number) => (
           <>
             <div className={styles.circularStepsContainer}>
               <div
                 key={index}
                 className={`${styles.step} ${
-                  index === state ? styles.activeStep : ''
+                  step.status === StepperStatus.COMPLETED ? styles.completedStep :
+                  step.status === StepperStatus.INPROGRESS ?  styles.activeStep :
+                  step.status === StepperStatus.REJECTED ? styles.rejectedStep :  ''
                 }`}
-                onClick={() => setState(index)}
+                onClick={() => handleStepperStep(index)}
               >
                 {index + 1}
               </div>
 
               <div className={styles.stepLabel}>{step.label}</div>
             </div>
-              {index < stepper.length - 1 && (
-                <div className={styles.stepLine}></div>
-              )}
+            {index < stepper.length - 1 && (
+              <div className={styles.stepLine}></div>
+            )}
           </>
         ))}
       </div>

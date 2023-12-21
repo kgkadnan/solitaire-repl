@@ -22,7 +22,7 @@ export default function Home() {
     {
       label: 'Personal Details',
       data: <div>This is step 1</div>,
-      status: StepperStatus.NOT_STARTED
+      status: StepperStatus.COMPLETED
     },
     {
       label: 'Personal Details',
@@ -34,7 +34,7 @@ export default function Home() {
     {
       label: 'Personal Details5',
       data: <div>This is step 3</div>,
-      status: StepperStatus.NOT_STARTED
+      status: StepperStatus.REJECTED
     },
     {
       label: 'Personal Details5',
