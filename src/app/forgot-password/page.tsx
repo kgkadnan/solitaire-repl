@@ -26,7 +26,15 @@ const ForgotPassword = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div className="flex flex-col gap-[20px] text-left mb-[40px]">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              marginBottom: '40px',
+              alignItems: 'center'
+            }}
+          >
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
