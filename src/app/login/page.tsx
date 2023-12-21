@@ -99,18 +99,9 @@ const Login = () => {
       }
     } else if (type === 'password') {
       setPassword(inputValue);
-
-      const passwordRegex = PASSWORD_REGEX;
-
-      if (passwordRegex.test(inputValue)) {
-        setIsError(false);
-        setErrorText('');
-        setPasswordErrorText('');
-      } else {
-        setPasswordErrorText(
-          'Password must exceed 8 characters and contain at least one uppercase letter, one lowercase letter, one numeral, and one special character'
-        );
-      }
+      setIsError(false);
+      setErrorText('');
+      setPasswordErrorText('');
     }
   };
 
@@ -119,7 +110,15 @@ const Login = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div className="flex flex-col gap-[20px] text-left mb-[40px]">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '20px',
+              marginBottom: '40px',
+              alignItems: 'center'
+            }}
+          >
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
