@@ -238,5 +238,7 @@
 
   "app.resetPassword.resetPassword": "Reset Password",
   "app.resetPassword.password": "Password*",
-  "app.resetPassword.confirmPassword": "Confirm Password*"
+  "app.resetPassword.confirmPassword": "Confirm Password*",
+
+  "app.companyDetails.registerCompanyName": "Registered Company Name*"
 }
