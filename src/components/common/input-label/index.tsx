@@ -18,14 +18,12 @@ export const CustomInputlabel: React.FC<InputLabelProps> = ({
   overriddenStyles
 }) => {
   return (
-    <>
-      <Label
-        data-testid="custom-label"
-        htmlFor={htmlfor}
-        className={`${styles.defaultLableStyle} ${overriddenStyles?.label} `}
-      >
-        {label}
-      </Label>
-    </>
+    <Label
+      data-testid="custom-label"
+      htmlFor={htmlfor}
+      className={`${styles.defaultLableStyle} ${overriddenStyles?.label} `}
+    >
+      {label}
+    </Label>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import { useDropzone } from 'react-dropzone';
 import DocumentOutline from '@public/assets/icons/document-outline.svg?url';
 import AttachOutline from '@public/assets/icons/attach-outline.svg?url';
@@ -8,104 +8,198 @@ import { CustomInputlabel } from '../input-label';
 import styles from './file-attachment.module.scss';
 import { Progress } from '@components/ui/progress';
 import greenCheckMarkOutline from '@public/assets/icons/green-checkmark-circle-outline.svg';
+import CustomMenuBar from '../menu-bar';
+import eyeOutline from '@public/assets/icons/eye-outline.svg';
+import deleteSvg from '@public/assets/icons/delete.svg';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { CustomModal } from '../modal';
+import pdf from '@public/assets/icons/pdf.svg';
+import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 
 const ALLOWED_FILE_TYPES = {
-  'application/msword': [],
+  'application/msword': ['.doc'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
+    '.docx'
+  ],
   'image/jpeg': [],
   'application/pdf': []
 };
 
+// Function to convert bytes to megabytes
+function bytesToMB(bytes: number) {
+  return (bytes / (1024 * 1024)).toFixed(3); // Keep it rounded to 3 decimal places
+}
+
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-const MAX_FILE = 1;
 
 interface IFileAttachements {
   lable: string;
+  isRequired: boolean;
+  uploadProgress: any;
+  isFileUploaded: any;
+  setUploadProgress: any;
+  setIsFileUploaded: any;
+  setSelectedFile: any;
+  selectedFile: any;
+  MAX_FILE: number;
 }
 
-const FileAttachements: React.FC<IFileAttachements> = ({ lable }) => {
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [fileUploaded, setFileUploaded] = useState(false); // New state variable
+const FileAttachements: React.FC<IFileAttachements> = ({
+  lable,
+  isRequired,
+  uploadProgress,
+  isFileUploaded,
+  setUploadProgress,
+  setIsFileUploaded,
+  setSelectedFile,
+  selectedFile,
+  MAX_FILE
+}) => {
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isModalOpen, modalContent } = modalState;
+  const { setIsModalOpen, setModalContent } = modalSetState;
 
   const dropzoneStyle = {
     borderRadius: '10px',
-    padding: '20px',
+    padding: '0px 20px',
     textAlign: 'center',
     height: '8vh',
-    width: '80%',
+    width: '100%',
     cursor: 'pointer',
+    backgroundColor: 'hsl(var(--solitaire-secondary))',
     display: 'flex',
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    alignItems: 'center'
   };
 
-  const onDrop = useCallback(async (acceptedFiles: any) => {
-    try {
-      if (acceptedFiles.length) {
-        setFileUploaded(false);
-        const simulateUpload = async () => {
-          return new Promise<void>(resolve => {
-            setTimeout(() => {
-              resolve();
-            }, 1000); // Simulate a 1-second delay
-          });
-        };
-        setUploadProgress(0);
-        for (let i = 0; i <= 100; i += 10) {
-          setUploadProgress(i);
-          await simulateUpload(); // Simulate a delay between progress updates
-        }
-        setUploadProgress(0);
-        setFileUploaded(true);
-      }
-    } catch (error) {
-      // Log an error message if the upload fails
-      console.error('File upload failed:', error);
-    }
-  }, []);
-
-  const { acceptedFiles, fileRejections, getRootProps, getInputProps } =
-    useDropzone({
-      onclick,
-      onchange,
-      onDrop,
-      accept: ALLOWED_FILE_TYPES,
-      maxSize: MAX_FILE_SIZE,
-      maxFiles: MAX_FILE
+  const onDrop = (acceptedFiles: any) => {
+    handleFileupload({
+      acceptedFiles,
+      setUploadProgress,
+      setIsFileUploaded,
+      setSelectedFile
     });
+  };
+
+  const { fileRejections, getRootProps, getInputProps } = useDropzone({
+    onDrop,
+    accept: ALLOWED_FILE_TYPES,
+    maxSize: MAX_FILE_SIZE,
+    maxFiles: MAX_FILE
+  });
+
+  const handlePreview = () => {
+    setIsModalOpen(true);
+    setModalContent(
+      <>
+        {selectedFile.map((file: any) => {
+          const path = file.path;
+          const fileExtension = path.slice(
+            ((path.lastIndexOf('.') - 1) >>> 0) + 2
+          );
+          return (
+            <>
+              {file.type === 'application/pdf' ? (
+                <iframe
+                  src={file.preview}
+                  style={{ width: '100%', height: '500px' }}
+                  title="PDF Preview"
+                ></iframe>
+              ) : (
+                // fileExtension == ('docx' || 'doc') ? (
+                //   <FileViewer
+                //     fileType={fileExtension}
+                //     filePath={file.preview}
+                //     className={'h-[60vh]'}
+                //   />
+                // ) :
+                <Image
+                  key={file.name}
+                  src={file.preview}
+                  alt={file.name}
+                  width="0"
+                  height="0"
+                  sizes="100vw"
+                  className="w-full h-[60vh]"
+                />
+              )}
+              <div className="flex items-center gap-1">
+                {fileExtension == 'pdf' ? (
+                  <Image src={pdf} alt="pdf" width={24} height={24} />
+                ) : (
+                  ''
+                )}
+                <p>
+                  {file.name} | {`${bytesToMB(file.size)}MB`}
+                </p>
+              </div>
+            </>
+          );
+        })}
+      </>
+    );
+  };
+
+  const handleDelete = () => {
+    console.log('delete');
+  };
 
   return (
-    <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full justify-between">
-      <DocumentOutline
-        className={fileRejections.length ? styles.errorStroke : styles.stroke}
+    <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full ">
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
       />
       <div {...getRootProps()} style={dropzoneStyle}>
-        <input {...getInputProps()} name="attachment" />
+        <DocumentOutline
+          className={`${
+            fileRejections.length ? styles.errorStroke : styles.stroke
+          } w-[10%]`}
+        />
+        {selectedFile.length < MAX_FILE && (
+          <input {...getInputProps()} name="attachment" />
+        )}
+        <div className=" flex flex-col w-[80%] text-left gap-1">
+          <div className="flex ">
+            <CustomInputlabel
+              label={lable}
+              htmlfor="attachment"
+              overriddenStyles={{
+                label: fileRejections.length ? styles.errorlabel : styles.label
+              }}
+            />
 
-        <div className=" flex flex-col w-[100%] text-left gap-[3px]">
-          <CustomInputlabel
-            label={lable}
-            htmlfor="attachment"
-            overriddenStyles={{
-              label: fileRejections.length ? styles.errorlabel : styles.label
-            }}
-          />
-          {acceptedFiles.length > 0 &&
+            <p
+              className={
+                fileRejections.length ? styles.errorlabel : styles.label
+              }
+            >
+              {isRequired && '*'}
+            </p>
+          </div>
+          {selectedFile.length > 0 &&
             uploadProgress === 0 &&
-            fileUploaded &&
-            acceptedFiles.map((file: any) => (
-              <div key={file.path} className="flex items-center gap-2">
-                <Image
-                  src={greenCheckMarkOutline}
-                  alt="greenCheckMarkOutline"
-                  height={18}
-                  width={18}
-                />
-                <p>{file.path}</p>
+            isFileUploaded && (
+              <div className="flex items-center gap-2">
+                {selectedFile.map((file: any) => (
+                  <div key={file.path} className="flex items-center gap-2">
+                    <Image
+                      src={greenCheckMarkOutline}
+                      alt="greenCheckMarkOutline"
+                      height={18}
+                      width={18}
+                    />
+                    <p>{file.path}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            )}
           {uploadProgress > 0 && (
             <Progress value={uploadProgress} className={'flex-none'} />
           )}
-          {!fileUploaded && (
+          {(!isFileUploaded || !selectedFile.length) && (
             <p
               className={
                 fileRejections.length ? styles.errorFormat : styles.format
@@ -115,26 +209,63 @@ const FileAttachements: React.FC<IFileAttachements> = ({ lable }) => {
             </p>
           )}
         </div>
+        <div className="flex flex-col items-end w-[10%]">
+          {uploadProgress > 0 ? (
+            <p className="text-[14px]">{`${uploadProgress}%`}</p>
+          ) : (
+            !isFileUploaded && (
+              <AttachOutline
+                className={
+                  fileRejections.length ? styles.errorStroke : styles.stroke
+                }
+              />
+            )
+          )}
+        </div>
       </div>
-      <div className="flex flex-col justify-center">
-        {uploadProgress > 0 ? (
-          <p className="text-[14px]">{`${uploadProgress}%`}</p>
-        ) : fileUploaded ? (
-          <Image
-            src={ellipsisVertical}
-            alt="ellipsisVertical"
-            className="cursor-pointer"
-            height={30}
-            width={30}
-            onClick={() => {
-              console.log('hello');
-            }}
-          />
-        ) : (
-          <AttachOutline
-            className={
-              fileRejections.length ? styles.errorStroke : styles.stroke
+      <div>
+        {isFileUploaded && (
+          <CustomMenuBar
+            menuTrigger={
+              <Image
+                src={ellipsisVertical}
+                alt="ellipsisVertical"
+                className="cursor-pointer mr-[17px]"
+                height={30}
+                width={30}
+              />
             }
+            menuItem={[
+              {
+                label: 'Preview',
+                id: '1',
+                svg: (
+                  <Image
+                    src={eyeOutline}
+                    alt="eyeOutline"
+                    width={24}
+                    height={24}
+                  />
+                ),
+                onSelect: handlePreview
+              },
+              {
+                label: 'Delete',
+                id: '2',
+                svg: (
+                  <Image
+                    src={deleteSvg}
+                    alt="deleteSvg"
+                    width={24}
+                    height={24}
+                  />
+                ),
+                onSelect: handleDelete
+              }
+            ]}
+            menuTriggerStyle={styles.menuTriggerStyle}
+            menuItemStyle={styles.menuItemStyle}
+            menuContentStyle={styles.menuContentStyle}
           />
         )}
       </div>

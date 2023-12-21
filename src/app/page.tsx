@@ -1,7 +1,5 @@
 'use client';
 
-import FileAttachements from '@/components/common/file-attachment';
-
 // import { getLogger } from 'logging/log-util';
 
 export default function Home() {
@@ -32,7 +30,6 @@ export default function Home() {
       >
         Building Digital Diamond Platform
       </h1>
-      <FileAttachements lable="Pan Card" />
     </>
   );
 }
