@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDropzone } from 'react-dropzone';
 import DocumentOutline from '@public/assets/icons/document-outline.svg?url';
 import AttachOutline from '@public/assets/icons/attach-outline.svg?url';
-import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
+import EllipsisVertical from '@public/assets/icons/ellipsis-vertical.svg?url';
 import Image from 'next/image';
 import { CustomInputlabel } from '../input-label';
 import styles from './file-attachment.module.scss';
@@ -38,6 +38,8 @@ interface IFileAttachements {
   selectedFile: any;
   MAX_FILE: number;
   modalSetState: any;
+  setError?: any;
+  error?: string;
 }
 
 const FileAttachements: React.FC<IFileAttachements> = ({
@@ -50,6 +52,8 @@ const FileAttachements: React.FC<IFileAttachements> = ({
   setSelectedFile,
   selectedFile,
   MAX_FILE,
+  setError,
+  error,
   modalSetState
 }) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
@@ -83,6 +87,26 @@ const FileAttachements: React.FC<IFileAttachements> = ({
     maxFiles: MAX_FILE
   });
 
+  useEffect(() => {
+    if (fileRejections?.length) {
+      setError(fileRejections[0].errors[0].code);
+    }
+  }, [fileRejections]);
+
+  const handleValidation = () => {
+    // Check if selectedFile is empty for required fields
+    if (isRequired && selectedFile.length === 0) {
+      setError('File is required');
+    } else {
+      setError(null); // Clear error if selectedFile is not empty or not required
+    }
+
+    // Check for file rejections
+    if (fileRejections?.length) {
+      setError(fileRejections[0].errors[0].code);
+    }
+  };
+
   const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
     const newFiles = [...selectedFile];
     newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
@@ -94,7 +118,7 @@ const FileAttachements: React.FC<IFileAttachements> = ({
     <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full ">
       <div {...getRootProps()} style={dropzoneStyle}>
         <div className="w-[10%] flex items-start">
-          {!fileRejections.length ? (
+          {!error?.length ? (
             <DocumentOutline className={`${styles.stroke}`} />
           ) : (
             <Image src={errorImage} alt="errorImage" width={40} />
@@ -110,15 +134,11 @@ const FileAttachements: React.FC<IFileAttachements> = ({
               label={lable}
               htmlfor="attachment"
               overriddenStyles={{
-                label: fileRejections.length ? styles.errorlabel : styles.label
+                label: error?.length ? styles.errorlabel : styles.label
               }}
             />
 
-            <p
-              className={
-                fileRejections.length ? styles.errorlabel : styles.label
-              }
-            >
+            <p className={error?.length ? styles.errorlabel : styles.label}>
               {isRequired && '*'}
             </p>
           </div>
@@ -143,21 +163,12 @@ const FileAttachements: React.FC<IFileAttachements> = ({
             <Progress value={uploadProgress} className={'flex-none'} />
           )}
           {(!isFileUploaded || !selectedFile.length) &&
-            (!fileRejections.length ? (
-              <p
-                className={
-                  fileRejections.length ? styles.errorFormat : styles.format
-                }
-              >
+            (!error?.length ? (
+              <p className={error?.length ? styles.errorFormat : styles.format}>
                 Format: pdf, doc, jpeg | Max File Size: 100 mb
               </p>
             ) : (
-              <p
-                className={styles.errorFormat}
-                key={fileRejections[0].errors[0].code}
-              >
-                {fileRejections[0].errors[0].code}
-              </p>
+              <p className={styles.errorFormat}>{error}</p>
             ))}
         </div>
         <div className="flex flex-col items-end w-[10%]">
@@ -165,23 +176,13 @@ const FileAttachements: React.FC<IFileAttachements> = ({
             <p className="text-[14px]">{`${uploadProgress}%`}</p>
           ) : !isFileUploaded ? (
             <AttachOutline
-              className={
-                fileRejections.length ? styles.errorStroke : styles.stroke
-              }
+              className={error?.length ? styles.errorStroke : styles.stroke}
             />
           ) : (
             <div onClick={e => e.stopPropagation()}>
               {isFileUploaded && (
                 <CustomMenuBar
-                  menuTrigger={
-                    <Image
-                      src={ellipsisVertical}
-                      alt="ellipsisVertical"
-                      className="cursor-pointer "
-                      height={30}
-                      width={30}
-                    />
-                  }
+                  menuTrigger={<EllipsisVertical />}
                   menuItem={[
                     {
                       label: 'Preview',

@@ -15,15 +15,14 @@ import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 
 const ALLOWED_FILE_TYPES = {
-  'application/msword': [],
+  'application/msword': ['.doc'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
+    '.docx'
+  ],
   'image/jpeg': [],
   'application/pdf': []
 };
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-
-function bytesToMB(bytes: number) {
-  return (bytes / (1024 * 1024)).toFixed(3); // Keep it rounded to 3 decimal places
-}
 
 export const DownloadAndUpload = ({
   uploadProgress,

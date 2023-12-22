@@ -17,57 +17,68 @@ const Kyc = () => {
       pan: {
         uploadProgress: uploadPanCardProgress,
         isUploaded: isPanFileUploaded,
-        selectedFile: panSelectedFile
+        selectedFile: panSelectedFile,
+        error: panError
       },
       business: {
         uploadProgress: uploadBusinessCardProgress,
         isUploaded: isBusinessFileUploaded,
-        selectedFile: businessSelectedFile
+        selectedFile: businessSelectedFile,
+        error: businessError
       },
       gstCert: {
         uploadProgress: uploadGstCertCardProgress,
         isUploaded: isGstCertFileUploaded,
-        selectedFile: gstCertSelectedFile
+        selectedFile: gstCertSelectedFile,
+        error: gstCertError
       },
       incorporationCert: {
         uploadProgress: uploadIncorporationCertCardProgress,
         isUploaded: isIncorporationCertFileUploaded,
-        selectedFile: incorporationCertSelectedFile
+        selectedFile: incorporationCertSelectedFile,
+        error: incorporationCertError
       },
       cancelChaque: {
         uploadProgress: uploadCancelChaqueCardProgress,
         isUploaded: isCancelChaqueFileUploaded,
-        selectedFile: cancelChaqueSelectedFile
+        selectedFile: cancelChaqueSelectedFile,
+        error: cancelChaqueError
       },
       govermentRegCert: {
         uploadProgress: uploadGovermentRegCertCardProgress,
         isUploaded: isGovermentRegCertFileUploaded,
-        selectedFile: govermentRegCertSelectedFile
+        selectedFile: govermentRegCertSelectedFile,
+        error: govermentRegCertError
       },
       panOrAdhaar: {
         uploadProgress: uploadPanOrAdhaarCardProgress,
         isUploaded: isPanOrAdhaarFileUploaded,
-        selectedFile: panOrAdhaarSelectedFile
+        selectedFile: panOrAdhaarSelectedFile,
+        error: panOrAdhaarError
       },
       passport: {
         uploadProgress: uploadPassportCardProgress,
         isUploaded: isPassportFileUploaded,
-        selectedFile: passportSelectedFile
+        selectedFile: passportSelectedFile,
+        error: passportError
       },
       photoIdOfPerson1: {
         uploadProgress: uploadPhotoIdOfPerson1CardProgress,
         isUploaded: isPhotoIdOfPerson1FileUploaded,
-        selectedFile: photoIdOfPerson1SelectedFile
+        selectedFile: photoIdOfPerson1SelectedFile,
+        error: photoIdOfPerson1Error
       },
       photoIdOfPerson2: {
         uploadProgress: uploadPhotoIdOfPerson2CardProgress,
         isUploaded: isPhotoIdOfPerson2FileUploaded,
-        selectedFile: photoIdOfPerson2SelectedFile
+        selectedFile: photoIdOfPerson2SelectedFile,
+        error: photoIdOfPerson2Error
       },
       photoIdOfPerson3: {
         uploadProgress: uploadPhotoIdOfPerson3CardProgress,
         isUploaded: isPhotoIdOfPerson3FileUploaded,
-        selectedFile: photoIdOfPerson3SelectedFile
+        selectedFile: photoIdOfPerson3SelectedFile,
+        error: photoIdOfPerson3Error
       }
       // Add more types as needed
     },
@@ -75,57 +86,68 @@ const Kyc = () => {
       setPan: {
         setProgress: setUploadPanCardProgress,
         setIsUploaded: setIsPanFileUploaded,
-        setSelectedFile: setPanSelectedFile
+        setSelectedFile: setPanSelectedFile,
+        setError: setPanError
       },
       setBusiness: {
         setProgress: setUploadBusinessCardProgress,
         setIsUploaded: setIsBusinessFileUploaded,
-        setSelectedFile: setBusinessSelectedFile
+        setSelectedFile: setBusinessSelectedFile,
+        setError: setBusinessError
       },
       setGstCert: {
         setProgress: setUploadGstCertCardProgress,
         setIsUploaded: setIsGstCertFileUploaded,
-        setSelectedFile: setGstCertSelectedFile
+        setSelectedFile: setGstCertSelectedFile,
+        setError: setGstCertError
       },
       setIncorporationCert: {
         setProgress: setUploadIncorporationCertCardProgress,
         setIsUploaded: setIsIncorporationCertFileUploaded,
-        setSelectedFile: setIncorporationCertSelectedFile
+        setSelectedFile: setIncorporationCertSelectedFile,
+        setError: setIncorporationCertError
       },
       setCancelChaque: {
         setProgress: setUploadCancelChaqueCardProgress,
         setIsUploaded: setIsCancelChaqueFileUploaded,
-        setSelectedFile: setCancelChaqueSelectedFile
+        setSelectedFile: setCancelChaqueSelectedFile,
+        setError: setCancelChaqueError
       },
       setGovermentRegCert: {
         setProgress: setUploadGovermentRegCertCardProgress,
         setIsUploaded: setIsGovermentRegCertFileUploaded,
-        setSelectedFile: setGovermentRegCertSelectedFile
+        setSelectedFile: setGovermentRegCertSelectedFile,
+        setError: setGovermentRegCertError
       },
       setPanOrAdhaar: {
         setProgress: setUploadPanOrAdhaarCardProgress,
         setIsUploaded: setIsPanOrAdhaarFileUploaded,
-        setSelectedFile: setPanOrAdhaarSelectedFile
+        setSelectedFile: setPanOrAdhaarSelectedFile,
+        setError: setPanOrAdhaarError
       },
       setPassport: {
         setProgress: setUploadPassportCardProgress,
         setIsUploaded: setIsPassportFileUploaded,
-        setSelectedFile: setPassportSelectedFile
+        setSelectedFile: setPassportSelectedFile,
+        setError: setPassportError
       },
       setPhotoIdOfPerson1: {
         setProgress: setUploadPhotoIdOfPerson1CardProgress,
         setIsUploaded: setIsPhotoIdOfPerson1FileUploaded,
-        setSelectedFile: setPhotoIdOfPerson1SelectedFile
+        setSelectedFile: setPhotoIdOfPerson1SelectedFile,
+        setError: setPhotoIdOfPerson1Error
       },
       setPhotoIdOfPerson2: {
         setProgress: setUploadPhotoIdOfPerson2CardProgress,
         setIsUploaded: setIsPhotoIdOfPerson2FileUploaded,
-        setSelectedFile: setPhotoIdOfPerson2SelectedFile
+        setSelectedFile: setPhotoIdOfPerson2SelectedFile,
+        setError: setPhotoIdOfPerson2Error
       },
       setPhotoIdOfPerson3: {
         setProgress: setUploadPhotoIdOfPerson3CardProgress,
         setIsUploaded: setIsPhotoIdOfPerson3FileUploaded,
-        setSelectedFile: setPhotoIdOfPerson3SelectedFile
+        setSelectedFile: setPhotoIdOfPerson3SelectedFile,
+        setError: setPhotoIdOfPerson3Error
       }
       // Add more types as needed
     }
@@ -150,6 +172,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPanFileUploaded,
       setSelectedFile: setPanSelectedFile,
       selectedFile: panSelectedFile,
+      error: panError,
+      setError: setPanError,
       MAX_FILE: 1
     },
     {
@@ -162,6 +186,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsGstCertFileUploaded,
       setSelectedFile: setGstCertSelectedFile,
       selectedFile: gstCertSelectedFile,
+      error: gstCertError,
+      setError: setGstCertError,
       MAX_FILE: 1
     },
     {
@@ -174,6 +200,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsIncorporationCertFileUploaded,
       setSelectedFile: setIncorporationCertSelectedFile,
       selectedFile: incorporationCertSelectedFile,
+      error: incorporationCertError,
+      setError: setIncorporationCertError,
       MAX_FILE: 1
     },
     {
@@ -186,6 +214,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsCancelChaqueFileUploaded,
       setSelectedFile: setCancelChaqueSelectedFile,
       selectedFile: cancelChaqueSelectedFile,
+      error: cancelChaqueError,
+      setError: setCancelChaqueError,
       MAX_FILE: 1
     },
     {
@@ -198,18 +228,22 @@ const Kyc = () => {
       setIsFileUploaded: setIsGovermentRegCertFileUploaded,
       setSelectedFile: setGovermentRegCertSelectedFile,
       selectedFile: govermentRegCertSelectedFile,
+      error: govermentRegCertError,
+      setError: setGovermentRegCertError,
       MAX_FILE: 1
     },
     {
       id: '6',
       label: 'Business Card',
-      isRequired: true,
+      isRequired: false,
       uploadProgress: uploadBusinessCardProgress,
       isFileUploaded: isBusinessFileUploaded,
       setUploadProgress: setUploadBusinessCardProgress,
       setIsFileUploaded: setIsBusinessFileUploaded,
       setSelectedFile: setBusinessSelectedFile,
       selectedFile: businessSelectedFile,
+      error: businessError,
+      setError: setBusinessError,
       MAX_FILE: 1
     }
   ];
@@ -224,6 +258,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPanOrAdhaarFileUploaded,
       setSelectedFile: setPanOrAdhaarSelectedFile,
       selectedFile: panOrAdhaarSelectedFile,
+      error: panOrAdhaarError,
+      setError: setPanOrAdhaarError,
       MAX_FILE: 1
     },
     {
@@ -236,6 +272,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPassportFileUploaded,
       setSelectedFile: setPassportSelectedFile,
       selectedFile: passportSelectedFile,
+      error: passportError,
+      setError: setPassportError,
       MAX_FILE: 1
     }
   ];
@@ -251,6 +289,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPhotoIdOfPerson1FileUploaded,
       setSelectedFile: setPhotoIdOfPerson1SelectedFile,
       selectedFile: photoIdOfPerson1SelectedFile,
+      error: photoIdOfPerson1Error,
+      setError: setPhotoIdOfPerson1Error,
       MAX_FILE: 1
     },
     {
@@ -263,6 +303,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPhotoIdOfPerson2FileUploaded,
       setSelectedFile: setPhotoIdOfPerson2SelectedFile,
       selectedFile: photoIdOfPerson2SelectedFile,
+      error: photoIdOfPerson2Error,
+      setError: setPhotoIdOfPerson2Error,
       MAX_FILE: 1
     },
     {
@@ -275,6 +317,8 @@ const Kyc = () => {
       setIsFileUploaded: setIsPhotoIdOfPerson3FileUploaded,
       setSelectedFile: setPhotoIdOfPerson3SelectedFile,
       selectedFile: photoIdOfPerson3SelectedFile,
+      error: photoIdOfPerson3Error,
+      setError: setPhotoIdOfPerson3Error,
       MAX_FILE: 1
     }
   ];
@@ -325,6 +369,8 @@ const Kyc = () => {
                 setIsFileUploaded,
                 setSelectedFile,
                 selectedFile,
+                setError,
+                error,
                 MAX_FILE
               }) => {
                 return (
@@ -339,6 +385,8 @@ const Kyc = () => {
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
                     MAX_FILE={MAX_FILE}
+                    setError={setError}
+                    error={error}
                     modalSetState={modalSetState}
                   />
                 );
@@ -362,6 +410,8 @@ const Kyc = () => {
                 setIsFileUploaded,
                 setSelectedFile,
                 selectedFile,
+                setError,
+                error,
                 MAX_FILE
               }) => {
                 return (
@@ -375,6 +425,8 @@ const Kyc = () => {
                     setIsFileUploaded={setIsFileUploaded}
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
+                    setError={setError}
+                    error={error}
                     MAX_FILE={MAX_FILE}
                     modalSetState={modalSetState}
                   />
@@ -397,6 +449,8 @@ const Kyc = () => {
                 setIsFileUploaded,
                 setSelectedFile,
                 selectedFile,
+                setError,
+                error,
                 MAX_FILE
               }) => {
                 return (
@@ -411,6 +465,8 @@ const Kyc = () => {
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
                     MAX_FILE={MAX_FILE}
+                    setError={setError}
+                    error={error}
                     modalSetState={modalSetState}
                   />
                 );

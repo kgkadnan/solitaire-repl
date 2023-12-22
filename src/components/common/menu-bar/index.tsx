@@ -43,7 +43,8 @@ const CustomMenuBar = ({
                 onSelect={items.onSelect}
                 className={menuItemStyle}
               >
-                {items.svg ?? items.svg} {items.label}
+                {items.svg && <div className="w-[30%]">{items.svg}</div>}
+                <div className="w-[70%]">{items.label}</div>
               </MenubarItem>
             );
           })}
