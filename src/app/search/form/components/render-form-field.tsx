@@ -398,7 +398,6 @@ const renderContent = (
       temp.length == 0
     ) {
       setSelectedMake('3G');
-      console.log('herere');
     } else if (
       selectedCut.toString() === 'F' &&
       selectedPolish.toString() === 'F' &&

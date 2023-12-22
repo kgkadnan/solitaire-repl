@@ -2,7 +2,7 @@
 import { CustomSearchInputField } from '@/components/common/search-input';
 import { ManageLocales } from '@/utils/translate';
 import { SearchIcon } from 'lucide-react';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../my-diamonds.module.scss';
 import { IHeaderSearchBarProps } from '../interface/my-diamonds-interface';
 import ClearIcon from '@public/assets/icons/close-outline.svg?url';
@@ -16,7 +16,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   // State to manage the search input value
   const [search, setsearch] = useState<string>('');
 
-  //  Handles the change of the search input.
+  // Handles the change of the search input.
   const handleSearch = (e: any) => {
     const inputValue = e.target.value;
 
@@ -56,35 +56,39 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
     setMyInvoiceSearchUrl('');
     setPreviousConfirmationSearchUrl('');
   };
+
   return (
     <div className="flex">
       {/* Search icon */}
       <SearchIcon className="stroke-solitaireQuaternary mt-[10px] mr-[15px]" />
-      {/* CustomSearchInputField component for the search input */}
-      <CustomSearchInputField
-        type="text"
-        name="Search"
-        style={searchInputStyle}
-        value={search}
-        onChange={handleSearch}
-        handleKeyPress={handleKeyDown}
-        placeholder={
-          // Dynamic placeholder based on the active tab
-          activeTab === 'Recent Confirmations'
-            ? ManageLocales(
-                'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
-              )
-            : ManageLocales(
-                'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
-              )
-        }
-      />
-
-      <div
-        className="cursor-pointer border-b border-solitaireQuaternary"
-        onClick={handleClearInput}
-      >
-        <ClearIcon className="stroke-solitaireQuaternary mt-[10px] " />
+      <div className="relative">
+        {/* CustomSearchInputField component for the search input */}
+        <CustomSearchInputField
+          type="text"
+          name="Search"
+          style={searchInputStyle}
+          value={search}
+          onChange={handleSearch}
+          handleKeyPress={handleKeyDown}
+          placeholder={
+            // Dynamic placeholder based on the active tab
+            activeTab === 'Recent Confirmations'
+              ? ManageLocales(
+                  'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
+                )
+              : ManageLocales(
+                  'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
+                )
+          }
+        />
+        {search && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-1">
+            <ClearIcon
+              className="stroke-solitaireQuaternary cursor-pointer"
+              onClick={handleClearInput}
+            />
+          </div>
+        )}
       </div>
     </div>
   );
