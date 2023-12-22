@@ -15,6 +15,7 @@ import errorImage from '@public/assets/icons/error.svg';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { MAX_FILE_SIZE } from '@/constants/business-logic';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -25,10 +26,7 @@ const ALLOWED_FILE_TYPES = {
   'application/pdf': []
 };
 
-// Function to convert bytes to megabytes
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
-
-interface IFileAttachements {
+interface IFileAttachments {
   lable: string;
   isRequired: boolean;
   uploadProgress: number;
@@ -37,13 +35,13 @@ interface IFileAttachements {
   setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
   selectedFile: string[];
-  MAX_FILE: number;
+  maxFile: number;
   modalSetState: IModalSetState;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   error: string | null;
 }
 
-const FileAttachements: React.FC<IFileAttachements> = ({
+const FileAttachments: React.FC<IFileAttachments> = ({
   lable,
   isRequired,
   uploadProgress,
@@ -52,7 +50,7 @@ const FileAttachements: React.FC<IFileAttachements> = ({
   setIsFileUploaded,
   setSelectedFile,
   selectedFile,
-  MAX_FILE,
+  maxFile,
   setError,
   error,
   modalSetState
@@ -85,7 +83,7 @@ const FileAttachements: React.FC<IFileAttachements> = ({
     onDrop,
     accept: ALLOWED_FILE_TYPES,
     maxSize: MAX_FILE_SIZE,
-    maxFiles: MAX_FILE
+    maxFiles: maxFile
   });
 
   useEffect(() => {
@@ -126,7 +124,7 @@ const FileAttachements: React.FC<IFileAttachements> = ({
           )}
         </div>
 
-        {selectedFile.length < MAX_FILE && (
+        {selectedFile.length < maxFile && (
           <input {...getInputProps()} name="attachment" />
         )}
         <div className=" flex flex-col w-[80%] text-left gap-1">
@@ -231,4 +229,4 @@ const FileAttachements: React.FC<IFileAttachements> = ({
   );
 };
 
-export default FileAttachements;
+export default FileAttachments;
