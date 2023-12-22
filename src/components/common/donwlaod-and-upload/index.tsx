@@ -14,6 +14,7 @@ import errorImage from '@public/assets/icons/error.svg';
 import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -73,13 +74,6 @@ export const DownloadAndUpload = ({
     document.body.appendChild(link);
     link.click(); // Trigger the download
     document.body.removeChild(link); // Remove the link from the document
-  };
-
-  const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
-    const newFiles = [...selectedFile];
-    newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
-    setSelectedFile(newFiles);
-    setIsFileUploaded(false);
   };
 
   return (
@@ -179,7 +173,11 @@ export const DownloadAndUpload = ({
                         />
                       ),
                       onSelect: () =>
-                        handleDelete({ selectedFile, setIsFileUploaded })
+                        handleDeleteAttachment({
+                          selectedFile,
+                          setIsFileUploaded,
+                          setSelectedFile
+                        })
                     }
                   ]}
                   menuTriggerStyle={styles.menuTriggerStyle}

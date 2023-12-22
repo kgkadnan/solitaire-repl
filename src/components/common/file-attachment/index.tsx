@@ -15,6 +15,7 @@ import errorImage from '@public/assets/icons/error.svg';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -106,13 +107,6 @@ const FileAttachements: React.FC<IFileAttachements> = ({
     if (fileRejections?.length) {
       setError(fileRejections[0].errors[0].code);
     }
-  };
-
-  const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
-    const newFiles = [...selectedFile];
-    newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
-    setSelectedFile(newFiles);
-    setIsFileUploaded(false);
   };
 
   return (
@@ -215,7 +209,11 @@ const FileAttachements: React.FC<IFileAttachements> = ({
                         />
                       ),
                       onSelect: () =>
-                        handleDelete({ selectedFile, setIsFileUploaded })
+                        handleDeleteAttachment({
+                          selectedFile,
+                          setIsFileUploaded,
+                          setSelectedFile
+                        })
                     }
                   ]}
                   menuTriggerStyle={styles.menuTriggerStyle}
