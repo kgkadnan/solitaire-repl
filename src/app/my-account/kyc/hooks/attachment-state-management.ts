@@ -2,98 +2,120 @@ import { useState } from 'react';
 
 const useAttachmentsStateManagement = () => {
   // State for Pan Card
-  const [uploadPanCardProgress, setUploadPanCardProgress] = useState(0);
-  const [isPanFileUploaded, setIsPanFileUploaded] = useState(false);
-  const [panSelectedFile, setPanSelectedFile] = useState([]);
-  const [panError, setPanError] = useState('');
+  const [uploadPanCardProgress, setUploadPanCardProgress] = useState<number>(0);
+  const [isPanFileUploaded, setIsPanFileUploaded] = useState<boolean>(false);
+  const [panSelectedFile, setPanSelectedFile] = useState<string[]>([]);
+  const [panError, setPanError] = useState<string | null>('');
 
   // State for Business Card
   const [uploadBusinessCardProgress, setUploadBusinessCardProgress] =
-    useState(0);
-  const [isBusinessFileUploaded, setIsBusinessFileUploaded] = useState(false);
-  const [businessSelectedFile, setBusinessSelectedFile] = useState([]);
-  const [businessError, setBusinessError] = useState('');
+    useState<number>(0);
+  const [isBusinessFileUploaded, setIsBusinessFileUploaded] =
+    useState<boolean>(false);
+  const [businessSelectedFile, setBusinessSelectedFile] = useState<string[]>(
+    []
+  );
+  const [businessError, setBusinessError] = useState<string | null>('');
 
   // State for GST Certificate
-  const [uploadGstCertCardProgress, setUploadGstCertCardProgress] = useState(0);
-  const [isGstCertFileUploaded, setIsGstCertFileUploaded] = useState(false);
-  const [gstCertSelectedFile, setGstCertSelectedFile] = useState([]);
-  const [gstCertError, setGstCertError] = useState('');
+  const [uploadGstCertCardProgress, setUploadGstCertCardProgress] =
+    useState<number>(0);
+  const [isGstCertFileUploaded, setIsGstCertFileUploaded] =
+    useState<boolean>(false);
+  const [gstCertSelectedFile, setGstCertSelectedFile] = useState<string[]>([]);
+  const [gstCertError, setGstCertError] = useState<string | null>('');
   // State for Incorporation Certificate
   const [
     uploadIncorporationCertCardProgress,
     setUploadIncorporationCertCardProgress
-  ] = useState(0);
+  ] = useState<number>(0);
   const [isIncorporationCertFileUploaded, setIsIncorporationCertFileUploaded] =
-    useState(false);
+    useState<boolean>(false);
   const [incorporationCertSelectedFile, setIncorporationCertSelectedFile] =
-    useState([]);
-  const [incorporationCertError, setIncorporationCertError] = useState('');
+    useState<string[]>([]);
+  const [incorporationCertError, setIncorporationCertError] = useState<
+    string | null
+  >('');
 
   // State for Cancelled Cheque
   const [uploadCancelChaqueCardProgress, setUploadCancelChaqueCardProgress] =
-    useState(0);
+    useState<number>(0);
   const [isCancelChaqueFileUploaded, setIsCancelChaqueFileUploaded] =
-    useState(false);
-  const [cancelChaqueSelectedFile, setCancelChaqueSelectedFile] = useState([]);
-  const [cancelChaqueError, setCancelChaqueError] = useState('');
+    useState<boolean>(false);
+  const [cancelChaqueSelectedFile, setCancelChaqueSelectedFile] = useState<
+    string[]
+  >([]);
+  const [cancelChaqueError, setCancelChaqueError] = useState<string | null>('');
 
   // State for Government Registration Certificate
   const [
     uploadGovermentRegCertCardProgress,
     setUploadGovermentRegCertCardProgress
-  ] = useState(0);
+  ] = useState<number>(0);
   const [isGovermentRegCertFileUploaded, setIsGovermentRegCertFileUploaded] =
-    useState(false);
+    useState<boolean>(false);
   const [govermentRegCertSelectedFile, setGovermentRegCertSelectedFile] =
-    useState([]);
-  const [govermentRegCertError, setGovermentRegCertError] = useState('');
+    useState<string[]>([]);
+  const [govermentRegCertError, setGovermentRegCertError] = useState<
+    string | null
+  >('');
 
   // State for PAN or Aadhaar Card
   const [uploadPanOrAdhaarCardProgress, setUploadPanOrAdhaarCardProgress] =
-    useState(0);
+    useState<number>(0);
   const [isPanOrAdhaarFileUploaded, setIsPanOrAdhaarFileUploaded] =
-    useState(false);
-  const [panOrAdhaarSelectedFile, setPanOrAdhaarSelectedFile] = useState([]);
-  const [panOrAdhaarError, setPanOrAdhaarError] = useState('');
+    useState<boolean>(false);
+  const [panOrAdhaarSelectedFile, setPanOrAdhaarSelectedFile] = useState<
+    string[]
+  >([]);
+  const [panOrAdhaarError, setPanOrAdhaarError] = useState<string | null>('');
 
   // State for Passport
   const [uploadPassportCardProgress, setUploadPassportCardProgress] =
-    useState(0);
-  const [isPassportFileUploaded, setIsPassportFileUploaded] = useState(false);
-  const [passportSelectedFile, setPassportSelectedFile] = useState([]);
-  const [passportError, setPassportError] = useState('');
+    useState<number>(0);
+  const [isPassportFileUploaded, setIsPassportFileUploaded] =
+    useState<boolean>(false);
+  const [passportSelectedFile, setPassportSelectedFile] = useState<string[]>(
+    []
+  );
+  const [passportError, setPassportError] = useState<string | null>('');
 
   // State for Photo ID of Person
   const [
     uploadPhotoIdOfPerson1CardProgress,
     setUploadPhotoIdOfPerson1CardProgress
-  ] = useState(0);
+  ] = useState<number>(0);
   const [isPhotoIdOfPerson1FileUploaded, setIsPhotoIdOfPerson1FileUploaded] =
-    useState(false);
+    useState<boolean>(false);
   const [photoIdOfPerson1SelectedFile, setPhotoIdOfPerson1SelectedFile] =
-    useState([]);
-  const [photoIdOfPerson1Error, setPhotoIdOfPerson1Error] = useState('');
+    useState<string[]>([]);
+  const [photoIdOfPerson1Error, setPhotoIdOfPerson1Error] = useState<
+    string | null
+  >('');
 
   const [
     uploadPhotoIdOfPerson2CardProgress,
     setUploadPhotoIdOfPerson2CardProgress
-  ] = useState(0);
+  ] = useState<number>(0);
   const [isPhotoIdOfPerson2FileUploaded, setIsPhotoIdOfPerson2FileUploaded] =
-    useState(false);
+    useState<boolean>(false);
   const [photoIdOfPerson2SelectedFile, setPhotoIdOfPerson2SelectedFile] =
-    useState([]);
-  const [photoIdOfPerson2Error, setPhotoIdOfPerson2Error] = useState('');
+    useState<string[]>([]);
+  const [photoIdOfPerson2Error, setPhotoIdOfPerson2Error] = useState<
+    string | null
+  >('');
 
   const [
     uploadPhotoIdOfPerson3CardProgress,
     setUploadPhotoIdOfPerson3CardProgress
-  ] = useState(0);
+  ] = useState<number>(0);
   const [isPhotoIdOfPerson3FileUploaded, setIsPhotoIdOfPerson3FileUploaded] =
-    useState(false);
+    useState<boolean>(false);
   const [photoIdOfPerson3SelectedFile, setPhotoIdOfPerson3SelectedFile] =
-    useState([]);
-  const [photoIdOfPerson3Error, setPhotoIdOfPerson3Error] = useState('');
+    useState<string[]>([]);
+  const [photoIdOfPerson3Error, setPhotoIdOfPerson3Error] = useState<
+    string | null
+  >('');
 
   // Combined state object for all attachments
   const attachmentsState = {

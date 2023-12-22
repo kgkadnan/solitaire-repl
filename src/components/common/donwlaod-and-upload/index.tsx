@@ -13,6 +13,7 @@ import deleteSvg from '@public/assets/icons/delete.svg';
 import errorImage from '@public/assets/icons/error.svg';
 import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -24,6 +25,17 @@ const ALLOWED_FILE_TYPES = {
 };
 const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
+interface IDownloadAndUpload {
+  uploadProgress: number;
+  isFileUploaded: boolean;
+  setUploadProgress: React.Dispatch<React.SetStateAction<number>>;
+  setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedFile: string[];
+  MAX_FILE: number;
+  modalSetState: IModalSetState;
+}
+
 export const DownloadAndUpload = ({
   uploadProgress,
   isFileUploaded,
@@ -33,7 +45,7 @@ export const DownloadAndUpload = ({
   selectedFile,
   MAX_FILE,
   modalSetState
-}: any) => {
+}: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
 
   const onDrop = (acceptedFiles: any) => {

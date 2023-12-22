@@ -14,6 +14,7 @@ import deleteSvg from '@public/assets/icons/delete.svg';
 import errorImage from '@public/assets/icons/error.svg';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -30,16 +31,16 @@ const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 interface IFileAttachements {
   lable: string;
   isRequired: boolean;
-  uploadProgress: any;
-  isFileUploaded: any;
-  setUploadProgress: any;
-  setIsFileUploaded: any;
-  setSelectedFile: any;
-  selectedFile: any;
+  uploadProgress: number;
+  isFileUploaded: boolean;
+  setUploadProgress: React.Dispatch<React.SetStateAction<number>>;
+  setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedFile: string[];
   MAX_FILE: number;
-  modalSetState: any;
-  setError?: any;
-  error?: string;
+  modalSetState: IModalSetState;
+  setError: React.Dispatch<React.SetStateAction<string | null>>;
+  error: string | null;
 }
 
 const FileAttachements: React.FC<IFileAttachements> = ({

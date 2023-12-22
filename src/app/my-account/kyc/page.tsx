@@ -153,9 +153,9 @@ const Kyc = () => {
     }
   } = useAttachmentsStateManagement();
 
-  const [uploadProgress, setUploadProgress] = useState(0);
-  const [isFileUploaded, setIsFileUploaded] = useState(false);
-  const [uploadFilePreview, setUploadFilePreview] = useState([]);
+  const [uploadProgress, setUploadProgress] = useState<number>(0);
+  const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
+  const [uploadFilePreview, setUploadFilePreview] = useState<string[]>([]);
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isModalOpen, modalContent } = modalState;
