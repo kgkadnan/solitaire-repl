@@ -1,0 +1,55 @@
+.label {
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 16px;
+    text-transform: capitalize;
+  }
+  
+  .format {
+    color: hsl(var(--solitaire-tertiary));
+    font-size: 14px;
+    font-weight: 400;
+    font-weight: 100;
+  }
+  .errorFormat {
+    color: #983131;
+    font-size: 14px;
+    font-weight: 400;
+  }
+  
+  .errorlabel {
+    color: #983131;
+    font-size: 16px;
+    text-transform: capitalize;
+  }
+  
+  .stroke {
+    stroke: hsl(var(--solitaire-quaternary));
+  }
+  
+  .errorStroke {
+    stroke: #983131;
+  }
+  
+  .menuTriggerStyle{
+    background: hsl(var(--solitaire-secondary));
+  }
+  
+  .menuItemStyle{
+    justify-content:space-evenly;
+  }
+  
+  .menuContentStyle{
+    background-color: hsl(var(--solitaire-primary));
+    border: none;
+    border-radius: 10px;
+    min-width: 10rem;
+  }
+  .modalStyle {
+    max-width: 1000px;
+    height: 80vh;
+    z-index: 1200;
+    color: hsl(var(--solitaire-tertiary));
+    border-radius: 30px;
+  }
+  
+  
