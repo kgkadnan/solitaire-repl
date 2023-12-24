@@ -10,6 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { CustomModal } from '@/components/common/modal';
 import styles from './attachment.module.scss';
+import authorizedLogin from '@/utils/authorized-login';
 
 const Kyc = () => {
   const {
@@ -495,4 +496,4 @@ const Kyc = () => {
   );
 };
 
-export default Kyc;
+export default authorizedLogin(Kyc);
