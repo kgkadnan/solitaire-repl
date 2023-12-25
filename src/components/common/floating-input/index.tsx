@@ -1,3 +1,4 @@
+'use client';
 import React, { KeyboardEventHandler, useState } from 'react';
 import styles from './floating-input.module.scss';
 import EyeSlash from '@public/assets/icons/eye-off-outline.svg?url';

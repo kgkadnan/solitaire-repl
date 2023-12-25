@@ -1,7 +1,5 @@
 'use client';
 
-// import { getLogger } from 'logging/log-util';
-
 export default function Home() {
   // const logger = getLogger('home');
   // logger.error('a error message from _app');

@@ -136,6 +136,13 @@
   "app.myProfile.emailNotification": "Email Notification",
   "app.myProfile.reportBug": "Report Bug",
 
+  "app.myProfile.kyc.attachments": "Attachments",
+  "app.myProfile.kyc.companyDocuments": "Company Documents",
+  "app.myProfile.kyc.companyOwnerDocuments": "Company Owner Documents",
+  "app.myProfile.kyc.photoId": "Photo ID of person/s authorised to collect goods",
+  "app.myProfile.kyc.download": "Download",
+  "app.myProfile.kyc.upload": "Upload",
+
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
   "app.myaccount.summary.emailID": "Email ID",
@@ -240,5 +247,8 @@
   "app.resetPassword.password": "Password*",
   "app.resetPassword.confirmPassword": "Confirm Password*",
 
-  "app.companyDetails.registerCompanyName": "Registered Company Name*"
+  "app.companyDetails.registerCompanyName": "Registered Company Name*",
+  "app.personalDetail.firstName": "First Name*",
+  "app.personalDetail.contactNumber": "Contact Number*",
+  "app.personalDetail.contactEmailId": "Contact Email-ID*"
 }
