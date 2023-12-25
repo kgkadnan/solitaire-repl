@@ -45,6 +45,96 @@ export const KYCForm = [
         ]
       },
       {
+        screen: 'Company Details',
+        fields: [
+          {
+            name: 'Registered Company Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Year of Establishment*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'City*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+
+          {
+            name: 'State*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Pin-Code*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Company Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Company Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          }
+        ]
+      },
+      {
         screen: 'Personal',
         fields: [
           {

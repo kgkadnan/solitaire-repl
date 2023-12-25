@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import styles from './checkbox.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleCheckboxClick } from './helper/handle-checkbox-click';
@@ -7,6 +7,12 @@ import { handleCheckboxClick } from './helper/handle-checkbox-click';
 interface ICustomCheckboxProps {
   data: string;
   isChecked: string[];
+  isInput?: boolean;
+  inputName?: string;
+  inputValue?: string;
+  handleInputChange?: (value: string) => void;
+  placeholder?: string;
+  inputStyle?: string;
   style?: string;
   setIsCheck?: any;
   setIsCheckAll?: any;
@@ -17,6 +23,12 @@ interface ICustomCheckboxProps {
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   data,
+  isInput,
+  inputName,
+  inputValue,
+  handleInputChange,
+  placeholder,
+  inputStyle,
   style,
   isChecked,
   setIsCheck,
@@ -25,28 +37,73 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   row,
   setIsError
 }) => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const checkboxRef = useRef<any>(null);
+
+  // State to manage the checkbox's checked status
+  const [isCheckedState, setIsCheckedState] = useState(
+    isChecked.includes(data)
+  );
+
+  // Handle changes in the input field
+  const onInputChange = (value: string) => {
+    // Update the state of the input value if there's a handler provided
+    if (handleInputChange) {
+      handleInputChange(value);
+    }
+    // Update the checkbox state based on whether the input is empty
+    setIsCheckedState(value !== '');
+  };
+
+  const handleInputClick = () => {
+    if (checkboxRef.current) {
+      checkboxRef.current.click();
+    }
+  };
+
+  const handleCheckboxClickWrapper = () => {
+    handleCheckboxClick({
+      id: data,
+      isCheck: isChecked,
+      setIsCheck,
+      setIsCheckAll,
+      isCheckAll,
+      data: row,
+      setIsError
+    });
+    if (isInput && inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  useEffect(() => {
+    // Update the checkbox state based on whether it's checked in the isChecked array
+    setIsCheckedState(isChecked.includes(data));
+  }, [isChecked, data]);
+
   return (
-    <div className="flex items-center text-center space-x-2">
+    <div className="flex items-center space-x-2">
       <Checkbox
         data-testid={`custom-checkbox-${data}`}
         key={`checkbox-${data}`}
         id={data}
-        checked={isChecked?.includes(data)}
-        onClick={() =>
-          handleCheckboxClick({
-            id: data,
-            isCheck: isChecked,
-            setIsCheck,
-            setIsCheckAll,
-            isCheckAll,
-            data: row,
-            setIsError
-          })
-        }
-        className={`${styles.defaultCheckbox} ${style} `}
+        ref={checkboxRef}
+        checked={isCheckedState}
+        onClick={handleCheckboxClickWrapper}
+        className={`${styles.defaultCheckbox} ${style}`}
       />
-      {/* );
-      })} */}
+      {isInput && (
+        <input
+          className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}
+          type="text"
+          name={inputName}
+          value={inputValue}
+          onChange={e => onInputChange(e.target.value)}
+          onClick={handleInputClick}
+          ref={inputRef}
+          placeholder={placeholder}
+        />
+      )}
     </div>
   );
 };

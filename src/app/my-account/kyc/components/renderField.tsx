@@ -1,19 +1,23 @@
 'use client';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
-const handleInput = (e: any) => {
-  console.log(e.target.value);
-};
-export const renderField = (field: any) => {
-  switch (field.type) {
+
+export const renderField = ({
+  name,
+  type,
+  handleChange,
+  state,
+  inputType
+}: any) => {
+  switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
         <FloatingLabelInput
-          label={'test'}
-          onChange={handleInput}
-          type="number"
-          name="number"
-          value={'value'}
+          label={name}
+          onChange={handleChange}
+          type={inputType}
+          name={name}
+          value={state}
         />
       );
     case fieldType.CHECKBOX:
