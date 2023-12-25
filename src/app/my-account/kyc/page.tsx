@@ -11,7 +11,7 @@ interface IStepper {
   status: string;
 }
 
-const MainComponent: React.FC = () => {
+const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNextStep = () => {
@@ -102,4 +102,4 @@ const MainComponent: React.FC = () => {
   );
 };
 
-export default MainComponent;
+export default KYC;
