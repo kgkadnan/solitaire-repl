@@ -24,7 +24,7 @@ const ConfirmationScreen = () => {
           >
             <Image src={confirmImage} alt="Banner image" />
             <div className="">
-              <p className="text-solitaireTertiary mb-[20px] w-[90%]">
+              <p className="text-solitaireTertiary mb-[20px] w-[90%] text-[16px]">
                 {ManageLocales('app.confirmationScreen.message')}
               </p>
             </div>

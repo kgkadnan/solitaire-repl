@@ -10,11 +10,7 @@ import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
-import {
-  EMAIL_REGEX,
-  PASSWORD_REGEX,
-  PHONE_REGEX
-} from '@/constants/validation-regex/regex';
+import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
 
 // Define the Login component
 const Login = () => {
@@ -40,8 +36,14 @@ const Login = () => {
         email: emailAndNumber,
         password: password
       });
-      if (res.error) {
+
+      console.log(res);
+
+      if (res?.error?.originalStatus === 401) {
         // Display error message if login fails
+        setIsError(true);
+        setErrorText('Incorrect login credential');
+      } else if (res.error) {
         setIsError(true);
         setErrorText(res.error.data.message);
       } else {
@@ -128,7 +130,7 @@ const Login = () => {
               }}
             />
             <div className="">
-              <p className="text-solitaireTertiary">
+              <p className="text-solitaireTertiary text-[16px]">
                 {ManageLocales('app.login.welcomeMessage')}
               </p>
             </div>
@@ -159,9 +161,11 @@ const Login = () => {
 
             <div>
               {/* Display error message if there is an error */}
-              <div className="h-6 mb-3">
+              <div className="h-6 mb-3 flex items-center justify-center">
                 {isError ? (
-                  <div className="text-red-600 flex text-left">{errorText}</div>
+                  <div className="text-[#983131] flex text-left">
+                    {errorText}
+                  </div>
                 ) : (
                   ''
                 )}

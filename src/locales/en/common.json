@@ -239,9 +239,10 @@
   "app.confirmationScreen.finishKycProcess": "Finish KYC Process",
 
   "app.forgotpassword": "Forgot Password",
-  "app.forgotpassword.message": "Please enter your registered phone number to reset password",
-  "app.forgotpassword.mobileNumber": "Mobile Number",
-  "app.forgotpassword.sendOtp": "Send OTP",
+  "app.forgotpassword.message": "Please enter your registered mail and we’ll send you link to reset your password.",
+  "app.forgotpassword.emailId": "Email ID",
+  "app.forgotpassword.goBackToLogin": "Go Back to Login",
+  "app.forgotpassword.submit": "Submit",
 
   "app.resetPassword.resetPassword": "Reset Password",
   "app.resetPassword.password": "Password*",

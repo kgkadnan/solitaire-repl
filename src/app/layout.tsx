@@ -27,7 +27,8 @@ export default function RootLayout({
   const showHeader =
     path === '/login' ||
     path === '/forgot-password' ||
-    path === '/reset-password'
+    path === '/reset-password' ||
+    path === '/confirmation-screen'
       ? false
       : true;
 

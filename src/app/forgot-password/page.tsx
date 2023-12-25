@@ -43,8 +43,8 @@ const ForgotPassword = () => {
                 label: 'text-solitaireQuaternary text-[48px] font-semibold'
               }}
             />
-            <div className="">
-              <p className="text-solitaireTertiary">
+            <div className="w-[70%]">
+              <p className="text-solitaireTertiary text-[16px]">
                 {ManageLocales('app.forgotpassword.message')}
               </p>
             </div>
@@ -53,7 +53,7 @@ const ForgotPassword = () => {
           {/* Input field for email */}
           <div className="flex flex-col gap-[40px]">
             <FloatingLabelInput
-              label={ManageLocales('app.forgotpassword.mobileNumber')}
+              label={ManageLocales('app.forgotpassword.emailId')}
               onChange={handleMobileNumber}
               type="number"
               name="number"
@@ -62,18 +62,22 @@ const ForgotPassword = () => {
             />
 
             <div>
-              {/* Display error message if there is an error */}
-              {/* <div className="h-6 mb-3">
-                {isError ? (
-                  <div className="text-red-600 flex text-left">{errorText}</div>
-                ) : (
-                  ''
-                )}
-              </div> */}
-              {/* Button to trigger the login action */}
-
               <CustomDisplayButton
-                displayButtonLabel={ManageLocales('app.forgotpassword.sendOtp')}
+                displayButtonLabel={ManageLocales(
+                  'app.forgotpassword.goBackToLogin'
+                )}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    'bg-[transparent] border-[1px] border-solitaireQuaternary w-[500px] h-[64px] mb-[]',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-[16px] font-medium'
+                }}
+                // handleClick={handleLogin}
+              />
+            </div>
+            <div className="">
+              <CustomDisplayButton
+                displayButtonLabel={ManageLocales('app.forgotpassword.submit')}
                 displayButtonAllStyle={{
                   displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
                   displayLabelStyle:
