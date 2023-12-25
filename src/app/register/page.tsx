@@ -160,7 +160,6 @@ const Register = () => {
           </div>
 
           {/* Input field for first Name */}
-
           <form onSubmit={handleRegister}>
             <div className="flex flex-col gap-[30px]">
               <FloatingLabelInput
