@@ -245,5 +245,9 @@
 
   "app.resetPassword.resetPassword": "Reset Password",
   "app.resetPassword.password": "Password*",
-  "app.resetPassword.confirmPassword": "Confirm Password*"
+  "app.resetPassword.confirmPassword": "Confirm Password*",
+
+  "app.personalDetail.firstName": "First Name*",
+  "app.personalDetail.contactNumber": "Contact Number*",
+  "app.personalDetail.contactEmailId": "Contact Email-ID*"
 }

@@ -1,6 +1,6 @@
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
-import donwloadOutlineShadow from '@public/assets/icons/download-outline-shadow.svg';
+import downloadOutlineShadow from '@public/assets/icons/download-outline-shadow.svg';
 import UploadOutline from '@public/assets/icons/cloud-upload-outline.svg?url';
 import { useDropzone } from 'react-dropzone';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
@@ -15,6 +15,7 @@ import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { IModalSetState } from '@/app/search/result/result-interface';
 import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
+import { MAX_FILE_SIZE } from '@/constants/business-logic';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -24,7 +25,6 @@ const ALLOWED_FILE_TYPES = {
   'image/jpeg': [],
   'application/pdf': []
 };
-const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
 
 interface IDownloadAndUpload {
   uploadProgress: number;
@@ -33,7 +33,7 @@ interface IDownloadAndUpload {
   setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
   setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
   selectedFile: string[];
-  MAX_FILE: number;
+  maxFile: number;
   modalSetState: IModalSetState;
 }
 
@@ -44,7 +44,7 @@ export const DownloadAndUpload = ({
   setIsFileUploaded,
   setSelectedFile,
   selectedFile,
-  MAX_FILE,
+  maxFile,
   modalSetState
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
@@ -62,7 +62,7 @@ export const DownloadAndUpload = ({
     onDrop,
     accept: ALLOWED_FILE_TYPES,
     maxSize: MAX_FILE_SIZE,
-    maxFiles: MAX_FILE
+    maxFiles: maxFile
   });
 
   const handleKycFormDownload = () => {
@@ -83,8 +83,8 @@ export const DownloadAndUpload = ({
         onClick={handleKycFormDownload}
       >
         <Image
-          src={donwloadOutlineShadow}
-          alt="donwloadOutlineShadow"
+          src={downloadOutlineShadow}
+          alt="downloadOutlineShadow"
           width={24}
           height={24}
         />
@@ -100,7 +100,7 @@ export const DownloadAndUpload = ({
         {...getRootProps()}
         className="flex flex-col justify-evenly  h-[12vh] rounded-[10px]   bg-solitaireSecondary items-center p-3 cursor-pointer w-[45%]"
       >
-        {selectedFile.length < MAX_FILE && (
+        {selectedFile.length < maxFile && (
           <input {...getInputProps()} name="attachment" />
         )}
 

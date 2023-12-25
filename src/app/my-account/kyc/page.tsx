@@ -1,5 +1,5 @@
 'use client';
-import FileAttachements from '@/components/common/file-attachment';
+import FileAttachments from '@/components/common/file-attachment';
 import React, { useState } from 'react';
 import Finger from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import Image from 'next/image';
@@ -174,7 +174,7 @@ const Kyc = () => {
       selectedFile: panSelectedFile,
       error: panError,
       setError: setPanError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '2',
@@ -188,7 +188,7 @@ const Kyc = () => {
       selectedFile: gstCertSelectedFile,
       error: gstCertError,
       setError: setGstCertError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '3',
@@ -202,7 +202,7 @@ const Kyc = () => {
       selectedFile: incorporationCertSelectedFile,
       error: incorporationCertError,
       setError: setIncorporationCertError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '4',
@@ -216,7 +216,7 @@ const Kyc = () => {
       selectedFile: cancelChaqueSelectedFile,
       error: cancelChaqueError,
       setError: setCancelChaqueError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '5',
@@ -230,7 +230,7 @@ const Kyc = () => {
       selectedFile: govermentRegCertSelectedFile,
       error: govermentRegCertError,
       setError: setGovermentRegCertError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '6',
@@ -244,7 +244,7 @@ const Kyc = () => {
       selectedFile: businessSelectedFile,
       error: businessError,
       setError: setBusinessError,
-      MAX_FILE: 1
+      maxFile: 1
     }
   ];
   const companyOwnerDocument = [
@@ -260,7 +260,7 @@ const Kyc = () => {
       selectedFile: panOrAdhaarSelectedFile,
       error: panOrAdhaarError,
       setError: setPanOrAdhaarError,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '2',
@@ -274,7 +274,7 @@ const Kyc = () => {
       selectedFile: passportSelectedFile,
       error: passportError,
       setError: setPassportError,
-      MAX_FILE: 1
+      maxFile: 1
     }
   ];
 
@@ -291,7 +291,7 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson1SelectedFile,
       error: photoIdOfPerson1Error,
       setError: setPhotoIdOfPerson1Error,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '2',
@@ -305,7 +305,7 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson2SelectedFile,
       error: photoIdOfPerson2Error,
       setError: setPhotoIdOfPerson2Error,
-      MAX_FILE: 1
+      maxFile: 1
     },
     {
       id: '3',
@@ -319,7 +319,7 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson3SelectedFile,
       error: photoIdOfPerson3Error,
       setError: setPhotoIdOfPerson3Error,
-      MAX_FILE: 1
+      maxFile: 1
     }
   ];
 
@@ -341,7 +341,7 @@ const Kyc = () => {
           setIsFileUploaded={setIsFileUploaded}
           setSelectedFile={setUploadFilePreview}
           selectedFile={uploadFilePreview}
-          MAX_FILE={1}
+          maxFile={1}
           modalSetState={modalSetState}
         />
       </div>
@@ -371,10 +371,10 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                MAX_FILE
+                maxFile
               }) => {
                 return (
-                  <FileAttachements
+                  <FileAttachments
                     key={id}
                     lable={label}
                     isRequired={isRequired}
@@ -384,7 +384,7 @@ const Kyc = () => {
                     setIsFileUploaded={setIsFileUploaded}
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
-                    MAX_FILE={MAX_FILE}
+                    maxFile={maxFile}
                     setError={setError}
                     error={error}
                     modalSetState={modalSetState}
@@ -412,10 +412,10 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                MAX_FILE
+                maxFile
               }) => {
                 return (
-                  <FileAttachements
+                  <FileAttachments
                     key={id}
                     lable={label}
                     isRequired={isRequired}
@@ -427,7 +427,7 @@ const Kyc = () => {
                     selectedFile={selectedFile}
                     setError={setError}
                     error={error}
-                    MAX_FILE={MAX_FILE}
+                    maxFile={maxFile}
                     modalSetState={modalSetState}
                   />
                 );
@@ -451,10 +451,10 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                MAX_FILE
+                maxFile
               }) => {
                 return (
-                  <FileAttachements
+                  <FileAttachments
                     key={id}
                     lable={label}
                     isRequired={isRequired}
@@ -464,7 +464,7 @@ const Kyc = () => {
                     setIsFileUploaded={setIsFileUploaded}
                     setSelectedFile={setSelectedFile}
                     selectedFile={selectedFile}
-                    MAX_FILE={MAX_FILE}
+                    maxFile={maxFile}
                     setError={setError}
                     error={error}
                     modalSetState={modalSetState}
