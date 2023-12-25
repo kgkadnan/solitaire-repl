@@ -21,6 +21,7 @@ import {
   SAVED_SEARCHES
 } from '@/constants/application-constants/search-page';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { CustomDisplayButton } from '../buttons/display-button';
 
 const SideBar = () => {
   const router = useRouter();
@@ -28,12 +29,56 @@ const SideBar = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const { setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { dialogContent, isDialogOpen } = modalState;
 
   const subRoute = useSearchParams().get('active-tab');
+
   const onKGKLogoContainerClick = useCallback(() => {
-    router.push('/');
+    // let localData = JSON.parse(localStorage.getItem('Search')!);
+
+    // let data = localData?.filter(
+    //   (isSaved: any) => isSaved.isSavedSearch === false
+    // );
+
+    const isKyc = true;
+    if (isKyc && currentRoute == '/my-diamonds') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to terminate KYC process and explore website? (your
+            progress will be saved)
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                // localStorage.removeItem('Search');
+                router.push('/');
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled
+              }}
+            />
+          </div>
+        </>
+      );
+    } else {
+      router.push('/');
+    }
   }, [router, currentRoute]);
 
   const imageData: IImageTileProps[] = [
@@ -107,7 +152,51 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    handleRoute(nav, link);
+    // let localData = JSON.parse(localStorage.getItem('Search')!);
+
+    // let data = localData?.filter(
+    //   (isSaved: any) => isSaved.isSavedSearch === false
+    // );
+
+    const isKyc = true;
+
+    if (isKyc && currentRoute == '/my-diamonds') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to terminate KYC process and explore website? (your
+            progress will be saved)
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                // localStorage.removeItem('Search');
+                handleRoute(nav, link);
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled
+              }}
+            />
+          </div>
+        </>
+      );
+    } else {
+      handleRoute(nav, link);
+    }
   };
 
   return (

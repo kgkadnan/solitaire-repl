@@ -93,7 +93,57 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    handleRoute(label, link);
+    // let localData = JSON.parse(localStorage.getItem('Search')!);
+
+    // let data = localData?.filter(
+    //   (isSaved: any) => isSaved.isSavedSearch === false
+    // );
+
+    const isKyc = true;
+
+    if (isKyc && currentRoute == '/my-diamonds') {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <>
+          <div className="text-center align-middle text-solitaireTertiary">
+            Do you want to terminate KYC process and explore website? (your
+            progress will be saved)
+          </div>
+          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+            <CustomDisplayButton
+              displayButtonLabel="Yes"
+              // handleClick={() => {
+              //   localStorage.setItem('Search', JSON.stringify([]));
+              //   handleRoute(label, link);
+              //   setIsDialogOpen(false);
+              //   setDialogContent('');
+              // }}
+              handleClick={() => {
+                handleRoute(label, link);
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonTransparent
+              }}
+            />
+            <CustomDisplayButton
+              displayButtonLabel="No"
+              handleClick={() => {
+                setIsDialogOpen(false);
+                setDialogContent('');
+              }}
+              displayButtonAllStyle={{
+                displayButtonStyle: styles.showResultButtonFilled
+              }}
+            />
+          </div>
+        </>
+      );
+    } else {
+      // localStorage.removeItem('Search');
+      handleRoute(label, link);
+    }
   };
 
   const handleScroll = useCallback(() => {
