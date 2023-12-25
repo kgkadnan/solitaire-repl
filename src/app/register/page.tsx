@@ -103,7 +103,11 @@ const Register = () => {
     return isValid;
   };
 
-  const handleRegister = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleRegister = (
+    event:
+      | React.FormEvent<HTMLFormElement>
+      | React.KeyboardEvent<HTMLInputElement>
+  ) => {
     event.preventDefault();
     const isFormValid = validateAllFields(); // Validate all fields
     if (!isFormValid) return; // If the form is not valid, prevent submission
@@ -123,11 +127,9 @@ const Register = () => {
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
-      //   handleRegister(e);
+      handleRegister(e);
     }
   };
-
-  console.log('counjksenf', countryCode.countries);
 
   return (
     <UserAuthenticationLayout
