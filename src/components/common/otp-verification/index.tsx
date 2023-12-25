@@ -5,6 +5,7 @@ import React, {
   ClipboardEvent
 } from 'react';
 import styles from './otp-verification.module.scss';
+import { Events } from '@/constants/enums/event';
 
 interface IOtpInput {
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
@@ -63,7 +64,7 @@ const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues }) => {
             handleInput(index, e.target.value)
           }
           onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === 'Backspace') {
+            if (e.key === Events.BACKSPACPE) {
               handleBackspace(index);
             }
           }}

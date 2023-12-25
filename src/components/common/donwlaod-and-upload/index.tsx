@@ -174,7 +174,6 @@ export const DownloadAndUpload = ({
                       ),
                       onSelect: () =>
                         handleDeleteAttachment({
-                          selectedFile,
                           setIsFileUploaded,
                           setSelectedFile
                         })

@@ -7,34 +7,18 @@ import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
-import { useRouter } from 'next/navigation';
+import { EMAIL_REGEX, PASSWORD_REG } from '@/constants/validation-regex/regex';
 import Link from 'next/link';
-import Select from 'react-select';
-import { colourStyles } from '../search/form/helpers/select-colour-style';
-import countryCode from './country-code.json';
 
-interface FormState {
-  firstName: string;
-  lastName: string;
-  email: string;
-  mobileNumber: string;
-  countryCode: string;
-  companyName: string;
-  password: string;
-  confirmPassword: string;
-}
-
-const initialFormState: FormState = {
-  firstName: '',
-  lastName: '',
-  email: '',
-  mobileNumber: '',
-  companyName: '',
-  countryCode: '',
-  password: '',
-  confirmPassword: ''
-};
+import countryCode from '../../constants/country-code.json';
+import { FormState, initialFormState } from './interface';
+import { Events } from '@/constants/enums/event';
+import {
+  INVALID_EMAIL_FORMAT,
+  MINIMUM_CHAR_PASSWORD,
+  PASSWORD_NOT_MATCH,
+  REQUIRED_FIELD
+} from '@/constants/error-messages/register';
 
 const Register = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
@@ -43,37 +27,34 @@ const Register = () => {
   const validateField = (name: string, value: string) => {
     let error = '';
 
-    const regexPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{9,}$/;
-
     // Validation logic
     if (value.trim() === '') {
-      error = 'This field is required';
+      error = REQUIRED_FIELD;
     } else {
       switch (name) {
         case 'email':
           if (!EMAIL_REGEX.test(value)) {
-            error = 'Invalid email format.';
+            error = INVALID_EMAIL_FORMAT;
           }
           break;
         case 'password':
-          if (!regexPassword.test(value)) {
-            error =
-              'Password must be over 8 characters and include at least one uppercase letter, one lowercase letter, and one number';
+          if (!PASSWORD_REG.test(value)) {
+            error = MINIMUM_CHAR_PASSWORD;
           }
           if (
             formState.confirmPassword &&
             value !== formState.confirmPassword
           ) {
-            error = 'Passwords do not match.';
+            error = PASSWORD_NOT_MATCH;
             setFormErrors(prev => ({
               ...prev,
-              confirmPassword: 'Passwords do not match.'
+              confirmPassword: PASSWORD_NOT_MATCH
             }));
           }
           break;
         case 'confirmPassword':
           if (value !== formState.password) {
-            error = 'Passwords do not match.';
+            error = PASSWORD_NOT_MATCH;
           }
           break;
 
@@ -126,7 +107,7 @@ const Register = () => {
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === Events.ENTER) {
       handleRegister(e);
     }
   };
@@ -135,15 +116,7 @@ const Register = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '10px',
-              marginBottom: '40px',
-              alignItems: 'center'
-            }}
-          >
+          <div className="flex flex-col gap-[5px] mb-[20px] items-center">
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
@@ -161,7 +134,7 @@ const Register = () => {
 
           {/* Input field for first Name */}
           <form onSubmit={handleRegister}>
-            <div className="flex flex-col gap-[30px]">
+            <div className="flex flex-col gap-[40px]">
               <FloatingLabelInput
                 label={ManageLocales('app.register.firstName')}
                 type="text"

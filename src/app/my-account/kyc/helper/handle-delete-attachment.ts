@@ -1,10 +1,11 @@
+interface IhandleDeleteAttachment {
+  setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
+  setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
+}
 export const handleDeleteAttachment = ({
-  selectedFile,
   setIsFileUploaded,
   setSelectedFile
-}: any) => {
-  const newFiles = [...selectedFile];
-  newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
-  setSelectedFile(newFiles);
+}: IhandleDeleteAttachment) => {
+  setSelectedFile([]);
   setIsFileUploaded(false);
 };

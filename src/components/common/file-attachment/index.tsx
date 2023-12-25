@@ -208,7 +208,6 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                       ),
                       onSelect: () =>
                         handleDeleteAttachment({
-                          selectedFile,
                           setIsFileUploaded,
                           setSelectedFile
                         })
