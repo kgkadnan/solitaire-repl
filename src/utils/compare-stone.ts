@@ -9,7 +9,7 @@ interface CompareStoneParams {
   isCheck: string[];
   setIsError: (value: boolean) => void;
   setErrorText: (text: string) => void;
-  activeCartRows: ProductItem[];
+  activeCartRows: any;
 }
 
 export const handleCompareStone = ({
