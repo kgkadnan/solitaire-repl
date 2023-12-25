@@ -26,15 +26,7 @@ const ForgotPassword = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              marginBottom: '40px',
-              alignItems: 'center'
-            }}
-          >
+          <div className="flex flex-col gap-[8px] mb-[40px] items-center">
             <Image src={handImage} alt="Banner image" />
             <CustomInputlabel
               htmlfor={''}
@@ -51,7 +43,7 @@ const ForgotPassword = () => {
           </div>
 
           {/* Input field for email */}
-          <div className="flex flex-col gap-[40px]">
+          <div className="mb-[30px]">
             <FloatingLabelInput
               label={ManageLocales('app.forgotpassword.emailId')}
               onChange={handleMobileNumber}
@@ -60,32 +52,31 @@ const ForgotPassword = () => {
               onKeyDown={handleKeyDown}
               value={value}
             />
-
-            <div>
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales(
-                  'app.forgotpassword.goBackToLogin'
-                )}
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    'bg-[transparent] border-[1px] border-solitaireQuaternary w-[500px] h-[64px] mb-[]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
-                }}
-                // handleClick={handleLogin}
-              />
-            </div>
-            <div className="">
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales('app.forgotpassword.submit')}
-                displayButtonAllStyle={{
-                  displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
-                }}
-                // handleClick={handleLogin}
-              />
-            </div>
+          </div>
+          <div className="mb-[20px]">
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales(
+                'app.forgotpassword.goBackToLogin'
+              )}
+              displayButtonAllStyle={{
+                displayButtonStyle:
+                  'bg-[transparent] border-[1px] border-solitaireQuaternary w-[500px] h-[54px] mb-[]',
+                displayLabelStyle:
+                  'text-solitaireTertiary text-[16px] font-medium'
+              }}
+              // handleClick={handleLogin}
+            />
+          </div>
+          <div className="">
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.forgotpassword.submit')}
+              displayButtonAllStyle={{
+                displayButtonStyle: 'bg-solitaireQuaternary w-[500px] h-[54px]',
+                displayLabelStyle:
+                  'text-solitaireTertiary text-[16px] font-medium'
+              }}
+              // handleClick={handleLogin}
+            />
           </div>
         </div>
       }

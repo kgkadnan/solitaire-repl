@@ -40,14 +40,13 @@ const ResetPassword = () => {
 
   return (
     <div className="flex flex-col justify-center items-center min-h-screen w-full px-4">
-      <div className="flex flex-col gap-4 mb-8 items-center w-full max-w-md text-center">
+      <div className="flex flex-col gap-[8px] mb-8 items-center w-full max-w-md text-center">
         <Image src={handImage} alt="Banner image" />
         <CustomInputlabel
           htmlfor={''}
           label={ManageLocales('app.resetPassword.resetPassword')}
           overriddenStyles={{
-            label:
-              'text-solitaireQuaternary lg:text-[48px] md:text-[30px] sm:text-[20px] font-semibold '
+            label: 'lg:text-[48px] md:text-[30px] sm:text-[20px] font-semibold '
           }}
         />
       </div>
@@ -81,7 +80,7 @@ const ResetPassword = () => {
             )}
             displayButtonAllStyle={{
               displayButtonStyle:
-                'bg-[#9f8b75] w-full lg:h-[64px] md:h-[50px] sm:h-[40px]',
+                'bg-solitaireQuaternary w-full lg:h-[64px] md:h-[50px] sm:h-[40px]',
               displayLabelStyle:
                 'text-solitaireTertiary lg:text-[16px] sm:text-[14px] md:text-[16px] font-medium'
             }}

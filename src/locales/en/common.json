@@ -229,7 +229,7 @@
   "app.login": "Login",
   "app.login.welcomeMessage": "Welcome back! Please login to your account",
   "app.login.forgotPassword": "Forgot Password?",
-  "app.login.newUser": "New User ?",
+  "app.login.newUser": "New User?",
   "app.login.register": " Register",
   "app.login.emailAndNumber": "Email / Mobile Number",
   "app.login.password": "Password",
