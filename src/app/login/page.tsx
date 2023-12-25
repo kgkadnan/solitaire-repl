@@ -28,8 +28,7 @@ const Login = () => {
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const router = useRouter();
-  const {  userLoggedIn } = useUser();
-
+  const { userLoggedIn } = useUser();
 
   // Handle the login logic
   const handleLogin = async () => {
@@ -51,7 +50,7 @@ const Login = () => {
         // Redirect to home page if login is successful
         if (res.data.access_token) {
           // localStorage.removeItem('Search');
-          userLoggedIn(res.data.access_token)
+          userLoggedIn(res.data.access_token);
           router.push('/');
         }
       }
