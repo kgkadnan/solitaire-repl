@@ -1,9 +1,12 @@
+import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
+
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
   RADIOWITHINPUT = 'radioWithInput',
-  ATTACHMENT = 'attachment'
+  ATTACHMENT = 'attachment',
+  FLOATING_INPUT_WITH_LABEL = 'attachment'
 }
 
 enum supportedMediaUnit {
@@ -30,9 +33,33 @@ export const KYCForm = [
     digital: [
       {
         screen: 'Personal Details',
+        icon: HandIcon,
         fields: [
           {
-            name: 'First Name',
+            name: 'First Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
             inputType:"text",
             isRequired: true,
