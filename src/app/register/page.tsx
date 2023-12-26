@@ -188,7 +188,10 @@ const Register = () => {
               <div className="flex flex-col gap-2">
                 {/* Button to trigger the register action */}
                 <div className="flex flex-col justify-center bg-transparent  border border-2 border-solitaireQuaternary w-[500px] h-[64px]">
-                  <Link href={'/'} className="text-[16px] font-medium">
+                  <Link
+                    href={'/'}
+                    className="text-[16px] font-medium text-solitaireTertiary"
+                  >
                     {ManageLocales('app.register.registerAsGuest')}
                   </Link>
                 </div>
