@@ -4,7 +4,9 @@ export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
-  ATTACHMENT = 'attachment'
+  RADIOWITHINPUT = 'radioWithInput',
+  ATTACHMENT = 'attachment',
+  FLOATING_INPUT_WITH_LABEL = 'attachment'
 }
 
 enum supportedMediaUnit {
@@ -85,7 +87,6 @@ export const KYCForm = [
             setError: 'setError',
             errorMessage: ''
           },
-
           {
             name: 'State*',
             type: fieldType.FLOATING_INPUT,
@@ -329,7 +330,8 @@ export const KYCForm = [
           },
           {
             name: 'Member of any Business Organisation / Council*',
-            type: fieldType.RADIO,
+            subTitle: 'If yes then provide the name',
+            type: fieldType.RADIOWITHINPUT,
             radioData: [
               {
                 id: 1,
@@ -346,6 +348,41 @@ export const KYCForm = [
                 name: ''
               }
             ]
+          },
+          {
+            name: 'Registered under MSME Act',
+            subTitle:
+              'If yes then provide the name field & Registration Number',
+            type: fieldType.RADIOWITHINPUT,
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ]
+          },
+          {
+            label: 'Ultimate Beneficiary Details',
+            name: 'Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
           }
         ]
       },
