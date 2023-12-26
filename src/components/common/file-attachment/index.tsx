@@ -15,6 +15,7 @@ import errorImage from '@public/assets/icons/error.svg';
 import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
 import { MAX_FILE_SIZE } from '@/constants/business-logic';
 
 const ALLOWED_FILE_TYPES = {
@@ -104,13 +105,6 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     if (fileRejections?.length) {
       setError(fileRejections[0].errors[0].code);
     }
-  };
-
-  const handleDelete = ({ selectedFile, setIsFileUploaded }: any) => {
-    const newFiles = [...selectedFile];
-    newFiles.splice(newFiles.indexOf(selectedFile[0]), 1);
-    setSelectedFile(newFiles);
-    setIsFileUploaded(false);
   };
 
   return (
@@ -213,7 +207,10 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                         />
                       ),
                       onSelect: () =>
-                        handleDelete({ selectedFile, setIsFileUploaded })
+                        handleDeleteAttachment({
+                          setIsFileUploaded,
+                          setSelectedFile
+                        })
                     }
                   ]}
                   menuTriggerStyle={styles.menuTriggerStyle}

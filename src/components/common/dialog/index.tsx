@@ -9,7 +9,6 @@ export const CustomDialog: React.FC<IDialog> = ({
   dialogStyle
 }) => {
   const onclose = (open: boolean) => {
-    console.log('hello', open);
     setIsOpen(open);
   };
   return (

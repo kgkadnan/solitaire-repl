@@ -9,6 +9,7 @@ interface IHeaderDataStyle {
   headerDataStyles?: string;
   headerDataContainerStyles?: string;
 }
+
 export interface IHeaderData {
   headerHeading?: string | React.ReactNode;
   handleSelectAllCheckbox?: (e: any) => void;
@@ -20,7 +21,7 @@ export interface IHeaderData {
   suggestions?: string[];
   headerData?: React.ReactNode;
   overriddenStyles?: IHeaderDataStyle;
-  handleClearInput?: (e: any) => void;
+  handleClearInput?: () => void; // Change the type of handleClearInput
 }
 
 interface ICustomHeaderProps {
@@ -36,7 +37,8 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
 }) => {
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
-  //input style
+
+  // input style
   let searchInputStyle = {
     searchInput: styles.headerInputStyle,
     searchInputMain: 'relative'
@@ -69,10 +71,10 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
       <div
         className={`flex gap-[40px] ${data?.overriddenStyles?.headerDataContainerStyles}`}
       >
-        {/* Search Input Field*/}
+        {/* Search Input Field */}
         {data?.handleSearch ? (
-          <div className="flex">
-            <SearchIcon className="stroke-solitaireQuaternary mt-[10px] mr-2" />
+          <div className="relative">
+            <SearchIcon className="stroke-solitaireQuaternary absolute top-[50%] left-[-30px] transform -translate-y-1/2" />
             <CustomSearchInputField
               type="text"
               name="Search"
@@ -83,12 +85,12 @@ const CustomHeader: React.FC<ICustomHeaderProps> = ({
               handleSuggestionClick={data.handleSuggestionClick}
               suggestions={data.suggestions}
             />
-            {data.handleClearInput && (
+            {data.handleClearInput && data?.searchValue && (
               <div
-                className="cursor-pointer border-b border-solitaireQuaternary"
+                className="absolute top-[50%] right-2 transform -translate-y-1/2 cursor-pointer"
                 onClick={data.handleClearInput}
               >
-                <ClearIcon className="stroke-solitaireQuaternary mt-[10px] " />
+                <ClearIcon className="stroke-solitaireQuaternary" />
               </div>
             )}
           </div>
