@@ -34,13 +34,10 @@ export const KYCForm = [
           {
             name: 'First Name',
             type: fieldType.FLOATING_INPUT,
+            inputType:"text",
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
           }
         ]
       },
@@ -52,11 +49,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
           }
         ]
       }
@@ -121,11 +114,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
           }
         ]
       }
@@ -164,11 +153,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
           }
         ]
       }
@@ -207,11 +192,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
           }
         ]
       }

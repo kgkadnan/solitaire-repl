@@ -13,6 +13,7 @@ import RenderCountrySelection from './components/render-country-selection';
 import RenderKYCSelection from './components/render-kyc-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import RenderManually from './components/manually/render-manually';
+import { FormProvider } from './hooks/form-context';
 interface IStepper {
   label: string;
   data: ReactNode;
@@ -27,23 +28,23 @@ const KYC: React.FC = () => {
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState({});
 
-  // const [activeStep, setActiveStep] = useState(0);
-  // const handleNextStep = () => {
-  //   setActiveStep(prevStep => prevStep + 1);
-  // };
-  // const handlePrevStep = () => {
-  //   setActiveStep(prevStep => prevStep - 1);
-  // };
-  // const renderDigitalForm = (country: any, screen: any, isLastStep: any) => (
-  //   <div key={screen.screen}>
-  //     <h3>{screen.screen}</h3>
-  //     {screen.fields.map((field: any) => (
-  //       <div key={field.name}>{renderField(field)}</div>
-  //     ))}
-  //     {isLastStep && renderAttachment()}{' '}
-  //     {/* Render attachment for the last step */}
-  //   </div>
-  // );
+  const [activeStep, setActiveStep] = useState(0);
+  const handleNextStep = () => {
+    setActiveStep(prevStep => prevStep + 1);
+  };
+  const handlePrevStep = () => {
+    setActiveStep(prevStep => prevStep - 1);
+  };
+  const renderDigitalForm = (country: any, screen: any, isLastStep: any) => (
+    <div key={screen.screen}>
+      <h3>{screen.screen}</h3>
+      {screen.fields.map((field: any) => (
+        <div key={field.name}>{renderField(field)}</div>
+      ))}
+      {isLastStep && renderAttachment()}{' '}
+      {/* Render attachment for the last step */}
+    </div>
+  );
   // const renderManualForm = () => (
   //   <div>
   //     {/* <DownloadAndUpload
@@ -58,41 +59,41 @@ const KYC: React.FC = () => {
   //       /> */}
   //   </div>
   // );
-  // const renderAttachment = () => (
-  //   <div>
-  //     {/* <FileAttachments
-  //                   key={id}
-  //                   lable={label}
-  //                   isRequired={isRequired}
-  //                   uploadProgress={uploadProgress}
-  //                   isFileUploaded={isFileUploaded}
-  //                   setUploadProgress={setUploadProgress}
-  //                   setIsFileUploaded={setIsFileUploaded}
-  //                   setSelectedFile={setSelectedFile}
-  //                   selectedFile={selectedFile}
-  //                   maxFile={maxFile}
-  //                   setError={setError}
-  //                   error={error}
-  //                   modalSetState={modalSetState}
-  //                 /> */}
-  //   </div>
-  // );
-  // const country = KYCForm[0]; // Replace this with the actual logic you use to select the country and screen dynamically
-  // const selectedMode = 'digital';
-  // const stepperData: IStepper[] = country.digital
-  //   ? country.digital.map((screen: any, index: number) => ({
-  //       label: `${screen.screen}`,
-  //       data: renderDigitalForm(
-  //         country,
-  //         screen,
-  //         index === country.digital.length - 1
-  //       ),
-  //       status:
-  //         index === activeStep
-  //           ? StepperStatus.INPROGRESS
-  //           : StepperStatus.NOT_STARTED
-  //     }))
-  //   : [];
+  const renderAttachment = () => (
+    <div>
+      {/* <FileAttachments
+                    key={id}
+                    lable={label}
+                    isRequired={isRequired}
+                    uploadProgress={uploadProgress}
+                    isFileUploaded={isFileUploaded}
+                    setUploadProgress={setUploadProgress}
+                    setIsFileUploaded={setIsFileUploaded}
+                    setSelectedFile={setSelectedFile}
+                    selectedFile={selectedFile}
+                    maxFile={maxFile}
+                    setError={setError}
+                    error={error}
+                    modalSetState={modalSetState}
+                  /> */}
+    </div>
+  );
+  const country = KYCForm[0]; // Replace this with the actual logic you use to select the country and screen dynamically
+  const selectedMode = 'digital';
+  const stepperData: IStepper[] = country.digital
+    ? country.digital.map((screen: any, index: number) => ({
+        label: `${screen.screen}`,
+        data: renderDigitalForm(
+          country,
+          screen,
+          index === country.digital.length - 1
+        ),
+        status:
+          index === activeStep
+            ? StepperStatus.INPROGRESS
+            : StepperStatus.NOT_STARTED
+      }))
+    : [];
   // return (
   //   <div>
   //     {selectedMode === 'digital' ? (
@@ -146,7 +147,14 @@ const KYC: React.FC = () => {
       return <RenderManually data={data} />;
     // Add more cases as needed
     case 'digitally':
-      return;
+      return     <FormProvider> <Stepper
+              stepper={stepperData}
+              state={activeStep}
+              setState={setActiveStep}
+              prevStep={handlePrevStep}
+              nextStep={handleNextStep}
+            /></FormProvider>
+
     case 'manually':
       return <RenderManually data={data} />;
     default:
