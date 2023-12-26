@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, ComponentType, FC } from 'react';
+import React, { ReactNode, FC } from 'react';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
 import { Providers } from './Providers';
@@ -10,6 +10,7 @@ import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
 import { usePathname } from 'next/navigation';
 import authorizedLogin from '@/utils/authorized-login';
+import { headerlessRoutes, protectedRoutes } from '@/constants/routes';
 
 const store = setupStore();
 
@@ -17,19 +18,13 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
-  const showHeader = ![
-    '/login',
-    '/forgot-password',
-    '/reset-password'
-  ].includes(path);
-  console.log(path, 'path');
+  const showHeader = !headerlessRoutes.includes(path);
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
   );
-
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
-  const SecureComponent = ['/search'].includes(path)
+  const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 

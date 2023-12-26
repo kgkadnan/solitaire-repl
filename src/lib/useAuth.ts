@@ -6,7 +6,6 @@ const useUser = () => {
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
-    console.log('Retrieved user from localStorage:', storedUser);
 
     if (storedUser) {
       setAuthToken(JSON.parse(storedUser));

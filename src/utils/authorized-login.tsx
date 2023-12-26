@@ -1,34 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Correct import for useRouter
 import useUser from '../lib/useAuth';
+import CustomLoader from '@/components/common/loader';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
     const { authToken, isTokenChecked, userLoggedOut } = useUser();
     const router = useRouter();
     const [isAuthorized, setIsAuthorized] = useState(false);
+    const [isLoading, setIsLoading] = useState(true); // New loading state
 
     useEffect(() => {
-      const handleRedirect = () => {
-        userLoggedOut();
-        router.push('/login');
-      };
-
+      setIsLoading(true);
       if (authToken === null && isTokenChecked) {
-        handleRedirect();
+        router.push('/login');
         return;
       }
-
-      const jwtSecret = process.env.NEXT_PUBLIC_JWT_SECRET;
-      if (!jwtSecret) {
-        handleRedirect();
-        return;
-      }
-    
 
       setIsAuthorized(true);
+      setIsLoading(false);
     }, [authToken, userLoggedOut, router]);
 
+    if (isLoading) {
+      return <CustomLoader />; // Or any other loading indicator
+    }
     return isAuthorized ? <WrappedComponent {...props} /> : null;
   };
 

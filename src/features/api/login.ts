@@ -12,8 +12,7 @@ type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 export const loginApi = createApi({
   reducerPath: 'loginReducer',
   baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
+    baseUrl: apiURL
   }) as BaseQuery,
   tagTypes: ['Login'],
 
