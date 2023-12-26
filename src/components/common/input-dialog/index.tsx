@@ -78,7 +78,6 @@ export const CustomInputDialog: React.FC<IInputDialog> = ({
               if (inputValue.length > 0) {
                 displayButtonFunction();
               } else {
-                console.log('helelelel');
                 setErrorContent('Please enter name');
                 setIsError(true);
               }

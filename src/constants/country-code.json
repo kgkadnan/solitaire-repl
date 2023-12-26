@@ -1,0 +1,74 @@
+{
+  "countries": [
+    {
+      "name": "Afghanistan",
+      "code": "93",
+      "iso_codes": "AF / AFG"
+    },
+    {
+      "name": "Albania",
+      "code": "355",
+      "iso_codes": "AL / ALB"
+    },
+    {
+      "name": "Algeria",
+      "code": "213",
+      "iso_codes": "DZ / DZA"
+    },
+    {
+      "name": "American Samoa",
+      "code": "1-684",
+      "iso_codes": "AS / ASM"
+    },
+    {
+      "name": "Andorra",
+      "code": "376",
+      "iso_codes": "AD / AND"
+    },
+    {
+      "name": "Angola",
+      "code": "244",
+      "iso_codes": "AO / AGO"
+    },
+    {
+      "name": "Anguilla",
+      "code": "1-264",
+      "iso_codes": "AI / AIA"
+    },
+    {
+      "name": "Antarctica",
+      "code": "672",
+      "iso_codes": "AQ / ATA"
+    },
+    {
+      "name": "Antigua and Barbuda",
+      "code": "1-268",
+      "iso_codes": "AG / ATG"
+    },
+    {
+      "name": "Argentina",
+      "code": "54",
+      "iso_codes": "AR / ARG"
+    },
+    {
+      "name": "Armenia",
+      "code": "374",
+      "iso_codes": "AM / ARM"
+    },
+    {
+      "name": "Aruba",
+      "code": "297",
+      "iso_codes": "AW / ABW"
+    },
+    {
+      "name": "India",
+      "code": "91",
+      "iso_codes": "IN / IND"
+    },
+    {
+      "name": "Zimbabwe",
+      "code": "263",
+      "iso_codes": "ZW / ZWE"
+    }
+  ]
+}
