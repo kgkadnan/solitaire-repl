@@ -9,7 +9,6 @@ import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { EMAIL_REGEX, PASSWORD_REG } from '@/constants/validation-regex/regex';
 import Link from 'next/link';
-
 import countryCode from '../../constants/country-code.json';
 import { FormState, initialFormState } from './interface';
 import { Events } from '@/constants/enums/event';

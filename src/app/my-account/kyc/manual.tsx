@@ -174,7 +174,8 @@ const Kyc = () => {
       selectedFile: panSelectedFile,
       error: panError,
       setError: setPanError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '2',
@@ -188,7 +189,8 @@ const Kyc = () => {
       selectedFile: gstCertSelectedFile,
       error: gstCertError,
       setError: setGstCertError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '3',
@@ -202,7 +204,8 @@ const Kyc = () => {
       selectedFile: incorporationCertSelectedFile,
       error: incorporationCertError,
       setError: setIncorporationCertError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '4',
@@ -216,7 +219,8 @@ const Kyc = () => {
       selectedFile: cancelChaqueSelectedFile,
       error: cancelChaqueError,
       setError: setCancelChaqueError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '5',
@@ -230,7 +234,8 @@ const Kyc = () => {
       selectedFile: govermentRegCertSelectedFile,
       error: govermentRegCertError,
       setError: setGovermentRegCertError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '6',
@@ -244,7 +249,8 @@ const Kyc = () => {
       selectedFile: businessSelectedFile,
       error: businessError,
       setError: setBusinessError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 0
     }
   ];
   const companyOwnerDocument = [
@@ -260,7 +266,8 @@ const Kyc = () => {
       selectedFile: panOrAdhaarSelectedFile,
       error: panOrAdhaarError,
       setError: setPanOrAdhaarError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 1
     },
     {
       id: '2',
@@ -274,7 +281,8 @@ const Kyc = () => {
       selectedFile: passportSelectedFile,
       error: passportError,
       setError: setPassportError,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 0
     }
   ];
 
@@ -291,7 +299,8 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson1SelectedFile,
       error: photoIdOfPerson1Error,
       setError: setPhotoIdOfPerson1Error,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 0
     },
     {
       id: '2',
@@ -305,7 +314,8 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson2SelectedFile,
       error: photoIdOfPerson2Error,
       setError: setPhotoIdOfPerson2Error,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 0
     },
     {
       id: '3',
@@ -319,7 +329,8 @@ const Kyc = () => {
       selectedFile: photoIdOfPerson3SelectedFile,
       error: photoIdOfPerson3Error,
       setError: setPhotoIdOfPerson3Error,
-      maxFile: 1
+      maxFile: 1,
+      minFile: 0
     }
   ];
 
@@ -371,7 +382,8 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                maxFile
+                maxFile,
+                minFile
               }) => {
                 return (
                   <FileAttachments
@@ -388,6 +400,7 @@ const Kyc = () => {
                     setError={setError}
                     error={error}
                     modalSetState={modalSetState}
+                    minFile={minFile}
                   />
                 );
               }
@@ -412,7 +425,8 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                maxFile
+                maxFile,
+                minFile
               }) => {
                 return (
                   <FileAttachments
@@ -429,6 +443,7 @@ const Kyc = () => {
                     error={error}
                     maxFile={maxFile}
                     modalSetState={modalSetState}
+                    minFile={minFile}
                   />
                 );
               }
@@ -451,7 +466,8 @@ const Kyc = () => {
                 selectedFile,
                 setError,
                 error,
-                maxFile
+                maxFile,
+                minFile
               }) => {
                 return (
                   <FileAttachments
@@ -468,6 +484,7 @@ const Kyc = () => {
                     setError={setError}
                     error={error}
                     modalSetState={modalSetState}
+                    minFile={minFile}
                   />
                 );
               }

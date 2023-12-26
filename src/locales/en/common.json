@@ -142,6 +142,8 @@
   "app.myProfile.kyc.photoId": "Photo ID of person/s authorised to collect goods",
   "app.myProfile.kyc.download": "Download",
   "app.myProfile.kyc.upload": "Upload",
+  "app.myProfile.kyc.country": "Country",
+  "app.myProfile.kyc.chooseTheCountry": "Choose the Country",
 
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
