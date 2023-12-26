@@ -26,24 +26,8 @@ const MyDiamonds = () => {
   const { commonState, commonSetState } = useCommonStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const {
-    dialogContent,
-    isDialogOpen,
-    isInputDialogOpen,
-    isSliderOpen,
-    isModalOpen,
-    modalContent,
-    persistDialogContent,
-    isPersistDialogOpen
-  } = modalState;
-  const {
-    setIsDialogOpen,
-    setIsInputDialogOpen,
-    setIsSliderOpen,
-    setDialogContent,
-    setIsModalOpen,
-    setIsPersistDialogOpen
-  } = modalSetState;
+  const { dialogContent, isDialogOpen, isModalOpen, modalContent } = modalState;
+  const { setIsDialogOpen, setIsModalOpen } = modalSetState;
   const {
     prevScrollPos,
     visible,

@@ -15,6 +15,7 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import Link from 'next/link';
+import { handleCompareStone } from '@/utils/compare-stone';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -65,33 +66,6 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
         setIsCheckAll,
         setIsError
       });
-    }
-  };
-
-  /**
-   * The function `compareStone` checks the number of selected stones and performs different actions
-   * based on the number, including displaying error messages or opening a new window to compare the
-   * selected stones.
-   */
-  const compareStone = () => {
-    if (isCheck.length > 10) {
-      setIsError(true);
-      setErrorText('You can compare maximum of ten stones.');
-    } else if (isCheck.length < 1) {
-      setIsError(true);
-      setErrorText('Please select a stone to perform action');
-    } else if (isCheck.length < 2) {
-      setIsError(true);
-      setErrorText('Minimum 2 stone to compare.');
-    } else {
-      const comapreStone = isCheck.map((id: string) => {
-        return rows.find((row: Product) => row.id === id);
-      });
-
-      localStorage.setItem('compareStone', JSON.stringify(comapreStone));
-      window.open('/compare-stone', '_blank');
-      setIsError(false);
-      setErrorText('');
     }
   };
 
@@ -187,7 +161,13 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
             },
             {
               label: 'Compare Stone',
-              fn: compareStone
+              fn: () =>
+                handleCompareStone({
+                  isCheck,
+                  setIsError,
+                  setErrorText,
+                  activeCartRows: rows
+                })
             }
           ]}
         />
