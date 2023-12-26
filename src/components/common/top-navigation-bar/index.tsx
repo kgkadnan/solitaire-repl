@@ -159,7 +159,6 @@ export const TopNavigationBar = () => {
                 />
               </div>
             ))}
-            {/* <SearchIcon className={styles.stroke} alt='advance-search' /> */}
             <Popover>
               <PopoverTrigger>
                 <div className={styles.headerIconStyle}>
