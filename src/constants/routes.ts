@@ -15,5 +15,6 @@ export const protectedRoutes = [
 export const headerlessRoutes = [
   '/login',
   '/forgot-password',
-  '/reset-password'
+  '/reset-password',
+  '/register'
 ];
