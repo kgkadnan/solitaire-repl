@@ -234,6 +234,18 @@
   "app.login.emailAndNumber": "Email / Mobile Number",
   "app.login.password": "Password",
 
+  "app.register": "Register",
+  "app.register.welcomeMessage": "Welcome! Please register to create account",
+  "app.register.firstName": "First Name*",
+  "app.register.lastName": "Last Name*",
+  "app.register.email": "Email*",
+  "app.register.mobileNumber": "Mobile Number*",
+  "app.register.companyName": "Company Name*",
+  "app.register.password": "Password*",
+  "app.register.confirmPassword": "Confirm Password*",
+
+  "app.register.registerAsGuest": "Register as Guest",
+
   "app.confirmationScreen.message": "Your account has been successfully created!",
   "app.confirmationScreen.exploreWebsite": "Explore Website",
   "app.confirmationScreen.finishKycProcess": "Finish KYC Process",

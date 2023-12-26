@@ -4,7 +4,6 @@ export default function Home() {
   // const logger = getLogger('home');
   // logger.error('a error message from _app');
   // logger.debug('a debug message from _app');
-  // logger.info('a info message from _app');
 
   return (
     <>
