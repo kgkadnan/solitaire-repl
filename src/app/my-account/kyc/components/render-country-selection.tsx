@@ -67,7 +67,9 @@ const RenderCountrySelection = ({
                 style: 'bg-solitaireQuaternary !text-[14px]',
                 fn: () =>
                   selectedCountry.length
-                    ? handleSaveAndNext('choice_for_filling_kyc')
+                    ? selectedCountry === 'other'
+                      ? handleSaveAndNext('other')
+                      : handleSaveAndNext('choice_for_filling_kyc')
                     : setErrorText('Please select value to proceed')
               }
             ]}

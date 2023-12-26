@@ -131,7 +131,10 @@ const RenderKYCSelection = ({
                 displayButtonLabel: ManageLocales('app.myaccount.kyc.back'),
                 style:
                   'border border-solid border-solitaireQuaternary !text-[14px]',
-                fn: () => handleSaveAndNext('country_selection')
+                fn: () => {
+                  setSelectedKYCOption('');
+                  handleSaveAndNext('country_selection');
+                }
               },
               {
                 id: 2,
@@ -139,7 +142,7 @@ const RenderKYCSelection = ({
                 style: 'bg-solitaireQuaternary !text-[14px]',
                 fn: () =>
                   selectedKYCOption.length
-                    ? handleSaveAndNext('choice_for_filling_kyc')
+                    ? handleSaveAndNext(selectedKYCOption)
                     : setErrorText('please select option to proceed')
               }
             ]}

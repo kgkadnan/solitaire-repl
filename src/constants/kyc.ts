@@ -62,24 +62,50 @@ export const KYCForm = [
       }
     ],
     manual: {
-      kycForm: 'link_to_kyc_form.pdf'
+      kycForm: 'link_to_kyc_form.pdf',
+      setUploadFilePreview: 'setUploadFilePreview',
+      uploadFilePreview: 'uploadFilePreview',
+      isFileUploaded: 'isFileUploaded',
+      setIsFileUploaded: 'setIsFileUploaded',
+      uploadProgress: 'uploadProgress',
+      setUploadProgress: 'setUploadProgress'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {},
-        state: 'state',
-        setState: 'setState',
-        error: 'error',
-        setError: 'setError',
-        errorMessage: 'Pan is required'
-      }
-    ]
+    attachment: {
+      companyDetail: [
+        {
+          id: '1',
+          label: 'Pan Card',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        }
+      ],
+      companyOwnerDetail: [
+        {
+          id: '1',
+          label: 'Pan Card',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        }
+      ]
+    }
   },
   {
     country: {

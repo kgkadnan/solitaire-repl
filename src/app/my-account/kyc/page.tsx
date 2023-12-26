@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
 import { renderField } from './components/renderField';
 import { StepperStatus } from '@/constants/enums/stepper-status';
@@ -12,6 +12,7 @@ import { CustomFooter } from '@/components/common/footer';
 import RenderCountrySelection from './components/render-country-selection';
 import RenderKYCSelection from './components/render-kyc-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import RenderManually from './components/manually/render-manually';
 interface IStepper {
   label: string;
   data: ReactNode;
@@ -24,6 +25,7 @@ const KYC: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
+  const [data, setData] = useState({});
 
   // const [activeStep, setActiveStep] = useState(0);
   // const handleNextStep = () => {
@@ -107,6 +109,13 @@ const KYC: React.FC = () => {
   //   </div>
   // );  // Configuration for footer buttons
 
+  useEffect(() => {
+    let KYCData = KYCForm.filter(country => {
+      return country.country.shortName === selectedCountry;
+    });
+    setData(KYCData);
+  }, [selectedCountry]);
+
   const handleSaveAndNext = (state: string) => {
     setCurrentState(state);
   };
@@ -133,7 +142,13 @@ const KYC: React.FC = () => {
           errorState={errorState}
         />
       );
+    case 'other':
+      return <RenderManually data={data} />;
     // Add more cases as needed
+    case 'digitally':
+      return;
+    case 'manually':
+      return <RenderManually data={data} />;
     default:
       // Render a default component or handle the default case
       return;
