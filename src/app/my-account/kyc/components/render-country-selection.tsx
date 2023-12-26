@@ -1,26 +1,81 @@
-import { KYCForm } from '@/constants/kyc';
 import { ManageLocales } from '@/utils/translate';
-import Select from 'react-select';
-import { colourStyles } from '../styles/select-style';
-
-export const CountrySelection = ({ setSelectedCountry }: any) => {
-  const handleFancyFilterChange = (selectedOption: any) => {
-    setSelectedCountry(selectedOption.value);
-  };
-
-  const computeDropdownField = (countries: any) => {
-    return countries.map(({ country }: any) => ({
-      label: country.fullName,
-      value: country.shortName
-    }));
-  };
-
+import React from 'react';
+import { CountrySelectionDropdown } from './render-country-selection-dropdown';
+import { CustomFooter } from '@/components/common/footer';
+import handImage from '@public/assets/images/noto_waving-hand.png';
+import { CustomInputlabel } from '@/components/common/input-label';
+import Image from 'next/image';
+import {
+  IErrorSetState,
+  IErrorState
+} from '@/app/search/result/result-interface';
+interface IRenderCountrySelection {
+  selectedCountry: string;
+  setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
+  handleSaveAndNext: (state: string) => void;
+  errorState: IErrorState;
+  errorSetState: IErrorSetState;
+}
+const RenderCountrySelection = ({
+  selectedCountry,
+  setSelectedCountry,
+  handleSaveAndNext,
+  errorState,
+  errorSetState
+}: IRenderCountrySelection) => {
+  const { setErrorText } = errorSetState;
+  const { errorText } = errorState;
   return (
-    <Select
-      options={computeDropdownField(KYCForm)}
-      onChange={handleFancyFilterChange}
-      placeholder={ManageLocales('app.myProfile.kyc.country')}
-      styles={colourStyles}
-    />
+    <div className="w-full">
+      <div className="flex flex-col gap-[30px] mb-[20px] items-start w-[30%] h-[70vh]">
+        <Image src={handImage} alt="Banner image" />
+        <div className="flex flex-col gap-[10px]">
+          <CustomInputlabel
+            htmlfor={''}
+            label={ManageLocales('app.myaccount.kyc.chooseTheCountry')}
+            overriddenStyles={{
+              label: '!text-solitaireTertiary text-[18px] font-semibold'
+            }}
+          />
+          <div className="">
+            <p className="text-solitaireTertiary text-[14px] font-normal">
+              Please enter valid input as the form will ask <br /> documents for
+              verification
+            </p>
+          </div>
+        </div>
+
+        <div className="w-full ">
+          <CountrySelectionDropdown
+            setSelectedCountry={setSelectedCountry}
+            errorSetState={errorSetState}
+          />
+        </div>
+      </div>
+      <div className="sticky bottom-0">
+        <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
+          {errorText.length > 0 && (
+            <div className="w-[30%]">
+              <p className="text-red-700 text-base ">{errorText}</p>
+            </div>
+          )}
+          <CustomFooter
+            footerButtonData={[
+              {
+                id: 1,
+                displayButtonLabel: ManageLocales('app.myaccount.kyc.next'),
+                style: 'bg-solitaireQuaternary !text-[14px]',
+                fn: () =>
+                  selectedCountry.length
+                    ? handleSaveAndNext('choice_for_filling_kyc')
+                    : setErrorText('Please select value to proceed')
+              }
+            ]}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
+
+export default RenderCountrySelection;

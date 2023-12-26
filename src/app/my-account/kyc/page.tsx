@@ -4,11 +4,14 @@ import { KYCForm } from '@/constants/kyc';
 import { renderField } from './components/renderField';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
-import { CountrySelection } from './components/render-country-selection';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { ManageLocales } from '@/utils/translate';
 import { CustomInputlabel } from '@/components/common/input-label';
 import Image from 'next/image';
+import { CustomFooter } from '@/components/common/footer';
+import RenderCountrySelection from './components/render-country-selection';
+import RenderKYCSelection from './components/render-kyc-selection';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
 interface IStepper {
   label: string;
   data: ReactNode;
@@ -16,7 +19,12 @@ interface IStepper {
 }
 
 const KYC: React.FC = () => {
-  const [selectedCountry, setSelectedCountry] = useState(null);
+  const { errorState, errorSetState } = useErrorStateManagement();
+
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedKYCOption, setSelectedKYCOption] = useState('');
+  const [currentState, setCurrentState] = useState('country_selection');
+
   // const [activeStep, setActiveStep] = useState(0);
   // const handleNextStep = () => {
   //   setActiveStep(prevStep => prevStep + 1);
@@ -97,36 +105,39 @@ const KYC: React.FC = () => {
   //       renderManualForm()
   //     )}
   //   </div>
-  // );
-  return (
-    <div className="w-full">
-      <div className="flex flex-col gap-[30px] mb-[20px] items-start w-[30%]">
-        <Image src={handImage} alt="Banner image" />
-        <div className="flex flex-col gap-[10px]">
-          <CustomInputlabel
-            htmlfor={''}
-            label={ManageLocales('app.myProfile.kyc.chooseTheCountry')}
-            overriddenStyles={{
-              label: '!text-solitaireTertiary text-[18px] font-semibold'
-            }}
-          />
-          <div className="">
-            <p className="text-solitaireTertiary text-[14px] text-sm">
-              Please enter valid input as the form will ask <br /> documents for
-              verification
-            </p>
-          </div>
-        </div>
+  // );  // Configuration for footer buttons
 
-        <div className="w-full">
-          <CountrySelection
-            selectedCountry={selectedCountry}
-            setSelectedCountry={setSelectedCountry}
-          />
-        </div>
-      </div>
-    </div>
-  );
+  const handleSaveAndNext = (state: string) => {
+    setCurrentState(state);
+  };
+
+  switch (currentState) {
+    case 'country_selection':
+      return (
+        <RenderCountrySelection
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          handleSaveAndNext={handleSaveAndNext}
+          errorSetState={errorSetState}
+          errorState={errorState}
+        />
+      );
+    case 'choice_for_filling_kyc':
+      // Render the component for 'choice_for_filling_kyc'
+      return (
+        <RenderKYCSelection
+          handleSaveAndNext={handleSaveAndNext}
+          setSelectedKYCOption={setSelectedKYCOption}
+          selectedKYCOption={selectedKYCOption}
+          errorSetState={errorSetState}
+          errorState={errorState}
+        />
+      );
+    // Add more cases as needed
+    default:
+      // Render a default component or handle the default case
+      return;
+  }
 };
 
 export default KYC;

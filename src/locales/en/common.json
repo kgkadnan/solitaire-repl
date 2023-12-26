@@ -143,7 +143,12 @@
   "app.myProfile.kyc.download": "Download",
   "app.myProfile.kyc.upload": "Upload",
   "app.myProfile.kyc.country": "Country",
-  "app.myProfile.kyc.chooseTheCountry": "Choose the Country",
+
+  "app.myaccount.kyc.chooseTheCountry": "Choose the Country",
+  "app.myaccount.kyc.choiceOfFillingTheKYCForm": "Choice of filling the KYC form",
+  "app.myaccount.kyc.saveAndNext": "Save and Next",
+  "app.myaccount.kyc.next": "Next",
+  "app.myaccount.kyc.back": "Back",
 
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
