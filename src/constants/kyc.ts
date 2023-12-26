@@ -1,8 +1,9 @@
+import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
+
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
-  RADIOWITHINPUT = 'radioWithInput',
   ATTACHMENT = 'attachment'
 }
 
@@ -46,6 +47,7 @@ export const KYCForm = [
       },
       {
         screen: 'Company Details',
+        icon: HandIcon,
         fields: [
           {
             name: 'Registered Company Name*',
@@ -131,6 +133,219 @@ export const KYCForm = [
             error: 'error',
             setError: 'setError',
             errorMessage: ''
+          },
+          {
+            name: 'Business Type*',
+            type: fieldType.CHECKBOX,
+            checkboxData: [
+              {
+                name: 'Manufacturer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Wholesaler',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Corporate Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Type of Industry*',
+            type: fieldType.CHECKBOX,
+            checkboxData: [
+              {
+                name: 'Diamonds',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Colour Stones',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Jewellery',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Organisation Type*',
+            type: fieldType.RADIO,
+            radioData: [
+              {
+                id: 1,
+                label: 'Individual',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 2,
+                label: 'Partnership Firm',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 3,
+                label: 'Private Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 4,
+                label: 'LLP',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 5,
+                label: 'Public Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 6,
+                label: 'OPC',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 7,
+                label: 'Other',
+                value: '',
+                onChange: () => {},
+                name: '',
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: '',
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Business Registration Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Pan-Card Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'GST Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Subsidiary/Affiliated Company',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: ''
+          },
+          {
+            name: 'Member of any Business Organisation / Council*',
+            type: fieldType.RADIO,
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ]
           }
         ]
       },

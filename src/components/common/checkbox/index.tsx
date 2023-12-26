@@ -18,7 +18,8 @@ interface ICustomCheckboxProps {
   setIsCheckAll?: any;
   isCheckAll?: any;
   row: any;
-  setIsError: any;
+  setIsError?: any;
+  checkboxLabel?: string;
 }
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
@@ -35,7 +36,8 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   setIsCheckAll,
   isCheckAll,
   row,
-  setIsError
+  setIsError,
+  checkboxLabel
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<any>(null);
@@ -92,6 +94,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
         onClick={handleCheckboxClickWrapper}
         className={`${styles.defaultCheckbox} ${style}`}
       />
+      {checkboxLabel && <p>{checkboxLabel}</p>}
       {isInput && (
         <input
           className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}

@@ -4,6 +4,7 @@ import { KYCForm } from '@/constants/kyc';
 import { renderField } from './components/renderField';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
+import Image from 'next/image';
 
 interface IStepper {
   label: string;
@@ -24,9 +25,16 @@ const KYC: React.FC = () => {
 
   const renderDigitalForm = (country: any, screen: any, isLastStep: any) => (
     <div key={screen.screen}>
-      <h3>{screen.screen}</h3>
+      <div className="flex items-center mt-[30px] mb-[30px] ">
+        <Image src={screen.icon} alt="Backhand image" />
+        <h3 className="ml-[10px] text-[18px] text-solitaireTertiary">
+          {screen.screen}
+        </h3>
+      </div>
       {screen.fields.map((field: any) => (
-        <div key={field.name}>{renderField(field)}</div>
+        <div key={field.name} className="mb-[20px]">
+          {renderField(field)}
+        </div>
       ))}
       {isLastStep && renderAttachment()}{' '}
       {/* Render attachment for the last step */}

@@ -1,23 +1,7 @@
 import React, { ReactNode, useRef } from 'react';
 import styles from './custom-input-radio.module.scss';
 
-interface RadioButtonProps {
-  radioMetaData: {
-    label: string | ReactNode;
-    value: string;
-    checked?: boolean;
-    onChange: (value: string) => void;
-    name: string;
-    isInput?: boolean;
-    inputName?: string;
-    inputValue?: string;
-    handleInputChange?: (value: string) => void;
-    placeholder?: string;
-    inputStyle: string;
-  };
-}
-
-export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
+export const RadioButton: React.FC<any> = ({ radioMetaData }) => {
   const {
     label,
     value,
