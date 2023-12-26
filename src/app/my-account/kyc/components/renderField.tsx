@@ -36,6 +36,8 @@ interface IRenderFieldProps {
   errorMessage?: string;
   radioData: IRadioData[];
   subTitle: string;
+  dynamicField: any;
+  dynamicCondition: string;
 }
 
 export const renderField = ({
@@ -48,38 +50,43 @@ export const renderField = ({
   errorMessage,
   checkboxData,
   radioData,
-  subTitle
+  subTitle,
+  dynamicField,
+  dynamicCondition
 }: IRenderFieldProps) => {
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
-        <FloatingLabelInput
-          label={name}
-          onChange={handleChange}
-          type={inputType}
-          name={name}
-          // value={state}
-          value={''}
-        />
+        <div className="">
+          <FloatingLabelInput
+            label={name}
+            onChange={handleChange}
+            type={inputType}
+            name={name}
+            // value={state}
+            value={''}
+          />
+        </div>
       );
     case fieldType.CHECKBOX:
       return (
-        <div className="text-[14px] text-solitaireTertiary">
-          <p className="mb-[16px]">{name}</p>
-          <div className="flex flex-row gap-[16px]">
-            {checkboxData.map((items: ICheckboxData) => {
+        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+          <p className="mb-4">{name}</p>{' '}
+          <div className="grid grid-cols-2 gap-[16px]">
+            {checkboxData.map(item => {
               return (
-                <div key={items.name}>
+                <div key={item.name}>
                   <CustomCheckBox
-                    data={items.data}
-                    isChecked={items.isChecked}
-                    row={items.row}
-                    isInput={items.isInput}
-                    inputName={items.inputName}
-                    inputValue={items.inputValue}
-                    handleInputChange={items.handleInputChange}
-                    placeholder={items.placeholder}
-                    checkboxLabel={items.name}
+                    data={item.data}
+                    isChecked={item.isChecked}
+                    row={item.row}
+                    isInput={item.isInput}
+                    inputName={item.inputName}
+                    inputValue={item.inputValue}
+                    handleInputChange={item.handleInputChange}
+                    placeholder={item.placeholder}
+                    checkboxLabel={item.name}
+                    inputStyle="w-[150px]"
                   />
                 </div>
               );
@@ -89,9 +96,9 @@ export const renderField = ({
       );
     case fieldType.RADIO:
       return (
-        <div className="text-[14px] text-solitaireTertiary">
+        <div className="text-[14px] text-solitaireTertiary w-[70%]">
           <p className="mb-[16px]">{name}</p>
-          <div className="flex flex-col gap-[16px]">
+          <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
               return (
                 <div key={items.id}>
@@ -117,6 +124,12 @@ export const renderField = ({
                 </div>
               );
             })}
+            {state === dynamicCondition && //state to be replaced with actual state
+              dynamicField?.map((field: any) => (
+                <div key={field.name} className={`mb-[20px] w-[40%] `}>
+                  {renderField(field)}
+                </div>
+              ))}
           </div>
         </div>
       );

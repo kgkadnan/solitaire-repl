@@ -33,10 +33,47 @@ export const KYCForm = [
     digital: [
       {
         screen: 'Personal Details',
+        icon: HandIcon,
         fields: [
           {
-            name: 'First Name',
+            name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
             isRequired: true,
             handleChange: () => {},
             state: 'state',
@@ -276,7 +313,8 @@ export const KYCForm = [
                 inputName: '',
                 inputValue: '',
                 handleInputChange: '',
-                placeholder: 'If other please specify'
+                placeholder: 'If other please specify',
+                inputStyle: 'w-[150px]'
               }
             ]
           },
@@ -346,6 +384,21 @@ export const KYCForm = [
                 value: '',
                 onChange: () => {},
                 name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Last Name*',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                state: 'state',
+                setState: 'setState',
+                error: 'error',
+                setError: 'setError',
+                errorMessage: 'First Name is required'
               }
             ]
           },

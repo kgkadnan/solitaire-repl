@@ -31,13 +31,15 @@ const KYC: React.FC = () => {
           {screen.screen}
         </h3>
       </div>
-      {screen.fields.map((field: any) => (
-        <div key={field.name} className="mb-[20px]">
-          {renderField(field)}
-        </div>
-      ))}
-      {isLastStep && renderAttachment()}{' '}
-      {/* Render attachment for the last step */}
+      <div className="h-[950px] flex flex-col flex-wrap">
+        {screen.fields.map((field: any) => (
+          <div key={field.name} className={`mb-[20px] w-[40%] `}>
+            {renderField(field)}
+          </div>
+        ))}
+        {isLastStep && renderAttachment()}{' '}
+        {/* Render attachment for the last step */}
+      </div>
     </div>
   );
 
@@ -94,7 +96,7 @@ const KYC: React.FC = () => {
     : [];
 
   return (
-    <div>
+    <div className="">
       {selectedMode === 'digital' ? (
         <Stepper
           stepper={stepperData}
