@@ -7,94 +7,49 @@ import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { EMAIL_REGEX, PASSWORD_REG } from '@/constants/validation-regex/regex';
+
 import Link from 'next/link';
 import countryCode from '../../constants/country-code.json';
 import { FormState, initialFormState } from './interface';
 import { Events } from '@/constants/enums/event';
-import {
-  INVALID_EMAIL_FORMAT,
-  MINIMUM_CHAR_PASSWORD,
-  PASSWORD_NOT_MATCH,
-  REQUIRED_FIELD
-} from '@/constants/error-messages/register';
+
+import { useRegisterMutation } from '@/features/api/register';
+import { validateField } from './helpers/validate-field';
+import { validateAllFields } from './helpers/handle-validate-all-fields';
 
 const Register = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
 
-  const validateField = (name: string, value: string) => {
-    let error = '';
+  const [register] = useRegisterMutation();
 
-    // Validation logic
-    if (value.trim() === '') {
-      error = REQUIRED_FIELD;
-    } else {
-      switch (name) {
-        case 'email':
-          if (!EMAIL_REGEX.test(value)) {
-            error = INVALID_EMAIL_FORMAT;
-          }
-          break;
-        case 'password':
-          if (!PASSWORD_REG.test(value)) {
-            error = MINIMUM_CHAR_PASSWORD;
-          }
-          if (
-            formState.confirmPassword &&
-            value !== formState.confirmPassword
-          ) {
-            error = PASSWORD_NOT_MATCH;
-            setFormErrors(prev => ({
-              ...prev,
-              confirmPassword: PASSWORD_NOT_MATCH
-            }));
-          }
-          break;
-        case 'confirmPassword':
-          if (value !== formState.password) {
-            error = PASSWORD_NOT_MATCH;
-          }
-          break;
-
-        default:
-          break;
-      }
-    }
-
-    setFormErrors(prevErrors => ({ ...prevErrors, [name]: error }));
-    return error;
-  };
-
-  const validateAllFields = () => {
-    let errors: FormState = { ...initialFormState };
-    let isValid = true;
-
-    // Validate each field
-    Object.keys(formState).forEach(key => {
-      const fieldError = validateField(key, formState[key as keyof FormState]);
-      if (fieldError) {
-        isValid = false;
-        errors = { ...errors, [key]: fieldError };
-      }
-    });
-
-    setFormErrors(errors);
-    return isValid;
-  };
-
-  const handleRegister = (
+  const handleRegister = async (
     event:
       | React.FormEvent<HTMLFormElement>
       | React.KeyboardEvent<HTMLInputElement>
   ) => {
     event.preventDefault();
-    const isFormValid = validateAllFields(); // Validate all fields
-    if (!isFormValid) return; // If the form is not valid, prevent submission
 
+    const isFormValid = validateAllFields({ formState, setFormErrors }); // Validate all fields
+    if (!isFormValid) return; // If the form is not valid, prevent submission
     // If the form is valid, proceed with the form submission (e.g., API call)
+    await register({
+      first_name: formState.firstName,
+      last_name: formState.lastName,
+      email: formState.email,
+      password: formState.password,
+      company_name: formState.companyName,
+      country_code: formState.countryCode,
+      phone: formState.mobileNumber
+    })
+      .unwrap()
+      .then((res: any) => {
+        console.log('rets', res);
+      })
+      .catch(e => {});
     console.log(formState);
   };
+
   const handleChange = (
     event:
       | React.ChangeEvent<HTMLInputElement>
@@ -102,7 +57,7 @@ const Register = () => {
   ) => {
     const { name, value } = event.target;
     setFormState(prev => ({ ...prev, [name]: value }));
-    validateField(name, value);
+    validateField({ name, value, setFormErrors, formState });
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
