@@ -47,6 +47,16 @@ const useAttachmentsStateManagement = () => {
   >([]);
   const [cancelChaqueError, setCancelChaqueError] = useState<string | null>('');
 
+  // State for Pan Card
+  const [uploadSection194QCardProgress, setUploadSection194QCardProgress] =
+    useState<number>(0);
+  const [isSection194QFileUploaded, setIsSection194QFileUploaded] =
+    useState<boolean>(false);
+  const [section194QSelectedFile, setSection194QSelectedFile] = useState<
+    string[]
+  >([]);
+  const [section194QError, setSection194QError] = useState<string | null>('');
+
   // State for Government Registration Certificate
   const [
     uploadGovermentRegCertCardProgress,
@@ -149,6 +159,12 @@ const useAttachmentsStateManagement = () => {
       selectedFile: cancelChaqueSelectedFile,
       error: cancelChaqueError
     },
+    section194Q: {
+      uploadProgress: uploadSection194QCardProgress,
+      isUploaded: isSection194QFileUploaded,
+      selectedFile: section194QSelectedFile,
+      error: section194QError
+    },
     govermentRegCert: {
       uploadProgress: uploadGovermentRegCertCardProgress,
       isUploaded: isGovermentRegCertFileUploaded,
@@ -218,6 +234,12 @@ const useAttachmentsStateManagement = () => {
       setIsUploaded: setIsCancelChaqueFileUploaded,
       setSelectedFile: setCancelChaqueSelectedFile,
       setError: setCancelChaqueError
+    },
+    setSection194Q: {
+      setProgress: setUploadSection194QCardProgress,
+      setIsUploaded: setIsSection194QFileUploaded,
+      setSelectedFile: setSection194QSelectedFile,
+      setError: setSection194QError
     },
     setGovermentRegCert: {
       setProgress: setUploadGovermentRegCertCardProgress,

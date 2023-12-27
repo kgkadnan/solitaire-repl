@@ -68,6 +68,7 @@
   "app.advanceSearch.addAnotherSearch": "Add Another Search",
 
   "app.advanceSearch.search": "Search",
+  "app.advanceSearch.save": "Save",
 
   "app.advanceSearch.from": "From",
   "app.advanceSearch.to": "To",
@@ -257,6 +258,8 @@
   "app.OTPVerification.goBack": "Go Back",
   "app.OTPVerification.verify": "verify",
   "app.OTPVerification.resend": "Resend",
+  "app.OTPVerification.save": "Save",
+  "app.OTPVerification.cancel": "Cancel",
 
   "app.successfullyCreated.exploreWebsite": "Explore Website",
   "app.successfullyCreated.finishKYCProcess": "Finish KYC Process",

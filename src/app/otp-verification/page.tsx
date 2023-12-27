@@ -7,12 +7,24 @@ import { ManageLocales } from '@/utils/translate';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import OtpInput from '@/components/common/otp-verification';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import errorImage from '@public/assets/icons/error.svg';
+import countryCode from '../../constants/country-code.json';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { CustomInputDialog } from '@/components/common/input-dialogNew';
 
+export interface FormState {
+  mobileNumber: string;
+  countryCode: string;
+  codeAndNumber: string;
+}
+
+const initialFormState: FormState = {
+  mobileNumber: '',
+  countryCode: '',
+  codeAndNumber: ''
+};
 const OTPVerification = () => {
   const router = useRouter();
   const { modalState, modalSetState } = useModalStateManagement();
@@ -29,6 +41,9 @@ const OTPVerification = () => {
     ''
   ]);
   const [resendTimer, setResendTimer] = useState<number>(60);
+
+  const [formState, setFormState] = useState<FormState>(initialFormState);
+  const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -69,18 +84,114 @@ const OTPVerification = () => {
       // Additional logic for failed verification
     }
   };
+
   const goBack = () => {
     router.back();
   };
 
-  const resendLabel = resendTimer > 0 ? `(${resendTimer})` : '';
+  const handleChange = (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLSelectElement>
+  ) => {
+    const { name, value } = event.target;
+    setFormState(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleEditMobileNumber = () => {
+    if (!formState.countryCode || !formState.mobileNumber) {
+      setFormErrors(prev => ({
+        ...prev,
+        mobileNumber: 'Please enter Mobile Number to Save'
+      }));
+    } else {
+      setFormState(prev => ({
+        ...prev,
+        codeAndNumber: `${formState.countryCode} ${formState.mobileNumber}`
+      }));
+      setIsDialogOpen(false);
+    }
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p> Change Mobile Number</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <select
+            name="countryCode"
+            value={formState.countryCode}
+            onChange={handleChange}
+            className={`bg-transparent w-[20%]  ${
+              !formErrors.mobileNumber.length
+                ? 'border-solitaireQuaternary text-solitaireTertiary'
+                : 'border-[#983131] text-[#983131]'
+            } border-b h-[4.6vh] text-[14px] focus:outline-none`}
+          >
+            {countryCode.countries.map(country => (
+              <option
+                key={country.iso_codes}
+                value={`+${country.code}`}
+                className="bg-solitaireDenary round-0 border-none"
+              >
+                +{country.code}
+              </option>
+            ))}
+          </select>
+
+          <FloatingLabelInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={handleChange}
+            type="number"
+            name="mobileNumber"
+            value={formState.mobileNumber}
+            errorText={formErrors.mobileNumber}
+          />
+        </div>
+        <div className="flex  gap-2">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setFormState(initialFormState);
+              setFormErrors(initialFormState);
+              setIsDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={handleEditMobileNumber}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const mobileNumber = '+91 0000 000 000';
+
+  const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   return (
     <>
-      <CustomDialog
-        dialogContent={dialogContent}
-        isOpens={isDialogOpen}
-        setIsOpen={setIsDialogOpen}
+      <CustomInputDialog
+        isOpen={isDialogOpen}
+        onClose={() => setIsDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
+
       <UserAuthenticationLayout
         formData={
           <div className="flex justify-center gap-5 flex-col w-[500px]">
@@ -95,10 +206,19 @@ const OTPVerification = () => {
               />
             </div>
             <div className="flex flex-col justify-between h-[17vh]">
-              <div className="">
+              <div className="flex gap-2">
                 <p className="text-solitaireTertiary">
-                  OTP has been sent to +91 0000 000 000 (change)
+                  OTP has been sent to{' '}
+                  {!formState?.codeAndNumber.length
+                    ? mobileNumber
+                    : formState.codeAndNumber}
                 </p>
+                <button
+                  onClick={() => setIsDialogOpen(true)}
+                  className="font-bold"
+                >
+                  (Edit)
+                </button>
               </div>
 
               <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
@@ -111,7 +231,7 @@ const OTPVerification = () => {
                 <CustomDisplayButton
                   displayButtonLabel={`${ManageLocales(
                     'app.OTPVerification.resend'
-                  )} ${resendLabel}Sec`}
+                  )} ${resendLabel}`}
                   displayButtonAllStyle={{
                     displayLabelStyle: 'text-[14px] font-medium'
                   }}
@@ -130,7 +250,7 @@ const OTPVerification = () => {
                   )}
                   displayButtonAllStyle={{
                     displayButtonStyle:
-                      'bg-transparent  border-2 border-solitaireQuaternary w-[500px] h-[64px]',
+                      'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[64px]',
                     displayLabelStyle:
                       'text-solitaireTertiary text-[16px] font-medium'
                   }}
