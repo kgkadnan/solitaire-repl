@@ -3,6 +3,8 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
+import { useContext } from 'react';
+import { FormContext } from '../hooks/form-context';
 
 // Define an interface for the parameters of renderField
 
@@ -26,45 +28,51 @@ interface IRadioData {
   name: string;
 }
 interface IRenderFieldProps {
-  name: string;
-  label: string;
-  type: any;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  state: string;
-  checkboxData: ICheckboxData[];
-  inputType?: any;
-  errorMessage?: string;
-  radioData: IRadioData[];
-  subTitle: string;
-  dynamicField: any;
-  dynamicCondition: string;
+  data: {
+    name: string;
+    label: string;
+    type: any;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    state: string;
+    checkboxData: ICheckboxData[];
+    inputType?: any;
+    radioData: IRadioData[];
+    subTitle: string;
+    dynamicField: any;
+    dynamicCondition: string;
+    key: string;
+  };
 }
 
-export const renderField = ({
-  name,
-  label,
-  type,
-  handleChange,
-  state,
-  inputType,
-  errorMessage,
-  checkboxData,
-  radioData,
-  subTitle,
-  dynamicField,
-  dynamicCondition
-}: IRenderFieldProps) => {
+export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
+  const {
+    name,
+    label,
+    type,
+    handleChange,
+    state,
+    inputType,
+    checkboxData,
+    radioData,
+    subTitle,
+    dynamicField,
+    dynamicCondition,
+    key
+  } = data;
+
+  const { formState, updateFormState, formErrors } = useContext(FormContext);
+
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
         <div className="">
           <FloatingLabelInput
             label={name}
-            onChange={handleChange}
+            onChange={e => updateFormState(key, e.target.value)}
             type={inputType}
             name={name}
-            // value={state}
-            value={''}
+            value={formState[name]!}
+            errorText={formErrors[key]!}
           />
         </div>
       );
@@ -127,7 +135,7 @@ export const renderField = ({
             {state === dynamicCondition && //state to be replaced with actual state
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
-                  {renderField(field)}
+                  <RenderField data={field} />
                 </div>
               ))}
           </div>
