@@ -55,6 +55,12 @@ const RenderManually = ({ data }: any) => {
         selectedFile: panOrAdhaarSelectedFile,
         error: panOrAdhaarError
       },
+      section194Q: {
+        uploadProgress: uploadSection194QCardProgress,
+        isUploaded: isSection194QFileUploaded,
+        selectedFile: section194QSelectedFile,
+        error: section194QError
+      },
       passport: {
         uploadProgress: uploadPassportCardProgress,
         isUploaded: isPassportFileUploaded,
@@ -105,6 +111,12 @@ const RenderManually = ({ data }: any) => {
         setIsUploaded: setIsIncorporationCertFileUploaded,
         setSelectedFile: setIncorporationCertSelectedFile,
         setError: setIncorporationCertError
+      },
+      setSection194Q: {
+        setProgress: setUploadSection194QCardProgress,
+        setIsUploaded: setIsSection194QFileUploaded,
+        setSelectedFile: setSection194QSelectedFile,
+        setError: setSection194QError
       },
       setCancelChaque: {
         setProgress: setUploadCancelChaqueCardProgress,
@@ -191,7 +203,7 @@ const RenderManually = ({ data }: any) => {
     },
     {
       id: '3',
-      label: 'Incorporation Certificate',
+      label: 'Incorporation Certificate or ISE copy*',
       isRequired: true,
       uploadProgress: uploadIncorporationCertCardProgress,
       setUploadProgress: setUploadIncorporationCertCardProgress,
@@ -221,6 +233,21 @@ const RenderManually = ({ data }: any) => {
     },
     {
       id: '5',
+      label: 'Section 194Q',
+      isRequired: true,
+      uploadProgress: uploadSection194QCardProgress,
+      isFileUploaded: isSection194QFileUploaded,
+      setUploadProgress: setUploadSection194QCardProgress,
+      setIsFileUploaded: setIsSection194QFileUploaded,
+      setSelectedFile: setSection194QSelectedFile,
+      selectedFile: section194QSelectedFile,
+      error: section194QError,
+      setError: setSection194QError,
+      maxFile: 1,
+      minFile: 1
+    },
+    {
+      id: '6',
       label: 'Goverment Registration Certificate',
       isRequired: true,
       uploadProgress: uploadGovermentRegCertCardProgress,
@@ -235,7 +262,7 @@ const RenderManually = ({ data }: any) => {
       minFile: 1
     },
     {
-      id: '6',
+      id: '7',
       label: 'Business Card',
       isRequired: false,
       uploadProgress: uploadBusinessCardProgress,

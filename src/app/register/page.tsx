@@ -224,7 +224,7 @@ const Register = () => {
 
                 <div className="flex flex-col gap-2">
                   {/* Button to trigger the register action */}
-                  <div className="flex flex-col justify-center bg-transparent   border-2 border-solitaireQuaternary w-[500px] h-[64px]">
+                  <div className="flex flex-col justify-center bg-transparent   border-[1px] border-solitaireQuaternary w-[500px] h-[64px]">
                     <Link
                       href={'/'}
                       className="text-[16px] font-medium text-solitaireTertiary"
