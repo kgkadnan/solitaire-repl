@@ -20,6 +20,7 @@ import { handleConfirmStone } from '@/components/common/confirm-stone/helper/han
 
 import { ProductItem } from '../interface';
 import { handleCompareStone } from '@/utils/compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 
 const ActiveMyCart = ({
   tableColumns,
@@ -115,7 +116,7 @@ const ActiveMyCart = ({
       );
     } else {
       setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
+      setErrorText(NO_STONES_SELECTED);
     }
   };
 
@@ -161,7 +162,7 @@ const ActiveMyCart = ({
 
   const handleAppointment = () => {
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_SELECTED);
   };
 
   // Configuration for footer buttons

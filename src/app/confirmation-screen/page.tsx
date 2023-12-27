@@ -13,18 +13,10 @@ const ConfirmationScreen = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              gap: '20px',
-              marginBottom: '40px',
-              flexDirection: 'column',
-              alignItems: 'center'
-            }}
-          >
+          <div className="flex flex-col gap-[8px] mb-[20px] items-center">
             <Image src={confirmImage} alt="Banner image" />
             <div className="">
-              <p className="text-solitaireTertiary mb-[20px] w-[90%]">
+              <p className="text-solitaireTertiary mb-[20px] w-[90%] text-[16px]">
                 {ManageLocales('app.confirmationScreen.message')}
               </p>
             </div>
@@ -39,7 +31,7 @@ const ConfirmationScreen = () => {
                 )}
                 displayButtonAllStyle={{
                   displayButtonStyle:
-                    'bg-[transparent] border-[1px] border-solitaireQuaternary mb-[20px] w-[500px] h-[64px]',
+                    'bg-[transparent] border-[1px] border-solitaireQuaternary mb-[20px] w-[500px] h-[54px]',
                   displayLabelStyle:
                     'text-solitaireTertiary text-[16px] font-medium'
                 }}
@@ -50,7 +42,8 @@ const ConfirmationScreen = () => {
                   'app.confirmationScreen.finishKycProcess'
                 )}
                 displayButtonAllStyle={{
-                  displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
+                  displayButtonStyle:
+                    'bg-solitaireQuaternary w-[500px] h-[54px]',
                   displayLabelStyle:
                     'text-solitaireTertiary text-[16px] font-medium'
                 }}

@@ -72,25 +72,26 @@ const ForgotPassword = () => {
       />
       <UserAuthenticationLayout
         formData={
-          <div className="flex justify-center flex-col w-[500px]">
-            <div className="flex flex-col gap-[8px] mb-[40px] items-center">
+          <div className="flex justify-center flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4">
+            <div className="flex flex-col gap-2 mb-10 items-center">
               <Image src={handImage} alt="Banner image" />
               <CustomInputlabel
                 htmlfor={''}
                 label={ManageLocales('app.forgotpassword')}
                 overriddenStyles={{
-                  label: 'text-solitaireQuaternary text-[48px] font-semibold'
+                  label:
+                    'text-solitaireQuaternary text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold'
                 }}
               />
-              <div className="w-[70%]">
-                <p className="text-solitaireTertiary text-[16px]">
+              <div className="w-3/4">
+                <p className="text-solitaireTertiary text-sm sm:text-base md:[18px]">
                   {ManageLocales('app.forgotpassword.message')}
                 </p>
               </div>
             </div>
 
             {/* Input field for email */}
-            <div className="mb-[30px]">
+            <div className="mb-6">
               <FloatingLabelInput
                 label={ManageLocales('app.forgotpassword.emailId')}
                 onChange={handleEmail}
@@ -101,28 +102,27 @@ const ForgotPassword = () => {
                 errorText={emailErrorText}
               />
             </div>
-            <div className="mb-[20px]">
+            <div className="mb-5">
               <CustomDisplayButton
                 displayButtonLabel={ManageLocales(
                   'app.forgotpassword.goBackToLogin'
                 )}
                 displayButtonAllStyle={{
                   displayButtonStyle:
-                    'bg-[transparent] border-[1px] border-solitaireQuaternary w-[500px] h-[54px] mb-[]',
+                    'bg-transparent border border-solitaireQuaternary w-full h-14',
                   displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
+                    'text-solitaireTertiary text-base font-medium'
                 }}
                 handleClick={() => router.push('/login')}
               />
             </div>
-            <div className="">
+            <div>
               <CustomDisplayButton
                 displayButtonLabel={ManageLocales('app.forgotpassword.submit')}
                 displayButtonAllStyle={{
-                  displayButtonStyle:
-                    'bg-solitaireQuaternary w-[500px] h-[54px]',
+                  displayButtonStyle: 'bg-solitaireQuaternary w-full h-14',
                   displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
+                    'text-solitaireTertiary text-base font-medium'
                 }}
                 handleClick={handleSubmit}
               />

@@ -30,6 +30,7 @@ import {
   SAVED_SEARCH_HEADER,
   NEW_SEARCH_HEADER
 } from '@/constants/application-constants/search-page';
+import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 
 interface IMyProfileRoutes {
   id: number;
@@ -218,9 +219,7 @@ function SearchResultLayout() {
       })
       .catch(() => {
         setInputError(true);
-        setInputErrorContent(
-          'Title already exists. Choose another title to save your search'
-        );
+        setInputErrorContent(TITLE_ALREADY_EXISTS);
       });
   };
 
