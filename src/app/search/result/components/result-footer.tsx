@@ -16,6 +16,11 @@ import { handleConfirmStone } from '@/components/common/confirm-stone/helper/han
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import Link from 'next/link';
 import { handleCompareStone } from '@/utils/compare-stone';
+import {
+  NOT_MORE_THAN_100,
+  SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_NOT_AVAILABLE
+} from '@/constants/error-messages/search';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -55,7 +60,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   const downloadExcelFunction = () => {
     if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Please select a stone to perform action.');
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     } else if (isCheck.length) {
       performDownloadExcel({
         products: isCheck,
@@ -73,10 +78,10 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
   const addToCart = () => {
     if (isCheck.length > 100) {
       setIsError(true);
-      setErrorText('The cart does not allow more than 100 Stones.');
+      setErrorText(NOT_MORE_THAN_100);
     } else if (isCheck.length < 1) {
       setIsError(true);
-      setErrorText('Please select a stone to perform action');
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
@@ -85,9 +90,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
       });
 
       if (hasMemoOut) {
-        setErrorText(
-          'Some stones in your selection are not available, Please modify your selection.'
-        );
+        setErrorText(SOME_STONES_NOT_AVAILABLE);
         setIsError(true);
       } else {
         const variantIds = isCheck.map((id: string) => {
