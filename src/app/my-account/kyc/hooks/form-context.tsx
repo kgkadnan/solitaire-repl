@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useState } from 'react';
 interface FormContextType {
   formState: { [key: string]: any };
   formErrors: { [key: string]: string | null };
@@ -6,20 +6,21 @@ interface FormContextType {
   updateFormErrors: (name: string, error: string | null) => void;
 }
 
-
 // Create a default value that matches the shape of your context
 const defaultContextValue: FormContextType = {
   formState: {},
-  updateFormState: () => {}, 
+  updateFormState: () => {},
   formErrors: {},
-  updateFormErrors: () => {}, 
+  updateFormErrors: () => {}
 };
 
 export const FormContext = createContext<FormContextType>(defaultContextValue);
 
 export const FormProvider = ({ children }: any) => {
   const [formState, setFormState] = useState<{ [key: string]: any }>({});
-  const [formErrors, setFormErrors] = useState<{ [key: string]: string | null }>({});
+  const [formErrors, setFormErrors] = useState<{
+    [key: string]: string | null;
+  }>({});
 
   const updateFormState = (name: string, value: any) => {
     setFormState({ ...formState, [name]: value });
@@ -34,7 +35,9 @@ export const FormProvider = ({ children }: any) => {
   };
 
   return (
-    <FormContext.Provider value={{ formState, formErrors, updateFormState, updateFormErrors }}>
+    <FormContext.Provider
+      value={{ formState, formErrors, updateFormState, updateFormErrors }}
+    >
       {children}
     </FormContext.Provider>
   );

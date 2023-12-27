@@ -39,7 +39,7 @@ interface IRenderFieldProps {
   subTitle: string;
   dynamicField: any;
   dynamicCondition: string;
-  key:string;
+  key: string;
 }
 
 export const renderField = ({
@@ -63,10 +63,8 @@ export const renderField = ({
       return (
         <div className="">
           <FloatingLabelInput
-           
-
             label={name}
-            onChange={(e) => updateFormState(key, e.target.value)}
+            onChange={e => updateFormState(key, e.target.value)}
             type={inputType}
             name={name}
             value={formState[name]!}
