@@ -1,15 +1,14 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
-import { RenderField } from './components/render-field';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
-import RenderCountrySelection from './components/render-country-selection';
-import RenderKYCSelection from './components/render-kyc-selection';
+import RenderCountrySelection from './render-country-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
-import RenderManually from './components/manually/render-manually';
-import { FormProvider } from './hooks/form-context';
-import Image from 'next/image';
+import RenderManually from './render-manually';
+import { useSelector } from 'react-redux';
+import { RenderDigitalForm } from './render-digital';
+import RenderKYCModeSelection from './render-kyc-mode-selection';
 
 interface IStepper {
   label: string;
@@ -32,25 +31,10 @@ const KYC: React.FC = () => {
   const handlePrevStep = () => {
     setActiveStep(prevStep => prevStep - 1);
   };
-  const renderDigitalForm = (country: any, screen: any, isLastStep: any) => (
-    <div key={screen.screen}>
-      <div className="flex items-center mt-[30px] mb-[30px] ">
-        <Image src={screen.icon} alt="Backhand image" />
-        <h3 className="ml-[10px] text-[18px] text-solitaireTertiary">
-          {screen.screen}
-        </h3>
-      </div>
-      <div className="h-[950px] flex flex-col flex-wrap">
-        {screen.fields.map((field: any) => (
-          <div key={field.name} className={`mb-[20px] w-[40%] `}>
-            <RenderField data={field} />
-          </div>
-        ))}
-        {isLastStep && renderAttachment()}{' '}
-        {/* Render attachment for the last step */}
-      </div>
-    </div>
-  );
+
+  const formState = useSelector((state: any) => state.kyc.formState);
+  const formErrors = useSelector((state: any) => state.kyc?.formErrors);
+
   // const renderManualForm = () => (
   //   <div>
   //     {/* <DownloadAndUpload
@@ -89,10 +73,13 @@ const KYC: React.FC = () => {
   const stepperData: IStepper[] = country.digital
     ? country.digital.map((screen: any, index: number) => ({
         label: `${screen.screen}`,
-        data: renderDigitalForm(
-          country,
-          screen,
-          index === country.digital.length - 1
+        data: (
+          <RenderDigitalForm
+            screen={screen}
+            isLastStep={index === country.digital.length - 1}
+            formState={formState}
+            formErrorState={formErrors}
+          />
         ),
         status:
           index === activeStep
@@ -141,7 +128,7 @@ const KYC: React.FC = () => {
     case 'choice_for_filling_kyc':
       // Render the component for 'choice_for_filling_kyc'
       return (
-        <RenderKYCSelection
+        <RenderKYCModeSelection
           handleSaveAndNext={handleSaveAndNext}
           setSelectedKYCOption={setSelectedKYCOption}
           selectedKYCOption={selectedKYCOption}
@@ -154,16 +141,13 @@ const KYC: React.FC = () => {
     // Add more cases as needed
     case 'digitally':
       return (
-        <FormProvider>
-          {' '}
-          <Stepper
-            stepper={stepperData}
-            state={activeStep}
-            setState={setActiveStep}
-            prevStep={handlePrevStep}
-            nextStep={handleNextStep}
-          />
-        </FormProvider>
+        <Stepper
+          stepper={stepperData}
+          state={activeStep}
+          setState={setActiveStep}
+          prevStep={handlePrevStep}
+          nextStep={handleNextStep}
+        />
       );
 
     case 'manually':

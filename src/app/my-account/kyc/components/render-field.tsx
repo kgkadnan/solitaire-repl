@@ -3,8 +3,8 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
-import { useContext } from 'react';
-import { FormContext } from '../hooks/form-context';
+import { useDispatch, useSelector } from 'react-redux';
+import { handleInputChange } from '../helper/handle-change';
 
 // Define an interface for the parameters of renderField
 
@@ -42,9 +42,15 @@ interface IRenderFieldProps {
     dynamicCondition: string;
     key: string;
   };
+  formState: any;
+  formErrorState: any;
 }
 
-export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
+export const RenderField: React.FC<IRenderFieldProps> = ({
+  data,
+  formState,
+  formErrorState
+}) => {
   const {
     name,
     label,
@@ -60,7 +66,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
     key
   } = data;
 
-  const { formState, updateFormState, formErrors } = useContext(FormContext);
+  const dispatch = useDispatch();
 
   switch (type) {
     case fieldType.FLOATING_INPUT:
@@ -68,11 +74,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
         <div className="">
           <FloatingLabelInput
             label={name}
-            onChange={e => updateFormState(key, e.target.value)}
+            onChange={e => handleInputChange(key, e.target.value, dispatch)}
             type={inputType}
             name={name}
-            value={formState[name]!}
-            errorText={formErrors[key]!}
+            value={formState?.online?.sections[0][key] || ''}
+            errorText={formErrorState[key]!}
           />
         </div>
       );
@@ -135,7 +141,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
             {state === dynamicCondition && //state to be replaced with actual state
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
-                  <RenderField data={field} />
+                  <RenderField
+                    data={field}
+                    formState={formState}
+                    formErrorState={formErrorState}
+                  />
                 </div>
               ))}
           </div>

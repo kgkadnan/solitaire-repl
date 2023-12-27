@@ -13,20 +13,20 @@ import {
 } from '@/app/search/result/result-interface';
 import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
 
-interface IRenderKYCSelection {
+interface IRenderKYCModeSelection {
   setSelectedKYCOption: React.Dispatch<React.SetStateAction<string>>;
   selectedKYCOption: string;
   handleSaveAndNext: (state: string) => void;
   errorState: IErrorState;
   errorSetState: IErrorSetState;
 }
-const RenderKYCSelection = ({
+const RenderKYCModeSelection = ({
   handleSaveAndNext,
   setSelectedKYCOption,
   selectedKYCOption,
   errorState,
   errorSetState
-}: IRenderKYCSelection) => {
+}: IRenderKYCModeSelection) => {
   const { setErrorText } = errorSetState;
   const { errorText } = errorState;
 
@@ -154,4 +154,4 @@ const RenderKYCSelection = ({
   );
 };
 
-export default RenderKYCSelection;
+export default RenderKYCModeSelection;

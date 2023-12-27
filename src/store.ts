@@ -20,12 +20,14 @@ import { manageListingSequenceApi } from './features/api/manage-listing-sequence
 import { myDiamondAPI } from './features/api/my-diamonds/my-diamond';
 import { registerApi } from './features/api/register';
 import { currentIPApi } from './features/api/current-ip';
+import kycReducer from './features/kyc/kyc';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
   savedSearch: savedSearchReducer,
+  kyc: kycReducer,
   [downloadExcelApi.reducerPath]: downloadExcelApi.reducer,
   [currentIPApi.reducerPath]: currentIPApi.reducer,
   [manageListingSequenceApi.reducerPath]: manageListingSequenceApi.reducer,

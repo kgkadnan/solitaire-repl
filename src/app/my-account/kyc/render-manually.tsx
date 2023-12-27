@@ -8,7 +8,7 @@ import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 
-import useAttachmentsStateManagement from '../../hooks/attachment-state-management';
+import useAttachmentsStateManagement from './hooks/attachment-state-management';
 
 const RenderManually = ({ data }: any) => {
   const {

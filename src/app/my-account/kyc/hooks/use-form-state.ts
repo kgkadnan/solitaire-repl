@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-const useFormState = (initialState: any) => {
+export const useFormState = (initialState: any) => {
   const [formState, setFormState] = useState(initialState);
 
   const updateFormState = (path: any, value: any) => {
@@ -23,14 +23,3 @@ const useFormState = (initialState: any) => {
 
   return [formState, updateFormState];
 };
-
-const initialFormState = {
-  country: '',
-  online: {
-    sections: {}
-  },
-  offline: null
-};
-
-// Usage
-const [formState, updateFormState] = useFormState(initialFormState);

@@ -48,7 +48,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'last_name'
           },
           {
             name: 'Contact Number*',
@@ -71,7 +71,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'first_name1'
           },
           {
             name: 'Year of Establishment*',
