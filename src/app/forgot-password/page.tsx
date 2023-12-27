@@ -38,28 +38,34 @@ const ForgotPassword = () => {
   };
 
   const handleSubmit = () => {
-    if (!emailErrorText.length && !value.length) {
-      const res: any = ForgotPassword({
-        email: value
-      });
+    const res: any = ForgotPassword({
+      email: value
+    });
 
-      if (res?.error) {
-        setIsDialogOpen(true);
-        setDialogContent(
-          <ErrorModel
-            content={res?.error}
-            handleClick={() => setIsDialogOpen(false)}
-          />
-        );
-      } else {
-        // if (res?.data) {
-        //   localStorage.removeItem('Search');
-        //   router.push('/otp-verification');
-        // }
-      }
-    } else {
-      setEmailErrorText('Please enter email');
-    }
+    console.log('res', res);
+
+    // if (!emailErrorText.length && !value.length) {
+    //   const res: any = ForgotPassword({
+    //     email: value
+    //   });
+
+    //   if (res?.error) {
+    //     setIsDialogOpen(true);
+    //     setDialogContent(
+    //       <ErrorModel
+    //         content={res?.error}
+    //         handleClick={() => setIsDialogOpen(false)}
+    //       />
+    //     );
+    //   } else {
+    //     // if (res?.data) {
+    //     //   localStorage.removeItem('Search');
+    //     //   router.push('/otp-verification');
+    //     // }
+    //   }
+    // } else {
+    //   setEmailErrorText('Please enter email');
+    // }
   };
 
   return (
