@@ -153,13 +153,18 @@ const KYC: React.FC = () => {
       return <RenderManually data={data} />;
     // Add more cases as needed
     case 'digitally':
-      return     <FormProvider> <Stepper
-              stepper={stepperData}
-              state={activeStep}
-              setState={setActiveStep}
-              prevStep={handlePrevStep}
-              nextStep={handleNextStep}
-            /></FormProvider>
+      return (
+        <FormProvider>
+          {' '}
+          <Stepper
+            stepper={stepperData}
+            state={activeStep}
+            setState={setActiveStep}
+            prevStep={handlePrevStep}
+            nextStep={handleNextStep}
+          />
+        </FormProvider>
+      );
 
     case 'manually':
       return <RenderManually data={data} />;
