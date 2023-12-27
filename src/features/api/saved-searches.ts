@@ -1,12 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from './base-query';
 
 export const savedSearchesApi = createApi({
   reducerPath: 'savedSearchReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }),
+  baseQuery: createBaseQuery(),
   tagTypes: ['SavedSearch'],
 
   endpoints: builder => ({
