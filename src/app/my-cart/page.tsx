@@ -27,6 +27,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomModal } from '@/components/common/modal';
+import { SELECT_STONES } from '@/constants/error-messages/cart';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
@@ -210,9 +211,9 @@ function MyCart() {
   };
 
   // Effect hook to update table columns when they change
-  // useEffect(() => {
-  //   setTableColumns(listingColumns);
-  // }, [listingColumns, setTableColumns]);
+  useEffect(() => {
+    setTableColumns(listingColumns);
+  }, [listingColumns, setTableColumns]);
 
   // useEffect(() => {
   //   if (isDialogOpen) {
@@ -230,7 +231,7 @@ function MyCart() {
   const downloadExcelFunction = () => {
     if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Please select a stone to perform action.');
+      setErrorText(SELECT_STONES);
     } else if (isCheck.length) {
       performDownloadExcel({
         products: isCheck,

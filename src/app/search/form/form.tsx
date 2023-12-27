@@ -30,6 +30,17 @@ import {
 } from '@/constants/application-constants/search-page';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
+import {
+  EXCEEDS_LIIMITS,
+  MAX_LIMIT_REACHED,
+  SELECT_SOME_PARAM,
+  SOMETHING_WENT_WRONG,
+  TITLE_ALREADY_EXISTS
+} from '@/constants/error-messages/form';
+import {
+  NO_STONE_FOUND,
+  SELECT_STONE_TO_PERFORM_ACTION
+} from '@/constants/error-messages/form';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -154,12 +165,10 @@ used for managing the state of a form field or input element in a React componen
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(
-            'Please modify your search, the stones exceeds the limit.'
-          );
+          setErrorText(EXCEEDS_LIIMITS);
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(`No stones found, Please modify your search.`);
+          setErrorText(NO_STONE_FOUND);
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
           data?.count && setErrorText(`${data?.count} stones found`);
@@ -174,7 +183,7 @@ used for managing the state of a form field or input element in a React componen
     }
     if (error) {
       setIsError(true);
-      setErrorText('Something went wrong');
+      setErrorText(SOMETHING_WENT_WRONG);
     }
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl]);
@@ -188,7 +197,7 @@ used for managing the state of a form field or input element in a React componen
       modifySearchFrom !== `${SAVED_SEARCHES}`
     ) {
       setIsError(true);
-      setErrorText('Max search limit reached. Please remove existing searches');
+      setErrorText(MAX_LIMIT_REACHED);
     } else {
       if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
         if (
@@ -243,15 +252,13 @@ used for managing the state of a form field or input element in a React componen
               .catch((error: any) => {
                 console.log('error', error);
                 setInputError(true);
-                setInputErrorContent(
-                  'Title already exists. Choose another title to save your search'
-                );
+                setInputErrorContent(TITLE_ALREADY_EXISTS);
               });
           }
         }
       } else {
         setIsError(true);
-        setErrorText('Please select some parameter before initiating search');
+        setErrorText(SELECT_SOME_PARAM);
       }
     }
   };
@@ -264,7 +271,7 @@ used for managing the state of a form field or input element in a React componen
       modifySearchFrom !== `${RESULT}`
     ) {
       setIsError(true);
-      setErrorText('Max search limit reached. Please remove existing searches');
+      setErrorText(MAX_LIMIT_REACHED);
     } else {
       if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
         if (
@@ -324,7 +331,7 @@ used for managing the state of a form field or input element in a React componen
         }
       } else {
         setIsError(true);
-        setErrorText('Please select some parameter before initiating search');
+        setErrorText(SELECT_SOME_PARAM);
       }
     }
   };
@@ -431,9 +438,7 @@ used for managing the state of a form field or input element in a React componen
                   modifySearchFrom !== `${SAVED_SEARCHES}`
                 ) {
                   setIsError(true);
-                  setErrorText(
-                    'Max search limit reached. Please remove existing searches'
-                  );
+                  setErrorText(MAX_LIMIT_REACHED);
                 } else {
                   if (
                     data?.count < MAX_SEARCH_FORM_COUNT &&
@@ -457,9 +462,7 @@ used for managing the state of a form field or input element in a React componen
                       }
                     } else {
                       setIsError(true);
-                      setErrorText(
-                        'Please make a selection to perform action.'
-                      );
+                      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
                     }
                   }
                 }

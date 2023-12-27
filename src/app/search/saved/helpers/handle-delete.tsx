@@ -1,5 +1,6 @@
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import styles from '../saved.module.scss';
+import { NO_STONES_PICKED } from '@/constants/error-messages/saved';
 
 interface HandleDeleteProps {
   isCheck: string[];
@@ -99,7 +100,7 @@ export const handleDelete = ({
   } else {
     // Display error if no stones are selected for deletion
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_PICKED);
   }
 
   // Adjust current page if deleting the only stone on the last page
