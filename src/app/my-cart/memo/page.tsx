@@ -8,6 +8,7 @@ import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 
 import { handleCompareStone } from '@/utils/compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 
 const MemoOut = ({
   tableColumns,
@@ -34,7 +35,7 @@ const MemoOut = ({
   // Share handler
   const handleShare = () => {
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_SELECTED);
   };
 
   // View Similar Stone handler
