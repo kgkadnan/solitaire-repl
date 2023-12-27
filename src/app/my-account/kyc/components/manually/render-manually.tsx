@@ -330,8 +330,6 @@ const RenderManually = ({ data }: any) => {
     }
   ];
 
-  console.log('data={data}ḍ', data);
-
   const handleTermAndCondition = () => {};
 
   return (

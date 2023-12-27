@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
-import { renderField } from './components/render-field';
+import { RenderField } from './components/render-field';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
 import RenderCountrySelection from './components/render-country-selection';
@@ -43,7 +43,7 @@ const KYC: React.FC = () => {
       <div className="h-[950px] flex flex-col flex-wrap">
         {screen.fields.map((field: any) => (
           <div key={field.name} className={`mb-[20px] w-[40%] `}>
-            {renderField(field)}
+            <RenderField data={field} />
           </div>
         ))}
         {isLastStep && renderAttachment()}{' '}

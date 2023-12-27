@@ -272,17 +272,17 @@ const CompareStone = () => {
   }, []);
 
   // UseEffect to close the dialog box
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {

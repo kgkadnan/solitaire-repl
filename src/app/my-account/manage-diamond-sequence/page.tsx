@@ -43,17 +43,17 @@ const ManageListingSequence = () => {
 
   /* The `useEffect` hook in the code snippet is used to set a timeout for closing the dialog box after a
 delay of 3000 milliseconds (3 seconds). */
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen]);
 
   // const [updateSequence, setUpdateSequence] = useState<TableColumn[]>([]);
 
