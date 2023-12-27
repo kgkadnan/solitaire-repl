@@ -21,11 +21,39 @@ const Login = () => {
 
   // Handle the login logic
   const handleLogin = async () => {
+<<<<<<< Updated upstream
     let res: any = await verifyLogin({ email: email, password: password });
     if (res.error) {
       // Display error message if login fails
       setIsError(true);
       setErrorText(res.error.data.message);
+=======
+    if (
+      !emailErrorText.length &&
+      !passwordErrorText.length &&
+      password.length &&
+      emailAndNumber.length
+    ) {
+      let res: any = await verifyLogin({
+        email: emailAndNumber,
+        password: password
+      });
+
+      if (res?.error?.originalStatus === 401) {
+        // Display error message if login fails
+        setIsError(true);
+        setErrorText('Incorrect login credential');
+      } else if (res.error) {
+        setIsError(true);
+        setErrorText(res.error.data.message);
+      } else {
+        // Redirect to home page if login is successful
+        if (res.data.customer) {
+          localStorage.removeItem('Search');
+          router.push('/');
+        }
+      }
+>>>>>>> Stashed changes
     } else {
       // Redirect to home page if login is successful
       if (res.data.customer) {
