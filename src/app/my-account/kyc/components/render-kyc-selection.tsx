@@ -11,6 +11,7 @@ import {
   IErrorSetState,
   IErrorState
 } from '@/app/search/result/result-interface';
+import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
 
 interface IRenderKYCSelection {
   setSelectedKYCOption: React.Dispatch<React.SetStateAction<string>>;
@@ -143,7 +144,7 @@ const RenderKYCSelection = ({
                 fn: () =>
                   selectedKYCOption.length
                     ? handleSaveAndNext(selectedKYCOption)
-                    : setErrorText('please select option to proceed')
+                    : setErrorText(SELECT_VALID_INPUT)
               }
             ]}
           />
