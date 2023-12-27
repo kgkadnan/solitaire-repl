@@ -32,7 +32,7 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   };
 
   return (
-    <div className="relative z-0 w-[500px]">
+    <div className="relative z-0">
       <input
         type={showPassword && isPasswordVisible ? 'text' : type}
         name={name}

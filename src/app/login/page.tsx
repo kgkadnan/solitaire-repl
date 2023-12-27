@@ -10,11 +10,7 @@ import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
-import {
-  EMAIL_REGEX,
-  PASSWORD_REGEX,
-  PHONE_REGEX
-} from '@/constants/validation-regex/regex';
+import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
 import useUser from '@/lib/useAuth';
 
 // Define the Login component
@@ -42,14 +38,19 @@ const Login = () => {
         email: emailAndNumber,
         password: password
       });
-      if (res.error) {
+
+      console.log(res);
+
+      if (res?.error?.originalStatus === 401) {
         // Display error message if login fails
+        setIsError(true);
+        setErrorText('Incorrect login credential');
+      } else if (res.error) {
         setIsError(true);
         setErrorText(res.error.data.message);
       } else {
         // Redirect to home page if login is successful
         if (res.data.access_token) {
-          // localStorage.removeItem('Search');
           userLoggedIn(res.data.access_token);
           router.push('/');
         }
@@ -113,32 +114,27 @@ const Login = () => {
     <UserAuthenticationLayout
       formData={
         <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              marginBottom: '40px',
-              alignItems: 'center'
-            }}
-          >
+          <div className="flex flex-col gap-[8px] mb-[40px] items-center">
             <Image src={handImage} alt="Banner image" />
-            <CustomInputlabel
-              htmlfor={''}
-              label={ManageLocales('app.login')}
-              overriddenStyles={{
-                label: 'text-solitaireQuaternary text-[48px] font-semibold'
-              }}
-            />
+            <div>
+              <CustomInputlabel
+                htmlfor={''}
+                label={ManageLocales('app.login')}
+                overriddenStyles={{
+                  label: 'text-solitaireQuaternary text-[48px] font-semibold'
+                }}
+              />
+            </div>
+
             <div className="">
-              <p className="text-solitaireTertiary">
+              <p className="text-solitaireTertiary text-[16px]">
                 {ManageLocales('app.login.welcomeMessage')}
               </p>
             </div>
           </div>
 
           {/* Input field for email */}
-          <div className="flex flex-col gap-[40px]">
+          <div className="flex flex-col gap-[30px]">
             <FloatingLabelInput
               label={ManageLocales('app.login.emailAndNumber')}
               onChange={e => handleInputChange(e, 'email')}
@@ -159,47 +155,47 @@ const Login = () => {
               errorText={passwordErrorText}
               showPassword={true}
             />
-
-            <div>
-              {/* Display error message if there is an error */}
-              <div className="h-6 mb-3">
-                {isError ? (
-                  <div className="text-red-600 flex text-left">{errorText}</div>
-                ) : (
-                  ''
-                )}
-              </div>
-              {/* Button to trigger the login action */}
-
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales('app.login')}
-                displayButtonAllStyle={{
-                  displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
-                }}
-                handleClick={handleLogin}
-              />
+          </div>
+          <div>
+            {/* Display error message if there is an error */}
+            <div className="flex justify-center items-center text-[16px] h-10">
+              {isError ? (
+                <div className="text-[#983131] flex text-left">{errorText}</div>
+              ) : (
+                ''
+              )}
             </div>
+            {/* Button to trigger the login action */}
 
-            <div className="">
-              <Link
-                href={'/forgot-password'}
-                className="text-[18px] font-medium"
-              >
-                {ManageLocales('app.login.forgotPassword')}
-              </Link>
-              <div className="mt-[20px]">
-                <p className="text-solitaireTertiary text-[18px] font-light">
-                  {ManageLocales('app.login.newUser')}
-                  <Link
-                    href={''}
-                    className="text-solitaireQuaternary font-medium"
-                  >
-                    {ManageLocales('app.login.register')}
-                  </Link>
-                </p>
-              </div>
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.login')}
+              displayButtonAllStyle={{
+                displayButtonStyle:
+                  'bg-solitaireQuaternary w-[500px] h-[54px] mb-[40px]',
+                displayLabelStyle:
+                  'text-solitaireTertiary text-[16px] font-medium'
+              }}
+              handleClick={handleLogin}
+            />
+          </div>
+
+          <div className="">
+            <Link
+              href={'/forgot-password'}
+              className="text-[18px] text-solitaireQuaternary font-medium"
+            >
+              {ManageLocales('app.login.forgotPassword')}
+            </Link>
+            <div className="mt-[20px]">
+              <p className="text-solitaireTertiary text-[18px] font-light">
+                {ManageLocales('app.login.newUser')}
+                <Link
+                  href={''}
+                  className="text-solitaireQuaternary font-medium"
+                >
+                  {ManageLocales('app.login.register')}
+                </Link>
+              </p>
             </div>
           </div>
         </div>
