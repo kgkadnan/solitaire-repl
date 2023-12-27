@@ -210,21 +210,21 @@ function MyCart() {
   };
 
   // Effect hook to update table columns when they change
-  useEffect(() => {
-    setTableColumns(listingColumns);
-  }, [listingColumns, setTableColumns]);
+  // useEffect(() => {
+  //   setTableColumns(listingColumns);
+  // }, [listingColumns, setTableColumns]);
 
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   // Handle download of Excel based on user selection (All or Selected)
   const downloadExcelFunction = () => {

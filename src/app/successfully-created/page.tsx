@@ -1,10 +1,8 @@
 'use client';
 import Image from 'next/image';
 import React from 'react';
-import handImage from '@public/assets/images/noto_waving-hand.png';
 import { ManageLocales } from '@/utils/translate';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import Link from 'next/link';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 

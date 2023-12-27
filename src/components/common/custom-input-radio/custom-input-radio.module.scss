@@ -41,3 +41,11 @@
 .radio input[type='radio']:checked ~ span:after {
   transform: translate(-50%, -50%) scale(1);
 }
+
+.Border {
+  border-bottom: 1px solid hsl(var(--solitaire-border));
+}
+
+.Border:focus {
+  border-color: hsl(var(--solitaire-quaternary));
+}

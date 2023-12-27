@@ -10,16 +10,15 @@ export const colourStyles: StylesConfig<ColourOption, true> = {
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
 
-    backgroundColor: ' hsl(var(--solitaire-primary))',
+    backgroundColor: ' hsl(var(--solitaire-secondary))',
     borderRadius: 'none',
     border: 'none',
-    borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
+    padding: '10px',
     // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
     outline: '1px solid hsl(var(--solitaire-primary))',
     width: '100%',
     ':hover': {
-      border: 'none',
-      borderBottom: '1px solid hsl(var(--solitaire-quaternary))'
+      border: 'none'
     }
   }),
   singleValue: styles => ({
