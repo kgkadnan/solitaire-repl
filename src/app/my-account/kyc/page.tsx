@@ -1,13 +1,9 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
-import { RenderField } from './components/renderField';
+import { RenderField } from './components/render-field';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
-import handImage from '@public/assets/images/noto_waving-hand.png';
-import { ManageLocales } from '@/utils/translate';
-import { CustomInputlabel } from '@/components/common/input-label';
-import { CustomFooter } from '@/components/common/footer';
 import RenderCountrySelection from './components/render-country-selection';
 import RenderKYCSelection from './components/render-kyc-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
