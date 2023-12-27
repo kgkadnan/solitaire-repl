@@ -3,7 +3,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { ManageLocales } from '@/utils/translate';
@@ -40,69 +39,56 @@ const ResetPassword = () => {
   };
 
   return (
-    <UserAuthenticationLayout
-      formData={
-        <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              marginBottom: '40px',
-              alignItems: 'center'
+    <div className="flex flex-col justify-center items-center min-h-screen w-full px-4">
+      <div className="flex flex-col gap-[8px] mb-8 items-center w-full max-w-md text-center">
+        <Image src={handImage} alt="Banner image" />
+        <CustomInputlabel
+          htmlfor={''}
+          label={ManageLocales('app.resetPassword.resetPassword')}
+          overriddenStyles={{
+            label: 'lg:text-[48px] md:text-[30px] sm:text-[20px] font-semibold '
+          }}
+        />
+      </div>
+
+      <div className="flex flex-col gap-8 w-full max-w-md">
+        <FloatingLabelInput
+          label={ManageLocales('app.resetPassword.password')}
+          onChange={handlePasswordInput}
+          type="password"
+          name="password"
+          onKeyDown={handleKeyDown}
+          value={resetPassword}
+          errorText={comparePasswordError}
+          showPassword={true}
+        />
+        <FloatingLabelInput
+          label={ManageLocales('app.resetPassword.confirmPassword')}
+          onChange={handleConfirmPasswordInput}
+          type="password"
+          name="confirmPassword"
+          onKeyDown={handleKeyDown}
+          value={resetConfirmPassword}
+          errorText={comparePasswordError}
+          showPassword={true}
+        />
+
+        <div>
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales(
+              'app.resetPassword.resetPassword'
+            )}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                'bg-solitaireQuaternary w-full lg:h-[64px] md:h-[50px] sm:h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary lg:text-[16px] sm:text-[14px] md:text-[16px] font-medium'
             }}
-          >
-            <Image src={handImage} alt="Banner image" />
-            <CustomInputlabel
-              htmlfor={''}
-              label={ManageLocales('app.resetPassword.resetPassword')}
-              overriddenStyles={{
-                label: 'text-solitaireQuaternary text-[48px] font-semibold'
-              }}
-            />
-          </div>
-
-          {/* Input field for email */}
-          <div className="flex flex-col gap-[40px]">
-            <FloatingLabelInput
-              label={ManageLocales('app.resetPassword.password')}
-              onChange={handlePasswordInput}
-              type="password"
-              name="password"
-              onKeyDown={handleKeyDown}
-              value={resetPassword}
-              errorText={comparePasswordError}
-              showPassword={true}
-            />
-            {/* Input field for password */}
-            <FloatingLabelInput
-              label={ManageLocales('app.resetPassword.confirmPassword')}
-              onChange={handleConfirmPasswordInput}
-              type="Password"
-              name="Password"
-              onKeyDown={handleKeyDown}
-              value={resetConfirmPassword}
-              errorText={comparePasswordError}
-              showPassword={true}
-            />
-
-            <div>
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales(
-                  'app.resetPassword.resetPassword'
-                )}
-                displayButtonAllStyle={{
-                  displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
-                }}
-                handleClick={handleResetPassword}
-              />
-            </div>
-          </div>
+            handleClick={handleResetPassword}
+          />
         </div>
-      }
-    />
+      </div>
+    </div>
   );
 };
 

@@ -211,9 +211,9 @@ function MyCart() {
   };
 
   // Effect hook to update table columns when they change
-  // useEffect(() => {
-  //   setTableColumns(listingColumns);
-  // }, [listingColumns, setTableColumns]);
+  useEffect(() => {
+    setTableColumns(listingColumns);
+  }, [listingColumns, setTableColumns]);
 
   // useEffect(() => {
   //   if (isDialogOpen) {
