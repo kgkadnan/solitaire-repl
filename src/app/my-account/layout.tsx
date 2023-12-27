@@ -18,14 +18,15 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const myProfileRoutes = [
     {
       id: '1',
-      pathName: ManageLocales('app.myProfile.summary'),
-      path: 'summary'
-    },
-    {
-      id: '2',
       pathName: ManageLocales('app.myProfile.kyc'),
       path: 'kyc'
     },
+    {
+      id: '2',
+      pathName: ManageLocales('app.myProfile.summary'),
+      path: 'summary'
+    },
+
     {
       id: '3',
       pathName: ManageLocales('app.myProfile.changePassword'),

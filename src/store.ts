@@ -18,6 +18,7 @@ import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
 import { myDiamondAPI } from './features/api/my-diamonds/my-diamond';
+import { registerApi } from './features/api/register';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -33,6 +34,7 @@ const rootReducer = combineReducers({
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
+  [registerApi.reducerPath]: registerApi.reducer,
   [myDiamondAPI.reducerPath]: myDiamondAPI.reducer
 });
 
@@ -51,7 +53,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         notificationSettingApi.middleware,
         productApi.middleware,
         loginApi.middleware,
-        myDiamondAPI.middleware
+        myDiamondAPI.middleware,
+        registerApi.middleware
       ),
     preloadedState
   });

@@ -34,7 +34,8 @@ export const colourStyles: StylesConfig<ColourOption, true> = {
   menuList: styles => ({
     ...styles,
     backgroundColor: 'hsl(var(--solitaire-denary))',
-    height: '20vh'
+    minHeight: '10vh',
+    height: '17vh'
   }),
   option: styles => {
     return {

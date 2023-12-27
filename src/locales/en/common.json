@@ -136,6 +136,20 @@
   "app.myProfile.emailNotification": "Email Notification",
   "app.myProfile.reportBug": "Report Bug",
 
+  "app.myProfile.kyc.attachments": "Attachments",
+  "app.myProfile.kyc.companyDocuments": "Company Documents",
+  "app.myProfile.kyc.companyOwnerDocuments": "Company Owner Documents",
+  "app.myProfile.kyc.photoId": "Photo ID of person/s authorised to collect goods",
+  "app.myProfile.kyc.download": "Download",
+  "app.myProfile.kyc.upload": "Upload",
+  "app.myProfile.kyc.country": "Country",
+
+  "app.myaccount.kyc.chooseTheCountry": "Choose the Country",
+  "app.myaccount.kyc.choiceOfFillingTheKYCForm": "Choice of filling the KYC form",
+  "app.myaccount.kyc.saveAndNext": "Save and Next",
+  "app.myaccount.kyc.next": "Next",
+  "app.myaccount.kyc.back": "Back",
+
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
   "app.myaccount.summary.emailID": "Email ID",
@@ -217,5 +231,51 @@
   "app.myDiamonds.myInvoice.myInvoiceDetail": "Invoices Details",
   "app.myDiamonds.MyInvoices.header.searchByInvoiceId": "Search by Invoice ID",
   "app.myDiamonds.PreviousConfirmations": "Previous Confirmations",
-  "app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails": "Previous Confirmation Details"
+  "app.myDiamonds.PreviousConfirmations.PreviousConfirmationDetails": "Previous Confirmation Details",
+
+  "app.login": "Login",
+  "app.login.welcomeMessage": "Welcome back! Please login to your account",
+  "app.login.forgotPassword": "Forgot Password?",
+  "app.login.newUser": "New User ?",
+  "app.login.register": " Register",
+  "app.login.emailAndNumber": "Email / Mobile Number",
+  "app.login.password": "Password",
+
+  "app.register": "Register",
+  "app.register.welcomeMessage": "Welcome! Please register to create account",
+  "app.register.firstName": "First Name*",
+  "app.register.lastName": "Last Name*",
+  "app.register.email": "Email*",
+  "app.register.mobileNumber": "Mobile Number*",
+  "app.register.companyName": "Company Name*",
+  "app.register.password": "Password*",
+  "app.register.confirmPassword": "Confirm Password*",
+
+  "app.register.registerAsGuest": "Register as Guest",
+
+  "app.OTPVerification": "Verification",
+  "app.OTPVerification.goBack": "Go Back",
+  "app.OTPVerification.verify": "verify",
+  "app.OTPVerification.resend": "Resend",
+
+  "app.successfullyCreated.exploreWebsite": "Explore Website",
+  "app.successfullyCreated.finishKYCProcess": "Finish KYC Process",
+
+  "app.confirmationScreen.message": "Your account has been successfully created!",
+  "app.confirmationScreen.exploreWebsite": "Explore Website",
+  "app.confirmationScreen.finishKycProcess": "Finish KYC Process",
+
+  "app.forgotpassword": "Forgot Password",
+  "app.forgotpassword.message": "Please enter your registered phone number to reset password",
+  "app.forgotpassword.mobileNumber": "Mobile Number",
+  "app.forgotpassword.sendOtp": "Send OTP",
+
+  "app.resetPassword.resetPassword": "Reset Password",
+  "app.resetPassword.password": "Password*",
+  "app.resetPassword.confirmPassword": "Confirm Password*",
+
+  "app.companyDetails.registerCompanyName": "Registered Company Name*",
+  "app.personalDetail.firstName": "First Name*",
+  "app.personalDetail.contactNumber": "Contact Number*",
+  "app.personalDetail.contactEmailId": "Contact Email-ID*"
 }

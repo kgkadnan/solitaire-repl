@@ -1,0 +1,25 @@
+.inputStyles {
+  background-color: hsl(var(--solitaire-denary));
+  width: 50% !important;
+  height: 45px;
+  border-radius: 7px;
+  border: 0px;
+  margin-left: 8px;
+  margin-right: 8px;
+  font-size: 20px;
+}
+
+.otpContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.otpInput {
+  background-color: hsl(var(--solitaire-denary));
+  border-radius: 10px;
+  width: 65px;
+  height: 65px;
+  text-align: center;
+  font-size: 18px;
+}
