@@ -10,12 +10,15 @@ export const forgotPasswordApi = createApi({
   tagTypes: ['forgotPassword'],
 
   endpoints: builder => ({
-    ForgotPassword: builder.mutation({
+    forgotPassword: builder.mutation({
       query: data => ({
         url: `/store/customers/password-token`,
         method: 'POST',
         body: data
       }),
+      transformResponse: (response, meta) => {
+        return { data: response, statusCode: meta?.response?.status };
+      },
       invalidatesTags: ['forgotPassword']
     })
   })
