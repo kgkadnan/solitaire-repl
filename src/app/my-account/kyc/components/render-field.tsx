@@ -3,7 +3,7 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { handleInputChange } from '../helper/handle-change';
 
 // Define an interface for the parameters of renderField
@@ -44,12 +44,14 @@ interface IRenderFieldProps {
   };
   formState: any;
   formErrorState: any;
+  screenId: number;
 }
 
 export const RenderField: React.FC<IRenderFieldProps> = ({
   data,
   formState,
-  formErrorState
+  formErrorState,
+  screenId
 }) => {
   const {
     name,
@@ -67,18 +69,24 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   } = data;
 
   const dispatch = useDispatch();
-
+  console.log(formState, 'llllll');
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
         <div className="">
           <FloatingLabelInput
             label={name}
-            onChange={e => handleInputChange(key, e.target.value, dispatch)}
+            onChange={e =>
+              handleInputChange(
+                `online.sections[${screenId}][${key}]`,
+                e.target.value,
+                dispatch
+              )
+            }
             type={inputType}
             name={name}
-            value={formState?.online?.sections[0][key] || ''}
-            errorText={formErrorState[key]!}
+            value={formState?.online?.sections[screenId]?.[key] ?? ''}
+            errorText={formErrorState?.online?.sections[screenId]?.[key] ?? ''}
           />
         </div>
       );
@@ -145,6 +153,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     data={field}
                     formState={formState}
                     formErrorState={formErrorState}
+                    screenId={screenId}
                   />
                 </div>
               ))}

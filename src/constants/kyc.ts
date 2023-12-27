@@ -53,10 +53,10 @@ export const KYCForm = [
           {
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'phone_number'
           }
         ]
       },

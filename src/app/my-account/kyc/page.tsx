@@ -22,10 +22,11 @@ const KYC: React.FC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
-  const [data, setData] = useState({});
+  const [data, setData] = useState<any>({});
 
   const [activeStep, setActiveStep] = useState(0);
   const handleNextStep = () => {
+    console.log('handleNextStep', activeStep);
     setActiveStep(prevStep => prevStep + 1);
   };
   const handlePrevStep = () => {
@@ -33,52 +34,20 @@ const KYC: React.FC = () => {
   };
 
   const formState = useSelector((state: any) => state.kyc.formState);
-  const formErrors = useSelector((state: any) => state.kyc?.formErrors);
+  const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
 
-  // const renderManualForm = () => (
-  //   <div>
-  //     {/* <DownloadAndUpload
-  //         uploadProgress={uploadProgress}
-  //         isFileUploaded={isFileUploaded}
-  //         setUploadProgress={setUploadProgress}
-  //         setIsFileUploaded={setIsFileUploaded}
-  //         setSelectedFile={setUploadFilePreview}
-  //         selectedFile={uploadFilePreview}
-  //         maxFile={1}
-  //         modalSetState={modalSetState}
-  //       /> */}
-  //   </div>
-  // );
-  const renderAttachment = () => (
-    <div>
-      {/* <FileAttachments
-                    key={id}
-                    lable={label}
-                    isRequired={isRequired}
-                    uploadProgress={uploadProgress}
-                    isFileUploaded={isFileUploaded}
-                    setUploadProgress={setUploadProgress}
-                    setIsFileUploaded={setIsFileUploaded}
-                    setSelectedFile={setSelectedFile}
-                    selectedFile={selectedFile}
-                    maxFile={maxFile}
-                    setError={setError}
-                    error={error}
-                    modalSetState={modalSetState}
-                  /> */}
-    </div>
-  );
-  const country = KYCForm[0]; // Replace this with the actual logic you use to select the country and screen dynamically
-  const selectedMode = 'digital';
-  const stepperData: IStepper[] = country.digital
-    ? country.digital.map((screen: any, index: number) => ({
+  console.log(data, 'datatt');
+
+  const stepperData: IStepper[] = data?.digital
+    ? data.digital.map((screen: any, index: number) => ({
         label: `${screen.screen}`,
         data: (
           <RenderDigitalForm
             screen={screen}
-            isLastStep={index === country.digital.length - 1}
+            isLastStep={index === data.digital.length - 1}
             formState={formState}
-            formErrorState={formErrors}
+            formErrorState={formErrorState}
+            screenId={index}
           />
         ),
         status:
@@ -107,7 +76,7 @@ const KYC: React.FC = () => {
     let KYCData = KYCForm.filter(country => {
       return country.country.shortName === selectedCountry;
     });
-    setData(KYCData);
+    setData(KYCData[0]);
   }, [selectedCountry]);
 
   const handleSaveAndNext = (state: string) => {

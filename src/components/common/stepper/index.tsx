@@ -90,7 +90,7 @@ const Stepper: React.FC<IStepperProps> = ({
           </>
         ))}
       </div>
-      <div>{stepper[state].data}</div>
+      <div>{stepper[state]?.data}</div>
 
       <div className={styles.navigationButtons}>
         <CustomFooter
