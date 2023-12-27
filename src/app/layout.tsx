@@ -28,8 +28,11 @@ export default function RootLayout({
     path === '/login' ||
     path === '/forgot-password' ||
     path === '/reset-password' ||
-    path === '/confirmation-screen';
-  path === '/register' ? false : true;
+    path === '/otp-verification' ||
+    path === '/successfully-created' ||
+    path === '/register'
+      ? false
+      : true;
 
   return (
     <html lang="en">

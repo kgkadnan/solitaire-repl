@@ -246,6 +246,14 @@
 
   "app.register.registerAsGuest": "Register as Guest",
 
+  "app.OTPVerification": "Verification",
+  "app.OTPVerification.goBack": "Go Back",
+  "app.OTPVerification.verify": "verify",
+  "app.OTPVerification.resend": "Resend",
+
+  "app.successfullyCreated.exploreWebsite": "Explore Website",
+  "app.successfullyCreated.finishKYCProcess": "Finish KYC Process",
+
   "app.confirmationScreen.message": "Your account has been successfully created!",
   "app.confirmationScreen.exploreWebsite": "Explore Website",
   "app.confirmationScreen.finishKycProcess": "Finish KYC Process",
