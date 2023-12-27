@@ -12,7 +12,7 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import errorImage from '@public/assets/icons/error.svg';
 import countryCode from '../../constants/country-code.json';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { CustomInputDialog } from '@/components/common/input-dialogNew';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 
 export interface FormState {
   mobileNumber: string;

@@ -27,7 +27,7 @@ import { CustomModal } from '@/components/common/modal';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { CustomInputDialog } from '@/components/common/input-dialogNew';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 // Define a type for the radio state
 
 const SearchResults = ({

@@ -32,7 +32,7 @@ import {
 } from '@/constants/application-constants/search-page';
 import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { CustomInputDialog } from '@/components/common/input-dialogNew';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 
 interface IMyProfileRoutes {
   id: number;

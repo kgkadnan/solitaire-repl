@@ -40,7 +40,7 @@ import {
   NO_STONE_FOUND,
   SELECT_STONE_TO_PERFORM_ACTION
 } from '@/constants/error-messages/form';
-import { CustomInputDialog } from '@/components/common/input-dialogNew';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 
