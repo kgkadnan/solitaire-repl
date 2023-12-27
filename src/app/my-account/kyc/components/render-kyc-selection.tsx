@@ -35,7 +35,7 @@ const RenderKYCSelection = ({
   };
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-[30px] mb-[20px] items-start w-[30%] h-[70vh]">
+      <div className="flex flex-col gap-[30px] mb-[20px] items-start  h-[70vh]">
         <Image src={handImage} alt="Banner image" />
         <div className="flex flex-col gap-[10px]">
           <CustomInputlabel
@@ -55,7 +55,7 @@ const RenderKYCSelection = ({
           </div>
         </div>
 
-        <div className=" flex flex-col w-[90%] gap-3">
+        <div className=" flex flex-col min-w-[400px] w-[30%] gap-3">
           <div
             className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer ${
               selectedKYCOption === 'digitally'

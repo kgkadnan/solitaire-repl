@@ -27,7 +27,7 @@ const RenderCountrySelection = ({
   const { errorText } = errorState;
   return (
     <div className="w-full">
-      <div className="flex flex-col gap-[30px] mb-[20px] items-start w-[30%] h-[70vh]">
+      <div className="flex flex-col gap-[30px] mb-[20px] items-start h-[70vh]">
         <Image src={handImage} alt="Banner image" />
         <div className="flex flex-col gap-[10px]">
           <CustomInputlabel
@@ -45,7 +45,7 @@ const RenderCountrySelection = ({
           </div>
         </div>
 
-        <div className="w-full ">
+        <div className="min-w-[400px] w-[30%]">
           <CountrySelectionDropdown
             setSelectedCountry={setSelectedCountry}
             errorSetState={errorSetState}
