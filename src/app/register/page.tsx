@@ -2,7 +2,7 @@
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
@@ -17,16 +17,20 @@ import { validateField } from './helpers/validate-field';
 import { validateAllFields } from './helpers/handle-validate-all-fields';
 import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useRouter } from 'next/navigation';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 const Register = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
 
-  const { modalState, modalSetState } = useModalStateManagement();
+  const router = useRouter();
 
+  const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
 
+  const { data, error } = useGetCountryCodeQuery({});
   const [register] = useRegisterMutation();
 
   const handleRegister = async (
@@ -37,6 +41,7 @@ const Register = () => {
     event.preventDefault();
 
     const isFormValid = validateAllFields({ formState, setFormErrors }); // Validate all fields
+
     if (!isFormValid) return; // If the form is not valid, prevent submission
     // If the form is valid, proceed with the form submission (e.g., API call)
     await register({
@@ -50,7 +55,7 @@ const Register = () => {
     })
       .unwrap()
       .then((res: any) => {
-        console.log('rets', res);
+        if (res) router.push('/otp-verification');
       })
       .catch(e => {
         setIsDialogOpen(true);
@@ -66,8 +71,16 @@ const Register = () => {
           </>
         );
       });
-    console.log(formState);
+    // console.log(formState);
   };
+
+  useEffect(() => {
+    if (data) {
+      setFormState({ ...formState, countryCode: data.country_calling_code });
+    } else if (error) {
+      console.error('Error fetching country code', error);
+    }
+  }, [data, error]);
 
   const handleChange = (
     event:
@@ -149,17 +162,17 @@ const Register = () => {
                     name="countryCode"
                     value={formState.countryCode}
                     onChange={handleChange}
-                    className={`bg-transparent  ${
+                    className={`bg-transparent   ${
                       !formErrors.mobileNumber.length
                         ? 'border-solitaireQuaternary text-solitaireTertiary'
                         : 'border-[#983131] text-[#983131]'
-                    } border-solitaireQuaternary border-b h-[4.6vh] text-[14px] focus:outline-none`}
+                    } border-b h-[4.6vh] text-[14px] focus:outline-none`}
                   >
                     {countryCode.countries.map(country => (
                       <option
                         key={country.iso_codes}
                         value={`+${country.code}`}
-                        className="bg-solitaireSecondary round-0"
+                        className="bg-solitaireDenary round-0 border-none"
                       >
                         +{country.code}
                       </option>
