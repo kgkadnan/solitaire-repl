@@ -1,7 +1,7 @@
 'use client';
 import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
-import { renderField } from './components/renderField';
+import { RenderField } from './components/renderField';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper from '@/components/common/stepper';
 import handImage from '@public/assets/images/noto_waving-hand.png';
@@ -47,7 +47,7 @@ const KYC: React.FC = () => {
       <div className="h-[950px] flex flex-col flex-wrap">
         {screen.fields.map((field: any) => (
           <div key={field.name} className={`mb-[20px] w-[40%] `}>
-            {renderField(field)}
+            <RenderField data={field} />
           </div>
         ))}
         {isLastStep && renderAttachment()}{' '}
@@ -157,13 +157,18 @@ const KYC: React.FC = () => {
       return <RenderManually data={data} />;
     // Add more cases as needed
     case 'digitally':
-      return     <FormProvider> <Stepper
-              stepper={stepperData}
-              state={activeStep}
-              setState={setActiveStep}
-              prevStep={handlePrevStep}
-              nextStep={handleNextStep}
-            /></FormProvider>
+      return (
+        <FormProvider>
+          {' '}
+          <Stepper
+            stepper={stepperData}
+            state={activeStep}
+            setState={setActiveStep}
+            prevStep={handlePrevStep}
+            nextStep={handleNextStep}
+          />
+        </FormProvider>
+      );
 
     case 'manually':
       return <RenderManually data={data} />;

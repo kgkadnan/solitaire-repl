@@ -61,10 +61,10 @@ export const KYCForm = [
           {
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType:"text",
+            inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key:'first_name'
+            key: 'first_name'
           }
         ]
       },
@@ -76,7 +76,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key:'first_name'
+            key: 'first_name'
           }
         ]
       }
@@ -141,7 +141,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key:'first_name'
+            key: 'first_name'
           }
         ]
       }
@@ -180,7 +180,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key:'first_name'
+            key: 'first_name'
           }
         ]
       }
@@ -219,7 +219,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key:'first_name'
+            key: 'first_name'
           }
         ]
       }

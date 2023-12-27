@@ -28,34 +28,38 @@ interface IRadioData {
   name: string;
 }
 interface IRenderFieldProps {
-  name: string;
-  label: string;
-  type: any;
-  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  state: string;
-  checkboxData: ICheckboxData[];
-  inputType?: any;
-  radioData: IRadioData[];
-  subTitle: string;
-  dynamicField: any;
-  dynamicCondition: string;
-  key:string;
+  data: {
+    name: string;
+    label: string;
+    type: any;
+    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+    state: string;
+    checkboxData: ICheckboxData[];
+    inputType?: any;
+    radioData: IRadioData[];
+    subTitle: string;
+    dynamicField: any;
+    dynamicCondition: string;
+    key: string;
+  };
 }
 
-export const renderField = ({
-  name,
-  label,
-  type,
-  handleChange,
-  state,
-  inputType,
-  checkboxData,
-  radioData,
-  subTitle,
-  dynamicField,
-  dynamicCondition,
-  key
-}: IRenderFieldProps) => {
+export const RenderField: React.FC<IRenderFieldProps> = ({ data }) => {
+  const {
+    name,
+    label,
+    type,
+    handleChange,
+    state,
+    inputType,
+    checkboxData,
+    radioData,
+    subTitle,
+    dynamicField,
+    dynamicCondition,
+    key
+  } = data;
+
   const { formState, updateFormState, formErrors } = useContext(FormContext);
 
   switch (type) {
@@ -63,10 +67,8 @@ export const renderField = ({
       return (
         <div className="">
           <FloatingLabelInput
-           
-
             label={name}
-            onChange={(e) => updateFormState(key, e.target.value)}
+            onChange={e => updateFormState(key, e.target.value)}
             type={inputType}
             name={name}
             value={formState[name]!}
@@ -133,7 +135,7 @@ export const renderField = ({
             {state === dynamicCondition && //state to be replaced with actual state
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
-                  {renderField(field)}
+                  <RenderField data={field} />
                 </div>
               ))}
           </div>

@@ -34,7 +34,8 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "log-level.js"
-, "src/app/my-account/kyc/components/manually/render-manually.tsz"  ],
+    "log-level.js",
+    "src/app/my-account/kyc/components/manually/render-manually.tsz"
+  ],
   "exclude": ["node_modules"]
 }
