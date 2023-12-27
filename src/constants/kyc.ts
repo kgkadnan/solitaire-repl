@@ -1,9 +1,12 @@
+import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
+
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
   RADIOWITHINPUT = 'radioWithInput',
-  ATTACHMENT = 'attachment'
+  ATTACHMENT = 'attachment',
+  FLOATING_INPUT_WITH_LABEL = 'attachment'
 }
 
 enum supportedMediaUnit {
@@ -30,9 +33,10 @@ export const KYCForm = [
     digital: [
       {
         screen: 'Personal Details',
+        icon: HandIcon,
         fields: [
           {
-            name: 'First Name',
+            name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
@@ -41,6 +45,26 @@ export const KYCForm = [
             error: 'error',
             setError: 'setError',
             errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            state: 'state',
+            setState: 'setState',
+            error: 'error',
+            setError: 'setError',
+            errorMessage: 'First Name is required'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType:"text",
+            isRequired: true,
+            handleChange: () => {},
+            key:'first_name'
           }
         ]
       },
@@ -52,11 +76,72 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
+          }
+        ]
+      }
+    ],
+    manual: {
+      kycForm: 'link_to_kyc_form.pdf',
+      setUploadFilePreview: 'setUploadFilePreview',
+      uploadFilePreview: 'uploadFilePreview',
+      isFileUploaded: 'isFileUploaded',
+      setIsFileUploaded: 'setIsFileUploaded',
+      uploadProgress: 'uploadProgress',
+      setUploadProgress: 'setUploadProgress'
+    },
+    attachment: {
+      companyDetail: [
+        {
+          id: '1',
+          label: 'Pan Card',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        }
+      ],
+      companyOwnerDetail: [
+        {
+          id: '1',
+          label: 'Pan Card',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        }
+      ]
+    }
+  },
+  {
+    country: {
+      fullName: 'USA',
+      shortName: 'usa'
+    },
+    digital: [
+      {
+        screen: 'Personal Details',
+        fields: [
+          {
+            name: 'First Name',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key:'first_name'
           }
         ]
       }
@@ -83,8 +168,8 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'USA',
-      shortName: 'usa'
+      fullName: 'Dubai',
+      shortName: 'dubai'
     },
     digital: [
       {
@@ -95,11 +180,46 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key:'first_name'
+          }
+        ]
+      }
+    ],
+    manual: {
+      kycForm: 'link_to_kyc_form.pdf'
+    },
+    attachment: [
+      {
+        name: 'Pan',
+        maxAttachment: 1,
+        fileSizeLimit: FILE_SIZE_LIMIT,
+        fileSizeUnit: supportedMediaUnit.MB,
+        isRequired: true,
+        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
+        handleChange: () => {},
+        state: 'state',
+        setState: 'setState',
+        error: 'error',
+        setError: 'setError',
+        errorMessage: 'Pan is required'
+      }
+    ]
+  },
+  {
+    country: {
+      fullName: 'Other',
+      shortName: 'other'
+    },
+    digital: [
+      {
+        screen: 'Personal Details',
+        fields: [
+          {
+            name: 'First Name',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key:'first_name'
           }
         ]
       }

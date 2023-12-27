@@ -4,3 +4,11 @@
   align-items: center;
   margin-right: 14px;
 }
+
+.Border {
+  border-bottom: 1px solid hsl(var(--solitaire-border));
+}
+
+.Border:focus {
+  border-color: hsl(var(--solitaire-quaternary));
+}

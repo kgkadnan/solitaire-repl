@@ -5,13 +5,12 @@ import Finger from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/translate';
 import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
-import useAttachmentsStateManagement from './hooks/attachment-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
-import { CustomModal } from '@/components/common/modal';
-import styles from './attachment.module.scss';
 
-const Kyc = () => {
+import useAttachmentsStateManagement from '../../hooks/attachment-state-management';
+
+const RenderManually = ({ data }: any) => {
   const {
     attachmentsState: {
       pan: {
@@ -158,8 +157,6 @@ const Kyc = () => {
   const [uploadFilePreview, setUploadFilePreview] = useState<string[]>([]);
 
   const { modalState, modalSetState } = useModalStateManagement();
-  const { isModalOpen, modalContent } = modalState;
-  const { setIsModalOpen } = modalSetState;
 
   const companyDocument = [
     {
@@ -285,7 +282,6 @@ const Kyc = () => {
       minFile: 0
     }
   ];
-
   const photoId = [
     {
       id: '1',
@@ -334,16 +330,12 @@ const Kyc = () => {
     }
   ];
 
+  console.log('data={data}ḍ', data);
+
   const handleTermAndCondition = () => {};
 
   return (
     <div>
-      <CustomModal
-        isOpens={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        dialogContent={modalContent}
-        modalStyle={styles.modalStyle}
-      />
       <div className="w-full flex justify-between pb-5">
         <DownloadAndUpload
           uploadProgress={uploadProgress}
@@ -512,4 +504,4 @@ const Kyc = () => {
   );
 };
 
-export default Kyc;
+export default RenderManually;
