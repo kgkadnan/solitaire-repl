@@ -15,6 +15,7 @@ import {
   PASSWORD_REGEX,
   PHONE_REGEX
 } from '@/constants/validation-regex/regex';
+import useUser from '@/lib/useAuth';
 
 // Define the Login component
 const Login = () => {
@@ -27,6 +28,7 @@ const Login = () => {
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const router = useRouter();
+  const { userLoggedIn } = useUser();
 
   // Handle the login logic
   const handleLogin = async () => {
@@ -46,8 +48,9 @@ const Login = () => {
         setErrorText(res.error.data.message);
       } else {
         // Redirect to home page if login is successful
-        if (res.data.customer) {
-          localStorage.removeItem('Search');
+        if (res.data.access_token) {
+          // localStorage.removeItem('Search');
+          userLoggedIn(res.data.access_token);
           router.push('/');
         }
       }
