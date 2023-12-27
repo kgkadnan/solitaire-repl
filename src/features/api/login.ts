@@ -12,15 +12,14 @@ type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 export const loginApi = createApi({
   reducerPath: 'loginReducer',
   baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
+    baseUrl: apiURL
   }) as BaseQuery,
   tagTypes: ['Login'],
 
   endpoints: builder => ({
     verifyLogin: builder.mutation({
       query: filter => ({
-        url: `/store/auth`,
+        url: `/store/auth/token`,
         method: 'POST', // Use the appropriate HTTP method
         body: filter // Modify this to match your API's payload
       }),
