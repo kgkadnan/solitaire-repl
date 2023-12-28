@@ -7,14 +7,12 @@ type RenderOnlineFormProps = {
   isLastStep: boolean;
   formState: any;
   formErrorState: any;
-  screenId: number;
 };
 export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
   screen,
   isLastStep,
   formState,
-  formErrorState,
-  screenId
+  formErrorState
 }) => {
   return (
     // const renderOnlineForm = ( screen: any, isLastStep: any) => (
@@ -32,7 +30,7 @@ export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
               data={field}
               formState={formState}
               formErrorState={formErrorState}
-              screenId={screenId}
+              screenName={screen.screenName}
             />
           </div>
         ))}

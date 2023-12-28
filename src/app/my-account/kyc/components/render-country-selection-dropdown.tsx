@@ -4,7 +4,7 @@ import Select from 'react-select';
 import { colourStyles } from '../styles/select-style';
 import { IErrorSetState } from '@/app/search/result/result-interface';
 import { updateFormState } from '@/features/kyc/kyc';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/hooks/hook';
 
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
@@ -15,7 +15,7 @@ export const CountrySelectionDropdown = ({
   errorSetState
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSelectCountry = (selectedOption: any) => {
     setErrorText('');

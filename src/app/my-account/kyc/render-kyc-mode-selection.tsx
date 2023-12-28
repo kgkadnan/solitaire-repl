@@ -12,8 +12,9 @@ import {
   IErrorState
 } from '@/app/search/result/result-interface';
 import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
-import { useDispatch } from 'react-redux';
+
 import { updateFormState } from '@/features/kyc/kyc';
+import { useAppDispatch } from '@/hooks/hook';
 
 interface IRenderKYCModeSelection {
   setSelectedKYCOption: React.Dispatch<React.SetStateAction<string>>;
@@ -31,7 +32,7 @@ const RenderKYCModeSelection = ({
 }: IRenderKYCModeSelection) => {
   const { setErrorText } = errorSetState;
   const { errorText } = errorState;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const handleBoxClick = (selection: string) => {
     console.log('selectetion', selection);
     setErrorText('');

@@ -368,8 +368,21 @@ export const KYCForm = [
       },
 
       {
-        screen: 'Personal',
-        screenName: 'personal',
+        screen: 'Company Owner Details',
+        screenName: 'company_owner_details',
+        fields: [
+          {
+            name: 'First Name',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'first_name'
+          }
+        ]
+      },
+      {
+        screen: 'banking Details',
+        screenName: 'banking_details',
         fields: [
           {
             name: 'First Name',
