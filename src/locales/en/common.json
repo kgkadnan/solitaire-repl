@@ -243,6 +243,7 @@
   "app.login.password": "Password",
 
   "app.register": "Register",
+  "app.register.okay": "Okay!",
   "app.register.welcomeMessage": "Welcome! Please register to create account",
   "app.register.firstName": "First Name*",
   "app.register.lastName": "Last Name*",
