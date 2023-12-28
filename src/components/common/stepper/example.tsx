@@ -20,7 +20,8 @@ const StepperExample = () => {
     {
       label: 'Personal Details',
       data: <div>This is step 1</div>,
-      status: StepperStatus.COMPLETED
+      status: StepperStatus.COMPLETED,
+      screenName: 'personal'
     },
     {
       label: 'Personal Details',
@@ -32,22 +33,26 @@ const StepperExample = () => {
           used as a placeholder before final copy is available. Wikipedia
         </div>
       ),
-      status: StepperStatus.NOT_STARTED
+      status: StepperStatus.NOT_STARTED,
+      screenName: 'personal'
     },
     {
       label: 'Personal Details5',
       data: <div>This is step 3</div>,
-      status: StepperStatus.REJECTED
+      status: StepperStatus.REJECTED,
+      screenName: 'personal'
     },
     {
       label: 'Personal Details5',
       data: <div>This is step 3</div>,
-      status: StepperStatus.NOT_STARTED
+      status: StepperStatus.NOT_STARTED,
+      screenName: 'personal'
     },
     {
       label: 'Personal Details5',
       data: <div>This is step 3</div>,
-      status: StepperStatus.NOT_STARTED
+      status: StepperStatus.NOT_STARTED,
+      screenName: 'personal'
     }
   ];
   return (
