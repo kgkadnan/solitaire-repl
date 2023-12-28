@@ -3,7 +3,6 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
@@ -19,7 +18,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useRouter } from 'next/navigation';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
-
+import KGKlogo from '@public/assets/icons/vector.svg';
 const Register = () => {
   const [formState, setFormState] = useState<FormState>(initialFormState);
   const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
@@ -60,15 +59,25 @@ const Register = () => {
       .catch(e => {
         setIsDialogOpen(true);
         setDialogContent(
-          <>
+          <div className="w-full flex flex-col gap-4 items-center">
+            {' '}
             <div className=" flex justify-center align-middle items-center">
               <Image src={errorImage} alt="errorImage" />
               <p>Error!</p>
             </div>
-            <div className="text-center text-solitaireTertiary">
-              {e.message}
+            <div className="text-center text-solitaireTertiary h-[4vh]">
+              {e.data.message}
             </div>
-          </>
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.register.okay')}
+              displayButtonAllStyle={{
+                displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
+                displayLabelStyle:
+                  'text-solitaireTertiary text-[16px] font-medium'
+              }}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          </div>
         );
       });
     // console.log(formState);
@@ -109,7 +118,7 @@ const Register = () => {
         formData={
           <div className="flex justify-center flex-col w-[500px] ">
             <div className="flex flex-col gap-[5px] mb-[20px] items-center">
-              <Image src={handImage} alt="Banner image" />
+              <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
               <CustomInputlabel
                 htmlfor={''}
                 label={ManageLocales('app.register')}
@@ -224,7 +233,7 @@ const Register = () => {
 
                 <div className="flex flex-col gap-2">
                   {/* Button to trigger the register action */}
-                  <div className="flex flex-col justify-center bg-transparent   border-2 border-solitaireQuaternary w-[500px] h-[64px]">
+                  <div className="flex flex-col justify-center bg-transparent   border-[1px] border-solitaireQuaternary w-[500px] h-[64px]">
                     <Link
                       href={'/'}
                       className="text-[16px] font-medium text-solitaireTertiary"
