@@ -13,6 +13,7 @@ import {
   Matches,
   MinLength,
   ValidateIf,
+  ValidationError,
   validate
 } from 'class-validator';
 
@@ -183,21 +184,91 @@ export const validateScreen = async (
 
   return validationErrors;
 };
-const validateInputField = (fieldName: string, value: string) => {
-  switch (fieldName) {
-    case 'first_name':
-      return value ? undefined : 'First name is required';
-    // Add more cases for other fields
-    default:
-      return undefined;
-  }
-};
+
 
 // Base File
 export class KycBase {}
 
 // same info is required for all the section
 // Section1
+
+
+class ValidationFirstNameCriteria {
+  @MinLength(3, { message: 'First name must be at least 3 characters long' })
+  @IsAlpha()
+  @IsNotEmpty({ message: 'First name is required' })
+  first_name: string;
+
+  constructor(first_name: string) {
+    this.first_name = first_name;
+  }
+}
+
+export async function validateFirstName(first_name: string) {
+  const instance = new ValidationFirstNameCriteria(first_name);
+  return await validate(instance);
+}
+
+class ValidationLastNameCriteria {
+  @MinLength(3, { message: 'Last name must be at least 3 characters long' })
+  @IsAlpha()
+  @IsNotEmpty({ message: 'Last name is required' })
+  last_name: string;
+
+  constructor(last_name: string) {
+    this.last_name = last_name;
+  }
+}
+
+export async function validateLastName(last_name: string) {
+  const instance = new ValidationLastNameCriteria(last_name);
+  return await validate(instance);
+}
+
+class ValidationEmailCriteria {
+  @IsEmail({}, { message: 'Invalid email address' })
+  @IsNotEmpty({ message: 'Email is required' })
+  email: string;
+
+  constructor(email: string) {
+    this.email = email;
+  }
+}
+
+export async function validateEmail(email: string) {
+  const instance = new ValidationEmailCriteria(email);
+  return await validate(instance);
+}
+
+class ValidationCountryCodeCriteria {
+  @IsNotEmpty({ message: 'Invalid phone country code!' })
+  country_code: string;
+
+  constructor(country_code: string) {
+    this.country_code = country_code;
+  }
+}
+
+export async function validateCountryCode(country_code: string) {
+  const instance = new ValidationCountryCodeCriteria(country_code);
+  return await validate(instance);
+}
+
+class ValidationPhoneCriteria {
+  @MinLength(3, { message: 'Invalid phone!' })
+  @IsMobilePhone()
+  phone: string;
+
+  constructor(phone: string) {
+    this.phone = phone;
+  }
+}
+
+export async function validatePhone(phone: string) {
+  const instance = new ValidationPhoneCriteria(phone);
+  return await validate(instance);
+}
+
 export class PersonalDetails extends KycBase {
   @MinLength(3)
   @IsAlpha()
@@ -231,7 +302,13 @@ export class PersonalDetails extends KycBase {
     this.country_code = country_code;
     this.phone = phone;
   }
+
 }
+
+
+
+
+
 
 // Company Information
 // Section2
