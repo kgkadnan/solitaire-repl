@@ -1,3 +1,5 @@
+import { IsNotEmpty, IsEmail, Length, validate } from 'class-validator';
+
 // Validation functions
 export const validateCountry = (value: any) => {
   if (!value) return 'Country is required';
@@ -13,7 +15,10 @@ export const validateOnlineSection = (value: any) => {
 };
 
 // Add more validation functions as needed
-const validateScreen = (formData: any) => {
+export const validateScreen = async (formData: any) => {
+  const userForm = new UserForm(formData.firstName, formData.email, formData.password);
+    const validationErrors = await validate(userForm);
+console.log(validationErrors,"validationErrors")
   const errors: any = {};
 
   // Check if certain fields are filled based on the values of other fields
@@ -26,6 +31,7 @@ const validateScreen = (formData: any) => {
   return errors;
 };
 const validateInputField = (fieldName: string, value: string) => {
+  
   switch (fieldName) {
     case 'first_name':
       return value ? undefined : 'First name is required';
@@ -63,3 +69,22 @@ const validateInputField = (fieldName: string, value: string) => {
 //     },
 //   });
 // };
+
+
+
+export class UserForm {
+  @IsNotEmpty({ message: 'First name is required' })
+  firstName: string;
+
+  @IsEmail({}, { message: 'Email is invalid' })
+  email: string;
+
+  @Length(6, 12, { message: 'Password must be 6-12 characters long' })
+  password: string;
+
+  constructor(firstName: string, email: string, password: string) {
+    this.firstName = firstName;
+    this.email = email;
+    this.password = password;
+  }
+}
