@@ -382,17 +382,22 @@ export const KYCForm = [
     offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {}
-      }
-    ]
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {}
+        }
+      ]
+    }
   },
   {
     country: {
@@ -1373,18 +1378,23 @@ export const KYCForm = [
     offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {},
-        key: 'first_name'
-      }
-    ]
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {},
+          key: 'first_name'
+        }
+      ]
+    }
   },
   {
     country: {

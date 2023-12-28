@@ -10,12 +10,13 @@ import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 import { validateScreen } from './helper/handle-validation';
-import { useAppSelector } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { useKycMutation } from '@/features/api/kyc';
+import { updateFormState } from '@/features/kyc/kyc';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -23,7 +24,7 @@ const KYC: React.FC = () => {
   const [kyc] = useKycMutation();
 
   const kycStoreData: any = useAppSelector(store => store.kyc.formState);
-
+  const dispatch = useAppDispatch();
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
@@ -106,6 +107,7 @@ const KYC: React.FC = () => {
 
     setActiveStep(prevStep => prevStep + 1);
   };
+
   const handlePrevStep = () => {
     console.log(activeStep, 'activeStep');
     if (activeStep <= 0) {
@@ -201,6 +203,97 @@ const KYC: React.FC = () => {
         : StepperStatus.NOT_STARTED,
     screenName: 'Attachment'
   });
+
+  const resData = {
+    online: {
+      '1': {
+        email: 'bhushan@asd.com',
+        phone: '9999955555',
+        last_name: 'Vaiude',
+        first_name: 'Bhushan',
+        country_code: 'IND'
+      },
+      '2': {
+        city: 'Mumbai',
+        state: 'Maharashtra',
+        address: 'Nallasopara',
+        pincode: '401203',
+        msme_type: 'SME',
+        gst_number: 'GST401203',
+        company_name: 'Bhushan Pvt Ltd',
+        business_type: ['Wholesaler', 'Retailer'],
+        company_email: 'best@email.com',
+        industry_type: ['Diamonds', 'Other Gaming'],
+        organisation_type: ['Other Gaming'],
+        company_pan_number: 'CompnayPAN401203',
+        is_msme_registered: true,
+        subsidiary_company: 'KGK Infotech',
+        company_phone_number: '401203',
+        is_member_of_business: true,
+        year_of_establishment: '1967',
+        member_of_business_name: 'KGK Group',
+        msme_registration_number: '401203',
+        ultimate_beneficiary_name: 'Kanha',
+        business_registration_number: 'BUSREG401203'
+      },
+      '3': {
+        owner_email: 'asd@asd.com',
+        owner_phone: '9999955555',
+        owner_full_name: 'Bhushan Kishore Vaiude',
+        owner_pan_number: '9999955555',
+        owner_country_code: 'IND'
+      },
+      '4': {
+        bank_name: 'OM',
+        ifsc_code: '9999955555',
+        country_code: 'IND',
+        account_number: 'Om',
+        account_holder_name: 'asdom'
+      }
+    },
+    country: 'India',
+    offline: true
+  };
+
+  useEffect(() => {
+    const sectionKeys: string[] =
+      resData.country === 'India'
+        ? [
+            'personal_details',
+            'company_details',
+            'company_owner_details',
+            'banking_details'
+          ]
+        : ['personal_details', 'company_details', 'banking_details'];
+
+    sectionKeys.forEach((key, index: any) => {
+      dispatch(
+        updateFormState({
+          name: `online.sections[${key}]`,
+          value: resData.online[index + 1]
+        })
+      );
+    });
+
+    dispatch(
+      updateFormState({
+        name: 'country',
+        value: resData.country
+      })
+    );
+
+    // setActiveStep(Object.keys(resData.online).length - 1);
+    dispatch(
+      updateFormState({
+        name: 'offline',
+        value: resData.offline
+      })
+    );
+
+    resData.offline
+      ? setSelectedKYCOption('online')
+      : setSelectedKYCOption('offline');
+  }, []);
 
   // return (
   //   <div>
