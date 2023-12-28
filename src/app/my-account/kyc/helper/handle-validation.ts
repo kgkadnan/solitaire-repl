@@ -36,13 +36,11 @@ export const validateScreen = async (
   screenName: string,
   country: string
 ) => {
-  console.log(formData, 'qqqqqqqqqqqqqqqqqqqqqqqqqqqq');
   let validationErrors;
   let kycForm;
   if (formData) {
     switch (screenName) {
       case 'personal_details':
-        console.log('kkkkkkkkkkkkkkkkk');
         kycForm = new PersonalDetails(
           formData.first_name,
           formData.last_name,
@@ -181,7 +179,6 @@ export const validateScreen = async (
     console.log(validationErrors, 'validationErrors');
   } else {
     validationErrors = validationErrors || 'please all fields';
-    console.log('llllllllllllllllllll', validationErrors);
   }
 
   return validationErrors;

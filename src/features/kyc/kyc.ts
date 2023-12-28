@@ -49,15 +49,12 @@ const formSlice = createSlice({
   reducers: {
     updateFormState: (state: any, action) => {
       const { name, value } = action.payload;
-      console.log(action.payload);
       setNestedValue(state, name, value);
-
       // Perform validation and update errors
       let error = null;
       if (name === 'country') error = validateCountry(value);
       if (name === 'online') error = validateOnlineSection(value);
-
-      state.formErrorState[name] = error;
+      // state.formErrorState[name] = error;
     }
     // ... other reducers
   }
