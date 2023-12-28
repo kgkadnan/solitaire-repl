@@ -34,7 +34,6 @@ const RenderKYCModeSelection = ({
   const { errorText } = errorState;
   const dispatch = useAppDispatch();
   const handleBoxClick = (selection: string) => {
-    console.log('selectetion', selection);
     setErrorText('');
     setSelectedKYCOption(selection);
     dispatch(

@@ -50,6 +50,7 @@ const RenderCountrySelection = ({
           <CountrySelectionDropdown
             setSelectedCountry={setSelectedCountry}
             errorSetState={errorSetState}
+            selectedCountry={selectedCountry}
           />
         </div>
       </div>
