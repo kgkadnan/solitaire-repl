@@ -13,7 +13,6 @@ const send = async function (level: any, logEvent: any) {
     },
     body: JSON.stringify([logEvent])
   });
-  console.log(response);
 };
 
 // Configure logger with dynamic log level

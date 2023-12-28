@@ -2,6 +2,7 @@ import Image from 'next/image';
 import { ReactNode, Dispatch, SetStateAction } from 'react';
 import { downloadExcelFromBase64 } from './download-excel-from-base64';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import logger from 'logging/log-util';
 
 interface DownloadExcelApiResponse {
   data: {
@@ -59,6 +60,7 @@ export const performDownloadExcel = async ({
       }
     }
   } catch (error) {
-    console.log('error', error);
+    logger.error(error);
+
   }
 };

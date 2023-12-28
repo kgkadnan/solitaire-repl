@@ -43,6 +43,7 @@ import {
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { FloatingLabelInput } from '@/components/common/floating-input';
+import logger from 'logging/log-util';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -238,7 +239,8 @@ used for managing the state of a form field or input element in a React componen
                 handleSearch(true);
               })
               .catch((error: any) => {
-                console.log('error', error);
+                logger.error(error);
+
               });
           } else {
             await addSavedSearch({
@@ -252,7 +254,8 @@ used for managing the state of a form field or input element in a React componen
                 handleSearch(true, res.id);
               })
               .catch((error: any) => {
-                console.log('error', error);
+                logger.error(error);
+
                 setInputError(true);
                 setInputErrorContent(TITLE_ALREADY_EXISTS);
               });

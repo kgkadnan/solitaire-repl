@@ -22,6 +22,7 @@ import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDialog } from '@/components/common/dialog';
 import CustomLoader from '@/components/common/loader';
+import logger from 'logging/log-util';
 
 const ManageListingSequence = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
@@ -158,8 +159,9 @@ and `nonManageableListings` whenever the `data` variable changes. */
           );
           setIsDialogOpen(true);
         })
-        .catch(() => {
-          console.log('1111111111111111');
+        .catch((error) => {
+          logger.error(error);
+
         });
     }
     // Perform actions on update

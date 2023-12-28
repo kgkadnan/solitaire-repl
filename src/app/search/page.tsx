@@ -265,7 +265,8 @@ function SearchResultLayout() {
                       closeTheSearchFunction(removeDataIndex, yourSelection);
                     })
                     .catch((error: any) => {
-                      console.log('error', error);
+                      logger.error(error);
+
                     });
                 } else {
                   setIsInputDialogOpen(true);

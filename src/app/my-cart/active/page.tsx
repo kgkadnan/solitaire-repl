@@ -21,6 +21,7 @@ import { handleConfirmStone } from '@/components/common/confirm-stone/helper/han
 import { ProductItem } from '../interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import logger from 'logging/log-util';
 
 const ActiveMyCart = ({
   tableColumns,
@@ -155,7 +156,8 @@ const ActiveMyCart = ({
         setIsDialogOpen(true);
       })
       .catch(error => {
-        console.log('error', error);
+        logger.error(error);
+
       });
     setIsDialogOpen(false);
   };

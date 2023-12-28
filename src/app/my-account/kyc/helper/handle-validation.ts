@@ -16,6 +16,7 @@ import {
   ValidationError,
   validate
 } from 'class-validator';
+import logger from 'logging/log-util';
 
 // Validation functions
 export const validateCountry = (value: any) => {
@@ -173,11 +174,12 @@ export const validateScreen = async (
         }
         break;
       default:
-        console.log('default');
+        logger.info("default");
+        break;
+
     }
     validationErrors = await validate(kycForm!);
 
-    console.log(validationErrors, 'validationErrors');
   } else {
     validationErrors = validationErrors || 'please all fields';
   }

@@ -3,10 +3,11 @@
 import React from 'react';
 import { CustomSelectionButton } from '..';
 import style from './example.module.scss';
+import logger from 'logging/log-util';
 
 const SelectionButtonExample = () => {
   const handleClick = () => {
-    console.log('Its sworing');
+    logger.info("click");
   };
 
   const myStyle = {
