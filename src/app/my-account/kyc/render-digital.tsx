@@ -25,7 +25,7 @@ export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
           {screen.screen}
         </h3>
       </div>
-      <div className="h-[950px] flex flex-col flex-wrap">
+      <div className="max-h-[950px] flex flex-col flex-wrap">
         {screen.fields.map((field: any) => (
           <div key={field.name} className={`mb-[20px] w-[40%] `}>
             <RenderField
