@@ -16,23 +16,24 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { updateFormState } from '@/features/kyc/kyc';
+import { useKycMutation } from '@/features/api/kyc';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
-  const kycStoreData: any = useAppSelector(
-    store => store.kyc.formState.online.sections
-  );
+  const [kyc] = useKycMutation();
+
+  const kycStoreData: any = useAppSelector(store => store.kyc.formState);
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
-
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
 
-  const handleNextStep = async (screenName: string) => {
+  const handleNextStep = async (screenName: string, activeID: number) => {
+    let active = activeID + 1;
     let validationError;
     switch (screenName) {
       case 'personal_details':
@@ -49,16 +50,66 @@ const KYC: React.FC = () => {
 
         !validationError &&
           console.log('personal_details', kycStoreData[screenName]);
+        // code block
+        kyc({
+          data: {
+            country: kycStoreData.country,
+            offline: kycStoreData.offline,
+            data: {
+              ...kycStoreData.online.sections[screenName],
+              country_code: 'IND'
+            }
+          },
+          ID: active
+        })
+          .unwrap()
+          .then((res:any)=> console.log('res'))
+          .catch((e:any)=> {});
         break;
       case 'company_details':
         // code block
+        kyc({
+          data: {
+            country: kycStoreData.country,
+            offline: kycStoreData.offline,
+            data: { ...kycStoreData.online.sections[screenName] }
+          },
+          ID: active
+        })
+          .unwrap()
+          .then((res:any) => console.log('res'))
+          .catch((e:any) => {});
         console.log('company_details', kycStoreData[screenName]);
         break;
       case 'company_owner_details':
+        kyc({
+          data: {
+            country: kycStoreData.country,
+            offline: kycStoreData.offline,
+            data: { ...kycStoreData.online.sections[screenName] }
+          },
+          ID: active
+        })
+          .unwrap()
+          .then((res:any) => console.log('res'))
+          .catch((e:any) => {});
         // code block
         console.log('company_owner_details', kycStoreData[screenName]);
         break;
       case 'banking_details':
+        kyc({
+          data: {
+            country: kycStoreData.country,
+            offline: kycStoreData.offline,
+            data: {
+              ...kycStoreData.online.sections[screenName]
+            }
+          },
+          ID: active
+        })
+          .unwrap()
+          .then((res:any)=> console.log('res'))
+          .catch((e:any)=> {});
         // code block
         console.log('banking_details', kycStoreData[screenName]);
         break;
@@ -183,7 +234,7 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let KYCData = KYCForm.filter(country => {
-      return country.country.shortName === selectedCountry;
+      return country.country.fullName === selectedCountry;
     });
     setData(KYCData[0]);
   }, [selectedCountry]);

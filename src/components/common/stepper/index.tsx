@@ -15,7 +15,7 @@ interface IStepperProps {
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: (_name: string) => void;
+  nextStep: (_name: string, _activeID: number) => void;
   prevLabel?: string;
   nextLabel?: string;
 }
@@ -30,6 +30,7 @@ const Stepper: React.FC<IStepperProps> = ({
   nextLabel = 'Save and Next'
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
+
   const footerButtonData = (state: number) => {
     return [
       {
@@ -43,7 +44,7 @@ const Stepper: React.FC<IStepperProps> = ({
         id: 2,
         displayButtonLabel: nextLabel,
         style: styles.filled,
-        fn: () => nextStep(stepper[state]?.screenName),
+        fn: () => nextStep(stepper[state]?.screenName, state),
         isDisable: state === stepper.length - 1
       }
     ];
@@ -91,9 +92,10 @@ const Stepper: React.FC<IStepperProps> = ({
           </>
         ))}
       </div>
+      <hr className="border-1 border-solitaireSenary my-6" />
       <div>{stepper[state]?.data}</div>
 
-      <div className={styles.navigationButtons}>
+      <div className={`${styles.navigationButtons} `}>
         <CustomFooter
           footerButtonData={footerButtonData(state)}
           noBorderTop={styles.paginationContainerStyle}

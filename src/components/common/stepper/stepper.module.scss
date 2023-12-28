@@ -2,6 +2,8 @@
 .stepperContainer {
   display: flex;
   flex-direction: column;
+  height: 100%; 
+  padding-bottom: 5px;
 }
 
 .circularStepsContainer {
@@ -58,6 +60,7 @@
   display: flex;
   justify-content: space-between;
   width: 100%;
+  margin-top: auto;
 }
 
 //Footer Button

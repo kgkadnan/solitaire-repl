@@ -14,6 +14,7 @@ export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
 }) => {
   return (
     // const renderOnlineForm = ( screen: any, isLastStep: any) => (
+
     <div key={screen.screen}>
       <div className="flex items-center mt-[30px] mb-[30px] ">
         <Image src={screen.icon} alt="Backhand image" />
