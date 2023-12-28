@@ -2,19 +2,13 @@
 import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
 import { StepperStatus } from '@/constants/enums/stepper-status';
-import Stepper from '@/components/common/stepper';
+import Stepper, { IStepper } from '@/components/common/stepper';
 import RenderCountrySelection from './render-country-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import RenderManually from './render-manually';
 import { useSelector } from 'react-redux';
 import { RenderDigitalForm } from './render-digital';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
-
-interface IStepper {
-  label: string;
-  data: ReactNode;
-  status: string;
-}
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -25,7 +19,8 @@ const KYC: React.FC = () => {
   const [data, setData] = useState<any>({});
 
   const [activeStep, setActiveStep] = useState(0);
-  const handleNextStep = () => {
+  const handleNextStep = (screenName:string) => {
+    
     console.log('handleNextStep', activeStep);
     setActiveStep(prevStep => prevStep + 1);
   };
@@ -50,10 +45,12 @@ const KYC: React.FC = () => {
             screenId={index}
           />
         ),
+        screenName:`${screen.screenName}`,
+
         status:
           index === activeStep
             ? StepperStatus.INPROGRESS
-            : StepperStatus.NOT_STARTED
+            : StepperStatus.NOT_STARTED,
       }))
     : [];
   // return (
@@ -116,6 +113,7 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+
         />
       );
 
