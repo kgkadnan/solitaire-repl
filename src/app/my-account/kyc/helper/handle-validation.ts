@@ -16,19 +16,11 @@ export const validateOnlineSection = (value: any) => {
 
 // Add more validation functions as needed
 export const validateScreen = async (formData: any) => {
-  const userForm = new UserForm(formData.firstName, formData.email, formData.password);
+  console.log("rrrrrrrrrrrrr",formData)
+  const userForm = new UserForm(formData.first_name, formData.email, formData.password);
     const validationErrors = await validate(userForm);
 console.log(validationErrors,"validationErrors")
-  const errors: any = {};
-
-  // Check if certain fields are filled based on the values of other fields
-  if (formData.first_name && !formData.last_name) {
-    // errors.last_name = 'Last name is required when first name is filled';
-  }
-
-  // Add more screen-level validation rules as needed
-
-  return errors;
+  return validationErrors
 };
 const validateInputField = (fieldName: string, value: string) => {
   
@@ -41,44 +33,17 @@ const validateInputField = (fieldName: string, value: string) => {
   }
 };
 
-// const handleFieldChange = (fieldName, value) => {
-//   // Validate the field
-//   const fieldError = validateField(fieldName, value);
-
-//   // Update the form data and errors
-//   onChange({
-//     ...formData,
-//     [fieldName]: value,
-//     errors: {
-//       ...formData.errors,
-//       [fieldName]: fieldError,
-//     },
-//   });
-// };
-
-// const handleScreenValidation = () => {
-//   // Validate the entire screen
-//   const screenErrors = validateScreen(formData);
-
-//   // Update the form data with screen-level errors
-//   onChange({
-//     ...formData,
-//     errors: {
-//       ...formData.errors,
-//       ...screenErrors,
-//     },
-//   });
-// };
-
 
 
 export class UserForm {
   @IsNotEmpty({ message: 'First name is required' })
   firstName: string;
 
+  @IsNotEmpty({ message: 'First name is required' })
   @IsEmail({}, { message: 'Email is invalid' })
   email: string;
 
+  @IsNotEmpty({ message: 'First name is required' })
   @Length(6, 12, { message: 'Password must be 6-12 characters long' })
   password: string;
 

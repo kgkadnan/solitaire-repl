@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 import { validateScreen } from './helper/handle-validation';
-import { useAppSelector } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -25,10 +25,13 @@ const KYC: React.FC = () => {
   const [data, setData] = useState<any>({});
 
   const [activeStep, setActiveStep] = useState(0);
+
   const handleNextStep = (screenName: string) => {
-    validateScreen({firstName:"jyoti",email:"abc@examplecom",password:"Jyoti@123"})
     switch (screenName) {
       case 'personal_details':
+        console.log("jjjj",kycStoreData[screenName])
+        validateScreen(kycStoreData[screenName])
+
         // code block
         console.log('personal_details', kycStoreData[screenName]);
         break;
