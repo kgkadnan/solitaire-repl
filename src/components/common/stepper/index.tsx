@@ -15,7 +15,7 @@ interface IStepperProps {
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: (_name: string) => void;
+  nextStep: (_name: string, _activeID: number) => void;
   prevLabel?: string;
   nextLabel?: string;
 }
@@ -43,7 +43,7 @@ const Stepper: React.FC<IStepperProps> = ({
         id: 2,
         displayButtonLabel: nextLabel,
         style: styles.filled,
-        fn: () => nextStep(stepper[state]?.screenName),
+        fn: () => nextStep(stepper[state]?.screenName, state),
         isDisable: state === stepper.length - 1
       }
     ];

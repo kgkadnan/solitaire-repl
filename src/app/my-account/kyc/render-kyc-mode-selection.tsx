@@ -40,7 +40,7 @@ const RenderKYCModeSelection = ({
     dispatch(
       updateFormState({
         name: `${selection === 'online' ? 'offline' : 'online'}`,
-        value: false
+        value: true
       })
     );
   };
