@@ -1,4 +1,9 @@
-import { validateEmail, validateFirstName, validateLastName, validatePhone } from '@/app/my-account/kyc/helper/handle-validation';
+import {
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePhone
+} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 
 export enum fieldType {

@@ -67,7 +67,6 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         registerApi.middleware,
         resetPasswordApi.middleware,
         currentIPApi.middleware,
-        currentIPApi.middleware,
         forgotPasswordApi.middleware,
         kycApi.middleware
       ),

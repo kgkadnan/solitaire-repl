@@ -185,13 +185,11 @@ export const validateScreen = async (
   return validationErrors;
 };
 
-
 // Base File
 export class KycBase {}
 
 // same info is required for all the section
 // Section1
-
 
 class ValidationFirstNameCriteria {
   @MinLength(3, { message: 'First name must be at least 3 characters long' })
@@ -302,13 +300,7 @@ export class PersonalDetails extends KycBase {
     this.country_code = country_code;
     this.phone = phone;
   }
-
 }
-
-
-
-
-
 
 // Company Information
 // Section2

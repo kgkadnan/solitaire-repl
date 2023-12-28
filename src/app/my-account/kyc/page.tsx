@@ -37,11 +37,11 @@ const KYC: React.FC = () => {
     switch (screenName) {
       case 'personal_details':
         validationError = await validateScreen(
-          kycStoreData.online.sections[screenName] ,
+          kycStoreData.online.sections[screenName],
           screenName,
           selectedCountry
         );
-        if ( Array.isArray(validationError)) {
+        if (Array.isArray(validationError)) {
           validationError.length &&
             validationError.map(error => {
               dispatch(
@@ -54,7 +54,6 @@ const KYC: React.FC = () => {
               );
             });
         }
-        
 
         !validationError &&
           console.log('personal_details API CALL', kycStoreData[screenName]);

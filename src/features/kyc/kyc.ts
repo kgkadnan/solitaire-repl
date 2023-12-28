@@ -7,7 +7,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   formState: {
     country: '',
-    online: { sections: {personal_details:{first_name:"",last_name:"",phone:"",email:"",country_code:"+91"}} },
+    online: {
+      sections: {
+        personal_details: {
+          first_name: '',
+          last_name: '',
+          phone: '',
+          email: '',
+          country_code: '+91'
+        }
+      }
+    },
     offline: null
   },
   formErrorState: {
