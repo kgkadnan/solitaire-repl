@@ -24,19 +24,32 @@ const KYC: React.FC = () => {
   const [kyc] = useKycMutation();
 
   const kycStoreData: any = useAppSelector(store => store.kyc.formState);
-  const dispatch = useAppDispatch();
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useAppDispatch();
 
-  const handleNextStep = (screenName: string, activeID: number) => {
+  const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
+    let validationError;
     switch (screenName) {
       case 'personal_details':
-        validateScreen(kycStoreData[screenName]);
+        console.log('nnnnnnnnnnnnnn', kycStoreData);
+        validationError = await validateScreen(
+          kycStoreData.online.sections[screenName],
+          screenName,
+          selectedCountry
+        );
+        // if (validationError) {
+        //   dispatch(
+        //     updateFormState({ name: 'country', value: selectedOption.value })
+        //   );
+        // }
 
+        !validationError &&
+          console.log('personal_details', kycStoreData[screenName]);
         // code block
         kyc({
           data: {
@@ -50,8 +63,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then(res => console.log('res'))
-          .catch(e => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         break;
       case 'company_details':
         // code block
@@ -64,8 +77,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then(res => console.log('res'))
-          .catch(e => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         console.log('company_details', kycStoreData[screenName]);
         break;
       case 'company_owner_details':
@@ -78,8 +91,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then(res => console.log('res'))
-          .catch(e => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         // code block
         console.log('company_owner_details', kycStoreData[screenName]);
         break;
@@ -95,8 +108,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then(res => console.log('res'))
-          .catch(e => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         // code block
         console.log('banking_details', kycStoreData[screenName]);
         break;
@@ -105,7 +118,7 @@ const KYC: React.FC = () => {
         console.log('default');
     }
 
-    setActiveStep(prevStep => prevStep + 1);
+    !validationError && setActiveStep(prevStep => prevStep + 1);
   };
 
   const handlePrevStep = () => {
@@ -157,7 +170,7 @@ const KYC: React.FC = () => {
                   {category}
                 </h1>
                 <div className="flex flex-col gap-[20px] flex-wrap ">
-                  {data?.attachment[category].map(
+                  {data?.attachment[category]?.map(
                     ({
                       id,
                       label,
@@ -269,7 +282,7 @@ const KYC: React.FC = () => {
     sectionKeys.forEach((key, index: any) => {
       dispatch(
         updateFormState({
-          name: `online.sections[${key}]`,
+          name: `formState.online.sections[${key}]`,
           value: resData.online[index + 1]
         })
       );
