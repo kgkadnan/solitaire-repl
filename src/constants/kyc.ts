@@ -34,6 +34,7 @@ export const KYCForm = [
       {
         screen: 'Personal Details',
         icon: HandIcon,
+        screenName: 'personal_details',
         fields: [
           {
             name: 'First Name*',
@@ -48,15 +49,15 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'phone_number'
           }
         ]
       },
@@ -64,6 +65,7 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
+        screenName: 'company_details',
         fields: [
           {
             name: 'Registered Company Name*',
@@ -71,7 +73,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'first_name1'
           },
           {
             name: 'Year of Establishment*',
@@ -367,6 +369,7 @@ export const KYCForm = [
 
       {
         screen: 'Personal',
+        screenName: 'personal',
         fields: [
           {
             name: 'First Name',

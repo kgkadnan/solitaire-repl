@@ -5,13 +5,12 @@ import Finger from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/translate';
 import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
-import useAttachmentsStateManagement from './hooks/attachment-state-management';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
-import { CustomModal } from '@/components/common/modal';
-import styles from './attachment.module.scss';
 
-const Kyc = () => {
+import useAttachmentsStateManagement from './hooks/attachment-state-management';
+
+const RenderManually = ({ data }: any) => {
   const {
     attachmentsState: {
       pan: {
@@ -55,6 +54,12 @@ const Kyc = () => {
         isUploaded: isPanOrAdhaarFileUploaded,
         selectedFile: panOrAdhaarSelectedFile,
         error: panOrAdhaarError
+      },
+      section194Q: {
+        uploadProgress: uploadSection194QCardProgress,
+        isUploaded: isSection194QFileUploaded,
+        selectedFile: section194QSelectedFile,
+        error: section194QError
       },
       passport: {
         uploadProgress: uploadPassportCardProgress,
@@ -107,6 +112,12 @@ const Kyc = () => {
         setSelectedFile: setIncorporationCertSelectedFile,
         setError: setIncorporationCertError
       },
+      setSection194Q: {
+        setProgress: setUploadSection194QCardProgress,
+        setIsUploaded: setIsSection194QFileUploaded,
+        setSelectedFile: setSection194QSelectedFile,
+        setError: setSection194QError
+      },
       setCancelChaque: {
         setProgress: setUploadCancelChaqueCardProgress,
         setIsUploaded: setIsCancelChaqueFileUploaded,
@@ -158,8 +169,6 @@ const Kyc = () => {
   const [uploadFilePreview, setUploadFilePreview] = useState<string[]>([]);
 
   const { modalState, modalSetState } = useModalStateManagement();
-  const { isModalOpen, modalContent } = modalState;
-  const { setIsModalOpen } = modalSetState;
 
   const companyDocument = [
     {
@@ -194,7 +203,7 @@ const Kyc = () => {
     },
     {
       id: '3',
-      label: 'Incorporation Certificate',
+      label: 'Incorporation Certificate or ISE copy*',
       isRequired: true,
       uploadProgress: uploadIncorporationCertCardProgress,
       setUploadProgress: setUploadIncorporationCertCardProgress,
@@ -224,6 +233,21 @@ const Kyc = () => {
     },
     {
       id: '5',
+      label: 'Section 194Q',
+      isRequired: true,
+      uploadProgress: uploadSection194QCardProgress,
+      isFileUploaded: isSection194QFileUploaded,
+      setUploadProgress: setUploadSection194QCardProgress,
+      setIsFileUploaded: setIsSection194QFileUploaded,
+      setSelectedFile: setSection194QSelectedFile,
+      selectedFile: section194QSelectedFile,
+      error: section194QError,
+      setError: setSection194QError,
+      maxFile: 1,
+      minFile: 1
+    },
+    {
+      id: '6',
       label: 'Goverment Registration Certificate',
       isRequired: true,
       uploadProgress: uploadGovermentRegCertCardProgress,
@@ -238,7 +262,7 @@ const Kyc = () => {
       minFile: 1
     },
     {
-      id: '6',
+      id: '7',
       label: 'Business Card',
       isRequired: false,
       uploadProgress: uploadBusinessCardProgress,
@@ -285,7 +309,6 @@ const Kyc = () => {
       minFile: 0
     }
   ];
-
   const photoId = [
     {
       id: '1',
@@ -338,12 +361,6 @@ const Kyc = () => {
 
   return (
     <div>
-      <CustomModal
-        isOpens={isModalOpen}
-        setIsOpen={setIsModalOpen}
-        dialogContent={modalContent}
-        modalStyle={styles.modalStyle}
-      />
       <div className="w-full flex justify-between pb-5">
         <DownloadAndUpload
           uploadProgress={uploadProgress}
@@ -512,4 +529,4 @@ const Kyc = () => {
   );
 };
 
-export default Kyc;
+export default RenderManually;

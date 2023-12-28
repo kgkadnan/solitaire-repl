@@ -12,27 +12,36 @@ import {
   IErrorState
 } from '@/app/search/result/result-interface';
 import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
+import { useDispatch } from 'react-redux';
+import { updateFormState } from '@/features/kyc/kyc';
 
-interface IRenderKYCSelection {
+interface IRenderKYCModeSelection {
   setSelectedKYCOption: React.Dispatch<React.SetStateAction<string>>;
   selectedKYCOption: string;
   handleSaveAndNext: (state: string) => void;
   errorState: IErrorState;
   errorSetState: IErrorSetState;
 }
-const RenderKYCSelection = ({
+const RenderKYCModeSelection = ({
   handleSaveAndNext,
   setSelectedKYCOption,
   selectedKYCOption,
   errorState,
   errorSetState
-}: IRenderKYCSelection) => {
+}: IRenderKYCModeSelection) => {
   const { setErrorText } = errorSetState;
   const { errorText } = errorState;
-
+  const dispatch = useDispatch();
   const handleBoxClick = (selection: string) => {
+    console.log('selectetion', selection);
     setErrorText('');
     setSelectedKYCOption(selection);
+    dispatch(
+      updateFormState({
+        name: `${selection === 'digitally' ? 'offline' : 'online'}`,
+        value: false
+      })
+    );
   };
   return (
     <div className="w-full">
@@ -154,4 +163,4 @@ const RenderKYCSelection = ({
   );
 };
 
-export default RenderKYCSelection;
+export default RenderKYCModeSelection;
