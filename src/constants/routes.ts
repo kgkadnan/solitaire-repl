@@ -17,11 +17,12 @@ export const myAccountRoutes = [
 ];
 
 export const protectedRoutes = [
+  '/',
   '/search',
   '/my-diamonds',
   '/my-cart',
   '/compare-stone',
   '/confirmation-screen',
   '/notification',
-  ...myAccountRoutes.filter(route => route !== '/my-account/kyc')
+  ...myAccountRoutes
 ];

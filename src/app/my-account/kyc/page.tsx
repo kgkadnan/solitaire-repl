@@ -31,14 +31,11 @@ const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNextStep = (screenName: string, activeID: number) => {
-    validateScreen({
-      firstName: 'jyoti',
-      email: 'abc@examplecom',
-      password: 'Jyoti@123'
-    });
-
     switch (screenName) {
       case 'personal_details':
+        console.log('jjjj', kycStoreData[screenName]);
+        validateScreen(kycStoreData[screenName]);
+
         // code block
         kyc({
           data: {
