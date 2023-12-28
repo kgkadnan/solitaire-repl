@@ -6,7 +6,11 @@ import React, { useState } from 'react';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { useRouter } from 'next/navigation';
+import { CustomDialog } from '@/components/common/dialog';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { ManageLocales } from '@/utils/translate';
+import ErrorModel from '@/components/common/error-model';
 
 const ForgotPassword = () => {
   const [value, setValue] = useState('');
