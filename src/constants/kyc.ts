@@ -6,7 +6,7 @@ export enum fieldType {
   RADIO = 'radio',
   RADIOWITHINPUT = 'radioWithInput',
   ATTACHMENT = 'attachment',
-  FLOATING_INPUT_WITH_LABEL = 'attachment'
+  FLOATING_INPUT_WITH_LABEL = 'floatingInputWithLabel'
 }
 
 enum supportedMediaUnit {
@@ -18,8 +18,8 @@ enum supportedMediaFormat {
   JPEG = 'JPEG',
   PNG = 'PNG',
   JPG = 'JPG',
-  'PDF' = 'PDF',
-  'DOC' = 'DOC',
+  PDF = 'PDF',
+  DOC = 'DOC',
   DOCX = 'DOCX'
 }
 
@@ -31,20 +31,18 @@ export const KYCForm = [
       shortName: 'india'
     },
     digital: [
+      //Personal Details
       {
         screen: 'Personal Details',
         icon: HandIcon,
+        screenName: 'personal_details',
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key: 'first_name'
           },
           {
             name: 'Last Name*',
@@ -52,31 +50,432 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            state: 'state',
-            setState: 'setState',
-            error: 'error',
-            setError: 'setError',
-            errorMessage: 'First Name is required'
+            key: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'phone'
           }
         ]
       },
+
+      //Company Details
       {
-        screen: 'Personal',
+        screen: 'Company Details',
+        icon: HandIcon,
+        screenName: 'company_details',
         fields: [
           {
-            name: 'First Name',
+            name: 'Registered Company Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_name'
+          },
+          {
+            name: 'Year of Establishment*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'year_of_establishment'
+          },
+          {
+            name: 'Registered Address*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'address'
+          },
+          {
+            name: 'City*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'city'
+          },
+          {
+            name: 'State*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'state'
+          },
+          {
+            name: 'Pin-Code*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'pincode'
+          },
+          {
+            name: 'Company Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_phone_number'
+          },
+          {
+            name: 'Company Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_email'
+          },
+          {
+            name: 'Business Type*',
+            type: fieldType.CHECKBOX,
+            key: 'business_type',
+            checkboxData: [
+              {
+                name: 'Manufacturer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Wholesaler',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Corporate Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Type of Industry*',
+            type: fieldType.CHECKBOX,
+            key: 'industry_type',
+            checkboxData: [
+              {
+                name: 'Diamonds',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Colour Stones',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Jewellery',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Organisation Type*',
+            type: fieldType.RADIO,
+            key: 'organisation_type',
+            radioData: [
+              {
+                id: 1,
+                label: 'Individual',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 2,
+                label: 'Partnership Firm',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 3,
+                label: 'Private Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 4,
+                label: 'LLP',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 5,
+                label: 'Public Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 6,
+                label: 'OPC',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 7,
+                label: 'Other',
+                value: '',
+                onChange: () => {},
+                name: '',
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: '',
+                placeholder: 'If other please specify',
+                inputStyle: 'w-[150px]'
+              }
+            ]
+          },
+          {
+            name: 'Business Registration Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'business_registration_number'
+          },
+          {
+            name: 'Pan-Card Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_pan_number'
+          },
+          {
+            name: 'GST Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'gst_number'
+          },
+          {
+            name: 'Subsidiary/Affiliated Company',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'subsidiary_company'
+          },
+          {
+            name: 'Member of any Business Organisation / Council*',
+            subTitle: 'If yes then provide the name',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_member_of_business',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Name If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'member_of_business_name'
+              }
+            ]
+          },
+          {
+            name: 'Registered under MSME Act',
+            subTitle:
+              'If yes then provide the name field & Registration Number',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_msme_registered',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'MSME type If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'msme_type'
+              },
+              {
+                name: 'Registration Number If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'msme_registration_number'
+              }
+            ]
+          },
+          {
+            label: 'Ultimate Beneficiary Details',
+            name: 'Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ultimate_beneficiary_name'
+          }
+        ]
+      },
+
+      //Company Owner Details
+      {
+        screen: 'Company Owner Details',
+        fields: [
+          {
+            name: 'Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'owner_full_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'owner_phone'
+          },
+          {
+            name: 'Email ID*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'owner_email'
+          },
+          {
+            name: 'Pan-Card Number (pre-filled if user selects Individual in Business type)',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'owner_pan_number'
+          }
+        ]
+      },
+
+      //Banking Details
+      {
+        screen: 'Banking Details',
+        fields: [
+          {
+            name: 'Bank Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'bank_name'
+          },
+          {
+            label: 'Banking Details',
+            name: 'Account Holder Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_holder_name'
+          },
+          {
+            name: 'Account Number*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_number'
+          },
+          {
+            name: 'IFSC Code*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ifsc_code'
+          },
+          {
+            name: 'Bank Address',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'bank_address'
           }
         ]
       }
@@ -133,15 +532,392 @@ export const KYCForm = [
       shortName: 'usa'
     },
     digital: [
+      //Personal Details
       {
         screen: 'Personal Details',
+        icon: HandIcon,
+        screenName: 'personal_details',
         fields: [
           {
-            name: 'First Name',
+            name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
             key: 'first_name'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'last_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'number',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'phone'
+          }
+        ]
+      },
+
+      //Company Details
+      {
+        screen: 'Company Details',
+        icon: HandIcon,
+        screenName: 'company_details',
+        fields: [
+          {
+            name: 'Registered Company Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_name'
+          },
+          {
+            name: 'Year of Establishment*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'year_of_establishment'
+          },
+          {
+            name: 'Registered Address*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'address'
+          },
+          {
+            name: 'Company Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_phone_number'
+          },
+          {
+            name: 'Company Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_email'
+          },
+          {
+            name: 'Business Type*',
+            type: fieldType.CHECKBOX,
+            key: 'business_type',
+            checkboxData: [
+              {
+                name: 'Manufacturer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Wholesaler',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Corporate Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Type of Industry*',
+            type: fieldType.CHECKBOX,
+            key: 'industry_type',
+            checkboxData: [
+              {
+                name: 'Diamonds',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Colour Stones',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Jewellery',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Organisation Type*',
+            type: fieldType.RADIO,
+            key: 'organisation_type',
+            radioData: [
+              {
+                id: 1,
+                label: 'Individual',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 2,
+                label: 'Partnership Firm',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 3,
+                label: 'Private Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 4,
+                label: 'LLP',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 5,
+                label: 'Public Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 6,
+                label: 'OPC',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 7,
+                label: 'Other',
+                value: '',
+                onChange: () => {},
+                name: '',
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: '',
+                placeholder: 'If other please specify',
+                inputStyle: 'w-[150px]'
+              }
+            ]
+          },
+          {
+            name: 'Business Registration Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'business_registration_number'
+          },
+          {
+            name: 'VAT Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'vat_number'
+          },
+          {
+            name: 'Federal Tax ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'federal_tax_id'
+          },
+          {
+            name: 'Fax Number',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'fax_number'
+          },
+          {
+            name: 'Subsidiary/Affiliated Company',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'subsidiary_company'
+          },
+          {
+            name: 'Member of any Business Organisation / Council*',
+            subTitle: 'If yes then provide the name',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_member_of_business',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Name If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'member_of_business_name'
+              }
+            ]
+          },
+          {
+            label: 'Ultimate Beneficiary Details',
+            name: 'Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ultimate_beneficiary_name'
+          },
+          {
+            name: 'Ownership%',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ownership_percentage'
+          },
+          {
+            name: 'Have you instituted an Anti-Money laundering policy in your company?*',
+            subTitle: 'If “No” please specify',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_anti_money_laundering',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Specify here',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'anti_money_laundering_policy_name'
+              }
+            ]
+          }
+        ]
+      },
+
+      //Banking Details
+      {
+        screen: 'Banking Details',
+        fields: [
+          {
+            name: 'Bank Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'bank_name'
+          },
+          {
+            label: 'Banking Details',
+            name: 'Account Holder Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_holder_name'
+          },
+          {
+            name: 'Account Number/IBN Number*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_number'
+          },
+          {
+            name: 'Swift Code*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'swift_code'
           }
         ]
       }
@@ -158,29 +934,361 @@ export const KYCForm = [
         isRequired: true,
         supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
         handleChange: () => {},
-        state: 'state',
-        setState: 'setState',
-        error: 'error',
-        setError: 'setError',
-        errorMessage: 'Pan is required'
+        key: 'first_name'
       }
     ]
   },
   {
     country: {
-      fullName: 'Dubai',
-      shortName: 'dubai'
+      fullName: 'Belgium',
+      shortName: 'Belgium'
     },
     digital: [
+      //Personal Details
       {
         screen: 'Personal Details',
+        icon: HandIcon,
+        screenName: 'personal_details',
         fields: [
           {
-            name: 'First Name',
+            name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
             key: 'first_name'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'last_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'number',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'phone'
+          }
+        ]
+      },
+
+      //Company Details
+      {
+        screen: 'Company Details',
+        icon: HandIcon,
+        screenName: 'company_details',
+        fields: [
+          {
+            name: 'Registered Company Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_name'
+          },
+          {
+            name: 'Year of Establishment*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'year_of_establishment'
+          },
+          {
+            name: 'Registered Address*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'address'
+          },
+          {
+            name: 'Company Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_phone_number'
+          },
+          {
+            name: 'Company Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_email'
+          },
+          {
+            name: 'Business Type*',
+            type: fieldType.CHECKBOX,
+            key: 'business_type',
+            checkboxData: [
+              {
+                name: 'Manufacturer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Wholesaler',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Corporate Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Type of Industry*',
+            type: fieldType.CHECKBOX,
+            key: 'industry_type',
+            checkboxData: [
+              {
+                name: 'Diamonds',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Colour Stones',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Jewellery',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Organisation Type*',
+            type: fieldType.RADIO,
+            key: 'organisation_type',
+            radioData: [
+              {
+                id: 1,
+                label: 'Individual',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 2,
+                label: 'Partnership Firm',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 3,
+                label: 'Private Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 4,
+                label: 'LLP',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 5,
+                label: 'Public Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 6,
+                label: 'OPC',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 7,
+                label: 'Other',
+                value: '',
+                onChange: () => {},
+                name: '',
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: '',
+                placeholder: 'If other please specify',
+                inputStyle: 'w-[150px]'
+              }
+            ]
+          },
+          {
+            name: 'Business Registration Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'business_registration_number'
+          },
+          {
+            name: 'VAT Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'vat_number'
+          },
+          {
+            name: 'Fax Number',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'fax_number'
+          },
+          {
+            name: 'Subsidiary/Affiliated Company',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'subsidiary_company'
+          },
+          {
+            name: 'Member of any Business Organisation / Council*',
+            subTitle: 'If yes then provide the name',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_member_of_business',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Name If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'member_of_business_name'
+              }
+            ]
+          },
+          {
+            label: 'Ultimate Beneficiary Details',
+            name: 'Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ultimate_beneficiary_name'
+          },
+          {
+            name: 'Ownership%',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ownership_percentage'
+          }
+        ]
+      },
+
+      //Banking Details
+      {
+        screen: 'Banking Details',
+        fields: [
+          {
+            name: 'Bank Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'bank_name'
+          },
+          {
+            label: 'Banking Details',
+            name: 'Account Holder Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_holder_name'
+          },
+          {
+            name: 'Account Number/IBN Number*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_number'
+          },
+          {
+            name: 'Swift Code*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'swift_code'
           }
         ]
       }
@@ -196,12 +1304,7 @@ export const KYCForm = [
         fileSizeUnit: supportedMediaUnit.MB,
         isRequired: true,
         supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {},
-        state: 'state',
-        setState: 'setState',
-        error: 'error',
-        setError: 'setError',
-        errorMessage: 'Pan is required'
+        handleChange: () => {}
       }
     ]
   },
@@ -235,12 +1338,7 @@ export const KYCForm = [
         fileSizeUnit: supportedMediaUnit.MB,
         isRequired: true,
         supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {},
-        state: 'state',
-        setState: 'setState',
-        error: 'error',
-        setError: 'setError',
-        errorMessage: 'Pan is required'
+        handleChange: () => {}
       }
     ]
   }
