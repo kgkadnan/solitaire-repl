@@ -12,6 +12,7 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 
 const ResetPassword = () => {
   // State variables for email, password, and error handling
@@ -23,15 +24,17 @@ const ResetPassword = () => {
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
 
+  const token = useSearchParams().get('token');
+  const email = useSearchParams().get('email');
+
   const [resetPassword] = useResetPasswordMutation();
 
   const handleResetPassword = async () => {
     if (resetPasswordValue === resetConfirmPassword) {
       const res: any = await resetPassword({
-        email: 'jyotitiwarikgk@gmail.com',
+        email: email || '',
         password: resetPasswordValue,
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhKTVlBSEpaVldUVDVDR1YyS1dHR0RNSCIsImV4cCI6MTcwMzc0NDk4NCwiaWF0IjoxNzAzNzQ0MDg0fQ.jVDyTzQTHlXbgkhvjEUR9zV2QSTyZKtB0gNuIWXxteA'
+        token: token || ''
       });
 
       if (res.error) {
