@@ -41,7 +41,7 @@ const KYC: React.FC = () => {
           screenName,
           selectedCountry
         );
-        if (validationError) {
+        if (validationError.length) {
           Array.isArray(validationError) &&
             validationError.map(error => {
               dispatch(
