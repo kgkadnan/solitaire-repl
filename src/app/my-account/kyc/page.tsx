@@ -33,7 +33,6 @@ const KYC: React.FC = () => {
   const handleNextStep = (screenName: string, activeID: number) => {
     switch (screenName) {
       case 'personal_details':
-        console.log('jjjj', kycStoreData[screenName]);
         validateScreen(kycStoreData[screenName]);
 
         // code block
