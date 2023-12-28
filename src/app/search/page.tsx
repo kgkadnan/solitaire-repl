@@ -16,7 +16,7 @@ import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
 import { CustomDialog } from '@/components/common/dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { CustomInputDialog } from '@/components/common/input-dialog';
+
 import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
@@ -30,6 +30,9 @@ import {
   SAVED_SEARCH_HEADER,
   NEW_SEARCH_HEADER
 } from '@/constants/application-constants/search-page';
+import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 
 interface IMyProfileRoutes {
   id: number;
@@ -218,9 +221,7 @@ function SearchResultLayout() {
       })
       .catch(() => {
         setInputError(true);
-        setInputErrorContent(
-          'Title already exists. Choose another title to save your search'
-        );
+        setInputErrorContent(TITLE_ALREADY_EXISTS);
       });
   };
 
@@ -377,23 +378,6 @@ function SearchResultLayout() {
     router.push(`/search?active-tab=${subRoute}&edit=${RESULT}`);
   };
 
-  const handleCloseInputDialog = () => {
-    setIsInputDialogOpen(false);
-    setInputError(false);
-    setSaveSearchName('');
-  };
-
-  const customInputDialogData = {
-    isOpens: isInputDialogOpen,
-    setIsOpen: setIsInputDialogOpen,
-    setInputvalue: setSaveSearchName,
-    inputValue: saveSearchName,
-    displayButtonFunction: handleCloseAndSave,
-    label: 'Save and close this search',
-    name: 'Save',
-    displayButtonLabel2: 'Save'
-  };
-
   const handleCloseResultTabs = () => {
     localStorage.removeItem('Search');
     setMyProfileRoutes([
@@ -427,15 +411,71 @@ function SearchResultLayout() {
     setViewPort(isViewPortGreater);
   }, [myProfileRoutes]);
 
+  const handleInputChange = (e: any) => {
+    setInputErrorContent('');
+    setSaveSearchName(e.target.value);
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p>Save and close this search</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <FloatingLabelInput
+            label={'Enter name'}
+            onChange={handleInputChange}
+            type="text"
+            name="save"
+            value={saveSearchName}
+            errorText={inputErrorContent}
+          />
+        </div>
+
+        <div className="flex  gap-2">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setSaveSearchName('');
+              setInputErrorContent('');
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              if (!saveSearchName.length) {
+                setInputErrorContent('Please enter name');
+              } else {
+                handleCloseAndSave();
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       <CustomInputDialog
-        customInputDialogData={customInputDialogData}
-        isError={inputError}
-        errorContent={inputErrorContent}
-        setIsError={setInputError}
-        setErrorContent={setInputErrorContent}
-        handleClose={handleCloseInputDialog}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
       <CustomDialog
         dialogContent={dialogContent}

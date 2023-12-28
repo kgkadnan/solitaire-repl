@@ -30,6 +30,10 @@ import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 import Link from 'next/link';
+import {
+  NO_STONES_AVAILABLE,
+  NO_STONES_SELECTED
+} from '@/constants/error-messages/compare-stone';
 
 const CompareStone = () => {
   // Initialize necessary state variables
@@ -80,7 +84,7 @@ const CompareStone = () => {
   const handleAddToCart = () => {
     if (!isCheck.length) {
       setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
+      setErrorText(NO_STONES_SELECTED);
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return compareStoneData.some(
@@ -91,9 +95,7 @@ const CompareStone = () => {
       });
 
       if (hasMemoOut) {
-        setErrorText(
-          'Some stones in your selection are not available, Please modify your selection.'
-        );
+        setErrorText(NO_STONES_AVAILABLE);
         setIsError(true);
       } else {
         // Extract variant IDs for selected stones
@@ -272,17 +274,17 @@ const CompareStone = () => {
   }, []);
 
   // UseEffect to close the dialog box
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   // Handle change in the slider's open state
   const onOpenChange = (open: boolean) => {

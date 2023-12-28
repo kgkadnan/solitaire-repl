@@ -27,6 +27,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomModal } from '@/components/common/modal';
+import { SELECT_STONES } from '@/constants/error-messages/cart';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
@@ -214,23 +215,23 @@ function MyCart() {
     setTableColumns(listingColumns);
   }, [listingColumns, setTableColumns]);
 
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   // Handle download of Excel based on user selection (All or Selected)
   const downloadExcelFunction = () => {
     if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Please select a stone to perform action.');
+      setErrorText(SELECT_STONES);
     } else if (isCheck.length) {
       performDownloadExcel({
         products: isCheck,

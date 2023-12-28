@@ -1,93 +1,111 @@
 'use client';
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
-import { renderField } from './components/renderField';
 import { StepperStatus } from '@/constants/enums/stepper-status';
-import Stepper from '@/components/common/stepper';
-
-interface IStepper {
-  label: string;
-  data: ReactNode;
-  status: string;
-}
+import Stepper, { IStepper } from '@/components/common/stepper';
+import RenderCountrySelection from './render-country-selection';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
+import RenderManually from './render-manually';
+import { useSelector } from 'react-redux';
+import { RenderDigitalForm } from './render-digital';
+import RenderKYCModeSelection from './render-kyc-mode-selection';
 
 const KYC: React.FC = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const { errorState, errorSetState } = useErrorStateManagement();
 
-  const handleNextStep = () => {
+  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedKYCOption, setSelectedKYCOption] = useState('');
+  const [currentState, setCurrentState] = useState('country_selection');
+  const [data, setData] = useState<any>({});
+
+  const [activeStep, setActiveStep] = useState(0);
+  const handleNextStep = (screenName: string) => {
+    console.log('handleNextStep', activeStep);
     setActiveStep(prevStep => prevStep + 1);
   };
-
   const handlePrevStep = () => {
     setActiveStep(prevStep => prevStep - 1);
   };
 
-  const renderDigitalForm = (country: any, screen: any, isLastStep: any) => (
-    <div key={screen.screen}>
-      <h3>{screen.screen}</h3>
-      {screen.fields.map((field: any) => (
-        <div key={field.name}>{renderField(field)}</div>
-      ))}
-      {isLastStep && renderAttachment()}{' '}
-      {/* Render attachment for the last step */}
-    </div>
-  );
+  const formState = useSelector((state: any) => state.kyc.formState);
+  const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
 
-  const renderManualForm = () => (
-    <div>
-      {/* <DownloadAndUpload
-          uploadProgress={uploadProgress}
-          isFileUploaded={isFileUploaded}
-          setUploadProgress={setUploadProgress}
-          setIsFileUploaded={setIsFileUploaded}
-          setSelectedFile={setUploadFilePreview}
-          selectedFile={uploadFilePreview}
-          maxFile={1}
-          modalSetState={modalSetState}
-        /> */}
-    </div>
-  );
+  console.log(data, 'datatt');
 
-  const renderAttachment = () => (
-    <div>
-      {/* <FileAttachments
-                    key={id}
-                    lable={label}
-                    isRequired={isRequired}
-                    uploadProgress={uploadProgress}
-                    isFileUploaded={isFileUploaded}
-                    setUploadProgress={setUploadProgress}
-                    setIsFileUploaded={setIsFileUploaded}
-                    setSelectedFile={setSelectedFile}
-                    selectedFile={selectedFile}
-                    maxFile={maxFile}
-                    setError={setError}
-                    error={error}
-                    modalSetState={modalSetState}
-                  /> */}
-    </div>
-  );
-
-  const country = KYCForm[0]; // Replace this with the actual logic you use to select the country and screen dynamically
-  const selectedMode = 'digital';
-  const stepperData: IStepper[] = country.digital
-    ? country.digital.map((screen: any, index: number) => ({
+  const stepperData: IStepper[] = data?.digital
+    ? data.digital.map((screen: any, index: number) => ({
         label: `${screen.screen}`,
-        data: renderDigitalForm(
-          country,
-          screen,
-          index === country.digital.length - 1
+        data: (
+          <RenderDigitalForm
+            screen={screen}
+            isLastStep={index === data.digital.length - 1}
+            formState={formState}
+            formErrorState={formErrorState}
+            screenId={index}
+          />
         ),
+        screenName: `${screen.screenName}`,
+
         status:
           index === activeStep
             ? StepperStatus.INPROGRESS
             : StepperStatus.NOT_STARTED
       }))
     : [];
+  // return (
+  //   <div>
+  //     {selectedMode === 'digital' ? (
+  //       <Stepper
+  //         stepper={stepperData}
+  //         state={activeStep}
+  //         setState={setActiveStep}
+  //         prevStep={handlePrevStep}
+  //         nextStep={handleNextStep}
+  //       />
+  //     ) : (
+  //       renderManualForm()
+  //     )}
+  //   </div>
+  // );  // Configuration for footer buttons
 
-  return (
-    <div>
-      {selectedMode === 'digital' ? (
+  useEffect(() => {
+    let KYCData = KYCForm.filter(country => {
+      return country.country.shortName === selectedCountry;
+    });
+    setData(KYCData[0]);
+  }, [selectedCountry]);
+
+  const handleSaveAndNext = (state: string) => {
+    setCurrentState(state);
+  };
+
+  switch (currentState) {
+    case 'country_selection':
+      return (
+        <RenderCountrySelection
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          handleSaveAndNext={handleSaveAndNext}
+          errorSetState={errorSetState}
+          errorState={errorState}
+        />
+      );
+    case 'choice_for_filling_kyc':
+      // Render the component for 'choice_for_filling_kyc'
+      return (
+        <RenderKYCModeSelection
+          handleSaveAndNext={handleSaveAndNext}
+          setSelectedKYCOption={setSelectedKYCOption}
+          selectedKYCOption={selectedKYCOption}
+          errorSetState={errorSetState}
+          errorState={errorState}
+        />
+      );
+    case 'other':
+      return <RenderManually data={data} />;
+    // Add more cases as needed
+    case 'digitally':
+      return (
         <Stepper
           stepper={stepperData}
           state={activeStep}
@@ -95,11 +113,14 @@ const KYC: React.FC = () => {
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
         />
-      ) : (
-        renderManualForm()
-      )}
-    </div>
-  );
+      );
+
+    case 'manually':
+      return <RenderManually data={data} />;
+    default:
+      // Render a default component or handle the default case
+      return;
+  }
 };
 
 export default KYC;

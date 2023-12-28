@@ -5,6 +5,10 @@ import {
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { RESULT } from '@/constants/application-constants/search-page';
+import {
+  MAX_SEARCH_LIMIT_EXCEED,
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT
+} from '@/constants/error-messages/saved';
 
 //Handles the click event on a saved search card.
 export const handleCardClick = (
@@ -30,7 +34,7 @@ export const handleCardClick = (
   // Check if the product data count exceeds the maximum limit
   if (productDataCount > MAX_SAVED_SEARCH_COUNT) {
     setIsError(true);
-    setErrorText('Please modify your search, the stones exceeds the limit.');
+    setErrorText(MODIFY_SEARCH_STONES_EXCEEDS_LIMIT);
   } else {
     const data: any = JSON.parse(localStorage.getItem('Search')!);
 
@@ -38,9 +42,7 @@ export const handleCardClick = (
       // Check if the maximum search tab limit is reached
       if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
         setIsError(true);
-        setErrorText(
-          'Max search limit reached. Please remove existing searches'
-        );
+        setErrorText(MAX_SEARCH_LIMIT_EXCEED);
       } else {
         // Add the clicked search to local storage and navigate to the search result page
         const localStorageData = [

@@ -37,6 +37,7 @@ interface IFileAttachments {
   setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
   selectedFile: string[];
   maxFile: number;
+  minFile: number;
   modalSetState: IModalSetState;
   setError: React.Dispatch<React.SetStateAction<string | null>>;
   error: string | null;
@@ -52,6 +53,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   setSelectedFile,
   selectedFile,
   maxFile,
+  minFile,
   setError,
   error,
   modalSetState
@@ -82,6 +84,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     onDrop,
+    minFile: minFile,
     accept: ALLOWED_FILE_TYPES,
     maxSize: MAX_FILE_SIZE,
     maxFiles: maxFile

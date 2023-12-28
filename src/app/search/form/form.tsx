@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './form.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -11,7 +11,6 @@ import {
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { useAppSelector } from '@/hooks/hook';
-import { CustomInputDialog } from '@/components/common/input-dialog';
 import useFieldStateManagement from './hooks/field-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameter';
 import { handleReset } from './helpers/reset';
@@ -30,6 +29,20 @@ import {
 } from '@/constants/application-constants/search-page';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
+import {
+  EXCEEDS_LIIMITS,
+  MAX_LIMIT_REACHED,
+  SELECT_SOME_PARAM,
+  SOMETHING_WENT_WRONG,
+  TITLE_ALREADY_EXISTS
+} from '@/constants/error-messages/form';
+import {
+  NO_STONE_FOUND,
+  SELECT_STONE_TO_PERFORM_ACTION
+} from '@/constants/error-messages/form';
+import { CustomInputDialog } from '@/components/common/input-dialog';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { FloatingLabelInput } from '@/components/common/floating-input';
 
 const AdvanceSearch = () => {
   const router = useRouter();
@@ -154,12 +167,10 @@ used for managing the state of a form field or input element in a React componen
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(
-            'Please modify your search, the stones exceeds the limit.'
-          );
+          setErrorText(EXCEEDS_LIIMITS);
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
-          setErrorText(`No stones found, Please modify your search.`);
+          setErrorText(NO_STONE_FOUND);
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
           data?.count && setErrorText(`${data?.count} stones found`);
@@ -174,7 +185,7 @@ used for managing the state of a form field or input element in a React componen
     }
     if (error) {
       setIsError(true);
-      setErrorText('Something went wrong');
+      setErrorText(SOMETHING_WENT_WRONG);
     }
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl]);
@@ -188,7 +199,7 @@ used for managing the state of a form field or input element in a React componen
       modifySearchFrom !== `${SAVED_SEARCHES}`
     ) {
       setIsError(true);
-      setErrorText('Max search limit reached. Please remove existing searches');
+      setErrorText(MAX_LIMIT_REACHED);
     } else {
       if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
         if (
@@ -243,15 +254,13 @@ used for managing the state of a form field or input element in a React componen
               .catch((error: any) => {
                 console.log('error', error);
                 setInputError(true);
-                setInputErrorContent(
-                  'Title already exists. Choose another title to save your search'
-                );
+                setInputErrorContent(TITLE_ALREADY_EXISTS);
               });
           }
         }
       } else {
         setIsError(true);
-        setErrorText('Please select some parameter before initiating search');
+        setErrorText(SELECT_SOME_PARAM);
       }
     }
   };
@@ -264,7 +273,7 @@ used for managing the state of a form field or input element in a React componen
       modifySearchFrom !== `${RESULT}`
     ) {
       setIsError(true);
-      setErrorText('Max search limit reached. Please remove existing searches');
+      setErrorText(MAX_LIMIT_REACHED);
     } else {
       if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
         if (
@@ -324,29 +333,68 @@ used for managing the state of a form field or input element in a React componen
         }
       } else {
         setIsError(true);
-        setErrorText('Please select some parameter before initiating search');
+        setErrorText(SELECT_SOME_PARAM);
       }
     }
   };
 
-  // Data for custom input dialog
-  const customInputDialogData = {
-    isOpens: isInputDialogOpen,
-    setIsOpen: setIsInputDialogOpen,
-    setInputvalue: setSaveSearchName,
-    inputValue: saveSearchName,
-    displayButtonFunction: handleSaveAndSearch,
-    label: 'Save And Search',
-    name: 'Save',
-    displayButtonLabel2: 'Save'
+  const handleInputChange = (e: any) => {
+    setInputErrorContent('');
+    setSaveSearchName(e.target.value);
   };
 
-  // Function: Close input dialog
-  const handleCloseInputDialog = () => {
-    setIsInputDialogOpen(false);
-    setInputError(false);
-    setInputErrorContent('');
-    setSaveSearchName('');
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p>Save And Search</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <FloatingLabelInput
+            label={'Enter name'}
+            onChange={handleInputChange}
+            type="text"
+            name="save"
+            value={saveSearchName}
+            errorText={inputErrorContent}
+          />
+        </div>
+
+        <div className="flex  gap-2">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setSaveSearchName('');
+              setInputErrorContent('');
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              if (!saveSearchName.length) {
+                setInputErrorContent('Please enter name');
+              } else {
+                handleSaveAndSearch();
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
   const handleAddDemand = () => {};
@@ -354,12 +402,9 @@ used for managing the state of a form field or input element in a React componen
   return (
     <div>
       <CustomInputDialog
-        customInputDialogData={customInputDialogData}
-        isError={inputError}
-        errorContent={inputErrorContent}
-        setIsError={setInputError}
-        setErrorContent={setInputErrorContent}
-        handleClose={handleCloseInputDialog}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
 
       {renderContent(
@@ -431,9 +476,7 @@ used for managing the state of a form field or input element in a React componen
                   modifySearchFrom !== `${SAVED_SEARCHES}`
                 ) {
                   setIsError(true);
-                  setErrorText(
-                    'Max search limit reached. Please remove existing searches'
-                  );
+                  setErrorText(MAX_LIMIT_REACHED);
                 } else {
                   if (
                     data?.count < MAX_SEARCH_FORM_COUNT &&
@@ -455,12 +498,10 @@ used for managing the state of a form field or input element in a React componen
                       } else {
                         searchUrl && setIsInputDialogOpen(true);
                       }
-                    } else {
-                      setIsError(true);
-                      setErrorText(
-                        'Please make a selection to perform action.'
-                      );
                     }
+                  } else {
+                    setIsError(true);
+                    setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
                   }
                 }
               }
