@@ -31,6 +31,7 @@ const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const handleNextStep = (screenName: string, activeID: number) => {
+    let active = activeID + 1;
     switch (screenName) {
       case 'personal_details':
         validateScreen(kycStoreData[screenName]);
@@ -40,9 +41,12 @@ const KYC: React.FC = () => {
           data: {
             country: kycStoreData.country,
             offline: kycStoreData.offline,
-            data: { ...kycStoreData.online.sections[screenName] }
+            data: {
+              ...kycStoreData.online.sections[screenName],
+              country_code: 'IND'
+            }
           },
-          ID: activeID
+          ID: active
         })
           .unwrap()
           .then(res => console.log('res'))
@@ -56,7 +60,7 @@ const KYC: React.FC = () => {
             offline: kycStoreData.offline,
             data: { ...kycStoreData.online.sections[screenName] }
           },
-          ID: activeID
+          ID: active
         })
           .unwrap()
           .then(res => console.log('res'))
@@ -70,7 +74,7 @@ const KYC: React.FC = () => {
             offline: kycStoreData.offline,
             data: { ...kycStoreData.online.sections[screenName] }
           },
-          ID: activeID
+          ID: active
         })
           .unwrap()
           .then(res => console.log('res'))
@@ -83,9 +87,11 @@ const KYC: React.FC = () => {
           data: {
             country: kycStoreData.country,
             offline: kycStoreData.offline,
-            data: { ...kycStoreData.online.sections[screenName] }
+            data: {
+              ...kycStoreData.online.sections[screenName]
+            }
           },
-          ID: activeID
+          ID: active
         })
           .unwrap()
           .then(res => console.log('res'))
@@ -214,7 +220,7 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let KYCData = KYCForm.filter(country => {
-      return country.country.shortName === selectedCountry;
+      return country.country.fullName === selectedCountry;
     });
     setData(KYCData[0]);
   }, [selectedCountry]);

@@ -58,6 +58,14 @@ export const KYCForm = [
             isRequired: true,
             handleChange: () => {},
             key: 'phone'
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'email'
           }
         ]
       },
