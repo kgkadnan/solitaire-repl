@@ -8,15 +8,14 @@ export interface IStepper {
   label: string;
   data: ReactNode;
   status: string;
-  screenName:string
-
+  screenName: string;
 }
 interface IStepperProps {
   stepper: IStepper[];
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: (_name:string) => void;
+  nextStep: (_name: string) => void;
   prevLabel?: string;
   nextLabel?: string;
 }

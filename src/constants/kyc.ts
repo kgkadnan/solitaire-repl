@@ -34,7 +34,7 @@ export const KYCForm = [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName:'personal_details',
+        screenName: 'personal_details',
         fields: [
           {
             name: 'First Name*',
@@ -65,7 +65,7 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName:'company_details',
+        screenName: 'company_details',
         fields: [
           {
             name: 'Registered Company Name*',
@@ -369,7 +369,7 @@ export const KYCForm = [
 
       {
         screen: 'Personal',
-        screenName:'personal',
+        screenName: 'personal',
         fields: [
           {
             name: 'First Name',

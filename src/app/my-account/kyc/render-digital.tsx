@@ -7,7 +7,7 @@ type RenderDigitalFormProps = {
   isLastStep: boolean;
   formState: any;
   formErrorState: any;
-  screenId:number
+  screenId: number;
 };
 export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
   screen,

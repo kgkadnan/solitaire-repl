@@ -19,8 +19,7 @@ const KYC: React.FC = () => {
   const [data, setData] = useState<any>({});
 
   const [activeStep, setActiveStep] = useState(0);
-  const handleNextStep = (screenName:string) => {
-    
+  const handleNextStep = (screenName: string) => {
     console.log('handleNextStep', activeStep);
     setActiveStep(prevStep => prevStep + 1);
   };
@@ -45,12 +44,12 @@ const KYC: React.FC = () => {
             screenId={index}
           />
         ),
-        screenName:`${screen.screenName}`,
+        screenName: `${screen.screenName}`,
 
         status:
           index === activeStep
             ? StepperStatus.INPROGRESS
-            : StepperStatus.NOT_STARTED,
+            : StepperStatus.NOT_STARTED
       }))
     : [];
   // return (
@@ -113,7 +112,6 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
-
         />
       );
 
