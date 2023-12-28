@@ -1,17 +1,3 @@
-export const protectedRoutes = [
-  '/search',
-  '/my-diamonds',
-  '/my-cart',
-  '/compare-stone',
-  '/confirmation-screen',
-  '/notification',
-  '/my-account/summary',
-  '/my-account/change-password',
-  '/my-account/email-notification',
-  '/my-account/report-bug',
-  '/my-account/manage-diamond-sequence'
-];
-
 export const headerlessRoutes = [
   '/login',
   '/forgot-password',
@@ -19,4 +5,23 @@ export const headerlessRoutes = [
   '/register',
   '/otp-verification',
   '/successfully-created'
+];
+
+export const myAccountRoutes = [
+  '/my-account/summary',
+  '/my-account/change-password',
+  '/my-account/email-notification',
+  '/my-account/report-bug',
+  '/my-account/manage-diamond-sequence',
+  '/my-account/kyc'
+];
+
+export const protectedRoutes = [
+  '/search',
+  '/my-diamonds',
+  '/my-cart',
+  '/compare-stone',
+  '/confirmation-screen',
+  '/notification',
+  ...myAccountRoutes.filter(route => route !== '/my-account/kyc')
 ];

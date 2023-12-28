@@ -1,6 +1,6 @@
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
-import { CountrySelectionDropdown } from './render-country-selection-dropdown';
+import { CountrySelectionDropdown } from './components/render-country-selection-dropdown';
 import { CustomFooter } from '@/components/common/footer';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';

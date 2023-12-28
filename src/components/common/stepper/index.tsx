@@ -4,17 +4,18 @@ import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 
-interface IStepper {
+export interface IStepper {
   label: string;
   data: ReactNode;
   status: string;
+  screenName: string;
 }
 interface IStepperProps {
   stepper: IStepper[];
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: () => void;
+  nextStep: (_name: string) => void;
   prevLabel?: string;
   nextLabel?: string;
 }
@@ -42,7 +43,7 @@ const Stepper: React.FC<IStepperProps> = ({
         id: 2,
         displayButtonLabel: nextLabel,
         style: styles.filled,
-        fn: nextStep,
+        fn: () => nextStep(stepper[state]?.screenName),
         isDisable: state === stepper.length - 1
       }
     ];
@@ -90,7 +91,7 @@ const Stepper: React.FC<IStepperProps> = ({
           </>
         ))}
       </div>
-      <div>{stepper[state].data}</div>
+      <div>{stepper[state]?.data}</div>
 
       <div className={styles.navigationButtons}>
         <CustomFooter
