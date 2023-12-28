@@ -2,14 +2,14 @@ import React from 'react';
 import { RenderField } from './components/render-field';
 import Image from 'next/image';
 
-type RenderDigitalFormProps = {
+type RenderOnlineFormProps = {
   screen: any;
   isLastStep: boolean;
   formState: any;
   formErrorState: any;
   screenId: number;
 };
-export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
+export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
   screen,
   isLastStep,
   formState,
@@ -17,7 +17,7 @@ export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
   screenId
 }) => {
   return (
-    // const renderDigitalForm = ( screen: any, isLastStep: any) => (
+    // const renderOnlineForm = ( screen: any, isLastStep: any) => (
     <div key={screen.screen}>
       <div className="flex items-center mt-[30px] mb-[30px] ">
         <Image src={screen.icon} alt="Backhand image" />

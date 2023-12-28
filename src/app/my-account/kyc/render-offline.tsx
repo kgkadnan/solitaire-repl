@@ -10,7 +10,7 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 
 import useAttachmentsStateManagement from './hooks/attachment-state-management';
 
-const RenderManually = ({ data }: any) => {
+const RenderOffline = ({ data }: any) => {
   const {
     attachmentsState: {
       pan: {
@@ -529,4 +529,4 @@ const RenderManually = ({ data }: any) => {
   );
 };
 
-export default RenderManually;
+export default RenderOffline;
