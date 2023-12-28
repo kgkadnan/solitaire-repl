@@ -1,5 +1,5 @@
 'use client';
-import { ReactNode, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper, { IStepper } from '@/components/common/stepper';
@@ -9,9 +9,14 @@ import RenderOffline from './render-offline';
 import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
+import { useAppSelector } from '@/hooks/hook';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
+
+  const kycStoreData: any = useAppSelector(
+    store => store.kyc.formState.online.sections
+  );
 
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
@@ -23,18 +28,34 @@ const KYC: React.FC = () => {
     switch (screenName) {
       case 'personal_details':
         // code block
+        console.log('personal_details', kycStoreData[screenName]);
         break;
       case 'company_details':
         // code block
+        console.log('company_details', kycStoreData[screenName]);
+        break;
+      case 'company_owner_details':
+        // code block
+        console.log('company_owner_details', kycStoreData[screenName]);
+        break;
+      case 'banking_details':
+        // code block
+        console.log('banking_details', kycStoreData[screenName]);
         break;
       default:
-      // code block
+        // code block
+        console.log('default');
     }
 
     setActiveStep(prevStep => prevStep + 1);
   };
   const handlePrevStep = () => {
-    setActiveStep(prevStep => prevStep - 1);
+    console.log(activeStep, 'activeStep');
+    if (activeStep <= 0) {
+      setCurrentState('choice_for_filling_kyc');
+    } else {
+      setActiveStep(prevStep => prevStep - 1);
+    }
   };
 
   const formState = useSelector((state: any) => state.kyc.formState);
@@ -49,7 +70,6 @@ const KYC: React.FC = () => {
             isLastStep={index === data.online.length - 1}
             formState={formState}
             formErrorState={formErrorState}
-            screenId={index}
           />
         ),
         screenName: `${screen.screenName}`,

@@ -7,12 +7,12 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   formState: {
     country: '',
-    online: { sections: [] },
+    online: { sections: {} },
     offline: null
   },
   formErrorState: {
     country: '',
-    online: { sections: [] },
+    online: { sections: {} },
     offline: null
   }
 };
