@@ -302,6 +302,7 @@ const KYC: React.FC = () => {
         value: resData.offline
       })
     );
+    setSelectedCountry(resData.country);
 
     resData.offline
       ? setSelectedKYCOption('online')

@@ -37,7 +37,7 @@ export const CountrySelectionDropdown = ({
     <Select
       options={computeDropdownField(KYCForm)}
       onChange={handleSelectCountry}
-      defaultValue={selectedCountry || 'Select'}
+      value={{ value: selectedCountry, label: selectedCountry }}
       placeholder={ManageLocales('app.myProfile.kyc.country')}
       styles={colourStyles}
     />
