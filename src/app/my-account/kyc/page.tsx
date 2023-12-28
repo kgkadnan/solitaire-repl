@@ -37,8 +37,9 @@ const KYC: React.FC = () => {
     let validationError;
     switch (screenName) {
       case 'personal_details':
+        console.log('nnnnnnnnnnnnnn', kycStoreData);
         validationError = await validateScreen(
-          kycStoreData[screenName],
+          kycStoreData.online.sections[screenName],
           screenName,
           selectedCountry
         );
@@ -63,8 +64,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then((res:any)=> console.log('res'))
-          .catch((e:any)=> {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         break;
       case 'company_details':
         // code block
@@ -77,8 +78,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then((res:any) => console.log('res'))
-          .catch((e:any) => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         console.log('company_details', kycStoreData[screenName]);
         break;
       case 'company_owner_details':
@@ -91,8 +92,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then((res:any) => console.log('res'))
-          .catch((e:any) => {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         // code block
         console.log('company_owner_details', kycStoreData[screenName]);
         break;
@@ -108,8 +109,8 @@ const KYC: React.FC = () => {
           ID: active
         })
           .unwrap()
-          .then((res:any)=> console.log('res'))
-          .catch((e:any)=> {});
+          .then((res: any) => console.log('res'))
+          .catch((e: any) => {});
         // code block
         console.log('banking_details', kycStoreData[screenName]);
         break;
@@ -169,7 +170,7 @@ const KYC: React.FC = () => {
                   {category}
                 </h1>
                 <div className="flex flex-col gap-[20px] flex-wrap ">
-                  {data?.attachment[category].map(
+                  {data?.attachment[category]?.map(
                     ({
                       id,
                       label,

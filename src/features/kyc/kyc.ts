@@ -50,7 +50,7 @@ const formSlice = createSlice({
     updateFormState: (state: any, action) => {
       const { name, value } = action.payload;
       console.log(action.payload);
-      setNestedValue(state.formState, name, value);
+      setNestedValue(state, name, value);
 
       // Perform validation and update errors
       let error = null;

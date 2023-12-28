@@ -36,6 +36,7 @@ export const validateScreen = async (
   screenName: string,
   country: string
 ) => {
+  console.log(formData, 'qqqqqqqqqqqqqqqqqqqqqqqqqqqq');
   let validationErrors;
   let kycForm;
   if (formData) {
