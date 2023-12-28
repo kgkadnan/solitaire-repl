@@ -33,6 +33,7 @@ import {
 import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
+import logger from 'logging/log-util';
 
 interface IMyProfileRoutes {
   id: number;
@@ -266,7 +267,6 @@ function SearchResultLayout() {
                     })
                     .catch((error: any) => {
                       logger.error(error);
-
                     });
                 } else {
                   setIsInputDialogOpen(true);

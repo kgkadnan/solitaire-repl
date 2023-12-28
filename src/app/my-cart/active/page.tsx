@@ -157,7 +157,6 @@ const ActiveMyCart = ({
       })
       .catch(error => {
         logger.error(error);
-
       });
     setIsDialogOpen(false);
   };

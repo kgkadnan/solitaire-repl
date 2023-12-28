@@ -7,7 +7,7 @@ import logger from 'logging/log-util';
 
 const SelectionButtonExample = () => {
   const handleClick = () => {
-    logger.info("click");
+    logger.info('click');
   };
 
   const myStyle = {

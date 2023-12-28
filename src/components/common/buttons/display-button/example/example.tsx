@@ -7,7 +7,7 @@ import logger from 'logging/log-util';
 
 export const DisplayButtonExample = () => {
   const handleClick = () => {
-    logger.info("click");
+    logger.info('click');
   };
   const classes = {
     displayButtonStyle: style?.button,

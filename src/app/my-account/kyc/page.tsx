@@ -122,8 +122,7 @@ const KYC: React.FC = () => {
         break;
       default:
         // code block
-        logger.info("default");
-
+        logger.info('default');
     }
 
     !validationError && setActiveStep(prevStep => prevStep + 1);

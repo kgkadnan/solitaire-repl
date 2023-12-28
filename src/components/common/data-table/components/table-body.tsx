@@ -56,7 +56,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
     if (sliderData[0].diamond_status === MEMO_OUT_STATUS) {
-      logger.info("Memoout");
+      logger.info('Memoout');
     } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id]
@@ -81,7 +81,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
           );
           setIsPersistDialogOpen?.(true);
         })
-        .catch((error) => {
+        .catch(error => {
           logger.error(error);
         });
     }

@@ -61,6 +61,5 @@ export const performDownloadExcel = async ({
     }
   } catch (error) {
     logger.error(error);
-
   }
 };

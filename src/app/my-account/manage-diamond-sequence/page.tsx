@@ -159,9 +159,8 @@ and `nonManageableListings` whenever the `data` variable changes. */
           );
           setIsDialogOpen(true);
         })
-        .catch((error) => {
+        .catch(error => {
           logger.error(error);
-
         });
     }
     // Perform actions on update

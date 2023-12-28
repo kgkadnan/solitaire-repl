@@ -240,7 +240,6 @@ used for managing the state of a form field or input element in a React componen
               })
               .catch((error: any) => {
                 logger.error(error);
-
               });
           } else {
             await addSavedSearch({

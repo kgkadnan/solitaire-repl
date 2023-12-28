@@ -174,12 +174,10 @@ export const validateScreen = async (
         }
         break;
       default:
-        logger.info("default");
+        logger.info('default');
         break;
-
     }
     validationErrors = await validate(kycForm!);
-
   } else {
     validationErrors = validationErrors || 'please all fields';
   }
