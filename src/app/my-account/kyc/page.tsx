@@ -286,10 +286,11 @@ const KYC: React.FC = () => {
         : ['personal_details', 'company_details', 'banking_details'];
 
     sectionKeys.forEach((key, index: number) => {
+      let test = (index + 1).toString();
       dispatch(
         updateFormState({
           name: `formState.online.sections[${key}]`,
-          value: resData.online[index + 1]
+          value: resData.online[test as keyof typeof resData.online]
         })
       );
     });
