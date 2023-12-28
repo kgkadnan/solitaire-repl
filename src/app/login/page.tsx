@@ -12,6 +12,7 @@ import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
 import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
 import useUser from '@/lib/useAuth';
+import { isEmailValid } from '@/utils/validate-email';
 
 // Define the Login component
 const Login = () => {
@@ -38,8 +39,6 @@ const Login = () => {
         email: emailAndNumber,
         password: password
       });
-
-      console.log(res);
 
       if (res?.error?.originalStatus === 401) {
         // Display error message if login fails
@@ -73,13 +72,6 @@ const Login = () => {
     if (e.key === 'Enter') {
       handleLogin();
     }
-  };
-
-  // Function to validate email format
-  const isEmailValid = (email: string) => {
-    // Regular expression for basic email validation
-    const emailRegex = EMAIL_REGEX;
-    return emailRegex.test(email);
   };
 
   // Function to validate phone number format
