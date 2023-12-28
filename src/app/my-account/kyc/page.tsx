@@ -10,11 +10,12 @@ import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 import { validateScreen } from './helper/handle-validation';
-import { useAppSelector } from '@/hooks/hook';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
+import { updateFormState } from '@/features/kyc/kyc';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -29,15 +30,25 @@ const KYC: React.FC = () => {
   const [data, setData] = useState<any>({});
 
   const [activeStep, setActiveStep] = useState(0);
+  const dispatch = useAppDispatch();
 
-  const handleNextStep = (screenName: string) => {
+  const handleNextStep = async (screenName: string) => {
+    let validationError;
     switch (screenName) {
       case 'personal_details':
-        console.log("jjjj",kycStoreData[screenName])
-        validateScreen(kycStoreData[screenName])
+        validationError = await validateScreen(
+          kycStoreData[screenName],
+          screenName,
+          selectedCountry
+        );
+        // if (validationError) {
+        //   dispatch(
+        //     updateFormState({ name: 'country', value: selectedOption.value })
+        //   );
+        // }
 
-        // code block
-        console.log('personal_details', kycStoreData[screenName]);
+        !validationError &&
+          console.log('personal_details', kycStoreData[screenName]);
         break;
       case 'company_details':
         // code block
@@ -56,7 +67,7 @@ const KYC: React.FC = () => {
         console.log('default');
     }
 
-    setActiveStep(prevStep => prevStep + 1);
+    !validationError && setActiveStep(prevStep => prevStep + 1);
   };
   const handlePrevStep = () => {
     console.log(activeStep, 'activeStep');
