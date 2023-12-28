@@ -68,6 +68,7 @@
   "app.advanceSearch.addAnotherSearch": "Add Another Search",
 
   "app.advanceSearch.search": "Search",
+  "app.advanceSearch.save": "Save",
 
   "app.advanceSearch.from": "From",
   "app.advanceSearch.to": "To",
@@ -242,6 +243,7 @@
   "app.login.password": "Password",
 
   "app.register": "Register",
+  "app.register.okay": "Okay!",
   "app.register.welcomeMessage": "Welcome! Please register to create account",
   "app.register.firstName": "First Name*",
   "app.register.lastName": "Last Name*",
@@ -257,6 +259,8 @@
   "app.OTPVerification.goBack": "Go Back",
   "app.OTPVerification.verify": "verify",
   "app.OTPVerification.resend": "Resend",
+  "app.OTPVerification.save": "Save",
+  "app.OTPVerification.cancel": "Cancel",
 
   "app.successfullyCreated.exploreWebsite": "Explore Website",
   "app.successfullyCreated.finishKYCProcess": "Finish KYC Process",

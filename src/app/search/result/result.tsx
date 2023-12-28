@@ -8,7 +8,6 @@ import CustomDataTable from '@/components/common/data-table';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
-import { CustomInputDialog } from '@/components/common/input-dialog';
 import CustomLoader from '@/components/common/loader';
 import ConfirmStone from '@/components/common/confirm-stone';
 import { ResultFooter } from './components/result-footer';
@@ -25,6 +24,10 @@ import { calculateTotal } from './helpers/product-total-calculations';
 import { calculateAverage } from './helpers/average-calculations';
 import { ISearchResultsProps } from './result-interface';
 import { CustomModal } from '@/components/common/modal';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { ManageLocales } from '@/utils/translate';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 // Define a type for the radio state
 
 const SearchResults = ({
@@ -150,38 +153,73 @@ variable changes. */
     setYourSelectionData
   ]);
 
-  const customInputDialogData = {
-    isOpens: isInputDialogOpen,
-    setIsOpen: setIsInputDialogOpen,
-    setInputvalue: setSaveSearchName,
-    inputValue: saveSearchName,
-    displayButtonFunction: () => {
-      handleSaveSearch({
-        addSavedSearch,
-        saveSearchName,
-        activeTab,
-        data,
-        setYourSelectionData,
-        setIsInputDialogOpen,
-        setSaveSearchName,
-        setInputError,
-        setInputErrorContent
-      });
-    },
-    label: 'Save And Search',
-    name: 'save',
-    displayButtonLabel2: 'Save'
+  const handleInputChange = (e: any) => {
+    setInputErrorContent('');
+    setSaveSearchName(e.target.value);
   };
 
-  /**
-   * The function handleCloseInputDialog is used to close an input dialog and reset related state
-   * variables.
-   */
-  const handleCloseInputDialog = () => {
-    setIsInputDialogOpen(false);
-    setInputError(false);
-    setInputErrorContent('');
-    setSaveSearchName('');
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p>Save Search</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <FloatingLabelInput
+            label={'Enter name'}
+            onChange={handleInputChange}
+            type="text"
+            name="save"
+            value={saveSearchName}
+            errorText={inputErrorContent}
+          />
+        </div>
+
+        <div className="flex  gap-2">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setSaveSearchName('');
+              setInputErrorContent('');
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              if (!saveSearchName.length) {
+                setInputErrorContent('Please enter name');
+              } else {
+                handleSaveSearch({
+                  addSavedSearch,
+                  saveSearchName,
+                  activeTab,
+                  data,
+                  setYourSelectionData,
+                  setIsInputDialogOpen,
+                  setSaveSearchName,
+                  setInputError,
+                  setInputErrorContent
+                });
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
   /**
@@ -215,12 +253,9 @@ variable changes. */
         sheetContentStyle={styles.diamondDetailSheet}
       />
       <CustomInputDialog
-        isError={inputError}
-        setIsError={setInputError}
-        errorContent={inputErrorContent}
-        handleClose={handleCloseInputDialog}
-        setErrorContent={setInputErrorContent}
-        customInputDialogData={customInputDialogData}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
       <CustomDialog
         isOpens={isDialogOpen}

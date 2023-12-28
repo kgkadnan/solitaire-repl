@@ -3,6 +3,8 @@ import { ManageLocales } from '@/utils/translate';
 import Select from 'react-select';
 import { colourStyles } from '../styles/select-style';
 import { IErrorSetState } from '@/app/search/result/result-interface';
+import { updateFormState } from '@/features/kyc/kyc';
+import { useDispatch } from 'react-redux';
 
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
@@ -13,9 +15,12 @@ export const CountrySelectionDropdown = ({
   errorSetState
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
+  const dispatch = useDispatch();
+
   const handleSelectCountry = (selectedOption: any) => {
     setErrorText('');
     setSelectedCountry(selectedOption.value);
+    dispatch(updateFormState({ name: 'country', value: selectedOption.value }));
   };
 
   const computeDropdownField = (countries: any) => {
