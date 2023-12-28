@@ -64,17 +64,17 @@ const Stepper: React.FC<IStepperProps> = ({
   return (
     <div className={styles.stepperContainer}>
       <div className={styles.circularSteps}>
-        {stepperData.map((step: any, index: number) => (
+        {stepperData?.map((step: any, index: number) => (
           <>
             <div className={styles.circularStepsContainer}>
               <div
                 key={index}
                 className={`${styles.step} ${
-                  step.status === StepperStatus.COMPLETED
+                  step?.status === StepperStatus.COMPLETED
                     ? styles.completedStep
-                    : step.status === StepperStatus.INPROGRESS
+                    : step?.status === StepperStatus.INPROGRESS
                     ? styles.activeStep
-                    : step.status === StepperStatus.REJECTED
+                    : step?.status === StepperStatus.REJECTED
                     ? styles.rejectedStep
                     : ''
                 }`}
@@ -83,7 +83,7 @@ const Stepper: React.FC<IStepperProps> = ({
                 {index + 1}
               </div>
 
-              <div className={styles.stepLabel}>{step.label}</div>
+              <div className={styles.stepLabel}>{step?.label}</div>
             </div>
             {index < stepper.length - 1 && (
               <div className={styles.stepLine}></div>

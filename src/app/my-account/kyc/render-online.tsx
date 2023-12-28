@@ -4,13 +4,11 @@ import Image from 'next/image';
 
 type RenderOnlineFormProps = {
   screen: any;
-  isLastStep: boolean;
   formState: any;
   formErrorState: any;
 };
 export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
   screen,
-  isLastStep,
   formState,
   formErrorState
 }) => {
@@ -34,7 +32,6 @@ export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
             />
           </div>
         ))}
-        {/* {isLastStep && renderAttachment()}{' '} */}
       </div>
     </div>
     //   );
