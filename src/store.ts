@@ -20,6 +20,7 @@ import { manageListingSequenceApi } from './features/api/manage-listing-sequence
 import { myDiamondAPI } from './features/api/my-diamonds/my-diamond';
 import { registerApi } from './features/api/register';
 import { currentIPApi } from './features/api/current-ip';
+import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
 
 const rootReducer = combineReducers({
@@ -38,6 +39,7 @@ const rootReducer = combineReducers({
   [notificationSettingApi.reducerPath]: notificationSettingApi.reducer,
   [productApi.reducerPath]: productApi.reducer,
   [loginApi.reducerPath]: loginApi.reducer,
+  [forgotPasswordApi.reducerPath]: forgotPasswordApi.reducer,
   [registerApi.reducerPath]: registerApi.reducer,
   [myDiamondAPI.reducerPath]: myDiamondAPI.reducer
 });
@@ -59,7 +61,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         loginApi.middleware,
         myDiamondAPI.middleware,
         registerApi.middleware,
-        currentIPApi.middleware
+        currentIPApi.middleware,
+        forgotPasswordApi.middleware
       ),
     preloadedState
   });
