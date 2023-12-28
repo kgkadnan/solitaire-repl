@@ -16,9 +16,13 @@ export const validateOnlineSection = (value: any) => {
 
 // Add more validation functions as needed
 export const validateScreen = async (formData: any) => {
-  const userForm = new UserForm(formData.firstName, formData.email, formData.password);
-    const validationErrors = await validate(userForm);
-console.log(validationErrors,"validationErrors")
+  const userForm = new UserForm(
+    formData.firstName,
+    formData.email,
+    formData.password
+  );
+  const validationErrors = await validate(userForm);
+  console.log(validationErrors, 'validationErrors');
   const errors: any = {};
 
   // Check if certain fields are filled based on the values of other fields
@@ -31,7 +35,6 @@ console.log(validationErrors,"validationErrors")
   return errors;
 };
 const validateInputField = (fieldName: string, value: string) => {
-  
   switch (fieldName) {
     case 'first_name':
       return value ? undefined : 'First name is required';
@@ -69,8 +72,6 @@ const validateInputField = (fieldName: string, value: string) => {
 //     },
 //   });
 // };
-
-
 
 export class UserForm {
   @IsNotEmpty({ message: 'First name is required' })

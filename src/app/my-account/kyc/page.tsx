@@ -30,7 +30,11 @@ const KYC: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const handleNextStep = (screenName: string) => {
-    validateScreen({firstName:"jyoti",email:"abc@examplecom",password:"Jyoti@123"})
+    validateScreen({
+      firstName: 'jyoti',
+      email: 'abc@examplecom',
+      password: 'Jyoti@123'
+    });
     switch (screenName) {
       case 'personal_details':
         // code block
