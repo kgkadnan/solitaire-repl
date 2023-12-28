@@ -5,9 +5,9 @@ import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper, { IStepper } from '@/components/common/stepper';
 import RenderCountrySelection from './render-country-selection';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
-import RenderManually from './render-manually';
+import RenderOffline from './render-offline';
 import { useSelector } from 'react-redux';
-import { RenderDigitalForm } from './render-digital';
+import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 
 const KYC: React.FC = () => {
@@ -20,7 +20,17 @@ const KYC: React.FC = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const handleNextStep = (screenName: string) => {
-    console.log('handleNextStep', activeStep);
+    switch (screenName) {
+      case 'personal_details':
+        // code block
+        break;
+      case 'company_details':
+        // code block
+        break;
+      default:
+      // code block
+    }
+
     setActiveStep(prevStep => prevStep + 1);
   };
   const handlePrevStep = () => {
@@ -30,15 +40,13 @@ const KYC: React.FC = () => {
   const formState = useSelector((state: any) => state.kyc.formState);
   const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
 
-  console.log(data, 'datatt');
-
-  const stepperData: IStepper[] = data?.digital
-    ? data.digital.map((screen: any, index: number) => ({
+  const stepperData: IStepper[] = data?.online
+    ? data.online.map((screen: any, index: number) => ({
         label: `${screen.screen}`,
         data: (
-          <RenderDigitalForm
+          <RenderOnlineForm
             screen={screen}
-            isLastStep={index === data.digital.length - 1}
+            isLastStep={index === data.online.length - 1}
             formState={formState}
             formErrorState={formErrorState}
             screenId={index}
@@ -54,7 +62,7 @@ const KYC: React.FC = () => {
     : [];
   // return (
   //   <div>
-  //     {selectedMode === 'digital' ? (
+  //     {selectedMode === 'online' ? (
   //       <Stepper
   //         stepper={stepperData}
   //         state={activeStep}
@@ -102,9 +110,9 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
-      return <RenderManually data={data} />;
+      return <RenderOffline data={data} />;
     // Add more cases as needed
-    case 'digitally':
+    case 'online':
       return (
         <Stepper
           stepper={stepperData}
@@ -115,8 +123,8 @@ const KYC: React.FC = () => {
         />
       );
 
-    case 'manually':
-      return <RenderManually data={data} />;
+    case 'offline':
+      return <RenderOffline data={data} />;
     default:
       // Render a default component or handle the default case
       return;

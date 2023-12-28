@@ -30,7 +30,7 @@ export const KYCForm = [
       fullName: 'India',
       shortName: 'india'
     },
-    digital: [
+    online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
@@ -381,7 +381,7 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf',
       setUploadFilePreview: 'setUploadFilePreview',
       uploadFilePreview: 'uploadFilePreview',
@@ -432,7 +432,7 @@ export const KYCForm = [
       fullName: 'USA',
       shortName: 'usa'
     },
-    digital: [
+    online: [
       {
         screen: 'Personal Details',
         fields: [
@@ -446,7 +446,7 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
     attachment: [
@@ -467,7 +467,7 @@ export const KYCForm = [
       fullName: 'Dubai',
       shortName: 'dubai'
     },
-    digital: [
+    online: [
       {
         screen: 'Personal Details',
         fields: [
@@ -481,7 +481,7 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
     attachment: [
@@ -501,7 +501,7 @@ export const KYCForm = [
       fullName: 'Other',
       shortName: 'other'
     },
-    digital: [
+    online: [
       {
         screen: 'Personal Details',
         fields: [
@@ -515,7 +515,7 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
     attachment: [

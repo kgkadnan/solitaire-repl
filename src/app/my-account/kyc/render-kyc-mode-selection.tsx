@@ -38,7 +38,7 @@ const RenderKYCModeSelection = ({
     setSelectedKYCOption(selection);
     dispatch(
       updateFormState({
-        name: `${selection === 'digitally' ? 'offline' : 'online'}`,
+        name: `${selection === 'online' ? 'offline' : 'online'}`,
         value: false
       })
     );
@@ -67,12 +67,12 @@ const RenderKYCModeSelection = ({
 
         <div className=" flex flex-col min-w-[400px] w-[30%] gap-3">
           <div
-            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer ${
-              selectedKYCOption === 'digitally'
-                ? 'border border-solid border-solitaireQuaternary'
-                : ''
+            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid  ${
+              selectedKYCOption === 'online'
+                ? ' border-solitaireQuaternary'
+                : 'border-transparent'
             }`}
-            onClick={() => handleBoxClick('digitally')}
+            onClick={() => handleBoxClick('online')}
           >
             <div className="w-[13%]">
               <Image
@@ -83,7 +83,7 @@ const RenderKYCModeSelection = ({
               />
             </div>
             <div className="text-solitaireTertiary  w-[70%]">
-              <h1>Fill Form Digitally</h1>
+              <h1>Fill Form online</h1>
               <p className="font-thin">
                 Fill the form on the app, for your convenience
               </p>
@@ -99,12 +99,12 @@ const RenderKYCModeSelection = ({
           </div>
 
           <div
-            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer ${
-              selectedKYCOption === 'manually'
-                ? 'border border-solid border-solitaireQuaternary'
-                : ''
+            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid ${
+              selectedKYCOption === 'offline'
+                ? 'border-solitaireQuaternary'
+                : ' border-transparent'
             }`}
-            onClick={() => handleBoxClick('manually')}
+            onClick={() => handleBoxClick('offline')}
           >
             <div className="w-[13%]">
               <Image src={edit} width={30} height={30} alt="edit" />
@@ -113,7 +113,7 @@ const RenderKYCModeSelection = ({
               <h1>Download and Upload Form</h1>
               <p className="font-thin">
                 Download and fill the form and upload the filled <br /> form
-                manually.
+                offline.
               </p>
             </div>
             <div className="w-[10%]">
