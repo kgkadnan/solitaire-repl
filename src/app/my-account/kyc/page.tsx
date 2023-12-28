@@ -10,7 +10,11 @@ import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 import { validateScreen } from './helper/handle-validation';
-import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { useAppSelector } from '@/hooks/hook';
+import FileAttachments from '@/components/common/file-attachment';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import Image from 'next/image';
+import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -62,17 +66,16 @@ const KYC: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-
+  const { modalSetState } = useModalStateManagement();
   const formState = useSelector((state: any) => state.kyc.formState);
   const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
 
-  const stepperData: IStepper[] = data?.online
+  let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
         label: `${screen.screen}`,
         data: (
           <RenderOnlineForm
             screen={screen}
-            isLastStep={index === data.online.length - 1}
             formState={formState}
             formErrorState={formErrorState}
           />
@@ -85,6 +88,72 @@ const KYC: React.FC = () => {
             : StepperStatus.NOT_STARTED
       }))
     : [];
+
+  stepperData.push({
+    label: 'attachment',
+    data: (
+      <>
+        <div className="flex items-center mt-[30px] mb-[30px] ">
+          <Image src={HandIcon} alt="Backhand image" />
+          <h3 className="ml-[10px] text-[18px] text-solitaireTertiary">
+            Attachments
+          </h3>
+        </div>
+        <div className="flex w-full justify-between pb-5">
+          {data?.attachment &&
+            Object?.keys(data?.attachment).map((category: any) => (
+              <div key={category} className="w-[45%]">
+                <h1 className="text-solitaireTertiary mb-3 capitalize ">
+                  {category}
+                </h1>
+                <div className="flex flex-col gap-[20px] flex-wrap ">
+                  {data?.attachment[category].map(
+                    ({
+                      id,
+                      label,
+                      isRequired,
+                      uploadProgress,
+                      isFileUploaded,
+                      setUploadProgress,
+                      setIsFileUploaded,
+                      setSelectedFile,
+                      selectedFile,
+                      setError,
+                      error,
+                      maxFile,
+                      minFile
+                    }: any) => (
+                      <FileAttachments
+                        key={id}
+                        lable={label}
+                        isRequired={isRequired}
+                        uploadProgress={uploadProgress}
+                        isFileUploaded={isFileUploaded}
+                        setUploadProgress={setUploadProgress}
+                        setIsFileUploaded={setIsFileUploaded}
+                        setSelectedFile={setSelectedFile}
+                        selectedFile={selectedFile}
+                        maxFile={maxFile}
+                        setError={setError}
+                        error={error}
+                        modalSetState={modalSetState}
+                        minFile={minFile}
+                      />
+                    )
+                  )}
+                </div>
+              </div>
+            ))}
+        </div>
+      </>
+    ),
+    status:
+      stepperData.length === activeStep
+        ? StepperStatus.INPROGRESS
+        : StepperStatus.NOT_STARTED,
+    screenName: 'Attachment'
+  });
+
   // return (
   //   <div>
   //     {selectedMode === 'online' ? (

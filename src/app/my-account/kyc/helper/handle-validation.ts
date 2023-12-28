@@ -23,7 +23,6 @@ console.log(validationErrors,"validationErrors")
   return validationErrors
 };
 const validateInputField = (fieldName: string, value: string) => {
-  
   switch (fieldName) {
     case 'first_name':
       return value ? undefined : 'First name is required';
@@ -32,7 +31,6 @@ const validateInputField = (fieldName: string, value: string) => {
       return undefined;
   }
 };
-
 
 
 export class UserForm {
