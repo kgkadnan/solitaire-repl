@@ -5,7 +5,6 @@ import { colourStyles } from '../styles/select-style';
 import { IErrorSetState } from '@/app/search/result/result-interface';
 import { updateFormState } from '@/features/kyc/kyc';
 import { useAppDispatch } from '@/hooks/hook';
-import { useEffect } from 'react';
 
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
@@ -37,7 +36,8 @@ export const CountrySelectionDropdown = ({
     <Select
       options={computeDropdownField(KYCForm)}
       onChange={handleSelectCountry}
-      value={{ value: selectedCountry, label: selectedCountry }}
+      // defaultValue={{ value: 'Country', label: 'Country' }}
+      // value={{ value: s electedCountry, label: selectedCountry }}
       placeholder={ManageLocales('app.myProfile.kyc.country')}
       styles={colourStyles}
     />

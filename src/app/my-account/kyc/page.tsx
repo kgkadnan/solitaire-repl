@@ -274,47 +274,47 @@ const KYC: React.FC = () => {
     offline: true
   };
 
-  useEffect(() => {
-    const sectionKeys: string[] =
-      resData.country === 'India'
-        ? [
-            'personal_details',
-            'company_details',
-            'company_owner_details',
-            'banking_details'
-          ]
-        : ['personal_details', 'company_details', 'banking_details'];
+  // useEffect(() => {
+  //   const sectionKeys: string[] =
+  //     resData.country === 'India'
+  //       ? [
+  //           'personal_details',
+  //           'company_details',
+  //           'company_owner_details',
+  //           'banking_details'
+  //         ]
+  //       : ['personal_details', 'company_details', 'banking_details'];
 
-    sectionKeys.forEach((key, index: number) => {
-      let test = (index + 1).toString();
-      dispatch(
-        updateFormState({
-          name: `formState.online.sections[${key}]`,
-          value: resData.online[test as keyof typeof resData.online]
-        })
-      );
-    });
+  //   sectionKeys.forEach((key, index: number) => {
+  //     let test = (index + 1).toString();
+  //     dispatch(
+  //       updateFormState({
+  //         name: `formState.online.sections[${key}]`,
+  //         value: resData.online[test as keyof typeof resData.online]
+  //       })
+  //     );
+  //   });
 
-    dispatch(
-      updateFormState({
-        name: 'country',
-        value: resData.country
-      })
-    );
+  //   dispatch(
+  //     updateFormState({
+  //       name: 'country',
+  //       value: resData.country
+  //     })
+  //   );
 
-    // setActiveStep(Object.keys(resData.online).length - 1);
-    dispatch(
-      updateFormState({
-        name: 'offline',
-        value: resData.offline
-      })
-    );
-    setSelectedCountry(resData.country);
+  //   // setActiveStep(Object.keys(resData.online).length - 1);
+  //   dispatch(
+  //     updateFormState({
+  //       name: 'offline',
+  //       value: resData.offline
+  //     })
+  //   );
+  //   setSelectedCountry(resData.country);
 
-    resData.offline
-      ? setSelectedKYCOption('online')
-      : setSelectedKYCOption('offline');
-  }, []);
+  //   resData.offline
+  //     ? setSelectedKYCOption('online')
+  //     : setSelectedKYCOption('offline');
+  // }, []);
 
   // return (
   //   <div>
