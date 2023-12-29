@@ -75,10 +75,10 @@ const Login = () => {
   };
 
   // Function to validate phone number format
-  const isPhoneNumberValid = (number: string) => {
-    const phoneRegex = PHONE_REGEX;
-    return phoneRegex.test(number);
-  };
+  // const isPhoneNumberValid = (number: string) => {
+  //   const phoneRegex = PHONE_REGEX;
+  //   return phoneRegex.test(number);
+  // };
 
   const handleInputChange = (e: any, type: string) => {
     const inputValue = e.target.value;
@@ -86,19 +86,21 @@ const Login = () => {
     if (type === 'email') {
       setEmailAndNumber(inputValue);
 
-      if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
+      // if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
+      if (isEmailValid(inputValue)) {
         setEmailErrorText('');
         setErrorText('');
       } else {
         setEmailErrorText('Please enter a valid email or phone number');
         setErrorText('');
       }
-    } else if (type === 'password') {
-      setPassword(inputValue);
-      setIsError(false);
-      setErrorText('');
-      setPasswordErrorText('');
     }
+    //  else if (type === 'password') {
+    //   setPassword(inputValue);
+    //   setIsError(false);
+    //   setErrorText('');
+    //   setPasswordErrorText('');
+    // }
   };
 
   // JSX rendering for the Login component
