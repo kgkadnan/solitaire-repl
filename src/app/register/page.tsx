@@ -117,7 +117,7 @@ const Register = () => {
       />
       <UserAuthenticationLayout
         formData={
-          <div className="flex justify-center flex-col w-[500px] mt-[250px]">
+          <div className="flex justify-center flex-col w-[500px] lg:mt-[200px] md:mt-[280px]">
             <div className="flex flex-col gap-[5px] mb-[20px] items-center">
               <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
               <CustomInputlabel

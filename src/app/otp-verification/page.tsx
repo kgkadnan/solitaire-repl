@@ -235,7 +235,7 @@ const OTPVerification = () => {
               />
             </div>
             <div className="flex flex-col justify-between gap-5">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center justify-center">
                 <p className="text-solitaireTertiary">
                   OTP has been sent to{' '}
                   {!formState?.codeAndNumber.length
