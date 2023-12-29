@@ -38,7 +38,9 @@ const RenderKYCModeSelection = ({
     setSelectedKYCOption(selection);
     dispatch(
       updateFormState({
-        name: `${selection === 'online' ? 'offline' : 'online'}`,
+        name: `${
+          selection === 'online' ? 'formState.offline' : 'formState.online'
+        }`,
         value: true
       })
     );
