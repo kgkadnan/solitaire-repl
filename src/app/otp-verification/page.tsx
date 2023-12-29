@@ -13,6 +13,7 @@ import errorImage from '@public/assets/icons/error.svg';
 import countryCode from '../../constants/country-code.json';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
+import { CustomDialog } from '@/components/common/dialog';
 
 export interface FormState {
   mobileNumber: string;
@@ -34,8 +35,24 @@ const OTPVerification = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const { dialogContent, isDialogOpen } = modalState;
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const {
+    dialogContent,
+    isDialogOpen,
+    isInputDialogOpen,
+    isSliderOpen,
+    isModalOpen,
+    modalContent,
+    persistDialogContent,
+    isPersistDialogOpen
+  } = modalState;
+  const {
+    setIsDialogOpen,
+    setIsInputDialogOpen,
+    setIsSliderOpen,
+    setDialogContent,
+    setIsModalOpen,
+    setIsPersistDialogOpen
+  } = modalSetState;
 
   const [otpValues, setOtpValues] = useState<string[]>([
     '',
@@ -78,13 +95,22 @@ const OTPVerification = () => {
     } else {
       setIsDialogOpen(true);
       setDialogContent(
-        <>
+        <div className="w-full flex flex-col gap-4 items-center">
           <div className=" flex justify-center align-middle items-center">
             <Image src={errorImage} alt="errorImage" />
             <p>Error!</p>
           </div>
-          <div className="text-center text-solitaireTertiary">{''}</div>
-        </>
+          <div className="text-center text-solitaireTertiary">{'error'}</div>
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.register.okay')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => setIsDialogOpen(false)}
+          />
+        </div>
       );
       // Additional logic for failed verification
     }
@@ -199,9 +225,14 @@ const OTPVerification = () => {
   return (
     <>
       <CustomInputDialog
-        isOpen={isDialogOpen}
-        onClose={() => setIsDialogOpen(false)}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
+      />
+      <CustomDialog
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        dialogContent={dialogContent}
       />
 
       <UserAuthenticationLayout
@@ -226,7 +257,7 @@ const OTPVerification = () => {
                     : formState.codeAndNumber}
                 </p>
                 <button
-                  onClick={() => setIsDialogOpen(true)}
+                  onClick={() => setIsInputDialogOpen(true)}
                   className="font-bold"
                 >
                   (Edit)
@@ -276,7 +307,7 @@ const OTPVerification = () => {
                     displayButtonStyle:
                       'bg-solitaireQuaternary w-[500px] h-[64px]',
                     displayLabelStyle:
-                      'text-solitaireTertiary text-[16px] font-medium'
+                      'text-solitaireTertiary !text-[16px] font-medium'
                   }}
                   handleClick={verifyOtp}
                 />
