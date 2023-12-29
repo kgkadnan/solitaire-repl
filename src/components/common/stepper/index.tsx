@@ -92,7 +92,7 @@ const Stepper: React.FC<IStepperProps> = ({
           </>
         ))}
       </div>
-      <hr className="border-1 border-solitaireSenary my-6" />
+      <hr className="border-1 border-solitaireSenary mt-6" />
       <div>{stepper[state]?.data}</div>
 
       <div className={`${styles.navigationButtons} `}>
