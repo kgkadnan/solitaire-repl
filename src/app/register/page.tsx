@@ -117,7 +117,7 @@ const Register = () => {
       />
       <UserAuthenticationLayout
         formData={
-          <div className="flex justify-center flex-col w-[500px] mt-[250px]">
+          <div className="flex justify-center flex-col w-[500px] xl:mt-[200px] lg:mt-[280px] md:mt-[300px] sm:mt-[300px]">
             <div className="flex flex-col gap-[5px] mb-[20px] items-center">
               <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
               <CustomInputlabel
@@ -176,7 +176,7 @@ const Register = () => {
                       !formErrors.mobileNumber.length
                         ? 'border-solitaireQuaternary text-solitaireTertiary'
                         : 'border-[#983131] text-[#983131]'
-                    } border-b h-[4.6vh] text-[14px] focus:outline-none`}
+                    } border-b min-h-[43px] h-[43px] text-[14px] focus:outline-none`}
                   >
                     {countryCode.countries.map(country => (
                       <option
@@ -236,11 +236,11 @@ const Register = () => {
                   {/* Button to trigger the register action */}
                   <CustomDisplayButton
                     displayButtonLabel={ManageLocales(
-                      'app.register.registerAsGuest'
+                      'app.register.registerAsAGuest'
                     )}
                     displayButtonAllStyle={{
                       displayButtonStyle:
-                        'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[64px]',
+                        'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[54px]',
                       displayLabelStyle:
                         'text-solitaireTertiary !text-[16px] font-medium'
                     }}
@@ -250,7 +250,7 @@ const Register = () => {
                     displayButtonLabel={ManageLocales('app.register')}
                     displayButtonAllStyle={{
                       displayButtonStyle:
-                        'bg-solitaireQuaternary w-[500px] h-[64px]',
+                        'bg-solitaireQuaternary w-[500px] h-[54px]',
                       displayLabelStyle:
                         'text-solitaireTertiary text-[16px] font-medium'
                     }}

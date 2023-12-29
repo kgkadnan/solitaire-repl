@@ -69,7 +69,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     dynamicCondition,
     key
   } = data;
-  console.log(formState, 'formstate');
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;

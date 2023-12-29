@@ -151,7 +151,7 @@ const OTPVerification = () => {
               !formErrors.mobileNumber.length
                 ? 'border-solitaireQuaternary text-solitaireTertiary'
                 : 'border-[#983131] text-[#983131]'
-            } border-b h-[4.6vh] text-[14px] focus:outline-none`}
+            } border-b min-h-[43px] h-[43px] text-[14px] focus:outline-none`}
           >
             {countryCode.countries.map(country => (
               <option
@@ -188,7 +188,7 @@ const OTPVerification = () => {
             handleClick={() => {
               setFormState(initialFormState);
               setFormErrors(initialFormState);
-              setIsDialogOpen(false);
+              setIsInputDialogOpen(false);
             }}
           />
           <CustomDisplayButton
@@ -235,7 +235,7 @@ const OTPVerification = () => {
               />
             </div>
             <div className="flex flex-col justify-between gap-5">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center justify-center">
                 <p className="text-solitaireTertiary">
                   OTP has been sent to{' '}
                   {!formState?.codeAndNumber.length
@@ -252,7 +252,7 @@ const OTPVerification = () => {
 
               <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-center gap-3 items-center">
                 <p className="text-solitaireTertiary">
                   Haven’t received any OTP ?
                 </p>
@@ -279,7 +279,7 @@ const OTPVerification = () => {
                   )}
                   displayButtonAllStyle={{
                     displayButtonStyle:
-                      'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[64px]',
+                      'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[54px]',
                     displayLabelStyle:
                       'text-solitaireTertiary text-[16px] font-medium'
                   }}
@@ -291,7 +291,7 @@ const OTPVerification = () => {
                   )}
                   displayButtonAllStyle={{
                     displayButtonStyle:
-                      'bg-solitaireQuaternary w-[500px] h-[64px]',
+                      'bg-solitaireQuaternary w-[500px] h-[54px]',
                     displayLabelStyle:
                       'text-solitaireTertiary !text-[16px] font-medium'
                   }}
