@@ -10,7 +10,7 @@ interface ICustomCheckboxProps {
   isInput?: boolean;
   inputName?: string;
   inputValue?: string;
-  handleInputChange?: (value: string) => void;
+  handleChange?: (value: string) => void;
   placeholder?: string;
   inputStyle?: string;
   style?: string;
@@ -20,6 +20,7 @@ interface ICustomCheckboxProps {
   row: any;
   setIsError?: any;
   checkboxLabel?: string;
+  myFun?: any;
 }
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
@@ -27,7 +28,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   isInput,
   inputName,
   inputValue,
-  handleInputChange,
+  handleChange,
   placeholder,
   inputStyle,
   style,
@@ -37,7 +38,8 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   isCheckAll,
   row,
   setIsError,
-  checkboxLabel
+  checkboxLabel,
+  myFun
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<any>(null);
@@ -50,8 +52,8 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   // Handle changes in the input field
   const onInputChange = (value: string) => {
     // Update the state of the input value if there's a handler provided
-    if (handleInputChange) {
-      handleInputChange(value);
+    if (handleChange) {
+      handleChange(value);
     }
     // Update the checkbox state based on whether the input is empty
     setIsCheckedState(value !== '');
@@ -61,6 +63,14 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
     if (checkboxRef.current) {
       checkboxRef.current.click();
     }
+  };
+
+  let handleCheckbox = () => {
+    handleCheckboxClickWrapper();
+    setIsCheck((prevIsCheck: any) => {
+      myFun && myFun(prevIsCheck);
+      return prevIsCheck;
+    });
   };
 
   const handleCheckboxClickWrapper = () => {
@@ -91,7 +101,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
         id={data}
         ref={checkboxRef}
         checked={isCheckedState}
-        onClick={handleCheckboxClickWrapper}
+        onClick={handleCheckbox}
         className={`${styles.defaultCheckbox} ${style}`}
       />
       {checkboxLabel && <p>{checkboxLabel}</p>}
