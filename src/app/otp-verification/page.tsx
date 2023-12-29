@@ -14,6 +14,7 @@ import countryCode from '../../constants/country-code.json';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { CustomDialog } from '@/components/common/dialog';
+import KGKlogo from '@public/assets/icons/vector.svg';
 
 export interface FormState {
   mobileNumber: string;
@@ -35,24 +36,9 @@ const OTPVerification = () => {
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const {
-    dialogContent,
-    isDialogOpen,
-    isInputDialogOpen,
-    isSliderOpen,
-    isModalOpen,
-    modalContent,
-    persistDialogContent,
-    isPersistDialogOpen
-  } = modalState;
-  const {
-    setIsDialogOpen,
-    setIsInputDialogOpen,
-    setIsSliderOpen,
-    setDialogContent,
-    setIsModalOpen,
-    setIsPersistDialogOpen
-  } = modalSetState;
+  const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
+  const { setIsDialogOpen, setIsInputDialogOpen, setDialogContent } =
+    modalSetState;
 
   const [otpValues, setOtpValues] = useState<string[]>([
     '',
@@ -239,7 +225,7 @@ const OTPVerification = () => {
         formData={
           <div className="flex justify-center gap-5 flex-col w-[500px]">
             <div className="flex flex-col gap-[5px] mb-[20px] items-center">
-              <Image src={handImage} alt="Banner image" />
+              <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
               <CustomInputlabel
                 htmlfor={''}
                 label={ManageLocales('app.OTPVerification')}

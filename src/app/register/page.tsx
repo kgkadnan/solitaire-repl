@@ -7,7 +7,6 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import errorImage from '@public/assets/icons/error.svg';
-import Link from 'next/link';
 import countryCode from '../../constants/country-code.json';
 import { FormState, initialFormState } from './interface';
 import { Events } from '@/constants/enums/event';
@@ -235,14 +234,18 @@ const Register = () => {
 
                 <div className="flex flex-col gap-2">
                   {/* Button to trigger the register action */}
-                  <div className="flex flex-col justify-center bg-transparent   border-[1px] border-solitaireQuaternary w-[500px] h-[64px]">
-                    <Link
-                      href={'/'}
-                      className="text-[16px] font-medium text-solitaireTertiary rounded-md"
-                    >
-                      {ManageLocales('app.register.registerAsGuest')}
-                    </Link>
-                  </div>
+                  <CustomDisplayButton
+                    displayButtonLabel={ManageLocales(
+                      'app.register.registerAsGuest'
+                    )}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[64px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary !text-[16px] font-medium'
+                    }}
+                    type="submit"
+                  />
                   <CustomDisplayButton
                     displayButtonLabel={ManageLocales('app.register')}
                     displayButtonAllStyle={{
