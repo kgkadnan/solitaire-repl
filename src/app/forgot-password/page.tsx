@@ -3,7 +3,7 @@ import { CustomInputlabel } from '@/components/common/input-label';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import Image from 'next/image';
 import React, { useState } from 'react';
-import handImage from '@public/assets/images/noto_waving-hand.png';
+import Logo from '@public/assets/icons/vector.svg';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { useForgotPasswordMutation } from '@/features/api/forgot-password';
@@ -97,9 +97,13 @@ const ForgotPassword = () => {
       ) : (
         <UserAuthenticationLayout
           formData={
-            <div className="flex justify-center flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:max-w-xl mx-auto px-4">
+            <div className="flex justify-center flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:[500px] mx-auto px-4">
               <div className="flex flex-col gap-2 mb-10 items-center">
-                <Image src={handImage} alt="Banner image" />
+                <Image
+                  src={Logo}
+                  alt="Banner image"
+                  style={{ width: '60px', height: '80px' }}
+                />
                 <CustomInputlabel
                   htmlfor={''}
                   label={ManageLocales('app.forgotpassword')}
