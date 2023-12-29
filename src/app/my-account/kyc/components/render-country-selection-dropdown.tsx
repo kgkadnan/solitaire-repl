@@ -22,7 +22,12 @@ export const CountrySelectionDropdown = ({
   const handleSelectCountry = (selectedOption: any) => {
     setErrorText('');
     setSelectedCountry(selectedOption.value);
-    dispatch(updateFormState({ name: 'country', value: selectedOption.value }));
+    dispatch(
+      updateFormState({
+        name: 'formState.country',
+        value: selectedOption.value
+      })
+    );
   };
 
   const computeDropdownField = (countries: any) => {

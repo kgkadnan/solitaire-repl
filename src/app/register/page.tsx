@@ -117,7 +117,7 @@ const Register = () => {
       />
       <UserAuthenticationLayout
         formData={
-          <div className="flex justify-center flex-col w-[500px] ">
+          <div className="flex justify-center flex-col w-[500px] mt-[250px]">
             <div className="flex flex-col gap-[5px] mb-[20px] items-center">
               <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
               <CustomInputlabel
@@ -136,7 +136,7 @@ const Register = () => {
 
             {/* Input field for first Name */}
             <form onSubmit={handleRegister}>
-              <div className="flex flex-col gap-[40px]">
+              <div className="flex flex-col gap-[40px] mb-[40px]">
                 <FloatingLabelInput
                   label={ManageLocales('app.register.firstName')}
                   type="text"
