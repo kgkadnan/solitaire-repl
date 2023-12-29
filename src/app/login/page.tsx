@@ -1,5 +1,5 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -31,8 +31,13 @@ const Login = () => {
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
-  const { userLoggedIn } = useUser();
+  const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
+  useEffect(() => {
+    if (isTokenChecked) {
+      authToken && router.push('/');
+    }
+  }, [isTokenChecked]);
   // Handle the login logic
   const handleLogin = async () => {
     if (
