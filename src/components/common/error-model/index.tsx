@@ -30,7 +30,8 @@ const ErrorModel: React.FC<IErrorModelProps> = ({ content, handleClick }) => {
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'center',
-            borderRadius: '5px'
+            borderRadius: '5px',
+            fontWeight: '300'
           }}
         >
           <CustomDisplayButton
