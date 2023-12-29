@@ -42,7 +42,7 @@ const ForgotPassword = () => {
     if (isEmailValid(inputValue)) {
       setEmailErrorText('');
     } else {
-      setEmailErrorText('Please enter a valid email or phone number');
+      setEmailErrorText('Please enter a valid email');
     }
   };
 
@@ -64,7 +64,7 @@ const ForgotPassword = () => {
         );
       }
     } else {
-      setEmailErrorText('aliasger');
+      setEmailErrorText('Please enter a valid email');
     }
   };
 

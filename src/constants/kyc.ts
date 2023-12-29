@@ -141,35 +141,35 @@ export const KYCForm = [
               {
                 name: 'Manufacturer',
                 handleChange: () => {},
-                data: '',
+                data: 'Manufacturer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Retailer',
                 handleChange: () => {},
-                data: '',
+                data: 'Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Wholesaler',
                 handleChange: () => {},
-                data: '',
+                data: 'Wholesaler',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Corporate Retailer',
                 handleChange: () => {},
-                data: '',
+                data: 'Corporate Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
                 handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
@@ -404,6 +404,7 @@ export const KYCForm = [
       //Company Owner Details
       {
         screen: 'Company Owner Details',
+        screenName: 'company_owner_details',
         fields: [
           {
             name: 'Name*',
@@ -439,6 +440,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        screenName: 'banking_details',
         fields: [
           {
             name: 'Bank Name*',
@@ -888,6 +890,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        screenName: 'banking_details',
         fields: [
           {
             name: 'Bank Name*',
@@ -1259,6 +1262,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        screenName: 'banking_details',
         fields: [
           {
             name: 'Bank Name*',

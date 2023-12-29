@@ -5,6 +5,7 @@ import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
 import { useDispatch } from 'react-redux';
 import { handleInputChange } from '../helper/handle-change';
+import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 
 // Define an interface for the parameters of renderField
 
@@ -69,7 +70,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   } = data;
 
   const dispatch = useDispatch();
-  console.log(formState, 'llllll');
+
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { isCheck } = checkboxState;
+  const { setIsCheck } = checkboxSetState;
+
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -93,22 +98,31 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     case fieldType.CHECKBOX:
       return (
         <div className="text-[14px] text-solitaireTertiary w-[70%]">
-          <p className="mb-4">{name}</p>{' '}
+          <p className="mb-4">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
             {checkboxData.map(item => {
               return (
                 <div key={item.name}>
                   <CustomCheckBox
+                    myFun={(isChecked: string[]) =>
+                      handleInputChange(
+                        `online.sections[${screenId}][${key}]`,
+                        isChecked,
+                        dispatch
+                      )
+                    }
                     data={item.data}
-                    isChecked={item.isChecked}
+                    isChecked={isCheck}
+                    setIsCheck={setIsCheck}
                     row={item.row}
                     isInput={item.isInput}
                     inputName={item.inputName}
                     inputValue={item.inputValue}
-                    handleInputChange={item.handleInputChange}
+                    handleChange={item.handleInputChange}
                     placeholder={item.placeholder}
                     checkboxLabel={item.name}
                     inputStyle="w-[150px]"
+                    setIsError={false}
                   />
                 </div>
               );

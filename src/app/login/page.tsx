@@ -40,7 +40,7 @@ const Login = () => {
         password: password
       });
 
-      if (res?.error?.originalStatus === 401) {
+      if (res?.error?.status === 401) {
         // Display error message if login fails
         setIsError(true);
         setErrorText('Incorrect login credential');
