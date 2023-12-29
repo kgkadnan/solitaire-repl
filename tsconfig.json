@@ -15,6 +15,8 @@
     "jsx": "preserve",
     "incremental": true,
     // "noImplicitAny": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
     "plugins": [
       {
         "name": "next"
@@ -35,7 +37,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "log-level.js",
-    "src/app/my-account/kyc/components/manually/render-manually.tsz"
+    "src/app/my-account/kyc/components/offline/render-offline.tsz"
   ],
   "exclude": ["node_modules"]
 }

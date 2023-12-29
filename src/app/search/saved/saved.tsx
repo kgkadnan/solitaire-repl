@@ -38,6 +38,7 @@ import { handleCardClick } from './helpers/handle-card-click';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import logger from 'logging/log-util';
 
 const SavedSearch = () => {
   // State management hooks
@@ -269,7 +270,7 @@ const SavedSearch = () => {
         setIsDialogOpen(true);
       })
       .catch((error: Error) => {
-        console.log('error', error);
+        logger.error(error);
       });
     setIsCheck([]);
     setIsCheckAll(false);

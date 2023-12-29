@@ -3,8 +3,9 @@ import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/kyc';
-import { useDispatch } from 'react-redux';
+
 import { handleInputChange } from '../helper/handle-change';
+import { useAppDispatch } from '@/hooks/hook';
 
 // Define an interface for the parameters of renderField
 
@@ -44,14 +45,14 @@ interface IRenderFieldProps {
   };
   formState: any;
   formErrorState: any;
-  screenId: number;
+  screenName: string;
 }
 
 export const RenderField: React.FC<IRenderFieldProps> = ({
   data,
   formState,
   formErrorState,
-  screenId
+  screenName
 }) => {
   const {
     name,
@@ -68,8 +69,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     key
   } = data;
 
-  const dispatch = useDispatch();
-  console.log(formState, 'llllll');
+  const dispatch = useAppDispatch();
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -78,15 +78,19 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             label={name}
             onChange={e =>
               handleInputChange(
-                `online.sections[${screenId}][${key}]`,
+                `formState.online.sections[${screenName}][${key}]`,
                 e.target.value,
-                dispatch
+                dispatch,
+                handleChange,
+                screenName
               )
             }
             type={inputType}
             name={name}
-            value={formState?.online?.sections[screenId]?.[key] ?? ''}
-            errorText={formErrorState?.online?.sections[screenId]?.[key] ?? ''}
+            value={formState?.online?.sections?.[screenName]?.[key] ?? ''}
+            errorText={
+              formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
+            }
           />
         </div>
       );
@@ -153,7 +157,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     data={field}
                     formState={formState}
                     formErrorState={formErrorState}
-                    screenId={screenId}
+                    screenName={screenName}
                   />
                 </div>
               ))}

@@ -2,22 +2,19 @@ import React from 'react';
 import { RenderField } from './components/render-field';
 import Image from 'next/image';
 
-type RenderDigitalFormProps = {
+type RenderOnlineFormProps = {
   screen: any;
-  isLastStep: boolean;
   formState: any;
   formErrorState: any;
-  screenId: number;
 };
-export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
+export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
   screen,
-  isLastStep,
   formState,
-  formErrorState,
-  screenId
+  formErrorState
 }) => {
   return (
-    // const renderDigitalForm = ( screen: any, isLastStep: any) => (
+    // const renderOnlineForm = ( screen: any, isLastStep: any) => (
+
     <div key={screen.screen}>
       <div className="flex items-center mt-[30px] mb-[30px] ">
         <Image src={screen.icon} alt="Backhand image" />
@@ -25,18 +22,17 @@ export const RenderDigitalForm: React.FC<RenderDigitalFormProps> = ({
           {screen.screen}
         </h3>
       </div>
-      <div className="h-[950px] flex flex-col flex-wrap">
+      <div className="max-h-[950px] flex flex-col flex-wrap">
         {screen.fields.map((field: any) => (
           <div key={field.name} className={`mb-[20px] w-[40%] `}>
             <RenderField
               data={field}
               formState={formState}
               formErrorState={formErrorState}
-              screenId={screenId}
+              screenName={screen.screenName}
             />
           </div>
         ))}
-        {/* {isLastStep && renderAttachment()}{' '} */}
       </div>
     </div>
     //   );

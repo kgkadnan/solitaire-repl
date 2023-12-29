@@ -17,12 +17,13 @@ import searchListReducer from './features/search/search-list';
 import savedSearchReducer from './features/saved-search/saved-search';
 import { changePasswordApi } from './features/api/change-password';
 import { manageListingSequenceApi } from './features/api/manage-listing-sequence';
-import { myDiamondAPI } from './features/api/my-diamonds/my-diamond';
+import { myDiamondApi } from './features/api/my-diamonds/my-diamond';
 import { registerApi } from './features/api/register';
 import { resetPasswordApi } from './features/api/reset-password';
 import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
+import { kycApi } from './features/api/kyc';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -42,7 +43,8 @@ const rootReducer = combineReducers({
   [loginApi.reducerPath]: loginApi.reducer,
   [forgotPasswordApi.reducerPath]: forgotPasswordApi.reducer,
   [registerApi.reducerPath]: registerApi.reducer,
-  [myDiamondAPI.reducerPath]: myDiamondAPI.reducer,
+  [myDiamondApi.reducerPath]: myDiamondApi.reducer,
+  [kycApi.reducerPath]: kycApi.reducer,
   [resetPasswordApi.reducerPath]: resetPasswordApi.reducer
 });
 
@@ -61,12 +63,12 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         notificationSettingApi.middleware,
         productApi.middleware,
         loginApi.middleware,
-        myDiamondAPI.middleware,
+        myDiamondApi.middleware,
         registerApi.middleware,
         resetPasswordApi.middleware,
         currentIPApi.middleware,
-        currentIPApi.middleware,
-        forgotPasswordApi.middleware
+        forgotPasswordApi.middleware,
+        kycApi.middleware
       ),
     preloadedState
   });
