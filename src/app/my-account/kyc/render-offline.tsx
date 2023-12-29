@@ -6,11 +6,12 @@ import Image from 'next/image';
 import { ManageLocales } from '@/utils/translate';
 import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
 import { Checkbox } from '@/components/ui/checkbox';
-import { useModalStateManagement } from '@/hooks/modal-state-management';
+import styles from './styles/attachment.module.scss';
 
 import useAttachmentsStateManagement from './hooks/attachment-state-management';
+import { CustomModal } from '@/components/common/modal';
 
-const RenderOffline = ({ data }: any) => {
+const RenderOffline = ({ data, modalSetState, modalState }: any) => {
   const {
     attachmentsState: {
       pan: {
@@ -164,11 +165,12 @@ const RenderOffline = ({ data }: any) => {
     }
   } = useAttachmentsStateManagement();
 
+  const { isModalOpen, modalContent } = modalState;
+  const { setIsModalOpen } = modalSetState;
+
   const [uploadProgress, setUploadProgress] = useState<number>(0);
   const [isFileUploaded, setIsFileUploaded] = useState<boolean>(false);
   const [uploadFilePreview, setUploadFilePreview] = useState<string[]>([]);
-
-  const { modalState, modalSetState } = useModalStateManagement();
 
   const companyDocument = [
     {
@@ -361,6 +363,12 @@ const RenderOffline = ({ data }: any) => {
 
   return (
     <div>
+      <CustomModal
+        isOpens={isModalOpen}
+        setIsOpen={setIsModalOpen}
+        dialogContent={modalContent}
+        modalStyle={styles.modalStyle}
+      />
       <div className="w-full flex justify-between pb-5">
         <DownloadAndUpload
           uploadProgress={uploadProgress}

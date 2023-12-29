@@ -34,24 +34,42 @@ export const validateField = ({
           error = INVALID_EMAIL_FORMAT;
         }
         break;
+      // Inside your form validation logic
       case 'password':
         if (!PASSWORD_REGEX.test(value)) {
           error = MINIMUM_CHAR_PASSWORD;
         }
+        // Clear confirmPassword error if it was set
+        setFormErrors(prev => ({
+          ...prev,
+          confirmPassword: ''
+        }));
         if (formState.confirmPassword && value !== formState.confirmPassword) {
           error = PASSWORD_NOT_MATCH;
+          // Set confirmPassword error
           setFormErrors(prev => ({
             ...prev,
             confirmPassword: PASSWORD_NOT_MATCH
           }));
         }
         break;
+
       case 'confirmPassword':
         if (!PASSWORD_REGEX.test(value)) {
           error = MINIMUM_CHAR_PASSWORD;
         }
+        // Clear password error if it was set
+        setFormErrors(prev => ({
+          ...prev,
+          password: ''
+        }));
         if (value !== formState.password) {
           error = PASSWORD_NOT_MATCH;
+          // Set password error
+          setFormErrors(prev => ({
+            ...prev,
+            password: PASSWORD_NOT_MATCH
+          }));
         }
         break;
 
