@@ -257,7 +257,7 @@
 
   "app.OTPVerification": "Verification",
   "app.OTPVerification.goBack": "Go Back",
-  "app.OTPVerification.verify": "verify",
+  "app.OTPVerification.verify": "Verify",
   "app.OTPVerification.resend": "Resend",
   "app.OTPVerification.save": "Save",
   "app.OTPVerification.cancel": "Cancel",

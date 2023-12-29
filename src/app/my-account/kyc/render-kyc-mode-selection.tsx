@@ -84,7 +84,7 @@ const RenderKYCModeSelection = ({
             </div>
             <div className="text-solitaireTertiary  w-[70%]">
               <h1>Fill Form online</h1>
-              <p className="font-thin">
+              <p className="font-thin pr-6">
                 Fill the form on the app, for your convenience
               </p>
             </div>
@@ -111,9 +111,8 @@ const RenderKYCModeSelection = ({
             </div>
             <div className="text-solitaireTertiary w-[70%]">
               <h1>Download and Upload Form</h1>
-              <p className="font-thin">
-                Download and fill the form and upload the filled <br /> form
-                offline.
+              <p className="font-thin pr-6">
+                Download and fill the form and upload the filled form offline.
               </p>
             </div>
             <div className="w-[10%]">
