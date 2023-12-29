@@ -69,11 +69,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     dynamicCondition,
     key
   } = data;
+  console.log(formState,"formstate")
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
-
   const dispatch = useAppDispatch();
   switch (type) {
     case fieldType.FLOATING_INPUT:

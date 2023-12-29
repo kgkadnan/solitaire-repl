@@ -8,14 +8,15 @@ export const handleInputChange = async (
   screenName: string
 ) => {
   let errors = await handleChange(value);
-  dispatch(
-    updateFormState({
-      name: `formErrorState.online.sections.${[screenName]}.${[
-        errors[0]?.property
-      ]}`,
-      value: Object.values(errors[0]?.constraints ?? {})[0] || ''
-    })
-  );
-  //  });
+  Array.isArray(errors) &&
+    errors.length &&
+    dispatch(
+      updateFormState({
+        name: `formErrorState.online.sections.${[screenName]}.${[
+          errors[0]?.property
+        ]}`,
+        value: Object.values(errors[0]?.constraints ?? {})[0] || ''
+      })
+    );
   dispatch(updateFormState({ name: name, value: value }));
 };
