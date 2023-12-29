@@ -79,11 +79,11 @@ const Login = () => {
       // Handle both fields being empty
       if (!password.length && !emailAndNumber.length) {
         setPasswordErrorText('Please enter password');
-        setEmailErrorText('Please enter email/Phone number');
+        setEmailErrorText('Please enter valid email');
       } else if (!password.length) {
         setPasswordErrorText('Please enter password');
       } else if (!emailAndNumber.length) {
-        setEmailErrorText('Please enter email/Phone number');
+        setEmailErrorText('Please enter valid email');
       }
     }
   };
@@ -112,7 +112,7 @@ const Login = () => {
         setEmailErrorText('');
         setErrorText('');
       } else {
-        setEmailErrorText('Please enter a valid email or phone number');
+        setEmailErrorText('Please enter a valid email');
         setErrorText('');
       }
     } else if (type === 'password') {

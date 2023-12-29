@@ -11,14 +11,15 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useRouter } from 'next/navigation';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 
 const ResetPassword = () => {
   // State variables for email, password, and error handling
   const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
   const [resetConfirmPassword, setResetConfirmPassword] = useState<string>('');
-  const [comparePasswordError, setComparePasswordError] = useState<string>('');
+  const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
+  const [PasswordError, setPasswordError] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -30,44 +31,69 @@ const ResetPassword = () => {
   const [resetPassword] = useResetPasswordMutation();
 
   const handleResetPassword = async () => {
-    if (resetPasswordValue === resetConfirmPassword) {
-      const res: any = await resetPassword({
-        email: email || '',
-        password: resetPasswordValue,
-        token: token || ''
-      });
+    if (
+      resetPasswordValue &&
+      resetConfirmPassword &&
+      !PasswordError.length &&
+      !confirmPasswordError &&
+      resetPasswordValue === resetConfirmPassword
+    ) {
+      if (token && email) {
+        const res: any = await resetPassword({
+          email: email || '',
+          password: resetPasswordValue,
+          token: token || ''
+        });
 
-      if (res.error) {
-        setIsDialogOpen(true);
-        setDialogContent(
-          <ErrorModel
-            content={res.error.data.message}
-            handleClick={() => setIsDialogOpen(false)}
-          />
-        );
+        if (res.error) {
+          setIsDialogOpen(true);
+          setDialogContent(
+            <ErrorModel
+              content={res.error.data.message}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          );
+        } else {
+          setIsDialogOpen(true);
+          setDialogContent(
+            <div className="flex gap-[10px] flex-col items-center justify-center">
+              <div className="flex">
+                <Image src={confirmImage} alt="Error Image" />
+              </div>
+              <div className="text-[16px] text-solitaireTertiary">
+                <p> Your password has reset successfully</p>
+              </div>
+              <CustomDisplayButton
+                displayButtonLabel="Login"
+                handleClick={() => router.push('/login')}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
+                }}
+              />
+            </div>
+          );
+        }
       } else {
         setIsDialogOpen(true);
         setDialogContent(
-          <div className="flex gap-[10px] flex-col items-center justify-center">
-            <div className="flex">
-              <Image src={confirmImage} alt="Error Image" />
-            </div>
-            <div className="text-[16px] text-solitaireTertiary">
-              <p> Your password has reset successfully</p>
-            </div>
-            <CustomDisplayButton
-              displayButtonLabel="Login"
-              handleClick={() => router.push('/login')}
-              displayButtonAllStyle={{
-                displayButtonStyle:
-                  'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
-              }}
-            />
-          </div>
+          <ErrorModel
+            content="Something went wrong"
+            handleClick={() => setIsDialogOpen(false)}
+          />
         );
       }
+    } else if (!token && !email) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <ErrorModel
+          content="Something went wrong"
+          handleClick={() => setIsDialogOpen(false)}
+        />
+      );
     } else {
-      setComparePasswordError('Password and confirm password must match');
+      setPasswordError('Password and confirm password must match');
+      setConfirmPasswordError('Password and confirm password must match');
     }
   };
 
@@ -79,13 +105,26 @@ const ResetPassword = () => {
   };
 
   const handlePasswordInput = (e: any) => {
-    setResetPasswordValue(e.target.value);
-    setComparePasswordError('');
+    const inputValue = e.target.value;
+    setResetPasswordValue(inputValue);
+
+    if (!PASSWORD_REGEX.test(inputValue)) {
+      setPasswordError('Please enter valid password');
+    } else {
+      setPasswordError('');
+      setConfirmPasswordError('');
+    }
   };
 
   const handleConfirmPasswordInput = (e: any) => {
-    setResetConfirmPassword(e.target.value);
-    setComparePasswordError('');
+    const inputValue = e.target.value;
+    setResetConfirmPassword(inputValue);
+    if (!PASSWORD_REGEX.test(inputValue)) {
+      setConfirmPasswordError('Please enter valid password');
+    } else {
+      setConfirmPasswordError('');
+      setPasswordError('');
+    }
   };
 
   return (
@@ -117,7 +156,7 @@ const ResetPassword = () => {
             name="password"
             onKeyDown={handleKeyDown}
             value={resetPasswordValue}
-            errorText={comparePasswordError}
+            errorText={PasswordError}
             showPassword={true}
           />
           <FloatingLabelInput
@@ -127,7 +166,7 @@ const ResetPassword = () => {
             name="confirmPassword"
             onKeyDown={handleKeyDown}
             value={resetConfirmPassword}
-            errorText={comparePasswordError}
+            errorText={confirmPasswordError}
             showPassword={true}
           />
 
