@@ -31,17 +31,15 @@ const Login = () => {
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
-  const { isTokenChecked,authToken,userLoggedIn } = useUser();
+  const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
-
-  useEffect(()=>{
-    if(isTokenChecked){
-      authToken && router.push('/')
+  useEffect(() => {
+    if (isTokenChecked) {
+      authToken && router.push('/');
     }
-  },[isTokenChecked])
+  }, [isTokenChecked]);
   // Handle the login logic
   const handleLogin = async () => {
-
     if (
       !emailErrorText.length &&
       !passwordErrorText.length &&

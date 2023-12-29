@@ -18,6 +18,7 @@ import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { useKycMutation } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import logger from 'logging/log-util';
+import { ValidationError } from 'class-validator';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -34,98 +35,93 @@ const KYC: React.FC = () => {
 
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
-    let validationError;
+    let validationError: ValidationError[] | string;
+
+    validationError = await validateScreen(
+      kycStoreData.online.sections[screenName],
+      screenName,
+      selectedCountry
+    );
+    if (Array.isArray(validationError)) {
+      validationError.map(error => {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.online.sections.${[screenName]}.${[
+              error.property
+            ]}`,
+            value: Object.values(error.constraints ?? {})[0]
+          })
+        );
+      });
+    }
     switch (screenName) {
       case 'personal_details':
-        validationError = await validateScreen(
-          kycStoreData.online.sections[screenName],
-          screenName,
-          selectedCountry
-        );
-        if (Array.isArray(validationError)) {
-          validationError.length &&
-            validationError.map(error => {
-              dispatch(
-                updateFormState({
-                  name: `formErrorState.online.sections.${[screenName]}.${[
-                    error.property
-                  ]}`,
-                  value: Object.values(error.constraints ?? {})[0]
-                })
-              );
-            });
-        }
-
-        !validationError &&
-          console.log('personal_details API CALL', kycStoreData[screenName]);
-        kyc({
-          data: {
-            country: kycStoreData.country,
-            offline: kycStoreData.offline,
+        !validationError.length &&
+          kyc({
             data: {
-              ...kycStoreData.online.sections[screenName],
-              country_code: 'IND'
-            }
-          },
-          ID: active
-        })
-          .unwrap()
-          .then((res: any) => console.log('res'))
-          .catch((e: any) => {});
+              country: kycStoreData.country,
+              offline: kycStoreData.offline,
+              data: {
+                ...kycStoreData.online.sections[screenName],
+                country_code: 'IND'
+              }
+            },
+            ID: active
+          })
+            .unwrap()
+            .then((res: any) => console.log('res'))
+            .catch((e: any) => {});
         break;
       case 'company_details':
         // code block
-        kyc({
-          data: {
-            country: kycStoreData.country,
-            offline: kycStoreData.offline,
-            data: { ...kycStoreData.online.sections[screenName] }
-          },
-          ID: active
-        })
-          .unwrap()
-          .then((res: any) => console.log('res'))
-          .catch((e: any) => {});
-        console.log('company_details  API CALL', kycStoreData[screenName]);
+        !validationError.length &&
+          kyc({
+            data: {
+              country: kycStoreData.country,
+              offline: kycStoreData.offline,
+              data: { ...kycStoreData.online.sections[screenName] }
+            },
+            ID: active
+          })
+            .unwrap()
+            .then((res: any) => console.log('res'))
+            .catch((e: any) => {});
         break;
       case 'company_owner_details':
-        kyc({
-          data: {
-            country: kycStoreData.country,
-            offline: kycStoreData.offline,
-            data: { ...kycStoreData.online.sections[screenName] }
-          },
-          ID: active
-        })
-          .unwrap()
-          .then((res: any) => console.log('res'))
-          .catch((e: any) => {});
-        // code block
-        console.log('company_owner_details', kycStoreData[screenName]);
+        !validationError.length &&
+          kyc({
+            data: {
+              country: kycStoreData.country,
+              offline: kycStoreData.offline,
+              data: { ...kycStoreData.online.sections[screenName] }
+            },
+            ID: active
+          })
+            .unwrap()
+            .then((res: any) => console.log('res'))
+            .catch((e: any) => {});
         break;
       case 'banking_details':
-        kyc({
-          data: {
-            country: kycStoreData.country,
-            offline: kycStoreData.offline,
+        !validationError.length &&
+          kyc({
             data: {
-              ...kycStoreData.online.sections[screenName]
-            }
-          },
-          ID: active
-        })
-          .unwrap()
-          .then((res: any) => console.log('res'))
-          .catch((e: any) => {});
-        // code block
-        console.log('banking_details', kycStoreData[screenName]);
+              country: kycStoreData.country,
+              offline: kycStoreData.offline,
+              data: {
+                ...kycStoreData.online.sections[screenName]
+              }
+            },
+            ID: active
+          })
+            .unwrap()
+            .then((res: any) => console.log('res'))
+            .catch((e: any) => {});
         break;
       default:
-        // code block
         logger.info('default');
     }
 
-    !validationError && setActiveStep(prevStep => prevStep + 1);
+    !validationError.length && setActiveStep(prevStep => prevStep + 1);
   };
 
   const handlePrevStep = () => {
