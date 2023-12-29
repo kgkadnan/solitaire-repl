@@ -54,7 +54,10 @@ const Register = () => {
     })
       .unwrap()
       .then((res: any) => {
-        if (res) router.push('/otp-verification');
+        if (res)
+          router.push(
+            `/otp-verification?country_code=${formState.countryCode}&phone=${formState.mobileNumber}`
+          );
       })
       .catch(e => {
         setIsDialogOpen(true);
@@ -236,7 +239,7 @@ const Register = () => {
                   <div className="flex flex-col justify-center bg-transparent   border-[1px] border-solitaireQuaternary w-[500px] h-[64px]">
                     <Link
                       href={'/'}
-                      className="text-[16px] font-medium text-solitaireTertiary"
+                      className="text-[16px] font-medium text-solitaireTertiary rounded-md"
                     >
                       {ManageLocales('app.register.registerAsGuest')}
                     </Link>

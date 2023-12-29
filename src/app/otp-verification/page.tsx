@@ -7,7 +7,7 @@ import { ManageLocales } from '@/utils/translate';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import OtpInput from '@/components/common/otp-verification';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import errorImage from '@public/assets/icons/error.svg';
 import countryCode from '../../constants/country-code.json';
@@ -27,6 +27,11 @@ const initialFormState: FormState = {
 };
 const OTPVerification = () => {
   const router = useRouter();
+
+  const searchParams = useSearchParams();
+  const country_code = searchParams.get('country_code');
+  const phone_number = searchParams.get('phone');
+
   const { modalState, modalSetState } = useModalStateManagement();
 
   const { dialogContent, isDialogOpen } = modalState;
@@ -113,18 +118,24 @@ const OTPVerification = () => {
     }
   };
 
+  useEffect(() => {
+    setFormState(prev => ({ ...prev, countryCode: `+${country_code}` }));
+    setFormState(prev => ({ ...prev, mobileNumber: `${phone_number}` }));
+  }, [country_code, phone_number]);
+
   const renderContentWithInput = () => {
     return (
       <div className="w-full flex flex-col gap-6">
         <div className=" flex justify-center align-middle items-center">
           <p> Change Mobile Number</p>
         </div>
-        <div className="flex text-center gap-6 w-[350px]">
+        <div className="flex text-center gap-5 w-[350px]">
           <select
             name="countryCode"
             value={formState.countryCode}
             onChange={handleChange}
-            className={`bg-transparent w-[20%]  ${
+            defaultValue={`+${country_code}`!}
+            className={`bg-transparent w-[30%]  ${
               !formErrors.mobileNumber.length
                 ? 'border-solitaireQuaternary text-solitaireTertiary'
                 : 'border-[#983131] text-[#983131]'
@@ -134,6 +145,7 @@ const OTPVerification = () => {
               <option
                 key={country.iso_codes}
                 value={`+${country.code}`}
+                defaultValue={`+${country_code}`!}
                 className="bg-solitaireDenary round-0 border-none"
               >
                 +{country.code}
@@ -181,7 +193,7 @@ const OTPVerification = () => {
     );
   };
 
-  const mobileNumber = '+91 0000 000 000';
+  const mobileNumber = `+${country_code} ${phone_number}`;
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   return (
