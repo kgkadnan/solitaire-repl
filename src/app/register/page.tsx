@@ -236,7 +236,7 @@ const Register = () => {
                   {/* Button to trigger the register action */}
                   <CustomDisplayButton
                     displayButtonLabel={ManageLocales(
-                      'app.register.registerAsGuest'
+                      'app.register.registerAsAGuest'
                     )}
                     displayButtonAllStyle={{
                       displayButtonStyle:

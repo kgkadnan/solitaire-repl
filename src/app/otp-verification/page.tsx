@@ -188,7 +188,7 @@ const OTPVerification = () => {
             handleClick={() => {
               setFormState(initialFormState);
               setFormErrors(initialFormState);
-              setIsDialogOpen(false);
+              setIsInputDialogOpen(false);
             }}
           />
           <CustomDisplayButton
@@ -252,7 +252,7 @@ const OTPVerification = () => {
 
               <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
 
-              <div className="flex justify-between items-center">
+              <div className="flex justify-center gap-3 items-center">
                 <p className="text-solitaireTertiary">
                   Haven’t received any OTP ?
                 </p>

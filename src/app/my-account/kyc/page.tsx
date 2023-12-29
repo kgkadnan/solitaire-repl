@@ -135,7 +135,7 @@ const KYC: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  const { modalSetState } = useModalStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
   const formState = useSelector((state: any) => state.kyc.formState);
   const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
 
@@ -159,7 +159,7 @@ const KYC: React.FC = () => {
     : [];
 
   stepperData.push({
-    label: 'attachment',
+    label: 'Attachment',
     data: (
       <>
         <div className="flex items-center mt-[30px] mb-[30px] ">
@@ -220,7 +220,7 @@ const KYC: React.FC = () => {
       stepperData.length === activeStep
         ? StepperStatus.INPROGRESS
         : StepperStatus.NOT_STARTED,
-    screenName: 'Attachment'
+    screenName: 'attachment'
   });
 
   const resData = {
@@ -366,7 +366,13 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
-      return <RenderOffline data={data} />;
+      return (
+        <RenderOffline
+          data={data}
+          modalSetState={modalSetState}
+          modalState={modalState}
+        />
+      );
     // Add more cases as needed
     case 'online':
       return (
@@ -380,7 +386,13 @@ const KYC: React.FC = () => {
       );
 
     case 'offline':
-      return <RenderOffline data={data} />;
+      return (
+        <RenderOffline
+          data={data}
+          modalSetState={modalSetState}
+          modalState={modalState}
+        />
+      );
     default:
       // Render a default component or handle the default case
       return;

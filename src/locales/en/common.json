@@ -253,7 +253,7 @@
   "app.register.password": "Password*",
   "app.register.confirmPassword": "Confirm Password*",
 
-  "app.register.registerAsGuest": "Register as Guest",
+  "app.register.registerAsAGuest": "Register as a Guest",
 
   "app.OTPVerification": "Verification",
   "app.OTPVerification.goBack": "Go Back",

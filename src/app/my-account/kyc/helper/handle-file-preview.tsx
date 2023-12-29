@@ -11,6 +11,8 @@ export const handlePreview = ({
   setModalContent,
   selectedFile
 }: any) => {
+  console.log('setIsModalOpen', setIsModalOpen);
+  console.log('setModalContent', setModalContent);
   setIsModalOpen(true);
   setModalContent(
     <>
