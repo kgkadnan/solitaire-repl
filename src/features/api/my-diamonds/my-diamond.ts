@@ -1,7 +1,7 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from '../base-query';
 
-export const myDiamondAPI = createApi({
+export const myDiamondApi = createApi({
   reducerPath: 'recentConfirmationReducer',
   baseQuery: createBaseQuery(),
   tagTypes: ['myDiamond'],
@@ -53,4 +53,4 @@ export const {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
   useGetProductDetailsQuery
-} = myDiamondAPI;
+} = myDiamondApi;

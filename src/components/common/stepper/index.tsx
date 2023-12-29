@@ -15,7 +15,7 @@ interface IStepperProps {
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: (_name: string) => void;
+  nextStep: (_name: string, _activeID: number) => void;
   prevLabel?: string;
   nextLabel?: string;
 }
@@ -30,6 +30,7 @@ const Stepper: React.FC<IStepperProps> = ({
   nextLabel = 'Save and Next'
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
+
   const footerButtonData = (state: number) => {
     return [
       {
@@ -43,7 +44,7 @@ const Stepper: React.FC<IStepperProps> = ({
         id: 2,
         displayButtonLabel: nextLabel,
         style: styles.filled,
-        fn: () => nextStep(stepper[state]?.screenName),
+        fn: () => nextStep(stepper[state]?.screenName, state),
         isDisable: state === stepper.length - 1
       }
     ];
@@ -64,17 +65,17 @@ const Stepper: React.FC<IStepperProps> = ({
   return (
     <div className={styles.stepperContainer}>
       <div className={styles.circularSteps}>
-        {stepperData.map((step: any, index: number) => (
+        {stepperData?.map((step: any, index: number) => (
           <>
             <div className={styles.circularStepsContainer}>
               <div
                 key={index}
                 className={`${styles.step} ${
-                  step.status === StepperStatus.COMPLETED
+                  step?.status === StepperStatus.COMPLETED
                     ? styles.completedStep
-                    : step.status === StepperStatus.INPROGRESS
+                    : step?.status === StepperStatus.INPROGRESS
                     ? styles.activeStep
-                    : step.status === StepperStatus.REJECTED
+                    : step?.status === StepperStatus.REJECTED
                     ? styles.rejectedStep
                     : ''
                 }`}
@@ -83,7 +84,7 @@ const Stepper: React.FC<IStepperProps> = ({
                 {index + 1}
               </div>
 
-              <div className={styles.stepLabel}>{step.label}</div>
+              <div className={styles.stepLabel}>{step?.label}</div>
             </div>
             {index < stepper.length - 1 && (
               <div className={styles.stepLine}></div>
@@ -91,9 +92,10 @@ const Stepper: React.FC<IStepperProps> = ({
           </>
         ))}
       </div>
+      <hr className="border-1 border-solitaireSenary my-6" />
       <div>{stepper[state]?.data}</div>
 
-      <div className={styles.navigationButtons}>
+      <div className={`${styles.navigationButtons} `}>
         <CustomFooter
           footerButtonData={footerButtonData(state)}
           noBorderTop={styles.paginationContainerStyle}

@@ -4,18 +4,21 @@ import Select from 'react-select';
 import { colourStyles } from '../styles/select-style';
 import { IErrorSetState } from '@/app/search/result/result-interface';
 import { updateFormState } from '@/features/kyc/kyc';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '@/hooks/hook';
+import { useEffect } from 'react';
 
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
   errorSetState: IErrorSetState;
+  selectedCountry: any;
 }
 export const CountrySelectionDropdown = ({
   setSelectedCountry,
-  errorSetState
+  errorSetState,
+  selectedCountry
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const handleSelectCountry = (selectedOption: any) => {
     setErrorText('');
@@ -26,7 +29,7 @@ export const CountrySelectionDropdown = ({
   const computeDropdownField = (countries: any) => {
     return countries.map(({ country }: any) => ({
       label: country.fullName,
-      value: country.shortName
+      value: country.fullName
     }));
   };
 
@@ -34,6 +37,7 @@ export const CountrySelectionDropdown = ({
     <Select
       options={computeDropdownField(KYCForm)}
       onChange={handleSelectCountry}
+      value={{ value: selectedCountry, label: selectedCountry }}
       placeholder={ManageLocales('app.myProfile.kyc.country')}
       styles={colourStyles}
     />

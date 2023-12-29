@@ -3,8 +3,6 @@
 import React from 'react';
 import { render, fireEvent, logDOM } from '@testing-library/react';
 import ConfirmStone from '@/components/common/confirm-stone';
-import userEvent from '@testing-library/user-event';
-import { boolean } from 'zod';
 
 // Mock the translation function
 jest.mock('@/utils/translate', () => ({

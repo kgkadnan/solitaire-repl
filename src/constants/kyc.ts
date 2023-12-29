@@ -1,3 +1,9 @@
+import {
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePhone
+} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 
 export enum fieldType {
@@ -27,11 +33,10 @@ const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [
   {
     country: {
-      fullName: 'India',
-      shortName: 'india'
+      fullName: 'Belgium',
+      shortName: 'Belgium'
     },
-    digital: [
-      //Personal Details
+    online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
@@ -59,6 +64,388 @@ export const KYCForm = [
             isRequired: true,
             handleChange: () => {},
             key: 'phone'
+          }
+        ]
+      },
+
+      //Company Details
+      {
+        screen: 'Company Details',
+        icon: HandIcon,
+        screenName: 'company_details',
+        fields: [
+          {
+            name: 'Registered Company Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_name'
+          },
+          {
+            name: 'Year of Establishment*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'year_of_establishment'
+          },
+          {
+            name: 'Registered Address*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'address'
+          },
+          {
+            name: 'Company Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_phone_number'
+          },
+          {
+            name: 'Company Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'company_email'
+          },
+          {
+            name: 'Business Type*',
+            type: fieldType.CHECKBOX,
+            key: 'business_type',
+            checkboxData: [
+              {
+                name: 'Manufacturer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Wholesaler',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Corporate Retailer',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Type of Industry*',
+            type: fieldType.CHECKBOX,
+            key: 'industry_type',
+            checkboxData: [
+              {
+                name: 'Diamonds',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Colour Stones',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Jewellery',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: []
+              },
+              {
+                name: 'Other',
+                handleChange: () => {},
+                data: '',
+                row: [],
+                isChecked: [],
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: () => {},
+                placeholder: 'If other please specify'
+              }
+            ]
+          },
+          {
+            name: 'Organisation Type*',
+            type: fieldType.RADIO,
+            key: 'organisation_type',
+            radioData: [
+              {
+                id: 1,
+                label: 'Individual',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 2,
+                label: 'Partnership Firm',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 3,
+                label: 'Private Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 4,
+                label: 'LLP',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 5,
+                label: 'Public Ltd.',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 6,
+                label: 'OPC',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 7,
+                label: 'Other',
+                value: '',
+                onChange: () => {},
+                name: '',
+                isInput: true,
+                inputName: '',
+                inputValue: '',
+                handleInputChange: '',
+                placeholder: 'If other please specify',
+                inputStyle: 'w-[150px]'
+              }
+            ]
+          },
+          {
+            name: 'Business Registration Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'business_registration_number'
+          },
+          {
+            name: 'VAT Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'vat_number'
+          },
+          {
+            name: 'Fax Number',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'fax_number'
+          },
+          {
+            name: 'Subsidiary/Affiliated Company',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'subsidiary_company'
+          },
+          {
+            name: 'Member of any Business Organisation / Council*',
+            subTitle: 'If yes then provide the name',
+            type: fieldType.RADIOWITHINPUT,
+            key: 'is_member_of_business',
+            radioData: [
+              {
+                id: 1,
+                label: 'Yes',
+                value: '',
+                onChange: () => {},
+                name: ''
+              },
+              {
+                id: 1,
+                label: 'No',
+                value: '',
+                onChange: () => {},
+                name: ''
+              }
+            ],
+            dynamicCondition: 'Yes',
+            dynamicField: [
+              {
+                name: 'Name If you select “Yes”',
+                type: fieldType.FLOATING_INPUT,
+                inputType: 'text',
+                isRequired: true,
+                handleChange: () => {},
+                key: 'member_of_business_name'
+              }
+            ]
+          },
+          {
+            label: 'Ultimate Beneficiary Details',
+            name: 'Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ultimate_beneficiary_name'
+          },
+          {
+            name: 'Ownership%',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'ownership_percentage'
+          }
+        ]
+      },
+
+      //Banking Details
+      {
+        screen: 'Banking Details',
+        fields: [
+          {
+            name: 'Bank Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'bank_name'
+          },
+          {
+            label: 'Banking Details',
+            name: 'Account Holder Name*',
+            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_holder_name'
+          },
+          {
+            name: 'Account Number/IBN Number*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'account_number'
+          },
+          {
+            name: 'Swift Code*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: () => {},
+            key: 'swift_code'
+          }
+        ]
+      }
+    ],
+    offline: {
+      kycForm: 'link_to_kyc_form.pdf'
+    },
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {}
+        }
+      ]
+    }
+  },
+  {
+    country: {
+      fullName: 'India',
+      shortName: 'india'
+    },
+    online: [
+      {
+        screen: 'Personal Details',
+        icon: HandIcon,
+        screenName: 'personal_details',
+        fields: [
+          {
+            name: 'First Name*',
+            type: fieldType.FLOATING_INPUT,
+            isRequired: true,
+            handleChange: validateFirstName,
+            key: 'first_name'
+          },
+          {
+            name: 'Last Name*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: validateLastName,
+            key: 'last_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'number',
+            isRequired: true,
+            handleChange: validatePhone,
+            key: 'phone'
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            isRequired: true,
+            handleChange: validateEmail,
+            key: 'email'
           }
         ]
       },
@@ -404,35 +791,15 @@ export const KYCForm = [
       //Company Owner Details
       {
         screen: 'Company Owner Details',
+        icon: HandIcon,
         screenName: 'company_owner_details',
         fields: [
           {
-            name: 'Name*',
+            name: 'First Name',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
             handleChange: () => {},
-            key: 'owner_full_name'
-          },
-          {
-            name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'owner_phone'
-          },
-          {
-            name: 'Email ID*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'owner_email'
-          },
-          {
-            name: 'Pan-Card Number (pre-filled if user selects Individual in Business type)',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'owner_pan_number'
+            key: 'first_name'
           }
         ]
       },
@@ -441,6 +808,7 @@ export const KYCForm = [
       {
         screen: 'Banking Details',
         screenName: 'banking_details',
+        icon: HandIcon,
         fields: [
           {
             name: 'Bank Name*',
@@ -482,7 +850,7 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf',
       setUploadFilePreview: 'setUploadFilePreview',
       uploadFilePreview: 'uploadFilePreview',
@@ -496,6 +864,96 @@ export const KYCForm = [
         {
           id: '1',
           label: 'Pan Card',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '2',
+          label: 'Pan Card 2',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '3',
+          label: 'Pan Card 3',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '4',
+          label: 'Pan Card 4',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '5',
+          label: 'Pan Card 5',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '6',
+          label: 'Pan Card 6',
+          isRequired: true,
+          uploadProgress: 'uploadProgress',
+          isFileUploaded: 'isPanFileUploaded',
+          setUploadProgress: 'setUploadPanCardProgress',
+          setIsFileUploaded: 'setIsPanFileUploaded',
+          setSelectedFile: 'setPanSelectedFile',
+          selectedFile: 'panSelectedFile',
+          error: 'panError',
+          setError: 'setPanError',
+          maxFile: 1,
+          minFile: 1
+        },
+        {
+          id: '7',
+          label: 'Pan Card 7',
           isRequired: true,
           uploadProgress: 'uploadProgress',
           isFileUploaded: 'isPanFileUploaded',
@@ -533,8 +991,7 @@ export const KYCForm = [
       fullName: 'USA',
       shortName: 'usa'
     },
-    digital: [
-      //Personal Details
+    online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
@@ -925,21 +1382,25 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {},
-        key: 'first_name'
-      }
-    ]
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {}
+        }
+      ]
+    }
   },
   {
     country: {
@@ -1300,24 +1761,29 @@ export const KYCForm = [
     manual: {
       kycForm: 'link_to_kyc_form.pdf'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {}
-      }
-    ]
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {}
+        }
+      ]
+    }
   },
   {
     country: {
       fullName: 'Other',
       shortName: 'other'
     },
-    digital: [
+    online: [
       {
         screen: 'Personal Details',
         fields: [
@@ -1331,19 +1797,24 @@ export const KYCForm = [
         ]
       }
     ],
-    manual: {
+    offline: {
       kycForm: 'link_to_kyc_form.pdf'
     },
-    attachment: [
-      {
-        name: 'Pan',
-        maxAttachment: 1,
-        fileSizeLimit: FILE_SIZE_LIMIT,
-        fileSizeUnit: supportedMediaUnit.MB,
-        isRequired: true,
-        supportedFormats: [supportedMediaFormat.PDF, supportedMediaFormat.JPEG],
-        handleChange: () => {}
-      }
-    ]
+    attachment: {
+      other: [
+        {
+          name: 'Pan',
+          maxAttachment: 1,
+          fileSizeLimit: FILE_SIZE_LIMIT,
+          fileSizeUnit: supportedMediaUnit.MB,
+          isRequired: true,
+          supportedFormats: [
+            supportedMediaFormat.PDF,
+            supportedMediaFormat.JPEG
+          ],
+          handleChange: () => {}
+        }
+      ]
+    }
   }
 ];
