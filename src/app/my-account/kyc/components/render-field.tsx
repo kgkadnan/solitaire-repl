@@ -70,7 +70,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   } = data;
 
   const dispatch = useAppDispatch();
-  console.log(formState, 'llllll');
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -79,9 +78,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             label={name}
             onChange={e =>
               handleInputChange(
-                `online.sections[${screenName}][${key}]`,
+                `formState.online.sections[${screenName}][${key}]`,
                 e.target.value,
-                dispatch
+                dispatch,
+                handleChange,
+                screenName
               )
             }
             type={inputType}

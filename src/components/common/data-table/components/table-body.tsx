@@ -18,6 +18,7 @@ import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import Link from 'next/link';
+import logger from 'logging/log-util';
 
 export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -55,7 +56,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
     if (sliderData[0].diamond_status === MEMO_OUT_STATUS) {
-      console.log('hello');
+      logger.info('Memoout');
     } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id]
@@ -80,8 +81,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
           );
           setIsPersistDialogOpen?.(true);
         })
-        .catch(() => {
-          console.log('1111111111111111');
+        .catch(error => {
+          logger.error(error);
         });
     }
   };

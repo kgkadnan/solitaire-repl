@@ -83,7 +83,6 @@ const Register = () => {
           </div>
         );
       });
-    // console.log(formState);
   };
 
   useEffect(() => {

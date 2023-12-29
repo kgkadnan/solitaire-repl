@@ -1,3 +1,9 @@
+import {
+  validateEmail,
+  validateFirstName,
+  validateLastName,
+  validatePhone
+} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 
 export enum fieldType {
@@ -414,7 +420,7 @@ export const KYCForm = [
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             isRequired: true,
-            handleChange: () => {},
+            handleChange: validateFirstName,
             key: 'first_name'
           },
           {
@@ -422,7 +428,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             isRequired: true,
-            handleChange: () => {},
+            handleChange: validateLastName,
             key: 'last_name'
           },
           {
@@ -430,7 +436,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
             isRequired: true,
-            handleChange: () => {},
+            handleChange: validatePhone,
             key: 'phone'
           },
           {
@@ -438,7 +444,7 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
             isRequired: true,
-            handleChange: () => {},
+            handleChange: validateEmail,
             key: 'email'
           }
         ]

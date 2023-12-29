@@ -7,7 +7,17 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
   formState: {
     country: '',
-    online: { sections: {} },
+    online: {
+      sections: {
+        personal_details: {
+          first_name: '',
+          last_name: '',
+          phone: '',
+          email: '',
+          country_code: '+91'
+        }
+      }
+    },
     offline: null
   },
   formErrorState: {
@@ -49,15 +59,12 @@ const formSlice = createSlice({
   reducers: {
     updateFormState: (state: any, action) => {
       const { name, value } = action.payload;
-
       setNestedValue(state, name, value);
-
       // Perform validation and update errors
       let error = null;
       if (name === 'country') error = validateCountry(value);
       if (name === 'online') error = validateOnlineSection(value);
-
-      state.formErrorState[name] = error;
+      // state.formErrorState[name] = error;
     }
     // ... other reducers
   }

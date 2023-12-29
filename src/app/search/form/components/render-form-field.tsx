@@ -365,7 +365,6 @@ const renderContent = (
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     const temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
-    console.log('temp', temp);
     if (index !== -1) {
       temp.splice(index, 1);
     } else {

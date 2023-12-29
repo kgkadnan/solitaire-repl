@@ -17,6 +17,7 @@ import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { useKycMutation } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
+import logger from 'logging/log-util';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -36,21 +37,27 @@ const KYC: React.FC = () => {
     let validationError;
     switch (screenName) {
       case 'personal_details':
-        console.log('nnnnnnnnnnnnnn', kycStoreData);
         validationError = await validateScreen(
           kycStoreData.online.sections[screenName],
           screenName,
           selectedCountry
         );
-        // if (validationError) {
-        //   dispatch(
-        //     updateFormState({ name: 'country', value: selectedOption.value })
-        //   );
-        // }
+        if (Array.isArray(validationError)) {
+          validationError.length &&
+            validationError.map(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.online.sections.${[screenName]}.${[
+                    error.property
+                  ]}`,
+                  value: Object.values(error.constraints ?? {})[0]
+                })
+              );
+            });
+        }
 
         !validationError &&
-          console.log('personal_details', kycStoreData[screenName]);
-        // code block
+          console.log('personal_details API CALL', kycStoreData[screenName]);
         kyc({
           data: {
             country: kycStoreData.country,
@@ -79,7 +86,7 @@ const KYC: React.FC = () => {
           .unwrap()
           .then((res: any) => console.log('res'))
           .catch((e: any) => {});
-        console.log('company_details', kycStoreData[screenName]);
+        console.log('company_details  API CALL', kycStoreData[screenName]);
         break;
       case 'company_owner_details':
         kyc({
@@ -115,14 +122,13 @@ const KYC: React.FC = () => {
         break;
       default:
         // code block
-        console.log('default');
+        logger.info('default');
     }
 
     !validationError && setActiveStep(prevStep => prevStep + 1);
   };
 
   const handlePrevStep = () => {
-    console.log(activeStep, 'activeStep');
     if (activeStep <= 0) {
       setCurrentState('choice_for_filling_kyc');
     } else {
@@ -279,11 +285,12 @@ const KYC: React.FC = () => {
           ]
         : ['personal_details', 'company_details', 'banking_details'];
 
-    sectionKeys.forEach((key, index: any) => {
+    sectionKeys.forEach((key, index: number) => {
+      let test = (index + 1).toString();
       dispatch(
         updateFormState({
           name: `formState.online.sections[${key}]`,
-          value: resData.online[index + 1]
+          value: resData.online[test as keyof typeof resData.online]
         })
       );
     });

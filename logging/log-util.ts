@@ -1,27 +1,30 @@
-// import logLevelData from '../log-level';
-// import pino, { Logger } from 'pino';
-// import fs from 'fs';
+import pino from 'pino';
 
-// const logLevels = new Map<string, string>(Object.entries(logLevelData));
+// Define log level based on environment
+const logLevel = process.env.NODE_ENV === 'production' ? 'info' : 'debug';
 
-// const cerate = fs.createWriteStream('./my-logs.log');
+const send = async function (level: any, logEvent: any) {
+  const url = 'server-log-stream-url';
 
-// export function getLogLevel(logger: string): string {
-//   return logLevels.get(logger) || logLevels.get('*') || 'info';
-// }
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      Authorization: 'token'
+    },
+    body: JSON.stringify([logEvent])
+  });
+};
 
-// export function getLogger(name: string): Logger {
-//   return pino(
-//     {
-//       name,
-//       level: getLogLevel(name)
+// Configure logger with dynamic log level
+const logger = pino({
+  level: logLevel,
+  browser: {
+    serialize: true,
+    asObject: true,
+    transmit: {
+      send
+    }
+  }
+});
 
-//       // ...(pino.version && pino.version.startsWith('7')
-//       //   ? { prettyPrint: true }
-//       //   : { destination: './my-logs.log' })
-//     },
-//     pino.destination(cerate)
-//   );
-// }
-
-// // pino({})
+export default logger;
