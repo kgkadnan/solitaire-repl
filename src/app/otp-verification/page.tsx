@@ -151,7 +151,7 @@ const OTPVerification = () => {
               !formErrors.mobileNumber.length
                 ? 'border-solitaireQuaternary text-solitaireTertiary'
                 : 'border-[#983131] text-[#983131]'
-            } border-b h-[4.6vh] text-[14px] focus:outline-none`}
+            } border-b min-h-[43px] h-[43px] text-[14px] focus:outline-none`}
           >
             {countryCode.countries.map(country => (
               <option
@@ -235,7 +235,7 @@ const OTPVerification = () => {
               />
             </div>
             <div className="flex flex-col justify-between gap-5">
-              <div className="flex gap-2">
+              <div className="flex gap-2 items-center justify-center">
                 <p className="text-solitaireTertiary">
                   OTP has been sent to{' '}
                   {!formState?.codeAndNumber.length
