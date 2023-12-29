@@ -279,7 +279,7 @@ const OTPVerification = () => {
                   )}
                   displayButtonAllStyle={{
                     displayButtonStyle:
-                      'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[64px]',
+                      'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[54px]',
                     displayLabelStyle:
                       'text-solitaireTertiary text-[16px] font-medium'
                   }}
@@ -291,7 +291,7 @@ const OTPVerification = () => {
                   )}
                   displayButtonAllStyle={{
                     displayButtonStyle:
-                      'bg-solitaireQuaternary w-[500px] h-[64px]',
+                      'bg-solitaireQuaternary w-[500px] h-[54px]',
                     displayLabelStyle:
                       'text-solitaireTertiary !text-[16px] font-medium'
                   }}

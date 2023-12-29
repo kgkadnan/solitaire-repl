@@ -22,7 +22,7 @@ const successfullyCreated = () => {
           <div className="mt-10">
             <div className="flex flex-col gap-3">
               {/* Button to trigger the register action */}
-              <div className="flex flex-col justify-center bg-transparent  border-2 border-solitaireQuaternary w-[500px] h-[64px] cursor-pointer">
+              <div className="flex flex-col justify-center bg-transparent  border-2 border-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
                 <Link
                   href={'/'}
                   className="text-[16px] font-medium text-solitaireTertiary"
@@ -30,7 +30,7 @@ const successfullyCreated = () => {
                   {ManageLocales('app.successfullyCreated.exploreWebsite')}
                 </Link>
               </div>
-              <div className="flex flex-col justify-center bg-solitaireQuaternary w-[500px] h-[64px] cursor-pointer">
+              <div className="flex flex-col justify-center bg-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
                 <Link
                   href={'/my-account/kyc'}
                   className="text-[16px] font-medium text-solitaireTertiary"
