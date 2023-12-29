@@ -86,7 +86,7 @@ const KYC: React.FC = () => {
           .unwrap()
           .then((res: any) => console.log('res'))
           .catch((e: any) => {});
-        console.log('company_details', kycStoreData[screenName]);
+        console.log('company_details  API CALL', kycStoreData[screenName]);
         break;
       case 'company_owner_details':
         kyc({
