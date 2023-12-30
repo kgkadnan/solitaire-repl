@@ -141,9 +141,34 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           <p className="mb-[16px]">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
+              const handleRadioChange = (value: string) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key}]`,
+                  value,
+                  dispatch,
+                  handleChange,
+                  screenName
+                );
+              };
               return (
                 <div key={items.id}>
-                  <RadioButton radioMetaData={items} key={items?.id} />
+                  <RadioButton
+                    radioMetaData={items}
+                    onChange={handleRadioChange}
+                    handleInputChange={(e: any) =>
+                      handleInputChange(
+                        `formState.online.sections[${screenName}][${key}]`,
+                        e.target.value,
+                        dispatch,
+                        handleChange,
+                        screenName
+                      )
+                    }
+                    inputValue={
+                      formState?.online?.sections?.[screenName]?.[key] ?? ''
+                    }
+                    key={items?.id}
+                  />
                 </div>
               );
             })}

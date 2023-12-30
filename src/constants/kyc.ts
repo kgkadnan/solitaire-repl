@@ -615,55 +615,55 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Individual',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Partnership Firm',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Private Ltd',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'LLP',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Public Ltd',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'OPC',
+                // onChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: '',
-                onChange: () => {},
-                name: '',
+                value: 'Other',
+                // onChange: () => {},
+                name: 'organisationType',
                 isInput: true,
-                inputName: '',
-                inputValue: '',
-                handleInputChange: '',
+                inputName: 'Other',
+                // inputValue: '',
+                // handleInputChange: '',
                 placeholder: 'If other please specify',
                 inputStyle: 'w-[150px]'
               }
