@@ -10,7 +10,6 @@ import KGKLogo from '@public/assets/icons/vector.svg';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
-import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
 import useUser from '@/lib/useAuth';
 import { isEmailValid } from '@/utils/validate-email';
 import { CustomDialog } from '@/components/common/dialog';

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ITheadProps } from '../interface';
 import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';

@@ -1,37 +1,5 @@
 import { IModalSetState } from '@/app/search/result/result-interface';
-
-interface Customer {
-  cart_id: string;
-  id: string;
-  created_at: string;
-  updated_at: string;
-  deleted_at: string | null;
-  email: string;
-  first_name: string;
-  last_name: string;
-  billing_address_id: string | null;
-  phone: string | null;
-  has_account: boolean;
-  metadata: any | null; // You might want to define a more specific type for metadata
-}
-
-interface Payment {
-  id: string;
-  created_at: string;
-  updated_at: string;
-  swap_id: string | null;
-  cart_id: string;
-  order_id: string;
-  amount: number;
-  currency_code: string;
-  amount_refunded: number;
-  provider_id: string;
-  data: any | null; // You might want to define a more specific type for data
-  captured_at: string | null;
-  canceled_at: string | null;
-  metadata: any | null; // You might want to define a more specific type for metadata
-  idempotency_key: string | null;
-}
+import { ICustomer, IPayment } from './my-invoice-interface';
 
 interface IPreviousConfirmData {
   object: string;
@@ -53,16 +21,16 @@ interface IPreviousConfirmData {
   region_id: string;
   currency_code: string;
   tax_rate: number | null;
-  customer: Customer;
+  customer: ICustomer;
   fulfillments: any[]; // You might want to define a more specific type for fulfillments
-  payments: Payment[];
+  payments: IPayment[];
   shipping_address: any | null; // You might want to define a more specific type for shipping_address
   subtotal: number;
   discount_total: number;
   total: number;
 }
 
-export interface PreviousConfirmationProps {
+export interface IPreviousConfirmationProps {
   previousConfirmData: IPreviousConfirmData[]; // You might want to define a more specific type for this data
   setOffset: (offset: number) => void;
   setLimit: (limit: number) => void;

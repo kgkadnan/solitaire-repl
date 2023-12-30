@@ -47,7 +47,6 @@ const ActiveMyCart = ({
     setDialogContent,
     setPersistDialogContent,
     setIsPersistDialogOpen,
-    setIsModalOpen,
     setIsSliderOpen
   } = modalSetState;
 

@@ -12,7 +12,7 @@ import {
   useGetManageListingSequenceQuery
 } from '@/features/api/manage-listing-sequence';
 import { ListManager } from 'react-beautiful-dnd-grid';
-import { ManageListingSequenceResponse } from './interface';
+import { IManageListingSequenceResponse } from './interface';
 import { TableColumn } from '@/app/search/result/result-interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
@@ -28,7 +28,7 @@ const ManageListingSequence = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
  `useAddManageListingSequenceMutation` from the `@/features/api/manage-listing-sequence` module. */
   const { data } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
   const [addManageListingSequence] = useAddManageListingSequenceMutation();
 
   const [manageableListings, setManageableListings] = useState<TableColumn[]>(

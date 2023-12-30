@@ -6,6 +6,7 @@ import advanceSearch from '@/constants/advance-search.json';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { computeDropdownFieldFromJson } from '../helpers/compute-dropdown-field-from-json';
 // Define interfaces for the component props
 interface IRange {
   gte: number;
@@ -52,9 +53,7 @@ const renderMeasurementField = (
     pavilionAngleFrom,
     pavilionAngleTo,
     starLengthFrom,
-    starLengthTo,
-    girdleFrom,
-    girdleTo
+    starLengthTo
   } = state;
 
   const {
@@ -242,19 +241,13 @@ const renderMeasurementField = (
     return (
       <div className={`${styles.parameterContainer} pt-6`}>
         <Select
-          options={computeDropdownField(advanceSearch.culet)}
+          options={computeDropdownFieldFromJson(advanceSearch.culet)}
           onChange={handleCuletChange}
           placeholder={'Culet'}
           styles={colourStyles}
         />
       </div>
     );
-  };
-
-  const computeDropdownField = (fieldData: string[]) => {
-    return fieldData.map(data => {
-      return { value: data, label: data };
-    });
   };
 
   const handleGirdleFrom = (data: any) => {
@@ -274,13 +267,13 @@ const renderMeasurementField = (
         />
         <div className={`${styles.filterSectio}  ${styles.parameterFilter}`}>
           <Select
-            options={computeDropdownField(advanceSearch.girdle)}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleFrom}
             styles={colourStyles}
           />
           <div className={styles.parameterLabel}>to</div>
           <Select
-            options={computeDropdownField(advanceSearch.girdle)}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleTo}
             styles={colourStyles}
           />

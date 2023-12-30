@@ -1,4 +1,4 @@
-export interface NotificationItem {
+export interface INotificationItem {
   customer_id: string;
   template: string;
   parameter: {
@@ -15,22 +15,22 @@ export interface NotificationItem {
   updated_at: Date;
 }
 
-interface NotificationData {
-  data: NotificationItem[];
+interface INotificationData {
+  data: INotificationItem[];
 }
 
-export interface NotificationProps {
-  notificationData: NotificationData | null;
+export interface INotificationProps {
+  notificationData: INotificationData | null;
   setOffset: (offset: number) => void;
   offset: number;
   limit: number;
 }
 
-export interface NotificationParameter {
+export interface IINotificationParameter {
   stoneId: string;
 }
 
-export interface NotificationUpdate {
+export interface INotificationUpdate {
   id: string;
   status: 'read' | 'unread';
 }

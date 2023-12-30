@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import styles from './form.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -79,16 +79,13 @@ used for managing the state of a form field or input element in a React componen
     addSearches,
     setAddSearches,
     isValidationError,
-    inputError,
     setInputError,
     inputErrorContent,
     setInputErrorContent,
     saveSearchName,
     setSaveSearchName,
     validationError,
-    setValidationError,
-    errors,
-    setErrors
+    setValidationError
   } = useValidationStateManagement();
 
   const searchParams = useSearchParams();
@@ -414,8 +411,6 @@ used for managing the state of a form field or input element in a React componen
         setState,
         validationError,
         setValidationError,
-        errors,
-        setErrors,
         errorState,
         errorSetState
       )}

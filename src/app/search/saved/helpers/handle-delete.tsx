@@ -1,8 +1,10 @@
+import React from 'react';
+
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import styles from '../saved.module.scss';
 import { NO_STONES_PICKED } from '@/constants/error-messages/saved';
 
-interface HandleDeleteProps {
+interface IHandleDeleteProps {
   isCheck: string[];
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
@@ -29,7 +31,7 @@ export const handleDelete = ({
   data,
   setCurrentPage,
   currentPage
-}: HandleDeleteProps) => {
+}: IHandleDeleteProps) => {
   // Get saved search data from local storage
   const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
 

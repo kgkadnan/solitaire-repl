@@ -1,13 +1,13 @@
 'use client';
 
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CustomSlider } from '../../../../components/common/slider';
 import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
 import Image from 'next/image';
 import styles from './my-diamonds.module.scss';
 import { formatDate } from '@/utils/format-date-only';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../../../../components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
@@ -58,7 +58,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   // Fetch product page table columns
   const { data: productTableColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   // Download Excel API
   let [downloadExcel] = useDownloadExcelMutation();

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { KYCForm } from '@/constants/kyc';
 import { ManageLocales } from '@/utils/translate';
 import Select from 'react-select';
@@ -9,12 +11,10 @@ import { useAppDispatch } from '@/hooks/hook';
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
   errorSetState: IErrorSetState;
-  selectedCountry: any;
 }
 export const CountrySelectionDropdown = ({
   setSelectedCountry,
-  errorSetState,
-  selectedCountry
+  errorSetState
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
   const dispatch = useAppDispatch();

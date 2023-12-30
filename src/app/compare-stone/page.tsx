@@ -25,7 +25,7 @@ import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
@@ -78,7 +78,7 @@ const CompareStone = () => {
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   // Handle adding items to the cart
   const handleAddToCart = () => {
@@ -89,7 +89,7 @@ const CompareStone = () => {
       const hasMemoOut = isCheck.some((id: string) => {
         return compareStoneData.some(
           (compareStoneData: Product) =>
-            compareStoneData.id == id &&
+            compareStoneData.id === id &&
             compareStoneData.diamond_status === 'MemoOut'
         );
       });

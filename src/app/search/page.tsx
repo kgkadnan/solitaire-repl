@@ -49,7 +49,7 @@ interface IPathName {
   fullName: string;
 }
 
-function SearchResultLayout() {
+function SearchLayout() {
   const subRoute = useSearchParams().get('active-tab');
   const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
@@ -67,7 +67,7 @@ function SearchResultLayout() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maxTab, setMaxTab] = useState<number>(0);
 
-  const [inputError, setInputError] = useState(false);
+  const [, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
 
   const [viewPort, setViewPort] = useState<boolean>(true);
@@ -617,4 +617,4 @@ function SearchResultLayout() {
   );
 }
 
-export default SearchResultLayout;
+export default SearchLayout;

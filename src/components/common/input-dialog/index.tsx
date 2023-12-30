@@ -1,14 +1,14 @@
 import React from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 
-interface CustomDialogProps {
+interface ICustomDialogProps {
   isOpen: boolean;
   onClose: () => void;
   renderContent: () => React.ReactNode; // A function that returns React nodes
   dialogStyle?: string; // Optional style string
 }
 
-export const CustomInputDialog: React.FC<CustomDialogProps> = ({
+export const CustomInputDialog: React.FC<ICustomDialogProps> = ({
   isOpen,
   onClose,
   renderContent, // This is the render function for the content

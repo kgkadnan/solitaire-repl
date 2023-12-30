@@ -23,8 +23,8 @@ import {
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import {
-  NotificationItem,
-  NotificationUpdate
+  INotificationItem,
+  INotificationUpdate
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
@@ -45,7 +45,7 @@ export const TopNavigationBar = () => {
     store => store.notificationBadge.status
   );
 
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
+  const [dialogContent] = useState<ReactNode>('');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const router = useRouter();
@@ -113,14 +113,14 @@ export const TopNavigationBar = () => {
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    const notificationMapData = data?.data?.map((item: NotificationItem) => ({
+    const notificationMapData = data?.data?.map((item: INotificationItem) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread'
     }));
 
-    const unreadNotifications: NotificationUpdate[] =
+    const unreadNotifications: INotificationUpdate[] =
       notificationMapData?.filter(
-        (item: NotificationUpdate) => item.status === 'unread'
+        (item: INotificationUpdate) => item.status === 'unread'
       );
 
     unreadNotifications.length

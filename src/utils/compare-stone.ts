@@ -1,11 +1,11 @@
-import { ProductItem } from '@/app/my-cart/interface';
+import { IProductItem } from '@/app/my-cart/interface';
 import {
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE
 } from '@/constants/business-logic';
 
 // Define an interface for the function parameters
-interface CompareStoneParams {
+interface ICompareStoneParams {
   isCheck: string[];
   setIsError: (value: boolean) => void;
   setErrorText: (text: string) => void;
@@ -17,7 +17,7 @@ export const handleCompareStone = ({
   setIsError,
   setErrorText,
   activeCartRows
-}: CompareStoneParams) => {
+}: ICompareStoneParams) => {
   const maxStones = MAX_COMPARE_STONE;
   const minStones = MIN_COMPARE_STONE;
 
@@ -29,7 +29,7 @@ export const handleCompareStone = ({
     setErrorText(`Minimum ${minStones} stones are required to compare`);
   } else {
     const compareStones = isCheck.map((id: string) => {
-      return activeCartRows.find((row: ProductItem) => row.id === id);
+      return activeCartRows.find((row: IProductItem) => row.id === id);
     });
 
     localStorage.setItem('compareStone', JSON.stringify(compareStones));

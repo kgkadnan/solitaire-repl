@@ -15,7 +15,7 @@ import { ProductItem } from './interface';
 import MemoOut from './memo/page';
 import ActiveMyCart from './active/page';
 import OutOfStock from './sold/page';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { CustomDialog } from '@/components/common/dialog';
@@ -101,7 +101,7 @@ function MyCart() {
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   // Header data for CustomHeader component
   const headerData = {

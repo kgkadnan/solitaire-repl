@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Image from 'next/image';
 import { CustomSlider } from '../../slider';
 import styles from '../custom-table.module.scss';

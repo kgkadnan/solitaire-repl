@@ -21,8 +21,6 @@ const useFieldStateManagement = () => {
 
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
-  const [selectedHR, setSelectedHR] = useState<string[]>([]);
-  const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
   const [selectedOrigin, setSelectedOrigin] = useState<string[]>([]);
   const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
@@ -99,8 +97,6 @@ const useFieldStateManagement = () => {
       selectedCulet,
       selectedKeyToSymbol,
       selectedLab,
-      selectedHR,
-      selectedBrilliance,
       selectedLocation,
       selectedOrigin,
       priceRangeFrom,
@@ -173,8 +169,6 @@ const useFieldStateManagement = () => {
       setSelectedCulet,
       setSelectedKeyToSymbol,
       setSelectedLab,
-      setSelectedHR,
-      setSelectedBrilliance,
       setSelectedLocation,
       setSelectedOrigin,
       setPriceRangeFrom,
