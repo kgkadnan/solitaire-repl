@@ -18,7 +18,7 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
-import { ProductItem } from '../interface';
+import { IProductItem } from '../interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import logger from 'logging/log-util';
@@ -75,10 +75,10 @@ const ActiveMyCart = ({
       if (data) {
         const activeDiamondItems = data?.cart?.items
           .filter(
-            (item: ProductItem) =>
+            (item: IProductItem) =>
               item?.product?.diamond_status === ACTIVE_STATUS
           )
-          .map((row: ProductItem) => row?.product);
+          .map((row: IProductItem) => row?.product);
 
         setActiveCartRows(activeDiamondItems);
       }
@@ -124,12 +124,12 @@ const ActiveMyCart = ({
   const deleteStoneHandler = () => {
     setIsPersistDialogOpen(false);
     const activeDiamondItems = data?.cart?.items.filter(
-      (item: ProductItem) => item?.product?.diamond_status === ACTIVE_STATUS
+      (item: IProductItem) => item?.product?.diamond_status === ACTIVE_STATUS
     );
 
     const itemsId = isCheck.map((id: any) => {
       const selectedRow = activeDiamondItems.find(
-        (row: ProductItem) => row.product.id === id
+        (row: IProductItem) => row.product.id === id
       );
 
       return selectedRow?.id;

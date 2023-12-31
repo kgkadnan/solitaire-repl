@@ -19,7 +19,7 @@ import { RightSideContent } from './components/right-side-content';
 import { LeftFixedContent } from './components/left-fixed-content';
 import { keyLabelMapping } from './helpers/key-label';
 import { handleShowDifferencesChange } from './helpers/handle-show-difference-function';
-import { Product } from '../search/result/result-interface';
+import { IProduct } from '../search/result/result-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
@@ -67,7 +67,7 @@ const CompareStone = () => {
   const { setConfirmStoneData } = confirmStoneSetState;
 
   const dispatch = useAppDispatch();
-  const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
 
   // Initialize state for displaying differences in stone properties
   const [showDifferences, setShowDifferences] = useState(false);
@@ -88,7 +88,7 @@ const CompareStone = () => {
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return compareStoneData.some(
-          (compareStoneData: Product) =>
+          (compareStoneData: IProduct) =>
             compareStoneData.id === id &&
             compareStoneData.diamond_status === 'MemoOut'
         );
@@ -100,8 +100,8 @@ const CompareStone = () => {
       } else {
         // Extract variant IDs for selected stones
         const variantIds = isCheck?.map((id: string) => {
-          const compareStoneCheck: Product | object =
-            compareStoneData.find((compareStone: Product) => {
+          const compareStoneCheck: IProduct | object =
+            compareStoneData.find((compareStone: IProduct) => {
               return compareStone?.id === id;
             }) ?? {};
 
@@ -213,13 +213,13 @@ const CompareStone = () => {
     );
 
     const updatedStones = compareStones.filter(
-      (stone: Product) => stone.id !== id
+      (stone: IProduct) => stone.id !== id
     );
 
     localStorage.setItem('compareStone', JSON.stringify(updatedStones));
 
     const filterData = compareStoneData.filter(
-      (item: Product) => item.id !== id
+      (item: IProduct) => item.id !== id
     );
     setCompareStoneData(filterData);
   };
@@ -267,7 +267,7 @@ const CompareStone = () => {
 
   // UseEffect to fetch and set compareStoneData from local storage
   useEffect(() => {
-    let compareStoneStoreData: Product[] = JSON.parse(
+    let compareStoneStoreData: IProduct[] = JSON.parse(
       localStorage.getItem('compareStone')!
     );
     setCompareStoneData(compareStoneStoreData);

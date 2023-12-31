@@ -18,11 +18,11 @@ import { useCheckboxStateManagement } from '../../../../components/common/checkb
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import CustomPagination from '../../../../components/common/pagination';
 import Link from 'next/link';
-import { MyDiamondsProps } from '../../interface/my-diamonds-interface';
+import { IMyDiamondsProps } from '../../interface/my-diamonds-interface';
 import { MyDiamondsSheetContent } from './sheet-content';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/my-diamond';
 
-export const MyDiamonds: React.FC<MyDiamondsProps> = ({
+export const MyDiamonds: React.FC<IMyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,

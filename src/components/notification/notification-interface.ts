@@ -26,7 +26,7 @@ export interface INotificationProps {
   limit: number;
 }
 
-export interface IINotificationParameter {
+export interface INotificationParameter {
   stoneId: string;
 }
 

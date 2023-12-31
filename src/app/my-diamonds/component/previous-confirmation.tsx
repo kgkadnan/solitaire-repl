@@ -3,9 +3,9 @@
 import { MyDiamonds } from '@/app/my-diamonds/component/my-diamond/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
 import React, { useEffect, useState } from 'react';
-import { PreviousConfirmationProps } from '../interface/previous-confirmation-interface';
+import { IPreviousConfirmationProps } from '../interface/previous-confirmation-interface';
 
-const PreviousConfirmation: React.FC<PreviousConfirmationProps> = ({
+const PreviousConfirmation: React.FC<IPreviousConfirmationProps> = ({
   previousConfirmData,
   setOffset,
   setLimit,
