@@ -616,49 +616,49 @@ export const KYCForm = [
                 id: 1,
                 label: 'Individual',
                 value: 'Individual',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
                 value: 'Partnership Firm',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
                 value: 'Private Ltd',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
                 value: 'LLP',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
                 value: 'Public Ltd',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
                 value: 'OPC',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
                 value: 'Other',
-                // onChange: () => {},
+                handleChange: () => {},
                 name: 'organisationType',
                 isInput: true,
                 inputName: 'Other',

@@ -26,7 +26,7 @@ interface IRadioData {
   id: number;
   label: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
 }
 interface IRenderFieldProps {
@@ -103,7 +103,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
         <div className="text-[14px] text-solitaireTertiary w-[70%]">
           <p className="mb-4">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
-            {checkboxData.map(item => {
+            {checkboxData.map((item: any) => {
               return (
                 <div key={item.name}>
                   <CustomCheckBox
@@ -112,7 +112,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         `online.sections[${screenName}][${key}]`,
                         isChecked,
                         dispatch,
-                        handleChange,
+                        item.handleChange,
                         screenName
                       )
                     }
@@ -122,8 +122,18 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     row={item.row}
                     isInput={item.isInput}
                     inputName={item.inputName}
-                    inputValue={item.inputValue}
-                    handleChange={item.handleInputChange}
+                    inputValue={
+                      formState?.online?.sections?.[screenName]?.[key] ?? ''
+                    }
+                    handleChange={(e: any) =>
+                      handleInputChange(
+                        `formState.online.sections[${screenName}][${key}]`,
+                        e.target.value,
+                        dispatch,
+                        item.handleInputChange,
+                        screenName
+                      )
+                    }
                     placeholder={item.placeholder}
                     checkboxLabel={item.name}
                     inputStyle="w-[150px]"
@@ -146,7 +156,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   `formState.online.sections[${screenName}][${key}]`,
                   value,
                   dispatch,
-                  handleChange,
+                  items.handleChange,
                   screenName
                 );
               };
@@ -160,7 +170,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         `formState.online.sections[${screenName}][${key}]`,
                         e.target.value,
                         dispatch,
-                        handleChange,
+                        items.handleChange,
                         screenName
                       )
                     }
