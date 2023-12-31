@@ -108,8 +108,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 <div key={item.name}>
                   <CustomCheckBox
                     myFun={(isChecked: string[]) =>
+                      !isChecked.includes('Other') &&
                       handleInputChange(
-                        `online.sections[${screenName}][${key}]`,
+                        `formState.online.sections[${screenName}][${key}]`,
                         isChecked,
                         dispatch,
                         item.handleChange,
@@ -123,12 +124,41 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     isInput={item.isInput}
                     inputName={item.inputName}
                     inputValue={
-                      formState?.online?.sections?.[screenName]?.[key] ?? ''
+                      formState?.online?.sections?.[screenName]?.[key]?.filter(
+                        (element: any) =>
+                          !checkboxData
+                            ?.map(element => {
+                              return element.name;
+                            })
+                            ?.includes(element)
+                      )[0]
+                      // formState?.online?.sections?.[screenName]?.[key] ?? ''
                     }
                     handleChange={(e: any) =>
                       handleInputChange(
                         `formState.online.sections[${screenName}][${key}]`,
-                        e.target.value,
+                        [
+                          ...(formState?.online?.sections?.[screenName]?.[
+                            key
+                          ]?.filter(
+                            (element: any) =>
+                              checkboxData
+                                ?.map(element => {
+                                  return element.name;
+                                })
+                                ?.includes(element)
+                          ) ?? []),
+                          formState?.online?.sections?.[screenName]?.[
+                            key
+                          ]?.filter(
+                            (element: any) =>
+                              !checkboxData
+                                ?.map(element => {
+                                  return element.name;
+                                })
+                                ?.includes(element)
+                          )[0] ?? '' + e
+                        ],
                         dispatch,
                         item.handleInputChange,
                         screenName
