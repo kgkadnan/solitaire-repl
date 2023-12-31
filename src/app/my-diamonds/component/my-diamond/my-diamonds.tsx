@@ -20,6 +20,7 @@ import CustomPagination from '../../../../components/common/pagination';
 import Link from 'next/link';
 import { MyDiamondsProps } from '../../interface/my-diamonds-interface';
 import { MyDiamondsSheetContent } from './sheet-content';
+import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/my-diamond';
 
 export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   data,
@@ -88,7 +89,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
   const downloadExcelFunction = () => {
     if (isCheck.length === 0) {
       setIsError(true);
-      setErrorText('Please select a stone to perform action.');
+      setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     } else if (isCheck.length) {
       performDownloadExcel({
         products: isCheck,

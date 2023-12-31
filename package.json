@@ -52,7 +52,7 @@
     "@reduxjs/toolkit": "^1.9.5",
     "@testing-library/react-hooks": "^8.0.1",
     "autoprefixer": "10.4.14",
-    "axios": "^1.4.0",
+    "class-validator": "^0.14.0",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "cmdk": "^0.2.0",
@@ -65,7 +65,7 @@
     "next-themes": "^0.2.1",
     "path": "^0.12.7",
     "pino": "^8.16.2",
-    "pino-pretty": "^10.2.3",
+    "pino-pretty": "^10.3.1",
     "postcss": "8.4.27",
     "react": "18.2.0",
     "react-beautiful-dnd-grid": "0.1.3-alpha",
@@ -74,12 +74,10 @@
     "react-redux": "^8.1.2",
     "react-scripts": "^5.0.1",
     "react-select": "^5.8.0",
-    "react-toastify": "^9.1.3",
     "tailwind-merge": "^1.14.0",
     "tailwindcss": "3.3.3",
     "tailwindcss-animate": "^1.0.6",
-    "typescript": "5.1.6",
-    "zod": "^3.22.4"
+    "typescript": "5.1.6"
   },
   "devDependencies": {
     "@storybook/addon-actions": "^7.3.0",

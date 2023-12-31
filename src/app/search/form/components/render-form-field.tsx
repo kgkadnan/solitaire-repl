@@ -365,7 +365,6 @@ const renderContent = (
     handleFilterChange(data, selectedFluorescence, setSelectedFluorescence);
     const temp: string[] = selectedFluorescence;
     const index = temp.indexOf(data);
-    console.log('temp', temp);
     if (index !== -1) {
       temp.splice(index, 1);
     } else {
@@ -398,7 +397,6 @@ const renderContent = (
       temp.length == 0
     ) {
       setSelectedMake('3G');
-      console.log('herere');
     } else if (
       selectedCut.toString() === 'F' &&
       selectedPolish.toString() === 'F' &&

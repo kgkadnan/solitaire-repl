@@ -1,20 +1,9 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  BaseQueryFn
-} from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from '../base-query';
 
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
-// Define the type for the base query function
-type BaseQuery = BaseQueryFn<any, unknown, unknown>;
-
-export const myDiamondAPI = createApi({
+export const myDiamondApi = createApi({
   reducerPath: 'recentConfirmationReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }) as BaseQuery,
+  baseQuery: createBaseQuery(),
   tagTypes: ['myDiamond'],
   endpoints: builder => ({
     cardRecentConfirmation: builder.query({
@@ -64,4 +53,4 @@ export const {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
   useGetProductDetailsQuery
-} = myDiamondAPI;
+} = myDiamondApi;

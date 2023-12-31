@@ -18,14 +18,15 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
   const myProfileRoutes = [
     {
       id: '1',
-      pathName: ManageLocales('app.myProfile.summary'),
-      path: 'summary'
-    },
-    {
-      id: '2',
       pathName: ManageLocales('app.myProfile.kyc'),
       path: 'kyc'
     },
+    {
+      id: '2',
+      pathName: ManageLocales('app.myProfile.summary'),
+      path: 'summary'
+    },
+
     {
       id: '3',
       pathName: ManageLocales('app.myProfile.changePassword'),
@@ -63,7 +64,7 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll">
+      <div className="sticky top-0 bg-solitairePrimary mt-16 overflow-y-scroll z-50">
         <CustomHeader
           data={myAccountHeader}
           mainDivStyle={styles.mainHeaderStyle}
@@ -71,11 +72,11 @@ function MyAccountLayout({ children }: { children: React.ReactNode }) {
         />
       </div>
       <div
-        className={`${styles.navBar} ${
+        className={`z-50 ${styles.navBar} ${
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="absolute top-[172px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary">
+        <div className="absolute top-[160px] left-[122px] flex flex-row items-start justify-start gap-[40px] w-full bg-solitairePrimary z-50 pb-[10px]">
           {myProfileRoutes.map(({ id, pathName, path }) => {
             // Check if the current route matches the link's path
             const isActive = currentPath === `/my-account/${path}`;

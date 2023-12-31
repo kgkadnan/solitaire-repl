@@ -7,11 +7,8 @@ import styles from './memo.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 
-import {
-  MAX_COMPARE_STONE,
-  MIN_COMPARE_STONE
-} from '@/constants/business-logic';
-import { Product } from '@/app/search/result/result-interface';
+import { handleCompareStone } from '@/utils/compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 
 const MemoOut = ({
   tableColumns,
@@ -38,33 +35,12 @@ const MemoOut = ({
   // Share handler
   const handleShare = () => {
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_SELECTED);
   };
 
   // View Similar Stone handler
   const handleViewSimilarStone = () => {
     alert('You have click the View Similar Stone');
-  };
-
-  // Compare Stone handler
-  const handleCompareStone = () => {
-    const maxStones = MAX_COMPARE_STONE;
-    const minStones = MIN_COMPARE_STONE;
-
-    if (isCheck.length > maxStones) {
-      setIsError(true);
-      setErrorText(`You can compare a maximum of ${maxStones} stones`);
-    } else if (isCheck.length < minStones) {
-      setIsError(true);
-      setErrorText(`Minimum ${minStones} stones are required to compare`);
-    } else {
-      const comapreStones = isCheck.map((id: string) => {
-        return memoRows.find((row: Product) => row.id === id);
-      });
-
-      localStorage.setItem('compareStone', JSON.stringify(comapreStones));
-      window.open('/compare-stone', '_blank');
-    }
   };
 
   //Footer Button Data
@@ -85,7 +61,13 @@ const MemoOut = ({
       id: 4,
       displayButtonLabel: 'Compare Stone',
       style: styles.transparent,
-      fn: handleCompareStone
+      fn: () =>
+        handleCompareStone({
+          isCheck,
+          setIsError,
+          setErrorText,
+          activeCartRows: memoRows
+        })
     },
 
     {
