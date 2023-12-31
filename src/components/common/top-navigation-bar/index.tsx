@@ -34,8 +34,6 @@ export interface ISavedSearch {
   isSavedSearch: boolean;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
-import { NEW_SEARCH } from '@/constants/application-constants/search-page';
-import { myAccountRoutes } from '@/constants/routes';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
@@ -69,8 +67,8 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: `/search?active-tab=${NEW_SEARCH}`,
-      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
+      link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
+      isActive: currentRoute === '/search' && subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       label: ManageLocales('app.topNav.myCart'),
@@ -80,7 +78,7 @@ export const TopNavigationBar = () => {
     {
       label: ManageLocales('app.topNav.myAccount'),
       link: '/my-account/kyc',
-      isActive: myAccountRoutes.includes(currentRoute)
+      isActive: currentRoute.includes('/my-account')
     }
   ];
 

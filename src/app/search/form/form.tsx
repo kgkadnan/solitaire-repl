@@ -22,11 +22,6 @@ import {
 import { setModifySearch } from './helpers/modify-search';
 import useValidationStateManagement from './hooks/validation-state-management';
 import renderContent from './components/render-form-field';
-import {
-  NEW_SEARCH,
-  SAVED_SEARCHES,
-  RESULT
-} from '@/constants/application-constants/search-page';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import {
@@ -111,9 +106,9 @@ used for managing the state of a form field or input element in a React componen
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
-    if (modifySearchFrom === `${SAVED_SEARCHES}` && modifysavedSearchData) {
+    if (modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}` && modifysavedSearchData) {
       setModifySearch(modifysavedSearchData, setState, carat);
-    } else if (modifySearchFrom === `${RESULT}` && modifySearchResult) {
+    } else if (modifySearchFrom === `${ManageLocales('app.search.resultRoute')}` && modifySearchResult) {
       setModifySearch(
         modifySearchResult[searchResult.activeTab]?.queryParams,
         setState,
@@ -133,7 +128,7 @@ used for managing the state of a form field or input element in a React componen
 
   // Reset form when a new search is initiated
   useEffect(() => {
-    if (isNewSearch === `${NEW_SEARCH}`) {
+    if (isNewSearch === ManageLocales('app.search.newSearchRoute')) {
       handleFormReset();
     }
   }, [isNewSearch]);
@@ -193,8 +188,8 @@ used for managing the state of a form field or input element in a React componen
     if (
       JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
-      modifySearchFrom !== `${RESULT}` &&
-      modifySearchFrom !== `${SAVED_SEARCHES}`
+      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
+      modifySearchFrom !== `${ManageLocales('app.search.savedSearchesRoute')}`
     ) {
       setIsError(true);
       setErrorText(MAX_LIMIT_REACHED);
@@ -210,7 +205,7 @@ used for managing the state of a form field or input element in a React componen
           const activeSearch: number =
             addSearches[activeTab]?.saveSearchName.length;
 
-          if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+          if (modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`) {
             if (savedSearch?.savedSearch?.meta_data) {
               let updatedMeta = savedSearch.savedSearch.meta_data;
               updatedMeta = queryParams;
@@ -220,7 +215,7 @@ used for managing the state of a form field or input element in a React componen
                 diamond_count: parseInt(data?.count)
               };
               updateSavedSearch(updateSavedData);
-              router.push(`/search?active-tab=${SAVED_SEARCHES}`);
+              router.push(`/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}`);
             }
           } else if (activeSearch) {
             const updatedMeta = addSearches;
@@ -269,7 +264,7 @@ used for managing the state of a form field or input element in a React componen
     if (
       JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
-      modifySearchFrom !== `${RESULT}`
+      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
     ) {
       setIsError(true);
       setErrorText(MAX_LIMIT_REACHED);
@@ -280,7 +275,7 @@ used for managing the state of a form field or input element in a React componen
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           const queryParams = generateQueryParams(state);
-          if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+          if (modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`) {
             if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
               const updatedMeta = [...savedSearch.savedSearch.meta_data];
               updatedMeta[savedSearch.activeTab] = queryParams;
@@ -291,7 +286,7 @@ used for managing the state of a form field or input element in a React componen
               updateSavedSearch(data);
             }
           }
-          if (modifySearchFrom === `${RESULT}`) {
+          if (modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`) {
             let modifySearchResult = JSON.parse(
               localStorage.getItem('Search')!
             );
@@ -309,7 +304,7 @@ used for managing the state of a form field or input element in a React componen
               localStorage.setItem('Search', JSON.stringify(updatedData));
             }
             router.push(
-              `/search?active-tab=${RESULT}-${searchResult.activeTab + 1}`
+              `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${searchResult.activeTab + 1}`
             );
           } else {
             let setDataOnLocalStorage = {
@@ -323,7 +318,7 @@ used for managing the state of a form field or input element in a React componen
               JSON.stringify([...addSearches, setDataOnLocalStorage])
             );
             router.push(
-              `/search?active-tab=${RESULT}-${
+              `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
                 JSON.parse(localStorage.getItem('Search')!).length
               }`
             );
@@ -438,17 +433,17 @@ used for managing the state of a form field or input element in a React componen
               displayButtonLabel: ManageLocales('app.advanceSearch.cancel'),
               style: styles.transparent,
               fn: () => {
-                if (modifySearchFrom === `${SAVED_SEARCHES}`) {
-                  router.push(`/search?active-tab=${SAVED_SEARCHES}`);
-                } else if (modifySearchFrom === `${RESULT}`) {
+                if (modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`) {
+                  router.push(`/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}`);
+                } else if (modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`) {
                   router.push(
-                    `/search?active-tab=${RESULT}-${searchResult.activeTab + 3}`
+                    `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${searchResult.activeTab + 3}`
                   );
                 }
               },
               isHidden:
-                modifySearchFrom !== `${SAVED_SEARCHES}` &&
-                modifySearchFrom !== `${RESULT}`
+                modifySearchFrom !== `${ManageLocales('app.search.savedSearchesRoute')}` &&
+                modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
             },
             {
               id: 2,
@@ -462,15 +457,15 @@ used for managing the state of a form field or input element in a React componen
                 'app.advanceSearch.saveSearch'
               )}`,
               style:
-                modifySearchFrom === `${SAVED_SEARCHES}`
+                modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`
                   ? styles.filled
                   : styles.transparent,
               fn: () => {
                 if (
                   JSON.parse(localStorage.getItem('Search')!)?.length >=
                     MAX_SEARCH_TAB_LIMIT &&
-                  modifySearchFrom !== `${RESULT}` &&
-                  modifySearchFrom !== `${SAVED_SEARCHES}`
+                  modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
+                  modifySearchFrom !== `${ManageLocales('app.search.savedSearchesRoute')}`
                 ) {
                   setIsError(true);
                   setErrorText(MAX_LIMIT_REACHED);
@@ -486,7 +481,7 @@ used for managing the state of a form field or input element in a React componen
                       const isSaved: boolean =
                         addSearches[activeTab]?.isSavedSearch;
                       // Check if the active search is not null and isSavedSearch is true
-                      if (modifySearchFrom === `${SAVED_SEARCHES}`) {
+                      if (modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`) {
                         handleSaveAndSearch();
                       } else if (isSaved) {
                         handleSaveAndSearch();
@@ -512,7 +507,7 @@ used for managing the state of a form field or input element in a React componen
                     ),
                     style: styles.filled,
                     fn: handleSearch,
-                    isHidden: modifySearchFrom === `${SAVED_SEARCHES}`
+                    isHidden: modifySearchFrom === `${ManageLocales('app.search.savedSearchesRoute')}`
                   }
                 ]
               : [

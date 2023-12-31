@@ -1,20 +1,11 @@
 import {
-  createApi,
-  fetchBaseQuery,
-  BaseQueryFn
+  createApi
 } from '@reduxjs/toolkit/query/react';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
-
-// Define the type for the base query function
-type BaseQuery = BaseQueryFn<any, unknown, unknown>;
+import { createBaseQuery } from './base-query';
 
 export const registerApi = createApi({
   reducerPath: 'registerReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }) as BaseQuery,
+  baseQuery: createBaseQuery(false),
   tagTypes: ['Register'],
 
   endpoints: builder => ({

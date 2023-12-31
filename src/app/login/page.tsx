@@ -10,11 +10,13 @@ import KGKLogo from '@public/assets/icons/vector.svg';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
-import useUser from '@/lib/useAuth';
+import useUser from '@/lib/use-auth';
 import { isEmailValid } from '@/utils/validate-email';
 import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
+import { ENTER_PASSWORD, INCORRECT_LOGIN_CREDENTIALS, INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import { Events } from '@/constants/enums/event';
 
 // Define the Login component
 const Login = () => {
@@ -55,7 +57,7 @@ const Login = () => {
         setIsDialogOpen(true);
         setDialogContent(
           <ErrorModel
-            content={'Incorrect login credential'}
+            content={INCORRECT_LOGIN_CREDENTIALS}
             handleClick={() => setIsDialogOpen(false)}
           />
         );
@@ -77,19 +79,19 @@ const Login = () => {
     } else {
       // Handle both fields being empty
       if (!password.length && !emailAndNumber.length) {
-        setPasswordErrorText('Please enter password');
-        setEmailErrorText('Please enter valid email');
+        setPasswordErrorText(ENTER_PASSWORD);
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
       } else if (!password.length) {
-        setPasswordErrorText('Please enter password');
+        setPasswordErrorText(ENTER_PASSWORD);
       } else if (!emailAndNumber.length) {
-        setEmailErrorText('Please enter valid email');
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
       }
     }
   };
 
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === Events.ENTER) {
       handleLogin();
     }
   };
@@ -111,7 +113,7 @@ const Login = () => {
         setEmailErrorText('');
         setErrorText('');
       } else {
-        setEmailErrorText('Please enter a valid email');
+        setEmailErrorText(INVALID_EMAIL_FORMAT);
         setErrorText('');
       }
     } else if (type === 'password') {

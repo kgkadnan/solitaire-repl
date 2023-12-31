@@ -28,7 +28,6 @@ import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
-import { SAVED_SEARCHES } from '@/constants/application-constants/search-page';
 import { useCommonStateManagement } from './hooks/state-management';
 import { formatRangeData } from './helpers/format-range-date';
 import { handleDelete } from './helpers/handle-delete';
@@ -409,7 +408,7 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
+    router.push(`/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}&edit=${ManageLocales('app.search.savedSearchesRoute')}`);
   };
 
   // useEffect(() => {

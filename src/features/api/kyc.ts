@@ -1,12 +1,9 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from './base-query';
 
 export const kycApi = createApi({
   reducerPath: 'kycReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }),
+  baseQuery: createBaseQuery(),
   tagTypes: ['kyc'],
 
   endpoints: builder => ({
