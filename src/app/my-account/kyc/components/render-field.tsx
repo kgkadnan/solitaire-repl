@@ -77,7 +77,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
-        <div className="">
+        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
           <FloatingLabelInput
             label={name}
             onChange={e =>
@@ -177,7 +177,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.RADIO:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+        <div className="text-[14px] text-solitaireTertiary">
           <p className="mb-[16px]">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
@@ -246,7 +246,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.FLOATING_INPUT_WITH_LABEL:
       return (
-        <div className="">
+        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
           <p className="mb-[8px] text-solitaireTertiary">{label}</p>
           <FloatingLabelInput
             label={name}
