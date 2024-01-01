@@ -68,7 +68,9 @@ export const TopNavigationBar = () => {
     {
       label: ManageLocales('app.topNav.advanceSearch'),
       link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
-      isActive: currentRoute === '/search' && subRoute === `${ManageLocales('app.search.newSearchRoute')}`
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       label: ManageLocales('app.topNav.myCart'),

@@ -13,7 +13,7 @@ import {
 } from '@/features/api/manage-listing-sequence';
 import { ListManager } from 'react-beautiful-dnd-grid';
 import { IManageListingSequenceResponse } from './interface';
-import { TableColumn } from '@/app/search/result/result-interface';
+import { ITableColumn } from '@/app/search/result/result-interface';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './manage-listing-sequence.module.scss';
 import { ManageLocales } from '@/utils/translate';
@@ -31,12 +31,12 @@ const ManageListingSequence = () => {
     useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
   const [addManageListingSequence] = useAddManageListingSequenceMutation();
 
-  const [manageableListings, setManageableListings] = useState<TableColumn[]>(
+  const [manageableListings, setManageableListings] = useState<ITableColumn[]>(
     []
   );
 
   const [nonManageableListings, setNonManageableListings] = useState<
-    TableColumn[]
+    ITableColumn[]
   >([]);
 
   const [dialogContent, setDialogContent] = useState<ReactNode>();
@@ -56,16 +56,16 @@ delay of 3000 milliseconds (3 seconds). */
   //   }
   // }, [isDialogOpen]);
 
-  // const [updateSequence, setUpdateSequence] = useState<TableColumn[]>([]);
+  // const [updateSequence, setUpdateSequence] = useState<ITableColumn[]>([]);
 
   /**
-   * The `sortList` function takes an array of `TableColumn` objects and returns a new array sorted based
+   * The `sortList` function takes an array of `ITableColumn` objects and returns a new array sorted based
    * on the `sequence` property of each object.
-   * @param {TableColumn[]} list - The `list` parameter is an array of `TableColumn` objects.
-   * @returns The function `sortList` returns a sorted copy of the input list of `TableColumn` objects.
-   * The sorting is based on the `sequence` property of each `TableColumn` object, in ascending order.
+   * @param {ITableColumn[]} list - The `list` parameter is an array of `ITableColumn` objects.
+   * @returns The function `sortList` returns a sorted copy of the input list of `ITableColumn` objects.
+   * The sorting is based on the `sequence` property of each `ITableColumn` object, in ascending order.
    */
-  const sortList = (list: TableColumn[]) => {
+  const sortList = (list: ITableColumn[]) => {
     return list
       .slice()
       .sort((first, second) => first.sequence - second.sequence);

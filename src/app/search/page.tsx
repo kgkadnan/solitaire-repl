@@ -72,7 +72,7 @@ function SearchLayout() {
         shortName: ManageLocales('app.searchResult.header.newSearch'),
         fullName: ManageLocales('app.searchResult.header.newSearch')
       },
-      path:  ManageLocales('app.search.newSearchRoute')
+      path: ManageLocales('app.search.newSearchRoute')
     },
     {
       id: 2,
@@ -87,12 +87,15 @@ function SearchLayout() {
   const computeRouteAndComponentRenderer = () => {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    const replaceSubrouteWithSearchResult = subRoute?.replace(`${ManageLocales('app.search.resultRoute')}-`, '');
+    const replaceSubrouteWithSearchResult = subRoute?.replace(
+      `${ManageLocales('app.search.resultRoute')}-`,
+      ''
+    );
 
     if (subRoute === ManageLocales('app.search.savedSearchesRoute'))
       return {
-        shortName:ManageLocales('app.search.savedSearchesHeader'),
-        fullName:ManageLocales('app.search.savedSearchesHeader')
+        shortName: ManageLocales('app.search.savedSearchHeader'),
+        fullName: ManageLocales('app.search.savedSearchHeader')
       };
     else if (subRoute === ManageLocales('app.search.newSearchRoute'))
       return {
@@ -176,7 +179,9 @@ function SearchLayout() {
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?active-tab=${ManageLocales('app.search.newSearchRoute')}`);
+      router.push(
+        `search?active-tab=${ManageLocales('app.search.newSearchRoute')}`
+      );
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
       setHeaderPath({
         shortName: `R ${removeDataIndex + 1}`,
@@ -184,14 +189,22 @@ function SearchLayout() {
       });
       setActiveTab(removeDataIndex + 1);
 
-      router.push(`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${removeDataIndex + 1}`);
+      router.push(
+        `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+          removeDataIndex + 1
+        }`
+      );
     } else {
       setHeaderPath({
         shortName: `R ${removeDataIndex}`,
         fullName: `Result ${removeDataIndex}`
       });
       setActiveTab(removeDataIndex);
-      router.push(`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${removeDataIndex}`);
+      router.push(
+        `/search?active-tab=${ManageLocales(
+          'app.search.resultRoute'
+        )}-${removeDataIndex}`
+      );
     }
 
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
@@ -291,7 +304,10 @@ function SearchLayout() {
   }, [searchUrl]);
 
   useEffect(() => {
-    if (subRoute !== ManageLocales('app.search.newSearchRoute') && subRoute !== ManageLocales('app.search.savedSearchesRoute')) {
+    if (
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute')
+    ) {
       const replaceSubrouteWithSearchResult = subRoute?.replace(
         `${ManageLocales('app.search.resultRoute')}-`,
         ''
@@ -349,8 +365,8 @@ function SearchLayout() {
             {
               id: 2,
               pathName: {
-                shortName: `${ManageLocales('app.search.savedSearchesHeader')}`,
-                fullName: `${ManageLocales('app.search.savedSearchesHeader')}`
+                shortName: `${ManageLocales('app.search.savedSearchHeader')}`,
+                fullName: `${ManageLocales('app.search.savedSearchHeader')}`
               },
               path: ManageLocales('app.search.savedSearchesRoute')
             }
@@ -369,7 +385,11 @@ function SearchLayout() {
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?active-tab=${subRoute}&edit=${ManageLocales('app.search.resultRoute')}`);
+    router.push(
+      `/search?active-tab=${subRoute}&edit=${ManageLocales(
+        'app.search.resultRoute'
+      )}`
+    );
   };
 
   const handleCloseResultTabs = () => {
@@ -386,17 +406,22 @@ function SearchLayout() {
       {
         id: 2,
         pathName: {
-          shortName: `${ManageLocales('app.search.savedSearchesHeader')}`,
-          fullName: `${ManageLocales('app.search.savedSearchesHeader')}`
+          shortName: `${ManageLocales('app.search.savedSearchHeader')}`,
+          fullName: `${ManageLocales('app.search.savedSearchHeader')}`
         },
         path: ManageLocales('app.search.savedSearchesRoute')
       }
     ]);
-    router.push(`/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`);
+    router.push(
+      `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`
+    );
   };
 
   const isRoute = (path: string) => {
-    return path === ManageLocales('app.search.newSearchRoute') || path === ManageLocales('app.search.savedSearchesRoute');
+    return (
+      path === ManageLocales('app.search.newSearchRoute') ||
+      path === ManageLocales('app.search.savedSearchesRoute')
+    );
   };
 
   useEffect(() => {
@@ -427,14 +452,14 @@ function SearchLayout() {
           />
         </div>
 
-        <div className="flex  gap-2">
+        <div className="flex justify-center  gap-5">
           {/* Button to trigger the register action */}
 
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
             displayButtonAllStyle={{
               displayButtonStyle:
-                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
@@ -447,7 +472,7 @@ function SearchLayout() {
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.advanceSearch.save')}
             displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
@@ -540,7 +565,9 @@ function SearchLayout() {
                           : 'hover:text-solitaireQuaternary'
                       }`}
                       onClick={() => handleSearchTab(parseInt(path), pathName)}
-                      href={`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${path}`}
+                      href={`/search?active-tab=${ManageLocales(
+                        'app.search.resultRoute'
+                      )}-${path}`}
                       key={id}
                     >
                       <div
@@ -588,11 +615,13 @@ function SearchLayout() {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {headerPath.fullName === `${ManageLocales('app.search.newSearchHeader')}` ||
+          {headerPath.fullName ===
+            `${ManageLocales('app.search.newSearchHeader')}` ||
           editSubRoute === ManageLocales('app.search.savedSearchesRoute') ||
           editSubRoute === `${ManageLocales('app.search.resultRoute')}` ? (
             <AdvanceSearch />
-          ) : headerPath.fullName === `${ManageLocales('app.search.savedSearchesHeader')}` ? (
+          ) : headerPath.fullName ===
+            `${ManageLocales('app.search.savedSearchHeader')}` ? (
             <SavedSearch />
           ) : headerPath.fullName === 'No Data Found' ? (
             <NoDataFound />

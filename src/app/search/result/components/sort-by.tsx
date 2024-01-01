@@ -7,11 +7,11 @@ import Image from 'next/image';
 import sortOutline from '@public/assets/icons/sort-outline.svg';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { sortProducts } from '../helpers/sort-produts';
-import { ISortBySetState, ISortByState, Product } from '../result-interface';
+import { ISortBySetState, ISortByState, IProduct } from '../result-interface';
 
 interface ISrotByProps {
-  rows: Product[];
-  setRows: Dispatch<SetStateAction<Product[]>>;
+  rows: IProduct[];
+  setRows: Dispatch<SetStateAction<IProduct[]>>;
   sortByState: ISortByState;
   sortBySetState: ISortBySetState;
 }

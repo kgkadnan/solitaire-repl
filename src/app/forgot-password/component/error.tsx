@@ -10,7 +10,9 @@ const ErrorModel = ({ content, handleClick }: any) => {
     <div className="flex gap-[20px] flex-col items-center justify-center">
       <div className="flex">
         <Image src={ErrorImage} alt="Error Image" />
-        <p className="text-[20px] text-[#C51A2D] ml-[8px]">{ManageLocales('app.forgotpassword.errorText')}</p>
+        <p className="text-[20px] text-[#C51A2D] ml-[8px]">
+          {ManageLocales('app.forgotpassword.errorText')}
+        </p>
       </div>
       <div className="text-[16px] text-solitaireTertiary">
         <p>{content}</p>

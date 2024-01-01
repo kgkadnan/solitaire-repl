@@ -98,7 +98,7 @@ const Register = () => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormState((prev:any) => ({ ...prev, [name]: value }));
+    setFormState((prev: any) => ({ ...prev, [name]: value }));
     validateField({ name, value, setFormErrors, formState });
   };
   // Handle Enter key press for login

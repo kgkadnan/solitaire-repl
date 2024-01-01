@@ -2,7 +2,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 
 export const handleInputChange = async (
   path: string,
-  value: string,
+  value: string | string[],
   dispatch: any,
   handleChange: any,
   screenName: string

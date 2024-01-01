@@ -13,11 +13,11 @@ import { NoDataFound } from '../common/no-data-found';
 import {
   INotificationItem,
   INotificationParameter,
-  NotificationProps,
+  INotificationProps,
   INotificationUpdate
 } from './notification-interface';
 
-export const Notification: React.FC<NotificationProps> = ({
+export const Notification: React.FC<INotificationProps> = ({
   notificationData,
   setOffset,
   offset,

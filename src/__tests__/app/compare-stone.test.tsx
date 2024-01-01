@@ -37,10 +37,10 @@ describe('Compare stone component', () => {
       const successIndicator = screen.queryByTestId('success-indicator');
 
       if (successIndicator) {
-        // Success scenario: Product successfully added to cart
+        // Success scenario: IProduct successfully added to cart
         expect(successIndicator).toBeInTheDocument();
       } else {
-        // Error scenario: Product is already in the cart
+        // Error scenario: IProduct is already in the cart
         const errorIndicator = screen.getByTestId('error-indicator');
         expect(errorIndicator).toBeInTheDocument();
       }

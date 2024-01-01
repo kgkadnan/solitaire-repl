@@ -173,14 +173,14 @@ const OTPVerification = () => {
             errorText={formErrors.mobileNumber}
           />
         </div>
-        <div className="flex  gap-2">
+        <div className="flex justify-center  gap-5">
           {/* Button to trigger the register action */}
 
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.OTPVerification.cancel')}
             displayButtonAllStyle={{
               displayButtonStyle:
-                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
@@ -193,7 +193,7 @@ const OTPVerification = () => {
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.OTPVerification.save')}
             displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}

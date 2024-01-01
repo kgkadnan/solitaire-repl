@@ -15,7 +15,11 @@ import { isEmailValid } from '@/utils/validate-email';
 import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
-import { ENTER_PASSWORD, INCORRECT_LOGIN_CREDENTIALS, INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import {
+  ENTER_PASSWORD,
+  INCORRECT_LOGIN_CREDENTIALS,
+  INVALID_EMAIL_FORMAT
+} from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 
 // Define the Login component
