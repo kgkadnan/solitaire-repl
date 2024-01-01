@@ -1,13 +1,13 @@
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { ICardData } from '@/app/search/saved/saved-interface';
 import { Dispatch, SetStateAction } from 'react';
 
 //Selecting All Checkbox Function
-interface IhandleSelectAllCheckbox {
+interface IHandleSelectAllCheckbox {
   setIsCheck?: Dispatch<SetStateAction<string[]>>;
   setIsCheckAll?: Dispatch<SetStateAction<boolean>>;
   isCheckAll?: boolean;
-  data: Product[] | ICardData[];
+  data: IProduct[] | ICardData[];
 }
 
 export const handleSelectAllCheckbox = ({
@@ -15,10 +15,10 @@ export const handleSelectAllCheckbox = ({
   isCheckAll,
   setIsCheck,
   data
-}: IhandleSelectAllCheckbox) => {
+}: IHandleSelectAllCheckbox) => {
   setIsCheckAll?.(!isCheckAll);
 
-  setIsCheck?.(data?.map((item: Product | ICardData) => item.id));
+  setIsCheck?.(data?.map((item: IProduct | ICardData) => item.id));
   if (isCheckAll) {
     setIsCheck?.([]);
   }

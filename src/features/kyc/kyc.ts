@@ -1,7 +1,7 @@
 import {
-  validateCountry,
-  validateOnlineSection
-} from '@/app/my-account/kyc/helper/handle-validation';
+  KYC_INDEX_MATCH,
+  PATH_SEPARATOR
+} from '@/constants/validation-regex/regex';
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -36,7 +36,7 @@ const setNestedValue = (obj: any, path: string, value: string | string[]) => {
   // Traverse the object based on the path
   keys.forEach(key => {
     // Handle array indices
-    const indexMatch = key.match(/^(\w+)(\d+)?$/);
+    const indexMatch = key.match(KYC_INDEX_MATCH);
     if (indexMatch) {
       const [, arrayKey, arrayIndex] = indexMatch;
       if (arrayIndex !== undefined) {
@@ -60,13 +60,7 @@ const formSlice = createSlice({
     updateFormState: (state: any, action) => {
       const { name, value } = action.payload;
       setNestedValue(state, name, value);
-      // Perform validation and update errors
-      let error = null;
-      if (name === 'country') error = validateCountry(value);
-      if (name === 'online') error = validateOnlineSection(value);
-      // state.formErrorState[name] = error;
     }
-    // ... other reducers
   }
 });
 

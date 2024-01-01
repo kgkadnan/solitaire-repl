@@ -23,13 +23,6 @@ import {
 } from '@/features/api/saved-searches';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
-import {
-  NEW_SEARCH,
-  SAVED_SEARCHES,
-  RESULT,
-  SAVED_SEARCH_HEADER,
-  NEW_SEARCH_HEADER
-} from '@/constants/application-constants/search-page';
 import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
@@ -49,7 +42,7 @@ interface IPathName {
   fullName: string;
 }
 
-function SearchResultLayout() {
+function SearchLayout() {
   const subRoute = useSearchParams().get('active-tab');
   const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
@@ -67,7 +60,7 @@ function SearchResultLayout() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maxTab, setMaxTab] = useState<number>(0);
 
-  const [inputError, setInputError] = useState(false);
+  const [, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
 
   const [viewPort, setViewPort] = useState<boolean>(true);
@@ -79,7 +72,7 @@ function SearchResultLayout() {
         shortName: ManageLocales('app.searchResult.header.newSearch'),
         fullName: ManageLocales('app.searchResult.header.newSearch')
       },
-      path: `${NEW_SEARCH}`
+      path:  ManageLocales('app.search.newSearchRoute')
     },
     {
       id: 2,
@@ -87,28 +80,28 @@ function SearchResultLayout() {
         shortName: ManageLocales('app.savedSearch.header'),
         fullName: ManageLocales('app.savedSearch.header')
       },
-      path: `${SAVED_SEARCHES}`
+      path: ManageLocales('app.search.savedSearchesRoute')
     }
   ]);
 
   const computeRouteAndComponentRenderer = () => {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    const replaceSubrouteWithSearchResult = subRoute?.replace(`${RESULT}-`, '');
+    const replaceSubrouteWithSearchResult = subRoute?.replace(`${ManageLocales('app.search.resultRoute')}-`, '');
 
-    if (subRoute === `${SAVED_SEARCHES}`)
+    if (subRoute === ManageLocales('app.search.savedSearchesRoute'))
       return {
-        shortName: `${SAVED_SEARCH_HEADER}`,
-        fullName: `${SAVED_SEARCH_HEADER}`
+        shortName:ManageLocales('app.search.savedSearchesHeader'),
+        fullName:ManageLocales('app.search.savedSearchesHeader')
       };
-    else if (subRoute === `${NEW_SEARCH}`)
+    else if (subRoute === ManageLocales('app.search.newSearchRoute'))
       return {
-        shortName: `${NEW_SEARCH_HEADER}`,
-        fullName: `${NEW_SEARCH_HEADER}`
+        shortName: ManageLocales('app.search.newSearchHeader'),
+        fullName: ManageLocales('app.search.newSearchHeader')
       };
     else if (
-      subRoute !== `${SAVED_SEARCHES}` &&
-      subRoute !== `${NEW_SEARCH}` &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute') &&
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
       replaceSubrouteWithSearchResult
     ) {
       const isRouteExist =
@@ -129,13 +122,13 @@ function SearchResultLayout() {
       (replaceSubrouteWithSearchResult?.length === 0 || subRoute === null)
     ) {
       return {
-        shortName: `${NEW_SEARCH_HEADER}`,
-        fullName: `${NEW_SEARCH_HEADER}`
+        shortName: ManageLocales('app.search.newSearchHeader'),
+        fullName: ManageLocales('app.search.newSearchHeader')
       };
     }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  const [headerPath, setheaderPath] = useState<any>(
+  const [headerPath, setHeaderPath] = useState<any>(
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
@@ -150,7 +143,7 @@ function SearchResultLayout() {
     }
   );
   useEffect(() => {
-    setheaderPath(computeRouteAndComponentRenderer());
+    setHeaderPath(computeRouteAndComponentRenderer());
   }, [subRoute]);
 
   const handleScroll = () => {
@@ -183,22 +176,22 @@ function SearchResultLayout() {
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?active-tab=${NEW_SEARCH}`);
+      router.push(`search?active-tab=${ManageLocales('app.search.newSearchRoute')}`);
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      setheaderPath({
+      setHeaderPath({
         shortName: `R ${removeDataIndex + 1}`,
         fullName: `Result ${removeDataIndex + 1}`
       });
       setActiveTab(removeDataIndex + 1);
 
-      router.push(`/search?active-tab=${RESULT}-${removeDataIndex + 1}`);
+      router.push(`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${removeDataIndex + 1}`);
     } else {
-      setheaderPath({
+      setHeaderPath({
         shortName: `R ${removeDataIndex}`,
         fullName: `Result ${removeDataIndex}`
       });
       setActiveTab(removeDataIndex);
-      router.push(`/search?active-tab=${RESULT}-${removeDataIndex}`);
+      router.push(`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${removeDataIndex}`);
     }
 
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
@@ -298,9 +291,9 @@ function SearchResultLayout() {
   }, [searchUrl]);
 
   useEffect(() => {
-    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
+    if (subRoute !== ManageLocales('app.search.newSearchRoute') && subRoute !== ManageLocales('app.search.savedSearchesRoute')) {
       const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${RESULT}-`,
+        `${ManageLocales('app.search.resultRoute')}-`,
         ''
       );
       setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
@@ -348,18 +341,18 @@ function SearchResultLayout() {
             {
               id: 1,
               pathName: {
-                shortName: `${NEW_SEARCH_HEADER}`,
-                fullName: `${NEW_SEARCH_HEADER}`
+                shortName: `${ManageLocales('app.search.newSearchHeader')}`,
+                fullName: `${ManageLocales('app.search.newSearchHeader')}`
               },
-              path: `${NEW_SEARCH}`
+              path: ManageLocales('app.search.newSearchRoute')
             },
             {
               id: 2,
               pathName: {
-                shortName: `${SAVED_SEARCH_HEADER}`,
-                fullName: `${SAVED_SEARCH_HEADER}`
+                shortName: `${ManageLocales('app.search.savedSearchesHeader')}`,
+                fullName: `${ManageLocales('app.search.savedSearchesHeader')}`
               },
-              path: `${SAVED_SEARCHES}`
+              path: ManageLocales('app.search.savedSearchesRoute')
             }
           ]);
         }
@@ -371,12 +364,12 @@ function SearchResultLayout() {
 
   const handleSearchTab = (index: number, pathName: IPathName) => {
     setActiveTab(index);
-    setheaderPath(pathName);
+    setHeaderPath(pathName);
   };
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?active-tab=${subRoute}&edit=${RESULT}`);
+    router.push(`/search?active-tab=${subRoute}&edit=${ManageLocales('app.search.resultRoute')}`);
   };
 
   const handleCloseResultTabs = () => {
@@ -385,25 +378,25 @@ function SearchResultLayout() {
       {
         id: 1,
         pathName: {
-          shortName: `${NEW_SEARCH_HEADER}`,
-          fullName: `${NEW_SEARCH_HEADER}`
+          shortName: `${ManageLocales('app.search.newSearchHeader')}`,
+          fullName: `${ManageLocales('app.search.newSearchHeader')}`
         },
-        path: `${NEW_SEARCH}`
+        path: ManageLocales('app.search.newSearchRoute')
       },
       {
         id: 2,
         pathName: {
-          shortName: `${SAVED_SEARCH_HEADER}`,
-          fullName: `${SAVED_SEARCH_HEADER}`
+          shortName: `${ManageLocales('app.search.savedSearchesHeader')}`,
+          fullName: `${ManageLocales('app.search.savedSearchesHeader')}`
         },
-        path: `${SAVED_SEARCHES}`
+        path: ManageLocales('app.search.savedSearchesRoute')
       }
     ]);
-    router.push(`/search?active-tab=${NEW_SEARCH}`);
+    router.push(`/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`);
   };
 
   const isRoute = (path: string) => {
-    return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}`;
+    return path === ManageLocales('app.search.newSearchRoute') || path === ManageLocales('app.search.savedSearchesRoute');
   };
 
   useEffect(() => {
@@ -547,7 +540,7 @@ function SearchResultLayout() {
                           : 'hover:text-solitaireQuaternary'
                       }`}
                       onClick={() => handleSearchTab(parseInt(path), pathName)}
-                      href={`/search?active-tab=${RESULT}-${path}`}
+                      href={`/search?active-tab=${ManageLocales('app.search.resultRoute')}-${path}`}
                       key={id}
                     >
                       <div
@@ -595,11 +588,11 @@ function SearchResultLayout() {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {headerPath.fullName === `${NEW_SEARCH_HEADER}` ||
-          editSubRoute === `${SAVED_SEARCHES}` ||
-          editSubRoute === `${RESULT}` ? (
+          {headerPath.fullName === `${ManageLocales('app.search.newSearchHeader')}` ||
+          editSubRoute === ManageLocales('app.search.savedSearchesRoute') ||
+          editSubRoute === `${ManageLocales('app.search.resultRoute')}` ? (
             <AdvanceSearch />
-          ) : headerPath.fullName === `${SAVED_SEARCH_HEADER}` ? (
+          ) : headerPath.fullName === `${ManageLocales('app.search.savedSearchesHeader')}` ? (
             <SavedSearch />
           ) : headerPath.fullName === 'No Data Found' ? (
             <NoDataFound />
@@ -617,4 +610,4 @@ function SearchResultLayout() {
   );
 }
 
-export default SearchResultLayout;
+export default SearchLayout;

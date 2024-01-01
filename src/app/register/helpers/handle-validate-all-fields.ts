@@ -1,23 +1,24 @@
-import { FormState, initialFormState } from '../interface';
+import React from 'react';
+import { IRegister, initialFormState } from '../interface';
 import { validateField } from './validate-field';
 
 interface IValidateAllFields {
-  formState: FormState;
-  setFormErrors: React.Dispatch<React.SetStateAction<FormState>>;
+  formState: IRegister;
+  setFormErrors: React.Dispatch<React.SetStateAction<IRegister>>;
 }
 
 export const validateAllFields = ({
   formState,
   setFormErrors
 }: IValidateAllFields) => {
-  let errors: FormState = { ...initialFormState };
+  let errors: IRegister = { ...initialFormState };
   let isValid = true;
 
   // Validate each field
   Object.keys(formState).forEach(key => {
     const fieldError = validateField({
       name: key,
-      value: formState[key as keyof FormState],
+      value: formState[key as keyof IRegister],
       setFormErrors,
       formState
     });

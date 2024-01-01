@@ -13,8 +13,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedCulet,
     setSelectedKeyToSymbol,
     setSelectedLab,
-    setSelectedHR,
-    setSelectedBrilliance,
     setSelectedLocation,
     setSelectedOrigin,
     setPriceRangeFrom,
@@ -82,13 +80,11 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.culet && setSelectedCulet(data?.culet);
   data?.polish && setSelectedPolish(data?.polish);
   data?.location && setSelectedLocation(data?.location);
-  data?.HA && setSelectedHR(data?.HA);
   data?.symmetry && setSelectedSymmetry(data?.symmetry);
   data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
   data?.country_of_origin && setSelectedOrigin(data?.country_of_origin);
   data?.color_shade && setSelectedTinge(data?.color_shade);
   data?.overtone && setSelectedOvertone(data?.overtone);
-  data?.brilliance && setSelectedBrilliance(data?.brilliance);
   data?.priceRange && setPriceRangeFrom(data?.priceRange?.gte);
   data?.priceRange && setPriceRangeTo(data?.priceRange?.lte);
   data?.discount && setDiscountFrom(data?.discount?.gte);

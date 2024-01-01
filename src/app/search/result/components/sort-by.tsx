@@ -114,7 +114,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Default',
       label: 'Default',
-      checked: selectedDefaultValue == 'Default'
+      checked: selectedDefaultValue === 'Default'
     }
   ];
   const carartRadioData = [
@@ -142,7 +142,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Clarity - Low to High',
       label: 'Clarity - (FL - I3)',
-      checked: selectedClarityRadioValue == 'Clarity - Low to High'
+      checked: selectedClarityRadioValue === 'Clarity - Low to High'
     },
     {
       name: 'clarity',
@@ -150,7 +150,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'Clarity - High to Low',
       label: 'Clarity - (I3 - FL)',
-      checked: selectedClarityRadioValue == 'Clarity - High to Low'
+      checked: selectedClarityRadioValue === 'Clarity - High to Low'
     }
   ];
   const amountRadioData = [
@@ -160,7 +160,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Amount - Low to High',
       label: 'Amount - Low to High',
-      checked: selectedPriceRadioValue == 'Amount - Low to High'
+      checked: selectedPriceRadioValue === 'Amount - Low to High'
     },
     {
       name: 'Amount',
@@ -168,7 +168,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'Amount - High to Low',
       label: 'Amount - High to Low',
-      checked: selectedPriceRadioValue == 'Amount - High to Low'
+      checked: selectedPriceRadioValue === 'Amount - High to Low'
     }
   ];
   const discountRadioData = [
@@ -178,7 +178,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Discount - Low to High',
       label: 'Discount - Low to High',
-      checked: selectedDiscountRadioValue == 'Discount - Low to High'
+      checked: selectedDiscountRadioValue === 'Discount - Low to High'
     },
     {
       name: 'discount',
@@ -186,7 +186,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'Discount - High to Low',
       label: 'Discount - High to Low',
-      checked: selectedDiscountRadioValue == 'Discount - High to Low'
+      checked: selectedDiscountRadioValue === 'Discount - High to Low'
     }
   ];
   const tableInclusionRadioData = [
@@ -197,7 +197,7 @@ code also combines all the radio button data arrays into a single array called R
       value: 'Table_Inclusion - Low to High',
       label: 'Table Inclusion - (T0 - T3)',
       checked:
-        seletedTableInclusionRadioValue == 'Table_Inclusion - Low to High'
+        seletedTableInclusionRadioValue === 'Table_Inclusion - Low to High'
     },
     {
       name: 'Table Inclusion',
@@ -206,7 +206,7 @@ code also combines all the radio button data arrays into a single array called R
       value: 'Table_Inclusion - High to Low',
       label: 'Table Inclusion - (T3 - T0)',
       checked:
-        seletedTableInclusionRadioValue == 'Table_Inclusion - High to Low'
+        seletedTableInclusionRadioValue === 'Table_Inclusion - High to Low'
     }
   ];
   const fluorescenceRadioData = [
@@ -216,7 +216,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'Fluorescence - Low to High',
       label: 'Fluorescence - (None - Very Strong) ',
-      checked: selectedFluorescenceRadioValue == 'Fluorescence - Low to High'
+      checked: selectedFluorescenceRadioValue === 'Fluorescence - Low to High'
     },
     {
       name: 'Fluorescence',
@@ -224,7 +224,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'Fluorescence - High to Low',
       label: 'Fluorescence - (Very Strong - None) ',
-      checked: selectedFluorescenceRadioValue == 'Fluorescence - High to Low'
+      checked: selectedFluorescenceRadioValue === 'Fluorescence - High to Low'
     }
   ];
   const blackTableRadioData = [
@@ -234,7 +234,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'table_black - Low to High',
       label: 'Black Table - (B0 - B3) ',
-      checked: selectedBlackTableRadioValue == 'table_black - Low to High'
+      checked: selectedBlackTableRadioValue === 'table_black - Low to High'
     },
     {
       name: 'Black Table',
@@ -242,7 +242,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'table_black - High to Low',
       label: 'Black Table - (B3 - B0) ',
-      checked: selectedBlackTableRadioValue == 'table_black - High to Low'
+      checked: selectedBlackTableRadioValue === 'table_black - High to Low'
     }
   ];
   const sideBlackRadioData = [
@@ -252,7 +252,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '1',
       value: 'side_black - Low to High',
       label: 'Side Black - (SB0 - SB3) ',
-      checked: selectedSideBlackRadioValue == 'side_black - Low to High'
+      checked: selectedSideBlackRadioValue === 'side_black - Low to High'
     },
     {
       name: 'Side Black',
@@ -260,7 +260,7 @@ code also combines all the radio button data arrays into a single array called R
       id: '2',
       value: 'side_black - High to Low',
       label: 'Side Black - (SB3 - SB0) ',
-      checked: selectedSideBlackRadioValue == 'side_black - High to Low'
+      checked: selectedSideBlackRadioValue === 'side_black - High to Low'
     }
   ];
   const RadioData = [

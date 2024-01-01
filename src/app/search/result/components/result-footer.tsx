@@ -85,7 +85,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
-          (row: Product) => row.id == id && row.diamond_status === 'MemoOut'
+          (row: Product) => row.id === id && row.diamond_status === 'MemoOut'
         );
       });
 

@@ -8,7 +8,7 @@ import { ManageLocales } from '@/utils/translate';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import errorImage from '@public/assets/icons/error.svg';
 import countryCode from '../../constants/country-code.json';
-import { FormState, initialFormState } from './interface';
+import { IRegister, initialFormState } from './interface';
 import { Events } from '@/constants/enums/event';
 import { useRegisterMutation } from '@/features/api/register';
 import { validateField } from './helpers/validate-field';
@@ -19,8 +19,8 @@ import { useRouter } from 'next/navigation';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import KGKlogo from '@public/assets/icons/vector.svg';
 const Register = () => {
-  const [formState, setFormState] = useState<FormState>(initialFormState);
-  const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
+  const [formState, setFormState] = useState<IRegister>(initialFormState);
+  const [formErrors, setFormErrors] = useState<IRegister>(initialFormState);
 
   const router = useRouter();
 
@@ -98,7 +98,7 @@ const Register = () => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
+    setFormState((prev:any) => ({ ...prev, [name]: value }));
     validateField({ name, value, setFormErrors, formState });
   };
   // Handle Enter key press for login

@@ -17,8 +17,6 @@ export const handleReset = (setState: any, errorSetState: any) => {
     setSelectedCulet,
     setSelectedKeyToSymbol,
     setSelectedLab,
-    setSelectedHR,
-    setSelectedBrilliance,
     setSelectedLocation,
     setSelectedOrigin,
     setPriceRangeFrom,
@@ -107,8 +105,6 @@ export const handleReset = (setState: any, errorSetState: any) => {
   setSelectedSymmetry([]);
   setSelectedFluorescence([]);
   setSelectedLab([]);
-  setSelectedHR([]);
-  setSelectedBrilliance([]);
   setPriceRangeFrom('');
   setPriceRangeTo('');
   setDiscountFrom('');

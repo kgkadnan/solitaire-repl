@@ -1,11 +1,11 @@
 import { StylesConfig } from 'react-select';
 
-interface ColourOption {
+interface IColourOption {
   readonly value: string;
   readonly label: string;
 }
 
-export const colourStyles: StylesConfig<ColourOption, true> = {
+export const colourStyles: StylesConfig<IColourOption, true> = {
   control: styles => ({
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',

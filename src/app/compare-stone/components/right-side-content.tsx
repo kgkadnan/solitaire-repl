@@ -5,7 +5,7 @@ import styles from '../styles/right-side-content.module.scss';
 import { FILE_URLS } from '@/constants/business-logic';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IRightSideContentProps } from '../interface';
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { useState } from 'react';
 import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
 
@@ -36,7 +36,7 @@ export function RightSideContent({
       <div
         className={`flex border-b border-solitaireSenary ${styles.dimaondImageContainer}`}
       >
-        {compareStoneData.map((items: Product) => (
+        {compareStoneData.map((items: IProduct) => (
           <div key={items.id} className="border-r border-solitaireSenary">
             <div className={`h-[200px]  ${styles.diamondImageContainer}`}>
               <Image

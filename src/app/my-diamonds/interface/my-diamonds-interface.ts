@@ -22,11 +22,11 @@ export interface IFilterByDaysProps {
   setPreviousConfirmationSelectedDays: (selectedDays: string) => void;
 }
 
-export interface PageTitles {
+export interface IPageTitles {
   [key: string]: string;
 }
 
-export interface MyDiamondsProps {
+export interface IMyDiamondsProps {
   data: any;
   handleCardClick: (id: string) => void;
   productPageDetail?: any;
@@ -37,7 +37,7 @@ export interface MyDiamondsProps {
   modalSetState: IModalSetState;
 }
 
-export interface MyDiamondsSheetContentProps {
+export interface IMyDiamondsSheetContentProps {
   check: string | undefined;
   productPageDetail: any;
   rows: any[];

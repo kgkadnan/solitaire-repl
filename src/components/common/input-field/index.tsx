@@ -2,9 +2,9 @@
 import React from 'react';
 import styles from './input-field.module.scss';
 import { Input } from '@components/ui/input';
-import { InputFieldProps } from './interface';
+import { IInputFieldProps } from './interface';
 
-export const CustomInputField: React.FC<InputFieldProps> = ({
+export const CustomInputField: React.FC<IInputFieldProps> = ({
   style,
   type,
   value,

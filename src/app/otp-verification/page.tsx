@@ -1,7 +1,6 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
@@ -16,13 +15,13 @@ import { CustomInputDialog } from '@/components/common/input-dialog';
 import { CustomDialog } from '@/components/common/dialog';
 import KGKlogo from '@public/assets/icons/vector.svg';
 
-export interface FormState {
+export interface IOtp {
   mobileNumber: string;
   countryCode: string;
   codeAndNumber: string;
 }
 
-const initialFormState: FormState = {
+const initialFormState: IOtp = {
   mobileNumber: '',
   countryCode: '',
   codeAndNumber: ''
@@ -50,8 +49,8 @@ const OTPVerification = () => {
   ]);
   const [resendTimer, setResendTimer] = useState<number>(60);
 
-  const [formState, setFormState] = useState<FormState>(initialFormState);
-  const [formErrors, setFormErrors] = useState<FormState>(initialFormState);
+  const [formState, setFormState] = useState<IOtp>(initialFormState);
+  const [formErrors, setFormErrors] = useState<IOtp>(initialFormState);
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;

@@ -20,15 +20,14 @@ import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import { ICardData, IDateRange, IFormatedData, Item } from './saved-interface';
-import { KeyLabelMapping } from '@/components/common/data-table/interface';
+import { ICardData, IDateRange, IFormatedData, IItem } from './saved-interface';
+import { IKeyLabelMapping } from '@/components/common/data-table/interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '@/components/common/checkbox/helper/handle-select-all-checkbox';
-import { SAVED_SEARCHES } from '@/constants/application-constants/search-page';
 import { useCommonStateManagement } from './hooks/state-management';
 import { formatRangeData } from './helpers/format-range-date';
 import { handleDelete } from './helpers/handle-delete';
@@ -168,7 +167,7 @@ const SavedSearch = () => {
   };
 
   // Mapping data keys and table column labels
-  const keyLabelMapping: KeyLabelMapping = useMemo(() => {
+  const IKeyLabelMapping: IKeyLabelMapping = useMemo(() => {
     return {
       shape: 'Shape',
       carat: 'carat',
@@ -186,11 +185,11 @@ const SavedSearch = () => {
   const renderCardData = useCallback(
     (data: any) => {
       return data?.map((item: any) => {
-        // Filter the data based on the keyLabelMapping
+        // Filter the data based on the IKeyLabelMapping
         const filteredData: IFormatedData = {};
-        for (const key in keyLabelMapping) {
+        for (const key in IKeyLabelMapping) {
           if (item.meta_data && !Array.isArray(item.meta_data[key])) {
-            filteredData[keyLabelMapping[key]] = formatRangeData(
+            filteredData[IKeyLabelMapping[key]] = formatRangeData(
               item.meta_data[key]
             );
           } else if (
@@ -198,11 +197,11 @@ const SavedSearch = () => {
             Array.isArray(item.meta_data[key]) &&
             typeof item.meta_data[key][0] !== 'string'
           ) {
-            filteredData[keyLabelMapping[key]] = formatRangeData(
+            filteredData[IKeyLabelMapping[key]] = formatRangeData(
               item.meta_data[key][0]
             );
           } else {
-            filteredData[keyLabelMapping[key]] =
+            filteredData[IKeyLabelMapping[key]] =
               item.meta_data[key] && item.meta_data[key]?.length
                 ? item.meta_data[key]
                 : '-';
@@ -247,7 +246,7 @@ const SavedSearch = () => {
         };
       });
     },
-    [searchCardTitle, tableStyles, keyLabelMapping]
+    [searchCardTitle, tableStyles, IKeyLabelMapping]
   );
 
   // Handler for deleting saved searches
@@ -281,12 +280,12 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchList.filter((item: Item) =>
+      const filteredSuggestions = searchList.filter((item: IItem) =>
         item.name.toLowerCase().includes(inputValue.toLowerCase())
       );
       // Extract card titles from filtered suggestions
       const suggestionTitles = filteredSuggestions.map(
-        (item: Item) => item.name
+        (item: IItem) => item.name
       );
 
       setSuggestions(suggestionTitles);
@@ -409,7 +408,7 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
+    router.push(`/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}&edit=${ManageLocales('app.search.savedSearchesRoute')}`);
   };
 
   // useEffect(() => {

@@ -1,5 +1,5 @@
-import { TableColumn } from '@/app/search/result/result-interface';
+import { ITableColumn } from '@/app/search/result/result-interface';
 
-export interface ManageListingSequenceResponse {
-  data: TableColumn[];
+export interface IManageListingSequenceResponse {
+  data: ITableColumn[];
 }

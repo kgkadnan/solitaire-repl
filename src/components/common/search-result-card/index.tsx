@@ -48,8 +48,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
   const {
     overriddenStyles = {},
     handleCardAction = () => {},
-    defaultCardPosition = true,
-    blurContent
+    defaultCardPosition = true
   } = card;
   const {
     cardContainerStyle,

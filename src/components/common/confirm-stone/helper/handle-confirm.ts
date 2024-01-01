@@ -26,7 +26,7 @@ export const handleConfirmStone = (
     setIsComeFromConfirmStone(true);
   }
   const hasMemoOut = isCheck?.some(id => {
-    return rows.some(row => row.id == id && row.diamond_status === 'MemoOut');
+    return rows.some(row => row.id === id && row.diamond_status === 'MemoOut');
   });
 
   if (hasMemoOut) {

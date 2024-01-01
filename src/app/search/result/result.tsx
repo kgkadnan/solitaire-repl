@@ -49,7 +49,7 @@ const SearchResults = ({
   const { setRows, setTableColumns } = dataTableSetState;
 
   const { refetchDataToDefault } = sortByState;
-  const { inputError, inputErrorContent } = errorState;
+  const { inputErrorContent } = errorState;
   const { setInputError, setInputErrorContent, setIsSliderError } =
     errorSetState;
 
@@ -70,7 +70,6 @@ const SearchResults = ({
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent,
     setIsModalOpen,
     setIsPersistDialogOpen
   } = modalSetState;

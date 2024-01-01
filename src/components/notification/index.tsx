@@ -11,10 +11,10 @@ import { useUpdateNotificationMutation } from '@/features/api/notification';
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '../common/no-data-found';
 import {
-  NotificationItem,
-  NotificationParameter,
+  INotificationItem,
+  INotificationParameter,
   NotificationProps,
-  NotificationUpdate
+  INotificationUpdate
 } from './notification-interface';
 
 export const Notification: React.FC<NotificationProps> = ({
@@ -27,12 +27,12 @@ export const Notification: React.FC<NotificationProps> = ({
 
   const [updateNotification] = useUpdateNotificationMutation();
   const [storeNotificationData, setStoreNotificationData] = useState<
-    NotificationItem[]
+    INotificationItem[]
   >([]);
 
   const storeMyNotificationData = useCallback(() => {
     if (offset > 0) {
-      const newNotificationData: NotificationItem[] = (
+      const newNotificationData: INotificationItem[] = (
         notificationData?.data ?? []
       ).filter(
         newItem =>
@@ -63,7 +63,7 @@ export const Notification: React.FC<NotificationProps> = ({
 
   function stringWithHTMLReplacement(
     template: string,
-    parameter: NotificationParameter
+    parameter: INotificationParameter
   ) {
     const parts = template?.split('${{');
 
@@ -76,7 +76,7 @@ export const Notification: React.FC<NotificationProps> = ({
         return (
           <span key={index}>
             <span style={{ fontWeight: 600 }}>
-              {parameter[paramName as keyof NotificationParameter]}
+              {parameter[paramName as keyof INotificationParameter]}
             </span>
             {part.substr(paramName.length + 2)}
           </span>
@@ -88,9 +88,9 @@ export const Notification: React.FC<NotificationProps> = ({
   }
 
   const handleNotificationRead = async (category: string) => {
-    const filteredData: NotificationUpdate[] = storeNotificationData
-      ?.filter((item: NotificationItem) => item.category === category)
-      .map((item: NotificationItem) => ({ id: item.id, status: 'read' }));
+    const filteredData: INotificationUpdate[] = storeNotificationData
+      ?.filter((item: INotificationItem) => item.category === category)
+      .map((item: INotificationItem) => ({ id: item.id, status: 'read' }));
 
     await updateNotification(filteredData);
   };
@@ -101,7 +101,7 @@ export const Notification: React.FC<NotificationProps> = ({
 
   const handleMarkAllAsRead = async () => {
     const notificationMapData = storeNotificationData.map(
-      (item: NotificationItem) => ({
+      (item: INotificationItem) => ({
         id: item.id,
         status: 'read'
       })
@@ -144,7 +144,7 @@ export const Notification: React.FC<NotificationProps> = ({
         </div>
         <div className={` ${styles.newNotificationContainer}`}>
           {storeNotificationData?.length > 0 ? (
-            storeNotificationData?.map((items: NotificationItem) => {
+            storeNotificationData?.map((items: INotificationItem) => {
               return (
                 <div
                   key={items.customer_id}

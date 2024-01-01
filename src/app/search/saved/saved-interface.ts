@@ -45,10 +45,6 @@ export interface IInclusionDetails {
   internal_graining: string[];
 }
 
-export interface KeyLabelMapping {
-  [key: string]: string;
-}
-
 export interface IOtherInformation {
   [key: string]: string[] | string;
   girdle: string[];
@@ -57,7 +53,6 @@ export interface IOtherInformation {
 
 export interface IBasicCardDetails {
   [key: string]: string[] | string;
-  'H&A': string[];
   cut: string[];
   lab: string[];
   carat: string[];
@@ -71,7 +66,6 @@ export interface IBasicCardDetails {
   overtone: string[];
   symmetry: string[];
   intensity: string[];
-  brilliance: string[];
   color_shade: string[];
   price_range: string;
   fluoroscence: string[];
@@ -106,7 +100,7 @@ export interface IFormatedData {
   [key: string]: string | string[];
 }
 
-export interface Item {
+export interface IItem {
   name: string;
 }
 

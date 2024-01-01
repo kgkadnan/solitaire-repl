@@ -1,3 +1,5 @@
+import React from 'react';
+
 import {
   INVALID_EMAIL_FORMAT,
   MINIMUM_CHAR_PASSWORD,
@@ -8,13 +10,13 @@ import {
   EMAIL_REGEX,
   PASSWORD_REGEX
 } from '@/constants/validation-regex/regex';
-import { FormState } from '../interface';
+import { IRegister } from '../interface';
 
 interface IValidateField {
   name: string;
   value: string;
-  setFormErrors: React.Dispatch<React.SetStateAction<FormState>>;
-  formState: FormState;
+  setFormErrors: React.Dispatch<React.SetStateAction<IRegister>>;
+  formState: IRegister;
 }
 export const validateField = ({
   name,

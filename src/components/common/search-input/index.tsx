@@ -8,7 +8,7 @@ interface IInputStyle {
   searchInputMain?: string;
 }
 
-interface InputFieldProps {
+interface ISearchInputProps {
   style?: IInputStyle;
   type: string;
   value?: string;
@@ -20,7 +20,7 @@ interface InputFieldProps {
   handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-export const CustomSearchInputField: React.FC<InputFieldProps> = ({
+export const CustomSearchInputField: React.FC<ISearchInputProps> = ({
   style,
   type,
   value,

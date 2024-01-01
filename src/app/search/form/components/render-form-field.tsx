@@ -4,7 +4,7 @@ import { CustomInputField } from '@/components/common/input-field';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
-import renderOtherParameterFields from './render-inclusion-field';
+import renderInclusionField from './render-inclusion-field';
 import renderMeasurementField from './render-measurement-field';
 import renderSelectionButtons from './render-selection-button';
 import styles from '../form.module.scss';
@@ -13,14 +13,13 @@ import { handleFilterChange } from '../helpers/handle-change';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { computeDropdownFieldFromJson } from '../helpers/compute-dropdown-field-from-json';
 
 const renderContent = (
   state: any,
   setState: any,
   validationError: any,
   setValidationError: any,
-  errors: any,
-  setErrors: any,
   errorState: any,
   errorSetState: any
 ) => {
@@ -45,8 +44,6 @@ const renderContent = (
     selectedFluorescence,
     selectedKeyToSymbol,
     selectedLab,
-    selectedHR,
-    selectedBrilliance,
     selectedLocation,
     selectedOrigin,
     priceRangeFrom,
@@ -56,9 +53,7 @@ const renderContent = (
     pricePerCaratFrom,
     pricePerCaratTo,
     caratRangeFrom,
-    caratRangeTo,
-    selectedFancyColor,
-    selectedOvertone
+    caratRangeTo
   } = state;
 
   const {
@@ -77,8 +72,6 @@ const renderContent = (
     setSelectedFluorescence,
     setSelectedKeyToSymbol,
     setSelectedLab,
-    setSelectedHR,
-    setSelectedBrilliance,
     setSelectedLocation,
     setSelectedOrigin,
     setPriceRangeFrom,
@@ -394,14 +387,14 @@ const renderContent = (
       selectedCut.toString() === 'G' &&
       selectedPolish.toString() === 'G' &&
       selectedSymmetry.toString() === 'G' &&
-      temp.length == 0
+      temp.length === 0
     ) {
       setSelectedMake('3G');
     } else if (
       selectedCut.toString() === 'F' &&
       selectedPolish.toString() === 'F' &&
       selectedSymmetry.toString() === 'F' &&
-      temp.length == 0
+      temp.length === 0
     ) {
       setSelectedMake('3F');
     } else {
@@ -488,12 +481,6 @@ const renderContent = (
     } else {
       setCaratError('Max upto 5 carat can be added');
     }
-  };
-
-  const computeDropdownField = (fieldData: string[]) => {
-    return fieldData.map(data => {
-      return { value: data, label: data };
-    });
   };
 
   return (
@@ -644,7 +631,7 @@ const renderContent = (
         >
           <div className="w-[30%]">
             <Select
-              options={computeDropdownField(advanceSearch.fancy)}
+              options={computeDropdownFieldFromJson(advanceSearch.fancy)}
               onChange={handleFancyFilterChange}
               placeholder={ManageLocales('app.advanceSearch.fancyColor')}
               styles={colourStyles}
@@ -654,7 +641,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
-              options={computeDropdownField(advanceSearch.intensity)}
+              options={computeDropdownFieldFromJson(advanceSearch.intensity)}
               onChange={handleIntensityChange}
               placeholder={ManageLocales('app.advanceSearch.intensity')}
               styles={colourStyles}
@@ -664,7 +651,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
-              options={computeDropdownField(advanceSearch.overtone)}
+              options={computeDropdownFieldFromJson(advanceSearch.overtone)}
               onChange={handleOvertoneChange}
               placeholder={ManageLocales('app.advanceSearch.overtone')}
               styles={colourStyles}
@@ -1030,7 +1017,7 @@ const renderContent = (
         </div>
         <div className={styles.filterSectionData}>
           <div className={styles.filterSection}>
-            {renderOtherParameterFields(state, setState)}
+            {renderInclusionField(state, setState)}
           </div>
         </div>
       </div>

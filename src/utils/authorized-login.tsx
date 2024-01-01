@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Correct import for useRouter
-import useUser from '../lib/useAuth';
+import useUser from '../lib/use-auth';
 import CustomLoader from '@/components/common/loader';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {

@@ -1,4 +1,6 @@
-export interface IfooterButtonData {
+import React from 'react';
+
+export interface IFooterButtonData {
   id: number;
   displayButtonLabel: string | React.ReactNode;
   style?: string;
@@ -7,6 +9,6 @@ export interface IfooterButtonData {
 }
 
 export interface ICustomFooterProps {
-  footerButtonData?: IfooterButtonData[];
+  footerButtonData?: IFooterButtonData[];
   noBorderTop?: string;
 }
