@@ -7,6 +7,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { IRightSideContentProps } from '../interface';
 import { Product } from '@/app/search/result/result-interface';
 import { useState } from 'react';
+import { MINIMUM_STONES } from '@/constants/error-messages/compare-stone';
 
 export function RightSideContent({
   compareStoneData,
@@ -59,10 +60,7 @@ export function RightSideContent({
                 onClick={event =>
                   compareStoneData.length > 2
                     ? handleClose(event, items.id)
-                    : (setIsError(true),
-                      setErrorText(
-                        'Two stones should be available for comparison.'
-                      ))
+                    : (setIsError(true), setErrorText(MINIMUM_STONES))
                 }
               >
                 <CloseButton />

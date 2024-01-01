@@ -11,7 +11,7 @@ const UserAuthenticationLayout: React.FC<UserAuthenticationLayoutProps> = ({
 }) => {
   return (
     <div className="w-full flex">
-      <div className="w-[50%] h-full">
+      <div className="w-[50%] h-full ">
         <div>
           <Image
             style={{ width: '100vw', height: '100vh' }}
@@ -20,7 +20,9 @@ const UserAuthenticationLayout: React.FC<UserAuthenticationLayoutProps> = ({
           />
         </div>
       </div>
-      <div className="w-[50%] flex justify-center text-center">{formData}</div>
+      <div className="w-[50%] flex justify-center text-center h-[100vh] overflow-auto">
+        {formData}
+      </div>
     </div>
   );
 };

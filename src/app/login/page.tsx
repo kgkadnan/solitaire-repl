@@ -1,20 +1,21 @@
 'use client';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { useVerifyLoginMutation } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
-import handImage from '@public/assets/images/noto_waving-hand.png';
+import KGKLogo from '@public/assets/icons/vector.svg';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import Link from 'next/link';
 import { ManageLocales } from '@/utils/translate';
-import {
-  EMAIL_REGEX,
-  PASSWORD_REGEX,
-  PHONE_REGEX
-} from '@/constants/validation-regex/regex';
+import { EMAIL_REGEX, PHONE_REGEX } from '@/constants/validation-regex/regex';
+import useUser from '@/lib/useAuth';
+import { isEmailValid } from '@/utils/validate-email';
+import { CustomDialog } from '@/components/common/dialog';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import ErrorModel from '@/components/common/error-model';
 
 // Define the Login component
 const Login = () => {
@@ -26,8 +27,17 @@ const Login = () => {
   const [errorText, setErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { dialogContent, isDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
+  const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
+  useEffect(() => {
+    if (isTokenChecked) {
+      authToken && router.push('/');
+    }
+  }, [isTokenChecked]);
   // Handle the login logic
   const handleLogin = async () => {
     if (
@@ -40,14 +50,28 @@ const Login = () => {
         email: emailAndNumber,
         password: password
       });
-      if (res.error) {
+
+      if (res?.error?.status === 401) {
         // Display error message if login fails
-        setIsError(true);
-        setErrorText(res.error.data.message);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <ErrorModel
+            content={'Incorrect login credential'}
+            handleClick={() => setIsDialogOpen(false)}
+          />
+        );
+      } else if (res.error) {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <ErrorModel
+            content={res.error.data.message}
+            handleClick={() => setIsDialogOpen(false)}
+          />
+        );
       } else {
         // Redirect to home page if login is successful
-        if (res.data.customer) {
-          localStorage.removeItem('Search');
+        if (res.data.access_token) {
+          userLoggedIn(res.data.access_token);
           router.push('/');
         }
       }
@@ -55,11 +79,11 @@ const Login = () => {
       // Handle both fields being empty
       if (!password.length && !emailAndNumber.length) {
         setPasswordErrorText('Please enter password');
-        setEmailErrorText('Please enter email/Phone number');
+        setEmailErrorText('Please enter valid email');
       } else if (!password.length) {
         setPasswordErrorText('Please enter password');
       } else if (!emailAndNumber.length) {
-        setEmailErrorText('Please enter email/Phone number');
+        setEmailErrorText('Please enter valid email');
       }
     }
   };
@@ -71,18 +95,11 @@ const Login = () => {
     }
   };
 
-  // Function to validate email format
-  const isEmailValid = (email: string) => {
-    // Regular expression for basic email validation
-    const emailRegex = EMAIL_REGEX;
-    return emailRegex.test(email);
-  };
-
   // Function to validate phone number format
-  const isPhoneNumberValid = (number: string) => {
-    const phoneRegex = PHONE_REGEX;
-    return phoneRegex.test(number);
-  };
+  // const isPhoneNumberValid = (number: string) => {
+  //   const phoneRegex = PHONE_REGEX;
+  //   return phoneRegex.test(number);
+  // };
 
   const handleInputChange = (e: any, type: string) => {
     const inputValue = e.target.value;
@@ -90,11 +107,12 @@ const Login = () => {
     if (type === 'email') {
       setEmailAndNumber(inputValue);
 
-      if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
+      // if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
+      if (isEmailValid(inputValue)) {
         setEmailErrorText('');
         setErrorText('');
       } else {
-        setEmailErrorText('Please enter a valid email or phone number');
+        setEmailErrorText('Please enter a valid email');
         setErrorText('');
       }
     } else if (type === 'password') {
@@ -107,90 +125,94 @@ const Login = () => {
 
   // JSX rendering for the Login component
   return (
-    <UserAuthenticationLayout
-      formData={
-        <div className="flex justify-center flex-col w-[500px]">
-          <div
-            style={{
-              display: 'flex',
-              flexDirection: 'column',
-              gap: '20px',
-              marginBottom: '40px',
-              alignItems: 'center'
-            }}
-          >
-            <Image src={handImage} alt="Banner image" />
-            <CustomInputlabel
-              htmlfor={''}
-              label={ManageLocales('app.login')}
-              overriddenStyles={{
-                label: 'text-solitaireQuaternary text-[48px] font-semibold'
-              }}
-            />
-            <div className="">
-              <p className="text-solitaireTertiary">
-                {ManageLocales('app.login.welcomeMessage')}
-              </p>
-            </div>
-          </div>
+    <>
+      <CustomDialog
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        data-testid={'success-indicator'}
+      />
+      <UserAuthenticationLayout
+        formData={
+          <div className="flex justify-center flex-col w-full max-w-md px-4 lg:max-w-lg xl:max-w-xl 2xl:max-w-[500px] mx-auto">
+            <div className="flex flex-col gap-2 mb-[40px] items-center">
+              <Image
+                src={KGKLogo}
+                alt="Banner image"
+                style={{ width: '60px', height: '80px' }}
+              />
+              <div>
+                <CustomInputlabel
+                  htmlfor={''}
+                  label={ManageLocales('app.login')}
+                  overriddenStyles={{
+                    label:
+                      'text-solitaireQuaternary text-4xl sm:text-5xl md:text-6xl font-semibold mb-4'
+                  }}
+                />
+              </div>
 
-          {/* Input field for email */}
-          <div className="flex flex-col gap-[40px]">
-            <FloatingLabelInput
-              label={ManageLocales('app.login.emailAndNumber')}
-              onChange={e => handleInputChange(e, 'email')}
-              type="email"
-              name="email"
-              onKeyDown={handleKeyDown}
-              value={emailAndNumber}
-              errorText={emailErrorText}
-            />
-            {/* Input field for password */}
-            <FloatingLabelInput
-              label={ManageLocales('app.login.password')}
-              onChange={e => handleInputChange(e, 'password')}
-              type="Password"
-              name="Password"
-              onKeyDown={handleKeyDown}
-              value={password}
-              errorText={passwordErrorText}
-              showPassword={true}
-            />
+              <div>
+                <p className="text-solitaireTertiary text-sm sm:text-base">
+                  {ManageLocales('app.login.welcomeMessage')}
+                </p>
+              </div>
+            </div>
+
+            {/* Input fields */}
+            <div className="flex flex-col gap-7">
+              <FloatingLabelInput
+                label={ManageLocales('app.login.emailAndNumber')}
+                onChange={e => handleInputChange(e, 'email')}
+                type="email"
+                name="email"
+                onKeyDown={handleKeyDown}
+                value={emailAndNumber}
+                errorText={emailErrorText}
+              />
+              <FloatingLabelInput
+                label={ManageLocales('app.login.password')}
+                onChange={e => handleInputChange(e, 'password')}
+                type="password"
+                name="password"
+                onKeyDown={handleKeyDown}
+                value={password}
+                errorText={passwordErrorText}
+                showPassword={true}
+              />
+            </div>
 
             <div>
-              {/* Display error message if there is an error */}
-              <div className="h-6 mb-3">
-                {isError ? (
+              <div className="flex justify-center items-center text-sm sm:text-base h-10">
+                {isError && (
                   <div className="text-red-600 flex text-left">{errorText}</div>
-                ) : (
-                  ''
                 )}
               </div>
-              {/* Button to trigger the login action */}
 
               <CustomDisplayButton
                 displayButtonLabel={ManageLocales('app.login')}
                 displayButtonAllStyle={{
-                  displayButtonStyle: 'bg-[#9f8b75] w-[500px] h-[64px]',
+                  displayButtonStyle:
+                    'bg-solitaireQuaternary w-full h-14 mb-10', // Adjust height as needed
                   displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
+                    'text-solitaireTertiary text-base font-medium'
                 }}
                 handleClick={handleLogin}
               />
             </div>
 
-            <div className="">
+            <div>
               <Link
                 href={'/forgot-password'}
-                className="text-[18px] font-medium"
+                className="text-lg text-solitaireQuaternary font-medium"
               >
                 {ManageLocales('app.login.forgotPassword')}
               </Link>
-              <div className="mt-[20px]">
-                <p className="text-solitaireTertiary text-[18px] font-light">
+              <div className="mt-5">
+                <p className="text-solitaireTertiary text-lg font-light">
                   {ManageLocales('app.login.newUser')}
                   <Link
-                    href={''}
+                    href={'/register'}
                     className="text-solitaireQuaternary font-medium"
                   >
                     {ManageLocales('app.login.register')}
@@ -199,9 +221,9 @@ const Login = () => {
               </div>
             </div>
           </div>
-        </div>
-      }
-    />
+        }
+      />
+    </>
   );
 };
 

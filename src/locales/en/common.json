@@ -68,6 +68,7 @@
   "app.advanceSearch.addAnotherSearch": "Add Another Search",
 
   "app.advanceSearch.search": "Search",
+  "app.advanceSearch.save": "Save",
 
   "app.advanceSearch.from": "From",
   "app.advanceSearch.to": "To",
@@ -142,6 +143,13 @@
   "app.myProfile.kyc.photoId": "Photo ID of person/s authorised to collect goods",
   "app.myProfile.kyc.download": "Download",
   "app.myProfile.kyc.upload": "Upload",
+  "app.myProfile.kyc.country": "Country",
+
+  "app.myaccount.kyc.chooseTheCountry": "Choose the Country",
+  "app.myaccount.kyc.choiceOfFillingTheKYCForm": "Choice of filling the KYC form",
+  "app.myaccount.kyc.saveAndNext": "Save and Next",
+  "app.myaccount.kyc.next": "Next",
+  "app.myaccount.kyc.back": "Back",
 
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
@@ -229,24 +237,49 @@
   "app.login": "Login",
   "app.login.welcomeMessage": "Welcome back! Please login to your account",
   "app.login.forgotPassword": "Forgot Password?",
-  "app.login.newUser": "New User ?",
+  "app.login.newUser": "New User?",
   "app.login.register": " Register",
   "app.login.emailAndNumber": "Email / Mobile Number",
   "app.login.password": "Password",
+
+  "app.register": "Register",
+  "app.register.okay": "Okay!",
+  "app.register.welcomeMessage": "Welcome! Please register to create account",
+  "app.register.firstName": "First Name*",
+  "app.register.lastName": "Last Name*",
+  "app.register.email": "Email*",
+  "app.register.mobileNumber": "Mobile Number*",
+  "app.register.companyName": "Company Name*",
+  "app.register.password": "Password*",
+  "app.register.confirmPassword": "Confirm Password*",
+
+  "app.register.registerAsAGuest": "Register as a Guest",
+
+  "app.OTPVerification": "Verification",
+  "app.OTPVerification.goBack": "Go Back",
+  "app.OTPVerification.verify": "Verify",
+  "app.OTPVerification.resend": "Resend",
+  "app.OTPVerification.save": "Save",
+  "app.OTPVerification.cancel": "Cancel",
+
+  "app.successfullyCreated.exploreWebsite": "Explore Website",
+  "app.successfullyCreated.finishKYCProcess": "Finish KYC Process",
 
   "app.confirmationScreen.message": "Your account has been successfully created!",
   "app.confirmationScreen.exploreWebsite": "Explore Website",
   "app.confirmationScreen.finishKycProcess": "Finish KYC Process",
 
   "app.forgotpassword": "Forgot Password",
-  "app.forgotpassword.message": "Please enter your registered phone number to reset password",
-  "app.forgotpassword.mobileNumber": "Mobile Number",
-  "app.forgotpassword.sendOtp": "Send OTP",
+  "app.forgotpassword.message": "Please enter your registered mail and we’ll send you link to reset your password.",
+  "app.forgotpassword.emailId": "Email ID",
+  "app.forgotpassword.goBackToLogin": "Go Back to Login",
+  "app.forgotpassword.submit": "Submit",
 
   "app.resetPassword.resetPassword": "Reset Password",
   "app.resetPassword.password": "Password*",
   "app.resetPassword.confirmPassword": "Confirm Password*",
 
+  "app.companyDetails.registerCompanyName": "Registered Company Name*",
   "app.personalDetail.firstName": "First Name*",
   "app.personalDetail.contactNumber": "Contact Number*",
   "app.personalDetail.contactEmailId": "Contact Email-ID*"

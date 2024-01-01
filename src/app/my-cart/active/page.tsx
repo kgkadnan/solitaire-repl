@@ -11,11 +11,7 @@ import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
-import {
-  ACTIVE_STATUS,
-  MAX_COMPARE_STONE,
-  MIN_COMPARE_STONE
-} from '@/constants/business-logic';
+import { ACTIVE_STATUS } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 
@@ -23,7 +19,9 @@ import { useConfirmStoneStateManagement } from '@/components/common/confirm-ston
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
 import { ProductItem } from '../interface';
-import { Product } from '@/app/search/result/result-interface';
+import { handleCompareStone } from '@/utils/compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import logger from 'logging/log-util';
 
 const ActiveMyCart = ({
   tableColumns,
@@ -119,28 +117,7 @@ const ActiveMyCart = ({
       );
     } else {
       setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
-    }
-  };
-
-  // Compare Stone handler
-  const handleCompareStone = () => {
-    const maxStones = MAX_COMPARE_STONE;
-    const minStones = MIN_COMPARE_STONE;
-
-    if (isCheck.length > maxStones) {
-      setIsError(true);
-      setErrorText(`You can compare a maximum of ${maxStones} stones`);
-    } else if (isCheck.length < minStones) {
-      setIsError(true);
-      setErrorText(`Minimum ${minStones} stones are required to compare`);
-    } else {
-      const comapreStones = isCheck.map((id: string) => {
-        return activeCartRows.find((row: Product) => row.id === id);
-      });
-
-      localStorage.setItem('compareStone', JSON.stringify(comapreStones));
-      window.open('/compare-stone', '_blank');
+      setErrorText(NO_STONES_SELECTED);
     }
   };
 
@@ -179,14 +156,14 @@ const ActiveMyCart = ({
         setIsDialogOpen(true);
       })
       .catch(error => {
-        console.log('error', error);
+        logger.error(error);
       });
     setIsDialogOpen(false);
   };
 
   const handleAppointment = () => {
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_SELECTED);
   };
 
   // Configuration for footer buttons
@@ -215,7 +192,13 @@ const ActiveMyCart = ({
             },
             {
               label: 'Compare Stone',
-              fn: handleCompareStone
+              fn: () =>
+                handleCompareStone({
+                  isCheck,
+                  setIsError,
+                  setErrorText,
+                  activeCartRows
+                })
             }
           ]}
         />

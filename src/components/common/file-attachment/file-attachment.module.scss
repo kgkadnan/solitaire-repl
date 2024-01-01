@@ -30,14 +30,12 @@
   width: 100%;
 }
 
-.menuTriggerStyle{
+.menuTriggerStyle {
   background: hsl(var(--solitaire-secondary));
   padding: 0px !important;
 }
 
-
-
-.menuContentStyle{
+.menuContentStyle {
   background-color: hsl(var(--solitaire-primary));
   border: none;
   border-radius: 10px;
@@ -50,4 +48,3 @@
   color: hsl(var(--solitaire-tertiary));
   border-radius: 30px;
 }
-

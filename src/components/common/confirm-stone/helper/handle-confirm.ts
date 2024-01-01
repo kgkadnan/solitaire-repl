@@ -1,4 +1,6 @@
 import { Product } from '@/app/search/result/result-interface';
+import { SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 
 /**
@@ -28,18 +30,16 @@ export const handleConfirmStone = (
   });
 
   if (hasMemoOut) {
-    setErrorText(
-      'Some stones in your selection are not available, Please modify your selection.'
-    );
+    setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
     setIsError(true);
   } else if (isCheck?.length) {
     setIsError(false);
-    setErrorText('Please select a stone to perform action.');
+    setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
     setIsSliderOpen(true);
     const confirmStone = rows.filter(item => isCheck?.includes(item.id));
     setConfirmStoneData(confirmStone);
   } else {
     setIsError(true);
-    setErrorText('Please select a stone to perform action.');
+    setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
   }
 };

@@ -1,3 +1,4 @@
+'use client';
 import React, { KeyboardEventHandler, useState } from 'react';
 import styles from './floating-input.module.scss';
 import EyeSlash from '@public/assets/icons/eye-off-outline.svg?url';
@@ -31,7 +32,7 @@ export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
   };
 
   return (
-    <div className="relative z-0 w-[500px]">
+    <div className="relative z-0 w-full">
       <input
         type={showPassword && isPasswordVisible ? 'text' : type}
         name={name}

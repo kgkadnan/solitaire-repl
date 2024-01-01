@@ -38,6 +38,7 @@ import { handleCardClick } from './helpers/handle-card-click';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
+import logger from 'logging/log-util';
 
 const SavedSearch = () => {
   // State management hooks
@@ -269,7 +270,7 @@ const SavedSearch = () => {
         setIsDialogOpen(true);
       })
       .catch((error: Error) => {
-        console.log('error', error);
+        logger.error(error);
       });
     setIsCheck([]);
     setIsCheckAll(false);
@@ -411,17 +412,17 @@ const SavedSearch = () => {
     router.push(`/search?active-tab=${SAVED_SEARCHES}&edit=${SAVED_SEARCHES}`);
   };
 
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3500);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   return (
     <>
