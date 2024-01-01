@@ -108,7 +108,7 @@ const MyDiamonds = () => {
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
-  }, [myDiamondRecentConfirmData, recentConfirmData]);
+  }, [myDiamondRecentConfirmData]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {

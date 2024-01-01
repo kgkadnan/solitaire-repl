@@ -3,6 +3,7 @@ import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
 import styles from './email-notification.module.scss';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const EmailNotificationData = [
   {
@@ -64,15 +65,7 @@ const EmailNotification = () => {
                 <p className="text-solitaireTertiary text-base  font-thin">
                   {id}. {notificationName}
                 </p>
-                {/* <CustomCheckBox
-                  data={id}
-                  isChecked={isCheck}
-                  setIsCheck={setIsCheck}
-                  setIsCheckAll={setIsCheckAll}
-                  isCheckAll={isCheckAll}
-                  row={tableRows}
-                  setIsError={setIsError}
-                /> */}
+                <Checkbox />
               </div>
             );
           })}

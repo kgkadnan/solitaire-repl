@@ -79,12 +79,11 @@
   "app.advanceSearch.range": "Range",
   "app.advanceSearch.cancel": "Cancel",
 
-  "app.search.newSearchHeader":"New Search",
-  "app.search.savedSearchHeader":"Saved Searches",
-  "app.search.newSearchRoute":"new-search",
-  "app.search.savedSearchesRoute":"saved-searches",
-  "app.search.resultRoute":"result",
-
+  "app.search.newSearchHeader": "New Search",
+  "app.search.savedSearchHeader": "Saved Searches",
+  "app.search.newSearchRoute": "new-search",
+  "app.search.savedSearchesRoute": "saved-searches",
+  "app.search.resultRoute": "result",
 
   "app.savedSearch.delete": "Delete",
   "app.savedSearch.header": "Saved Searches",
@@ -273,9 +272,9 @@
   "app.forgotpassword.emailId": "Email ID",
   "app.forgotpassword.goBackToLogin": "Go back to Login",
   "app.forgotpassword.submit": "Submit",
-  "app.forgotpassword.confirmation":"An email with a link has been sent to your registered email for password reset.",
-  "app.forgotpassword.okayText":"Okay!",
-  "app.forgotpassword.errorText":"Error",
+  "app.forgotpassword.confirmation": "An email with a link has been sent to your registered email for password reset.",
+  "app.forgotpassword.okayText": "Okay!",
+  "app.forgotpassword.errorText": "Error",
 
   "app.resetPassword.resetPassword": "Reset Password",
   "app.resetPassword.password": "Password*",

@@ -1,8 +1,8 @@
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { useState } from 'react';
 
 export const useConfirmStoneStateManagement = () => {
-  const [confirmStoneData, setConfirmStoneData] = useState<Product[]>([]);
+  const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
   const [commentValue, setCommentValue] = useState('');
   const [selectedDaysInputValue, setSelectedDaysInputValue] = useState('');
   const [selectedRadioDaysValue, setSelectedRadioDaysValue] =

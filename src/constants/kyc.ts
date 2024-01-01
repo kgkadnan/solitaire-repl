@@ -1,6 +1,15 @@
-import { validateFirstName, validateLastName, validatePhone, validateEmail } from "@/app/my-account/kyc/helper/handle-validation";
+import {
+  validateFirstName,
+  validateLastName,
+  validatePhone,
+  validateEmail
+} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { fieldType, supportedMediaFormat, supportedMediaUnit } from "./enums/kyc";
+import {
+  fieldType,
+  supportedMediaFormat,
+  supportedMediaUnit
+} from './enums/kyc';
 
 const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [

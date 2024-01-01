@@ -135,7 +135,7 @@ const CompareStone = () => {
                     href={'/my-cart?active-tab=active'}
                     className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
                   >
-                    Go To Cart
+                    Go To &quot;MyCart&quot;
                   </Link>
                 </div>
               );

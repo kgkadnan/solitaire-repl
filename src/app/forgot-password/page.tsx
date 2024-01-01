@@ -14,7 +14,7 @@ import ErrorModel from './component/error';
 import { ManageLocales } from '@/utils/translate';
 import ConfirmationScreen from '@/components/common/confirmation-screen';
 import { isEmailValid } from '@/utils/validate-email';
-import {  INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 
 const ForgotPassword = () => {
@@ -84,7 +84,9 @@ const ForgotPassword = () => {
           buttons={
             <div>
               <CustomDisplayButton
-                displayButtonLabel={ManageLocales('app.forgotpassword.goBackToLogin')}
+                displayButtonLabel={ManageLocales(
+                  'app.forgotpassword.goBackToLogin'
+                )}
                 displayButtonAllStyle={{
                   displayButtonStyle:
                     'bg-solitaireQuaternary w-[500px] h-[54px]',

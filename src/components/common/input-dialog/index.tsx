@@ -17,7 +17,7 @@ export const CustomInputDialog: React.FC<ICustomDialogProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose} defaultOpen={false}>
       <DialogContent
-        className={`max-w-[390px] h-[200px] bg-solitairePrimary text-solitaireTertiary justify-center items-center ${dialogStyle}`}
+        className={`max-w-[400px] h-[220px] bg-solitairePrimary text-solitaireTertiary justify-center items-center ${dialogStyle}`}
       >
         {renderContent()}
       </DialogContent>

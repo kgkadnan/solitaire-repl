@@ -1,4 +1,3 @@
-
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
@@ -21,4 +20,3 @@ export enum supportedMediaFormat {
   DOC = 'DOC',
   DOCX = 'DOCX'
 }
-

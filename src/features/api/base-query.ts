@@ -22,11 +22,12 @@ export const createBaseQuery = (
       }
 
       // Merge custom headers with existing headers
-      customHeaders &&Object.keys(customHeaders).forEach(key => {
-        headers.set(key, String(customHeaders[key]));
-      });
+      customHeaders &&
+        Object.keys(customHeaders).forEach(key => {
+          headers.set(key, String(customHeaders[key]));
+        });
 
       return headers;
-    },
+    }
   });
 };

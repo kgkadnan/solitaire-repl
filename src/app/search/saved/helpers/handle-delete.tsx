@@ -92,7 +92,10 @@ export const handleDelete = ({
               displayButtonAllStyle={{
                 displayButtonStyle: styles.filled
               }}
-              handleClick={deleteStoneHandler}
+              handleClick={() => {
+                setIsPersistDialogOpen(false);
+                deleteStoneHandler();
+              }}
             />
           </div>
         </>

@@ -53,7 +53,10 @@ const renderMeasurementField = (
     pavilionAngleFrom,
     pavilionAngleTo,
     starLengthFrom,
-    starLengthTo
+    starLengthTo,
+    selectedCulet,
+    girdleFrom,
+    girdleTo
   } = state;
 
   const {
@@ -234,13 +237,14 @@ const renderMeasurementField = (
 
   // Function to handle filter changes and culet selection based on user input
   const handleCuletChange = (data: any) => {
-    setSelectedCulet(data.value);
+    setSelectedCulet(data);
   };
 
   const culetField = () => {
     return (
       <div className={`${styles.parameterContainer} pt-6`}>
         <Select
+          value={selectedCulet}
           options={computeDropdownFieldFromJson(advanceSearch.culet)}
           onChange={handleCuletChange}
           placeholder={'Culet'}
@@ -251,10 +255,10 @@ const renderMeasurementField = (
   };
 
   const handleGirdleFrom = (data: any) => {
-    setGirdleFrom(data.value);
+    setGirdleFrom(data);
   };
   const handleGirdleTo = (data: any) => {
-    setGirdleTo(data.value);
+    setGirdleTo(data);
   };
 
   const girdle = () => {
@@ -267,12 +271,14 @@ const renderMeasurementField = (
         />
         <div className={`${styles.filterSectio}  ${styles.parameterFilter}`}>
           <Select
+            value={girdleFrom}
             options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleFrom}
             styles={colourStyles}
           />
           <div className={styles.parameterLabel}>to</div>
           <Select
+            value={girdleTo}
             options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleTo}
             styles={colourStyles}

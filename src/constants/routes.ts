@@ -7,7 +7,6 @@ export const headerlessRoutes = [
   '/successfully-created'
 ];
 
-
 export const protectedRoutes = [
   '/',
   '/search',

@@ -408,7 +408,11 @@ const SavedSearch = () => {
     });
 
     dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
-    router.push(`/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}&edit=${ManageLocales('app.search.savedSearchesRoute')}`);
+    router.push(
+      `/search?active-tab=${ManageLocales(
+        'app.search.savedSearchesRoute'
+      )}&edit=${ManageLocales('app.search.savedSearchesRoute')}`
+    );
   };
 
   // useEffect(() => {

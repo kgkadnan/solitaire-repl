@@ -3,9 +3,9 @@ import { useState } from 'react';
 const useFieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
-  const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
+  const [selectedFancyColor, setSelectedFancyColor] = useState<string>('');
+  const [selectedIntensity, setSelectedIntensity] = useState<string>('');
+  const [selectedOvertone, setSelectedOvertone] = useState<string>('');
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();
