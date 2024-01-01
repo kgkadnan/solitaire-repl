@@ -22,10 +22,16 @@ import {
 } from '@/constants/application-constants/search-page';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { CustomDisplayButton } from '../buttons/display-button';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
+  const dispatch = useAppDispatch();
+  const kycIsCompletedStoreData: boolean = useAppSelector(
+    store => store.kycIsCompleted.status
+  );
 
   const { modalState, modalSetState } = useModalStateManagement();
 
@@ -35,14 +41,8 @@ const SideBar = () => {
   const subRoute = useSearchParams().get('active-tab');
 
   const onKGKLogoContainerClick = useCallback(() => {
-    // let localData = JSON.parse(localStorage.getItem('Search')!);
-
-    // let data = localData?.filter(
-    //   (isSaved: any) => isSaved.isSavedSearch === false
-    // );
-
-    const isKyc = true;
-    if (isKyc && currentRoute == '/my-diamonds') {
+    const isKyc = kycIsCompletedStoreData;
+    if (isKyc && currentRoute == '/my-account/kyc') {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -52,9 +52,9 @@ const SideBar = () => {
           </div>
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
-              displayButtonLabel="No"
+              displayButtonLabel="Yes"
               handleClick={() => {
-                // localStorage.removeItem('Search');
+                dispatch(kycIsCompleted(false));
                 router.push('/');
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -64,7 +64,7 @@ const SideBar = () => {
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="Yes"
+              displayButtonLabel="No"
               handleClick={() => {
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -152,15 +152,9 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    // let localData = JSON.parse(localStorage.getItem('Search')!);
+    const isKyc = kycIsCompletedStoreData;
 
-    // let data = localData?.filter(
-    //   (isSaved: any) => isSaved.isSavedSearch === false
-    // );
-
-    const isKyc = true;
-
-    if (isKyc && currentRoute == '/my-diamonds') {
+    if (isKyc && currentRoute == '/my-account/kyc') {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -170,9 +164,9 @@ const SideBar = () => {
           </div>
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
-              displayButtonLabel="No"
+              displayButtonLabel="yes"
               handleClick={() => {
-                // localStorage.removeItem('Search');
+                dispatch(kycIsCompleted(false));
                 handleRoute(nav, link);
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -182,7 +176,7 @@ const SideBar = () => {
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="Yes"
+              displayButtonLabel="No"
               handleClick={() => {
                 setIsDialogOpen(false);
                 setDialogContent('');

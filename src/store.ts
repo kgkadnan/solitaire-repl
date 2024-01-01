@@ -12,6 +12,7 @@ import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
+import kycIsCompletedReducer from './features/kyc/kyc-iscompleted-slice';
 import searchResultReducer from './features/search-result/search-result';
 import searchListReducer from './features/search/search-list';
 import savedSearchReducer from './features/saved-search/saved-search';
@@ -27,6 +28,7 @@ import { kycApi } from './features/api/kyc';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
+  kycIsCompleted: kycIsCompletedReducer,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
   savedSearch: savedSearchReducer,

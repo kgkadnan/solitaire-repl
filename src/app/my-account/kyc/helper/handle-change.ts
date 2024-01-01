@@ -1,4 +1,5 @@
 import { updateFormState } from '@/features/kyc/kyc';
+import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
 
 export const handleInputChange = async (
   name: any,
@@ -18,4 +19,6 @@ export const handleInputChange = async (
     })
   );
   dispatch(updateFormState({ name: name, value: value }));
+
+  dispatch(kycIsCompleted(true));
 };

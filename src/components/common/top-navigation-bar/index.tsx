@@ -36,6 +36,7 @@ export interface ISavedSearch {
 }
 import { NEW_SEARCH } from '@/constants/application-constants/search-page';
 import { myAccountRoutes } from '@/constants/routes';
+import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
@@ -43,6 +44,10 @@ export const TopNavigationBar = () => {
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(
     store => store.notificationBadge.status
+  );
+
+  const kycIsCompletedStoreData: boolean = useAppSelector(
+    store => store.kycIsCompleted.status
   );
 
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
@@ -94,15 +99,9 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    // let localData = JSON.parse(localStorage.getItem('Search')!);
+    const isKyc = kycIsCompletedStoreData;
 
-    // let data = localData?.filter(
-    //   (isSaved: any) => isSaved.isSavedSearch === false
-    // );
-
-    const isKyc = true;
-
-    if (isKyc && currentRoute == '/my-diamonds') {
+    if (isKyc && currentRoute == '/my-account/kyc') {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -113,13 +112,8 @@ export const TopNavigationBar = () => {
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
               displayButtonLabel="Yes"
-              // handleClick={() => {
-              //   localStorage.setItem('Search', JSON.stringify([]));
-              //   handleRoute(label, link);
-              //   setIsDialogOpen(false);
-              //   setDialogContent('');
-              // }}
               handleClick={() => {
+                dispatch(kycIsCompleted(false));
                 handleRoute(label, link);
                 setIsDialogOpen(false);
                 setDialogContent('');
