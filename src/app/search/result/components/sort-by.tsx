@@ -417,6 +417,7 @@ code also combines all the radio button data arrays into a single array called R
                 <RadioButton
                   key={radioData.id} // Ensure each component has a unique key
                   radioMetaData={radioData}
+                  onChange={radioData.onChange}
                 />
               );
             })}
