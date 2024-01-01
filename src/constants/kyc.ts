@@ -1,6 +1,15 @@
-import { validateFirstName, validateLastName, validatePhone, validateEmail } from "@/app/my-account/kyc/helper/handle-validation";
+import {
+  validateFirstName,
+  validateLastName,
+  validatePhone,
+  validateEmail
+} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { fieldType, supportedMediaFormat, supportedMediaUnit } from "./enums/kyc";
+import {
+  fieldType,
+  supportedMediaFormat,
+  supportedMediaUnit
+} from './enums/kyc';
 
 const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [
@@ -548,28 +557,28 @@ export const KYCForm = [
               {
                 name: 'Diamonds',
                 handleChange: () => {},
-                data: '',
+                data: 'Diamonds',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Colour Stones',
                 handleChange: () => {},
-                data: '',
+                data: 'Colour Stones',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Jewellery',
                 handleChange: () => {},
-                data: '',
+                data: 'Jewellery',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
                 handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
@@ -683,16 +692,16 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Yes',
+                handleChange: () => {},
+                name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'No',
+                handleChange: () => {},
+                name: 'isMemberOfBusiness'
               }
             ],
             dynamicCondition: 'Yes',
@@ -717,16 +726,16 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Yes',
+                handleChange: () => {},
+                name: 'isMsmeRegistered'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'No',
+                handleChange: () => {},
+                name: 'isMsmeRegistered'
               }
             ],
             dynamicCondition: 'Yes',

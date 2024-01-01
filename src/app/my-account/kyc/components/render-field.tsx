@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useState } from 'react';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
@@ -225,13 +225,27 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </p>
           <div className="flex flex-col gap-[16px]">
             {radioData.map((items: IRadioData) => {
+              const handleRadioChange = (value: string) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key}]`,
+                  value,
+                  dispatch,
+                  items.handleChange,
+                  screenName
+                );
+              };
               return (
                 <div key={items.id}>
-                  <RadioButton radioMetaData={items} key={items?.id} />
+                  <RadioButton
+                    radioMetaData={items}
+                    onChange={handleRadioChange}
+                    key={items?.id}
+                  />
                 </div>
               );
             })}
-            {state === dynamicCondition && //state to be replaced with actual state
+            {formState.online.sections[screenName]?.[key] ===
+              dynamicCondition &&
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
                   <RenderField
@@ -251,11 +265,21 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           <p className="mb-[8px] text-solitaireTertiary">{label}</p>
           <FloatingLabelInput
             label={name}
-            onChange={handleChange}
+            onChange={e =>
+              handleInputChange(
+                `formState.online.sections[${screenName}][${key}]`,
+                e.target.value,
+                dispatch,
+                handleChange,
+                screenName
+              )
+            }
             type={inputType}
             name={name}
-            // value={state}
-            value={''}
+            value={formState?.online?.sections?.[screenName]?.[key] ?? ''}
+            errorText={
+              formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
+            }
           />
         </div>
       );
