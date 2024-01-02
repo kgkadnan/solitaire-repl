@@ -19,14 +19,14 @@ import { CustomDialog } from '../dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
-import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const isSavedKycCheck: boolean = useAppSelector(
-    store => store.kycIsCompleted.status
+  const isEditingKYCStore: boolean = useAppSelector(
+    store => store.isEditingKYC.status
   );
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -37,7 +37,7 @@ const SideBar = () => {
   const subRoute = useSearchParams().get('active-tab');
 
   const onKGKLogoContainerClick = useCallback(() => {
-    if (isSavedKycCheck) {
+    if (isEditingKYCStore) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -48,7 +48,7 @@ const SideBar = () => {
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.sideNav.yes')}
               handleClick={() => {
-                dispatch(kycIsCompleted(false));
+                dispatch(isEditingKYC(false));
                 router.push('/');
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -73,7 +73,7 @@ const SideBar = () => {
     } else {
       router.push('/');
     }
-  }, [router, isSavedKycCheck]);
+  }, [router, isEditingKYCStore]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -152,7 +152,7 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    if (isSavedKycCheck) {
+    if (isEditingKYCStore) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -163,7 +163,7 @@ const SideBar = () => {
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.sideNav.yes')}
               handleClick={() => {
-                dispatch(kycIsCompleted(false));
+                dispatch(isEditingKYC(false));
                 handleRoute(nav, link);
                 setIsDialogOpen(false);
                 setDialogContent('');

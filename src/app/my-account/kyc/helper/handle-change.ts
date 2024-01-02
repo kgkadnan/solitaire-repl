@@ -1,5 +1,5 @@
 import { updateFormState } from '@/features/kyc/kyc';
-import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 export const handleInputChange = async (
   path: string,
@@ -19,5 +19,5 @@ export const handleInputChange = async (
     })
   );
   dispatch(updateFormState({ name: path, value: value }));
-  dispatch(kycIsCompleted(true));
+  dispatch(isEditingKYC(true));
 };

@@ -34,7 +34,7 @@ export interface ISavedSearch {
   isSavedSearch: boolean;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
-import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
@@ -44,8 +44,8 @@ export const TopNavigationBar = () => {
     store => store.notificationBadge.status
   );
 
-  const isSavedKycCheck: boolean = useAppSelector(
-    store => store.kycIsCompleted.status
+  const isEditingKYCStoreData: boolean = useAppSelector(
+    store => store.isEditingKYC.status
   );
 
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
@@ -99,7 +99,7 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    if (isSavedKycCheck) {
+    if (isEditingKYCStoreData) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -110,7 +110,7 @@ export const TopNavigationBar = () => {
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.topNav.yes')}
               handleClick={() => {
-                dispatch(kycIsCompleted(false));
+                dispatch(isEditingKYC(false));
                 handleRoute(label, link);
                 setIsDialogOpen(false);
                 setDialogContent('');
