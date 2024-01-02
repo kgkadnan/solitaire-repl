@@ -1,7 +1,7 @@
 import { INVALID_INPUT } from '@/constants/error-messages/confirm-stone';
-import { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 
-interface IhandleRadioDayValue {
+interface IHandleRadioDayValue {
   event: React.ChangeEvent<HTMLInputElement>;
   setInputError: Dispatch<SetStateAction<boolean>>;
   setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
@@ -19,7 +19,7 @@ export const handleRadioDayValue = ({
   setInputError,
   setSelectedDaysInputValue,
   setInputErrorContent
-}: IhandleRadioDayValue) => {
+}: IHandleRadioDayValue) => {
   const inputValue = parseFloat(event.target.value);
   if (inputValue >= 121) {
     setInputError(true);

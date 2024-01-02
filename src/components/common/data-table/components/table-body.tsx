@@ -1,5 +1,7 @@
+import React from 'react';
+
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
+import { IProduct, ITableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -75,7 +77,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
                 href={'/my-cart?active-tab=active'}
                 className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
               >
-                Go To Cart
+                Go To &quot;MyCart&quot;
               </Link>
             </div>
           );
@@ -159,7 +161,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   ];
 
-  const handleRowClick = (row: Product) => {
+  const handleRowClick = (row: IProduct) => {
     handleCheckboxClick({
       id: row.id,
       isCheck,
@@ -171,7 +173,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     });
   };
 
-  const renderCellContent = (column: TableColumn, row: any, index: number) => {
+  const renderCellContent = (column: ITableColumn, row: any, index: number) => {
     switch (column.accessor) {
       case 'details':
         return (
@@ -230,7 +232,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows?.map((row: Product, index: number) => (
+      {tableRows?.map((row: IProduct, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}
@@ -250,7 +252,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
             </td>
           )}
 
-          {tableCol?.map((column: TableColumn, tableColindex: number) => (
+          {tableCol?.map((column: ITableColumn, tableColindex: number) => (
             <td
               style={{
                 left: `${

@@ -6,13 +6,13 @@ interface ILabelStyle {
   label: string;
 }
 
-interface InputLabelProps {
+interface IInputLabelProps {
   htmlfor: string;
   label: string | string[];
   overriddenStyles?: ILabelStyle;
 }
 
-export const CustomInputlabel: React.FC<InputLabelProps> = ({
+export const CustomInputlabel: React.FC<IInputLabelProps> = ({
   htmlfor,
   label,
   overriddenStyles

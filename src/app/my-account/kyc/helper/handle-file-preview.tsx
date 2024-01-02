@@ -49,7 +49,7 @@ export const handlePreview = ({
               )}
             </div>
             <div className="flex items-center gap-1">
-              {fileExtension == 'pdf' ? (
+              {fileExtension === 'pdf' ? (
                 <Image src={pdf} alt="pdf" width={24} height={24} />
               ) : (
                 ''

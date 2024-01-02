@@ -14,6 +14,8 @@ import ErrorModel from './component/error';
 import { ManageLocales } from '@/utils/translate';
 import ConfirmationScreen from '@/components/common/confirmation-screen';
 import { isEmailValid } from '@/utils/validate-email';
+import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import { Events } from '@/constants/enums/event';
 
 const ForgotPassword = () => {
   const [value, setValue] = useState('');
@@ -30,23 +32,23 @@ const ForgotPassword = () => {
 
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.key === 'Enter') {
-      handleSubmit();
+    if (e.key === Events.ENTER) {
+      handleForgotPassword();
     }
   };
 
-  const handleEmail = (e: any) => {
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setValue(inputValue);
 
     if (isEmailValid(inputValue)) {
       setEmailErrorText('');
     } else {
-      setEmailErrorText('Please enter a valid email');
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
 
-  const handleSubmit = async () => {
+  const handleForgotPassword = async () => {
     if (value.length && !emailErrorText) {
       let res: any = await forgotPassword({
         email: value
@@ -64,7 +66,7 @@ const ForgotPassword = () => {
         );
       }
     } else {
-      setEmailErrorText('Please enter a valid email');
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
 
@@ -78,11 +80,13 @@ const ForgotPassword = () => {
       />
       {isConfirmed ? (
         <ConfirmationScreen
-          message="An email with a link has been sent to your registered email for password reset."
+          message={ManageLocales('app.forgotpassword.confirmation')}
           buttons={
             <div>
               <CustomDisplayButton
-                displayButtonLabel={'Go back to Login'}
+                displayButtonLabel={ManageLocales(
+                  'app.forgotpassword.goBackToLogin'
+                )}
                 displayButtonAllStyle={{
                   displayButtonStyle:
                     'bg-solitaireQuaternary w-[500px] h-[54px]',
@@ -155,7 +159,7 @@ const ForgotPassword = () => {
                     displayLabelStyle:
                       'text-solitaireTertiary text-base font-medium'
                   }}
-                  handleClick={handleSubmit}
+                  handleClick={handleForgotPassword}
                 />
               </div>
             </div>

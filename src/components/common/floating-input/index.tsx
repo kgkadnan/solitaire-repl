@@ -4,7 +4,7 @@ import styles from './floating-input.module.scss';
 import EyeSlash from '@public/assets/icons/eye-off-outline.svg?url';
 import Eye from '@public/assets/icons/eye-outline.svg?url';
 
-interface FloatingLabelInputProps {
+interface IFloatingLabelInputProps {
   label: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   type: string;
@@ -15,7 +15,7 @@ interface FloatingLabelInputProps {
   showPassword?: boolean;
 }
 
-export const FloatingLabelInput: React.FC<FloatingLabelInputProps> = ({
+export const FloatingLabelInput: React.FC<IFloatingLabelInputProps> = ({
   label,
   onChange,
   type,

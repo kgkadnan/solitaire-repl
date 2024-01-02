@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KYCForm } from '@/constants/kyc';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import Stepper, { IStepper } from '@/components/common/stepper';
@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
 import { validateScreen } from './helper/handle-validation';
-import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
@@ -25,7 +25,6 @@ const KYC: React.FC = () => {
 
   const [kyc] = useKycMutation();
 
-  const kycStoreData: any = useAppSelector(store => store.kyc.formState);
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
@@ -38,7 +37,7 @@ const KYC: React.FC = () => {
     let validationError: ValidationError[] | string;
 
     validationError = await validateScreen(
-      kycStoreData.online.sections[screenName],
+      formState.online.sections[screenName],
       screenName,
       selectedCountry
     );
@@ -59,63 +58,58 @@ const KYC: React.FC = () => {
         !validationError.length &&
           kyc({
             data: {
-              country: kycStoreData.country,
-              offline: kycStoreData.offline,
-              data: {
-                ...kycStoreData.online.sections[screenName],
-                country_code: 'IND'
-              }
+              country: formState.country,
+              offline: formState.offline,
+              data: { ...formState.online.sections[screenName] }
             },
             ID: active
           })
-            .unwrap()
-            .then((res: any) => console.log('res'))
-            .catch((e: any) => {});
+            .then((_res: any) => console.log('res'))
+            .catch((_e: any) => {});
+
         break;
       case 'company_details':
-        // code block
         !validationError.length &&
           kyc({
             data: {
-              country: kycStoreData.country,
-              offline: kycStoreData.offline,
-              data: { ...kycStoreData.online.sections[screenName] }
+              country: formState.country,
+              offline: formState.offline,
+              data: { ...formState.online.sections[screenName] }
             },
             ID: active
           })
-            .unwrap()
-            .then((res: any) => console.log('res'))
-            .catch((e: any) => {});
+            .then((_res: any) => console.log('res'))
+            .catch((_e: any) => {});
+
         break;
       case 'company_owner_details':
         !validationError.length &&
           kyc({
             data: {
-              country: kycStoreData.country,
-              offline: kycStoreData.offline,
-              data: { ...kycStoreData.online.sections[screenName] }
+              country: formState.country,
+              offline: formState.offline,
+              data: { ...formState.online.sections[screenName] }
             },
             ID: active
           })
-            .unwrap()
-            .then((res: any) => console.log('res'))
-            .catch((e: any) => {});
+            .then((_res: any) => console.log('res'))
+            .catch((_e: any) => {});
+
         break;
       case 'banking_details':
         !validationError.length &&
           kyc({
             data: {
-              country: kycStoreData.country,
-              offline: kycStoreData.offline,
+              country: formState.country,
+              offline: formState.offline,
               data: {
-                ...kycStoreData.online.sections[screenName]
+                ...formState.online.sections[screenName]
               }
             },
             ID: active
           })
-            .unwrap()
-            .then((res: any) => console.log('res'))
-            .catch((e: any) => {});
+            .then((_res: any) => console.log('res'))
+            .catch((_e: any) => {});
         break;
       default:
         logger.info('default');
@@ -132,8 +126,7 @@ const KYC: React.FC = () => {
     }
   };
   const { modalState, modalSetState } = useModalStateManagement();
-  const formState = useSelector((state: any) => state.kyc.formState);
-  const formErrorState = useSelector((state: any) => state.kyc?.formErrorState);
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
@@ -219,56 +212,56 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
-  const resData = {
-    online: {
-      '1': {
-        email: 'bhushan@asd.com',
-        phone: '9999955555',
-        last_name: 'Vaiude',
-        first_name: 'Bhushan',
-        country_code: 'IND'
-      },
-      '2': {
-        city: 'Mumbai',
-        state: 'Maharashtra',
-        address: 'Nallasopara',
-        pincode: '401203',
-        msme_type: 'SME',
-        gst_number: 'GST401203',
-        company_name: 'Bhushan Pvt Ltd',
-        business_type: ['Wholesaler', 'Retailer'],
-        company_email: 'best@email.com',
-        industry_type: ['Diamonds', 'Other Gaming'],
-        organisation_type: ['Other Gaming'],
-        company_pan_number: 'CompnayPAN401203',
-        is_msme_registered: true,
-        subsidiary_company: 'KGK Infotech',
-        company_phone_number: '401203',
-        is_member_of_business: true,
-        year_of_establishment: '1967',
-        member_of_business_name: 'KGK Group',
-        msme_registration_number: '401203',
-        ultimate_beneficiary_name: 'Kanha',
-        business_registration_number: 'BUSREG401203'
-      },
-      '3': {
-        owner_email: 'asd@asd.com',
-        owner_phone: '9999955555',
-        owner_full_name: 'Bhushan Kishore Vaiude',
-        owner_pan_number: '9999955555',
-        owner_country_code: 'IND'
-      },
-      '4': {
-        bank_name: 'OM',
-        ifsc_code: '9999955555',
-        country_code: 'IND',
-        account_number: 'Om',
-        account_holder_name: 'asdom'
-      }
-    },
-    country: 'India',
-    offline: true
-  };
+  // const resData = {
+  //   online: {
+  //     '1': {
+  //       email: 'bhushan@asd.com',
+  //       phone: '9999955555',
+  //       last_name: 'Vaiude',
+  //       first_name: 'Bhushan',
+  //       country_code: 'IND'
+  //     },
+  //     '2': {
+  //       city: 'Mumbai',
+  //       state: 'Maharashtra',
+  //       address: 'Nallasopara',
+  //       pincode: '401203',
+  //       msme_type: 'SME',
+  //       gst_number: 'GST401203',
+  //       company_name: 'Bhushan Pvt Ltd',
+  //       business_type: ['Wholesaler', 'Retailer'],
+  //       company_email: 'best@email.com',
+  //       industry_type: ['Diamonds', 'Other Gaming'],
+  //       organisation_type: ['Other Gaming'],
+  //       company_pan_number: 'CompnayPAN401203',
+  //       is_msme_registered: true,
+  //       subsidiary_company: 'KGK Infotech',
+  //       company_phone_number: '401203',
+  //       is_member_of_business: true,
+  //       year_of_establishment: '1967',
+  //       member_of_business_name: 'KGK Group',
+  //       msme_registration_number: '401203',
+  //       ultimate_beneficiary_name: 'Kanha',
+  //       business_registration_number: 'BUSREG401203'
+  //     },
+  //     '3': {
+  //       owner_email: 'asd@asd.com',
+  //       owner_phone: '9999955555',
+  //       owner_full_name: 'Bhushan Kishore Vaiude',
+  //       owner_pan_number: '9999955555',
+  //       owner_country_code: 'IND'
+  //     },
+  //     '4': {
+  //       bank_name: 'OM',
+  //       ifsc_code: '9999955555',
+  //       country_code: 'IND',
+  //       account_number: 'Om',
+  //       account_holder_name: 'asdom'
+  //     }
+  //   },
+  //   country: 'India',
+  //   offline: true
+  // };
 
   // useEffect(() => {
   //   const sectionKeys: string[] =
@@ -329,10 +322,10 @@ const KYC: React.FC = () => {
   // );  // Configuration for footer buttons
 
   useEffect(() => {
-    let KYCData = KYCForm.filter(country => {
+    let kycData = KYCForm.filter(country => {
       return country.country.fullName === selectedCountry;
     });
-    setData(KYCData[0]);
+    setData(kycData[0]);
   }, [selectedCountry]);
 
   const handleSaveAndNext = (state: string) => {

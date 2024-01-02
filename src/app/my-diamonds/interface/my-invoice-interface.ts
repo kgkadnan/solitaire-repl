@@ -1,4 +1,4 @@
-interface Invoice {
+interface IInvoice {
   cin: string;
   currency: string;
   Invoice_id: string;
@@ -7,13 +7,13 @@ interface Invoice {
   discount_amount: number;
 }
 
-interface Delivery {
+interface IDelivery {
   link: string;
   tracking_id: string;
   partner_name: string;
 }
 
-interface Customer {
+export interface ICustomer {
   cart_id: string;
   id: string;
   created_at: string;
@@ -28,7 +28,7 @@ interface Customer {
   metadata: any; // You might want to define a more specific type for metadata
 }
 
-interface Payment {
+export interface IPayment {
   id: string;
   created_at: string;
   updated_at: string;
@@ -52,8 +52,8 @@ export interface IMyInvoice {
   comments: string;
   payment_term: number;
   invoice_id: string;
-  invoice: Invoice;
-  delivery: Delivery;
+  invoice: IInvoice;
+  delivery: IDelivery;
   id: string;
   created_at: string;
   status: string;
@@ -66,9 +66,9 @@ export interface IMyInvoice {
   region_id: string;
   currency_code: string;
   tax_rate: number | null;
-  customer: Customer;
+  customer: ICustomer;
   fulfillments: any[]; // You might want to define a more specific type for fulfillments
-  payments: Payment[];
+  payments: IPayment[];
   shipping_address: any; // You might want to define a more specific type for shipping_address
   subtotal: number;
   discount_total: number;

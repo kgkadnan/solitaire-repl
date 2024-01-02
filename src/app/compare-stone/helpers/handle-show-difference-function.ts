@@ -1,4 +1,4 @@
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { IDifferValue, IShowDifferencesChangeProps } from '../interface';
 
 export const handleShowDifferencesChange = ({
@@ -12,10 +12,10 @@ export const handleShowDifferencesChange = ({
   if (!showDifferences) {
     const propertiesToKeep: string[] = Object.keys(keyLabelMapping);
     // Create a new array with filtered data
-    const filteredData = compareStoneData.map((item: Product) => {
-      const filteredItem: Product | any = {} as Product;
+    const filteredData = compareStoneData.map((item: IProduct) => {
+      const filteredItem: IProduct | any = {} as IProduct;
       propertiesToKeep.forEach(prop => {
-        filteredItem[prop] = item[prop as keyof Product];
+        filteredItem[prop] = item[prop as keyof IProduct];
       });
       return filteredItem;
     });

@@ -1,19 +1,19 @@
-type QueryDataValue = string | number | NestedQuery | NestedQuery[];
+type IQueryDataValue = string | number | INestedQuery | INestedQuery[];
 
-export interface QueryData {
-  [key: string]: QueryDataValue;
+export interface IQueryData {
+  [key: string]: IQueryDataValue;
 }
 
-interface NestedQuery {
-  [key: string]: QueryDataValue;
+interface INestedQuery {
+  [key: string]: IQueryDataValue;
 }
 
-export function constructUrlParams(data: QueryData): string {
+export function constructUrlParams(data: IQueryData): string {
   const queryParams: string[] = [];
 
   const encodeNested = (
     prefix: string,
-    nestedData: NestedQuery | NestedQuery[]
+    nestedData: INestedQuery | INestedQuery[]
   ) => {
     if (Array.isArray(nestedData)) {
       nestedData.forEach(item => {
@@ -46,7 +46,7 @@ export function constructUrlParams(data: QueryData): string {
           });
         }
       } else if (typeof value === 'object') {
-        encodeNested(key, value as NestedQuery | NestedQuery[]);
+        encodeNested(key, value as INestedQuery | INestedQuery[]);
       } else {
         queryParams.push(`${key}=${value}`);
       }

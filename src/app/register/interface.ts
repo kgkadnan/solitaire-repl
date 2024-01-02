@@ -1,4 +1,4 @@
-export interface FormState {
+export interface IRegister {
   firstName: string;
   lastName: string;
   email: string;
@@ -9,7 +9,7 @@ export interface FormState {
   confirmPassword: string;
 }
 
-export const initialFormState: FormState = {
+export const initialFormState: IRegister = {
   firstName: '',
   lastName: '',
   email: '',

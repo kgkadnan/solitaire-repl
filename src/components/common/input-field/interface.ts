@@ -5,7 +5,7 @@ export interface IInputStyle {
   inputMain?: string;
 }
 
-export interface InputFieldProps {
+export interface IInputFieldProps {
   style?: IInputStyle;
   type: string;
   value?: string | number;

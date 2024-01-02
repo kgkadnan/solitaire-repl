@@ -21,7 +21,7 @@ export function LeftFixedContent({
         <div className={`sticky top-[200px] w-full bg-solitaireSecondary`}>
           <div>{'discount' in compareStoneData[0] ? 'Discount' : null}</div>
           <div>
-            {'amount' in compareStoneData[0]?.variants[0]?.prices[0]
+            {'amount' in compareStoneData[0].variants[0].prices[0]
               ? 'Amount'
               : null}
           </div>
