@@ -37,8 +37,7 @@ const SideBar = () => {
   const subRoute = useSearchParams().get('active-tab');
 
   const onKGKLogoContainerClick = useCallback(() => {
-    const isKyc = kycIsCompletedStoreData;
-    if (isKyc && currentRoute == '/my-account/kyc') {
+    if (kycIsCompletedStoreData) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
@@ -75,7 +74,7 @@ const SideBar = () => {
     } else {
       router.push('/');
     }
-  }, [router, currentRoute]);
+  }, [router, kycIsCompletedStoreData]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -154,9 +153,7 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    const isKyc = kycIsCompletedStoreData;
-
-    if (isKyc && currentRoute == '/my-account/kyc') {
+    if (kycIsCompletedStoreData && currentRoute == '/my-account/kyc') {
       setIsDialogOpen(true);
       setDialogContent(
         <>

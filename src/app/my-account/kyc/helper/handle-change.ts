@@ -18,7 +18,6 @@ export const handleInputChange = async (
       value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
     })
   );
-  dispatch(updateFormState({ name: name, value: value }));
-
+  dispatch(updateFormState({ name: path, value: value }));
   dispatch(kycIsCompleted(true));
 };
