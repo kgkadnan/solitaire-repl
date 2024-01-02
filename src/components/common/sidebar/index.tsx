@@ -17,20 +17,39 @@ import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDialog } from '../dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
+  const dispatch = useAppDispatch();
+  const isEditingKYCStoreData: boolean = useAppSelector(
+    store => store.isEditingKYC.status
+  );
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const { setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { dialogContent, isDialogOpen } = modalState;
 
   const subRoute = useSearchParams().get('active-tab');
+
   const onKGKLogoContainerClick = useCallback(() => {
-    router.push('/');
-  }, [router, currentRoute]);
+    if (isEditingKYCStoreData) {
+      handleIsEditingKyc({
+        isEditingKYCStoreData,
+        setIsDialogOpen,
+        setDialogContent,
+        dispatch,
+        handleRoute,
+        styles,
+        currentRoute
+      });
+    } else {
+      router.push('/');
+    }
+  }, [router, isEditingKYCStoreData]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -109,7 +128,17 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    handleRoute(nav, link);
+    handleIsEditingKyc({
+      isEditingKYCStoreData,
+      setIsDialogOpen,
+      setDialogContent,
+      dispatch,
+      handleRoute,
+      label: nav,
+      link,
+      styles,
+      currentRoute
+    });
   };
 
   return (
