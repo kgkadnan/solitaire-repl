@@ -1,5 +1,5 @@
 // components/Stepper.js
-import { ReactNode, useState } from 'react';
+import React, { ReactNode, useState } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';

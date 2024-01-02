@@ -1,8 +1,9 @@
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import { CustomSlider } from '../../slider';
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { ManageLocales } from '@/utils/translate';
-import { IDiamondDetailSlider, IswitchButtonTabs } from '../interface';
+import { IDiamondDetailSlider, ISwitchButtonTabs } from '../interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { handleSwitchImageUrl } from '../helper/handle-switch-image-url';
 import Image from 'next/image';
@@ -158,7 +159,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
               : 'px-[5px]'
           }`}
         >
-          {row[column.accessor as keyof Product]}
+          {row[column.accessor as keyof IProduct]}
         </button>
       }
       sheetContentStyle={styles.diamondDetailSheet}
@@ -180,7 +181,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                   className="flex items-center justify-between my-5 px-10"
                 >
                   <div className="w-[145px]">
-                    {switchButtonTabs.map((items: IswitchButtonTabs) => {
+                    {switchButtonTabs.map((items: ISwitchButtonTabs) => {
                       return (
                         <div key={items.id} className="">
                           <CustomDisplayButton

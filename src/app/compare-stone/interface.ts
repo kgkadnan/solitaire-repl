@@ -1,4 +1,6 @@
-import { Product } from '../search/result/result-interface';
+import React from 'react';
+
+import { IProduct } from '../search/result/result-interface';
 
 export interface IKeyLabelMapping {
   [key: string]: string | number;
@@ -8,7 +10,7 @@ export interface IDifferValue {
 }
 
 export interface IRightSideContentProps {
-  compareStoneData: Product[];
+  compareStoneData: IProduct[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   compareValues: IKeyLabelMapping;
@@ -19,14 +21,14 @@ export interface IRightSideContentProps {
 }
 
 export interface ILeftSideContentProps {
-  compareStoneData: Product[];
+  compareStoneData: IProduct[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   compareValues: IKeyLabelMapping;
 }
 
 export interface IShowDifferencesChangeProps {
-  compareStoneData: Product[];
+  compareStoneData: IProduct[];
   showDifferences: boolean;
   keyLabelMapping: IKeyLabelMapping;
   setCompareValues: React.Dispatch<React.SetStateAction<IDifferValue>>;

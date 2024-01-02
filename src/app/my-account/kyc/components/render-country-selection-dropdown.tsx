@@ -1,20 +1,20 @@
-import { KYCForm } from '@/constants/kyc';
+import React from 'react';
+
 import { ManageLocales } from '@/utils/translate';
 import Select from 'react-select';
 import { colourStyles } from '../styles/select-style';
 import { IErrorSetState } from '@/app/search/result/result-interface';
 import { updateFormState } from '@/features/kyc/kyc';
 import { useAppDispatch } from '@/hooks/hook';
+import { KYCForm } from '@/constants/kyc';
 
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
   errorSetState: IErrorSetState;
-  selectedCountry: any;
 }
 export const CountrySelectionDropdown = ({
   setSelectedCountry,
-  errorSetState,
-  selectedCountry
+  errorSetState
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
   const dispatch = useAppDispatch();

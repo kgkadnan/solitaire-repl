@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
 import downloadOutlineShadow from '@public/assets/icons/download-outline-shadow.svg';

@@ -2,8 +2,8 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { kycIsCompleted } from '@/features/kyc/kyc-iscompleted-slice';
 
 export const handleInputChange = async (
-  name: any,
-  value: any,
+  path: string,
+  value: string | string[],
   dispatch: any,
   handleChange: any,
   screenName: string

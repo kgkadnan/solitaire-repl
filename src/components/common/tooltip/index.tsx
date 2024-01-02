@@ -1,14 +1,14 @@
 // components/Tooltip.js
 
-import { useState } from 'react';
+import React, { useState } from 'react';
 import style from './tooltip.module.scss';
 interface ITooltip {
   tooltipElement: React.ReactNode;
   content: React.ReactNode;
   handleEvent?: () => void;
-  tooltipStyles?: ItooltipStyles;
+  tooltipStyles?: ITooltipStyles;
 }
-interface ItooltipStyles {
+interface ITooltipStyles {
   tooltipContainerStyles?: string;
   tooltipContentStyle?: string;
 }

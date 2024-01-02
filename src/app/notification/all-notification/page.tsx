@@ -10,7 +10,7 @@ import {
 import { formatCreatedAt } from '@/utils/format-date';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { INotificationData } from './all-notification-interface';
-import { NotificationParameter } from '@/components/notification/notification-interface';
+import { INotificationParameter } from '@/components/notification/notification-interface';
 import {
   NOTIFICATION_READ_STATUS,
   NOTIFICATION_TYPE,
@@ -32,7 +32,7 @@ const Notification = () => {
 
   function stringWithHTMLReplacement(
     template: string,
-    parameter: NotificationParameter
+    parameter: INotificationParameter
   ) {
     const parts = template.split('${{');
 
@@ -44,7 +44,7 @@ const Notification = () => {
         return (
           <span key={index}>
             <span style={{ fontWeight: 600 }}>
-              {parameter[paramName as keyof NotificationParameter]}
+              {parameter[paramName as keyof INotificationParameter]}
             </span>
             {part.substr(paramName.length + 2)}
           </span>

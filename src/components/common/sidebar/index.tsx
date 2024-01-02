@@ -16,10 +16,6 @@ import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDialog } from '../dialog';
-import {
-  NEW_SEARCH,
-  SAVED_SEARCHES
-} from '@/constants/application-constants/search-page';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
@@ -97,8 +93,10 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: `/search?active-tab=${NEW_SEARCH}`,
-      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
+      link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -109,8 +107,12 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: `/search?active-tab=${SAVED_SEARCHES}`,
-      isActive: currentRoute === '/search' && subRoute === `${SAVED_SEARCHES}`
+      link: `/search?active-tab=${ManageLocales(
+        'app.search.savedSearchesRoute'
+      )}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.savedSearchesRoute')}`
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,

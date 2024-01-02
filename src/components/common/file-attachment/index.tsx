@@ -96,19 +96,19 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     }
   }, [fileRejections]);
 
-  const handleValidation = () => {
-    // Check if selectedFile is empty for required fields
-    if (isRequired && selectedFile.length === 0) {
-      setError('File is required');
-    } else {
-      setError(null); // Clear error if selectedFile is not empty or not required
-    }
+  // const _handleValidation = () => {
+  //   // Check if selectedFile is empty for required fields
+  //   if (isRequired && selectedFile.length === 0) {
+  //     setError('File is required');
+  //   } else {
+  //     setError(null); // Clear error if selectedFile is not empty or not required
+  //   }
 
-    // Check for file rejections
-    if (fileRejections?.length) {
-      setError(fileRejections[0].errors[0].code);
-    }
-  };
+  //   // Check for file rejections
+  //   if (fileRejections?.length) {
+  //     setError(fileRejections[0].errors[0].code);
+  //   }
+  // };
 
   return (
     <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full ">

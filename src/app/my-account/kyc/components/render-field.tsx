@@ -1,8 +1,9 @@
 'use client';
+import React from 'react';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { fieldType } from '@/constants/kyc';
+import { fieldType } from '@/constants/enums/kyc';
 
 import { handleInputChange } from '../helper/handle-change';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';

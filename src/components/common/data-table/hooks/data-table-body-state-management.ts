@@ -1,8 +1,8 @@
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { useState } from 'react';
 
 export const useDataTableBodyStateManagement = () => {
-  const [sliderData, setSliderData] = useState<Product[]>([]);
+  const [sliderData, setSliderData] = useState<IProduct[]>([]);
 
   const [activeTab, setActiveTab] = useState('');
 

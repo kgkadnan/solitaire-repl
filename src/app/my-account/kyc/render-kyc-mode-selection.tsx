@@ -1,7 +1,7 @@
+import React from 'react';
+import Image from 'next/image';
 import { CustomFooter } from '@/components/common/footer';
 import { ManageLocales } from '@/utils/translate';
-import Image from 'next/image';
-import React from 'react';
 import handImage from '@public/assets/images/noto_waving-hand.png';
 import { CustomInputlabel } from '@/components/common/input-label';
 import arrowForward from '@public/assets/icons/arrow-forward-outline.svg';
@@ -12,7 +12,6 @@ import {
   IErrorState
 } from '@/app/search/result/result-interface';
 import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
-
 import { updateFormState } from '@/features/kyc/kyc';
 import { useAppDispatch } from '@/hooks/hook';
 
@@ -23,16 +22,18 @@ interface IRenderKYCModeSelection {
   errorState: IErrorState;
   errorSetState: IErrorSetState;
 }
-const RenderKYCModeSelection = ({
+
+const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
   handleSaveAndNext,
   setSelectedKYCOption,
   selectedKYCOption,
   errorState,
   errorSetState
-}: IRenderKYCModeSelection) => {
+}) => {
   const { setErrorText } = errorSetState;
   const { errorText } = errorState;
   const dispatch = useAppDispatch();
+
   const handleBoxClick = (selection: string) => {
     setErrorText('');
     setSelectedKYCOption(selection);
@@ -45,6 +46,13 @@ const RenderKYCModeSelection = ({
       })
     );
   };
+
+  const renderImage = (src: string) => (
+    <div className="w-[13%]">
+      <Image src={src} width={30} height={30} alt={src} />
+    </div>
+  );
+
   return (
     <div className="w-full">
       <div className="flex flex-col gap-[30px] mb-[20px] items-start  h-[70vh]">
@@ -67,65 +75,33 @@ const RenderKYCModeSelection = ({
           </div>
         </div>
 
-        <div className=" flex flex-col min-w-[400px] w-[30%] gap-3">
-          <div
-            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid  ${
-              selectedKYCOption === 'online'
-                ? ' border-solitaireQuaternary'
-                : 'border-transparent'
-            }`}
-            onClick={() => handleBoxClick('online')}
-          >
-            <div className="w-[13%]">
-              <Image
-                src={playForward}
-                width={30}
-                height={30}
-                alt="playForward"
-              />
+        <div className="flex flex-col min-w-[400px] w-[30%] gap-3">
+          {['online', 'offline'].map(option => (
+            <div
+              key={option}
+              className={`flex items-center justify-between bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid  ${
+                selectedKYCOption === option
+                  ? 'border-solitaireQuaternary'
+                  : 'border-transparent'
+              }`}
+              onClick={() => handleBoxClick(option)}
+            >
+              {renderImage(option === 'online' ? playForward : edit)}
+              <div className="text-solitaireTertiary w-[70%]">
+                <h1>
+                  {option === 'online'
+                    ? 'Fill Form online'
+                    : 'Download and Upload Form'}
+                </h1>
+                <p className="font-thin pr-6">
+                  {option === 'online'
+                    ? 'Fill the form on the app, for your convenience'
+                    : 'Download and fill the form and upload the filled form offline.'}
+                </p>
+              </div>
+              {renderImage(arrowForward)}
             </div>
-            <div className="text-solitaireTertiary  w-[70%]">
-              <h1>Fill Form online</h1>
-              <p className="font-thin pr-6">
-                Fill the form on the app, for your convenience
-              </p>
-            </div>
-            <div className="w-[10%]">
-              <Image
-                src={arrowForward}
-                width={24}
-                height={24}
-                alt="arrowForward"
-              />
-            </div>
-          </div>
-
-          <div
-            className={`flex items-center justify-between  bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid ${
-              selectedKYCOption === 'offline'
-                ? 'border-solitaireQuaternary'
-                : ' border-transparent'
-            }`}
-            onClick={() => handleBoxClick('offline')}
-          >
-            <div className="w-[13%]">
-              <Image src={edit} width={30} height={30} alt="edit" />
-            </div>
-            <div className="text-solitaireTertiary w-[70%]">
-              <h1>Download and Upload Form</h1>
-              <p className="font-thin pr-6">
-                Download and fill the form and upload the filled form offline.
-              </p>
-            </div>
-            <div className="w-[10%]">
-              <Image
-                src={arrowForward}
-                width={24}
-                height={24}
-                alt="arrowForward"
-              />
-            </div>
-          </div>
+          ))}
         </div>
       </div>
       <div className="sticky bottom-0">

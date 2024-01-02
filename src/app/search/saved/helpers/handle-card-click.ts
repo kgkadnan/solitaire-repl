@@ -1,14 +1,16 @@
+import React from 'react';
+
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { ISavedSearchData } from '../saved-interface';
 import {
   MAX_SAVED_SEARCH_COUNT,
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
-import { RESULT } from '@/constants/application-constants/search-page';
 import {
   MAX_SEARCH_LIMIT_EXCEED,
   MODIFY_SEARCH_STONES_EXCEEDS_LIMIT
 } from '@/constants/error-messages/saved';
+import { ManageLocales } from '@/utils/translate';
 
 //Handles the click event on a saved search card.
 export const handleCardClick = (
@@ -56,7 +58,11 @@ export const handleCardClick = (
         ];
 
         localStorage.setItem('Search', JSON.stringify(localStorageData));
-        router.push(`/search?active-tab=${RESULT}-${data.length + 1}`);
+        router.push(
+          `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+            data.length + 1
+          }`
+        );
       }
     } else {
       // If no data in local storage, create a new entry and navigate to the search result page
@@ -70,7 +76,9 @@ export const handleCardClick = (
       ];
 
       localStorage.setItem('Search', JSON.stringify(localStorageData));
-      router.push(`/search?active-tab=${RESULT}-${1}`);
+      router.push(
+        `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${1}`
+      );
     }
   }
 };

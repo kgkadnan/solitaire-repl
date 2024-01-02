@@ -6,7 +6,7 @@ import { IConfirmStoneSetState } from '@/components/common/confirm-stone/interfa
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
-export interface TableColumn {
+export interface ITableColumn {
   label: string;
   short_label: string;
   accessor: string;
@@ -16,7 +16,7 @@ export interface TableColumn {
   id: string;
 }
 
-export interface Rows {
+export interface IRows {
   id: string;
   stock_no: string | null;
   is_memo_out: boolean;
@@ -85,7 +85,7 @@ export interface Rows {
   details: any;
 }
 
-export interface Product {
+export interface IProduct {
   id: string;
   title: string | null;
   subtitle: string | null;
@@ -295,7 +295,7 @@ interface IData {
   count: number;
   limit: number;
   offset: number;
-  products: Product[];
+  products: IProduct[];
 }
 export interface ISearchResultsProps {
   searchUrl: string;
@@ -318,17 +318,17 @@ export interface IResultHeaderProps {
 }
 
 export interface IDataTableSetState {
-  setRows: Dispatch<SetStateAction<Product[]>>;
-  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
+  setRows: Dispatch<SetStateAction<IProduct[]>>;
+  setTableColumns: Dispatch<SetStateAction<ITableColumn[]>>;
 }
 
 export interface IDataTableState {
-  rows: Product[];
-  tableColumns: TableColumn[];
+  rows: IProduct[];
+  tableColumns: ITableColumn[];
 }
 
 export interface IResultFooterProps {
-  rows: Product[];
+  rows: IProduct[];
   refetchRow: any;
   modalSetState: IModalSetState;
   checkboxState: ICheckboxState;

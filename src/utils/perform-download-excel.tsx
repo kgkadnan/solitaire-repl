@@ -4,14 +4,14 @@ import { downloadExcelFromBase64 } from './download-excel-from-base64';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import logger from 'logging/log-util';
 
-interface DownloadExcelApiResponse {
+interface IDownloadExcelApiResponse {
   data: {
     fileName: string;
     data: string;
   };
 }
 
-interface DownloadExcelFunctionProps {
+interface IDownloadExcelFunctionProps {
   products: string[];
   downloadExcelApi: any;
   setDialogContent?: Dispatch<SetStateAction<ReactNode>>;
@@ -29,10 +29,10 @@ export const performDownloadExcel = async ({
   setIsCheck,
   setIsCheckAll,
   setIsError
-}: DownloadExcelFunctionProps) => {
+}: IDownloadExcelFunctionProps) => {
   try {
     // Explicitly type res to include unwrap method
-    const res: DownloadExcelApiResponse = await downloadExcelApi({
+    const res: IDownloadExcelApiResponse = await downloadExcelApi({
       products
     });
 
