@@ -1,4 +1,8 @@
-export const handleReset = (setState: any, errorSetState: any) => {
+export const handleReset = (
+  setState: any,
+  errorSetState: any,
+  setValidationError: any
+) => {
   const {
     setSelectedShape,
     setSelectedColor,
@@ -93,9 +97,9 @@ export const handleReset = (setState: any, errorSetState: any) => {
 
   setSelectedShape([]);
   setSelectedColor('');
-  setSelectedFancyColor([]);
-  setSelectedIntensity([]);
-  setSelectedOvertone([]);
+  setSelectedFancyColor('');
+  setSelectedIntensity('');
+  setSelectedOvertone('');
   setSelectedTinge([]);
   setSelectedClarity([]);
   setSelectedCaratRange([]);
@@ -179,4 +183,6 @@ export const handleReset = (setState: any, errorSetState: any) => {
   setDiscountError('');
   setPricePerCaratError('');
   setAmountRangeError('');
+
+  setValidationError('');
 };

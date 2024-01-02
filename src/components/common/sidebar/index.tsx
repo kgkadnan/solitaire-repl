@@ -49,7 +49,9 @@ const SideBar = () => {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
       link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
-      isActive: currentRoute === '/search' && subRoute === `${ManageLocales('app.search.newSearchRoute')}`
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -60,8 +62,12 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: `/search?active-tab=${ManageLocales('app.search.savedSearchesRoute')}`,
-      isActive: currentRoute === '/search' && subRoute === `${ManageLocales('app.search.savedSearchesRoute')}`
+      link: `/search?active-tab=${ManageLocales(
+        'app.search.savedSearchesRoute'
+      )}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.savedSearchesRoute')}`
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,

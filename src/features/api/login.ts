@@ -1,8 +1,5 @@
-import {
-  createApi
-} from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
 import { createBaseQuery } from './base-query';
-
 
 export const loginApi = createApi({
   reducerPath: 'loginReducer',

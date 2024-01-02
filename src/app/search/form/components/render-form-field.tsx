@@ -53,7 +53,10 @@ const renderContent = (
     pricePerCaratFrom,
     pricePerCaratTo,
     caratRangeFrom,
-    caratRangeTo
+    caratRangeTo,
+    selectedFancyColor,
+    selectedIntensity,
+    selectedOvertone
   } = state;
 
   const {
@@ -143,31 +146,31 @@ const renderContent = (
 
   // Function to handle color change based on user selection
   const handleColorChange = (data: string) => {
-    setSelectedFancyColor([]);
-    setSelectedIntensity([]);
-    setSelectedOvertone([]);
+    setSelectedFancyColor('');
+    setSelectedIntensity('');
+    setSelectedOvertone('');
     handleFilterChange(data, selectedColor, setSelectedColor);
   };
 
   // Function to handle fancy color filter change based on user selection
   const handleFancyFilterChange = (selectedOption: any) => {
     setSelectedColor([]);
-    setSelectedFancyColor([]);
+    setSelectedFancyColor('');
     selectedOption.map((data: any) => {
       setSelectedFancyColor((prevSelectedColors: string[]) => [
         ...prevSelectedColors,
-        data.value
+        data
       ]);
     });
   };
   // Function to handle intensity change based on user selection
   const handleIntensityChange = (selectedOption: any) => {
     setSelectedColor([]);
-    setSelectedIntensity([]);
+    setSelectedIntensity('');
     selectedOption.map((data: any) => {
       setSelectedIntensity((prevSelectedColors: string[]) => [
         ...prevSelectedColors,
-        data.value
+        data
       ]);
     });
   };
@@ -175,11 +178,11 @@ const renderContent = (
   // Function to handle overtone change based on user selection
   const handleOvertoneChange = (selectedOption: any) => {
     setSelectedColor([]);
-    setSelectedOvertone([]);
+    setSelectedOvertone('');
     selectedOption.map((data: any) => {
       setSelectedOvertone((prevSelectedColors: string[]) => [
         ...prevSelectedColors,
-        data.value
+        data
       ]);
     });
   };
@@ -631,6 +634,7 @@ const renderContent = (
         >
           <div className="w-[30%]">
             <Select
+              value={selectedFancyColor}
               options={computeDropdownFieldFromJson(advanceSearch.fancy)}
               onChange={handleFancyFilterChange}
               placeholder={ManageLocales('app.advanceSearch.fancyColor')}
@@ -641,6 +645,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
+              value={selectedIntensity}
               options={computeDropdownFieldFromJson(advanceSearch.intensity)}
               onChange={handleIntensityChange}
               placeholder={ManageLocales('app.advanceSearch.intensity')}
@@ -651,6 +656,7 @@ const renderContent = (
           </div>
           <div className="w-[30%]">
             <Select
+              value={selectedOvertone}
               options={computeDropdownFieldFromJson(advanceSearch.overtone)}
               onChange={handleOvertoneChange}
               placeholder={ManageLocales('app.advanceSearch.overtone')}

@@ -1,8 +1,8 @@
-import { Product } from '../result-interface';
+import { IProduct } from '../result-interface';
 
 interface ICalculateTotal {
   isCheck: string[];
-  rows: Product[];
+  rows: IProduct[];
   type: 'amount' | 'carat';
 }
 
