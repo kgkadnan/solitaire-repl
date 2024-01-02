@@ -4,6 +4,7 @@ import { ITheadProps } from '../interface';
 import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '../../checkbox/helper/handle-select-all-checkbox';
+import Tooltip from '../../tooltip';
 
 export const TableHead: React.FC<ITheadProps> = ({
   selectionAllowed,
@@ -46,7 +47,15 @@ export const TableHead: React.FC<ITheadProps> = ({
               position: `${index === 0 ? 'sticky' : 'static'}`
             }}
           >
-            {column.short_label}
+            <Tooltip
+              tooltipElement={column.short_label}
+              content={column.label}
+              tooltipStyles={{
+                tooltipContentStyle:
+                  '!rounded-[4px] !px-[10px] !py-[5px] !bg-solitaireSenary'
+              }}
+              // Optional: You can add tooltipStyles and handleEvent props here
+            />
           </th>
         ))}
       </tr>
