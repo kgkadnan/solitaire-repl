@@ -102,6 +102,9 @@
   "app.topNav.wishlist": "Wishlist",
   "app.topNav.myCart": "My Cart",
   "app.topNav.myAccount": "My Account",
+  "app.topNav.no": "No",
+  "app.topNav.yes": "Yes",
+  "app.topNav.kycModelContent": "Do you want to terminate KYC process and explore website? (yourprogress will be saved)",
 
   "app.sideNav.dashboard": "Dashboard",
   "app.sideNav.newArrival": "New Arrival",
@@ -113,6 +116,9 @@
   "app.sideNav.recentConfirmations": "Recent Confirmations",
   "app.sideNav.appointments": "Appointments",
   "app.sideNav.myDiamonds": "My Diamonds",
+  "app.sideNav.no": "No",
+  "app.sideNav.yes": "Yes",
+  "app.sideNav.kycModelContent": "Do you want to terminate KYC process and explore website? (yourprogress will be saved)",
 
   "app.bottomNav.aboutUs": "About Us",
   "app.bottomNav.contactUs": "Contact Us",
