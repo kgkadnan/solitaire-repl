@@ -1,8 +1,8 @@
 import { ManageLocales } from '@/utils/translate';
 import React from 'react';
 import {
-  MyDiamondsSheetContentProps,
-  PageTitles
+  IMyDiamondsSheetContentProps,
+  IPageTitles
 } from '../../interface/my-diamonds-interface';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 
@@ -13,7 +13,7 @@ import styles from './my-diamonds.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import Link from 'next/link';
 
-export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
+export const MyDiamondsSheetContent: React.FC<IMyDiamondsSheetContentProps> = ({
   check,
   productPageDetail,
   rows,
@@ -49,7 +49,7 @@ export const MyDiamondsSheetContent: React.FC<MyDiamondsSheetContentProps> = ({
   );
 
   // Page titles Data
-  const pageTitles: PageTitles = {
+  const pageTitles: IPageTitles = {
     'recent-confirmation':
       'app.myDiamonds.RecentConfirmations.recentConfirmationDetail',
     'my-invoices': 'app.myDiamonds.myInvoice.myInvoiceDetail',

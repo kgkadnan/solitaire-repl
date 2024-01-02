@@ -11,11 +11,11 @@ import {
   MEMO_OUT_STATUS,
   SOLD_OUT_STATUS
 } from '@/constants/business-logic';
-import { ProductItem } from './interface';
+import { IProductItem } from './interface';
 import MemoOut from './memo/page';
 import ActiveMyCart from './active/page';
 import OutOfStock from './sold/page';
-import { ManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
 import { CustomDialog } from '@/components/common/dialog';
@@ -101,7 +101,7 @@ function MyCart() {
 
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   // Header data for CustomHeader component
   const headerData = {
@@ -143,10 +143,10 @@ function MyCart() {
       if (data) {
         const activeDiamondItems = data?.cart?.items
           .filter(
-            (item: ProductItem) =>
+            (item: IProductItem) =>
               item?.product?.diamond_status === ACTIVE_STATUS
           )
-          .map((row: ProductItem) => row?.product);
+          .map((row: IProductItem) => row?.product);
 
         setActiveTabCount(activeDiamondItems?.length);
       }
@@ -160,10 +160,10 @@ function MyCart() {
       if (data) {
         const soldOutItems = data?.cart?.items
           .filter(
-            (item: ProductItem) =>
+            (item: IProductItem) =>
               item?.product?.diamond_status === SOLD_OUT_STATUS
           )
-          .map((row: ProductItem) => row?.product);
+          .map((row: IProductItem) => row?.product);
 
         setSoldCount(soldOutItems?.length);
         setSoldOutRows(soldOutItems);
@@ -178,10 +178,10 @@ function MyCart() {
       if (data) {
         const memoOutDiamondItems = data?.cart?.items
           .filter(
-            (item: ProductItem) =>
+            (item: IProductItem) =>
               item?.product?.diamond_status === MEMO_OUT_STATUS
           )
-          .map((row: ProductItem) => row?.product);
+          .map((row: IProductItem) => row?.product);
 
         setMemoCount(memoOutDiamondItems?.length);
         setMemoRows(memoOutDiamondItems);

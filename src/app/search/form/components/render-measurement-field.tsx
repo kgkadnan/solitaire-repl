@@ -6,6 +6,7 @@ import advanceSearch from '@/constants/advance-search.json';
 import Select from 'react-select';
 import { colourStyles } from '../helpers/select-colour-style';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { computeDropdownFieldFromJson } from '../helpers/compute-dropdown-field-from-json';
 // Define interfaces for the component props
 interface IRange {
   gte: number;
@@ -53,6 +54,7 @@ const renderMeasurementField = (
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
+    selectedCulet,
     girdleFrom,
     girdleTo
   } = state;
@@ -235,14 +237,15 @@ const renderMeasurementField = (
 
   // Function to handle filter changes and culet selection based on user input
   const handleCuletChange = (data: any) => {
-    setSelectedCulet(data.value);
+    setSelectedCulet(data);
   };
 
   const culetField = () => {
     return (
       <div className={`${styles.parameterContainer} pt-6`}>
         <Select
-          options={computeDropdownField(advanceSearch.culet)}
+          value={selectedCulet}
+          options={computeDropdownFieldFromJson(advanceSearch.culet)}
           onChange={handleCuletChange}
           placeholder={'Culet'}
           styles={colourStyles}
@@ -251,17 +254,11 @@ const renderMeasurementField = (
     );
   };
 
-  const computeDropdownField = (fieldData: string[]) => {
-    return fieldData.map(data => {
-      return { value: data, label: data };
-    });
-  };
-
   const handleGirdleFrom = (data: any) => {
-    setGirdleFrom(data.value);
+    setGirdleFrom(data);
   };
   const handleGirdleTo = (data: any) => {
-    setGirdleTo(data.value);
+    setGirdleTo(data);
   };
 
   const girdle = () => {
@@ -274,13 +271,15 @@ const renderMeasurementField = (
         />
         <div className={`${styles.filterSectio}  ${styles.parameterFilter}`}>
           <Select
-            options={computeDropdownField(advanceSearch.girdle)}
+            value={girdleFrom}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleFrom}
             styles={colourStyles}
           />
           <div className={styles.parameterLabel}>to</div>
           <Select
-            options={computeDropdownField(advanceSearch.girdle)}
+            value={girdleTo}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
             onChange={handleGirdleTo}
             styles={colourStyles}
           />

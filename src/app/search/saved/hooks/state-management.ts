@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ISavedSearchData } from '../saved-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';

@@ -1,4 +1,4 @@
-import React, { ReactNode, useRef } from 'react';
+import React, { useRef } from 'react';
 import styles from './custom-input-radio.module.scss';
 
 export const RadioButton: React.FC<any> = ({ radioMetaData }) => {

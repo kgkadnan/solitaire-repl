@@ -1,33 +1,15 @@
 import {
-  validateEmail,
   validateFirstName,
   validateLastName,
-  validatePhone
+  validatePhone,
+  validateEmail
 } from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-
-export enum fieldType {
-  FLOATING_INPUT = 'floatingInput',
-  CHECKBOX = 'checkbox',
-  RADIO = 'radio',
-  RADIOWITHINPUT = 'radioWithInput',
-  ATTACHMENT = 'attachment',
-  FLOATING_INPUT_WITH_LABEL = 'floatingInputWithLabel'
-}
-
-enum supportedMediaUnit {
-  MB = 'MB',
-  KB = 'KB'
-}
-
-enum supportedMediaFormat {
-  JPEG = 'JPEG',
-  PNG = 'PNG',
-  JPG = 'JPG',
-  PDF = 'PDF',
-  DOC = 'DOC',
-  DOCX = 'DOCX'
-}
+import {
+  fieldType,
+  supportedMediaFormat,
+  supportedMediaUnit
+} from './enums/kyc';
 
 const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [

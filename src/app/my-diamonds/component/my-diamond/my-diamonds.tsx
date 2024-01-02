@@ -1,13 +1,13 @@
 'use client';
 
-import React, { ReactNode, useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { CustomSlider } from '../../../../components/common/slider';
 import ChevronImage from '@public/assets/icons/chevron-forward-outline.svg';
 import Image from 'next/image';
 import styles from './my-diamonds.module.scss';
 import { formatDate } from '@/utils/format-date-only';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { ManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { NoDataFound } from '../../../../components/common/no-data-found';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
@@ -18,11 +18,11 @@ import { useCheckboxStateManagement } from '../../../../components/common/checkb
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import CustomPagination from '../../../../components/common/pagination';
 import Link from 'next/link';
-import { MyDiamondsProps } from '../../interface/my-diamonds-interface';
+import { IMyDiamondsProps } from '../../interface/my-diamonds-interface';
 import { MyDiamondsSheetContent } from './sheet-content';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/my-diamond';
 
-export const MyDiamonds: React.FC<MyDiamondsProps> = ({
+export const MyDiamonds: React.FC<IMyDiamondsProps> = ({
   data,
   handleCardClick,
   productPageDetail,
@@ -58,7 +58,7 @@ export const MyDiamonds: React.FC<MyDiamondsProps> = ({
 
   // Fetch product page table columns
   const { data: productTableColumns } =
-    useGetManageListingSequenceQuery<ManageListingSequenceResponse>({});
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   // Download Excel API
   let [downloadExcel] = useDownloadExcelMutation();

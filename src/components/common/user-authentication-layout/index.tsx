@@ -2,11 +2,11 @@ import Image from 'next/image';
 import React, { ReactNode } from 'react';
 import Banner from '@public/assets/images/Form-image.png';
 
-interface UserAuthenticationLayoutProps {
+interface IUserAuthenticationLayoutProps {
   formData: ReactNode;
 }
 
-const UserAuthenticationLayout: React.FC<UserAuthenticationLayoutProps> = ({
+const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
   formData
 }) => {
   return (

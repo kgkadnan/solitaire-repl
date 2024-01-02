@@ -8,7 +8,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { IResultFooterProps, Product } from '../result-interface';
+import { IProduct, IResultFooterProps } from '../result-interface';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
@@ -85,7 +85,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
-          (row: Product) => row.id == id && row.diamond_status === 'MemoOut'
+          (row: IProduct) => row.id === id && row.diamond_status === 'MemoOut'
         );
       });
 
@@ -94,7 +94,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
         setIsError(true);
       } else {
         const variantIds = isCheck.map((id: string) => {
-          const selectedRow = rows.find((row: Product) => row.id === id);
+          const selectedRow = rows.find((row: IProduct) => row.id === id);
           return selectedRow?.variants[0]?.id;
         });
         if (variantIds.length) {
@@ -117,7 +117,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
                     href={'/my-cart?active-tab=active'}
                     className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
                   >
-                    Go To Cart
+                    Go To &quot;MyCart&quot;
                   </Link>
                 </div>
               );

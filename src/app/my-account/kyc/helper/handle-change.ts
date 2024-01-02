@@ -1,8 +1,9 @@
 import { updateFormState } from '@/features/kyc/kyc';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 export const handleInputChange = async (
-  name: any,
-  value: any,
+  path: string,
+  value: string | string[],
   dispatch: any,
   handleChange: any,
   screenName: string
@@ -17,5 +18,6 @@ export const handleInputChange = async (
       value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
     })
   );
-  dispatch(updateFormState({ name: name, value: value }));
+  dispatch(updateFormState({ name: path, value: value }));
+  dispatch(isEditingKYC(true));
 };

@@ -13,24 +13,9 @@ import {
   Matches,
   MinLength,
   ValidateIf,
-  ValidationError,
   validate
 } from 'class-validator';
 import logger from 'logging/log-util';
-
-// Validation functions
-export const validateCountry = (value: any) => {
-  if (!value) return 'Country is required';
-  // Add more complex validation logic if needed
-  return null;
-};
-
-export const validateOnlineSection = (value: any) => {
-  // Assuming this is a complex object, validate accordingly
-  if (Object.keys(value.sections).length === 0)
-    return 'At least one section is required';
-  return null;
-};
 
 // Add more validation functions as needed
 export const validateScreen = async (
@@ -357,7 +342,7 @@ export class KycPostCompanyDetailsValidation extends KycBase {
   })
   is_member_of_business: boolean = false;
 
-  @ValidateIf((object, value) => object.is_member_of_business === true)
+  @ValidateIf(object => object.is_member_of_business === true)
   @IsNotEmpty({ message: 'Member of business name must be provided' })
   @IsString({ message: 'Member of business name must be a string' })
   member_of_business_name: string;
@@ -422,14 +407,14 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsOptional()
   is_msme_registered: boolean = false;
 
-  @ValidateIf((object, value) => object?.is_msme_registered === true)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: 'MSME type must be a non-empty when MSME is registered'
   })
   @IsNotEmpty({ message: 'MSME type is required when MSME is registered' })
   msme_type: string;
 
-  @ValidateIf((object, value) => object?.is_msme_registered === true)
+  @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message:
       'MSME registration number must be a non-empty when MSME is registered'
@@ -548,7 +533,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   @IsOptional()
   is_anti_money_laundering: boolean = false;
 
-  @ValidateIf((object, value) => object?.is_anti_money_laundering === true)
+  @ValidateIf(object => object?.is_anti_money_laundering === true)
   @IsString({
     message:
       'Anti-money laundering policy name must be a non-empty string when registered under MSME Act'

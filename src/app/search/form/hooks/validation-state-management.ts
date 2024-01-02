@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export interface Errors {
+export interface IErrors {
   discount: { from: string | null; to: string | null };
   price_range: { from: string | null; to: string | null };
   price_per_carat: { from: string | null; to: string | null };
@@ -20,7 +20,7 @@ const useValidationStateManagement = () => {
   const [inputErrorContent, setInputErrorContent] = useState('');
   const [selectedStep, setSelectedStep] = useState('');
   const [selectedShadeContain, setSelectedShadeContain] = useState('');
-  const [errors, setErrors] = useState<Errors>({
+  const [errors, setErrors] = useState<IErrors>({
     discount: { from: null, to: null },
     price_range: { from: null, to: null },
     price_per_carat: { from: null, to: null }

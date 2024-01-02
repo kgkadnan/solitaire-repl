@@ -3,7 +3,6 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
-
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -23,8 +22,8 @@ import {
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import {
-  NotificationItem,
-  NotificationUpdate
+  INotificationItem,
+  INotificationUpdate
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
@@ -34,8 +33,7 @@ export interface ISavedSearch {
   isSavedSearch: boolean;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
-import { NEW_SEARCH } from '@/constants/application-constants/search-page';
-import { myAccountRoutes } from '@/constants/routes';
+import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
@@ -43,6 +41,10 @@ export const TopNavigationBar = () => {
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(
     store => store.notificationBadge.status
+  );
+
+  const isEditingKYCStoreData: boolean = useAppSelector(
+    store => store.isEditingKYC.status
   );
 
   const [dialogContent, setDialogContent] = useState<ReactNode>('');
@@ -69,8 +71,10 @@ export const TopNavigationBar = () => {
     },
     {
       label: ManageLocales('app.topNav.advanceSearch'),
-      link: `/search?active-tab=${NEW_SEARCH}`,
-      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
+      link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       label: ManageLocales('app.topNav.myCart'),
@@ -80,7 +84,7 @@ export const TopNavigationBar = () => {
     {
       label: ManageLocales('app.topNav.myAccount'),
       link: '/my-account/kyc',
-      isActive: myAccountRoutes.includes(currentRoute)
+      isActive: currentRoute.includes('/my-account')
     }
   ];
 
@@ -91,10 +95,6 @@ export const TopNavigationBar = () => {
         navData.isActive = false;
       }
     });
-  };
-
-  const handleButtonClick = (label: string, link: string) => {
-    handleRoute(label, link);
   };
 
   const handleScroll = useCallback(() => {
@@ -113,14 +113,14 @@ export const TopNavigationBar = () => {
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
 
-    const notificationMapData = data?.data?.map((item: NotificationItem) => ({
+    const notificationMapData = data?.data?.map((item: INotificationItem) => ({
       id: item.id,
       status: item.status === 'read' ? 'read' : 'unread'
     }));
 
-    const unreadNotifications: NotificationUpdate[] =
+    const unreadNotifications: INotificationUpdate[] =
       notificationMapData?.filter(
-        (item: NotificationUpdate) => item.status === 'unread'
+        (item: INotificationUpdate) => item.status === 'unread'
       );
 
     unreadNotifications.length
@@ -155,7 +155,17 @@ export const TopNavigationBar = () => {
                   }}
                   displayButtonLabel={navData.label}
                   handleClick={() =>
-                    handleButtonClick(navData.label, navData.link)
+                    handleIsEditingKyc({
+                      isEditingKYCStoreData,
+                      setIsDialogOpen,
+                      setDialogContent,
+                      dispatch,
+                      handleRoute,
+                      label: navData.label,
+                      link: navData.link,
+                      styles,
+                      currentRoute
+                    })
                   }
                 />
               </div>
@@ -198,7 +208,17 @@ export const TopNavigationBar = () => {
             />
             <div
               onClick={() => {
-                handleButtonClick('My Account', topNavData[3].link);
+                handleIsEditingKyc({
+                  isEditingKYCStoreData,
+                  setIsDialogOpen,
+                  setDialogContent,
+                  dispatch,
+                  handleRoute,
+                  label: 'My Account',
+                  link: topNavData[3].link,
+                  styles,
+                  currentRoute
+                });
               }}
               className={`${styles.headerIconStyle}`}
             >

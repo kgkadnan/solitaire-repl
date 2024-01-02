@@ -49,7 +49,7 @@ const SearchResults = ({
   const { setRows, setTableColumns } = dataTableSetState;
 
   const { refetchDataToDefault } = sortByState;
-  const { inputError, inputErrorContent } = errorState;
+  const { inputErrorContent } = errorState;
   const { setInputError, setInputErrorContent, setIsSliderError } =
     errorSetState;
 
@@ -70,7 +70,6 @@ const SearchResults = ({
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent,
     setIsModalOpen,
     setIsPersistDialogOpen
   } = modalSetState;
@@ -175,14 +174,14 @@ variable changes. */
           />
         </div>
 
-        <div className="flex  gap-2">
+        <div className="flex justify-center  gap-2">
           {/* Button to trigger the register action */}
 
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
             displayButtonAllStyle={{
               displayButtonStyle:
-                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[80%] h-[40px]',
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
@@ -195,7 +194,7 @@ variable changes. */
           <CustomDisplayButton
             displayButtonLabel={ManageLocales('app.advanceSearch.save')}
             displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[80%] h-[40px]',
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}

@@ -10,13 +10,13 @@ import {
 import React, { useState } from 'react';
 import styles from './dropdown.module.scss';
 
-interface IdropdownMenu {
+interface IDropdownMenu {
   label: string;
   fn: any;
 }
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
-  dropdownMenu: IdropdownMenu[];
+  dropdownMenu: IDropdownMenu[];
 }
 
 export const CustomDropdown: React.FC<IDropdownData> = ({

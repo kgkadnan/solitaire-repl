@@ -1,9 +1,9 @@
-import { Product } from '../result-interface';
+import { IProduct } from '../result-interface';
 
 interface ICalculateAverageDiscount {
   isCheck: string[];
-  rows: Product[];
-  property: keyof Product;
+  rows: IProduct[];
+  property: keyof IProduct;
 }
 
 export function calculateAverage({

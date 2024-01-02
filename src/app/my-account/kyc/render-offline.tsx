@@ -4,14 +4,14 @@ import React, { useState } from 'react';
 import Finger from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/translate';
-import { DownloadAndUpload } from '@/components/common/donwlaod-and-upload';
+import { DownloadAndUpload } from '@/components/common/download-and-upload';
 import { Checkbox } from '@/components/ui/checkbox';
 import styles from './styles/attachment.module.scss';
 
 import useAttachmentsStateManagement from './hooks/attachment-state-management';
 import { CustomModal } from '@/components/common/modal';
 
-const RenderOffline = ({ data, modalSetState, modalState }: any) => {
+const RenderOffline = ({ _data, modalSetState, modalState }: any) => {
   const {
     attachmentsState: {
       pan: {
