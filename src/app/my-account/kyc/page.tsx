@@ -19,7 +19,7 @@ import { useKycMutation } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import logger from 'logging/log-util';
 import { ValidationError } from 'class-validator';
-import { Checkbox } from '@radix-ui/react-checkbox';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
