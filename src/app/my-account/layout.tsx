@@ -1,7 +1,6 @@
 'use client';
 import CustomHeader from '@/components/common/header';
 import { ManageLocales } from '@/utils/translate';
-import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation'; // Import the useRouter hook
 import React, { useCallback, useEffect, useState } from 'react';
 import styles from './my-account.module.scss';
