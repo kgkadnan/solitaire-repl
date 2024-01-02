@@ -11,7 +11,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 
 const ResetPassword = () => {
@@ -25,8 +25,10 @@ const ResetPassword = () => {
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
 
-  const token = useSearchParams().get('token');
-  const email = useSearchParams().get('email');
+  const pathName = usePathname();
+  console.log('pathname', pathName);
+
+  const [, , token, email] = pathName.split('/');
 
   const [resetPassword] = useResetPasswordMutation();
 
