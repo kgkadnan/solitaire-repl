@@ -25,7 +25,7 @@ const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const kycIsCompletedStoreData: boolean = useAppSelector(
+  const isSavedKycCheck: boolean = useAppSelector(
     store => store.kycIsCompleted.status
   );
 
@@ -37,17 +37,16 @@ const SideBar = () => {
   const subRoute = useSearchParams().get('active-tab');
 
   const onKGKLogoContainerClick = useCallback(() => {
-    if (kycIsCompletedStoreData) {
+    if (isSavedKycCheck) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
           <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to terminate KYC process and explore website? (your
-            progress will be saved)
+            {ManageLocales('app.sideNav.kycModelContent')}
           </div>
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
-              displayButtonLabel="Yes"
+              displayButtonLabel={ManageLocales('app.sideNav.yes')}
               handleClick={() => {
                 dispatch(kycIsCompleted(false));
                 router.push('/');
@@ -59,7 +58,7 @@ const SideBar = () => {
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="No"
+              displayButtonLabel={ManageLocales('app.sideNav.no')}
               handleClick={() => {
                 setIsDialogOpen(false);
                 setDialogContent('');
@@ -74,7 +73,7 @@ const SideBar = () => {
     } else {
       router.push('/');
     }
-  }, [router, kycIsCompletedStoreData]);
+  }, [router, isSavedKycCheck]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -153,17 +152,16 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    if (kycIsCompletedStoreData && currentRoute == '/my-account/kyc') {
+    if (isSavedKycCheck) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
           <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to terminate KYC process and explore website? (your
-            progress will be saved)
+            {ManageLocales('app.sideNav.kycModelContent')}
           </div>
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
-              displayButtonLabel="yes"
+              displayButtonLabel={ManageLocales('app.sideNav.yes')}
               handleClick={() => {
                 dispatch(kycIsCompleted(false));
                 handleRoute(nav, link);
@@ -175,7 +173,7 @@ const SideBar = () => {
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="No"
+              displayButtonLabel={ManageLocales('app.sideNav.no')}
               handleClick={() => {
                 setIsDialogOpen(false);
                 setDialogContent('');

@@ -44,7 +44,7 @@ export const TopNavigationBar = () => {
     store => store.notificationBadge.status
   );
 
-  const kycIsCompletedStoreData: boolean = useAppSelector(
+  const isSavedKycCheck: boolean = useAppSelector(
     store => store.kycIsCompleted.status
   );
 
@@ -99,19 +99,16 @@ export const TopNavigationBar = () => {
   };
 
   const handleButtonClick = (label: string, link: string) => {
-    const isKyc = kycIsCompletedStoreData;
-
-    if (isKyc && currentRoute == '/my-account/kyc') {
+    if (isSavedKycCheck) {
       setIsDialogOpen(true);
       setDialogContent(
         <>
           <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to terminate KYC process and explore website? (your
-            progress will be saved)
+            {ManageLocales('app.topNav.kycModelContent')}
           </div>
           <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
             <CustomDisplayButton
-              displayButtonLabel="Yes"
+              displayButtonLabel={ManageLocales('app.topNav.yes')}
               handleClick={() => {
                 dispatch(kycIsCompleted(false));
                 handleRoute(label, link);
@@ -123,7 +120,7 @@ export const TopNavigationBar = () => {
               }}
             />
             <CustomDisplayButton
-              displayButtonLabel="No"
+              displayButtonLabel={ManageLocales('app.topNav.no')}
               handleClick={() => {
                 setIsDialogOpen(false);
                 setDialogContent('');
