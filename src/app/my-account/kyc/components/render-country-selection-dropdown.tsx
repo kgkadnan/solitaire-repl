@@ -32,8 +32,8 @@ export const CountrySelectionDropdown = ({
 
   const computeDropdownField = (countries: any) => {
     return countries.map(({ country }: any) => ({
-      label: country.fullName,
-      value: country.fullName
+      label: country.display,
+      value: country.backend
     }));
   };
 

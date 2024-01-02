@@ -1,13 +1,14 @@
 import { updateFormState } from '@/features/kyc/kyc';
+import { validateKYCField } from './validations/field';
 
 export const handleInputChange = async (
   path: string,
   value: string | string[],
   dispatch: any,
-  handleChange: any,
-  screenName: string
+  screenName: string,
+  key: string
 ) => {
-  let errors = await handleChange(value);
+  let errors = await validateKYCField(key, value);
 
   dispatch(
     updateFormState({

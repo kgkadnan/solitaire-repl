@@ -35,7 +35,6 @@ interface IRenderFieldProps {
     name: string;
     label: string;
     type: any;
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
     state: string;
     checkboxData: ICheckboxData[];
     inputType?: any;
@@ -60,7 +59,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     name,
     label,
     type,
-    handleChange,
     state,
     inputType,
     checkboxData,
@@ -78,7 +76,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
-        <div className="">
+        <div className="" key={key}>
           <FloatingLabelInput
             label={name}
             onChange={e =>
@@ -86,8 +84,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 `formState.online.sections[${screenName}][${key}]`,
                 e.target.value,
                 dispatch,
-                handleChange,
-                screenName
+                screenName,
+                key
               )
             }
             type={inputType}
@@ -96,12 +94,13 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             errorText={
               formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
             }
+            key={key}
           />
         </div>
       );
     case fieldType.CHECKBOX:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+        <div className="text-[14px] text-solitaireTertiary w-[70%]" key={key}>
           <p className="mb-4">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
             {checkboxData.map(item => {
@@ -113,8 +112,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         `online.sections[${screenName}][${key}]`,
                         isChecked,
                         dispatch,
-                        handleChange,
-                        screenName
+                        screenName,
+                        key
                       )
                     }
                     data={item.data}
@@ -138,7 +137,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.RADIO:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+        <div className="text-[14px] text-solitaireTertiary w-[70%]" key={key}>
           <p className="mb-[16px]">{name}</p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
@@ -151,9 +150,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </div>
         </div>
       );
-    case fieldType.RADIOWITHINPUT:
+    case fieldType.RADIO_WITH_INPUT:
       return (
-        <div className="text-[14px] text-solitaireTertiary">
+        <div className="text-[14px] text-solitaireTertiary" key={key}>
           <p className="mb-[0px]">{name}</p>
           <p className="mb-[8px] text-[12px] text-solitaireSenary">
             {subTitle}
@@ -182,15 +181,23 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.FLOATING_INPUT_WITH_LABEL:
       return (
-        <div className="">
+        <div className="" key={key}>
           <p className="mb-[8px] text-solitaireTertiary">{label}</p>
           <FloatingLabelInput
             label={name}
-            onChange={handleChange}
             type={inputType}
             name={name}
             // value={state}
             value={''}
+            onChange={e =>
+              handleInputChange(
+                `formState.online.sections[${screenName}][${key}]`,
+                e.target.value,
+                dispatch,
+                screenName,
+                key
+              )
+            }
           />
         </div>
       );

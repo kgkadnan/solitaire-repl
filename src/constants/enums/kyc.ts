@@ -2,7 +2,7 @@ export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
-  RADIOWITHINPUT = 'radioWithInput',
+  RADIO_WITH_INPUT = 'radioWithInput',
   ATTACHMENT = 'attachment',
   FLOATING_INPUT_WITH_LABEL = 'floatingInputWithLabel'
 }
@@ -19,4 +19,19 @@ export enum supportedMediaFormat {
   PDF = 'PDF',
   DOC = 'DOC',
   DOCX = 'DOCX'
+}
+
+export enum supportedCountries {
+  INDIA = 'India',
+  BELGIUM = 'Belgium',
+  USA = 'Usa',
+  OTHER = 'Other'
+}
+
+export enum kycScreenIdentifierNames {
+  PERSONAL_DETAILS = 'personal_details',
+  COMPANY_DETAILS = 'company_details',
+  COMPANY_OWNER_DETAILS = 'company_owner_details',
+  BANKING_DETAILS = 'banking_details',
+  ATTACHMENT = 'attachment'
 }

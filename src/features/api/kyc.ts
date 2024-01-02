@@ -13,7 +13,9 @@ export const kycApi = createApi({
         method: 'PUT',
         body: data
       }),
-
+      transformResponse: (response, meta) => {
+        return { data: response, statusCode: meta?.response?.status };
+      },
       invalidatesTags: ['kyc']
     })
   })

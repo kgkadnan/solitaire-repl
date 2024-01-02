@@ -1,33 +1,28 @@
-import {
-  validateFirstName,
-  validateLastName,
-  validatePhone,
-  validateEmail
-} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
   fieldType,
   supportedMediaFormat,
-  supportedMediaUnit
+  supportedMediaUnit,
+  supportedCountries,
+  kycScreenIdentifierNames
 } from './enums/kyc';
 
 const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [
   {
     country: {
-      fullName: 'Belgium',
-      shortName: 'Belgium'
+      display: 'Belgium',
+      backend: supportedCountries.BELGIUM
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'first_name'
           },
@@ -35,7 +30,6 @@ export const KYCForm = [
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'last_name'
           },
@@ -43,7 +37,6 @@ export const KYCForm = [
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
-            isRequired: true,
             handleChange: () => {},
             key: 'phone'
           }
@@ -54,13 +47,12 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_name'
           },
@@ -68,7 +60,6 @@ export const KYCForm = [
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'year_of_establishment'
           },
@@ -76,7 +67,6 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'address'
           },
@@ -84,7 +74,6 @@ export const KYCForm = [
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_phone_number'
           },
@@ -92,7 +81,6 @@ export const KYCForm = [
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_email'
           },
@@ -249,7 +237,6 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'business_registration_number'
           },
@@ -257,7 +244,6 @@ export const KYCForm = [
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'vat_number'
           },
@@ -265,7 +251,6 @@ export const KYCForm = [
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'fax_number'
           },
@@ -273,14 +258,13 @@ export const KYCForm = [
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
+            type: fieldType.RADIO_WITH_INPUT,
             key: 'is_member_of_business',
             radioData: [
               {
@@ -304,7 +288,6 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'member_of_business_name'
               }
@@ -315,7 +298,6 @@ export const KYCForm = [
             name: 'Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
           },
@@ -323,7 +305,6 @@ export const KYCForm = [
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'ownership_percentage'
           }
@@ -337,7 +318,6 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'bank_name'
           },
@@ -346,21 +326,18 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'swift_code'
           }
@@ -389,44 +366,36 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'India',
-      shortName: 'india'
+      display: 'India',
+      backend: supportedCountries.INDIA
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: validateFirstName,
             key: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
-            handleChange: validateLastName,
             key: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
-            isRequired: true,
-            handleChange: validatePhone,
             key: 'phone'
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
-            isRequired: true,
-            handleChange: validateEmail,
             key: 'email'
           }
         ]
@@ -436,13 +405,12 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_name'
           },
@@ -450,7 +418,6 @@ export const KYCForm = [
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'year_of_establishment'
           },
@@ -458,7 +425,6 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'address'
           },
@@ -466,7 +432,6 @@ export const KYCForm = [
             name: 'City*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'city'
           },
@@ -474,7 +439,6 @@ export const KYCForm = [
             name: 'State*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'state'
           },
@@ -482,7 +446,6 @@ export const KYCForm = [
             name: 'Pin-Code*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'pincode'
           },
@@ -490,7 +453,6 @@ export const KYCForm = [
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_phone_number'
           },
@@ -498,7 +460,6 @@ export const KYCForm = [
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_email'
           },
@@ -655,7 +616,6 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'business_registration_number'
           },
@@ -663,7 +623,6 @@ export const KYCForm = [
             name: 'Pan-Card Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_pan_number'
           },
@@ -671,7 +630,6 @@ export const KYCForm = [
             name: 'GST Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'gst_number'
           },
@@ -679,14 +637,13 @@ export const KYCForm = [
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
+            type: fieldType.RADIO_WITH_INPUT,
             key: 'is_member_of_business',
             radioData: [
               {
@@ -710,7 +667,6 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'member_of_business_name'
               }
@@ -720,7 +676,7 @@ export const KYCForm = [
             name: 'Registered under MSME Act',
             subTitle:
               'If yes then provide the name field & Registration Number',
-            type: fieldType.RADIOWITHINPUT,
+            type: fieldType.RADIO_WITH_INPUT,
             key: 'is_msme_registered',
             radioData: [
               {
@@ -744,7 +700,6 @@ export const KYCForm = [
                 name: 'MSME type If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'msme_type'
               },
@@ -752,7 +707,6 @@ export const KYCForm = [
                 name: 'Registration Number If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'msme_registration_number'
               }
@@ -763,7 +717,6 @@ export const KYCForm = [
             name: 'Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
           }
@@ -774,12 +727,11 @@ export const KYCForm = [
       {
         screen: 'Company Owner Details',
         icon: HandIcon,
-        screenName: 'company_owner_details',
+        screenName: kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
         fields: [
           {
             name: 'First Name',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'first_name'
           }
@@ -795,7 +747,6 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'bank_name'
           },
@@ -804,28 +755,24 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'account_holder_name'
           },
           {
             name: 'Account Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'account_number'
           },
           {
             name: 'IFSC Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'ifsc_code'
           },
           {
             name: 'Bank Address',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'bank_address'
           }
@@ -970,19 +917,18 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'USA',
-      shortName: 'usa'
+      display: 'USA',
+      backend: supportedCountries.USA
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'first_name'
           },
@@ -990,7 +936,6 @@ export const KYCForm = [
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'last_name'
           },
@@ -998,7 +943,6 @@ export const KYCForm = [
             name: 'Contact Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
-            isRequired: true,
             handleChange: () => {},
             key: 'phone'
           }
@@ -1009,13 +953,12 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_name'
           },
@@ -1023,7 +966,6 @@ export const KYCForm = [
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'year_of_establishment'
           },
@@ -1031,7 +973,6 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'address'
           },
@@ -1039,7 +980,6 @@ export const KYCForm = [
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_phone_number'
           },
@@ -1047,7 +987,6 @@ export const KYCForm = [
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'company_email'
           },
@@ -1204,7 +1143,6 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'business_registration_number'
           },
@@ -1212,7 +1150,6 @@ export const KYCForm = [
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'vat_number'
           },
@@ -1220,7 +1157,6 @@ export const KYCForm = [
             name: 'Federal Tax ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'federal_tax_id'
           },
@@ -1228,7 +1164,6 @@ export const KYCForm = [
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'fax_number'
           },
@@ -1236,14 +1171,13 @@ export const KYCForm = [
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
+            type: fieldType.RADIO_WITH_INPUT,
             key: 'is_member_of_business',
             radioData: [
               {
@@ -1267,7 +1201,6 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'member_of_business_name'
               }
@@ -1278,7 +1211,6 @@ export const KYCForm = [
             name: 'Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
           },
@@ -1286,14 +1218,13 @@ export const KYCForm = [
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'ownership_percentage'
           },
           {
             name: 'Have you instituted an Anti-Money laundering policy in your company?*',
             subTitle: 'If “No” please specify',
-            type: fieldType.RADIOWITHINPUT,
+            type: fieldType.RADIO_WITH_INPUT,
             key: 'is_anti_money_laundering',
             radioData: [
               {
@@ -1317,7 +1248,6 @@ export const KYCForm = [
                 name: 'Specify here',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
                 key: 'anti_money_laundering_policy_name'
               }
@@ -1334,7 +1264,6 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'bank_name'
           },
@@ -1343,21 +1272,18 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT_WITH_LABEL,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
             key: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'swift_code'
           }
@@ -1384,386 +1310,11 @@ export const KYCForm = [
       ]
     }
   },
+
   {
     country: {
-      fullName: 'Belgium',
-      shortName: 'Belgium'
-    },
-    digital: [
-      //Personal Details
-      {
-        screen: 'Personal Details',
-        icon: HandIcon,
-        screenName: 'personal_details',
-        fields: [
-          {
-            name: 'First Name*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'first_name'
-          },
-          {
-            name: 'Last Name*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'last_name'
-          },
-          {
-            name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'number',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'phone'
-          }
-        ]
-      },
-
-      //Company Details
-      {
-        screen: 'Company Details',
-        icon: HandIcon,
-        screenName: 'company_details',
-        fields: [
-          {
-            name: 'Registered Company Name*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'company_name'
-          },
-          {
-            name: 'Year of Establishment*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'year_of_establishment'
-          },
-          {
-            name: 'Registered Address*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'address'
-          },
-          {
-            name: 'Company Number*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'company_phone_number'
-          },
-          {
-            name: 'Company Email-ID*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'company_email'
-          },
-          {
-            name: 'Business Type*',
-            type: fieldType.CHECKBOX,
-            key: 'business_type',
-            checkboxData: [
-              {
-                name: 'Manufacturer',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Retailer',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Wholesaler',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Corporate Retailer',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Other',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: [],
-                isInput: true,
-                inputName: '',
-                inputValue: '',
-                handleInputChange: () => {},
-                placeholder: 'If other please specify'
-              }
-            ]
-          },
-          {
-            name: 'Type of Industry*',
-            type: fieldType.CHECKBOX,
-            key: 'industry_type',
-            checkboxData: [
-              {
-                name: 'Diamonds',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Colour Stones',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Jewellery',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: []
-              },
-              {
-                name: 'Other',
-                handleChange: () => {},
-                data: '',
-                row: [],
-                isChecked: [],
-                isInput: true,
-                inputName: '',
-                inputValue: '',
-                handleInputChange: () => {},
-                placeholder: 'If other please specify'
-              }
-            ]
-          },
-          {
-            name: 'Organisation Type*',
-            type: fieldType.RADIO,
-            key: 'organisation_type',
-            radioData: [
-              {
-                id: 1,
-                label: 'Individual',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 2,
-                label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 3,
-                label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 4,
-                label: 'LLP',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 5,
-                label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 6,
-                label: 'OPC',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 7,
-                label: 'Other',
-                value: '',
-                onChange: () => {},
-                name: '',
-                isInput: true,
-                inputName: '',
-                inputValue: '',
-                handleInputChange: '',
-                placeholder: 'If other please specify',
-                inputStyle: 'w-[150px]'
-              }
-            ]
-          },
-          {
-            name: 'Business Registration Number*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'business_registration_number'
-          },
-          {
-            name: 'VAT Number*',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'vat_number'
-          },
-          {
-            name: 'Fax Number',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'fax_number'
-          },
-          {
-            name: 'Subsidiary/Affiliated Company',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'subsidiary_company'
-          },
-          {
-            name: 'Member of any Business Organisation / Council*',
-            subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_member_of_business',
-            radioData: [
-              {
-                id: 1,
-                label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
-              },
-              {
-                id: 1,
-                label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
-              }
-            ],
-            dynamicCondition: 'Yes',
-            dynamicField: [
-              {
-                name: 'Name If you select “Yes”',
-                type: fieldType.FLOATING_INPUT,
-                inputType: 'text',
-                isRequired: true,
-                handleChange: () => {},
-                key: 'member_of_business_name'
-              }
-            ]
-          },
-          {
-            label: 'Ultimate Beneficiary Details',
-            name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'ultimate_beneficiary_name'
-          },
-          {
-            name: 'Ownership%',
-            type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'ownership_percentage'
-          }
-        ]
-      },
-
-      //Banking Details
-      {
-        screen: 'Banking Details',
-        screenName: 'banking_details',
-        fields: [
-          {
-            name: 'Bank Name*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'bank_name'
-          },
-          {
-            label: 'Banking Details',
-            name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
-            inputType: 'text',
-            isRequired: true,
-            handleChange: () => {},
-            key: 'account_holder_name'
-          },
-          {
-            name: 'Account Number/IBN Number*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'account_number'
-          },
-          {
-            name: 'Swift Code*',
-            type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: () => {},
-            key: 'swift_code'
-          }
-        ]
-      }
-    ],
-    manual: {
-      kycForm: 'link_to_kyc_form.pdf'
-    },
-    attachment: {
-      other: [
-        {
-          name: 'Pan',
-          maxAttachment: 1,
-          fileSizeLimit: FILE_SIZE_LIMIT,
-          fileSizeUnit: supportedMediaUnit.MB,
-          isRequired: true,
-          supportedFormats: [
-            supportedMediaFormat.PDF,
-            supportedMediaFormat.JPEG
-          ],
-          handleChange: () => {}
-        }
-      ]
-    }
-  },
-  {
-    country: {
-      fullName: 'Other',
-      shortName: 'other'
+      display: 'Other',
+      backend: supportedCountries.OTHER
     },
     online: [
       {
@@ -1772,7 +1323,6 @@ export const KYCForm = [
           {
             name: 'First Name',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
             key: 'first_name'
           }
