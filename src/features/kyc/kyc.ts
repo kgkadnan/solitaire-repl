@@ -18,12 +18,14 @@ const initialState = {
         }
       }
     },
-    offline: null
+    offline: null,
+    attachment: null
   },
   formErrorState: {
     country: '',
     online: { sections: {} },
-    offline: null
+    offline: null,
+    attachment: null
   }
 };
 
