@@ -28,7 +28,7 @@ const initialState = {
 };
 
 const setNestedValue = (obj: any, path: string, value: string | string[]) => {
-  const keys = path.split(/[\.\[\]]+/).filter(Boolean); // Split by '.', '[', and ']' and filter out empty strings
+  const keys = path.split(PATH_SEPARATOR).filter(Boolean); // Split by '.', '[', and ']' and filter out empty strings
   const lastKey = keys.pop();
 
   let currentObj = obj;
