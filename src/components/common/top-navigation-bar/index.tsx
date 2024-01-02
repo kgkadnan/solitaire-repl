@@ -3,7 +3,6 @@ import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
 import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
-
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -34,7 +33,7 @@ export interface ISavedSearch {
   isSavedSearch: boolean;
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
-import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
+import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
@@ -98,46 +97,6 @@ export const TopNavigationBar = () => {
     });
   };
 
-  const handleButtonClick = (label: string, link: string) => {
-    if (isEditingKYCStoreData) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            {ManageLocales('app.topNav.kycModelContent')}
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.topNav.yes')}
-              handleClick={() => {
-                dispatch(isEditingKYC(false));
-                handleRoute(label, link);
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.topNav.no')}
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    } else {
-      // localStorage.removeItem('Search');
-      handleRoute(label, link);
-    }
-  };
-
   const handleScroll = useCallback(() => {
     const currentScrollPos = window.pageYOffset;
     setVisible(prevScrollPos > currentScrollPos);
@@ -196,7 +155,17 @@ export const TopNavigationBar = () => {
                   }}
                   displayButtonLabel={navData.label}
                   handleClick={() =>
-                    handleButtonClick(navData.label, navData.link)
+                    handleIsEditingKyc({
+                      isEditingKYCStoreData,
+                      setIsDialogOpen,
+                      setDialogContent,
+                      dispatch,
+                      handleRoute,
+                      label: navData.label,
+                      link: navData.link,
+                      styles,
+                      currentRoute
+                    })
                   }
                 />
               </div>
@@ -239,7 +208,17 @@ export const TopNavigationBar = () => {
             />
             <div
               onClick={() => {
-                handleButtonClick('My Account', topNavData[3].link);
+                handleIsEditingKyc({
+                  isEditingKYCStoreData,
+                  setIsDialogOpen,
+                  setDialogContent,
+                  dispatch,
+                  handleRoute,
+                  label: 'My Account',
+                  link: topNavData[3].link,
+                  styles,
+                  currentRoute
+                });
               }}
               className={`${styles.headerIconStyle}`}
             >

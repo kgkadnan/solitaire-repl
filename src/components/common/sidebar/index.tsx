@@ -17,15 +17,14 @@ import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDialog } from '../dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
-import { CustomDisplayButton } from '../buttons/display-button';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
-import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
+import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
   const dispatch = useAppDispatch();
-  const isEditingKYCStore: boolean = useAppSelector(
+  const isEditingKYCStoreData: boolean = useAppSelector(
     store => store.isEditingKYC.status
   );
 
@@ -37,43 +36,20 @@ const SideBar = () => {
   const subRoute = useSearchParams().get('active-tab');
 
   const onKGKLogoContainerClick = useCallback(() => {
-    if (isEditingKYCStore) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            {ManageLocales('app.sideNav.kycModelContent')}
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.sideNav.yes')}
-              handleClick={() => {
-                dispatch(isEditingKYC(false));
-                router.push('/');
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.sideNav.no')}
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
+    if (isEditingKYCStoreData) {
+      handleIsEditingKyc({
+        isEditingKYCStoreData,
+        setIsDialogOpen,
+        setDialogContent,
+        dispatch,
+        handleRoute,
+        styles,
+        currentRoute
+      });
     } else {
       router.push('/');
     }
-  }, [router, isEditingKYCStore]);
+  }, [router, isEditingKYCStoreData]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -152,42 +128,17 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    if (isEditingKYCStore) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            {ManageLocales('app.sideNav.kycModelContent')}
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.sideNav.yes')}
-              handleClick={() => {
-                dispatch(isEditingKYC(false));
-                handleRoute(nav, link);
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.sideNav.no')}
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    } else {
-      handleRoute(nav, link);
-    }
+    handleIsEditingKyc({
+      isEditingKYCStoreData,
+      setIsDialogOpen,
+      setDialogContent,
+      dispatch,
+      handleRoute,
+      label: nav,
+      link,
+      styles,
+      currentRoute
+    });
   };
 
   return (
