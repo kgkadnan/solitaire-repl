@@ -196,7 +196,8 @@ const ActiveMyCart = ({
                   isCheck,
                   setIsError,
                   setErrorText,
-                  activeCartRows
+                  activeCartRows,
+                  footerCheck: 'my-cart'
                 })
             }
           ]}

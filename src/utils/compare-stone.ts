@@ -10,13 +10,15 @@ interface ICompareStoneParams {
   setIsError: (value: boolean) => void;
   setErrorText: (text: string) => void;
   activeCartRows: any;
+  footerCheck?: string;
 }
 
 export const handleCompareStone = ({
   isCheck,
   setIsError,
   setErrorText,
-  activeCartRows
+  activeCartRows,
+  footerCheck
 }: ICompareStoneParams) => {
   const maxStones = MAX_COMPARE_STONE;
   const minStones = MIN_COMPARE_STONE;
@@ -33,7 +35,11 @@ export const handleCompareStone = ({
     });
 
     localStorage.setItem('compareStone', JSON.stringify(compareStones));
-    window.open('/compare-stone', '_blank');
+    {
+      footerCheck === 'my-cart'
+        ? window.open(`/compare-stone?source=${footerCheck}`, '_blank')
+        : window.open('/compare-stone', '_blank');
+    }
 
     setIsError(false);
     setErrorText('');
