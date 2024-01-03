@@ -6,9 +6,10 @@ import {
 } from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
-  fieldType
+  fieldType,
   // supportedMediaFormat,
   // supportedMediaUnit
+  fileLimit
 } from './enums/kyc';
 
 // const FILE_SIZE_LIMIT = 100;
@@ -41,11 +42,11 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -83,10 +84,10 @@ export const KYCForm = [
           {
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'phone',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
@@ -376,24 +377,24 @@ export const KYCForm = [
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
         key: 'FEIN_No._/_tax_no._/_business_registration_copy',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
         key: 'driving_license_/_passport',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
         key: 'ID_copy_/_residency_copy',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   },
@@ -425,11 +426,11 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: validatePhone,
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Contact Email-ID*',
@@ -491,7 +492,7 @@ export const KYCForm = [
           {
             name: 'Pin-Code*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             isRequired: true,
             handleChange: () => {},
             key: 'pincode'
@@ -502,7 +503,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
@@ -787,11 +788,36 @@ export const KYCForm = [
         screenName: 'company_owner_details',
         fields: [
           {
-            name: 'First Name',
+            name: 'Name',
             type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'owner_full_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.PHONE_NUMBER,
+            inputType: 'number',
+            isRequired: true,
+            handleChange: validatePhone,
+            key: ['owner_country_code', 'owner_phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            isRequired: true,
+            handleChange: validateEmail,
+            key: 'owner_email'
+          },
+          {
+            name: 'Pan-Card Number',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'owner_pan_number'
           }
         ]
       },
@@ -852,56 +878,56 @@ export const KYCForm = [
           label: 'Pan Card',
           isRequired: true,
           key: 'pan',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'GST Certificate',
           isRequired: true,
           key: 'gst_certificate',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '3',
           label: 'Incorporation Certificate or ISE copy',
           isRequired: true,
           key: 'incorporation_Certificate_or_ISE_copy',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: ' 4',
           label: 'Cancel Cheque',
           isRequired: true,
           key: 'cancel_cheque',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '6',
           label: 'Section 194Q',
           isRequired: true,
           key: 'section_194Q',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '7',
           label: 'Government Registration Certificate',
           isRequired: true,
           key: 'government_registration_crtificate',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '8',
           label: 'Business Card',
           isRequired: false,
           key: 'Business Card',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ],
       companyOwnerDetail: [
@@ -910,16 +936,16 @@ export const KYCForm = [
           label: 'Pan Card/Aadhar Card',
           isRequired: true,
           key: 'pan_card/aadhar_card',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'Passport',
           isRequired: false,
           key: 'Passport',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ],
       PhotoIDofpersonsauthorisedtocollectgoods: [
@@ -928,24 +954,24 @@ export const KYCForm = [
           label: 'Photo ID 1',
           isRequired: true,
           key: 'photo_ID_1',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'Photo ID 2',
           isRequired: true,
           key: 'photo_ID_2',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '3',
           label: 'Photo ID 3',
           isRequired: true,
           key: 'photo_ID_3',
-          maxFile: 1,
-          minFile: 1
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ]
     }
@@ -978,11 +1004,11 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -1023,7 +1049,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
@@ -1355,24 +1381,24 @@ export const KYCForm = [
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
         key: 'FEIN_No._/_tax_no._/_business_registration_copy',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
         key: 'driving_license_/_passport',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
         key: 'ID_copy_/_residency Copy',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   },
@@ -1404,56 +1430,56 @@ export const KYCForm = [
         label: 'Certificate of Incumbency/Extract of Registry',
         isRequired: true,
         key: 'certificate_of_incumbency_/_extract_of_registry',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Business Registration/Trade license',
         isRequired: true,
         key: 'business_registration_/_trade_license',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'TRN/VAT/GST Certificate',
         isRequired: true,
         key: 'TRN_/_VAT_/_GST_certificate',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '4',
         label: 'MOA/AOA/Partnership Deed',
         isRequired: true,
         key: 'MOA_/AOA_/_partnership_deed',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '5',
         label: 'Business Registration/Trade License',
         isRequired: true,
         key: 'business_registration_/_trade_license',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '6',
         label: 'ID Copy/Passport of Ultimate Beneficial Owners',
         isRequired: true,
         key: 'ID_copy_/_passport_of_ultimate_beneficial_owners',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '7',
         label: 'ID Copy/Passport of Authorised Signatory/Manager',
         isRequired: true,
         key: 'ID_copy_/_passport_of_authorised_signatory_/_manager',
-        maxFile: 1,
-        minFile: 1
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   }

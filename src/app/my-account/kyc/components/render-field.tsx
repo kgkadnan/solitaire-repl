@@ -1,13 +1,18 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/enums/kyc';
-
+import countryCode from '../../../../constants/country-code.json';
+import Select from 'react-select';
 import { handleInputChange } from '../helper/handle-change';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useAppDispatch } from '@/hooks/hook';
+import { countryCodeSelectStyles } from '../styles/country-code-select-style';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import { updateFormState } from '@/features/kyc/kyc';
+import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
 
 // Define an interface for the parameters of renderField
 
@@ -74,6 +79,26 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
   const dispatch = useAppDispatch();
+  const [skip, setSkip] = useState(true);
+  const { data: getCountryCode } = useGetCountryCodeQuery({}, { skip });
+
+  useEffect(() => {
+    if (fieldType.PHONE_NUMBER === type) {
+      setSkip(false);
+    }
+  }, [fieldType]);
+
+  useEffect(() => {
+    if (getCountryCode) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${screenName}][${key[0]}]`,
+          value: getCountryCode.country_calling_code
+        })
+      );
+    }
+  }, [skip, getCountryCode]);
+
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -96,6 +121,51 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
             }
           />
+        </div>
+      );
+    case fieldType.PHONE_NUMBER:
+      return (
+        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+          <div className="w-[18%]">
+            <Select
+              options={computeCountryDropdownField(countryCode)}
+              onChange={({ value }: any) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key[0]}]`,
+                  value,
+                  dispatch,
+                  handleChange,
+                  screenName
+                );
+              }}
+              styles={countryCodeSelectStyles}
+              value={{
+                label:
+                  formState?.online?.sections?.[screenName]?.[key[0]] ?? '',
+                value: formState?.online?.sections?.[screenName]?.[key[0]] ?? ''
+              }}
+            />
+          </div>
+          <div className="w-[78%]">
+            <FloatingLabelInput
+              label={name}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key[1]}]`,
+                  e.target.value,
+                  dispatch,
+                  handleChange,
+                  screenName
+                )
+              }
+              type={inputType}
+              name={name}
+              value={formState?.online?.sections?.[screenName]?.[key[1]] ?? ''}
+              errorText={
+                formErrorState?.online?.sections?.[screenName]?.[key[1]] ?? ''
+              }
+            />
+          </div>
         </div>
       );
     case fieldType.CHECKBOX:

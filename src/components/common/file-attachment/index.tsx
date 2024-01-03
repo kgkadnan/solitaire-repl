@@ -16,20 +16,11 @@ import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 // import { IModalSetState } from '@/app/search/result/result-interface';
 import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
-import { MAX_FILE_SIZE } from '@/constants/business-logic';
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import { CustomModal } from '../modal';
 import { IModalSetState } from '@/app/search/result/result-interface';
-
-const ALLOWED_FILE_TYPES = {
-  'application/msword': ['.doc'],
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
-    '.docx'
-  ],
-  'image/jpeg': [],
-  'application/pdf': []
-};
 
 interface IFileAttachments {
   lable: string;
