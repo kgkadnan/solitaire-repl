@@ -134,7 +134,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             <div>Days</div>
           </div>
           {inputError ? (
-            <div className="h-[10px] text-[#983131]">{inputErrorContent}</div>
+            <div className="h-[10px] text-solitaireError">
+              {inputErrorContent}
+            </div>
           ) : (
             <div className="h-[10px]" />
           )}
@@ -262,7 +264,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               )}
             </p>
             {isSliderError && (
-              <p className="text-red-700 text-xs font-bold">
+              <p className="text-solitaireError text-xs font-bold">
                 {sliderErrorText}
               </p>
             )}

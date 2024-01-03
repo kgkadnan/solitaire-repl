@@ -10,13 +10,13 @@
   font-weight: 400;
 }
 .errorFormat {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 14px;
   font-weight: 400;
 }
 
 .errorlabel {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 14px;
   text-transform: capitalize;
 }
@@ -26,7 +26,7 @@
 }
 
 .errorFill {
-  fill: #983131;
+  fill: hsl(var(--solitaire-error));
   width: 100%;
 }
 

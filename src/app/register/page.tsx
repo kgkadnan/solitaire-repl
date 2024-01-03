@@ -191,7 +191,7 @@ const Register = () => {
                 />
                 {/* Input field for mobile Number */}
                 <div className="flex text-center gap-6">
-                  <div className="w-[18%] border-red border-[1px] border-solid">
+                  <div className="w-[18%] ">
                     <Select
                       name="countryCode"
                       options={computeCountryDropdownField(countryCode)}

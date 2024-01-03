@@ -361,7 +361,7 @@ const CompareStone = () => {
           <div className="w-[30%]">
             <p
               data-testid={'error-indicator'}
-              className="text-red-700 text-base "
+              className="text-solitaireError text-base "
             >
               {errorText}
             </p>

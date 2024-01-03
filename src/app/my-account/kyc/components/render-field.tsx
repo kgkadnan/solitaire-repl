@@ -125,8 +125,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.PHONE_NUMBER:
       return (
-        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
-          <div className="w-[18%]">
+        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px] gap-6">
+          <div className="w-[100px]">
             <Select
               options={computeCountryDropdownField(countryCode)}
               onChange={({ value }: any) => {
@@ -139,7 +139,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 );
               }}
               styles={countryCodeSelectStyle(
-                formErrorState?.online?.sections?.[screenName]?.[key]
+                formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
               )}
               value={{
                 label:

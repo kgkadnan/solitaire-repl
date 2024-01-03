@@ -201,7 +201,9 @@ const Login = () => {
             <div>
               <div className="flex justify-center items-center text-sm sm:text-base h-10">
                 {isError && (
-                  <div className="text-red-600 flex text-left">{errorText}</div>
+                  <div className="text-solitaireError flex text-left">
+                    {errorText}
+                  </div>
                 )}
               </div>
 

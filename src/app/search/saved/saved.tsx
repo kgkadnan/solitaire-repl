@@ -516,7 +516,7 @@ const SavedSearch = () => {
             <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
               {isError && (
                 <div className="w-[50%]">
-                  <p className="text-red-700 text-base ">{errorText}</p>
+                  <p className="text-solitaireError text-base ">{errorText}</p>
                 </div>
               )}
               <CustomFooter

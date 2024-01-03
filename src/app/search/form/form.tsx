@@ -433,15 +433,15 @@ used for managing the state of a form field or input element in a React componen
       <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary">
         {isError && (
           <div className="w-[50%] flex items-center">
-            <span className="hidden  text-green-500" />
+            <span className="hidden  text-solitaireSuccess tex-solitaireError" />
             <p
               className={`text-${
                 searchUrl &&
                 data?.count < MAX_SEARCH_FORM_COUNT &&
                 data?.count > MIN_SEARCH_FORM_COUNT
-                  ? 'green'
-                  : 'red'
-              }-500 text-base`}
+                  ? 'solitaireSuccess'
+                  : 'solitaireError'
+              } text-base`}
             >
               {!isValidationError && errorText}
             </p>

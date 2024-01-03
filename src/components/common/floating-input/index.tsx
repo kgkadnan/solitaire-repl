@@ -60,7 +60,10 @@ export const FloatingLabelInput: React.FC<IFloatingLabelInputProps> = ({
           {isPasswordVisible ? <EyeSlash /> : <Eye />}
         </div>
       )}
-      <div style={{ color: '#983131' }} className="flex text-left h-[5px]">
+      <div
+        style={{ color: 'hsl(var(--solitaire-error))' }}
+        className="flex text-left h-[5px]"
+      >
         {errorText}
       </div>
     </div>

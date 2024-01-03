@@ -88,7 +88,7 @@ export const countryCodeSelectStyle = (error: any) => {
       color: 'hsl(var(--solitaire-tertiary))',
       border: 'none',
       borderBottom: error.length
-        ? '1px solid red'
+        ? '1px solid hsl(var(--solitaire-error))'
         : '1px solid hsl(var(--solitaire-quaternary))',
       backgroundColor: ' hsl(var(--solitaire-primary))',
       borderRadius: 'none',
@@ -99,13 +99,13 @@ export const countryCodeSelectStyle = (error: any) => {
       ':hover': {
         border: 'none',
         borderBottom: error.length
-          ? '1px solid #983131'
+          ? '1px solid hsl(var(--solitaire-error))'
           : '1px solid hsl(var(--solitaire-quaternary))'
       }
     }),
     dropdownIndicator: (styles: any) => ({
       ...styles,
-      color: error.length ? '#983131' : styles.color
+      color: error.length ? 'hsl(var(--solitaire-error))' : styles.color
     }),
     singleValue: (styles: any) => ({
       ...styles,
