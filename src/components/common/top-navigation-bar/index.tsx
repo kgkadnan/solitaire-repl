@@ -5,7 +5,7 @@ import NotificationHeaderIcon from '@public/assets/icons/notifications-outline.s
 import NotificationPopoverIcon from '@public/assets/icons/notification-icon.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import UserIcon from '@public/assets/icons/user-outline.svg?url';
-import logOutIcon from '@public/assets/icons/log-out-outline.svg';
+import LogOutIcon from '@public/assets/icons/log-out-outline.svg';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -300,7 +300,7 @@ export const TopNavigationBar = () => {
                     </div>
                   </div>
                   <div className="flex gap-[18px] mt-[10px]">
-                    <Image src={logOutIcon} alt="logout Icon" />
+                    <Image src={LogOutIcon} alt="logout Icon" />
                     <CustomDisplayButton
                       displayButtonLabel="Logout"
                       handleClick={handleLogout}
