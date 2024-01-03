@@ -368,9 +368,7 @@ export const KYCForm = [
       }
     ],
     offline: {
-      download: {
-        pdf_link: 'link_to_kyc_form.pdf'
-      }
+      download: 'link_to_kyc_form.pdf'
     },
     attachment: [
       {
@@ -870,9 +868,7 @@ export const KYCForm = [
       }
     ],
     offline: {
-      download: {
-        pdf_link: 'link_to_kyc_form.pdf'
-      }
+      download: 'link_to_kyc_form.pdf'
     },
     attachment: {
       companyDetail: [
@@ -1376,9 +1372,7 @@ export const KYCForm = [
       }
     ],
     offline: {
-      download: {
-        pdf_link: 'link_to_kyc_form.pdf'
-      }
+      download: 'link_to_kyc_form.pdf'
     },
     attachment: [
       {
@@ -1427,9 +1421,7 @@ export const KYCForm = [
       }
     ],
     offline: {
-      download: {
-        pdf_link: 'link_to_kyc_form.pdf'
-      }
+      download: 'link_to_kyc_form.pdf'
     },
     attachment: [
       {
