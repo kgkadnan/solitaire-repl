@@ -142,7 +142,7 @@ function MyCart() {
     const updateRows = () => {
       if (data) {
         const activeDiamondItems = data?.cart?.items
-          .filter(
+          ?.filter(
             (item: IProductItem) =>
               item?.product?.diamond_status === ACTIVE_STATUS
           )
@@ -159,7 +159,7 @@ function MyCart() {
     const updateRows = () => {
       if (data) {
         const soldOutItems = data?.cart?.items
-          .filter(
+          ?.filter(
             (item: IProductItem) =>
               item?.product?.diamond_status === SOLD_OUT_STATUS
           )
@@ -177,7 +177,7 @@ function MyCart() {
     const updateRows = () => {
       if (data) {
         const memoOutDiamondItems = data?.cart?.items
-          .filter(
+          ?.filter(
             (item: IProductItem) =>
               item?.product?.diamond_status === MEMO_OUT_STATUS
           )
