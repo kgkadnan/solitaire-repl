@@ -104,7 +104,7 @@
   "app.topNav.myAccount": "My Account",
   "app.topNav.no": "No",
   "app.topNav.yes": "Yes",
-  "app.topNav.kycModelContent": "Do you want to terminate KYC process and explore website? (yourprogress will be saved)",
+  "app.topNav.kycModelContent": "Do you want to terminate KYC process and explore website? (your progress will be saved)",
 
   "app.sideNav.dashboard": "Dashboard",
   "app.sideNav.newArrival": "New Arrival",
@@ -118,7 +118,7 @@
   "app.sideNav.myDiamonds": "My Diamonds",
   "app.sideNav.no": "No",
   "app.sideNav.yes": "Yes",
-  "app.sideNav.kycModelContent": "Do you want to terminate KYC process and explore website? (yourprogress will be saved)",
+  "app.sideNav.kycModelContent": "Do you want to terminate KYC process and explore website? (your progress will be saved)",
 
   "app.bottomNav.aboutUs": "About Us",
   "app.bottomNav.contactUs": "Contact Us",

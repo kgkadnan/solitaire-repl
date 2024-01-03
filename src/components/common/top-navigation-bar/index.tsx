@@ -1,8 +1,11 @@
 'use client';
 import React, { ReactNode, useCallback, useEffect, useState } from 'react';
 import CalculatorIcon from '@public/assets/icons/calculator-outline.svg?url';
-import NotificationIcon from '@public/assets/icons/notifications-outline.svg?url';
+import NotificationHeaderIcon from '@public/assets/icons/notifications-outline.svg?url';
+import NotificationPopoverIcon from '@public/assets/icons/notification-icon.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
+import UserIcon from '@public/assets/icons/user-outline.svg?url';
+import logOutIcon from '@public/assets/icons/log-out-outline.svg';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -27,6 +30,7 @@ import {
 } from '@/components/notification/notification-interface';
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
+import useUser from '@/lib/use-auth';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -34,9 +38,13 @@ export interface ISavedSearch {
   queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
 }
 import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
+import Image from 'next/image';
+
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
+
+  const { userLoggedOut } = useUser();
 
   const dispatch = useAppDispatch();
   const notificationBadgeStoreData: boolean = useAppSelector(
@@ -130,6 +138,11 @@ export const TopNavigationBar = () => {
     setOffset(0);
   };
 
+  const handleLogout = () => {
+    userLoggedOut();
+    router.push('/login');
+  };
+
   return (
     <>
       <CustomDialog
@@ -194,7 +207,7 @@ export const TopNavigationBar = () => {
                   <div
                     className={`${styles.notificationContainer} ${styles.headerIconStyle}`}
                   >
-                    <NotificationIcon
+                    <NotificationHeaderIcon
                       role="button"
                       className={styles.iconColor}
                     />
@@ -206,29 +219,99 @@ export const TopNavigationBar = () => {
               }
               sheetContentStyle={styles.notificationSheetContent}
             />
-            <div
-              onClick={() => {
-                handleIsEditingKyc({
-                  isEditingKYCStoreData,
-                  setIsDialogOpen,
-                  setDialogContent,
-                  dispatch,
-                  handleRoute,
-                  label: 'My Account',
-                  link: topNavData[3].link,
-                  styles,
-                  currentRoute
-                });
-              }}
-              className={`${styles.headerIconStyle}`}
-            >
-              <MyProfileIcon
-                role="button"
-                stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
-                className={
-                  topNavData[3].isActive ? styles.activeIcon : styles.iconColor
-                }
-              />
+            <div className={`${styles.headerIconStyle}`}>
+              <Popover>
+                <PopoverTrigger>
+                  <div
+                    className={`flex items-center mt-2 ${styles.headerIconStyle}`}
+                  >
+                    <MyProfileIcon
+                      stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
+                    />
+                  </div>
+                </PopoverTrigger>
+                <PopoverContent className="w-[280px] h-[250px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
+                  <div className="flex items-center gap-[18px] border-b border-solitaireSenary pb-[20px]">
+                    <div className="">
+                      <MyProfileIcon
+                        stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
+                        className={
+                          topNavData[3].isActive
+                            ? styles.activeIcon
+                            : styles.iconColor
+                        }
+                      />
+                    </div>
+                    <div className="">
+                      <p className="text-[16px] font-semibold text-solitaireQuaternary">
+                        Amanita Wilson
+                      </p>
+                      <p className="text-14px text-solitaireTertiary">
+                        amanitawilson@gmail.com
+                      </p>
+                    </div>
+                  </div>
+                  <div className="border-b border-solitaireSenary mt-[10px] pb-[10px]">
+                    <div className="fill-solitaireTertiary flex gap-[18px] items-center">
+                      <UserIcon fill="solitaireTertiary" />
+                      <CustomDisplayButton
+                        displayButtonLabel="My Account"
+                        displayButtonAllStyle={{
+                          displayButtonStyle:
+                            'text-14px font-light cursor-pointer'
+                        }}
+                        handleClick={() => {
+                          handleIsEditingKyc({
+                            isEditingKYCStoreData,
+                            setIsDialogOpen,
+                            setDialogContent,
+                            dispatch,
+                            handleRoute,
+                            label: 'My Account',
+                            link: topNavData[3].link,
+                            styles,
+                            currentRoute
+                          });
+                        }}
+                      />
+                    </div>
+                    <div className="fill-solitaireTertiary flex gap-[18px] items-center">
+                      <NotificationPopoverIcon className="stroke-solitaireTertiary" />
+                      <CustomDisplayButton
+                        displayButtonLabel="Notification"
+                        displayButtonAllStyle={{
+                          displayButtonStyle:
+                            'text-14px font-light cursor-pointer'
+                        }}
+                        handleClick={() => {
+                          handleIsEditingKyc({
+                            isEditingKYCStoreData,
+                            setIsDialogOpen,
+                            setDialogContent,
+                            dispatch,
+                            handleRoute,
+                            label: 'Notificaton',
+                            link: '/notification/all-notification',
+                            styles,
+                            currentRoute
+                          });
+                        }}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex gap-[18px] mt-[10px]">
+                    <Image src={logOutIcon} alt="logout Icon" />
+                    <CustomDisplayButton
+                      displayButtonLabel="Logout"
+                      handleClick={handleLogout}
+                      displayButtonAllStyle={{
+                        displayLabelStyle:
+                          'font-semibold text-solitaireQuaternary text-[14px] cursor-pointer'
+                      }}
+                    />
+                  </div>
+                </PopoverContent>
+              </Popover>
             </div>
             <ToggleButton />
           </div>
