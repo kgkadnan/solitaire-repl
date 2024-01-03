@@ -101,7 +101,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     case fieldType.CHECKBOX:
       return (
         <div className="text-[14px] text-solitaireTertiary w-[70%]">
-          <p className="mb-4">{name}</p>
+          <p className="mb-[10px]">{name}</p>
+          <p className="text-[#C51A2D] mb-4">
+            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+          </p>
           <div className="grid grid-cols-2 gap-[16px]">
             {checkboxData.map((item: any) => {
               return (
@@ -132,7 +135,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                             })
                             ?.includes(element)
                       )[0]
-                      // formState?.online?.sections?.[screenName]?.[key] ?? ''
                     }
                     handleChange={(e: any) =>
                       handleInputChange(
@@ -178,7 +180,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     case fieldType.RADIO:
       return (
         <div className="text-[14px] text-solitaireTertiary">
-          <p className="mb-[16px]">{name}</p>
+          <p className="mb-[10px]">{name}</p>
+          <p className="text-[#C51A2D] mb-4">
+            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+          </p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {

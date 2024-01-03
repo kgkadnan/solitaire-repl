@@ -95,16 +95,19 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox
-        data-testid={`custom-checkbox-${data}`}
-        key={`checkbox-${data}`}
-        id={data}
-        ref={checkboxRef}
-        checked={isCheckedState}
-        onClick={handleCheckbox}
-        className={`${styles.defaultCheckbox} ${style}`}
-      />
-      {checkboxLabel && <p>{checkboxLabel}</p>}
+      <div className={`flex`}>
+        <Checkbox
+          data-testid={`custom-checkbox-${data}`}
+          key={`checkbox-${data}`}
+          id={data}
+          ref={checkboxRef}
+          checked={isCheckedState}
+          onClick={handleCheckbox}
+          className={`${styles.defaultCheckbox} ${style}`}
+        />
+        {checkboxLabel && <p>{checkboxLabel}</p>}
+      </div>
+
       {isInput && (
         <input
           className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}
