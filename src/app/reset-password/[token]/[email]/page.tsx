@@ -19,7 +19,7 @@ const ResetPassword = () => {
   const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
   const [resetConfirmPassword, setResetConfirmPassword] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
-  const [PasswordError, setPasswordError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -35,7 +35,7 @@ const ResetPassword = () => {
     if (
       resetPasswordValue &&
       resetConfirmPassword &&
-      !PasswordError.length &&
+      !passwordError.length &&
       !confirmPasswordError &&
       resetPasswordValue === resetConfirmPassword
     ) {
@@ -157,7 +157,7 @@ const ResetPassword = () => {
             name="password"
             onKeyDown={handleKeyDown}
             value={resetPasswordValue}
-            errorText={PasswordError}
+            errorText={passwordError}
             showPassword={true}
           />
           <FloatingLabelInput
