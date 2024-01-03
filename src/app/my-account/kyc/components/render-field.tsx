@@ -125,8 +125,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.PHONE_NUMBER:
       return (
-        <div className="flex text-center justify-between">
-          <div className="w-[15%]">
+        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+          <div className="w-[18%]">
             <Select
               options={computeCountryDropdownField(countryCode)}
               onChange={({ value }: any) => {
@@ -146,7 +146,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               }}
             />
           </div>
-          <div className="w-[80%]">
+          <div className="w-[78%]">
             <FloatingLabelInput
               label={name}
               onChange={e =>

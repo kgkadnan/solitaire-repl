@@ -26,6 +26,10 @@ export const countryCodeSelectStyles: StylesConfig<IColourOption, true> = {
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))'
   }),
+  indicatorSeparator: styles => ({
+    ...styles,
+    display: 'none'
+  }),
   placeholder: styles => ({
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
