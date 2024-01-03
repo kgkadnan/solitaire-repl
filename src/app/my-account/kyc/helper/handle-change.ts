@@ -1,5 +1,6 @@
 import { updateFormState } from '@/features/kyc/kyc';
 import { validateKYCField } from './validations/field';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 export const handleInputChange = async (
   path: string,
@@ -19,4 +20,5 @@ export const handleInputChange = async (
     })
   );
   dispatch(updateFormState({ name: path, value: value }));
+  dispatch(isEditingKYC(true));
 };
