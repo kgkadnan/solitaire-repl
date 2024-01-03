@@ -1,52 +1,42 @@
-import {
-  validateFirstName,
-  validateLastName,
-  validatePhone,
-  validateEmail
-} from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
   fieldType,
-  // supportedMediaFormat,
-  // supportedMediaUnit
-  fileLimit
+  fileLimit,
+  kycScreenIdentifierNames,
+  supportedCountries
 } from './enums/kyc';
 
-// const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [
   {
     country: {
-      fullName: 'Belgium',
-      shortName: 'Belgium'
+      display: 'Belgium',
+      backend: supportedCountries.BELGIUM
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            fromformKey: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'last_name'
+            formKey: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            isRequired: true,
             handleChange: () => {},
-            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -55,52 +45,47 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_name'
+            formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'year_of_establishment'
+            formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'address'
+            formKey: 'address'
           },
           {
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'phone',
-            isRequired: true,
             handleChange: () => {},
-            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_email'
+            formKey: 'company_email'
           },
           {
             name: 'Business Type*',
             type: fieldType.CHECKBOX,
-            key: 'business_type',
+            formKey: 'business_type',
             checkboxData: [
               {
                 name: 'Manufacturer',
@@ -147,7 +132,7 @@ export const KYCForm = [
           {
             name: 'Type of Industry*',
             type: fieldType.CHECKBOX,
-            key: 'industry_type',
+            formKey: 'industry_type',
             checkboxData: [
               {
                 name: 'Diamonds',
@@ -187,7 +172,7 @@ export const KYCForm = [
           {
             name: 'Organisation Type*',
             type: fieldType.RADIO,
-            key: 'organisation_type',
+            formKey: 'organisation_type',
             radioData: [
               {
                 id: 1,
@@ -250,39 +235,35 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'business_registration_number'
+            formKey: 'business_registration_number'
           },
           {
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'vat_number'
+            formKey: 'vat_number'
           },
           {
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'fax_number'
+            formKey: 'fax_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'subsidiary_company'
+            formKey: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_member_of_business',
+            type: fieldType.RADIO_WITH_INPUT,
+            formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
@@ -305,28 +286,25 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'member_of_business_name'
+                formKey: 'member_of_business_name'
               }
             ]
           },
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'ultimate_beneficiary_name'
+            formKey: 'ultimate_beneficiary_name'
           },
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'ownership_percentage'
+            formKey: 'ownership_percentage'
           }
         ]
       },
@@ -338,32 +316,28 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'bank_name'
+            formKey: 'bank_name'
           },
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_holder_name'
+            formKey: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_number'
+            formKey: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'swift_code'
+            formKey: 'swift_code'
           }
         ]
       }
@@ -376,7 +350,7 @@ export const KYCForm = [
         id: '1',
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
-        key: 'FEIN_No._/_tax_no._/_business_registration_copy',
+        formKey: 'FEIN_No._/_tax_no._/_business_registration_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -384,7 +358,7 @@ export const KYCForm = [
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
-        key: 'driving_license_/_passport',
+        formKey: 'driving_license_/_passport',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -392,7 +366,7 @@ export const KYCForm = [
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
-        key: 'ID_copy_/_residency_copy',
+        formKey: 'ID_copy_/_residency_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }
@@ -400,45 +374,37 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'India',
-      shortName: 'india'
+      display: 'India',
+      backend: supportedCountries.INDIA
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
-            handleChange: validateFirstName,
-            key: 'first_name'
+            formKey: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
-            handleChange: validateLastName,
-            key: 'last_name'
+            formKey: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            isRequired: true,
-            handleChange: validatePhone,
-            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
-            isRequired: true,
-            handleChange: validateEmail,
-            key: 'email'
+            formKey: 'email'
           }
         ]
       },
@@ -447,76 +413,68 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_name'
+            formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'year_of_establishment'
+            formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'address'
+            formKey: 'address'
           },
           {
             name: 'City*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'city'
+            formKey: 'city'
           },
           {
             name: 'State*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'state'
+            formKey: 'state'
           },
           {
             name: 'Pin-Code*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
-            isRequired: true,
             handleChange: () => {},
-            key: 'pincode'
+            formKey: 'pincode'
           },
           {
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_email'
+            formKey: 'company_email'
           },
           {
             name: 'Business Type*',
             type: fieldType.CHECKBOX,
-            key: 'business_type',
+            formKey: 'business_type',
             checkboxData: [
               {
                 name: 'Manufacturer',
@@ -563,7 +521,7 @@ export const KYCForm = [
           {
             name: 'Type of Industry*',
             type: fieldType.CHECKBOX,
-            key: 'industry_type',
+            formKey: 'industry_type',
             checkboxData: [
               {
                 name: 'Diamonds',
@@ -603,7 +561,7 @@ export const KYCForm = [
           {
             name: 'Organisation Type*',
             type: fieldType.RADIO,
-            key: 'organisation_type',
+            formKey: 'organisation_type',
             radioData: [
               {
                 id: 1,
@@ -666,39 +624,35 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'business_registration_number'
+            formKey: 'business_registration_number'
           },
           {
             name: 'Pan-Card Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_pan_number'
+            formKey: 'company_pan_number'
           },
           {
             name: 'GST Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'gst_number'
+            formKey: 'gst_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'subsidiary_company'
+            formKey: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_member_of_business',
+            type: fieldType.RADIO_WITH_INPUT,
+            formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
@@ -721,9 +675,8 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'member_of_business_name'
+                formKey: 'member_of_business_name'
               }
             ]
           },
@@ -731,8 +684,8 @@ export const KYCForm = [
             name: 'Registered under MSME Act',
             subTitle:
               'If yes then provide the name field & Registration Number',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_msme_registered',
+            type: fieldType.RADIO_WITH_INPUT,
+            formKey: 'is_msme_registered',
             radioData: [
               {
                 id: 1,
@@ -755,28 +708,25 @@ export const KYCForm = [
                 name: 'MSME type If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'msme_type'
+                formKey: 'msme_type'
               },
               {
                 name: 'Registration Number If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'msme_registration_number'
+                formKey: 'msme_registration_number'
               }
             ]
           },
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'ultimate_beneficiary_name'
+            formKey: 'ultimate_beneficiary_name'
           }
         ]
       },
@@ -785,31 +735,30 @@ export const KYCForm = [
       {
         screen: 'Company Owner Details',
         icon: HandIcon,
-        screenName: 'company_owner_details',
+        screenName: kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
         fields: [
           {
             name: 'Name',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'owner_full_name'
+            formKey: 'owner_full_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
-            handleChange: validatePhone,
-            key: ['owner_country_code', 'owner_phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            handleChange: () => {},
+            formKey: ['owner_country_code', 'owner_phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
             isRequired: true,
-            handleChange: validateEmail,
-            key: 'owner_email'
+            handleChange: () => {},
+            formKey: 'owner_email'
           },
           {
             name: 'Pan-Card Number',
@@ -817,7 +766,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'owner_pan_number'
+            formKey: 'owner_pan_number'
           }
         ]
       },
@@ -831,39 +780,34 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'bank_name'
+            formKey: 'bank_name'
           },
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_holder_name'
+            formKey: 'account_holder_name'
           },
           {
             name: 'Account Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_number'
+            formKey: 'account_number'
           },
           {
             name: 'IFSC Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'ifsc_code'
+            formKey: 'ifsc_code'
           },
           {
             name: 'Bank Address',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'bank_address'
+            formKey: 'bank_address'
           }
         ]
       }
@@ -877,7 +821,7 @@ export const KYCForm = [
           id: '1',
           label: 'Pan Card',
           isRequired: true,
-          key: 'pan',
+          formKey: 'pan',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -885,7 +829,7 @@ export const KYCForm = [
           id: '2',
           label: 'GST Certificate',
           isRequired: true,
-          key: 'gst_certificate',
+          formKey: 'gst_certificate',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -893,7 +837,7 @@ export const KYCForm = [
           id: '3',
           label: 'Incorporation Certificate or ISE copy',
           isRequired: true,
-          key: 'incorporation_Certificate_or_ISE_copy',
+          formKey: 'incorporation_Certificate_or_ISE_copy',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -901,7 +845,7 @@ export const KYCForm = [
           id: ' 4',
           label: 'Cancel Cheque',
           isRequired: true,
-          key: 'cancel_cheque',
+          formKey: 'cancel_cheque',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -909,7 +853,7 @@ export const KYCForm = [
           id: '6',
           label: 'Section 194Q',
           isRequired: true,
-          key: 'section_194Q',
+          formKey: 'section_194Q',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -917,7 +861,7 @@ export const KYCForm = [
           id: '7',
           label: 'Government Registration Certificate',
           isRequired: true,
-          key: 'government_registration_crtificate',
+          formKey: 'government_registration_crtificate',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -925,7 +869,7 @@ export const KYCForm = [
           id: '8',
           label: 'Business Card',
           isRequired: false,
-          key: 'Business Card',
+          formKey: 'Business Card',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         }
@@ -935,7 +879,7 @@ export const KYCForm = [
           id: '1',
           label: 'Pan Card/Aadhar Card',
           isRequired: true,
-          key: 'pan_card/aadhar_card',
+          formKey: 'pan_card/aadhar_card',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -943,7 +887,7 @@ export const KYCForm = [
           id: '2',
           label: 'Passport',
           isRequired: false,
-          key: 'Passport',
+          formKey: 'Passport',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         }
@@ -953,7 +897,7 @@ export const KYCForm = [
           id: '1',
           label: 'Photo ID 1',
           isRequired: true,
-          key: 'photo_ID_1',
+          formKey: 'photo_ID_1',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -961,7 +905,7 @@ export const KYCForm = [
           id: '2',
           label: 'Photo ID 2',
           isRequired: true,
-          key: 'photo_ID_2',
+          formKey: 'photo_ID_2',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         },
@@ -969,7 +913,7 @@ export const KYCForm = [
           id: '3',
           label: 'Photo ID 3',
           isRequired: true,
-          key: 'photo_ID_3',
+          formKey: 'photo_ID_3',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES
         }
@@ -978,37 +922,34 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'USA',
-      shortName: 'usa'
+      display: 'USA',
+      backend: supportedCountries.USA
     },
     online: [
       {
         screen: 'Personal Details',
         icon: HandIcon,
-        screenName: 'personal_details',
+        screenName: kycScreenIdentifierNames.PERSONAL_DETAILS,
         fields: [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            formKey: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'last_name'
+            formKey: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            isRequired: true,
             handleChange: () => {},
-            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -1017,52 +958,47 @@ export const KYCForm = [
       {
         screen: 'Company Details',
         icon: HandIcon,
-        screenName: 'company_details',
+        screenName: kycScreenIdentifierNames.COMPANY_DETAILS,
         fields: [
           {
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_name'
+            formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'year_of_establishment'
+            formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'address'
+            formKey: 'address'
           },
           {
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'company_email'
+            formKey: 'company_email'
           },
           {
             name: 'Business Type*',
             type: fieldType.CHECKBOX,
-            key: 'business_type',
+            formKey: 'business_type',
             checkboxData: [
               {
                 name: 'Manufacturer',
@@ -1109,7 +1045,7 @@ export const KYCForm = [
           {
             name: 'Type of Industry*',
             type: fieldType.CHECKBOX,
-            key: 'industry_type',
+            formKey: 'industry_type',
             checkboxData: [
               {
                 name: 'Diamonds',
@@ -1149,7 +1085,7 @@ export const KYCForm = [
           {
             name: 'Organisation Type*',
             type: fieldType.RADIO,
-            key: 'organisation_type',
+            formKey: 'organisation_type',
             radioData: [
               {
                 id: 1,
@@ -1212,47 +1148,42 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'business_registration_number'
+            formKey: 'business_registration_number'
           },
           {
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'vat_number'
+            formKey: 'vat_number'
           },
           {
             name: 'Federal Tax ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'federal_tax_id'
+            formKey: 'federal_tax_id'
           },
           {
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'fax_number'
+            formKey: 'fax_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'subsidiary_company'
+            formKey: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_member_of_business',
+            type: fieldType.RADIO_WITH_INPUT,
+            formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
@@ -1275,34 +1206,31 @@ export const KYCForm = [
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'member_of_business_name'
+                formKey: 'member_of_business_name'
               }
             ]
           },
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'ultimate_beneficiary_name'
+            formKey: 'ultimate_beneficiary_name'
           },
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'ownership_percentage'
+            formKey: 'ownership_percentage'
           },
           {
             name: 'Have you instituted an Anti-Money laundering policy in your company?*',
             subTitle: 'If “No” please specify',
-            type: fieldType.RADIOWITHINPUT,
-            key: 'is_anti_money_laundering',
+            type: fieldType.RADIO_WITH_INPUT,
+            formKey: 'is_anti_money_laundering',
             radioData: [
               {
                 id: 1,
@@ -1325,9 +1253,8 @@ export const KYCForm = [
                 name: 'Specify here',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                isRequired: true,
                 handleChange: () => {},
-                key: 'anti_money_laundering_policy_name'
+                formKey: 'anti_money_laundering_policy_name'
               }
             ]
           }
@@ -1342,32 +1269,28 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'bank_name'
+            formKey: 'bank_name'
           },
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_holder_name'
+            formKey: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'account_number'
+            formKey: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'swift_code'
+            formKey: 'swift_code'
           }
         ]
       }
@@ -1380,7 +1303,7 @@ export const KYCForm = [
         id: '1',
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
-        key: 'FEIN_No._/_tax_no._/_business_registration_copy',
+        formKey: 'FEIN_No._/_tax_no._/_business_registration_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1388,7 +1311,7 @@ export const KYCForm = [
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
-        key: 'driving_license_/_passport',
+        formKey: 'driving_license_/_passport',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1396,7 +1319,7 @@ export const KYCForm = [
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
-        key: 'ID_copy_/_residency Copy',
+        formKey: 'ID_copy_/_residency Copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }
@@ -1404,8 +1327,8 @@ export const KYCForm = [
   },
   {
     country: {
-      fullName: 'Other',
-      shortName: 'other'
+      display: 'Other',
+      backend: supportedCountries.OTHER
     },
     online: [
       {
@@ -1414,9 +1337,8 @@ export const KYCForm = [
           {
             name: 'First Name',
             type: fieldType.FLOATING_INPUT,
-            isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            formKey: 'first_name'
           }
         ]
       }
@@ -1429,7 +1351,7 @@ export const KYCForm = [
         id: '1',
         label: 'Certificate of Incumbency/Extract of Registry',
         isRequired: true,
-        key: 'certificate_of_incumbency_/_extract_of_registry',
+        formKey: 'certificate_of_incumbency_/_extract_of_registry',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1437,7 +1359,7 @@ export const KYCForm = [
         id: '2',
         label: 'Business Registration/Trade license',
         isRequired: true,
-        key: 'business_registration_/_trade_license',
+        formKey: 'business_registration_/_trade_license',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1445,7 +1367,7 @@ export const KYCForm = [
         id: '3',
         label: 'TRN/VAT/GST Certificate',
         isRequired: true,
-        key: 'TRN_/_VAT_/_GST_certificate',
+        formKey: 'TRN_/_VAT_/_GST_certificate',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1453,7 +1375,7 @@ export const KYCForm = [
         id: '4',
         label: 'MOA/AOA/Partnership Deed',
         isRequired: true,
-        key: 'MOA_/AOA_/_partnership_deed',
+        formKey: 'MOA_/AOA_/_partnership_deed',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1461,7 +1383,7 @@ export const KYCForm = [
         id: '5',
         label: 'Business Registration/Trade License',
         isRequired: true,
-        key: 'business_registration_/_trade_license',
+        formKey: 'business_registration_/_trade_license',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1469,7 +1391,7 @@ export const KYCForm = [
         id: '6',
         label: 'ID Copy/Passport of Ultimate Beneficial Owners',
         isRequired: true,
-        key: 'ID_copy_/_passport_of_ultimate_beneficial_owners',
+        formKey: 'ID_copy_/_passport_of_ultimate_beneficial_owners',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1477,7 +1399,7 @@ export const KYCForm = [
         id: '7',
         label: 'ID Copy/Passport of Authorised Signatory/Manager',
         isRequired: true,
-        key: 'ID_copy_/_passport_of_authorised_signatory_/_manager',
+        formKey: 'ID_copy_/_passport_of_authorised_signatory_/_manager',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }

@@ -40,15 +40,13 @@ interface IRenderFieldProps {
     name: string;
     label: string;
     type: any;
-    handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-    state: string;
     checkboxData: ICheckboxData[];
     inputType?: any;
     radioData: IRadioData[];
     subTitle: string;
     dynamicField: any;
     dynamicCondition: string;
-    key: string;
+    formKey: string;
   };
   formState: any;
   formErrorState: any;
@@ -65,14 +63,13 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     name,
     label,
     type,
-    handleChange,
     inputType,
     checkboxData,
     radioData,
     subTitle,
     dynamicField,
     dynamicCondition,
-    key
+    formKey
   } = data;
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
@@ -92,7 +89,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     if (getCountryCode) {
       dispatch(
         updateFormState({
-          name: `formState.online.sections[${screenName}][${key[0]}]`,
+          name: `formState.online.sections[${screenName}][${formKey[0]}]`,
           value: getCountryCode.country_calling_code
         })
       );
@@ -103,23 +100,25 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     case fieldType.FLOATING_INPUT:
       return (
         <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+          {label && <p className="mb-[8px] text-solitaireTertiary">{label}</p>}
           <FloatingLabelInput
             label={name}
             onChange={e =>
               handleInputChange(
-                `formState.online.sections[${screenName}][${key}]`,
+                `formState.online.sections[${screenName}][${formKey}]`,
                 e.target.value,
                 dispatch,
-                handleChange,
-                screenName
+                screenName,
+                formKey
               )
             }
             type={inputType}
             name={name}
-            value={formState?.online?.sections?.[screenName]?.[key] ?? ''}
+            value={formState?.online?.sections?.[screenName]?.[formKey] ?? ''}
             errorText={
-              formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
+              formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''
             }
+            key={formKey}
           />
         </div>
       );
@@ -131,18 +130,19 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               options={computeCountryDropdownField(countryCode)}
               onChange={({ value }: any) => {
                 handleInputChange(
-                  `formState.online.sections[${screenName}][${key[0]}]`,
+                  `formState.online.sections[${screenName}][${formKey[0]}]`,
                   value,
                   dispatch,
-                  handleChange,
-                  screenName
+                  screenName,
+                  formKey[0]
                 );
               }}
               styles={countryCodeSelectStyles}
               value={{
                 label:
-                  formState?.online?.sections?.[screenName]?.[key[0]] ?? '',
-                value: formState?.online?.sections?.[screenName]?.[key[0]] ?? ''
+                  formState?.online?.sections?.[screenName]?.[formKey[0]] ?? '',
+                value:
+                  formState?.online?.sections?.[screenName]?.[formKey[0]] ?? ''
               }}
             />
           </div>
@@ -151,18 +151,21 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               label={name}
               onChange={e =>
                 handleInputChange(
-                  `formState.online.sections[${screenName}][${key[1]}]`,
+                  `formState.online.sections[${screenName}][${formKey[1]}]`,
                   e.target.value,
                   dispatch,
-                  handleChange,
-                  screenName
+                  screenName,
+                  formKey[1]
                 )
               }
               type={inputType}
               name={name}
-              value={formState?.online?.sections?.[screenName]?.[key[1]] ?? ''}
+              value={
+                formState?.online?.sections?.[screenName]?.[formKey[1]] ?? ''
+              }
               errorText={
-                formErrorState?.online?.sections?.[screenName]?.[key[1]] ?? ''
+                formErrorState?.online?.sections?.[screenName]?.[formKey[1]] ??
+                ''
               }
             />
           </div>
@@ -173,7 +176,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
         <div className="text-[14px] text-solitaireTertiary w-[70%]">
           <p className="mb-[10px]">{name}</p>
           <p className="text-[#C51A2D] mb-4">
-            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+            {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
           </p>
           <div className="grid grid-cols-2 gap-[16px]">
             {checkboxData.map((item: any) => {
@@ -183,11 +186,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     checkboxHandleFunction={(isChecked: string[]) =>
                       !isChecked.includes(name) &&
                       handleInputChange(
-                        `formState.online.sections[${screenName}][${key}]`,
+                        `formState.online.sections[${screenName}][${formKey}]`,
                         isChecked,
                         dispatch,
-                        item.handleChange,
-                        screenName
+                        screenName,
+                        formKey
                       )
                     }
                     data={item.data}
@@ -197,7 +200,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     isInput={item.isInput}
                     inputName={item.inputName}
                     inputValue={
-                      formState?.online?.sections?.[screenName]?.[key]?.filter(
+                      formState?.online?.sections?.[screenName]?.[
+                        formKey
+                      ]?.filter(
                         (element: any) =>
                           !checkboxData
                             ?.map(element => {
@@ -208,10 +213,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     }
                     handleChange={(e: any) =>
                       handleInputChange(
-                        `formState.online.sections[${screenName}][${key}]`,
+                        `formState.online.sections[${screenName}][${formKey}]`,
                         [
                           ...(formState?.online?.sections?.[screenName]?.[
-                            key
+                            formKey
                           ]?.filter(
                             (element: any) =>
                               checkboxData
@@ -221,7 +226,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                                 ?.includes(element)
                           ) ?? []),
                           formState?.online?.sections?.[screenName]?.[
-                            key
+                            formKey
                           ]?.filter(
                             (element: any) =>
                               !checkboxData
@@ -252,17 +257,17 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
         <div className="text-[14px] text-solitaireTertiary">
           <p className="mb-[10px]">{name}</p>
           <p className="text-[#C51A2D] mb-4">
-            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+            {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
           </p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
                 handleInputChange(
-                  `formState.online.sections[${screenName}][${key}]`,
+                  `formState.online.sections[${screenName}][${formKey}]`,
                   value,
                   dispatch,
-                  items.handleChange,
-                  screenName
+                  screenName,
+                  formKey
                 );
               };
               return (
@@ -272,15 +277,15 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     onChange={handleRadioChange}
                     handleInputChange={(e: any) =>
                       handleInputChange(
-                        `formState.online.sections[${screenName}][${key}]`,
+                        `formState.online.sections[${screenName}][${formKey}]`,
                         e.target.value,
                         dispatch,
-                        items.handleChange,
-                        screenName
+                        screenName,
+                        formKey
                       )
                     }
                     inputValue={
-                      formState?.online?.sections?.[screenName]?.[key] ?? ''
+                      formState?.online?.sections?.[screenName]?.[formKey] ?? ''
                     }
                     key={items?.id}
                   />
@@ -290,9 +295,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </div>
         </div>
       );
-    case fieldType.RADIOWITHINPUT:
+    case fieldType.RADIO_WITH_INPUT:
       return (
-        <div className="text-[14px] text-solitaireTertiary">
+        <div className="text-[14px] text-solitaireTertiary" key={formKey}>
           <p className="mb-[0px]">{name}</p>
           <p className="mb-[8px] text-[12px] text-solitaireSenary">
             {subTitle}
@@ -301,11 +306,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
                 handleInputChange(
-                  `formState.online.sections[${screenName}][${key}]`,
+                  `formState.online.sections[${screenName}][${formKey}]`,
                   value,
                   dispatch,
-                  items.handleChange,
-                  screenName
+                  screenName,
+                  formKey
                 );
               };
               return (
@@ -318,7 +323,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 </div>
               );
             })}
-            {formState.online.sections[screenName]?.[key] ===
+            {formState.online.sections[screenName]?.[formKey] ===
               dynamicCondition &&
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
@@ -333,30 +338,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </div>
         </div>
       );
-    case fieldType.FLOATING_INPUT_WITH_LABEL:
-      return (
-        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
-          <p className="mb-[8px] text-solitaireTertiary">{label}</p>
-          <FloatingLabelInput
-            label={name}
-            onChange={e =>
-              handleInputChange(
-                `formState.online.sections[${screenName}][${key}]`,
-                e.target.value,
-                dispatch,
-                handleChange,
-                screenName
-              )
-            }
-            type={inputType}
-            name={name}
-            value={formState?.online?.sections?.[screenName]?.[key] ?? ''}
-            errorText={
-              formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
-            }
-          />
-        </div>
-      );
+
     default:
       return null;
   }

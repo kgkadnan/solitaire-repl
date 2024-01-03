@@ -67,7 +67,10 @@ const Stepper: React.FC<IStepperProps> = ({
       <div className={styles.circularSteps}>
         {stepperData?.map((step: any, index: number) => (
           <>
-            <div className={styles.circularStepsContainer}>
+            <div
+              className={styles.circularStepsContainer}
+              key={step.screenName}
+            >
               <div
                 key={index}
                 className={`${styles.step} ${

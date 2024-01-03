@@ -9,7 +9,6 @@ import RenderOffline from './render-offline';
 import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
-import { validateScreen } from './helper/handle-validation';
 import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
@@ -17,8 +16,8 @@ import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { useKycMutation } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
-import logger from 'logging/log-util';
 import { ValidationError } from 'class-validator';
+import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 
 const KYC: React.FC = () => {
@@ -36,7 +35,7 @@ const KYC: React.FC = () => {
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
-
+    let stepSuccessStatus;
     validationError = await validateScreen(
       formState.online.sections[screenName],
       screenName,
@@ -54,29 +53,24 @@ const KYC: React.FC = () => {
         );
       });
     }
-    switch (screenName) {
-      case 'personal_details':
-      case 'company_details':
-      case 'company_owner_details':
-      case 'banking_details':
-        if (!validationError.length) {
-          kyc({
-            data: {
-              country: formState.country,
-              offline: formState.offline,
-              data: { ...formState.online.sections[screenName] }
-            },
-            ID: active
-          })
-            .then((_res: any) => console.log('res'))
-            .catch((_e: any) => {});
-        }
-        break;
-      default:
-        logger.info('default');
-    }
+    !validationError.length &&
+      (await kyc({
+        data: {
+          country: formState.country,
+          offline: formState.offline,
+          data: {
+            ...formState.online.sections[screenName]
+          }
+        },
+        ID: active
+      })
+        .then((_res: any) => (stepSuccessStatus = _res.data.statusCode))
+        .catch((_e: any) => {}));
 
-    !validationError.length && setActiveStep(prevStep => prevStep + 1);
+    !validationError.length &&
+      stepSuccessStatus === 204 &&
+      setActiveStep(prevStep => prevStep + 1);
+    stepSuccessStatus = 0;
   };
 
   const handleTermAndCondition = () => {};
@@ -130,7 +124,7 @@ const KYC: React.FC = () => {
                       <FileAttachments
                         key={id}
                         lable={label}
-                        backendKey={key}
+                        formKey={key}
                         isRequired={isRequired}
                         formErrorState={formErrorState}
                         formState={formState}
@@ -161,7 +155,7 @@ const KYC: React.FC = () => {
                           <FileAttachments
                             key={id}
                             lable={label}
-                            backendKey={key}
+                            formKey={key}
                             isRequired={isRequired}
                             formErrorState={formErrorState}
                             formState={formState}
@@ -256,12 +250,12 @@ const KYC: React.FC = () => {
   //   const sectionKeys: string[] =
   //     resData.country === 'India'
   //       ? [
-  //           'personal_details',
-  //           'company_details',
-  //           'company_owner_details',
-  //           'banking_details'
+  //           kycScreenIdentifierNames.PERSONAL_DETAILS,
+  //           kycScreenIdentifierNames.COMPANY_DETAILS,
+  //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+  //           kycScreenIdentifierNames.BANKING_DETAILS
   //         ]
-  //       : ['personal_details', 'company_details', 'banking_details'];
+  //       : [kycScreenIdentifierNames.PERSONAL_DETAILS, kycScreenIdentifierNames.COMPANY_DETAILS, kycScreenIdentifierNames.BANKING_DETAILS];
 
   //   sectionKeys.forEach((key, index: number) => {
   //     let test = (index + 1).toString();
@@ -312,7 +306,7 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.fullName === selectedCountry.value;
+      return country.country.display === selectedCountry.value;
     });
     setData(kycData[0]);
   }, [currentState]);
@@ -344,6 +338,7 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
+      break;
     case 'offline':
       return (
         <RenderOffline

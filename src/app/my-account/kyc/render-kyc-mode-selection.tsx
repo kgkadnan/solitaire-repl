@@ -90,7 +90,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
               <div className="text-solitaireTertiary w-[70%]">
                 <h1>
                   {option === 'online'
-                    ? 'Fill Form online'
+                    ? 'Fill Form Digitally'
                     : 'Download and Upload Form'}
                 </h1>
                 <p className="font-thin pr-6">
