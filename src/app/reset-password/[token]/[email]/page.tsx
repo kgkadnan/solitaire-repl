@@ -26,7 +26,6 @@ const ResetPassword = () => {
   const router = useRouter();
 
   const pathName = usePathname();
-  console.log('pathname', pathName);
 
   const [, , token, email] = pathName.split('/');
 
