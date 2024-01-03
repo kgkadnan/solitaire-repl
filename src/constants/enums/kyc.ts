@@ -5,7 +5,7 @@ export enum fieldType {
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
   RADIO_WITH_INPUT = 'radioWithInput',
-  ATTACHMENT = 'attachment',
+  ATTACHMENT = 'attachment'
 }
 
 export enum supportedMediaUnit {

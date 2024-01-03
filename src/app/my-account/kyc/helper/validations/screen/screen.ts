@@ -22,9 +22,6 @@ export const validateScreen = async (
   screenName: string,
   country: string
 ) => {
-  console.log(screenName,country,"ppppppp")
-  console.log("formData",formData)
-
   let validationErrors;
   let kycForm;
   if (formData) {
@@ -166,7 +163,6 @@ export const validateScreen = async (
         break;
     }
     validationErrors = await validate(kycForm!);
-    console.log(kycForm,"kycForm",validationErrors)
   } else {
     validationErrors = validationErrors || 'please all fields';
   }

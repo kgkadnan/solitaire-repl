@@ -1,30 +1,19 @@
-import {
-  MinLength,
-  IsNotEmpty,
-  IsEmail,
-  IsMobilePhone,
-  IsAlphanumeric
-} from 'class-validator';
+import { IsNotEmpty } from 'class-validator';
 
 export class KycPostCompanyOwnerInformation {
-  @MinLength(3)
   @IsNotEmpty()
   owner_full_name: string;
 
-  @MinLength(3)
-  @IsEmail()
   @IsNotEmpty()
   owner_email: string;
 
   @IsNotEmpty()
   owner_country_code: string;
 
-  @MinLength(3, { message: 'Invalid phone!' })
-  @IsMobilePhone()
+  @IsNotEmpty()
   owner_phone: string;
 
-  @MinLength(10)
-  @IsAlphanumeric()
+  @IsNotEmpty()
   owner_pan_number: string;
 
   constructor(

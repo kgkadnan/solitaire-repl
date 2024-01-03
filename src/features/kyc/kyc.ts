@@ -10,15 +10,12 @@ const initialState = {
     online: {
       sections: {
         personal_details: {
-         country_code:'+91'
+          country_code: '+91'
         },
-        company_details:{},
-        company_owner_Details:{},
-        banking_details:{
-          
-        }
-      },
-      
+        company_details: {},
+        company_owner_Details: {},
+        banking_details: {}
+      }
     },
     offline: null,
     attachment: null

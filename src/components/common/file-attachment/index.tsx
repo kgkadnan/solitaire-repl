@@ -26,7 +26,7 @@ interface IFileAttachments {
   lable: string;
   isRequired: boolean;
   formState: any;
-  backendKey: string;
+  formKey: string;
   maxFile: number;
   minFile: number;
   formErrorState: any;
@@ -38,7 +38,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   lable,
   isRequired,
   formState,
-  backendKey,
+  formKey,
   maxFile,
   minFile,
   formErrorState,
@@ -64,14 +64,14 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
       acceptedFiles,
-      setUploadProgress: `formState.attachment[${backendKey}].uploadProgress`,
-      setIsFileUploaded: `formState.attachment[${backendKey}].isFileUploaded`,
-      setSelectedFile: `formState.attachment[${backendKey}].selectedFile`,
+      setUploadProgress: `formState.attachment[${formKey}].uploadProgress`,
+      setIsFileUploaded: `formState.attachment[${formKey}].isFileUploaded`,
+      setSelectedFile: `formState.attachment[${formKey}].selectedFile`,
       dispatch
     });
     dispatch(
       updateFormState({
-        name: `formErrorState.attachment[${backendKey}]`,
+        name: `formErrorState.attachment[${formKey}]`,
         value: ''
       })
     );
@@ -89,7 +89,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     if (fileRejections?.length) {
       dispatch(
         updateFormState({
-          name: `formErrorState.attachment[${backendKey}]`,
+          name: `formErrorState.attachment[${formKey}]`,
           value: fileRejections[0].errors[0].code
         })
       );
@@ -110,12 +110,10 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   //   }
   // };
 
-  let uploadProgress =
-    formState?.attachment?.[backendKey]?.uploadProgress ?? '';
-  let isFileUploaded =
-    formState?.attachment?.[backendKey]?.isFileUploaded ?? '';
-  let selectedFile = formState?.attachment?.[backendKey]?.selectedFile ?? '';
-  let error = formErrorState?.attachment?.[backendKey] ?? '';
+  let uploadProgress = formState?.attachment?.[formKey]?.uploadProgress ?? '';
+  let isFileUploaded = formState?.attachment?.[formKey]?.isFileUploaded ?? '';
+  let selectedFile = formState?.attachment?.[formKey]?.selectedFile ?? '';
+  let error = formErrorState?.attachment?.[formKey] ?? '';
 
   return (
     <>
@@ -227,8 +225,8 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                         ),
                         onSelect: () =>
                           handleDeleteAttachment({
-                            setIsFileUploaded: `formState.attachment[${backendKey}].isFileUploaded`,
-                            setSelectedFile: `formState.attachment[${backendKey}].selectedFile`,
+                            setIsFileUploaded: `formState.attachment[${formKey}].isFileUploaded`,
+                            setSelectedFile: `formState.attachment[${formKey}].selectedFile`,
                             dispatch
                           })
                       }

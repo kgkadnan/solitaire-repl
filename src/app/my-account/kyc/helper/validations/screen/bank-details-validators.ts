@@ -1,8 +1,4 @@
-import {
-  IsString,
-  IsNotEmpty,
-  IsOptional,
-} from 'class-validator';
+import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 class BaseBankDetails {
   @IsNotEmpty({ message: 'Bank name is required' })
@@ -12,7 +8,6 @@ class BaseBankDetails {
   account_holder_name: string;
 
   @IsNotEmpty({ message: 'Account number is required' })
- 
   account_number: string;
 
   constructor(
@@ -32,8 +27,6 @@ export class IndiaBankDetails extends BaseBankDetails {
   bank_address: string;
 
   @IsNotEmpty({ message: 'IFSC code is required' })
- 
- 
   ifsc_code: string;
 
   constructor(
@@ -50,7 +43,6 @@ export class IndiaBankDetails extends BaseBankDetails {
 }
 export class UsaBankDetails extends BaseBankDetails {
   @IsNotEmpty({ message: 'SWIFT code is required' })
- 
   swift_code: string;
 
   constructor(

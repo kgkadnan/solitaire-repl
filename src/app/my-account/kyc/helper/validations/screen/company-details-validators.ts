@@ -1,8 +1,6 @@
 import {
   IsString,
   IsNotEmpty,
-  IsNumberString,
-  IsEmail,
   ArrayNotEmpty,
   IsBoolean,
   ValidateIf,
@@ -10,29 +8,18 @@ import {
 } from 'class-validator';
 
 export class KycPostCompanyDetailsValidation {
-  @IsString({ message: 'Company name must be a string' })
   @IsNotEmpty({ message: 'Company name is required' })
   company_name: string;
 
-  @IsNumberString(
-    {},
-    { message: 'Year of establishment must be a valid number' }
-  )
   @IsNotEmpty({ message: 'Year of establishment is required' })
   year_of_establishment: string;
 
-  @IsString({ message: 'Address must be a string' })
   @IsNotEmpty({ message: 'Address is required' })
   address: string;
 
-  @IsNumberString(
-    {},
-    { message: 'Company phone number must be a valid number' }
-  )
   @IsNotEmpty({ message: 'Company phone number is required' })
   company_phone_number: string;
 
-  @IsEmail({}, { message: 'Invalid company email address' })
   @IsNotEmpty({ message: 'Company email is required' })
   company_email: string;
 
@@ -45,28 +32,14 @@ export class KycPostCompanyDetailsValidation {
   @ArrayNotEmpty({ message: 'Organisation type array must not be empty' })
   organisation_type: string[];
 
-  @IsString({ message: 'Business registration number must be a string' })
   @IsNotEmpty({ message: 'Business registration number is required' })
   business_registration_number: string;
 
-  @IsString({ message: 'Subsidiary company must be a string' })
-  subsidiary_company: string;
-
-  @IsBoolean({
-    message:
-      'Member of any Business Organisation / Council check must be a boolean'
-  })
   @IsNotEmpty({
     message: 'Member of any Business Organisation / Council check is required'
   })
   is_member_of_business: boolean = false;
 
-  @ValidateIf(object => object.is_member_of_business === true)
-  @IsNotEmpty({ message: 'Member of business name must be provided' })
-  @IsString({ message: 'Member of business name must be a string' })
-  member_of_business_name: string;
-
-  @IsString({ message: 'Ultimate beneficiary name must be a string' })
   @IsNotEmpty({ message: 'Ultimate beneficiary name is required' })
   ultimate_beneficiary_name: string;
 
@@ -80,9 +53,7 @@ export class KycPostCompanyDetailsValidation {
     industry_type: string[],
     organisation_type: string[],
     business_registration_number: string,
-    subsidiary_company: string,
     is_member_of_business: boolean,
-    member_of_business_name: string,
     ultimate_beneficiary_name: string
   ) {
     this.company_name = company_name;
@@ -94,30 +65,24 @@ export class KycPostCompanyDetailsValidation {
     this.industry_type = industry_type;
     this.organisation_type = organisation_type;
     this.business_registration_number = business_registration_number;
-    this.subsidiary_company = subsidiary_company;
     this.is_member_of_business = is_member_of_business;
-    this.member_of_business_name = member_of_business_name;
     this.ultimate_beneficiary_name = ultimate_beneficiary_name;
   }
 }
 
 export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
-  @IsString({ message: 'City must be a string' })
   @IsNotEmpty({ message: 'City is required' })
   city: string;
 
-  @IsString({ message: 'State must be a string' })
   @IsNotEmpty({ message: 'State is required' })
   state: string;
 
   @IsNotEmpty({ message: 'Pincode is required' })
   pincode: string;
 
-  @IsString({ message: 'Company PAN number must be a string' })
   @IsNotEmpty({ message: 'Company PAN number is required' })
   company_pan_number: string;
 
-  @IsString({ message: 'GST number must be a string' })
   @IsNotEmpty({ message: 'GST number is required' })
   gst_number: string;
 
@@ -141,6 +106,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     message: 'MSME registration number is required when MSME is registered'
   })
   msme_registration_number: string;
+
   constructor(
     company_name: string,
     year_of_establishment: string,
@@ -174,9 +140,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
       industry_type,
       organisation_type,
       business_registration_number,
-      subsidiary_company,
       is_member_of_business,
-      member_of_business_name,
       ultimate_beneficiary_name
     );
     this.city = city;
@@ -191,11 +155,9 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
 }
 
 export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
-  @IsString({ message: 'VAT number must be a string' })
   @IsNotEmpty({ message: 'VAT number is required' })
   vat_number: string;
 
-  @IsString({ message: 'Fax number must be a string' })
   @IsOptional()
   fax_number: string;
 
@@ -231,9 +193,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
       industry_type,
       organisation_type,
       business_registration_number,
-      subsidiary_company,
       is_member_of_business,
-      member_of_business_name,
       ultimate_beneficiary_name
     );
     this.vat_number = vat_number;
@@ -243,7 +203,6 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
 }
 
 export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDetailsValidation {
-  @IsString({ message: 'Federal tax ID must be a string' })
   @IsNotEmpty({ message: 'Federal tax ID is required' })
   federal_tax_id: string;
 

@@ -33,7 +33,6 @@ const KYC: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleNextStep = async (screenName: string, activeID: number) => {
-    console.log(screenName,activeID,"ppppppp",formState.online)
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
@@ -125,7 +124,7 @@ const KYC: React.FC = () => {
                       <FileAttachments
                         key={id}
                         lable={label}
-                        backendKey={key}
+                        formKey={key}
                         isRequired={isRequired}
                         formErrorState={formErrorState}
                         formState={formState}
@@ -156,7 +155,7 @@ const KYC: React.FC = () => {
                           <FileAttachments
                             key={id}
                             lable={label}
-                            backendKey={key}
+                            formKey={key}
                             isRequired={isRequired}
                             formErrorState={formErrorState}
                             formState={formState}
@@ -307,7 +306,7 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.fullName === selectedCountry.value;
+      return country.country.display === selectedCountry.value;
     });
     setData(kycData[0]);
   }, [currentState]);
@@ -339,6 +338,7 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
+      break;
     case 'offline':
       return (
         <RenderOffline
