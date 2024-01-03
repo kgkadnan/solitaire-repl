@@ -35,12 +35,11 @@ export const handleCompareStone = ({
     });
 
     localStorage.setItem('compareStone', JSON.stringify(compareStones));
-    {
-      footerCheck === 'my-cart'
-        ? window.open(`/compare-stone?source=${footerCheck}`, '_blank')
-        : window.open('/compare-stone', '_blank');
-    }
 
+    window.open(
+      `/compare-stone${footerCheck ? '?source=' + footerCheck : ''}`,
+      '_blank'
+    );
     setIsError(false);
     setErrorText('');
   }
