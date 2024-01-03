@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { handleInputChange } from '../helper/handle-change';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useAppDispatch } from '@/hooks/hook';
-import { countryCodeSelectStyles } from '../styles/country-code-select-style';
+import { countryCodeSelectStyle } from '../styles/country-code-select-style';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { updateFormState } from '@/features/kyc/kyc';
 import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
@@ -124,8 +124,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.PHONE_NUMBER:
       return (
-        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
-          <div className="w-[18%]">
+        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px] gap-6">
+          <div className="w-[100px]">
             <Select
               options={computeCountryDropdownField(countryCode)}
               onChange={({ value }: any) => {
@@ -137,7 +137,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   formKey[0]
                 );
               }}
-              styles={countryCodeSelectStyles}
+              styles={countryCodeSelectStyle(
+                formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
+              )}
               value={{
                 label:
                   formState?.online?.sections?.[screenName]?.[formKey[0]] ?? '',

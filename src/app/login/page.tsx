@@ -3,7 +3,10 @@ import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { useVerifyLoginMutation } from '@/features/api/login';
+import {
+  useGetAuthDataQuery,
+  useVerifyLoginMutation
+} from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import KGKLogo from '@public/assets/icons/vector.svg';
@@ -37,12 +40,27 @@ const Login = () => {
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
+  const [token, setToken] = useState('');
+  const { data } = useGetAuthDataQuery(token);
 
   useEffect(() => {
     if (isTokenChecked) {
       authToken && router.push('/');
     }
   }, [isTokenChecked]);
+
+  useEffect(() => {
+    if (data) {
+      if (data.customer.is_phone_verified) {
+        userLoggedIn(token);
+        router.push('/');
+      } else {
+        router.push(
+          `/otp-verification?country_code=${data.customer.country_code}&phone=${data.customer.phone}`
+        );
+      }
+    }
+  }, [data]);
   // Handle the login logic
   const handleLogin = async () => {
     if (
@@ -73,23 +91,16 @@ const Login = () => {
             handleClick={() => setIsDialogOpen(false)}
           />
         );
-      } else {
-        // Redirect to home page if login is successful
-        if (res.data.access_token) {
-          userLoggedIn(res.data.access_token);
-          router.push('/');
-        }
+      } else if (res.data.access_token) {
+        setToken(res.data.access_token);
       }
-    } else {
-      // Handle both fields being empty
-      if (!password.length && !emailAndNumber.length) {
-        setPasswordErrorText(ENTER_PASSWORD);
-        setEmailErrorText(INVALID_EMAIL_FORMAT);
-      } else if (!password.length) {
-        setPasswordErrorText(ENTER_PASSWORD);
-      } else if (!emailAndNumber.length) {
-        setEmailErrorText(INVALID_EMAIL_FORMAT);
-      }
+    } else if (!password.length && !emailAndNumber.length) {
+      setPasswordErrorText(ENTER_PASSWORD);
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
+    } else if (!password.length) {
+      setPasswordErrorText(ENTER_PASSWORD);
+    } else if (!emailAndNumber.length) {
+      setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
 
@@ -190,7 +201,9 @@ const Login = () => {
             <div>
               <div className="flex justify-center items-center text-sm sm:text-base h-10">
                 {isError && (
-                  <div className="text-red-600 flex text-left">{errorText}</div>
+                  <div className="text-solitaireError flex text-left">
+                    {errorText}
+                  </div>
                 )}
               </div>
 

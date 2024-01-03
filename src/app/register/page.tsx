@@ -18,9 +18,14 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useRouter } from 'next/navigation';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import KGKlogo from '@public/assets/icons/vector.svg';
+import Select from 'react-select';
+import { computeCountryDropdownField } from '../my-account/kyc/helper/compute-country-dropdown';
+import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-select-style';
 const Register = () => {
-  const [formState, setFormState] = useState<IRegister>(initialFormState);
-  const [formErrors, setFormErrors] = useState<IRegister>(initialFormState);
+  const [registerFormState, setRegisterFormState] =
+    useState<IRegister>(initialFormState);
+  const [registerFormErrors, setRegisterFormErrors] =
+    useState<IRegister>(initialFormState);
 
   const router = useRouter();
 
@@ -38,24 +43,27 @@ const Register = () => {
   ) => {
     event.preventDefault();
 
-    const isFormValid = validateAllFields({ formState, setFormErrors }); // Validate all fields
+    const isFormValid = validateAllFields({
+      formState: registerFormState,
+      setFormErrors: setRegisterFormErrors
+    }); // Validate all fields
 
     if (!isFormValid) return; // If the form is not valid, prevent submission
     // If the form is valid, proceed with the form submission (e.g., API call)
     await register({
-      first_name: formState.firstName,
-      last_name: formState.lastName,
-      email: formState.email,
-      password: formState.password,
-      company_name: formState.companyName,
-      country_code: formState.countryCode,
-      phone: formState.mobileNumber
+      first_name: registerFormState.firstName,
+      last_name: registerFormState.lastName,
+      email: registerFormState.email,
+      password: registerFormState.password,
+      company_name: registerFormState.companyName,
+      country_code: registerFormState.countryCode,
+      phone: registerFormState.mobileNumber
     })
       .unwrap()
       .then((res: any) => {
         if (res)
           router.push(
-            `/otp-verification?country_code=${formState.countryCode}&phone=${formState.mobileNumber}`
+            `/otp-verification?country_code=${registerFormState.countryCode}&phone=${registerFormState.mobileNumber}`
           );
       })
       .catch(e => {
@@ -86,7 +94,10 @@ const Register = () => {
 
   useEffect(() => {
     if (data) {
-      setFormState({ ...formState, countryCode: data.country_calling_code });
+      setRegisterFormState({
+        ...registerFormState,
+        countryCode: data.country_calling_code
+      });
     } else if (error) {
       console.error('Error fetching country code', error);
     }
@@ -98,8 +109,20 @@ const Register = () => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormState((prev: any) => ({ ...prev, [name]: value }));
-    validateField({ name, value, setFormErrors, formState });
+    setRegisterFormState((prev: any) => ({ ...prev, [name]: value }));
+    validateField({
+      name,
+      value,
+      setFormErrors: setRegisterFormErrors,
+      formState: registerFormState
+    });
+  };
+
+  const handleSelectChange = (selectValue: any) => {
+    setRegisterFormState((prev: any) => ({
+      ...prev,
+      countryCode: selectValue.value
+    }));
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -142,8 +165,8 @@ const Register = () => {
                   type="text"
                   name="firstName"
                   onKeyDown={handleKeyDown}
-                  errorText={formErrors.firstName}
-                  value={formState.firstName}
+                  errorText={registerFormErrors.firstName}
+                  value={registerFormState.firstName}
                   onChange={handleChange}
                 />
                 {/* Input field for last Name */}
@@ -152,8 +175,8 @@ const Register = () => {
                   type="text"
                   name="lastName"
                   onKeyDown={handleKeyDown}
-                  errorText={formErrors.lastName}
-                  value={formState.lastName}
+                  errorText={registerFormErrors.lastName}
+                  value={registerFormState.lastName}
                   onChange={handleChange}
                 />
                 {/* Input field for email */}
@@ -163,41 +186,38 @@ const Register = () => {
                   type="email"
                   name="email"
                   onKeyDown={handleKeyDown}
-                  value={formState.email}
-                  errorText={formErrors.email}
+                  value={registerFormState.email}
+                  errorText={registerFormErrors.email}
                 />
                 {/* Input field for mobile Number */}
                 <div className="flex text-center gap-6">
-                  <select
-                    name="countryCode"
-                    value={formState.countryCode}
-                    onChange={handleChange}
-                    className={`bg-transparent   ${
-                      !formErrors.mobileNumber.length
-                        ? 'border-solitaireQuaternary text-solitaireTertiary'
-                        : 'border-[#983131] text-[#983131]'
-                    } border-b min-h-[43px] h-[43px] text-[14px] focus:outline-none`}
-                  >
-                    {countryCode.countries.map(country => (
-                      <option
-                        key={country.iso_codes}
-                        value={`+${country.code}`}
-                        className="bg-solitaireDenary round-0 border-none"
-                      >
-                        +{country.code}
-                      </option>
-                    ))}
-                  </select>
+                  <div className="w-[18%] ">
+                    <Select
+                      name="countryCode"
+                      options={computeCountryDropdownField(countryCode)}
+                      onChange={handleSelectChange}
+                      styles={countryCodeSelectStyle(
+                        registerFormErrors.countryCode
+                      )}
+                      value={{
+                        label: registerFormState.countryCode,
+                        value: registerFormState.countryCode
+                      }}
+                    />
+                  </div>
 
-                  <FloatingLabelInput
-                    label={ManageLocales('app.register.mobileNumber')}
-                    onChange={handleChange}
-                    type="number"
-                    name="mobileNumber"
-                    onKeyDown={handleKeyDown}
-                    value={formState.mobileNumber}
-                    errorText={formErrors.mobileNumber}
-                  />
+                  <div className="w-[75%]">
+                    {' '}
+                    <FloatingLabelInput
+                      label={ManageLocales('app.register.mobileNumber')}
+                      onChange={handleChange}
+                      type="number"
+                      name="mobileNumber"
+                      onKeyDown={handleKeyDown}
+                      value={registerFormState.mobileNumber}
+                      errorText={registerFormErrors.mobileNumber}
+                    />
+                  </div>
                 </div>
                 {/* Input field for companyName */}
                 <FloatingLabelInput
@@ -206,8 +226,8 @@ const Register = () => {
                   type="text"
                   name="companyName"
                   onKeyDown={handleKeyDown}
-                  value={formState.companyName}
-                  errorText={formErrors.companyName}
+                  value={registerFormState.companyName}
+                  errorText={registerFormErrors.companyName}
                 />
                 {/* Input field for  password */}
                 <FloatingLabelInput
@@ -216,8 +236,8 @@ const Register = () => {
                   type="password"
                   name="password"
                   onKeyDown={handleKeyDown}
-                  value={formState.password}
-                  errorText={formErrors.password}
+                  value={registerFormState.password}
+                  errorText={registerFormErrors.password}
                   showPassword={true}
                 />
                 {/* Input field for confirm password */}
@@ -227,8 +247,8 @@ const Register = () => {
                   type="password"
                   name="confirmPassword"
                   onKeyDown={handleKeyDown}
-                  value={formState.confirmPassword}
-                  errorText={formErrors.confirmPassword}
+                  value={registerFormState.confirmPassword}
+                  errorText={registerFormErrors.confirmPassword}
                   showPassword={true}
                 />
 

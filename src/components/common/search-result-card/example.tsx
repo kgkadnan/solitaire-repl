@@ -8,7 +8,7 @@ const SearchResultCardExample = () => {
     id: '1',
     cardIcon: Edit,
     cardhandleIcon: Edit,
-    cardHeader: <p style={{ color: 'red' }}>header</p>,
+    cardHeader: <p style={{ color: 'hsl(var(--solitaire-error))' }}>header</p>,
     cardDescription: <p>desc</p>,
     cardContent: <ImageTileExample />
   };
