@@ -107,8 +107,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               return (
                 <div key={item.name}>
                   <CustomCheckBox
-                    myFun={(isChecked: string[]) =>
-                      !isChecked.includes('Other') &&
+                    checkboxHandleFunction={(isChecked: string[]) =>
+                      !isChecked.includes(name) &&
                       handleInputChange(
                         `formState.online.sections[${screenName}][${key}]`,
                         isChecked,
