@@ -41,7 +41,7 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},
@@ -427,7 +427,7 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: validatePhone,
@@ -982,7 +982,7 @@ export const KYCForm = [
           },
           {
             name: 'Contact Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},

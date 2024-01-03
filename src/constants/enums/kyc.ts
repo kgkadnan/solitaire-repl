@@ -1,5 +1,6 @@
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
+  PHONE_NUMBER = 'phoneNumber',
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
   RADIOWITHINPUT = 'radioWithInput',
