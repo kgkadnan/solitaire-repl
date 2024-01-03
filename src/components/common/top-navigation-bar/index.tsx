@@ -5,6 +5,8 @@ import NotificationHeaderIcon from '@public/assets/icons/notifications-outline.s
 import NotificationPopoverIcon from '@public/assets/icons/notification-icon.svg?url';
 import MyProfileIcon from '@public/assets/icons/my-profile.svg?url';
 import UserIcon from '@public/assets/icons/user-outline.svg?url';
+import DarkIcon from '@public/assets/icons/dark-mode.svg?url';
+import LightIcon from '@public/assets/icons/light-mode.svg?url';
 import LogOutIcon from '@public/assets/icons/log-out-outline.svg';
 import { ToggleButton } from '../toggle';
 import { CustomDisplayButton } from '../buttons/display-button';
@@ -31,6 +33,7 @@ import {
 import { Notification } from '@/components/notification';
 import { CustomDialog } from '../dialog';
 import useUser from '@/lib/use-auth';
+import { useTheme } from 'next-themes';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -43,6 +46,8 @@ import Image from 'next/image';
 export const TopNavigationBar = () => {
   const currentRoute = usePathname();
   const subRoute = useSearchParams().get('active-tab');
+  const { systemTheme, theme, setTheme } = useTheme();
+  const currentTheme = theme === 'system' ? systemTheme : theme;
 
   const { userLoggedOut } = useUser();
 
@@ -230,7 +235,7 @@ export const TopNavigationBar = () => {
                     />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-[280px] h-[250px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
+                <PopoverContent className="w-[280px] h-[300px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
                   <div className="flex items-center gap-[18px] border-b border-solitaireSenary pb-[20px]">
                     <div className="">
                       <MyProfileIcon
@@ -275,6 +280,44 @@ export const TopNavigationBar = () => {
                         }}
                       />
                     </div>
+                    <div className="fill-solitaireTertiary flex justify-between items-center">
+                      <div className="flex gap-[18px] items-center">
+                        {currentTheme === 'dark' ? (
+                          <DarkIcon fill="solitaireTertiary" />
+                        ) : (
+                          <LightIcon fill="solitaireTertiary" />
+                        )}
+
+                        <CustomDisplayButton
+                          displayButtonLabel={
+                            currentTheme === 'dark'
+                              ? 'Dark Theme'
+                              : 'Light Theme'
+                          }
+                          displayButtonAllStyle={{
+                            displayButtonStyle:
+                              'text-14px font-light cursor-pointer'
+                          }}
+                          handleClick={() => {
+                            handleIsEditingKyc({
+                              isEditingKYCStoreData,
+                              setIsDialogOpen,
+                              setDialogContent,
+                              dispatch,
+                              handleRoute,
+                              label: 'My Account',
+                              link: topNavData[3].link,
+                              styles,
+                              currentRoute
+                            });
+                          }}
+                        />
+                      </div>
+                      <ToggleButton
+                        setTheme={setTheme}
+                        currentTheme={currentTheme}
+                      />
+                    </div>
                     <div className="fill-solitaireTertiary flex gap-[18px] items-center">
                       <NotificationPopoverIcon className="stroke-solitaireTertiary" />
                       <CustomDisplayButton
@@ -313,7 +356,6 @@ export const TopNavigationBar = () => {
                 </PopoverContent>
               </Popover>
             </div>
-            <ToggleButton />
           </div>
         </div>
       </div>
