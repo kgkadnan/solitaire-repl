@@ -5,8 +5,7 @@ export const RadioButton: React.FC<any> = ({
   radioMetaData,
   onChange,
   handleInputChange,
-  inputValue,
-  errorText
+  inputValue
 }) => {
   const {
     label,
@@ -46,7 +45,7 @@ export const RadioButton: React.FC<any> = ({
           checked={checked}
           onChange={handleRadioChange}
         />
-        <p className={`${errorText ? 'text-[red]' : ''}`}>{label}</p>
+        <p>{label}</p>
         <span></span>
       </label>
 

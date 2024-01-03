@@ -21,7 +21,6 @@ interface ICustomCheckboxProps {
   setIsError?: any;
   checkboxLabel?: string;
   checkboxHandleFunction?: (value: string[]) => void;
-  errorText?: string;
 }
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
@@ -40,8 +39,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   row,
   setIsError,
   checkboxLabel,
-  checkboxHandleFunction,
-  errorText
+  checkboxHandleFunction
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<any>(null);
@@ -107,9 +105,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
           onClick={handleCheckbox}
           className={`${styles.defaultCheckbox} ${style}`}
         />
-        {checkboxLabel && (
-          <p className={`${errorText ? 'text-[red]' : ''}`}>{checkboxLabel}</p>
-        )}
+        {checkboxLabel && <p>{checkboxLabel}</p>}
       </div>
 
       {isInput && (
