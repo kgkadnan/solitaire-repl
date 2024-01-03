@@ -6,11 +6,11 @@ import {
 } from '@/app/my-account/kyc/helper/handle-validation';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
-  fieldType
+  fieldType,
   // supportedMediaFormat,
   // supportedMediaUnit
+  fileLimit
 } from './enums/kyc';
-import { MAX_FILES, MIN_FILES } from './business-logic';
 
 // const FILE_SIZE_LIMIT = 100;
 export const KYCForm = [
@@ -377,24 +377,24 @@ export const KYCForm = [
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
         key: 'FEIN_No._/_tax_no._/_business_registration_copy',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
         key: 'driving_license_/_passport',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
         key: 'ID_copy_/_residency_copy',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   },
@@ -878,56 +878,56 @@ export const KYCForm = [
           label: 'Pan Card',
           isRequired: true,
           key: 'pan',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'GST Certificate',
           isRequired: true,
           key: 'gst_certificate',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '3',
           label: 'Incorporation Certificate or ISE copy',
           isRequired: true,
           key: 'incorporation_Certificate_or_ISE_copy',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: ' 4',
           label: 'Cancel Cheque',
           isRequired: true,
           key: 'cancel_cheque',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '6',
           label: 'Section 194Q',
           isRequired: true,
           key: 'section_194Q',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '7',
           label: 'Government Registration Certificate',
           isRequired: true,
           key: 'government_registration_crtificate',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '8',
           label: 'Business Card',
           isRequired: false,
           key: 'Business Card',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ],
       companyOwnerDetail: [
@@ -936,16 +936,16 @@ export const KYCForm = [
           label: 'Pan Card/Aadhar Card',
           isRequired: true,
           key: 'pan_card/aadhar_card',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'Passport',
           isRequired: false,
           key: 'Passport',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ],
       PhotoIDofpersonsauthorisedtocollectgoods: [
@@ -954,24 +954,24 @@ export const KYCForm = [
           label: 'Photo ID 1',
           isRequired: true,
           key: 'photo_ID_1',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '2',
           label: 'Photo ID 2',
           isRequired: true,
           key: 'photo_ID_2',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         },
         {
           id: '3',
           label: 'Photo ID 3',
           isRequired: true,
           key: 'photo_ID_3',
-          maxFile: MAX_FILES,
-          minFile: MIN_FILES
+          maxFile: fileLimit.MAX_FILES,
+          minFile: fileLimit.MIN_FILES
         }
       ]
     }
@@ -1381,24 +1381,24 @@ export const KYCForm = [
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
         key: 'FEIN_No._/_tax_no._/_business_registration_copy',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
         key: 'driving_license_/_passport',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
         key: 'ID_copy_/_residency Copy',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   },
@@ -1430,56 +1430,56 @@ export const KYCForm = [
         label: 'Certificate of Incumbency/Extract of Registry',
         isRequired: true,
         key: 'certificate_of_incumbency_/_extract_of_registry',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '2',
         label: 'Business Registration/Trade license',
         isRequired: true,
         key: 'business_registration_/_trade_license',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '3',
         label: 'TRN/VAT/GST Certificate',
         isRequired: true,
         key: 'TRN_/_VAT_/_GST_certificate',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '4',
         label: 'MOA/AOA/Partnership Deed',
         isRequired: true,
         key: 'MOA_/AOA_/_partnership_deed',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '5',
         label: 'Business Registration/Trade License',
         isRequired: true,
         key: 'business_registration_/_trade_license',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '6',
         label: 'ID Copy/Passport of Ultimate Beneficial Owners',
         isRequired: true,
         key: 'ID_copy_/_passport_of_ultimate_beneficial_owners',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       },
       {
         id: '7',
         label: 'ID Copy/Passport of Authorised Signatory/Manager',
         isRequired: true,
         key: 'ID_copy_/_passport_of_authorised_signatory_/_manager',
-        maxFile: MAX_FILES,
-        minFile: MIN_FILES
+        maxFile: fileLimit.MAX_FILES,
+        minFile: fileLimit.MIN_FILES
       }
     ]
   }

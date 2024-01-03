@@ -22,3 +22,8 @@ export enum supportedMediaFormat {
   DOC = 'DOC',
   DOCX = 'DOCX'
 }
+
+export enum fileLimit {
+  MAX_FILES = 1,
+  MIN_FILES = 1
+}

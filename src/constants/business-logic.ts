@@ -8,9 +8,6 @@ export const ALLOWED_FILE_TYPES = {
   'application/pdf': []
 };
 
-export const MAX_FILES = 1;
-export const MIN_FILES = 1;
-
 export const REPORT_BUG_MAX_CHARACTERS = 1000;
 export const CONFIRM_STONE_COMMENT_MAX_CHARACTERS = 1000;
 
