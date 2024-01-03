@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>;
 
 const classes = {
   selectionButtonStyle: 'p-1',
-  selectionButtonLabelStyle: 'bg-green-600'
+  selectionButtonLabelStyle: 'bg-solitaireSuccess'
 };
 
 export const SelectionButtonStory: Story = {

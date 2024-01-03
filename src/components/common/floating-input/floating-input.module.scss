@@ -5,7 +5,7 @@
 
 .errorInput {
   color: hsl(var(--solitaire-tertiary));
-  border-bottom: 1px solid #983131;
+  border-bottom: 1px solid hsl(var(--solitaire-error));
 }
 
 .label {
@@ -15,7 +15,7 @@
 }
 
 .errorLabel {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   display: flex;
   justify-content: left;
 }

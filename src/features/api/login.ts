@@ -14,8 +14,17 @@ export const loginApi = createApi({
         body: filter // Modify this to match your API's payload
       }),
       invalidatesTags: ['Login']
+    }),
+    getAuthData: builder.query({
+      query: token => ({
+        url: '/store/auth',
+        method: 'GET',
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
     })
   })
 });
 
-export const { useVerifyLoginMutation } = loginApi;
+export const { useVerifyLoginMutation, useGetAuthDataQuery } = loginApi;

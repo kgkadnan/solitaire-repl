@@ -30,6 +30,8 @@ module.exports = {
         solitaireDenary: 'hsl(var(--solitaire-denary))', // dark - Emerald 7 / light- Carbon 1
         solitaireOutline: 'hsl(var(--solitaire-outline))', // dark - Emerald 4 / light- Carbon 2
         solitaireBorder: 'hsl(var(--solitaire-border))', // dark - Emerald 4 / light- white
+        solitaireError: 'hsl(var(--solitaire-error))', // dark - Error / light- Error
+        solitaireSuccess: 'hsl(var(--solitaire-success))', // dark - Success / light- Success
         //********************* */
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

@@ -227,7 +227,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
       <div className="flex border-t-2 border-solitaireSenary items-center justify-between">
         {isError && (
           <div className="w-[30%]">
-            <p className="text-red-700 text-base ">{errorText}</p>
+            <p className="text-solitaireError text-base ">{errorText}</p>
           </div>
         )}
         <CustomFooter

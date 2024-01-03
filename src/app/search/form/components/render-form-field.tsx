@@ -582,7 +582,7 @@ const renderContent = (
               )}
             </div>
           </div>
-          <div className="text-red-500 text-xs ml-2 ">
+          <div className="text-solitaireError text-xs ml-2 ">
             {validationError && validationError}
           </div>
         </div>
