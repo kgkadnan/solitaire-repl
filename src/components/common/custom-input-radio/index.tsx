@@ -5,18 +5,16 @@ export const RadioButton: React.FC<any> = ({
   radioMetaData,
   onChange,
   handleInputChange,
-  inputValue
+  inputValue,
+  errorText
 }) => {
   const {
     label,
     value,
     name,
     checked,
-    // onChange,
     isInput,
-    // inputValue,
     inputName,
-    // handleInputChange,
     placeholder,
     inputStyle
   } = radioMetaData;
@@ -33,7 +31,6 @@ export const RadioButton: React.FC<any> = ({
   const handleInputClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
-      // handleRadioChange();
       onChange(value);
     }
   };
@@ -49,7 +46,7 @@ export const RadioButton: React.FC<any> = ({
           checked={checked}
           onChange={handleRadioChange}
         />
-        {label}
+        <p className={`${errorText ? 'text-[red]' : ''}`}>{label}</p>
         <span></span>
       </label>
 

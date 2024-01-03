@@ -107,6 +107,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               return (
                 <div key={item.name}>
                   <CustomCheckBox
+                    errorText={
+                      formErrorState?.online?.sections?.[screenName]?.[key] ??
+                      ''
+                    }
                     checkboxHandleFunction={(isChecked: string[]) =>
                       !isChecked.includes(name) &&
                       handleInputChange(
@@ -132,7 +136,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                             })
                             ?.includes(element)
                       )[0]
-                      // formState?.online?.sections?.[screenName]?.[key] ?? ''
                     }
                     handleChange={(e: any) =>
                       handleInputChange(
@@ -193,6 +196,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               return (
                 <div key={items.id}>
                   <RadioButton
+                    errorText={
+                      formErrorState?.online?.sections?.[screenName]?.[key] ??
+                      ''
+                    }
                     radioMetaData={items}
                     onChange={handleRadioChange}
                     handleInputChange={(e: any) =>
