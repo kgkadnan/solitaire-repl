@@ -1,13 +1,25 @@
-import React from 'react';
-
 interface IHandleDeleteAttachment {
-  setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsFileUploaded: string;
+  setSelectedFile: string;
+  dispatch: any;
 }
+
+import { updateFormState } from '@/features/kyc/kyc';
 export const handleDeleteAttachment = ({
   setIsFileUploaded,
-  setSelectedFile
+  setSelectedFile,
+  dispatch
 }: IHandleDeleteAttachment) => {
-  setSelectedFile([]);
-  setIsFileUploaded(false);
+  dispatch(
+    updateFormState({
+      name: setSelectedFile,
+      value: []
+    })
+  );
+  dispatch(
+    updateFormState({
+      name: setIsFileUploaded,
+      value: false
+    })
+  );
 };

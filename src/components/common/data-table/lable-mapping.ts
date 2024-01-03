@@ -1,4 +1,4 @@
-import { IKeyLabelMapping } from './interface';
+import { IKeyLabelMapping } from '@/interface/interface';
 
 /* The above code is defining several constant variables that map keys to labels. These mappings are
   used to display labels for specific keys in a user interface. Each constant variable represents a

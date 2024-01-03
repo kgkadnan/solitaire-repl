@@ -21,7 +21,6 @@ import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
 import { ICardData, IDateRange, IFormatedData, IItem } from './saved-interface';
-import { IKeyLabelMapping } from '@/components/common/data-table/interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import Image from 'next/image';
@@ -38,6 +37,7 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import logger from 'logging/log-util';
+import { IKeyLabelMapping } from '@/interface/interface';
 
 const SavedSearch = () => {
   // State management hooks

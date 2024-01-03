@@ -20,7 +20,7 @@ interface ICustomCheckboxProps {
   row: any;
   setIsError?: any;
   checkboxLabel?: string;
-  myFun?: any;
+  checkboxHandleFunction?: (value: string[]) => void;
 }
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
@@ -39,7 +39,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   row,
   setIsError,
   checkboxLabel,
-  myFun
+  checkboxHandleFunction
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<any>(null);
@@ -68,7 +68,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   let handleCheckbox = () => {
     handleCheckboxClickWrapper();
     setIsCheck((prevIsCheck: any) => {
-      myFun && myFun(prevIsCheck);
+      checkboxHandleFunction && checkboxHandleFunction(prevIsCheck);
       return prevIsCheck;
     });
   };
@@ -95,16 +95,19 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
 
   return (
     <div className="flex items-center space-x-2">
-      <Checkbox
-        data-testid={`custom-checkbox-${data}`}
-        key={`checkbox-${data}`}
-        id={data}
-        ref={checkboxRef}
-        checked={isCheckedState}
-        onClick={handleCheckbox}
-        className={`${styles.defaultCheckbox} ${style}`}
-      />
-      {checkboxLabel && <p>{checkboxLabel}</p>}
+      <div className={`flex`}>
+        <Checkbox
+          data-testid={`custom-checkbox-${data}`}
+          key={`checkbox-${data}`}
+          id={data}
+          ref={checkboxRef}
+          checked={isCheckedState}
+          onClick={handleCheckbox}
+          className={`${styles.defaultCheckbox} ${style}`}
+        />
+        {checkboxLabel && <p>{checkboxLabel}</p>}
+      </div>
+
       {isInput && (
         <input
           className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}

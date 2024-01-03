@@ -11,7 +11,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 
 const ResetPassword = () => {
@@ -19,14 +19,15 @@ const ResetPassword = () => {
   const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
   const [resetConfirmPassword, setResetConfirmPassword] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
-  const [PasswordError, setPasswordError] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const router = useRouter();
 
-  const token = useSearchParams().get('token');
-  const email = useSearchParams().get('email');
+  const pathName = usePathname();
+
+  const [, , token, email] = pathName.split('/');
 
   const [resetPassword] = useResetPasswordMutation();
 
@@ -34,7 +35,7 @@ const ResetPassword = () => {
     if (
       resetPasswordValue &&
       resetConfirmPassword &&
-      !PasswordError.length &&
+      !passwordError.length &&
       !confirmPasswordError &&
       resetPasswordValue === resetConfirmPassword
     ) {
@@ -156,7 +157,7 @@ const ResetPassword = () => {
             name="password"
             onKeyDown={handleKeyDown}
             value={resetPasswordValue}
-            errorText={PasswordError}
+            errorText={passwordError}
             showPassword={true}
           />
           <FloatingLabelInput

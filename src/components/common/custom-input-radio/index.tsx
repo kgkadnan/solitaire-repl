@@ -1,17 +1,19 @@
 import React, { useRef } from 'react';
 import styles from './custom-input-radio.module.scss';
 
-export const RadioButton: React.FC<any> = ({ radioMetaData }) => {
+export const RadioButton: React.FC<any> = ({
+  radioMetaData,
+  onChange,
+  handleInputChange,
+  inputValue
+}) => {
   const {
     label,
     value,
     name,
     checked,
-    onChange,
     isInput,
-    inputValue,
     inputName,
-    handleInputChange,
     placeholder,
     inputStyle
   } = radioMetaData;
@@ -28,7 +30,7 @@ export const RadioButton: React.FC<any> = ({ radioMetaData }) => {
   const handleInputClick = () => {
     if (inputRef.current) {
       inputRef.current.focus();
-      handleRadioChange();
+      onChange(value);
     }
   };
 
@@ -43,7 +45,7 @@ export const RadioButton: React.FC<any> = ({ radioMetaData }) => {
           checked={checked}
           onChange={handleRadioChange}
         />
-        {label}
+        <p>{label}</p>
         <span></span>
       </label>
 

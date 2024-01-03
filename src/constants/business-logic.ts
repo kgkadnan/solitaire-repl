@@ -1,4 +1,12 @@
 export const MAX_FILE_SIZE = 100 * 1024 * 1024; // 100MB
+export const ALLOWED_FILE_TYPES = {
+  'application/msword': ['.doc'],
+  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
+    '.docx'
+  ],
+  'image/jpeg': [],
+  'application/pdf': []
+};
 
 export const REPORT_BUG_MAX_CHARACTERS = 1000;
 export const CONFIRM_STONE_COMMENT_MAX_CHARACTERS = 1000;

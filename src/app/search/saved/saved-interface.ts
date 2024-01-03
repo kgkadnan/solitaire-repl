@@ -92,10 +92,6 @@ export interface ISavedSearchData {
   deleted_at?: string | null;
 }
 
-export interface IKeyLabelMapping {
-  [key: string]: string;
-}
-
 export interface IFormatedData {
   [key: string]: string | string[];
 }

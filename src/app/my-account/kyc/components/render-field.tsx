@@ -1,13 +1,18 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { CustomCheckBox } from '@/components/common/checkbox';
 import { RadioButton } from '@/components/common/custom-input-radio';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { fieldType } from '@/constants/enums/kyc';
-
+import countryCode from '../../../../constants/country-code.json';
+import Select from 'react-select';
 import { handleInputChange } from '../helper/handle-change';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useAppDispatch } from '@/hooks/hook';
+import { countryCodeSelectStyles } from '../styles/country-code-select-style';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import { updateFormState } from '@/features/kyc/kyc';
+import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
 
 // Define an interface for the parameters of renderField
 
@@ -27,7 +32,7 @@ interface IRadioData {
   id: number;
   label: string;
   value: string;
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
 }
 interface IRenderFieldProps {
@@ -73,12 +78,31 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
   const dispatch = useAppDispatch();
+  const [skip, setSkip] = useState(true);
+  const { data: getCountryCode } = useGetCountryCodeQuery({}, { skip });
+
+  useEffect(() => {
+    if (fieldType.PHONE_NUMBER === type) {
+      setSkip(false);
+    }
+  }, [fieldType]);
+
+  useEffect(() => {
+    if (getCountryCode) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${screenName}][${key[0]}]`,
+          value: getCountryCode.country_calling_code
+        })
+      );
+    }
+  }, [skip, getCountryCode]);
+
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
-        <div className="" key={key}>
-          {label &&           <p className="mb-[8px] text-solitaireTertiary">{label}</p>
-}
+        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+          {label &&           <p className="mb-[8px] text-solitaireTertiary">{label}</p>}
           <FloatingLabelInput
             label={name}
             onChange={e =>
@@ -100,18 +124,67 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           />
         </div>
       );
+    case fieldType.PHONE_NUMBER:
+      return (
+        <div className="flex text-center justify-between sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+          <div className="w-[18%]">
+            <Select
+              options={computeCountryDropdownField(countryCode)}
+              onChange={({ value }: any) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key[0]}]`,
+                  value,
+                  dispatch,
+                  screenName,
+                  key[0]
+                );
+              }}
+              styles={countryCodeSelectStyles}
+              value={{
+                label:
+                  formState?.online?.sections?.[screenName]?.[key[0]] ?? '',
+                value: formState?.online?.sections?.[screenName]?.[key[0]] ?? ''
+              }}
+            />
+          </div>
+          <div className="w-[78%]">
+            <FloatingLabelInput
+              label={name}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key[1]}]`,
+                  e.target.value,
+                  dispatch,
+                  screenName,
+                  key[1]
+                )
+              }
+              type={inputType}
+              name={name}
+              value={formState?.online?.sections?.[screenName]?.[key[1]] ?? ''}
+              errorText={
+                formErrorState?.online?.sections?.[screenName]?.[key[1]] ?? ''
+              }
+            />
+          </div>
+        </div>
+      );
     case fieldType.CHECKBOX:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]" key={key}>
-          <p className="mb-4">{name}</p>
+        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+          <p className="mb-[10px]">{name}</p>
+          <p className="text-[#C51A2D] mb-4">
+            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+          </p>
           <div className="grid grid-cols-2 gap-[16px]">
-            {checkboxData.map(item => {
+            {checkboxData.map((item: any) => {
               return (
                 <div key={item.name}>
                   <CustomCheckBox
-                    myFun={(isChecked: string[]) =>
+                    checkboxHandleFunction={(isChecked: string[]) =>
+                      !isChecked.includes(name) &&
                       handleInputChange(
-                        `online.sections[${screenName}][${key}]`,
+                        `formState.online.sections[${screenName}][${key}]`,
                         isChecked,
                         dispatch,
                         screenName,
@@ -124,8 +197,46 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     row={item.row}
                     isInput={item.isInput}
                     inputName={item.inputName}
-                    inputValue={item.inputValue}
-                    handleChange={item.handleInputChange}
+                    inputValue={
+                      formState?.online?.sections?.[screenName]?.[key]?.filter(
+                        (element: any) =>
+                          !checkboxData
+                            ?.map(element => {
+                              return element.name;
+                            })
+                            ?.includes(element)
+                      )[0]
+                    }
+                    handleChange={(e: any) =>
+                      handleInputChange(
+                        `formState.online.sections[${screenName}][${key}]`,
+                        [
+                          ...(formState?.online?.sections?.[screenName]?.[
+                            key
+                          ]?.filter(
+                            (element: any) =>
+                              checkboxData
+                                ?.map(element => {
+                                  return element.name;
+                                })
+                                ?.includes(element)
+                          ) ?? []),
+                          formState?.online?.sections?.[screenName]?.[
+                            key
+                          ]?.filter(
+                            (element: any) =>
+                              !checkboxData
+                                ?.map(element => {
+                                  return element.name;
+                                })
+                                ?.includes(element)
+                          )[0] ?? '' + e
+                        ],
+                        dispatch,
+                        item.handleInputChange,
+                        screenName
+                      )
+                    }
                     placeholder={item.placeholder}
                     checkboxLabel={item.name}
                     inputStyle="w-[150px]"
@@ -139,13 +250,41 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.RADIO:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]" key={key}>
-          <p className="mb-[16px]">{name}</p>
+        <div className="text-[14px] text-solitaireTertiary">
+          <p className="mb-[10px]">{name}</p>
+          <p className="text-[#C51A2D] mb-4">
+            {formErrorState?.online?.sections?.[screenName]?.[key] ?? ''}
+          </p>
           <div className="grid grid-cols-2 gap-[16px]">
             {radioData.map((items: IRadioData) => {
+              const handleRadioChange = (value: string) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key}]`,
+                  value,
+                  dispatch,
+                  screenName,
+                  key
+                );
+              };
               return (
                 <div key={items.id}>
-                  <RadioButton radioMetaData={items} key={items?.id} />
+                  <RadioButton
+                    radioMetaData={items}
+                    onChange={handleRadioChange}
+                    handleInputChange={(e: any) =>
+                      handleInputChange(
+                        `formState.online.sections[${screenName}][${key}]`,
+                        e.target.value,
+                        dispatch,
+                        screenName,
+                        key
+                      )
+                    }
+                    inputValue={
+                      formState?.online?.sections?.[screenName]?.[key] ?? ''
+                    }
+                    key={items?.id}
+                  />
                 </div>
               );
             })}
@@ -161,13 +300,27 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </p>
           <div className="flex flex-col gap-[16px]">
             {radioData.map((items: IRadioData) => {
+              const handleRadioChange = (value: string) => {
+                handleInputChange(
+                  `formState.online.sections[${screenName}][${key}]`,
+                  value,
+                  dispatch,
+                  screenName,
+                  key
+                );
+              };
               return (
                 <div key={items.id}>
-                  <RadioButton radioMetaData={items} key={items?.id} />
+                  <RadioButton
+                    radioMetaData={items}
+                    onChange={handleRadioChange}
+                    key={items?.id}
+                  />
                 </div>
               );
             })}
-            {state === dynamicCondition && //state to be replaced with actual state
+            {formState.online.sections[screenName]?.[key] ===
+              dynamicCondition &&
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
                   <RenderField

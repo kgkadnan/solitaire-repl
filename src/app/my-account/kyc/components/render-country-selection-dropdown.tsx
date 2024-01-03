@@ -11,17 +11,19 @@ import { KYCForm } from '@/constants/kyc';
 interface ICountrySelectionDropdown {
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
   errorSetState: IErrorSetState;
+  selectedCountry: any;
 }
 export const CountrySelectionDropdown = ({
   setSelectedCountry,
-  errorSetState
+  errorSetState,
+  selectedCountry
 }: ICountrySelectionDropdown) => {
   const { setErrorText } = errorSetState;
   const dispatch = useAppDispatch();
 
   const handleSelectCountry = (selectedOption: any) => {
     setErrorText('');
-    setSelectedCountry(selectedOption.value);
+    setSelectedCountry(selectedOption);
     dispatch(
       updateFormState({
         name: 'formState.country',
@@ -42,7 +44,7 @@ export const CountrySelectionDropdown = ({
       options={computeDropdownField(KYCForm)}
       onChange={handleSelectCountry}
       // defaultValue={{ value: 'Country', label: 'Country' }}
-      // value={{ value: s electedCountry, label: selectedCountry }}
+      value={selectedCountry}
       placeholder={ManageLocales('app.myProfile.kyc.country')}
       styles={colourStyles}
     />
