@@ -32,10 +32,6 @@ export interface ICustomDataTableProps {
   confirmStoneState?: IConfirmStoneState;
 }
 
-export interface IKeyLabelMapping {
-  [key: string]: string;
-}
-
 export interface ITheadProps {
   selectionAllowed: boolean;
   checkboxData?: ICheckboxData;

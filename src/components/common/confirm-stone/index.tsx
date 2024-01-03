@@ -84,7 +84,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   const confirmRadioButtons = [
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '0',
       value: '7',
       label: '7 Days',
@@ -92,7 +92,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '1',
       value: '30',
       label: '30 Days',
@@ -100,7 +100,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '2',
       value: '60',
       label: '60 Days',
@@ -108,7 +108,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '3',
       value: 'other',
       label: (
@@ -270,7 +270,11 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
 
           <div className="flex justify-between mt-2">
             {confirmRadioButtons?.map((radioData: any) => (
-              <RadioButton radioMetaData={radioData} key={radioData?.id} />
+              <RadioButton
+                radioMetaData={radioData}
+                onChange={handleConfirmStoneRadioChange}
+                key={radioData?.id}
+              />
             ))}
           </div>
         </div>

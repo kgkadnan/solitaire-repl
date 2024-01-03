@@ -557,28 +557,28 @@ export const KYCForm = [
               {
                 name: 'Diamonds',
                 handleChange: () => {},
-                data: '',
+                data: 'Diamonds',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Colour Stones',
                 handleChange: () => {},
-                data: '',
+                data: 'Colour Stones',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Jewellery',
                 handleChange: () => {},
-                data: '',
+                data: 'Jewellery',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
                 handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
@@ -597,55 +597,55 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Individual',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Partnership Firm',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Private Ltd',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'LLP',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Public Ltd',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'OPC',
+                handleChange: () => {},
+                name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: '',
-                onChange: () => {},
-                name: '',
+                value: 'Other',
+                handleChange: () => {},
+                name: 'organisationType',
                 isInput: true,
-                inputName: '',
-                inputValue: '',
-                handleInputChange: '',
+                inputName: 'Other',
+                // inputValue: '',
+                // handleInputChange: '',
                 placeholder: 'If other please specify',
                 inputStyle: 'w-[150px]'
               }
@@ -692,16 +692,16 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Yes',
+                handleChange: () => {},
+                name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'No',
+                handleChange: () => {},
+                name: 'isMemberOfBusiness'
               }
             ],
             dynamicCondition: 'Yes',
@@ -726,16 +726,16 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Yes',
+                handleChange: () => {},
+                name: 'isMsmeRegistered'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'No',
+                handleChange: () => {},
+                name: 'isMsmeRegistered'
               }
             ],
             dynamicCondition: 'Yes',

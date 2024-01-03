@@ -1,4 +1,4 @@
-import { IKeyLabelMapping } from '../interface';
+import { IKeyLabelMapping } from '@/interface/interface';
 
 // Define key-label mapping for stone properties
 export const keyLabelMapping: IKeyLabelMapping = {
