@@ -1,15 +1,27 @@
+import { updateFormState } from '@/features/kyc/kyc';
 export const handleFileupload = async ({
   acceptedFiles,
   setUploadProgress,
   setIsFileUploaded,
-  setSelectedFile
+  setSelectedFile,
+  dispatch
 }: any) => {
   try {
     if (acceptedFiles.length) {
-      setIsFileUploaded(false);
+      dispatch(
+        updateFormState({
+          name: setIsFileUploaded,
+          value: false
+        })
+      );
 
       acceptedFiles.forEach((file: any) => {
-        setSelectedFile((prevState: any) => [...prevState, file]);
+        dispatch(
+          updateFormState({
+            name: setSelectedFile,
+            value: [file]
+          })
+        );
       });
 
       const simulateUpload = async () => {
@@ -19,13 +31,33 @@ export const handleFileupload = async ({
           }, 1000); // Simulate a 1-second delay
         });
       };
-      setUploadProgress(0);
+      dispatch(
+        updateFormState({
+          name: setUploadProgress,
+          value: 0
+        })
+      );
       for (let i = 0; i <= 100; i += 50) {
-        setUploadProgress(i);
+        dispatch(
+          updateFormState({
+            name: setUploadProgress,
+            value: i
+          })
+        );
         await simulateUpload(); // Simulate a delay between progress updates
       }
-      setUploadProgress(0);
-      setIsFileUploaded(true);
+      dispatch(
+        updateFormState({
+          name: setUploadProgress,
+          value: 0
+        })
+      );
+      dispatch(
+        updateFormState({
+          name: setIsFileUploaded,
+          value: true
+        })
+      );
     }
   } catch (error) {
     // Log an error message if the upload fails
