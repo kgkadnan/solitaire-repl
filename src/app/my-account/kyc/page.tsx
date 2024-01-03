@@ -32,6 +32,7 @@ const KYC: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const handleNextStep = async (screenName: string, activeID: number) => {
+    console.log(screenName,activeID,"ppppppp",formState.online)
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;

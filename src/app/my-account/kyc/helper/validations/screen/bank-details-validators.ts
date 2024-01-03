@@ -1,25 +1,18 @@
 import {
   IsString,
   IsNotEmpty,
-  Matches,
   IsOptional,
-  Length
 } from 'class-validator';
 
 class BaseBankDetails {
-  @IsString({ message: 'Bank name must be a string' })
   @IsNotEmpty({ message: 'Bank name is required' })
   bank_name: string;
 
-  @IsString({ message: 'Account holder name must be a string' })
   @IsNotEmpty({ message: 'Account holder name is required' })
   account_holder_name: string;
 
-  @IsString({ message: 'Account number must be a string' })
   @IsNotEmpty({ message: 'Account number is required' })
-  @Matches(/^[0-9a-zA-Z]+$/, {
-    message: 'Account number must contain only alphanumeric characters'
-  })
+ 
   account_number: string;
 
   constructor(
@@ -38,14 +31,9 @@ export class IndiaBankDetails extends BaseBankDetails {
   @IsOptional()
   bank_address: string;
 
-  @IsString({ message: 'IFSC code must be a string' })
   @IsNotEmpty({ message: 'IFSC code is required' })
-  @Matches(/^[a-zA-Z0-9]+$/, {
-    message: 'IFSC code must contain only alphanumeric characters'
-  })
-  @Length(8, 11, {
-    message: 'IFSC code must be between 8 and 11 characters long'
-  })
+ 
+ 
   ifsc_code: string;
 
   constructor(
@@ -61,14 +49,8 @@ export class IndiaBankDetails extends BaseBankDetails {
   }
 }
 export class UsaBankDetails extends BaseBankDetails {
-  @IsString({ message: 'SWIFT code must be a string' })
   @IsNotEmpty({ message: 'SWIFT code is required' })
-  @Matches(/^[a-zA-Z0-9]+$/, {
-    message: 'SWIFT code must contain only alphanumeric characters'
-  })
-  @Length(8, 11, {
-    message: 'SWIFT code must be between 8 and 11 characters long'
-  })
+ 
   swift_code: string;
 
   constructor(

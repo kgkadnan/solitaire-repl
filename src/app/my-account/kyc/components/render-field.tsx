@@ -77,6 +77,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     case fieldType.FLOATING_INPUT:
       return (
         <div className="" key={key}>
+          {label &&           <p className="mb-[8px] text-solitaireTertiary">{label}</p>
+}
           <FloatingLabelInput
             label={name}
             onChange={e =>
@@ -179,28 +181,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </div>
         </div>
       );
-    case fieldType.FLOATING_INPUT_WITH_LABEL:
-      return (
-        <div className="" key={key}>
-          <p className="mb-[8px] text-solitaireTertiary">{label}</p>
-          <FloatingLabelInput
-            label={name}
-            type={inputType}
-            name={name}
-            // value={state}
-            value={''}
-            onChange={e =>
-              handleInputChange(
-                `formState.online.sections[${screenName}][${key}]`,
-                e.target.value,
-                dispatch,
-                screenName,
-                key
-              )
-            }
-          />
-        </div>
-      );
+    
     default:
       return null;
   }

@@ -296,7 +296,7 @@ export const KYCForm = [
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
@@ -324,7 +324,7 @@ export const KYCForm = [
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'account_holder_name'
@@ -715,7 +715,7 @@ export const KYCForm = [
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
@@ -753,7 +753,7 @@ export const KYCForm = [
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'account_holder_name'
@@ -1209,7 +1209,7 @@ export const KYCForm = [
           {
             label: 'Ultimate Beneficiary Details',
             name: 'Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'ultimate_beneficiary_name'
@@ -1270,7 +1270,7 @@ export const KYCForm = [
           {
             label: 'Banking Details',
             name: 'Account Holder Name*',
-            type: fieldType.FLOATING_INPUT_WITH_LABEL,
+            type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             handleChange: () => {},
             key: 'account_holder_name'

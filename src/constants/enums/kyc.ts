@@ -4,7 +4,6 @@ export enum fieldType {
   RADIO = 'radio',
   RADIO_WITH_INPUT = 'radioWithInput',
   ATTACHMENT = 'attachment',
-  FLOATING_INPUT_WITH_LABEL = 'floatingInputWithLabel'
 }
 
 export enum supportedMediaUnit {

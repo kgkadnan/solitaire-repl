@@ -109,6 +109,29 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
     //         instance = new ValidationAntiMoneyLaunderingPolicyNameCriteria(fieldValue);
     //         break;
 
+
+
+    // case 'bank_name':
+    //   instance = new ValidationPhoneCriteria(fieldValue);
+
+    //   break;
+    //   case 'account_holder_name':
+    //     instance = new ValidationPhoneCriteria(fieldValue);
+  
+    //     break;
+    //     case 'phone':
+    //       instance = new ValidationPhoneCriteria(fieldValue);
+    
+    //       break;
+    //       case 'phone':
+    //         instance = new ValidationPhoneCriteria(fieldValue);
+      
+    //         break;
+    //         case 'phone':
+    //           instance = new ValidationPhoneCriteria(fieldValue);
+        
+    //           break;
+
     default:
       throw new Error('Invalid field type');
   }
