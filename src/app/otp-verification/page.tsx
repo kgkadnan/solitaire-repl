@@ -14,7 +14,9 @@ import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { CustomDialog } from '@/components/common/dialog';
 import KGKlogo from '@public/assets/icons/vector.svg';
-
+import Select from 'react-select';
+import { computeCountryDropdownField } from '../my-account/kyc/helper/compute-country-dropdown';
+import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-select-style';
 export interface IOtp {
   mobileNumber: string;
   countryCode: string;
@@ -49,8 +51,10 @@ const OTPVerification = () => {
   ]);
   const [resendTimer, setResendTimer] = useState<number>(60);
 
-  const [formState, setFormState] = useState<IOtp>(initialFormState);
-  const [formErrors, setFormErrors] = useState<IOtp>(initialFormState);
+  const [otpVerificationFormState, setOTPVerificationFormState] =
+    useState<IOtp>(initialFormState);
+  const [otpVerificationFormErrors, setOTPVerificationFormErrors] =
+    useState<IOtp>(initialFormState);
 
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -111,27 +115,43 @@ const OTPVerification = () => {
       | React.ChangeEvent<HTMLSelectElement>
   ) => {
     const { name, value } = event.target;
-    setFormState(prev => ({ ...prev, [name]: value }));
+    setOTPVerificationFormState(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleSelectChange = (selectValue: any) => {
+    setOTPVerificationFormState((prev: any) => ({
+      ...prev,
+      countryCode: selectValue.value
+    }));
   };
 
   const handleEditMobileNumber = () => {
-    if (!formState.countryCode || !formState.mobileNumber) {
-      setFormErrors(prev => ({
+    if (
+      !otpVerificationFormState.countryCode ||
+      !otpVerificationFormState.mobileNumber
+    ) {
+      setOTPVerificationFormErrors(prev => ({
         ...prev,
         mobileNumber: 'Please enter Mobile Number to Save'
       }));
     } else {
-      setFormState(prev => ({
+      setOTPVerificationFormState(prev => ({
         ...prev,
-        codeAndNumber: `${formState.countryCode} ${formState.mobileNumber}`
+        codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.mobileNumber}`
       }));
       setIsDialogOpen(false);
     }
   };
 
   useEffect(() => {
-    setFormState(prev => ({ ...prev, countryCode: `+${country_code}` }));
-    setFormState(prev => ({ ...prev, mobileNumber: `${phone_number}` }));
+    setOTPVerificationFormState(prev => ({
+      ...prev,
+      countryCode: `+${country_code}`
+    }));
+    setOTPVerificationFormState(prev => ({
+      ...prev,
+      mobileNumber: `${phone_number}`
+    }));
   }, [country_code, phone_number]);
 
   const renderContentWithInput = () => {
@@ -140,38 +160,32 @@ const OTPVerification = () => {
         <div className=" flex justify-center align-middle items-center">
           <p> Change Mobile Number</p>
         </div>
-        <div className="flex text-center gap-5 w-[350px]">
-          <select
-            name="countryCode"
-            value={formState.countryCode}
-            onChange={handleChange}
-            defaultValue={`+${country_code}`!}
-            className={`bg-transparent w-[30%]  ${
-              !formErrors.mobileNumber.length
-                ? 'border-solitaireQuaternary text-solitaireTertiary'
-                : 'border-[#983131] text-[#983131]'
-            } border-b min-h-[43px] h-[43px] text-[14px] focus:outline-none`}
-          >
-            {countryCode.countries.map(country => (
-              <option
-                key={country.iso_codes}
-                value={`+${country.code}`}
-                defaultValue={`+${country_code}`!}
-                className="bg-solitaireDenary round-0 border-none"
-              >
-                +{country.code}
-              </option>
-            ))}
-          </select>
+        <div className="flex text-center justify-between  w-[350px]">
+          <div className="w-[25%]">
+            <Select
+              name="countryCode"
+              options={computeCountryDropdownField(countryCode)}
+              onChange={handleSelectChange}
+              styles={countryCodeSelectStyle(
+                otpVerificationFormErrors.countryCode
+              )}
+              value={{
+                label: otpVerificationFormState.countryCode,
+                value: otpVerificationFormState.countryCode
+              }}
+            />
+          </div>
 
-          <FloatingLabelInput
-            label={ManageLocales('app.register.mobileNumber')}
-            onChange={handleChange}
-            type="number"
-            name="mobileNumber"
-            value={formState.mobileNumber}
-            errorText={formErrors.mobileNumber}
-          />
+          <div className="w-[70%]">
+            <FloatingLabelInput
+              label={ManageLocales('app.register.mobileNumber')}
+              onChange={handleChange}
+              type="number"
+              name="mobileNumber"
+              value={otpVerificationFormState.mobileNumber}
+              errorText={otpVerificationFormErrors.mobileNumber}
+            />
+          </div>
         </div>
         <div className="flex justify-center  gap-5">
           {/* Button to trigger the register action */}
@@ -185,8 +199,8 @@ const OTPVerification = () => {
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
             handleClick={() => {
-              setFormState(initialFormState);
-              setFormErrors(initialFormState);
+              setOTPVerificationFormState(initialFormState);
+              setOTPVerificationFormErrors(initialFormState);
               setIsInputDialogOpen(false);
             }}
           />
@@ -237,9 +251,9 @@ const OTPVerification = () => {
               <div className="flex gap-2 items-center justify-center">
                 <p className="text-solitaireTertiary">
                   OTP has been sent to{' '}
-                  {!formState?.codeAndNumber.length
+                  {!otpVerificationFormState?.codeAndNumber.length
                     ? mobileNumber
-                    : formState.codeAndNumber}
+                    : otpVerificationFormState.codeAndNumber}
                 </p>
                 <button
                   onClick={() => setIsInputDialogOpen(true)}

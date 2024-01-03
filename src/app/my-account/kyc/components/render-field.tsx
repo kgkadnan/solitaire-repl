@@ -9,7 +9,7 @@ import Select from 'react-select';
 import { handleInputChange } from '../helper/handle-change';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
 import { useAppDispatch } from '@/hooks/hook';
-import { countryCodeSelectStyles } from '../styles/country-code-select-style';
+import { countryCodeSelectStyle } from '../styles/country-code-select-style';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { updateFormState } from '@/features/kyc/kyc';
 import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
@@ -138,7 +138,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   screenName
                 );
               }}
-              styles={countryCodeSelectStyles}
+              styles={countryCodeSelectStyle(
+                formErrorState?.online?.sections?.[screenName]?.[key]
+              )}
               value={{
                 label:
                   formState?.online?.sections?.[screenName]?.[key[0]] ?? '',

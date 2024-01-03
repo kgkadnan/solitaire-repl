@@ -80,3 +80,89 @@ export const countryCodeSelectStyles: StylesConfig<IColourOption, true> = {
     }
   })
 };
+
+export const countryCodeSelectStyle = (error: any) => {
+  return {
+    control: (styles: any) => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      border: 'none',
+      borderBottom: error.length
+        ? '1px solid red'
+        : '1px solid hsl(var(--solitaire-quaternary))',
+      backgroundColor: ' hsl(var(--solitaire-primary))',
+      borderRadius: 'none',
+      padding: '2.5px',
+      // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
+      outline: '1px solid hsl(var(--solitaire-primary))',
+      width: '100%',
+      ':hover': {
+        border: 'none',
+        borderBottom: error.length
+          ? '1px solid #983131'
+          : '1px solid hsl(var(--solitaire-quaternary))'
+      }
+    }),
+    dropdownIndicator: (styles: any) => ({
+      ...styles,
+      color: error.length ? '#983131' : styles.color
+    }),
+    singleValue: (styles: any) => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))'
+    }),
+    indicatorSeparator: (styles: any) => ({
+      ...styles,
+      display: 'none'
+    }),
+    placeholder: (styles: any) => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      border: 'none'
+    }),
+    menuList: (styles: any) => ({
+      ...styles,
+      backgroundColor: 'hsl(var(--solitaire-denary))',
+      minHeight: '23vh',
+      height: '23vh'
+    }),
+    option: (styles: any) => {
+      return {
+        ...styles,
+        backgroundColor: 'hsl(var(--solitaire-denary))',
+        minHeight: '5.5vh',
+        height: '5.5vh',
+        color: 'hsl(var(--solitaire-tertiary))',
+        ':active': {
+          ...styles[':active'],
+          border: 'none',
+          backgroundColor: 'hsl(var(--solitaire-denary))'
+        },
+        ':hover': {
+          backgroundColor: 'hsl(var(--solitaire-secondary))',
+          border: 'none',
+          color: 'hsl(var(--solitaire-tertiary))'
+        }
+      };
+    },
+    multiValue: (styles: any) => {
+      return {
+        ...styles,
+        backgroundColor: 'hsl(var(--solitaire-primary))'
+      };
+    },
+    multiValueLabel: (styles: any) => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      backgroundColor: 'hsl(var(--solitaire-primary))'
+    }),
+    multiValueRemove: (styles: any) => ({
+      ...styles,
+      color: 'hsl(var(--solitaire-tertiary))',
+      ':hover': {
+        backgroundColor: 'hsl(var(--solitaire-primary))',
+        color: 'hsl(var(--solitaire-tertiary))'
+      }
+    })
+  };
+};
