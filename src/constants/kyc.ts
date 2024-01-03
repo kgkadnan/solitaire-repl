@@ -45,7 +45,7 @@ export const KYCForm = [
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -83,10 +83,10 @@ export const KYCForm = [
           {
             name: 'Company Number*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'phone',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
@@ -431,7 +431,7 @@ export const KYCForm = [
             inputType: 'number',
             isRequired: true,
             handleChange: validatePhone,
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Contact Email-ID*',
@@ -493,7 +493,7 @@ export const KYCForm = [
           {
             name: 'Pin-Code*',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             isRequired: true,
             handleChange: () => {},
             key: 'pincode'
@@ -504,7 +504,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
@@ -789,11 +789,36 @@ export const KYCForm = [
         screenName: 'company_owner_details',
         fields: [
           {
-            name: 'First Name',
+            name: 'Name',
             type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'first_name'
+            key: 'owner_full_name'
+          },
+          {
+            name: 'Contact Number*',
+            type: fieldType.PHONE_NUMBER,
+            inputType: 'number',
+            isRequired: true,
+            handleChange: validatePhone,
+            key: ['owner_country_code', 'owner_phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            isRequired: true,
+            handleChange: validateEmail,
+            key: 'owner_email'
+          },
+          {
+            name: 'Pan-Card Number',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            isRequired: true,
+            handleChange: () => {},
+            key: 'owner_pan_number'
           }
         ]
       },
@@ -986,7 +1011,7 @@ export const KYCForm = [
             inputType: 'number',
             isRequired: true,
             handleChange: () => {},
-            key: 'phone'
+            key: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           }
         ]
       },
@@ -1027,7 +1052,7 @@ export const KYCForm = [
             inputType: 'text',
             isRequired: true,
             handleChange: () => {},
-            key: 'company_phone_number'
+            key: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',

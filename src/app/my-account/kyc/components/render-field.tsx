@@ -12,6 +12,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { countryCodeSelectStyles } from '../styles/country-code-select-style';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { updateFormState } from '@/features/kyc/kyc';
+import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
 
 // Define an interface for the parameters of renderField
 
@@ -92,22 +93,12 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     if (getCountryCode) {
       dispatch(
         updateFormState({
-          name: `formState.online.sections[${screenName}].countryCode`,
-          value: {
-            label: getCountryCode.country_calling_code,
-            value: getCountryCode.country_calling_code
-          }
+          name: `formState.online.sections[${screenName}][${key[0]}]`,
+          value: getCountryCode.country_calling_code
         })
       );
     }
   }, [skip, getCountryCode]);
-
-  const computeCountryDropdownField = (countryCode: any) => {
-    return countryCode?.countries?.map(({ code }: any) => ({
-      label: `+${code}`,
-      value: `+${code}`
-    }));
-  };
 
   switch (type) {
     case fieldType.FLOATING_INPUT:
@@ -139,9 +130,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           <div className="w-[15%]">
             <Select
               options={computeCountryDropdownField(countryCode)}
-              onChange={value => {
+              onChange={({ value }: any) => {
                 handleInputChange(
-                  `formState.online.sections[${screenName}].countryCode`,
+                  `formState.online.sections[${screenName}][${key[0]}]`,
                   value,
                   dispatch,
                   handleChange,
@@ -149,9 +140,11 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 );
               }}
               styles={countryCodeSelectStyles}
-              value={
-                formState?.online?.sections?.[screenName]?.countryCode ?? ''
-              }
+              value={{
+                label:
+                  formState?.online?.sections?.[screenName]?.[key[0]] ?? '',
+                value: formState?.online?.sections?.[screenName]?.[key[0]] ?? ''
+              }}
             />
           </div>
           <div className="w-[80%]">
@@ -159,7 +152,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               label={name}
               onChange={e =>
                 handleInputChange(
-                  `formState.online.sections[${screenName}][${key}]`,
+                  `formState.online.sections[${screenName}][${key[1]}]`,
                   e.target.value,
                   dispatch,
                   handleChange,
@@ -168,9 +161,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               }
               type={inputType}
               name={name}
-              value={formState?.online?.sections?.[screenName]?.[key] ?? ''}
+              value={formState?.online?.sections?.[screenName]?.[key[1]] ?? ''}
               errorText={
-                formErrorState?.online?.sections?.[screenName]?.[key] ?? ''
+                formErrorState?.online?.sections?.[screenName]?.[key[1]] ?? ''
               }
             />
           </div>

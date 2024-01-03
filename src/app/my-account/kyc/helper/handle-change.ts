@@ -1,10 +1,9 @@
 import { updateFormState } from '@/features/kyc/kyc';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
-import { MultiValue } from 'react-select';
 
 export const handleInputChange = async (
   path: string,
-  value: string | string[] | MultiValue<{ label: any; value: any }>,
+  value: string | string[],
   dispatch: any,
   handleChange: any,
   screenName: string
