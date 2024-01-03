@@ -54,7 +54,7 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
   const myDiamondsRadioButtons = [
     {
       name: 'days',
-      onChange: handleMyDiamondsRadioChange,
+      // onChange: handleMyDiamondsRadioChange,
       id: '1',
       value: '7',
       label: 'Last Week'
@@ -62,7 +62,7 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
     },
     {
       name: 'days',
-      onChange: handleMyDiamondsRadioChange,
+      // onChange: handleMyDiamondsRadioChange,
       id: '2',
       value: '30',
       label: 'Last Month'
@@ -70,7 +70,7 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
     },
     {
       name: 'days',
-      onChange: handleMyDiamondsRadioChange,
+      // onChange: handleMyDiamondsRadioChange,
       id: '3',
       value: '90',
       label: 'Last 3 Months'
@@ -101,7 +101,11 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
             {/* Mapping through radio button data and rendering RadioButton component */}
             {myDiamondsRadioButtons?.map((radioData: any) => (
               <div className="mb-3" key={radioData.id}>
-                <RadioButton radioMetaData={radioData} key={radioData?.id} />
+                <RadioButton
+                  radioMetaData={radioData}
+                  onChange={handleMyDiamondsRadioChange}
+                  key={radioData?.id}
+                />
               </div>
             ))}
           </div>
