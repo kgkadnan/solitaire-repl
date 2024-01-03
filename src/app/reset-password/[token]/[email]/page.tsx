@@ -11,7 +11,7 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import { useRouter, useSearchParams, usePathname } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { PASSWORD_REGEX } from '@/constants/validation-regex/regex';
 
 const ResetPassword = () => {
