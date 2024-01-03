@@ -2,7 +2,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { ManageLocales } from './translate';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
-interface HandleIsEditingKycProps {
+interface IHandleIsEditingKycProps {
   isEditingKYCStoreData: boolean;
   setIsDialogOpen: (isOpen: boolean) => void;
   setDialogContent: (content: React.ReactNode) => void;
@@ -24,7 +24,7 @@ export const handleIsEditingKyc = ({
   link,
   styles,
   currentRoute
-}: HandleIsEditingKycProps) => {
+}: IHandleIsEditingKycProps) => {
   if (isEditingKYCStoreData && currentRoute === '/my-account/kyc') {
     setIsDialogOpen(true);
     setDialogContent(

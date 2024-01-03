@@ -20,7 +20,7 @@ interface ICustomCheckboxProps {
   row: any;
   setIsError?: any;
   checkboxLabel?: string;
-  myFun?: any;
+  checkboxHandleFunction?: (value: string[]) => void;
 }
 
 export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
@@ -39,7 +39,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   row,
   setIsError,
   checkboxLabel,
-  myFun
+  checkboxHandleFunction
 }) => {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const checkboxRef = useRef<any>(null);
@@ -68,7 +68,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   let handleCheckbox = () => {
     handleCheckboxClickWrapper();
     setIsCheck((prevIsCheck: any) => {
-      myFun && myFun(prevIsCheck);
+      checkboxHandleFunction && checkboxHandleFunction(prevIsCheck);
       return prevIsCheck;
     });
   };
