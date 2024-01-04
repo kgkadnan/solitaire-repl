@@ -22,7 +22,7 @@ export const KYCForm = [
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
             handleChange: () => {},
-            fromformKey: 'first_name'
+            formKey: 'first_name'
           },
           {
             name: 'Last Name*',
@@ -37,6 +37,12 @@ export const KYCForm = [
             inputType: 'number',
             handleChange: () => {},
             formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            formKey: 'email'
           }
         ]
       },
@@ -312,6 +318,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {
             name: 'Bank Name*',
@@ -1264,7 +1271,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
-        screenName: 'banking_details',
+        screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {
             name: 'Bank Name*',
@@ -1330,19 +1337,7 @@ export const KYCForm = [
       display: 'Other',
       backend: supportedCountries.OTHER
     },
-    online: [
-      {
-        screen: 'Personal Details',
-        fields: [
-          {
-            name: 'First Name',
-            type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
-            formKey: 'first_name'
-          }
-        ]
-      }
-    ],
+
     offline: {
       download: 'link_to_kyc_form.pdf'
     },

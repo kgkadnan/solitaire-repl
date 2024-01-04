@@ -15,7 +15,7 @@ interface IStepperProps {
   state: number;
   setState: any;
   prevStep: () => void;
-  nextStep: (_name: string, _activeID: number) => void;
+  nextStep: (_name: string, _activeID: number,_saveStep?:boolean) => void;
   prevLabel?: string;
   nextLabel?: string;
 }
@@ -49,12 +49,22 @@ const Stepper: React.FC<IStepperProps> = ({
       }
     ];
   };
-  const handleStepperStep = (activeStep: number) => {
+  const handleStepperStep = async (activeStep: number) => {
+let stepperError:any=await nextStep(stepper[state]?.screenName, state,false)
     setState(activeStep);
     const updatedStepper = stepperData.map((step, index) => {
       if (index === activeStep) {
         return { ...step, status: StepperStatus.INPROGRESS };
       }
+      if(index<activeStep && (step.status !== StepperStatus.COMPLETED  || stepperError?.length)){
+        return { ...step, status: StepperStatus.REJECTED };
+      }
+      if(index===state){
+        let status= Array.isArray(stepperError) && stepperError?.length ? true : false
+              return { ...step, status: status ? StepperStatus.REJECTED : StepperStatus.COMPLETED };
+      }
+      step
+
       return step;
     });
 
@@ -70,6 +80,8 @@ const Stepper: React.FC<IStepperProps> = ({
             <div
               className={styles.circularStepsContainer}
               key={step.screenName}
+              onClick={() => handleStepperStep(index)}
+
             >
               <div
                 key={index}
@@ -80,9 +92,8 @@ const Stepper: React.FC<IStepperProps> = ({
                     ? styles.activeStep
                     : step?.status === StepperStatus.REJECTED
                     ? styles.rejectedStep
-                    : ''
+                    : styles.defaultStep
                 }`}
-                onClick={() => handleStepperStep(index)}
               >
                 {index + 1}
               </div>

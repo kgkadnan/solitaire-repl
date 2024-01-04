@@ -33,7 +33,11 @@ const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
 
-  const handleNextStep = async (screenName: string, activeID: number) => {
+  const handleNextStep = async (
+    screenName: string,
+    activeID: number,
+    saveStep = true
+  ) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
@@ -54,7 +58,8 @@ const KYC: React.FC = () => {
         );
       });
     }
-    !validationError.length &&
+    saveStep &&
+      !validationError.length &&
       (await kyc({
         data: {
           country: formState.country,
@@ -72,6 +77,7 @@ const KYC: React.FC = () => {
       stepSuccessStatus === statusCode.NO_CONTENT &&
       setActiveStep(prevStep => prevStep + 1);
     stepSuccessStatus = 0;
+    return validationError;
   };
 
   const handleTermAndCondition = () => {};
@@ -339,7 +345,6 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
-      break;
     case 'offline':
       return (
         <RenderOffline
