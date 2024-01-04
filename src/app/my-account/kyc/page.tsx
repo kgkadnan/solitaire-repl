@@ -20,7 +20,8 @@ import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import { CustomDialog } from '@/components/common/dialog';
+import { ManageLocales } from '@/utils/translate';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -202,63 +203,63 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
-  // const resData = {
-  //   online: {
-  //     '1': {
-  //       email: 'bhushan@asd.com',
-  //       phone: '9999955555',
-  //       last_name: 'Vaiude',
-  //       first_name: 'Bhushan',
-  //       country_code: 'IND'
-  //     },
-  //     '2': {
-  //       city: 'Mumbai',
-  //       state: 'Maharashtra',
-  //       address: 'Nallasopara',
-  //       pincode: '401203',
-  //       msme_type: 'SME',
-  //       gst_number: 'GST401203',
-  //       company_name: 'Bhushan Pvt Ltd',
-  //       business_type: ['Wholesaler', 'Retailer'],
-  //       company_email: 'best@email.com',
-  //       industry_type: ['Diamonds', 'Other Gaming'],
-  //       organisation_type: ['Other Gaming'],
-  //       company_pan_number: 'CompnayPAN401203',
-  //       is_msme_registered: true,
-  //       subsidiary_company: 'KGK Infotech',
-  //       company_phone_number: '401203',
-  //       is_member_of_business: true,
-  //       year_of_establishment: '1967',
-  //       member_of_business_name: 'KGK Group',
-  //       msme_registration_number: '401203',
-  //       ultimate_beneficiary_name: 'Kanha',
-  //       business_registration_number: 'BUSREG401203'
-  //     },
-  //     '3': {
-  //       owner_email: 'asd@asd.com',
-  //       owner_phone: '9999955555',
-  //       owner_full_name: 'Bhushan Kishore Vaiude',
-  //       owner_pan_number: '9999955555',
-  //       owner_country_code: 'IND'
-  //     },
-  //     '4': {
-  //       bank_name: 'OM',
-  //       ifsc_code: '9999955555',
-  //       country_code: 'IND',
-  //       account_number: 'Om',
-  //       account_holder_name: 'asdom'
-  //     }
-  //   },
-  //   country: 'India',
-  //   offline: true
-  // };
+  const handleResetButton = () => {
+    setCurrentState('country_selection');
+  };
 
   useEffect(() => {
     let resData = kycDetails?.kyc;
-    if (resData?.online && Object.keys(resData?.online).length !== 0) {
-      console.log('Dialog should open now'); // Add this line for debugging
-      setIsDialogOpen(true);
-      setDialogContent('aliasgeraaaaaaaaaaaaaaaa');
+
+    if (
+      resData &&
+      Object.keys(resData?.online).length !== 0 &&
+      Object.keys(resData?.offline).length === 0
+    ) {
+      const onlineData = resData?.online || {};
+
+      const filledScreens = Object.keys(onlineData)
+        .map(key => parseInt(key, 10))
+        .filter(num => !isNaN(num));
+
+      const lastFilledScreen = Math.max(...filledScreens);
+
+      if (lastFilledScreen > 0) {
+        setCurrentState('online');
+        setActiveStep(lastFilledScreen - 1);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="text-center align-middle text-solitaireTertiary">
+              {ManageLocales('app.topNav.kycModelContent')}
+            </div>
+            <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+              <CustomDisplayButton
+                displayButtonLabel="Restart"
+                handleClick={handleResetButton}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-[14px] font-medium'
+                }}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="Resume"
+                handleClick={() => {
+                  setIsDialogOpen(false);
+                  setDialogContent('');
+                }}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    'bg-solitaireQuaternary w-[150px] h-[35px]',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-[14px] font-medium'
+                }}
+              />
+            </div>
+          </>
+        );
+      }
     }
     const sectionKeys: string[] =
       resData?.country === 'India'
@@ -378,6 +379,9 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+          setIsDialogOpen={setIsDialogOpen}
+          isDialogOpen={isDialogOpen}
+          dialogContent={dialogContent}
         />
       );
 
