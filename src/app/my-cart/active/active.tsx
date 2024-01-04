@@ -22,8 +22,31 @@ import { IProductItem } from '../interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import logger from 'logging/log-util';
+import {
+  IErrorSetState,
+  IErrorState,
+  IModalSetState,
+  ITableColumn
+} from '@/app/search/result/result-interface';
+import {
+  ICheckboxSetState,
+  ICheckboxState
+} from '@/components/common/checkbox/interface';
 
-const ActiveMyCart = ({
+interface IActiveMyCart {
+  tableColumns: ITableColumn[];
+  refetch: any;
+  checkboxState: ICheckboxState;
+  checkboxSetState: ICheckboxSetState;
+  downloadExcelFunction: () => void;
+  errorSetState: IErrorSetState;
+  errorState: IErrorState;
+  modalSetState: IModalSetState;
+  data: any;
+  modalState: any;
+}
+
+const ActiveMyCart: React.FC<IActiveMyCart> = ({
   tableColumns,
   refetch,
   checkboxState,
@@ -34,7 +57,7 @@ const ActiveMyCart = ({
   modalSetState,
   data,
   modalState
-}: any) => {
+}) => {
   // State variables for managing component state
 
   const { isCheck } = checkboxState;
