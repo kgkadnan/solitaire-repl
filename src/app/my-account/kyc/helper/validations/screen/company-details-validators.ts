@@ -63,7 +63,7 @@ export class KycPostCompanyDetailsValidation {
     organisation_type: string,
     business_registration_number: string,
     is_member_of_business: boolean,
-    member_of_business_name:string,
+    member_of_business_name: string,
     ultimate_beneficiary_name: string
   ) {
     this.company_name = company_name;
@@ -76,7 +76,7 @@ export class KycPostCompanyDetailsValidation {
     this.organisation_type = organisation_type;
     this.business_registration_number = business_registration_number;
     this.is_member_of_business = is_member_of_business;
-    this.member_of_business_name=member_of_business_name;
+    this.member_of_business_name = member_of_business_name;
     this.ultimate_beneficiary_name = ultimate_beneficiary_name;
   }
 }
@@ -96,9 +96,6 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
 
   @IsNotEmpty({ message: 'GST number is required' })
   gst_number: string;
-
- 
- 
 
   @IsBoolean({ message: 'Registered under MSME Act must be a boolean' })
   @IsOptional()
@@ -132,7 +129,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     organisation_type: string,
     business_registration_number: string,
     subsidiary_company: string,
-    
+
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
