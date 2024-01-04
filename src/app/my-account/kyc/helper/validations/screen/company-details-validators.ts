@@ -29,16 +29,25 @@ export class KycPostCompanyDetailsValidation {
   @ArrayNotEmpty({ message: 'Industry type array must not be empty' })
   industry_type: string[];
 
-  @ArrayNotEmpty({ message: 'Organisation type array must not be empty' })
-  organisation_type: string[];
+  @IsNotEmpty({ message: 'Organisation type is required' })
+  organisation_type: string;
 
   @IsNotEmpty({ message: 'Business registration number is required' })
   business_registration_number: string;
 
+  @IsBoolean({
+    message:
+      'Member of any Business Organisation / Council check must be a boolean'
+  })
   @IsNotEmpty({
     message: 'Member of any Business Organisation / Council check is required'
   })
   is_member_of_business: boolean = false;
+
+  @ValidateIf((object, value) => object.is_member_of_business === value)
+  @IsNotEmpty({ message: 'Member of business name must be provided' })
+  @IsString({ message: 'Member of business name must be a string' })
+  member_of_business_name: string;
 
   @IsNotEmpty({ message: 'Ultimate beneficiary name is required' })
   ultimate_beneficiary_name: string;
@@ -51,9 +60,10 @@ export class KycPostCompanyDetailsValidation {
     company_email: string,
     business_type: string[],
     industry_type: string[],
-    organisation_type: string[],
+    organisation_type: string,
     business_registration_number: string,
     is_member_of_business: boolean,
+    member_of_business_name:string,
     ultimate_beneficiary_name: string
   ) {
     this.company_name = company_name;
@@ -66,6 +76,7 @@ export class KycPostCompanyDetailsValidation {
     this.organisation_type = organisation_type;
     this.business_registration_number = business_registration_number;
     this.is_member_of_business = is_member_of_business;
+    this.member_of_business_name=member_of_business_name;
     this.ultimate_beneficiary_name = ultimate_beneficiary_name;
   }
 }
@@ -85,6 +96,9 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
 
   @IsNotEmpty({ message: 'GST number is required' })
   gst_number: string;
+
+ 
+ 
 
   @IsBoolean({ message: 'Registered under MSME Act must be a boolean' })
   @IsOptional()
@@ -115,9 +129,10 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     company_email: string,
     business_type: string[],
     industry_type: string[],
-    organisation_type: string[],
+    organisation_type: string,
     business_registration_number: string,
     subsidiary_company: string,
+    
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -141,6 +156,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
       organisation_type,
       business_registration_number,
       is_member_of_business,
+      member_of_business_name,
       ultimate_beneficiary_name
     );
     this.city = city;
@@ -173,7 +189,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
     company_email: string,
     business_type: string[],
     industry_type: string[],
-    organisation_type: string[],
+    organisation_type: string,
     business_registration_number: string,
     subsidiary_company: string,
     is_member_of_business: boolean,
@@ -194,6 +210,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
       organisation_type,
       business_registration_number,
       is_member_of_business,
+      member_of_business_name,
       ultimate_beneficiary_name
     );
     this.vat_number = vat_number;
@@ -229,7 +246,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
     company_email: string,
     business_type: string[],
     industry_type: string[],
-    organisation_type: string[],
+    organisation_type: string,
     business_registration_number: string,
     subsidiary_company: string,
     is_member_of_business: boolean,

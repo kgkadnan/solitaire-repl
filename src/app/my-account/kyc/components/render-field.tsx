@@ -305,6 +305,9 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           <p className="mb-[8px] text-[12px] text-solitaireSenary">
             {subTitle}
           </p>
+          <p className="text-[#C51A2D] mb-4">
+            {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
+          </p>
           <div className="flex flex-col gap-[16px]">
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
