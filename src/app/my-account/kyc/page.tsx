@@ -14,16 +14,19 @@ import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { useKycMutation } from '@/features/api/kyc';
+import { useKycMutation, useGetKycDetailQuery } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
+import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { CustomDialog } from '@/components/common/dialog';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
+  const { data: kycDetails } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
@@ -31,6 +34,12 @@ const KYC: React.FC = () => {
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
   const dispatch = useAppDispatch();
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
+
+  const { dialogContent, isDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
 
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
@@ -82,8 +91,6 @@ const KYC: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
@@ -246,47 +253,57 @@ const KYC: React.FC = () => {
   //   offline: true
   // };
 
-  // useEffect(() => {
-  //   const sectionKeys: string[] =
-  //     resData.country === 'India'
-  //       ? [
-  //           kycScreenIdentifierNames.PERSONAL_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-  //           kycScreenIdentifierNames.BANKING_DETAILS
-  //         ]
-  //       : [kycScreenIdentifierNames.PERSONAL_DETAILS, kycScreenIdentifierNames.COMPANY_DETAILS, kycScreenIdentifierNames.BANKING_DETAILS];
+  useEffect(() => {
+    let resData = kycDetails?.kyc;
+    if (resData?.online && Object.keys(resData?.online).length !== 0) {
+      console.log('Dialog should open now'); // Add this line for debugging
+      setIsDialogOpen(true);
+      setDialogContent('aliasgeraaaaaaaaaaaaaaaa');
+    }
+    const sectionKeys: string[] =
+      resData?.country === 'India'
+        ? [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ]
+        : [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ];
 
-  //   sectionKeys.forEach((key, index: number) => {
-  //     let test = (index + 1).toString();
-  //     dispatch(
-  //       updateFormState({
-  //         name: `formState.online.sections[${key}]`,
-  //         value: resData.online[test as keyof typeof resData.online]
-  //       })
-  //     );
-  //   });
+    sectionKeys.forEach((key, index: number) => {
+      let screenIndex = (index + 1).toString();
 
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'country',
-  //       value: resData.country
-  //     })
-  //   );
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${key}]`,
+          value: resData?.online[screenIndex as keyof typeof resData.online]
+        })
+      );
+    });
 
-  //   // setActiveStep(Object.keys(resData.online).length - 1);
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'offline',
-  //       value: resData.offline
-  //     })
-  //   );
-  //   setSelectedCountry(resData.country);
+    dispatch(
+      updateFormState({
+        name: 'country',
+        value: resData?.country
+      })
+    );
 
-  //   resData.offline
-  //     ? setSelectedKYCOption('online')
-  //     : setSelectedKYCOption('offline');
-  // }, []);
+    dispatch(
+      updateFormState({
+        name: 'offline',
+        value: resData?.offline
+      })
+    );
+    setSelectedCountry({ label: resData?.country, value: resData?.country });
+
+    resData?.offline
+      ? setSelectedKYCOption('online')
+      : setSelectedKYCOption('offline');
+  }, [kycDetails]);
 
   // return (
   //   <div>

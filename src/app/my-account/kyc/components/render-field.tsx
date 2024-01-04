@@ -138,7 +138,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 );
               }}
               styles={countryCodeSelectStyle(
-                formErrorState?.online?.sections?.[screenName]?.[formKey[0]] ?? ''
+                formErrorState?.online?.sections?.[screenName]?.[formKey[0]] ??
+                  ''
               )}
               value={{
                 label:
