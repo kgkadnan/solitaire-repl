@@ -22,6 +22,10 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
       break;
     case 'phone':
       instance = new ValidationPhoneCriteria(fieldValue);
+
+      break;
+
+    case 'country_code':
       instance = new ValidationCountryCodeCriteria(fieldValue);
 
       break;

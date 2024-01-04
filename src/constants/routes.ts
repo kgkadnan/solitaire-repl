@@ -16,3 +16,12 @@ export const protectedRoutes = [
   '/notification',
   '/my-account'
 ];
+
+export const applicationRoutes = [
+  ...headerlessRoutes,
+  ...protectedRoutes,
+  '/match-pair',
+  '/new-arrival',
+  '/layouts',
+  '/appointments'
+];

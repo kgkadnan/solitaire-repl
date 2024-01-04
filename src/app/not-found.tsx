@@ -1,5 +1,6 @@
 import diamond from '@public/assets/icons/Group 1713.svg';
 import Image from 'next/image';
+
 export default function NotFound() {
   return (
     <div className="mx-auto flex justify-center h-screen">

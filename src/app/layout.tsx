@@ -10,7 +10,11 @@ import { Provider } from 'react-redux';
 import { setupStore } from '@/store';
 import { usePathname } from 'next/navigation';
 import authorizedLogin from '@/utils/authorized-login';
-import { headerlessRoutes, protectedRoutes } from '@/constants/routes';
+import {
+  headerlessRoutes,
+  protectedRoutes,
+  applicationRoutes
+} from '@/constants/routes';
 
 const store = setupStore();
 
@@ -18,7 +22,9 @@ const inter = Inter({ subsets: ['latin'] });
 
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
-  const showHeader = !headerlessRoutes.includes(path);
+  const isApplicationRoutes = applicationRoutes.includes(path);
+
+  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
