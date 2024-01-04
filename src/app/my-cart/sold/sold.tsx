@@ -5,15 +5,32 @@ import React from 'react';
 import styles from './sold.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
+import {
+  IErrorSetState,
+  IModalSetState,
+  ITableColumn
+} from '@/app/search/result/result-interface';
+import {
+  ICheckboxSetState,
+  ICheckboxState
+} from '@/components/common/checkbox/interface';
 
-const OutOfStock = ({
+interface IOutOfStock {
+  tableColumns: ITableColumn[];
+  soldOutRows: any;
+  checkboxState: ICheckboxState;
+  checkboxSetState: ICheckboxSetState;
+  errorSetState: IErrorSetState;
+  modalSetState: IModalSetState;
+}
+const OutOfStock: React.FC<IOutOfStock> = ({
   tableColumns,
   soldOutRows,
   checkboxState,
   checkboxSetState,
   errorSetState,
   modalSetState
-}: any) => {
+}) => {
   //Checkbox Data for Custom Data Table
   const checkboxData = {
     checkboxState,

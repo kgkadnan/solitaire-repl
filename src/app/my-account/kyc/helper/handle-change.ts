@@ -13,9 +13,7 @@ export const handleInputChange = async (
 
   dispatch(
     updateFormState({
-      name: `formErrorState.online.sections.${[screenName]}.${[
-        errors?.[0]?.property
-      ]}`,
+      name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
       value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
     })
   );
