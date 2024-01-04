@@ -1,47 +1,81 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import Image from 'next/image';
-import { CustomInputlabel } from '@/components/common/input-label';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import {
   useGetAuthDataQuery,
   useVerifyLoginMutation
 } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
-import KGKLogo from '@public/assets/icons/vector.svg';
-import { FloatingLabelInput } from '@/components/common/floating-input';
-import Link from 'next/link';
-import { ManageLocales } from '@/utils/translate';
+import Select from 'react-select';
 import useUser from '@/lib/use-auth';
 import { isEmailValid } from '@/utils/validate-email';
 import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
+import countryCode from '../../constants/country-code.json';
 import {
   ENTER_PASSWORD,
   INCORRECT_LOGIN_CREDENTIALS,
   INVALID_EMAIL_FORMAT
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
+import LoginComponent from './component/login';
+import OTPVerification from '@/components/otp-verication';
+import {
+  initialOTPFormState,
+  useOtpVerificationStateManagement
+} from '@/components/otp-verication/hooks/otp-verification-state-management';
+import { computeCountryDropdownField } from '../my-account/kyc/helper/compute-country-dropdown';
+import { handleOTPSelectChange } from '@/components/otp-verication/helpers/handle-otp-select-change';
+import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-select-style';
+import { ManageLocales } from '@/utils/translate';
+import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
+import { CustomInputDialog } from '@/components/common/input-dialog';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { useVerifyOTPMutation } from '@/features/api/otp-verification';
 
 // Define the Login component
 const Login = () => {
   // State variables for email, password, and error handling
   const [emailAndNumber, setEmailAndNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
+
   const [verifyLogin] = useVerifyLoginMutation();
+
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
-  const { dialogContent, isDialogOpen } = modalState;
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
+    modalSetState;
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
   const [token, setToken] = useState('');
   const { data } = useGetAuthDataQuery(token);
+
+  const [currentState, setCurrentState] = useState('login');
+  const [phoneToken, setPhoneToken] = useState('');
+  const [verifyOTP] = useVerifyOTPMutation();
+
+  const { otpVericationState, otpVerificationSetState } =
+    useOtpVerificationStateManagement();
+
+  const {
+    otpValues,
+    resendTimer,
+    otpVerificationFormState,
+    otpVerificationFormErrors
+  } = otpVericationState;
+  const {
+    setOtpValues,
+    setResendTimer,
+    setOTPVerificationFormState,
+    setOTPVerificationFormErrors
+  } = otpVerificationSetState;
 
   useEffect(() => {
     if (isTokenChecked) {
@@ -55,9 +89,7 @@ const Login = () => {
         userLoggedIn(token);
         router.push('/');
       } else {
-        router.push(
-          `/otp-verification?country_code=${data.customer.country_code}&phone=${data.customer.phone}`
-        );
+        setCurrentState('otpVerification');
       }
     }
   }, [data]);
@@ -117,28 +149,133 @@ const Login = () => {
   //   return phoneRegex.test(number);
   // };
 
-  const handleInputChange = (e: any, type: string) => {
-    const inputValue = e.target.value;
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p> Change Mobile Number</p>
+        </div>
+        <div className="flex text-center justify-between  w-[350px]">
+          <div className="w-[25%]">
+            <Select
+              name="countryCode"
+              options={computeCountryDropdownField(countryCode)}
+              onChange={selectValue =>
+                handleOTPSelectChange({
+                  selectValue,
+                  setOTPVerificationFormState
+                })
+              }
+              styles={countryCodeSelectStyle(
+                otpVerificationFormErrors.countryCode
+              )}
+              value={{
+                label: otpVerificationFormState.countryCode,
+                value: otpVerificationFormState.countryCode
+              }}
+            />
+          </div>
 
-    if (type === 'email') {
-      setEmailAndNumber(inputValue);
+          <div className="w-[70%]">
+            <FloatingLabelInput
+              label={ManageLocales('app.register.mobileNumber')}
+              onChange={event =>
+                handleOTPChange({ event, setOTPVerificationFormState })
+              }
+              type="number"
+              name="mobileNumber"
+              value={otpVerificationFormState.mobileNumber}
+              errorText={otpVerificationFormErrors.mobileNumber}
+            />
+          </div>
+        </div>
+        <div className="flex justify-center  gap-5">
+          {/* Button to trigger the register action */}
 
-      // if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
-      if (isEmailValid(inputValue)) {
-        setEmailErrorText('');
-        setErrorText('');
-      } else {
-        setEmailErrorText(INVALID_EMAIL_FORMAT);
-        setErrorText('');
-      }
-    } else if (type === 'password') {
-      setPassword(inputValue);
-      setIsError(false);
-      setErrorText('');
-      setPasswordErrorText('');
-    }
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setOTPVerificationFormState(prev => ({ ...prev }));
+              setOTPVerificationFormErrors(initialOTPFormState);
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              handleEditMobileNumber({
+                otpVerificationFormState,
+                setOTPVerificationFormErrors,
+                setOTPVerificationFormState,
+                setIsDialogOpen
+              });
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
+  const handleResendClick = () => {
+    // Add logic to resend the OTP, e.g., API call
+    // Reset the timer to 60 seconds
+    setResendTimer(60);
+  };
+
+  const rednerLoginContent = () => {
+    switch (currentState) {
+      case 'login':
+        return (
+          <LoginComponent
+            setEmailAndNumber={setEmailAndNumber}
+            isEmailValid={isEmailValid}
+            setEmailErrorText={setEmailErrorText}
+            setErrorText={setErrorText}
+            setPasswordErrorText={setPasswordErrorText}
+            setPassword={setPassword}
+            setIsError={setIsError}
+            handleKeyDown={handleKeyDown}
+            emailAndNumber={emailAndNumber}
+            emailErrorText={emailErrorText}
+            password={password}
+            passwordErrorText={passwordErrorText}
+            handleLogin={handleLogin}
+            isError={isError}
+            errorText={errorText}
+          />
+        );
+      case 'otpVerification':
+        return (
+          <OTPVerification
+            otpVerificationFormState={otpVerificationFormState}
+            setOtpValues={setOtpValues}
+            otpValues={otpValues}
+            handleResendClick={handleResendClick}
+            resendTimer={resendTimer}
+            setCurrentState={setCurrentState}
+            state={'login'}
+            router={router}
+            phoneToken={phoneToken}
+            userLoggedIn={userLoggedIn}
+            setIsInputDialogOpen={setIsInputDialogOpen}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
+            verifyOTP={verifyOTP}
+          />
+        );
+    }
+  };
   // JSX rendering for the Login component
   return (
     <>
@@ -148,99 +285,12 @@ const Login = () => {
         setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
       />
-      <UserAuthenticationLayout
-        formData={
-          <div className="flex justify-center flex-col w-full max-w-md px-4 lg:max-w-lg xl:max-w-xl 2xl:max-w-[500px] mx-auto">
-            <div className="flex flex-col gap-2 mb-[40px] items-center">
-              <Image
-                src={KGKLogo}
-                alt="Banner image"
-                style={{ width: '60px', height: '80px' }}
-              />
-              <div>
-                <CustomInputlabel
-                  htmlfor={''}
-                  label={ManageLocales('app.login')}
-                  overriddenStyles={{
-                    label:
-                      'text-solitaireQuaternary text-4xl sm:text-5xl md:text-6xl font-semibold mb-4'
-                  }}
-                />
-              </div>
-
-              <div>
-                <p className="text-solitaireTertiary text-sm sm:text-base">
-                  {ManageLocales('app.login.welcomeMessage')}
-                </p>
-              </div>
-            </div>
-
-            {/* Input fields */}
-            <div className="flex flex-col gap-7">
-              <FloatingLabelInput
-                label={ManageLocales('app.login.emailAndNumber')}
-                onChange={e => handleInputChange(e, 'email')}
-                type="email"
-                name="email"
-                onKeyDown={handleKeyDown}
-                value={emailAndNumber}
-                errorText={emailErrorText}
-              />
-              <FloatingLabelInput
-                label={ManageLocales('app.login.password')}
-                onChange={e => handleInputChange(e, 'password')}
-                type="password"
-                name="password"
-                onKeyDown={handleKeyDown}
-                value={password}
-                errorText={passwordErrorText}
-                showPassword={true}
-              />
-            </div>
-
-            <div>
-              <div className="flex justify-center items-center text-sm sm:text-base h-10">
-                {isError && (
-                  <div className="text-solitaireError flex text-left">
-                    {errorText}
-                  </div>
-                )}
-              </div>
-
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales('app.login')}
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    'bg-solitaireQuaternary w-full h-14 mb-10', // Adjust height as needed
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-base font-medium'
-                }}
-                handleClick={handleLogin}
-              />
-            </div>
-
-            <div>
-              <Link
-                href={'/forgot-password'}
-                className="text-lg text-solitaireQuaternary font-medium"
-              >
-                {ManageLocales('app.login.forgotPassword')}
-              </Link>
-              <div className="mt-5">
-                <p className="text-solitaireTertiary text-lg font-light">
-                  {ManageLocales('app.login.newUser')}
-                  <Link
-                    href={'/register'}
-                    className="text-solitaireQuaternary font-medium"
-                  >
-                    {ManageLocales('app.login.register')}
-                  </Link>
-                </p>
-              </div>
-            </div>
-          </div>
-        }
+      <CustomInputDialog
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
+      <UserAuthenticationLayout formData={rednerLoginContent()} />
     </>
   );
 };

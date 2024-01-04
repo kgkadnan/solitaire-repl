@@ -30,7 +30,7 @@ interface IOTPVerification {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyOTP: any;
-  role: string;
+  role?: string;
 }
 
 const OTPVerification = ({
@@ -48,7 +48,7 @@ const OTPVerification = ({
   setIsDialogOpen,
   setDialogContent,
   verifyOTP,
-  role
+  role = ''
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   return (
