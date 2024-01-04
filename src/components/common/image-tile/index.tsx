@@ -3,6 +3,12 @@
 import React, { ReactNode, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import style from './image-tile.module.scss';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger
+} from '@/components/ui/tooltip';
 
 export interface IImageTileStyleProps {
   imageTileMainContainerStyles?: string;
@@ -42,72 +48,83 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
   const [hoveredTile, setHoveredTile] = useState<string | null>(null);
 
   return (
-    <div
-      className={`${style.imageTileMainContainer} ${overriddenStyles?.imageTileMainContainerStyles}`}
-    >
-      {imageTileData.map((tileData: IImageTileProps) => {
-        const { src, title, link, short_name, isActive } = tileData;
+    <TooltipProvider>
+      <Tooltip>
+        <div
+          className={`${style.imageTileMainContainer} ${overriddenStyles?.imageTileMainContainerStyles}`}
+        >
+          {imageTileData.map((tileData: IImageTileProps) => {
+            const { src, title, link, short_name, isActive } = tileData;
 
-        const isTileActive =
-          isActive || (short_name && selectedTile?.includes(short_name));
-        return (
-          <div
-            key={`image-tile-data-${title}`}
-            role="img"
-            className={`${
-              style.imageTileContainer
-            } ${overriddenStyles?.imageTileContainerStyles} ${
-              isTileActive && overriddenStyles?.activeIndicatorStyles
-            }`}
-            onMouseEnter={() => setHoveredTile(title)}
-            onMouseLeave={() => setHoveredTile(null)}
-            onClick={() => {
-              link
-                ? handleSelectTile?.(title, link)
-                : short_name && handleSelectTile?.(short_name);
-            }}
-          >
-            {typeof src === 'string' ? (
-              <Image
-                src={src}
-                alt={title}
-                width={100}
-                height={100}
-                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-              />
-            ) : (
-              <div
-                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-              >
-                {src as ReactNode}
-              </div>
-            )}
+            const isTileActive =
+              isActive || (short_name && selectedTile?.includes(short_name));
+            return (
+              <>
+                <TooltipTrigger asChild>
+                  <div
+                    key={`image-tile-data-${title}`}
+                    role="img"
+                    className={`${
+                      style.imageTileContainer
+                    } ${overriddenStyles?.imageTileContainerStyles} ${
+                      isTileActive && overriddenStyles?.activeIndicatorStyles
+                    }`}
+                    onMouseEnter={() => setHoveredTile(title)}
+                    onMouseLeave={() => setHoveredTile(null)}
+                    onClick={() => {
+                      link
+                        ? handleSelectTile?.(title, link)
+                        : short_name && handleSelectTile?.(short_name);
+                    }}
+                  >
+                    {typeof src === 'string' ? (
+                      <Image
+                        src={src}
+                        alt={title}
+                        width={100}
+                        height={100}
+                        className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+                      />
+                    ) : (
+                      <div
+                        className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+                      >
+                        {src as ReactNode}
+                      </div>
+                    )}
 
-            {/* <div
+                    {/* <div
               className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
             >
               {title}
             </div> */}
 
-            {isNavOption ? (
-              hoveredTile === title && (
-                <div
-                  className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-                >
-                  {title}
-                </div>
-              )
-            ) : (
-              <div
-                className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-              >
-                {title}
-              </div>
-            )}
-          </div>
-        );
-      })}
-    </div>
+                    {isNavOption ? (
+                      hoveredTile === title && (
+                        <div
+                          className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
+                        >
+                          {title}
+                        </div>
+                      )
+                    ) : (
+                      <div
+                        className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
+                      >
+                        {title}
+                      </div>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>{short_name}</p>
+                </TooltipContent>
+              </>
+            );
+          })}
+        </div>
+      </Tooltip>
+    </TooltipProvider>
   );
 };
 
