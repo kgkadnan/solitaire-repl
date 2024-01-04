@@ -12,9 +12,9 @@ import {
   SOLD_OUT_STATUS
 } from '@/constants/business-logic';
 import { IProductItem } from './interface';
-import MemoOut from './memo/page';
-import ActiveMyCart from './active/page';
-import OutOfStock from './sold/page';
+import MemoOut from './memo/memo';
+import ActiveMyCart from './active/active';
+import OutOfStock from './sold/sold';
 import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';

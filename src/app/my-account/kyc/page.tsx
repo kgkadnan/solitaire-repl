@@ -19,6 +19,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
+import { statusCode } from '@/constants/enums/status-code';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -68,7 +69,7 @@ const KYC: React.FC = () => {
         .catch((_e: any) => {}));
 
     !validationError.length &&
-      stepSuccessStatus === 204 &&
+      stepSuccessStatus === statusCode.NO_CONTENT &&
       setActiveStep(prevStep => prevStep + 1);
     stepSuccessStatus = 0;
   };

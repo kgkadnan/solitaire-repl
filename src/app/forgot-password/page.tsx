@@ -16,6 +16,7 @@ import { isEmailValid } from '@/utils/validate-email';
 import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import ConfirmScreen from '@/components/common/confirmation-screen';
+import { statusCode } from '@/constants/enums/status-code';
 
 const ForgotPassword = () => {
   const [value, setValue] = useState('');
@@ -55,8 +56,9 @@ const ForgotPassword = () => {
         email: value
       });
 
-      if (res?.data?.statusCode === 204) {
-        // setIsConfirmed(true);
+      // setIsConfirmed(true);
+
+      if (res?.data?.statusCode === statusCode.NO_CONTENT) {
         setCurrentState('successfullyCreated');
       } else if (res.error) {
         setIsDialogOpen(true);
