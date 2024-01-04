@@ -23,7 +23,6 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
-
   const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
