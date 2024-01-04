@@ -7,6 +7,15 @@ export const headerlessRoutes = [
   '/successfully-created'
 ];
 
+export const myAccountRoutes = [
+  '/my-account/kyc',
+  '/my-account/summary',
+  '/my-account/change-password',
+  '/my-account/manage-diamond-sequence',
+  '/my-account/report-bug',
+  '/my-account/email-notification'
+];
+
 export const protectedRoutes = [
   '/',
   '/search',
@@ -14,5 +23,15 @@ export const protectedRoutes = [
   '/my-cart',
   '/compare-stone',
   '/notification',
-  '/my-account'
+  ...myAccountRoutes
+];
+
+export const applicationRoutes = [
+  ...headerlessRoutes,
+  ...protectedRoutes,
+  '/match-pair',
+  '/new-arrival',
+  '/layouts',
+  '/appointments',
+  '/for-you'
 ];
