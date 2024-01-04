@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import OtpInput from '@/components/common/otp-verification';
@@ -8,6 +8,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import KGKlogo from '@public/assets/icons/vector.svg';
 import { handleGoBack } from './helpers/handle-go-back';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
+import { handleResendOTP } from './helpers/handle-resend-otp';
 
 export interface IOtp {
   mobileNumber: string;
@@ -20,7 +21,6 @@ interface IOTPVerification {
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   otpValues: string[];
-  handleResendClick: () => void;
   resendTimer: number;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   state: string;
@@ -31,6 +31,8 @@ interface IOTPVerification {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyOTP: any;
   role?: string;
+  setResendTimer: React.Dispatch<React.SetStateAction<number>>;
+  sendOtp: any;
 }
 
 const OTPVerification = ({
@@ -38,7 +40,6 @@ const OTPVerification = ({
   setIsInputDialogOpen,
   setOtpValues,
   otpValues,
-  handleResendClick,
   resendTimer,
   setCurrentState,
   state,
@@ -48,9 +49,22 @@ const OTPVerification = ({
   setIsDialogOpen,
   setDialogContent,
   verifyOTP,
+  setResendTimer,
+  sendOtp,
   role = ''
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
+  useEffect(() => {
+    let countdownInterval: NodeJS.Timeout;
+
+    if (resendTimer > 0) {
+      countdownInterval = setInterval(() => {
+        setResendTimer(prevTimer => prevTimer - 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(countdownInterval);
+  }, [resendTimer]);
   return (
     <div className="flex justify-center gap-5 flex-col w-[500px]">
       <div className="flex flex-col gap-[5px] mb-[20px] items-center">
@@ -89,7 +103,15 @@ const OTPVerification = ({
               displayLabelStyle: 'text-[14px] font-medium'
             }}
             isDisable={resendTimer > 0}
-            handleClick={handleResendClick}
+            handleClick={() => {
+              handleResendOTP({
+                otpVerificationFormState,
+                setResendTimer,
+                sendOtp,
+                setIsDialogOpen,
+                setDialogContent
+              });
+            }}
           />
         </div>
       </div>

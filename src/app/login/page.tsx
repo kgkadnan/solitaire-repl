@@ -34,7 +34,12 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import { FloatingLabelInput } from '@/components/common/floating-input';
-import { useVerifyOTPMutation } from '@/features/api/otp-verification';
+import {
+  useSendOtpMutation,
+  useVerifyOTPMutation
+} from '@/features/api/otp-verification';
+import Link from 'next/link';
+import ConfirmScreen from '@/components/common/confirmation-screen';
 
 // Define the Login component
 const Login = () => {
@@ -54,12 +59,15 @@ const Login = () => {
     modalSetState;
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
+
   const [token, setToken] = useState('');
   const { data } = useGetAuthDataQuery(token);
 
   const [currentState, setCurrentState] = useState('login');
   const [phoneToken, setPhoneToken] = useState('');
+
   const [verifyOTP] = useVerifyOTPMutation();
+  const [sendOtp] = useSendOtpMutation();
 
   const { otpVericationState, otpVerificationSetState } =
     useOtpVerificationStateManagement();
@@ -90,6 +98,32 @@ const Login = () => {
         router.push('/');
       } else {
         setCurrentState('otpVerification');
+        setOTPVerificationFormState(prev => ({
+          ...prev,
+          mobileNumber: `${data.customer.phone}`,
+          countryCode: `${data.customer.country_code}`,
+          codeAndNumber: `${data.customer.country_code} ${data.customer.phone}`
+        }));
+        sendOtp({
+          phone: data.customer.phone,
+          country_code: data.customer.country_code
+        })
+          .unwrap()
+          .then(res => {
+            console.log('res.customer.token', res);
+            setPhoneToken(res.token);
+          })
+          .catch(e => {
+            console.log('e', e);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <ErrorModel
+                content={e.data.message}
+                handleClick={() => setIsDialogOpen(false)}
+              />
+            );
+            console.log(e);
+          });
       }
     }
   }, [data]);
@@ -218,19 +252,13 @@ const Login = () => {
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsDialogOpen
+                setIsInputDialogOpen
               });
             }}
           />
         </div>
       </div>
     );
-  };
-
-  const handleResendClick = () => {
-    // Add logic to resend the OTP, e.g., API call
-    // Reset the timer to 60 seconds
-    setResendTimer(60);
   };
 
   const rednerLoginContent = () => {
@@ -261,7 +289,7 @@ const Login = () => {
             otpVerificationFormState={otpVerificationFormState}
             setOtpValues={setOtpValues}
             otpValues={otpValues}
-            handleResendClick={handleResendClick}
+            sendOtp={sendOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
             state={'login'}
@@ -272,10 +300,38 @@ const Login = () => {
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
             verifyOTP={verifyOTP}
+            setResendTimer={setResendTimer}
+          />
+        );
+      case 'successfullyCreated':
+        return (
+          <ConfirmScreen
+            buttons={
+              <>
+                <div className="flex flex-col justify-center bg-transparent  border-2 border-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
+                  <Link
+                    href={'/'}
+                    className="text-[16px] font-medium text-solitaireTertiary"
+                  >
+                    {ManageLocales('app.successfullyCreated.exploreWebsite')}
+                  </Link>
+                </div>
+                <div className="flex flex-col justify-center bg-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
+                  <Link
+                    href={'/my-account/kyc'}
+                    className="text-[16px] font-medium text-solitaireTertiary"
+                  >
+                    {ManageLocales('app.successfullyCreated.finishKYCProcess')}
+                  </Link>
+                </div>
+              </>
+            }
+            message={'Your account has been successfully created!'}
           />
         );
     }
   };
+
   // JSX rendering for the Login component
   return (
     <>
@@ -283,7 +339,6 @@ const Login = () => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
-        data-testid={'success-indicator'}
       />
       <CustomInputDialog
         isOpen={isInputDialogOpen}

@@ -13,11 +13,14 @@ import { FloatingLabelInput } from '@/components/common/floating-input';
 import { computeCountryDropdownField } from '../my-account/kyc/helper/compute-country-dropdown';
 import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-select-style';
 import { useRouter } from 'next/navigation';
-import { useVerifyOTPMutation } from '@/features/api/otp-verification';
+import {
+  useSendOtpMutation,
+  useVerifyOTPMutation
+} from '@/features/api/otp-verification';
 import Select from 'react-select';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import countryCode from '../../constants/country-code.json';
-import ConfirmScreen from './component/confirmScreen';
+
 import Link from 'next/link';
 import useUser from '@/lib/use-auth';
 import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
@@ -28,6 +31,7 @@ import {
   initialOTPFormState,
   useOtpVerificationStateManagement
 } from '@/components/otp-verication/hooks/otp-verification-state-management';
+import ConfirmScreen from '@/components/common/confirmation-screen';
 export interface IOtp {
   mobileNumber: string;
   countryCode: string;
@@ -72,6 +76,7 @@ const Register = () => {
   const { data, error } = useGetCountryCodeQuery({});
   const [register] = useRegisterMutation();
   const [verifyOTP] = useVerifyOTPMutation();
+  const [sendOtp] = useSendOtpMutation();
 
   useEffect(() => {
     if (data) {
@@ -83,24 +88,6 @@ const Register = () => {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
-
-  useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
-
-    if (resendTimer > 0) {
-      countdownInterval = setInterval(() => {
-        setResendTimer(prevTimer => prevTimer - 1);
-      }, 1000);
-    }
-
-    return () => clearInterval(countdownInterval);
-  }, [resendTimer]);
-
-  const handleResendClick = () => {
-    // Add logic to resend the OTP, e.g., API call
-    // Reset the timer to 60 seconds
-    setResendTimer(60);
-  };
 
   useEffect(() => {
     setOTPVerificationFormState(prev => ({
@@ -180,7 +167,7 @@ const Register = () => {
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsDialogOpen
+                setIsInputDialogOpen
               });
             }}
           />
@@ -210,7 +197,7 @@ const Register = () => {
             otpVerificationFormState={otpVerificationFormState}
             setOtpValues={setOtpValues}
             otpValues={otpValues}
-            handleResendClick={handleResendClick}
+            sendOtp={sendOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
             state={'register'}
@@ -222,6 +209,7 @@ const Register = () => {
             setDialogContent={setDialogContent}
             verifyOTP={verifyOTP}
             role={role}
+            setResendTimer={setResendTimer}
           />
         );
 
