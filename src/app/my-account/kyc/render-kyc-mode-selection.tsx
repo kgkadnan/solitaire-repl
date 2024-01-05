@@ -42,7 +42,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
         name: `${
           selection === 'online' ? 'formState.offline' : 'formState.online'
         }`,
-        value: true
+        value: false
       })
     );
   };

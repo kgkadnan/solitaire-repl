@@ -19,9 +19,9 @@ interface IStepperProps {
   nextStep: (_name: string, _activeID: number) => void;
   prevLabel?: string;
   nextLabel?: string;
-  setIsDialogOpen: any;
-  isDialogOpen: any;
-  dialogContent: any;
+  // setIsDialogOpen: any;
+  // isDialogOpen: any;
+  // dialogContent: any;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -31,10 +31,10 @@ const Stepper: React.FC<IStepperProps> = ({
   prevStep,
   nextStep,
   prevLabel = 'Back',
-  nextLabel = 'Save and Next',
-  setIsDialogOpen,
-  isDialogOpen,
-  dialogContent
+  nextLabel = 'Save and Next'
+  // setIsDialogOpen,
+  // isDialogOpen,
+  // dialogContent
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>([]);
 
@@ -75,11 +75,11 @@ const Stepper: React.FC<IStepperProps> = ({
 
   return (
     <>
-      <CustomDialog
+      {/* <CustomDialog
         setIsOpen={setIsDialogOpen}
         isOpens={isDialogOpen}
         dialogContent={dialogContent}
-      />
+      /> */}
       <div className={styles.stepperContainer}>
         <div className={styles.circularSteps}>
           {stepperData?.map((step: any, index: number) => (
