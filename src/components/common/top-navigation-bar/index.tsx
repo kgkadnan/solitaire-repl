@@ -66,6 +66,7 @@ export const TopNavigationBar = () => {
   const router = useRouter();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
   const [visible, setVisible] = useState(true);
+  const [userData, setUserData] = useState<any>({});
   const [offset, setOffset] = useState(0);
   const limit = 11;
   const { data } = useGetAllNotificationQuery({
@@ -122,6 +123,14 @@ export const TopNavigationBar = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos, data, handleScroll]);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleNotificationClick = async () => {
     dispatch(notificationBadge(false));
@@ -249,10 +258,10 @@ export const TopNavigationBar = () => {
                     </div>
                     <div className="">
                       <p className="text-[16px] font-semibold text-solitaireQuaternary">
-                        Amanita Wilson
+                        {`${userData?.customer?.first_name} ${userData?.customer?.last_name}`}
                       </p>
                       <p className="text-14px text-solitaireTertiary">
-                        amanitawilson@gmail.com
+                        {userData?.customer?.email}
                       </p>
                     </div>
                   </div>
