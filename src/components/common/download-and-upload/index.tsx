@@ -15,9 +15,10 @@ import deleteSvg from '@public/assets/icons/delete.svg';
 import errorImage from '@public/assets/icons/error.svg';
 import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
-import { IModalSetState } from '@/app/search/result/result-interface';
 import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
 import { MAX_FILE_SIZE } from '@/constants/business-logic';
+import { useAppDispatch } from '@/hooks/hook';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -29,36 +30,31 @@ const ALLOWED_FILE_TYPES = {
 };
 
 interface IDownloadAndUpload {
-  uploadProgress: number;
-  isFileUploaded: boolean;
-  setUploadProgress: React.Dispatch<React.SetStateAction<number>>;
-  setIsFileUploaded: React.Dispatch<React.SetStateAction<boolean>>;
-  setSelectedFile: React.Dispatch<React.SetStateAction<string[]>>;
-  selectedFile: string[];
+  formState: any;
   maxFile: number;
   modalSetState: IModalSetState;
 }
 
 export const DownloadAndUpload = ({
-  uploadProgress,
-  isFileUploaded,
-  setUploadProgress,
-  setIsFileUploaded,
-  setSelectedFile,
-  selectedFile,
+  formState,
   maxFile,
   modalSetState
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
-
+  const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
       acceptedFiles,
-      setUploadProgress,
-      setIsFileUploaded,
-      setSelectedFile
+      setUploadProgress: `formState.offline.upload.uploadProgress`,
+      setIsFileUploaded: `formState.offline.upload.isFileUploaded`,
+      setSelectedFile: `formState.offline.upload.selectedFile`,
+      dispatch
     });
   };
+
+  let uploadProgress = formState?.offline?.upload?.uploadProgress ?? '';
+  let isFileUploaded = formState?.offline?.upload?.isFileUploaded ?? '';
+  let selectedFile = formState?.offline?.upload?.selectedFile ?? '';
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -176,8 +172,9 @@ export const DownloadAndUpload = ({
                       ),
                       onSelect: () =>
                         handleDeleteAttachment({
-                          setIsFileUploaded,
-                          setSelectedFile
+                          setIsFileUploaded: `formState.attachment.upload.isFileUploaded`,
+                          setSelectedFile: `formState.attachment.upload.selectedFile`,
+                          dispatch
                         })
                     }
                   ]}

@@ -11,13 +11,13 @@
   font-weight: 100;
 }
 .errorFormat {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 14px;
   font-weight: 400;
 }
 
 .errorlabel {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 16px;
   text-transform: capitalize;
 }
@@ -27,7 +27,7 @@
 }
 
 .errorStroke {
-  stroke: #983131;
+  stroke: hsl(var(--solitaire-error));
 }
 
 .menuTriggerStyle {

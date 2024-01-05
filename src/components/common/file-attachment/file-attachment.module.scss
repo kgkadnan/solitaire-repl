@@ -10,13 +10,13 @@
   font-weight: 400;
 }
 .errorFormat {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 14px;
   font-weight: 400;
 }
 
 .errorlabel {
-  color: #983131;
+  color: hsl(var(--solitaire-error));
   font-size: 14px;
   text-transform: capitalize;
 }
@@ -26,7 +26,7 @@
 }
 
 .errorFill {
-  fill: #983131;
+  fill: hsl(var(--solitaire-error));
   width: 100%;
 }
 
@@ -42,7 +42,7 @@
   min-width: 10rem;
 }
 .modalStyle {
-  max-width: 1000px;
+  max-width: 50vw;
   height: 80vh;
   z-index: 1200;
   color: hsl(var(--solitaire-tertiary));

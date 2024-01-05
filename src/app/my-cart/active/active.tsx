@@ -22,8 +22,31 @@ import { IProductItem } from '../interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import logger from 'logging/log-util';
+import {
+  IErrorSetState,
+  IErrorState,
+  IModalSetState,
+  ITableColumn
+} from '@/app/search/result/result-interface';
+import {
+  ICheckboxSetState,
+  ICheckboxState
+} from '@/components/common/checkbox/interface';
 
-const ActiveMyCart = ({
+interface IActiveMyCart {
+  tableColumns: ITableColumn[];
+  refetch: any;
+  checkboxState: ICheckboxState;
+  checkboxSetState: ICheckboxSetState;
+  downloadExcelFunction: () => void;
+  errorSetState: IErrorSetState;
+  errorState: IErrorState;
+  modalSetState: IModalSetState;
+  data: any;
+  modalState: any;
+}
+
+const ActiveMyCart: React.FC<IActiveMyCart> = ({
   tableColumns,
   refetch,
   checkboxState,
@@ -34,7 +57,7 @@ const ActiveMyCart = ({
   modalSetState,
   data,
   modalState
-}: any) => {
+}) => {
   // State variables for managing component state
 
   const { isCheck } = checkboxState;
@@ -196,7 +219,8 @@ const ActiveMyCart = ({
                   isCheck,
                   setIsError,
                   setErrorText,
-                  activeCartRows
+                  activeCartRows,
+                  footerCheck: 'my-cart'
                 })
             }
           ]}
@@ -275,7 +299,7 @@ const ActiveMyCart = ({
         <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
           {isError && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
+              <p className="text-solitaireError text-base ">{errorText}</p>
             </div>
           )}
           <CustomFooter

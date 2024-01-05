@@ -1,5 +1,4 @@
 import Image from 'next/image';
-
 function bytesToMB(bytes: number) {
   return (bytes / (1024 * 1024)).toFixed(3); // Keep it rounded to 3 decimal places
 }
@@ -19,27 +18,23 @@ export const handlePreview = ({
         const fileExtension = path.slice(
           ((path.lastIndexOf('.') - 1) >>> 0) + 2
         );
+
         return (
           <>
-            <div className="flex">
+            <div className="flex w-[40vw] h-[60vh]">
               {file.type === 'application/pdf' ? (
                 <iframe
-                  src={file.preview}
-                  style={{ width: '100%', height: '500px' }}
+                  src={URL.createObjectURL(file)}
+                  style={{ width: '40vw', height: '60vh' }}
                   title="PDF Preview"
                 ></iframe>
+              ) : fileExtension === ('docx' || 'doc') ? (
+                ''
               ) : (
-                // fileExtension == ('docx' || 'doc') ? (
-                //   <FileViewer
-                //     fileType={fileExtension}
-                //     filePath={file.preview}
-                //     className={'h-[60vh]'}
-                //   />
-                // ) :
                 <Image
                   key={file.name}
                   // src={file.preview}
-                  src={`${URL.createObjectURL(file)}`}
+                  src={URL.createObjectURL(file)}
                   alt={file.name}
                   width="0"
                   height="0"

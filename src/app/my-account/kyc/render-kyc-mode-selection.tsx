@@ -90,7 +90,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
               <div className="text-solitaireTertiary w-[70%]">
                 <h1>
                   {option === 'online'
-                    ? 'Fill Form online'
+                    ? 'Fill Form Digitally'
                     : 'Download and Upload Form'}
                 </h1>
                 <p className="font-thin pr-6">
@@ -108,7 +108,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
         <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
           {errorText.length > 0 && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
+              <p className="text-solitaireError text-base ">{errorText}</p>
             </div>
           )}
           <CustomFooter

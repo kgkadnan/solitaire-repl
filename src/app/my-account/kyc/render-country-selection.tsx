@@ -11,7 +11,7 @@ import {
 } from '@/app/search/result/result-interface';
 import { SELECT_VALID_INPUT } from '@/constants/error-messages/kyc';
 interface IRenderCountrySelection {
-  selectedCountry: string;
+  selectedCountry: any;
   setSelectedCountry: React.Dispatch<React.SetStateAction<string>>;
   handleSaveAndNext: (state: string) => void;
   errorState: IErrorState;
@@ -26,6 +26,7 @@ const RenderCountrySelection = ({
 }: IRenderCountrySelection) => {
   const { setErrorText } = errorSetState;
   const { errorText } = errorState;
+
   return (
     <div className="w-full">
       <div className="flex flex-col gap-[30px] mb-[20px] items-start h-[70vh]">
@@ -48,6 +49,7 @@ const RenderCountrySelection = ({
 
         <div className="min-w-[400px] w-[30%]">
           <CountrySelectionDropdown
+            selectedCountry={selectedCountry}
             setSelectedCountry={setSelectedCountry}
             errorSetState={errorSetState}
           />
@@ -57,7 +59,7 @@ const RenderCountrySelection = ({
         <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
           {errorText.length > 0 && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
+              <p className="text-solitaireError text-base ">{errorText}</p>
             </div>
           )}
           <CustomFooter
@@ -67,8 +69,8 @@ const RenderCountrySelection = ({
                 displayButtonLabel: ManageLocales('app.myaccount.kyc.next'),
                 style: 'bg-solitaireQuaternary !text-[14px]',
                 fn: () =>
-                  selectedCountry.length
-                    ? selectedCountry === 'other'
+                  selectedCountry?.value?.length
+                    ? selectedCountry.value === 'Other'
                       ? handleSaveAndNext('other')
                       : handleSaveAndNext('choice_for_filling_kyc')
                     : setErrorText(SELECT_VALID_INPUT)

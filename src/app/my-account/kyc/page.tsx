@@ -9,7 +9,6 @@ import RenderOffline from './render-offline';
 import { useSelector } from 'react-redux';
 import { RenderOnlineForm } from './render-online';
 import RenderKYCModeSelection from './render-kyc-mode-selection';
-import { validateScreen } from './helper/handle-validation';
 import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
@@ -17,15 +16,17 @@ import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import { useKycMutation } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
-import logger from 'logging/log-util';
 import { ValidationError } from 'class-validator';
+import { validateScreen } from './helper/validations/screen/screen';
+import { Checkbox } from '@/components/ui/checkbox';
+import { statusCode } from '@/constants/enums/status-code';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
 
-  const [selectedCountry, setSelectedCountry] = useState('');
+  const [selectedCountry, setSelectedCountry] = useState<any>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
@@ -35,14 +36,14 @@ const KYC: React.FC = () => {
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
-
+    let stepSuccessStatus;
     validationError = await validateScreen(
       formState.online.sections[screenName],
       screenName,
-      selectedCountry
+      selectedCountry.value
     );
     if (Array.isArray(validationError)) {
-      validationError.map(error => {
+      validationError.forEach(error => {
         dispatch(
           updateFormState({
             name: `formErrorState.online.sections.${[screenName]}.${[
@@ -53,70 +54,27 @@ const KYC: React.FC = () => {
         );
       });
     }
-    switch (screenName) {
-      case 'personal_details':
-        !validationError.length &&
-          kyc({
-            data: {
-              country: formState.country,
-              offline: formState.offline,
-              data: { ...formState.online.sections[screenName] }
-            },
-            ID: active
-          })
-            .then((_res: any) => console.log('res'))
-            .catch((_e: any) => {});
+    !validationError.length &&
+      (await kyc({
+        data: {
+          country: formState.country,
+          offline: formState.offline,
+          data: {
+            ...formState.online.sections[screenName]
+          }
+        },
+        ID: active
+      })
+        .then((_res: any) => (stepSuccessStatus = _res.data.statusCode))
+        .catch((_e: any) => {}));
 
-        break;
-      case 'company_details':
-        !validationError.length &&
-          kyc({
-            data: {
-              country: formState.country,
-              offline: formState.offline,
-              data: { ...formState.online.sections[screenName] }
-            },
-            ID: active
-          })
-            .then((_res: any) => console.log('res'))
-            .catch((_e: any) => {});
-
-        break;
-      case 'company_owner_details':
-        !validationError.length &&
-          kyc({
-            data: {
-              country: formState.country,
-              offline: formState.offline,
-              data: { ...formState.online.sections[screenName] }
-            },
-            ID: active
-          })
-            .then((_res: any) => console.log('res'))
-            .catch((_e: any) => {});
-
-        break;
-      case 'banking_details':
-        !validationError.length &&
-          kyc({
-            data: {
-              country: formState.country,
-              offline: formState.offline,
-              data: {
-                ...formState.online.sections[screenName]
-              }
-            },
-            ID: active
-          })
-            .then((_res: any) => console.log('res'))
-            .catch((_e: any) => {});
-        break;
-      default:
-        logger.info('default');
-    }
-
-    !validationError.length && setActiveStep(prevStep => prevStep + 1);
+    !validationError.length &&
+      stepSuccessStatus === statusCode.NO_CONTENT &&
+      setActiveStep(prevStep => prevStep + 1);
+    stepSuccessStatus = 0;
   };
+
+  const handleTermAndCondition = () => {};
 
   const handlePrevStep = () => {
     if (activeStep <= 0) {
@@ -157,51 +115,77 @@ const KYC: React.FC = () => {
             Attachments
           </h3>
         </div>
-        <div className="flex w-full justify-between pb-5">
+        <div className="pb-5 max-h-[800px] flex flex-wrap flex-col gap-[20px] content-between">
           {data?.attachment &&
-            Object?.keys(data?.attachment).map((category: any) => (
-              <div key={category} className="w-[45%]">
-                <h1 className="text-solitaireTertiary mb-3 capitalize ">
-                  {category}
-                </h1>
-                <div className="flex flex-col gap-[20px] flex-wrap ">
-                  {data?.attachment[category]?.map(
-                    ({
-                      id,
-                      label,
-                      isRequired,
-                      uploadProgress,
-                      isFileUploaded,
-                      setUploadProgress,
-                      setIsFileUploaded,
-                      setSelectedFile,
-                      selectedFile,
-                      setError,
-                      error,
-                      maxFile,
-                      minFile
-                    }: any) => (
+            (Array.isArray(data.attachment)
+              ? // Render when `attachment` is an array
+                data.attachment.map(
+                  ({ id, label, isRequired, key, maxFile, minFile }: any) => (
+                    <div key={id} className=" w-[45%]">
                       <FileAttachments
                         key={id}
                         lable={label}
+                        formKey={key}
                         isRequired={isRequired}
-                        uploadProgress={uploadProgress}
-                        isFileUploaded={isFileUploaded}
-                        setUploadProgress={setUploadProgress}
-                        setIsFileUploaded={setIsFileUploaded}
-                        setSelectedFile={setSelectedFile}
-                        selectedFile={selectedFile}
-                        maxFile={maxFile}
-                        setError={setError}
-                        error={error}
+                        formErrorState={formErrorState}
+                        formState={formState}
                         modalSetState={modalSetState}
+                        modalState={modalState}
+                        maxFile={maxFile}
                         minFile={minFile}
                       />
-                    )
-                  )}
-                </div>
-              </div>
-            ))}
+                    </div>
+                  )
+                )
+              : // Render when `attachment` is an object
+                Object.keys(data.attachment).map((category: any) => (
+                  <div key={category} className="w-[45%]">
+                    <h1 className="text-solitaireTertiary py-3 capitalize ">
+                      {category}
+                    </h1>
+                    <div className="flex flex-col gap-[20px]">
+                      {data.attachment[category].map(
+                        ({
+                          id,
+                          label,
+                          isRequired,
+                          key,
+                          maxFile,
+                          minFile
+                        }: any) => (
+                          <FileAttachments
+                            key={id}
+                            lable={label}
+                            formKey={key}
+                            isRequired={isRequired}
+                            formErrorState={formErrorState}
+                            formState={formState}
+                            modalSetState={modalSetState}
+                            modalState={modalState}
+                            maxFile={maxFile}
+                            minFile={minFile}
+                          />
+                        )
+                      )}
+                    </div>
+                  </div>
+                )))}
+        </div>
+        <hr className="border-1 border-solitaireSenary w-[50%]" />
+        <div className="flex py-6 items-center justify-center">
+          <div className="pr-3 flex items-center">
+            <Checkbox onClick={() => handleTermAndCondition()} />
+          </div>
+          <div className="text-solitaireTertiary flex gap-1">
+            <p>I hereby agree to</p>
+            <a
+              href="https://kgk.live/terms-condition"
+              className="border-b-[1px] border-solid border-solitaireQuaternary"
+              target="_blank"
+            >
+              terms and conditions
+            </a>
+          </div>
         </div>
       </>
     ),
@@ -267,12 +251,12 @@ const KYC: React.FC = () => {
   //   const sectionKeys: string[] =
   //     resData.country === 'India'
   //       ? [
-  //           'personal_details',
-  //           'company_details',
-  //           'company_owner_details',
-  //           'banking_details'
+  //           kycScreenIdentifierNames.PERSONAL_DETAILS,
+  //           kycScreenIdentifierNames.COMPANY_DETAILS,
+  //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+  //           kycScreenIdentifierNames.BANKING_DETAILS
   //         ]
-  //       : ['personal_details', 'company_details', 'banking_details'];
+  //       : [kycScreenIdentifierNames.PERSONAL_DETAILS, kycScreenIdentifierNames.COMPANY_DETAILS, kycScreenIdentifierNames.BANKING_DETAILS];
 
   //   sectionKeys.forEach((key, index: number) => {
   //     let test = (index + 1).toString();
@@ -323,10 +307,10 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.fullName === selectedCountry;
+      return country.country.display === selectedCountry.value;
     });
     setData(kycData[0]);
-  }, [selectedCountry]);
+  }, [currentState]);
 
   const handleSaveAndNext = (state: string) => {
     setCurrentState(state);
@@ -355,11 +339,18 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
+      break;
+    case 'offline':
       return (
         <RenderOffline
           data={data}
+          fromWhere={currentState}
+          formErrorState={formErrorState}
+          formState={formState}
           modalSetState={modalSetState}
           modalState={modalState}
+          prevStep={handlePrevStep}
+          handleTermAndCondition={handleTermAndCondition}
         />
       );
     // Add more cases as needed
@@ -374,14 +365,6 @@ const KYC: React.FC = () => {
         />
       );
 
-    case 'offline':
-      return (
-        <RenderOffline
-          data={data}
-          modalSetState={modalSetState}
-          modalState={modalState}
-        />
-      );
     default:
       // Render a default component or handle the default case
       return;

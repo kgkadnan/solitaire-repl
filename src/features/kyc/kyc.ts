@@ -10,20 +10,21 @@ const initialState = {
     online: {
       sections: {
         personal_details: {
-          first_name: '',
-          last_name: '',
-          phone: '',
-          email: '',
           country_code: '+91'
-        }
+        },
+        company_details: {},
+        company_owner_Details: {},
+        banking_details: {}
       }
     },
-    offline: null
+    offline: null,
+    attachment: null
   },
   formErrorState: {
     country: '',
     online: { sections: {} },
-    offline: null
+    offline: null,
+    attachment: null
   }
 };
 

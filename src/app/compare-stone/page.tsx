@@ -34,12 +34,14 @@ import {
   NO_STONES_AVAILABLE,
   NO_STONES_SELECTED
 } from '@/constants/error-messages/compare-stone';
+import { useSearchParams } from 'next/navigation';
 
 const CompareStone = () => {
   // Initialize necessary state variables
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
+  const pathName = useSearchParams().get('source');
 
   const { modalState, modalSetState } = useModalStateManagement();
   const {
@@ -194,14 +196,25 @@ const CompareStone = () => {
           setIsSliderOpen,
           setConfirmStoneData
         )
-    },
-    {
-      id: 4,
-      displayButtonLabel: 'Add to Cart',
-      style: styles.filled,
-      fn: handleAddToCart
     }
   ];
+
+  const [footerItems, setFooterItems] = useState(compareStoneFooter);
+
+  useEffect(() => {
+    if (pathName !== 'my-cart') {
+      const newFooterItems = [
+        ...compareStoneFooter,
+        {
+          id: 3,
+          displayButtonLabel: 'Add to Cart',
+          style: styles.filled,
+          fn: handleAddToCart
+        }
+      ];
+      setFooterItems(newFooterItems);
+    }
+  }, [pathName]);
 
   // Updated function type
   type HandleCloseType = (event: React.MouseEvent, id: string) => void;
@@ -361,14 +374,14 @@ const CompareStone = () => {
           <div className="w-[30%]">
             <p
               data-testid={'error-indicator'}
-              className="text-red-700 text-base "
+              className="text-solitaireError text-base "
             >
               {errorText}
             </p>
           </div>
         )}
         <CustomFooter
-          footerButtonData={compareStoneFooter}
+          footerButtonData={footerItems}
           noBorderTop={styles.paginationContainerStyle}
         />
       </div>

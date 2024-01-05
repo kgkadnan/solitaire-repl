@@ -9,8 +9,27 @@ import { NoDataFound } from '@/components/common/no-data-found';
 
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import {
+  IErrorSetState,
+  IErrorState,
+  IModalSetState
+} from '@/app/search/result/result-interface';
+import {
+  ICheckboxSetState,
+  ICheckboxState
+} from '@/components/common/checkbox/interface';
 
-const MemoOut = ({
+interface IMemoOut {
+  tableColumns: any;
+  memoRows: any;
+  downloadExcelFunction: () => void;
+  errorSetState: IErrorSetState;
+  errorState: IErrorState;
+  checkboxState: ICheckboxState;
+  checkboxSetState: ICheckboxSetState;
+  modalSetState: IModalSetState;
+}
+const MemoOut: React.FC<IMemoOut> = ({
   tableColumns,
   memoRows,
   downloadExcelFunction,
@@ -19,7 +38,7 @@ const MemoOut = ({
   checkboxState,
   checkboxSetState,
   modalSetState
-}: any) => {
+}) => {
   // State variables
 
   const { isCheck } = checkboxState;
@@ -98,7 +117,7 @@ const MemoOut = ({
         <div className="sticky bottom-0 bg-solitairePrimary mt-10 flex border-t-2 border-solitaireSenary items-center justify-between">
           {isError && (
             <div className="w-[30%]">
-              <p className="text-red-700 text-base ">{errorText}</p>
+              <p className="text-solitaireError text-base ">{errorText}</p>
             </div>
           )}
           <CustomFooter
