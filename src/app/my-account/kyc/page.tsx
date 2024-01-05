@@ -20,6 +20,8 @@ import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import { statusCode } from '@/constants/enums/status-code';
+import logger from 'logging/log-util';
+import ErrorModel from '@/components/common/error-model';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -33,6 +35,8 @@ const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const { modalState, modalSetState } = useModalStateManagement();
+
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
   const dispatch = useAppDispatch();
 
@@ -49,7 +53,6 @@ const KYC: React.FC = () => {
       screenName,
       selectedCountry.value
     );
-    console.log('kokokokok', validationError);
     if (Array.isArray(validationError)) {
       validationError.forEach(error => {
         dispatch(
@@ -62,21 +65,36 @@ const KYC: React.FC = () => {
         );
       });
     }
-    console.log(formErrorState, 'oooooooooo');
     saveStep &&
       !validationError.length &&
       (await kyc({
         data: {
           country: formState.country,
-          offline: formState.offline,
+          offline:"formState.offline",
           data: {
             ...formState.online.sections[screenName]
           }
         },
         ID: active
       })
-        .then((_res: any) => (stepSuccessStatus = _res.data.statusCode))
-        .catch((_e: any) => {}));
+        .then((_res: any) => { _res.data.statusCode ? stepSuccessStatus = _res.data.statusCode
+          :
+
+       setIsDialogOpen(true);
+        setDialogContent(
+          <ErrorModel
+            content={"res?.error.data.message"}
+            handleClick={() => setIsDialogOpen(false)}
+          />
+        )
+        })
+        .catch((_e: any) => { logger.error(`something went wrong while submitting kyc ${_e}`),setIsDialogOpen(true);
+        setDialogContent(
+          <ErrorModel
+            content={"res?.error.data.message"}
+            handleClick={() => setIsDialogOpen(false)}
+          />
+        );}));
 
     !validationError.length &&
       stepSuccessStatus === statusCode.NO_CONTENT &&
