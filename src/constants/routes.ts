@@ -2,9 +2,7 @@ export const headerlessRoutes = [
   '/login',
   '/forgot-password',
   '/reset-password',
-  '/register',
-  '/otp-verification',
-  '/successfully-created'
+  '/register'
 ];
 
 export const myAccountRoutes = [

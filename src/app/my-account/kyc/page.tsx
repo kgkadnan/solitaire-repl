@@ -31,6 +31,9 @@ const KYC: React.FC = () => {
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
   const dispatch = useAppDispatch();
 
   const handleNextStep = async (
@@ -46,6 +49,7 @@ const KYC: React.FC = () => {
       screenName,
       selectedCountry.value
     );
+    console.log('kokokokok', validationError);
     if (Array.isArray(validationError)) {
       validationError.forEach(error => {
         dispatch(
@@ -53,11 +57,12 @@ const KYC: React.FC = () => {
             name: `formErrorState.online.sections.${[screenName]}.${[
               error.property
             ]}`,
-            value: Object.values(error.constraints ?? {})[0]
+            value: Object.values(error.constraints ?? {})[0] || ''
           })
         );
       });
     }
+    console.log(formErrorState, 'oooooooooo');
     saveStep &&
       !validationError.length &&
       (await kyc({
@@ -89,8 +94,6 @@ const KYC: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
@@ -367,6 +370,8 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+          formErrorState={formErrorState}
+          formState={formState}
         />
       );
 
