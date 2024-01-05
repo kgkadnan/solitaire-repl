@@ -19,7 +19,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
-import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { statusCode } from '@/constants/enums/status-code';
@@ -31,6 +31,7 @@ const KYC: React.FC = () => {
   const { data: kycDetails } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [userData, setUserData] = useState<any>({});
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
@@ -42,6 +43,14 @@ const KYC: React.FC = () => {
 
   const { dialogContent, isDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem('user');
+
+    if (storedUser) {
+      setUserData(JSON.parse(storedUser));
+    }
+  }, []);
 
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
@@ -209,103 +218,115 @@ const KYC: React.FC = () => {
   };
 
   useEffect(() => {
-    let resData = kycDetails?.kyc;
+    switch (userData?.customer?.kyc?.status) {
+      case kycStatus.INPROGRESS:
+        let resData = kycDetails?.kyc;
+        if (
+          resData &&
+          Object.keys(resData?.online).length !== 0 &&
+          Object.keys(resData?.offline).length === 0
+        ) {
+          const onlineData = resData?.online || {};
 
-    if (
-      resData &&
-      Object.keys(resData?.online).length !== 0 &&
-      Object.keys(resData?.offline).length === 0
-    ) {
-      const onlineData = resData?.online || {};
+          const filledScreens = Object.keys(onlineData)
+            .map(key => parseInt(key, 10))
+            .filter(num => !isNaN(num));
 
-      const filledScreens = Object.keys(onlineData)
-        .map(key => parseInt(key, 10))
-        .filter(num => !isNaN(num));
+          const lastFilledScreen = Math.max(...filledScreens);
 
-      const lastFilledScreen = Math.max(...filledScreens);
+          if (lastFilledScreen > 0) {
+            setCurrentState('online');
+            setActiveStep(lastFilledScreen - 1);
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  {ManageLocales('app.topNav.kycModelContent')}
+                </div>
+                <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                  <CustomDisplayButton
+                    displayButtonLabel="Restart"
+                    handleClick={handleResetButton}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                  <CustomDisplayButton
+                    displayButtonLabel="Resume"
+                    handleClick={() => {
+                      setIsDialogOpen(false);
+                      setDialogContent('');
+                    }}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        'bg-solitaireQuaternary w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                </div>
+              </>
+            );
+          }
+        }
+        const sectionKeys: string[] =
+          resData?.country === 'India'
+            ? [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ]
+            : [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ];
 
-      if (lastFilledScreen > 0) {
-        setCurrentState('online');
-        setActiveStep(lastFilledScreen - 1);
-        setIsDialogOpen(true);
-        setDialogContent(
-          <>
-            <div className="text-center align-middle text-solitaireTertiary">
-              {ManageLocales('app.topNav.kycModelContent')}
-            </div>
-            <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-              <CustomDisplayButton
-                displayButtonLabel="Restart"
-                handleClick={handleResetButton}
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[14px] font-medium'
-                }}
-              />
-              <CustomDisplayButton
-                displayButtonLabel="Resume"
-                handleClick={() => {
-                  setIsDialogOpen(false);
-                  setDialogContent('');
-                }}
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    'bg-solitaireQuaternary w-[150px] h-[35px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[14px] font-medium'
-                }}
-              />
-            </div>
-          </>
+        sectionKeys.forEach((key, index: number) => {
+          let screenIndex = (index + 1).toString();
+
+          dispatch(
+            updateFormState({
+              name: `formState.online.sections[${key}]`,
+              value: resData?.online[screenIndex as keyof typeof resData.online]
+            })
+          );
+        });
+
+        dispatch(
+          updateFormState({
+            name: 'country',
+            value: resData?.country
+          })
         );
-      }
+
+        dispatch(
+          updateFormState({
+            name: 'offline',
+            value: resData?.offline
+          })
+        );
+        setSelectedCountry({
+          label: resData?.country,
+          value: resData?.country
+        });
+
+        resData?.offline
+          ? setSelectedKYCOption('online')
+          : setSelectedKYCOption('offline');
+
+      case kycStatus.PENDING:
+        break;
+      case kycStatus.APPROVED:
+        break;
+      case kycStatus.REJECTED:
+        break;
     }
-    const sectionKeys: string[] =
-      resData?.country === 'India'
-        ? [
-            kycScreenIdentifierNames.PERSONAL_DETAILS,
-            kycScreenIdentifierNames.COMPANY_DETAILS,
-            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-            kycScreenIdentifierNames.BANKING_DETAILS
-          ]
-        : [
-            kycScreenIdentifierNames.PERSONAL_DETAILS,
-            kycScreenIdentifierNames.COMPANY_DETAILS,
-            kycScreenIdentifierNames.BANKING_DETAILS
-          ];
-
-    sectionKeys.forEach((key, index: number) => {
-      let screenIndex = (index + 1).toString();
-
-      dispatch(
-        updateFormState({
-          name: `formState.online.sections[${key}]`,
-          value: resData?.online[screenIndex as keyof typeof resData.online]
-        })
-      );
-    });
-
-    dispatch(
-      updateFormState({
-        name: 'country',
-        value: resData?.country
-      })
-    );
-
-    dispatch(
-      updateFormState({
-        name: 'offline',
-        value: resData?.offline
-      })
-    );
-    setSelectedCountry({ label: resData?.country, value: resData?.country });
-
-    resData?.offline
-      ? setSelectedKYCOption('online')
-      : setSelectedKYCOption('offline');
-  }, [kycDetails]);
+  }, [kycDetails, userData]);
 
   // return (
   //   <div>

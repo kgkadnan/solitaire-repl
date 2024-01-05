@@ -5,7 +5,7 @@ const useUser = () => {
   const [isTokenChecked, setIsTokenChecked] = useState(false); // New state
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+    const storedUser = localStorage.getItem('auth');
 
     if (storedUser) {
       setAuthToken(JSON.parse(storedUser));
@@ -15,12 +15,12 @@ const useUser = () => {
 
   const userLoggedIn = (userData: any) => {
     setAuthToken(userData);
-    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('auth', JSON.stringify(userData));
   };
 
   const userLoggedOut = () => {
     setAuthToken(null);
-    localStorage.removeItem('user');
+    localStorage.removeItem('auth');
   };
 
   return { authToken, isTokenChecked, userLoggedIn, userLoggedOut };
