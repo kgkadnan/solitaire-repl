@@ -3,7 +3,6 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
-import { CustomDialog } from '../dialog';
 
 export interface IStepper {
   label: string;
