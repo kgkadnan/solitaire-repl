@@ -21,6 +21,7 @@ const useUser = () => {
   const userLoggedOut = () => {
     setAuthToken(null);
     localStorage.removeItem('auth');
+    localStorage.removeItem('user');
   };
 
   return { authToken, isTokenChecked, userLoggedIn, userLoggedOut };
