@@ -4,13 +4,13 @@ interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 export const handleEditMobileNumber = ({
   otpVerificationFormState,
   setOTPVerificationFormErrors,
   setOTPVerificationFormState,
-  setIsDialogOpen
+  setIsInputDialogOpen
 }: IHandleEditMobileNumber) => {
   if (
     !otpVerificationFormState.countryCode ||
@@ -25,6 +25,7 @@ export const handleEditMobileNumber = ({
       ...prev,
       codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.mobileNumber}`
     }));
-    setIsDialogOpen(false);
+    console.log('here');
+    setIsInputDialogOpen(false);
   }
 };

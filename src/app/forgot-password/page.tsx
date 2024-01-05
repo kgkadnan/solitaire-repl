@@ -12,17 +12,18 @@ import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from './component/error';
 import { ManageLocales } from '@/utils/translate';
-import ConfirmationScreen from '@/components/common/confirmation-screen';
 import { isEmailValid } from '@/utils/validate-email';
 import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
+import ConfirmScreen from '@/components/common/confirmation-screen';
 import { statusCode } from '@/constants/enums/status-code';
 
 const ForgotPassword = () => {
   const [value, setValue] = useState('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
-  const [isConfirmed, setIsConfirmed] = useState(false);
+  // const [isConfirmed, setIsConfirmed] = useState(false);
+  const [currentState, setCurrentState] = useState('forgotPassword');
   const { dialogContent, isDialogOpen } = modalState;
 
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -55,8 +56,10 @@ const ForgotPassword = () => {
         email: value
       });
 
+      // setIsConfirmed(true);
+
       if (res?.data?.statusCode === statusCode.NO_CONTENT) {
-        setIsConfirmed(true);
+        setCurrentState('successfullyCreated');
       } else if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
@@ -71,6 +74,95 @@ const ForgotPassword = () => {
     }
   };
 
+  const renderForgotPasswordContent = () => {
+    switch (currentState) {
+      case 'forgotPassword':
+        return (
+          <div className="flex justify-center flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:[500px] mx-auto px-4">
+            <div className="flex flex-col gap-2 mb-10 items-center">
+              <Image
+                src={Logo}
+                alt="Banner image"
+                style={{ width: '60px', height: '80px' }}
+              />
+              <CustomInputlabel
+                htmlfor={''}
+                label={ManageLocales('app.forgotpassword')}
+                overriddenStyles={{
+                  label:
+                    'text-solitaireQuaternary text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold'
+                }}
+              />
+              <div className="w-3/4">
+                <p className="text-solitaireTertiary text-sm sm:text-base md:[18px]">
+                  {ManageLocales('app.forgotpassword.message')}
+                </p>
+              </div>
+            </div>
+
+            {/* Input field for email */}
+            <div className="mb-6">
+              <FloatingLabelInput
+                label={ManageLocales('app.forgotpassword.emailId')}
+                onChange={handleEmail}
+                type="email"
+                name="email"
+                onKeyDown={handleKeyDown}
+                value={value}
+                errorText={emailErrorText}
+              />
+            </div>
+            <div className="mb-5">
+              <CustomDisplayButton
+                displayButtonLabel={ManageLocales(
+                  'app.forgotpassword.goBackToLogin'
+                )}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    'bg-transparent border border-solitaireQuaternary w-full h-14',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-base font-medium'
+                }}
+                handleClick={() => router.push('/login')}
+              />
+            </div>
+            <div>
+              <CustomDisplayButton
+                displayButtonLabel={ManageLocales('app.forgotpassword.submit')}
+                displayButtonAllStyle={{
+                  displayButtonStyle: 'bg-solitaireQuaternary w-full h-14',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-base font-medium'
+                }}
+                handleClick={handleForgotPassword}
+              />
+            </div>
+          </div>
+        );
+      case 'successfullyCreated':
+        return (
+          <ConfirmScreen
+            message={ManageLocales('app.forgotpassword.confirmation')}
+            buttons={
+              <div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.forgotpassword.goBackToLogin'
+                  )}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[500px] h-[54px]',
+                    displayLabelStyle:
+                      'text-solitaireTertiary text-[16px] font-medium'
+                  }}
+                  handleClick={() => router.push('/login')}
+                />
+              </div>
+            }
+          />
+        );
+    }
+  };
   return (
     <>
       <CustomDialog
@@ -79,94 +171,8 @@ const ForgotPassword = () => {
         setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
       />
-      {isConfirmed ? (
-        <ConfirmationScreen
-          message={ManageLocales('app.forgotpassword.confirmation')}
-          buttons={
-            <div>
-              <CustomDisplayButton
-                displayButtonLabel={ManageLocales(
-                  'app.forgotpassword.goBackToLogin'
-                )}
-                displayButtonAllStyle={{
-                  displayButtonStyle:
-                    'bg-solitaireQuaternary w-[500px] h-[54px]',
-                  displayLabelStyle:
-                    'text-solitaireTertiary text-[16px] font-medium'
-                }}
-                handleClick={() => router.push('/login')}
-              />
-            </div>
-          }
-        />
-      ) : (
-        <UserAuthenticationLayout
-          formData={
-            <div className="flex justify-center flex-col w-full max-w-xs sm:max-w-sm md:max-w-md lg:max-w-lg xl:[500px] mx-auto px-4">
-              <div className="flex flex-col gap-2 mb-10 items-center">
-                <Image
-                  src={Logo}
-                  alt="Banner image"
-                  style={{ width: '60px', height: '80px' }}
-                />
-                <CustomInputlabel
-                  htmlfor={''}
-                  label={ManageLocales('app.forgotpassword')}
-                  overriddenStyles={{
-                    label:
-                      'text-solitaireQuaternary text-xl sm:text-2xl md:text-3xl lg:text-4xl font-semibold'
-                  }}
-                />
-                <div className="w-3/4">
-                  <p className="text-solitaireTertiary text-sm sm:text-base md:[18px]">
-                    {ManageLocales('app.forgotpassword.message')}
-                  </p>
-                </div>
-              </div>
 
-              {/* Input field for email */}
-              <div className="mb-6">
-                <FloatingLabelInput
-                  label={ManageLocales('app.forgotpassword.emailId')}
-                  onChange={handleEmail}
-                  type="email"
-                  name="email"
-                  onKeyDown={handleKeyDown}
-                  value={value}
-                  errorText={emailErrorText}
-                />
-              </div>
-              <div className="mb-5">
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales(
-                    'app.forgotpassword.goBackToLogin'
-                  )}
-                  displayButtonAllStyle={{
-                    displayButtonStyle:
-                      'bg-transparent border border-solitaireQuaternary w-full h-14',
-                    displayLabelStyle:
-                      'text-solitaireTertiary text-base font-medium'
-                  }}
-                  handleClick={() => router.push('/login')}
-                />
-              </div>
-              <div>
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales(
-                    'app.forgotpassword.submit'
-                  )}
-                  displayButtonAllStyle={{
-                    displayButtonStyle: 'bg-solitaireQuaternary w-full h-14',
-                    displayLabelStyle:
-                      'text-solitaireTertiary text-base font-medium'
-                  }}
-                  handleClick={handleForgotPassword}
-                />
-              </div>
-            </div>
-          }
-        />
-      )}
+      <UserAuthenticationLayout formData={renderForgotPasswordContent()} />
     </>
   );
 };
