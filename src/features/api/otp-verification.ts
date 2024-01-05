@@ -14,8 +14,16 @@ export const otpVerificationApi = createApi({
         body: filter
       }),
       invalidatesTags: ['OtpVerification']
+    }),
+    sendOtp: builder.mutation({
+      query: filter => ({
+        url: `/store/customers/sms/otp/send`,
+        method: 'POST',
+        body: filter
+      }),
+      invalidatesTags: ['OtpVerification']
     })
   })
 });
 
-export const { useVerifyOTPMutation } = otpVerificationApi;
+export const { useVerifyOTPMutation, useSendOtpMutation } = otpVerificationApi;

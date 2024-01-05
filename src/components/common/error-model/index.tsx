@@ -20,25 +20,14 @@ const ErrorModel: React.FC<IErrorModelProps> = ({ content, handleClick }) => {
         <p>{content}</p>
       </div>
       {handleClick && (
-        <div
-          style={{
-            backgroundColor: 'hsl(var(--solitaire-quaternary))',
-            width: '150px',
-            height: '35px',
-            color: 'hsl(var(--solitaire-tertiary))',
-            fontSize: '14px',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            borderRadius: '5px',
-            fontWeight: '300'
+        <CustomDisplayButton
+          displayButtonAllStyle={{
+            displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
+            displayLabelStyle: 'text-solitaireTertiary text-[16px] font-medium'
           }}
-        >
-          <CustomDisplayButton
-            displayButtonLabel="Okay!"
-            handleClick={handleClick}
-          />
-        </div>
+          displayButtonLabel="Okay!"
+          handleClick={handleClick}
+        />
       )}
     </div>
   );
