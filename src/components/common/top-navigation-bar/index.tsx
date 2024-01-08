@@ -294,24 +294,24 @@ export const TopNavigationBar = () => {
                         </p>
                       </div>
                     </div>
-                    <div
-                      className="border-b border-solitaireSenary mt-[10px] pb-[10px] cursor-pointer"
-                      onClick={() => {
-                        handleIsEditingKyc({
-                          isEditingKYCStoreData,
-                          setIsDialogOpen,
-                          setDialogContent,
-                          dispatch,
-                          handleRoute,
-                          label: ManageLocales('app.topNav.myAccount'),
-                          link: topNavData[3].link,
-                          styles,
-                          currentRoute
-                        });
-                        setIsAccountMenuOpen(false);
-                      }}
-                    >
-                      <div className="fill-solitaireTertiary flex gap-[18px] items-center">
+                    <div className="border-b border-solitaireSenary mt-[10px] pb-[10px] cursor-pointer">
+                      <div
+                        className="fill-solitaireTertiary flex gap-[18px] items-center"
+                        onClick={() => {
+                          handleIsEditingKyc({
+                            isEditingKYCStoreData,
+                            setIsDialogOpen,
+                            setDialogContent,
+                            dispatch,
+                            handleRoute,
+                            label: ManageLocales('app.topNav.myAccount'),
+                            link: topNavData[3].link,
+                            styles,
+                            currentRoute
+                          });
+                          setIsAccountMenuOpen(false);
+                        }}
+                      >
                         <UserIcon fill="solitaireTertiary" />
                         <CustomDisplayButton
                           displayButtonLabel={ManageLocales(
