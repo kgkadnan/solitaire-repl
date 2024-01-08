@@ -14,24 +14,47 @@ import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { useKycMutation } from '@/features/api/kyc';
+import { useKycMutation, useGetKycDetailQuery } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
+import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
+import KycStatus from './components/kyc-status';
+import { useGetAuthDataQuery } from '@/features/api/login';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { ManageLocales } from '@/utils/translate';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
+  const { data: kycDetails } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [userData, setUserData] = useState<any>({});
+  const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+  const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
+
+  const { dialogContent, isDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('auth');
+
+    if (storedToken) setToken(JSON.parse(storedToken));
+    setUserData(authData);
+  }, [authData]);
 
   const handleNextStep = async (screenName: string, activeID: number) => {
     let active = activeID + 1;
@@ -54,11 +77,12 @@ const KYC: React.FC = () => {
         );
       });
     }
+
     !validationError.length &&
       (await kyc({
         data: {
           country: formState.country,
-          offline: formState.offline,
+          offline: false,
           data: {
             ...formState.online.sections[screenName]
           }
@@ -83,8 +107,6 @@ const KYC: React.FC = () => {
       setActiveStep(prevStep => prevStep - 1);
     }
   };
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
@@ -196,99 +218,130 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
-  // const resData = {
-  //   online: {
-  //     '1': {
-  //       email: 'bhushan@asd.com',
-  //       phone: '9999955555',
-  //       last_name: 'Vaiude',
-  //       first_name: 'Bhushan',
-  //       country_code: 'IND'
-  //     },
-  //     '2': {
-  //       city: 'Mumbai',
-  //       state: 'Maharashtra',
-  //       address: 'Nallasopara',
-  //       pincode: '401203',
-  //       msme_type: 'SME',
-  //       gst_number: 'GST401203',
-  //       company_name: 'Bhushan Pvt Ltd',
-  //       business_type: ['Wholesaler', 'Retailer'],
-  //       company_email: 'best@email.com',
-  //       industry_type: ['Diamonds', 'Other Gaming'],
-  //       organisation_type: ['Other Gaming'],
-  //       company_pan_number: 'CompnayPAN401203',
-  //       is_msme_registered: true,
-  //       subsidiary_company: 'KGK Infotech',
-  //       company_phone_number: '401203',
-  //       is_member_of_business: true,
-  //       year_of_establishment: '1967',
-  //       member_of_business_name: 'KGK Group',
-  //       msme_registration_number: '401203',
-  //       ultimate_beneficiary_name: 'Kanha',
-  //       business_registration_number: 'BUSREG401203'
-  //     },
-  //     '3': {
-  //       owner_email: 'asd@asd.com',
-  //       owner_phone: '9999955555',
-  //       owner_full_name: 'Bhushan Kishore Vaiude',
-  //       owner_pan_number: '9999955555',
-  //       owner_country_code: 'IND'
-  //     },
-  //     '4': {
-  //       bank_name: 'OM',
-  //       ifsc_code: '9999955555',
-  //       country_code: 'IND',
-  //       account_number: 'Om',
-  //       account_holder_name: 'asdom'
-  //     }
-  //   },
-  //   country: 'India',
-  //   offline: true
-  // };
+  const handleResetButton = () => {
+    setCurrentState('country_selection');
+  };
 
-  // useEffect(() => {
-  //   const sectionKeys: string[] =
-  //     resData.country === 'India'
-  //       ? [
-  //           kycScreenIdentifierNames.PERSONAL_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-  //           kycScreenIdentifierNames.BANKING_DETAILS
-  //         ]
-  //       : [kycScreenIdentifierNames.PERSONAL_DETAILS, kycScreenIdentifierNames.COMPANY_DETAILS, kycScreenIdentifierNames.BANKING_DETAILS];
+  useEffect(() => {
+    switch (userData?.customer?.kyc?.status) {
+      case kycStatus.INPROGRESS:
+        if (
+          kycDetails?.kyc &&
+          Object.keys(kycDetails?.kyc?.online).length >= 2 &&
+          Object.keys(kycDetails?.kyc?.offline).length === 0
+        ) {
+          const { online, country, offline } = kycDetails.kyc;
 
-  //   sectionKeys.forEach((key, index: number) => {
-  //     let test = (index + 1).toString();
-  //     dispatch(
-  //       updateFormState({
-  //         name: `formState.online.sections[${key}]`,
-  //         value: resData.online[test as keyof typeof resData.online]
-  //       })
-  //     );
-  //   });
+          const onlineData = online || {};
 
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'country',
-  //       value: resData.country
-  //     })
-  //   );
+          const filledScreens = Object.keys(onlineData)
+            .map(key => parseInt(key, 10))
+            .filter(num => !isNaN(num));
 
-  //   // setActiveStep(Object.keys(resData.online).length - 1);
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'offline',
-  //       value: resData.offline
-  //     })
-  //   );
-  //   setSelectedCountry(resData.country);
+          const lastFilledScreen = Math.max(...filledScreens);
 
-  //   resData.offline
-  //     ? setSelectedKYCOption('online')
-  //     : setSelectedKYCOption('offline');
-  // }, []);
+          if (lastFilledScreen > 0) {
+            setCurrentState('online');
+            setActiveStep(lastFilledScreen - 1);
 
+            offline
+              ? setSelectedKYCOption('online')
+              : setSelectedKYCOption('offline');
+
+            setSelectedCountry({
+              label: country,
+              value: country
+            });
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  {ManageLocales('app.topNav.kycModelContent')}
+                </div>
+                <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                  <CustomDisplayButton
+                    displayButtonLabel="Restart"
+                    handleClick={handleResetButton}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                  <CustomDisplayButton
+                    displayButtonLabel="Resume"
+                    handleClick={() => {
+                      setIsDialogOpen(false);
+                      setDialogContent('');
+                    }}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        'bg-solitaireQuaternary w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                </div>
+              </>
+            );
+          }
+        }
+        let sectionKeys: string[] =
+          kycDetails?.kyc?.country === 'India'
+            ? [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ]
+            : [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ];
+
+        sectionKeys.forEach((key, index: number) => {
+          let screenIndex = (index + 1).toString();
+
+          let onlineValue = kycDetails?.kyc?.online;
+
+          dispatch(
+            updateFormState({
+              name: `formState.online.sections[${key}]`,
+              value: onlineValue?.[screenIndex as keyof typeof onlineValue]
+            })
+          );
+        });
+
+        dispatch(
+          updateFormState({
+            name: 'formState.country',
+            value: kycDetails?.kyc?.country
+          })
+        );
+
+        dispatch(
+          updateFormState({
+            name: 'formState.offline',
+            value: kycDetails?.kyc?.offline
+          })
+        );
+
+        break;
+
+      case kycStatus.PENDING:
+        setRenderComponent(kycStatus.PENDING);
+        break;
+
+      case kycStatus.APPROVED:
+        setRenderComponent(kycStatus.APPROVED);
+        break;
+      case kycStatus.REJECTED:
+        setRenderComponent(kycStatus.REJECTED);
+        break;
+    }
+  }, [kycDetails, userData]);
   // return (
   //   <div>
   //     {selectedMode === 'online' ? (
@@ -318,15 +371,25 @@ const KYC: React.FC = () => {
 
   switch (currentState) {
     case 'country_selection':
-      return (
-        <RenderCountrySelection
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-          handleSaveAndNext={handleSaveAndNext}
-          errorSetState={errorSetState}
-          errorState={errorState}
-        />
-      );
+      switch (renderComponent) {
+        case kycStatus.PENDING:
+          return <KycStatus />;
+        case kycStatus.APPROVED:
+          return 'Welcome to APPROVED KYC page';
+        case kycStatus.REJECTED:
+          return 'Welcome to REJECTED KYC page';
+        default:
+          return (
+            <RenderCountrySelection
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              handleSaveAndNext={handleSaveAndNext}
+              errorSetState={errorSetState}
+              errorState={errorState}
+            />
+          );
+      }
+
     case 'choice_for_filling_kyc':
       // Render the component for 'choice_for_filling_kyc'
       return (
@@ -362,6 +425,9 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+          setIsDialogOpen={setIsDialogOpen}
+          isDialogOpen={isDialogOpen}
+          dialogContent={dialogContent}
         />
       );
 

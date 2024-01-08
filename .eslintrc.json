@@ -12,6 +12,7 @@
     "semi": ["error", "always"],
     "no-undef": "off",
     "react-hooks/exhaustive-deps": "off",
+    "no-case-declarations": "off",
 
     //  Avoid Unused Variables and Imports
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
