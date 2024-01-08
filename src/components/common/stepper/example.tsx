@@ -62,9 +62,9 @@ const StepperExample = () => {
       setState={setCurrentStep}
       prevStep={prevStep}
       nextStep={nextStep}
-      // setIsDialogOpen={() => ''}
-      // isDialogOpen={false}
-      // dialogContent={'test'}
+      setIsDialogOpen={() => ''}
+      isDialogOpen={false}
+      dialogContent={'test'}
     />
   );
 };

@@ -17,7 +17,6 @@
     //  Avoid Unused Variables and Imports
     "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
 
-
     // // Nullish Coalescing and Optional Chaining
     // "@typescript-eslint/no-non-null-assertion": "error",
     // "@typescript-eslint/no-unnecessary-boolean-literal-compare": "error",
