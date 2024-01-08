@@ -1,4 +1,4 @@
-import { ControlProps, GroupBase, StylesConfig } from 'react-select';
+import { StylesConfig } from 'react-select';
 
 interface IColourOption {
   readonly value: string;

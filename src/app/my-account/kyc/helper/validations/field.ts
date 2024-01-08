@@ -1,7 +1,6 @@
 import { NAME_REGEX } from '@/constants/validation-regex/regex';
 import {
   ArrayNotEmpty,
-  IsAlpha,
   IsAlphanumeric,
   IsBoolean,
   IsEmail,
