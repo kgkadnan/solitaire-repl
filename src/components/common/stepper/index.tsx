@@ -1,9 +1,10 @@
-// components/Stepper.js
+'use client';
 import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import { statusCode } from '@/constants/enums/status-code';
+import { CustomDialog } from '../dialog';
 
 export interface IStepper {
   label: string;
@@ -20,6 +21,9 @@ interface IStepperProps {
   prevLabel?: string;
   nextLabel?: string;
   formErrorState: any;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isDialogOpen: boolean;
+  dialogContent: any;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -30,9 +34,16 @@ const Stepper: React.FC<IStepperProps> = ({
   nextStep,
   prevLabel = 'Back',
   nextLabel = 'Save and Next',
-  formErrorState
+  formErrorState,
+  setIsDialogOpen,
+  isDialogOpen,
+  dialogContent
 }) => {
-  const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
+  const [stepperData, setStepperData] = useState<IStepper[]>([]);
+
+  useEffect(() => {
+    setStepperData(stepper);
+  }, [stepper]);
 
   useEffect(() => {
     const initializeStepperStatus = () => {
@@ -149,6 +160,12 @@ const Stepper: React.FC<IStepperProps> = ({
   };
 
   return (
+    <>
+    <CustomDialog
+    setIsOpen={setIsDialogOpen}
+    isOpens={isDialogOpen}
+    dialogContent={dialogContent}
+  />
     <div className={styles.stepperContainer}>
       <div className={styles.circularSteps}>
         {stepperData?.map((step: any, index: number) => (
@@ -170,27 +187,42 @@ const Stepper: React.FC<IStepperProps> = ({
                     : styles.defaultStep
                 }`}
               >
-                {index + 1}
+                <div
+                  key={index}
+                  className={`${styles.step} ${
+                    step?.status === StepperStatus.COMPLETED
+                      ? styles.completedStep
+                      : step?.status === StepperStatus.INPROGRESS
+                      ? styles.activeStep
+                      : step?.status === StepperStatus.REJECTED
+                      ? styles.rejectedStep
+                      : ''
+                  }`}
+                  onClick={() => handleStepperStep(index)}
+                >
+                  {index + 1}
+                </div>
+
+                <div className={styles.stepLabel}>{step?.label}</div>
               </div>
+              {index < stepper.length - 1 && (
+                <div className={styles.stepLine}></div>
+              )}
+              </div>
+            </>
+          ))}
+        </div>
+        <hr className="border-1 border-solitaireSenary mt-6" />
+        <div>{stepper[state]?.data}</div>
 
-              <div className={styles.stepLabel}>{step?.label}</div>
-            </div>
-            {index < stepper.length - 1 && (
-              <div className={styles.stepLine}></div>
-            )}
-          </>
-        ))}
+        <div className={`${styles.navigationButtons} `}>
+          <CustomFooter
+            footerButtonData={footerButtonData(state)}
+            noBorderTop={styles.paginationContainerStyle}
+          />
+        </div>
       </div>
-      <hr className="border-1 border-solitaireSenary mt-6" />
-      <div>{stepper[state]?.data}</div>
-
-      <div className={`${styles.navigationButtons} `}>
-        <CustomFooter
-          footerButtonData={footerButtonData(state)}
-          noBorderTop={styles.paginationContainerStyle}
-        />
-      </div>
-    </div>
+    </>
   );
 };
 

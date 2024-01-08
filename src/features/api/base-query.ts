@@ -13,7 +13,7 @@ export const createBaseQuery = (
   return fetchBaseQuery({
     baseUrl: apiURL,
     prepareHeaders: headers => {
-      const storedUser = localStorage.getItem('user');
+      const storedUser = localStorage.getItem('auth');
       const token = storedUser ? JSON.parse(storedUser) : null;
 
       // Set authorization header if auth is true and a token exists
