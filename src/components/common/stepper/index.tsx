@@ -161,31 +161,19 @@ const Stepper: React.FC<IStepperProps> = ({
 
   return (
     <>
-    <CustomDialog
-    setIsOpen={setIsDialogOpen}
-    isOpens={isDialogOpen}
-    dialogContent={dialogContent}
-  />
-    <div className={styles.stepperContainer}>
-      <div className={styles.circularSteps}>
-        {stepperData?.map((step: any, index: number) => (
-          <>
-            <div
-              className={styles.circularStepsContainer}
-              key={step.screenName}
-              onClick={() => handleStepperStep(index)}
-            >
+      <CustomDialog
+        setIsOpen={setIsDialogOpen}
+        isOpens={isDialogOpen}
+        dialogContent={dialogContent}
+      />
+      <div className={styles.stepperContainer}>
+        <div className={styles.circularSteps}>
+          {stepperData?.map((step: any, index: number) => (
+            <>
               <div
-                key={index}
-                className={`${styles.step} ${
-                  step?.status === StepperStatus.COMPLETED
-                    ? styles.completedStep
-                    : step?.status === StepperStatus.INPROGRESS
-                    ? styles.activeStep
-                    : step?.status === StepperStatus.REJECTED
-                    ? styles.rejectedStep
-                    : styles.defaultStep
-                }`}
+                className={styles.circularStepsContainer}
+                key={step.screenName}
+                onClick={() => handleStepperStep(index)}
               >
                 <div
                   key={index}
@@ -196,18 +184,30 @@ const Stepper: React.FC<IStepperProps> = ({
                       ? styles.activeStep
                       : step?.status === StepperStatus.REJECTED
                       ? styles.rejectedStep
-                      : ''
+                      : styles.defaultStep
                   }`}
-                  onClick={() => handleStepperStep(index)}
                 >
-                  {index + 1}
-                </div>
+                  <div
+                    key={index}
+                    className={`${styles.step} ${
+                      step?.status === StepperStatus.COMPLETED
+                        ? styles.completedStep
+                        : step?.status === StepperStatus.INPROGRESS
+                        ? styles.activeStep
+                        : step?.status === StepperStatus.REJECTED
+                        ? styles.rejectedStep
+                        : ''
+                    }`}
+                    onClick={() => handleStepperStep(index)}
+                  >
+                    {index + 1}
+                  </div>
 
-                <div className={styles.stepLabel}>{step?.label}</div>
-              </div>
-              {index < stepper.length - 1 && (
-                <div className={styles.stepLine}></div>
-              )}
+                  <div className={styles.stepLabel}>{step?.label}</div>
+                </div>
+                {index < stepper.length - 1 && (
+                  <div className={styles.stepLine}></div>
+                )}
               </div>
             </>
           ))}

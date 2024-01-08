@@ -23,7 +23,6 @@ import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
 import logger from 'logging/log-util';
 import ErrorModel from '@/components/common/error-model';
-import { CustomDialog } from '@/components/common/dialog';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -49,10 +48,8 @@ const KYC: React.FC = () => {
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
- 
   const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
-
 
   const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
 
@@ -63,7 +60,11 @@ const KYC: React.FC = () => {
     setUserData(authData);
   }, [authData]);
 
-  const handleNextStep = async (screenName: string, activeID: number,  saveStep = true) => {
+  const handleNextStep = async (
+    screenName: string,
+    activeID: number,
+    saveStep = true
+  ) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
