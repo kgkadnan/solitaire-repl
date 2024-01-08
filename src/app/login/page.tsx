@@ -61,7 +61,7 @@ const Login = () => {
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
   const [token, setToken] = useState('');
-  const { data } = useGetAuthDataQuery(token);
+  const { data } = useGetAuthDataQuery(token, { skip: !token });
 
   const [currentState, setCurrentState] = useState('login');
   const [phoneToken, setPhoneToken] = useState('');
@@ -93,6 +93,7 @@ const Login = () => {
 
   useEffect(() => {
     if (data) {
+      localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
         userLoggedIn(token);
         router.push('/');

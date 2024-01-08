@@ -40,3 +40,10 @@ export enum fileLimit {
   MAX_FILES = 1,
   MIN_FILES = 1
 }
+
+export enum kycStatus {
+  INPROGRESS = 'inprogress',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
+}
