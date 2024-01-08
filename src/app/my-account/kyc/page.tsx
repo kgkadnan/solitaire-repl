@@ -23,6 +23,8 @@ import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { ManageLocales } from '@/utils/translate';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -43,8 +45,8 @@ const KYC: React.FC = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
-  // const { dialogContent, isDialogOpen } = modalState;
-  // const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { dialogContent, isDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
 
   useEffect(() => {
@@ -216,9 +218,9 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
-  // const handleResetButton = () => {
-  //   setCurrentState('country_selection');
-  // };
+  const handleResetButton = () => {
+    setCurrentState('country_selection');
+  };
 
   useEffect(() => {
     switch (userData?.customer?.kyc?.status) {
@@ -250,39 +252,39 @@ const KYC: React.FC = () => {
               label: country,
               value: country
             });
-            // setIsDialogOpen(true);
-            // setDialogContent(
-            //   <>
-            //     <div className="text-center align-middle text-solitaireTertiary">
-            //       {ManageLocales('app.topNav.kycModelContent')}
-            //     </div>
-            //     <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            //       <CustomDisplayButton
-            //         displayButtonLabel="Restart"
-            //         handleClick={handleResetButton}
-            //         displayButtonAllStyle={{
-            //           displayButtonStyle:
-            //             ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-            //           displayLabelStyle:
-            //             'text-solitaireTertiary text-[14px] font-medium'
-            //         }}
-            //       />
-            //       <CustomDisplayButton
-            //         displayButtonLabel="Resume"
-            //         handleClick={() => {
-            //           setIsDialogOpen(false);
-            //           setDialogContent('');
-            //         }}
-            //         displayButtonAllStyle={{
-            //           displayButtonStyle:
-            //             'bg-solitaireQuaternary w-[150px] h-[35px]',
-            //           displayLabelStyle:
-            //             'text-solitaireTertiary text-[14px] font-medium'
-            //         }}
-            //       />
-            //     </div>
-            //   </>
-            // );
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  {ManageLocales('app.topNav.kycModelContent')}
+                </div>
+                <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                  <CustomDisplayButton
+                    displayButtonLabel="Restart"
+                    handleClick={handleResetButton}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                  <CustomDisplayButton
+                    displayButtonLabel="Resume"
+                    handleClick={() => {
+                      setIsDialogOpen(false);
+                      setDialogContent('');
+                    }}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        'bg-solitaireQuaternary w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                </div>
+              </>
+            );
           }
         }
         let sectionKeys: string[] =
@@ -423,9 +425,9 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
-          // setIsDialogOpen={setIsDialogOpen}
-          // isDialogOpen={isDialogOpen}
-          // dialogContent={dialogContent}
+          setIsDialogOpen={setIsDialogOpen}
+          isDialogOpen={isDialogOpen}
+          dialogContent={dialogContent}
         />
       );
 
