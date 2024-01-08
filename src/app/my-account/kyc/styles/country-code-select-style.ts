@@ -1,4 +1,4 @@
-import { StylesConfig } from 'react-select';
+import { ControlProps, GroupBase, StylesConfig } from 'react-select';
 
 interface IColourOption {
   readonly value: string;
@@ -81,7 +81,7 @@ export const countryCodeSelectStyles: StylesConfig<IColourOption, true> = {
   })
 };
 
-export const countryCodeSelectStyle = (error: any) => {
+export const countryCodeSelectStyle = (error: any, isDisabled?: boolean) => {
   return {
     control: (styles: any) => ({
       ...styles,
@@ -89,12 +89,15 @@ export const countryCodeSelectStyle = (error: any) => {
       border: 'none',
       borderBottom: error.length
         ? '1px solid hsl(var(--solitaire-error))'
+        : isDisabled
+        ? '1px solid hsl(var(--solitaire-denary))'
         : '1px solid hsl(var(--solitaire-quaternary))',
-      backgroundColor: ' hsl(var(--solitaire-primary))',
+      backgroundColor: 'hsl(var(--solitaire-primary))',
       borderRadius: 'none',
       padding: '2.5px',
-      // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
       outline: '1px solid hsl(var(--solitaire-primary))',
+      cursor: isDisabled ? 'not-allowed' : 'default', // Change cursor to "not allowed" if isDisabled is true
+      opacity: isDisabled && 0.6,
       width: '100%',
       ':hover': {
         border: 'none',

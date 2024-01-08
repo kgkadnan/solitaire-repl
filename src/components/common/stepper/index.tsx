@@ -3,6 +3,7 @@ import React, { ReactNode, useEffect, useState } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
+import { statusCode } from '@/constants/enums/status-code';
 
 export interface IStepper {
   label: string;
@@ -19,7 +20,6 @@ interface IStepperProps {
   prevLabel?: string;
   nextLabel?: string;
   formErrorState: any;
-  formState: any;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -30,8 +30,7 @@ const Stepper: React.FC<IStepperProps> = ({
   nextStep,
   prevLabel = 'Back',
   nextLabel = 'Save and Next',
-  formErrorState,
-  formState
+  formErrorState
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
 
@@ -39,10 +38,18 @@ const Stepper: React.FC<IStepperProps> = ({
     const initializeStepperStatus = () => {
       const updatedStepper = stepper.map((step, index) => {
         const errors = formErrorState.online.sections[step.screenName];
-        const hasErrors = errors && Object.keys(errors).length > 0;
+        const hasErrors = errors && Object.values(errors).length;
         return {
           ...step,
-          status: hasErrors ? StepperStatus.REJECTED : Object.keys(formState.online.sections[step.screenName]||{}).length ? StepperStatus.COMPLETED : StepperStatus.NOT_STARTED
+          status: hasErrors
+            ? errors &&
+              hasErrors &&
+              Object?.values(errors).every(element => element === '')
+              ? StepperStatus.COMPLETED
+              : StepperStatus.REJECTED
+            : index === 0
+            ? StepperStatus.INPROGRESS // 0 -> index condition tO be change to actual stepper index while redirecting
+            : StepperStatus.NOT_STARTED
         };
       });
       setStepperData(updatedStepper);
@@ -58,41 +65,81 @@ const Stepper: React.FC<IStepperProps> = ({
         displayButtonLabel: prevLabel,
         style: styles.transparent,
         fn: prevStep,
-        isDisable: state === 0
+        isHidden: state === 0
       },
       {
         id: 2,
         displayButtonLabel: nextLabel,
         style: styles.filled,
-        fn: () => nextStep(stepper[state]?.screenName, state),
-        isDisable: state === stepper.length - 1
+        fn: async () => {
+          const updatedStepper = await Promise.all(
+            stepperData.map(async (step, index) => {
+              if (index === state) {
+                let nextStepStatus: any = nextStep(
+                  stepper[state]?.screenName,
+                  state
+                );
+                const { validationError: stepperError, statusCode: code } =
+                  nextStepStatus;
+
+                const hasError =
+                  Array.isArray(stepperError) && stepperError.length;
+                return {
+                  ...step,
+                  status: hasError
+                    ? StepperStatus.REJECTED
+                    : code === statusCode.NO_CONTENT
+                    ? StepperStatus.COMPLETED
+                    : StepperStatus.INPROGRESS
+                };
+              } else {
+                return step;
+              }
+            })
+          );
+
+          // Update the state with the new array
+          setStepperData(updatedStepper);
+        },
+        isHidden: false
       }
     ];
   };
 
   const handleStepperStep = async (activeStep: number) => {
     setState(activeStep);
-
     const updatedStepper = await Promise.all(
       stepperData.map(async (step, index) => {
         if (index === activeStep) {
           // Set the current step to INPROGRESS
           return { ...step, status: StepperStatus.INPROGRESS };
-        } else if (index < activeStep) {
+        }
+        if (index < activeStep && step.status !== StepperStatus.COMPLETED) {
           // Only update previous steps if they are not already REJECTED
-          const stepperError: any = await nextStep(
+          const nextStepStatus: any = await nextStep(
             stepper[index]?.screenName,
             index,
             false
           );
+          const { validationError: stepperError, statusCode: code } =
+            nextStepStatus;
           const hasError = Array.isArray(stepperError) && stepperError.length;
           return {
             ...step,
-            status: hasError ? StepperStatus.REJECTED : StepperStatus.COMPLETED
+            status:
+              hasError || typeof stepperError === 'string'
+                ? StepperStatus.REJECTED
+                : code === statusCode.NO_CONTENT
+                ? StepperStatus.COMPLETED
+                : step.status
           };
         } else {
+          if (step.status === StepperStatus.INPROGRESS) {
+            return { ...step, status: StepperStatus.NOT_STARTED };
+          } else {
+            return step;
+          }
           // For steps after the current step, set them to NOT_STARTED or another appropriate status
-          return { ...step, status: StepperStatus.NOT_STARTED };
         }
       })
     );

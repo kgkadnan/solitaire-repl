@@ -1,6 +1,6 @@
 import { IsNotEmpty } from 'class-validator';
 
-export class KycPostCompanyOwnerInformation {
+export class IndiaKycPostCompanyOwnerInformation {
   @IsNotEmpty()
   owner_full_name: string;
 
@@ -28,23 +28,5 @@ export class KycPostCompanyOwnerInformation {
     this.owner_country_code = owner_country_code;
     this.owner_phone = owner_phone;
     this.owner_pan_number = owner_pan_number;
-  }
-}
-
-export class IndiaKycPostCompanyOwnerInformation extends KycPostCompanyOwnerInformation {
-  constructor(
-    owner_full_name: string,
-    owner_email: string,
-    owner_country_code: string,
-    owner_phone: string,
-    owner_pan_number: string
-  ) {
-    super(
-      owner_full_name,
-      owner_email,
-      owner_country_code,
-      owner_phone,
-      owner_pan_number
-    );
   }
 }

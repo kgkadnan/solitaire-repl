@@ -22,6 +22,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { statusCode } from '@/constants/enums/status-code';
 import logger from 'logging/log-util';
 import ErrorModel from '@/components/common/error-model';
+import { CustomDialog } from '@/components/common/dialog';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -35,6 +36,7 @@ const KYC: React.FC = () => {
   const [activeStep, setActiveStep] = useState(0);
 
   const { modalState, modalSetState } = useModalStateManagement();
+  const { dialogContent, isDialogOpen } = modalState;
 
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
@@ -70,47 +72,43 @@ const KYC: React.FC = () => {
       (await kyc({
         data: {
           country: formState.country,
-          offline:"formState.offline",
+          offline: 'false',
           data: {
             ...formState.online.sections[screenName]
           }
         },
         ID: active
       })
-        .then((_res: any) => { _res.data.statusCode ? stepSuccessStatus = _res.data.statusCode
-          :
-
-       setIsDialogOpen(true);
-        setDialogContent(
-          <ErrorModel
-            content={"res?.error.data.message"}
-            handleClick={() => setIsDialogOpen(false)}
-          />
-        )
+        .then((_res: any) => {
+          _res?.data?.statusCode
+            ? (stepSuccessStatus = _res.data.statusCode)
+            : setIsDialogOpen(true);
+          setDialogContent(
+            <ErrorModel
+              content={_res?.error?.data?.message}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          );
         })
-        .catch((_e: any) => { logger.error(`something went wrong while submitting kyc ${_e}`),setIsDialogOpen(true);
-        setDialogContent(
-          <ErrorModel
-            content={"res?.error.data.message"}
-            handleClick={() => setIsDialogOpen(false)}
-          />
-        );}));
+        .catch((_e: any) => {
+          logger.error(`something went wrong while submitting kyc ${_e}`);
+        }));
 
     !validationError.length &&
       stepSuccessStatus === statusCode.NO_CONTENT &&
       setActiveStep(prevStep => prevStep + 1);
+    let stepperFinalStatus = {
+      validationError: validationError,
+      statusCode: stepSuccessStatus
+    };
     stepSuccessStatus = 0;
-    return validationError;
+    return stepperFinalStatus;
   };
 
   const handleTermAndCondition = () => {};
 
   const handlePrevStep = () => {
-    if (activeStep <= 0) {
-      setCurrentState('choice_for_filling_kyc');
-    } else {
-      setActiveStep(prevStep => prevStep - 1);
-    }
+    setActiveStep(prevStep => prevStep - 1);
   };
 
   let stepperData: IStepper[] = data?.online
@@ -382,15 +380,23 @@ const KYC: React.FC = () => {
     // Add more cases as needed
     case 'online':
       return (
-        <Stepper
-          stepper={stepperData}
-          state={activeStep}
-          setState={setActiveStep}
-          prevStep={handlePrevStep}
-          nextStep={handleNextStep}
-          formErrorState={formErrorState}
-          formState={formState}
-        />
+        <>
+          <CustomDialog
+            dialogContent={dialogContent}
+            isOpens={isDialogOpen}
+            setIsOpen={setIsDialogOpen}
+            data-testid={'success-indicator'}
+          />
+
+          <Stepper
+            stepper={stepperData}
+            state={activeStep}
+            setState={setActiveStep}
+            prevStep={handlePrevStep}
+            nextStep={handleNextStep}
+            formErrorState={formErrorState}
+          />
+        </>
       );
 
     default:

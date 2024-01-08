@@ -111,19 +111,16 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            console.log('res.customer.token', res);
             setPhoneToken(res.token);
           })
-          .catch(e => {
-            console.log('e', e);
+          .catch(_e => {
             setIsDialogOpen(true);
             setDialogContent(
               <ErrorModel
-                content={e.data.message}
+                content={_e.data.message}
                 handleClick={() => setIsDialogOpen(false)}
               />
             );
-            console.log(e);
           });
       }
     }

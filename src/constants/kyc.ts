@@ -36,13 +36,15 @@ export const KYCForm = [
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             handleChange: () => {},
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
-            formKey: 'email'
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },
@@ -405,13 +407,15 @@ export const KYCForm = [
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
-            formKey: 'email'
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },
@@ -956,7 +960,15 @@ export const KYCForm = [
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             handleChange: () => {},
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },

@@ -13,14 +13,17 @@ export const myAccountRoutes = [
   '/my-account/report-bug',
   '/my-account/email-notification'
 ];
-
+export const notificationRoutes = [
+  '/notification/all-notification',
+  '/notification/setting'
+];
 export const protectedRoutes = [
   '/',
   '/search',
   '/my-diamonds',
   '/my-cart',
   '/compare-stone',
-  '/notification',
+  ...notificationRoutes,
   ...myAccountRoutes
 ];
 
