@@ -65,6 +65,7 @@ export const TopNavigationBar = () => {
 
   const router = useRouter();
   const [prevScrollPos, setPrevScrollPos] = useState(0);
+  const [isShowMyAccountMenu, setIsShowMyAccountMenu] = useState(false);
   const [visible, setVisible] = useState(true);
   const [userData, setUserData] = useState<any>({});
   const [offset, setOffset] = useState(0);
@@ -155,6 +156,7 @@ export const TopNavigationBar = () => {
   const handleLogout = () => {
     userLoggedOut();
     router.push('/login');
+    setIsShowMyAccountMenu(false);
   };
 
   return (
@@ -233,6 +235,7 @@ export const TopNavigationBar = () => {
               }
               sheetContentStyle={styles.notificationSheetContent}
             />
+
             <div className={`${styles.headerIconStyle}`}>
               <Popover>
                 <PopoverTrigger>
@@ -240,102 +243,102 @@ export const TopNavigationBar = () => {
                     className={`flex items-center mt-2 ${styles.headerIconStyle}`}
                   >
                     <MyProfileIcon
+                      onClick={() => setIsShowMyAccountMenu(true)}
                       stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
                     />
                   </div>
                 </PopoverTrigger>
-                <PopoverContent className="w-[280px] h-[300px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
-                  <div className="flex items-center gap-[18px] border-b border-solitaireSenary pb-[20px]">
-                    <div className="">
-                      <MyProfileIcon
-                        stroke={topNavData[3].isActive ? '#8C7459' : '#CED2D2'}
-                        className={
-                          topNavData[3].isActive
-                            ? styles.activeIcon
-                            : styles.iconColor
-                        }
-                      />
-                    </div>
-                    <div className="">
-                      <p className="text-[16px] font-semibold text-solitaireQuaternary">
-                        {`${userData?.customer?.first_name} ${userData?.customer?.last_name}`}
-                      </p>
-                      <p className="text-14px text-solitaireTertiary">
-                        {userData?.customer?.email}
-                      </p>
-                    </div>
-                  </div>
-                  <div className="border-b border-solitaireSenary mt-[10px] pb-[10px]">
-                    <div className="fill-solitaireTertiary flex gap-[18px] items-center">
-                      <UserIcon fill="solitaireTertiary" />
-                      <CustomDisplayButton
-                        displayButtonLabel="My Account"
-                        displayButtonAllStyle={{
-                          displayButtonStyle:
-                            'text-14px font-light cursor-pointer'
-                        }}
-                        handleClick={() => {
-                          handleIsEditingKyc({
-                            isEditingKYCStoreData,
-                            setIsDialogOpen,
-                            setDialogContent,
-                            dispatch,
-                            handleRoute,
-                            label: 'My Account',
-                            link: topNavData[3].link,
-                            styles,
-                            currentRoute
-                          });
-                        }}
-                      />
-                    </div>
-                    <div className="fill-solitaireTertiary flex justify-between items-center">
-                      <div className="flex gap-[18px] items-center">
-                        {currentTheme === 'dark' ? (
-                          <DarkIcon fill="solitaireTertiary" />
-                        ) : (
-                          <LightIcon fill="solitaireTertiary" />
-                        )}
-
-                        <CustomDisplayButton
-                          displayButtonLabel={
-                            currentTheme === 'dark'
-                              ? 'Dark Theme'
-                              : 'Light Theme'
+                {isShowMyAccountMenu && (
+                  <PopoverContent className="w-[280px] h-[300px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
+                    <div className="flex items-center gap-[18px] border-b border-solitaireSenary pb-[20px]">
+                      <div className="">
+                        <MyProfileIcon
+                          stroke={
+                            topNavData[3].isActive ? '#8C7459' : '#CED2D2'
                           }
+                          className={
+                            topNavData[3].isActive
+                              ? styles.activeIcon
+                              : styles.iconColor
+                          }
+                        />
+                      </div>
+                      <div className="">
+                        <p className="text-[16px] font-semibold text-solitaireQuaternary">
+                          {`${userData?.customer?.first_name} ${userData?.customer?.last_name}`}
+                        </p>
+                        <p className="text-14px text-solitaireTertiary">
+                          {userData?.customer?.email}
+                        </p>
+                      </div>
+                    </div>
+                    <div
+                      className="border-b border-solitaireSenary mt-[10px] pb-[10px] cursor-pointer"
+                      onClick={() => {
+                        handleIsEditingKyc({
+                          isEditingKYCStoreData,
+                          setIsDialogOpen,
+                          setDialogContent,
+                          dispatch,
+                          handleRoute,
+                          label: 'My Account',
+                          link: topNavData[3].link,
+                          styles,
+                          currentRoute
+                        });
+                        setIsShowMyAccountMenu(false);
+                      }}
+                    >
+                      <div className="fill-solitaireTertiary flex gap-[18px] items-center">
+                        <UserIcon fill="solitaireTertiary" />
+                        <CustomDisplayButton
+                          displayButtonLabel="My Account"
                           displayButtonAllStyle={{
-                            displayButtonStyle:
-                              'text-14px font-light cursor-pointer'
-                          }}
-                          handleClick={() => {
-                            handleIsEditingKyc({
-                              isEditingKYCStoreData,
-                              setIsDialogOpen,
-                              setDialogContent,
-                              dispatch,
-                              handleRoute,
-                              label: 'My Account',
-                              link: topNavData[3].link,
-                              styles,
-                              currentRoute
-                            });
+                            displayButtonStyle: 'text-14px font-light '
                           }}
                         />
                       </div>
-                      <ToggleButton
-                        setTheme={setTheme}
-                        currentTheme={currentTheme}
-                      />
-                    </div>
-                    <div className="fill-solitaireTertiary flex gap-[18px] items-center">
-                      <NotificationPopoverIcon className="stroke-solitaireTertiary" />
-                      <CustomDisplayButton
-                        displayButtonLabel="Notification"
-                        displayButtonAllStyle={{
-                          displayButtonStyle:
-                            'text-14px font-light cursor-pointer'
-                        }}
-                        handleClick={() => {
+                      <div className="fill-solitaireTertiary flex justify-between items-center">
+                        <div className="flex gap-[18px] items-center">
+                          {currentTheme === 'dark' ? (
+                            <DarkIcon fill="solitaireTertiary" />
+                          ) : (
+                            <LightIcon fill="solitaireTertiary" />
+                          )}
+
+                          <CustomDisplayButton
+                            displayButtonLabel={
+                              currentTheme === 'dark'
+                                ? 'Dark Theme'
+                                : 'Light Theme'
+                            }
+                            displayButtonAllStyle={{
+                              displayButtonStyle:
+                                'text-14px font-light cursor-pointer'
+                            }}
+                            handleClick={() => {
+                              handleIsEditingKyc({
+                                isEditingKYCStoreData,
+                                setIsDialogOpen,
+                                setDialogContent,
+                                dispatch,
+                                handleRoute,
+                                label: 'My Account',
+                                link: topNavData[3].link,
+                                styles,
+                                currentRoute
+                              });
+                            }}
+                          />
+                        </div>
+                        <ToggleButton
+                          setTheme={setTheme}
+                          currentTheme={currentTheme}
+                        />
+                      </div>
+                      <div
+                        className="fill-solitaireTertiary flex gap-[18px] items-center cursor-pointer"
+                        onClick={() => {
                           handleIsEditingKyc({
                             isEditingKYCStoreData,
                             setIsDialogOpen,
@@ -347,22 +350,33 @@ export const TopNavigationBar = () => {
                             styles,
                             currentRoute
                           });
+                          setIsShowMyAccountMenu(false);
+                        }}
+                      >
+                        <NotificationPopoverIcon className="stroke-solitaireTertiary" />
+                        <CustomDisplayButton
+                          displayButtonLabel="Notification"
+                          displayButtonAllStyle={{
+                            displayButtonStyle: 'text-14px font-light'
+                          }}
+                        />
+                      </div>
+                    </div>
+                    <div
+                      className="flex gap-[18px] mt-[10px] cursor-pointer"
+                      onClick={handleLogout}
+                    >
+                      <Image src={LogOutIcon} alt="logout Icon" />
+                      <CustomDisplayButton
+                        displayButtonLabel="Logout"
+                        displayButtonAllStyle={{
+                          displayLabelStyle:
+                            'font-semibold text-solitaireQuaternary text-[14px] '
                         }}
                       />
                     </div>
-                  </div>
-                  <div className="flex gap-[18px] mt-[10px]">
-                    <Image src={LogOutIcon} alt="logout Icon" />
-                    <CustomDisplayButton
-                      displayButtonLabel="Logout"
-                      handleClick={handleLogout}
-                      displayButtonAllStyle={{
-                        displayLabelStyle:
-                          'font-semibold text-solitaireQuaternary text-[14px] cursor-pointer'
-                      }}
-                    />
-                  </div>
-                </PopoverContent>
+                  </PopoverContent>
+                )}
               </Popover>
             </div>
           </div>
