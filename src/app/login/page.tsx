@@ -110,11 +110,9 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            console.log('res.customer.token', res);
             setPhoneToken(res.token);
           })
           .catch(e => {
-            console.log('e', e);
             setIsDialogOpen(true);
             setDialogContent(
               <ErrorModel
@@ -122,7 +120,6 @@ const Login = () => {
                 handleClick={() => setIsDialogOpen(false)}
               />
             );
-            console.log(e);
           });
       }
     }
