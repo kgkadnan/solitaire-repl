@@ -79,7 +79,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
           {['online', 'offline'].map(option => (
             <div
               key={option}
-              className={`flex items-center justify-between bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid  ${
+              className={`flex items-center justify-between bg-solitaireSecondary p-4 rounded-xl cursor-pointer border border-solid h-[112px]  ${
                 selectedKYCOption === option
                   ? 'border-solitaireQuaternary'
                   : 'border-transparent'
@@ -95,7 +95,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
                 </p>
                 <p className="font-thin pr-6 text-[14px]">
                   {option === 'online'
-                    ? 'Fill the form on the app, for your convenience'
+                    ? 'Fill the form on the website, for your convenience'
                     : 'Download and fill the form and upload the filled form offline.'}
                 </p>
               </div>
