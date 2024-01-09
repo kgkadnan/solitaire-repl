@@ -1,5 +1,5 @@
 'use client';
-import React, { useCallback, useEffect, useMemo } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import styles from './saved.module.scss';
 import { CustomTable } from '@/components/common/table';
 import editIcon from '@public/assets/icons/edit.svg';
@@ -20,7 +20,13 @@ import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import { ICardData, IDateRange, IFormatedData, IItem } from './saved-interface';
+import {
+  ICardData,
+  IDateRange,
+  IFormatedData,
+  IItem,
+  ISavedSearchData
+} from './saved-interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import Image from 'next/image';
@@ -38,6 +44,15 @@ import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/c
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import logger from 'logging/log-util';
 import { IKeyLabelMapping } from '@/interface/interface';
+import {
+  MAX_SAVED_SEARCH_COUNT,
+  MAX_SEARCH_TAB_LIMIT
+} from '@/constants/business-logic';
+import {
+  MAX_SEARCH_LIMIT_EXCEED,
+  MODIFY_SEARCH_STONES_EXCEEDS_LIMIT
+} from '@/constants/error-messages/saved';
+import CustomLoader from '@/components/common/loader';
 
 const SavedSearch = () => {
   // State management hooks
@@ -52,6 +67,8 @@ const SavedSearch = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
   const { isError, errorText } = errorState;
   const { setIsError, setErrorText } = errorSetState;
+
+  const [cardId, setCardId] = useState('');
 
   const {
     setDialogContent,
@@ -119,11 +136,13 @@ const SavedSearch = () => {
     }
   );
 
-  const { data: productData } = useGetProductCountQuery(
+  const { data: productData, isLoading } = useGetProductCountQuery(
     {
       searchUrl
     },
-    { skip: !searchUrl }
+    {
+      skip: !searchUrl
+    }
   );
 
   const { data: searchList } = useGetSavedSearchListQuery(search);
@@ -143,6 +162,67 @@ const SavedSearch = () => {
       tableBodyStyle: styles.SearchDateTime
     };
   }, []);
+
+  useEffect(() => {
+    if (productData !== undefined) {
+      // Filter the saved search data to get the clicked card's data
+      const specificCardData: any = savedSearchData.filter(
+        (items: ISavedSearchData) => {
+          return items.id === cardId;
+        }
+      );
+      // Check if the product data count exceeds the maximum limit
+      if (productData?.count > MAX_SAVED_SEARCH_COUNT) {
+        setIsError(true);
+        setErrorText(MODIFY_SEARCH_STONES_EXCEEDS_LIMIT);
+      } else {
+        const data: any = JSON.parse(localStorage.getItem('Search')!);
+
+        if (data?.length) {
+          // Check if the maximum search tab limit is reached
+          if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+            setIsError(true);
+            setErrorText(MAX_SEARCH_LIMIT_EXCEED);
+          } else {
+            // Add the clicked search to local storage and navigate to the search result page
+            const localStorageData = [
+              ...data,
+              {
+                saveSearchName: specificCardData[0].name,
+                isSavedSearch: true,
+                searchId: productData?.search_id,
+                queryParams: specificCardData[0].meta_data,
+                id: specificCardData[0].id
+              }
+            ];
+
+            localStorage.setItem('Search', JSON.stringify(localStorageData));
+            router.push(
+              `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+                data.length + 1
+              }`
+            );
+          }
+        } else {
+          // If no data in local storage, create a new entry and navigate to the search result page
+          let localStorageData = [
+            {
+              saveSearchName: specificCardData[0].name,
+              isSavedSearch: true,
+              searchId: productData?.search_id,
+              queryParams: specificCardData[0].meta_data,
+              id: specificCardData[0].id
+            }
+          ];
+
+          localStorage.setItem('Search', JSON.stringify(localStorageData));
+          router.push(
+            `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${1}`
+          );
+        }
+      }
+    }
+  }, [productData]);
 
   const handleResultsPerPageChange = useCallback(
     (event: string) => {
@@ -439,94 +519,97 @@ const SavedSearch = () => {
         setIsOpen={setIsPersistDialogOpen}
         dialogContent={persistDialogContent}
       />
-      <div className="container flex flex-col">
-        {/* Custom Header */}
-        <div className="sticky top-0 bg-solitairePrimary mt-3 mb-[1px]">
-          <CustomHeader
-            data={savedSearchheaderData}
-            mainDivStyle={styles.mainHeaderStyle}
-            visibleStyle={styles.visibleStyle}
-          />
-        </div>
-        <div className={`h-[70vh] ${styles.scrollBar} mb-[10px]`}>
-          {/* Custom Card and Checkbox map */}
-          {cardData?.length ? (
-            <div className="flex-grow mt-[50px]">
-              {cardData?.map((items: ICardData) => {
-                return (
-                  <div key={items.id}>
-                    <div className="flex mt-6 ">
-                      <CustomCheckBox
-                        data={items.id}
-                        isChecked={isCheck}
-                        setIsCheck={setIsCheck}
-                        setIsCheckAll={setIsCheckAll}
-                        isCheckAll={isCheckAll}
-                        row={cardData}
-                        setIsError={setIsError}
-                      />
-
-                      <div
-                        data-testid={'card-id123'}
-                        className={`${styles.mainCardContainer}`}
-                        onClick={() =>
-                          handleCardClick(
-                            items.id,
-                            savedSearchData,
-                            setSearchUrl,
-                            setIsError,
-                            setErrorText,
-                            productData?.count,
-                            router
-                          )
-                        }
-                      >
-                        <CustomSearchResultCard
-                          cardData={items}
-                          overriddenStyles={{
-                            cardContainerStyle: styles.searchCardContainer
-                          }}
-                          defaultCardPosition={false}
-                          handleCardAction={handleEdit}
+      {isLoading ? (
+        <CustomLoader />
+      ) : (
+        <div className="container flex flex-col">
+          {/* Custom Header */}
+          <div className="sticky top-0 bg-solitairePrimary mt-3 mb-[1px]">
+            <CustomHeader
+              data={savedSearchheaderData}
+              mainDivStyle={styles.mainHeaderStyle}
+              visibleStyle={styles.visibleStyle}
+            />
+          </div>
+          <div className={`h-[70vh] ${styles.scrollBar} mb-[10px]`}>
+            {/* Custom Card and Checkbox map */}
+            {cardData?.length ? (
+              <div className="flex-grow mt-[50px]">
+                {cardData?.map((items: ICardData) => {
+                  return (
+                    <div key={items.id}>
+                      <div className="flex mt-6 ">
+                        <CustomCheckBox
+                          data={items.id}
+                          isChecked={isCheck}
+                          setIsCheck={setIsCheck}
+                          setIsCheckAll={setIsCheckAll}
+                          isCheckAll={isCheckAll}
+                          row={cardData}
+                          setIsError={setIsError}
                         />
+
+                        <div
+                          data-testid={'card-id123'}
+                          className={`${styles.mainCardContainer}`}
+                          onClick={() =>
+                            handleCardClick(
+                              items.id,
+                              setCardId,
+                              savedSearchData,
+                              setSearchUrl
+                            )
+                          }
+                        >
+                          <CustomSearchResultCard
+                            cardData={items}
+                            overriddenStyles={{
+                              cardContainerStyle: styles.searchCardContainer
+                            }}
+                            defaultCardPosition={false}
+                            handleCardAction={handleEdit}
+                          />
+                        </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <NoDataFound />
-          )}
-        </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <NoDataFound />
+            )}
+          </div>
 
-        {/* Custom Footer */}
-        <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-          {data?.count > 0 && (
-            <CustomPagination
-              currentPage={currentPage}
-              totalPages={numberOfPages}
-              resultsPerPage={limit}
-              optionLimits={optionLimits}
-              handlePageClick={handlePageClick}
-              handleResultsPerPageChange={handleResultsPerPageChange}
-            />
-          )}
-          {footerButtonData?.length && (
-            <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
-              {isError && (
-                <div className="w-[50%]">
-                  <p className="text-solitaireError text-base ">{errorText}</p>
-                </div>
-              )}
-              <CustomFooter
-                footerButtonData={footerButtonData}
-                noBorderTop={styles.paginationContainerStyle}
+          {/* Custom Footer */}
+          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+            {data?.count > 0 && (
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={numberOfPages}
+                resultsPerPage={limit}
+                optionLimits={optionLimits}
+                handlePageClick={handlePageClick}
+                handleResultsPerPageChange={handleResultsPerPageChange}
               />
-            </div>
-          )}
+            )}
+            {footerButtonData?.length && (
+              <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+                {isError && (
+                  <div className="w-[50%]">
+                    <p className="text-solitaireError text-base ">
+                      {errorText}
+                    </p>
+                  </div>
+                )}
+                <CustomFooter
+                  footerButtonData={footerButtonData}
+                  noBorderTop={styles.paginationContainerStyle}
+                />
+              </div>
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };
