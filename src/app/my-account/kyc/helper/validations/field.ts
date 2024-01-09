@@ -1,6 +1,6 @@
+import { NAME_REGEX } from '@/constants/validation-regex/regex';
 import {
   ArrayNotEmpty,
-  IsAlpha,
   IsAlphanumeric,
   IsBoolean,
   IsEmail,
@@ -183,8 +183,10 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
 }
 
 class ValidationFirstNameCriteria {
-  @MinLength(3, { message: 'First name must be at least 3 characters long' })
-  @IsAlpha()
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   first_name: string;
 
   constructor(first_name: string) {
@@ -193,8 +195,10 @@ class ValidationFirstNameCriteria {
 }
 
 class ValidationLastNameCriteria {
-  @MinLength(3, { message: 'Last name must be at least 3 characters long' })
-  @IsAlpha()
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   last_name: string;
 
   constructor(last_name: string) {
@@ -203,6 +207,7 @@ class ValidationLastNameCriteria {
 }
 
 class ValidationEmailCriteria {
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   @IsEmail({}, { message: 'Invalid email address' })
   email: string;
 
@@ -232,6 +237,10 @@ class ValidationPhoneCriteria {
 
 //bank details
 class ValidationBankNameCriteria {
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
   @IsString({ message: 'Bank name must be a string' })
   bank_name: string;
 
@@ -241,6 +250,10 @@ class ValidationBankNameCriteria {
 }
 
 class ValidationAccountHolderNameCriteria {
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
   @IsString({ message: 'Account holder name must be a string' })
   account_holder_name: string;
 
@@ -250,6 +263,7 @@ class ValidationAccountHolderNameCriteria {
 }
 
 class ValidationAccountNumberCriteria {
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   @IsString({ message: 'Account number must be a string' })
   @Matches(/^[0-9a-zA-Z]+$/, {
     message: 'Account number must contain only alphanumeric characters'
@@ -262,6 +276,7 @@ class ValidationAccountNumberCriteria {
 }
 
 class ValidationBankAddressCriteria {
+  @Length(0, 140, { message: 'Input must be between 1 and 140 characters' })
   @IsString({ message: 'Bank address must be a string' })
   @IsOptional()
   bank_address: string;
@@ -305,8 +320,11 @@ class ValidationSwitfCriteria {
 ///company owner details
 
 class ValidationOwnerNameCriteria {
-  @MinLength(3)
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   @IsNotEmpty()
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
   owner_full_name: string;
 
   constructor(owner_full_name: string) {
@@ -327,6 +345,10 @@ class ValidationPanCriteria {
 
 class ValidationCompanyNameCriteria {
   @IsString({ message: 'Company name must be a string' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   company_name: string;
 
   constructor(company_name: string) {
@@ -347,6 +369,7 @@ class ValidationYearOfEstablishmentCriteria {
 }
 class ValidationAddressCriteria {
   @IsString({ message: 'Address must be a string' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   address: string;
 
   constructor(address: string) {
@@ -382,6 +405,7 @@ class ValidationOrganisationTypeCriteria {
 class ValidationBusinessRegistrationNumberCriteria {
   @IsString({ message: 'Business registration number must be a string' })
   @IsNotEmpty({ message: 'Business registration number is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   business_registration_number: string;
 
   constructor(business_registration_number: string) {
@@ -391,6 +415,7 @@ class ValidationBusinessRegistrationNumberCriteria {
 
 class ValidationSubsidiaryCompanyCriteria {
   @IsString({ message: 'Subsidiary company must be a string' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   subsidiary_company: string;
 
   constructor(subsidiary_company: string) {
@@ -417,6 +442,10 @@ class ValidationMemberNameCriteria {
   @ValidateIf((object, value) => object.is_member_of_business === value)
   @IsNotEmpty({ message: 'Member of business name must be provided' })
   @IsString({ message: 'Member of business name must be a string' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
   member_of_business_name: string;
 
   constructor(member_of_business_name: string) {
@@ -427,6 +456,10 @@ class ValidationMemberNameCriteria {
 class ValidationUltimateBeneficiaryNameCriteria {
   @IsString({ message: 'Ultimate beneficiary name must be a string' })
   @IsNotEmpty({ message: 'Ultimate beneficiary name is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
+  })
   ultimate_beneficiary_name: string;
 
   constructor(ultimate_beneficiary_name: string) {
@@ -437,6 +470,7 @@ class ValidationUltimateBeneficiaryNameCriteria {
 class ValidationCityCriteria {
   @IsString({ message: 'City must be a string' })
   @IsNotEmpty({ message: 'City is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   city: string;
 
   constructor(city: string) {
@@ -447,6 +481,7 @@ class ValidationCityCriteria {
 class ValidationStateCriteria {
   @IsString({ message: 'State must be a string' })
   @IsNotEmpty({ message: 'State is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   state: string;
 
   constructor(state: string) {
@@ -479,6 +514,7 @@ class ValidationPANCriteria {
 class ValidationGSTCriteria {
   @IsString({ message: 'GST number must be a string' })
   @IsNotEmpty({ message: 'GST number is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   gst_number: string;
 
   constructor(gst_number: string) {
@@ -501,6 +537,7 @@ class ValidationMSMETypeCriteria {
     message: 'MSME type must be a non-empty when MSME is registered'
   })
   @IsNotEmpty({ message: 'MSME type is required when MSME is registered' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   msme_type: string;
 
   constructor(msme_type: string) {
@@ -516,6 +553,7 @@ class ValidationMSMENumberCriteria {
   @IsNotEmpty({
     message: 'MSME registration number is required when MSME is registered'
   })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   msme_registration_number: string;
 
   constructor(msme_registration_number: string) {
@@ -525,6 +563,7 @@ class ValidationMSMENumberCriteria {
 class ValidationVATCriteria {
   @IsString({ message: 'VAT number must be a string' })
   @IsNotEmpty({ message: 'VAT number is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   vat_number: string;
 
   constructor(vat_number: string) {
@@ -534,6 +573,7 @@ class ValidationVATCriteria {
 class ValidationFAXCriteria {
   @IsString({ message: 'Fax number must be a string' })
   @IsOptional()
+  @Length(0, 140, { message: 'Input must be between 0 and 140 characters' })
   fax_number: string;
 
   constructor(fax_number: string) {
@@ -554,6 +594,7 @@ class ValidationOwnershipPercentageCriteria {
 class ValidationFederalTaxCriteria {
   @IsString({ message: 'Federal tax ID must be a string' })
   @IsNotEmpty({ message: 'Federal tax ID is required' })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
   federal_tax_id: string;
 
   constructor(federal_tax_id: string) {
@@ -578,6 +619,10 @@ class ValidationAntiMoneyPolicyNameCriteria {
   @IsNotEmpty({
     message:
       'Anti-money laundering policy name is required when registered under MSME Act'
+  })
+  @Length(1, 140, { message: 'Input must be between 1 and 140 characters' })
+  @Matches(NAME_REGEX, {
+    message: 'Name must contain only alphabets, numbers, and spaces'
   })
   anti_money_laundering_policy_name: string;
 

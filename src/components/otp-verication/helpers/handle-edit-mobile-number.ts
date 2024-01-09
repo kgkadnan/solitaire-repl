@@ -25,7 +25,6 @@ export const handleEditMobileNumber = ({
       ...prev,
       codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.mobileNumber}`
     }));
-    console.log('here');
     setIsInputDialogOpen(false);
   }
 };

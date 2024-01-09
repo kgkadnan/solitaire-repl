@@ -47,6 +47,7 @@ interface IRenderFieldProps {
     dynamicField: any;
     dynamicCondition: string;
     formKey: string;
+    isEditable?: boolean;
   };
   formState: any;
   formErrorState: any;
@@ -69,7 +70,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     subTitle,
     dynamicField,
     dynamicCondition,
-    formKey
+    formKey,
+    isEditable = true
   } = data;
 
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
@@ -119,6 +121,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''
             }
             key={formKey}
+            isEditable={isEditable}
           />
         </div>
       );
@@ -139,7 +142,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               }}
               styles={countryCodeSelectStyle(
                 formErrorState?.online?.sections?.[screenName]?.[formKey[0]] ??
-                  ''
+                  '',
+                !isEditable
               )}
               value={{
                 label:
@@ -147,6 +151,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 value:
                   formState?.online?.sections?.[screenName]?.[formKey[0]] ?? ''
               }}
+              isDisabled={!isEditable}
             />
           </div>
           <div className="w-[78%]">
@@ -170,6 +175,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 formErrorState?.online?.sections?.[screenName]?.[formKey[1]] ??
                 ''
               }
+              isEditable={isEditable}
             />
           </div>
         </div>
