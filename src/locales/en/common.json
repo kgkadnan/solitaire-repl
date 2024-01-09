@@ -105,6 +105,8 @@
   "app.topNav.no": "No",
   "app.topNav.yes": "Yes",
   "app.topNav.kycModelContent": "Do you want to terminate KYC process and explore website? (your progress will be saved)",
+  "app.topNav.logout": "Logout",
+  "app.topNav.notification": "Notification",
 
   "app.sideNav.dashboard": "Dashboard",
   "app.sideNav.newArrival": "New Arrival",

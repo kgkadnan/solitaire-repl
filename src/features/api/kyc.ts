@@ -17,8 +17,15 @@ export const kycApi = createApi({
         return { data: response, statusCode: meta?.response?.status };
       },
       invalidatesTags: ['kyc']
+    }),
+    getKycDetail: builder.query({
+      query: () => ({
+        url: `/store/kyc`,
+        method: 'GET'
+      }),
+      providesTags: ['kyc']
     })
   })
 });
 
-export const { useKycMutation } = kycApi;
+export const { useKycMutation, useGetKycDetailQuery } = kycApi;
