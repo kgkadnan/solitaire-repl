@@ -9,7 +9,10 @@ export const handleInputChange = async (
   screenName: string,
   key: string
 ) => {
-  let errors = await validateKYCField(key, value);
+  let errors = await validateKYCField(
+    key,
+    typeof value === 'string' ? value.trim() : value
+  );
 
   dispatch(
     updateFormState({
