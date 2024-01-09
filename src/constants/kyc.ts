@@ -179,7 +179,7 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO,
+            type: fieldType.RADIO_WITH_INPUT,
             formKey: 'organisation_type',
             radioData: [
               {
@@ -571,61 +571,54 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO,
+            type: fieldType.RADIO_WITH_INPUT,
             formKey: 'organisation_type',
             radioData: [
               {
                 id: 1,
                 label: 'Individual',
-                value: 'Individual',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: 'Partnership Firm',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: 'Private Ltd',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: 'LLP',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: 'Public Ltd',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: 'OPC',
                 handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: 'Other',
                 handleChange: () => {},
                 name: 'organisationType',
                 isInput: true,
                 inputName: 'Other',
-                // inputValue: '',
-                // handleInputChange: '',
+                inputValue: '',
+                handleInputChange: '',
                 placeholder: 'If other please specify',
                 inputStyle: 'w-[150px]'
               }
@@ -668,14 +661,12 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: 'Yes',
                 handleChange: () => {},
                 name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: 'No',
                 handleChange: () => {},
                 name: 'isMemberOfBusiness'
               }
@@ -701,14 +692,12 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: 'Yes',
                 handleChange: () => {},
                 name: 'isMsmeRegistered'
               },
               {
                 id: 1,
                 label: 'No',
-                value: 'No',
                 handleChange: () => {},
                 name: 'isMsmeRegistered'
               }
@@ -1103,7 +1092,7 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO,
+            type: fieldType.RADIO_WITH_INPUT,
             formKey: 'organisation_type',
             radioData: [
               {
@@ -1111,49 +1100,49 @@ export const KYCForm = [
                 label: 'Individual',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
                 value: '',
                 onChange: () => {},
-                name: ''
+                name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
                 value: '',
                 onChange: () => {},
-                name: '',
+                name: 'organisationType',
                 isInput: true,
                 inputName: '',
                 inputValue: '',

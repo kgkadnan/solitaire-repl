@@ -80,7 +80,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   const dispatch = useAppDispatch();
   const [skip, setSkip] = useState(true);
   const { data: getCountryCode } = useGetCountryCodeQuery({}, { skip });
-
   useEffect(() => {
     if (fieldType.PHONE_NUMBER === type) {
       setSkip(false);
@@ -97,7 +96,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     }
   }, [skip, getCountryCode]);
-
+  console.log(
+    'oooooooooooooo',
+    formState.online.sections.company_details?.organisation_type
+  );
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -192,18 +194,30 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               return (
                 <div key={item.name}>
                   <CustomCheckBox
-                    checkboxHandleFunction={(isChecked: string[]) =>
-                      !isChecked.includes(name) &&
-                      handleInputChange(
-                        `formState.online.sections[${screenName}][${formKey}]`,
-                        isChecked,
-                        dispatch,
-                        screenName,
-                        formKey
-                      )
-                    }
+                    checkboxHandleFunction={(isChecked: string[]) => {
+                      !isChecked.includes(formKey) &&
+                        handleInputChange(
+                          `formState.online.sections[${screenName}][${formKey}]`,
+                          [
+                            ...isChecked,
+                            formState?.online?.sections?.[screenName]?.[
+                              formKey
+                            ]?.filter(
+                              (element: any) =>
+                                !checkboxData
+                                  ?.map(element => {
+                                    return element.name;
+                                  })
+                                  ?.includes(element)
+                            )[0]
+                          ],
+                          dispatch,
+                          screenName,
+                          formKey
+                        );
+                    }}
                     data={item.data}
-                    isChecked={isCheck}
+                    isChecked={formState.online.sections[screenName]?.[formKey]}
                     setIsCheck={setIsCheck}
                     row={item.row}
                     isInput={item.isInput}
@@ -234,20 +248,17 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                                 })
                                 ?.includes(element)
                           ) ?? []),
-                          formState?.online?.sections?.[screenName]?.[
+                          (formState?.online?.sections?.[screenName]?.[
                             formKey
-                          ]?.filter(
-                            (element: any) =>
-                              !checkboxData
-                                ?.map(element => {
-                                  return element.name;
-                                })
-                                ?.includes(element)
-                          )[0] ?? '' + e
+                          ]?.find((element: any) => {
+                            !checkboxData
+                              ?.map(checkboxElement => checkboxElement.name)
+                              .includes(element);
+                          }) ?? '') + e
                         ],
                         dispatch,
-                        item.handleInputChange,
-                        screenName
+                        screenName,
+                        formKey
                       )
                     }
                     placeholder={item.placeholder}
@@ -261,16 +272,32 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           </div>
         </div>
       );
-    case fieldType.RADIO:
+
+    case fieldType.RADIO_WITH_INPUT:
       return (
-        <div className="text-[14px] text-solitaireTertiary">
-          <p className="mb-[10px]">{name}</p>
+        <div className="text-[14px] text-solitaireTertiary" key={formKey}>
+          <p className="mb-[0px]">{name}</p>
+          <p className="mb-[8px] text-[12px] text-solitaireSenary">
+            {subTitle && subTitle}
+          </p>
           <p className="text-[#C51A2D] mb-4">
             {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
           </p>
-          <div className="grid grid-cols-2 gap-[16px]">
+          <div
+            className={`${
+              formKey === 'organisation_type'
+                ? 'grid grid-cols-2 gap-[16px]'
+                : 'flex flex-col gap-[16px]'
+            }`}
+          >
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
+                console.log(
+                  formKey,
+                  value,
+                  'wwwwwwwwwwwwwwwwww',
+                  formState?.online?.sections?.[screenName]?.[formKey]
+                );
                 handleInputChange(
                   `formState.online.sections[${screenName}][${formKey}]`,
                   value,
@@ -293,50 +320,21 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         formKey
                       )
                     }
-                    inputValue={
-                      formState?.online?.sections?.[screenName]?.[formKey] ?? ''
-                    }
+                    inputValue={radioData
+                      ?.map(element => {
+                        return element.label;
+                      })
+                      ?.includes(
+                        formState?.online?.sections?.[screenName]?.[formKey]
+                      ) &&  formState?.online?.sections?.[screenName]?.[formKey]}
                     key={items?.id}
                   />
                 </div>
               );
             })}
-          </div>
-        </div>
-      );
-    case fieldType.RADIO_WITH_INPUT:
-      return (
-        <div className="text-[14px] text-solitaireTertiary" key={formKey}>
-          <p className="mb-[0px]">{name}</p>
-          <p className="mb-[8px] text-[12px] text-solitaireSenary">
-            {subTitle}
-          </p>
-          <p className="text-[#C51A2D] mb-4">
-            {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
-          </p>
-          <div className="flex flex-col gap-[16px]">
-            {radioData.map((items: IRadioData) => {
-              const handleRadioChange = (value: string) => {
-                handleInputChange(
-                  `formState.online.sections[${screenName}][${formKey}]`,
-                  value,
-                  dispatch,
-                  screenName,
-                  formKey
-                );
-              };
-              return (
-                <div key={items.id}>
-                  <RadioButton
-                    radioMetaData={items}
-                    onChange={handleRadioChange}
-                    key={items?.id}
-                  />
-                </div>
-              );
-            })}
-            {formState.online.sections[screenName]?.[formKey] ===
-              dynamicCondition &&
+            {dynamicCondition &&
+              formState.online.sections[screenName]?.[formKey] ===
+                dynamicCondition &&
               dynamicField?.map((field: any) => (
                 <div key={field.name} className={`mb-[20px] w-[40%] `}>
                   <RenderField
