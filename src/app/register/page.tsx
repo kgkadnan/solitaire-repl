@@ -15,7 +15,8 @@ import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-se
 import { useRouter } from 'next/navigation';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation
+  useVerifyOTPMutation,
+  useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
 import Select from 'react-select';
 import { CustomInputDialog } from '@/components/common/input-dialog';
@@ -32,11 +33,23 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/otp-verication/hooks/otp-verification-state-management';
 import ConfirmScreen from '@/components/common/confirmation-screen';
+import { useGetAuthDataQuery } from '@/features/api/login';
 export interface IOtp {
   mobileNumber: string;
   countryCode: string;
   codeAndNumber: string;
 }
+export interface IToken {
+  token: string;
+  phoneToken: string;
+  tempToken: string;
+}
+
+export const initialTokenState: IToken = {
+  token: '',
+  phoneToken: '',
+  tempToken: ''
+};
 const Register = () => {
   const router = useRouter();
   const { registerState, registerSetState } = useRegisterStateManagement();
@@ -62,7 +75,6 @@ const Register = () => {
 
   //common states
   const [currentState, setCurrentState] = useState('register');
-  const [phoneToken, setPhoneToken] = useState('');
   const [role, setRole] = useState('');
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -70,7 +82,24 @@ const Register = () => {
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
 
+  const [checkNum, setCheckNum] = useState(false);
+
+  const { data: verifyNumber } = useVerifyPhoneQuery(
+    {
+      country_code: otpVerificationFormState.countryCode,
+      phone_number: otpVerificationFormState.mobileNumber
+    },
+    {
+      skip: !checkNum
+    }
+  );
+
+  const [token, setToken] = useState(initialTokenState);
+
   const { userLoggedIn } = useUser();
+  const { data: userData } = useGetAuthDataQuery(token.token, {
+    skip: !token.token
+  });
 
   //APi CAlls
   const { data, error } = useGetCountryCodeQuery({});
@@ -88,6 +117,12 @@ const Register = () => {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
+  useEffect(() => {
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(data));
+    }
+  }, [userData]);
 
   useEffect(() => {
     setOTPVerificationFormState(prev => ({
@@ -164,10 +199,16 @@ const Register = () => {
             }}
             handleClick={() => {
               handleEditMobileNumber({
+                verifyNumber,
+                setCheckNum,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsInputDialogOpen
+                setIsInputDialogOpen,
+                setIsDialogOpen,
+                setDialogContent,
+                sendOtp,
+                setToken
               });
             }}
           />
@@ -186,7 +227,7 @@ const Register = () => {
             register={register}
             setRole={setRole}
             setCurrentState={setCurrentState}
-            setPhoneToken={setPhoneToken}
+            setToken={setToken}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
           />
@@ -202,7 +243,7 @@ const Register = () => {
             setCurrentState={setCurrentState}
             state={'register'}
             router={router}
-            phoneToken={phoneToken}
+            token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
@@ -210,6 +251,7 @@ const Register = () => {
             verifyOTP={verifyOTP}
             role={role}
             setResendTimer={setResendTimer}
+            setToken={setToken}
           />
         );
 

@@ -4,6 +4,7 @@ import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
 import errorImage from '@public/assets/icons/error.svg';
 import { IRegister } from '../interface';
+import { IToken } from '../page';
 
 interface IHandleRegister {
   role: string;
@@ -12,9 +13,9 @@ interface IHandleRegister {
   register: any;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   setRole: React.Dispatch<React.SetStateAction<string>>;
-  setPhoneToken: React.Dispatch<React.SetStateAction<string>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+  setToken: React.Dispatch<React.SetStateAction<IToken>>;
 }
 export const handleRegister = async ({
   role,
@@ -23,7 +24,7 @@ export const handleRegister = async ({
   register,
   setCurrentState,
   setRole,
-  setPhoneToken,
+  setToken,
   setIsDialogOpen,
   setDialogContent
 }: IHandleRegister) => {
@@ -48,7 +49,12 @@ export const handleRegister = async ({
       if (res) {
         setCurrentState('OTPVerification');
         setRole(role);
-        setPhoneToken(res.customer.phone_token);
+
+        setToken(prev => ({
+          ...prev,
+          phoneToken: res.customer.phone_token,
+          tempToken: res.customer.temp_token
+        }));
       }
     })
     .catch((e: any) => {

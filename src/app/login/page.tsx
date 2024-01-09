@@ -36,11 +36,24 @@ import { CustomInputDialog } from '@/components/common/input-dialog';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation
+  useVerifyOTPMutation,
+  useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
 import Link from 'next/link';
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { statusCode } from '@/constants/enums/status-code';
+
+export interface IToken {
+  token: string;
+  phoneToken: string;
+  tempToken: string;
+}
+
+export const initialTokenState: IToken = {
+  token: '',
+  phoneToken: '',
+  tempToken: ''
+};
 
 // Define the Login component
 const Login = () => {
@@ -61,11 +74,10 @@ const Login = () => {
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
-  const [token, setToken] = useState('');
-  const { data } = useGetAuthDataQuery(token, { skip: !token });
+  const [token, setToken] = useState(initialTokenState);
+  const { data } = useGetAuthDataQuery(token.token, { skip: !token.token });
 
   const [currentState, setCurrentState] = useState('login');
-  const [phoneToken, setPhoneToken] = useState('');
 
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
@@ -86,6 +98,18 @@ const Login = () => {
     setOTPVerificationFormErrors
   } = otpVerificationSetState;
 
+  const [checkNum, setCheckNum] = useState(false);
+
+  const { data: verifyNumber } = useVerifyPhoneQuery(
+    {
+      country_code: otpVerificationFormState.countryCode,
+      phone_number: otpVerificationFormState.mobileNumber
+    },
+    {
+      skip: !checkNum
+    }
+  );
+
   useEffect(() => {
     if (isTokenChecked) {
       authToken && router.push('/');
@@ -96,7 +120,7 @@ const Login = () => {
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
-        userLoggedIn(token);
+        userLoggedIn(token.token);
         router.push('/');
       } else {
         setCurrentState('otpVerification');
@@ -112,7 +136,13 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            setPhoneToken(res.token);
+            console.log('res', res);
+            setToken(prev => ({
+              ...prev,
+              phoneToken: res?.token || '',
+              tempToken: res?.temp_token || ''
+            }));
+            // setPhoneToken(res.token);
           })
           .catch(_e => {
             setIsDialogOpen(true);
@@ -157,7 +187,10 @@ const Login = () => {
           />
         );
       } else if (res.data.access_token) {
-        setToken(res.data.access_token);
+        setToken(prev => ({
+          ...prev,
+          token: res.data.access_token
+        }));
       }
     } else if (!password.length && !emailAndNumber.length) {
       setPasswordErrorText(ENTER_PASSWORD);
@@ -248,10 +281,16 @@ const Login = () => {
             }}
             handleClick={() => {
               handleEditMobileNumber({
+                setCheckNum,
+                verifyNumber,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsInputDialogOpen
+                setIsInputDialogOpen,
+                setIsDialogOpen,
+                setDialogContent,
+                sendOtp,
+                setToken
               });
             }}
           />
@@ -293,7 +332,7 @@ const Login = () => {
             setCurrentState={setCurrentState}
             state={'login'}
             router={router}
-            phoneToken={phoneToken}
+            token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}

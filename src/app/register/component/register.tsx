@@ -13,6 +13,7 @@ import { handleSelectChange } from '../helpers/handle-select-change';
 import { handleRegisterChange } from '../helpers/handle-register-change';
 import { handleRegister } from '../helpers/handle-register';
 import { IRegisterSetState, IRegisterState } from '../interface';
+import { IToken } from '../page';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
@@ -20,9 +21,9 @@ interface IRegisterComponent {
   register: any;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   setRole: React.Dispatch<React.SetStateAction<string>>;
-  setPhoneToken: React.Dispatch<React.SetStateAction<string>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+  setToken: React.Dispatch<React.SetStateAction<IToken>>;
 }
 const RegisterComponent = ({
   registerSetState,
@@ -30,7 +31,7 @@ const RegisterComponent = ({
   register,
   setCurrentState,
   setRole,
-  setPhoneToken,
+  setToken,
   setIsDialogOpen,
   setDialogContent
 }: IRegisterComponent) => {
@@ -209,7 +210,7 @@ const RegisterComponent = ({
                 register,
                 setCurrentState,
                 setRole,
-                setPhoneToken,
+                setToken,
                 setIsDialogOpen,
                 setDialogContent
               })
@@ -230,7 +231,7 @@ const RegisterComponent = ({
                 register,
                 setCurrentState,
                 setRole,
-                setPhoneToken,
+                setToken,
                 setIsDialogOpen,
                 setDialogContent
               })
