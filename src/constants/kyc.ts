@@ -185,50 +185,43 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                value: '',
-                onChange: () => {},
+                value: 'Individual',
                 name: ''
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
+                value: 'Partnership Firm',
                 name: ''
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
+                value: 'Private Ltd.',
                 name: ''
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: '',
-                onChange: () => {},
+                value: 'LLP',
                 name: ''
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
+                value: 'Public Ltd.',
                 name: ''
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: '',
-                onChange: () => {},
+                value: 'OPC',
                 name: ''
               },
               {
                 id: 7,
                 label: 'Other',
-                value: '',
-                onChange: () => {},
+                value: 'Other',
                 name: '',
                 isInput: true,
                 inputName: '',
@@ -577,44 +570,44 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                handleChange: () => {},
+                value: 'Individual',
                 name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                handleChange: () => {},
+                value: 'Partnership Firm',
                 name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                handleChange: () => {},
+                value: 'Private Ltd.',
                 name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                handleChange: () => {},
+                value: 'LLP',
                 name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                handleChange: () => {},
+                value: 'Public Ltd.',
                 name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                handleChange: () => {},
+                value: 'OPC',
                 name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                handleChange: () => {},
                 name: 'organisationType',
+                value: 'organisationType_Other',
                 isInput: true,
                 inputName: 'Other',
                 inputValue: '',
@@ -661,17 +654,17 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                handleChange: () => {},
+                value: true,
                 name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                handleChange: () => {},
+                value: false,
                 name: 'isMemberOfBusiness'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Name If you select “Yes”',
@@ -692,17 +685,17 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                handleChange: () => {},
+                value: true,
                 name: 'isMsmeRegistered'
               },
               {
                 id: 1,
                 label: 'No',
-                handleChange: () => {},
+                value: false,
                 name: 'isMsmeRegistered'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'MSME type If you select “Yes”',

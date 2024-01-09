@@ -34,6 +34,7 @@ interface IRadioData {
   value: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   name: string;
+  checked?: boolean;
 }
 interface IRenderFieldProps {
   data: {
@@ -96,10 +97,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     }
   }, [skip, getCountryCode]);
-  console.log(
-    'oooooooooooooo',
-    formState.online.sections.company_details?.organisation_type
-  );
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -113,7 +110,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 e.target.value,
                 dispatch,
                 screenName,
-                formKey
+                formKey,
+                formState
               )
             }
             type={inputType}
@@ -139,7 +137,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   value,
                   dispatch,
                   screenName,
-                  formKey[0]
+                  formKey[0],
+                  formState
                 );
               }}
               styles={countryCodeSelectStyle(
@@ -165,7 +164,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   e.target.value,
                   dispatch,
                   screenName,
-                  formKey[1]
+                  formKey[1],
+                  formState
                 )
               }
               type={inputType}
@@ -213,7 +213,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                           ],
                           dispatch,
                           screenName,
-                          formKey
+                          formKey,
+                          formState
                         );
                     }}
                     data={item.data}
@@ -258,7 +259,8 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         ],
                         dispatch,
                         screenName,
-                        formKey
+                        formKey,
+                        formState
                       )
                     }
                     placeholder={item.placeholder}
@@ -292,18 +294,13 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           >
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
-                console.log(
-                  formKey,
-                  value,
-                  'wwwwwwwwwwwwwwwwww',
-                  formState?.online?.sections?.[screenName]?.[formKey]
-                );
                 handleInputChange(
                   `formState.online.sections[${screenName}][${formKey}]`,
                   value,
                   dispatch,
                   screenName,
-                  formKey
+                  formKey,
+                  formState
                 );
               };
               return (
@@ -311,22 +308,27 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                   <RadioButton
                     radioMetaData={items}
                     onChange={handleRadioChange}
-                    handleInputChange={(e: any) =>
+                    handleInputChange={(e: any) => {
                       handleInputChange(
                         `formState.online.sections[${screenName}][${formKey}]`,
                         e.target.value,
                         dispatch,
                         screenName,
-                        formKey
-                      )
+                        formKey,
+                        formState
+                      );
+                    }}
+                    inputValue={
+                      !radioData
+                        ?.map(element => {
+                          return element.value;
+                        })
+                        ?.includes(
+                          formState?.online?.sections?.[screenName]?.[formKey]
+                        )
+                        ? formState?.online?.sections?.[screenName]?.[formKey]
+                        : ''
                     }
-                    inputValue={radioData
-                      ?.map(element => {
-                        return element.label;
-                      })
-                      ?.includes(
-                        formState?.online?.sections?.[screenName]?.[formKey]
-                      ) &&  formState?.online?.sections?.[screenName]?.[formKey]}
                     key={items?.id}
                   />
                 </div>
