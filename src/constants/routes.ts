@@ -2,9 +2,7 @@ export const headerlessRoutes = [
   '/login',
   '/forgot-password',
   '/reset-password',
-  '/register',
-  '/otp-verification',
-  '/successfully-created'
+  '/register'
 ];
 
 export const myAccountRoutes = [
@@ -15,14 +13,17 @@ export const myAccountRoutes = [
   '/my-account/report-bug',
   '/my-account/email-notification'
 ];
-
+export const notificationRoutes = [
+  '/notification/all-notification',
+  '/notification/setting'
+];
 export const protectedRoutes = [
   '/',
   '/search',
   '/my-diamonds',
   '/my-cart',
   '/compare-stone',
-  '/notification',
+  ...notificationRoutes,
   ...myAccountRoutes
 ];
 

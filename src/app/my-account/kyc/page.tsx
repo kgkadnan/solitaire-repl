@@ -21,6 +21,8 @@ import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
+import logger from 'logging/log-util';
+import ErrorModel from '@/components/common/error-model';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -39,14 +41,16 @@ const KYC: React.FC = () => {
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { dialogContent, isDialogOpen } = modalState;
+
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
+
   const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
 
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-
-  const { dialogContent, isDialogOpen } = modalState;
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
 
   useEffect(() => {
@@ -56,7 +60,11 @@ const KYC: React.FC = () => {
     setUserData(authData);
   }, [authData]);
 
-  const handleNextStep = async (screenName: string, activeID: number) => {
+  const handleNextStep = async (
+    screenName: string,
+    activeID: number,
+    saveStep = true
+  ) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
@@ -72,13 +80,13 @@ const KYC: React.FC = () => {
             name: `formErrorState.online.sections.${[screenName]}.${[
               error.property
             ]}`,
-            value: Object.values(error.constraints ?? {})[0]
+            value: Object.values(error.constraints ?? {})[0] || ''
           })
         );
       });
     }
-
-    !validationError.length &&
+    saveStep &&
+      !validationError.length &&
       (await kyc({
         data: {
           country: formState.country,
@@ -89,23 +97,36 @@ const KYC: React.FC = () => {
         },
         ID: active
       })
-        .then((_res: any) => (stepSuccessStatus = _res.data.statusCode))
-        .catch((_e: any) => {}));
+        .then((_res: any) => {
+          _res?.data?.statusCode
+            ? (stepSuccessStatus = _res.data.statusCode)
+            : setIsDialogOpen(true);
+          setDialogContent(
+            <ErrorModel
+              content={_res?.error?.data?.message}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          );
+        })
+        .catch((_e: any) => {
+          logger.error(`something went wrong while submitting kyc ${_e}`);
+        }));
 
     !validationError.length &&
       stepSuccessStatus === statusCode.NO_CONTENT &&
       setActiveStep(prevStep => prevStep + 1);
+    let stepperFinalStatus = {
+      validationError: validationError,
+      statusCode: stepSuccessStatus
+    };
     stepSuccessStatus = 0;
+    return stepperFinalStatus;
   };
 
   const handleTermAndCondition = () => {};
 
   const handlePrevStep = () => {
-    if (activeStep <= 0) {
-      setCurrentState('choice_for_filling_kyc');
-    } else {
-      setActiveStep(prevStep => prevStep - 1);
-    }
+    setActiveStep(prevStep => prevStep - 1);
   };
 
   let stepperData: IStepper[] = data?.online
@@ -402,7 +423,6 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
-      break;
     case 'offline':
       return (
         <RenderOffline
@@ -425,6 +445,7 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+          formErrorState={formErrorState}
           setIsDialogOpen={setIsDialogOpen}
           isDialogOpen={isDialogOpen}
           dialogContent={dialogContent}

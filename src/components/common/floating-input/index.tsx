@@ -13,6 +13,7 @@ interface IFloatingLabelInputProps {
   value: string | number;
   errorText?: string;
   showPassword?: boolean;
+  isEditable?: boolean;
 }
 
 export const FloatingLabelInput: React.FC<IFloatingLabelInputProps> = ({
@@ -23,7 +24,8 @@ export const FloatingLabelInput: React.FC<IFloatingLabelInputProps> = ({
   onKeyDown,
   value,
   errorText,
-  showPassword = false
+  showPassword = false,
+  isEditable = true
 }) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
@@ -38,11 +40,14 @@ export const FloatingLabelInput: React.FC<IFloatingLabelInputProps> = ({
         name={name}
         className={`${
           !errorText ? styles.input : styles.errorInput
-        } block py-2.5 px-0 w-full bg-transparent border-0 appearance-none focus:outline-none peer`}
+        } block py-2.5 px-0 w-full bg-transparent border-0 appearance-none focus:outline-none peer ${
+          !isEditable && styles.disableInput
+        }`}
         placeholder=""
         value={value}
         onChange={onChange}
         onKeyDown={onKeyDown}
+        disabled={!isEditable}
       />
       <label
         htmlFor=""
