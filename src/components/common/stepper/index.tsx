@@ -187,19 +187,7 @@ const Stepper: React.FC<IStepperProps> = ({
                       : styles.defaultStep
                   }`}
                 >
-                  <div
-                    key={index}
-                    className={`${styles.step} ${
-                      step?.status === StepperStatus.COMPLETED
-                        ? styles.completedStep
-                        : step?.status === StepperStatus.INPROGRESS
-                        ? styles.activeStep
-                        : step?.status === StepperStatus.REJECTED
-                        ? styles.rejectedStep
-                        : ''
-                    }`}
-                    onClick={() => handleStepperStep(index)}
-                  >
+                 
                     {index + 1}
                   </div>
 
@@ -208,7 +196,6 @@ const Stepper: React.FC<IStepperProps> = ({
                 {index < stepper.length - 1 && (
                   <div className={styles.stepLine}></div>
                 )}
-              </div>
             </>
           ))}
         </div>
