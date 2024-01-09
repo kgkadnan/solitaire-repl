@@ -289,5 +289,18 @@
   "app.companyDetails.registerCompanyName": "Registered Company Name*",
   "app.personalDetail.firstName": "First Name*",
   "app.personalDetail.contactNumber": "Contact Number*",
-  "app.personalDetail.contactEmailId": "Contact Email-ID*"
+  "app.personalDetail.contactEmailId": "Contact Email-ID*",
+
+  "app.dna.giaCertificate": "GIA Certificate",
+  "app.dna.image": "Image",
+  "app.dna.diamondVideo": "Diamond Video (360)",
+  "app.dna.download": "Download",
+  "app.dna.basicDetails": "Basic Details",
+  "app.dna.measurements": "Measurements",
+  "app.dna.heart": "Heart",
+  "app.dna.arrow": "Arrow",
+  "app.dna.aset": "Aset",
+  "app.dna.ideal": "Ideal",
+  "app.dna.fluorescence": "Fluorescence",
+  "app.dna.inclusionDetails": "Inclusion Details"
 }
