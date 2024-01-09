@@ -202,25 +202,6 @@ const DnaPage = () => {
           </div>
         </div>
       </div>
-      {/* <div className="flex my-5 gap-[40px] overflow-auto">
-        {dnaImages.map(({ url, altText, displayName, id }: any) => {
-          return (
-            <div key={id} className="w-[30%]">
-              <div className="text-center pb-3 text-solitaireTertiary">
-                <p>{displayName}</p>
-              </div>
-
-              <OptimizedImageWithFallback
-                src={url}
-                alt={altText}
-                width={250}
-                height={200}
-                openModal={openModal}
-              />
-            </div>
-          );
-        })}
-      </div> */}
 
       <div>
         {isMobile ? (
@@ -234,13 +215,16 @@ const DnaPage = () => {
                     <div className="text-center pb-3 text-solitaireTertiary">
                       <p>{displayName}</p>
                     </div>
-                    <OptimizedImageWithFallback
-                      src={url}
-                      alt={altText}
-                      width={250}
-                      height={200}
-                      openModal={openModal}
-                    />
+
+                    <div className="flex justify-center items-center">
+                      <OptimizedImageWithFallback
+                        src={url}
+                        alt={altText}
+                        width={250}
+                        height={200}
+                        openModal={openModal}
+                      />
+                    </div>
                   </div>
                 </CarouselItem>
               ))}
@@ -255,13 +239,15 @@ const DnaPage = () => {
                 <div className="text-center pb-3 text-solitaireTertiary">
                   <p>{displayName}</p>
                 </div>
-                <OptimizedImageWithFallback
-                  src={url}
-                  alt={altText}
-                  width={250}
-                  height={200}
-                  openModal={openModal}
-                />
+                <div className="flex justify-center items-center">
+                  <OptimizedImageWithFallback
+                    src={url}
+                    alt={altText}
+                    width={250}
+                    height={200}
+                    openModal={openModal}
+                  />
+                </div>
               </div>
             ))}
           </div>
