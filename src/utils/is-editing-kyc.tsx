@@ -11,7 +11,7 @@ interface IHandleIsEditingKycProps {
   label?: string;
   link?: string;
   styles: any;
-  currentRoute?: any;
+  currentRoute?: string;
 }
 
 export const handleIsEditingKyc = ({
@@ -22,10 +22,9 @@ export const handleIsEditingKyc = ({
   handleRoute,
   label,
   link,
-  styles,
-  currentRoute
+  styles
 }: IHandleIsEditingKycProps) => {
-  if (isEditingKYCStoreData && currentRoute === '/my-account/kyc') {
+  if (isEditingKYCStoreData && link !== '/my-account/kyc') {
     setIsDialogOpen(true);
     setDialogContent(
       <>
