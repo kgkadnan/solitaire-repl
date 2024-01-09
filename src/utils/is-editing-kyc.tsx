@@ -22,8 +22,7 @@ export const handleIsEditingKyc = ({
   handleRoute,
   label,
   link,
-  styles,
-  currentRoute
+  styles
 }: IHandleIsEditingKycProps) => {
   if (isEditingKYCStoreData && link !== '/my-account/kyc') {
     setIsDialogOpen(true);
