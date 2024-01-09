@@ -19,3 +19,8 @@
   display: flex;
   justify-content: left;
 }
+.disableInput {
+  border-bottom: 1px solid hsl(var(--solitaire-denary));
+  cursor: not-allowed;
+  opacity: 0.6;
+}

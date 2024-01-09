@@ -40,6 +40,7 @@ import {
 } from '@/features/api/otp-verification';
 import Link from 'next/link';
 import ConfirmScreen from '@/components/common/confirmation-screen';
+import { statusCode } from '@/constants/enums/status-code';
 
 // Define the Login component
 const Login = () => {
@@ -111,19 +112,16 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            console.log('res.customer.token', res);
             setPhoneToken(res.token);
           })
-          .catch(e => {
-            console.log('e', e);
+          .catch(_e => {
             setIsDialogOpen(true);
             setDialogContent(
               <ErrorModel
-                content={e.data.message}
+                content={_e.data.message}
                 handleClick={() => setIsDialogOpen(false)}
               />
             );
-            console.log(e);
           });
       }
     }
@@ -141,7 +139,7 @@ const Login = () => {
         password: password
       });
 
-      if (res?.error?.status === 401) {
+      if (res?.error?.status === statusCode.UNAUTHORIZED) {
         // Display error message if login fails
         setIsDialogOpen(true);
         setDialogContent(

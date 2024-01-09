@@ -23,7 +23,7 @@ export const validateScreen = async (
   country: string
 ) => {
   let validationErrors;
-  let kycForm;
+  let kycForm = {};
   if (formData) {
     switch (screenName) {
       case kycScreenIdentifierNames.PERSONAL_DETAILS:
@@ -164,7 +164,7 @@ export const validateScreen = async (
     }
     validationErrors = await validate(kycForm!);
   } else {
-    validationErrors = validationErrors || 'please all fields';
+    validationErrors = validationErrors || 'please fill all fields';
   }
 
   return validationErrors;
