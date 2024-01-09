@@ -187,15 +187,14 @@ const Stepper: React.FC<IStepperProps> = ({
                       : styles.defaultStep
                   }`}
                 >
-                 
-                    {index + 1}
-                  </div>
-
-                  <div className={styles.stepLabel}>{step?.label}</div>
+                  {index + 1}
                 </div>
-                {index < stepper.length - 1 && (
-                  <div className={styles.stepLine}></div>
-                )}
+
+                <div className={styles.stepLabel}>{step?.label}</div>
+              </div>
+              {index < stepper.length - 1 && (
+                <div className={styles.stepLine}></div>
+              )}
             </>
           ))}
         </div>
