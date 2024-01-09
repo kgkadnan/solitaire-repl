@@ -1,13 +1,13 @@
 import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 class BaseBankDetails {
-  @IsNotEmpty({ message: 'Bank name is required' })
+  @IsNotEmpty({ message: 'Bank Name is Mandatory' })
   bank_name: string;
 
-  @IsNotEmpty({ message: 'Account holder name is required' })
+  @IsNotEmpty({ message: 'Account Holder Name is Mandatory' })
   account_holder_name: string;
 
-  @IsNotEmpty({ message: 'Account number is required' })
+  @IsNotEmpty({ message: 'Account Number is Mandatory' })
   account_number: string;
 
   constructor(
@@ -22,11 +22,11 @@ class BaseBankDetails {
 }
 
 export class IndiaBankDetails extends BaseBankDetails {
-  @IsString({ message: 'Bank address must be a string' })
+  @IsString({ message: 'Please enter a valid Bank Address' })
   @IsOptional()
   bank_address: string;
 
-  @IsNotEmpty({ message: 'IFSC code is required' })
+  @IsNotEmpty({ message: 'IFSC Code is Mandatory' })
   ifsc_code: string;
 
   constructor(
@@ -42,7 +42,7 @@ export class IndiaBankDetails extends BaseBankDetails {
   }
 }
 export class UsaBankDetails extends BaseBankDetails {
-  @IsNotEmpty({ message: 'SWIFT code is required' })
+  @IsNotEmpty({ message: 'SWIFT Code is Mandatory' })
   swift_code: string;
 
   constructor(
