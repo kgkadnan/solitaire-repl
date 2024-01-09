@@ -88,12 +88,12 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
             >
               {renderImage(option === 'online' ? playForward : edit)}
               <div className="text-solitaireTertiary w-[70%]">
-                <h1>
+                <p className="text-[18px] font-medium">
                   {option === 'online'
                     ? 'Fill Form Digitally'
                     : 'Download and Upload Form'}
-                </h1>
-                <p className="font-thin pr-6">
+                </p>
+                <p className="font-thin pr-6 text-[14px]">
                   {option === 'online'
                     ? 'Fill the form on the app, for your convenience'
                     : 'Download and fill the form and upload the filled form offline.'}

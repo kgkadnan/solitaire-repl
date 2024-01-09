@@ -158,7 +158,7 @@ const KYC: React.FC = () => {
             Attachments
           </h3>
         </div>
-        <div className="pb-5 max-h-[800px] flex flex-wrap flex-col gap-[20px] content-between">
+        <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
           {data?.attachment &&
             (Array.isArray(data.attachment)
               ? // Render when `attachment` is an array
@@ -214,7 +214,7 @@ const KYC: React.FC = () => {
                   </div>
                 )))}
         </div>
-        <hr className="border-1 border-solitaireSenary w-[50%]" />
+        <hr className="w-[50%]" />
         <div className="flex py-6 items-center justify-center">
           <div className="pr-3 flex items-center">
             <Checkbox onClick={() => handleTermAndCondition()} />
@@ -223,7 +223,7 @@ const KYC: React.FC = () => {
             <p>I hereby agree to</p>
             <a
               href="https://kgk.live/terms-condition"
-              className="border-b-[1px] border-solid border-solitaireQuaternary"
+              className="border-b border-solitaireSenary ="
               target="_blank"
             >
               terms and conditions
