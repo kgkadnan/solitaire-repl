@@ -13,6 +13,7 @@ import { countryCodeSelectStyle } from '../styles/country-code-select-style';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import { updateFormState } from '@/features/kyc/kyc';
 import { computeCountryDropdownField } from '../helper/compute-country-dropdown';
+import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 
 // Define an interface for the parameters of renderField
 
@@ -234,34 +235,43 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                             ?.includes(element)
                       )[0]
                     }
-                    handleChange={(e: any) =>
-                      handleInputChange(
-                        `formState.online.sections[${screenName}][${formKey}]`,
-                        [
-                          ...(formState?.online?.sections?.[screenName]?.[
-                            formKey
-                          ]?.filter(
-                            (element: any) =>
-                              checkboxData
-                                ?.map(element => {
-                                  return element.name;
-                                })
-                                ?.includes(element)
-                          ) ?? []),
-                          (formState?.online?.sections?.[screenName]?.[
-                            formKey
-                          ]?.find((element: any) => {
-                            !checkboxData
-                              ?.map(checkboxElement => checkboxElement.name)
-                              .includes(element);
-                          }) ?? '') + e
-                        ],
-                        dispatch,
-                        screenName,
-                        formKey,
-                        formState
-                      )
-                    }
+                    handleChange={(e: any) => {
+                      e.trim().length <= 20
+                        ? handleInputChange(
+                            `formState.online.sections[${screenName}][${formKey}]`,
+                            [
+                              ...(formState?.online?.sections?.[screenName]?.[
+                                formKey
+                              ]?.filter(
+                                (element: any) =>
+                                  checkboxData
+                                    ?.map(element => {
+                                      return element.name;
+                                    })
+                                    ?.includes(element)
+                              ) ?? []),
+                              (formState?.online?.sections?.[screenName]?.[
+                                formKey
+                              ]?.find((element: any) => {
+                                !checkboxData
+                                  ?.map(checkboxElement => checkboxElement.name)
+                                  .includes(element);
+                              }) ?? '') + e
+                            ],
+                            dispatch,
+                            screenName,
+                            formKey,
+                            formState
+                          )
+                        : dispatch(
+                            updateFormState({
+                              name: `formErrorState.online.sections.${[
+                                screenName
+                              ]}.${[formKey]}`,
+                              value: RANGE_VALIDATION(name, 0, 20)
+                            })
+                          );
+                    }}
                     placeholder={item.placeholder}
                     checkboxLabel={item.name}
                     inputStyle="w-[150px]"
@@ -274,7 +284,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
         </div>
       );
 
-    case fieldType.RADIO_WITH_INPUT:
+    case fieldType.RADIO:
       return (
         <div className="text-[14px] text-solitaireTertiary" key={formKey}>
           <p className="mb-[0px]">{name}</p>
@@ -308,14 +318,23 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                     radioMetaData={items}
                     onChange={handleRadioChange}
                     handleInputChange={(e: any) => {
-                      handleInputChange(
-                        `formState.online.sections[${screenName}][${formKey}]`,
-                        e.target.value,
-                        dispatch,
-                        screenName,
-                        formKey,
-                        formState
-                      );
+                      e.target.value.trim().length <= 20
+                        ? handleInputChange(
+                            `formState.online.sections[${screenName}][${formKey}]`,
+                            e.target.value,
+                            dispatch,
+                            screenName,
+                            formKey,
+                            formState
+                          )
+                        : dispatch(
+                            updateFormState({
+                              name: `formErrorState.online.sections.${[
+                                screenName
+                              ]}.${[formKey]}`,
+                              value: RANGE_VALIDATION(name, 0, 20)
+                            })
+                          );
                     }}
                     inputValue={
                       !radioData

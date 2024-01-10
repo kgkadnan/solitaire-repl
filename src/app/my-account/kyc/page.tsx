@@ -31,13 +31,28 @@ import ErrorModel from '@/components/common/error-model';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { IAuthDataResponse } from '@/app/login/interface';
+
+interface IKYCData {
+  kyc: {
+    online: {
+      [key: string]: {
+        [key: string]: any;
+      };
+    };
+    country: string | null;
+    offline: {
+      [key: string]: any;
+    };
+  };
+}
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
   const [submitKYC] = useSubmitKYCMutation();
-  const { data: kycDetails } = useGetKycDetailQuery({});
+  const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
   const [userData, setUserData] = useState<any>({});
@@ -56,7 +71,10 @@ const KYC: React.FC = () => {
   const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
 
-  const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
+  const { data: authData }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
+    token,
+    { skip: !token }
+  );
 
   const [resetKyc] = useResetKycMutation();
 
@@ -321,8 +339,6 @@ const KYC: React.FC = () => {
   useEffect(() => {
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
-        console.log('kycDetails?.kyc?.country', kycDetails?.kyc?.country);
-
         if (
           kycDetails?.kyc &&
           (kycDetails?.kyc?.country !== null ||

@@ -26,6 +26,7 @@ import { ISearchResultsProps } from './result-interface';
 import { CustomModal } from '@/components/common/modal';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 // Define a type for the radio state
@@ -85,7 +86,8 @@ const SearchResults = ({
   const { saveSearchName } = commonState;
 
   const [addSavedSearch] = useAddSavedSearchMutation();
-  const { data: listingColumns } = useGetManageListingSequenceQuery({});
+  const { data: listingColumns } =
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   const checkboxData = {
     checkboxState,
