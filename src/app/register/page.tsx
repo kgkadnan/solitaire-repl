@@ -113,7 +113,7 @@ const Register = () => {
 
   useEffect(() => {
     if (userData) {
-      localStorage.setItem('user', JSON.stringify(data));
+      localStorage.setItem('user', JSON.stringify(userData));
     }
   }, [userData]);
 
