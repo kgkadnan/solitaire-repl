@@ -75,8 +75,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     isEditable = true
   } = data;
 
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck } = checkboxState;
+  const { checkboxSetState } = useCheckboxStateManagement();
   const { setIsCheck } = checkboxSetState;
   const dispatch = useAppDispatch();
   const [skip, setSkip] = useState(true);
