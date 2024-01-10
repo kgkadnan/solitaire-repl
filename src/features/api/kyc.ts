@@ -24,8 +24,19 @@ export const kycApi = createApi({
         method: 'GET'
       }),
       providesTags: ['kyc']
+    }),
+    resetKyc: builder.mutation({
+      query: () => ({
+        url: `/store/kyc/restart`,
+        method: 'PUT'
+      }),
+      transformResponse: (response, meta) => {
+        return { data: response, statusCode: meta?.response?.status };
+      },
+      invalidatesTags: ['kyc']
     })
   })
 });
 
-export const { useKycMutation, useGetKycDetailQuery } = kycApi;
+export const { useKycMutation, useGetKycDetailQuery, useResetKycMutation } =
+  kycApi;
