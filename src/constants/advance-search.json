@@ -99,9 +99,24 @@
   ],
 
   "make": ["3EX", "3EX+NON", "3VG+EX", "3G", "3F"],
-  "cut": ["EX", "VG", "G", "F"],
-  "polish": ["EX", "VG", "G", "F"],
-  "symmetry": ["EX", "VG", "G", "F"],
+  "cut": [
+    { "title": "Excellent", "short_name": "EX" },
+    { "title": "Very Good", "short_name": "VG" },
+    { "title": "Good", "short_name": "G" },
+    { "title": "Fair", "short_name": "F" }
+  ],
+  "polish": [
+    { "title": "Excellent", "short_name": "EX" },
+    { "title": "Very Good", "short_name": "VG" },
+    { "title": "Good", "short_name": "G" },
+    { "title": "Fair", "short_name": "F" }
+  ],
+  "symmetry": [
+    { "title": "Excellent", "short_name": "EX" },
+    { "title": "Very Good", "short_name": "VG" },
+    { "title": "Good", "short_name": "G" },
+    { "title": "Fair", "short_name": "F" }
+  ],
 
   "color_shade": [
     "None",
