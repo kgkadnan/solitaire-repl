@@ -21,7 +21,7 @@ export const handleCheckboxClick = ({
   data,
   setIsError
 }: IHandleCheckBoxClick) => {
-  let updatedIsCheck = [...isCheck!];
+  let updatedIsCheck = [...(isCheck ?? [])];
 
   if (updatedIsCheck.includes(id)) {
     updatedIsCheck = updatedIsCheck.filter(item => item !== id);
