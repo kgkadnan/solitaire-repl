@@ -161,7 +161,7 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'organisation_type',
             radioData: [
               {
@@ -241,7 +241,7 @@ export const KYCForm = [
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
@@ -516,7 +516,7 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'organisation_type',
             radioData: [
               {
@@ -596,7 +596,7 @@ export const KYCForm = [
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
@@ -626,7 +626,7 @@ export const KYCForm = [
             name: 'Registered under MSME Act',
             subTitle:
               'If yes then provide the name field & Registration Number',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_msme_registered',
             radioData: [
               {
@@ -1006,7 +1006,7 @@ export const KYCForm = [
           },
           {
             name: 'Organisation Type*',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'organisation_type',
             radioData: [
               {
@@ -1093,7 +1093,7 @@ export const KYCForm = [
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
@@ -1135,7 +1135,7 @@ export const KYCForm = [
           {
             name: 'Have you instituted an Anti-Money laundering policy in your company?*',
             subTitle: 'If “No” please specify',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_anti_money_laundering',
             radioData: [
               {

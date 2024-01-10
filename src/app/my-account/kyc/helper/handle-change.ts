@@ -30,28 +30,14 @@ export const handleInputChange = async (
   if (
     formState.country === supportedCountries.INDIA &&
     screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
-    key === 'organisation_type' &&
-    value === 'Individual'
+    ((key === 'organisation_type' && value === 'Individual') ||
+      formState.online.sections.company_details.organisation_type ===
+        'Individual')
   ) {
     dispatch(
       updateFormState({
-        name: `formState.online.sections.company_owner_details`,
-        value: {
-          owner_full_name:
-            formState?.online?.sections?.company_details?.company_name,
-
-          owner_email:
-            formState?.online?.sections?.company_details?.company_email,
-
-          owner_country_code:
-            formState?.online?.sections?.company_details?.company_country_code,
-
-          owner_phone:
-            formState?.online?.sections?.company_details?.company_phone_number,
-
-          owner_pan_number:
-            formState?.online?.sections?.company_details?.company_pan_number
-        }
+        name: `formState.online.sections.company_owner_details.owner_pan_number`,
+        value: formState?.online?.sections?.company_details?.company_pan_number
       })
     );
   }

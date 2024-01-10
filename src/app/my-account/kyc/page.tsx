@@ -298,8 +298,6 @@ const KYC: React.FC = () => {
   useEffect(() => {
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
-        console.log('kycDetails?.kyc?.country', kycDetails?.kyc?.country);
-
         if (
           kycDetails?.kyc &&
           (kycDetails?.kyc?.country !== null ||
