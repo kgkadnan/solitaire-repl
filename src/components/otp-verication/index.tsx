@@ -9,10 +9,11 @@ import KGKlogo from '@public/assets/icons/vector.svg';
 import { handleGoBack } from './helpers/handle-go-back';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
 import { handleResendOTP } from './helpers/handle-resend-otp';
+import { IToken } from '@/app/register/page';
 
 export interface IOtp {
-  mobileNumber: string;
-  countryCode: string;
+  otpMobileNumber: string;
+  otpCountryCode: string;
   codeAndNumber: string;
 }
 
@@ -25,7 +26,7 @@ interface IOTPVerification {
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   state: string;
   router: any;
-  phoneToken: string;
+  token: IToken;
   userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
@@ -33,6 +34,7 @@ interface IOTPVerification {
   role?: string;
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
   sendOtp: any;
+  setToken: React.Dispatch<React.SetStateAction<IToken>>;
 }
 
 const OTPVerification = ({
@@ -44,14 +46,15 @@ const OTPVerification = ({
   setCurrentState,
   state,
   router,
-  phoneToken,
+  token,
   userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
   verifyOTP,
   setResendTimer,
   sendOtp,
-  role = ''
+  role = '',
+  setToken
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   useEffect(() => {
@@ -109,7 +112,8 @@ const OTPVerification = ({
                 setResendTimer,
                 sendOtp,
                 setIsDialogOpen,
-                setDialogContent
+                setDialogContent,
+                setToken
               });
             }}
           />
@@ -141,12 +145,13 @@ const OTPVerification = ({
                 otpValues,
                 setCurrentState,
                 router,
-                phoneToken,
+                token,
                 userLoggedIn,
                 setIsDialogOpen,
                 setDialogContent,
                 verifyOTP,
-                role
+                role,
+                setToken
               })
             }
           />

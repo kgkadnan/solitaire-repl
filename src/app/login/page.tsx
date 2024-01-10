@@ -36,12 +36,25 @@ import { CustomInputDialog } from '@/components/common/input-dialog';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation
+  useVerifyOTPMutation,
+  useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
 import Link from 'next/link';
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { statusCode } from '@/constants/enums/status-code';
 import { IAuthDataResponse } from './interface';
+
+export interface IToken {
+  token: string;
+  phoneToken: string;
+  tempToken: string;
+}
+
+const initialTokenState = {
+  token: '',
+  phoneToken: '',
+  tempToken: ''
+};
 
 // Define the Login component
 const Login = () => {
@@ -49,10 +62,11 @@ const Login = () => {
   const [emailAndNumber, setEmailAndNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const [token, setToken] = useState('');
-  const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(token, {
-    skip: !token
-  });
+  const [token, setToken] = useState<any>('');
+  const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
+    token.token,
+    { skip: !token.token }
+  );
   const [verifyLogin] = useVerifyLoginMutation();
 
   const [isError, setIsError] = useState(false);
@@ -67,7 +81,6 @@ const Login = () => {
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
   const [currentState, setCurrentState] = useState('login');
-  const [phoneToken, setPhoneToken] = useState('');
 
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
@@ -88,6 +101,11 @@ const Login = () => {
     setOTPVerificationFormErrors
   } = otpVerificationSetState;
 
+  const { data: verifyNumber } = useVerifyPhoneQuery({
+    country_code: otpVerificationFormState.otpCountryCode,
+    phone_number: otpVerificationFormState.otpMobileNumber
+  });
+
   useEffect(() => {
     if (isTokenChecked) {
       authToken && router.push('/');
@@ -98,14 +116,14 @@ const Login = () => {
     if (data) {
       localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
-        userLoggedIn(token);
+        userLoggedIn(token.token);
         router.push('/');
       } else {
         setCurrentState('otpVerification');
         setOTPVerificationFormState(prev => ({
           ...prev,
-          mobileNumber: `${data.customer.phone}`,
-          countryCode: `${data.customer.country_code}`,
+          otpMobileNumber: `${data.customer.phone}`,
+          otpCountryCode: `${data.customer.country_code}`,
           codeAndNumber: `${data.customer.country_code} ${data.customer.phone}`
         }));
         sendOtp({
@@ -114,7 +132,10 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            setPhoneToken(res.token);
+            setToken((prev: any) => ({
+              ...prev,
+              phoneToken: res?.token || ''
+            }));
           })
           .catch(_e => {
             setIsDialogOpen(true);
@@ -159,7 +180,11 @@ const Login = () => {
           />
         );
       } else if (res.data.access_token) {
-        setToken(res.data.access_token);
+        setToken((prev: any) => ({
+          ...prev,
+          token: res.data.access_token,
+          tempToken: res.data.access_token
+        }));
       }
     } else if (!password.length && !emailAndNumber.length) {
       setPasswordErrorText(ENTER_PASSWORD);
@@ -202,11 +227,11 @@ const Login = () => {
                 })
               }
               styles={countryCodeSelectStyle(
-                otpVerificationFormErrors.countryCode
+                otpVerificationFormErrors.otpCountryCode
               )}
               value={{
-                label: otpVerificationFormState.countryCode,
-                value: otpVerificationFormState.countryCode
+                label: otpVerificationFormState.otpCountryCode,
+                value: otpVerificationFormState.otpCountryCode
               }}
             />
           </div>
@@ -219,8 +244,8 @@ const Login = () => {
               }
               type="number"
               name="mobileNumber"
-              value={otpVerificationFormState.mobileNumber}
-              errorText={otpVerificationFormErrors.mobileNumber}
+              value={otpVerificationFormState.otpMobileNumber}
+              errorText={otpVerificationFormErrors.otpMobileNumber}
             />
           </div>
         </div>
@@ -250,10 +275,15 @@ const Login = () => {
             }}
             handleClick={() => {
               handleEditMobileNumber({
+                verifyNumber,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsInputDialogOpen
+                setIsInputDialogOpen,
+                setIsDialogOpen,
+                setDialogContent,
+                sendOtp,
+                setToken
               });
             }}
           />
@@ -295,13 +325,15 @@ const Login = () => {
             setCurrentState={setCurrentState}
             state={'login'}
             router={router}
-            phoneToken={phoneToken}
+            token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
             verifyOTP={verifyOTP}
+            setToken={setToken}
             setResendTimer={setResendTimer}
+            role={'login'}
           />
         );
       case 'successfullyCreated':
