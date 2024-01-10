@@ -62,7 +62,7 @@ const Login = () => {
   const [emailAndNumber, setEmailAndNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
-  const [token, setToken] = useState<any>('');
+  const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token.token,
     { skip: !token.token }
