@@ -19,3 +19,12 @@ export const initialFormState: IRegister = {
   password: '',
   confirmPassword: ''
 };
+
+export interface IRegisterSetState {
+  setRegisterFormState: React.Dispatch<React.SetStateAction<IRegister>>;
+  setRegisterFormErrors: React.Dispatch<React.SetStateAction<IRegister>>;
+}
+export interface IRegisterState {
+  registerFormState: IRegister;
+  registerFormErrors: IRegister;
+}

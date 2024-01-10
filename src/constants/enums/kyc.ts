@@ -1,10 +1,8 @@
 export enum fieldType {
   FLOATING_INPUT = 'floatingInput',
   PHONE_NUMBER = 'phoneNumber',
-
   CHECKBOX = 'checkbox',
   RADIO = 'radio',
-  RADIO_WITH_INPUT = 'radioWithInput',
   ATTACHMENT = 'attachment'
 }
 
@@ -39,4 +37,11 @@ export enum kycScreenIdentifierNames {
 export enum fileLimit {
   MAX_FILES = 1,
   MIN_FILES = 1
+}
+
+export enum kycStatus {
+  INPROGRESS = 'inprogress',
+  PENDING = 'pending',
+  APPROVED = 'approved',
+  REJECTED = 'rejected'
 }

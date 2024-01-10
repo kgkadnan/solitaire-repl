@@ -49,6 +49,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
     yourSelection[activeTab] = {
       id: yourSelection[activeTab]?.id,
       saveSearchName: yourSelection[activeTab]?.saveSearchName,
+      searchId: data?.search_id,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab].queryParams
     };

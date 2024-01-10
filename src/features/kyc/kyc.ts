@@ -9,11 +9,9 @@ const initialState = {
     country: '',
     online: {
       sections: {
-        personal_details: {
-          country_code: '+91'
-        },
+        personal_details: {},
         company_details: {},
-        company_owner_Details: {},
+        company_owner_details: {},
         banking_details: {}
       }
     },
@@ -22,7 +20,14 @@ const initialState = {
   },
   formErrorState: {
     country: '',
-    online: { sections: {} },
+    online: {
+      sections: {
+        personal_details: {},
+        company_details: {},
+        company_owner_Details: {},
+        banking_details: {}
+      }
+    },
     offline: null,
     attachment: null
   }

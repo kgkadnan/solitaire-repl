@@ -105,6 +105,8 @@
   "app.topNav.no": "No",
   "app.topNav.yes": "Yes",
   "app.topNav.kycModelContent": "Do you want to terminate KYC process and explore website? (your progress will be saved)",
+  "app.topNav.logout": "Logout",
+  "app.topNav.notification": "Notification",
 
   "app.sideNav.dashboard": "Dashboard",
   "app.sideNav.newArrival": "New Arrival",
@@ -188,6 +190,7 @@
   "app.searchResult.countBar.totalAmount": "Total Amount",
   "app.searchResult.footer.addToCart": "Add to Cart",
   "app.searchResult.footer.bookAppointment": "Book Appointment",
+  "app.searchResult.footer.downloadAllResults": "Download All Results",
   "app.searchResult.footer.addToWhislist": "Add to Wishlist",
   "app.searchResult.footer.modifySearch": "Modify Search",
   "app.searchResult.footer.addSearch": "Add Search",
@@ -289,5 +292,18 @@
   "app.companyDetails.registerCompanyName": "Registered Company Name*",
   "app.personalDetail.firstName": "First Name*",
   "app.personalDetail.contactNumber": "Contact Number*",
-  "app.personalDetail.contactEmailId": "Contact Email-ID*"
+  "app.personalDetail.contactEmailId": "Contact Email-ID*",
+
+  "app.dna.giaCertificate": "GIA Certificate",
+  "app.dna.image": "Image",
+  "app.dna.diamondVideo": "Diamond Video (360)",
+  "app.dna.download": "Download",
+  "app.dna.basicDetails": "Basic Details",
+  "app.dna.measurements": "Measurements",
+  "app.dna.heart": "Heart",
+  "app.dna.arrow": "Arrow",
+  "app.dna.aset": "Aset",
+  "app.dna.ideal": "Ideal",
+  "app.dna.fluorescence": "Fluorescence",
+  "app.dna.inclusionDetails": "Inclusion Details"
 }

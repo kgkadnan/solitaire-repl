@@ -315,6 +315,7 @@ used for managing the state of a form field or input element in a React componen
                 modifySearchResult[searchResult.activeTab]?.saveSearchName ||
                 saveSearchName,
               isSavedSearch: isSaved,
+              searchId: data?.search_id,
               queryParams
             };
             if (modifySearchResult[searchResult.activeTab]) {
@@ -331,6 +332,7 @@ used for managing the state of a form field or input element in a React componen
             let setDataOnLocalStorage = {
               id: id,
               saveSearchName: saveSearchName,
+              searchId: data?.search_id,
               isSavedSearch: isSaved,
               queryParams
             };

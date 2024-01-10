@@ -25,6 +25,7 @@ import { currentIPApi } from './features/api/current-ip';
 import { forgotPasswordApi } from './features/api/forgot-password';
 import kycReducer from './features/kyc/kyc';
 import { kycApi } from './features/api/kyc';
+import { otpVerificationApi } from './features/api/otp-verification';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -47,7 +48,8 @@ const rootReducer = combineReducers({
   [registerApi.reducerPath]: registerApi.reducer,
   [myDiamondApi.reducerPath]: myDiamondApi.reducer,
   [kycApi.reducerPath]: kycApi.reducer,
-  [resetPasswordApi.reducerPath]: resetPasswordApi.reducer
+  [resetPasswordApi.reducerPath]: resetPasswordApi.reducer,
+  [otpVerificationApi.reducerPath]: otpVerificationApi.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -70,7 +72,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         resetPasswordApi.middleware,
         currentIPApi.middleware,
         forgotPasswordApi.middleware,
-        kycApi.middleware
+        kycApi.middleware,
+        otpVerificationApi.middleware
       ),
     preloadedState
   });

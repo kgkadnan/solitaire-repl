@@ -27,6 +27,7 @@ import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 import logger from 'logging/log-util';
+import { IProduct } from './result/result-interface';
 
 interface IMyProfileRoutes {
   id: number;
@@ -40,6 +41,13 @@ interface IMyProfileRoutes {
 interface IPathName {
   shortName: string;
   fullName: string;
+}
+
+interface IProductResponse {
+  count: any;
+  limit: number;
+  offset: number;
+  products: IProduct[];
 }
 
 function SearchLayout() {
@@ -135,7 +143,15 @@ function SearchLayout() {
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
-  let { data, isLoading, refetch } = useGetAllProductQuery(
+  let {
+    data = { count: 0, limit: 0, offset: 0, products: [] },
+    isLoading,
+    refetch
+  }: {
+    data?: IProductResponse;
+    isLoading: any;
+    refetch: any;
+  } = useGetAllProductQuery(
     {
       offset: 0,
       limit: LISTING_PAGE_DATA_LIMIT,

@@ -22,7 +22,7 @@ export const RenderOnlineForm: React.FC<RenderOnlineFormProps> = ({
           {screen.screen}
         </h3>
       </div>
-      <div className="max-h-[950px] flex flex-col flex-wrap">
+      <div className="max-h-[1200px] flex flex-col flex-wrap">
         {screen.fields.map((field: any) => (
           <div key={field.name} className={`mb-[20px] w-[40%] `}>
             <RenderField

@@ -411,7 +411,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   );
 };
 
-function OptimizedImageWithFallback({
+export function OptimizedImageWithFallback({
   src,
   alt,
   fallBackSrc = NoImageFound,
@@ -422,10 +422,6 @@ function OptimizedImageWithFallback({
   const [imageError, setImageError] = useState(false);
   return (
     <div
-      style={{
-        border: '1px solid black',
-        position: 'relative'
-      }}
       onClick={() => !imageError && openModal(src, alt)}
       className="w-[100%]"
     >

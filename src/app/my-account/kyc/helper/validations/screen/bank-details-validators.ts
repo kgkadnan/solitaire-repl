@@ -1,13 +1,21 @@
+import {
+  ACCOUNT_HOLDER_NAME_MANDATORY,
+  ACCOUNT_NUMBER_MANDATORY,
+  BANK_ADDRESS_INVALID,
+  BANK_NAME_MANDATORY,
+  IFSC_CODE_MANDATORY,
+  SWIFT_CODE_MANDATORY
+} from '@/constants/error-messages/kyc';
 import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
 
 class BaseBankDetails {
-  @IsNotEmpty({ message: 'Bank name is required' })
+  @IsNotEmpty({ message: BANK_NAME_MANDATORY })
   bank_name: string;
 
-  @IsNotEmpty({ message: 'Account holder name is required' })
+  @IsNotEmpty({ message: ACCOUNT_HOLDER_NAME_MANDATORY })
   account_holder_name: string;
 
-  @IsNotEmpty({ message: 'Account number is required' })
+  @IsNotEmpty({ message: ACCOUNT_NUMBER_MANDATORY })
   account_number: string;
 
   constructor(
@@ -22,11 +30,11 @@ class BaseBankDetails {
 }
 
 export class IndiaBankDetails extends BaseBankDetails {
-  @IsString({ message: 'Bank address must be a string' })
+  @IsString({ message: BANK_ADDRESS_INVALID })
   @IsOptional()
   bank_address: string;
 
-  @IsNotEmpty({ message: 'IFSC code is required' })
+  @IsNotEmpty({ message: IFSC_CODE_MANDATORY })
   ifsc_code: string;
 
   constructor(
@@ -41,8 +49,9 @@ export class IndiaBankDetails extends BaseBankDetails {
     this.ifsc_code = ifsc_code;
   }
 }
+
 export class UsaBankDetails extends BaseBankDetails {
-  @IsNotEmpty({ message: 'SWIFT code is required' })
+  @IsNotEmpty({ message: SWIFT_CODE_MANDATORY })
   swift_code: string;
 
   constructor(
@@ -55,6 +64,7 @@ export class UsaBankDetails extends BaseBankDetails {
     this.swift_code = swift_code;
   }
 }
+
 export class BelgiumBankDetails extends UsaBankDetails {
   constructor(
     bank_name: string,

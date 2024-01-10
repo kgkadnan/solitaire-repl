@@ -14,25 +14,80 @@ import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { useKycMutation } from '@/features/api/kyc';
+import {
+  useKycMutation,
+  useGetKycDetailQuery,
+  useResetKycMutation
+} from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
+import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
+import { statusCode } from '@/constants/enums/status-code';
+import logger from 'logging/log-util';
+import ErrorModel from '@/components/common/error-model';
+import KycStatus from './components/kyc-status';
+import { useGetAuthDataQuery } from '@/features/api/login';
+import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { IAuthDataResponse } from '@/app/login/interface';
+
+interface IKYCData {
+  kyc: {
+    online: {
+      [key: string]: {
+        [key: string]: any;
+      };
+    };
+    country: string | null;
+    offline: {
+      [key: string]: any;
+    };
+  };
+}
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
+  const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [userData, setUserData] = useState<any>({});
+  const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { dialogContent, isDialogOpen } = modalState;
+
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
+
+  const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
 
-  const handleNextStep = async (screenName: string, activeID: number) => {
+  const { data: authData }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
+    token,
+    { skip: !token }
+  );
+
+  const [resetKyc] = useResetKycMutation();
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('auth');
+
+    if (storedToken) setToken(JSON.parse(storedToken));
+    setUserData(authData);
+  }, [authData]);
+
+  const handleNextStep = async (
+    screenName: string,
+    activeID: number,
+    saveStep = true
+  ) => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
@@ -48,42 +103,54 @@ const KYC: React.FC = () => {
             name: `formErrorState.online.sections.${[screenName]}.${[
               error.property
             ]}`,
-            value: Object.values(error.constraints ?? {})[0]
+            value: Object.values(error.constraints ?? {})[0] || ''
           })
         );
       });
     }
-    !validationError.length &&
+    saveStep &&
+      !validationError.length &&
       (await kyc({
         data: {
           country: formState.country,
-          offline: formState.offline,
+          offline: false,
           data: {
             ...formState.online.sections[screenName]
           }
         },
         ID: active
       })
-        .then((_res: any) => (stepSuccessStatus = _res.data.statusCode))
-        .catch((_e: any) => {}));
+        .then((_res: any) => {
+          _res?.data?.statusCode
+            ? (stepSuccessStatus = _res.data.statusCode)
+            : setIsDialogOpen(true);
+          setDialogContent(
+            <ErrorModel
+              content={_res?.error?.data?.message}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          );
+        })
+        .catch((_e: any) => {
+          logger.error(`something went wrong while submitting kyc ${_e}`);
+        }));
 
     !validationError.length &&
-      stepSuccessStatus === 204 &&
+      stepSuccessStatus === statusCode.NO_CONTENT &&
       setActiveStep(prevStep => prevStep + 1);
+    let stepperFinalStatus = {
+      validationError: validationError,
+      statusCode: stepSuccessStatus
+    };
     stepSuccessStatus = 0;
+    return stepperFinalStatus;
   };
 
   const handleTermAndCondition = () => {};
 
   const handlePrevStep = () => {
-    if (activeStep <= 0) {
-      setCurrentState('choice_for_filling_kyc');
-    } else {
-      setActiveStep(prevStep => prevStep - 1);
-    }
+    setActiveStep(prevStep => prevStep - 1);
   };
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   let stepperData: IStepper[] = data?.online
     ? data.online.map((screen: any, index: number) => ({
@@ -114,7 +181,7 @@ const KYC: React.FC = () => {
             Attachments
           </h3>
         </div>
-        <div className="pb-5 max-h-[800px] flex flex-wrap flex-col gap-[20px] content-between">
+        <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
           {data?.attachment &&
             (Array.isArray(data.attachment)
               ? // Render when `attachment` is an array
@@ -170,7 +237,7 @@ const KYC: React.FC = () => {
                   </div>
                 )))}
         </div>
-        <hr className="border-1 border-solitaireSenary w-[50%]" />
+        <hr className="w-[50%]" />
         <div className="flex py-6 items-center justify-center">
           <div className="pr-3 flex items-center">
             <Checkbox onClick={() => handleTermAndCondition()} />
@@ -179,7 +246,7 @@ const KYC: React.FC = () => {
             <p>I hereby agree to</p>
             <a
               href="https://kgk.live/terms-condition"
-              className="border-b-[1px] border-solid border-solitaireQuaternary"
+              className="border-b border-solitaireSenary ="
               target="_blank"
             >
               terms and conditions
@@ -195,118 +262,185 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
-  // const resData = {
-  //   online: {
-  //     '1': {
-  //       email: 'bhushan@asd.com',
-  //       phone: '9999955555',
-  //       last_name: 'Vaiude',
-  //       first_name: 'Bhushan',
-  //       country_code: 'IND'
-  //     },
-  //     '2': {
-  //       city: 'Mumbai',
-  //       state: 'Maharashtra',
-  //       address: 'Nallasopara',
-  //       pincode: '401203',
-  //       msme_type: 'SME',
-  //       gst_number: 'GST401203',
-  //       company_name: 'Bhushan Pvt Ltd',
-  //       business_type: ['Wholesaler', 'Retailer'],
-  //       company_email: 'best@email.com',
-  //       industry_type: ['Diamonds', 'Other Gaming'],
-  //       organisation_type: ['Other Gaming'],
-  //       company_pan_number: 'CompnayPAN401203',
-  //       is_msme_registered: true,
-  //       subsidiary_company: 'KGK Infotech',
-  //       company_phone_number: '401203',
-  //       is_member_of_business: true,
-  //       year_of_establishment: '1967',
-  //       member_of_business_name: 'KGK Group',
-  //       msme_registration_number: '401203',
-  //       ultimate_beneficiary_name: 'Kanha',
-  //       business_registration_number: 'BUSREG401203'
-  //     },
-  //     '3': {
-  //       owner_email: 'asd@asd.com',
-  //       owner_phone: '9999955555',
-  //       owner_full_name: 'Bhushan Kishore Vaiude',
-  //       owner_pan_number: '9999955555',
-  //       owner_country_code: 'IND'
-  //     },
-  //     '4': {
-  //       bank_name: 'OM',
-  //       ifsc_code: '9999955555',
-  //       country_code: 'IND',
-  //       account_number: 'Om',
-  //       account_holder_name: 'asdom'
-  //     }
-  //   },
-  //   country: 'India',
-  //   offline: true
-  // };
+  const handleConfirmRestartKyc = () => {
+    resetKyc({})
+      .then((res: any) => {
+        if (res.data.statusCode === 204) {
+          setCurrentState('country_selection');
+          setSelectedCountry('');
+        }
+      })
+      .catch((e: any) => {
+        logger.error(`something went wrong while restart kyc ${e}`);
+      });
+  };
 
-  // useEffect(() => {
-  //   const sectionKeys: string[] =
-  //     resData.country === 'India'
-  //       ? [
-  //           kycScreenIdentifierNames.PERSONAL_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_DETAILS,
-  //           kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-  //           kycScreenIdentifierNames.BANKING_DETAILS
-  //         ]
-  //       : [kycScreenIdentifierNames.PERSONAL_DETAILS, kycScreenIdentifierNames.COMPANY_DETAILS, kycScreenIdentifierNames.BANKING_DETAILS];
+  const handleResetButton = () => {
+    setIsDialogOpen(true);
+    setDialogContent(
+      <>
+        <div className="text-center align-middle text-solitaireTertiary text-[20px]">
+          Are you sure?
+        </div>
+        <div className="text-center align-middle text-solitaireTertiary">
+          Do you want to restart KYC process
+        </div>
+        <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+          <CustomDisplayButton
+            displayButtonLabel="No"
+            handleClick={() => {
+              setIsDialogOpen(false);
+              setDialogContent('');
+            }}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[14px] font-medium'
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel="Yes"
+            handleClick={handleConfirmRestartKyc}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[14px] font-medium'
+            }}
+          />
+        </div>
+      </>
+    );
+  };
 
-  //   sectionKeys.forEach((key, index: number) => {
-  //     let test = (index + 1).toString();
-  //     dispatch(
-  //       updateFormState({
-  //         name: `formState.online.sections[${key}]`,
-  //         value: resData.online[test as keyof typeof resData.online]
-  //       })
-  //     );
-  //   });
+  useEffect(() => {
+    switch (userData?.customer?.kyc?.status) {
+      case kycStatus.INPROGRESS:
+        if (
+          kycDetails?.kyc &&
+          (kycDetails?.kyc?.country !== null ||
+            Object.keys(kycDetails?.kyc?.online).length >= 2) &&
+          Object.keys(kycDetails?.kyc?.offline).length === 0
+        ) {
+          const { online, country, offline } = kycDetails.kyc;
 
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'country',
-  //       value: resData.country
-  //     })
-  //   );
+          const onlineData = online || {};
 
-  //   // setActiveStep(Object.keys(resData.online).length - 1);
-  //   dispatch(
-  //     updateFormState({
-  //       name: 'offline',
-  //       value: resData.offline
-  //     })
-  //   );
-  //   setSelectedCountry(resData.country);
+          const filledScreens = Object.keys(onlineData)
+            .map(key => parseInt(key, 10))
+            .filter(num => !isNaN(num));
 
-  //   resData.offline
-  //     ? setSelectedKYCOption('online')
-  //     : setSelectedKYCOption('offline');
-  // }, []);
+          const lastFilledScreen = Math.max(...filledScreens);
 
-  // return (
-  //   <div>
-  //     {selectedMode === 'online' ? (
-  //       <Stepper
-  //         stepper={stepperData}
-  //         state={activeStep}
-  //         setState={setActiveStep}
-  //         prevStep={handlePrevStep}
-  //         nextStep={handleNextStep}
-  //       />
-  //     ) : (
-  //       renderManualForm()
-  //     )}
-  //   </div>
-  // );  // Configuration for footer buttons
+          if (lastFilledScreen > 0) {
+            setCurrentState('online');
+            setActiveStep(lastFilledScreen - 1);
+
+            offline
+              ? setSelectedKYCOption('online')
+              : setSelectedKYCOption('offline');
+
+            setSelectedCountry({
+              label: country,
+              value: country
+            });
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  <p className="text-[20px]">Are you sure?</p>
+                </div>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  Do you want to resume KYC process or restart it?
+                </div>
+                <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                  <CustomDisplayButton
+                    displayButtonLabel="Restart"
+                    handleClick={handleResetButton}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                  <CustomDisplayButton
+                    displayButtonLabel="Resume"
+                    handleClick={() => {
+                      setIsDialogOpen(false);
+                      setDialogContent('');
+                    }}
+                    displayButtonAllStyle={{
+                      displayButtonStyle:
+                        'bg-solitaireQuaternary w-[150px] h-[35px]',
+                      displayLabelStyle:
+                        'text-solitaireTertiary text-[14px] font-medium'
+                    }}
+                  />
+                </div>
+              </>
+            );
+          }
+        }
+        let sectionKeys: string[] =
+          kycDetails?.kyc?.country === 'India'
+            ? [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ]
+            : [
+                kycScreenIdentifierNames.PERSONAL_DETAILS,
+                kycScreenIdentifierNames.COMPANY_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS
+              ];
+
+        sectionKeys.forEach((key, index: number) => {
+          let screenIndex = (index + 1).toString();
+
+          let onlineValue = kycDetails?.kyc?.online;
+
+          dispatch(
+            updateFormState({
+              name: `formState.online.sections[${key}]`,
+              value: onlineValue?.[screenIndex as keyof typeof onlineValue]
+            })
+          );
+        });
+
+        dispatch(
+          updateFormState({
+            name: 'formState.country',
+            value: kycDetails?.kyc?.country
+          })
+        );
+
+        dispatch(
+          updateFormState({
+            name: 'formState.offline',
+            value: kycDetails?.kyc?.offline
+          })
+        );
+
+        break;
+
+      case kycStatus.PENDING:
+        setRenderComponent(kycStatus.PENDING);
+        break;
+
+      case kycStatus.APPROVED:
+        setRenderComponent(kycStatus.APPROVED);
+        break;
+      case kycStatus.REJECTED:
+        setRenderComponent(kycStatus.REJECTED);
+        break;
+    }
+  }, [kycDetails, userData]);
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.display === selectedCountry.value;
+      return country.country.backend === selectedCountry.value;
     });
     setData(kycData[0]);
   }, [currentState]);
@@ -317,15 +451,25 @@ const KYC: React.FC = () => {
 
   switch (currentState) {
     case 'country_selection':
-      return (
-        <RenderCountrySelection
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-          handleSaveAndNext={handleSaveAndNext}
-          errorSetState={errorSetState}
-          errorState={errorState}
-        />
-      );
+      switch (renderComponent) {
+        case kycStatus.PENDING:
+          return <KycStatus />;
+        case kycStatus.APPROVED:
+          return 'Welcome to APPROVED KYC page';
+        case kycStatus.REJECTED:
+          return 'Welcome to REJECTED KYC page';
+        default:
+          return (
+            <RenderCountrySelection
+              selectedCountry={selectedCountry}
+              setSelectedCountry={setSelectedCountry}
+              handleSaveAndNext={handleSaveAndNext}
+              errorSetState={errorSetState}
+              errorState={errorState}
+            />
+          );
+      }
+
     case 'choice_for_filling_kyc':
       // Render the component for 'choice_for_filling_kyc'
       return (
@@ -338,7 +482,6 @@ const KYC: React.FC = () => {
         />
       );
     case 'other':
-      break;
     case 'offline':
       return (
         <RenderOffline
@@ -361,6 +504,10 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
+          formErrorState={formErrorState}
+          setIsDialogOpen={setIsDialogOpen}
+          isDialogOpen={isDialogOpen}
+          dialogContent={dialogContent}
         />
       );
 

@@ -7,6 +7,7 @@ import {
 } from './enums/kyc';
 
 export const KYCForm = [
+  //Belgium
   {
     country: {
       display: 'Belgium',
@@ -21,22 +22,27 @@ export const KYCForm = [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
-            fromformKey: 'first_name'
+            formKey: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            handleChange: () => {},
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },
@@ -51,35 +57,30 @@ export const KYCForm = [
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'address'
           },
           {
             name: 'Company Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'phone',
-            handleChange: () => {},
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_email'
           },
           {
@@ -89,42 +90,36 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Manufacturer',
-                handleChange: () => {},
-                data: '',
+                data: 'Manufacturer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Retailer',
-                handleChange: () => {},
-                data: '',
+                data: 'Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Wholesaler',
-                handleChange: () => {},
-                data: '',
+                data: 'Wholesaler',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Corporate Retailer',
-                handleChange: () => {},
-                data: '',
+                data: 'Corporate Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -136,35 +131,30 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Diamonds',
-                handleChange: () => {},
-                data: '',
+                data: 'Diamonds',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Colour Stones',
-                handleChange: () => {},
-                data: '',
+                data: 'Colour Stones',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Jewellery',
-                handleChange: () => {},
-                data: '',
+                data: 'Jewellery',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -177,53 +167,46 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Individual',
+                name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Partnership Firm',
+                name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Private Ltd.',
+                name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'LLP',
+                name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Public Ltd.',
+                name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'OPC',
+                name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: '',
-                onChange: () => {},
-                name: '',
+                name: 'organisationType',
+                value: 'organisationType_Other',
                 isInput: true,
-                inputName: '',
+                inputName: 'Other',
                 inputValue: '',
                 handleInputChange: '',
                 placeholder: 'If other please specify',
@@ -235,58 +218,51 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'business_registration_number'
           },
           {
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'vat_number'
           },
           {
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'fax_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: true,
+                name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: false,
+                name: 'isMemberOfBusiness'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                handleChange: () => {},
                 formKey: 'member_of_business_name'
               }
             ]
@@ -296,14 +272,12 @@ export const KYCForm = [
             name: 'Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'ultimate_beneficiary_name'
           },
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'ownership_percentage'
           }
         ]
@@ -312,11 +286,11 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'bank_name'
           },
           {
@@ -324,19 +298,16 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'swift_code'
           }
         ]
@@ -372,6 +343,8 @@ export const KYCForm = [
       }
     ]
   },
+
+  // India
   {
     country: {
       display: 'India',
@@ -398,13 +371,15 @@ export const KYCForm = [
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
           },
           {
             name: 'Contact Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
-            formKey: 'email'
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },
@@ -419,56 +394,48 @@ export const KYCForm = [
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'address'
           },
           {
             name: 'City*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'city'
           },
           {
             name: 'State*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'state'
           },
           {
             name: 'Pin-Code*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'number',
-            handleChange: () => {},
             formKey: 'pincode'
           },
           {
             name: 'Company Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'text',
-            handleChange: () => {},
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_email'
           },
           {
@@ -478,42 +445,36 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Manufacturer',
-                handleChange: () => {},
                 data: 'Manufacturer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Retailer',
-                handleChange: () => {},
                 data: 'Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Wholesaler',
-                handleChange: () => {},
                 data: 'Wholesaler',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Corporate Retailer',
-                handleChange: () => {},
                 data: 'Corporate Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
                 data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -525,35 +486,30 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Diamonds',
-                handleChange: () => {},
                 data: 'Diamonds',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Colour Stones',
-                handleChange: () => {},
                 data: 'Colour Stones',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Jewellery',
-                handleChange: () => {},
                 data: 'Jewellery',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
                 data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -567,54 +523,47 @@ export const KYCForm = [
                 id: 1,
                 label: 'Individual',
                 value: 'Individual',
-                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
                 value: 'Partnership Firm',
-                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: 'Private Ltd',
-                handleChange: () => {},
+                value: 'Private Ltd.',
                 name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
                 value: 'LLP',
-                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: 'Public Ltd',
-                handleChange: () => {},
+                value: 'Public Ltd.',
                 name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
                 value: 'OPC',
-                handleChange: () => {},
                 name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: 'Other',
-                handleChange: () => {},
                 name: 'organisationType',
+                value: 'organisationType_Other',
                 isInput: true,
                 inputName: 'Other',
-                // inputValue: '',
-                // handleInputChange: '',
+                inputValue: '',
+                handleInputChange: '',
                 placeholder: 'If other please specify',
                 inputStyle: 'w-[150px]'
               }
@@ -624,58 +573,51 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'business_registration_number'
           },
           {
             name: 'Pan-Card Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_pan_number'
           },
           {
             name: 'GST Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'gst_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'subsidiary_company'
           },
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
                 label: 'Yes',
-                value: 'Yes',
-                handleChange: () => {},
+                value: true,
                 name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: 'No',
-                handleChange: () => {},
+                value: false,
                 name: 'isMemberOfBusiness'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                handleChange: () => {},
                 formKey: 'member_of_business_name'
               }
             ]
@@ -684,25 +626,23 @@ export const KYCForm = [
             name: 'Registered under MSME Act',
             subTitle:
               'If yes then provide the name field & Registration Number',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_msme_registered',
             radioData: [
               {
                 id: 1,
                 label: 'Yes',
-                value: 'Yes',
-                handleChange: () => {},
+                value: true,
                 name: 'isMsmeRegistered'
               },
               {
                 id: 1,
                 label: 'No',
-                value: 'No',
-                handleChange: () => {},
+                value: false,
                 name: 'isMsmeRegistered'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'MSME type If you select “Yes”',
@@ -741,7 +681,6 @@ export const KYCForm = [
             name: 'Name',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'owner_full_name'
           },
           {
@@ -749,7 +688,6 @@ export const KYCForm = [
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
             isRequired: true,
-            handleChange: () => {},
             formKey: ['owner_country_code', 'owner_phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
@@ -757,7 +695,6 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             inputType: 'email',
             isRequired: true,
-            handleChange: () => {},
             formKey: 'owner_email'
           },
           {
@@ -765,7 +702,6 @@ export const KYCForm = [
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             isRequired: true,
-            handleChange: () => {},
             formKey: 'owner_pan_number'
           }
         ]
@@ -780,7 +716,6 @@ export const KYCForm = [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'bank_name'
           },
           {
@@ -788,25 +723,21 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'account_holder_name'
           },
           {
             name: 'Account Number*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'account_number'
           },
           {
             name: 'IFSC Code*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'ifsc_code'
           },
           {
             name: 'Bank Address',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'bank_address'
           }
         ]
@@ -920,6 +851,8 @@ export const KYCForm = [
       ]
     }
   },
+
+  // USA
   {
     country: {
       display: 'USA',
@@ -934,22 +867,27 @@ export const KYCForm = [
           {
             name: 'First Name*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'first_name'
           },
           {
             name: 'Last Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'last_name'
           },
           {
             name: 'Contact Number*',
             type: fieldType.PHONE_NUMBER,
             inputType: 'number',
-            handleChange: () => {},
-            formKey: ['country_code', 'phone'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            formKey: ['country_code', 'phone'], //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
+            isEditable: false
+          },
+          {
+            name: 'Contact Email-ID*',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'email',
+            formKey: 'email',
+            isEditable: false
           }
         ]
       },
@@ -964,35 +902,30 @@ export const KYCForm = [
             name: 'Registered Company Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_name'
           },
           {
             name: 'Year of Establishment*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'year_of_establishment'
           },
           {
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'address'
           },
           {
             name: 'Company Number*',
-            type: fieldType.FLOATING_INPUT,
+            type: fieldType.PHONE_NUMBER,
             inputType: 'text',
-            handleChange: () => {},
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
             name: 'Company Email-ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'company_email'
           },
           {
@@ -1002,42 +935,36 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Manufacturer',
-                handleChange: () => {},
-                data: '',
+                data: 'Manufacturer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Retailer',
-                handleChange: () => {},
-                data: '',
+                data: 'Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Wholesaler',
-                handleChange: () => {},
-                data: '',
+                data: 'Wholesaler',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Corporate Retailer',
-                handleChange: () => {},
-                data: '',
+                data: 'Corporate Retailer',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -1049,35 +976,30 @@ export const KYCForm = [
             checkboxData: [
               {
                 name: 'Diamonds',
-                handleChange: () => {},
-                data: '',
+                data: 'Diamonds',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Colour Stones',
-                handleChange: () => {},
-                data: '',
+                data: 'Colour Stones',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Jewellery',
-                handleChange: () => {},
-                data: '',
+                data: 'Jewellery',
                 row: [],
                 isChecked: []
               },
               {
                 name: 'Other',
-                handleChange: () => {},
-                data: '',
+                data: 'Other',
                 row: [],
                 isChecked: [],
                 isInput: true,
                 inputName: '',
                 inputValue: '',
-                handleInputChange: () => {},
                 placeholder: 'If other please specify'
               }
             ]
@@ -1090,53 +1012,46 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Individual',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Individual',
+                name: 'organisationType'
               },
               {
                 id: 2,
                 label: 'Partnership Firm',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Partnership Firm',
+                name: 'organisationType'
               },
               {
                 id: 3,
                 label: 'Private Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Private Ltd.',
+                name: 'organisationType'
               },
               {
                 id: 4,
                 label: 'LLP',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'LLP',
+                name: 'organisationType'
               },
               {
                 id: 5,
                 label: 'Public Ltd.',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'Public Ltd.',
+                name: 'organisationType'
               },
               {
                 id: 6,
                 label: 'OPC',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: 'OPC',
+                name: 'organisationType'
               },
               {
                 id: 7,
                 label: 'Other',
-                value: '',
-                onChange: () => {},
-                name: '',
+                name: 'organisationType',
+                value: 'organisationType_Other',
                 isInput: true,
-                inputName: '',
+                inputName: 'Other',
                 inputValue: '',
                 handleInputChange: '',
                 placeholder: 'If other please specify',
@@ -1148,65 +1063,58 @@ export const KYCForm = [
             name: 'Business Registration Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'business_registration_number'
           },
           {
             name: 'VAT Number*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'vat_number'
           },
           {
             name: 'Federal Tax ID*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'federal_tax_id'
           },
           {
             name: 'Fax Number',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'fax_number'
           },
           {
             name: 'Subsidiary/Affiliated Company',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'subsidiary_company'
           },
+
           {
             name: 'Member of any Business Organisation / Council*',
             subTitle: 'If yes then provide the name',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_member_of_business',
             radioData: [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: true,
+                name: 'isMemberOfBusiness'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: false,
+                name: 'isMemberOfBusiness'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Name If you select “Yes”',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                handleChange: () => {},
                 formKey: 'member_of_business_name'
               }
             ]
@@ -1216,44 +1124,39 @@ export const KYCForm = [
             name: 'Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'ultimate_beneficiary_name'
           },
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'ownership_percentage'
           },
           {
             name: 'Have you instituted an Anti-Money laundering policy in your company?*',
             subTitle: 'If “No” please specify',
-            type: fieldType.RADIO_WITH_INPUT,
+            type: fieldType.RADIO,
             formKey: 'is_anti_money_laundering',
             radioData: [
               {
                 id: 1,
                 label: 'Yes',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: true,
+                name: 'antiMoneyLaunderingPolicyName'
               },
               {
                 id: 1,
                 label: 'No',
-                value: '',
-                onChange: () => {},
-                name: ''
+                value: false,
+                name: 'antiMoneyLaunderingPolicyName'
               }
             ],
-            dynamicCondition: 'Yes',
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Specify here',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                handleChange: () => {},
                 formKey: 'anti_money_laundering_policy_name'
               }
             ]
@@ -1264,12 +1167,11 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
-        screenName: 'banking_details',
+        screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {
             name: 'Bank Name*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'bank_name'
           },
           {
@@ -1277,19 +1179,16 @@ export const KYCForm = [
             name: 'Account Holder Name*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            handleChange: () => {},
             formKey: 'account_holder_name'
           },
           {
             name: 'Account Number/IBN Number*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'account_number'
           },
           {
             name: 'Swift Code*',
             type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
             formKey: 'swift_code'
           }
         ]
@@ -1325,24 +1224,14 @@ export const KYCForm = [
       }
     ]
   },
+
+  //Other
   {
     country: {
       display: 'Other',
       backend: supportedCountries.OTHER
     },
-    online: [
-      {
-        screen: 'Personal Details',
-        fields: [
-          {
-            name: 'First Name',
-            type: fieldType.FLOATING_INPUT,
-            handleChange: () => {},
-            formKey: 'first_name'
-          }
-        ]
-      }
-    ],
+
     offline: {
       download: 'link_to_kyc_form.pdf'
     },
