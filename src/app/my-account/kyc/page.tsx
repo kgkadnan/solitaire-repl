@@ -424,7 +424,7 @@ const KYC: React.FC = () => {
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.display === selectedCountry.value;
+      return country.country.backend === selectedCountry.value;
     });
     setData(kycData[0]);
   }, [currentState]);
