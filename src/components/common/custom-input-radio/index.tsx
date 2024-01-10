@@ -20,7 +20,6 @@ export const RadioButton: React.FC<any> = ({
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleRadioChange = () => {
-    console.log('called');
     onChange(value);
     if (inputRef.current) {
       inputRef.current.focus();

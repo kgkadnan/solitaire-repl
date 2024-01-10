@@ -74,8 +74,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
     isEditable = true
   } = data;
 
-  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
-  const { isCheck } = checkboxState;
+  const { checkboxSetState } = useCheckboxStateManagement();
   const { setIsCheck } = checkboxSetState;
   const dispatch = useAppDispatch();
   const [skip, setSkip] = useState(true);
@@ -96,10 +95,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     }
   }, [skip, getCountryCode]);
-  console.log(
-    'oooooooooooooo',
-    formState.online.sections.company_details?.organisation_type
-  );
+
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
@@ -292,12 +288,6 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           >
             {radioData.map((items: IRadioData) => {
               const handleRadioChange = (value: string) => {
-                console.log(
-                  formKey,
-                  value,
-                  'wwwwwwwwwwwwwwwwww',
-                  formState?.online?.sections?.[screenName]?.[formKey]
-                );
                 handleInputChange(
                   `formState.online.sections[${screenName}][${formKey}]`,
                   value,
@@ -320,13 +310,16 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                         formKey
                       )
                     }
-                    inputValue={radioData
-                      ?.map(element => {
-                        return element.label;
-                      })
-                      ?.includes(
-                        formState?.online?.sections?.[screenName]?.[formKey]
-                      ) &&  formState?.online?.sections?.[screenName]?.[formKey]}
+                    inputValue={
+                      radioData
+                        ?.map(element => {
+                          return element.label;
+                        })
+                        ?.includes(
+                          formState?.online?.sections?.[screenName]?.[formKey]
+                        ) &&
+                      formState?.online?.sections?.[screenName]?.[formKey]
+                    }
                     key={items?.id}
                   />
                 </div>
