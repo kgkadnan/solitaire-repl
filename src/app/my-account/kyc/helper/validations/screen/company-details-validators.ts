@@ -1,4 +1,35 @@
 import {
+  COMPANY_NAME_MANDATORY,
+  YEAR_OF_ESTABLISHMENT_MANDATORY,
+  ADDRESS_MANDATORY,
+  BUSINESS_TYPE_MANDATORY,
+  COMPANY_EMAIL_MANDATORY,
+  COMPANY_PHONE_NUMBER_MANDATORY,
+  INDUSTRY_TYPE_MANDATORY,
+  BUSINESS_REGISTRATION_NUMBER_MANDATORY,
+  MEMBER_CHECK_MANDATORY,
+  ORGANISATION_TYPE_MANDATORY,
+  ULTIMATE_BENEFICIARY_NAME_MANDATORY,
+  MEMBER_NAME_MANDATORY,
+  CITY_MANDATORY,
+  COMPANY_PAN_NUMBER_MANDATORY,
+  GST_NUMBER_MANDATORY,
+  MSME_REGISTRATION_NUMBER_MANDATORY,
+  MSME_TYPE_MANDATORY,
+  PINCODE_MANDATORY,
+  STATE_MANDATORY,
+  VAT_NUMBER_MANDATORY,
+  ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY,
+  FEDERAL_TAX_ID_MANDATORY,
+  ANTI_MONEY_LAUNDERING_POLICY_NAME_INVALID,
+  ANTI_MONEY_LAUNDERING_INVALID,
+  MSME_REGISTERED_INVALID,
+  MSME_REGISTRATION_NUMBER_INVALID,
+  MSME_TYPE_INVALID,
+  MEMBER_BUSINESS_INVALID,
+  MEMBER_NAME_INVALID
+} from '@/constants/error-messages/kyc';
+import {
   IsString,
   IsNotEmpty,
   ArrayNotEmpty,
@@ -8,48 +39,47 @@ import {
 } from 'class-validator';
 
 export class KycPostCompanyDetailsValidation {
-  @IsNotEmpty({ message: 'Company name is Mandatory' })
+  @IsNotEmpty({ message: COMPANY_NAME_MANDATORY })
   company_name: string;
 
-  @IsNotEmpty({ message: 'Year of Establishment is Mandatory' })
+  @IsNotEmpty({ message: YEAR_OF_ESTABLISHMENT_MANDATORY })
   year_of_establishment: string;
 
-  @IsNotEmpty({ message: 'Address is Mandatory' })
+  @IsNotEmpty({ message: ADDRESS_MANDATORY })
   address: string;
 
-  @IsNotEmpty({ message: 'Company Phone Number is Mandatory' })
+  @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
   company_phone_number: string;
 
-  @IsNotEmpty({ message: 'Company Email is Mandatory' })
+  @IsNotEmpty({ message: COMPANY_EMAIL_MANDATORY })
   company_email: string;
 
-  @ArrayNotEmpty({ message: 'Business Type is Mandatory' })
+  @ArrayNotEmpty({ message: BUSINESS_TYPE_MANDATORY })
   business_type: string[];
 
-  @ArrayNotEmpty({ message: 'Industry Type is Mandatory' })
+  @ArrayNotEmpty({ message: INDUSTRY_TYPE_MANDATORY })
   industry_type: string[];
 
-  @IsNotEmpty({ message: 'Organisation Type is Mandatory' })
+  @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   organisation_type: string;
 
-  @IsNotEmpty({ message: 'Business Registration Number is Mandatory' })
+  @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
   business_registration_number: string;
 
   @IsBoolean({
-    message:
-      'Please select valid Member of any Business Organisation / Council'
+    message: MEMBER_BUSINESS_INVALID
   })
   @IsNotEmpty({
-    message: 'Member of any Business Organisation / Council check is Mandatory'
+    message: MEMBER_CHECK_MANDATORY
   })
   is_member_of_business: boolean = false;
 
   @ValidateIf((object, value) => object.is_member_of_business === value)
-  @IsNotEmpty({ message: 'Member of business name must be provided' })
-  @IsString({ message: 'Member of Business Name must be a string' })
+  @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
+  @IsString({ message: MEMBER_NAME_INVALID })
   member_of_business_name: string;
 
-  @IsNotEmpty({ message: 'Ultimate Beneficiary Name is Mandatory' })
+  @IsNotEmpty({ message: ULTIMATE_BENEFICIARY_NAME_MANDATORY })
   ultimate_beneficiary_name: string;
 
   constructor(
@@ -82,39 +112,38 @@ export class KycPostCompanyDetailsValidation {
 }
 
 export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
-  @IsNotEmpty({ message: 'City is Mandatory' })
+  @IsNotEmpty({ message: CITY_MANDATORY })
   city: string;
 
-  @IsNotEmpty({ message: 'State is Mandatory' })
+  @IsNotEmpty({ message: STATE_MANDATORY })
   state: string;
 
-  @IsNotEmpty({ message: 'Pincode is Mandatory' })
+  @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
-  @IsNotEmpty({ message: 'Company PAN number is Mandatory' })
+  @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
-  @IsNotEmpty({ message: 'GST number is Mandatory' })
+  @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
   gst_number: string;
 
-  @IsBoolean({ message: 'Registered under MSME Act must be a boolean' })
+  @IsBoolean({ message: MSME_REGISTERED_INVALID })
   @IsOptional()
   is_msme_registered: boolean = false;
 
   @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
-    message: 'MSME type must be a non-empty when MSME is registered'
+    message: MSME_TYPE_INVALID
   })
-  @IsNotEmpty({ message: 'MSME type is Mandatory when MSME is registered' })
+  @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
   @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
-    message:
-      'MSME registration number must be a non-empty when MSME is registered'
+    message: MSME_REGISTRATION_NUMBER_INVALID
   })
   @IsNotEmpty({
-    message: 'MSME registration number is Mandatory when MSME is registered'
+    message: MSME_REGISTRATION_NUMBER_MANDATORY
   })
   msme_registration_number: string;
 
@@ -168,7 +197,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
 }
 
 export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
-  @IsNotEmpty({ message: 'VAT number is Mandatory' })
+  @IsNotEmpty({ message: VAT_NUMBER_MANDATORY })
   vat_number: string;
 
   @IsOptional()
@@ -217,21 +246,19 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
 }
 
 export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDetailsValidation {
-  @IsNotEmpty({ message: 'Federal tax ID is Mandatory' })
+  @IsNotEmpty({ message: FEDERAL_TAX_ID_MANDATORY })
   federal_tax_id: string;
 
-  @IsBoolean({ message: 'Registered under MSME Act must be a boolean' })
+  @IsBoolean({ message: ANTI_MONEY_LAUNDERING_INVALID })
   @IsOptional()
   is_anti_money_laundering: boolean = false;
 
   @ValidateIf(object => object?.is_anti_money_laundering === true)
   @IsString({
-    message:
-      'Anti-money laundering policy name must be a non-empty string when registered under MSME Act'
+    message: ANTI_MONEY_LAUNDERING_POLICY_NAME_INVALID
   })
   @IsNotEmpty({
-    message:
-      'Anti-money laundering policy name is Mandatory when registered under MSME Act'
+    message: ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY
   })
   anti_money_laundering_policy_name: string;
 
