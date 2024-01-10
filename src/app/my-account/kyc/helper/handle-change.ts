@@ -1,7 +1,10 @@
 import { updateFormState } from '@/features/kyc/kyc';
 import { validateKYCField } from './validations/field';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
-import { kycScreenIdentifierNames, supportedCountries } from '@/constants/enums/kyc';
+import {
+  kycScreenIdentifierNames,
+  supportedCountries
+} from '@/constants/enums/kyc';
 
 export const handleInputChange = async (
   path: string,
@@ -25,7 +28,7 @@ export const handleInputChange = async (
   dispatch(updateFormState({ name: path, value: value }));
   dispatch(isEditingKYC(true));
   if (
-    formState.country===supportedCountries.INDIA &&
+    formState.country === supportedCountries.INDIA &&
     screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
     key === 'organisation_type' &&
     value === 'Individual'
@@ -50,7 +53,6 @@ export const handleInputChange = async (
             formState?.online?.sections?.company_details?.company_pan_number
         }
       })
-     
     );
   }
 };
