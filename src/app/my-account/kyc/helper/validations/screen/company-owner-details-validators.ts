@@ -1,19 +1,26 @@
+import {
+  OWNER_COUNTRY_CODE_MANDATORY,
+  OWNER_EMAIL_MANDATORY,
+  OWNER_FULL_NAME_MANDATORY,
+  OWNER_PAN_NUMBER_MANDATORY,
+  OWNER_PHONE_MANDATORY
+} from '@/constants/error-messages/kyc';
 import { IsNotEmpty } from 'class-validator';
 
 export class IndiaKycPostCompanyOwnerInformation {
-  @IsNotEmpty()
+  @IsNotEmpty({ message: OWNER_FULL_NAME_MANDATORY })
   owner_full_name: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: OWNER_EMAIL_MANDATORY })
   owner_email: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: OWNER_COUNTRY_CODE_MANDATORY })
   owner_country_code: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: OWNER_PHONE_MANDATORY })
   owner_phone: string;
 
-  @IsNotEmpty()
+  @IsNotEmpty({ message: OWNER_PAN_NUMBER_MANDATORY })
   owner_pan_number: string;
 
   constructor(

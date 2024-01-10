@@ -1,19 +1,26 @@
+import {
+  COUNTRY_CODE_MANDATORY,
+  EMAIL_MANDATORY,
+  FIRST_NAME_MANDATORY,
+  LAST_NAME_MANDATORY,
+  PHONE_NUMBER_MANDATORY
+} from '@/constants/error-messages/kyc';
 import { IsNotEmpty } from 'class-validator';
 
 export class PersonalDetails {
-  @IsNotEmpty({ message: 'first name required' })
+  @IsNotEmpty({ message: FIRST_NAME_MANDATORY })
   first_name: string;
 
-  @IsNotEmpty({ message: 'last name required' })
+  @IsNotEmpty({ message: LAST_NAME_MANDATORY })
   last_name: string;
 
-  @IsNotEmpty({ message: 'email required' })
+  @IsNotEmpty({ message: EMAIL_MANDATORY })
   email: string;
 
-  @IsNotEmpty({ message: 'country code required' })
+  @IsNotEmpty({ message: COUNTRY_CODE_MANDATORY })
   country_code: string;
 
-  @IsNotEmpty({ message: 'phone number required' })
+  @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
   constructor(
