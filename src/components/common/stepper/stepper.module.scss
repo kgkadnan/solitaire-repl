@@ -1,0 +1,108 @@
+/* styles/Stepper.module.css */
+.stepperContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding-bottom: 5px;
+}
+
+.circularStepsContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 700px;
+  cursor: pointer;
+}
+
+.circularSteps {
+  display: flex;
+  position: relative;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.step {
+  width: 35px;
+  height: 35px;
+  border-radius: 50%;
+  background-color: hsl(var(--solitaire-denary));
+  color: hsl(var(--solitaire-primary));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 10px;
+  cursor: pointer;
+  position: relative;
+}
+
+.step:first-child::before {
+  display: none; /* Remove the line before the first step */
+}
+
+.activeStep {
+  background-color: hsl(var(--solitaire-active-stepper));
+  color: #fff;
+}
+
+.rejectedStep {
+  background-color: hsl(var(--solitaire-error));
+  color: #fff;
+}
+
+.defaultStep {
+  background-color: hsl(var(--solitaire-denary));
+  color: #fff;
+}
+.completedStep {
+  background-color: hsl(var(--solitaire-quaternary));
+  color: #fff;
+}
+.stepContent {
+  margin: 20px 0;
+}
+
+.navigationButtons {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-top: auto;
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid hsl(var(--solitaire-quaternary));
+
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.filled {
+  background-color: hsl(var(--solitaire-quaternary));
+
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.stepLabel {
+  color: #fff;
+  padding-top: 10px;
+  font-weight: normal;
+  text-align: center;
+}
+
+.stepLine {
+  height: 2px;
+  width: 30%; /* Adjust based on your layout */
+  background-color: #ccc;
+  margin: 10px 0; /* Adjust to position the line correctly */
+}

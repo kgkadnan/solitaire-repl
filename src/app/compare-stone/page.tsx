@@ -1,6 +1,6 @@
 'use client';
 
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './styles/compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
@@ -19,22 +19,58 @@ import { RightSideContent } from './components/right-side-content';
 import { LeftFixedContent } from './components/left-fixed-content';
 import { keyLabelMapping } from './helpers/key-label';
 import { handleShowDifferencesChange } from './helpers/handle-show-difference-function';
-import { Product } from '../search/result/result-interface';
+import { IProduct } from '../search/result/result-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
+import { CustomSlider } from '@/components/common/slider';
+import ConfirmStone from '@/components/common/confirm-stone';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useErrorStateManagement } from '@/hooks/error-state-management';
+import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
+import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
+import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
+import Link from 'next/link';
+import {
+  NO_STONES_AVAILABLE,
+  NO_STONES_SELECTED
+} from '@/constants/error-messages/compare-stone';
+import { useSearchParams } from 'next/navigation';
 
 const CompareStone = () => {
   // Initialize necessary state variables
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { isCheck } = checkboxState;
   const { setIsCheck } = checkboxSetState;
+  const pathName = useSearchParams().get('source');
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const {
+    dialogContent,
+    isDialogOpen,
+    isSliderOpen,
+    isPersistDialogOpen,
+    persistDialogContent
+  } = modalState;
+
+  const {
+    setIsDialogOpen,
+    setIsSliderOpen,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState;
+
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText, setIsSliderError } = errorSetState;
+  const { isError, errorText } = errorState;
+
+  const { confirmStoneState, confirmStoneSetState } =
+    useConfirmStoneStateManagement();
+
+  const { setConfirmStoneData } = confirmStoneSetState;
 
   const dispatch = useAppDispatch();
-  const [compareStoneData, setCompareStoneData] = useState<Product[]>([]);
-  const [dialogContent, setDialogContent] = useState<ReactNode>();
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [compareStoneData, setCompareStoneData] = useState<IProduct[]>([]);
 
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState<string>('');
   // Initialize state for displaying differences in stone properties
   const [showDifferences, setShowDifferences] = useState(false);
   const [compareValues, setCompareValues] = useState({});
@@ -42,56 +78,79 @@ const CompareStone = () => {
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
+  // Fetching table columns for managing listing sequence
+  const { data: listingColumns } =
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
+
   // Handle adding items to the cart
   const handleAddToCart = () => {
     if (!isCheck.length) {
       setIsError(true);
-      setErrorText(`You haven't picked any stones.`);
+      setErrorText(NO_STONES_SELECTED);
     } else {
-      // Extract variant IDs for selected stones
-      const variantIds = isCheck?.map((id: string) => {
-        const compareStoneCheck: Product | object =
-          compareStoneData.find((compareStone: Product) => {
-            return compareStone?.id === id;
-          }) ?? {};
-
-        if (compareStoneCheck && 'variants' in compareStoneCheck) {
-          return compareStoneCheck.variants[0]?.id;
-        }
-
-        return null;
+      const hasMemoOut = isCheck.some((id: string) => {
+        return compareStoneData.some(
+          (compareStoneData: IProduct) =>
+            compareStoneData.id === id &&
+            compareStoneData.diamond_status === 'MemoOut'
+        );
       });
 
-      // If there are variant IDs, add to the cart
-      if (variantIds.length) {
-        addCart({
-          variants: variantIds
-        })
-          .unwrap()
-          .then(res => {
-            // On success, show confirmation dialog and update badge
-            setIsError(false);
-            setErrorText('');
-            setIsDialogOpen(true);
-            setDialogContent(
-              <>
-                <div className="w-[350px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="w-[350px] flex justify-center text-center align-middle text-solitaireTertiary pb-7">
-                  {res?.message}
-                </div>
-              </>
-            );
-            dispatch(notificationBadge(true));
+      if (hasMemoOut) {
+        setErrorText(NO_STONES_AVAILABLE);
+        setIsError(true);
+      } else {
+        // Extract variant IDs for selected stones
+        const variantIds = isCheck?.map((id: string) => {
+          const compareStoneCheck: IProduct | object =
+            compareStoneData.find((compareStone: IProduct) => {
+              return compareStone?.id === id;
+            }) ?? {};
+
+          if (compareStoneCheck && 'variants' in compareStoneCheck) {
+            return compareStoneCheck.variants[0]?.id;
+          }
+
+          return null;
+        });
+
+        // If there are variant IDs, add to the cart
+        if (variantIds.length) {
+          addCart({
+            variants: variantIds
           })
-          .catch(error => {
-            // On error, set error state and error message
-            setIsError(true);
-            setErrorText(error?.data?.message);
-          });
-        // Clear the selected checkboxes
-        setIsCheck([]);
+            .unwrap()
+            .then(res => {
+              // On success, show confirmation dialog and update badge
+              setIsError(false);
+              setErrorText('');
+              setIsPersistDialogOpen(true);
+              setPersistDialogContent(
+                <div className="text-center  flex flex-col justify-center items-center ">
+                  <div className="w-[350px] flex justify-center items-center mb-3">
+                    <Image src={confirmImage} alt="vector image" />
+                  </div>
+                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
+                    {res?.message}
+                  </div>
+                  <Link
+                    href={'/my-cart?active-tab=active'}
+                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+                  >
+                    Go To &quot;MyCart&quot;
+                  </Link>
+                </div>
+              );
+              dispatch(notificationBadge(true));
+            })
+            .catch(error => {
+              // On error, set error state and error message
+              setIsError(true);
+              setErrorText(error?.data?.message);
+            });
+          // Clear the selected checkboxes
+          setIsCheck([]);
+        }
       }
     }
   };
@@ -124,14 +183,38 @@ const CompareStone = () => {
         />
       )
     },
-    { id: 2, displayButtonLabel: 'Confirm Stone', style: styles.transparent },
     {
-      id: 4,
-      displayButtonLabel: 'Add to Cart',
-      style: styles.filled,
-      fn: handleAddToCart
+      id: 2,
+      displayButtonLabel: 'Confirm Stone',
+      style: styles.transparent,
+      fn: () =>
+        handleConfirmStone(
+          isCheck,
+          compareStoneData,
+          setErrorText,
+          setIsError,
+          setIsSliderOpen,
+          setConfirmStoneData
+        )
     }
   ];
+
+  const [footerItems, setFooterItems] = useState(compareStoneFooter);
+
+  useEffect(() => {
+    if (pathName !== 'my-cart') {
+      const newFooterItems = [
+        ...compareStoneFooter,
+        {
+          id: 3,
+          displayButtonLabel: 'Add to Cart',
+          style: styles.filled,
+          fn: handleAddToCart
+        }
+      ];
+      setFooterItems(newFooterItems);
+    }
+  }, [pathName]);
 
   // Updated function type
   type HandleCloseType = (event: React.MouseEvent, id: string) => void;
@@ -143,13 +226,13 @@ const CompareStone = () => {
     );
 
     const updatedStones = compareStones.filter(
-      (stone: Product) => stone.id !== id
+      (stone: IProduct) => stone.id !== id
     );
 
     localStorage.setItem('compareStone', JSON.stringify(updatedStones));
 
     const filterData = compareStoneData.filter(
-      (item: Product) => item.id !== id
+      (item: IProduct) => item.id !== id
     );
     setCompareStoneData(filterData);
   };
@@ -197,31 +280,59 @@ const CompareStone = () => {
 
   // UseEffect to fetch and set compareStoneData from local storage
   useEffect(() => {
-    let compareStoneStoreData: Product[] = JSON.parse(
+    let compareStoneStoreData: IProduct[] = JSON.parse(
       localStorage.getItem('compareStone')!
     );
     setCompareStoneData(compareStoneStoreData);
   }, []);
 
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3000);
+  // UseEffect to close the dialog box
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
+
+  // Handle change in the slider's open state
+  const onOpenChange = (open: boolean) => {
+    setIsSliderError(false);
+    setIsSliderOpen(open);
+  };
 
   return (
     <div className={styles.comparestoneContainer}>
+      <CustomSlider
+        sheetContent={
+          <ConfirmStone
+            errorState={errorState}
+            errorSetState={errorSetState}
+            onOpenChange={onOpenChange}
+            confirmStoneState={confirmStoneState}
+            confirmStoneSetState={confirmStoneSetState}
+            listingColumns={listingColumns}
+            modalSetState={modalSetState}
+          />
+        }
+        sheetContentStyle={styles.diamondDetailSheet}
+        isSliderOpen={isSliderOpen}
+        onOpenChange={onOpenChange}
+      />
       <CustomDialog
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         data-testid={'success-indicator'}
+      />
+      <CustomDialog
+        isOpens={isPersistDialogOpen}
+        setIsOpen={setIsPersistDialogOpen}
+        dialogContent={persistDialogContent}
       />
       <div className="sticky text-solitaireQuaternary top-0 mt-16">
         <CustomHeader
@@ -263,14 +374,14 @@ const CompareStone = () => {
           <div className="w-[30%]">
             <p
               data-testid={'error-indicator'}
-              className="text-red-700 text-base "
+              className="text-solitaireError text-base "
             >
               {errorText}
             </p>
           </div>
         )}
         <CustomFooter
-          footerButtonData={compareStoneFooter}
+          footerButtonData={footerItems}
           noBorderTop={styles.paginationContainerStyle}
         />
       </div>

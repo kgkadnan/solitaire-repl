@@ -26,3 +26,9 @@
 .visibleStyle {
   top: 0;
 }
+.modalStyle {
+  max-width: 1000px;
+  height: 87vh;
+  z-index: 1200;
+  color: hsl(var(--solitaire-tertiary));
+}

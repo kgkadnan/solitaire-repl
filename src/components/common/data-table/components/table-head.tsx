@@ -1,3 +1,5 @@
+import React from 'react';
+
 import { ITheadProps } from '../interface';
 import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -44,7 +46,7 @@ export const TableHead: React.FC<ITheadProps> = ({
               position: `${index === 0 ? 'sticky' : 'static'}`
             }}
           >
-            {column.label}
+            {column.short_label}
           </th>
         ))}
       </tr>

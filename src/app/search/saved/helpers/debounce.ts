@@ -1,3 +1,4 @@
+import React from 'react';
 const debounce = <T extends any[]>(fn: (...args: T) => void, delay: number) => {
   let timeoutId: NodeJS.Timeout;
   return (...args: T) => {
@@ -6,7 +7,7 @@ const debounce = <T extends any[]>(fn: (...args: T) => void, delay: number) => {
   };
 };
 
-interface HandleSearchProps {
+interface IHandleSearchProps {
   e: React.ChangeEvent<HTMLInputElement>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   debouncedSave: any;
@@ -22,7 +23,7 @@ export const handleSearch = ({
   setSearchByName,
   setIsCheck,
   setIsCheckAll
-}: HandleSearchProps) => {
+}: IHandleSearchProps) => {
   const inputValue = e.target.value;
   setSearch(inputValue);
 

@@ -1,85 +1,25 @@
 import React from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { CustomDisplayButton } from '../buttons/display-button';
-import { CustomInputField } from '../input-field';
-import { CustomInputlabel } from '../input-label';
-import styles from './input-dialog.module.scss';
-import { IInputDialog } from './interface';
 
-export const CustomInputDialog: React.FC<IInputDialog> = ({
-  customInputDialogData,
-  isError,
-  setIsError,
-  setErrorContent,
-  errorContent,
-  handleClose
+interface ICustomDialogProps {
+  isOpen: boolean;
+  onClose: () => void;
+  renderContent: () => React.ReactNode; // A function that returns React nodes
+  dialogStyle?: string; // Optional style string
+}
+
+export const CustomInputDialog: React.FC<ICustomDialogProps> = ({
+  isOpen,
+  onClose,
+  renderContent, // This is the render function for the content
+  dialogStyle
 }) => {
-  const {
-    isOpens,
-    setIsOpen,
-    label,
-    name,
-    inputValue,
-    setInputvalue,
-    displayButtonLabel2,
-    displayButtonFunction
-  } = customInputDialogData;
-
-  const onclose = (open: boolean) => {
-    setIsOpen(open);
-  };
-
   return (
-    <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
-      <DialogContent className="max-w-[450px] h-[200px] bg-solitairePrimary z-[1200] rounded-lg">
-        {label && (
-          <div className="max-w-[450px] flex justify-center align-middle text-solitaireTertiary">
-            <CustomInputlabel
-              label={label}
-              htmlfor={name}
-              overriddenStyles={{ label: styles.customLabel }}
-            />
-          </div>
-        )}
-        <div className="w-full">
-          <CustomInputField
-            placeholder="Search Title* (Max 150 characters)"
-            type="text"
-            onChange={e => {
-              setErrorContent('');
-              setIsError(false);
-              setInputvalue(e.target.value);
-            }}
-            value={inputValue}
-            name={name}
-            style={{
-              inputMain: 'w-full',
-              input: styles.input
-            }}
-            maxLength={150}
-          />
-        </div>
-        {isError ? <div className="text-[#983131]">{errorContent}</div> : ''}
-        <div className="max-w-[400px] flex justify-around align-middle text-solitaireTertiary z-[1200]">
-          <CustomDisplayButton
-            displayButtonLabel="Cancel"
-            handleClick={() => {
-              handleClose();
-            }}
-            displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonTransparent
-            }}
-          />
-          <CustomDisplayButton
-            displayButtonLabel={displayButtonLabel2}
-            handleClick={() => {
-              inputValue.length > 0 && displayButtonFunction();
-            }}
-            displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonFilled
-            }}
-          />
-        </div>
+    <Dialog open={isOpen} onOpenChange={onClose} defaultOpen={false}>
+      <DialogContent
+        className={`max-w-[400px] h-[220px] bg-solitairePrimary text-solitaireTertiary justify-center items-center ${dialogStyle}`}
+      >
+        {renderContent()}
       </DialogContent>
     </Dialog>
   );

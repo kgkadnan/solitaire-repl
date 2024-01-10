@@ -93,56 +93,19 @@
     "Orange",
     "Black",
     "Gray",
-    "Vio ",
+    "Violet",
     "Brown",
-    "White",
-    "Other",
-    "Light Yellow"
+    "Other"
   ],
-  "make": ["3EX", "3EX+None", "3VG+EX", "3G", "3F"],
-  "cut": ["Ideal", "EX", "VG", "G", "F"],
-  "polish": ["Ideal", "EX", "VG", "G", "F"],
-  "symmetry": ["Ideal", "EX", "VG", "G", "F"],
 
-  "intensity": [
-    "Faint",
-    "Light",
-    "Fancy light",
-    "Fancy",
-    "Fancy dark",
-    "Fancy intense",
-    "Fancy vivid",
-    "Fancy deep",
-    "Very light"
-  ],
-  "overtone": [
-    "None",
-    "Yellow",
-    "Yellowish",
-    "Pink",
-    "Pinkish",
-    "Blue",
-    "Bluish",
-    "Red",
-    "Reddish",
-    "Green",
-    "Greenish",
-    "Purple",
-    "Purplish",
-    "Orange",
-    "Orangy",
-    "Gray",
-    "Grayish",
-    "Black",
-    "Brown",
-    "Brownish",
-    "Violetish",
-    "White",
-    "W-x Light Brown",
-    "Brownish Orangy"
-  ],
+  "make": ["3EX", "3EX+NON", "3VG+EX", "3G", "3F"],
+  "cut": ["EX", "VG", "G", "F"],
+  "polish": ["EX", "VG", "G", "F"],
+  "symmetry": ["EX", "VG", "G", "F"],
+
   "color_shade": [
     "None",
+    "White",
     "Mixed",
     "Yellow",
     "Brown",
@@ -171,27 +134,8 @@
     "I3"
   ],
   "color": ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N-Z"],
-  "fluorescence": [
-    "None",
-    "Very Slight",
-    "Slight",
-    "Faint",
-    "Medium",
-    "Strong",
-    "Very Strong"
-  ],
-  "culet": ["NON", "Minor", "Medium"],
-  "lab": [
-    "GIA",
-    "GIA DOR",
-    "DBIOD",
-    "FOREVERMARK",
-    "HRD",
-    "IGI",
-    "NGTC",
-    "KGK GRADING"
-  ],
-  "brilliance": ["EX", "VG", "G"],
+  "fluorescence": ["NON", "VSL", "SLT", "FNT", "MED", "STG", "VSTG"],
+  "lab": ["GIA", "GIA DOR", "DBIOD", "FM", "HRD", "IGI", "NGTC", "KGK GRADING"],
   "location": ["BEL", "DUB", "IND", "ISR", "USA"],
   "origin": [
     "Angola",
@@ -236,110 +180,110 @@
   ],
   "carat": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 100
     }
   },
   "parameter": [
     {
-      "label": "Table%",
+      "label": "Table %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
-      "label": "Depth%",
+      "label": "Depth %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Ratio",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Length",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Width",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Depth",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Crown Angle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 360
       }
     },
     {
       "label": "Crown Height",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
-      "label": "Girdle%",
+      "label": "Girdle %",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
     {
       "label": "Pavilion Angle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 360
       }
     },
     {
       "label": "Pavilion Height",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Lower Half",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Star Length",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     },
 
     {
       "label": "Girdle",
       "range": {
-        "start": 0,
-        "end": 100
+        "gte": 0,
+        "lte": 100
       }
     }
   ],
@@ -349,27 +293,27 @@
       "value": [
         {
           "element_key": "Black Table",
-          "element_value": ["BO", "BPP", "B1", "B2", "B3"]
+          "element_value": ["B0", "BPP", "B1", "B2", "B3"]
         },
         {
           "element_key": "Side Table",
-          "element_value": ["SBO", "SBPP", "SB1", "SB2", "SB3"]
+          "element_value": ["SB0", "SBPP", "SB1", "SB2", "SB3"]
         },
         {
           "element_key": "Open Crown",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Open Table",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Open Pavilion",
-          "element_value": ["None", "VS", "S", "M", "L"]
+          "element_value": ["N", "VS", "S", "M", "L"]
         },
         {
           "element_key": "Milky",
-          "element_value": ["MO", "M1", "M2", "M3"]
+          "element_value": ["M0", "M1", "M2", "M3"]
         },
         {
           "element_key": "Luster",
@@ -377,7 +321,7 @@
         },
         {
           "element_key": "Eye Clean",
-          "element_value": ["Yes", "No", "B"]
+          "element_value": ["Y", "N", "B"]
         }
       ]
     },
@@ -386,11 +330,11 @@
       "value": [
         {
           "element_key": "Table Inclusion",
-          "element_value": ["TO", "T1", "T2", "T3"]
+          "element_value": ["T0", "T1", "T2", "T3"]
         },
         {
           "element_key": "Side Inclusion",
-          "element_value": ["SO", "S1", "S2", "S3"]
+          "element_value": ["S0", "S1", "S2", "S3"]
         },
         {
           "element_key": "Natural Crown",
@@ -406,31 +350,73 @@
         },
         {
           "element_key": "Surface Graining",
-          "element_value": ["GO", "G1", "G2", "G3"]
+          "element_value": ["G0", "G1", "G2", "G3"]
         },
         {
           "element_key": "Internal Graining",
-          "element_value": ["IGO", "IG1", "IG2", "IG3"]
+          "element_value": ["IG0", "IG1", "IG2", "IG3"]
         }
       ]
     }
   ],
   "discount": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 100
     }
   },
-  "price": {
+  "amount_range": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 999999
     }
   },
   "price_per_carat": {
     "range": {
-      "start": 0,
-      "end": 100
+      "gte": 0,
+      "lte": 999999
     }
-  }
+  },
+
+  "girdle": ["ETN", "VTN", "STN", "THN", "MED", "STK", "THK", "VTK", "ETK "],
+
+  "culet": ["None", "Pointed", "Very Small", "Small", "Medium", "Large"],
+
+  "intensity": [
+    "Faint",
+    "Very Light",
+    "Light",
+    "Fancy",
+    "Fancy Light",
+    "Fancy Dark",
+    "Fancy Intense",
+    "Fancy Vivid",
+    "Fancy Deep"
+  ],
+
+  "overtone": [
+    "None",
+    "Yellow",
+    "Yellowish",
+    "Pink",
+    "Pinkish",
+    "Blue",
+    "Bluish",
+    "Red",
+    "Reddish",
+    "Green",
+    "Greenish",
+    "Purple",
+    "Purplish",
+    "Orange",
+    "Orangy",
+    "Grey",
+    "Greyish",
+    "Black",
+    "Brown",
+    "Brownish",
+    "Violetish",
+    "Light Brown",
+    "Brownish Orangy"
+  ]
 }

@@ -1,3 +1,5 @@
+import React from 'react';
+
 import Image from 'next/image';
 import { CustomSlider } from '../../slider';
 import styles from '../custom-table.module.scss';
@@ -52,9 +54,12 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
     {
       id: '3',
       displayButtonLabel: ManageLocales(
-        'app.searchResult.slider.diamondDetail.b2b'
+        'app.searchResult.slider.diamondDetail.b2bSparkle'
       ),
-      iframeUrl: `${FILE_URLS.B2B.replace('***', sliderData[0]?.lot_id ?? '')}`
+      iframeUrl: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        sliderData[0]?.lot_id ?? ''
+      )}`
     }
   ];
 
@@ -81,7 +86,7 @@ export const DetailImageSlider: React.FC<IDetailImageSlider> = ({
       sheetContent={
         <>
           <div className={styles.sheetMainHeading}>
-            <p>{ManageLocales('app.searchResult.slider.stoneImage.image')}</p>
+            <p>{ManageLocales('app.searchResult.slider.images.asset')}</p>
           </div>
 
           <div className="flex w-[80%] py-5 border-b border-solitaireSenary items-center mx-auto justify-center gap-10 ">

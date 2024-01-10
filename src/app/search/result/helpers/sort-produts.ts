@@ -13,7 +13,7 @@ const customSortFunctions: Record<string, Function> = {
     'Very Strong'
   ]),
   side_black: customSortOrder(['SBO', 'SBPP', 'SB1', 'SB2', 'SB3']),
-  black_table: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),
+  table_black: customSortOrder(['BO', 'BPP', 'B1', 'B2', 'B3']),
   clarity: customSortOrder([
     'FL',
     'IF',
@@ -46,7 +46,7 @@ export const sortProducts = (data: any, order: string, key: string) =>
       return customSortFunction(b[key], a[key]);
     } else if (a[key] !== b[key]) {
       return order === 'low to high' ? a[key] - b[key] : b[key] - a[key];
-    } else if (key === 'price') {
+    } else if (key === 'Amount') {
       return order === 'low to high'
         ? a?.variants[0]?.prices[0]?.amount - b?.variants[0]?.prices[0]?.amount
         : b?.variants[0]?.prices[0]?.amount - a?.variants[0]?.prices[0]?.amount;

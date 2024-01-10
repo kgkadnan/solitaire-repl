@@ -1,26 +1,29 @@
 import {
   IErrorSetState,
   IErrorState,
-  Product,
-  TableColumn
+  IModalSetState,
+  IProduct,
+  ITableColumn
 } from '@/app/search/result/result-interface';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 export interface IConfirmStoneSetState {
-  setConfirmStoneData: Dispatch<SetStateAction<Product[]>>;
+  setConfirmStoneData: Dispatch<SetStateAction<IProduct[]>>;
   setCommentValue: Dispatch<SetStateAction<string>>;
   setSelectedDaysInputValue: Dispatch<SetStateAction<string>>;
   setSelectedRadioDaysValue: Dispatch<SetStateAction<string>>;
+  setIsComeFromConfirmStone: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IConfirmStoneState {
-  confirmStoneData: Product[];
+  confirmStoneData: IProduct[];
   commentValue: string;
   selectedDaysInputValue: string;
   selectedRadioDaysValue: string;
+  isComeFromConfirmStone: boolean;
 }
 
-export interface IconfirmRadioButtons {
+export interface IConfirmRadioButtons {
   name: string;
   onChange: (value: string) => void;
   id: string;
@@ -30,12 +33,12 @@ export interface IconfirmRadioButtons {
 }
 
 export interface IConfirmStoneProps {
-  listingColumns: TableColumn[];
+  listingColumns: ITableColumn[];
   errorState: IErrorState;
   errorSetState: IErrorSetState;
   onOpenChange: (open: boolean) => void;
   confirmStoneState: IConfirmStoneState;
   confirmStoneSetState: IConfirmStoneSetState;
-  setIsDialogOpen: Dispatch<SetStateAction<boolean>>;
-  setDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  modalSetState: IModalSetState;
+  refetch?: any;
 }

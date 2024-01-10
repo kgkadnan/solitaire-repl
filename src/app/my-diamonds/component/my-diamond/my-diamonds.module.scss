@@ -1,0 +1,51 @@
+.sheetContentStyle {
+  background-color: hsl(var(--solitaire-primary));
+  max-width: 90% !important;
+  padding-right: 50px;
+  padding-left: 50px;
+}
+
+//Footer Button
+.transparent {
+  background-color: transparent;
+  border: 1px solid #8c7459;
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.filled {
+  background-color: #8c7459;
+  color: #ffffff;
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.tableWrapper {
+  max-height: 65vh; /* Set to 80% of the viewport height */
+  overflow-y: auto;
+  padding-bottom: 10px;
+  height: calc(
+    100vh - 45vh
+  ); /* This may not be needed, depending on the layout */
+}
+
+.paginationContainerStyle {
+  border: none !important ;
+}
+
+.scrollBar {
+  overflow-y: scroll;
+}
+
+.scrollBar::-webkit-scrollbar {
+  display: none;
+}

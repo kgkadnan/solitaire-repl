@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { useState } from 'react';
 import { DateRange } from 'react-day-picker';
 import { ISavedSearchData } from '../saved-interface';
 import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/checkbox-state-management';
@@ -30,9 +30,6 @@ export const useCommonStateManagement = () => {
   const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [dialogContent, setDialogContent] = useState<ReactNode>('');
-
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
   return {
@@ -52,8 +49,6 @@ export const useCommonStateManagement = () => {
       search,
       searchByName,
       suggestions,
-      isDialogOpen,
-      dialogContent,
       isError,
       errorText
     },
@@ -73,8 +68,6 @@ export const useCommonStateManagement = () => {
       setSearch,
       setSearchByName,
       setSuggestions,
-      setIsDialogOpen,
-      setDialogContent,
       setIsError,
       setErrorText
     }

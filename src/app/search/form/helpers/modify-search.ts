@@ -11,11 +11,8 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedSymmetry,
     setSelectedFluorescence,
     setSelectedCulet,
-    setSelectedGirdle,
     setSelectedKeyToSymbol,
     setSelectedLab,
-    setSelectedHR,
-    setSelectedBrilliance,
     setSelectedLocation,
     setSelectedOrigin,
     setPriceRangeFrom,
@@ -64,7 +61,9 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo
+    setStarLengthTo,
+    setGirdleFrom,
+    setGirdleTo
   } = setState;
 
   data?.shape && setSelectedShape(data?.shape);
@@ -81,13 +80,11 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.culet && setSelectedCulet(data?.culet);
   data?.polish && setSelectedPolish(data?.polish);
   data?.location && setSelectedLocation(data?.location);
-  data?.HA && setSelectedHR(data?.HA);
   data?.symmetry && setSelectedSymmetry(data?.symmetry);
   data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
   data?.country_of_origin && setSelectedOrigin(data?.country_of_origin);
   data?.color_shade && setSelectedTinge(data?.color_shade);
   data?.overtone && setSelectedOvertone(data?.overtone);
-  data?.brilliance && setSelectedBrilliance(data?.brilliance);
   data?.priceRange && setPriceRangeFrom(data?.priceRange?.gte);
   data?.priceRange && setPriceRangeTo(data?.priceRange?.lte);
   data?.discount && setDiscountFrom(data?.discount?.gte);
@@ -119,18 +116,18 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.crown_height && setCrownHeightTo(data?.crown_height?.lte);
   data?.pavilion_angle && setPavilionAngleFrom(data?.pavilion_angle?.gte);
   data?.pavilion_angle && setPavilionAngleTo(data?.pavilion_angle?.lte);
-  data?.pavilion_depth && setPavilionDepthFrom(data?.pavilion_depth?.gte);
-  data?.pavilion_depth && setPavilionDepthTo(data?.pavilion_depth?.lte);
+  data?.pavilion_height && setPavilionDepthFrom(data?.pavilion_height?.gte);
+  data?.pavilion_height && setPavilionDepthTo(data?.pavilion_height?.lte);
   //inclusion_details States
   data?.milky && setMilkyBI(data?.milky);
   data?.luster && setLusterBI(data?.luster);
   data?.eye_clean && setEyeCleanBI(data?.eye_clean);
-  data?.open_crown && setOpenCrownBI(data?.open_crown);
-  data?.open_table && setOpenTableBI(data?.open_table);
+  data?.crown_open && setOpenCrownBI(data?.crown_open);
+  data?.table_open && setOpenTableBI(data?.table_open);
   data?.side_table && setSideBlackBI(data?.side_table);
-  data?.black_table && setBlackTableBI(data?.black_table);
+  data?.table_black && setBlackTableBI(data?.table_black);
   data?.natural_crown && setNaturalCrownWI(data?.natural_crown);
-  data?.open_pavilion && setOpenPavilionBI(data?.open_pavilion);
+  data?.pavilion_open && setOpenPavilionBI(data?.pavilion_open);
   data?.natural_girdle && setNaturalGirdleWI(data?.natural_girdle);
   data?.side_inclusion && setSideInclusionWI(data?.side_inclusion);
   data?.table_inclusion && setTableInclusionWI(data?.table_inclusion);
@@ -138,6 +135,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.surface_graining && setSurfaceGrainingWI(data?.surface_graining);
   data?.internal_graining && setInternalGrainingWI(data?.internal_graining);
   //other_information States
-  data?.girdle && setSelectedGirdle(data?.girdle);
+  data?.girdle && setGirdleFrom(data?.girdle?.gte);
+  data?.girdle && setGirdleTo(data?.girdle?.lte);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
 };

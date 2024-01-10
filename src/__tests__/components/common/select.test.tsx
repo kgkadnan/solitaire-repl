@@ -48,7 +48,6 @@ describe('CustomSelect Component', () => {
     // await waitFor(async () => {
     //   for (const item of mockData) {
     //     const optionElement = await queryByText(item.value);
-    //     console.log('optionElement', optionElement);
     //     expect(optionElement).toBeInTheDocument();
     //   }
     // });
@@ -65,14 +64,12 @@ describe('CustomSelect Component', () => {
 //   );
 
 //   const placeholderElement = getByText('Select an option');
-//   console.log('placeholderElement', placeholderElement);
 //   expect(placeholderElement).toBeInTheDocument();
 
 //   userEvent.click(placeholderElement);
 
 //   mockData.forEach((item) => {
 //     const optionElement = queryByText(item.value);
-//     console.log('option', optionElement);
 //     // expect(optionElement).toBeInTheDocument();
 //   });
 // });

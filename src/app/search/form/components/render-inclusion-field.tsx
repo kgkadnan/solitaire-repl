@@ -6,6 +6,7 @@ import { ManageLocales } from '@/utils/translate';
 import advanceSearch from '@/constants/advance-search.json';
 import { handleFilterChange } from '../helpers/handle-change';
 
+// Define the interfaces for the component props
 interface IRenderEachOtherParameterData {
   element_key: string;
   element_value: string[];
@@ -17,6 +18,7 @@ interface IRenderOtherParameterData {
   value: IRenderEachOtherParameterData[];
 }
 const renderInclusionField = (state: any, setState: any) => {
+  // Destructure state variables
   const {
     blackTableBI,
     sideBlackBI,
@@ -52,6 +54,7 @@ const renderInclusionField = (state: any, setState: any) => {
     setInternalGrainingWI
   } = setState;
 
+  // Define individual change handlers
   const handleBlackTableBIChange = (data: string) => {
     handleFilterChange(data, blackTableBI, setBlackTableBI);
   };
@@ -98,6 +101,7 @@ const renderInclusionField = (state: any, setState: any) => {
     handleFilterChange(data, internalGrainingWI, setInternalGrainingWI);
   };
 
+  // Create an array of other parameter data with respective change handlers and state
   let otherParameterDataState = [
     {
       key: ManageLocales('app.advanceSearch.blackInclusion'),
@@ -170,6 +174,8 @@ const renderInclusionField = (state: any, setState: any) => {
       ]
     }
   ];
+
+  // Map the otherParameterDataState to create an array of objects
   let otherParameterData = otherParameterDataState.map((other, otherIndex) => {
     return {
       key: other.key,
@@ -185,7 +191,8 @@ const renderInclusionField = (state: any, setState: any) => {
   return otherParameterData.map((other: IRenderOtherParameterData) => (
     <div
       key={`other-parameter-${other.key}`}
-      className={styles.otherParameterContainer}
+      className={`${styles.otherParameterContainer}`}
+      style={{ paddingLeft: '10px' }}
     >
       <CustomInputlabel
         htmlfor="text"
@@ -194,7 +201,7 @@ const renderInclusionField = (state: any, setState: any) => {
       />
       {other.value.map(data => (
         <div
-          className={`${styles.filterSection} ${styles.otherParameterDataContainer} `}
+          className={`${styles.filterSection} ${styles.otherParameterDataContainer}`}
           key={`${other.key}-${data.element_key}`}
         >
           <div className={`${styles.otherParameterTitle}`}>
@@ -204,7 +211,7 @@ const renderInclusionField = (state: any, setState: any) => {
               overriddenStyles={{ label: styles.labelPlainColor }}
             />
           </div>
-          <div className={styles.filterSectionData}>
+          <div className={`${styles.filterSectionData}`}>
             {renderSelectionButtons(
               data.element_value,
               '',

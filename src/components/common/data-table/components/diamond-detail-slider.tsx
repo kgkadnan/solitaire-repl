@@ -1,8 +1,9 @@
+import React from 'react';
 import { usePathname } from 'next/navigation';
 import { CustomSlider } from '../../slider';
-import { Product } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/search/result/result-interface';
 import { ManageLocales } from '@/utils/translate';
-import { IDiamondDetailSlider, IswitchButtonTabs } from '../interface';
+import { IDiamondDetailSlider, ISwitchButtonTabs } from '../interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { handleSwitchImageUrl } from '../helper/handle-switch-image-url';
 import Image from 'next/image';
@@ -11,6 +12,8 @@ import { CustomFooter } from '../../footer';
 import styles from '../custom-table.module.scss';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
 import shareSocialOutline from '@public/assets/icons/share-social-outline.svg';
+import NoImageFound from '@public/assets/images/no-image-icon-23485.png';
+
 import {
   basicDetailsLabelMapping,
   inclusionDetailsLabelMapping,
@@ -18,6 +21,7 @@ import {
   measurementsLabelMapping,
   otherInformationsLabelMapping
 } from '../lable-mapping';
+import { useState } from 'react';
 
 export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
   dataTableBodyState,
@@ -126,15 +130,23 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
 
   const openModal = (url: string, altText: string) => {
     setIsModalOpen(true);
-    setModalContent(<Image src={url} alt={altText} width={900} height={500} />);
+    setModalContent(
+      <Image
+        src={url}
+        alt={altText}
+        style={{ width: '100%', height: '100%' }}
+        width={100}
+        height={100}
+      />
+    );
   };
 
   return (
     <CustomSlider
       sheetTriggenContent={
-        <div
+        <button
           onClick={() => {
-            setActiveTab('3');
+            setActiveTab('1');
             setDiamondDetailIframeUrl('');
             setDiamondDetailImageUrl(``);
             setSliderData([tableRows[index]]);
@@ -147,8 +159,8 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
               : 'px-[5px]'
           }`}
         >
-          {row[column.accessor as keyof Product]}
-        </div>
+          {row[column.accessor as keyof IProduct]}
+        </button>
       }
       sheetContentStyle={styles.diamondDetailSheet}
       sheetContent={
@@ -168,8 +180,8 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                   key={data.id}
                   className="flex items-center justify-between my-5 px-10"
                 >
-                  <div className="">
-                    {switchButtonTabs.map((items: IswitchButtonTabs) => {
+                  <div className="w-[145px]">
+                    {switchButtonTabs.map((items: ISwitchButtonTabs) => {
                       return (
                         <div key={items.id} className="">
                           <CustomDisplayButton
@@ -206,7 +218,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           alt={``}
                           width={450}
                           height={450}
-                          style={{ height: '450px' }}
+                          style={{ height: '450px', width: '450px' }}
                         />
                       )}
                     {diamondDetailImageUrl && !diamondDetailIframeUrl && (
@@ -215,7 +227,7 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                         alt={``}
                         width={450}
                         height={450}
-                        style={{ height: '450px' }}
+                        style={{ height: '450px', width: '450px' }}
                       />
                     )}
 
@@ -225,14 +237,16 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                         height={450}
                         frameBorder="0"
                         src={diamondDetailIframeUrl}
-                        className="mr-[37px]"
+                        // className="mr-[37px]"
                       />
                     )}
                   </div>
                   <div className="">
                     {Object.keys(keyLabelMapping).map(key => (
-                      <div key={key} className="text-solitaireTertiary py-1">
-                        <span className="text-xs">{keyLabelMapping[key]}</span>
+                      <div key={key} className="text-solitaireQuaternary py-1">
+                        <span className="text-xs text-solitaireTertiary">
+                          {keyLabelMapping[key]}
+                        </span>
                         <br />
                         {key === 'amount'
                           ? data?.variants[0]?.prices[0]?.amount ?? '-'
@@ -258,13 +272,6 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                       height={20}
                     />
                   </div>
-                  {/* <a
-                    href={`https://storageweweb.blob.core.windows.net/files/INVENTORYDATA/DNA.html?id=${sliderData[0]?.lot_id}`}
-                    target="_blank"
-                    className="cursor-pointer"
-                  >
-                    <Image src={dna} alt="dna" width={25} height={20} />
-                  </a> */}
                 </div>
                 <div className="border-b border-solitaireQuaternary"></div>
                 <div>
@@ -367,19 +374,26 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
                           <p>{displayName}</p>
                         </div>
 
-                        <div
+                        {/* <div
                           onClick={() => openModal(url, altText)}
                           className="w-[100%]"
-                        >
-                          <Image
+                        > */}
+                        {/* <Image
                             src={url}
                             alt={altText}
                             width={250}
                             height={150}
                             style={{ height: '200px', maxWidth: '250px' }}
-                          />
-                        </div>
+                          /> */}
+                        <OptimizedImageWithFallback
+                          src={url}
+                          alt={altText}
+                          width={250}
+                          height={150}
+                          openModal={openModal}
+                        />
                       </div>
+                      // </div>
                     );
                   })}
                 </div>
@@ -396,3 +410,29 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
     />
   );
 };
+
+export function OptimizedImageWithFallback({
+  src,
+  alt,
+  fallBackSrc = NoImageFound,
+  width,
+  height,
+  openModal
+}: any) {
+  const [imageError, setImageError] = useState(false);
+  return (
+    <div
+      onClick={() => !imageError && openModal(src, alt)}
+      className="w-[100%]"
+    >
+      <Image
+        src={imageError ? fallBackSrc : src}
+        alt={alt}
+        width={width}
+        height={height}
+        style={{ height: '200px', maxWidth: '250px' }}
+        onError={() => setImageError(true)}
+      />
+    </div>
+  );
+}

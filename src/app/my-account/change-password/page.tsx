@@ -9,6 +9,7 @@ import { ManageLocales } from '@/utils/translate';
 import { CustomFooter } from '@/components/common/footer';
 import { useChangePasswordMutation } from '@/features/api/change-password';
 const ChangePassword = () => {
+  // State variables for password visibility and input values
   const [currentPasswordVisible, setCurrentPasswordVisible] = useState(true);
   const [newPasswordVisible, setNewPasswordVisible] = useState(true);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(true);
@@ -21,7 +22,9 @@ const ChangePassword = () => {
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [currentPasswordError, setCurrentPasswordError] = useState<string>('');
 
+  // Handle cancel button click
   const handleCancel = () => {
+    // Clear input values and error messages
     setNewPassword('');
     setConfirmPassword('');
     setNewPasswordError('');
@@ -32,14 +35,18 @@ const ChangePassword = () => {
     setConfirmPasswordVisible(true);
   };
 
+  // Use the ChangePassword mutation hook
   const [ChangePassword] = useChangePasswordMutation();
 
+  // Handle change password button click
   const handleChangePassword = async () => {
+    // Call the ChangePassword mutation
     await ChangePassword({
       new_password: newPassword,
       confirm_password: confirmPassword,
       password: currentPassword
     });
+    // Clear input values and error messages
     setCurrentPassword('');
     setCurrentPasswordError('');
     setCurrentPasswordVisible(true);
@@ -55,6 +62,7 @@ const ChangePassword = () => {
     <>
       <div className={style.changePassword}>
         <div className={style.changePasswordContainer}>
+          {/* Input for current password */}
           <div className={style.passwordInputWrapper}>
             <CustomInputField
               type={`${currentPasswordVisible ? 'text' : 'password'}`}
@@ -67,11 +75,13 @@ const ChangePassword = () => {
               value={currentPassword}
               onChange={e => {
                 setCurrentPassword(e.target.value);
+                // Validate the current password
                 !validatePassword(e.target.value)
                   ? setCurrentPasswordError('invalid new password')
                   : setCurrentPasswordError('');
               }}
             />
+            {/* Toggle visibility icon for current password */}
             <div
               className={style.togglePassword}
               onClick={() => setCurrentPasswordVisible(!currentPasswordVisible)}
@@ -79,8 +89,10 @@ const ChangePassword = () => {
               {currentPasswordVisible ? <Eye /> : <EyeSlash />}
             </div>
           </div>
+          {/* Display error message for current password */}
           <p className={style.errorMessage}>{currentPasswordError}</p>
 
+          {/* Input for new password */}
           <div className={style.passwordInputWrapper}>
             <CustomInputField
               type={`${newPasswordVisible ? 'text' : 'password'}`}

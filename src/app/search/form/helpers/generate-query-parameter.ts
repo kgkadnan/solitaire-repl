@@ -1,4 +1,6 @@
+// Define a function to generate query parameters based on the provided state
 export const generateQueryParams = (state: any) => {
+  // Destructure values from the state object
   const {
     selectedShape,
     selectedFancyColor,
@@ -12,11 +14,9 @@ export const generateQueryParams = (state: any) => {
     selectedSymmetry,
     selectedFluorescence,
     selectedCulet,
-    selectedGirdle,
     selectedKeyToSymbol,
     selectedLab,
-    selectedHR,
-    selectedBrilliance,
+
     selectedLocation,
     selectedOrigin,
     priceRangeFrom,
@@ -66,18 +66,23 @@ export const generateQueryParams = (state: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
-    selectedColor
+    selectedColor,
+    girdleTo,
+    girdleFrom
   } = state;
 
+  // Initialize an empty object to store query parameters
   const queryParams: any = {};
+
+  // Check if a specific property exists in the state and add it to the queryParams object
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
   selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
   selectedFancyColor?.length !== 0 &&
-    (queryParams['fancy'] = selectedFancyColor);
+    (queryParams['fancy_color'] = selectedFancyColor);
   selectedIntensity?.length !== 0 &&
-    (queryParams['intensity'] = selectedIntensity);
+    (queryParams['fancy_intensity'] = selectedIntensity);
   selectedOvertone?.length !== 0 &&
-    (queryParams['overtone'] = selectedOvertone);
+    (queryParams['fancy_overtone'] = selectedOvertone);
   selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
@@ -96,13 +101,9 @@ export const generateQueryParams = (state: any) => {
   selectedFluorescence?.length !== 0 &&
     (queryParams['fluorescence'] = selectedFluorescence);
   selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
-  selectedGirdle?.length !== 0 && (queryParams['girdle'] = selectedGirdle);
   selectedKeyToSymbol?.length !== 0 &&
     (queryParams['key_to_symbol'] = selectedKeyToSymbol);
   selectedLab?.length !== 0 && (queryParams['lab'] = selectedLab);
-  selectedHR?.length !== 0 && (queryParams['ha'] = selectedHR);
-  selectedBrilliance?.length !== 0 &&
-    (queryParams['brilliance'] = selectedBrilliance);
   selectedLocation?.length !== 0 &&
     (queryParams['location'] = selectedLocation);
   selectedOrigin?.length !== 0 &&
@@ -125,12 +126,12 @@ export const generateQueryParams = (state: any) => {
       lte: pricePerCaratTo,
       gte: pricePerCaratFrom
     });
-  blackTableBI?.length !== 0 && (queryParams['black_table'] = blackTableBI);
+  blackTableBI?.length !== 0 && (queryParams['table_black'] = blackTableBI);
   sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
-  openCrownBI?.length !== 0 && (queryParams['open_crown'] = openCrownBI);
-  openTableBI?.length !== 0 && (queryParams['open_table'] = openTableBI);
+  openCrownBI?.length !== 0 && (queryParams['crown_open'] = openCrownBI);
+  openTableBI?.length !== 0 && (queryParams['table_open'] = openTableBI);
   openPavilionBI?.length !== 0 &&
-    (queryParams['open_pavilion'] = openPavilionBI);
+    (queryParams['pavilion_open'] = openPavilionBI);
   milkyBI?.length !== 0 && (queryParams['milky'] = milkyBI);
   lusterBI?.length !== 0 && (queryParams['luster'] = lusterBI);
   eyeCleanBI?.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI);
@@ -149,6 +150,12 @@ export const generateQueryParams = (state: any) => {
     (queryParams['surface_graining'] = surfaceGrainingWI);
   internalGrainingWI?.length !== 0 &&
     (queryParams['internal_graining'] = internalGrainingWI);
+  girdleTo.length &&
+    girdleFrom.length &&
+    (queryParams['girdle'] = {
+      lte: girdleTo,
+      gte: girdleFrom
+    });
   tablePerFrom &&
     tablePerTo &&
     (queryParams['table_percentage'] = {
@@ -175,7 +182,7 @@ export const generateQueryParams = (state: any) => {
     });
   pavilionDepthFrom &&
     pavilionDepthTo &&
-    (queryParams['pavilion_depth'] = {
+    (queryParams['pavilion_height'] = {
       lte: pavilionDepthTo,
       gte: pavilionDepthFrom
     });

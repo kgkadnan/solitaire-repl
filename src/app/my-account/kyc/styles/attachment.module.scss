@@ -1,0 +1,31 @@
+.modalStyle {
+  max-width: 50vw;
+  height: 80vh;
+  z-index: 1200;
+  color: hsl(var(--solitaire-tertiary));
+  border-radius: 30px;
+}
+
+.transparent {
+  background-color: transparent;
+  border: 1px solid hsl(var(--solitaire-quaternary));
+
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+.filled {
+  background-color: hsl(var(--solitaire-quaternary));
+
+  font-size: 14px !important;
+  width: 150px;
+  height: 35px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

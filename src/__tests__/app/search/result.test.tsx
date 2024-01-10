@@ -73,11 +73,11 @@ describe('Render Search Result Page', () => {
           intensity: 'N',
           ha: null,
           brilliance: null,
-          black_table: 'BPP',
+          table_black: 'BPP',
           side_black: 'SB0',
-          open_crown: 'N',
-          open_table: 'VS',
-          open_pavilion: 'VS',
+          crown_open: 'N',
+          table_open: 'VS',
+          pavilion_open: 'VS',
           milky: 'M0',
           luster: 'EX',
           eye_clean: 'Y',
@@ -98,7 +98,7 @@ describe('Render Search Result Page', () => {
           depth_percentage: 30,
           table_percentage: 68,
           crown_angle: 0,
-          pavilion_depth: 0,
+          pavilion_height: 0,
           crown_height: 0,
           lower_half: 0,
           ratio: 0,
@@ -245,7 +245,7 @@ describe('Render Search Result Page', () => {
               shape: ['EM'],
               clarity: ['SI1'],
               symmetry: ['VG'],
-              black_table: ['BPP']
+              table_black: ['BPP']
             }
           }
         ])

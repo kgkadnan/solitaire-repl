@@ -1,20 +1,11 @@
-import {
-  createApi,
-  fetchBaseQuery,
-  BaseQueryFn
-} from '@reduxjs/toolkit/query/react';
-
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from './base-query';
 
 // Define the type for the base query function
-type BaseQuery = BaseQueryFn<any, unknown, unknown>;
 
 export const productApi = createApi({
   reducerPath: 'productReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }) as BaseQuery,
+  baseQuery: createBaseQuery(),
   tagTypes: ['Product'],
 
   endpoints: builder => ({
@@ -34,7 +25,7 @@ export const productApi = createApi({
     }),
     confirmProduct: builder.mutation({
       query: data => ({
-        url: `confirm-stone`,
+        url: `/store/products/confirm`,
         method: 'POST',
         body: data
       }),

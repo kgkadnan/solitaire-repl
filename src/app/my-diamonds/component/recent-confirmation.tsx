@@ -1,9 +1,14 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
+import { MyDiamonds } from '@/app/my-diamonds/component/my-diamond/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
+import { IRecentConfirmationData } from '../interface/recent-confirmation-interface';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
-const RecentConfirmation = ({ recentConfirmData }: any) => {
+const RecentConfirmation: React.FC<{
+  recentConfirmData: IRecentConfirmationData[];
+  modalSetState: IModalSetState;
+}> = ({ recentConfirmData, modalSetState }) => {
   // Define query parameters for API request
   const singleExpand = 'items.variant.product%2Citems.variant.prices';
 
@@ -39,6 +44,7 @@ const RecentConfirmation = ({ recentConfirmData }: any) => {
       handleCardClick={handleCardClick}
       productPageDetail={recentConfirmationDetail}
       check={recentConfirmationCheck}
+      modalSetState={modalSetState}
     />
   );
 };

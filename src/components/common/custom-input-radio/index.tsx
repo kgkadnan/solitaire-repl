@@ -1,21 +1,36 @@
-import React, { ChangeEvent, ReactNode } from 'react';
+import React, { useRef } from 'react';
 import styles from './custom-input-radio.module.scss';
 
-interface RadioButtonProps {
-  radioMetaData: {
-    label: string | ReactNode;
-    value: string;
-    checked?: boolean;
-    onChange: (value: string) => void;
-    name: string;
-  };
-}
+export const RadioButton: React.FC<any> = ({
+  radioMetaData,
+  onChange,
+  handleInputChange,
+  inputValue
+}) => {
+  const {
+    label,
+    value,
+    name,
+    checked,
+    isInput,
+    inputName,
+    placeholder,
+    inputStyle
+  } = radioMetaData;
 
-export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
-  const { label, value, name, checked, onChange } = radioMetaData;
-
-  const handleInputChange = () => {
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const handleRadioChange = () => {
     onChange(value);
+    if (inputRef.current) {
+      inputRef.current.focus();
+    }
+  };
+
+  const handleInputClick = () => {
+    if (inputRef.current) {
+      onChange(value);
+      inputRef.current.focus();
+    }
   };
 
   return (
@@ -27,11 +42,26 @@ export const RadioButton: React.FC<RadioButtonProps> = ({ radioMetaData }) => {
           name={name}
           value={value}
           checked={checked}
-          onChange={handleInputChange}
+          onChange={handleRadioChange}
         />
-        {label}
+        <p>{label}</p>
         <span></span>
       </label>
+
+      {isInput && (
+        <input
+          className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}
+          type="text"
+          name={inputName}
+          value={inputValue}
+          onChange={e => {
+            handleInputChange(e);
+          }}
+          onClick={handleInputClick}
+          ref={inputRef}
+          placeholder={placeholder}
+        />
+      )}
     </div>
   );
 };

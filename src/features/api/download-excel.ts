@@ -1,18 +1,15 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-const apiURL = process.env.NEXT_PUBLIC_API_URL;
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from './base-query';
 
 export const downloadExcelApi = createApi({
   reducerPath: 'downloadExcelReducer',
-  baseQuery: fetchBaseQuery({
-    baseUrl: apiURL,
-    credentials: 'include'
-  }),
+  baseQuery: createBaseQuery(),
   tagTypes: ['downloadExcel'],
 
   endpoints: builder => ({
     downloadExcel: builder.mutation({
       query: filter => ({
-        url: `export-excel`,
+        url: `/store/products/export-excel`,
         method: 'POST', // Use the appropriate HTTP method
         body: filter // Modify this to match your API's payload
       }),

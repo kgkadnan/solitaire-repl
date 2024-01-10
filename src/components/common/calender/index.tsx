@@ -25,8 +25,6 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
   date,
   handleDate
 }) => {
-  console.log(date, 'll');
-
   return (
     <div className={cn('grid gap-2', className)}>
       <Popover>
@@ -52,13 +50,9 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
           align="start"
         >
           <div className="border-b border-solitaireTertiary pb-3 text-[12px]">
-            {/* {differenceInDays(date?.to, date?.from)} days */}
             {date?.from ? (
               date.to ? (
                 <>
-                  {/* <div className='text-[14px] tracking-wide mb-2'>
-                    {differenceInDays(date.to, date.from)} Days
-                  </div> */}
                   {format(date.from, 'LLL dd, y')} -{' '}
                   {format(date.to, 'LLL dd, y')}
                 </>
@@ -85,10 +79,6 @@ export const CustomCalender: React.FC<ICustomeCalendarProps> = ({
               displayButtonAllStyle={{ displayButtonStyle: styles.transparent }}
               handleClick={() => handleDate('')}
             />
-            {/* <CustomDisplayButton
-              displayButtonLabel='Close'
-              displayButtonAllStyle={{ displayButtonStyle: styles.filled }}
-            /> */}
           </div>
         </PopoverContent>
       </Popover>

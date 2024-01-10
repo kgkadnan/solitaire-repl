@@ -49,6 +49,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
     yourSelection[activeTab] = {
       id: yourSelection[activeTab]?.id,
       saveSearchName: yourSelection[activeTab]?.saveSearchName,
+      searchId: data?.search_id,
       isSavedSearch: true,
       queryParams: yourSelection[activeTab].queryParams
     };
@@ -60,7 +61,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
   return (
     <div className="mb-2 mt-[-40px]">
       {/* Count Bar  */}
-      <div className="flex justify-between items-center h-7">
+      <div className="flex justify-between items-center h-7 mt-4">
         <div className="flex gap-3">
           <p>
             {ManageLocales('app.searchResult.countBar.pieces')}:
@@ -107,7 +108,7 @@ export const ResultHeader: React.FC<IResultHeaderProps> = ({
                   : setIsInputDialogOpen(true)
               }
               displayButtonAllStyle={{
-                displayLabelStyle: `text-solitaireTertiary cursor-pointer`
+                displayLabelStyle: `text-solitaireQuaternary border-b border-solid border-solitaireQuaternary cursor-pointer`
               }}
             />
           ) : (

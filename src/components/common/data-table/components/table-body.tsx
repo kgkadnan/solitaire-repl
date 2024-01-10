@@ -1,6 +1,7 @@
+import React from 'react';
+
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelFromBase64 } from '@/utils/download-excel-from-base64';
-import { Product, TableColumn } from '@/app/search/result/result-interface';
+import { IProduct, ITableColumn } from '@/app/search/result/result-interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
@@ -17,6 +18,9 @@ import { DetailImageSlider } from './detail-image-slider';
 import { DetailCertificateSlider } from './detail-certificate-slider';
 import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
+import { performDownloadExcel } from '@/utils/perform-download-excel';
+import Link from 'next/link';
+import logger from 'logging/log-util';
 
 export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -25,6 +29,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
   tableCol,
   errorSetState,
   confirmStoneSetState,
+  confirmStoneState,
   modalSetState
 }) => {
   const { checkboxState, checkboxSetState } = checkboxData ?? {};
@@ -32,9 +37,15 @@ export const TableBody: React.FC<ITbodyProps> = ({
   const { setIsCheckAll, setIsCheck } = checkboxSetState ?? {};
 
   const { setErrorText, setIsError } = errorSetState;
-  const { setConfirmStoneData } = confirmStoneSetState ?? {};
-  const { setIsDialogOpen, setIsSliderOpen, setDialogContent } =
-    modalSetState ?? {};
+  const { setConfirmStoneData, setIsComeFromConfirmStone } =
+    confirmStoneSetState ?? {};
+  const {
+    setIsDialogOpen,
+    setIsSliderOpen,
+    setDialogContent,
+    setPersistDialogContent,
+    setIsPersistDialogOpen
+  } = modalSetState ?? {};
 
   const { dataTableBodyState, dataTableBodySetState } =
     useDataTableBodyStateManagement();
@@ -47,27 +58,33 @@ export const TableBody: React.FC<ITbodyProps> = ({
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
     if (sliderData[0].diamond_status === MEMO_OUT_STATUS) {
-      console.log('memo out');
+      logger.info('Memoout');
     } else if (sliderData[0]) {
       addCart({
         variants: [sliderData[0]?.variants[0].id]
       })
         .unwrap()
-        .then(() => {
-          setDialogContent?.(
-            <>
-              <div className="max-w-[400px] flex justify-center align-middle">
+        .then(res => {
+          setPersistDialogContent?.(
+            <div className="text-center  flex flex-col justify-center items-center ">
+              <div className="w-[350px] flex justify-center items-center mb-3">
                 <Image src={confirmImage} alt="vector image" />
               </div>
-              <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                Download Excel Successfully
+              <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
+                {res?.message}
               </div>
-            </>
+              <Link
+                href={'/my-cart?active-tab=active'}
+                className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+              >
+                Go To &quot;MyCart&quot;
+              </Link>
+            </div>
           );
-          setIsDialogOpen?.(true);
+          setIsPersistDialogOpen?.(true);
         })
-        .catch(() => {
-          console.log('1111111111111111');
+        .catch(error => {
+          logger.error(error);
         });
     }
   };
@@ -78,30 +95,15 @@ export const TableBody: React.FC<ITbodyProps> = ({
    */
   const downloadExcelFunction = () => {
     if (sliderData[0]) {
-      downloadExcel({
-        productIds: sliderData[0].id
-      })
-        .unwrap()
-        .then(res => {
-          const { data, fileName } = res;
-          if (data) {
-            downloadExcelFromBase64(data, fileName);
-            setDialogContent?.(
-              <>
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="vector image" />
-                </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                  Download Excel Successfully
-                </div>
-              </>
-            );
-            setIsDialogOpen?.(true);
-          }
-        })
-        .catch(error => {
-          console.log('error', error);
-        });
+      performDownloadExcel({
+        products: [sliderData[0].id],
+        downloadExcelApi: downloadExcel,
+        setDialogContent,
+        setIsDialogOpen,
+        setIsCheck,
+        setIsCheckAll,
+        setIsError
+      });
     }
   };
 
@@ -130,16 +132,13 @@ export const TableBody: React.FC<ITbodyProps> = ({
             {
               label: 'Find Matching Pair',
               fn: ''
-            },
-            {
-              label: 'Compare Stone',
-              fn: ''
             }
           ]}
         />
       )
     },
-    {
+    // Conditionally include this block only if isComeFromConfirmStone is false
+    !confirmStoneState?.isComeFromConfirmStone && {
       id: 2,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.transparent,
@@ -150,7 +149,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
           setErrorText,
           setIsError,
           setIsSliderOpen,
-          setConfirmStoneData
+          setConfirmStoneData,
+          setIsComeFromConfirmStone
         )
     },
     {
@@ -161,7 +161,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
     }
   ];
 
-  const handleRowClick = (row: Product) => {
+  const handleRowClick = (row: IProduct) => {
     handleCheckboxClick({
       id: row.id,
       isCheck,
@@ -173,11 +173,11 @@ export const TableBody: React.FC<ITbodyProps> = ({
     });
   };
 
-  const renderCellContent = (column: TableColumn, row: any, index: number) => {
+  const renderCellContent = (column: ITableColumn, row: any, index: number) => {
     switch (column.accessor) {
       case 'details':
         return (
-          <div
+          <button
             className="flex items-center gap-2"
             onClick={e => e.stopPropagation()}
           >
@@ -195,11 +195,11 @@ export const TableBody: React.FC<ITbodyProps> = ({
               tableRows={tableRows}
               index={index}
             />
-          </div>
+          </button>
         );
       case 'lot_id':
         return (
-          <div onClick={e => e.stopPropagation()}>
+          <button onClick={e => e.stopPropagation()}>
             <DiamondDetailSlider
               dataTableBodyState={dataTableBodyState}
               dataTableBodySetState={dataTableBodySetState}
@@ -210,7 +210,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
               footerButtonData={footerButtonData}
               modalSetState={modalSetState}
             />
-          </div>
+          </button>
         );
       case 'lab':
         return (
@@ -224,15 +224,15 @@ export const TableBody: React.FC<ITbodyProps> = ({
           </a>
         );
       case 'amount':
-        return row.variants[0].prices[0].amount;
+        return row.variants[0].prices[0].amount ?? '-';
       default:
-        return row[column.accessor] !== null ? row[column.accessor] : '-';
+        return row[column.accessor] ?? '-';
     }
   };
 
   return (
     <tbody className={styles.tableBody}>
-      {tableRows?.map((row: Product, index: number) => (
+      {tableRows?.map((row: IProduct, index: number) => (
         <tr
           key={row.id}
           className={styles.tableRow}
@@ -252,7 +252,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
             </td>
           )}
 
-          {tableCol?.map((column: TableColumn, tableColindex: number) => (
+          {tableCol?.map((column: ITableColumn, tableColindex: number) => (
             <td
               style={{
                 left: `${

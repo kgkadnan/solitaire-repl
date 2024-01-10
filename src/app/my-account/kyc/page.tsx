@@ -45,6 +45,7 @@ interface IKYCData {
     };
   };
 }
+
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
@@ -516,4 +517,4 @@ const KYC: React.FC = () => {
   }
 };
 
-export default Kyc;
+export default KYC;

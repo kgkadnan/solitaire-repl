@@ -1,10 +1,9 @@
 import { useState } from 'react';
 
-export interface Errors {
+export interface IErrors {
   discount: { from: string | null; to: string | null };
   price_range: { from: string | null; to: string | null };
   price_per_carat: { from: string | null; to: string | null };
-  // Add more input groups here if needed
 }
 
 const useValidationStateManagement = () => {
@@ -20,7 +19,8 @@ const useValidationStateManagement = () => {
   const [inputError, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
   const [selectedStep, setSelectedStep] = useState('');
-  const [errors, setErrors] = useState<Errors>({
+  const [selectedShadeContain, setSelectedShadeContain] = useState('');
+  const [errors, setErrors] = useState<IErrors>({
     discount: { from: null, to: null },
     price_range: { from: null, to: null },
     price_per_carat: { from: null, to: null }
@@ -36,6 +36,8 @@ const useValidationStateManagement = () => {
     setErrors,
     selectedStep,
     setSelectedStep,
+    selectedShadeContain,
+    setSelectedShadeContain,
     searchCount,
     setSearchCount,
     searchUrl,

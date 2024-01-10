@@ -31,7 +31,6 @@ export interface IImageContainerProps {
   overriddenStyles?: ISearchCardStyleProps;
   handleCardAction?: (stone: string) => void;
   defaultCardPosition?: boolean;
-  isBlur?: boolean;
   blurContent?: React.ReactNode;
 }
 
@@ -49,9 +48,7 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
   const {
     overriddenStyles = {},
     handleCardAction = () => {},
-    defaultCardPosition = true,
-    isBlur = false, // Default value is set to false
-    blurContent
+    defaultCardPosition = true
   } = card;
   const {
     cardContainerStyle,
@@ -66,78 +63,42 @@ const CustomSearchResultCard: React.FC<IImageContainerProps> = (
   };
 
   return (
-    <>
-      <div
-        className={`flex ${style.mainContainer} ${
-          isBlur && style.cardContainerWithContent
-        }`}
+    <div className={`flex ${style.mainContainer} `}>
+      <Card
+        className={`${style.cardContainer} ${cardContainerStyle} ${cardHeaderContainerStyle}  `}
+        data-testid={`card-${id}`}
       >
-        <Card
-          className={`${style.cardContainer} ${cardContainerStyle} ${cardHeaderContainerStyle}  `}
-          data-testid={`card-${id}`}
-        >
-          <CardHeader className={`${style.cardHeaderContainer} `}>
-            <div className={`${style.cardHeaderText} `}>
-              <CardTitle className={`${style.cardTitle} ${cardTitleStyle} `}>
-                {unBlurHeader!}
-                <div
-                  className={`${style.cardTitle} ${cardTitleStyle} ${
-                    isBlur ? style.blur : '' // Apply blur class if isBlur is true
-                  }`}
-                >
-                  {' '}
-                  {cardHeader}
-                </div>
-              </CardTitle>
-              <CardDescription
-                className={`${
-                  isBlur ? style.blur : '' // Apply blur class if isBlur is true
-                }`}
-              >
-                {cardDescription}
-              </CardDescription>
-              {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
-            </div>
-            <CardDescription
-              className={`${style.cardDescription} ${cardDescription} ${
-                isBlur ? style.blur : '' // Apply blur class if isBlur is true
-              }`}
-            >
-              {cardDescription}
-            </CardDescription>
-          </CardHeader>
-
-          {defaultCardPosition && (
-            <CardContent
-              className={`${
-                isBlur ? style.blur : '' // Apply blur class if isBlur is true
-              }`}
-            >
-              {cardContent}
-            </CardContent>
-          )}
-        </Card>
-        {isBlur && (
-          <>
-            <div className={style.floatingContent}>
-              {/* Content that appears above the blurred card */}
-              <div className={style.blurCardMainContainer}>
-                <div className={style.blurCardContent}>{blurContent}</div>
+        <CardHeader className={`${style.cardHeaderContainer} `}>
+          <div className={`${style.cardHeaderText} `}>
+            <CardTitle className={`${style.cardTitle} ${cardTitleStyle} `}>
+              {unBlurHeader!}
+              <div className={`${style.cardTitle} ${cardTitleStyle}`}>
+                {' '}
+                {cardHeader}
               </div>
-            </div>
-          </>
-        )}
+            </CardTitle>
+            <CardDescription>{cardDescription}</CardDescription>
+            {!defaultCardPosition && <CardContent>{cardContent}</CardContent>}
+          </div>
+          <CardDescription
+            className={`${style.cardDescription} ${cardDescription}`}
+          >
+            {cardDescription}
+          </CardDescription>
+        </CardHeader>
 
-        {cardActionIcon && (
-          <Image
-            src={cardActionIcon}
-            alt={'edit'}
-            onClick={handleClickEvent}
-            className={`${style.cardActionIcon} ${cardActionIconStyle}`}
-          />
-        )}
-      </div>
-    </>
+        {defaultCardPosition && <CardContent>{cardContent}</CardContent>}
+      </Card>
+
+      {cardActionIcon && (
+        <Image
+          src={cardActionIcon}
+          alt={'edit'}
+          onClick={handleClickEvent}
+          className={`${style.cardActionIcon} ${cardActionIconStyle}`}
+        />
+      )}
+    </div>
   );
 };
 

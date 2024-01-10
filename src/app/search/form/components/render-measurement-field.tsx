@@ -3,18 +3,30 @@ import React, { Dispatch, SetStateAction } from 'react';
 import styles from '../form.module.scss';
 import { CustomInputField } from '@/components/common/input-field';
 import advanceSearch from '@/constants/advance-search.json';
-
+import Select from 'react-select';
+import { colourStyles } from '../helpers/select-colour-style';
+import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { computeDropdownFieldFromJson } from '../helpers/compute-dropdown-field-from-json';
+// Define interfaces for the component props
 interface IRange {
-  start: number;
-  end: number;
+  gte: number;
+  lte: number;
 }
 interface IRenderMeasurementData {
   parameterState: string[];
   setParameterState: Dispatch<SetStateAction<string>>[];
   label: string;
   range: IRange;
+  errorSetState?: Dispatch<SetStateAction<string>>;
+  errorState?: string;
 }
-const renderMeasurementField = (state: any, setState: any) => {
+const renderMeasurementField = (
+  state: any,
+  setState: any,
+  errorState: any,
+  errorSetState: any
+) => {
+  // Destructure state variables
   const {
     tablePerFrom,
     tablePerTo,
@@ -42,6 +54,7 @@ const renderMeasurementField = (state: any, setState: any) => {
     pavilionAngleTo,
     starLengthFrom,
     starLengthTo,
+    selectedCulet,
     girdleFrom,
     girdleTo
   } = state;
@@ -74,205 +87,267 @@ const renderMeasurementField = (state: any, setState: any) => {
     setStarLengthFrom,
     setStarLengthTo,
     setGirdleFrom,
-    setGirdleTo
+    setGirdleTo,
+
+    setSelectedCulet
   } = setState;
 
+  const {
+    setTablePerError,
+
+    setDepthPerError,
+
+    setRatioError,
+
+    setLengthError,
+
+    setWidthError,
+
+    setDepthError,
+
+    setCrownAngleError,
+
+    setCrownHeightError,
+
+    setGirdlePerError,
+
+    setPavilionAngleError,
+
+    setPavilionHeightError,
+
+    setLowerHalfError,
+
+    setStarLengthError
+  } = errorSetState;
+
+  const {
+    tablePerError,
+
+    depthPerError,
+
+    ratioError,
+
+    lengthError,
+
+    widthError,
+
+    depthError,
+
+    crownAngleError,
+
+    crownHeightError,
+
+    girdlePerError,
+
+    pavilionAngleError,
+
+    pavilionHeightError,
+
+    lowerHalfError,
+
+    starLengthError
+  } = errorState;
+
+  // Define an array of objects representing measurement parameters and their state management functions
   const parameterDataState = [
     {
       parameterState: [tablePerFrom, tablePerTo],
-      setParameterState: [setTablePerFrom, setTablePerTo]
+      setParameterState: [setTablePerFrom, setTablePerTo],
+      errorSetState: setTablePerError,
+      errorState: tablePerError
     },
     {
       parameterState: [depthPerFrom, depthPerTo],
-      setParameterState: [setDepthPerFrom, setDepthPerTo]
+      setParameterState: [setDepthPerFrom, setDepthPerTo],
+      errorSetState: setDepthPerError,
+      errorState: depthPerError
     },
     {
       parameterState: [ratioFrom, ratioTo],
-      setParameterState: [setRatioFrom, setRatioTo]
+      setParameterState: [setRatioFrom, setRatioTo],
+      errorSetState: setRatioError,
+      errorState: ratioError
     },
     {
       parameterState: [lengthFrom, lengthTo],
-      setParameterState: [setLengthFrom, setLengthTo]
+      setParameterState: [setLengthFrom, setLengthTo],
+      errorSetState: setLengthError,
+      errorState: lengthError
     },
     {
       parameterState: [widthFrom, widthTo],
-      setParameterState: [setWidthFrom, setWidthTo]
+      setParameterState: [setWidthFrom, setWidthTo],
+      errorSetState: setWidthError,
+      errorState: widthError
     },
     {
       parameterState: [depthFrom, depthTo],
-      setParameterState: [setDepthFrom, setDepthTo]
+      setParameterState: [setDepthFrom, setDepthTo],
+      errorSetState: setDepthError,
+      errorState: depthError
     },
     {
       parameterState: [crownAngleFrom, crownAngleTo],
-      setParameterState: [setCrownAngleFrom, setCrownAngleTo]
+      setParameterState: [setCrownAngleFrom, setCrownAngleTo],
+      errorSetState: setCrownAngleError,
+      errorState: crownAngleError
     },
     {
       parameterState: [crownHeightFrom, crownHeightTo],
-      setParameterState: [setCrownHeightFrom, setCrownHeightTo]
+      setParameterState: [setCrownHeightFrom, setCrownHeightTo],
+      errorSetState: setCrownHeightError,
+      errorState: crownHeightError
     },
     {
       parameterState: [girdlePerFrom, girdlePerTo],
-      setParameterState: [setGirdlePerFrom, setGirdlePerTo]
+      setParameterState: [setGirdlePerFrom, setGirdlePerTo],
+      errorSetState: setGirdlePerError,
+      errorState: girdlePerError
     },
     {
       parameterState: [pavilionAngleFrom, pavilionAngleTo],
-      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo]
+      setParameterState: [setPavilionAngleFrom, setPavilionAngleTo],
+      errorSetState: setPavilionAngleError,
+      errorState: pavilionAngleError
     },
     {
       parameterState: [pavilionDepthFrom, pavilionDepthTo],
-      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo]
+      setParameterState: [setPavilionDepthFrom, setPavilionDepthTo],
+      errorSetState: setPavilionHeightError,
+      errorState: pavilionHeightError
     },
     {
       parameterState: [lowerHalfFrom, lowerHalfTo],
-      setParameterState: [setLowerHalfFrom, setLowerHalfTo]
+      setParameterState: [setLowerHalfFrom, setLowerHalfTo],
+      errorSetState: setLowerHalfError,
+      errorState: lowerHalfError
     },
     {
       parameterState: [starLengthFrom, starLengthTo],
-      setParameterState: [setStarLengthFrom, setStarLengthTo]
-    },
-    {
-      parameterState: [girdleFrom, girdleTo],
-      setParameterState: [setGirdleFrom, setGirdleTo]
+      setParameterState: [setStarLengthFrom, setStarLengthTo],
+      errorSetState: setStarLengthError,
+      errorState: starLengthError
     }
   ];
+
+  // Map the parameterDataState to create an array of objects with additional data from advanceSearch
   const parameterData = parameterDataState.map((parameter, index) => {
     return { ...parameter, ...advanceSearch.parameter[index] };
   });
 
-  const initialErrorState = {
-    key: '',
-    value: ''
+  // Function to handle filter changes and culet selection based on user input
+  const handleCuletChange = (data: any) => {
+    setSelectedCulet(data);
   };
 
-  // const [fromError, setFromError] = useState(initialErrorState);
-
-  const fromError = '';
-  const setFromError = '';
-
-  // const [fromAngle, setFromAngle] = useState('');
-  const fromAngle = '';
-  const setFromAngle = '';
-  // const [toAngle, setToAngle] = useState('');
-
-  const toAngle = '';
-  const setToAngle = '';
-
-  const handleAngle = (
-    key: string,
-    value: string,
-    setAngle: any,
-    setError: any,
-    otherValue: any
-  ) => {
-    const error = validateAngle(value, 0, 360);
-
-    if (
-      value.length > 0 &&
-      otherValue !== '' &&
-      value !== '' &&
-      parseInt(value) < parseInt(otherValue)
-    ) {
-      setError({ key, value: 'Please enter a valid range from 0 to 360' });
-    } else {
-      setError(initialErrorState);
-    }
-    setAngle(value);
-    if (error) {
-      setError({ key, value: error });
-    }
-  };
-
-  function validateAngle(value: string, min: number, max: number) {
-    const numValue = parseInt(value);
-
-    if (
-      value.length > 0 &&
-      (value === '' || numValue < min || numValue > max)
-    ) {
-      return 'Please enter a valid range from 0 to 100';
-    }
-    return '';
-  }
-
-  return parameterData.map((parameter: IRenderMeasurementData) => (
-    <div key={parameter.label} className={styles.parameterContainer}>
-      <CustomInputlabel
-        htmlfor="text"
-        label={parameter.label}
-        overriddenStyles={{ label: styles.labelPlainColor }}
-      />
-      <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
-        <CustomInputField
-          type="number"
-          name={`${parameter.parameterState[0]}`}
-          onChange={e => {
-            parameter.setParameterState[0](e.target.value);
-          }}
-          value={parameter.parameterState[0]}
-          style={{
-            input: styles.inputFieldStyles
-          }}
-          onBlur={
-            e =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setFromAngle,
-                    setFromError,
-                    toAngle
-                  )
-                : ''
-            // handleValidate(
-            //     parameter.label,
-            //     e.target.value,
-            //     setFromValue,
-            //     setFromError,
-            //     toValue
-            //   )
-          }
-        />
-        <div className={styles.parameterLabel}>to</div>
-        <CustomInputField
-          type="number"
-          name={`${parameter.parameterState[1]}`}
-          onChange={e => {
-            parameter.setParameterState[1](e.target.value);
-          }}
-          value={parameter.parameterState[1]}
-          style={{
-            input: styles.inputFieldStyles
-          }}
-          onBlur={
-            e =>
-              parameter.label === 'Crown Angle' ||
-              parameter.label === 'Pavilion Angle'
-                ? handleAngle(
-                    parameter.label,
-                    e.target.value,
-                    setToAngle,
-                    setFromError,
-                    fromAngle
-                  )
-                : ''
-            //  handleValidate(
-            //     parameter.label,
-            //     e.target.value,
-            //     setToValue,
-            //     setFromError,
-            //     fromValue
-            //   )
-          }
+  const culetField = () => {
+    return (
+      <div className={`${styles.parameterContainer} pt-6`}>
+        <Select
+          value={selectedCulet}
+          options={computeDropdownFieldFromJson(advanceSearch.culet)}
+          onChange={handleCuletChange}
+          placeholder={'Culet'}
+          styles={colourStyles}
         />
       </div>
-      {/* {fromError.key === parameter.label && ( */}
-      {fromError === parameter.label && (
-        <div className={styles.validationMessage}>{fromError}</div>
-        // <div className={styles.validationMessage}>{fromError.value}</div>
-      )}
-    </div>
-  ));
-};
+    );
+  };
 
+  const handleGirdleFrom = (data: any) => {
+    setGirdleFrom(data);
+  };
+  const handleGirdleTo = (data: any) => {
+    setGirdleTo(data);
+  };
+
+  const girdle = () => {
+    return (
+      <div className={styles.parameterContainer}>
+        <CustomInputlabel
+          htmlfor="text"
+          label={'Girdle'}
+          overriddenStyles={{ label: styles.labelPlainColor }}
+        />
+        <div className={`${styles.filterSectio}  ${styles.parameterFilter}`}>
+          <Select
+            value={girdleFrom}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
+            onChange={handleGirdleFrom}
+            styles={colourStyles}
+          />
+          <div className={styles.parameterLabel}>to</div>
+          <Select
+            value={girdleTo}
+            options={computeDropdownFieldFromJson(advanceSearch.girdle)}
+            onChange={handleGirdleTo}
+            styles={colourStyles}
+          />
+        </div>
+      </div>
+    );
+  };
+
+  const measurementFields = () => {
+    return parameterData.map((parameter: IRenderMeasurementData) => (
+      <div key={parameter.label} className={styles.parameterContainer}>
+        <CustomInputlabel
+          htmlfor="text"
+          label={parameter.label}
+          overriddenStyles={{ label: styles.labelPlainColor }}
+        />
+        <div className={`${styles.filterSection}  ${styles.parameterFilter}`}>
+          <CustomInputField
+            type="number"
+            name={`${parameter.parameterState[0]}`}
+            onChange={e => {
+              parameter.setParameterState[0](e.target.value);
+              errorSetState &&
+                handleNumericRange({
+                  from: e.target.value,
+                  to: parameter.parameterState[1],
+                  setErrorState: parameter?.errorSetState!,
+                  rangeCondition: parameter.range
+                });
+            }}
+            value={parameter.parameterState[0]}
+            style={{
+              input: styles.inputFieldStyles
+            }}
+          />
+          <div className={styles.parameterLabel}>to</div>
+          <CustomInputField
+            type="number"
+            name={`${parameter.parameterState[1]}`}
+            onChange={e => {
+              parameter.setParameterState[1](e.target.value);
+              errorSetState &&
+                handleNumericRange({
+                  from: parameter.parameterState[0],
+                  to: e.target.value,
+                  setErrorState: parameter?.errorSetState!,
+                  rangeCondition: parameter.range
+                });
+            }}
+            value={parameter.parameterState[1]}
+            style={{
+              input: styles.inputFieldStyles
+            }}
+          />
+        </div>
+        {parameter.errorState && (
+          <div className={styles.validationMessage}>{parameter.errorState}</div>
+        )}
+      </div>
+    ));
+  };
+
+  return (
+    <>
+      {measurementFields()}
+      {girdle()}
+      {culetField()}
+    </>
+  );
+};
 export default renderMeasurementField;

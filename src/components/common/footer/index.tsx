@@ -11,7 +11,7 @@ export const CustomFooter: React.FC<ICustomFooterProps> = ({
 }) => {
   return (
     <div className={`${styles.footerParentDiv} ${noBorderTop}`}>
-      {footerButtonData?.map(item => {
+      {footerButtonData?.filter(Boolean)?.map(item => {
         if (item?.isHidden) {
           return null;
         }

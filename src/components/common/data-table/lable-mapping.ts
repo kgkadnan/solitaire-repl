@@ -1,11 +1,11 @@
-import { KeyLabelMapping } from './interface';
+import { IKeyLabelMapping } from '@/interface/interface';
 
 /* The above code is defining several constant variables that map keys to labels. These mappings are
   used to display labels for specific keys in a user interface. Each constant variable represents a
   different category of labels, such as basic details, measurements, inclusion details, and other
   information. The keys in the mappings correspond to specific data fields, while the values represent
   the labels to be displayed. */
-export const keyLabelMapping: KeyLabelMapping = {
+export const keyLabelMapping: IKeyLabelMapping = {
   lot_id: 'Stock No',
   shape: 'Shape',
   carat: 'Carat',
@@ -14,7 +14,7 @@ export const keyLabelMapping: KeyLabelMapping = {
   discount: 'Discount',
   amount: 'Amt($)'
 };
-export const basicDetailsLabelMapping: KeyLabelMapping = {
+export const basicDetailsLabelMapping: IKeyLabelMapping = {
   lot_id: 'Stock No.',
   // rpt_number: 'Report No.',
   shape: 'Shape',
@@ -36,27 +36,27 @@ export const basicDetailsLabelMapping: KeyLabelMapping = {
   type_certificate: 'Type 2 Certificate',
   inscription: 'Laser Inscription'
 };
-export const measurementsLabelMapping: KeyLabelMapping = {
-  table_percentage: 'Table%',
-  depth_percentage: 'Depth%',
+export const measurementsLabelMapping: IKeyLabelMapping = {
+  table_percentage: 'Table %',
+  depth_percentage: 'Depth %',
   ratio: 'Ratio',
   length: 'Length',
   width: 'Width',
   depth: 'Depth',
   crown_angle: 'Crown Angle',
   crown_height: 'Crown Height',
-  girdle_percentage: 'Girdle%',
+  girdle_percentage: 'Girdle %',
   pavilion_angle: 'Pavilion Angle',
-  pavilion_depth: 'Pavilion Depth',
+  pavilion_height: 'Pavilion Height',
   lower_half: 'Lower Half',
   star_length: 'Star Length'
 };
-export const inclusionDetailsLabelMapping: KeyLabelMapping = {
-  black_table: 'Table Black',
+export const inclusionDetailsLabelMapping: IKeyLabelMapping = {
+  table_black: 'Table Black',
   side_black: 'Black Side',
-  open_crown: 'Crown Open',
-  open_table: 'Table Open',
-  open_pavilion: 'Pavilion Open',
+  crown_open: 'Crown Open',
+  table_open: 'Table Open',
+  pavilion_open: 'Pavilion Open',
   milky: 'Milky',
   luster: 'Luster',
   eye_clean: 'Eye Clean',
@@ -68,7 +68,7 @@ export const inclusionDetailsLabelMapping: KeyLabelMapping = {
   surface_graining: 'Surface Graining',
   internal_graining: 'Internal Graining'
 };
-export const otherInformationsLabelMapping: KeyLabelMapping = {
+export const otherInformationsLabelMapping: IKeyLabelMapping = {
   girdle: 'Girdle',
   key_to_symbbol: 'Key to Symbol',
   report_comments: 'Report Comments'

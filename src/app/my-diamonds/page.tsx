@@ -1,5 +1,5 @@
 'use client';
-import React, { ChangeEvent, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import CustomHeader from '@/components/common/header';
 import styles from './my-diamonds.module.scss';
 import {
@@ -12,17 +12,22 @@ import MyInvoices from './component/my-invoice';
 import PreviousConfirmation from './component/previous-confirmation';
 import {
   MAX_RECENT_CONFIRMATION_COUNT,
-  MAX_MY_INVOICE_LIMIT_COUNT,
-  PAGINATION_INTITAL_LIMIT
+  MAX_MY_INVOICE_LIMIT_COUNT
 } from '@/constants/business-logic';
 import { FilterByDays } from './component/filter-by-days';
 import { Tabs } from './component/tabs';
 import { HeaderSearchBar } from './component/header-search-bar';
 import { useCommonStateManagement } from './hooks/state-management';
+import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { CustomDialog } from '@/components/common/dialog';
+import { CustomModal } from '@/components/common/modal';
 
 const MyDiamonds = () => {
   const { commonState, commonSetState } = useCommonStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
 
+  const { dialogContent, isDialogOpen, isModalOpen, modalContent } = modalState;
+  const { setIsDialogOpen, setIsModalOpen } = modalSetState;
   const {
     prevScrollPos,
     visible,
@@ -103,7 +108,7 @@ const MyDiamonds = () => {
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
     setRecentConfirmData(myDiamondRecentConfirmData?.orders);
-  }, [myDiamondRecentConfirmData, recentConfirmData]);
+  }, [myDiamondRecentConfirmData]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
@@ -128,6 +133,18 @@ const MyDiamonds = () => {
       window.removeEventListener('scroll', handleScroll);
     };
   }, [prevScrollPos]);
+
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
+
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   return (
     <>
@@ -181,16 +198,34 @@ const MyDiamonds = () => {
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
+          <CustomDialog
+            setIsOpen={setIsDialogOpen}
+            isOpens={isDialogOpen}
+            dialogContent={dialogContent}
+          />
+          <CustomModal
+            isOpens={isModalOpen}
+            setIsOpen={setIsModalOpen}
+            dialogContent={modalContent}
+            modalStyle={styles.modalStyle}
+          />
           {activeTab === 'Recent Confirmations' ? (
-            <RecentConfirmation recentConfirmData={recentConfirmData} />
+            <RecentConfirmation
+              recentConfirmData={recentConfirmData}
+              modalSetState={modalSetState}
+            />
           ) : activeTab === 'My Invoices' ? (
-            <MyInvoices myInvoiceData={myInvoiceData} />
+            <MyInvoices
+              myInvoiceData={myInvoiceData}
+              modalSetState={modalSetState}
+            />
           ) : (
             <PreviousConfirmation
               previousConfirmData={previousConfirmData}
               setOffset={setOffset}
               setLimit={setLimit}
               limit={limit}
+              modalSetState={modalSetState}
             />
           )}
         </main>

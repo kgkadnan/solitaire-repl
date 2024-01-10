@@ -16,6 +16,7 @@ export interface IDisplayButtonProps {
   handleClick?: (color: string) => void;
   color?: string;
   isDisable?: boolean;
+  type?: 'button' | 'reset' | 'submit' | undefined;
 }
 
 // CustomDisplayButton component definition
@@ -24,7 +25,8 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
   displayButtonAllStyle,
   handleClick,
   color,
-  isDisable
+  isDisable,
+  type
 }) => {
   return (
     <>
@@ -33,9 +35,10 @@ export const CustomDisplayButton: React.FC<IDisplayButtonProps> = ({
         data-testid="display-button"
         className={`${style?.defaultStyle} ${displayButtonAllStyle?.displayButtonStyle}`}
         onClick={() => {
-          handleClick!(color!);
+          handleClick && handleClick(color!);
         }}
         disabled={isDisable}
+        type={type!}
       >
         {/* Display button label with optional styling */}
         <div

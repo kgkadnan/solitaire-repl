@@ -7,6 +7,8 @@ export const useModalStateManagement = () => {
   const [isSliderOpen, setIsSliderOpen] = useState(false);
   const [modalContent, setModalContent] = useState<ReactNode>();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [persistDialogContent, setPersistDialogContent] = useState<ReactNode>();
+  const [isPersistDialogOpen, setIsPersistDialogOpen] = useState(false);
 
   return {
     modalState: {
@@ -15,7 +17,9 @@ export const useModalStateManagement = () => {
       isInputDialogOpen,
       isSliderOpen,
       modalContent,
-      isModalOpen
+      isModalOpen,
+      persistDialogContent,
+      isPersistDialogOpen
     },
     modalSetState: {
       setDialogContent,
@@ -23,7 +27,9 @@ export const useModalStateManagement = () => {
       setIsInputDialogOpen,
       setIsSliderOpen,
       setModalContent,
-      setIsModalOpen
+      setIsModalOpen,
+      setPersistDialogContent,
+      setIsPersistDialogOpen
     }
   };
 };

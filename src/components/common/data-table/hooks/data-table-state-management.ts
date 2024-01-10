@@ -1,11 +1,11 @@
-import { Product, TableColumn } from '@/app/search/result/result-interface';
+import { IProduct, ITableColumn } from '@/app/search/result/result-interface';
 import { useState } from 'react';
 
 export const useDataTableStateManagement = () => {
-  const [rows, setRows] = useState<Product[]>([]);
-  const [tableColumns, setTableColumns] = useState<TableColumn[]>([]);
+  const [rows, setRows] = useState<IProduct[]>([]);
+  const [tableColumns, setTableColumns] = useState<ITableColumn[]>([]);
 
-  const [sliderData, setSliderData] = useState<Product[]>([]);
+  const [sliderData, setSliderData] = useState<IProduct[]>([]);
 
   const [activeTab, setActiveTab] = useState('');
 

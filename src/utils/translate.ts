@@ -1,14 +1,14 @@
 import en from '../locales/en/common.json';
 import fr from '../locales/fr/common.json';
 
-interface Translations {
+interface ITranslations {
   en: Record<string, string>;
   fr: Record<string, string>;
 }
 
 const computeTransalation = (key: string, locale: string) => {
   let translations: string;
-  const allTranslations: Translations = {
+  const allTranslations: ITranslations = {
     en,
     fr
   };

@@ -6,8 +6,9 @@ import { IConfirmStoneSetState } from '@/components/common/confirm-stone/interfa
 import { StaticImport } from 'next/dist/shared/lib/get-img-props';
 import { Dispatch, ReactNode, SetStateAction } from 'react';
 
-export interface TableColumn {
+export interface ITableColumn {
   label: string;
+  short_label: string;
   accessor: string;
   sequence: number;
   is_fixed: boolean;
@@ -15,7 +16,7 @@ export interface TableColumn {
   id: string;
 }
 
-export interface Rows {
+export interface IRows {
   id: string;
   stock_no: string | null;
   is_memo_out: boolean;
@@ -42,14 +43,14 @@ export interface Rows {
   overtone: string | null;
   ha: string | null;
   brilliance: string | null;
-  black_table: string | null;
+  table_black: string | null;
   side_black: string | null;
-  open_crown: string | null;
-  open_pavilion: string | null;
+  crown_open: string | null;
+  pavilion_open: string | null;
   milky: string | null;
   luster: string | null;
   eye_clean: string | null;
-  open_table: string | null;
+  table_open: string | null;
   table_inclusion: string | null;
   side_inclusion: string | null;
   natural_crown: string | null;
@@ -67,7 +68,7 @@ export interface Rows {
   table_percentage: number | null;
   crown_angle: number | null;
   crown_height: number | null;
-  pavilion_depth: number | null;
+  pavilion_height: number | null;
   lower_half: number | null;
   ratio: number | null;
   length: number | null;
@@ -84,7 +85,7 @@ export interface Rows {
   details: any;
 }
 
-export interface Product {
+export interface IProduct {
   id: string;
   title: string | null;
   subtitle: string | null;
@@ -135,11 +136,11 @@ export interface Product {
   intensity: string | null;
   ha: string | null;
   brilliance: string | null;
-  black_table: string | null;
+  table_black: string | null;
   side_black: string | null;
-  open_crown: string | null;
-  open_table: string | null;
-  open_pavilion: string | null;
+  crown_open: string | null;
+  table_open: string | null;
+  pavilion_open: string | null;
   milky: string | null;
   luster: string | null;
   eye_clean: string | null;
@@ -160,7 +161,7 @@ export interface Product {
   depth_percentage: number | null;
   table_percentage: number | null;
   crown_angle: number | null;
-  pavilion_depth: number | null;
+  pavilion_height: number | null;
   crown_height: number | null;
   lower_half: number | null;
   ratio: number | null;
@@ -294,7 +295,7 @@ interface IData {
   count: number;
   limit: number;
   offset: number;
-  products: Product[];
+  products: IProduct[];
 }
 export interface ISearchResultsProps {
   searchUrl: string;
@@ -317,17 +318,17 @@ export interface IResultHeaderProps {
 }
 
 export interface IDataTableSetState {
-  setRows: Dispatch<SetStateAction<Product[]>>;
-  setTableColumns: Dispatch<SetStateAction<TableColumn[]>>;
+  setRows: Dispatch<SetStateAction<IProduct[]>>;
+  setTableColumns: Dispatch<SetStateAction<ITableColumn[]>>;
 }
 
 export interface IDataTableState {
-  rows: Product[];
-  tableColumns: TableColumn[];
+  rows: IProduct[];
+  tableColumns: ITableColumn[];
 }
 
 export interface IResultFooterProps {
-  rows: Product[];
+  rows: IProduct[];
   refetchRow: any;
   modalSetState: IModalSetState;
   checkboxState: ICheckboxState;
@@ -344,6 +345,8 @@ export interface IModalSetState {
   setIsSliderOpen: Dispatch<SetStateAction<boolean>>;
   setModalContent: Dispatch<SetStateAction<ReactNode>>;
   setIsModalOpen: Dispatch<SetStateAction<boolean>>;
+  setPersistDialogContent: Dispatch<SetStateAction<ReactNode>>;
+  setIsPersistDialogOpen: Dispatch<SetStateAction<boolean>>;
 }
 
 export interface IErrorSetState {

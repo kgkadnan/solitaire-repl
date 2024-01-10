@@ -2,35 +2,31 @@
 import { CustomSearchInputField } from '@/components/common/search-input';
 import { ManageLocales } from '@/utils/translate';
 import { SearchIcon } from 'lucide-react';
-import React, { ChangeEvent, useState } from 'react';
+import React, { useState } from 'react';
 import styles from '../my-diamonds.module.scss';
-import { IHeaderSearchBarProps } from '../my-diamonds-interface';
+import { IHeaderSearchBarProps } from '../interface/my-diamonds-interface';
+import ClearIcon from '@public/assets/icons/close-outline.svg?url';
 
 export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   activeTab,
   setRecentConfiramtionSearchUrl,
   setMyInvoiceSearchUrl,
   setPreviousConfirmationSearchUrl
-}: any) => {
+}) => {
+  // State to manage the search input value
   const [search, setsearch] = useState<string>('');
-  // Handle search input change
-  const handleSearch = (e: ChangeEvent<HTMLInputElement>) => {
+
+  // Handles the change of the search input.
+  const handleSearch = (e: any) => {
     const inputValue = e.target.value;
 
+    // Update the search input value
     setsearch(inputValue);
 
-    if (!inputValue.length) {
+    if (!inputValue) {
       setRecentConfiramtionSearchUrl('');
       setMyInvoiceSearchUrl('');
       setPreviousConfirmationSearchUrl('');
-    } else {
-      if (activeTab === 'Recent Confirmations') {
-        setRecentConfiramtionSearchUrl(`display_id=${inputValue}`);
-      } else if (activeTab === 'My Invoices') {
-        setMyInvoiceSearchUrl(`invoice_id=${inputValue}`);
-      } else {
-        setPreviousConfirmationSearchUrl(`invoice_id=${inputValue}`);
-      }
     }
   };
 
@@ -39,25 +35,61 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
     searchInput: styles.headerInputStyle,
     searchInputMain: 'relative'
   };
+
+  // Handle Enter key press for login
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+      if (activeTab === 'Recent Confirmations') {
+        setRecentConfiramtionSearchUrl(`display_id=${search}`);
+      } else if (activeTab === 'My Invoices') {
+        setMyInvoiceSearchUrl(`invoice_id=${search}`);
+      } else {
+        setPreviousConfirmationSearchUrl(`invoice_id=${search}`);
+      }
+    }
+  };
+
+  const handleClearInput = () => {
+    setsearch('');
+    setRecentConfiramtionSearchUrl('');
+    setMyInvoiceSearchUrl('');
+    setPreviousConfirmationSearchUrl('');
+  };
+
   return (
-    <div className="flex gap-[15px]">
-      <SearchIcon className="stroke-solitaireQuaternary mt-[10px]" />
-      <CustomSearchInputField
-        type="text"
-        name="Search"
-        style={searchInputStyle}
-        value={search}
-        onChange={handleSearch}
-        placeholder={
-          activeTab === 'Recent Confirmations'
-            ? ManageLocales(
-                'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
-              )
-            : ManageLocales(
-                'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
-              )
-        }
-      />
+    <div className="flex">
+      {/* Search icon */}
+      <SearchIcon className="stroke-solitaireQuaternary mt-[10px] mr-[15px]" />
+      <div className="relative">
+        {/* CustomSearchInputField component for the search input */}
+        <CustomSearchInputField
+          type="text"
+          name="Search"
+          style={searchInputStyle}
+          value={search}
+          onChange={handleSearch}
+          handleKeyPress={handleKeyDown}
+          placeholder={
+            // Dynamic placeholder based on the active tab
+            activeTab === 'Recent Confirmations'
+              ? ManageLocales(
+                  'app.myDiamonds.RecentConfirmations.header.searchByOrderId'
+                )
+              : ManageLocales(
+                  'app.myDiamonds.MyInvoices.header.searchByInvoiceId'
+                )
+          }
+        />
+        {search && (
+          <div className="absolute inset-y-0 right-0 flex items-center pr-1">
+            <ClearIcon
+              className="stroke-solitaireQuaternary cursor-pointer"
+              onClick={handleClearInput}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

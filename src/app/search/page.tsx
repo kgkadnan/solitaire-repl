@@ -16,16 +16,12 @@ import { modifySearchResult } from '@/features/search-result/search-result';
 import { useAppDispatch } from '@/hooks/hook';
 import { CustomDialog } from '@/components/common/dialog';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { CustomInputDialog } from '@/components/common/input-dialog';
+
 import {
   useAddSavedSearchMutation,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import CustomLoader from '@/components/common/loader';
-import {
-  LISTING_PAGE_DATA_LIMIT,
-  MAX_SEARCH_TAB_LIMIT
-} from '@/constants/business-logic';
+import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { FloatingLabelInput } from '@/components/common/floating-input';
@@ -35,7 +31,10 @@ import { IProduct } from './result/result-interface';
 
 interface IMyProfileRoutes {
   id: number;
-  pathName: string;
+  pathName: {
+    shortName: string;
+    fullName: string;
+  };
   path: string | number;
 }
 
@@ -69,19 +68,27 @@ function SearchLayout() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [maxTab, setMaxTab] = useState<number>(0);
 
-  const [inputError, setInputError] = useState(false);
+  const [, setInputError] = useState(false);
   const [inputErrorContent, setInputErrorContent] = useState('');
+
+  const [viewPort, setViewPort] = useState<boolean>(true);
 
   const [myProfileRoutes, setMyProfileRoutes] = useState<IMyProfileRoutes[]>([
     {
       id: 1,
-      pathName: ManageLocales('app.searchResult.header.newSearch'),
-      path: `${NEW_SEARCH}`
+      pathName: {
+        shortName: ManageLocales('app.searchResult.header.newSearch'),
+        fullName: ManageLocales('app.searchResult.header.newSearch')
+      },
+      path: ManageLocales('app.search.newSearchRoute')
     },
     {
       id: 2,
-      pathName: ManageLocales('app.savedSearch.header'),
-      path: `${SAVED_SEARCHES}`
+      pathName: {
+        shortName: ManageLocales('app.savedSearch.header'),
+        fullName: ManageLocales('app.savedSearch.header')
+      },
+      path: ManageLocales('app.search.savedSearchesRoute')
     }
   ]);
 
@@ -89,34 +96,50 @@ function SearchLayout() {
     const yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
     const replaceSubrouteWithSearchResult = subRoute?.replace(
-      `${SEARCH_RESULT}-`,
+      `${ManageLocales('app.search.resultRoute')}-`,
       ''
     );
 
-    if (subRoute === `${SAVED_SEARCHES}`) return 'Saved Searches';
-    else if (subRoute === `${NEW_SEARCH}`) return 'New Search';
+    if (subRoute === ManageLocales('app.search.savedSearchesRoute'))
+      return {
+        shortName: ManageLocales('app.search.savedSearchHeader'),
+        fullName: ManageLocales('app.search.savedSearchHeader')
+      };
+    else if (subRoute === ManageLocales('app.search.newSearchRoute'))
+      return {
+        shortName: ManageLocales('app.search.newSearchHeader'),
+        fullName: ManageLocales('app.search.newSearchHeader')
+      };
     else if (
-      subRoute !== `${SAVED_SEARCHES}` &&
-      subRoute !== `${NEW_SEARCH}` &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute') &&
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
       replaceSubrouteWithSearchResult
     ) {
       const isRouteExist =
-        yourSelection[parseInt(replaceSubrouteWithSearchResult) - 1];
+        yourSelection?.[parseInt(replaceSubrouteWithSearchResult) - 1];
       if (isRouteExist === undefined) {
-        return 'No Data Found';
+        return {
+          shortName: `No Data Found`,
+          fullName: `No Data Found`
+        };
       } else {
-        return `Search Results ${parseInt(replaceSubrouteWithSearchResult!)}`;
+        return {
+          shortName: `R ${parseInt(replaceSubrouteWithSearchResult!)}`,
+          fullName: `Result ${parseInt(replaceSubrouteWithSearchResult!)}`
+        };
       }
     } else if (
-      (masterRoute === '/search' &&
-        replaceSubrouteWithSearchResult?.length === 0) ||
-      subRoute === null
+      masterRoute === '/search' &&
+      (replaceSubrouteWithSearchResult?.length === 0 || subRoute === null)
     ) {
-      return 'New Search';
+      return {
+        shortName: ManageLocales('app.search.newSearchHeader'),
+        fullName: ManageLocales('app.search.newSearchHeader')
+      };
     }
   };
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
-  const [headerPath, setheaderPath] = useState(
+  const [headerPath, setHeaderPath] = useState<any>(
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
@@ -139,7 +162,7 @@ function SearchLayout() {
     }
   );
   useEffect(() => {
-    setheaderPath(computeRouteAndComponentRenderer());
+    setHeaderPath(computeRouteAndComponentRenderer());
   }, [subRoute]);
 
   const handleScroll = () => {
@@ -164,20 +187,40 @@ function SearchLayout() {
 
     for (let i = 2; i < updateMyProfileRoute.length; i++) {
       updateMyProfileRoute[i].id = i + 1;
-      updateMyProfileRoute[i].pathName = `Search Results ${i - 1}`;
+      updateMyProfileRoute[i].pathName = {
+        shortName: `R ${i - 1}`,
+        fullName: `Result ${i - 1}`
+      };
       updateMyProfileRoute[i].path = i - 1;
     }
 
     if (removeDataIndex === 0 && updateMyProfileRoute.length === 2) {
-      router.push(`search?active-tab=${NEW_SEARCH}`);
+      router.push(
+        `search?active-tab=${ManageLocales('app.search.newSearchRoute')}`
+      );
     } else if (removeDataIndex === 0 && updateMyProfileRoute.length) {
-      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex + 1}`);
-      setheaderPath(`Search Results ${removeDataIndex + 1}`);
+      setHeaderPath({
+        shortName: `R ${removeDataIndex + 1}`,
+        fullName: `Result ${removeDataIndex + 1}`
+      });
       setActiveTab(removeDataIndex + 1);
+
+      router.push(
+        `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+          removeDataIndex + 1
+        }`
+      );
     } else {
-      router.push(`/search?active-tab=${SEARCH_RESULT}-${removeDataIndex}`);
-      setheaderPath(`Search Results ${removeDataIndex}`);
+      setHeaderPath({
+        shortName: `R ${removeDataIndex}`,
+        fullName: `Result ${removeDataIndex}`
+      });
       setActiveTab(removeDataIndex);
+      router.push(
+        `/search?active-tab=${ManageLocales(
+          'app.search.resultRoute'
+        )}-${removeDataIndex}`
+      );
     }
 
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
@@ -201,9 +244,7 @@ function SearchLayout() {
       })
       .catch(() => {
         setInputError(true);
-        setInputErrorContent(
-          'Title already exists. Choose another title to save your search'
-        );
+        setInputErrorContent(TITLE_ALREADY_EXISTS);
       });
   };
 
@@ -247,7 +288,7 @@ function SearchLayout() {
                       closeTheSearchFunction(removeDataIndex, yourSelection);
                     })
                     .catch((error: any) => {
-                      console.log('error', error);
+                      logger.error(error);
                     });
                 } else {
                   setIsInputDialogOpen(true);
@@ -275,9 +316,16 @@ function SearchLayout() {
   }, [prevScrollPos]);
 
   useEffect(() => {
-    if (subRoute !== `${NEW_SEARCH}` && subRoute !== `${SAVED_SEARCHES}`) {
+    if (searchUrl) refetch();
+  }, [searchUrl]);
+
+  useEffect(() => {
+    if (
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute')
+    ) {
       const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${SEARCH_RESULT}-`,
+        `${ManageLocales('app.search.resultRoute')}-`,
         ''
       );
       setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
@@ -301,7 +349,11 @@ function SearchLayout() {
         const newRoutes = parseYourSelection
           .map((data: any, index: number) => ({
             id: index + 3,
-            pathName: `Search Results ${index + 1}`,
+            pathName: {
+              shortName: `R ${index + 1}`,
+              fullName: `Result ${index + 1}`
+            },
+
             path: index + 1
           }))
           .filter(
@@ -313,73 +365,152 @@ function SearchLayout() {
 
         if (parseYourSelection.length) {
           setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
+          if (isLoading) {
+            refetch();
+          }
         } else {
           setMyProfileRoutes([
             {
               id: 1,
-              pathName: ManageLocales('app.searchResult.header.newSearch'),
-              path: `${NEW_SEARCH}`
+              pathName: {
+                shortName: `${ManageLocales('app.search.newSearchHeader')}`,
+                fullName: `${ManageLocales('app.search.newSearchHeader')}`
+              },
+              path: ManageLocales('app.search.newSearchRoute')
             },
             {
               id: 2,
-              pathName: ManageLocales('app.savedSearch.header'),
-              path: `${SAVED_SEARCHES}`
+              pathName: {
+                shortName: `${ManageLocales('app.search.savedSearchHeader')}`,
+                fullName: `${ManageLocales('app.search.savedSearchHeader')}`
+              },
+              path: ManageLocales('app.search.savedSearchesRoute')
             }
           ]);
         }
       }
     };
+
     fetchMyAPI();
   }, [localStorage.getItem('Search')!, activeTab, maxTab, usePathname()]);
 
-  const handleSearchTab = (index: number, pathName: string) => {
-    if (
-      maxTab === MAX_SEARCH_TAB_LIMIT &&
-      pathName.toLocaleLowerCase() === 'new search'
-    ) {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <div className="max-w-[450px] flex justify-center text-center align-middle text-solitaireTertiary">
-          Max search limit reached. Please remove existing searches
-        </div>
-      );
-    } else {
-      setActiveTab(index);
-      setheaderPath(pathName);
-    }
+  const handleSearchTab = (index: number, pathName: IPathName) => {
+    setActiveTab(index);
+    setHeaderPath(pathName);
   };
 
   const editSearchResult = (activeTab: number) => {
     dispatch(modifySearchResult({ activeTab: activeTab - 1 }));
-    router.push(`/search?active-tab=${subRoute}&edit=${SEARCH_RESULT}`);
+    router.push(
+      `/search?active-tab=${subRoute}&edit=${ManageLocales(
+        'app.search.resultRoute'
+      )}`
+    );
   };
 
-  const handleCloseInputDialog = () => {
-    setIsInputDialogOpen(false);
-    setInputError(false);
-    setSaveSearchName('');
+  const handleCloseResultTabs = () => {
+    localStorage.removeItem('Search');
+    setMyProfileRoutes([
+      {
+        id: 1,
+        pathName: {
+          shortName: `${ManageLocales('app.search.newSearchHeader')}`,
+          fullName: `${ManageLocales('app.search.newSearchHeader')}`
+        },
+        path: ManageLocales('app.search.newSearchRoute')
+      },
+      {
+        id: 2,
+        pathName: {
+          shortName: `${ManageLocales('app.search.savedSearchHeader')}`,
+          fullName: `${ManageLocales('app.search.savedSearchHeader')}`
+        },
+        path: ManageLocales('app.search.savedSearchesRoute')
+      }
+    ]);
+    router.push(
+      `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`
+    );
   };
 
-  const customInputDialogData = {
-    isOpens: isInputDialogOpen,
-    setIsOpen: setIsInputDialogOpen,
-    setInputvalue: setSaveSearchName,
-    inputValue: saveSearchName,
-    displayButtonFunction: handleCloseAndSave,
-    label: 'Save and close this search',
-    name: 'Save',
-    displayButtonLabel2: 'Save'
+  const isRoute = (path: string) => {
+    return (
+      path === ManageLocales('app.search.newSearchRoute') ||
+      path === ManageLocales('app.search.savedSearchesRoute')
+    );
+  };
+
+  useEffect(() => {
+    const isViewPortGreater =
+      (window.innerWidth - 400) / (myProfileRoutes.length - 2) > 140;
+    setViewPort(isViewPortGreater);
+  }, [myProfileRoutes]);
+
+  const handleInputChange = (e: any) => {
+    setInputErrorContent('');
+    setSaveSearchName(e.target.value);
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p>Save and close this search</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <FloatingLabelInput
+            label={'Enter name'}
+            onChange={handleInputChange}
+            type="text"
+            name="save"
+            value={saveSearchName}
+            errorText={inputErrorContent}
+          />
+        </div>
+
+        <div className="flex justify-center  gap-5">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setSaveSearchName('');
+              setInputErrorContent('');
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              if (!saveSearchName.length) {
+                setInputErrorContent('Please enter name');
+              } else {
+                handleCloseAndSave();
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
   return (
     <>
       <CustomInputDialog
-        customInputDialogData={customInputDialogData}
-        isError={inputError}
-        errorContent={inputErrorContent}
-        setIsError={setInputError}
-        setErrorContent={setInputErrorContent}
-        handleClose={handleCloseInputDialog}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
       <CustomDialog
         dialogContent={dialogContent}
@@ -391,82 +522,124 @@ function SearchLayout() {
           visible ? styles.visible : styles.hidden
         }`}
       >
-        <div className="border-b border-solid  border-solitaireSenary absolute top-[80px] left-[122px] flex flex-row items-start justify-start gap-[20px] w-full bg-solitairePrimary pb-3 pt-3 text-[13px] overflow-x-auto">
-          {myProfileRoutes.map(({ id, pathName, path }: any) => {
-            // Check if the current route matches the link's path
-            return path === `${NEW_SEARCH}` || path === `${SAVED_SEARCHES}` ? (
-              <Link
-                className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                  headerPath === pathName
-                    ? ''
-                    : 'hover:text-solitaireQuaternary'
-                }`}
-                onClick={() => handleSearchTab(0, pathName)}
-                href={
-                  maxTab === MAX_SEARCH_TAB_LIMIT && path === `${NEW_SEARCH}`
-                    ? ``
-                    : `/search?active-tab=${path}`
-                }
-                key={id}
-              >
-                <div
-                  className={`${
-                    headerPath === pathName && 'text-solitaireQuaternary'
-                  }`}
-                >
-                  {pathName}
-                </div>
-              </Link>
-            ) : (
-              <div className={`flex items-center cursor-pointer  rounded-sm `}>
-                {activeTab === parseInt(path) && (
-                  <div onClick={() => editSearchResult(activeTab)}>
-                    <Image src={EditIcon} alt="Edit Icon" />
-                  </div>
-                )}
-                <Link
-                  className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
-                    headerPath === pathName
-                      ? ''
-                      : 'hover:text-solitaireQuaternary'
-                  }`}
-                  onClick={() => handleSearchTab(parseInt(path), pathName)}
-                  href={`/search?active-tab=${SEARCH_RESULT}-${path}`}
-                  key={id}
-                >
-                  <div
-                    className={`${
-                      headerPath === pathName && 'text-solitaireQuaternary'
+        <div className="border-b border-solid  border-solitaireSenary items-center absolute top-[80px] left-[122px] flex flex-row  w-[90%] justify-between  bg-solitairePrimary pb-3 pt-3 text-[13px] gap-[20px] h-[80px]">
+          <div className="flex ">
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                isRoute(path) && (
+                  <Link
+                    className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary min-w-[110px] ${
+                      headerPath.fullName === pathName.fullName
+                        ? ''
+                        : 'hover:text-solitaireQuaternary'
                     }`}
+                    onClick={() => handleSearchTab(0, pathName)}
+                    href={`/search?active-tab=${path}`}
+                    key={id}
                   >
-                    {pathName}
+                    <div
+                      className={`${
+                        headerPath.fullName === pathName.fullName &&
+                        'text-solitaireQuaternary'
+                      }`}
+                    >
+                      {pathName.fullName}
+                    </div>
+                  </Link>
+                )
+              );
+            })}
+          </div>
+          <div className=" flex " style={{ width: '100%' }}>
+            {myProfileRoutes.map(({ id, pathName, path }: any) => {
+              // Check if the current route matches the link's path
+              return (
+                !isRoute(path) && (
+                  <div
+                    className={`flex items-center cursor-pointer  rounded-sm `}
+                    style={{
+                      minWidth:
+                        (window.innerWidth - 500) /
+                          (myProfileRoutes.length - 2) >
+                        170
+                          ? '8%'
+                          : '5%'
+                    }}
+                  >
+                    <div className="w-[24px]">
+                      {activeTab === parseInt(path) && (
+                        <div onClick={() => editSearchResult(activeTab)}>
+                          <Image src={EditIcon} alt="Edit Icon" />
+                        </div>
+                      )}
+                    </div>
+                    <Link
+                      className={`flex flex-row py-2.5 px-1.5  text-solitaireTertiary ${
+                        headerPath.fullName === pathName.fullName
+                          ? ''
+                          : 'hover:text-solitaireQuaternary'
+                      }`}
+                      onClick={() => handleSearchTab(parseInt(path), pathName)}
+                      href={`/search?active-tab=${ManageLocales(
+                        'app.search.resultRoute'
+                      )}-${path}`}
+                      key={id}
+                    >
+                      <div
+                        className={`${
+                          headerPath.fullName === pathName.fullName &&
+                          'text-solitaireQuaternary'
+                        }`}
+                      >
+                        {viewPort
+                          ? pathName.fullName
+                          : activeTab === parseInt(path)
+                          ? pathName.fullName
+                          : pathName.shortName}
+                      </div>
+                    </Link>
+                    <div onClick={() => closeSearch(parseInt(path) - 1)}>
+                      <CloseOutline stroke="#8C7459" />
+                    </div>
                   </div>
-                </Link>
-                <div onClick={() => closeSearch(parseInt(path) - 1)}>
-                  <CloseOutline stroke="#8C7459" />
-                </div>
-              </div>
-            );
-          })}
+                )
+              );
+            })}
+          </div>
+          {JSON.parse(localStorage.getItem('Search')!)?.length > 0 && (
+            <div className="w-[120px]">
+              <CustomDisplayButton
+                displayButtonLabel="Close Results"
+                displayButtonAllStyle={{
+                  displayLabelStyle: styles.closeResultButton
+                }}
+                handleClick={() => {
+                  handleCloseResultTabs();
+                }}
+              />
+            </div>
+          )}
         </div>
       </div>
+
       <div
         style={{
           display: 'flex',
-          marginTop: '78px',
+          marginTop: '60px',
           width: '100%'
         }}
       >
         <main style={{ width: '98%', minHeight: '70vh' }}>
-          {headerPath === 'New Search' ||
-          editSubRoute === `${SAVED_SEARCHES}` ||
-          editSubRoute === `${SEARCH_RESULT}` ? (
+          {headerPath.fullName ===
+            `${ManageLocales('app.search.newSearchHeader')}` ||
+          editSubRoute === ManageLocales('app.search.savedSearchesRoute') ||
+          editSubRoute === `${ManageLocales('app.search.resultRoute')}` ? (
             <AdvanceSearch />
-          ) : headerPath === 'Saved Searches' ? (
+          ) : headerPath.fullName ===
+            `${ManageLocales('app.search.savedSearchHeader')}` ? (
             <SavedSearch />
-          ) : isLoading ? (
-            <CustomLoader />
-          ) : headerPath === 'No Data Found' ? (
+          ) : headerPath.fullName === 'No Data Found' ? (
             <NoDataFound />
           ) : (
             <SearchResults
@@ -482,4 +655,4 @@ function SearchLayout() {
   );
 }
 
-export default SearchResultLayout;
+export default SearchLayout;

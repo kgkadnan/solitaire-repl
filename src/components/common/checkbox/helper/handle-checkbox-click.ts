@@ -9,7 +9,7 @@ interface IHandleCheckBoxClick {
   setIsCheckAll?: Dispatch<SetStateAction<boolean>>;
   isCheckAll?: boolean;
   data: any;
-  setIsError: Dispatch<SetStateAction<boolean>>;
+  setIsError?: Dispatch<SetStateAction<boolean>>;
 }
 
 export const handleCheckboxClick = ({
@@ -21,7 +21,7 @@ export const handleCheckboxClick = ({
   data,
   setIsError
 }: IHandleCheckBoxClick) => {
-  let updatedIsCheck = [...isCheck!];
+  let updatedIsCheck = [...(isCheck ?? [])];
 
   if (updatedIsCheck.includes(id)) {
     updatedIsCheck = updatedIsCheck.filter(item => item !== id);
@@ -43,5 +43,6 @@ export const handleCheckboxClick = ({
   if (isCheckAll && setIsCheckAll) {
     setIsCheckAll(false);
   }
-  setIsError(false);
+
+  if (setIsError) setIsError(false);
 };

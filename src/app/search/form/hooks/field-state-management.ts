@@ -3,10 +3,9 @@ import { useState } from 'react';
 const useFieldStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
   const [selectedColor, setSelectedColor] = useState<string>('');
-  const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
-  const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
-  const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
+  const [selectedFancyColor, setSelectedFancyColor] = useState<string>('');
+  const [selectedIntensity, setSelectedIntensity] = useState<string>('');
+  const [selectedOvertone, setSelectedOvertone] = useState<string>('');
   const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();
@@ -19,11 +18,9 @@ const useFieldStateManagement = () => {
     []
   );
   const [selectedCulet, setSelectedCulet] = useState<string>('');
-  const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
+
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
-  const [selectedHR, setSelectedHR] = useState<string[]>([]);
-  const [selectedBrilliance, setSelectedBrilliance] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
   const [selectedOrigin, setSelectedOrigin] = useState<string[]>([]);
   const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
@@ -73,6 +70,8 @@ const useFieldStateManagement = () => {
   const [ratioTo, setRatioTo] = useState<string>('');
   const [girdlePerFrom, setGirdlePerFrom] = useState<string>('');
   const [girdlePerTo, setGirdlePerTo] = useState<string>('');
+  const [girdleFrom, setGirdleFrom] = useState<string>('');
+  const [girdleTo, setGirdleTo] = useState<string>('');
   const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>('');
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
@@ -80,9 +79,10 @@ const useFieldStateManagement = () => {
   const [caratRangeData, setCaratRangeData] = useState<string[]>();
   return {
     state: {
+      girdleFrom,
+      girdleTo,
       selectedShape,
       selectedColor,
-      selectedWhiteColor,
       selectedFancyColor,
       selectedIntensity,
       selectedOvertone,
@@ -95,11 +95,8 @@ const useFieldStateManagement = () => {
       selectedSymmetry,
       selectedFluorescence,
       selectedCulet,
-      selectedGirdle,
       selectedKeyToSymbol,
       selectedLab,
-      selectedHR,
-      selectedBrilliance,
       selectedLocation,
       selectedOrigin,
       priceRangeFrom,
@@ -153,9 +150,10 @@ const useFieldStateManagement = () => {
       starLengthTo
     },
     setState: {
+      setGirdleFrom,
+      setGirdleTo,
       setSelectedShape,
       setSelectedColor,
-      setSelectedWhiteColor,
       setSelectedFancyColor,
       setSelectedIntensity,
       setSelectedOvertone,
@@ -169,11 +167,8 @@ const useFieldStateManagement = () => {
       setSelectedSymmetry,
       setSelectedFluorescence,
       setSelectedCulet,
-      setSelectedGirdle,
       setSelectedKeyToSymbol,
       setSelectedLab,
-      setSelectedHR,
-      setSelectedBrilliance,
       setSelectedLocation,
       setSelectedOrigin,
       setPriceRangeFrom,

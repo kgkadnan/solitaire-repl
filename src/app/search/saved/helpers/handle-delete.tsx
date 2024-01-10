@@ -1,33 +1,43 @@
+import React from 'react';
+
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import styles from '../saved.module.scss';
+import { NO_STONES_PICKED } from '@/constants/error-messages/saved';
 
-interface HandleDeleteProps {
+interface IHandleDeleteProps {
   isCheck: string[];
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
-  setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setPersistDialogContent: React.Dispatch<
+    React.SetStateAction<React.ReactNode>
+  >;
+  setIsPersistDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   deleteStoneHandler: () => void;
   numberOfPages: number;
   data: any;
   setCurrentPage: React.Dispatch<React.SetStateAction<number>>;
   currentPage: number;
 }
+
+// Handles the deletion of selected stones.
 export const handleDelete = ({
   isCheck,
   setIsError,
   setErrorText,
-  setDialogContent,
-  setIsDialogOpen,
+  setPersistDialogContent,
+  setIsPersistDialogOpen,
   deleteStoneHandler,
   numberOfPages,
   data,
   setCurrentPage,
   currentPage
-}: HandleDeleteProps) => {
+}: IHandleDeleteProps) => {
+  // Get saved search data from local storage
   const searchTabData = JSON.parse(localStorage.getItem('Search') ?? '[]');
 
+  // Check if stones are selected for deletion
   if (isCheck?.length) {
+    // Filter matching data based on selected stone IDs
     const matchingData = searchTabData.filter((item1: any, index: number) =>
       isCheck.some(item2 => {
         if (item1.id === item2) {
@@ -37,7 +47,9 @@ export const handleDelete = ({
       })
     );
 
+    // Check if there are matching data
     if (matchingData.length > 0) {
+      // Display error message if any of the selected stones are open in search result tabs
       setIsError(true);
       const searchNames = matchingData.map(
         (items: any) => items.saveSearchName
@@ -61,10 +73,11 @@ export const handleDelete = ({
 
       setErrorText(errorMessage);
     } else {
-      setDialogContent(
+      // Display confirmation dialog for stone deletion
+      setPersistDialogContent(
         <>
           <p className="text-center mt-3">
-            Do you want to Delete the selected Stones?
+            Do you want to delete the selected Saved Search?
           </p>
           <div className="flex justify-center">
             <CustomDisplayButton
@@ -72,25 +85,30 @@ export const handleDelete = ({
               displayButtonAllStyle={{
                 displayButtonStyle: `mr-[25px] ${styles.transparent}`
               }}
-              handleClick={() => setIsDialogOpen(false)}
+              handleClick={() => setIsPersistDialogOpen(false)}
             />
             <CustomDisplayButton
               displayButtonLabel="Yes"
               displayButtonAllStyle={{
                 displayButtonStyle: styles.filled
               }}
-              handleClick={deleteStoneHandler}
+              handleClick={() => {
+                setIsPersistDialogOpen(false);
+                deleteStoneHandler();
+              }}
             />
           </div>
         </>
       );
-      setIsDialogOpen(true);
+      setIsPersistDialogOpen(true);
     }
   } else {
+    // Display error if no stones are selected for deletion
     setIsError(true);
-    setErrorText(`You haven't picked any stones.`);
+    setErrorText(NO_STONES_PICKED);
   }
 
+  // Adjust current page if deleting the only stone on the last page
   if (data?.data?.previousSearch?.length === 1 && numberOfPages !== 1) {
     setCurrentPage(currentPage - 1);
   }

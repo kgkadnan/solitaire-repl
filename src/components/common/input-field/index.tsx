@@ -2,9 +2,9 @@
 import React from 'react';
 import styles from './input-field.module.scss';
 import { Input } from '@components/ui/input';
-import { InputFieldProps } from './interface';
+import { IInputFieldProps } from './interface';
 
-export const CustomInputField: React.FC<InputFieldProps> = ({
+export const CustomInputField: React.FC<IInputFieldProps> = ({
   style,
   type,
   value,
@@ -15,7 +15,8 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
   disable,
   onBlur,
   maxLength,
-  onFocus
+  onFocus,
+  onKeyDown
 }) => {
   return (
     <div className={`${style?.inputMain}`}>
@@ -31,6 +32,7 @@ export const CustomInputField: React.FC<InputFieldProps> = ({
         onBlur={onBlur}
         maxLength={maxLength}
         onFocus={onFocus}
+        onKeyDown={onKeyDown}
       />
     </div>
   );

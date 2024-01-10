@@ -1,8 +1,11 @@
-export const handleReset = (setState: any) => {
+export const handleReset = (
+  setState: any,
+  errorSetState: any,
+  setValidationError: any
+) => {
   const {
     setSelectedShape,
     setSelectedColor,
-    setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
@@ -16,11 +19,8 @@ export const handleReset = (setState: any) => {
     setSelectedSymmetry,
     setSelectedFluorescence,
     setSelectedCulet,
-    setSelectedGirdle,
     setSelectedKeyToSymbol,
     setSelectedLab,
-    setSelectedHR,
-    setSelectedBrilliance,
     setSelectedLocation,
     setSelectedOrigin,
     setPriceRangeFrom,
@@ -69,14 +69,37 @@ export const handleReset = (setState: any) => {
     setPavilionAngleFrom,
     setPavilionAngleTo,
     setStarLengthFrom,
-    setStarLengthTo
+    setStarLengthTo,
+    setGirdleFrom,
+    setGirdleTo
   } = setState;
+
+  const {
+    setTablePerError,
+    setDepthPerError,
+    setRatioError,
+    setLengthError,
+    setWidthError,
+    setDepthError,
+    setCrownAngleError,
+    setCrownHeightError,
+    setGirdlePerError,
+    setPavilionAngleError,
+    setPavilionHeightError,
+    setLowerHalfError,
+    setStarLengthError,
+    setGirdleError,
+    setCaratError,
+    setDiscountError,
+    setPricePerCaratError,
+    setAmountRangeError
+  } = errorSetState;
+
   setSelectedShape([]);
   setSelectedColor('');
-  setSelectedWhiteColor([]);
-  setSelectedFancyColor([]);
-  setSelectedIntensity([]);
-  setSelectedOvertone([]);
+  setSelectedFancyColor('');
+  setSelectedIntensity('');
+  setSelectedOvertone('');
   setSelectedTinge([]);
   setSelectedClarity([]);
   setSelectedCaratRange([]);
@@ -86,8 +109,6 @@ export const handleReset = (setState: any) => {
   setSelectedSymmetry([]);
   setSelectedFluorescence([]);
   setSelectedLab([]);
-  setSelectedHR([]);
-  setSelectedBrilliance([]);
   setPriceRangeFrom('');
   setPriceRangeTo('');
   setDiscountFrom('');
@@ -138,7 +159,30 @@ export const handleReset = (setState: any) => {
   setSelectedLocation([]);
   setSelectedOrigin([]);
   setSelectedCulet([]);
-  setSelectedGirdle([]);
+  setGirdleFrom('');
+  setGirdleTo('');
   setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
+
+  //Empty Error States
+  setTablePerError('');
+  setDepthPerError('');
+  setRatioError('');
+  setLengthError('');
+  setWidthError('');
+  setDepthError('');
+  setCrownAngleError('');
+  setCrownHeightError('');
+  setGirdlePerError('');
+  setPavilionAngleError('');
+  setPavilionHeightError('');
+  setLowerHalfError('');
+  setStarLengthError('');
+  setGirdleError('');
+  setCaratError('');
+  setDiscountError('');
+  setPricePerCaratError('');
+  setAmountRangeError('');
+
+  setValidationError('');
 };

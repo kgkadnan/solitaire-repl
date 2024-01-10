@@ -8,7 +8,6 @@ import CustomDataTable from '@/components/common/data-table';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
-import { CustomInputDialog } from '@/components/common/input-dialog';
 import CustomLoader from '@/components/common/loader';
 import ConfirmStone from '@/components/common/confirm-stone';
 import { ResultFooter } from './components/result-footer';
@@ -27,9 +26,9 @@ import { ISearchResultsProps } from './result-interface';
 import { CustomModal } from '@/components/common/modal';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
-// import { FloatingLabelInput } from '@/components/common/floating-input';
-// import { CustomInputDialog } from '@/components/common/input-dialog';
-// import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { CustomInputDialog } from '@/components/common/input-dialog';
 // Define a type for the radio state
 
 const SearchResults = ({
@@ -51,7 +50,7 @@ const SearchResults = ({
   const { setRows, setTableColumns } = dataTableSetState;
 
   const { refetchDataToDefault } = sortByState;
-  const { inputError, inputErrorContent } = errorState;
+  const { inputErrorContent } = errorState;
   const { setInputError, setInputErrorContent, setIsSliderError } =
     errorSetState;
 
@@ -64,14 +63,16 @@ const SearchResults = ({
     isInputDialogOpen,
     isSliderOpen,
     isModalOpen,
-    modalContent
+    modalContent,
+    persistDialogContent,
+    isPersistDialogOpen
   } = modalState;
   const {
     setIsDialogOpen,
     setIsInputDialogOpen,
     setIsSliderOpen,
-    setDialogContent,
-    setIsModalOpen
+    setIsModalOpen,
+    setIsPersistDialogOpen
   } = modalSetState;
   const {
     setYourSelectionData,
@@ -85,7 +86,8 @@ const SearchResults = ({
   const { saveSearchName } = commonState;
 
   const [addSavedSearch] = useAddSavedSearchMutation();
-  const { data: listingColumns } = useGetManageListingSequenceQuery<any>({});
+  const { data: listingColumns } =
+    useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
 
   const checkboxData = {
     checkboxState,
@@ -99,17 +101,17 @@ const SearchResults = ({
   }, [listingColumns, setTableColumns]);
   /* useEffect hook in a TypeScript React component. It is used to
 handle the logic for closing a dialog box after a certain delay. */
-  useEffect(() => {
-    if (isDialogOpen) {
-      // Set a timeout to close the dialog box after a delay (e.g., 3000 milliseconds)
-      const timeoutId = setTimeout(() => {
-        setIsDialogOpen(false);
-      }, 3000);
+  // useEffect(() => {
+  //   if (isDialogOpen) {
+  //     // Set a timeout to close the dialog box after a delay (e.g., 5000 milliseconds)
+  //     const timeoutId = setTimeout(() => {
+  //       setIsDialogOpen(false);
+  //     }, 3500);
 
-      // Cleanup the timeout when the component unmounts or when isDialogOpen changes
-      return () => clearTimeout(timeoutId);
-    }
-  }, [isDialogOpen, setIsDialogOpen]);
+  //     // Cleanup the timeout when the component unmounts or when isDialogOpen changes
+  //     return () => clearTimeout(timeoutId);
+  //   }
+  // }, [isDialogOpen, setIsDialogOpen]);
 
   useEffect(() => {
     // Update total amount and average discount whenever isCheck changes
@@ -152,38 +154,73 @@ variable changes. */
     setYourSelectionData
   ]);
 
-  const customInputDialogData = {
-    isOpens: isInputDialogOpen,
-    setIsOpen: setIsInputDialogOpen,
-    setInputvalue: setSaveSearchName,
-    inputValue: saveSearchName,
-    displayButtonFunction: () => {
-      handleSaveSearch({
-        addSavedSearch,
-        saveSearchName,
-        activeTab,
-        data,
-        setYourSelectionData,
-        setIsInputDialogOpen,
-        setSaveSearchName,
-        setInputError,
-        setInputErrorContent
-      });
-    },
-    label: 'Save And Search',
-    name: 'save',
-    displayButtonLabel2: 'Save'
+  const handleInputChange = (e: any) => {
+    setInputErrorContent('');
+    setSaveSearchName(e.target.value);
   };
 
-  /**
-   * The function handleCloseInputDialog is used to close an input dialog and reset related state
-   * variables.
-   */
-  const handleCloseInputDialog = () => {
-    setIsInputDialogOpen(false);
-    setInputError(false);
-    setInputErrorContent('');
-    setSaveSearchName('');
+  const renderContentWithInput = () => {
+    return (
+      <div className="w-full flex flex-col gap-6">
+        <div className=" flex justify-center align-middle items-center">
+          <p>Save Search</p>
+        </div>
+        <div className="flex text-center gap-6 w-[350px]">
+          <FloatingLabelInput
+            label={'Enter name'}
+            onChange={handleInputChange}
+            type="text"
+            name="save"
+            value={saveSearchName}
+            errorText={inputErrorContent}
+          />
+        </div>
+
+        <div className="flex justify-center  gap-2">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              setSaveSearchName('');
+              setInputErrorContent('');
+              setIsInputDialogOpen(false);
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.advanceSearch.save')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => {
+              if (!saveSearchName.length) {
+                setInputErrorContent('Please enter name');
+              } else {
+                handleSaveSearch({
+                  addSavedSearch,
+                  saveSearchName,
+                  activeTab,
+                  data,
+                  setYourSelectionData,
+                  setIsInputDialogOpen,
+                  setSaveSearchName,
+                  setInputError,
+                  setInputErrorContent
+                });
+              }
+            }}
+          />
+        </div>
+      </div>
+    );
   };
 
   /**
@@ -209,8 +246,7 @@ variable changes. */
             confirmStoneState={confirmStoneState}
             confirmStoneSetState={confirmStoneSetState}
             listingColumns={listingColumns}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
+            modalSetState={modalSetState}
           />
         }
         isSliderOpen={isSliderOpen}
@@ -218,17 +254,19 @@ variable changes. */
         sheetContentStyle={styles.diamondDetailSheet}
       />
       <CustomInputDialog
-        isError={inputError}
-        setIsError={setInputError}
-        errorContent={inputErrorContent}
-        handleClose={handleCloseInputDialog}
-        setErrorContent={setInputErrorContent}
-        customInputDialogData={customInputDialogData}
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
       <CustomDialog
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
         dialogContent={dialogContent}
+      />
+      <CustomDialog
+        isOpens={isPersistDialogOpen}
+        setIsOpen={setIsPersistDialogOpen}
+        dialogContent={persistDialogContent}
       />
       <CustomModal
         isOpens={isModalOpen}

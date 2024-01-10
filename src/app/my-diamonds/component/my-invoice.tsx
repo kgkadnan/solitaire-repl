@@ -1,9 +1,14 @@
 'use-client';
-import { MyDiamonds } from '@/components/common/my-diamonds/my-diamonds';
+import { MyDiamonds } from '@/app/my-diamonds/component/my-diamond/my-diamonds';
 import { useGetProductDetailsQuery } from '@/features/api/my-diamonds/my-diamond';
 import React, { useEffect, useState } from 'react';
+import { IMyInvoice } from '../interface/my-invoice-interface';
+import { IModalSetState } from '@/app/search/result/result-interface';
 
-const MyInvoices = ({ myInvoiceData }: any) => {
+const MyInvoices: React.FC<{
+  myInvoiceData: IMyInvoice[];
+  modalSetState: IModalSetState;
+}> = ({ myInvoiceData, modalSetState }) => {
   const [id, setId] = useState('');
   const [myInvoiceDetail, setMyInvoiceDetail] = useState([]);
   // Define query parameters for API request
@@ -37,6 +42,7 @@ const MyInvoices = ({ myInvoiceData }: any) => {
       handleCardClick={handleCardClick}
       productPageDetail={myInvoiceDetail}
       check={myInvoices}
+      modalSetState={modalSetState}
     />
   );
 };

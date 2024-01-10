@@ -8,7 +8,6 @@ import SavedSearch from '@public/assets/icons/bookmark-outline.svg?url';
 import Appointment from '@public/assets/icons/calendar-clear-outline.svg?url';
 import MyCart from '@public/assets/icons/cart-outline.svg?url';
 import AdvanceSearch from '@public/assets/icons/search-outline.svg?url';
-import RecentConfirmation from '@public/assets/icons/checkmark-circle-outline.svg?url';
 import Layout from '@public/assets/icons/layout.svg?url';
 import MatchPair from '@public/assets/icons/match-pair.svg?url';
 import MyDiamond from '@public/assets/icons/my-diamond.svg?url';
@@ -16,71 +15,41 @@ import NewArrival from '@public/assets/icons/new-arrival.svg?url';
 import Dashboard from '@public/assets/icons/grid-outline.svg?url';
 import styles from './sidebar.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import { CustomDisplayButton } from '../buttons/display-button';
 import { CustomDialog } from '../dialog';
-import { ISavedSearch } from '../top-navigation-bar';
-import {
-  NEW_SEARCH,
-  SAVED_SEARCHES
-} from '@/constants/application-constants/search-page';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { handleIsEditingKyc } from '@/utils/is-editing-kyc';
 
 const SideBar = () => {
   const router = useRouter();
   const currentRoute = usePathname();
+  const dispatch = useAppDispatch();
+  const isEditingKYCStoreData: boolean = useAppSelector(
+    store => store.isEditingKYC.status
+  );
 
   const { modalState, modalSetState } = useModalStateManagement();
 
-  const { setDialogContent, setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { dialogContent, isDialogOpen } = modalState;
 
   const subRoute = useSearchParams().get('active-tab');
-  const onKGKLogoContainerClick = useCallback(() => {
-    const localData: ISavedSearch[] = JSON.parse(
-      localStorage.getItem('Search')!
-    );
 
-    const data = localData?.filter(
-      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
-    );
-    if (data?.length && currentRoute == '/search') {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to save your &quot;Search <br /> Result &quot; for this
-            session?
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                localStorage.removeItem('Search');
-                router.push('/');
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
+  const onKGKLogoContainerClick = useCallback(() => {
+    if (isEditingKYCStoreData) {
+      handleIsEditingKyc({
+        isEditingKYCStoreData,
+        setIsDialogOpen,
+        setDialogContent,
+        dispatch,
+        handleRoute,
+        styles,
+        currentRoute
+      });
     } else {
       router.push('/');
     }
-  }, [router, currentRoute]);
+  }, [router, isEditingKYCStoreData]);
 
   const imageData: IImageTileProps[] = [
     {
@@ -98,8 +67,10 @@ const SideBar = () => {
     {
       src: <AdvanceSearch className={styles.stroke} alt="advance-search" />,
       title: ManageLocales('app.sideNav.advanceSearch'),
-      link: `/search?active-tab=${NEW_SEARCH}`,
-      isActive: currentRoute === '/search' && subRoute === `${NEW_SEARCH}`
+      link: `/search?active-tab=${ManageLocales('app.search.newSearchRoute')}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.newSearchRoute')}`
     },
     {
       src: <MatchPair className={styles.stroke} alt="match-pair" />,
@@ -110,14 +81,18 @@ const SideBar = () => {
     {
       src: <SavedSearch className={styles.stroke} alt="saved-search" />,
       title: ManageLocales('app.sideNav.savedSearches'),
-      link: `/search?active-tab=${SAVED_SEARCHES}`,
-      isActive: currentRoute === '/search' && subRoute === `${SAVED_SEARCHES}`
+      link: `/search?active-tab=${ManageLocales(
+        'app.search.savedSearchesRoute'
+      )}`,
+      isActive:
+        currentRoute === '/search' &&
+        subRoute === `${ManageLocales('app.search.savedSearchesRoute')}`
     },
     {
       src: <MyCart className={styles.stroke} alt="cart" />,
       title: ManageLocales('app.sideNav.cart'),
-      link: '/my-cart/active',
-      isActive: currentRoute === '/my-cart/active'
+      link: `/my-cart?active-tab=active`,
+      isActive: currentRoute === '/my-cart'
     },
     {
       src: <Layout className={styles.fill} alt="layouts" />,
@@ -126,27 +101,16 @@ const SideBar = () => {
       isActive: currentRoute === '/layouts'
     },
     {
-      src: (
-        <RecentConfirmation
-          className={styles.stroke}
-          alt="recent-confiramtion"
-        />
-      ),
-      title: ManageLocales('app.sideNav.recentConfirmations'),
-      link: '/recent-confiramtion',
-      isActive: currentRoute === '/recent-confiramtion'
+      src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
+      title: ManageLocales('app.sideNav.myDiamonds'),
+      link: '/my-diamonds',
+      isActive: currentRoute === '/my-diamonds'
     },
     {
       src: <Appointment className={styles.stroke} alt="appointments" />,
       title: ManageLocales('app.sideNav.appointments'),
       link: '/appointments',
       isActive: currentRoute === '/appointments'
-    },
-    {
-      src: <MyDiamond className={styles.stroke} alt="my-diamonds" />,
-      title: ManageLocales('app.sideNav.myDiamonds'),
-      link: '/my-diamonds',
-      isActive: currentRoute === '/my-diamonds'
     }
   ];
 
@@ -164,57 +128,17 @@ const SideBar = () => {
   };
 
   const handleChange = (nav: string, link?: string) => {
-    const localData: ISavedSearch[] = JSON.parse(
-      localStorage.getItem('Search')!
-    );
-
-    const data = localData?.filter(
-      (isSaved: ISavedSearch) => isSaved.isSavedSearch === false
-    );
-
-    // if (data?.length && link !== `/search?active-tab=${NEW_SEARCH}`) {
-    if (data?.length && currentRoute == '/search') {
-      setIsDialogOpen(true);
-      setDialogContent(
-        <>
-          <div className="text-center align-middle text-solitaireTertiary">
-            Do you want to save your &quot;Search <br /> Result &quot; for this
-            session?
-          </div>
-          <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-            <CustomDisplayButton
-              displayButtonLabel="No"
-              handleClick={() => {
-                localStorage.removeItem('Search');
-                handleRoute(nav, link);
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonTransparent
-              }}
-            />
-            <CustomDisplayButton
-              displayButtonLabel="Yes"
-              handleClick={() => {
-                setIsDialogOpen(false);
-                setDialogContent('');
-              }}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.showResultButtonFilled
-              }}
-            />
-          </div>
-        </>
-      );
-    }
-    // else if (data?.length && link === `/search?active-tab=${NEW_SEARCH}`) {
-    //   handleRoute(nav, link);
-    // }
-    else {
-      localStorage.removeItem('Search');
-      handleRoute(nav, link);
-    }
+    handleIsEditingKyc({
+      isEditingKYCStoreData,
+      setIsDialogOpen,
+      setDialogContent,
+      dispatch,
+      handleRoute,
+      label: nav,
+      link,
+      styles,
+      currentRoute
+    });
   };
 
   return (

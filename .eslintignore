@@ -7,6 +7,7 @@ out/
 # Ignore node_modules directory
 node_modules/
 src/__tests__/
+src/components/ui/
 
 # Ignore test files
 **/*.test.ts

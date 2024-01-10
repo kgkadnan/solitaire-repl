@@ -1,3 +1,4 @@
+import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { IHandleSaveSearch } from '../result-interface';
 
 /**
@@ -33,6 +34,7 @@ export const handleSaveSearch = async ({
           id: res?.id,
           saveSearchName,
           isSavedSearch: true,
+          searchId: data?.search_id,
           queryParams: parseData[activeTab].queryParams
         };
         localStorage.setItem('Search', JSON.stringify(parseData));
@@ -43,9 +45,7 @@ export const handleSaveSearch = async ({
 
       .catch(() => {
         setInputError(true);
-        setInputErrorContent(
-          'Title already exists. Choose another title to save your search'
-        );
+        setInputErrorContent(TITLE_ALREADY_EXISTS);
       });
   }
 };

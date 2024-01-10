@@ -9,8 +9,10 @@ import { CustomInputField } from '../input-field';
 import { handleComment } from './helper/handle-comment';
 import { handleRadioDayValue } from './helper/handle-radio-day-value';
 import confirmImage from '@public/assets/icons/confirmation.svg';
+import errorImage from '@public/assets/icons/error.svg';
 import Image from 'next/image';
 import { useConfirmProductMutation } from '@/features/api/product';
+import Link from 'next/link';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -19,10 +21,17 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   onOpenChange,
   confirmStoneState,
   confirmStoneSetState,
-  setDialogContent,
-  setIsDialogOpen
+  modalSetState,
+  refetch
 }) => {
   const [confirmProduct] = useConfirmProductMutation();
+
+  const {
+    setDialogContent,
+    setIsDialogOpen,
+    setIsPersistDialogOpen,
+    setPersistDialogContent
+  } = modalSetState;
 
   const { inputError, inputErrorContent, sliderErrorText, isSliderError } =
     errorState;
@@ -75,7 +84,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   const confirmRadioButtons = [
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '0',
       value: '7',
       label: '7 Days',
@@ -83,7 +92,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '1',
       value: '30',
       label: '30 Days',
@@ -91,7 +100,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '2',
       value: '60',
       label: '60 Days',
@@ -99,7 +108,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
     },
     {
       name: 'days',
-      onChange: handleConfirmStoneRadioChange,
+      // onChange: handleConfirmStoneRadioChange,
       id: '3',
       value: 'other',
       label: (
@@ -125,7 +134,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             <div>Days</div>
           </div>
           {inputError ? (
-            <div className="h-[10px] text-[#983131]">{inputErrorContent}</div>
+            <div className="h-[10px] text-solitaireError">
+              {inputErrorContent}
+            </div>
           ) : (
             <div className="h-[10px]" />
           )}
@@ -142,6 +153,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
    * Finally, it handles the promise returned by `confirmStone`, logging any errors to the console.
    * @returns None
    */
+
   const confirmStoneApiCall = () => {
     const variantIds: string[] = [];
 
@@ -149,22 +161,56 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
       variantIds.push(ids.variants[0].id);
     });
 
-    if (
-      (variantIds.length && !inputError && selectedRadioDaysValue.length) ||
-      selectedDaysInputValue.length
-    ) {
-      confirmProduct({
-        variants: variantIds,
-        comments: commentValue,
-        payment_term: parseInt(
-          selectedDaysInputValue.length > 0
-            ? selectedDaysInputValue
-            : selectedRadioDaysValue
-        )
-      })
-        .unwrap()
-        .then(res => {
-          if (res) {
+    if (!inputError) {
+      if (
+        variantIds.length &&
+        ((selectedRadioDaysValue.length &&
+          selectedRadioDaysValue !== 'other' &&
+          !selectedDaysInputValue.length) ||
+          (selectedRadioDaysValue === 'other' && selectedDaysInputValue.length))
+      ) {
+        confirmProduct({
+          variants: variantIds,
+          comments: commentValue,
+          payment_term: parseInt(
+            selectedDaysInputValue.length > 0
+              ? selectedDaysInputValue
+              : selectedRadioDaysValue
+          )
+        })
+          .unwrap()
+          .then(res => {
+            if (res) {
+              setIsPersistDialogOpen(true);
+              setPersistDialogContent(
+                <div className="text-center  flex flex-col justify-center items-center ">
+                  <div className="w-[350px] flex justify-center items-center mb-3">
+                    <Image src={confirmImage} alt="confirmImage" />
+                  </div>
+                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
+                    {variantIds.length} Stone Successfully Confirmed
+                  </div>
+                  <Link
+                    href={'/my-diamonds'}
+                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+                  >
+                    Go to “My Diamonds”
+                  </Link>
+                </div>
+              );
+              setCommentValue('');
+              setSelectedDaysInputValue('');
+              setInputErrorContent('');
+              setInputError(false);
+              onOpenChange(false);
+
+              if (refetch) {
+                refetch();
+              }
+            }
+          })
+          .catch(e => {
+            setCommentValue('');
             setSelectedDaysInputValue('');
             setInputErrorContent('');
             setInputError(false);
@@ -172,20 +218,20 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             setIsDialogOpen(true);
             setDialogContent(
               <>
-                <div className="max-w-[400px] flex justify-center align-middle">
-                  <Image src={confirmImage} alt="confirmImage" />
+                <div className=" flex justify-center align-middle items-center">
+                  <Image src={errorImage} alt="errorImage" />
+                  <p>Error!</p>
                 </div>
-                <div className="max-w-[400px] flex justify-center align-middle text-solitaireTertiary">
-                  {variantIds.length} Stone Successfully Confirmed
+                <div className="text-center text-solitaireTertiary">
+                  {e?.data?.message}
                 </div>
               </>
             );
-          }
-        })
-        .catch(e => console.log(e));
-    } else {
-      setIsSliderError(true);
-      setSliderErrorText('This Is a Mandotry Field');
+          });
+      } else {
+        setIsSliderError(true);
+        setSliderErrorText('This Is a Mandotry Field');
+      }
     }
   };
 
@@ -205,6 +251,9 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             selectionAllowed={false}
             mainTableStyle={styles.tableWrapper}
             errorSetState={errorSetState}
+            confirmStoneSetState={confirmStoneSetState}
+            modalSetState={modalSetState}
+            confirmStoneState={confirmStoneState}
           />
         )}
         <div className="mt-5">
@@ -215,7 +264,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               )}
             </p>
             {isSliderError && (
-              <p className="text-red-700 text-xs font-bold">
+              <p className="text-solitaireError text-xs font-bold">
                 {sliderErrorText}
               </p>
             )}
@@ -223,7 +272,11 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
 
           <div className="flex justify-between mt-2">
             {confirmRadioButtons?.map((radioData: any) => (
-              <RadioButton radioMetaData={radioData} key={radioData?.id} />
+              <RadioButton
+                radioMetaData={radioData}
+                onChange={handleConfirmStoneRadioChange}
+                key={radioData?.id}
+              />
             ))}
           </div>
         </div>
@@ -250,6 +303,7 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
               displayButtonStyle: styles.transparent
             }}
             handleClick={() => {
+              setSelectedRadioDaysValue('');
               setSelectedDaysInputValue('');
               setInputErrorContent('');
               setInputError(false);

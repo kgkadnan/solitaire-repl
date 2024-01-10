@@ -23,7 +23,7 @@ export interface IMeasurements {
   star_length: string;
   crown_height: string;
   pavilion_angle: string;
-  pavilion_depth: string;
+  pavilion_height: string;
 }
 
 export interface IInclusionDetails {
@@ -31,22 +31,18 @@ export interface IInclusionDetails {
   milky: string[];
   luster: string[];
   eye_clean: string[];
-  open_crown: string[];
-  open_table: string[];
+  crown_open: string[];
+  table_open: string[];
   side_table: string[];
-  black_table: string[];
+  table_black: string[];
   natural_crown: string[];
-  open_pavilion: string[];
+  pavilion_open: string[];
   natural_girdle: string[];
   side_inclusion: string[];
   table_inclusion: string[];
   natural_pavilion: string[];
   surface_graining: string[];
   internal_graining: string[];
-}
-
-export interface KeyLabelMapping {
-  [key: string]: string;
 }
 
 export interface IOtherInformation {
@@ -57,7 +53,6 @@ export interface IOtherInformation {
 
 export interface IBasicCardDetails {
   [key: string]: string[] | string;
-  'H&A': string[];
   cut: string[];
   lab: string[];
   carat: string[];
@@ -71,7 +66,6 @@ export interface IBasicCardDetails {
   overtone: string[];
   symmetry: string[];
   intensity: string[];
-  brilliance: string[];
   color_shade: string[];
   price_range: string;
   fluoroscence: string[];
@@ -98,15 +92,11 @@ export interface ISavedSearchData {
   deleted_at?: string | null;
 }
 
-export interface IKeyLabelMapping {
-  [key: string]: string;
-}
-
 export interface IFormatedData {
   [key: string]: string | string[];
 }
 
-export interface Item {
+export interface IItem {
   name: string;
 }
 

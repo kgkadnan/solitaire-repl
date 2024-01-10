@@ -1,7 +1,7 @@
 import { ManageLocales } from '@/utils/translate';
 import Link from 'next/link';
 import React from 'react';
-import { ITabsProps } from '../my-diamonds-interface';
+import { ITabsProps } from '../interface/my-diamonds-interface';
 
 export const Tabs: React.FC<ITabsProps> = ({
   activeTab,

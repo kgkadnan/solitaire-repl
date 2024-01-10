@@ -50,7 +50,8 @@
     --solitaire-nonary: 0, 0%, 84%, 1; // Custom
     --solitaire-denary: 0, 0%, 84%, 1; // Custom
     --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
-
+    --solitaire-error: 353, 77%, 44%, 1; //Error
+    --solitaire-success: 93, 48%, 42%; // Success
     //border -color
     --solitaire-border: 0, 0%, 100%, 1; //white
   }
@@ -101,6 +102,10 @@
     --solitaire-nonary: 180, 12%, 24%, 0.4; // Custom
     --solitaire-denary: 180, 13%, 24%, 1; // Emerald 5
     --solitaire-outline: 180, 6%, 39%, 1; //Emerald 4
+    --solitaire-error: 353, 77%, 44%, 1; //Error
+    --solitaire-success: 93, 48%, 42%; // Success
+    --solitaire-active-stepper: 32, 18%, 72%, 1; //active stepper
+
     //border -color
     --solitaire-border: 180, 6%, 39%, 1; //Emerald 4
   }
@@ -125,7 +130,7 @@
     /* width */
     ::-webkit-scrollbar {
       width: 6px !important;
-      height: 6px;
+      height: 0.6rem;
     }
 
     /* Track */
