@@ -49,7 +49,7 @@ export interface IToken {
   tempToken: string;
 }
 
-export const initialTokenState: IToken = {
+const initialTokenState = {
   token: '',
   phoneToken: '',
   tempToken: ''
@@ -129,7 +129,6 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            console.log('res', res);
             setToken(prev => ({
               ...prev,
               phoneToken: res?.token || ''

@@ -45,7 +45,7 @@ export interface IToken {
   tempToken: string;
 }
 
-export const initialTokenState: IToken = {
+const initialTokenState = {
   token: '',
   phoneToken: '',
   tempToken: ''
