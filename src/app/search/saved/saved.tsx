@@ -20,8 +20,16 @@ import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import { ICardData, IDateRange, IFormatedData, Item } from './saved-interface';
 import { KeyLabelMapping } from '@/components/common/data-table/interface';
+import {
+  ICardData,
+  IDateRange,
+  IFormatedData,
+  IItem,
+  ISavedSearchData,
+  ProductResponse,
+  SavedSearchResponse
+} from './saved-interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import Image from 'next/image';
@@ -91,7 +99,7 @@ const SavedSearch = () => {
   const dispatch = useAppDispatch();
 
   // Fetching saved search data
-  const { data } = useGetAllSavedSearchesQuery(
+  let { data }: { data?: SavedSearchResponse } = useGetAllSavedSearchesQuery(
     {
       limit,
       offset,
@@ -103,14 +111,20 @@ const SavedSearch = () => {
     }
   );
 
-  const { data: productData } = useGetProductCountQuery(
+  const {
+    data: productData,
+    isLoading
+  }: { data?: ProductResponse; isLoading: any } = useGetProductCountQuery(
     {
       searchUrl
     },
     { skip: !searchUrl }
   );
 
-  const { data: searchList } = useGetSavedSearchListQuery(search);
+  const { data: searchList }: { data?: IItem[] } =
+    useGetSavedSearchListQuery(search);
+
+  console.log('searchList', searchList);
 
   // Mutation for deleting items from the saved search
   const [deleteSavedSearch] = useDeleteSavedSearchMutation();
@@ -134,7 +148,7 @@ const SavedSearch = () => {
       setLimit(newResultsPerPage);
       setOffset(0);
       0; // Reset current page when changing results per page
-      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+      setNumberOfPages(Math.ceil(data?.count ?? 0 / newResultsPerPage));
     },
     [data?.count]
   );
@@ -262,15 +276,17 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchList.filter((item: Item) =>
-        item.name.toLowerCase().includes(inputValue.toLowerCase())
-      );
+      const filteredSuggestions =
+        searchList &&
+        searchList.filter((item: IItem) =>
+          item.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
       // Extract card titles from filtered suggestions
-      const suggestionTitles = filteredSuggestions.map(
-        (item: Item) => item.name
-      );
+      const suggestionTitles =
+        filteredSuggestions &&
+        filteredSuggestions.map((item: IItem) => item.name);
 
-      setSuggestions(suggestionTitles);
+      setSuggestions(suggestionTitles || []);
       // Update state with an array of strings
     },
     [searchList]
@@ -377,8 +393,8 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    let specificSavedSearchData = data?.savedSearches;
-    setNumberOfPages(Math.ceil(data?.count / data?.limit));
+    let specificSavedSearchData: any = data?.savedSearches;
+    setNumberOfPages(Math.ceil((data?.count ?? 0) / (data?.limit ?? 0)));
     setSavedSearchData(specificSavedSearchData);
     setCardData(renderCardData(specificSavedSearchData));
   }, [data, limit, offset, renderCardData]);
@@ -464,6 +480,33 @@ const SavedSearch = () => {
                         />
                       </div>
                     </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <NoDataFound />
+            )}
+          </div>
+
+          {/* Custom Footer */}
+          <div className="sticky bottom-0 bg-solitairePrimary mt-3">
+            {(data?.count ?? 0) > 0 && (
+              <CustomPagination
+                currentPage={currentPage}
+                totalPages={numberOfPages}
+                resultsPerPage={limit}
+                optionLimits={optionLimits}
+                handlePageClick={handlePageClick}
+                handleResultsPerPageChange={handleResultsPerPageChange}
+              />
+            )}
+            {footerButtonData?.length && (
+              <div className="sticky bottom-0 bg-solitairePrimary mt-3 flex border-t-2 border-solitaireSenary items-center justify-between">
+                {isError && (
+                  <div className="w-[50%]">
+                    <p className="text-solitaireError text-base ">
+                      {errorText}
+                    </p>
                   </div>
                 );
               })}

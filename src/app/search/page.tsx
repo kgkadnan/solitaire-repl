@@ -27,11 +27,11 @@ import {
   MAX_SEARCH_TAB_LIMIT
 } from '@/constants/business-logic';
 import { NoDataFound } from '@/components/common/no-data-found';
-import {
-  NEW_SEARCH,
-  SAVED_SEARCHES,
-  SEARCH_RESULT
-} from '@/constants/application-constants/search-page';
+import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
+import { FloatingLabelInput } from '@/components/common/floating-input';
+import { CustomInputDialog } from '@/components/common/input-dialog';
+import logger from 'logging/log-util';
+import { IProduct } from './result/result-interface';
 
 interface IMyProfileRoutes {
   id: number;
@@ -39,7 +39,19 @@ interface IMyProfileRoutes {
   path: string | number;
 }
 
-function SearchResultLayout() {
+interface IPathName {
+  shortName: string;
+  fullName: string;
+}
+
+interface IProductResponse {
+  count: any;
+  limit: number;
+  offset: number;
+  products: IProduct[];
+}
+
+function SearchLayout() {
   const subRoute = useSearchParams().get('active-tab');
   const masterRoute = usePathname();
   const editSubRoute = useSearchParams().get('edit');
@@ -108,7 +120,15 @@ function SearchResultLayout() {
     computeRouteAndComponentRenderer()
   );
   let [addSavedSearch] = useAddSavedSearchMutation();
-  let { data, isLoading, refetch } = useGetAllProductQuery(
+  let {
+    data = { count: 0, limit: 0, offset: 0, products: [] },
+    isLoading,
+    refetch
+  }: {
+    data?: IProductResponse;
+    isLoading: any;
+    refetch: any;
+  } = useGetAllProductQuery(
     {
       offset: 0,
       limit: LISTING_PAGE_DATA_LIMIT,
