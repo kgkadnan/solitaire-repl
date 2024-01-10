@@ -46,7 +46,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
 
   // State to manage the checkbox's checked status
   const [isCheckedState, setIsCheckedState] = useState(
-    isChecked.includes(data)
+    isChecked?.includes(data)
   );
 
   // Handle changes in the input field
@@ -60,7 +60,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
   };
 
   const handleInputClick = () => {
-    if (checkboxRef.current) {
+    if (checkboxRef.current && !inputValue) {
       checkboxRef.current.click();
     }
   };
@@ -90,7 +90,7 @@ export const CustomCheckBox: React.FC<ICustomCheckboxProps> = ({
 
   useEffect(() => {
     // Update the checkbox state based on whether it's checked in the isChecked array
-    setIsCheckedState(isChecked.includes(data));
+    setIsCheckedState(isChecked?.includes(data));
   }, [isChecked, data]);
 
   return (
