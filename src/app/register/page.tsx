@@ -15,7 +15,8 @@ import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-se
 import { useRouter } from 'next/navigation';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation
+  useVerifyOTPMutation,
+  useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
 import Select from 'react-select';
 import { CustomInputDialog } from '@/components/common/input-dialog';
@@ -32,11 +33,23 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/otp-verication/hooks/otp-verification-state-management';
 import ConfirmScreen from '@/components/common/confirmation-screen';
+import { useGetAuthDataQuery } from '@/features/api/login';
 export interface IOtp {
-  mobileNumber: string;
-  countryCode: string;
+  otpMobileNumber: string;
+  otpCountryCode: string;
   codeAndNumber: string;
 }
+export interface IToken {
+  token: string;
+  phoneToken: string;
+  tempToken: string;
+}
+
+const initialTokenState = {
+  token: '',
+  phoneToken: '',
+  tempToken: ''
+};
 const Register = () => {
   const router = useRouter();
   const { registerState, registerSetState } = useRegisterStateManagement();
@@ -62,7 +75,6 @@ const Register = () => {
 
   //common states
   const [currentState, setCurrentState] = useState('register');
-  const [phoneToken, setPhoneToken] = useState('');
   const [role, setRole] = useState('');
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -70,7 +82,17 @@ const Register = () => {
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
 
+  const { data: verifyNumber } = useVerifyPhoneQuery({
+    country_code: otpVerificationFormState.otpCountryCode,
+    phone_number: otpVerificationFormState.otpMobileNumber
+  });
+
+  const [token, setToken] = useState(initialTokenState);
+
   const { userLoggedIn } = useUser();
+  const { data: userData } = useGetAuthDataQuery(token.token, {
+    skip: !token.token
+  });
 
   //APi CAlls
   const { data, error } = useGetCountryCodeQuery({});
@@ -90,13 +112,10 @@ const Register = () => {
   }, [data, error]);
 
   useEffect(() => {
-    setOTPVerificationFormState(prev => ({
-      ...prev,
-      mobileNumber: `${registerFormState.mobileNumber}`,
-      countryCode: `${registerFormState.countryCode}`,
-      codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
-    }));
-  }, [registerFormState.countryCode, registerFormState.mobileNumber]);
+    if (userData) {
+      localStorage.setItem('user', JSON.stringify(data));
+    }
+  }, [userData]);
 
   const renderContentWithInput = () => {
     return (
@@ -107,7 +126,7 @@ const Register = () => {
         <div className="flex text-center justify-between  w-[350px]">
           <div className="w-[25%]">
             <Select
-              name="countryCode"
+              name="otpCountryCode"
               options={computeCountryDropdownField(countryCode)}
               onChange={selectValue =>
                 handleOTPSelectChange({
@@ -116,11 +135,11 @@ const Register = () => {
                 })
               }
               styles={countryCodeSelectStyle(
-                otpVerificationFormErrors.countryCode
+                otpVerificationFormErrors.otpCountryCode
               )}
               value={{
-                label: otpVerificationFormState.countryCode,
-                value: otpVerificationFormState.countryCode
+                label: otpVerificationFormState.otpCountryCode,
+                value: otpVerificationFormState.otpCountryCode
               }}
             />
           </div>
@@ -132,9 +151,9 @@ const Register = () => {
                 handleOTPChange({ event, setOTPVerificationFormState })
               }
               type="number"
-              name="mobileNumber"
-              value={otpVerificationFormState.mobileNumber}
-              errorText={otpVerificationFormErrors.mobileNumber}
+              name="otpMobileNumber"
+              value={otpVerificationFormState.otpMobileNumber}
+              errorText={otpVerificationFormErrors.otpMobileNumber}
             />
           </div>
         </div>
@@ -164,10 +183,15 @@ const Register = () => {
             }}
             handleClick={() => {
               handleEditMobileNumber({
+                verifyNumber,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
-                setIsInputDialogOpen
+                setIsInputDialogOpen,
+                setIsDialogOpen,
+                setDialogContent,
+                sendOtp,
+                setToken
               });
             }}
           />
@@ -186,9 +210,10 @@ const Register = () => {
             register={register}
             setRole={setRole}
             setCurrentState={setCurrentState}
-            setPhoneToken={setPhoneToken}
+            setToken={setToken}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            setOTPVerificationFormState={setOTPVerificationFormState}
           />
         );
       case 'OTPVerification':
@@ -202,7 +227,7 @@ const Register = () => {
             setCurrentState={setCurrentState}
             state={'register'}
             router={router}
-            phoneToken={phoneToken}
+            token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
             setIsDialogOpen={setIsDialogOpen}
@@ -210,6 +235,7 @@ const Register = () => {
             verifyOTP={verifyOTP}
             role={role}
             setResendTimer={setResendTimer}
+            setToken={setToken}
           />
         );
 

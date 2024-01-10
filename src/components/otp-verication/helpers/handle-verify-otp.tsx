@@ -2,10 +2,11 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
 import errorImage from '@public/assets/icons/error.svg';
+import { IToken } from '@/app/register/page';
 
 interface IHandleVerifyOtp {
   otpValues: string[];
-  phoneToken: string;
+  token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   router: any;
   userLoggedIn: any;
@@ -13,29 +14,44 @@ interface IHandleVerifyOtp {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyOTP: any;
   role: string;
+  setToken?: React.Dispatch<React.SetStateAction<IToken>>;
 }
 export const handleVerifyOtp = ({
   otpValues,
-  phoneToken,
+  token,
   setCurrentState,
   router,
   userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
   verifyOTP,
-  role
+  role,
+  setToken
 }: IHandleVerifyOtp) => {
   const enteredOtp = otpValues.join('');
-  verifyOTP({ token: phoneToken, otp: enteredOtp })
+
+  verifyOTP({
+    token: token.phoneToken,
+    otp: enteredOtp,
+    resend_token: token.tempToken
+  })
     .unwrap()
     .then((res: any) => {
       if (res) {
         if (role === 'guest') {
           router.push('/');
-        } else {
+        } else if (role === 'register') {
           setCurrentState('successfullyCreated');
+          if (setToken)
+            setToken(prev => ({
+              ...prev,
+              token: res.access_token
+            }));
+          userLoggedIn(res.access_token);
+        } else if (role === 'login') {
+          setCurrentState('successfullyCreated');
+          userLoggedIn(res.access_token);
         }
-        userLoggedIn(res.access_token);
       }
     })
     .catch((e: any) => {

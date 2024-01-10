@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { IOtp } from '..';
 
 export const initialOTPFormState: IOtp = {
-  mobileNumber: '',
-  countryCode: '',
+  otpMobileNumber: '',
+  otpCountryCode: '',
   codeAndNumber: ''
 };
 
