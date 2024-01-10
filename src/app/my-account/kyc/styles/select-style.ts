@@ -43,6 +43,8 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
       minHeight: '5.5vh',
       height: '5.5vh',
       color: 'hsl(var(--solitaire-tertiary))',
+      display: 'flex',
+      alignItems: 'center',
       ':active': {
         ...styles[':active'],
         border: 'none',
