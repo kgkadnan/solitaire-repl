@@ -14,7 +14,11 @@ import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { useKycMutation, useGetKycDetailQuery } from '@/features/api/kyc';
+import {
+  useKycMutation,
+  useGetKycDetailQuery,
+  useSubmitKYCMutation
+} from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
@@ -32,6 +36,7 @@ const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
 
   const [kyc] = useKycMutation();
+  const [submitKYC] = useSubmitKYCMutation();
   const { data: kycDetails } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
@@ -60,6 +65,26 @@ const KYC: React.FC = () => {
     setUserData(authData);
   }, [authData]);
 
+  const buildFormData = () => {
+    const formData = new FormData();
+    formData.append('country', formState.country);
+    formData.append('offline', 'false');
+    let uploadData = formState.attachment;
+    for (const key in uploadData) {
+      const fileData = uploadData[key];
+
+      // Check if the file is uploaded
+      if (fileData.isFileUploaded && fileData.selectedFile.length > 0) {
+        // Append each selected file to the FormData with a key like 'pan_0', 'gst_certificate_0', etc.
+        fileData.selectedFile.forEach((file: any) => {
+          formData.append(key, file);
+        });
+      }
+    }
+
+    return formData;
+  };
+
   const handleNextStep = async (
     screenName: string,
     activeID: number,
@@ -85,6 +110,7 @@ const KYC: React.FC = () => {
         );
       });
     }
+
     saveStep &&
       !validationError.length &&
       (await kyc({
@@ -121,6 +147,10 @@ const KYC: React.FC = () => {
     };
     stepSuccessStatus = 0;
     return stepperFinalStatus;
+  };
+
+  const handleSubmit = async () => {
+    await submitKYC(buildFormData());
   };
 
   const handleTermAndCondition = () => {};
@@ -160,59 +190,55 @@ const KYC: React.FC = () => {
         </div>
         <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
           {data?.attachment &&
-            (Array.isArray(data.attachment)
-              ? // Render when `attachment` is an array
-                data.attachment.map(
-                  ({ id, label, isRequired, key, maxFile, minFile }: any) => (
-                    <div key={id} className=" w-[45%]">
-                      <FileAttachments
-                        key={id}
-                        lable={label}
-                        formKey={key}
-                        isRequired={isRequired}
-                        formErrorState={formErrorState}
-                        formState={formState}
-                        modalSetState={modalSetState}
-                        modalState={modalState}
-                        maxFile={maxFile}
-                        minFile={minFile}
-                      />
-                    </div>
-                  )
-                )
-              : // Render when `attachment` is an object
-                Object.keys(data.attachment).map((category: any) => (
-                  <div key={category} className="w-[45%]">
-                    <h1 className="text-solitaireTertiary py-3 capitalize ">
-                      {category}
-                    </h1>
-                    <div className="flex flex-col gap-[20px]">
-                      {data.attachment[category].map(
-                        ({
-                          id,
-                          label,
-                          isRequired,
-                          key,
-                          maxFile,
-                          minFile
-                        }: any) => (
-                          <FileAttachments
-                            key={id}
-                            lable={label}
-                            formKey={key}
-                            isRequired={isRequired}
-                            formErrorState={formErrorState}
-                            formState={formState}
-                            modalSetState={modalSetState}
-                            modalState={modalState}
-                            maxFile={maxFile}
-                            minFile={minFile}
-                          />
-                        )
-                      )}
-                    </div>
+            data.attachment.map((attch: any) => {
+              return attch.key && Object?.keys(attch.key).length ? (
+                <div key={attch.key} className="w-[45%]">
+                  <h1 className="text-solitaireTertiary py-3 capitalize ">
+                    {attch.key}
+                  </h1>
+                  <div className="flex flex-col gap-[20px]">
+                    {attch.value.map(
+                      ({
+                        id,
+                        label,
+                        isRequired,
+                        formKey,
+                        maxFile,
+                        minFile
+                      }: any) => (
+                        <FileAttachments
+                          key={id}
+                          lable={label}
+                          formKey={formKey}
+                          isRequired={isRequired}
+                          formErrorState={formErrorState}
+                          formState={formState}
+                          modalSetState={modalSetState}
+                          modalState={modalState}
+                          maxFile={maxFile}
+                          minFile={minFile}
+                        />
+                      )
+                    )}
                   </div>
-                )))}
+                </div>
+              ) : (
+                <div key={attch.id} className=" w-[45%]">
+                  <FileAttachments
+                    key={attch.id}
+                    lable={attch.label}
+                    formKey={attch.formKey}
+                    isRequired={attch.isRequired}
+                    formErrorState={formErrorState}
+                    formState={formState}
+                    modalSetState={modalSetState}
+                    modalState={modalState}
+                    maxFile={attch.maxFile}
+                    minFile={attch.minFile}
+                  />
+                </div>
+              );
+            })}
         </div>
         <hr className="w-[50%]" />
         <div className="flex py-6 items-center justify-center">
@@ -432,7 +458,8 @@ const KYC: React.FC = () => {
           formState={formState}
           modalSetState={modalSetState}
           modalState={modalState}
-          prevStep={handlePrevStep}
+          handleSaveAndNext={handleSaveAndNext}
+          handleSubmit={handleSubmit}
           handleTermAndCondition={handleTermAndCondition}
         />
       );
@@ -449,6 +476,7 @@ const KYC: React.FC = () => {
           setIsDialogOpen={setIsDialogOpen}
           isDialogOpen={isDialogOpen}
           dialogContent={dialogContent}
+          handleSubmit={handleSubmit}
         />
       );
 

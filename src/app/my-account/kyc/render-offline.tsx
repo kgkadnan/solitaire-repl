@@ -19,7 +19,8 @@ interface IRenderOffline {
   handleTermAndCondition: () => void;
   formState: any;
   fromWhere: string;
-  prevStep: () => void;
+  handleSaveAndNext: (state: string) => void;
+  handleSubmit: () => void;
 }
 const RenderOffline = ({
   data,
@@ -29,11 +30,11 @@ const RenderOffline = ({
   handleTermAndCondition,
   formState,
   fromWhere,
-  prevStep
+  handleSaveAndNext,
+  handleSubmit
 }: IRenderOffline) => {
   const { isModalOpen, modalContent } = modalState;
   const { setIsModalOpen } = modalSetState;
-  const handleSubmit = () => {};
 
   return (
     <div>
@@ -65,63 +66,59 @@ const RenderOffline = ({
       </div>
       <div
         className={`pb-5 ${
-          fromWhere === 'offline' ? 'max-h-[800px]' : 'max-h-[400px]'
+          fromWhere === 'offline' ? 'max-h-[800px]' : 'max-h-[350px]'
         } flex flex-wrap flex-col gap-[20px] content-between`}
       >
         {data?.attachment &&
-          (Array.isArray(data.attachment)
-            ? // Render when `attachment` is an array
-              data.attachment.map(
-                ({ id, label, isRequired, key, maxFile, minFile }: any) => (
-                  <div key={id} className=" w-[45%]">
-                    <FileAttachments
-                      key={id}
-                      lable={label}
-                      formKey={key}
-                      isRequired={isRequired}
-                      formErrorState={formErrorState}
-                      formState={formState}
-                      modalSetState={modalSetState}
-                      modalState={modalState}
-                      maxFile={maxFile}
-                      minFile={minFile}
-                    />
-                  </div>
-                )
-              )
-            : // Render when `attachment` is an object
-              Object.keys(data.attachment).map((category: any) => (
-                <div key={category} className="w-[45%]">
-                  <h1 className="text-solitaireTertiary py-3 capitalize ">
-                    {category}
-                  </h1>
-                  <div className="flex flex-col gap-[20px]">
-                    {data.attachment[category].map(
-                      ({
-                        id,
-                        label,
-                        isRequired,
-                        key,
-                        maxFile,
-                        minFile
-                      }: any) => (
-                        <FileAttachments
-                          key={id}
-                          lable={label}
-                          formKey={key}
-                          isRequired={isRequired}
-                          formErrorState={formErrorState}
-                          formState={formState}
-                          modalSetState={modalSetState}
-                          modalState={modalState}
-                          maxFile={maxFile}
-                          minFile={minFile}
-                        />
-                      )
-                    )}
-                  </div>
+          data.attachment.map((attch: any) => {
+            return attch.key && Object?.keys(attch.key).length ? (
+              <div key={attch.key} className="w-[45%]">
+                <h1 className="text-solitaireTertiary py-3 capitalize ">
+                  {attch.key}
+                </h1>
+                <div className="flex flex-col gap-[20px]">
+                  {attch.value.map(
+                    ({
+                      id,
+                      label,
+                      isRequired,
+                      formKey,
+                      maxFile,
+                      minFile
+                    }: any) => (
+                      <FileAttachments
+                        key={id}
+                        lable={label}
+                        formKey={formKey}
+                        isRequired={isRequired}
+                        formErrorState={formErrorState}
+                        formState={formState}
+                        modalSetState={modalSetState}
+                        modalState={modalState}
+                        maxFile={maxFile}
+                        minFile={minFile}
+                      />
+                    )
+                  )}
                 </div>
-              )))}
+              </div>
+            ) : (
+              <div key={attch.id} className=" w-[45%]">
+                <FileAttachments
+                  key={attch.id}
+                  lable={attch.label}
+                  formKey={attch.formKey}
+                  isRequired={attch.isRequired}
+                  formErrorState={formErrorState}
+                  formState={formState}
+                  modalSetState={modalSetState}
+                  modalState={modalState}
+                  maxFile={attch.maxFile}
+                  minFile={attch.minFile}
+                />
+              </div>
+            );
+          })}
       </div>
       {fromWhere === 'other' && (
         <p className="text-[12px] text-solitaireSenary pb-5 w-[45%] text-center">
@@ -151,13 +148,13 @@ const RenderOffline = ({
               id: 1,
               displayButtonLabel: 'Back',
               style: styles.transparent,
-              fn: prevStep
+              fn: () => handleSaveAndNext('choice_for_filling_kyc')
             },
             {
               id: 2,
               displayButtonLabel: 'Submit',
               style: styles.filled,
-              fn: () => handleSubmit
+              fn: handleSubmit
             }
           ]}
         />

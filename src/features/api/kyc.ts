@@ -18,6 +18,14 @@ export const kycApi = createApi({
       },
       invalidatesTags: ['kyc']
     }),
+    submitKYC: builder.mutation({
+      query: data => ({
+        url: `/store/kyc/submit`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['kyc']
+    }),
     getKycDetail: builder.query({
       query: () => ({
         url: `/store/kyc`,
@@ -28,4 +36,5 @@ export const kycApi = createApi({
   })
 });
 
-export const { useKycMutation, useGetKycDetailQuery } = kycApi;
+export const { useKycMutation, useGetKycDetailQuery, useSubmitKYCMutation } =
+  kycApi;
