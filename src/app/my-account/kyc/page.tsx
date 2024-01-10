@@ -14,7 +14,11 @@ import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
-import { useKycMutation, useGetKycDetailQuery } from '@/features/api/kyc';
+import {
+  useKycMutation,
+  useGetKycDetailQuery,
+  useResetKycMutation
+} from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import { validateScreen } from './helper/validations/screen/screen';
@@ -26,7 +30,6 @@ import ErrorModel from '@/components/common/error-model';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { ManageLocales } from '@/utils/translate';
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -52,6 +55,8 @@ const KYC: React.FC = () => {
   const dispatch = useAppDispatch();
 
   const { data: authData } = useGetAuthDataQuery(token, { skip: !token });
+
+  const [resetKyc] = useResetKycMutation();
 
   useEffect(() => {
     const storedToken = localStorage.getItem('auth');
@@ -239,16 +244,66 @@ const KYC: React.FC = () => {
     screenName: 'attachment'
   });
 
+  const handleConfirmRestartKyc = () => {
+    resetKyc({})
+      .then((res: any) => {
+        if (res.data.statusCode === 204) {
+          setCurrentState('country_selection');
+          setSelectedCountry('');
+        }
+      })
+      .catch((e: any) => {
+        logger.error(`something went wrong while restart kyc ${e}`);
+      });
+  };
+
   const handleResetButton = () => {
-    setCurrentState('country_selection');
+    setIsDialogOpen(true);
+    setDialogContent(
+      <>
+        <div className="text-center align-middle text-solitaireTertiary text-[20px]">
+          Are you sure?
+        </div>
+        <div className="text-center align-middle text-solitaireTertiary">
+          Do you want to restart KYC process
+        </div>
+        <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+          <CustomDisplayButton
+            displayButtonLabel="No"
+            handleClick={() => {
+              setIsDialogOpen(false);
+              setDialogContent('');
+            }}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[14px] font-medium'
+            }}
+          />
+          <CustomDisplayButton
+            displayButtonLabel="Yes"
+            handleClick={handleConfirmRestartKyc}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[14px] font-medium'
+            }}
+          />
+        </div>
+      </>
+    );
   };
 
   useEffect(() => {
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
+        console.log('kycDetails?.kyc?.country', kycDetails?.kyc?.country);
+
         if (
           kycDetails?.kyc &&
-          Object.keys(kycDetails?.kyc?.online).length >= 2 &&
+          (kycDetails?.kyc?.country !== null ||
+            Object.keys(kycDetails?.kyc?.online).length >= 2) &&
           Object.keys(kycDetails?.kyc?.offline).length === 0
         ) {
           const { online, country, offline } = kycDetails.kyc;
@@ -277,7 +332,10 @@ const KYC: React.FC = () => {
             setDialogContent(
               <>
                 <div className="text-center align-middle text-solitaireTertiary">
-                  {ManageLocales('app.topNav.kycModelContent')}
+                  <p className="text-[20px]">Are you sure?</p>
+                </div>
+                <div className="text-center align-middle text-solitaireTertiary">
+                  Do you want to resume KYC process or restart it?
                 </div>
                 <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
                   <CustomDisplayButton
@@ -363,25 +421,10 @@ const KYC: React.FC = () => {
         break;
     }
   }, [kycDetails, userData]);
-  // return (
-  //   <div>
-  //     {selectedMode === 'online' ? (
-  //       <Stepper
-  //         stepper={stepperData}
-  //         state={activeStep}
-  //         setState={setActiveStep}
-  //         prevStep={handlePrevStep}
-  //         nextStep={handleNextStep}
-  //       />
-  //     ) : (
-  //       renderManualForm()
-  //     )}
-  //   </div>
-  // );  // Configuration for footer buttons
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
-      return country.country.display === selectedCountry.value;
+      return country.country.backend === selectedCountry.value;
     });
     setData(kycData[0]);
   }, [currentState]);
