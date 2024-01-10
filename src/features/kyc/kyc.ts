@@ -11,7 +11,7 @@ const initialState = {
       sections: {
         personal_details: {},
         company_details: {},
-        company_owner_Details: {},
+        company_owner_details: {},
         banking_details: {}
       }
     },

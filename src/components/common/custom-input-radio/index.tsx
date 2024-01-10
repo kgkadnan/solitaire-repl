@@ -19,7 +19,6 @@ export const RadioButton: React.FC<any> = ({
   } = radioMetaData;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
   const handleRadioChange = () => {
     onChange(value);
     if (inputRef.current) {
@@ -29,8 +28,8 @@ export const RadioButton: React.FC<any> = ({
 
   const handleInputClick = () => {
     if (inputRef.current) {
-      inputRef.current.focus();
       onChange(value);
+      inputRef.current.focus();
     }
   };
 
@@ -55,7 +54,9 @@ export const RadioButton: React.FC<any> = ({
           type="text"
           name={inputName}
           value={inputValue}
-          onChange={() => handleInputChange}
+          onChange={e => {
+            handleInputChange(e);
+          }}
           onClick={handleInputClick}
           ref={inputRef}
           placeholder={placeholder}
