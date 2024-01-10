@@ -4,7 +4,7 @@ import { ITheadProps } from '../interface';
 import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '../../checkbox/helper/handle-select-all-checkbox';
-
+import { CustomTooltip } from '../../shdecn-tooltip';
 export const TableHead: React.FC<ITheadProps> = ({
   selectionAllowed,
   checkboxData,
@@ -20,7 +20,7 @@ export const TableHead: React.FC<ITheadProps> = ({
       <tr>
         {selectionAllowed && (
           <th>
-            <div className={`flex text-center`}>
+            <div className={`flex text-center `}>
               <Checkbox
                 onClick={() =>
                   handleSelectAllCheckbox({
@@ -46,7 +46,12 @@ export const TableHead: React.FC<ITheadProps> = ({
               position: `${index === 0 ? 'sticky' : 'static'}`
             }}
           >
-            {column.short_label}
+            <CustomTooltip
+              tooltipTrigger={column.short_label}
+              tooltipContent={column.label}
+              delayDuration={0}
+              tooltipStyles={{ tooltipContent: 'bg-solitaireSenary' }}
+            />
           </th>
         ))}
       </tr>
