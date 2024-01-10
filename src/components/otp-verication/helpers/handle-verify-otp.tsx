@@ -40,15 +40,18 @@ export const handleVerifyOtp = ({
       if (res) {
         if (role === 'guest') {
           router.push('/');
-        } else {
+        } else if (role === 'register') {
           setCurrentState('successfullyCreated');
+          if (setToken)
+            setToken(prev => ({
+              ...prev,
+              token: res.access_token
+            }));
+          userLoggedIn(res.access_token);
+        } else if (role === 'login') {
+          setCurrentState('successfullyCreated');
+          userLoggedIn(res.access_token);
         }
-        if (setToken)
-          setToken(prev => ({
-            ...prev,
-            token: res.access_token
-          }));
-        userLoggedIn(res.access_token);
       }
     })
     .catch((e: any) => {

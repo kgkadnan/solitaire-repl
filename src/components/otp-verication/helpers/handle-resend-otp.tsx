@@ -26,7 +26,6 @@ export const handleResendOTP = ({
   })
     .unwrap()
     .then((res: any) => {
-      console.log('dres', res);
       setToken(prev => ({
         ...prev,
         phoneToken: res?.token || ''

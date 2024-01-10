@@ -11,8 +11,12 @@ export const otpVerificationApi = createApi({
       query: filter => ({
         url: `/store/customers/sms/otp/verify`,
         method: 'POST',
-        body: filter
+        body: filter,
+        headers: {
+          Authorization: `Bearer ${filter.resend_token}`
+        }
       }),
+
       invalidatesTags: ['OtpVerification']
     }),
     sendOtp: builder.mutation({

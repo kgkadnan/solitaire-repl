@@ -180,7 +180,8 @@ const Login = () => {
       } else if (res.data.access_token) {
         setToken(prev => ({
           ...prev,
-          token: res.data.access_token
+          token: res.data.access_token,
+          tempToken: res.data.access_token
         }));
       }
     } else if (!password.length && !emailAndNumber.length) {
@@ -330,6 +331,7 @@ const Login = () => {
             verifyOTP={verifyOTP}
             setToken={setToken}
             setResendTimer={setResendTimer}
+            role={'login'}
           />
         );
       case 'successfullyCreated':

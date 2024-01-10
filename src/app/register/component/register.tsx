@@ -228,7 +228,7 @@ const RegisterComponent = ({
             }}
             handleClick={() =>
               handleRegister({
-                role: '',
+                role: 'register',
                 registerFormState,
                 setRegisterFormErrors,
                 register,
