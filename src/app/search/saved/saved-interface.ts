@@ -104,3 +104,62 @@ export interface IDateRange {
   from: Date;
   to: Date;
 }
+
+interface ISavedSearch {
+  diamond_count: string;
+  name: string;
+  customer_id: string;
+  meta_data: {
+    [key: string]: string | string[];
+  };
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+}
+
+export interface ISavedSearchResponse {
+  savedSearches: ISavedSearch[];
+  count: number | undefined;
+  limit: number;
+  offset: number;
+}
+
+interface IProductVariant {
+  id: string;
+  created_at: string;
+  updated_at: string;
+  deleted_at: string | null;
+  title: string;
+  product_id: string;
+  sku: string | null;
+  barcode: string | null;
+  ean: string | null;
+  upc: string | null;
+  variant_rank: number;
+  inventory_quantity: number;
+  allow_backorder: boolean;
+  manage_inventory: boolean;
+  hs_code: string | null;
+  origin_country: string | null;
+  mid_code: string | null;
+  material: string | null;
+  weight: string | null;
+  length: string | null;
+  height: string | null;
+  width: string | null;
+  metadata: any | null;
+}
+
+interface IProduct {
+  id: string;
+  variants: IProductVariant[];
+}
+
+export interface IProductResponse {
+  products: IProduct[];
+  count: number;
+  offset: number;
+  limit: number;
+  search_id: string;
+}

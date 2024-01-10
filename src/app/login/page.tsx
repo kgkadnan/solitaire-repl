@@ -42,6 +42,7 @@ import {
 import Link from 'next/link';
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { statusCode } from '@/constants/enums/status-code';
+import { IAuthDataResponse } from './interface';
 
 export interface IToken {
   token: string;
@@ -61,6 +62,11 @@ const Login = () => {
   const [emailAndNumber, setEmailAndNumber] = useState<string>('');
   const [password, setPassword] = useState<string>('');
 
+  const [token, setToken] = useState(initialTokenState);
+  const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
+    token.token,
+    { skip: !token.token }
+  );
   const [verifyLogin] = useVerifyLoginMutation();
 
   const [isError, setIsError] = useState(false);
@@ -73,9 +79,6 @@ const Login = () => {
     modalSetState;
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
-
-  const [token, setToken] = useState(initialTokenState);
-  const { data } = useGetAuthDataQuery(token.token, { skip: !token.token });
 
   const [currentState, setCurrentState] = useState('login');
 
@@ -129,7 +132,7 @@ const Login = () => {
         })
           .unwrap()
           .then(res => {
-            setToken(prev => ({
+            setToken((prev: any) => ({
               ...prev,
               phoneToken: res?.token || ''
             }));
@@ -177,7 +180,7 @@ const Login = () => {
           />
         );
       } else if (res.data.access_token) {
-        setToken(prev => ({
+        setToken((prev: any) => ({
           ...prev,
           token: res.data.access_token,
           tempToken: res.data.access_token

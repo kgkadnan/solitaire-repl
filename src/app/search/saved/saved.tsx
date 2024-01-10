@@ -25,7 +25,9 @@ import {
   IDateRange,
   IFormatedData,
   IItem,
-  ISavedSearchData
+  IProductResponse,
+  ISavedSearchData,
+  ISavedSearchResponse
 } from './saved-interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
@@ -124,7 +126,7 @@ const SavedSearch = () => {
   const dispatch = useAppDispatch();
 
   // Fetching saved search data
-  const { data } = useGetAllSavedSearchesQuery(
+  const { data }: { data?: ISavedSearchResponse } = useGetAllSavedSearchesQuery(
     {
       limit,
       offset,
@@ -136,7 +138,10 @@ const SavedSearch = () => {
     }
   );
 
-  const { data: productData, isLoading } = useGetProductCountQuery(
+  const {
+    data: productData,
+    isLoading
+  }: { data?: IProductResponse; isLoading: any } = useGetProductCountQuery(
     {
       searchUrl
     },
@@ -145,7 +150,8 @@ const SavedSearch = () => {
     }
   );
 
-  const { data: searchList } = useGetSavedSearchListQuery(search);
+  const { data: searchList }: { data?: IItem[] } =
+    useGetSavedSearchListQuery(search);
 
   // Mutation for deleting items from the saved search
   const [deleteSavedSearch] = useDeleteSavedSearchMutation();
@@ -230,7 +236,7 @@ const SavedSearch = () => {
       setLimit(newResultsPerPage);
       setOffset(0);
       0; // Reset current page when changing results per page
-      setNumberOfPages(Math.ceil(data?.count / newResultsPerPage));
+      setNumberOfPages(Math.ceil(data?.count ?? 0 / newResultsPerPage));
     },
     [data?.count]
   );
@@ -360,15 +366,17 @@ const SavedSearch = () => {
   const debouncedSave = useCallback(
     (inputValue: string) => {
       // Filter data based on input value
-      const filteredSuggestions = searchList.filter((item: IItem) =>
-        item.name.toLowerCase().includes(inputValue.toLowerCase())
-      );
+      const filteredSuggestions =
+        searchList &&
+        searchList.filter((item: IItem) =>
+          item.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
       // Extract card titles from filtered suggestions
-      const suggestionTitles = filteredSuggestions.map(
-        (item: IItem) => item.name
-      );
+      const suggestionTitles =
+        filteredSuggestions &&
+        filteredSuggestions.map((item: IItem) => item.name);
 
-      setSuggestions(suggestionTitles);
+      setSuggestions(suggestionTitles || []);
       // Update state with an array of strings
     },
     [searchList]
@@ -475,8 +483,8 @@ const SavedSearch = () => {
   };
 
   useEffect(() => {
-    let specificSavedSearchData = data?.savedSearches;
-    setNumberOfPages(Math.ceil(data?.count / data?.limit));
+    let specificSavedSearchData: any = data?.savedSearches;
+    setNumberOfPages(Math.ceil((data?.count ?? 0) / (data?.limit ?? 0)));
     setSavedSearchData(specificSavedSearchData);
     setCardData(renderCardData(specificSavedSearchData));
   }, [data, limit, offset, renderCardData]);
@@ -582,7 +590,7 @@ const SavedSearch = () => {
 
           {/* Custom Footer */}
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-            {data?.count > 0 && (
+            {(data?.count ?? 0) > 0 && (
               <CustomPagination
                 currentPage={currentPage}
                 totalPages={numberOfPages}
