@@ -149,9 +149,23 @@
     "I3"
   ],
   "color": ["D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N-Z"],
-  "fluorescence": ["NON", "VSL", "SLT", "FNT", "MED", "STG", "VSTG"],
+  "fluorescence": [
+    { "title": "None", "short_name": "NON" },
+    { "title": "Very Slight", "short_name": "VSL" },
+    { "title": "Slight", "short_name": "SLT" },
+    { "title": "Faint", "short_name": "FNT" },
+    { "title": "Medium", "short_name": "MED" },
+    { "title": "Strong", "short_name": "STG" },
+    { "title": "Very Strong", "short_name": "VSTG" }
+  ],
   "lab": ["GIA", "GIA DOR", "DBIOD", "FM", "HRD", "IGI", "NGTC", "KGK GRADING"],
-  "location": ["BEL", "DUB", "IND", "ISR", "USA"],
+  "location": [
+    { "title": "Belgium", "short_name": "BEL" },
+    { "title": "Dubai", "short_name": "DUB" },
+    { "title": "India", "short_name": "IND" },
+    { "title": "Israel", "short_name": "ISR" },
+    { "title": "USA", "short_name": "USA" }
+  ],
   "origin": [
     "Angola",
     "Botswana",

@@ -112,7 +112,7 @@ const KYC: React.FC = () => {
       !validationError.length &&
       (await kyc({
         data: {
-          country: formState.country,
+          country: selectedCountry.label,
           offline: false,
           data: {
             ...formState.online.sections[screenName]
@@ -268,13 +268,20 @@ const KYC: React.FC = () => {
         if (res.data.statusCode === 204) {
           setCurrentState('country_selection');
           setSelectedCountry('');
+          dispatch(
+            updateFormState({
+              name: 'formState.country',
+              value: null
+            })
+          );
+          
         }
       })
       .catch((e: any) => {
         logger.error(`something went wrong while restart kyc ${e}`);
       });
   };
-
+console.log("test",formState)
   const handleResetButton = () => {
     setIsDialogOpen(true);
     setDialogContent(
@@ -314,12 +321,13 @@ const KYC: React.FC = () => {
   };
 
   useEffect(() => {
+    console.log("tetettetette",kycDetails)
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
         if (
           kycDetails?.kyc &&
-          (kycDetails?.kyc?.country !== null ||
-            Object.keys(kycDetails?.kyc?.online).length >= 2) &&
+          (kycDetails?.kyc?.country !== null) &&
+            Object.keys(kycDetails?.kyc?.online).length >1 &&
           Object.keys(kycDetails?.kyc?.offline).length === 0
         ) {
           const { online, country, offline } = kycDetails.kyc;
