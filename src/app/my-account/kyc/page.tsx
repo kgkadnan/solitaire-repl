@@ -30,7 +30,7 @@ import ErrorModel from '@/components/common/error-model';
 import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { AuthDataResponse } from '@/app/login/interface';
+import { IAuthDataResponse } from '@/app/login/interface';
 
 interface IKYCData {
   kyc: {
@@ -69,7 +69,7 @@ const KYC: React.FC = () => {
   const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
 
-  const { data: authData }: { data?: AuthDataResponse } = useGetAuthDataQuery(
+  const { data: authData }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
     token,
     { skip: !token }
   );
@@ -322,7 +322,7 @@ const KYC: React.FC = () => {
             Object.keys(kycDetails?.kyc?.online).length >= 2) &&
           Object.keys(kycDetails?.kyc?.offline).length === 0
         ) {
-          const { online, country, offline } = kycDetails?.kyc;
+          const { online, country, offline } = kycDetails.kyc;
 
           const onlineData = online || {};
 

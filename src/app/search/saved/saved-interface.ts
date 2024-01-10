@@ -105,7 +105,7 @@ export interface IDateRange {
   to: Date;
 }
 
-interface SavedSearch {
+interface ISavedSearch {
   diamond_count: string;
   name: string;
   customer_id: string;
@@ -118,14 +118,14 @@ interface SavedSearch {
   deleted_at: string | null;
 }
 
-export interface SavedSearchResponse {
-  savedSearches: SavedSearch[];
+export interface ISavedSearchResponse {
+  savedSearches: ISavedSearch[];
   count: number | undefined;
   limit: number;
   offset: number;
 }
 
-interface ProductVariant {
+interface IProductVariant {
   id: string;
   created_at: string;
   updated_at: string;
@@ -151,13 +151,13 @@ interface ProductVariant {
   metadata: any | null;
 }
 
-interface Product {
+interface IProduct {
   id: string;
-  variants: ProductVariant[];
+  variants: IProductVariant[];
 }
 
-export interface ProductResponse {
-  products: Product[];
+export interface IProductResponse {
+  products: IProduct[];
   count: number;
   offset: number;
   limit: number;

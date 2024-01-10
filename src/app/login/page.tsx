@@ -41,7 +41,7 @@ import {
 import Link from 'next/link';
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { statusCode } from '@/constants/enums/status-code';
-import { AuthDataResponse } from './interface';
+import { IAuthDataResponse } from './interface';
 
 // Define the Login component
 const Login = () => {
@@ -50,7 +50,7 @@ const Login = () => {
   const [password, setPassword] = useState<string>('');
 
   const [token, setToken] = useState('');
-  const { data }: { data?: AuthDataResponse } = useGetAuthDataQuery(token, {
+  const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(token, {
     skip: !token
   });
   const [verifyLogin] = useVerifyLoginMutation();

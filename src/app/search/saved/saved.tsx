@@ -20,15 +20,14 @@ import { useRouter } from 'next/navigation';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomDialog } from '@/components/common/dialog';
 import { useGetProductCountQuery } from '@/features/api/product';
-import { KeyLabelMapping } from '@/components/common/data-table/interface';
 import {
   ICardData,
   IDateRange,
   IFormatedData,
   IItem,
+  IProductResponse,
   ISavedSearchData,
-  ProductResponse,
-  SavedSearchResponse
+  ISavedSearchResponse
 } from './saved-interface';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
@@ -127,7 +126,7 @@ const SavedSearch = () => {
   const dispatch = useAppDispatch();
 
   // Fetching saved search data
-  let { data }: { data?: SavedSearchResponse } = useGetAllSavedSearchesQuery(
+  const { data }: { data?: ISavedSearchResponse } = useGetAllSavedSearchesQuery(
     {
       limit,
       offset,
@@ -142,7 +141,7 @@ const SavedSearch = () => {
   const {
     data: productData,
     isLoading
-  }: { data?: ProductResponse; isLoading: any } = useGetProductCountQuery(
+  }: { data?: IProductResponse; isLoading: any } = useGetProductCountQuery(
     {
       searchUrl
     },
@@ -153,8 +152,6 @@ const SavedSearch = () => {
 
   const { data: searchList }: { data?: IItem[] } =
     useGetSavedSearchListQuery(search);
-
-  console.log('searchList', searchList);
 
   // Mutation for deleting items from the saved search
   const [deleteSavedSearch] = useDeleteSavedSearchMutation();
@@ -593,7 +590,7 @@ const SavedSearch = () => {
 
           {/* Custom Footer */}
           <div className="sticky bottom-0 bg-solitairePrimary mt-3">
-            {data?.count > 0 && (
+            {(data?.count ?? 0) > 0 && (
               <CustomPagination
                 currentPage={currentPage}
                 totalPages={numberOfPages}

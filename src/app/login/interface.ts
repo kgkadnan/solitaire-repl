@@ -1,4 +1,4 @@
-interface CustomerData {
+interface ICustomerData {
   cart_id: string;
   country_code: string;
   company_name: string;
@@ -20,6 +20,6 @@ interface CustomerData {
   shipping_addresses: any[];
 }
 
-export interface AuthDataResponse {
-  customer: CustomerData;
+export interface IAuthDataResponse {
+  customer: ICustomerData;
 }
