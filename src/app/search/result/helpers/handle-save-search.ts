@@ -34,6 +34,7 @@ export const handleSaveSearch = async ({
           id: res?.id,
           saveSearchName,
           isSavedSearch: true,
+          searchId: data?.search_id,
           queryParams: parseData[activeTab].queryParams
         };
         localStorage.setItem('Search', JSON.stringify(parseData));

@@ -74,6 +74,21 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     }
   };
 
+  const downloadAllTabsExcel = () => {
+    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
+
+    performDownloadExcel({
+      previousSearch: allTabsIds,
+      downloadExcelApi: downloadExcel,
+      setDialogContent,
+      setIsDialogOpen,
+      setIsCheck,
+      setIsCheckAll,
+      setIsError
+    });
+  };
+
   /* The above code is defining a function called `addToCart` in a TypeScript React component. */
   const addToCart = () => {
     if (isCheck.length > 100) {
@@ -144,9 +159,6 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
           dropdownTrigger={
             <CustomDisplayButton
               displayButtonLabel={ManageLocales('app.searchResult.footer.more')}
-              displayButtonAllStyle={{
-                displayButtonStyle: styles.transparent
-              }}
             />
           }
           dropdownMenu={[
@@ -179,19 +191,27 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     {
       id: 2,
       displayButtonLabel: ManageLocales(
+        'app.searchResult.footer.downloadAllResults'
+      ),
+      style: styles.transparent,
+      fn: downloadAllTabsExcel
+    },
+    {
+      id: 3,
+      displayButtonLabel: ManageLocales(
         'app.searchResult.footer.bookAppointment'
       ),
       style: styles.transparent,
       fn: () => {}
     },
     {
-      id: 3,
+      id: 4,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.transparent,
       fn: addToCart
     },
     {
-      id: 4,
+      id: 5,
       displayButtonLabel: ManageLocales('app.searchResult.footer.confirmStone'),
       style: styles.filled,
       fn: () =>
