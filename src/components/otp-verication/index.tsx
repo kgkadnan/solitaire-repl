@@ -12,8 +12,8 @@ import { handleResendOTP } from './helpers/handle-resend-otp';
 import { IToken } from '@/app/register/page';
 
 export interface IOtp {
-  mobileNumber: string;
-  countryCode: string;
+  otpMobileNumber: string;
+  otpCountryCode: string;
   codeAndNumber: string;
 }
 
@@ -34,7 +34,7 @@ interface IOTPVerification {
   role?: string;
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
   sendOtp: any;
-  setToken?: React.Dispatch<React.SetStateAction<IToken>>;
+  setToken: React.Dispatch<React.SetStateAction<IToken>>;
 }
 
 const OTPVerification = ({
@@ -112,7 +112,8 @@ const OTPVerification = ({
                 setResendTimer,
                 sendOtp,
                 setIsDialogOpen,
-                setDialogContent
+                setDialogContent,
+                setToken
               });
             }}
           />

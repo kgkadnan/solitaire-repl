@@ -6,7 +6,6 @@ import errorImage from '@public/assets/icons/error.svg';
 import { IToken } from '@/app/register/page';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
-  setCheckNum: React.Dispatch<React.SetStateAction<boolean>>;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
   setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -18,7 +17,6 @@ interface IHandleEditMobileNumber {
 }
 export const handleEditMobileNumber = ({
   verifyNumber,
-  setCheckNum,
   otpVerificationFormState,
   setOTPVerificationFormErrors,
   setOTPVerificationFormState,
@@ -29,23 +27,23 @@ export const handleEditMobileNumber = ({
   setToken
 }: IHandleEditMobileNumber) => {
   if (
-    !otpVerificationFormState.countryCode ||
-    !otpVerificationFormState.mobileNumber
+    !otpVerificationFormState.otpCountryCode ||
+    !otpVerificationFormState.otpMobileNumber
   ) {
     setOTPVerificationFormErrors(prev => ({
       ...prev,
       mobileNumber: 'Please enter Mobile Number to Save'
     }));
   } else {
-    setCheckNum(true);
+    console.log('verifyNumber', verifyNumber);
     if (verifyNumber?.exists === false) {
       setOTPVerificationFormState(prev => ({
         ...prev,
-        codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.mobileNumber}`
+        codeAndNumber: `${otpVerificationFormState.otpCountryCode} ${otpVerificationFormState.otpMobileNumber}`
       }));
       sendOtp({
-        phone: otpVerificationFormState.mobileNumber,
-        country_code: otpVerificationFormState.countryCode
+        phone: otpVerificationFormState.otpMobileNumber,
+        country_code: otpVerificationFormState.otpCountryCode
       })
         .unwrap()
         .then((res: any) => {

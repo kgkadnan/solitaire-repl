@@ -13,7 +13,7 @@ import { handleSelectChange } from '../helpers/handle-select-change';
 import { handleRegisterChange } from '../helpers/handle-register-change';
 import { handleRegister } from '../helpers/handle-register';
 import { IRegisterSetState, IRegisterState } from '../interface';
-import { IToken } from '../page';
+import { IOtp, IToken } from '../page';
 
 interface IRegisterComponent {
   registerSetState: IRegisterSetState;
@@ -24,6 +24,7 @@ interface IRegisterComponent {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
+  setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
 }
 const RegisterComponent = ({
   registerSetState,
@@ -33,7 +34,8 @@ const RegisterComponent = ({
   setRole,
   setToken,
   setIsDialogOpen,
-  setDialogContent
+  setDialogContent,
+  setOTPVerificationFormState
 }: IRegisterComponent) => {
   const { registerFormState, registerFormErrors } = registerState;
   const { setRegisterFormState, setRegisterFormErrors } = registerSetState;
@@ -212,7 +214,8 @@ const RegisterComponent = ({
                 setRole,
                 setToken,
                 setIsDialogOpen,
-                setDialogContent
+                setDialogContent,
+                setOTPVerificationFormState
               })
             }
           />
@@ -233,7 +236,8 @@ const RegisterComponent = ({
                 setRole,
                 setToken,
                 setIsDialogOpen,
-                setDialogContent
+                setDialogContent,
+                setOTPVerificationFormState
               })
             }
           />

@@ -1,4 +1,4 @@
-import { IOtp } from '@/app/register/page';
+import { IOtp, IToken } from '@/app/register/page';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
@@ -10,20 +10,27 @@ interface IHandleResendOTP {
   sendOtp: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
+  setToken: React.Dispatch<React.SetStateAction<IToken>>;
 }
 export const handleResendOTP = ({
   otpVerificationFormState,
   setResendTimer,
   sendOtp,
   setIsDialogOpen,
-  setDialogContent
+  setDialogContent,
+  setToken
 }: IHandleResendOTP) => {
   sendOtp({
-    phone: otpVerificationFormState.mobileNumber,
-    country_code: otpVerificationFormState.countryCode
+    phone: otpVerificationFormState.otpMobileNumber,
+    country_code: otpVerificationFormState.otpCountryCode
   })
     .unwrap()
-    .then(() => {
+    .then((res: any) => {
+      console.log('dres', res);
+      setToken(prev => ({
+        ...prev,
+        phoneToken: res?.token || ''
+      }));
       setIsDialogOpen(true);
       setDialogContent(
         <>

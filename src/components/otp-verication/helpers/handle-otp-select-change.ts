@@ -11,6 +11,6 @@ export const handleOTPSelectChange = ({
 }: IHandleOTPSelectChange) => {
   setOTPVerificationFormState((prev: any) => ({
     ...prev,
-    countryCode: `+${selectValue?.value}`
+    otpCountryCode: `+${selectValue?.value}`
   }));
 };

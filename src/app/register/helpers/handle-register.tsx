@@ -4,7 +4,7 @@ import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
 import errorImage from '@public/assets/icons/error.svg';
 import { IRegister } from '../interface';
-import { IToken } from '../page';
+import { IOtp, IToken } from '../page';
 
 interface IHandleRegister {
   role: string;
@@ -16,6 +16,7 @@ interface IHandleRegister {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
+  setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
 }
 export const handleRegister = async ({
   role,
@@ -26,7 +27,8 @@ export const handleRegister = async ({
   setRole,
   setToken,
   setIsDialogOpen,
-  setDialogContent
+  setDialogContent,
+  setOTPVerificationFormState
 }: IHandleRegister) => {
   const isFormValid = validateAllFields({
     formState: registerFormState,
@@ -49,7 +51,12 @@ export const handleRegister = async ({
       if (res) {
         setCurrentState('OTPVerification');
         setRole(role);
-
+        setOTPVerificationFormState(prev => ({
+          ...prev,
+          otpMobileNumber: `${registerFormState.mobileNumber}`,
+          otpCountryCode: `${registerFormState.countryCode}`,
+          codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+        }));
         setToken(prev => ({
           ...prev,
           phoneToken: res.customer.phone_token,

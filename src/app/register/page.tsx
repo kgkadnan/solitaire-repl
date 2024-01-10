@@ -35,8 +35,8 @@ import {
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { useGetAuthDataQuery } from '@/features/api/login';
 export interface IOtp {
-  mobileNumber: string;
-  countryCode: string;
+  otpMobileNumber: string;
+  otpCountryCode: string;
   codeAndNumber: string;
 }
 export interface IToken {
@@ -82,17 +82,10 @@ const Register = () => {
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
 
-  const [checkNum, setCheckNum] = useState(false);
-
-  const { data: verifyNumber } = useVerifyPhoneQuery(
-    {
-      country_code: otpVerificationFormState.countryCode,
-      phone_number: otpVerificationFormState.mobileNumber
-    },
-    {
-      skip: !checkNum
-    }
-  );
+  const { data: verifyNumber } = useVerifyPhoneQuery({
+    country_code: otpVerificationFormState.otpCountryCode,
+    phone_number: otpVerificationFormState.otpMobileNumber
+  });
 
   const [token, setToken] = useState(initialTokenState);
 
@@ -124,15 +117,6 @@ const Register = () => {
     }
   }, [userData]);
 
-  useEffect(() => {
-    setOTPVerificationFormState(prev => ({
-      ...prev,
-      mobileNumber: `${registerFormState.mobileNumber}`,
-      countryCode: `${registerFormState.countryCode}`,
-      codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
-    }));
-  }, [registerFormState.countryCode, registerFormState.mobileNumber]);
-
   const renderContentWithInput = () => {
     return (
       <div className="w-full flex flex-col gap-6">
@@ -142,7 +126,7 @@ const Register = () => {
         <div className="flex text-center justify-between  w-[350px]">
           <div className="w-[25%]">
             <Select
-              name="countryCode"
+              name="otpCountryCode"
               options={computeCountryDropdownField(countryCode)}
               onChange={selectValue =>
                 handleOTPSelectChange({
@@ -151,11 +135,11 @@ const Register = () => {
                 })
               }
               styles={countryCodeSelectStyle(
-                otpVerificationFormErrors.countryCode
+                otpVerificationFormErrors.otpCountryCode
               )}
               value={{
-                label: otpVerificationFormState.countryCode,
-                value: otpVerificationFormState.countryCode
+                label: otpVerificationFormState.otpCountryCode,
+                value: otpVerificationFormState.otpCountryCode
               }}
             />
           </div>
@@ -167,9 +151,9 @@ const Register = () => {
                 handleOTPChange({ event, setOTPVerificationFormState })
               }
               type="number"
-              name="mobileNumber"
-              value={otpVerificationFormState.mobileNumber}
-              errorText={otpVerificationFormErrors.mobileNumber}
+              name="otpMobileNumber"
+              value={otpVerificationFormState.otpMobileNumber}
+              errorText={otpVerificationFormErrors.otpMobileNumber}
             />
           </div>
         </div>
@@ -200,7 +184,6 @@ const Register = () => {
             handleClick={() => {
               handleEditMobileNumber({
                 verifyNumber,
-                setCheckNum,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
@@ -230,6 +213,7 @@ const Register = () => {
             setToken={setToken}
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            setOTPVerificationFormState={setOTPVerificationFormState}
           />
         );
       case 'OTPVerification':
