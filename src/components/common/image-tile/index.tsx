@@ -3,6 +3,7 @@
 import React, { ReactNode, useState } from 'react';
 import Image, { StaticImageData } from 'next/image';
 import style from './image-tile.module.scss';
+import { CustomTooltip } from '../shadcn-tooltip';
 
 export interface IImageTileStyleProps {
   imageTileMainContainerStyles?: string;
@@ -68,12 +69,28 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
             }}
           >
             {typeof src === 'string' ? (
-              <Image
-                src={src}
-                alt={title}
-                width={100}
-                height={100}
-                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+              <CustomTooltip
+                tooltipTrigger={
+                  <>
+                    <Image
+                      src={src}
+                      alt={title}
+                      width={100}
+                      height={100}
+                      className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+                    />
+                    {!isNavOption && (
+                      <div
+                        className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
+                      >
+                        {title}
+                      </div>
+                    )}
+                  </>
+                }
+                tooltipContent={tileData.short_name}
+                delayDuration={0}
+                tooltipStyles={{ tooltipContent: 'bg-solitaireSenary' }}
               />
             ) : (
               <div
@@ -84,20 +101,12 @@ const CustomImageTile: React.FC<IImageContainerProps> = (
             )}
 
             {/* <div
-              className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-            >
-              {title}
-            </div> */}
+        className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
+      >
+        {title}
+      </div> */}
 
-            {isNavOption ? (
-              hoveredTile === title && (
-                <div
-                  className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-                >
-                  {title}
-                </div>
-              )
-            ) : (
+            {isNavOption && hoveredTile === title && (
               <div
                 className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
               >

@@ -27,7 +27,8 @@ import {
   MSME_REGISTRATION_NUMBER_INVALID,
   MSME_TYPE_INVALID,
   MEMBER_BUSINESS_INVALID,
-  MEMBER_NAME_INVALID
+  MEMBER_NAME_INVALID,
+  FIELD_INVALID
 } from '@/constants/error-messages/kyc';
 import {
   IsString,
@@ -35,7 +36,10 @@ import {
   ArrayNotEmpty,
   IsBoolean,
   ValidateIf,
-  IsOptional
+  IsOptional,
+  Matches,
+  IsAlphanumeric,
+  MinLength
 } from 'class-validator';
 
 export class KycPostCompanyDetailsValidation {
@@ -119,7 +123,10 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
+  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, { message: FIELD_INVALID('PAN Number') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric()
+  @MinLength(10)
   company_pan_number: string;
 
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })

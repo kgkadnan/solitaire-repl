@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { ManageLocales } from '@/utils/translate';
 import errorImage from '@public/assets/icons/error.svg';
 import { IToken } from '@/app/register/page';
+import logger from 'logging/log-util';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -35,7 +36,6 @@ export const handleEditMobileNumber = ({
       mobileNumber: 'Please enter Mobile Number to Save'
     }));
   } else {
-    console.log('verifyNumber', verifyNumber);
     if (verifyNumber?.exists === false) {
       setOTPVerificationFormState(prev => ({
         ...prev,
@@ -53,7 +53,7 @@ export const handleEditMobileNumber = ({
           }));
         })
         .catch((e: any) => {
-          console.log(e);
+          logger.error(`something went wrong while sending OTP ${e}`);
         });
     } else {
       setIsDialogOpen(true);
