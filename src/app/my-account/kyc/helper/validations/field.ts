@@ -76,6 +76,12 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
     case 'address':
       instance = new ValidationAddressCriteria(fieldValue);
       break;
+    case 'address_line_1':
+      instance = new ValidationAddressCriteria(fieldValue);
+      break;
+    case 'address_line_2':
+      instance = new ValidationAddressLineCriteria(fieldValue);
+      break;
     case 'company_country_code':
       instance = new ValidationCountryCodeCriteria(fieldValue);
       break;
@@ -149,7 +155,7 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
     case 'is_anti_money_laundering':
       instance = new ValidationIsAntiMoneyCriteria(fieldValue);
       break;
-    case 'anti_money_laundering_policy_name':
+    case 'no_anti_money_laundering_policy_reason':
       instance = new ValidationAntiMoneyPolicyNameCriteria(fieldValue);
       break;
 
@@ -628,6 +634,17 @@ class ValidationFAXCriteria {
   }
 }
 
+class ValidationAddressLineCriteria {
+  @IsString({ message: FIELD_INVALID('Address') })
+  @IsOptional()
+  @Length(0, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Address', 140) })
+  address_line_2: string;
+
+  constructor(address_line_2: string) {
+    this.address_line_2 = address_line_2;
+  }
+}
+
 class ValidationOwnershipPercentageCriteria {
   //TODO:validator for it
   @IsOptional()
@@ -669,9 +686,10 @@ class ValidationAntiMoneyPolicyNameCriteria {
   @Matches(NAME_REGEX, {
     message: ANTI_MONEY_LAUNDERING_INVALID
   })
-  anti_money_laundering_policy_name: string;
+  no_anti_money_laundering_policy_reason: string;
 
-  constructor(anti_money_laundering_policy_name: string) {
-    this.anti_money_laundering_policy_name = anti_money_laundering_policy_name;
+  constructor(no_anti_money_laundering_policy_reason: string) {
+    this.no_anti_money_laundering_policy_reason =
+      no_anti_money_laundering_policy_reason;
   }
 }
