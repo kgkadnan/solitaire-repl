@@ -42,15 +42,24 @@ import { useRouter } from 'next/navigation';
 
 interface IKYCData {
   kyc: {
-    online: {
-      [key: string]: {
+    created_at: string;
+    customer_id: string;
+    deleted_at: string | null;
+    updated_at: string;
+    id: string;
+    profile_data: {
+      online: {
+        [key: string]: {
+          [key: string]: any;
+        };
+      };
+      country: string | null;
+      offline: {
         [key: string]: any;
       };
     };
-    country: string | null;
-    offline: {
-      [key: string]: any;
-    };
+    remarks: string | null;
+    status: string;
   };
 }
 
@@ -208,7 +217,7 @@ const KYC: React.FC = () => {
       } else {
         await submitKYC(buildFormData())
           .unwrap()
-          .then(res => {
+          .then((res: any) => {
             setIsDialogOpen(true);
             setDialogContent(
               <div className="flex gap-[10px] flex-col items-center justify-center">
@@ -479,10 +488,10 @@ const KYC: React.FC = () => {
           kycDetails &&
           kycDetails?.kyc &&
           selectedCountry === '' &&
-          Object?.keys(kycDetails?.kyc?.online).length > 1 &&
-          Object?.keys(kycDetails?.kyc?.offline).length === 0
+          Object?.keys(kycDetails?.kyc?.profile_data?.online).length > 1 &&
+          Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
         ) {
-          const { online, offline } = kycDetails.kyc;
+          const { online, offline } = kycDetails.kyc.profile_data;
 
           const onlineData = online || {};
 
@@ -539,7 +548,7 @@ const KYC: React.FC = () => {
           }
         }
         let sectionKeys: string[] =
-          kycDetails?.kyc?.country === 'India'
+          kycDetails?.kyc?.profile_data?.country === 'India'
             ? [
                 kycScreenIdentifierNames.PERSONAL_DETAILS,
                 kycScreenIdentifierNames.COMPANY_DETAILS,
@@ -555,7 +564,7 @@ const KYC: React.FC = () => {
         sectionKeys.forEach((key, index: number) => {
           let screenIndex = (index + 1).toString();
 
-          let onlineValue = kycDetails?.kyc?.online;
+          let onlineValue = kycDetails?.kyc?.profile_data?.online;
 
           dispatch(
             updateFormState({
@@ -565,20 +574,20 @@ const KYC: React.FC = () => {
           );
         });
         setSelectedCountry({
-          label: kycDetails?.kyc?.country,
-          value: kycDetails?.kyc?.country
+          label: kycDetails?.kyc?.profile_data?.country,
+          value: kycDetails?.kyc?.profile_data?.country
         });
         dispatch(
           updateFormState({
             name: 'formState.country',
-            value: kycDetails?.kyc?.country
+            value: kycDetails?.kyc?.profile_data?.country
           })
         );
 
         dispatch(
           updateFormState({
             name: 'formState.offline',
-            value: kycDetails?.kyc?.offline
+            value: kycDetails?.kyc?.profile_data?.offline
           })
         );
 
