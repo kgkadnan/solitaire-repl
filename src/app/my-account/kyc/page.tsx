@@ -685,7 +685,7 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
-          formErrorState={formErrorState}
+          formState={formState}
           setIsDialogOpen={setIsDialogOpen}
           isDialogOpen={isDialogOpen}
           dialogContent={dialogContent}
