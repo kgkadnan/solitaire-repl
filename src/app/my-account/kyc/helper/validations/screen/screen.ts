@@ -23,6 +23,7 @@ import {
   OtherAttachmentValidation,
   UsaAttachmentValidation
 } from './attachment-validators';
+import { ManualAttachmentValidation } from './manual-attachment-validator';
 
 export const validateScreen = async (
   formData: any,
@@ -199,29 +200,42 @@ export const validateAttachment = async (formData: any, country: string) => {
         break;
       case kycAttachmentIdentifierNames.BELGIUM:
         attachments = new BelgiumAttachmentValidation(
-          formData.registration_number.selectedFile,
-          formData.passport.selectedFile,
-          formData.id_copy.selectedFile
+          formData?.registration_number?.selectedFile,
+          formData?.passport?.selectedFile,
+          formData?.id_copy?.selectedFile
         );
         break;
       case kycAttachmentIdentifierNames.USA:
         attachments = new UsaAttachmentValidation(
-          formData.registration_number.selectedFile,
-          formData.passport.selectedFile,
-          formData.id_copy.selectedFile
+          formData?.registration_number?.selectedFile,
+          formData?.passport?.selectedFile,
+          formData?.id_copy?.selectedFile
         );
         break;
       case kycAttachmentIdentifierNames.OTHER:
         attachments = new OtherAttachmentValidation(
-          formData.incumbency_certificate.selectedFile,
-          formData.trade_license.selectedFile,
-          formData.gst_certificate.selectedFile,
-          formData.owner_id_copy.selectedFile,
-          formData.manager_id_copy.selectedFile,
-          formData.moa.selectedFile
+          formData?.incumbency_certificate?.selectedFile,
+          formData?.trade_license?.selectedFile,
+          formData?.gst_certificate?.selectedFile,
+          formData?.owner_id_copy?.selectedFile,
+          formData?.manager_id_copy?.selectedFile,
+          formData?.moa?.selectedFile
         );
         break;
     }
+
+    validationErrors = await validate(attachments!);
+  }
+  return validationErrors;
+};
+
+export const validateManualAttachment = async (formData: any) => {
+  let validationErrors;
+  let attachments = {};
+  if (formData) {
+    attachments = new ManualAttachmentValidation(
+      formData?.upload_form?.selectedFile
+    );
 
     validationErrors = await validate(attachments!);
   }
