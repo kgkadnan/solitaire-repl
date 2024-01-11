@@ -256,30 +256,28 @@ const KYC: React.FC = () => {
       } else {
         await submitKYC(buildFormData())
           .unwrap()
-          .then((res: any) => {
-            if (res) {
-              setIsDialogOpen(true);
-              setDialogContent(
-                <div className="flex gap-[10px] flex-col items-center justify-center">
-                  <div className="flex">
-                    <Image src={confirmImage} alt="Error Image" />
-                  </div>
-                  <div className="text-[16px] text-solitaireTertiary">
-                    <p>Your KYC has been submitted for approval</p>
-                  </div>
-                  <CustomDisplayButton
-                    displayButtonLabel={ManageLocales(
-                      'app.myaccount.kyc.browseApp'
-                    )}
-                    handleClick={() => router.push('/')}
-                    displayButtonAllStyle={{
-                      displayButtonStyle:
-                        'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
-                    }}
-                  />
+          .then(() => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <div className="flex gap-[10px] flex-col items-center justify-center">
+                <div className="flex">
+                  <Image src={confirmImage} alt="Error Image" />
                 </div>
-              );
-            }
+                <div className="text-[16px] text-solitaireTertiary">
+                  <p>Your KYC has been submitted for approval</p>
+                </div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.myaccount.kyc.browseApp'
+                  )}
+                  handleClick={() => router.push('/')}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
+                  }}
+                />
+              </div>
+            );
           })
           .catch(e => {
             setIsDialogOpen(true);
