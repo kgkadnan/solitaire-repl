@@ -293,6 +293,7 @@ export const KYCForm = [
       {
         screen: 'Banking Details',
         screenName: kycScreenIdentifierNames.BANKING_DETAILS,
+        icon: HandIcon,
         fields: [
           {
             name: 'Bank Name*',
@@ -1188,6 +1189,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        icon: HandIcon,
         screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {

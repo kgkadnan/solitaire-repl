@@ -42,15 +42,24 @@ import { useRouter } from 'next/navigation';
 
 interface IKYCData {
   kyc: {
-    online: {
-      [key: string]: {
+    created_at: string;
+    customer_id: string;
+    deleted_at: string | null;
+    updated_at: string;
+    id: string;
+    profile_data: {
+      online: {
+        [key: string]: {
+          [key: string]: any;
+        };
+      };
+      country: string | null;
+      offline: {
         [key: string]: any;
       };
     };
-    country: string | null;
-    offline: {
-      [key: string]: any;
-    };
+    remarks: string | null;
+    status: string;
   };
 }
 
@@ -208,7 +217,7 @@ const KYC: React.FC = () => {
       } else {
         await submitKYC(buildFormData())
           .unwrap()
-          .then(res => {
+          .then((res: any) => {
             setIsDialogOpen(true);
             setDialogContent(
               <div className="flex gap-[10px] flex-col items-center justify-center">
@@ -437,10 +446,10 @@ const KYC: React.FC = () => {
     setIsDialogOpen(true);
     setDialogContent(
       <>
-        <div className="text-center align-middle text-solitaireTertiary text-[20px]">
+        <div className="text-center align-middle text-solitaireTertiary text-[20px] font-semibold">
           Are you sure?
         </div>
-        <div className="text-center align-middle text-solitaireTertiary">
+        <div className="text-center align-middle text-solitaireTertiary text-[16px]">
           Do you want to restart KYC process
         </div>
         <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
@@ -476,14 +485,13 @@ const KYC: React.FC = () => {
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
         if (
+          kycDetails &&
           kycDetails?.kyc &&
-          (kycDetails?.kyc?.country !== null ||
-            selectedCountry === '' ||
-            formState.country === null) &&
-          Object.keys(kycDetails?.kyc?.online).length > 1 &&
-          Object.keys(kycDetails?.kyc?.offline).length === 0
+          selectedCountry === '' &&
+          Object?.keys(kycDetails?.kyc?.profile_data?.online).length > 1 &&
+          Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
         ) {
-          const { online, offline } = kycDetails.kyc;
+          const { online, offline } = kycDetails.kyc.profile_data;
 
           const onlineData = online || {};
 
@@ -505,9 +513,9 @@ const KYC: React.FC = () => {
             setDialogContent(
               <>
                 <div className="text-center align-middle text-solitaireTertiary">
-                  <p className="text-[20px]">Are you sure?</p>
+                  <p className="text-[20px] font-semibold">Are you sure?</p>
                 </div>
-                <div className="text-center align-middle text-solitaireTertiary">
+                <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
                   Do you want to resume KYC process or restart it?
                 </div>
                 <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
@@ -540,7 +548,7 @@ const KYC: React.FC = () => {
           }
         }
         let sectionKeys: string[] =
-          kycDetails?.kyc?.country === 'India'
+          kycDetails?.kyc?.profile_data?.country === 'India'
             ? [
                 kycScreenIdentifierNames.PERSONAL_DETAILS,
                 kycScreenIdentifierNames.COMPANY_DETAILS,
@@ -556,7 +564,7 @@ const KYC: React.FC = () => {
         sectionKeys.forEach((key, index: number) => {
           let screenIndex = (index + 1).toString();
 
-          let onlineValue = kycDetails?.kyc?.online;
+          let onlineValue = kycDetails?.kyc?.profile_data?.online;
 
           dispatch(
             updateFormState({
@@ -566,20 +574,20 @@ const KYC: React.FC = () => {
           );
         });
         setSelectedCountry({
-          label: kycDetails?.kyc?.country,
-          value: kycDetails?.kyc?.country
+          label: kycDetails?.kyc?.profile_data?.country,
+          value: kycDetails?.kyc?.profile_data?.country
         });
         dispatch(
           updateFormState({
             name: 'formState.country',
-            value: kycDetails?.kyc?.country
+            value: kycDetails?.kyc?.profile_data?.country
           })
         );
 
         dispatch(
           updateFormState({
             name: 'formState.offline',
-            value: kycDetails?.kyc?.offline
+            value: kycDetails?.kyc?.profile_data?.offline
           })
         );
 
