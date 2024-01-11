@@ -369,6 +369,7 @@ class ValidationOwnerNameCriteria {
 }
 class ValidationPanCriteria {
   @MinLength(10)
+  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, { message: FIELD_INVALID('OWNER PAN') })
   @IsAlphanumeric()
   owner_pan_number: string;
 
@@ -542,8 +543,13 @@ class ValidationPincodeCriteria {
 }
 
 class ValidationPANCriteria {
+  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, {
+    message: FIELD_INVALID('Company PAN')
+  })
   @IsString({ message: FIELD_INVALID('Company PAN') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric()
+  @MinLength(10)
   company_pan_number: string;
 
   constructor(company_pan_number: string) {

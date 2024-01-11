@@ -180,6 +180,7 @@ export const TopNavigationBar = () => {
 
   const handleLogout = () => {
     userLoggedOut();
+    localStorage.removeItem('Search');
     router.push('/login');
     setIsAccountMenuOpen(false);
   };
@@ -274,7 +275,7 @@ export const TopNavigationBar = () => {
                   </div>
                 </PopoverTrigger>
                 {isAccountMenuOpen && (
-                  <PopoverContent className="w-[280px] h-[300px] p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
+                  <PopoverContent className="w-[280px]  p-[20px] bg-solitaireSecondary mt-[10px] rounded-3xl">
                     <div className="flex items-center gap-[18px] border-b border-solitaireSenary pb-[20px]">
                       <div className="">
                         <MyProfileIcon

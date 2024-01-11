@@ -4,7 +4,7 @@ import { ITheadProps } from '../interface';
 import styles from '../custom-table.module.scss';
 import { Checkbox } from '@/components/ui/checkbox';
 import { handleSelectAllCheckbox } from '../../checkbox/helper/handle-select-all-checkbox';
-import { CustomTooltip } from '../../shdecn-tooltip';
+import { CustomTooltip } from '../../shadcn-tooltip';
 export const TableHead: React.FC<ITheadProps> = ({
   selectionAllowed,
   checkboxData,
