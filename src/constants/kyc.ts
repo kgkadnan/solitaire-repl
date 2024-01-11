@@ -1156,7 +1156,7 @@ export const KYCForm = [
           },
           {
             name: 'Have you instituted an Anti-Money laundering policy in your company?*',
-            subTitle: 'If “No” please specify',
+            subTitle: 'If “No”, please specify why',
             type: fieldType.RADIO,
             formKey: 'is_anti_money_laundering',
             radioData: [

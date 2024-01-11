@@ -71,6 +71,8 @@ const KYC: React.FC = () => {
   const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
+
   const [userData, setUserData] = useState<any>({});
   const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
@@ -489,13 +491,12 @@ const KYC: React.FC = () => {
           if (
             kycDetails &&
             kycDetails?.kyc &&
-            kycDetails?.kyc?.profile_data?.country !== null &&
-            // ||
-            // selectedCountry === '' ||
-            // formState.country === null
-            Object.keys(kycDetails?.kyc?.profile_data?.online).length > 1 &&
+            !isResumeCalled &&
+            (kycDetails?.kyc?.profile_data?.country !== null ||
+              Object.keys(kycDetails?.kyc?.profile_data?.online).length > 1) &&
             Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
           ) {
+            setIsResumeCalled(true);
             const { online, offline } = kycDetails.kyc.profile_data;
 
             const onlineData = online || {};
@@ -574,7 +575,8 @@ const KYC: React.FC = () => {
             dispatch(
               updateFormState({
                 name: `formState.online.sections[${key}]`,
-                value: onlineValue?.[screenIndex as keyof typeof onlineValue]
+                value:
+                  onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
               })
             );
           });
