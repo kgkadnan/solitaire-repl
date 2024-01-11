@@ -40,7 +40,7 @@ export class IndiaKycPostCompanyOwnerInformation {
   @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
   @IsNotEmpty({ message: OWNER_PAN_NUMBER_MANDATORY })
   @IsAlphanumeric(undefined, { message: OWNER_PAN_NUMBER_MANDATORY })
-  @MinLength(10)
+  @MinLength(10, { message: FIELD_INVALID('PAN Number') })
   owner_pan_number: string;
 
   constructor(

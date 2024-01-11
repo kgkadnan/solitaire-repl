@@ -326,7 +326,7 @@ class ValidationBankAddressCriteria {
 class ValidationIFSCCriteria {
   @IsString({ message: FIELD_INVALID('IFSC code') })
   @IsNotEmpty({ message: IFSC_CODE_MANDATORY })
-  @Matches(/^[a-zA-Z0-9]+$/, {
+  @Matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, {
     message: FIELD_INVALID('IFSC code')
   })
   @Length(8, 11, {
@@ -361,7 +361,7 @@ class ValidationOwnerNameCriteria {
   @Length(1, 140, {
     message: MAX_CHARACTER_LIMIT_EXCEEDED('Owner Full Name', 140)
   })
-  @IsNotEmpty()
+  @IsNotEmpty({ message: FIELD_INVALID('Owner Full Name') })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Owner Full Name')
   })
@@ -553,8 +553,8 @@ class ValidationPANCriteria {
   })
   @IsString({ message: FIELD_INVALID('Company PAN') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric()
-  @MinLength(10)
+  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
+  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
   constructor(company_pan_number: string) {
