@@ -62,8 +62,6 @@ export class KycPostCompanyDetailsValidation {
   @Length(4, 4, { message: FIELD_INVALID('Year of Establishment') })
   year_of_establishment: string;
 
- 
-
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
   company_phone_number: string;
 
