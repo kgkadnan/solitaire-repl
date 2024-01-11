@@ -69,7 +69,13 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            formKey: 'address'
+            formKey: 'address_line_1'
+          },
+          {
+            name: '',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            formKey: 'address_line_2'
           },
           {
             name: 'Company Number*',
@@ -287,6 +293,7 @@ export const KYCForm = [
       {
         screen: 'Banking Details',
         screenName: kycScreenIdentifierNames.BANKING_DETAILS,
+        icon: HandIcon,
         fields: [
           {
             name: 'Bank Name*',
@@ -321,7 +328,7 @@ export const KYCForm = [
         id: '1',
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
-        formKey: 'FEIN_No._/_tax_no._/_business_registration_copy',
+        formKey: 'registration_number',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -329,7 +336,7 @@ export const KYCForm = [
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
-        formKey: 'driving_license_/_passport',
+        formKey: 'passport',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -337,7 +344,7 @@ export const KYCForm = [
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
-        formKey: 'ID_copy_/_residency_copy',
+        formKey: 'id_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }
@@ -746,110 +753,119 @@ export const KYCForm = [
     offline: {
       download: 'link_to_kyc_form.pdf'
     },
-    attachment: {
-      companyDetail: [
-        {
-          id: '1',
-          label: 'Pan Card',
-          isRequired: true,
-          formKey: 'pan',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '2',
-          label: 'GST Certificate',
-          isRequired: true,
-          formKey: 'gst_certificate',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '3',
-          label: 'Incorporation Certificate or ISE copy',
-          isRequired: true,
-          formKey: 'incorporation_Certificate_or_ISE_copy',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: ' 4',
-          label: 'Cancel Cheque',
-          isRequired: true,
-          formKey: 'cancel_cheque',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '6',
-          label: 'Section 194Q',
-          isRequired: true,
-          formKey: 'section_194Q',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '7',
-          label: 'Government Registration Certificate',
-          isRequired: true,
-          formKey: 'government_registration_crtificate',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '8',
-          label: 'Business Card',
-          isRequired: false,
-          formKey: 'Business Card',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        }
-      ],
-      companyOwnerDetail: [
-        {
-          id: '1',
-          label: 'Pan Card/Aadhar Card',
-          isRequired: true,
-          formKey: 'pan_card/aadhar_card',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '2',
-          label: 'Passport',
-          isRequired: false,
-          formKey: 'Passport',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        }
-      ],
-      PhotoIDofpersonsauthorisedtocollectgoods: [
-        {
-          id: '1',
-          label: 'Photo ID 1',
-          isRequired: true,
-          formKey: 'photo_ID_1',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '2',
-          label: 'Photo ID 2',
-          isRequired: true,
-          formKey: 'photo_ID_2',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        },
-        {
-          id: '3',
-          label: 'Photo ID 3',
-          isRequired: true,
-          formKey: 'photo_ID_3',
-          maxFile: fileLimit.MAX_FILES,
-          minFile: fileLimit.MIN_FILES
-        }
-      ]
-    }
+    attachment: [
+      {
+        key: 'Company Detail',
+        value: [
+          {
+            id: '1',
+            label: 'Pan Card',
+            isRequired: true,
+            formKey: 'pan_card',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '2',
+            label: 'GST Certificate',
+            isRequired: true,
+            formKey: 'gst_certificate',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '3',
+            label: 'Incorporation Certificate or ISE copy',
+            isRequired: true,
+            formKey: 'incorporation_certificate',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: ' 4',
+            label: 'Cancel Cheque',
+            isRequired: true,
+            formKey: 'cancel_cheque',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '6',
+            label: 'Section 194Q',
+            isRequired: true,
+            formKey: 'section_194q',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '7',
+            label: 'Government Registration Certificate',
+            isRequired: true,
+            formKey: 'government_registration_certificate',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '8',
+            label: 'Business Card',
+            isRequired: false,
+            formKey: 'business_card',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          }
+        ]
+      },
+      {
+        key: 'Company Owner Detail',
+        value: [
+          {
+            id: '1',
+            label: 'Pan Card/Aadhar Card',
+            isRequired: true,
+            formKey: 'company_owner_pan_card',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '2',
+            label: 'Passport',
+            isRequired: false,
+            formKey: 'company_owner_passport',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          }
+        ]
+      },
+      {
+        key: 'PhotoID of persons authorised to collect goods',
+        value: [
+          {
+            id: '1',
+            label: 'Photo ID 1',
+            isRequired: false,
+            formKey: 'person_to_contact_1',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '2',
+            label: 'Photo ID 2',
+            isRequired: false,
+            formKey: 'person_to_contact_2',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          },
+          {
+            id: '3',
+            label: 'Photo ID 3',
+            isRequired: false,
+            formKey: 'person_to_contact_3',
+            maxFile: fileLimit.MAX_FILES,
+            minFile: fileLimit.MIN_FILES
+          }
+        ]
+      }
+    ]
   },
 
   // USA
@@ -914,7 +930,13 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            formKey: 'address'
+            formKey: 'address_line_1'
+          },
+          {
+            name: '',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            formKey: 'address_line_2'
           },
           {
             name: 'Company Number*',
@@ -1157,7 +1179,7 @@ export const KYCForm = [
                 name: 'Specify here',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                formKey: 'anti_money_laundering_policy_name'
+                formKey: 'no_anti_money_laundering_policy_reason'
               }
             ]
           }
@@ -1167,6 +1189,7 @@ export const KYCForm = [
       //Banking Details
       {
         screen: 'Banking Details',
+        icon: HandIcon,
         screenName: kycScreenIdentifierNames.BANKING_DETAILS,
         fields: [
           {
@@ -1202,7 +1225,7 @@ export const KYCForm = [
         id: '1',
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
-        formKey: 'FEIN_No._/_tax_no._/_business_registration_copy',
+        formKey: 'registration_number',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1210,7 +1233,7 @@ export const KYCForm = [
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
-        formKey: 'driving_license_/_passport',
+        formKey: 'passport',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1218,7 +1241,7 @@ export const KYCForm = [
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
-        formKey: 'ID_copy_/_residency Copy',
+        formKey: 'id_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }
@@ -1240,7 +1263,7 @@ export const KYCForm = [
         id: '1',
         label: 'Certificate of Incumbency/Extract of Registry',
         isRequired: true,
-        formKey: 'certificate_of_incumbency_/_extract_of_registry',
+        formKey: 'incumbency_certificate',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1248,7 +1271,7 @@ export const KYCForm = [
         id: '2',
         label: 'Business Registration/Trade license',
         isRequired: true,
-        formKey: 'business_registration_/_trade_license',
+        formKey: 'trade_license',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1256,7 +1279,7 @@ export const KYCForm = [
         id: '3',
         label: 'TRN/VAT/GST Certificate',
         isRequired: true,
-        formKey: 'TRN_/_VAT_/_GST_certificate',
+        formKey: 'gst_certificate',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -1264,31 +1287,23 @@ export const KYCForm = [
         id: '4',
         label: 'MOA/AOA/Partnership Deed',
         isRequired: true,
-        formKey: 'MOA_/AOA_/_partnership_deed',
+        formKey: 'moa',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
       {
         id: '5',
-        label: 'Business Registration/Trade License',
+        label: 'ID Copy/Passport of Ultimate Beneficial Owners',
         isRequired: true,
-        formKey: 'business_registration_/_trade_license',
+        formKey: 'owner_id_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
       {
         id: '6',
-        label: 'ID Copy/Passport of Ultimate Beneficial Owners',
-        isRequired: true,
-        formKey: 'ID_copy_/_passport_of_ultimate_beneficial_owners',
-        maxFile: fileLimit.MAX_FILES,
-        minFile: fileLimit.MIN_FILES
-      },
-      {
-        id: '7',
         label: 'ID Copy/Passport of Authorised Signatory/Manager',
         isRequired: true,
-        formKey: 'ID_copy_/_passport_of_authorised_signatory_/_manager',
+        formKey: 'manager_id_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }

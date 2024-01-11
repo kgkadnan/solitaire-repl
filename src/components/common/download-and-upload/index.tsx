@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
@@ -19,6 +19,7 @@ import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delet
 import { MAX_FILE_SIZE } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -33,14 +34,18 @@ interface IDownloadAndUpload {
   formState: any;
   maxFile: number;
   modalSetState: IModalSetState;
+  selectedCountry: string;
 }
 
 export const DownloadAndUpload = ({
   formState,
   maxFile,
-  modalSetState
+  modalSetState,
+  selectedCountry
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
+  const [getKycPdf, pdf] = useLazyGetKycPdfQuery();
+
   const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
@@ -64,15 +69,17 @@ export const DownloadAndUpload = ({
   });
 
   const handleKycFormDownload = () => {
-    // Create a link element
-    const link = document.createElement('a');
-    link.href = 'assets/images/User_Registration.PNG'; // Set the file URL
-
-    link.download = 'KYC Form'; // Set the file name when downloaded
-    document.body.appendChild(link);
-    link.click(); // Trigger the download
-    document.body.removeChild(link); // Remove the link from the document
+    getKycPdf({ country: selectedCountry });
   };
+
+  useEffect(() => {
+    if (pdf && pdf?.data) {
+      const link = document.createElement('a');
+      link.href = pdf.data.url;
+      link.download = selectedCountry || 'downloaded_file';
+      window.open(link.href, '_blank');
+    }
+  }, [pdf]);
 
   return (
     <>

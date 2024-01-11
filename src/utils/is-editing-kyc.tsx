@@ -21,15 +21,18 @@ export const handleIsEditingKyc = ({
   dispatch,
   handleRoute,
   label,
-  link,
-  styles
+  link
 }: IHandleIsEditingKycProps) => {
   if (isEditingKYCStoreData && link !== '/my-account/kyc') {
     setIsDialogOpen(true);
     setDialogContent(
       <>
-        <div className="text-center align-middle text-solitaireTertiary">
-          {ManageLocales('app.topNav.kycModelContent')}
+        <div className="text-center align-middle text-solitaireTertiary text-[20px] font-semibold">
+          {ManageLocales('app.topNav.areYouSure')}
+        </div>
+        <div className="text-center align-middle text-solitaireTertiary text-[16px]">
+          Do you want to terminate KYC process and explore website?
+          <span className="text-[12px]">(your progress will be saved)</span>
         </div>
         <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
           <CustomDisplayButton
@@ -41,7 +44,10 @@ export const handleIsEditingKyc = ({
               setDialogContent('');
             }}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonTransparent
+              displayButtonStyle:
+                'bg-transparent border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
             }}
           />
           <CustomDisplayButton
@@ -51,7 +57,9 @@ export const handleIsEditingKyc = ({
               setDialogContent('');
             }}
             displayButtonAllStyle={{
-              displayButtonStyle: styles.showResultButtonFilled
+              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
             }}
           />
         </div>

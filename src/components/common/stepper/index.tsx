@@ -24,6 +24,7 @@ interface IStepperProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isDialogOpen: boolean;
   dialogContent: any;
+  handleSubmit?: () => void;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -37,7 +38,8 @@ const Stepper: React.FC<IStepperProps> = ({
   formErrorState,
   setIsDialogOpen,
   isDialogOpen,
-  dialogContent
+  dialogContent,
+  handleSubmit
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>([]);
 
@@ -80,37 +82,40 @@ const Stepper: React.FC<IStepperProps> = ({
       },
       {
         id: 2,
-        displayButtonLabel: nextLabel,
+        displayButtonLabel: state === stepper.length - 1 ? 'Submit' : nextLabel,
         style: styles.filled,
         fn: async () => {
-          const updatedStepper = await Promise.all(
-            stepperData.map(async (step, index) => {
-              if (index === state) {
-                let nextStepStatus: any = nextStep(
-                  stepper[state]?.screenName,
-                  state
-                );
-                const { validationError: stepperError, statusCode: code } =
-                  nextStepStatus;
+          if (state === stepper.length - 1) {
+            handleSubmit!();
+          } else {
+            const updatedStepper = await Promise.all(
+              stepperData.map(async (step, index) => {
+                if (index === state) {
+                  let nextStepStatus: any = nextStep(
+                    stepper[state]?.screenName,
+                    state
+                  );
+                  const { validationError: stepperError, statusCode: code } =
+                    nextStepStatus;
 
-                const hasError =
-                  Array.isArray(stepperError) && stepperError.length;
-                return {
-                  ...step,
-                  status: hasError
-                    ? StepperStatus.REJECTED
-                    : code === statusCode.NO_CONTENT
-                    ? StepperStatus.COMPLETED
-                    : StepperStatus.INPROGRESS
-                };
-              } else {
-                return step;
-              }
-            })
-          );
-
-          // Update the state with the new array
-          setStepperData(updatedStepper);
+                  const hasError =
+                    Array.isArray(stepperError) && stepperError.length;
+                  return {
+                    ...step,
+                    status: hasError
+                      ? StepperStatus.REJECTED
+                      : code === statusCode.NO_CONTENT
+                      ? StepperStatus.COMPLETED
+                      : StepperStatus.INPROGRESS
+                  };
+                } else {
+                  return step;
+                }
+              })
+            );
+            // Update the state with the new array
+            setStepperData(updatedStepper);
+          }
         },
         isHidden: false
       }

@@ -117,7 +117,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
                 id: 1,
                 displayButtonLabel: ManageLocales('app.myaccount.kyc.back'),
                 style:
-                  'border border-solid border-solitaireQuaternary !text-[14px]',
+                  'border border-solid border-solitaireQuaternary !text-[14px] h-[35px]',
                 fn: () => {
                   setSelectedKYCOption('');
                   handleSaveAndNext('country_selection');
@@ -126,7 +126,7 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
               {
                 id: 2,
                 displayButtonLabel: ManageLocales('app.myaccount.kyc.next'),
-                style: 'bg-solitaireQuaternary !text-[14px]',
+                style: 'bg-solitaireQuaternary !text-[14px] h-[35px]',
                 fn: () =>
                   selectedKYCOption.length
                     ? handleSaveAndNext(selectedKYCOption)

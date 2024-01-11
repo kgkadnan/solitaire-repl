@@ -1,5 +1,6 @@
 import logger from 'logging/log-util';
 import {
+  kycAttachmentIdentifierNames,
   kycScreenIdentifierNames,
   supportedCountries
 } from '@/constants/enums/kyc';
@@ -16,6 +17,12 @@ import {
   UsaKycPostCompanyDetailsValidation
 } from './company-details-validators';
 import { IndiaKycPostCompanyOwnerInformation } from './company-owner-details-validators';
+import {
+  BelgiumAttachmentValidation,
+  IndianAttachmentValidation,
+  OtherAttachmentValidation,
+  UsaAttachmentValidation
+} from './attachment-validators';
 
 export const validateScreen = async (
   formData: any,
@@ -49,7 +56,6 @@ export const validateScreen = async (
               formData.industry_type,
               formData.organisation_type,
               formData.business_registration_number,
-              formData.subsidiary_company,
               formData.is_member_of_business,
               formData.member_of_business_name,
               formData.ultimate_beneficiary_name,
@@ -68,14 +74,14 @@ export const validateScreen = async (
             kycForm = new BelgiumKycPostCompanyDetailsValidation(
               formData.company_name,
               formData.year_of_establishment,
-              formData.address,
+              formData.address_line_1,
+              formData.address_line_2,
               formData.company_phone_number,
               formData.company_email,
               formData.business_type,
               formData.industry_type,
               formData.organisation_type,
               formData.business_registration_number,
-              formData.subsidiary_company,
               formData.is_member_of_business,
               formData.member_of_business_name,
               formData.ultimate_beneficiary_name,
@@ -89,14 +95,14 @@ export const validateScreen = async (
             kycForm = new UsaKycPostCompanyDetailsValidation(
               formData.company_name,
               formData.year_of_establishment,
-              formData.address,
+              formData.address_line_1,
+              formData.address_line_2,
               formData.company_phone_number,
               formData.company_email,
               formData.business_type,
               formData.industry_type,
               formData.organisation_type,
               formData.business_registration_number,
-              formData.subsidiary_company,
               formData.is_member_of_business,
               formData.member_of_business_name,
               formData.ultimate_beneficiary_name,
@@ -104,7 +110,7 @@ export const validateScreen = async (
               formData.swift_code,
               formData.federal_tax_id,
               formData.is_anti_money_laundering,
-              formData.anti_money_laundering_policy_name,
+              formData.no_anti_money_laundering_policy_reason,
               formData.ownership_percentage // Added this missing argument
             );
 
@@ -167,5 +173,57 @@ export const validateScreen = async (
     validationErrors = validationErrors || 'please fill all fields';
   }
 
+  return validationErrors;
+};
+
+export const validateAttachment = async (formData: any, country: string) => {
+  let validationErrors;
+  let attachments = {};
+  if (formData) {
+    switch (country) {
+      case kycAttachmentIdentifierNames.INDIA:
+        attachments = new IndianAttachmentValidation(
+          formData?.pan_card?.selectedFile,
+          formData?.gst_certificate?.selectedFile,
+          formData?.incorporation_certificate?.selectedFile,
+          formData?.cancel_cheque?.selectedFile,
+          formData?.government_registration_certificate?.selectedFile,
+          formData?.business_card?.selectedFile,
+          formData?.company_owner_passport?.selectedFile,
+          formData?.person_to_contact_1?.selectedFile,
+          formData?.person_to_contact_2?.selectedFile,
+          formData?.person_to_contact_3?.selectedFile,
+          formData?.company_owner_pan_card?.selectedFile,
+          formData?.section_194q?.selectedFile
+        );
+        break;
+      case kycAttachmentIdentifierNames.BELGIUM:
+        attachments = new BelgiumAttachmentValidation(
+          formData.registration_number.selectedFile,
+          formData.passport.selectedFile,
+          formData.id_copy.selectedFile
+        );
+        break;
+      case kycAttachmentIdentifierNames.USA:
+        attachments = new UsaAttachmentValidation(
+          formData.registration_number.selectedFile,
+          formData.passport.selectedFile,
+          formData.id_copy.selectedFile
+        );
+        break;
+      case kycAttachmentIdentifierNames.OTHER:
+        attachments = new OtherAttachmentValidation(
+          formData.incumbency_certificate.selectedFile,
+          formData.trade_license.selectedFile,
+          formData.gst_certificate.selectedFile,
+          formData.owner_id_copy.selectedFile,
+          formData.manager_id_copy.selectedFile,
+          formData.moa.selectedFile
+        );
+        break;
+    }
+
+    validationErrors = await validate(attachments!);
+  }
   return validationErrors;
 };

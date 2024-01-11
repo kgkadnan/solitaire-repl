@@ -45,3 +45,10 @@ export enum kycStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected'
 }
+
+export enum kycAttachmentIdentifierNames {
+  INDIA = 'India',
+  USA = 'Usa',
+  OTHER = 'Other',
+  BELGIUM = 'Belgium'
+}
