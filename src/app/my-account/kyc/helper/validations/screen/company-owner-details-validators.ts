@@ -1,11 +1,17 @@
 import {
+  FIELD_INVALID,
   OWNER_COUNTRY_CODE_MANDATORY,
   OWNER_EMAIL_MANDATORY,
   OWNER_FULL_NAME_MANDATORY,
   OWNER_PAN_NUMBER_MANDATORY,
   OWNER_PHONE_MANDATORY
 } from '@/constants/error-messages/kyc';
-import { IsNotEmpty } from 'class-validator';
+import {
+  IsAlphanumeric,
+  IsNotEmpty,
+  Matches,
+  MinLength
+} from 'class-validator';
 
 export class IndiaKycPostCompanyOwnerInformation {
   @IsNotEmpty({ message: OWNER_FULL_NAME_MANDATORY })
@@ -20,7 +26,10 @@ export class IndiaKycPostCompanyOwnerInformation {
   @IsNotEmpty({ message: OWNER_PHONE_MANDATORY })
   owner_phone: string;
 
+  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, { message: FIELD_INVALID('PAN Number') })
   @IsNotEmpty({ message: OWNER_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric()
+  @MinLength(10)
   owner_pan_number: string;
 
   constructor(

@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   formState: {
-    country: '',
+    country: null,
     online: {
       sections: {
         personal_details: {},

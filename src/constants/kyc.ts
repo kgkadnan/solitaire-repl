@@ -69,7 +69,13 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            formKey: 'address'
+            formKey: 'address_line_1'
+          },
+          {
+            name: '',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            formKey: 'address_line_2'
           },
           {
             name: 'Company Number*',
@@ -923,7 +929,13 @@ export const KYCForm = [
             name: 'Registered Address*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
-            formKey: 'address'
+            formKey: 'address_line_1'
+          },
+          {
+            name: '',
+            type: fieldType.FLOATING_INPUT,
+            inputType: 'text',
+            formKey: 'address_line_2'
           },
           {
             name: 'Company Number*',
@@ -1166,7 +1178,7 @@ export const KYCForm = [
                 name: 'Specify here',
                 type: fieldType.FLOATING_INPUT,
                 inputType: 'text',
-                formKey: 'anti_money_laundering_policy_name'
+                formKey: 'no_anti_money_laundering_policy_reason'
               }
             ]
           }
