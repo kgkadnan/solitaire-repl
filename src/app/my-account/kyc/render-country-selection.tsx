@@ -67,7 +67,7 @@ const RenderCountrySelection = ({
               {
                 id: 1,
                 displayButtonLabel: ManageLocales('app.myaccount.kyc.next'),
-                style: 'bg-solitaireQuaternary !text-[14px]',
+                style: 'bg-solitaireQuaternary !text-[14px] h-[35px]',
                 fn: () =>
                   selectedCountry?.value?.length
                     ? selectedCountry.value === 'Other'

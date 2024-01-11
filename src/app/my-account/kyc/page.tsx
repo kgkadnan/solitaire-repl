@@ -13,15 +13,21 @@ import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
+import errorImage from '@public/assets/icons/error.svg';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
   useKycMutation,
   useGetKycDetailQuery,
+  useSubmitKYCMutation,
   useResetKycMutation
 } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
-import { validateScreen } from './helper/validations/screen/screen';
+import {
+  validateAttachment,
+  validateScreen
+} from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
@@ -31,6 +37,8 @@ import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { IAuthDataResponse } from '@/app/login/interface';
+import { ManageLocales } from '@/utils/translate';
+import { useRouter } from 'next/navigation';
 
 interface IKYCData {
   kyc: {
@@ -48,8 +56,9 @@ interface IKYCData {
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
-
+  const router = useRouter();
   const [kyc] = useKycMutation();
+  const [submitKYC] = useSubmitKYCMutation();
   const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
@@ -83,6 +92,26 @@ const KYC: React.FC = () => {
     setUserData(authData);
   }, [authData]);
 
+  const buildFormData = () => {
+    const formData = new FormData();
+    formData.append('country', formState.country);
+    formData.append('offline', 'false');
+    let uploadData = formState.attachment;
+    for (const key in uploadData) {
+      const fileData = uploadData[key];
+
+      // Check if the file is uploaded
+      if (fileData.isFileUploaded && fileData.selectedFile.length > 0) {
+        // Append each selected file to the FormData with a key like 'pan_0', 'gst_certificate_0', etc.
+        fileData.selectedFile.forEach((file: any) => {
+          formData.append(key, file);
+        });
+      }
+    }
+
+    return formData;
+  };
+
   const handleNextStep = async (
     screenName: string,
     activeID: number,
@@ -108,6 +137,7 @@ const KYC: React.FC = () => {
         );
       });
     }
+
     saveStep &&
       !validationError.length &&
       (await kyc({
@@ -146,7 +176,104 @@ const KYC: React.FC = () => {
     return stepperFinalStatus;
   };
 
-  const handleTermAndCondition = () => {};
+  const handleSubmit = async () => {
+    const screenValidationError = formErrorState?.online?.sections;
+    let data = Object.values(screenValidationError).map(screen => screen);
+    let hasError = data.some((obj: any) => Object.keys(obj).length > 0);
+
+    let validationError = await validateAttachment(
+      formState.attachment,
+      selectedCountry.value
+    );
+
+    if (Array.isArray(validationError)) {
+      validationError.forEach(error => {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment.${[error.property]}`,
+            value: Object.values(error.constraints ?? {})[0] || ''
+          })
+        );
+      });
+    }
+
+    if (!validationError?.length && !hasError) {
+      if (!formState.termAndCondition) {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.termAndCondition`,
+            value: true
+          })
+        );
+      } else {
+        await submitKYC(buildFormData())
+          .unwrap()
+          .then(res => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <div className="flex gap-[10px] flex-col items-center justify-center">
+                <div className="flex">
+                  <Image src={confirmImage} alt="Error Image" />
+                </div>
+                <div className="text-[16px] text-solitaireTertiary">
+                  <p>{res}</p>
+                </div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.myaccount.kyc.browseApp'
+                  )}
+                  handleClick={() => router.push('/')}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
+                  }}
+                />
+              </div>
+            );
+          })
+          .catch(e => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <div className="w-full flex flex-col gap-4 items-center">
+                {' '}
+                <div className=" flex justify-center align-middle items-center">
+                  <Image src={errorImage} alt="errorImage" />
+                  <p>Error!</p>
+                </div>
+                <div className="text-center text-solitaireTertiary h-[4vh]">
+                  {e.data.message}
+                </div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales('app.myaccount.kyc.okay')}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[150px] h-[36px]',
+                    displayLabelStyle:
+                      'text-solitaireTertiary text-[16px] font-medium'
+                  }}
+                  handleClick={() => setIsDialogOpen(false)}
+                />
+              </div>
+            );
+          });
+      }
+    }
+  };
+
+  const handleTermAndCondition = (state: boolean) => {
+    dispatch(
+      updateFormState({
+        name: `formErrorState.termAndCondition`,
+        value: false
+      })
+    );
+    dispatch(
+      updateFormState({
+        name: `formState.termAndCondition`,
+        value: state
+      })
+    );
+  };
 
   const handlePrevStep = () => {
     setActiveStep(prevStep => prevStep - 1);
@@ -183,70 +310,83 @@ const KYC: React.FC = () => {
         </div>
         <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
           {data?.attachment &&
-            (Array.isArray(data.attachment)
-              ? // Render when `attachment` is an array
-                data.attachment.map(
-                  ({ id, label, isRequired, key, maxFile, minFile }: any) => (
-                    <div key={id} className=" w-[45%]">
-                      <FileAttachments
-                        key={id}
-                        lable={label}
-                        formKey={key}
-                        isRequired={isRequired}
-                        formErrorState={formErrorState}
-                        formState={formState}
-                        modalSetState={modalSetState}
-                        modalState={modalState}
-                        maxFile={maxFile}
-                        minFile={minFile}
-                      />
-                    </div>
-                  )
-                )
-              : // Render when `attachment` is an object
-                Object.keys(data.attachment).map((category: any) => (
-                  <div key={category} className="w-[45%]">
-                    <h1 className="text-solitaireTertiary py-3 capitalize ">
-                      {category}
-                    </h1>
-                    <div className="flex flex-col gap-[20px]">
-                      {data.attachment[category].map(
-                        ({
-                          id,
-                          label,
-                          isRequired,
-                          key,
-                          maxFile,
-                          minFile
-                        }: any) => (
-                          <FileAttachments
-                            key={id}
-                            lable={label}
-                            formKey={key}
-                            isRequired={isRequired}
-                            formErrorState={formErrorState}
-                            formState={formState}
-                            modalSetState={modalSetState}
-                            modalState={modalState}
-                            maxFile={maxFile}
-                            minFile={minFile}
-                          />
-                        )
-                      )}
-                    </div>
+            data.attachment.map((attch: any) => {
+              return attch.key && Object?.keys(attch.key).length ? (
+                <div key={attch.key} className="w-[45%]">
+                  <h1 className="text-solitaireTertiary py-3 capitalize ">
+                    {attch.key}
+                  </h1>
+                  <div className="flex flex-col gap-[20px]">
+                    {attch.value.map(
+                      ({
+                        id,
+                        label,
+                        isRequired,
+                        formKey,
+                        maxFile,
+                        minFile
+                      }: any) => (
+                        <FileAttachments
+                          key={id}
+                          lable={label}
+                          formKey={formKey}
+                          isRequired={isRequired}
+                          formErrorState={formErrorState}
+                          formState={formState}
+                          modalSetState={modalSetState}
+                          modalState={modalState}
+                          maxFile={maxFile}
+                          minFile={minFile}
+                        />
+                      )
+                    )}
                   </div>
-                )))}
+                </div>
+              ) : (
+                <div key={attch.id} className=" w-[45%]">
+                  <FileAttachments
+                    key={attch.id}
+                    lable={attch.label}
+                    formKey={attch.formKey}
+                    isRequired={attch.isRequired}
+                    formErrorState={formErrorState}
+                    formState={formState}
+                    modalSetState={modalSetState}
+                    modalState={modalState}
+                    maxFile={attch.maxFile}
+                    minFile={attch.minFile}
+                  />
+                </div>
+              );
+            })}
         </div>
         <hr className="w-[50%]" />
         <div className="flex py-6 items-center justify-center">
           <div className="pr-3 flex items-center">
-            <Checkbox onClick={() => handleTermAndCondition()} />
+            <Checkbox
+              onClick={() =>
+                handleTermAndCondition(!formState.termAndCondition)
+              }
+              className={
+                formErrorState.termAndCondition ? '!border-solitaireError' : ''
+              }
+            />
           </div>
-          <div className="text-solitaireTertiary flex gap-1">
+          <div
+            className={`flex gap-1 ${
+              formErrorState.termAndCondition
+                ? 'text-solitaireError'
+                : 'text-solitaireTertiary'
+            }`}
+          >
             <p>I hereby agree to</p>
             <a
               href="https://kgk.live/terms-condition"
-              className="border-b border-solitaireSenary ="
+              className={`border-b ${
+                formErrorState.termAndCondition
+                  ? 'border-solitaireError '
+                  : 'border-solitaireSenary'
+              } `}
               target="_blank"
             >
               terms and conditions
@@ -507,11 +647,13 @@ const KYC: React.FC = () => {
         <RenderOffline
           data={data}
           fromWhere={currentState}
+          selectedCountry={selectedCountry.value}
           formErrorState={formErrorState}
           formState={formState}
           modalSetState={modalSetState}
           modalState={modalState}
-          prevStep={handlePrevStep}
+          handleSaveAndNext={handleSaveAndNext}
+          handleSubmit={handleSubmit}
           handleTermAndCondition={handleTermAndCondition}
         />
       );
@@ -528,6 +670,7 @@ const KYC: React.FC = () => {
           setIsDialogOpen={setIsDialogOpen}
           isDialogOpen={isDialogOpen}
           dialogContent={dialogContent}
+          handleSubmit={handleSubmit}
         />
       );
 

@@ -123,7 +123,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
         dialogContent={modalContent}
         modalStyle={styles.modalStyle}
       />
-      <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full ">
+      <div className="flex items-center bg-solitaireSecondary rounded-[10px] px-3 w-full h-[9vh]">
         <div {...getRootProps()} style={dropzoneStyle}>
           <div className="w-[10%] flex items-start">
             {!error?.length ? (

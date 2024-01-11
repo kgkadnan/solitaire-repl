@@ -16,10 +16,12 @@ interface IRenderOffline {
   modalSetState: IModalSetState;
   modalState: any;
   formErrorState: any;
-  handleTermAndCondition: () => void;
+  handleTermAndCondition: (state: boolean) => void;
   formState: any;
   fromWhere: string;
-  prevStep: () => void;
+  handleSaveAndNext: (state: string) => void;
+  handleSubmit: () => void;
+  selectedCountry: string;
 }
 const RenderOffline = ({
   data,
@@ -29,11 +31,12 @@ const RenderOffline = ({
   handleTermAndCondition,
   formState,
   fromWhere,
-  prevStep
+  handleSaveAndNext,
+  handleSubmit,
+  selectedCountry
 }: IRenderOffline) => {
   const { isModalOpen, modalContent } = modalState;
   const { setIsModalOpen } = modalSetState;
-  const handleSubmit = () => {};
 
   return (
     <div>
@@ -48,6 +51,7 @@ const RenderOffline = ({
           formState={formState}
           maxFile={1}
           modalSetState={modalSetState}
+          selectedCountry={selectedCountry}
         />
       </div>
       {fromWhere === 'other' && (
@@ -65,63 +69,59 @@ const RenderOffline = ({
       </div>
       <div
         className={`pb-5 ${
-          fromWhere === 'offline' ? 'max-h-[800px]' : 'max-h-[400px]'
+          fromWhere === 'offline' ? 'max-h-[800px]' : 'max-h-[350px]'
         } flex flex-wrap flex-col gap-[20px] content-between`}
       >
         {data?.attachment &&
-          (Array.isArray(data.attachment)
-            ? // Render when `attachment` is an array
-              data.attachment.map(
-                ({ id, label, isRequired, key, maxFile, minFile }: any) => (
-                  <div key={id} className=" w-[45%]">
-                    <FileAttachments
-                      key={id}
-                      lable={label}
-                      formKey={key}
-                      isRequired={isRequired}
-                      formErrorState={formErrorState}
-                      formState={formState}
-                      modalSetState={modalSetState}
-                      modalState={modalState}
-                      maxFile={maxFile}
-                      minFile={minFile}
-                    />
-                  </div>
-                )
-              )
-            : // Render when `attachment` is an object
-              Object.keys(data.attachment).map((category: any) => (
-                <div key={category} className="w-[45%]">
-                  <h1 className="text-solitaireTertiary py-3 capitalize ">
-                    {category}
-                  </h1>
-                  <div className="flex flex-col gap-[20px]">
-                    {data.attachment[category].map(
-                      ({
-                        id,
-                        label,
-                        isRequired,
-                        key,
-                        maxFile,
-                        minFile
-                      }: any) => (
-                        <FileAttachments
-                          key={id}
-                          lable={label}
-                          formKey={key}
-                          isRequired={isRequired}
-                          formErrorState={formErrorState}
-                          formState={formState}
-                          modalSetState={modalSetState}
-                          modalState={modalState}
-                          maxFile={maxFile}
-                          minFile={minFile}
-                        />
-                      )
-                    )}
-                  </div>
+          data.attachment.map((attch: any) => {
+            return attch.key && Object?.keys(attch.key).length ? (
+              <div key={attch.key} className="w-[45%]">
+                <h1 className="text-solitaireTertiary py-3 capitalize ">
+                  {attch.key}
+                </h1>
+                <div className="flex flex-col gap-[20px]">
+                  {attch.value.map(
+                    ({
+                      id,
+                      label,
+                      isRequired,
+                      formKey,
+                      maxFile,
+                      minFile
+                    }: any) => (
+                      <FileAttachments
+                        key={id}
+                        lable={label}
+                        formKey={formKey}
+                        isRequired={isRequired}
+                        formErrorState={formErrorState}
+                        formState={formState}
+                        modalSetState={modalSetState}
+                        modalState={modalState}
+                        maxFile={maxFile}
+                        minFile={minFile}
+                      />
+                    )
+                  )}
                 </div>
-              )))}
+              </div>
+            ) : (
+              <div key={attch.id} className=" w-[45%]">
+                <FileAttachments
+                  key={attch.id}
+                  lable={attch.label}
+                  formKey={attch.formKey}
+                  isRequired={attch.isRequired}
+                  formErrorState={formErrorState}
+                  formState={formState}
+                  modalSetState={modalSetState}
+                  modalState={modalState}
+                  maxFile={attch.maxFile}
+                  minFile={attch.minFile}
+                />
+              </div>
+            );
+          })}
       </div>
       {fromWhere === 'other' && (
         <p className="text-[12px] text-solitaireSenary pb-5 w-[45%] text-center">
@@ -131,13 +131,28 @@ const RenderOffline = ({
       <hr className="border-1 border-solitaireSenary w-[50%]" />
       <div className="flex py-6 items-center justify-center">
         <div className="pr-3 flex items-center">
-          <Checkbox onClick={() => handleTermAndCondition()} />
+          <Checkbox
+            onClick={() => handleTermAndCondition(!formState.termAndCondition)}
+            className={
+              formErrorState.termAndCondition ? '!border-solitaireError' : ''
+            }
+          />
         </div>
-        <div className="text-solitaireTertiary flex gap-1">
+        <div
+          className={`flex gap-1 ${
+            formErrorState.termAndCondition
+              ? 'text-solitaireError'
+              : 'text-solitaireTertiary'
+          }`}
+        >
           <p>I hereby agree to</p>
           <a
             href="https://kgk.live/terms-condition"
-            className="border-b-[1px] border-solid border-solitaireQuaternary"
+            className={`border-b ${
+              formErrorState.termAndCondition
+                ? 'border-solitaireError '
+                : 'border-solitaireSenary'
+            } `}
             target="_blank"
           >
             terms and conditions
@@ -151,13 +166,16 @@ const RenderOffline = ({
               id: 1,
               displayButtonLabel: 'Back',
               style: styles.transparent,
-              fn: prevStep
+              fn: () =>
+                fromWhere === 'other'
+                  ? handleSaveAndNext('country_selection')
+                  : handleSaveAndNext('choice_for_filling_kyc')
             },
             {
               id: 2,
               displayButtonLabel: 'Submit',
               style: styles.filled,
-              fn: () => handleSubmit
+              fn: handleSubmit
             }
           ]}
         />

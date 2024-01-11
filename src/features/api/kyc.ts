@@ -18,6 +18,21 @@ export const kycApi = createApi({
       },
       invalidatesTags: ['kyc']
     }),
+    submitKYC: builder.mutation({
+      query: data => ({
+        url: `/store/kyc/submit`,
+        method: 'POST',
+        body: data
+      }),
+      invalidatesTags: ['kyc']
+    }),
+    getKycPdf: builder.query({
+      query: ({ country }) => ({
+        url: `/store/kyc/${country}/download`,
+        method: 'GET'
+      }),
+      providesTags: ['kyc']
+    }),
     getKycDetail: builder.query({
       query: () => ({
         url: `/store/kyc`,
@@ -38,5 +53,10 @@ export const kycApi = createApi({
   })
 });
 
-export const { useKycMutation, useGetKycDetailQuery, useResetKycMutation } =
-  kycApi;
+export const {
+  useKycMutation,
+  useGetKycDetailQuery,
+  useSubmitKYCMutation,
+  useResetKycMutation,
+  useLazyGetKycPdfQuery
+} = kycApi;

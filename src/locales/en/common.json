@@ -156,6 +156,8 @@
   "app.myaccount.kyc.saveAndNext": "Save and Next",
   "app.myaccount.kyc.next": "Next",
   "app.myaccount.kyc.back": "Back",
+  "app.myaccount.kyc.okay": "Okay",
+  "app.myaccount.kyc.browseApp": "Browse App",
 
   "app.myaccount.summary.personalInformation": "Personal Information",
   "app.myaccount.summary.contactNo": "Contact no",
