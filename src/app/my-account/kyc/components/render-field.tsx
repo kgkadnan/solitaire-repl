@@ -298,7 +298,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             className={`${
               formKey === 'organisation_type'
                 ? 'grid grid-cols-2 gap-[16px]'
-                : 'flex flex-col gap-[16px]'
+                : 'flex flex-row justify-between gap-[16px]'
             }`}
           >
             {radioData.map((items: IRadioData) => {
@@ -352,20 +352,20 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 </div>
               );
             })}
-            {dynamicCondition &&
-              formState.online.sections[screenName]?.[formKey] ===
-                dynamicCondition &&
-              dynamicField?.map((field: any) => (
-                <div key={field.name} className={`mb-[20px] w-[40%] `}>
-                  <RenderField
-                    data={field}
-                    formState={formState}
-                    formErrorState={formErrorState}
-                    screenName={screenName}
-                  />
-                </div>
-              ))}
           </div>
+          {dynamicCondition &&
+            formState.online.sections[screenName]?.[formKey] ===
+              dynamicCondition &&
+            dynamicField?.map((field: any) => (
+              <div key={field.name} className={`mb-[20px] w-[40%] `}>
+                <RenderField
+                  data={field}
+                  formState={formState}
+                  formErrorState={formErrorState}
+                  screenName={screenName}
+                />
+              </div>
+            ))}
         </div>
       );
 
