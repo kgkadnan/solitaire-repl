@@ -166,7 +166,10 @@ const RenderOffline = ({
               id: 1,
               displayButtonLabel: 'Back',
               style: styles.transparent,
-              fn: () => handleSaveAndNext('choice_for_filling_kyc')
+              fn: () =>
+                fromWhere === 'other'
+                  ? handleSaveAndNext('country_selection')
+                  : handleSaveAndNext('choice_for_filling_kyc')
             },
             {
               id: 2,
