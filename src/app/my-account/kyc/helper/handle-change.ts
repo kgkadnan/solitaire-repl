@@ -31,7 +31,7 @@ export const handleInputChange = async (
     formState.country === supportedCountries.INDIA &&
     screenName === kycScreenIdentifierNames.COMPANY_DETAILS &&
     ((key === 'organisation_type' && value === 'Individual') ||
-      formState.online.sections.company_details.organisation_type ===
+      formState.online.sections.company_details?.organisation_type ===
         'Individual')
   ) {
     dispatch(

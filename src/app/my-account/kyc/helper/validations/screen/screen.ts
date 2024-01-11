@@ -104,7 +104,7 @@ export const validateScreen = async (
               formData.swift_code,
               formData.federal_tax_id,
               formData.is_anti_money_laundering,
-              formData.anti_money_laundering_policy_name,
+              formData.no_anti_money_laundering_policy_reason,
               formData.ownership_percentage // Added this missing argument
             );
 

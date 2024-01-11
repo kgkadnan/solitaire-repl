@@ -45,9 +45,6 @@ export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: YEAR_OF_ESTABLISHMENT_MANDATORY })
   year_of_establishment: string;
 
-  @IsNotEmpty({ message: ADDRESS_MANDATORY })
-  address: string;
-
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
   company_phone_number: string;
 
@@ -85,7 +82,6 @@ export class KycPostCompanyDetailsValidation {
   constructor(
     company_name: string,
     year_of_establishment: string,
-    address: string,
     company_phone_number: string,
     company_email: string,
     business_type: string[],
@@ -98,7 +94,6 @@ export class KycPostCompanyDetailsValidation {
   ) {
     this.company_name = company_name;
     this.year_of_establishment = year_of_establishment;
-    this.address = address;
     this.company_phone_number = company_phone_number;
     this.company_email = company_email;
     this.business_type = business_type;
@@ -114,6 +109,9 @@ export class KycPostCompanyDetailsValidation {
 export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: CITY_MANDATORY })
   city: string;
+
+  @IsNotEmpty({ message: ADDRESS_MANDATORY })
+  address: string;
 
   @IsNotEmpty({ message: STATE_MANDATORY })
   state: string;
@@ -157,7 +155,6 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
-    subsidiary_company: string,
 
     is_member_of_business: boolean,
     member_of_business_name: string,
@@ -174,7 +171,6 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     super(
       company_name,
       year_of_establishment,
-      address,
       company_phone_number,
       company_email,
       business_type,
@@ -187,6 +183,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     );
     this.city = city;
     this.state = state;
+    this.address = address;
     this.pincode = pincode;
     this.company_pan_number = company_pan_number;
     this.gst_number = gst_number;
@@ -203,6 +200,12 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
   @IsOptional()
   fax_number: string;
 
+  @IsNotEmpty({ message: ADDRESS_MANDATORY })
+  address_line_1: string;
+
+  @IsOptional()
+  address_line_2: string;
+
   //TODO:validator for it
   @IsOptional()
   ownership_percentage: number;
@@ -210,14 +213,14 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
   constructor(
     company_name: string,
     year_of_establishment: string,
-    address: string,
+    address_line_1: string,
+    address_line_2: string,
     company_phone_number: string,
     company_email: string,
     business_type: string[],
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
-    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -228,7 +231,6 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
     super(
       company_name,
       year_of_establishment,
-      address,
       company_phone_number,
       company_email,
       business_type,
@@ -240,6 +242,8 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
       ultimate_beneficiary_name
     );
     this.vat_number = vat_number;
+    this.address_line_1 = address_line_1;
+    this.address_line_2 = address_line_2;
     this.fax_number = fax_number;
     this.ownership_percentage = ownership_percentage;
   }
@@ -260,19 +264,19 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
   @IsNotEmpty({
     message: ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY
   })
-  anti_money_laundering_policy_name: string;
+  no_anti_money_laundering_policy_reason: string;
 
   constructor(
     company_name: string,
     year_of_establishment: string,
-    address: string,
+    address_line_1: string,
+    address_line_2: string,
     company_phone_number: string,
     company_email: string,
     business_type: string[],
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
-    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -281,19 +285,19 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
     ownership_percentage: number,
     federal_tax_id: string,
     is_anti_money_laundering: boolean,
-    anti_money_laundering_policy_name: string
+    no_anti_money_laundering_policy_reason: string
   ) {
     super(
       company_name,
+      address_line_1,
+      address_line_2,
       year_of_establishment,
-      address,
       company_phone_number,
       company_email,
       business_type,
       industry_type,
       organisation_type,
       business_registration_number,
-      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
       ultimate_beneficiary_name,
@@ -303,6 +307,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
     );
     this.federal_tax_id = federal_tax_id;
     this.is_anti_money_laundering = is_anti_money_laundering;
-    this.anti_money_laundering_policy_name = anti_money_laundering_policy_name;
+    this.no_anti_money_laundering_policy_reason =
+      no_anti_money_laundering_policy_reason;
   }
 }
