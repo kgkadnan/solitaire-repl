@@ -16,11 +16,12 @@ interface IRenderOffline {
   modalSetState: IModalSetState;
   modalState: any;
   formErrorState: any;
-  handleTermAndCondition: () => void;
+  handleTermAndCondition: (state: boolean) => void;
   formState: any;
   fromWhere: string;
   handleSaveAndNext: (state: string) => void;
   handleSubmit: () => void;
+  selectedCountry: string;
 }
 const RenderOffline = ({
   data,
@@ -31,7 +32,8 @@ const RenderOffline = ({
   formState,
   fromWhere,
   handleSaveAndNext,
-  handleSubmit
+  handleSubmit,
+  selectedCountry
 }: IRenderOffline) => {
   const { isModalOpen, modalContent } = modalState;
   const { setIsModalOpen } = modalSetState;
@@ -49,6 +51,7 @@ const RenderOffline = ({
           formState={formState}
           maxFile={1}
           modalSetState={modalSetState}
+          selectedCountry={selectedCountry}
         />
       </div>
       {fromWhere === 'other' && (
@@ -128,13 +131,28 @@ const RenderOffline = ({
       <hr className="border-1 border-solitaireSenary w-[50%]" />
       <div className="flex py-6 items-center justify-center">
         <div className="pr-3 flex items-center">
-          <Checkbox onClick={() => handleTermAndCondition()} />
+          <Checkbox
+            onClick={() => handleTermAndCondition(!formState.termAndCondition)}
+            className={
+              formErrorState.termAndCondition ? '!border-solitaireError' : ''
+            }
+          />
         </div>
-        <div className="text-solitaireTertiary flex gap-1">
+        <div
+          className={`flex gap-1 ${
+            formErrorState.termAndCondition
+              ? 'text-solitaireError'
+              : 'text-solitaireTertiary'
+          }`}
+        >
           <p>I hereby agree to</p>
           <a
             href="https://kgk.live/terms-condition"
-            className="border-b-[1px] border-solid border-solitaireQuaternary"
+            className={`border-b ${
+              formErrorState.termAndCondition
+                ? 'border-solitaireError '
+                : 'border-solitaireSenary'
+            } `}
             target="_blank"
           >
             terms and conditions

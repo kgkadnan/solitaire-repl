@@ -16,7 +16,7 @@ const initialState = {
       }
     },
     offline: null,
-    attachment: null
+    attachment: {}
   },
   formErrorState: {
     country: '',
@@ -29,7 +29,7 @@ const initialState = {
       }
     },
     offline: null,
-    attachment: null
+    attachment: {}
   }
 };
 

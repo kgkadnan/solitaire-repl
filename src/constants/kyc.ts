@@ -321,7 +321,7 @@ export const KYCForm = [
         id: '1',
         label: 'FEIN No. / Tax No. / Business Registration Copy',
         isRequired: true,
-        formKey: 'FEIN_No._/_tax_no._/_business_registration_copy',
+        formKey: 'registration_number',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -329,7 +329,7 @@ export const KYCForm = [
         id: '2',
         label: 'Driving License/Passport',
         isRequired: true,
-        formKey: 'driving_license_/_passport',
+        formKey: 'passport',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       },
@@ -337,7 +337,7 @@ export const KYCForm = [
         id: '3',
         label: 'ID Copy / Residency Copy',
         isRequired: true,
-        formKey: 'ID_copy_/_residency_copy',
+        formKey: 'id_copy',
         maxFile: fileLimit.MAX_FILES,
         minFile: fileLimit.MIN_FILES
       }
@@ -835,7 +835,7 @@ export const KYCForm = [
           {
             id: '1',
             label: 'Photo ID 1',
-            isRequired: true,
+            isRequired: false,
             formKey: 'person_to_contact_1',
             maxFile: fileLimit.MAX_FILES,
             minFile: fileLimit.MIN_FILES
@@ -843,7 +843,7 @@ export const KYCForm = [
           {
             id: '2',
             label: 'Photo ID 2',
-            isRequired: true,
+            isRequired: false,
             formKey: 'person_to_contact_2',
             maxFile: fileLimit.MAX_FILES,
             minFile: fileLimit.MIN_FILES
@@ -851,7 +851,7 @@ export const KYCForm = [
           {
             id: '3',
             label: 'Photo ID 3',
-            isRequired: true,
+            isRequired: false,
             formKey: 'person_to_contact_3',
             maxFile: fileLimit.MAX_FILES,
             minFile: fileLimit.MIN_FILES

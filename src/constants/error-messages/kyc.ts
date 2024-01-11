@@ -101,3 +101,29 @@ export const MAX_CHARACTER_LIMIT_EXCEEDED = (field: string, max: number) =>
 export const RANGE_VALIDATION = (field: string, min: number, max: number) =>
   `${field} should between ${min} to ${max} characters`;
 export const FIELD_INVALID = (field: string) => `${field} is Invalid`;
+
+// for Attachments
+export const PAN_CARD = MANDATORY_ERROR('Pan Card');
+export const GST_CERTIFICATE = MANDATORY_ERROR('Gst Certificate');
+export const INCORPORATION_CERTIFICATE = MANDATORY_ERROR(
+  'Incorporation Certificate'
+);
+export const CANCEL_CHAQUE = MANDATORY_ERROR('Cancel Cheque');
+export const SECTION_194Q = MANDATORY_ERROR('Section 194q');
+export const GOVERMENT_REGISTRATION_CERTIFICATE = MANDATORY_ERROR(
+  'Government Registration Certificate'
+);
+export const COMPANY_OWNER_PASSPORT = MANDATORY_ERROR('Company Owner Passport');
+export const COMPANY_OWNER_PAN_CARD = MANDATORY_ERROR('Company Owner Pan Card');
+
+//
+export const REGISTRATION_NUMBER = MANDATORY_ERROR('Registration Number');
+export const ID_COPY = MANDATORY_ERROR('Id Copy');
+export const PASSPORT = MANDATORY_ERROR('Passport');
+
+//
+export const INCUMBENCY_CERTIFICATE = MANDATORY_ERROR('Incumbency Certificate');
+export const TRADE_LICENSE = MANDATORY_ERROR('Trade License');
+export const MOA = MANDATORY_ERROR('MOA');
+export const OWNER_ID_COPY = MANDATORY_ERROR('Owner Id Copy');
+export const MANAGER_ID_COPY = MANDATORY_ERROR('Manager Id Copy');

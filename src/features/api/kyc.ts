@@ -26,6 +26,13 @@ export const kycApi = createApi({
       }),
       invalidatesTags: ['kyc']
     }),
+    getKycPdf: builder.query({
+      query: ({ country }) => ({
+        url: `/store/kyc/${country}/download`,
+        method: 'GET'
+      }),
+      providesTags: ['kyc']
+    }),
     getKycDetail: builder.query({
       query: () => ({
         url: `/store/kyc`,
@@ -50,5 +57,6 @@ export const {
   useKycMutation,
   useGetKycDetailQuery,
   useSubmitKYCMutation,
-  useResetKycMutation
+  useResetKycMutation,
+  useLazyGetKycPdfQuery
 } = kycApi;

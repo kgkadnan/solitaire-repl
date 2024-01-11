@@ -13,6 +13,8 @@ import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
+import errorImage from '@public/assets/icons/error.svg';
+import confirmImage from '@public/assets/icons/confirmation.svg';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
   useKycMutation,
@@ -22,7 +24,10 @@ import {
 } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
-import { validateScreen } from './helper/validations/screen/screen';
+import {
+  validateAttachment,
+  validateScreen
+} from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
 import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
@@ -32,6 +37,8 @@ import KycStatus from './components/kyc-status';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { IAuthDataResponse } from '@/app/login/interface';
+import { ManageLocales } from '@/utils/translate';
+import { useRouter } from 'next/navigation';
 
 interface IKYCData {
   kyc: {
@@ -49,7 +56,7 @@ interface IKYCData {
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
-
+  const router = useRouter();
   const [kyc] = useKycMutation();
   const [submitKYC] = useSubmitKYCMutation();
   const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
@@ -170,10 +177,103 @@ const KYC: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    await submitKYC(buildFormData());
+    const screenValidationError = formErrorState?.online?.sections;
+    let data = Object.values(screenValidationError).map(screen => screen);
+    let hasError = data.some((obj: any) => Object.keys(obj).length > 0);
+
+    let validationError = await validateAttachment(
+      formState.attachment,
+      selectedCountry.value
+    );
+
+    if (Array.isArray(validationError)) {
+      validationError.forEach(error => {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment.${[error.property]}`,
+            value: Object.values(error.constraints ?? {})[0] || ''
+          })
+        );
+      });
+    }
+
+    if (!validationError?.length && !hasError) {
+      if (!formState.termAndCondition) {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.termAndCondition`,
+            value: true
+          })
+        );
+      } else {
+        await submitKYC(buildFormData())
+          .unwrap()
+          .then(res => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <div className="flex gap-[10px] flex-col items-center justify-center">
+                <div className="flex">
+                  <Image src={confirmImage} alt="Error Image" />
+                </div>
+                <div className="text-[16px] text-solitaireTertiary">
+                  <p>{res}</p>
+                </div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales(
+                    'app.myaccount.kyc.browseApp'
+                  )}
+                  handleClick={() => router.push('/')}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
+                  }}
+                />
+              </div>
+            );
+          })
+          .catch(e => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <div className="w-full flex flex-col gap-4 items-center">
+                {' '}
+                <div className=" flex justify-center align-middle items-center">
+                  <Image src={errorImage} alt="errorImage" />
+                  <p>Error!</p>
+                </div>
+                <div className="text-center text-solitaireTertiary h-[4vh]">
+                  {e.data.message}
+                </div>
+                <CustomDisplayButton
+                  displayButtonLabel={ManageLocales('app.myaccount.kyc.okay')}
+                  displayButtonAllStyle={{
+                    displayButtonStyle:
+                      'bg-solitaireQuaternary w-[150px] h-[36px]',
+                    displayLabelStyle:
+                      'text-solitaireTertiary text-[16px] font-medium'
+                  }}
+                  handleClick={() => setIsDialogOpen(false)}
+                />
+              </div>
+            );
+          });
+      }
+    }
   };
 
-  const handleTermAndCondition = () => {};
+  const handleTermAndCondition = (state: boolean) => {
+    dispatch(
+      updateFormState({
+        name: `formErrorState.termAndCondition`,
+        value: false
+      })
+    );
+    dispatch(
+      updateFormState({
+        name: `formState.termAndCondition`,
+        value: state
+      })
+    );
+  };
 
   const handlePrevStep = () => {
     setActiveStep(prevStep => prevStep - 1);
@@ -263,13 +363,30 @@ const KYC: React.FC = () => {
         <hr className="w-[50%]" />
         <div className="flex py-6 items-center justify-center">
           <div className="pr-3 flex items-center">
-            <Checkbox onClick={() => handleTermAndCondition()} />
+            <Checkbox
+              onClick={() =>
+                handleTermAndCondition(!formState.termAndCondition)
+              }
+              className={
+                formErrorState.termAndCondition ? '!border-solitaireError' : ''
+              }
+            />
           </div>
-          <div className="text-solitaireTertiary flex gap-1">
+          <div
+            className={`flex gap-1 ${
+              formErrorState.termAndCondition
+                ? 'text-solitaireError'
+                : 'text-solitaireTertiary'
+            }`}
+          >
             <p>I hereby agree to</p>
             <a
               href="https://kgk.live/terms-condition"
-              className="border-b border-solitaireSenary ="
+              className={`border-b ${
+                formErrorState.termAndCondition
+                  ? 'border-solitaireError '
+                  : 'border-solitaireSenary'
+              } `}
               target="_blank"
             >
               terms and conditions
@@ -510,6 +627,7 @@ const KYC: React.FC = () => {
         <RenderOffline
           data={data}
           fromWhere={currentState}
+          selectedCountry={selectedCountry.value}
           formErrorState={formErrorState}
           formState={formState}
           modalSetState={modalSetState}
