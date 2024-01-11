@@ -337,7 +337,9 @@ const KYC: React.FC = () => {
       case kycStatus.INPROGRESS:
         if (
           kycDetails?.kyc &&
-          selectedCountry === '' &&
+          (kycDetails?.kyc?.country !== null ||
+            selectedCountry === '' ||
+            formState.country === null) &&
           Object.keys(kycDetails?.kyc?.online).length > 1 &&
           Object.keys(kycDetails?.kyc?.offline).length === 0
         ) {
@@ -423,7 +425,10 @@ const KYC: React.FC = () => {
             })
           );
         });
-
+        setSelectedCountry({
+          label: kycDetails?.kyc?.country,
+          value: kycDetails?.kyc?.country
+        });
         dispatch(
           updateFormState({
             name: 'formState.country',
