@@ -1,25 +1,25 @@
 interface IHandleDeleteAttachment {
-  setIsFileUploaded: string;
+  // setIsFileUploaded: string;
   setSelectedFile: string;
   dispatch: any;
 }
 
 import { updateFormState } from '@/features/kyc/kyc';
 export const handleDeleteAttachment = ({
-  setIsFileUploaded,
+  // setIsFileUploaded,
   setSelectedFile,
   dispatch
 }: IHandleDeleteAttachment) => {
   dispatch(
     updateFormState({
       name: setSelectedFile,
-      value: []
+      value: {}
     })
   );
-  dispatch(
-    updateFormState({
-      name: setIsFileUploaded,
-      value: false
-    })
-  );
+  // dispatch(
+  //   updateFormState({
+  //     name: setIsFileUploaded,
+  //     value: false
+  //   })
+  // );
 };
