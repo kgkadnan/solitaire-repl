@@ -155,7 +155,6 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
-
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
