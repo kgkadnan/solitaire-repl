@@ -24,7 +24,7 @@ interface IStepperProps {
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isDialogOpen: boolean;
   dialogContent: any;
-  handleSubmit: () => void;
+  handleSubmit?: () => void;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -86,7 +86,7 @@ const Stepper: React.FC<IStepperProps> = ({
         style: styles.filled,
         fn: async () => {
           if (state === stepper.length - 1) {
-            handleSubmit();
+            handleSubmit!();
           } else {
             const updatedStepper = await Promise.all(
               stepperData.map(async (step, index) => {
