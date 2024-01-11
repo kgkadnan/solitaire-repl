@@ -127,3 +127,5 @@ export const TRADE_LICENSE = MANDATORY_ERROR('Trade License');
 export const MOA = MANDATORY_ERROR('MOA');
 export const OWNER_ID_COPY = MANDATORY_ERROR('Owner Id Copy');
 export const MANAGER_ID_COPY = MANDATORY_ERROR('Manager Id Copy');
+
+export const UPLOAD_FORM = MANDATORY_ERROR('Upload Form');

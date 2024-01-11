@@ -52,3 +52,8 @@ export enum kycAttachmentIdentifierNames {
   OTHER = 'Other',
   BELGIUM = 'Belgium'
 }
+
+export enum kycOption {
+  OFFLINE = 'offline',
+  ONLINE = 'online'
+}

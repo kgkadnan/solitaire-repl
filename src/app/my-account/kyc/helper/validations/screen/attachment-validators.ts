@@ -1,7 +1,6 @@
 import {
   CANCEL_CHAQUE,
   COMPANY_OWNER_PAN_CARD,
-  GOVERMENT_REGISTRATION_CERTIFICATE,
   GST_CERTIFICATE,
   ID_COPY,
   INCORPORATION_CERTIFICATE,
@@ -32,7 +31,7 @@ export class IndianAttachmentValidation {
 
   @IsNotEmpty({ message: SECTION_194Q })
   section_194q: string;
-  @IsNotEmpty({ message: GOVERMENT_REGISTRATION_CERTIFICATE })
+  @IsOptional()
   government_registration_certificate: string;
 
   @IsOptional()

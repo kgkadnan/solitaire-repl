@@ -51,7 +51,9 @@ const Stepper: React.FC<IStepperProps> = ({
     const initializeStepperStatus = () => {
       const updatedStepper = stepper.map((step, index) => {
         const errors = formErrorState.online.sections[step.screenName];
+
         const hasErrors = errors && Object.values(errors).length;
+
         return {
           ...step,
           status: hasErrors

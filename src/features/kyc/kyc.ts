@@ -6,7 +6,7 @@ import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
   formState: {
-    country: null,
+    country: '',
     online: {
       sections: {
         personal_details: {},
@@ -15,8 +15,9 @@ const initialState = {
         banking_details: {}
       }
     },
-    offline: null,
-    attachment: {}
+    offline: {},
+    attachment: {},
+    termAndCondition: false
   },
   formErrorState: {
     country: '',
@@ -28,8 +29,9 @@ const initialState = {
         banking_details: {}
       }
     },
-    offline: null,
-    attachment: {}
+    offline: {},
+    attachment: {},
+    termAndCondition: false
   }
 };
 

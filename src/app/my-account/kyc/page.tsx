@@ -26,6 +26,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
 import {
   validateAttachment,
+  validateManualAttachment,
   validateScreen
 } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -94,8 +95,22 @@ const KYC: React.FC = () => {
 
   const buildFormData = () => {
     const formData = new FormData();
+
+    if (formState.country === 'Other' || selectedKYCOption === 'offline') {
+      formState.offline?.upload_form?.selectedFile.forEach((file: any) => {
+        formData.append('upload_form', file);
+      });
+    }
     formData.append('country', formState.country);
-    formData.append('offline', 'false');
+    formData.append(
+      'offline',
+      `${
+        formState.country === 'Other' || selectedKYCOption === 'offline'
+          ? 'true'
+          : 'false'
+      }`
+    );
+
     let uploadData = formState.attachment;
     for (const key in uploadData) {
       const fileData = uploadData[key];
@@ -120,11 +135,13 @@ const KYC: React.FC = () => {
     let active = activeID + 1;
     let validationError: ValidationError[] | string;
     let stepSuccessStatus;
+
     validationError = await validateScreen(
       formState.online.sections[screenName],
       screenName,
       formState.country
     );
+
     if (Array.isArray(validationError)) {
       validationError.forEach(error => {
         dispatch(
@@ -177,9 +194,25 @@ const KYC: React.FC = () => {
   };
 
   const handleSubmit = async () => {
-    const screenValidationError = formErrorState?.online?.sections;
-    let data = Object.values(screenValidationError).map(screen => screen);
-    let hasError = data.some((obj: any) => Object.keys(obj).length > 0);
+    let hasError = false;
+    let manualValidationError: any = [];
+    if (formState.country === 'Other' || selectedKYCOption === 'offline') {
+      manualValidationError = await validateManualAttachment(formState.offline);
+      if (Array.isArray(manualValidationError)) {
+        manualValidationError.forEach(error => {
+          dispatch(
+            updateFormState({
+              name: `formErrorState.offline.${[error.property]}`,
+              value: Object.values(error.constraints ?? {})[0] || ''
+            })
+          );
+        });
+      }
+    } else {
+      const screenValidationError = formErrorState?.online?.sections;
+      let data = Object.values(screenValidationError).map(screen => screen);
+      hasError = data.some((obj: any) => Object.keys(obj).length > 0);
+    }
 
     let validationError = await validateAttachment(
       formState.attachment,
@@ -197,7 +230,11 @@ const KYC: React.FC = () => {
       });
     }
 
-    if (!validationError?.length && !hasError) {
+    if (
+      !validationError?.length &&
+      !hasError &&
+      !manualValidationError.length
+    ) {
       if (!formState.termAndCondition) {
         dispatch(
           updateFormState({
@@ -561,10 +598,12 @@ const KYC: React.FC = () => {
           dispatch(
             updateFormState({
               name: `formState.online.sections[${key}]`,
-              value: onlineValue?.[screenIndex as keyof typeof onlineValue]
+              value:
+                onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
             })
           );
         });
+
         setSelectedCountry({
           label: kycDetails?.kyc?.country,
           value: kycDetails?.kyc?.country
@@ -654,6 +693,9 @@ const KYC: React.FC = () => {
           modalState={modalState}
           handleSaveAndNext={handleSaveAndNext}
           handleSubmit={handleSubmit}
+          setIsDialogOpen={setIsDialogOpen}
+          isDialogOpen={isDialogOpen}
+          dialogContent={dialogContent}
           handleTermAndCondition={handleTermAndCondition}
         />
       );

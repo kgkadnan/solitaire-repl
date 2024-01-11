@@ -799,7 +799,7 @@ export const KYCForm = [
           {
             id: '7',
             label: 'Government Registration Certificate',
-            isRequired: true,
+            isRequired: false,
             formKey: 'government_registration_certificate',
             maxFile: fileLimit.MAX_FILES,
             minFile: fileLimit.MIN_FILES
