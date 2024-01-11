@@ -437,10 +437,10 @@ const KYC: React.FC = () => {
     setIsDialogOpen(true);
     setDialogContent(
       <>
-        <div className="text-center align-middle text-solitaireTertiary text-[20px]">
+        <div className="text-center align-middle text-solitaireTertiary text-[20px] font-semibold">
           Are you sure?
         </div>
-        <div className="text-center align-middle text-solitaireTertiary">
+        <div className="text-center align-middle text-solitaireTertiary text-[16px]">
           Do you want to restart KYC process
         </div>
         <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
@@ -476,12 +476,11 @@ const KYC: React.FC = () => {
     switch (userData?.customer?.kyc?.status) {
       case kycStatus.INPROGRESS:
         if (
+          kycDetails &&
           kycDetails?.kyc &&
-          (kycDetails?.kyc?.country !== null ||
-            selectedCountry === '' ||
-            formState.country === null) &&
-          Object.keys(kycDetails?.kyc?.online).length > 1 &&
-          Object.keys(kycDetails?.kyc?.offline).length === 0
+          selectedCountry === '' &&
+          Object?.keys(kycDetails?.kyc?.online).length > 1 &&
+          Object?.keys(kycDetails?.kyc?.offline).length === 0
         ) {
           const { online, offline } = kycDetails.kyc;
 
@@ -505,9 +504,9 @@ const KYC: React.FC = () => {
             setDialogContent(
               <>
                 <div className="text-center align-middle text-solitaireTertiary">
-                  <p className="text-[20px]">Are you sure?</p>
+                  <p className="text-[20px] font-semibold">Are you sure?</p>
                 </div>
-                <div className="text-center align-middle text-solitaireTertiary">
+                <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
                   Do you want to resume KYC process or restart it?
                 </div>
                 <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">

@@ -384,7 +384,7 @@ used for managing the state of a form field or input element in a React componen
             displayButtonLabel={ManageLocales('app.advanceSearch.cancel')}
             displayButtonAllStyle={{
               displayButtonStyle:
-                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                'bg-transparent border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
               displayLabelStyle:
                 'text-solitaireTertiary text-[16px] font-medium'
             }}
