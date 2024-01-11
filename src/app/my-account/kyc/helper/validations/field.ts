@@ -26,13 +26,12 @@ import {
   ULTIMATE_BENEFICIARY_NAME_MANDATORY,
   VAT_NUMBER_MANDATORY
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX } from '@/constants/validation-regex/regex';
+import { NAME_REGEX, PAN_MATCH } from '@/constants/validation-regex/regex';
 import {
   ArrayNotEmpty,
   IsAlphanumeric,
   IsBoolean,
   IsEmail,
-  IsMobilePhone,
   IsNotEmpty,
   IsNumberString,
   IsOptional,
@@ -261,7 +260,6 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
-  @IsMobilePhone()
   phone: string;
 
   constructor(phone: string) {
@@ -299,8 +297,8 @@ class ValidationAccountHolderNameCriteria {
 }
 
 class ValidationAccountNumberCriteria {
-  @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 140)
+  @Length(1, 15, {
+    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
   })
   @IsString({ message: FIELD_INVALID('Account Number') })
   @Matches(/^[0-9a-zA-Z]+$/, {
@@ -374,9 +372,9 @@ class ValidationOwnerNameCriteria {
   }
 }
 class ValidationPanCriteria {
-  @MinLength(10)
-  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, { message: FIELD_INVALID('OWNER PAN') })
-  @IsAlphanumeric()
+  @MinLength(10, { message: FIELD_INVALID('Owner PAN') })
+  @Matches(PAN_MATCH, { message: FIELD_INVALID('Owner PAN') })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Owner PAN') })
   owner_pan_number: string;
 
   constructor(owner_pan_number: string) {
@@ -403,6 +401,7 @@ class ValidationCompanyNameCriteria {
 
 class ValidationYearOfEstablishmentCriteria {
   @IsNumberString({}, { message: FIELD_INVALID('Year of Establishment') })
+  @Length(4, 4, { message: FIELD_INVALID('Year of Establishment') })
   year_of_establishment: string;
 
   constructor(year_of_establishment: string) {
@@ -549,7 +548,7 @@ class ValidationPincodeCriteria {
 }
 
 class ValidationPANCriteria {
-  @Matches(/[A-Z]{5}[0-9]{4}[A-Z]{1}/, {
+  @Matches(PAN_MATCH, {
     message: FIELD_INVALID('Company PAN')
   })
   @IsString({ message: FIELD_INVALID('Company PAN') })

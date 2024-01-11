@@ -436,7 +436,7 @@ export const KYCForm = [
           {
             name: 'Company Number*',
             type: fieldType.PHONE_NUMBER,
-            inputType: 'text',
+            inputType: 'number',
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
@@ -941,7 +941,7 @@ export const KYCForm = [
           {
             name: 'Company Number*',
             type: fieldType.PHONE_NUMBER,
-            inputType: 'text',
+            inputType: 'number',
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
@@ -1173,7 +1173,7 @@ export const KYCForm = [
                 name: 'antiMoneyLaunderingPolicyName'
               }
             ],
-            dynamicCondition: true,
+            dynamicCondition: false,
             dynamicField: [
               {
                 name: 'Specify here',

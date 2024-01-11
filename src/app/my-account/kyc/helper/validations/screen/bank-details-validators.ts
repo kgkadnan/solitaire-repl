@@ -3,18 +3,47 @@ import {
   ACCOUNT_NUMBER_MANDATORY,
   BANK_ADDRESS_INVALID,
   BANK_NAME_MANDATORY,
+  FIELD_INVALID,
   IFSC_CODE_MANDATORY,
+  MAX_CHARACTER_LIMIT_EXCEEDED,
+  RANGE_VALIDATION,
   SWIFT_CODE_MANDATORY
 } from '@/constants/error-messages/kyc';
-import { IsString, IsNotEmpty, IsOptional } from 'class-validator';
+import { NAME_REGEX } from '@/constants/validation-regex/regex';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  Length,
+  Matches
+} from 'class-validator';
 
 class BaseBankDetails {
   @IsNotEmpty({ message: BANK_NAME_MANDATORY })
+  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Name', 140) })
+  @Matches(NAME_REGEX, {
+    message: FIELD_INVALID('Bank Name')
+  })
+  @IsString({ message: FIELD_INVALID('Bank Name') })
   bank_name: string;
 
+  @Length(1, 140, {
+    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Holder Name', 140)
+  })
+  @Matches(NAME_REGEX, {
+    message: FIELD_INVALID('Account Holder Name')
+  })
+  @IsString({ message: FIELD_INVALID('Account Holder Name') })
   @IsNotEmpty({ message: ACCOUNT_HOLDER_NAME_MANDATORY })
   account_holder_name: string;
 
+  @Length(1, 15, {
+    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
+  })
+  @IsString({ message: FIELD_INVALID('Account Number') })
+  @Matches(/^[0-9a-zA-Z]+$/, {
+    message: FIELD_INVALID('Account Number')
+  })
   @IsNotEmpty({ message: ACCOUNT_NUMBER_MANDATORY })
   account_number: string;
 
@@ -32,9 +61,19 @@ class BaseBankDetails {
 export class IndiaBankDetails extends BaseBankDetails {
   @IsString({ message: BANK_ADDRESS_INVALID })
   @IsOptional()
+  @Length(0, 140, {
+    message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Address', 140)
+  })
   bank_address: string;
 
+  @IsString({ message: FIELD_INVALID('IFSC code') })
   @IsNotEmpty({ message: IFSC_CODE_MANDATORY })
+  @Matches(/^[a-zA-Z0-9]+$/, {
+    message: FIELD_INVALID('IFSC code')
+  })
+  @Length(8, 11, {
+    message: RANGE_VALIDATION('IFSC code', 8, 11)
+  })
   ifsc_code: string;
 
   constructor(
@@ -51,7 +90,14 @@ export class IndiaBankDetails extends BaseBankDetails {
 }
 
 export class UsaBankDetails extends BaseBankDetails {
+  @IsString({ message: FIELD_INVALID('Swift code') })
   @IsNotEmpty({ message: SWIFT_CODE_MANDATORY })
+  @Matches(/^[a-zA-Z0-9]+$/, {
+    message: FIELD_INVALID('Swift code')
+  })
+  @Length(8, 11, {
+    message: RANGE_VALIDATION('Swift code', 8, 11)
+  })
   swift_code: string;
 
   constructor(
