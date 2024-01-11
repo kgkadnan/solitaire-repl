@@ -276,10 +276,16 @@ const KYC: React.FC = () => {
           );
           dispatch(
             updateFormState({
-              name: 'formState.online.sections.personal_details',
-              value: res.data.data.online?.['1']
+              name: 'formState.online.sections',
+              value: {
+                personal_details: res.data.data.online?.['1'],
+                company_details: {},
+                company_owner_details: {},
+                bank_details: {}
+              }
             })
           );
+
           setIsDialogOpen(false);
         }
       })
@@ -353,10 +359,6 @@ const KYC: React.FC = () => {
               ? setSelectedKYCOption('online')
               : setSelectedKYCOption('offline');
 
-            // setSelectedCountry({
-            //   label: country,
-            //   value: country
-            // });
             setIsDialogOpen(true);
             setDialogContent(
               <>
