@@ -30,6 +30,17 @@ export const CountrySelectionDropdown = ({
         value: selectedOption.value
       })
     );
+    dispatch(
+      updateFormState({
+        name: 'formErrorState.online.sections',
+        value: {
+          personal_details: {},
+          company_details: {},
+          company_owner_details: {},
+          bank_details: {}
+        }
+      })
+    );
   };
 
   const computeDropdownField = (countries: any) => {

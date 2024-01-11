@@ -5,3 +5,4 @@ export const PATH_SEPARATOR = /[.[\]]+/; ///[\.\[\]]+/
 export const KYC_INDEX_MATCH = /^(\w+)(\d+)?$/;
 
 export const NAME_REGEX = /^[a-zA-Z0-9\s]+$/;
+export const PAN_MATCH = /[a-zA-Z]{5}[0-9]{4}[a-zA-Z]{1}/;

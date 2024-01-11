@@ -184,7 +184,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
       );
     case fieldType.CHECKBOX:
       return (
-        <div className="text-[14px] text-solitaireTertiary w-[70%]">
+        <div className="text-[14px] text-solitaireTertiary sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
           <p className="mb-[10px]">{name}</p>
           <p className="text-[#C51A2D] mb-4">
             {formErrorState?.online?.sections?.[screenName]?.[formKey] ?? ''}
@@ -286,7 +286,10 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
 
     case fieldType.RADIO:
       return (
-        <div className="text-[14px] text-solitaireTertiary" key={formKey}>
+        <div
+          className="text-[14px] text-solitaireTertiary sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]"
+          key={formKey}
+        >
           <p className="mb-[0px]">{name}</p>
           <p className="mb-[8px] text-[12px] text-solitaireSenary">
             {subTitle && subTitle}
@@ -298,7 +301,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             className={`${
               formKey === 'organisation_type'
                 ? 'grid grid-cols-2 gap-[16px]'
-                : 'flex flex-col gap-[16px]'
+                : 'flex flex-row justify-between gap-[16px] w-[50%]'
             }`}
           >
             {radioData.map((items: IRadioData) => {
@@ -352,20 +355,20 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                 </div>
               );
             })}
-            {dynamicCondition &&
-              formState.online.sections[screenName]?.[formKey] ===
-                dynamicCondition &&
-              dynamicField?.map((field: any) => (
-                <div key={field.name} className={`mb-[20px] w-[40%] `}>
-                  <RenderField
-                    data={field}
-                    formState={formState}
-                    formErrorState={formErrorState}
-                    screenName={screenName}
-                  />
-                </div>
-              ))}
           </div>
+          {dynamicCondition &&
+            formState.online.sections[screenName]?.[formKey] ===
+              dynamicCondition &&
+            dynamicField?.map((field: any) => (
+              <div key={field.name} className={`mb-[20px] w-[40%] `}>
+                <RenderField
+                  data={field}
+                  formState={formState}
+                  formErrorState={formErrorState}
+                  screenName={screenName}
+                />
+              </div>
+            ))}
         </div>
       );
 

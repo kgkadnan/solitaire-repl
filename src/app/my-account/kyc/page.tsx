@@ -43,15 +43,24 @@ import { useRouter } from 'next/navigation';
 
 interface IKYCData {
   kyc: {
-    online: {
-      [key: string]: {
+    created_at: string;
+    customer_id: string;
+    deleted_at: string | null;
+    updated_at: string;
+    id: string;
+    profile_data: {
+      online: {
+        [key: string]: {
+          [key: string]: any;
+        };
+      };
+      country: string | null;
+      offline: {
         [key: string]: any;
       };
     };
-    country: string | null;
-    offline: {
-      [key: string]: any;
-    };
+    remarks: string | null;
+    status: string;
   };
 }
 
@@ -63,6 +72,8 @@ const KYC: React.FC = () => {
   const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
+  const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
+
   const [userData, setUserData] = useState<any>({});
   const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
@@ -245,7 +256,7 @@ const KYC: React.FC = () => {
       } else {
         await submitKYC(buildFormData())
           .unwrap()
-          .then(res => {
+          .then((res: any) => {
             setIsDialogOpen(true);
             setDialogContent(
               <div className="flex gap-[10px] flex-col items-center justify-center">
@@ -445,6 +456,7 @@ const KYC: React.FC = () => {
         if (res.data.statusCode === statusCode.SUCCESS) {
           setCurrentState('country_selection');
           setSelectedCountry('');
+          setSelectedKYCOption('');
           dispatch(
             updateFormState({
               name: 'formState.country',
@@ -474,10 +486,10 @@ const KYC: React.FC = () => {
     setIsDialogOpen(true);
     setDialogContent(
       <>
-        <div className="text-center align-middle text-solitaireTertiary text-[20px]">
+        <div className="text-center align-middle text-solitaireTertiary text-[20px] font-semibold">
           Are you sure?
         </div>
-        <div className="text-center align-middle text-solitaireTertiary">
+        <div className="text-center align-middle text-solitaireTertiary text-[16px]">
           Do you want to restart KYC process
         </div>
         <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
@@ -509,131 +521,136 @@ const KYC: React.FC = () => {
   };
 
   useEffect(() => {
-    userData && localStorage.setItem('user', JSON.stringify(userData));
-    switch (userData?.customer?.kyc?.status) {
-      case kycStatus.INPROGRESS:
-        if (
-          kycDetails?.kyc &&
-          (kycDetails?.kyc?.country !== null ||
-            selectedCountry === '' ||
-            formState.country === null) &&
-          Object.keys(kycDetails?.kyc?.online).length > 1 &&
-          Object.keys(kycDetails?.kyc?.offline).length === 0
-        ) {
-          const { online, offline } = kycDetails.kyc;
+    if (kycDetails) {
+      userData && localStorage.setItem('user', JSON.stringify(userData));
+      switch (userData?.customer?.kyc?.status) {
+        case kycStatus.INPROGRESS:
+          if (
+            kycDetails &&
+            kycDetails?.kyc &&
+            !isResumeCalled &&
+            (kycDetails?.kyc?.profile_data?.country !== null ||
+              Object.keys(kycDetails?.kyc?.profile_data?.online).length > 1) &&
+            Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+          ) {
+            setIsResumeCalled(true);
+            const { online, offline } = kycDetails.kyc.profile_data;
 
-          const onlineData = online || {};
+            const onlineData = online || {};
 
-          const filledScreens = Object.keys(onlineData)
-            .map(key => parseInt(key, 10))
-            .filter(num => !isNaN(num));
+            const filledScreens = Object.keys(onlineData)
+              .map(key => parseInt(key, 10))
+              .filter(num => !isNaN(num));
 
-          const lastFilledScreen = Math.max(...filledScreens);
+            const lastFilledScreen = Math.max(...filledScreens);
 
-          if (lastFilledScreen > 0) {
-            setCurrentState('online');
-            setActiveStep(lastFilledScreen - 1);
+            if (lastFilledScreen > 0) {
+              setCurrentState('online');
+              setActiveStep(lastFilledScreen - 1);
 
-            offline
-              ? setSelectedKYCOption('online')
-              : setSelectedKYCOption('offline');
+              offline
+                ? setSelectedKYCOption('online')
+                : setSelectedKYCOption('offline');
 
-            setIsDialogOpen(true);
-            setDialogContent(
-              <>
-                <div className="text-center align-middle text-solitaireTertiary">
-                  <p className="text-[20px]">Are you sure?</p>
-                </div>
-                <div className="text-center align-middle text-solitaireTertiary">
-                  Do you want to resume KYC process or restart it?
-                </div>
-                <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-                  <CustomDisplayButton
-                    displayButtonLabel="Restart"
-                    handleClick={handleResetButton}
-                    displayButtonAllStyle={{
-                      displayButtonStyle:
-                        ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-                      displayLabelStyle:
-                        'text-solitaireTertiary text-[14px] font-medium'
-                    }}
-                  />
-                  <CustomDisplayButton
-                    displayButtonLabel="Resume"
-                    handleClick={() => {
-                      setIsDialogOpen(false);
-                      setDialogContent('');
-                    }}
-                    displayButtonAllStyle={{
-                      displayButtonStyle:
-                        'bg-solitaireQuaternary w-[150px] h-[35px]',
-                      displayLabelStyle:
-                        'text-solitaireTertiary text-[14px] font-medium'
-                    }}
-                  />
-                </div>
-              </>
-            );
+              setIsDialogOpen(true);
+              setDialogContent(
+                <>
+                  <div className="text-center align-middle text-solitaireTertiary">
+                    <p className="text-[20px] font-semibold">Are you sure?</p>
+                  </div>
+                  <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
+                    Do you want to resume KYC process or restart it?
+                  </div>
+                  <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                    <CustomDisplayButton
+                      displayButtonLabel="Restart"
+                      handleClick={handleResetButton}
+                      displayButtonAllStyle={{
+                        displayButtonStyle:
+                          ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                        displayLabelStyle:
+                          'text-solitaireTertiary text-[14px] font-medium'
+                      }}
+                    />
+                    <CustomDisplayButton
+                      displayButtonLabel="Resume"
+                      handleClick={() => {
+                        setIsDialogOpen(false);
+                        setDialogContent('');
+                      }}
+                      displayButtonAllStyle={{
+                        displayButtonStyle:
+                          'bg-solitaireQuaternary w-[150px] h-[35px]',
+                        displayLabelStyle:
+                          'text-solitaireTertiary text-[14px] font-medium'
+                      }}
+                    />
+                  </div>
+                </>
+              );
+            }
           }
-        }
-        let sectionKeys: string[] =
-          kycDetails?.kyc?.country === 'India'
-            ? [
-                kycScreenIdentifierNames.PERSONAL_DETAILS,
-                kycScreenIdentifierNames.COMPANY_DETAILS,
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]
-            : [
-                kycScreenIdentifierNames.PERSONAL_DETAILS,
-                kycScreenIdentifierNames.COMPANY_DETAILS,
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ];
+          let sectionKeys: string[] =
+            kycDetails?.kyc?.profile_data?.country === 'India'
+              ? [
+                  kycScreenIdentifierNames.PERSONAL_DETAILS,
+                  kycScreenIdentifierNames.COMPANY_DETAILS,
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]
+              : [
+                  kycScreenIdentifierNames.PERSONAL_DETAILS,
+                  kycScreenIdentifierNames.COMPANY_DETAILS,
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ];
 
-        sectionKeys.forEach((key, index: number) => {
-          let screenIndex = (index + 1).toString();
+          sectionKeys.forEach((key, index: number) => {
+            let screenIndex = (index + 1).toString();
 
-          let onlineValue = kycDetails?.kyc?.online;
+            let onlineValue = kycDetails?.kyc?.profile_data?.online;
+
+            dispatch(
+              updateFormState({
+                name: `formState.online.sections[${key}]`,
+                value:
+                  onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+              })
+            );
+          });
+          setSelectedCountry(
+            kycDetails?.kyc?.profile_data?.country
+              ? {
+                  label: kycDetails?.kyc?.profile_data?.country,
+                  value: kycDetails?.kyc?.profile_data?.country
+                }
+              : ''
+          );
+          dispatch(
+            updateFormState({
+              name: 'formState.country',
+              value: kycDetails?.kyc?.profile_data?.country
+            })
+          );
 
           dispatch(
             updateFormState({
-              name: `formState.online.sections[${key}]`,
-              value:
-                onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+              name: 'formState.offline',
+              value: kycDetails?.kyc?.profile_data?.offline ?? {}
             })
           );
-        });
 
-        setSelectedCountry({
-          label: kycDetails?.kyc?.country,
-          value: kycDetails?.kyc?.country
-        });
-        dispatch(
-          updateFormState({
-            name: 'formState.country',
-            value: kycDetails?.kyc?.country
-          })
-        );
+          break;
+        case kycStatus.PENDING:
+          setRenderComponent(kycStatus.PENDING);
+          break;
 
-        dispatch(
-          updateFormState({
-            name: 'formState.offline',
-            value: kycDetails?.kyc?.offline
-          })
-        );
-
-        break;
-
-      case kycStatus.PENDING:
-        setRenderComponent(kycStatus.PENDING);
-        break;
-
-      case kycStatus.APPROVED:
-        setRenderComponent(kycStatus.APPROVED);
-        break;
-      case kycStatus.REJECTED:
-        setRenderComponent(kycStatus.REJECTED);
-        break;
+        case kycStatus.APPROVED:
+          setRenderComponent(kycStatus.APPROVED);
+          break;
+        case kycStatus.REJECTED:
+          setRenderComponent(kycStatus.REJECTED);
+          break;
+      }
     }
   }, [kycDetails, userData]);
 
