@@ -60,8 +60,7 @@ const Stepper: React.FC<IStepperProps> = ({
               index,
               false
             );
-            const { validationError: stepperError, statusCode: code } =
-              nextStepStatus;
+            const { validationError: stepperError } = nextStepStatus;
             const hasError = Array.isArray(stepperError) && stepperError.length;
 
             return {
