@@ -47,7 +47,7 @@ export const DownloadAndUpload = ({
   selectedCountry
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
-  const [getKycPdf, pdf] = useLazyGetKycPdfQuery();
+  const [trigger, { data }] = useLazyGetKycPdfQuery();
 
   const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
@@ -85,17 +85,17 @@ export const DownloadAndUpload = ({
   }, [fileRejections]);
 
   const handleKycFormDownload = () => {
-    getKycPdf({ country: selectedCountry });
+    trigger({ country: selectedCountry });
   };
 
   useEffect(() => {
-    if (pdf && pdf?.data) {
+    if (data && data?.url) {
       const link = document.createElement('a');
-      link.href = pdf.data.url;
+      link.href = data.url;
       link.download = selectedCountry || 'downloaded_file';
       window.open(link.href, '_blank');
     }
-  }, [pdf]);
+  }, [data]);
 
   let uploadProgress = formState?.offline?.upload_form?.uploadProgress ?? '';
   let isFileUploaded = formState?.offline?.upload_form?.isFileUploaded ?? '';
