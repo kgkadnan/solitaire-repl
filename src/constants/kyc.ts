@@ -283,7 +283,7 @@ export const KYCForm = [
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             formKey: 'ownership_percentage'
           }
         ]
@@ -1151,7 +1151,7 @@ export const KYCForm = [
           {
             name: 'Ownership%',
             type: fieldType.FLOATING_INPUT,
-            inputType: 'text',
+            inputType: 'number',
             formKey: 'ownership_percentage'
           },
           {
