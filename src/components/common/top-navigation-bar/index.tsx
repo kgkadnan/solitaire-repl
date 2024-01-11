@@ -180,7 +180,6 @@ export const TopNavigationBar = () => {
 
   const handleLogout = () => {
     userLoggedOut();
-    localStorage.removeItem('Search');
     router.push('/login');
     setIsAccountMenuOpen(false);
   };
