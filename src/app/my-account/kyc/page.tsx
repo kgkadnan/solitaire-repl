@@ -577,10 +577,10 @@ const KYC: React.FC = () => {
               })
             );
           });
-          setSelectedCountry({
+          setSelectedCountry(kycDetails?.kyc?.profile_data?.country ?{
             label: kycDetails?.kyc?.profile_data?.country,
             value: kycDetails?.kyc?.profile_data?.country
-          });
+          } : '');
           dispatch(
             updateFormState({
               name: 'formState.country',
