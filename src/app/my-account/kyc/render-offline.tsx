@@ -10,6 +10,7 @@ import { CustomModal } from '@/components/common/modal';
 import { CustomFooter } from '@/components/common/footer';
 import { Checkbox } from '@/components/ui/checkbox';
 import { IModalSetState } from '@/app/search/result/result-interface';
+import { CustomDialog } from '@/components/common/dialog';
 
 interface IRenderOffline {
   data: any;
@@ -22,6 +23,9 @@ interface IRenderOffline {
   handleSaveAndNext: (state: string) => void;
   handleSubmit: () => void;
   selectedCountry: string;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isDialogOpen: boolean;
+  dialogContent: any;
 }
 const RenderOffline = ({
   data,
@@ -33,13 +37,21 @@ const RenderOffline = ({
   fromWhere,
   handleSaveAndNext,
   handleSubmit,
-  selectedCountry
+  selectedCountry,
+  setIsDialogOpen,
+  isDialogOpen,
+  dialogContent
 }: IRenderOffline) => {
   const { isModalOpen, modalContent } = modalState;
   const { setIsModalOpen } = modalSetState;
 
   return (
     <div>
+      <CustomDialog
+        setIsOpen={setIsDialogOpen}
+        isOpens={isDialogOpen}
+        dialogContent={dialogContent}
+      />
       <CustomModal
         isOpens={isModalOpen}
         setIsOpen={setIsModalOpen}
@@ -49,6 +61,7 @@ const RenderOffline = ({
       <div className="w-full flex justify-between  pb-5">
         <DownloadAndUpload
           formState={formState}
+          formErrorState={formErrorState}
           maxFile={1}
           modalSetState={modalSetState}
           selectedCountry={selectedCountry}

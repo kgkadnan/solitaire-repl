@@ -225,8 +225,8 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                         ),
                         onSelect: () =>
                           handleDeleteAttachment({
-                            setIsFileUploaded: `formState.attachment[${formKey}].isFileUploaded`,
-                            setSelectedFile: `formState.attachment[${formKey}].selectedFile`,
+                            // setIsFileUploaded: `formState.attachment[${formKey}]`,
+                            setSelectedFile: `formState.attachment[${formKey}]`,
                             dispatch
                           })
                       }

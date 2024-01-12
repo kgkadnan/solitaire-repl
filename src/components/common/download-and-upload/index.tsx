@@ -20,6 +20,7 @@ import { MAX_FILE_SIZE } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { IModalSetState } from '@/app/search/result/result-interface';
 import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
+import { updateFormState } from '@/features/kyc/kyc';
 
 const ALLOWED_FILE_TYPES = {
   'application/msword': ['.doc'],
@@ -35,31 +36,35 @@ interface IDownloadAndUpload {
   maxFile: number;
   modalSetState: IModalSetState;
   selectedCountry: string;
+  formErrorState: any;
 }
 
 export const DownloadAndUpload = ({
   formState,
+  formErrorState,
   maxFile,
   modalSetState,
   selectedCountry
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
-  const [getKycPdf, pdf] = useLazyGetKycPdfQuery();
+  const [trigger, { data }] = useLazyGetKycPdfQuery();
 
   const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
       acceptedFiles,
-      setUploadProgress: `formState.offline.upload.uploadProgress`,
-      setIsFileUploaded: `formState.offline.upload.isFileUploaded`,
-      setSelectedFile: `formState.offline.upload.selectedFile`,
+      setUploadProgress: `formState.offline.upload_form.uploadProgress`,
+      setIsFileUploaded: `formState.offline.upload_form.isFileUploaded`,
+      setSelectedFile: `formState.offline.upload_form.selectedFile`,
       dispatch
     });
+    dispatch(
+      updateFormState({
+        name: 'formErrorState.offline.upload_form',
+        value: ''
+      })
+    );
   };
-
-  let uploadProgress = formState?.offline?.upload?.uploadProgress ?? '';
-  let isFileUploaded = formState?.offline?.upload?.isFileUploaded ?? '';
-  let selectedFile = formState?.offline?.upload?.selectedFile ?? '';
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     onDrop,
@@ -68,18 +73,34 @@ export const DownloadAndUpload = ({
     maxFiles: maxFile
   });
 
+  useEffect(() => {
+    if (fileRejections?.length) {
+      dispatch(
+        updateFormState({
+          name: `formErrorState.offline.upload_form`,
+          value: fileRejections[0].errors[0].code
+        })
+      );
+    }
+  }, [fileRejections]);
+
   const handleKycFormDownload = () => {
-    getKycPdf({ country: selectedCountry });
+    trigger({ country: selectedCountry });
   };
 
   useEffect(() => {
-    if (pdf && pdf?.data) {
+    if (data && data?.url) {
       const link = document.createElement('a');
-      link.href = pdf.data.url;
+      link.href = data.url;
       link.download = selectedCountry || 'downloaded_file';
       window.open(link.href, '_blank');
     }
-  }, [pdf]);
+  }, [data]);
+
+  let uploadProgress = formState?.offline?.upload_form?.uploadProgress ?? '';
+  let isFileUploaded = formState?.offline?.upload_form?.isFileUploaded ?? '';
+  let selectedFile = formState?.offline?.upload_form?.selectedFile ?? '';
+  let error = formErrorState?.offline?.upload_form ?? '';
 
   return (
     <>
@@ -109,16 +130,12 @@ export const DownloadAndUpload = ({
           <input {...getInputProps()} name="attachment" />
         )}
 
-        {!fileRejections.length ? (
+        {!error.length ? (
           <UploadOutline className={`${styles.stroke}`} />
         ) : (
           <Image src={errorImage} alt="errorImage" width={30} />
         )}
-        <h1
-          className={`${
-            fileRejections.length ? styles.errorlabel : styles.label
-          }`}
-        >
+        <h1 className={`${error.length ? styles.errorlabel : styles.label}`}>
           {ManageLocales('app.myProfile.kyc.upload')}
         </h1>
 
@@ -179,8 +196,8 @@ export const DownloadAndUpload = ({
                       ),
                       onSelect: () =>
                         handleDeleteAttachment({
-                          setIsFileUploaded: `formState.attachment.upload.isFileUploaded`,
-                          setSelectedFile: `formState.attachment.upload.selectedFile`,
+                          // setIsFileUploaded: `formState.offline.upload_form.isFileUploaded`,
+                          setSelectedFile: `formState.offline.upload_form`,
                           dispatch
                         })
                     }
@@ -204,20 +221,13 @@ export const DownloadAndUpload = ({
         )}
 
         {(!isFileUploaded || !selectedFile.length) &&
-          (!fileRejections.length ? (
-            <p
-              className={
-                fileRejections.length ? styles.errorFormat : styles.format
-              }
-            >
+          (!error.length ? (
+            <p className={error.length ? styles.errorFormat : styles.format}>
               Upload the filled KYC form here | Max file size: 100 mb
             </p>
           ) : (
-            <p
-              className={styles.errorFormat}
-              key={fileRejections[0].errors[0].code}
-            >
-              {fileRejections[0].errors[0].code}
+            <p className={styles.errorFormat} key={error}>
+              {error}
             </p>
           ))}
       </div>
