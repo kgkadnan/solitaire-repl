@@ -66,13 +66,13 @@ export const KYCForm = [
             formKey: 'year_of_establishment'
           },
           {
-            name: 'Registered Address*',
+            name: 'Registered Address Line 1*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             formKey: 'address_line_1'
           },
           {
-            name: '',
+            name: 'Registered Address Line 2',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             formKey: 'address_line_2'
@@ -80,7 +80,7 @@ export const KYCForm = [
           {
             name: 'Company Number*',
             type: fieldType.PHONE_NUMBER,
-            inputType: 'phone',
+            inputType: 'number',
             formKey: ['company_country_code', 'company_phone_number'] //The 'key' array for the phone should follow this structure: 'country_code' at index 0 to represent the country code and 'phone' at index 1 for the phone number.
           },
           {
@@ -630,7 +630,7 @@ export const KYCForm = [
             ]
           },
           {
-            name: 'Registered under MSME Act',
+            name: 'Registered under MSME Act*',
             subTitle:
               'If yes then provide the name field & Registration Number',
             type: fieldType.RADIO,

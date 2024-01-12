@@ -575,7 +575,6 @@ class ValidationGSTCriteria {
 
 class ValidationisMsmeRegisteredCriteria {
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
-  @IsOptional()
   is_msme_registered: boolean;
 
   constructor(is_msme_registered: boolean) {

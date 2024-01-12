@@ -153,7 +153,6 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   gst_number: string;
 
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
-  @IsOptional()
   is_msme_registered: boolean = false;
 
   @ValidateIf(object => object?.is_msme_registered === true)

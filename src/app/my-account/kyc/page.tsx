@@ -164,6 +164,13 @@ const KYC: React.FC = () => {
           })
         );
       });
+    } else {
+      dispatch(
+        updateFormState({
+          name: `formErrorState.online.sections.${[screenName]}`,
+          value: {}
+        })
+      );
     }
 
     saveStep &&
