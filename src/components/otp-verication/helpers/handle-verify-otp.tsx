@@ -8,7 +8,6 @@ interface IHandleVerifyOtp {
   otpValues: string[];
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
-  router: any;
   userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
@@ -20,7 +19,6 @@ export const handleVerifyOtp = ({
   otpValues,
   token,
   setCurrentState,
-  router,
   userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
@@ -38,9 +36,7 @@ export const handleVerifyOtp = ({
     .unwrap()
     .then((res: any) => {
       if (res) {
-        if (role === 'guest') {
-          router.push('/');
-        } else if (role === 'register') {
+        if (role === 'register' || role === 'guest') {
           setCurrentState('successfullyCreated');
           if (setToken)
             setToken(prev => ({

@@ -12,7 +12,6 @@ import RegisterComponent from './component/register';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import { computeCountryDropdownField } from '../my-account/kyc/helper/compute-country-dropdown';
 import { countryCodeSelectStyle } from '../my-account/kyc/styles/country-code-select-style';
-import { useRouter } from 'next/navigation';
 import {
   useSendOtpMutation,
   useVerifyOTPMutation,
@@ -51,7 +50,6 @@ const initialTokenState = {
   tempToken: ''
 };
 const Register = () => {
-  const router = useRouter();
   const { registerState, registerSetState } = useRegisterStateManagement();
   const { registerFormState } = registerState;
   const { setRegisterFormState } = registerSetState;
@@ -226,7 +224,6 @@ const Register = () => {
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
             state={'register'}
-            router={router}
             token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
