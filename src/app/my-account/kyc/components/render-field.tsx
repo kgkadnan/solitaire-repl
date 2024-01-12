@@ -339,6 +339,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                             })
                           );
                     }}
+                    // isChecked={formState.online.sections[screenName]?.[formKey]}
                     inputValue={
                       !radioData
                         ?.map(element => {
