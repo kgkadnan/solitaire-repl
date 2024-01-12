@@ -1163,17 +1163,17 @@ export const KYCForm = [
               {
                 id: 1,
                 label: 'Yes',
-                value: true,
+                value: false,
                 name: 'antiMoneyLaunderingPolicyName'
               },
               {
                 id: 1,
                 label: 'No',
-                value: false,
+                value: true,
                 name: 'antiMoneyLaunderingPolicyName'
               }
             ],
-            dynamicCondition: false,
+            dynamicCondition: true,
             dynamicField: [
               {
                 name: 'Specify here',
