@@ -37,8 +37,8 @@ export const kycApi = createApi({
       query: () => ({
         url: `/store/kyc`,
         method: 'GET'
-      }),
-      providesTags: ['kyc']
+      })
+      // providesTags: ['kyc']
     }),
     resetKyc: builder.mutation({
       query: () => ({
