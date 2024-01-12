@@ -324,7 +324,6 @@ const Login = () => {
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
             state={'login'}
-            router={router}
             token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
