@@ -41,6 +41,24 @@ export const CountrySelectionDropdown = ({
         }
       })
     );
+    dispatch(
+      updateFormState({
+        name: 'formErrorState.attachment',
+        value: {}
+      })
+    );
+    dispatch(
+      updateFormState({
+        name: 'formErrorState.offline',
+        value: {}
+      })
+    );
+    dispatch(
+      updateFormState({
+        name: 'formErrorState.offline',
+        value: false
+      })
+    );
   };
 
   const computeDropdownField = (countries: any) => {

@@ -229,6 +229,7 @@ const KYC: React.FC = () => {
     } else {
       const screenValidationError = formErrorState?.online?.sections;
       let data = Object.values(screenValidationError).map(screen => screen);
+
       hasError = data.some((obj: any) => Object.keys(obj).length > 0);
     }
 
@@ -476,6 +477,17 @@ const KYC: React.FC = () => {
               value: {
                 personal_details:
                   res.data.data?.kyc?.profile_data?.online?.['1'],
+                company_details: {},
+                company_owner_details: {},
+                bank_details: {}
+              }
+            })
+          );
+          dispatch(
+            updateFormState({
+              name: 'formErrorState.online.sections',
+              value: {
+                personal_details: {},
                 company_details: {},
                 company_owner_details: {},
                 bank_details: {}

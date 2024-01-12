@@ -48,7 +48,7 @@ export enum kycStatus {
 
 export enum kycAttachmentIdentifierNames {
   INDIA = 'India',
-  USA = 'Usa',
+  USA = 'USA',
   OTHER = 'Other',
   BELGIUM = 'Belgium'
 }
