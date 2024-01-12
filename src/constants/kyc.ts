@@ -927,13 +927,13 @@ export const KYCForm = [
             formKey: 'year_of_establishment'
           },
           {
-            name: 'Registered Address*',
+            name: 'Registered Address Line 1*',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             formKey: 'address_line_1'
           },
           {
-            name: '',
+            name: 'Registered Address Line 2',
             type: fieldType.FLOATING_INPUT,
             inputType: 'text',
             formKey: 'address_line_2'
