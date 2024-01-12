@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
@@ -19,7 +19,7 @@ import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delet
 import { MAX_FILE_SIZE } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { IModalSetState } from '@/app/search/result/result-interface';
-import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
+import { useGetKycPdfQuery } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 
 const ALLOWED_FILE_TYPES = {
@@ -47,7 +47,12 @@ export const DownloadAndUpload = ({
   selectedCountry
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
-  const [trigger, { data }] = useLazyGetKycPdfQuery();
+  const [getPDF, setGetPDF] = useState(false);
+
+  const { data } = useGetKycPdfQuery(
+    { country: selectedCountry },
+    { skip: !getPDF }
+  );
 
   const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
@@ -84,18 +89,15 @@ export const DownloadAndUpload = ({
     }
   }, [fileRejections]);
 
-  const handleKycFormDownload = () => {
-    trigger({ country: selectedCountry });
-  };
-
   useEffect(() => {
     if (data && data?.url) {
       const link = document.createElement('a');
       link.href = data.url;
       link.download = selectedCountry || 'downloaded_file';
       window.open(link.href, '_blank');
+      setGetPDF(false);
     }
-  }, [data]);
+  }, [data?.url]);
 
   let uploadProgress = formState?.offline?.upload_form?.uploadProgress ?? '';
   let isFileUploaded = formState?.offline?.upload_form?.isFileUploaded ?? '';
@@ -106,7 +108,7 @@ export const DownloadAndUpload = ({
     <>
       <div
         className="w-[45%] bg-solitaireSecondary h-[12vh] rounded-[10px] flex flex-col justify-evenly items-center p-3 cursor-pointer"
-        onClick={handleKycFormDownload}
+        onClick={() => setGetPDF(true)}
       >
         <Image
           src={downloadOutlineShadow}
