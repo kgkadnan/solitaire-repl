@@ -23,7 +23,7 @@ export enum supportedMediaFormat {
 export enum supportedCountries {
   INDIA = 'India',
   BELGIUM = 'Belgium',
-  USA = 'Usa',
+  USA = 'USA',
   OTHER = 'Other'
 }
 
