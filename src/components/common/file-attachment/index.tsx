@@ -96,20 +96,6 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     }
   }, [fileRejections]);
 
-  // const _handleValidation = () => {
-  //   // Check if selectedFile is empty for required fields
-  //   if (isRequired && selectedFile.length === 0) {
-  //     setError('File is required');
-  //   } else {
-  //     setError(null); // Clear error if selectedFile is not empty or not required
-  //   }
-
-  //   // Check for file rejections
-  //   if (fileRejections?.length) {
-  //     setError(fileRejections[0].errors[0].code);
-  //   }
-  // };
-
   let uploadProgress = formState?.attachment?.[formKey]?.uploadProgress ?? '';
   let isFileUploaded = formState?.attachment?.[formKey]?.isFileUploaded ?? '';
   let selectedFile = formState?.attachment?.[formKey]?.selectedFile ?? '';

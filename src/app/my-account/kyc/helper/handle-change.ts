@@ -40,12 +40,5 @@ export const handleInputChange = async (
         value: formState?.online?.sections?.company_details?.company_pan_number
       })
     );
-  } else {
-    dispatch(
-      updateFormState({
-        name: `formState.online.sections.company_owner_details.owner_pan_number`,
-        value: ''
-      })
-    );
   }
 };

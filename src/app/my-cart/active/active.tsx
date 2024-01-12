@@ -96,12 +96,14 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems = data?.cart?.items
-          .filter(
-            (item: IProductItem) =>
-              item?.product?.diamond_status === ACTIVE_STATUS
-          )
-          .map((row: IProductItem) => row?.product);
+        const activeDiamondItems =
+          data?.cart?.items ??
+          []
+            .filter(
+              (item: IProductItem) =>
+                item?.product?.diamond_status === ACTIVE_STATUS
+            )
+            .map((row: IProductItem) => row?.product);
 
         setActiveCartRows(activeDiamondItems);
       }
