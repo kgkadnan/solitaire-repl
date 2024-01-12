@@ -5,6 +5,7 @@ import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
 import { statusCode } from '@/constants/enums/status-code';
 import { CustomDialog } from '../dialog';
+import CustomLoader from '../loader';
 
 export interface IStepper {
   label: string;
@@ -43,6 +44,11 @@ const Stepper: React.FC<IStepperProps> = ({
 }) => {
   const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
 
+  useEffect(() => {
+    if (stepper.length > 1 && !(stepperData.length > 1)) {
+      setStepperData(stepper);
+    }
+  }, [stepper]);
   useEffect(() => {
     const updateStepper = async () => {
       const updatedStepper = await Promise.all(
@@ -90,7 +96,9 @@ const Stepper: React.FC<IStepperProps> = ({
       );
 
       // Update the state with the new array
-      stepper && setStepperData(updatedStepper);
+      stepper.length > 1 &&
+        !(stepperData.length > 1) &&
+        setStepperData(updatedStepper);
     };
     updateStepper();
   }, [state]);
@@ -205,35 +213,39 @@ const Stepper: React.FC<IStepperProps> = ({
       />
       <div className={styles.stepperContainer}>
         <div className={styles.circularSteps}>
-          {stepperData?.map((step: any, index: number) => (
-            <>
-              <div
-                className={styles.circularStepsContainer}
-                key={step.screenName}
-                onClick={() => handleStepperStep(index)}
-              >
+          {stepperData.length ? (
+            stepperData?.map((step: any, index: number) => (
+              <>
                 <div
-                  key={index}
-                  className={`${styles.step} ${
-                    step?.status === StepperStatus.COMPLETED
-                      ? styles.completedStep
-                      : step?.status === StepperStatus.INPROGRESS
-                      ? styles.activeStep
-                      : step?.status === StepperStatus.REJECTED
-                      ? styles.rejectedStep
-                      : styles.defaultStep
-                  }`}
+                  className={styles.circularStepsContainer}
+                  key={step.screenName}
+                  onClick={() => handleStepperStep(index)}
                 >
-                  {index + 1}
-                </div>
+                  <div
+                    key={index}
+                    className={`${styles.step} ${
+                      step?.status === StepperStatus.COMPLETED
+                        ? styles.completedStep
+                        : step?.status === StepperStatus.INPROGRESS
+                        ? styles.activeStep
+                        : step?.status === StepperStatus.REJECTED
+                        ? styles.rejectedStep
+                        : styles.defaultStep
+                    }`}
+                  >
+                    {index + 1}
+                  </div>
 
-                <div className={styles.stepLabel}>{step?.label}</div>
-              </div>
-              {index < stepper.length - 1 && (
-                <div className={styles.stepLine}></div>
-              )}
-            </>
-          ))}
+                  <div className={styles.stepLabel}>{step?.label}</div>
+                </div>
+                {index < stepper.length - 1 && (
+                  <div className={styles.stepLine}></div>
+                )}
+              </>
+            ))
+          ) : (
+            <CustomLoader />
+          )}
         </div>
         <hr className="border-1 border-solitaireSenary mt-6" />
         <div>{stepper[state]?.data}</div>

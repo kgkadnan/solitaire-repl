@@ -32,7 +32,7 @@ export const handleIsEditingKyc = ({
         </div>
         <div className="text-center align-middle text-solitaireTertiary text-[16px]">
           Do you want to terminate KYC process and explore website?
-          <span className="text-[12px]">(your progress will be saved)</span>
+          <span className="text-[12px]"> (your progress will be saved)</span>
         </div>
         <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
           <CustomDisplayButton

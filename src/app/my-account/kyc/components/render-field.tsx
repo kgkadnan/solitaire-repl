@@ -100,7 +100,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
   switch (type) {
     case fieldType.FLOATING_INPUT:
       return (
-        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px]">
+        <div className="sm:w-[200px] md:w-[300px] lg:w-[400px] xl:w-[500px] mb-[10px]">
           {label && <p className="mb-[8px] text-solitaireTertiary">{label}</p>}
           <FloatingLabelInput
             label={name}
@@ -301,7 +301,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             className={`${
               formKey === 'organisation_type'
                 ? 'grid grid-cols-2 gap-[16px]'
-                : 'flex flex-row justify-between gap-[16px] w-[50%]'
+                : 'flex flex-row justify-between gap-[16px] w-[50%] mb-[20px]'
             }`}
           >
             {radioData.map((items: IRadioData) => {
@@ -339,6 +339,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
                             })
                           );
                     }}
+                    // isChecked={formState.online.sections[screenName]?.[formKey]}
                     inputValue={
                       !radioData
                         ?.map(element => {
