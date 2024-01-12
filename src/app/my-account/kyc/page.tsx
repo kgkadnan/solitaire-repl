@@ -474,7 +474,8 @@ const KYC: React.FC = () => {
             updateFormState({
               name: 'formState.online.sections',
               value: {
-                personal_details: res.data.data.online?.['1'],
+                personal_details:
+                  res.data.data?.kyc?.profile_data?.online?.['1'],
                 company_details: {},
                 company_owner_details: {},
                 bank_details: {}
