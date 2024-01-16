@@ -279,7 +279,7 @@ const KYC: React.FC = () => {
       }
     } else {
       const screenValidationError = formErrorState?.online?.sections;
-      const onlineValidator = [];
+      onlineValidator = [];
 
       for (const key of Object.keys(screenValidationError)) {
         let validationErrors = await validateScreen(
@@ -293,6 +293,7 @@ const KYC: React.FC = () => {
         }
       }
     }
+    console.log('onlineValidatord', onlineValidator);
 
     let validationError = await validateAttachment(
       formState.attachment,
@@ -471,6 +472,7 @@ const KYC: React.FC = () => {
               onClick={() =>
                 handleTermAndCondition(!formState.termAndCondition)
               }
+              checked={formState.termAndCondition}
               className={
                 formErrorState.termAndCondition ? '!border-solitaireError' : ''
               }

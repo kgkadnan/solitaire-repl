@@ -58,5 +58,5 @@ export const {
   useGetKycDetailQuery,
   useSubmitKYCMutation,
   useResetKycMutation,
-  useGetKycPdfQuery
+  useLazyGetKycPdfQuery
 } = kycApi;

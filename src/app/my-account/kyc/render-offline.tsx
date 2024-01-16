@@ -146,6 +146,7 @@ const RenderOffline = ({
         <div className="pr-3 flex items-center">
           <Checkbox
             onClick={() => handleTermAndCondition(!formState.termAndCondition)}
+            checked={formState.termAndCondition}
             className={
               formErrorState.termAndCondition ? '!border-solitaireError' : ''
             }
