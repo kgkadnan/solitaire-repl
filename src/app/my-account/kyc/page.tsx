@@ -211,9 +211,60 @@ const KYC: React.FC = () => {
     return stepperFinalStatus;
   };
 
+  const kycSubmitted = async () => {
+    setIsDialogOpen(false);
+    await submitKYC(buildFormData())
+      .unwrap()
+      .then(() => {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <div className="flex gap-[10px] flex-col items-center justify-center">
+            <div className="flex">
+              <Image src={confirmImage} alt="Error Image" />
+            </div>
+            <div className="text-[16px] text-solitaireTertiary">
+              <p>Your KYC has been submitted for approval</p>
+            </div>
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.myaccount.kyc.browseApp')}
+              handleClick={() => router.push('/')}
+              displayButtonAllStyle={{
+                displayButtonStyle:
+                  'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
+              }}
+            />
+          </div>
+        );
+      })
+      .catch(e => {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <div className="w-full flex flex-col gap-4 items-center">
+            {' '}
+            <div className=" flex justify-center align-middle items-center">
+              <Image src={errorImage} alt="errorImage" />
+              <p>Error!</p>
+            </div>
+            <div className="text-center text-solitaireTertiary h-[4vh]">
+              {e.data.message}
+            </div>
+            <CustomDisplayButton
+              displayButtonLabel={ManageLocales('app.myaccount.kyc.okay')}
+              displayButtonAllStyle={{
+                displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
+                displayLabelStyle:
+                  'text-solitaireTertiary text-[16px] font-medium'
+              }}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          </div>
+        );
+      });
+  };
+
   const handleSubmit = async () => {
-    let hasError = false;
     let manualValidationError: any = [];
+    let onlineValidator: any = [];
     if (formState.country === 'Other' || selectedKYCOption === 'offline') {
       manualValidationError = await validateManualAttachment(formState.offline);
       if (Array.isArray(manualValidationError)) {
@@ -228,9 +279,19 @@ const KYC: React.FC = () => {
       }
     } else {
       const screenValidationError = formErrorState?.online?.sections;
-      let data = Object.values(screenValidationError).map(screen => screen);
+      onlineValidator = [];
 
-      hasError = data.some((obj: any) => Object.keys(obj).length > 0);
+      for (const key of Object.keys(screenValidationError)) {
+        let validationErrors = await validateScreen(
+          formState.online.sections[key],
+          key,
+          formState.country
+        );
+        // If validationErrors is an array, add its elements to onlineValidator
+        if (Array.isArray(validationErrors)) {
+          onlineValidator.push(...validationErrors);
+        }
+      }
     }
 
     let validationError = await validateAttachment(
@@ -251,7 +312,7 @@ const KYC: React.FC = () => {
 
     if (
       !validationError?.length &&
-      !hasError &&
+      !onlineValidator.length &&
       !manualValidationError.length
     ) {
       if (!formState.termAndCondition) {
@@ -262,56 +323,43 @@ const KYC: React.FC = () => {
           })
         );
       } else {
-        await submitKYC(buildFormData())
-          .unwrap()
-          .then(() => {
-            setIsDialogOpen(true);
-            setDialogContent(
-              <div className="flex gap-[10px] flex-col items-center justify-center">
-                <div className="flex">
-                  <Image src={confirmImage} alt="Error Image" />
-                </div>
-                <div className="text-[16px] text-solitaireTertiary">
-                  <p>Your KYC has been submitted for approval</p>
-                </div>
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales(
-                    'app.myaccount.kyc.browseApp'
-                  )}
-                  handleClick={() => router.push('/')}
-                  displayButtonAllStyle={{
-                    displayButtonStyle:
-                      'bg-solitaireQuaternary w-[150px] h-[35px] text-solitaireTertiary text-[14px] flex justify-center item-center'
-                  }}
-                />
-              </div>
-            );
-          })
-          .catch(e => {
-            setIsDialogOpen(true);
-            setDialogContent(
-              <div className="w-full flex flex-col gap-4 items-center">
-                {' '}
-                <div className=" flex justify-center align-middle items-center">
-                  <Image src={errorImage} alt="errorImage" />
-                  <p>Error!</p>
-                </div>
-                <div className="text-center text-solitaireTertiary h-[4vh]">
-                  {e.data.message}
-                </div>
-                <CustomDisplayButton
-                  displayButtonLabel={ManageLocales('app.myaccount.kyc.okay')}
-                  displayButtonAllStyle={{
-                    displayButtonStyle:
-                      'bg-solitaireQuaternary w-[150px] h-[36px]',
-                    displayLabelStyle:
-                      'text-solitaireTertiary text-[16px] font-medium'
-                  }}
-                  handleClick={() => setIsDialogOpen(false)}
-                />
-              </div>
-            );
-          });
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="text-center align-middle text-solitaireTertiary text-[20px] font-semibold">
+              Are you sure?
+            </div>
+            <div className="text-center align-middle text-solitaireTertiary text-[16px]">
+              Please review all the information you have entered before
+              submitting the form!
+            </div>
+            <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+              <CustomDisplayButton
+                displayButtonLabel="No"
+                handleClick={() => {
+                  setIsDialogOpen(false);
+                  setDialogContent('');
+                }}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-[14px] font-medium'
+                }}
+              />
+              <CustomDisplayButton
+                displayButtonLabel="Yes"
+                handleClick={kycSubmitted}
+                displayButtonAllStyle={{
+                  displayButtonStyle:
+                    'bg-solitaireQuaternary w-[150px] h-[35px]',
+                  displayLabelStyle:
+                    'text-solitaireTertiary text-[14px] font-medium'
+                }}
+              />
+            </div>
+          </>
+        );
       }
     }
   };
@@ -423,6 +471,7 @@ const KYC: React.FC = () => {
               onClick={() =>
                 handleTermAndCondition(!formState.termAndCondition)
               }
+              checked={formState.termAndCondition}
               className={
                 formErrorState.termAndCondition ? '!border-solitaireError' : ''
               }
@@ -649,13 +698,6 @@ const KYC: React.FC = () => {
             updateFormState({
               name: 'formState.country',
               value: kycDetails?.kyc?.profile_data?.country
-            })
-          );
-
-          dispatch(
-            updateFormState({
-              name: 'formState.offline',
-              value: kycDetails?.kyc?.profile_data?.offline ?? {}
             })
           );
 

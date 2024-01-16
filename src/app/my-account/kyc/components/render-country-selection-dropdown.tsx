@@ -55,7 +55,7 @@ export const CountrySelectionDropdown = ({
     );
     dispatch(
       updateFormState({
-        name: 'formErrorState.offline',
+        name: 'formErrorState.termAndCondition',
         value: false
       })
     );

@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-
+import React, { useEffect } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import Image from 'next/image';
 import downloadOutlineShadow from '@public/assets/icons/download-outline-shadow.svg';
@@ -16,20 +15,11 @@ import errorImage from '@public/assets/icons/error.svg';
 import ellipsisVertical from '@public/assets/icons/ellipsis-vertical.svg';
 import { handlePreview } from '@/app/my-account/kyc/helper/handle-file-preview';
 import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
-import { MAX_FILE_SIZE } from '@/constants/business-logic';
+import { ALLOWED_FILE_TYPES, MAX_FILE_SIZE } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { IModalSetState } from '@/app/search/result/result-interface';
-import { useGetKycPdfQuery } from '@/features/api/kyc';
+import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
-
-const ALLOWED_FILE_TYPES = {
-  'application/msword': ['.doc'],
-  'application/vnd.openxmlformats-officedocument.wordprocessingml.document': [
-    '.docx'
-  ],
-  'image/jpeg': [],
-  'application/pdf': []
-};
 
 interface IDownloadAndUpload {
   formState: any;
@@ -47,12 +37,8 @@ export const DownloadAndUpload = ({
   selectedCountry
 }: IDownloadAndUpload) => {
   const { setIsModalOpen, setModalContent } = modalSetState;
-  const [getPDF, setGetPDF] = useState(false);
 
-  const { data } = useGetKycPdfQuery(
-    { country: selectedCountry },
-    { skip: !getPDF }
-  );
+  const [fetchTrigger] = useLazyGetKycPdfQuery({});
 
   const dispatch = useAppDispatch();
   const onDrop = (acceptedFiles: any) => {
@@ -89,26 +75,29 @@ export const DownloadAndUpload = ({
     }
   }, [fileRejections]);
 
-  useEffect(() => {
-    if (data && data?.url) {
-      const link = document.createElement('a');
-      link.href = data.url;
-      link.download = selectedCountry || 'downloaded_file';
-      window.open(link.href, '_blank');
-      setGetPDF(false);
-    }
-  }, [data?.url]);
-
   let uploadProgress = formState?.offline?.upload_form?.uploadProgress ?? '';
   let isFileUploaded = formState?.offline?.upload_form?.isFileUploaded ?? '';
   let selectedFile = formState?.offline?.upload_form?.selectedFile ?? '';
   let error = formErrorState?.offline?.upload_form ?? '';
 
+  const handleDownloadFile = () => {
+    fetchTrigger({ country: selectedCountry }).then(async res => {
+      if (res.data && res.data?.url) {
+        const link = document.createElement('a');
+        link.href = res.data?.url;
+        link.download = selectedCountry || 'downloaded_file';
+        window.open(link.href, '_blank');
+      }
+    });
+  };
+
   return (
     <>
       <div
         className="w-[45%] bg-solitaireSecondary h-[12vh] rounded-[10px] flex flex-col justify-evenly items-center p-3 cursor-pointer"
-        onClick={() => setGetPDF(true)}
+        onClick={() => {
+          handleDownloadFile();
+        }}
       >
         <Image
           src={downloadOutlineShadow}
@@ -137,12 +126,15 @@ export const DownloadAndUpload = ({
         ) : (
           <Image src={errorImage} alt="errorImage" width={30} />
         )}
-        <h1 className={`${error.length ? styles.errorlabel : styles.label}`}>
-          {ManageLocales('app.myProfile.kyc.upload')}
-        </h1>
+
+        {uploadProgress <= 0 && (
+          <h1 className={`${error.length ? styles.errorlabel : styles.label}`}>
+            {ManageLocales('app.myProfile.kyc.upload')}
+          </h1>
+        )}
 
         {selectedFile.length > 0 && uploadProgress === 0 && isFileUploaded && (
-          <div className="flex items-center gap-2 justify-evenly w-full">
+          <div className="flex items-center gap-2 justify-evenly w-full h-[3vh]">
             {selectedFile.map((file: any) => (
               <div key={file.path} className="flex items-center gap-2">
                 <Image

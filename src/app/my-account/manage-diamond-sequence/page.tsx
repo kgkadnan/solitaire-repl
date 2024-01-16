@@ -56,8 +56,6 @@ delay of 3000 milliseconds (3 seconds). */
   //   }
   // }, [isDialogOpen]);
 
-  // const [updateSequence, setUpdateSequence] = useState<ITableColumn[]>([]);
-
   /**
    * The `sortList` function takes an array of `ITableColumn` objects and returns a new array sorted based
    * on the `sequence` property of each object.
@@ -227,7 +225,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
                   'app.myProfile.ManageListingSequence.ManageableEntities'
                 )}{' '}
               </h1>
-              <div className="flex-grow min-h-[52vh]">
+              <div className="flex-grow min-h-[52vh] w-[100%]">
                 <ListManager
                   items={manageableListings}
                   direction="horizontal"

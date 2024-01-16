@@ -5,6 +5,8 @@ export const ALLOWED_FILE_TYPES = {
     '.docx'
   ],
   'image/jpeg': [],
+  'image/jpg': [],
+  'image/png': [],
   'application/pdf': []
 };
 
