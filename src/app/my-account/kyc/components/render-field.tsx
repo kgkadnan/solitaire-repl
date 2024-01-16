@@ -161,7 +161,7 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
               onChange={e =>
                 handleInputChange(
                   `formState.online.sections[${screenName}][${formKey[1]}]`,
-                  e.target.value,
+                  e.target.value.slice(0, 15),
                   dispatch,
                   screenName,
                   formKey[1],
