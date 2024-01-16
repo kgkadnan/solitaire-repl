@@ -293,7 +293,6 @@ const KYC: React.FC = () => {
         }
       }
     }
-    console.log('onlineValidatord', onlineValidator);
 
     let validationError = await validateAttachment(
       formState.attachment,
