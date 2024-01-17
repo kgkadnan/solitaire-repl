@@ -1,12 +1,10 @@
 'use client';
 
 import CustomDataTable from '@/components/common/data-table';
-
 import React from 'react';
-import styles from './memo.module.scss';
+import styles from '../memo/memo.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
-
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import {
