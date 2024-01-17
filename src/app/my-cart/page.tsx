@@ -29,6 +29,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomModal } from '@/components/common/modal';
 import { SELECT_STONES } from '@/constants/error-messages/cart';
+import HoldStones from './hold/hold';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
@@ -361,9 +362,9 @@ function MyCart() {
               data={data}
             />
           ) : headerPath === 'hold' ? (
-            <MemoOut
+            <HoldStones
               tableColumns={tableColumns}
-              memoRows={holdRows}
+              holdRows={holdRows}
               downloadExcelFunction={downloadExcelFunction}
               errorSetState={errorSetState}
               errorState={errorState}
