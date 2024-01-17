@@ -7,9 +7,10 @@ import styles from './my-cart.module.scss';
 import CustomHeader from '@/components/common/header';
 import { useGetCartQuery } from '@/features/api/cart';
 import {
-  ACTIVE_STATUS,
-  MEMO_OUT_STATUS,
-  SOLD_OUT_STATUS
+  AVAILABLE_STATUS,
+  HOLD_STATUS,
+  MEMO_STATUS,
+  SOLD_STATUS
 } from '@/constants/business-logic';
 import { IProductItem } from './interface';
 import MemoOut from './memo/memo';
@@ -36,11 +37,13 @@ function MyCart() {
   const computeRouteAndComponentRenderer = () => {
     if (subRoute === `memo`) return 'memo';
     else if (subRoute === `active`) return 'active';
+    else if (subRoute === `hold`) return 'hold';
     else if (subRoute === 'sold') {
       return 'sold';
     } else if (
       subRoute !== `memo` &&
       subRoute !== `active` &&
+      subRoute !== `hold` &&
       subRoute !== `sold`
     ) {
       return 'no data found';
@@ -54,6 +57,7 @@ function MyCart() {
   const [activeTabCount, setActiveTabCount] = useState(0);
   const [soldCount, setSoldCount] = useState(0);
   const [memoCount, setMemoCount] = useState(0);
+  const [holdCount, setHoldCount] = useState(0);
 
   const [headerPath, setheaderPath] = useState<any>(
     computeRouteAndComponentRenderer()
@@ -64,6 +68,7 @@ function MyCart() {
    * @returns None
    */
   const [memoRows, setMemoRows] = useState([]);
+  const [holdRows, setHoldRows] = useState([]);
 
   const [soldOutRows, setSoldOutRows] = useState([]);
 
@@ -130,6 +135,12 @@ function MyCart() {
       pathName: ManageLocales('app.myCart.memo'),
       path: 'memo',
       count: memoCount
+    },
+    {
+      id: '4',
+      pathName: ManageLocales('app.myCart.hold'),
+      path: 'hold',
+      count: holdCount
     }
   ];
 
@@ -144,7 +155,7 @@ function MyCart() {
         const activeDiamondItems = data?.cart?.items
           ?.filter(
             (item: IProductItem) =>
-              item?.product?.diamond_status === ACTIVE_STATUS
+              item?.product?.diamond_status === AVAILABLE_STATUS
           )
           .map((row: IProductItem) => row?.product);
 
@@ -161,7 +172,7 @@ function MyCart() {
         const soldOutItems = data?.cart?.items
           ?.filter(
             (item: IProductItem) =>
-              item?.product?.diamond_status === SOLD_OUT_STATUS
+              item?.product?.diamond_status === SOLD_STATUS
           )
           .map((row: IProductItem) => row?.product);
 
@@ -172,19 +183,37 @@ function MyCart() {
     updateRows();
   }, [data]);
 
-  // // useEffect to update memo out count when cart data changes
+  // useEffect to update memo out count when cart data changes
   useEffect(() => {
     const updateRows = () => {
       if (data) {
         const memoOutDiamondItems = data?.cart?.items
           ?.filter(
             (item: IProductItem) =>
-              item?.product?.diamond_status === MEMO_OUT_STATUS
+              item?.product?.diamond_status === MEMO_STATUS
           )
           .map((row: IProductItem) => row?.product);
 
         setMemoCount(memoOutDiamondItems?.length);
         setMemoRows(memoOutDiamondItems);
+      }
+    };
+    updateRows();
+  }, [data]);
+
+  // useEffect to update memo out count when cart data changes
+  useEffect(() => {
+    const updateRows = () => {
+      if (data) {
+        const memoOutDiamondItems = data?.cart?.items
+          ?.filter(
+            (item: IProductItem) =>
+              item?.product?.diamond_status === HOLD_STATUS
+          )
+          .map((row: IProductItem) => row?.product);
+
+        setHoldCount(memoOutDiamondItems?.length);
+        setHoldRows(memoOutDiamondItems);
       }
     };
     updateRows();
@@ -330,6 +359,17 @@ function MyCart() {
               modalSetState={modalSetState}
               modalState={modalState}
               data={data}
+            />
+          ) : headerPath === 'hold' ? (
+            <MemoOut
+              tableColumns={tableColumns}
+              memoRows={holdRows}
+              downloadExcelFunction={downloadExcelFunction}
+              errorSetState={errorSetState}
+              errorState={errorState}
+              checkboxState={checkboxState}
+              checkboxSetState={checkboxSetState}
+              modalSetState={modalSetState}
             />
           ) : headerPath === 'no data found' ? (
             <NoDataFound />

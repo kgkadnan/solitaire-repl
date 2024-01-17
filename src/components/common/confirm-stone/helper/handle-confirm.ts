@@ -1,4 +1,5 @@
 import { IProduct } from '@/app/search/result/result-interface';
+import { MEMO_STATUS } from '@/constants/business-logic';
 import { SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
@@ -26,7 +27,9 @@ export const handleConfirmStone = (
     setIsComeFromConfirmStone(true);
   }
   const hasMemoOut = isCheck?.some(id => {
-    return rows.some(row => row.id === id && row.diamond_status === 'MemoOut');
+    return rows.some(
+      row => row.id === id && row.diamond_status === MEMO_STATUS
+    );
   });
 
   if (hasMemoOut) {

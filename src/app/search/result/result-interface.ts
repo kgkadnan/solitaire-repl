@@ -20,7 +20,7 @@ export interface IRows {
   id: string;
   stock_no: string | null;
   is_memo_out: boolean;
-  diamond_status: string | null;
+  diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold';
   discount: number;
   amount: number;
   color: string | null;
@@ -176,7 +176,7 @@ export interface IProduct {
   disclosed_source: string | null;
   is_memo_out: string | null;
   lot_id: string | null;
-  diamond_status: string | null;
+  diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold';
   collection: string | null;
   images:
     | {

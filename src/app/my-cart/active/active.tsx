@@ -11,7 +11,7 @@ import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomSlider } from '@/components/common/slider';
 import ConfirmStone from '@/components/common/confirm-stone';
-import { ACTIVE_STATUS } from '@/constants/business-logic';
+import { AVAILABLE_STATUS } from '@/constants/business-logic';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 
@@ -96,14 +96,12 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   useEffect(() => {
     const updateRows = () => {
       if (data) {
-        const activeDiamondItems =
-          data?.cart?.items ??
-          []
-            .filter(
-              (item: IProductItem) =>
-                item?.product?.diamond_status === ACTIVE_STATUS
-            )
-            .map((row: IProductItem) => row?.product);
+        const activeDiamondItems = data?.cart?.items
+          ?.filter(
+            (item: IProductItem) =>
+              item?.product?.diamond_status === AVAILABLE_STATUS
+          )
+          .map((row: IProductItem) => row?.product);
 
         setActiveCartRows(activeDiamondItems);
       }
@@ -149,7 +147,7 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   const deleteStoneHandler = () => {
     setIsPersistDialogOpen(false);
     const activeDiamondItems = data?.cart?.items.filter(
-      (item: IProductItem) => item?.product?.diamond_status === ACTIVE_STATUS
+      (item: IProductItem) => item?.product?.diamond_status === AVAILABLE_STATUS
     );
 
     const itemsId = isCheck.map((id: any) => {

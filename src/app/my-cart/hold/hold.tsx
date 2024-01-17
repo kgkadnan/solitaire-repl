@@ -19,9 +19,9 @@ import {
   ICheckboxState
 } from '@/components/common/checkbox/interface';
 
-interface IMemoOut {
+interface IHoldProps {
   tableColumns: any;
-  memoRows: any;
+  holdRows: any;
   downloadExcelFunction: () => void;
   errorSetState: IErrorSetState;
   errorState: IErrorState;
@@ -29,9 +29,9 @@ interface IMemoOut {
   checkboxSetState: ICheckboxSetState;
   modalSetState: IModalSetState;
 }
-const MemoOut: React.FC<IMemoOut> = ({
+const HoldStones: React.FC<IHoldProps> = ({
   tableColumns,
-  memoRows,
+  holdRows,
   downloadExcelFunction,
   errorSetState,
   errorState,
@@ -85,7 +85,7 @@ const MemoOut: React.FC<IMemoOut> = ({
           isCheck,
           setIsError,
           setErrorText,
-          activeCartRows: memoRows
+          activeCartRows: holdRows
         })
     },
 
@@ -99,9 +99,9 @@ const MemoOut: React.FC<IMemoOut> = ({
 
   return (
     <div className="mt-[21px]">
-      {memoRows.length > 0 ? (
+      {holdRows.length > 0 ? (
         <CustomDataTable
-          tableRows={memoRows}
+          tableRows={holdRows}
           tableColumns={tableColumns}
           checkboxData={checkboxData}
           mainTableStyle={styles.tableWrapper}
@@ -130,4 +130,4 @@ const MemoOut: React.FC<IMemoOut> = ({
   );
 };
 
-export default MemoOut;
+export default HoldStones;

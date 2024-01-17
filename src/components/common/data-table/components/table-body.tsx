@@ -11,7 +11,7 @@ import { CustomCheckBox } from '../../checkbox';
 import Image from 'next/image';
 import { ITbodyProps } from '../interface';
 import styles from '../custom-table.module.scss';
-import { GIA_LINK, MEMO_OUT_STATUS } from '@/constants/business-logic';
+import { GIA_LINK, MEMO_STATUS } from '@/constants/business-logic';
 import { handleCheckboxClick } from '../../checkbox/helper/handle-checkbox-click';
 import { useDataTableBodyStateManagement } from '../hooks/data-table-body-state-management';
 import { DetailImageSlider } from './detail-image-slider';
@@ -57,7 +57,7 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   /* The above code is defining a function called `addToCart`. */
   const addToCart = () => {
-    if (sliderData[0].diamond_status === MEMO_OUT_STATUS) {
+    if (sliderData[0].diamond_status === MEMO_STATUS) {
       logger.info('Memoout');
     } else if (sliderData[0]) {
       addCart({
