@@ -13,7 +13,6 @@ import { useAppDispatch } from '@/hooks/hook';
 import FileAttachments from '@/components/common/file-attachment';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import Image from 'next/image';
-import errorImage from '@public/assets/icons/error.svg';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
@@ -77,7 +76,7 @@ const KYC: React.FC = () => {
   const [userData, setUserData] = useState<any>({});
   const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
-  const [currentState, setCurrentState] = useState('country_selection');
+  const [currentState, setCurrentState] = useState('');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
 
@@ -103,12 +102,12 @@ const KYC: React.FC = () => {
     if (storedToken) setToken(JSON.parse(storedToken));
     setUserData(authData);
   }, [authData]);
-
+  console.log('formState', formState);
   const buildFormData = () => {
     const formData = new FormData();
 
     if (formState.country === 'Other' || selectedKYCOption === 'offline') {
-      formState.offline?.upload_form?.selectedFile.forEach((file: any) => {
+      formState.attachment?.upload_form?.selectedFile.forEach((file: any) => {
         formData.append('upload_form', file);
       });
     }
@@ -239,25 +238,10 @@ const KYC: React.FC = () => {
       .catch(e => {
         setIsDialogOpen(true);
         setDialogContent(
-          <div className="w-full flex flex-col gap-4 items-center">
-            {' '}
-            <div className=" flex justify-center align-middle items-center">
-              <Image src={errorImage} alt="errorImage" />
-              <p>Error!</p>
-            </div>
-            <div className="text-center text-solitaireTertiary h-[4vh]">
-              {e.data.message}
-            </div>
-            <CustomDisplayButton
-              displayButtonLabel={ManageLocales('app.myaccount.kyc.okay')}
-              displayButtonAllStyle={{
-                displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
-                displayLabelStyle:
-                  'text-solitaireTertiary text-[16px] font-medium'
-              }}
-              handleClick={() => setIsDialogOpen(false)}
-            />
-          </div>
+          <ErrorModel
+            content={e?.data?.message}
+            handleClick={() => setIsDialogOpen(false)}
+          />
         );
       });
   };
@@ -266,12 +250,14 @@ const KYC: React.FC = () => {
     let manualValidationError: any = [];
     let onlineValidator: any = [];
     if (formState.country === 'Other' || selectedKYCOption === 'offline') {
-      manualValidationError = await validateManualAttachment(formState.offline);
+      manualValidationError = await validateManualAttachment(
+        formState.attachment
+      );
       if (Array.isArray(manualValidationError)) {
         manualValidationError.forEach(error => {
           dispatch(
             updateFormState({
-              name: `formErrorState.offline.${[error.property]}`,
+              name: `formErrorState.attachment.${[error.property]}`,
               value: Object.values(error.constraints ?? {})[0] || ''
             })
           );
@@ -383,8 +369,57 @@ const KYC: React.FC = () => {
     setActiveStep(prevStep => prevStep - 1);
   };
 
-  let stepperData: IStepper[] = data?.online
-    ? data.online.map((screen: any, index: number) => ({
+  const getStatus = async (screen: any, index: number) => {
+    let validationErrors = await validateScreen(
+      formState.online.sections[screen.screenName],
+      screen.screenName,
+      formState.country
+    );
+
+    const screenValidationError =
+      formErrorState?.online?.sections[screen.screenName];
+
+    if (index === activeStep) {
+      return StepperStatus.INPROGRESS;
+    } else if (!validationErrors.length) {
+      return StepperStatus.COMPLETED;
+    } else if (
+      activeStep < index &&
+      screenValidationError &&
+      !Object.keys(screenValidationError).length
+    ) {
+      return StepperStatus.NOT_STARTED;
+    } else if (validationErrors.length) {
+      if (Array.isArray(validationErrors)) {
+        validationErrors.forEach(error => {
+          dispatch(
+            updateFormState({
+              name: `formErrorState.online.sections.${[screen.screenName]}.${[
+                error.property
+              ]}`,
+              value: Object.values(error.constraints ?? {})[0] || ''
+            })
+          );
+        });
+      } else {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.online.sections.${[screen.screenName]}`,
+            value: {}
+          })
+        );
+      }
+      return StepperStatus.REJECTED;
+    }
+  };
+
+  const [stepperData, setStepperData] = useState<IStepper[]>([]);
+
+  const initializeStepperData = async () => {
+    let tempStepperData = [];
+
+    if (data?.online) {
+      const promises = data.online.map(async (screen: any, index: number) => ({
         label: `${screen.screen}`,
         data: (
           <RenderOnlineForm
@@ -394,118 +429,136 @@ const KYC: React.FC = () => {
           />
         ),
         screenName: `${screen.screenName}`,
+        status: await getStatus(screen, index)
+      }));
 
-        status:
-          index === activeStep
-            ? StepperStatus.INPROGRESS
-            : StepperStatus.NOT_STARTED
-      }))
-    : [];
+      tempStepperData = await Promise.all(promises);
+    }
 
-  stepperData.push({
-    label: 'Attachment',
-    data: (
-      <>
-        <div className="flex items-center mt-[30px] mb-[30px] ">
-          <Image src={HandIcon} alt="Backhand image" />
-          <h3 className="ml-[10px] text-[18px] text-solitaireTertiary">
-            Attachments
-          </h3>
-        </div>
-        <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
-          {data?.attachment &&
-            data.attachment.map((attch: any) => {
-              return attch.key && Object?.keys(attch.key).length ? (
-                <div key={attch.key} className="w-[45%]">
-                  <h1 className="text-solitaireTertiary py-3 capitalize ">
-                    {attch.key}
-                  </h1>
-                  <div className="flex flex-col gap-[20px]">
-                    {attch.value.map(
-                      ({
-                        id,
-                        label,
-                        isRequired,
-                        formKey,
-                        maxFile,
-                        minFile
-                      }: any) => (
-                        <FileAttachments
-                          key={id}
-                          lable={label}
-                          formKey={formKey}
-                          isRequired={isRequired}
-                          formErrorState={formErrorState}
-                          formState={formState}
-                          modalSetState={modalSetState}
-                          modalState={modalState}
-                          maxFile={maxFile}
-                          minFile={minFile}
-                        />
-                      )
-                    )}
+    // Handle the Attachment step
+    const attachmentStep = {
+      label: 'Attachment',
+      data: (
+        <>
+          <div className="flex items-center mt-[30px] mb-[30px] ">
+            <Image src={HandIcon} alt="Backhand image" />
+            <h3 className="ml-[10px] text-[18px] text-solitaireTertiary">
+              Attachments
+            </h3>
+          </div>
+          <div className="pb-5 max-h-[800px] border-b border-solitaireSenary  flex flex-wrap flex-col gap-[20px] content-between">
+            {data?.attachment &&
+              data.attachment.map((attch: any) => {
+                return attch.key && Object?.keys(attch.key).length ? (
+                  <div key={attch.key} className="w-[45%]">
+                    <h1 className="text-solitaireTertiary py-3 capitalize ">
+                      {attch.key}
+                    </h1>
+                    <div className="flex flex-col gap-[20px]">
+                      {attch.value.map(
+                        ({
+                          id,
+                          label,
+                          isRequired,
+                          formKey,
+                          maxFile,
+                          minFile
+                        }: any) => (
+                          <FileAttachments
+                            key={id}
+                            lable={label}
+                            formKey={formKey}
+                            isRequired={isRequired}
+                            formErrorState={formErrorState}
+                            formState={formState}
+                            modalSetState={modalSetState}
+                            modalState={modalState}
+                            maxFile={maxFile}
+                            minFile={minFile}
+                          />
+                        )
+                      )}
+                    </div>
                   </div>
-                </div>
-              ) : (
-                <div key={attch.id} className=" w-[45%]">
-                  <FileAttachments
-                    key={attch.id}
-                    lable={attch.label}
-                    formKey={attch.formKey}
-                    isRequired={attch.isRequired}
-                    formErrorState={formErrorState}
-                    formState={formState}
-                    modalSetState={modalSetState}
-                    modalState={modalState}
-                    maxFile={attch.maxFile}
-                    minFile={attch.minFile}
-                  />
-                </div>
-              );
-            })}
-        </div>
-        <hr className="w-[50%]" />
-        <div className="flex py-6 items-center justify-center">
-          <div className="pr-3 flex items-center">
-            <Checkbox
-              onClick={() =>
-                handleTermAndCondition(!formState.termAndCondition)
-              }
-              checked={formState.termAndCondition}
-              className={
-                formErrorState.termAndCondition ? '!border-solitaireError' : ''
-              }
-            />
+                ) : (
+                  <div key={attch.id} className=" w-[45%]">
+                    <FileAttachments
+                      key={attch.id}
+                      lable={attch.label}
+                      formKey={attch.formKey}
+                      isRequired={attch.isRequired}
+                      formErrorState={formErrorState}
+                      formState={formState}
+                      modalSetState={modalSetState}
+                      modalState={modalState}
+                      maxFile={attch.maxFile}
+                      minFile={attch.minFile}
+                    />
+                  </div>
+                );
+              })}
           </div>
-          <div
-            className={`flex gap-1 ${
-              formErrorState.termAndCondition
-                ? 'text-solitaireError'
-                : 'text-solitaireTertiary'
-            }`}
-          >
-            <p>I hereby agree to</p>
-            <a
-              href="https://kgk.live/terms-condition"
-              className={`border-b ${
+          <hr className="w-[50%]" />
+          <div className="flex py-6 items-center justify-center">
+            <div className="pr-3 flex items-center">
+              <Checkbox
+                onClick={() =>
+                  handleTermAndCondition(!formState.termAndCondition)
+                }
+                checked={formState.termAndCondition}
+                className={
+                  formErrorState.termAndCondition
+                    ? '!border-solitaireError'
+                    : ''
+                }
+              />
+            </div>
+            <div
+              className={`flex gap-1 ${
                 formErrorState.termAndCondition
-                  ? 'border-solitaireError '
-                  : 'border-solitaireSenary'
-              } `}
-              target="_blank"
+                  ? 'text-solitaireError'
+                  : 'text-solitaireTertiary'
+              }`}
             >
-              terms and conditions
-            </a>
+              <p
+                className="cursor-pointer"
+                onClick={() =>
+                  handleTermAndCondition(!formState.termAndCondition)
+                }
+              >
+                I hereby agree to
+              </p>
+              <a
+                href="https://kgk.live/terms-condition"
+                className={`border-b ${
+                  formErrorState.termAndCondition
+                    ? 'border-solitaireError '
+                    : 'border-solitaireSenary'
+                } `}
+                target="_blank"
+              >
+                terms and conditions
+              </a>
+            </div>
           </div>
-        </div>
-      </>
-    ),
-    status:
-      stepperData.length === activeStep
-        ? StepperStatus.INPROGRESS
-        : StepperStatus.NOT_STARTED,
-    screenName: 'attachment'
-  });
+        </>
+      ),
+      status:
+        tempStepperData.length === activeStep
+          ? StepperStatus.INPROGRESS
+          : StepperStatus.NOT_STARTED,
+      screenName: 'attachment'
+    };
+
+    tempStepperData.push(attachmentStep);
+    setStepperData(tempStepperData);
+  };
+
+  useEffect(() => {
+    if (selectedKYCOption === 'online') {
+      initializeStepperData();
+    }
+  }, [data, formState, formErrorState, activeStep, selectedKYCOption]);
 
   const handleConfirmRestartKyc = () => {
     resetKyc({})
@@ -514,6 +567,7 @@ const KYC: React.FC = () => {
           setCurrentState('country_selection');
           setSelectedCountry('');
           setSelectedKYCOption('');
+          setActiveStep(0);
           dispatch(
             updateFormState({
               name: 'formState.country',
@@ -528,7 +582,7 @@ const KYC: React.FC = () => {
                   res.data.data?.kyc?.profile_data?.online?.['1'],
                 company_details: {},
                 company_owner_details: {},
-                bank_details: {}
+                banking_details: {}
               }
             })
           );
@@ -539,7 +593,7 @@ const KYC: React.FC = () => {
                 personal_details: {},
                 company_details: {},
                 company_owner_details: {},
-                bank_details: {}
+                banking_details: {}
               }
             })
           );
@@ -589,9 +643,29 @@ const KYC: React.FC = () => {
     );
   };
 
+  function findfirstNonFilledScreens(data: any) {
+    const filledScreens = Object.keys(data).map(Number);
+    const maxScreen = Math.max(...filledScreens);
+
+    const nonFilledScreens = [];
+
+    for (let i = 1; i <= maxScreen; i++) {
+      if (!filledScreens.includes(i)) {
+        nonFilledScreens.push(i);
+      }
+    }
+
+    if (nonFilledScreens.length) {
+      return nonFilledScreens;
+    } else {
+      return [maxScreen + 1];
+    }
+  }
+
   useEffect(() => {
     if (kycDetails) {
       userData && localStorage.setItem('user', JSON.stringify(userData));
+
       switch (userData?.customer?.kyc?.status) {
         case kycStatus.INPROGRESS:
           if (
@@ -607,15 +681,12 @@ const KYC: React.FC = () => {
 
             const onlineData = online || {};
 
-            const filledScreens = Object.keys(onlineData)
-              .map(key => parseInt(key, 10))
-              .filter(num => !isNaN(num));
+            let firstNonFilledScreens =
+              findfirstNonFilledScreens(onlineData)[0] - 1;
 
-            const lastFilledScreen = Math.max(...filledScreens);
-
-            if (lastFilledScreen > 0) {
+            if (firstNonFilledScreens > 0) {
               setCurrentState('online');
-              setActiveStep(lastFilledScreen - 1);
+              setActiveStep(firstNonFilledScreens);
 
               offline
                 ? setSelectedKYCOption('online')
@@ -658,7 +729,10 @@ const KYC: React.FC = () => {
                 </>
               );
             }
+          } else {
+            setCurrentState('country_selection');
           }
+
           let sectionKeys: string[] =
             kycDetails?.kyc?.profile_data?.country === 'India'
               ? [
@@ -787,11 +861,11 @@ const KYC: React.FC = () => {
           setState={setActiveStep}
           prevStep={handlePrevStep}
           nextStep={handleNextStep}
-          formState={formState}
           setIsDialogOpen={setIsDialogOpen}
           isDialogOpen={isDialogOpen}
           dialogContent={dialogContent}
           handleSubmit={handleSubmit}
+          setStepperData={setStepperData}
         />
       );
 

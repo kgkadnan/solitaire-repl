@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, useEffect, useState } from 'react';
+import React, { ReactNode } from 'react';
 import styles from './stepper.module.scss'; // Import your CSS module
 import { CustomFooter } from '../footer';
 import { StepperStatus } from '@/constants/enums/stepper-status';
@@ -21,11 +21,11 @@ interface IStepperProps {
   nextStep: (_name: string, _activeID: number, _saveStep?: boolean) => void;
   prevLabel?: string;
   nextLabel?: string;
-  formState: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   isDialogOpen: boolean;
   dialogContent: any;
   handleSubmit?: () => void;
+  setStepperData?: any;
 }
 
 const Stepper: React.FC<IStepperProps> = ({
@@ -36,73 +36,12 @@ const Stepper: React.FC<IStepperProps> = ({
   nextStep,
   prevLabel = 'Back',
   nextLabel = 'Save and Next',
-  formState,
+  setStepperData,
   setIsDialogOpen,
   isDialogOpen,
   dialogContent,
   handleSubmit
 }) => {
-  const [stepperData, setStepperData] = useState<IStepper[]>(stepper);
-
-  useEffect(() => {
-    if (stepper.length > 1 && !(stepperData.length > 1)) {
-      setStepperData(stepper);
-    }
-  }, [stepper]);
-  useEffect(() => {
-    const updateStepper = async () => {
-      const updatedStepper = await Promise.all(
-        stepperData.map(async (step, index) => {
-          if (index === state) {
-            // Set the current step to INPROGRESS
-            return { ...step, status: StepperStatus.INPROGRESS };
-          }
-
-          if (index < state) {
-            // && step.status !== StepperStatus.COMPLETED
-            // Only update previous steps if they are not already REJECTED
-            const nextStepStatus: any = await nextStep(
-              stepper[index]?.screenName,
-              index,
-              false
-            );
-            const { validationError: stepperError } = nextStepStatus;
-            const hasError = Array.isArray(stepperError) && stepperError.length;
-
-            return {
-              ...step,
-              status:
-                hasError || typeof stepperError === 'string'
-                  ? StepperStatus.REJECTED
-                  : Object?.keys(
-                      formState.online?.sections?.[stepper[index]?.screenName]
-                    )
-                  ? StepperStatus.COMPLETED
-                  : StepperStatus.REJECTED
-            };
-          } else {
-            // return step ;
-            if (
-              step.status === StepperStatus.REJECTED ||
-              step.status === StepperStatus.INPROGRESS
-            ) {
-              return { ...step, status: StepperStatus.NOT_STARTED };
-            } else {
-              return step;
-            }
-            // For steps after the current step, set them to NOT_STARTED or another appropriate status
-          }
-        })
-      );
-
-      // Update the state with the new array
-      stepper.length > 1 &&
-        !(stepperData.length > 1) &&
-        setStepperData(updatedStepper);
-    };
-    updateStepper();
-  }, [state]);
-
   const footerButtonData = (state: number) => {
     return [
       {
@@ -121,7 +60,7 @@ const Stepper: React.FC<IStepperProps> = ({
             handleSubmit!();
           } else {
             const updatedStepper = await Promise.all(
-              stepperData.map(async (step, index) => {
+              stepper.map(async (step, index) => {
                 if (index === state) {
                   let nextStepStatus: any = await nextStep(
                     stepper[state]?.screenName,
@@ -155,55 +94,10 @@ const Stepper: React.FC<IStepperProps> = ({
     ];
   };
 
-  const handleStepperStep = async (activeStep: number) => {
+  const updateStepperStatus = async (activeStep: number) => {
     setState(activeStep);
-    const updatedStepper = await Promise.all(
-      stepperData.map(async (step, index) => {
-        if (index === activeStep) {
-          // Set the current step to INPROGRESS
-          return { ...step, status: StepperStatus.INPROGRESS };
-        }
-
-        if (index < activeStep) {
-          // && step.status !== StepperStatus.COMPLETED
-          // Only update previous steps if they are not already REJECTED
-          const nextStepStatus: any = await nextStep(
-            stepper[index]?.screenName,
-            index,
-            false
-          );
-          const { validationError: stepperError } = nextStepStatus;
-          const hasError = Array.isArray(stepperError) && stepperError.length;
-
-          return {
-            ...step,
-            status:
-              hasError || typeof stepperError === 'string'
-                ? StepperStatus.REJECTED
-                : Object?.keys(
-                    formState.online?.sections?.[stepper[index]?.screenName]
-                  )
-                ? StepperStatus.COMPLETED
-                : StepperStatus.REJECTED
-          };
-        } else {
-          // return step ;
-          if (
-            step.status === StepperStatus.REJECTED ||
-            step.status === StepperStatus.INPROGRESS
-          ) {
-            return { ...step, status: StepperStatus.NOT_STARTED };
-          } else {
-            return step;
-          }
-          // For steps after the current step, set them to NOT_STARTED or another appropriate status
-        }
-      })
-    );
-
-    // Update the state with the new array
-    setStepperData(updatedStepper);
   };
+
   return (
     <>
       <CustomDialog
@@ -213,13 +107,13 @@ const Stepper: React.FC<IStepperProps> = ({
       />
       <div className={styles.stepperContainer}>
         <div className={styles.circularSteps}>
-          {stepperData.length ? (
-            stepperData?.map((step: any, index: number) => (
+          {stepper.length ? (
+            stepper?.map((step: any, index: number) => (
               <>
                 <div
                   className={styles.circularStepsContainer}
                   key={step.screenName}
-                  onClick={() => handleStepperStep(index)}
+                  onClick={() => updateStepperStatus(index)}
                 >
                   <div
                     key={index}

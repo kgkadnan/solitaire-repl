@@ -44,14 +44,14 @@ export const DownloadAndUpload = ({
   const onDrop = (acceptedFiles: any) => {
     handleFileupload({
       acceptedFiles,
-      setUploadProgress: `formState.offline.upload_form.uploadProgress`,
-      setIsFileUploaded: `formState.offline.upload_form.isFileUploaded`,
-      setSelectedFile: `formState.offline.upload_form.selectedFile`,
+      setUploadProgress: `formState.attachment.upload_form.uploadProgress`,
+      setIsFileUploaded: `formState.attachment.upload_form.isFileUploaded`,
+      setSelectedFile: `formState.attachment.upload_form.selectedFile`,
       dispatch
     });
     dispatch(
       updateFormState({
-        name: 'formErrorState.offline.upload_form',
+        name: 'formErrorState.attachment.upload_form',
         value: ''
       })
     );
@@ -68,17 +68,18 @@ export const DownloadAndUpload = ({
     if (fileRejections?.length) {
       dispatch(
         updateFormState({
-          name: `formErrorState.offline.upload_form`,
+          name: `formErrorState.attachment.upload_form`,
           value: fileRejections[0].errors[0].code
         })
       );
     }
   }, [fileRejections]);
 
-  let uploadProgress = formState?.offline?.upload_form?.uploadProgress ?? '';
-  let isFileUploaded = formState?.offline?.upload_form?.isFileUploaded ?? '';
-  let selectedFile = formState?.offline?.upload_form?.selectedFile ?? '';
-  let error = formErrorState?.offline?.upload_form ?? '';
+  let uploadProgress = formState?.attachment.upload_form?.uploadProgress ?? '';
+  let isFileUploaded = formState?.attachment.upload_form?.isFileUploaded ?? '';
+  let selectedFile = formState?.attachment.upload_form?.selectedFile ?? '';
+
+  let error = formErrorState?.attachment?.upload_form ?? '';
 
   const handleDownloadFile = () => {
     fetchTrigger({ country: selectedCountry }).then(async res => {
@@ -190,8 +191,8 @@ export const DownloadAndUpload = ({
                       ),
                       onSelect: () =>
                         handleDeleteAttachment({
-                          // setIsFileUploaded: `formState.offline.upload_form.isFileUploaded`,
-                          setSelectedFile: `formState.offline.upload_form`,
+                          // setIsFileUploaded: `formState.attachment.upload_form.isFileUploaded`,
+                          setSelectedFile: `formState.attachment.upload_form`,
                           dispatch
                         })
                     }

@@ -159,7 +159,12 @@ const RenderOffline = ({
               : 'text-solitaireTertiary'
           }`}
         >
-          <p>I hereby agree to</p>
+          <p
+            className="cursor-pointer"
+            onClick={() => handleTermAndCondition(!formState.termAndCondition)}
+          >
+            I hereby agree to
+          </p>
           <a
             href="https://kgk.live/terms-condition"
             className={`border-b ${
