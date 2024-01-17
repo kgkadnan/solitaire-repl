@@ -39,9 +39,6 @@ const HoldStones: React.FC<IHoldProps> = ({
   modalSetState
 }) => {
   // State variables
-
-  console.log('holdRows', holdRows);
-
   const { isCheck } = checkboxState;
   const { isError, errorText } = errorState;
   const { setIsError, setErrorText } = errorSetState;
