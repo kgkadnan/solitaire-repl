@@ -32,7 +32,11 @@ import {
   MAX_CHARACTER_LIMIT_EXCEEDED,
   RANGE_VALIDATION
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX, PAN_MATCH } from '@/constants/validation-regex/regex';
+import {
+  GST_NUMBER_REGEX,
+  NAME_REGEX,
+  PAN_MATCH
+} from '@/constants/validation-regex/regex';
 import {
   IsString,
   IsNotEmpty,
@@ -149,6 +153,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Number') })
   company_pan_number: string;
 
+  @Matches(GST_NUMBER_REGEX, { message: FIELD_INVALID('GST Number') })
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
   gst_number: string;
 

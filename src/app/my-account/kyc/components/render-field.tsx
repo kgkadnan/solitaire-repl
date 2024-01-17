@@ -159,14 +159,23 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
             <FloatingLabelInput
               label={name}
               onChange={e =>
-                handleInputChange(
-                  `formState.online.sections[${screenName}][${formKey[1]}]`,
-                  e.target.value,
-                  dispatch,
-                  screenName,
-                  formKey[1],
-                  formState
-                )
+                e.target.value.trim().length <= 15
+                  ? handleInputChange(
+                      `formState.online.sections[${screenName}][${formKey[1]}]`,
+                      e.target.value,
+                      dispatch,
+                      screenName,
+                      formKey[1],
+                      formState
+                    )
+                  : dispatch(
+                      updateFormState({
+                        name: `formErrorState.online.sections.${[
+                          screenName
+                        ]}.${[formKey[1]]}`,
+                        value: RANGE_VALIDATION(name, 0, 15)
+                      })
+                    )
               }
               type={inputType}
               name={name}

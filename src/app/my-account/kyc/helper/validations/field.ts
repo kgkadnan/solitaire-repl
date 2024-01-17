@@ -26,7 +26,14 @@ import {
   ULTIMATE_BENEFICIARY_NAME_MANDATORY,
   VAT_NUMBER_MANDATORY
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX, PAN_MATCH } from '@/constants/validation-regex/regex';
+import {
+  ACCOUNT_NUMBER_REGEX,
+  GST_NUMBER_REGEX,
+  IFSC_REGEX,
+  NAME_REGEX,
+  PAN_MATCH,
+  SWIFT_CODE_REGEX
+} from '@/constants/validation-regex/regex';
 import {
   ArrayNotEmpty,
   IsAlphanumeric,
@@ -301,7 +308,7 @@ class ValidationAccountNumberCriteria {
     message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
   })
   @IsString({ message: FIELD_INVALID('Account Number') })
-  @Matches(/^[0-9a-zA-Z]+$/, {
+  @Matches(ACCOUNT_NUMBER_REGEX, {
     message: FIELD_INVALID('Account Number')
   })
   account_number: string;
@@ -326,7 +333,7 @@ class ValidationBankAddressCriteria {
 class ValidationIFSCCriteria {
   @IsString({ message: FIELD_INVALID('IFSC code') })
   @IsNotEmpty({ message: IFSC_CODE_MANDATORY })
-  @Matches(/^[A-Z]{4}0[A-Z0-9]{6}$/, {
+  @Matches(IFSC_REGEX, {
     message: FIELD_INVALID('IFSC code')
   })
   @Length(8, 11, {
@@ -342,7 +349,7 @@ class ValidationIFSCCriteria {
 class ValidationSwitfCriteria {
   @IsString({ message: FIELD_INVALID('Swift code') })
   @IsNotEmpty({ message: SWIFT_CODE_MANDATORY })
-  @Matches(/^[a-zA-Z0-9]+$/, {
+  @Matches(SWIFT_CODE_REGEX, {
     message: FIELD_INVALID('Swift code')
   })
   @Length(8, 11, {
@@ -563,6 +570,9 @@ class ValidationPANCriteria {
 }
 
 class ValidationGSTCriteria {
+  @Matches(GST_NUMBER_REGEX, {
+    message: FIELD_INVALID('GST Number')
+  })
   @IsString({ message: FIELD_INVALID('GST Number') })
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
   @Length(1, 140, { message: RANGE_VALIDATION('GST Number', 1, 140) })

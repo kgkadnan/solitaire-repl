@@ -9,7 +9,12 @@ import {
   RANGE_VALIDATION,
   SWIFT_CODE_MANDATORY
 } from '@/constants/error-messages/kyc';
-import { NAME_REGEX } from '@/constants/validation-regex/regex';
+import {
+  ACCOUNT_NUMBER_REGEX,
+  IFSC_REGEX,
+  NAME_REGEX,
+  SWIFT_CODE_REGEX
+} from '@/constants/validation-regex/regex';
 import {
   IsString,
   IsNotEmpty,
@@ -41,7 +46,7 @@ class BaseBankDetails {
     message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
   })
   @IsString({ message: FIELD_INVALID('Account Number') })
-  @Matches(/^[0-9a-zA-Z]+$/, {
+  @Matches(ACCOUNT_NUMBER_REGEX, {
     message: FIELD_INVALID('Account Number')
   })
   @IsNotEmpty({ message: ACCOUNT_NUMBER_MANDATORY })
@@ -68,7 +73,7 @@ export class IndiaBankDetails extends BaseBankDetails {
 
   @IsString({ message: FIELD_INVALID('IFSC code') })
   @IsNotEmpty({ message: IFSC_CODE_MANDATORY })
-  @Matches(/^[a-zA-Z0-9]+$/, {
+  @Matches(IFSC_REGEX, {
     message: FIELD_INVALID('IFSC code')
   })
   @Length(8, 11, {
@@ -92,7 +97,7 @@ export class IndiaBankDetails extends BaseBankDetails {
 export class UsaBankDetails extends BaseBankDetails {
   @IsString({ message: FIELD_INVALID('Swift code') })
   @IsNotEmpty({ message: SWIFT_CODE_MANDATORY })
-  @Matches(/^[a-zA-Z0-9]+$/, {
+  @Matches(SWIFT_CODE_REGEX, {
     message: FIELD_INVALID('Swift code')
   })
   @Length(8, 11, {
