@@ -86,7 +86,6 @@ const KYC: React.FC = () => {
   const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
-  const [renderComponent, setRenderComponent] = useState('');
   const dispatch = useAppDispatch();
 
   const { data: authData }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
@@ -642,7 +641,7 @@ const KYC: React.FC = () => {
     );
   };
 
-  function findfirstNonFilledScreens(data: any) {
+  function findFirstNonFilledScreens(data: any) {
     const filledScreens = Object.keys(data).map(Number);
     const maxScreen = Math.max(...filledScreens);
 
@@ -681,7 +680,7 @@ const KYC: React.FC = () => {
             const onlineData = online || {};
 
             let firstNonFilledScreens =
-              findfirstNonFilledScreens(onlineData)[0] - 1;
+              findFirstNonFilledScreens(onlineData)[0] - 1;
 
             if (firstNonFilledScreens > 0) {
               setCurrentState('online');
@@ -776,14 +775,14 @@ const KYC: React.FC = () => {
 
           break;
         case kycStatus.PENDING:
-          setRenderComponent(kycStatus.PENDING);
+          setCurrentState(kycStatus.PENDING);
           break;
 
         case kycStatus.APPROVED:
-          setRenderComponent(kycStatus.APPROVED);
+          setCurrentState(kycStatus.APPROVED);
           break;
         case kycStatus.REJECTED:
-          setRenderComponent(kycStatus.REJECTED);
+          setCurrentState(kycStatus.REJECTED);
           break;
       }
     }
@@ -802,24 +801,22 @@ const KYC: React.FC = () => {
 
   switch (currentState) {
     case 'country_selection':
-      switch (renderComponent) {
-        case kycStatus.PENDING:
-          return <KycStatus />;
-        case kycStatus.APPROVED:
-          return 'Welcome to APPROVED KYC page';
-        case kycStatus.REJECTED:
-          return 'Welcome to REJECTED KYC page';
-        default:
-          return (
-            <RenderCountrySelection
-              selectedCountry={selectedCountry}
-              setSelectedCountry={setSelectedCountry}
-              handleSaveAndNext={handleSaveAndNext}
-              errorSetState={errorSetState}
-              errorState={errorState}
-            />
-          );
-      }
+      return (
+        <RenderCountrySelection
+          selectedCountry={selectedCountry}
+          setSelectedCountry={setSelectedCountry}
+          handleSaveAndNext={handleSaveAndNext}
+          errorSetState={errorSetState}
+          errorState={errorState}
+        />
+      );
+
+    case kycStatus.PENDING:
+      return <KycStatus />;
+    case kycStatus.APPROVED:
+      return 'Welcome to APPROVED KYC page';
+    case kycStatus.REJECTED:
+      return 'Welcome to REJECTED KYC page';
 
     case 'choice_for_filling_kyc':
       // Render the component for 'choice_for_filling_kyc'
