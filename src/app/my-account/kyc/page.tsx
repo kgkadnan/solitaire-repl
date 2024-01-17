@@ -102,7 +102,6 @@ const KYC: React.FC = () => {
     if (storedToken) setToken(JSON.parse(storedToken));
     setUserData(authData);
   }, [authData]);
-  console.log('formState', formState);
   const buildFormData = () => {
     const formData = new FormData();
 
