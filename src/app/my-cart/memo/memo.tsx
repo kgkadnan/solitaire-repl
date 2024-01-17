@@ -99,7 +99,7 @@ const MemoOut: React.FC<IMemoOut> = ({
 
   return (
     <div className="mt-[21px]">
-      {memoRows.length > 0 ? (
+      {memoRows?.length > 0 ? (
         <CustomDataTable
           tableRows={memoRows}
           tableColumns={tableColumns}

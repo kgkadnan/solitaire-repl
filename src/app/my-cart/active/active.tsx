@@ -281,7 +281,7 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
         onOpenChange={onOpenChange}
       />
 
-      {activeCartRows.length > 0 ? (
+      {activeCartRows?.length > 0 ? (
         <CustomDataTable
           tableRows={activeCartRows}
           tableColumns={tableColumns}

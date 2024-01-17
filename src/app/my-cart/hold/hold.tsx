@@ -99,7 +99,7 @@ const HoldStones: React.FC<IHoldProps> = ({
 
   return (
     <div className="mt-[21px]">
-      {holdRows.length > 0 ? (
+      {holdRows?.length > 0 ? (
         <CustomDataTable
           tableRows={holdRows}
           tableColumns={tableColumns}
