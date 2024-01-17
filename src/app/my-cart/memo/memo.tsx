@@ -12,7 +12,8 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import {
   IErrorSetState,
   IErrorState,
-  IModalSetState
+  IModalSetState,
+  ITableColumn
 } from '@/app/search/result/result-interface';
 import {
   ICheckboxSetState,
@@ -20,7 +21,7 @@ import {
 } from '@/components/common/checkbox/interface';
 
 interface IMemoOut {
-  tableColumns: any;
+  tableColumns: ITableColumn[];
   memoRows: any;
   downloadExcelFunction: () => void;
   errorSetState: IErrorSetState;
