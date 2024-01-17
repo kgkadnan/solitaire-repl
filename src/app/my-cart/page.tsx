@@ -70,14 +70,10 @@ function MyCart() {
    */
   const [memoRows, setMemoRows] = useState([]);
   const [holdRows, setHoldRows] = useState([]);
-
   const [soldOutRows, setSoldOutRows] = useState([]);
-
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
-
   const { tableColumns } = dataTableState;
   const { setTableColumns } = dataTableSetState;
-
   const { modalState, modalSetState } = useModalStateManagement();
   const {
     dialogContent,

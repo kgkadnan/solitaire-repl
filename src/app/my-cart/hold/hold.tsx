@@ -51,13 +51,22 @@ const HoldStones: React.FC<IHoldProps> = ({
 
   // Share handler
   const handleShare = () => {
-    setIsError(true);
-    setErrorText(NO_STONES_SELECTED);
+    if (!isCheck.length) {
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
+    } else {
+      alert('You have click the Share button');
+    }
   };
 
   // View Similar Stone handler
   const handleViewSimilarStone = () => {
-    alert('You have click the View Similar Stone');
+    if (!isCheck.length) {
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
+    } else {
+      alert('You have click the View Similar Stone');
+    }
   };
 
   //Footer Button Data
