@@ -12,10 +12,10 @@ import {
   MEMO_STATUS,
   SOLD_STATUS
 } from '@/constants/business-logic';
-import { IProductItem } from './interface';
-import MemoOut from './memo/memo';
-import ActiveMyCart from './active/active';
-import OutOfStock from './sold/sold';
+import { IProductItem } from './interface/interface';
+import MemoOut from './components/memo/memo';
+import ActiveMyCart from './components/active/active';
+import OutOfStock from './components/sold/sold';
 import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
@@ -29,7 +29,8 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomModal } from '@/components/common/modal';
 import { SELECT_STONES } from '@/constants/error-messages/cart';
-import HoldStones from './hold/hold';
+import HoldStones from './components/hold/hold';
+import { handleRenderCartPages } from './healper/handle-render-cart-pages';
 
 function MyCart() {
   // Get the current pathname using the usePathname hook
@@ -333,53 +334,23 @@ function MyCart() {
             setIsOpen={setIsPersistDialogOpen}
             dialogContent={persistDialogContent}
           />
-          {headerPath === 'memo' ? (
-            <MemoOut
-              tableColumns={tableColumns}
-              memoRows={memoRows}
-              downloadExcelFunction={downloadExcelFunction}
-              errorSetState={errorSetState}
-              errorState={errorState}
-              checkboxState={checkboxState}
-              checkboxSetState={checkboxSetState}
-              modalSetState={modalSetState}
-            />
-          ) : headerPath === 'active' ? (
-            <ActiveMyCart
-              tableColumns={tableColumns}
-              refetch={refetch}
-              downloadExcelFunction={downloadExcelFunction}
-              errorSetState={errorSetState}
-              errorState={errorState}
-              checkboxState={checkboxState}
-              checkboxSetState={checkboxSetState}
-              modalSetState={modalSetState}
-              modalState={modalState}
-              data={data}
-            />
-          ) : headerPath === 'hold' ? (
-            <HoldStones
-              tableColumns={tableColumns}
-              holdRows={holdRows}
-              downloadExcelFunction={downloadExcelFunction}
-              errorSetState={errorSetState}
-              errorState={errorState}
-              checkboxState={checkboxState}
-              checkboxSetState={checkboxSetState}
-              modalSetState={modalSetState}
-            />
-          ) : headerPath === 'no data found' ? (
-            <NoDataFound />
-          ) : (
-            <OutOfStock
-              tableColumns={tableColumns}
-              soldOutRows={soldOutRows}
-              errorSetState={errorSetState}
-              checkboxSetState={checkboxSetState}
-              checkboxState={checkboxState}
-              modalSetState={modalSetState}
-            />
-          )}
+
+          {handleRenderCartPages({
+            headerPath,
+            tableColumns,
+            memoRows,
+            downloadExcelFunction,
+            errorSetState,
+            errorState,
+            checkboxState,
+            checkboxSetState,
+            modalSetState,
+            refetch,
+            modalState,
+            data,
+            holdRows,
+            soldOutRows
+          })}
         </main>
       </div>
     </>

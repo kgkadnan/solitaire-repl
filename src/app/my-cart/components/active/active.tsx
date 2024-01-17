@@ -18,7 +18,7 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
-import { IProductItem } from '../interface';
+import { IProductItem } from '../../interface/interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import logger from 'logging/log-util';

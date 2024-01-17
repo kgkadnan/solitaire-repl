@@ -1,4 +1,4 @@
-import { IProduct } from '../search/result/result-interface';
+import { IProduct } from '../../search/result/result-interface';
 
 export interface IProductItem {
   id: string;
