@@ -5,8 +5,6 @@ import {
   BANK_NAME_MANDATORY,
   FIELD_INVALID,
   IFSC_CODE_MANDATORY,
-  MAX_CHARACTER_LIMIT_EXCEEDED,
-  RANGE_VALIDATION,
   SWIFT_CODE_MANDATORY
 } from '@/constants/error-messages/kyc';
 import {
@@ -25,7 +23,7 @@ import {
 
 class BaseBankDetails {
   @IsNotEmpty({ message: BANK_NAME_MANDATORY })
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Name', 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Bank Name') })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Bank Name')
   })
@@ -33,7 +31,7 @@ class BaseBankDetails {
   bank_name: string;
 
   @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Holder Name', 140)
+    message: FIELD_INVALID('Account Holder Name')
   })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Account Holder Name')
@@ -43,7 +41,7 @@ class BaseBankDetails {
   account_holder_name: string;
 
   @Length(1, 15, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
+    message: FIELD_INVALID('Account Number')
   })
   @IsString({ message: FIELD_INVALID('Account Number') })
   @Matches(ACCOUNT_NUMBER_REGEX, {
@@ -67,7 +65,7 @@ export class IndiaBankDetails extends BaseBankDetails {
   @IsString({ message: BANK_ADDRESS_INVALID })
   @IsOptional()
   @Length(0, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Address', 140)
+    message: FIELD_INVALID('Bank Address')
   })
   bank_address: string;
 
@@ -77,7 +75,7 @@ export class IndiaBankDetails extends BaseBankDetails {
     message: FIELD_INVALID('IFSC code')
   })
   @Length(8, 11, {
-    message: RANGE_VALIDATION('IFSC code', 8, 11)
+    message: FIELD_INVALID('IFSC code')
   })
   ifsc_code: string;
 
@@ -101,7 +99,7 @@ export class UsaBankDetails extends BaseBankDetails {
     message: FIELD_INVALID('Swift code')
   })
   @Length(8, 11, {
-    message: RANGE_VALIDATION('Swift code', 8, 11)
+    message: FIELD_INVALID('Swift code')
   })
   swift_code: string;
 
