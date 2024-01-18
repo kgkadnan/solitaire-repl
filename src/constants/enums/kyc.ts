@@ -45,6 +45,11 @@ export enum kycStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected'
 }
+export enum kycStatusContent {
+  REJECTED = 'Your KYC verification has not been successful. To ensure compliance with our regulatory requirements and for further assistance, please contact your Key Account Manager directly. We appreciate your cooperation and understanding in this matter.',
+  PENDING = 'We have received your KYC, we are reviewing it. We will give an update over it soon, by then you can explore our website',
+  APPROVED = 'Congratulations! Your KYC verification has been successfully completed. Thank you for your cooperation in this process. You can now fully utilize all the services available.'
+}
 
 export enum kycAttachmentIdentifierNames {
   INDIA = 'India',
