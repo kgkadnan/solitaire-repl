@@ -19,9 +19,10 @@ import { handleCompareStone } from '@/utils/compare-stone';
 import {
   NOT_MORE_THAN_100,
   SELECT_STONE_TO_PERFORM_ACTION,
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH,
   SOME_STONES_NOT_AVAILABLE
 } from '@/constants/error-messages/search';
-import { MEMO_STATUS } from '@/constants/business-logic';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -104,10 +105,18 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
           (row: IProduct) => row.id === id && row.diamond_status === MEMO_STATUS
         );
       });
+      const hasHold = isCheck.some((id: string) => {
+        return rows.some(
+          (row: IProduct) => row.id === id && row.diamond_status === HOLD_STATUS
+        );
+      });
 
       if (hasMemoOut) {
         setErrorText(SOME_STONES_NOT_AVAILABLE);
         setIsError(true);
+      } else if (hasHold) {
+        setIsError(true);
+        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
       } else {
         const variantIds = isCheck.map((id: string) => {
           const selectedRow = rows.find((row: IProduct) => row.id === id);
@@ -235,13 +244,25 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
           <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-[2px]">
             0000000000
           </span>
-          <p className="text-solitaireTertiary text-sm">Memo</p>
+          <p className="text-solitaireTertiary text-sm">
+            {ManageLocales('app.searchResult.footer.memo')}
+          </p>
         </div>
         <div className="flex items-center gap-3">
           <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-[2px]">
             0000000000
           </span>
-          <p className="text-solitaireTertiary text-sm">In Cart</p>
+          <p className="text-solitaireTertiary text-sm">
+            {ManageLocales('app.searchResult.footer.inCart')}
+          </p>
+        </div>
+        <div className="flex items-center gap-3">
+          <span className="text-solitaireTertiary bg-solitaireQuaternary px-2 rounded-[2px]">
+            0000000000
+          </span>
+          <p className="text-solitaireTertiary text-sm">
+            {ManageLocales('app.searchResult.footer.onHold')}
+          </p>
         </div>
       </div>
 
