@@ -9,10 +9,10 @@ import { CustomInputField } from '../input-field';
 import { handleComment } from './helper/handle-comment';
 import { handleRadioDayValue } from './helper/handle-radio-day-value';
 import confirmImage from '@public/assets/icons/confirmation.svg';
-import errorImage from '@public/assets/icons/error.svg';
 import Image from 'next/image';
 import { useConfirmProductMutation } from '@/features/api/product';
 import Link from 'next/link';
+import ErrorModel from '../error-model';
 
 const ConfirmStone: React.FC<IConfirmStoneProps> = ({
   listingColumns,
@@ -218,13 +218,10 @@ const ConfirmStone: React.FC<IConfirmStoneProps> = ({
             setIsDialogOpen(true);
             setDialogContent(
               <>
-                <div className=" flex justify-center align-middle items-center">
-                  <Image src={errorImage} alt="errorImage" />
-                  <p>Error!</p>
-                </div>
-                <div className="text-center text-solitaireTertiary">
-                  {e?.data?.message}
-                </div>
+                <ErrorModel
+                  content={e?.data?.message}
+                  handleClick={() => setIsDialogOpen(false)}
+                />
               </>
             );
           });
