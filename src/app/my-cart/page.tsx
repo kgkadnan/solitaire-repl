@@ -13,9 +13,6 @@ import {
   SOLD_STATUS
 } from '@/constants/business-logic';
 import { IProductItem } from './interface/interface';
-import MemoOut from './components/memo/memo';
-import ActiveMyCart from './components/active/active';
-import OutOfStock from './components/sold/sold';
 import { IManageListingSequenceResponse } from '../my-account/manage-diamond-sequence/interface';
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useDataTableStateManagement } from '@/components/common/data-table/hooks/data-table-state-management';
@@ -25,11 +22,8 @@ import { useCheckboxStateManagement } from '@/components/common/checkbox/hooks/c
 import { useErrorStateManagement } from '@/hooks/error-state-management';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-
-import { NoDataFound } from '@/components/common/no-data-found';
 import { CustomModal } from '@/components/common/modal';
 import { SELECT_STONES } from '@/constants/error-messages/cart';
-import HoldStones from './components/hold/hold';
 import { handleRenderCartPages } from './healper/handle-render-cart-pages';
 
 function MyCart() {
