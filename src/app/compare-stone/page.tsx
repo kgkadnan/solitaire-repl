@@ -35,6 +35,7 @@ import {
   NO_STONES_SELECTED
 } from '@/constants/error-messages/compare-stone';
 import { useSearchParams } from 'next/navigation';
+import { MEMO_STATUS } from '@/constants/business-logic';
 
 const CompareStone = () => {
   // Initialize necessary state variables
@@ -92,7 +93,7 @@ const CompareStone = () => {
         return compareStoneData.some(
           (compareStoneData: IProduct) =>
             compareStoneData.id === id &&
-            compareStoneData.diamond_status === 'MemoOut'
+            compareStoneData.diamond_status === MEMO_STATUS
         );
       });
 

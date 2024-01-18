@@ -234,6 +234,7 @@
   "app.myCart.active": "Active",
   "app.myCart.sold": "Sold",
   "app.myCart.memo": "Memo",
+  "app.myCart.hold": "Hold",
 
   "app.myDiamonds.RecentConfirmations": "Recent Confirmations",
   "app.myDiamonds.RecentConfirmations.recentConfirmationDetail": "Recent Confirmations Details",

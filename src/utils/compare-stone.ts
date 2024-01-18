@@ -1,4 +1,4 @@
-import { IProductItem } from '@/app/my-cart/interface';
+import { IProductItem } from '@/app/my-cart/interface/interface';
 import {
   MAX_COMPARE_STONE,
   MIN_COMPARE_STONE

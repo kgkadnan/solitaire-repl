@@ -1,4 +1,4 @@
-import MyCart from '@/app/my-cart/active/active';
+import MyCart from '@/app/my-cart/components/active/active';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 

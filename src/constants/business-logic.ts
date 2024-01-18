@@ -20,9 +20,11 @@ export const MAX_DAYS_TO_PAY = 120;
 
 export const PAGINATION_INTITAL_LIMIT = 50;
 
-export const SOLD_OUT_STATUS = 'SoldOut';
-export const ACTIVE_STATUS = 'Active';
-export const MEMO_OUT_STATUS = 'MemoOut';
+//   diamond_status: 'Available' | 'Hold' | 'Memo' | 'Sold'
+export const SOLD_STATUS = 'Sold';
+export const AVAILABLE_STATUS = 'Available';
+export const MEMO_STATUS = 'Memo';
+export const HOLD_STATUS = 'Hold';
 
 export const NOTIFICATION_READ_STATUS = 'read';
 export const NOTIFICATION_UNSEEN_STATUS = 'unseen';

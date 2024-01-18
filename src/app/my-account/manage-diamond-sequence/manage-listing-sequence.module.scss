@@ -9,21 +9,21 @@
   font-size: 14px;
   /* Larger screens */
 
-/* Large devices such as laptops (1024px and up) */
-@media only screen and (min-width: 64em) {
-  width: 250px;
-}
-/* Largest devices such as desktops (1280px and up) */
-@media only screen and (min-width: 80em) {
-  width: 250px;
-}
-@media only screen and (max-width: 80em) {
-  width: 250px;
-}
+  /* Large devices such as laptops (1024px and up) */
+  @media only screen and (min-width: 64em) {
+    width: 250px;
+  }
+  /* Largest devices such as desktops (1280px and up) */
+  @media only screen and (min-width: 80em) {
+    width: 250px;
+  }
+  @media only screen and (max-width: 80em) {
+    width: 250px;
+  }
 
-@media only screen and (min-width: 100em) {
-  width: 300px;
-}
+  @media only screen and (min-width: 100em) {
+    width: 300px;
+  }
 }
 
 .lableManageListingSequence {
