@@ -211,7 +211,7 @@ const KYC: React.FC = () => {
         triggerAuth(authToken).then(res => {
           localStorage.setItem('user', JSON.stringify(res?.data));
         });
-        dispatch(isEditingKYC(true));
+        dispatch(isEditingKYC(false));
         setIsDialogOpen(true);
         setDialogContent(
           <div className="flex gap-[10px] flex-col items-center justify-center">
