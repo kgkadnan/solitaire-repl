@@ -1,10 +1,8 @@
-import React from 'react'
-import Form from './form/form'
+import React from 'react';
+import Form from './form/form';
 
 const page = () => {
-  return (
-    <Form/>
-  )
-}
+  return <Form />;
+};
 
-export default page
+export default page;
