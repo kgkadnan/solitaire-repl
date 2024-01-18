@@ -46,7 +46,7 @@ import {
   IsAlphanumeric,
   Length,
   IsNumberString,
-  IsEmail,
+  MinLength,
   IsNumber,
   Min,
   Max
@@ -69,11 +69,9 @@ export class KycPostCompanyDetailsValidation {
   year_of_establishment: string;
 
   @IsNotEmpty({ message: COMPANY_PHONE_NUMBER_MANDATORY })
-  @IsNumberString({}, { message: FIELD_INVALID('Company Phone Number') })
   company_phone_number: string;
 
   @IsNotEmpty({ message: COMPANY_EMAIL_MANDATORY })
-  @IsEmail({}, { message: FIELD_INVALID('Company Email') })
   company_email: string;
 
   @ArrayNotEmpty({ message: BUSINESS_TYPE_MANDATORY })
@@ -84,7 +82,6 @@ export class KycPostCompanyDetailsValidation {
 
   @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
-  @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
   organisation_type: string;
 
   @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
@@ -94,8 +91,9 @@ export class KycPostCompanyDetailsValidation {
   })
   business_registration_number: string;
 
+  @IsString({ message: FIELD_INVALID('Subsidiary Company') })
   @IsOptional()
-  @Length(1, 140, { message: 'Subsidiary Company Name is Invalid.' })
+  @Length(1, 140, { message: FIELD_INVALID('Subsidiary Company Name') })
   subsidiary_company: string;
 
   @IsBoolean({
@@ -110,12 +108,15 @@ export class KycPostCompanyDetailsValidation {
   @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
   @IsString({ message: MEMBER_NAME_INVALID })
   @Length(1, 140, { message: FIELD_INVALID('Member of Business Name') })
+  @Matches(NAME_REGEX, {
+    message: MEMBER_NAME_INVALID
+  })
   member_of_business_name: string;
 
-  @IsNotEmpty({ message: ULTIMATE_BENEFICIARY_NAME_MANDATORY })
   @Length(1, 140, {
     message: FIELD_INVALID('Ultimate Beneficiary Name')
   })
+  @IsNotEmpty({ message: ULTIMATE_BENEFICIARY_NAME_MANDATORY })
   ultimate_beneficiary_name: string;
 
   constructor(
@@ -127,10 +128,10 @@ export class KycPostCompanyDetailsValidation {
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
-    ultimate_beneficiary_name: string,
-    subsidiary_company: string
+    ultimate_beneficiary_name: string
   ) {
     this.company_name = company_name;
     this.year_of_establishment = year_of_establishment;
@@ -138,9 +139,9 @@ export class KycPostCompanyDetailsValidation {
     this.company_email = company_email;
     this.business_type = business_type;
     this.industry_type = industry_type;
-    this.subsidiary_company = subsidiary_company;
     this.organisation_type = organisation_type;
     this.business_registration_number = business_registration_number;
+    this.subsidiary_company = subsidiary_company;
     this.is_member_of_business = is_member_of_business;
     this.member_of_business_name = member_of_business_name;
     this.ultimate_beneficiary_name = ultimate_beneficiary_name;
@@ -148,9 +149,9 @@ export class KycPostCompanyDetailsValidation {
 }
 
 export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
-  @Length(1, 140, { message: FIELD_INVALID('City Name') })
   @IsString({ message: FIELD_INVALID('City') })
   @IsNotEmpty({ message: CITY_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('City Name') })
   city: string;
 
   @IsString({ message: FIELD_INVALID('Address') })
@@ -166,13 +167,21 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
-  @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
+  @Matches(PAN_MATCH, {
+    message: FIELD_INVALID('Company PAN')
+  })
+  @IsString({ message: FIELD_INVALID('Company PAN') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Number') })
+  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
+  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
-  @Matches(GST_NUMBER_REGEX, { message: FIELD_INVALID('GST Number') })
+  @Matches(GST_NUMBER_REGEX, {
+    message: FIELD_INVALID('GST Number')
+  })
+  @IsString({ message: FIELD_INVALID('GST Number') })
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('GST Number') })
   gst_number: string;
 
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
@@ -182,15 +191,14 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsString({
     message: MSME_TYPE_INVALID
   })
-  @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   @Length(1, 140, { message: FIELD_INVALID('MSME Type') })
+  @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
   @ValidateIf(object => object?.is_msme_registered === true)
   @IsString({
     message: MSME_REGISTRATION_NUMBER_INVALID
   })
-  @Length(12, 12, { message: FIELD_INVALID('MSME Registration Number') })
   @IsNotEmpty({
     message: MSME_REGISTRATION_NUMBER_MANDATORY
   })
@@ -206,9 +214,9 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
-    subsidiary_company: string,
     ultimate_beneficiary_name: string,
     city: string,
     state: string,
@@ -228,9 +236,9 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
       industry_type,
       organisation_type,
       business_registration_number,
+      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
-      subsidiary_company,
       ultimate_beneficiary_name
     );
     this.city = city;
@@ -256,11 +264,9 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
   @Length(5, 25, { message: FIELD_INVALID('Fax Number') })
   fax_number: string;
 
-  @Length(1, 140, { message: FIELD_INVALID('Address Line 1') })
   @IsNotEmpty({ message: ADDRESS_MANDATORY })
   address_line_1: string;
 
-  @Length(1, 140, { message: FIELD_INVALID('Address Line 2') })
   @IsOptional()
   address_line_2: string;
 
@@ -282,8 +288,8 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
-    is_member_of_business: boolean,
     subsidiary_company: string,
+    is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
     vat_number: string,
@@ -299,8 +305,8 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
       industry_type,
       organisation_type,
       business_registration_number,
-      is_member_of_business,
       subsidiary_company,
+      is_member_of_business,
       member_of_business_name,
       ultimate_beneficiary_name
     );
@@ -342,9 +348,9 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
-    subsidiary_company: string,
     ultimate_beneficiary_name: string,
     vat_number: string,
     fax_number: string,
@@ -364,9 +370,9 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
       industry_type,
       organisation_type,
       business_registration_number,
+      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
-      subsidiary_company,
       ultimate_beneficiary_name,
       vat_number,
       fax_number,
