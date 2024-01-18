@@ -4,7 +4,6 @@ import React, { useEffect, useState } from 'react';
 import styles from './styles/compare-stone.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { CustomSideScrollable } from '@/components/common/side-scrollable';
-import Image from 'next/image';
 import { CustomFooter } from '@/components/common/footer';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { CustomDropdown } from '@/components/common/dropdown';
@@ -12,9 +11,7 @@ import CustomHeader from '@/components/common/header';
 import { Checkbox } from '@/components/ui/checkbox';
 import { useAddCartMutation } from '@/features/api/cart';
 import { CustomDialog } from '@/components/common/dialog';
-import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useAppDispatch } from '@/hooks/hook';
-import { notificationBadge } from '@/features/notification/notification-slice';
 import { RightSideContent } from './components/right-side-content';
 import { LeftFixedContent } from './components/left-fixed-content';
 import { keyLabelMapping } from './helpers/key-label';
@@ -29,13 +26,8 @@ import { IManageListingSequenceResponse } from '../my-account/manage-diamond-seq
 import { useGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
-import Link from 'next/link';
-import {
-  NO_STONES_AVAILABLE,
-  NO_STONES_SELECTED
-} from '@/constants/error-messages/compare-stone';
 import { useSearchParams } from 'next/navigation';
-import { MEMO_STATUS } from '@/constants/business-logic';
+import { handleAddToCart } from '@/utils/my-cart';
 
 const CompareStone = () => {
   // Initialize necessary state variables
@@ -82,79 +74,6 @@ const CompareStone = () => {
   // Fetching table columns for managing listing sequence
   const { data: listingColumns } =
     useGetManageListingSequenceQuery<IManageListingSequenceResponse>({});
-
-  // Handle adding items to the cart
-  const handleAddToCart = () => {
-    if (!isCheck.length) {
-      setIsError(true);
-      setErrorText(NO_STONES_SELECTED);
-    } else {
-      const hasMemoOut = isCheck.some((id: string) => {
-        return compareStoneData.some(
-          (compareStoneData: IProduct) =>
-            compareStoneData.id === id &&
-            compareStoneData.diamond_status === MEMO_STATUS
-        );
-      });
-
-      if (hasMemoOut) {
-        setErrorText(NO_STONES_AVAILABLE);
-        setIsError(true);
-      } else {
-        // Extract variant IDs for selected stones
-        const variantIds = isCheck?.map((id: string) => {
-          const compareStoneCheck: IProduct | object =
-            compareStoneData.find((compareStone: IProduct) => {
-              return compareStone?.id === id;
-            }) ?? {};
-
-          if (compareStoneCheck && 'variants' in compareStoneCheck) {
-            return compareStoneCheck.variants[0]?.id;
-          }
-
-          return null;
-        });
-
-        // If there are variant IDs, add to the cart
-        if (variantIds.length) {
-          addCart({
-            variants: variantIds
-          })
-            .unwrap()
-            .then(res => {
-              // On success, show confirmation dialog and update badge
-              setIsError(false);
-              setErrorText('');
-              setIsPersistDialogOpen(true);
-              setPersistDialogContent(
-                <div className="text-center  flex flex-col justify-center items-center ">
-                  <div className="w-[350px] flex justify-center items-center mb-3">
-                    <Image src={confirmImage} alt="vector image" />
-                  </div>
-                  <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
-                    {res?.message}
-                  </div>
-                  <Link
-                    href={'/my-cart?active-tab=active'}
-                    className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
-                  >
-                    Go To &quot;MyCart&quot;
-                  </Link>
-                </div>
-              );
-              dispatch(notificationBadge(true));
-            })
-            .catch(error => {
-              // On error, set error state and error message
-              setIsError(true);
-              setErrorText(error?.data?.message);
-            });
-          // Clear the selected checkboxes
-          setIsCheck([]);
-        }
-      }
-    }
-  };
 
   // Define footer buttons for the compare stone component
   const compareStoneFooter = [
@@ -208,9 +127,22 @@ const CompareStone = () => {
         ...compareStoneFooter,
         {
           id: 3,
-          displayButtonLabel: 'Add to Cart',
+          displayButtonLabel: ManageLocales(
+            'app.searchResult.footer.addToCart'
+          ),
           style: styles.filled,
-          fn: handleAddToCart
+          fn: () =>
+            handleAddToCart({
+              isCheck,
+              setIsError,
+              setErrorText,
+              rows: compareStoneData,
+              addCart,
+              setIsPersistDialogOpen,
+              setPersistDialogContent,
+              dispatch,
+              setIsCheck
+            })
         }
       ];
       setFooterItems(newFooterItems);
@@ -364,6 +296,8 @@ const CompareStone = () => {
                 handleClose={handleClose}
                 setIsError={setIsError}
                 setErrorText={setErrorText}
+                setIsCheck={setIsCheck}
+                isCheck={isCheck}
               />
             }
           />
