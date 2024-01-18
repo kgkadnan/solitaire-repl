@@ -37,7 +37,7 @@ export const CountrySelectionDropdown = ({
           personal_details: {},
           company_details: {},
           company_owner_details: {},
-          bank_details: {}
+          banking_details: {}
         }
       })
     );
@@ -49,7 +49,7 @@ export const CountrySelectionDropdown = ({
     );
     dispatch(
       updateFormState({
-        name: 'formErrorState.offline',
+        name: 'formErrorState.attachment',
         value: {}
       })
     );

@@ -1,8 +1,5 @@
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { ManageLocales } from '@/utils/translate';
-import Image from 'next/image';
-import errorImage from '@public/assets/icons/error.svg';
 import { IToken } from '@/app/register/page';
+import ErrorModel from '@/components/common/error-model';
 
 interface IHandleVerifyOtp {
   otpValues: string[];
@@ -53,25 +50,10 @@ export const handleVerifyOtp = ({
     .catch((e: any) => {
       setIsDialogOpen(true);
       setDialogContent(
-        <div className="w-full flex flex-col gap-4 items-center">
-          <div className=" flex justify-center align-middle items-center">
-            <Image src={errorImage} alt="errorImage" />
-            <p>Error!</p>
-          </div>
-          <div className="text-center text-solitaireTertiary h-[4vh]">
-            {e.data.message}
-          </div>
-
-          <CustomDisplayButton
-            displayButtonLabel={ManageLocales('app.register.okay')}
-            displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
-              displayLabelStyle:
-                'text-solitaireTertiary text-[16px] font-medium'
-            }}
-            handleClick={() => setIsDialogOpen(false)}
-          />
-        </div>
+        <ErrorModel
+          content={e?.data?.message}
+          handleClick={() => setIsDialogOpen(false)}
+        />
       );
     });
 };

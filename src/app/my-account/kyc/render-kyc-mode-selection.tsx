@@ -37,12 +37,11 @@ const RenderKYCModeSelection: React.FC<IRenderKYCModeSelection> = ({
   const handleBoxClick = (selection: string) => {
     setErrorText('');
     setSelectedKYCOption(selection);
+
     dispatch(
       updateFormState({
-        name: `${
-          selection === 'online' ? 'formState.offline' : 'formState.online'
-        }`,
-        value: false
+        name: 'formState.offline',
+        value: selection === 'online' ? false : true
       })
     );
   };

@@ -1,10 +1,7 @@
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { IOtp } from '..';
-import Image from 'next/image';
-import { ManageLocales } from '@/utils/translate';
-import errorImage from '@public/assets/icons/error.svg';
 import { IToken } from '@/app/register/page';
 import logger from 'logging/log-util';
+import ErrorModel from '@/components/common/error-model';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -59,27 +56,10 @@ export const handleEditMobileNumber = ({
       setIsDialogOpen(true);
 
       setDialogContent(
-        <div className="w-full flex flex-col gap-4 items-center">
-          {' '}
-          <div className=" flex justify-center align-middle items-center">
-            <Image src={errorImage} alt="errorImage" />
-            <p>Error!</p>
-          </div>
-          <div className="text-center text-solitaireTertiary h-[4vh]">
-            Mobile number already exists
-          </div>
-          <CustomDisplayButton
-            displayButtonLabel={ManageLocales('app.register.okay')}
-            displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
-              displayLabelStyle:
-                'text-solitaireTertiary text-[16px] font-medium'
-            }}
-            handleClick={() => {
-              setIsDialogOpen(false);
-            }}
-          />
-        </div>
+        <ErrorModel
+          content={'Mobile number already exists'}
+          handleClick={() => setIsDialogOpen(false)}
+        />
       );
     }
 
