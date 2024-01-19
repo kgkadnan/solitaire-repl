@@ -1,7 +1,7 @@
 'use client';
 
 import React, { ReactNode, useState } from 'react';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
 import style from './image-tile.module.scss';
 
 export interface IImageTileStyleProps {
