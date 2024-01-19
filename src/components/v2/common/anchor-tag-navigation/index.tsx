@@ -7,26 +7,43 @@ const AnchorLinkNavigation: React.FC = () => {
   const [showArrows, setShowArrows] = useState(false);
   const [activeTab, setActiveTab] = useState<number | null>(null);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
-  console.log('scrollContainerReff', scrollContainerRef);
-  // Function to handle left and right arrow clicks
-  const scroll = (direction: 'left' | 'right') => {
-    if (scrollContainerRef.current) {
-      const container = scrollContainerRef.current;
-      const scrollAmount =
-        container.offsetWidth * 0.2 * (direction === 'left' ? -1 : 1);
-      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-    }
+
+  const calculateScrollAmount = (
+    direction: 'left' | 'right',
+    container: HTMLDivElement
+  ): number => {
+    return container.offsetWidth * 0.2 * (direction === 'left' ? -1 : 1);
   };
 
-  const handleScroll = () => {
+  const findNewActiveTab = (container: HTMLDivElement): void => {
+    const tabs = container.querySelectorAll('.section');
+    tabs.forEach((tab, index) => {
+      const rect = tab.getBoundingClientRect();
+      if (rect.left >= 0 && rect.right <= container.clientWidth / 2) {
+        setActiveTab(index);
+        window.location.hash = `#section${index}`;
+      }
+    });
+  };
+
+  const handleScroll = (): void => {
     const container = scrollContainerRef.current;
     if (container) {
       setShowArrows(container.scrollWidth > container.clientWidth);
     }
   };
 
-  const handleTabClick = (index: number) => {
+  const handleTabClick = (index: number): void => {
     setActiveTab(index);
+  };
+
+  const handleArrowClick = (direction: 'left' | 'right'): void => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      const scrollAmount = calculateScrollAmount(direction, container);
+      container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+      findNewActiveTab(container);
+    }
   };
 
   useEffect(() => {
@@ -41,21 +58,21 @@ const AnchorLinkNavigation: React.FC = () => {
     };
   }, []);
 
-  console.log('showArrows', showArrows);
-
   return (
-    <div className="flex items-center w-full bg-white sticky top-0">
+    <div className="flex items-center w-full bg-neutral200 sticky top-0 ">
       <div
         ref={scrollContainerRef}
-        className="flex overflow-x-auto no-scrollbar w-[95%]"
+        className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
       >
         {Array(30)
           .fill('dummy')
           .map((_, index) => (
             <a
               key={index}
-              className={`section flex-shrink-0 px-4 py-1 text-center cursor-pointer whitespace-nowrap ${
-                index === activeTab ? 'border-b-2 border-black-200' : ''
+              className={`section flex-shrink-0 px-4 py-1 text-center text-mMedium  cursor-pointer whitespace-nowrap ${
+                index === activeTab
+                  ? 'border-b-2 border-black-200 text-primaryMain'
+                  : 'text-neutral600'
               }`}
               href={`#section${index}`}
               onClick={() => handleTabClick(index)}
@@ -67,20 +84,18 @@ const AnchorLinkNavigation: React.FC = () => {
 
       {showArrows && (
         <div className="flex w-[5%] justify-end">
-          <button onClick={() => scroll('left')} className="mr-2">
+          <button onClick={() => handleArrowClick('left')}>
             <Image
               src={arrowBackward}
               alt="Scroll Left"
-              width={24}
-              height={24}
+              className="w-[24px] h-[24px]"
             />
           </button>
-          <button onClick={() => scroll('right')} className="ml-2">
+          <button onClick={() => handleArrowClick('right')}>
             <Image
               src={arrowForward}
               alt="Scroll Right"
-              width={24}
-              height={24}
+              className="w-[24px] h-[24px]"
             />
           </button>
         </div>
