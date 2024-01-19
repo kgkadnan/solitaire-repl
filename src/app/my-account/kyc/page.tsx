@@ -17,9 +17,9 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import HandIcon from '@public/assets/icons/noto_backhand-index-pointing-up.svg';
 import {
   useKycMutation,
-  useGetKycDetailQuery,
   useSubmitKYCMutation,
-  useResetKycMutation
+  useResetKycMutation,
+  useLazyGetKycDetailQuery
 } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { ValidationError } from 'class-validator';
@@ -29,56 +29,60 @@ import {
   validateScreen
 } from './helper/validations/screen/screen';
 import { Checkbox } from '@/components/ui/checkbox';
-import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
+import {
+  kycScreenIdentifierNames,
+  kycStatus,
+  kycStatusContent
+} from '@/constants/enums/kyc';
 import { statusCode } from '@/constants/enums/status-code';
 import logger from 'logging/log-util';
 import ErrorModel from '@/components/common/error-model';
 import KycStatus from './components/kyc-status';
-import { useGetAuthDataQuery } from '@/features/api/login';
+import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import { IAuthDataResponse } from '@/app/login/interface';
 import { ManageLocales } from '@/utils/translate';
 import { useRouter } from 'next/navigation';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
+import Loader from '@/components/v2/common/custom-loader';
 
-interface IKYCData {
-  kyc: {
-    created_at: string;
-    customer_id: string;
-    deleted_at: string | null;
-    updated_at: string;
-    id: string;
-    profile_data: {
-      online: {
-        [key: string]: {
-          [key: string]: any;
-        };
-      };
-      country: string | null;
-      offline: {
-        [key: string]: any;
-      };
-    };
-    remarks: string | null;
-    status: string;
-  };
-}
+// interface IKYCData {
+//   kyc: {
+//     created_at: string;
+//     customer_id: string;
+//     deleted_at: string | null;
+//     updated_at: string;
+//     id: string;
+//     profile_data: {
+//       online: {
+//         [key: string]: {
+//           [key: string]: any;
+//         };
+//       };
+//       country: string | null;
+//       offline: {
+//         [key: string]: any;
+//       };
+//     };
+//     remarks: string | null;
+//     status: string;
+//   };
+// }
 
 const KYC: React.FC = () => {
   const { errorState, errorSetState } = useErrorStateManagement();
   const router = useRouter();
   const [kyc] = useKycMutation();
-  const [submitKYC] = useSubmitKYCMutation();
-  const { data: kycDetails }: { data?: IKYCData } = useGetKycDetailQuery({});
+  const [submitKYC, { isLoading: isSubmitKycLoading }] = useSubmitKYCMutation();
+  const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
   const [selectedCountry, setSelectedCountry] = useState<any>('');
   const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
 
-  const [userData, setUserData] = useState<any>({});
-  const [token, setToken] = useState<string>('');
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
   const [currentState, setCurrentState] = useState('');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
+  const [stepperData, setStepperData] = useState<IStepper[]>([]);
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen } = modalState;
@@ -87,20 +91,9 @@ const KYC: React.FC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
 
   const dispatch = useAppDispatch();
-
-  const { data: authData }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
-    token,
-    { skip: !token }
-  );
-
+  const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  useEffect(() => {
-    const storedToken = localStorage.getItem('auth');
-
-    if (storedToken) setToken(JSON.parse(storedToken));
-    setUserData(authData);
-  }, [authData]);
   const buildFormData = () => {
     const formData = new FormData();
 
@@ -213,6 +206,12 @@ const KYC: React.FC = () => {
     await submitKYC(buildFormData())
       .unwrap()
       .then(() => {
+        const authToken = JSON.parse(localStorage.getItem('auth')!);
+
+        triggerAuth(authToken).then(res => {
+          localStorage.setItem('user', JSON.stringify(res?.data));
+        });
+        dispatch(isEditingKYC(false));
         setIsDialogOpen(true);
         setDialogContent(
           <div className="flex gap-[10px] flex-col items-center justify-center">
@@ -410,8 +409,6 @@ const KYC: React.FC = () => {
       return StepperStatus.REJECTED;
     }
   };
-
-  const [stepperData, setStepperData] = useState<IStepper[]>([]);
 
   const initializeStepperData = async () => {
     let tempStepperData = [];
@@ -661,132 +658,134 @@ const KYC: React.FC = () => {
   }
 
   useEffect(() => {
-    if (kycDetails) {
-      userData && localStorage.setItem('user', JSON.stringify(userData));
+    triggerKycDetail({}).then(res => {
+      let kycDetails = res?.data;
+      if (kycDetails?.kyc?.status) {
+        switch (kycDetails?.kyc?.status) {
+          case kycStatus.INPROGRESS:
+            if (
+              kycDetails &&
+              kycDetails?.kyc &&
+              !isResumeCalled &&
+              (kycDetails?.kyc?.profile_data?.country !== null ||
+                Object.keys(kycDetails?.kyc?.profile_data?.online).length >
+                  1) &&
+              Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+            ) {
+              setIsResumeCalled(true);
+              const { online, offline } = kycDetails.kyc.profile_data;
 
-      switch (userData?.customer?.kyc?.status) {
-        case kycStatus.INPROGRESS:
-          if (
-            kycDetails &&
-            kycDetails?.kyc &&
-            !isResumeCalled &&
-            (kycDetails?.kyc?.profile_data?.country !== null ||
-              Object.keys(kycDetails?.kyc?.profile_data?.online).length > 1) &&
-            Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
-          ) {
-            setIsResumeCalled(true);
-            const { online, offline } = kycDetails.kyc.profile_data;
+              const onlineData = online || {};
 
-            const onlineData = online || {};
+              let firstNonFilledScreens =
+                findFirstNonFilledScreens(onlineData)[0] - 1;
 
-            let firstNonFilledScreens =
-              findFirstNonFilledScreens(onlineData)[0] - 1;
+              if (firstNonFilledScreens > 0) {
+                setCurrentState('online');
+                setActiveStep(firstNonFilledScreens);
 
-            if (firstNonFilledScreens > 0) {
-              setCurrentState('online');
-              setActiveStep(firstNonFilledScreens);
+                offline
+                  ? setSelectedKYCOption('online')
+                  : setSelectedKYCOption('offline');
 
-              offline
-                ? setSelectedKYCOption('online')
-                : setSelectedKYCOption('offline');
-
-              setIsDialogOpen(true);
-              setDialogContent(
-                <>
-                  <div className="text-center align-middle text-solitaireTertiary">
-                    <p className="text-[20px] font-semibold">Are you sure?</p>
-                  </div>
-                  <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
-                    Do you want to resume KYC process or restart it?
-                  </div>
-                  <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-                    <CustomDisplayButton
-                      displayButtonLabel="Restart"
-                      handleClick={handleResetButton}
-                      displayButtonAllStyle={{
-                        displayButtonStyle:
-                          ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-                        displayLabelStyle:
-                          'text-solitaireTertiary text-[14px] font-medium'
-                      }}
-                    />
-                    <CustomDisplayButton
-                      displayButtonLabel="Resume"
-                      handleClick={() => {
-                        setIsDialogOpen(false);
-                        setDialogContent('');
-                      }}
-                      displayButtonAllStyle={{
-                        displayButtonStyle:
-                          'bg-solitaireQuaternary w-[150px] h-[35px]',
-                        displayLabelStyle:
-                          'text-solitaireTertiary text-[14px] font-medium'
-                      }}
-                    />
-                  </div>
-                </>
-              );
+                setIsDialogOpen(true);
+                setDialogContent(
+                  <>
+                    <div className="text-center align-middle text-solitaireTertiary">
+                      <p className="text-[20px] font-semibold">Are you sure?</p>
+                    </div>
+                    <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
+                      Do you want to resume KYC process or restart it?
+                    </div>
+                    <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                      <CustomDisplayButton
+                        displayButtonLabel="Restart"
+                        handleClick={handleResetButton}
+                        displayButtonAllStyle={{
+                          displayButtonStyle:
+                            ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                          displayLabelStyle:
+                            'text-solitaireTertiary text-[14px] font-medium'
+                        }}
+                      />
+                      <CustomDisplayButton
+                        displayButtonLabel="Resume"
+                        handleClick={() => {
+                          setIsDialogOpen(false);
+                          setDialogContent('');
+                        }}
+                        displayButtonAllStyle={{
+                          displayButtonStyle:
+                            'bg-solitaireQuaternary w-[150px] h-[35px]',
+                          displayLabelStyle:
+                            'text-solitaireTertiary text-[14px] font-medium'
+                        }}
+                      />
+                    </div>
+                  </>
+                );
+              }
+            } else {
+              setCurrentState('country_selection');
             }
-          } else {
-            setCurrentState('country_selection');
-          }
 
-          let sectionKeys: string[] =
-            kycDetails?.kyc?.profile_data?.country === 'India'
-              ? [
-                  kycScreenIdentifierNames.PERSONAL_DETAILS,
-                  kycScreenIdentifierNames.COMPANY_DETAILS,
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ]
-              : [
-                  kycScreenIdentifierNames.PERSONAL_DETAILS,
-                  kycScreenIdentifierNames.COMPANY_DETAILS,
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ];
+            let sectionKeys: string[] =
+              kycDetails?.kyc?.profile_data?.country === 'India'
+                ? [
+                    kycScreenIdentifierNames.PERSONAL_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]
+                : [
+                    kycScreenIdentifierNames.PERSONAL_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ];
 
-          sectionKeys.forEach((key, index: number) => {
-            let screenIndex = (index + 1).toString();
+            sectionKeys.forEach((key, index: number) => {
+              let screenIndex = (index + 1).toString();
 
-            let onlineValue = kycDetails?.kyc?.profile_data?.online;
+              let onlineValue = kycDetails?.kyc?.profile_data?.online;
 
+              dispatch(
+                updateFormState({
+                  name: `formState.online.sections[${key}]`,
+                  value:
+                    onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+                })
+              );
+            });
+            setSelectedCountry(
+              kycDetails?.kyc?.profile_data?.country
+                ? {
+                    label: kycDetails?.kyc?.profile_data?.country,
+                    value: kycDetails?.kyc?.profile_data?.country
+                  }
+                : ''
+            );
             dispatch(
               updateFormState({
-                name: `formState.online.sections[${key}]`,
-                value:
-                  onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+                name: 'formState.country',
+                value: kycDetails?.kyc?.profile_data?.country
               })
             );
-          });
-          setSelectedCountry(
-            kycDetails?.kyc?.profile_data?.country
-              ? {
-                  label: kycDetails?.kyc?.profile_data?.country,
-                  value: kycDetails?.kyc?.profile_data?.country
-                }
-              : ''
-          );
-          dispatch(
-            updateFormState({
-              name: 'formState.country',
-              value: kycDetails?.kyc?.profile_data?.country
-            })
-          );
 
-          break;
-        case kycStatus.PENDING:
-          setCurrentState(kycStatus.PENDING);
-          break;
+            break;
+          case kycStatus.PENDING:
+            setCurrentState(kycStatus.PENDING);
+            break;
 
-        case kycStatus.APPROVED:
-          setCurrentState(kycStatus.APPROVED);
-          break;
-        case kycStatus.REJECTED:
-          setCurrentState(kycStatus.REJECTED);
-          break;
+          case kycStatus.APPROVED:
+            setCurrentState(kycStatus.APPROVED);
+            break;
+          case kycStatus.REJECTED:
+            setCurrentState(kycStatus.REJECTED);
+            break;
+        }
       }
-    }
-  }, [kycDetails, userData]);
+    });
+  }, []);
 
   useEffect(() => {
     let kycData = KYCForm.filter(country => {
@@ -799,76 +798,104 @@ const KYC: React.FC = () => {
     setCurrentState(state);
   };
 
-  switch (currentState) {
-    case 'country_selection':
-      return (
-        <RenderCountrySelection
-          selectedCountry={selectedCountry}
-          setSelectedCountry={setSelectedCountry}
-          handleSaveAndNext={handleSaveAndNext}
-          errorSetState={errorSetState}
-          errorState={errorState}
-        />
-      );
+  const renderContent = () => {
+    switch (currentState) {
+      case 'country_selection':
+        return (
+          <RenderCountrySelection
+            selectedCountry={selectedCountry}
+            setSelectedCountry={setSelectedCountry}
+            handleSaveAndNext={handleSaveAndNext}
+            errorSetState={errorSetState}
+            errorState={errorState}
+          />
+        );
 
-    case kycStatus.PENDING:
-      return <KycStatus />;
-    case kycStatus.APPROVED:
-      return 'Welcome to APPROVED KYC page';
-    case kycStatus.REJECTED:
-      return 'Welcome to REJECTED KYC page';
+      case kycStatus.PENDING:
+        return (
+          <KycStatus
+            status={kycStatus.PENDING}
+            content={kycStatusContent.PENDING}
+          />
+        );
+      case kycStatus.APPROVED:
+        return (
+          <KycStatus
+            status={kycStatus.APPROVED}
+            content={kycStatusContent.APPROVED}
+            linkHref="/"
+            linkLabel={ManageLocales('app.myaccount.kyc.exploreWebsite')}
+          />
+        );
+      case kycStatus.REJECTED:
+        return (
+          <KycStatus
+            status={kycStatus.REJECTED}
+            content={kycStatusContent.REJECTED}
+            linkHref="/my-account/summary"
+            linkLabel={ManageLocales('app.myaccount.kyc.keyAccountManager')}
+          />
+        );
 
-    case 'choice_for_filling_kyc':
-      // Render the component for 'choice_for_filling_kyc'
-      return (
-        <RenderKYCModeSelection
-          handleSaveAndNext={handleSaveAndNext}
-          setSelectedKYCOption={setSelectedKYCOption}
-          selectedKYCOption={selectedKYCOption}
-          errorSetState={errorSetState}
-          errorState={errorState}
-        />
-      );
-    case 'other':
-    case 'offline':
-      return (
-        <RenderOffline
-          data={data}
-          fromWhere={currentState}
-          selectedCountry={selectedCountry.value}
-          formErrorState={formErrorState}
-          formState={formState}
-          modalSetState={modalSetState}
-          modalState={modalState}
-          handleSaveAndNext={handleSaveAndNext}
-          handleSubmit={handleSubmit}
-          setIsDialogOpen={setIsDialogOpen}
-          isDialogOpen={isDialogOpen}
-          dialogContent={dialogContent}
-          handleTermAndCondition={handleTermAndCondition}
-        />
-      );
-    // Add more cases as needed
-    case 'online':
-      return (
-        <Stepper
-          stepper={stepperData}
-          state={activeStep}
-          setState={setActiveStep}
-          prevStep={handlePrevStep}
-          nextStep={handleNextStep}
-          setIsDialogOpen={setIsDialogOpen}
-          isDialogOpen={isDialogOpen}
-          dialogContent={dialogContent}
-          handleSubmit={handleSubmit}
-          setStepperData={setStepperData}
-        />
-      );
+      case 'choice_for_filling_kyc':
+        // Render the component for 'choice_for_filling_kyc'
+        return (
+          <RenderKYCModeSelection
+            handleSaveAndNext={handleSaveAndNext}
+            setSelectedKYCOption={setSelectedKYCOption}
+            selectedKYCOption={selectedKYCOption}
+            errorSetState={errorSetState}
+            errorState={errorState}
+          />
+        );
+      case 'other':
+      case 'offline':
+        return (
+          <RenderOffline
+            data={data}
+            fromWhere={currentState}
+            selectedCountry={selectedCountry.value}
+            formErrorState={formErrorState}
+            formState={formState}
+            modalSetState={modalSetState}
+            modalState={modalState}
+            handleSaveAndNext={handleSaveAndNext}
+            handleSubmit={handleSubmit}
+            setIsDialogOpen={setIsDialogOpen}
+            isDialogOpen={isDialogOpen}
+            dialogContent={dialogContent}
+            handleTermAndCondition={handleTermAndCondition}
+          />
+        );
+      // Add more cases as needed
+      case 'online':
+        return (
+          <Stepper
+            stepper={stepperData}
+            state={activeStep}
+            setState={setActiveStep}
+            prevStep={handlePrevStep}
+            nextStep={handleNextStep}
+            setIsDialogOpen={setIsDialogOpen}
+            isDialogOpen={isDialogOpen}
+            dialogContent={dialogContent}
+            handleSubmit={handleSubmit}
+            setStepperData={setStepperData}
+          />
+        );
 
-    default:
-      // Render a default component or handle the default case
-      return;
-  }
+      default:
+        // Render a default component or handle the default case
+        return;
+    }
+  };
+
+  return (
+    <>
+      {isSubmitKycLoading && <Loader />}
+      {renderContent()}
+    </>
+  );
 };
 
 export default KYC;

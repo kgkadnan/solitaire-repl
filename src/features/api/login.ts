@@ -27,4 +27,8 @@ export const loginApi = createApi({
   })
 });
 
-export const { useVerifyLoginMutation, useGetAuthDataQuery } = loginApi;
+export const {
+  useVerifyLoginMutation,
+  useGetAuthDataQuery,
+  useLazyGetAuthDataQuery
+} = loginApi;

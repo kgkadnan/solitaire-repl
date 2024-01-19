@@ -17,59 +17,8 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --background-dark: 0 0% 100%;
+    @apply bg-solitairePrimary text-foreground;
 
-    --foreground: 0 0% 3.9%;
-
-    --muted: 0 0% 96.1%;
-    --muted-foreground: 0 0% 45.1%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 3.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
-
-    --border: 0 0% 89.8%;
-    --input: 0 0% 89.8%;
-
-    --primary: 0 0% 9%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 0 0% 96.1%;
-    --secondary-foreground: 0 0% 9%;
-
-    --accent: 0 0% 96.1%;
-    --accent-foreground: 0 0% 9%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --ring: 0 0% 63.9%;
-
-    --radius: 0.5rem;
-
-    //customized variables
-
-    --solitaire-primary: 0, 0%, 100%, 1; //white
-    --solitaire-secondary: 0, 0%, 100%, 1; //white
-    --solitaire-tertiary: 0, 0%, 20%, 1; //Carbon 6
-    --solitaire-quaternary: 32, 22%, 45%, 1; //shadow
-    --solitaire-quinary: 0, 0%, 60%, 1; //Carbon 3
-    --solitaire-senary: 0, 0%, 60%, 1; //Carbon 3
-    --solitaire-septenary: 32, 22%, 45%, 1; //shadow
-    --solitaire-octonary: 0, 0%, 84%, 1; //Carbon 1
-    --solitaire-nonary: 0, 0%, 84%, 1; // Custom
-    --solitaire-denary: 0, 0%, 84%, 1; // Custom
-    --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
-    --solitaire-error: 353, 77%, 44%, 1; //Error
-    --solitaire-success: 93, 48%, 42%; // Success
-    //border -color
-    --solitaire-border: 0, 0%, 100%, 1; //white
-  }
-
-  .dark {
     --background: 180, 44%, 8%, 1;
 
     --background-dark: 180, 44%, 4%, 1;
@@ -122,6 +71,175 @@
     //border -color
     --solitaire-border: 180, 6%, 39%, 1; //Emerald 4
   }
+  .primary {
+    @apply bg-solitairePrimary text-foreground;
+
+    --background: 180, 44%, 8%, 1;
+
+    --background-dark: 180, 44%, 4%, 1;
+
+    --foreground: 32, 18%, 54%, 1;
+
+    --muted: 0 0% 14.9%;
+    --muted-foreground: 0 0% 63.9%;
+
+    --popover: 0 0% 3.9%;
+    --popover-foreground: 0 0% 98%;
+
+    --card: 0 0% 3.9%;
+    --card-foreground: 0 0% 98%;
+
+    --border: 0 0% 14.9%;
+    --input: 0 0% 14.9%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 9%;
+
+    --secondary: 0 0% 14.9%;
+    --secondary-foreground: 0 0% 98%;
+
+    --accent: 0 0% 14.9%;
+    --accent-foreground: 0 0% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 85.7% 97.3%;
+
+    --ring: 0 0% 14.9%;
+
+    //customized variables
+
+    --solitaire-primary: 180, 44%, 8%, 1; //Emerald Green
+    --solitaire-secondary: 180, 44%, 4%, 1; //Emerald 7
+    --solitaire-tertiary: 80, 4%, 82%, 1; //Emerald 1
+    --solitaire-quaternary: 32, 22%, 45%, 1; //shadow
+    --solitaire-quinary: 180, 44%, 8%, 1; //Emerald Green
+    --solitaire-senary: 180, 6%, 39%, 1; //Emerald 4
+    --solitaire-septenary: 180, 44%, 4%, 1; //Emerald 7
+    --solitaire-octonary: 180, 44%, 4%, 1; //Emerald 7
+    --solitaire-nonary: 180, 12%, 24%, 0.4; // Custom
+    --solitaire-denary: 180, 13%, 24%, 1; // Emerald 5
+    --solitaire-outline: 180, 6%, 39%, 1; //Emerald 4
+    --solitaire-error: 353, 77%, 44%, 1; //Error
+    --solitaire-success: 93, 48%, 42%; // Success
+    --solitaire-active-stepper: 32, 18%, 72%, 1; //active stepper
+
+    //border -color
+    --solitaire-border: 180, 6%, 39%, 1; //Emerald 4
+  }
+
+  .secondary {
+    @apply bg-solitairePrimary text-foreground;
+
+    --background: 0 0% 100%;
+    --background-dark: 0 0% 100%;
+
+    --foreground: 0 0% 3.9%;
+
+    --muted: 0 0% 96.1%;
+    --muted-foreground: 0 0% 45.1%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 3.9%;
+
+    --border: 0 0% 89.8%;
+    --input: 0 0% 89.8%;
+
+    --primary: 0 0% 9%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 0 0% 96.1%;
+    --secondary-foreground: 0 0% 9%;
+
+    --accent: 0 0% 96.1%;
+    --accent-foreground: 0 0% 9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --ring: 0 0% 63.9%;
+
+    --radius: 0.5rem;
+    //customized variables
+
+    --solitaire-primary: 0, 0%, 100%, 1; //white
+    --solitaire-secondary: 0, 0%, 100%, 1; //white
+    --solitaire-tertiary: 0, 0%, 20%, 1; //Carbon 6
+    --solitaire-quaternary: 32, 22%, 45%, 1; //shadow
+    --solitaire-quinary: 0, 0%, 60%, 1; //Carbon 3
+    --solitaire-senary: 0, 0%, 60%, 1; //Carbon 3
+    --solitaire-septenary: 32, 22%, 45%, 1; //shadow
+    --solitaire-octonary: 0, 0%, 84%, 1; //Carbon 1
+    --solitaire-nonary: 0, 0%, 84%, 1; // Custom
+    --solitaire-denary: 0, 0%, 84%, 1; // Custom
+    --solitaire-outline: 0, 0%, 73%, 1; //Carbon 2
+    --solitaire-error: 353, 77%, 44%, 1; //Error
+    --solitaire-success: 93, 48%, 42%; // Success
+    //border -color
+    --solitaire-border: 0, 0%, 100%, 1; //white
+  }
+
+  .v2primary {
+    @apply bg-neutral0;
+
+    // v2 UI theme
+
+    --neutral-0: hsl(0, 0%, 100%);
+    --neutral-25: hsl(0, 0%, 99%);
+    --neutral-50: hsl(0, 0%, 98%);
+    --neutral-100: hsl(0, 0%, 96%);
+    --neutral-200: hsl(210, 17%, 90%);
+    --neutral-300: hsl(220, 22%, 81%);
+    --neutral-400: hsl(214, 29%, 64%);
+    --neutral-500: hsl(214, 31%, 52%);
+    --neutral-600: hsl(214, 35%, 41%);
+    --neutral-700: hsl(214, 39%, 32%);
+    --neutral-800: hsl(214, 47%, 22%);
+    --neutral-900: hsl(214, 55%, 11%);
+
+    --primary-main: hsl(214, 39%, 32%);
+    --primary-surface: hsl(0, 0%, 98%);
+    --primary-border: hsl(210, 17%, 90%);
+    --primary-hover: hsl(214, 31%, 52%);
+    --primary-pressed: hsl(214, 47%, 22%);
+    --primary-focus: hsla(214, 55%, 11%, 0.2);
+    --primary-icon-color: hsl(214, 39%, 32%);
+
+    --danger-main: hsl(0, 84.2%, 60.2%);
+    --danger-surface: hsl(0, 100%, 92.9%);
+    --danger-border: hsl(0, 100%, 84.7%);
+    --danger-hover: hsl(0, 100%, 41.2%);
+    --danger-pressed: hsl(0, 100%, 20%);
+    --danger-focus: hsla(0, 84.2%, 60.2%, 0.2);
+
+    --success-main: hsl(162, 100%, 25.5%);
+    --success-surface: hsl(149, 71%, 94.1%);
+    --success-border: hsl(149, 43%, 76.9%);
+    --success-hover: hsl(162, 100%, 20.8%);
+    --success-pressed: hsl(162, 100%, 16.1%);
+    --success-focus: hsla(162, 100%, 25.5%, 0.2);
+
+    --warning-main: hsl(30, 92.3%, 46.7%);
+    --warning-surface: hsl(30, 100%, 95.3%);
+    --warning-border: hsl(30, 100%, 72.9%);
+    --warning-hover: hsl(30, 100%, 33.3%);
+    --warning-pressed: hsl(30, 100%, 15.7%);
+    --warning-focus: hsla(30, 92.3%, 46.7%, 0.2);
+
+    --info-main: hsl(209, 93.3%, 34.5%);
+    --info-surface: hsl(212, 87.8%, 98%);
+    --info-border: hsl(212, 63.1%, 80.4%);
+    --info-hover: hsl(211, 93.1%, 29%);
+    --info-pressed: hsl(211, 93.1%, 22.7%);
+    --info-focus: hsla(209, 93.3%, 34.5%, 0.2);
+
+    --accent-teal: hsl(198, 33.7%, 33.7%);
+    --accent-purple: hsl(248, 57.6%, 65.9%);
+    --accent-jade: hsl(168, 100%, 35.7%);
+    --accent-gold: hsl(38, 100%, 63.1%);
+  }
 }
 
 @layer base {
@@ -138,8 +256,6 @@
   }
 
   body {
-    @apply bg-solitairePrimary text-foreground;
-
     /* width */
     ::-webkit-scrollbar {
       width: 6px !important;

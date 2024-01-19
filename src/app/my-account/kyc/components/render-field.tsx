@@ -104,16 +104,18 @@ export const RenderField: React.FC<IRenderFieldProps> = ({
           {label && <p className="mb-[8px] text-solitaireTertiary">{label}</p>}
           <FloatingLabelInput
             label={name}
-            onChange={e =>
+            onChange={e => {
               handleInputChange(
                 `formState.online.sections[${screenName}][${formKey}]`,
-                e.target.value,
+                inputType === 'number'
+                  ? parseInt(e.target.value)
+                  : e.target.value,
                 dispatch,
                 screenName,
                 formKey,
                 formState
-              )
-            }
+              );
+            }}
             type={inputType}
             name={name}
             value={formState?.online?.sections?.[screenName]?.[formKey] ?? ''}
