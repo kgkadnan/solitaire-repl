@@ -12,7 +12,8 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import {
   IErrorSetState,
   IErrorState,
-  IModalSetState
+  IModalSetState,
+  ITableColumn
 } from '@/app/search/result/result-interface';
 import {
   ICheckboxSetState,
@@ -20,7 +21,7 @@ import {
 } from '@/components/common/checkbox/interface';
 
 interface IMemoOut {
-  tableColumns: any;
+  tableColumns: ITableColumn[];
   memoRows: any;
   downloadExcelFunction: () => void;
   errorSetState: IErrorSetState;
@@ -65,19 +66,19 @@ const MemoOut: React.FC<IMemoOut> = ({
   //Footer Button Data
   const footerButtonData = [
     {
-      id: 2,
+      id: 1,
       displayButtonLabel: 'Download Excel',
       style: styles.transparent,
       fn: downloadExcelFunction
     },
     {
-      id: 3,
+      id: 2,
       displayButtonLabel: 'Share',
       style: styles.transparent,
       fn: handleShare
     },
     {
-      id: 4,
+      id: 3,
       displayButtonLabel: 'Compare Stone',
       style: styles.transparent,
       fn: () =>
@@ -99,7 +100,7 @@ const MemoOut: React.FC<IMemoOut> = ({
 
   return (
     <div className="mt-[21px]">
-      {memoRows.length > 0 ? (
+      {memoRows?.length > 0 ? (
         <CustomDataTable
           tableRows={memoRows}
           tableColumns={tableColumns}

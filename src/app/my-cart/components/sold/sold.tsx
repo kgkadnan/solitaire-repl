@@ -52,7 +52,7 @@ const OutOfStock: React.FC<IOutOfStock> = ({
 
   return (
     <div className="mt-[21px]">
-      {soldOutRows.length > 0 ? (
+      {soldOutRows?.length > 0 ? (
         <CustomDataTable
           tableRows={soldOutRows}
           tableColumns={tableColumns}

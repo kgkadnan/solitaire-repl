@@ -21,6 +21,7 @@ import {
   SELECT_STONE_TO_PERFORM_ACTION,
   SOME_STONES_NOT_AVAILABLE
 } from '@/constants/error-messages/search';
+import { MEMO_STATUS } from '@/constants/business-logic';
 
 export const ResultFooter: React.FC<IResultFooterProps> = ({
   rows,
@@ -100,7 +101,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     } else {
       const hasMemoOut = isCheck.some((id: string) => {
         return rows.some(
-          (row: IProduct) => row.id === id && row.diamond_status === 'MemoOut'
+          (row: IProduct) => row.id === id && row.diamond_status === MEMO_STATUS
         );
       });
 
