@@ -8,7 +8,7 @@ import {
 
 export const handleInputChange = async (
   path: string,
-  value: string | string[],
+  value: string | string[] | number,
   dispatch: any,
   screenName: string,
   key: string,
@@ -25,6 +25,7 @@ export const handleInputChange = async (
       value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
     })
   );
+
   dispatch(updateFormState({ name: path, value: value }));
   dispatch(isEditingKYC(true));
   if (
