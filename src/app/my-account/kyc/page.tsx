@@ -43,7 +43,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { ManageLocales } from '@/utils/translate';
 import { useRouter } from 'next/navigation';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
-import CustomLoader from '@/components/common/loader';
+import Loader from '@/components/v2/common/custom-loader';
 
 // interface IKYCData {
 //   kyc: {
@@ -890,7 +890,12 @@ const KYC: React.FC = () => {
     }
   };
 
-  return <>{isSubmitKycLoading ? <CustomLoader /> : renderContent()}</>;
+  return (
+    <>
+      {isSubmitKycLoading && <Loader />}
+      {renderContent()}
+    </>
+  );
 };
 
 export default KYC;
