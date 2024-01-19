@@ -324,7 +324,7 @@ export const TopNavigationBar = () => {
                       </div>
                       <div className="fill-solitaireTertiary flex justify-between items-center">
                         <div className="flex gap-[18px] items-center">
-                          {currentTheme === 'dark' ? (
+                          {currentTheme === 'primary' ? (
                             <DarkIcon fill="solitaireTertiary" />
                           ) : (
                             <LightIcon fill="solitaireTertiary" />
@@ -332,7 +332,7 @@ export const TopNavigationBar = () => {
 
                           <CustomDisplayButton
                             displayButtonLabel={
-                              currentTheme === 'dark'
+                              currentTheme === 'primary'
                                 ? 'Dark Theme'
                                 : 'Light Theme'
                             }

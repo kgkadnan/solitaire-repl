@@ -17,6 +17,7 @@ export const notificationRoutes = [
   '/notification/all-notification',
   '/notification/setting'
 ];
+export const v2Routes = ['/v2'];
 export const protectedRoutes = [
   '/',
   '/search',
@@ -24,7 +25,8 @@ export const protectedRoutes = [
   '/my-cart',
   '/compare-stone',
   ...notificationRoutes,
-  ...myAccountRoutes
+  ...myAccountRoutes,
+  ...v2Routes
 ];
 
 export const applicationRoutes = [
