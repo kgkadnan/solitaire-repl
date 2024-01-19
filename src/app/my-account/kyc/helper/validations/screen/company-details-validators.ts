@@ -28,9 +28,7 @@ import {
   MSME_TYPE_INVALID,
   MEMBER_BUSINESS_INVALID,
   MEMBER_NAME_INVALID,
-  FIELD_INVALID,
-  MAX_CHARACTER_LIMIT_EXCEEDED,
-  RANGE_VALIDATION
+  FIELD_INVALID
 } from '@/constants/error-messages/kyc';
 import {
   GST_NUMBER_REGEX,
@@ -47,7 +45,11 @@ import {
   Matches,
   IsAlphanumeric,
   Length,
-  IsNumberString
+  IsNumberString,
+  MinLength,
+  IsNumber,
+  Min,
+  Max
 } from 'class-validator';
 
 export class KycPostCompanyDetailsValidation {
@@ -57,7 +59,7 @@ export class KycPostCompanyDetailsValidation {
     message: FIELD_INVALID('Company Name')
   })
   @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Company Name', 140)
+    message: FIELD_INVALID('Company Name')
   })
   company_name: string;
 
@@ -84,11 +86,15 @@ export class KycPostCompanyDetailsValidation {
 
   @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
   @IsString({ message: FIELD_INVALID('Business Registration Number') })
-  @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
   @Length(1, 140, {
-    message: RANGE_VALIDATION('Business Registration Number', 1, 140)
+    message: FIELD_INVALID('Business Registration Number')
   })
   business_registration_number: string;
+
+  @IsString({ message: FIELD_INVALID('Subsidiary Company') })
+  @IsOptional()
+  @Length(1, 140, { message: FIELD_INVALID('Subsidiary Company Name') })
+  subsidiary_company: string;
 
   @IsBoolean({
     message: MEMBER_BUSINESS_INVALID
@@ -101,8 +107,15 @@ export class KycPostCompanyDetailsValidation {
   @ValidateIf((object, value) => object.is_member_of_business === value)
   @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
   @IsString({ message: MEMBER_NAME_INVALID })
+  @Length(1, 140, { message: FIELD_INVALID('Member of Business Name') })
+  @Matches(NAME_REGEX, {
+    message: MEMBER_NAME_INVALID
+  })
   member_of_business_name: string;
 
+  @Length(1, 140, {
+    message: FIELD_INVALID('Ultimate Beneficiary Name')
+  })
   @IsNotEmpty({ message: ULTIMATE_BENEFICIARY_NAME_MANDATORY })
   ultimate_beneficiary_name: string;
 
@@ -115,6 +128,7 @@ export class KycPostCompanyDetailsValidation {
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string
@@ -127,6 +141,7 @@ export class KycPostCompanyDetailsValidation {
     this.industry_type = industry_type;
     this.organisation_type = organisation_type;
     this.business_registration_number = business_registration_number;
+    this.subsidiary_company = subsidiary_company;
     this.is_member_of_business = is_member_of_business;
     this.member_of_business_name = member_of_business_name;
     this.ultimate_beneficiary_name = ultimate_beneficiary_name;
@@ -134,27 +149,39 @@ export class KycPostCompanyDetailsValidation {
 }
 
 export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
+  @IsString({ message: FIELD_INVALID('City') })
   @IsNotEmpty({ message: CITY_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('City Name') })
   city: string;
 
   @IsString({ message: FIELD_INVALID('Address') })
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Address', 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Address') })
   @IsNotEmpty({ message: ADDRESS_MANDATORY })
   address: string;
 
+  @IsString({ message: FIELD_INVALID('State') })
+  @Length(1, 140, { message: FIELD_INVALID('State') })
   @IsNotEmpty({ message: STATE_MANDATORY })
   state: string;
 
   @IsNotEmpty({ message: PINCODE_MANDATORY })
   pincode: string;
 
-  @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
+  @Matches(PAN_MATCH, {
+    message: FIELD_INVALID('Company PAN')
+  })
+  @IsString({ message: FIELD_INVALID('Company PAN') })
   @IsNotEmpty({ message: COMPANY_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Number') })
+  @IsAlphanumeric(undefined, { message: COMPANY_PAN_NUMBER_MANDATORY })
+  @MinLength(10, { message: COMPANY_PAN_NUMBER_MANDATORY })
   company_pan_number: string;
 
-  @Matches(GST_NUMBER_REGEX, { message: FIELD_INVALID('GST Number') })
+  @Matches(GST_NUMBER_REGEX, {
+    message: FIELD_INVALID('GST Number')
+  })
+  @IsString({ message: FIELD_INVALID('GST Number') })
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('GST Number') })
   gst_number: string;
 
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
@@ -164,6 +191,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsString({
     message: MSME_TYPE_INVALID
   })
+  @Length(1, 140, { message: FIELD_INVALID('MSME Type') })
   @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
@@ -186,6 +214,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -207,6 +236,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
       industry_type,
       organisation_type,
       business_registration_number,
+      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
       ultimate_beneficiary_name
@@ -226,10 +256,12 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
 export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetailsValidation {
   @IsString({ message: FIELD_INVALID('VAT Number') })
   @IsNotEmpty({ message: VAT_NUMBER_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('VAT Number', 1, 140) })
+  @Length(5, 15, { message: FIELD_INVALID('VAT Number') })
   vat_number: string;
 
+  @IsString({ message: FIELD_INVALID('FAX Number') })
   @IsOptional()
+  @Length(5, 25, { message: FIELD_INVALID('Fax Number') })
   fax_number: string;
 
   @IsNotEmpty({ message: ADDRESS_MANDATORY })
@@ -240,6 +272,9 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
 
   //TODO:validator for it
   @IsOptional()
+  @IsNumber({}, { message: FIELD_INVALID('Ownership Percentage') })
+  @Min(0, { message: FIELD_INVALID('Ownership Percentage') })
+  @Max(100, { message: FIELD_INVALID('Ownership Percentage') })
   ownership_percentage: number;
 
   constructor(
@@ -253,6 +288,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -269,6 +305,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
       industry_type,
       organisation_type,
       business_registration_number,
+      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
       ultimate_beneficiary_name
@@ -284,7 +321,7 @@ export class BelgiumKycPostCompanyDetailsValidation extends KycPostCompanyDetail
 export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDetailsValidation {
   @IsString({ message: FIELD_INVALID('Federal Tax ID') })
   @IsNotEmpty({ message: FEDERAL_TAX_ID_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('Federal Tax ID', 1, 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Federal Tax ID') })
   federal_tax_id: string;
 
   @IsBoolean({ message: ANTI_MONEY_LAUNDERING_INVALID })
@@ -311,6 +348,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
     industry_type: string[],
     organisation_type: string,
     business_registration_number: string,
+    subsidiary_company: string,
     is_member_of_business: boolean,
     member_of_business_name: string,
     ultimate_beneficiary_name: string,
@@ -332,6 +370,7 @@ export class UsaKycPostCompanyDetailsValidation extends BelgiumKycPostCompanyDet
       industry_type,
       organisation_type,
       business_registration_number,
+      subsidiary_company,
       is_member_of_business,
       member_of_business_name,
       ultimate_beneficiary_name,
