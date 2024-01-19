@@ -68,30 +68,30 @@ const ImageTile: React.FC<IImageContainerProps> = (
             }}
           >
             {typeof src === 'string' ? (
-            //   <CustomTooltip
-            //     tooltipTrigger={
-            //       <>
-            //         <Image
-            //           src={src}
-            //           alt={title}
-            //           width={100}
-            //           height={100}
-            //           className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-            //         />
-            //         {!isNavOption && (
-            //           <div
-            //             className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-            //           >
-            //             {title}
-            //           </div>
-            //         )}
-            //       </>
-            //     }
-            //     tooltipContent={tileData.short_name}
-            //     delayDuration={0}
-            //     tooltipStyles={{ tooltipContent: 'bg-solitaireSenary' }}
-            //   />
-            <></>
+              //   <CustomTooltip
+              //     tooltipTrigger={
+              //       <>
+              //         <Image
+              //           src={src}
+              //           alt={title}
+              //           width={100}
+              //           height={100}
+              //           className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
+              //         />
+              //         {!isNavOption && (
+              //           <div
+              //             className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
+              //           >
+              //             {title}
+              //           </div>
+              //         )}
+              //       </>
+              //     }
+              //     tooltipContent={tileData.short_name}
+              //     delayDuration={0}
+              //     tooltipStyles={{ tooltipContent: 'bg-solitaireSenary' }}
+              //   />
+              <></>
             ) : (
               <div
                 className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
