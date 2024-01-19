@@ -6,22 +6,21 @@ import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import Image from 'next/image';
 import Link from 'next/link';
 import { notificationBadge } from '@/features/notification/notification-slice';
-import {
-  NOT_MORE_THAN_100,
-  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH
-} from '@/constants/error-messages/search';
+import { NOT_MORE_THAN_100 } from '@/constants/error-messages/search';
+import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import { Dispatch, ReactNode, SetStateAction } from 'react';
 
 interface IHandleAddToCart {
-  isCheck: any;
-  setIsError: any;
-  setErrorText: any;
+  isCheck: string[];
+  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
+  setErrorText: React.Dispatch<React.SetStateAction<string>>;
   rows: any;
   addCart: any;
-  setIsPersistDialogOpen: any;
-  setPersistDialogContent: any;
+  setIsPersistDialogOpen: Dispatch<SetStateAction<boolean>>;
+  setPersistDialogContent: Dispatch<SetStateAction<ReactNode>>;
   dispatch: any;
   setIsCheck: any;
-  setIsCheckAll?: any;
+  setIsCheckAll?: React.Dispatch<React.SetStateAction<boolean>>;
   refetchRow?: any;
 }
 
