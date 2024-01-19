@@ -169,33 +169,41 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     }
   ];
 
+  const legendsData = [
+    {
+      label: ManageLocales('app.searchResult.footer.memo'),
+      backGroundColor: 'bg-solitaireSenary'
+    },
+    {
+      label: ManageLocales('app.searchResult.footer.inCart'),
+      backGroundColor: 'bg-[#614C4B]'
+    },
+    {
+      label: ManageLocales('app.searchResult.footer.onHold'),
+      backGroundColor: 'bg-solitaireQuaternary'
+    },
+    ,
+  ];
+
   return (
     <div className="sticky-bottom bg-solitairePrimary mt-3">
       <div className="flex border-t-2 border-solitaireSenary items-center py-3 gap-3">
-        <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireSenary px-2 rounded-[2px]">
-            0000000000
-          </span>
-          <p className="text-solitaireTertiary text-sm">
-            {ManageLocales('app.searchResult.footer.memo')}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-[#614C4B] px-2 rounded-[2px]">
-            0000000000
-          </span>
-          <p className="text-solitaireTertiary text-sm">
-            {ManageLocales('app.searchResult.footer.inCart')}
-          </p>
-        </div>
-        <div className="flex items-center gap-3">
-          <span className="text-solitaireTertiary bg-solitaireQuaternary px-2 rounded-[2px]">
-            0000000000
-          </span>
-          <p className="text-solitaireTertiary text-sm">
-            {ManageLocales('app.searchResult.footer.onHold')}
-          </p>
-        </div>
+        {legendsData.map(items => {
+          return (
+            <div className="flex items-center gap-3" key={items && items.label}>
+              <span
+                className={`text-solitaireTertiary px-2 rounded-[2px] ${
+                  items && items.backGroundColor
+                }`}
+              >
+                0000000000
+              </span>
+              <p className="text-solitaireTertiary text-sm">
+                {items && items.label}
+              </p>
+            </div>
+          );
+        })}
       </div>
 
       <div className="flex border-t-2 border-solitaireSenary items-center justify-between">

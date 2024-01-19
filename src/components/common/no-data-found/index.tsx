@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './no-data-founs.module.scss';
 
 interface INoDataFound {
-  message?: React.ReactNode | string;
+  message?: React.ReactNode;
 }
 
 export const NoDataFound: React.FC<INoDataFound> = ({ message }) => {
