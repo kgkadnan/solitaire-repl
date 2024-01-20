@@ -1,15 +1,24 @@
 import {
+  ACCOUNT_HOLDER_NAME_MANDATORY,
+  ACCOUNT_NUMBER_MANDATORY,
+  ADDRESS_MANDATORY,
   ANTI_MONEY_LAUNDERING_INVALID,
+  BANK_ADDRESS_INVALID,
+  BANK_NAME_MANDATORY,
   BUSINESS_REGISTRATION_NUMBER_MANDATORY,
   BUSINESS_TYPE_MANDATORY,
   CITY_MANDATORY,
+  COMPANY_NAME_MANDATORY,
   COMPANY_PAN_NUMBER_MANDATORY,
+  COUNTRY_CODE_MANDATORY,
+  EMAIL_MANDATORY,
   FEDERAL_TAX_ID_MANDATORY,
   FIELD_INVALID,
+  FIRST_NAME_MANDATORY,
   GST_NUMBER_MANDATORY,
   IFSC_CODE_MANDATORY,
   INDUSTRY_TYPE_MANDATORY,
-  MAX_CHARACTER_LIMIT_EXCEEDED,
+  LAST_NAME_MANDATORY,
   MEMBER_BUSINESS_INVALID,
   MEMBER_CHECK_MANDATORY,
   MEMBER_NAME_INVALID,
@@ -19,12 +28,14 @@ import {
   MSME_TYPE_INVALID,
   MSME_TYPE_MANDATORY,
   ORGANISATION_TYPE_MANDATORY,
+  OWNER_PAN_NUMBER_MANDATORY,
+  PHONE_NUMBER_MANDATORY,
   PINCODE_MANDATORY,
-  RANGE_VALIDATION,
   STATE_MANDATORY,
   SWIFT_CODE_MANDATORY,
   ULTIMATE_BENEFICIARY_NAME_MANDATORY,
-  VAT_NUMBER_MANDATORY
+  VAT_NUMBER_MANDATORY,
+  YEAR_OF_ESTABLISHMENT_MANDATORY
 } from '@/constants/error-messages/kyc';
 import {
   ACCOUNT_NUMBER_REGEX,
@@ -39,12 +50,16 @@ import {
   IsAlphanumeric,
   IsBoolean,
   IsEmail,
+  IsMobilePhone,
   IsNotEmpty,
+  IsNumber,
   IsNumberString,
   IsOptional,
   IsString,
   Length,
   Matches,
+  Max,
+  Min,
   MinLength,
   ValidateIf,
   validate
@@ -223,10 +238,11 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
 }
 
 class ValidationFirstNameCriteria {
+  @IsNotEmpty({ message: FIRST_NAME_MANDATORY })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('First Name')
   })
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('First Name', 140) })
+  @Length(1, 140, { message: FIELD_INVALID('First Name') })
   first_name: string;
 
   constructor(first_name: string) {
@@ -238,7 +254,8 @@ class ValidationLastNameCriteria {
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Last Name')
   })
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Last Name', 140) })
+  @IsNotEmpty({ message: LAST_NAME_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('Last Name') })
   last_name: string;
 
   constructor(last_name: string) {
@@ -247,7 +264,8 @@ class ValidationLastNameCriteria {
 }
 
 class ValidationEmailCriteria {
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Email', 140) })
+  @IsNotEmpty({ message: EMAIL_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('Email') })
   @IsEmail({}, { message: FIELD_INVALID('Email') })
   email: string;
 
@@ -257,7 +275,8 @@ class ValidationEmailCriteria {
 }
 
 class ValidationCountryCodeCriteria {
-  @IsNotEmpty({ message: FIELD_INVALID('Country Code') })
+  @IsNotEmpty({ message: COUNTRY_CODE_MANDATORY })
+  @Length(1, 4, { message: FIELD_INVALID('Country Code') })
   country_code: string;
 
   constructor(country_code: string) {
@@ -267,6 +286,8 @@ class ValidationCountryCodeCriteria {
 
 class ValidationPhoneCriteria {
   @MinLength(3, { message: FIELD_INVALID('Phone') })
+  @IsMobilePhone()
+  @IsNotEmpty({ message: PHONE_NUMBER_MANDATORY })
   phone: string;
 
   constructor(phone: string) {
@@ -276,7 +297,8 @@ class ValidationPhoneCriteria {
 
 //bank details
 class ValidationBankNameCriteria {
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Name', 140) })
+  @IsNotEmpty({ message: BANK_NAME_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('Bank Name') })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Bank Name')
   })
@@ -290,12 +312,13 @@ class ValidationBankNameCriteria {
 
 class ValidationAccountHolderNameCriteria {
   @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Holder Name', 140)
+    message: FIELD_INVALID('Account Holder Name')
   })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Account Holder Name')
   })
   @IsString({ message: FIELD_INVALID('Account Holder Name') })
+  @IsNotEmpty({ message: ACCOUNT_HOLDER_NAME_MANDATORY })
   account_holder_name: string;
 
   constructor(account_holder_name: string) {
@@ -305,12 +328,13 @@ class ValidationAccountHolderNameCriteria {
 
 class ValidationAccountNumberCriteria {
   @Length(1, 15, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Account Number', 15)
+    message: FIELD_INVALID('Account Number')
   })
   @IsString({ message: FIELD_INVALID('Account Number') })
   @Matches(ACCOUNT_NUMBER_REGEX, {
     message: FIELD_INVALID('Account Number')
   })
+  @IsNotEmpty({ message: ACCOUNT_NUMBER_MANDATORY })
   account_number: string;
 
   constructor(account_number: string) {
@@ -319,11 +343,11 @@ class ValidationAccountNumberCriteria {
 }
 
 class ValidationBankAddressCriteria {
-  @Length(0, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Bank Address', 140)
-  })
-  @IsString({ message: FIELD_INVALID('Bank Address') })
+  @IsString({ message: BANK_ADDRESS_INVALID })
   @IsOptional()
+  @Length(0, 140, {
+    message: FIELD_INVALID('Bank Address')
+  })
   bank_address: string;
 
   constructor(bank_address: string) {
@@ -337,7 +361,7 @@ class ValidationIFSCCriteria {
     message: FIELD_INVALID('IFSC code')
   })
   @Length(8, 11, {
-    message: RANGE_VALIDATION('IFSC code', 8, 11)
+    message: FIELD_INVALID('IFSC code')
   })
   ifsc_code: string;
 
@@ -353,7 +377,7 @@ class ValidationSwitfCriteria {
     message: FIELD_INVALID('Swift code')
   })
   @Length(8, 11, {
-    message: RANGE_VALIDATION('Swift code', 8, 11)
+    message: FIELD_INVALID('Swift code')
   })
   swift_code: string;
 
@@ -366,7 +390,7 @@ class ValidationSwitfCriteria {
 
 class ValidationOwnerNameCriteria {
   @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Owner Full Name', 140)
+    message: FIELD_INVALID('Owner Full Name')
   })
   @IsNotEmpty({ message: FIELD_INVALID('Owner Full Name') })
   @Matches(NAME_REGEX, {
@@ -379,9 +403,10 @@ class ValidationOwnerNameCriteria {
   }
 }
 class ValidationPanCriteria {
-  @MinLength(10, { message: FIELD_INVALID('Owner PAN') })
-  @Matches(PAN_MATCH, { message: FIELD_INVALID('Owner PAN') })
-  @IsAlphanumeric(undefined, { message: FIELD_INVALID('Owner PAN') })
+  @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
+  @IsNotEmpty({ message: OWNER_PAN_NUMBER_MANDATORY })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Number') })
+  @MinLength(10, { message: FIELD_INVALID('PAN Number') })
   owner_pan_number: string;
 
   constructor(owner_pan_number: string) {
@@ -392,12 +417,13 @@ class ValidationPanCriteria {
 ///company details
 
 class ValidationCompanyNameCriteria {
+  @IsNotEmpty({ message: COMPANY_NAME_MANDATORY })
   @IsString({ message: FIELD_INVALID('Company Name') })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Company Name')
   })
   @Length(1, 140, {
-    message: MAX_CHARACTER_LIMIT_EXCEEDED('Company Name', 140)
+    message: FIELD_INVALID('Company Name')
   })
   company_name: string;
 
@@ -407,6 +433,7 @@ class ValidationCompanyNameCriteria {
 }
 
 class ValidationYearOfEstablishmentCriteria {
+  @IsNotEmpty({ message: YEAR_OF_ESTABLISHMENT_MANDATORY })
   @IsNumberString({}, { message: FIELD_INVALID('Year of Establishment') })
   @Length(4, 4, { message: FIELD_INVALID('Year of Establishment') })
   year_of_establishment: string;
@@ -417,7 +444,8 @@ class ValidationYearOfEstablishmentCriteria {
 }
 class ValidationAddressCriteria {
   @IsString({ message: FIELD_INVALID('Address') })
-  @Length(1, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Address', 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Address') })
+  @IsNotEmpty({ message: ADDRESS_MANDATORY })
   address: string;
 
   constructor(address: string) {
@@ -442,7 +470,9 @@ class ValidationIndustryTypeCriteria {
   }
 }
 class ValidationOrganisationTypeCriteria {
+  @IsNotEmpty({ message: ORGANISATION_TYPE_MANDATORY })
   @IsString({ message: ORGANISATION_TYPE_MANDATORY })
+  @Length(1, 140, { message: FIELD_INVALID('Organisation Type') })
   organisation_type: string;
 
   constructor(organisation_type: string) {
@@ -451,10 +481,10 @@ class ValidationOrganisationTypeCriteria {
 }
 
 class ValidationBusinessRegistrationNumberCriteria {
-  @IsString({ message: FIELD_INVALID('Business Registration Number') })
   @IsNotEmpty({ message: BUSINESS_REGISTRATION_NUMBER_MANDATORY })
+  @IsString({ message: FIELD_INVALID('Business Registration Number') })
   @Length(1, 140, {
-    message: RANGE_VALIDATION('Business Registration Number', 1, 140)
+    message: FIELD_INVALID('Business Registration Number')
   })
   business_registration_number: string;
 
@@ -465,7 +495,8 @@ class ValidationBusinessRegistrationNumberCriteria {
 
 class ValidationSubsidiaryCompanyCriteria {
   @IsString({ message: FIELD_INVALID('Subsidiary Company') })
-  @Length(1, 140, { message: RANGE_VALIDATION('Subsidiary Company', 1, 140) })
+  @IsOptional()
+  @Length(1, 140, { message: FIELD_INVALID('Subsidiary Company') })
   subsidiary_company: string;
 
   constructor(subsidiary_company: string) {
@@ -491,9 +522,7 @@ class ValidationMemberNameCriteria {
   @ValidateIf((object, value) => object.is_member_of_business === value)
   @IsNotEmpty({ message: MEMBER_NAME_MANDATORY })
   @IsString({ message: MEMBER_NAME_INVALID })
-  @Length(1, 140, {
-    message: RANGE_VALIDATION('Member of Business Organisation Name', 1, 140)
-  })
+  @Length(1, 140, { message: FIELD_INVALID('Member of Business Name') })
   @Matches(NAME_REGEX, {
     message: MEMBER_NAME_INVALID
   })
@@ -508,7 +537,7 @@ class ValidationUltimateBeneficiaryNameCriteria {
   @IsString({ message: FIELD_INVALID('Ultimate Beneficiary Name') })
   @IsNotEmpty({ message: ULTIMATE_BENEFICIARY_NAME_MANDATORY })
   @Length(1, 140, {
-    message: RANGE_VALIDATION('Ultimate Beneficiary Name', 1, 140)
+    message: FIELD_INVALID('Ultimate Beneficiary Name')
   })
   @Matches(NAME_REGEX, {
     message: FIELD_INVALID('Ultimate Beneficiary Name')
@@ -523,7 +552,7 @@ class ValidationUltimateBeneficiaryNameCriteria {
 class ValidationCityCriteria {
   @IsString({ message: FIELD_INVALID('City') })
   @IsNotEmpty({ message: CITY_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('City', 1, 140) })
+  @Length(1, 140, { message: FIELD_INVALID('City Name') })
   city: string;
 
   constructor(city: string) {
@@ -533,8 +562,8 @@ class ValidationCityCriteria {
 
 class ValidationStateCriteria {
   @IsString({ message: FIELD_INVALID('State') })
+  @Length(1, 140, { message: FIELD_INVALID('State') })
   @IsNotEmpty({ message: STATE_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('State', 1, 140) })
   state: string;
 
   constructor(state: string) {
@@ -575,7 +604,7 @@ class ValidationGSTCriteria {
   })
   @IsString({ message: FIELD_INVALID('GST Number') })
   @IsNotEmpty({ message: GST_NUMBER_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('GST Number', 1, 140) })
+  @Length(1, 140, { message: FIELD_INVALID('GST Number') })
   gst_number: string;
 
   constructor(gst_number: string) {
@@ -612,9 +641,7 @@ class ValidationMSMENumberCriteria {
   @IsNotEmpty({
     message: MSME_REGISTRATION_NUMBER_MANDATORY
   })
-  @Length(1, 140, {
-    message: RANGE_VALIDATION('MSME Registration Number', 1, 140)
-  })
+  @Length(12, 12, { message: FIELD_INVALID('MSME Registration Number') })
   msme_registration_number: string;
 
   constructor(msme_registration_number: string) {
@@ -624,7 +651,7 @@ class ValidationMSMENumberCriteria {
 class ValidationVATCriteria {
   @IsString({ message: FIELD_INVALID('VAT Number') })
   @IsNotEmpty({ message: VAT_NUMBER_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('VAT Number', 1, 140) })
+  @Length(5, 15, { message: FIELD_INVALID('VAT Number') })
   vat_number: string;
 
   constructor(vat_number: string) {
@@ -634,7 +661,7 @@ class ValidationVATCriteria {
 class ValidationFAXCriteria {
   @IsString({ message: FIELD_INVALID('FAX Number') })
   @IsOptional()
-  @Length(0, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('FAX Number', 140) })
+  @Length(5, 25, { message: FIELD_INVALID('Fax Number') })
   fax_number: string;
 
   constructor(fax_number: string) {
@@ -645,7 +672,7 @@ class ValidationFAXCriteria {
 class ValidationAddressLineCriteria {
   @IsString({ message: FIELD_INVALID('Address') })
   @IsOptional()
-  @Length(0, 140, { message: MAX_CHARACTER_LIMIT_EXCEEDED('Address', 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Address Line 2') })
   address_line_2: string;
 
   constructor(address_line_2: string) {
@@ -656,6 +683,9 @@ class ValidationAddressLineCriteria {
 class ValidationOwnershipPercentageCriteria {
   //TODO:validator for it
   @IsOptional()
+  @IsNumber({}, { message: FIELD_INVALID('Ownership Percentage') })
+  @Min(0, { message: FIELD_INVALID('Ownership Percentage') })
+  @Max(100, { message: FIELD_INVALID('Ownership Percentage') })
   ownership_percentage: number;
 
   constructor(ownership_percentage: number) {
@@ -666,7 +696,7 @@ class ValidationOwnershipPercentageCriteria {
 class ValidationFederalTaxCriteria {
   @IsString({ message: FIELD_INVALID('Federal Tax ID') })
   @IsNotEmpty({ message: FEDERAL_TAX_ID_MANDATORY })
-  @Length(1, 140, { message: RANGE_VALIDATION('Federal Tax ID', 1, 140) })
+  @Length(1, 140, { message: FIELD_INVALID('Federal Tax ID') })
   federal_tax_id: string;
 
   constructor(federal_tax_id: string) {

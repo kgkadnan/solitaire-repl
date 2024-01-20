@@ -16,6 +16,44 @@ module.exports = {
       }
     },
     extend: {
+      // v2 theme typography
+      fontSize: {
+        sRegular: '12px',
+        sMedium: '12px',
+        sMobileRegular: '10px',
+        mRegular: '14px',
+        mMedium: '14px',
+        mMedium10: '10px',
+        lRegular: '16px',
+        lMedium: '16px',
+        headingS: '20px',
+        headingM: '28px',
+        headingL: '36px',
+        headingXL: '48px'
+      },
+      fontWeight: {
+        regular: 400,
+        medium: 500,
+        semiBold: 600,
+        bold: 700
+      },
+      lineHeight: {
+        sRegular: '1.33',
+        sMedium: '1.33',
+        sMobileRegular: '1.6',
+        mRegular: '1.5',
+        mMedium: '1.5',
+        mMedium10: '1.6',
+        lRegular: '1.5',
+        lMedium: '1.5',
+        headingS: '1.5',
+        headingM: '1.5',
+        headingL: '1.5',
+        headingXL: '1.5'
+      },
+      fontFamily: {
+        custom: ['Inter', 'sans-serif']
+      },
       colors: {
         //*********Customize**************
         solitairePrimary: 'hsl(var(--solitaire-primary))', // dark - Emerald Green / light- white
@@ -29,7 +67,7 @@ module.exports = {
         solitaireNonary: 'hsl(var(--solitaire-nonary))', // dark - Emerald 7 / light- Carbon 1
         solitaireDenary: 'hsl(var(--solitaire-denary))', // dark - Emerald 7 / light- Carbon 1
         solitaireOutline: 'hsl(var(--solitaire-outline))', // dark - Emerald 4 / light- Carbon 2
-        solitaireBorder: 'hsl(var(--solitaire-border))', // dark - Emerald 4 / light- white
+        solitaireBorder: 'hsl(var(--solitaire-border))', // dar  - Emerald 4 / light- white
         solitaireError: 'hsl(var(--solitaire-error))', // dark - Error / light- Error
         solitaireSuccess: 'hsl(var(--solitaire-success))', // dark - Success / light- Success
         //********************* */
@@ -66,7 +104,56 @@ module.exports = {
         card: {
           DEFAULT: 'hsl(var(--card))',
           foreground: 'hsl(var(--card-foreground))'
-        }
+        },
+
+        // v2 UI theme
+        neutral0: 'var(--neutral-0)',
+        neutral25: 'var(--neutral-25)',
+        neutral50: 'var(--neutral-50)',
+        neutral100: 'var(--neutral-100)',
+        neutral200: 'var(--neutral-200)',
+        neutral300: 'var(--neutral-300)',
+        neutral400: 'var(--neutral-400)',
+        neutral500: 'var(--neutral-500)',
+        neutral600: 'var(--neutral-600)',
+        neutral700: 'var(--neutral-700)',
+        neutral800: 'var(--neutral-800)',
+        neutral900: 'var(--neutral-900)',
+        primaryMain: 'var(--primary-main)',
+        primarySurface: 'var(--primary-surface)',
+        primaryBorder: 'var(--primary-border)',
+        primaryHover: 'var(--primary-hover)',
+        primaryPressed: 'var(--primary-pressed)',
+        primaryFocus: 'var(--primary-focus)',
+        primaryIconColor: 'var(--primary-icon-color)',
+        dangerMain: 'var(--danger-main)',
+        dangerSurface: 'var(--danger-surface)',
+        dangerBorder: 'var(--danger-border)',
+        dangerHover: 'var(--danger-hover)',
+        dangerPressed: 'var(--danger-pressed)',
+        dangerFocus: 'var(--danger-focus)',
+        successMain: 'var(--success-main)',
+        successSurface: 'var(--success-surface)',
+        successBorder: 'var(--success-border)',
+        successHover: 'var(--success-hover)',
+        successPressed: 'var(--success-pressed)',
+        successFocus: 'var(--success-focus)',
+        warningMain: 'var(--warning-main)',
+        warningSurface: 'var(--warning-surface)',
+        warningBorder: 'var(--warning-border)',
+        warningHover: 'var(--warning-hover)',
+        warningPressed: 'var(--warning-pressed)',
+        warningFocus: 'var(--warning-focus)',
+        infoMain: 'var(--info-main)',
+        infoSurface: 'var(--info-surface)',
+        infoBorder: 'var(--info-border)',
+        infoHover: 'var(--info-hover)',
+        infoPressed: 'var(--info-pressed)',
+        infoFocus: 'var(--info-focus)',
+        accentTeal: 'var(--accent-teal)',
+        accentPurple: 'var(--accent-purple)',
+        accentJade: 'var(--accent-jade)',
+        accentGold: 'var(--accent-gold))'
       },
       borderRadius: {
         lg: 'var(--radius)',
@@ -86,9 +173,6 @@ module.exports = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out'
-      },
-      fontFamily: {
-        custom: ['Manrope', 'sans-serif']
       }
     }
   },

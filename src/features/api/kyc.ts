@@ -56,6 +56,7 @@ export const kycApi = createApi({
 export const {
   useKycMutation,
   useGetKycDetailQuery,
+  useLazyGetKycDetailQuery,
   useSubmitKYCMutation,
   useResetKycMutation,
   useLazyGetKycPdfQuery

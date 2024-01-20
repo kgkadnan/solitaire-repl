@@ -15,7 +15,7 @@ export const MEMBER_NAME_INVALID =
 export const MEMBER_BUSINESS_INVALID =
   'Member of Business Organisation must be boolean';
 
-export const MANDATORY_ERROR = (field: string) => `${field} is Mandatory`;
+export const MANDATORY_ERROR = (field: string) => `${field} is mandatory`;
 
 // For bank details
 export const BANK_NAME_MANDATORY = MANDATORY_ERROR('Bank Name');
@@ -100,7 +100,7 @@ export const MAX_CHARACTER_LIMIT_EXCEEDED = (field: string, max: number) =>
 
 export const RANGE_VALIDATION = (field: string, min: number, max: number) =>
   `${field} should between ${min} to ${max} characters`;
-export const FIELD_INVALID = (field: string) => `${field} is Invalid`;
+export const FIELD_INVALID = (field: string) => `${field} is invalid`;
 
 // for Attachments
 export const PAN_CARD = MANDATORY_ERROR('Pan Card');

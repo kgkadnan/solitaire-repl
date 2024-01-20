@@ -2,7 +2,6 @@
 import React, { ReactNode, FC } from 'react';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
-import { Providers } from './Providers';
 import { TopNavigationBar } from '@/components/common/top-navigation-bar';
 import { BottomNavigationBar } from '@/components/common/bottom-navigation-bar';
 import SideBar from '@/components/common/sidebar';
@@ -13,8 +12,10 @@ import authorizedLogin from '@/utils/authorized-login';
 import {
   headerlessRoutes,
   protectedRoutes,
-  applicationRoutes
+  applicationRoutes,
+  v2Routes
 } from '@/constants/routes';
+import { ThemeProviders } from './theme-providers';
 
 const store = setupStore();
 
@@ -23,8 +24,9 @@ const inter = Inter({ subsets: ['latin'] });
 export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
-  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  const isV2Route = v2Routes.includes(path);
 
+  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
@@ -37,8 +39,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Providers>
-          <Provider store={store}>
+        <Provider store={store}>
+          <ThemeProviders isV2Route={isV2Route}>
             {showHeader ? (
               <>
                 <SideBar />
@@ -48,8 +50,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                   style={{
                     display: 'flex',
                     justifyContent: 'right',
-                    marginTop: '110px',
-                    padding: '0px 30px'
+                    padding: '110px 30px 0px 30px'
                   }}
                 >
                   <main
@@ -63,8 +64,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             ) : (
               <div>{children}</div>
             )}
-          </Provider>
-        </Providers>
+          </ThemeProviders>
+        </Provider>
       </body>
     </html>
   );
