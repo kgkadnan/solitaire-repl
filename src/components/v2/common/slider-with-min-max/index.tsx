@@ -1,52 +1,47 @@
 import React, { useState } from 'react';
 import { MinMaxInput } from '../min-max-input';
+import { RangeSlider } from '../slider';
 
-export const SliderWithMinMaxInput = ({ min, max, step }: any) => {
-  const [minValue, setMinValue] = useState(min);
-  const [maxValue, setMaxValue] = useState(max);
+interface ISliderWithMinMaxInputProps {
+  minValue: string;
+  maxValue: string;
+  sliderValue: string[];
+  handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSliderChange: (newValue: string[]) => void;
+  errorText?: string;
+}
 
-  const handleMinChange = (event: any) => {
-    const newMin = Math.min(Number(event.target.value), maxValue - step);
-    setMinValue(newMin);
-  };
-
-  const handleMaxChange = (event: any) => {
-    const newMax = Math.max(minValue + step, Number(event.target.value));
-    setMaxValue(newMax);
-  };
-
-  const handleMinSliderChange = (event: any) => {
-    handleMinChange(event);
-  };
-
+export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
+  minValue,
+  maxValue,
+  sliderValue,
+  handleMinChange,
+  handleMaxChange,
+  handleSliderChange,
+  errorText
+}) => {
   return (
     <div>
       <MinMaxInput
         minInputData={{
           minValue: minValue,
           minPlaceHolder: 'Min',
-          minOnchange: () => handleMinChange
+          minOnchange: handleMinChange
         }}
         maxInputData={{
           maxValue: maxValue,
           maxPlaceHolder: 'Max',
-          maxOnchange: () => handleMaxChange
+          maxOnchange: handleMaxChange
         }}
-        inputGap="gap-2" // This is an example, adjust the gap as needed
-        errorText="" // Add any error handling as needed
+        inputGap="gap-[121px]"
+        errorText=""
       />
-      <div className="relative">
-        <input
-          type="range"
-          min={min}
-          max={max}
-          value={minValue}
-          step={step}
-          onChange={handleMinSliderChange}
-          className="slider absolute"
-          style={{ zIndex: '5' }}
-        />
-      </div>
+      <RangeSlider
+        handleSliderChange={handleSliderChange}
+        sliderValue={sliderValue}
+      />
+      <p className="text-[#FA2238] text-[12px] mt-3 font-light">{errorText}</p>
     </div>
   );
 };

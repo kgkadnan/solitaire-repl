@@ -15,7 +15,7 @@ export const MinMaxInput = ({
 
   return (
     <>
-      <div className={`flex ${inputGap}`}>
+      <div className={`flex my-[16px] ${inputGap}`}>
         {minMaxData.map(type => (
           <div
             key={type}
