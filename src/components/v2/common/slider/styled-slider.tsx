@@ -20,12 +20,12 @@ const StyledThumb = styled.div`
   top: -5px;
 `;
 
-const ThumbComponent = (props, state) => <StyledThumb {...props}></StyledThumb>;
+const ThumbComponent = (props: any) => <StyledThumb {...props}></StyledThumb>;
 
 const StyledTrack = styled.div`
   top: 0;
   bottom: 0;
-  background: ${props =>
+  background: ${(props: any) =>
     props.index === 2
       ? 'var(--neutral-300)'
       : props.index === 1
@@ -34,7 +34,7 @@ const StyledTrack = styled.div`
   border-radius: 999px;
 `;
 
-const TrackComponent = (props, state) => (
+const TrackComponent = (props: any, state: any) => (
   <StyledTrack {...props} index={state.index} />
 );
 

@@ -3,7 +3,7 @@ import { Label } from '@components/ui/label';
 
 interface IInputLabelProps {
   htmlFor: string;
-  label: string | string[];
+  label: string;
   styles?: string;
 }
 
