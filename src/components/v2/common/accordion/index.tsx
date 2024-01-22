@@ -43,9 +43,7 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
           </div>
         </AccordionTrigger>
         <AccordionContent
-          className={`${
-            hasError ? styles.accordionErrorStyle : styles.accordionSuccessStyle
-          } ${styles.accordionContentStyle}`}
+          className={`${styles.accordionSuccessStyle} ${styles.accordionContentStyle}`}
         >
           {accordionContent}
         </AccordionContent>
