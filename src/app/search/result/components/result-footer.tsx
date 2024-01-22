@@ -181,8 +181,7 @@ export const ResultFooter: React.FC<IResultFooterProps> = ({
     {
       label: ManageLocales('app.searchResult.footer.onHold'),
       backGroundColor: 'bg-solitaireQuaternary'
-    },
-    ,
+    }
   ];
 
   return (
