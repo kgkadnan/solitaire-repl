@@ -18,33 +18,10 @@ import confirmImage from '@public/assets/icons/confirmation.svg';
 import { useConfirmStoneStateManagement } from '@/components/common/confirm-stone/hooks/confirm-state-management';
 import { handleConfirmStone } from '@/components/common/confirm-stone/helper/handle-confirm';
 
-import { IProductItem } from '../../interface/interface';
+import { IActiveMyCart, IProductItem } from '../../interface/interface';
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import logger from 'logging/log-util';
-import {
-  IErrorSetState,
-  IErrorState,
-  IModalSetState,
-  ITableColumn
-} from '@/app/search/result/result-interface';
-import {
-  ICheckboxSetState,
-  ICheckboxState
-} from '@/components/common/checkbox/interface';
-
-interface IActiveMyCart {
-  tableColumns: ITableColumn[];
-  refetch: any;
-  checkboxState: ICheckboxState;
-  checkboxSetState: ICheckboxSetState;
-  downloadExcelFunction: () => void;
-  errorSetState: IErrorSetState;
-  errorState: IErrorState;
-  modalSetState: IModalSetState;
-  data: any;
-  modalState: any;
-}
 
 const ActiveMyCart: React.FC<IActiveMyCart> = ({
   tableColumns,
@@ -55,7 +32,7 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   errorSetState,
   errorState,
   modalSetState,
-  data,
+  activeRows,
   modalState
 }) => {
   // State variables for managing component state
@@ -95,8 +72,8 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   // useEffect to update active tab count when cart data changes
   useEffect(() => {
     const updateRows = () => {
-      if (data) {
-        const activeDiamondItems = data?.cart?.items
+      if (activeRows) {
+        const activeDiamondItems = activeRows?.cart?.items
           ?.filter(
             (item: IProductItem) =>
               item?.product?.diamond_status === AVAILABLE_STATUS
@@ -107,7 +84,7 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
       }
     };
     updateRows();
-  }, [data]);
+  }, [activeRows]);
 
   // Handle the deletion of selected stones
   const handleDelete = () => {
@@ -146,7 +123,7 @@ const ActiveMyCart: React.FC<IActiveMyCart> = ({
   // Handle the actual deletion of stones
   const deleteStoneHandler = () => {
     setIsPersistDialogOpen(false);
-    const activeDiamondItems = data?.cart?.items.filter(
+    const activeDiamondItems = activeRows?.cart?.items.filter(
       (item: IProductItem) => item?.product?.diamond_status === AVAILABLE_STATUS
     );
 

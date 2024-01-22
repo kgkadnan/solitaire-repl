@@ -73,7 +73,7 @@ export const handleRenderCartPages: React.FC<IHandleRenderCartPages> = ({
           checkboxSetState={checkboxSetState}
           modalSetState={modalSetState}
           modalState={modalState}
-          data={data}
+          activeRows={data}
         />
       );
     case 'hold':
