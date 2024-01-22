@@ -19,10 +19,10 @@ const Form = () => {
       <AnchorLinkNavigation linkItems={linkItems} />
       <div className="mt-10" id="shape">
         <AccordionComponent
-          value="shape"
+          value="Shape"
           isDisable={true}
           accordionContent={<>Hello</>}
-          accordionTrigger={'shape'}
+          accordionTrigger={'Shape'}
           hasError={false}
         />
       </div>
