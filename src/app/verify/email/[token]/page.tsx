@@ -7,7 +7,6 @@ import React, { useState, useEffect, ReactNode } from 'react';
 const EmailVerificationPage = () => {
   const pathName = usePathname();
   const [, , , token] = pathName.split('/');
-  const [isEmailVerified, setIsEmailVerified] = useState<boolean>(false);
   const [content, setContent] = useState<ReactNode | null>(null);
   const [verifyEmail] = useVerifyEmailMutation();
 
@@ -16,7 +15,6 @@ const EmailVerificationPage = () => {
       const res: any = await verifyEmail({ token: token || '' });
 
       if (res?.data?.statusCode === statusCode.NO_CONTENT) {
-        setIsEmailVerified(true);
         setContent(
           <>
             <h1 className="text-3xl text-green-600 font-bold mb-4">
@@ -29,7 +27,6 @@ const EmailVerificationPage = () => {
           </>
         );
       } else {
-        setIsEmailVerified(true);
         setContent(
           <>
             <h1 className="text-3xl text-red-600 font-bold mb-4">
@@ -47,13 +44,13 @@ const EmailVerificationPage = () => {
     emailVerify();
   }, [token, verifyEmail]);
 
-  return isEmailVerified ? (
+  return !content ? null : (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md max-w-md w-full">
         {content}
       </div>
     </div>
-  ) : null;
+  );
 };
 
 export default EmailVerificationPage;
