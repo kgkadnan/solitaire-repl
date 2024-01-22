@@ -1,7 +1,6 @@
 'use client';
 import React, { useState } from 'react';
-import { Toggle } from '.';
-import Switch from 'react-switch';
+import SwitchSelector from 'react-switch-selector';
 
 export const FormToggle = () => {
   const [checked, setChecked] = useState(false);
@@ -11,45 +10,31 @@ export const FormToggle = () => {
     setChecked(nextChecked);
   };
 
-  //   console.log('checked', checked);
-
-  //   return (
-  //     <Toggle
-  //       checked={checked}
-  //       className="h-[30px] rounded-lg"
-  //       id=""
-  //       onClick={handleChange}
-  //     />
-  //   );
+  const options = [
+    {
+      label: 'White',
+      value: 'White'
+    },
+    {
+      label: 'Fancy',
+      value: 'Fancy'
+    }
+  ];
 
   return (
-    <label htmlFor="small-radius-switch">
-      <span>A switch all available styling options</span>
-      <Switch
-        checked={checked}
+    <div className="w-[120px] h-[30px]">
+      <SwitchSelector
         onChange={handleChange}
-        offColor="#fff"
-        onColor="#000"
-        offHandleColor="#000"
-        onHandleColor="#fff"
-        handleDiameter={30}
-        height={30}
-        width={120}
-        borderRadius={6}
-        activeBoxShadow="0px 0px 1px 2px #fffc35"
-        uncheckedIcon={
-          <div style={{ color: 'orange', fontSize: '10px' }}>White</div>
-        }
-        checkedIcon={
-          <div style={{ color: 'blue', fontSize: '10px' }}>White</div>
-        }
-        uncheckedHandleIcon={<div style={{ fontSize: '10px' }}>Fancy</div>}
-        checkedHandleIcon={
-          <div style={{ fontSize: '10px', color: 'red' }}>Fancy</div>
-        }
-        className="react-switch"
-        id="custom-switch"
+        options={options}
+        backgroundColor={'var(--neutral-0)'}
+        fontColor={'var(--neutral-900)'}
+        fontSize="10"
+        selectedFontColor={'var(--neutral-25)'}
+        selectedBackgroundColor={'var(--primary-main)'}
+        border={'1px solid var(--neutral-200)'}
+        wrapperBorderRadius={'8px'}
+        optionBorderRadius={'8px'}
       />
-    </label>
+    </div>
   );
 };
