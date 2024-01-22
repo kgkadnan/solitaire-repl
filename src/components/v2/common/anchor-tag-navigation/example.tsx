@@ -1,16 +1,10 @@
-'use client';
+import React from 'react';
+import AnchorLinkNavigation from '.';
 
-import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
-import logger from 'logging/log-util';
-
-export default function Home() {
-  logger.info('test log! pinotest stream from reactjs application.');
-
+const ExampleAnchorLinkNavigation = () => {
   let linkItems = ['a', 'b', 'c', 'd', 'f', 'g', 'h'];
-
   return (
     <>
-      {' '}
       <AnchorLinkNavigation linkItems={linkItems} />
       <p className="mt-10" id="a">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
@@ -68,26 +62,8 @@ export default function Home() {
         totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
         reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
       </p>
-      <h1
-        style={{
-          fontSize: '100px',
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '180px'
-        }}
-      >
-        Welcome to KGK live 2.O
-      </h1>
-      <h1
-        style={{
-          fontSize: '30px',
-          display: 'flex',
-          justifyContent: 'center',
-          marginTop: '20px'
-        }}
-      >
-        Building Digital Diamond Platform
-      </h1>
     </>
   );
-}
+};
+
+export default ExampleAnchorLinkNavigation;
