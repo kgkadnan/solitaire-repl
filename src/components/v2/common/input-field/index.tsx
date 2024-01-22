@@ -18,7 +18,7 @@ export const InputField = ({
   return (
     <div className={`${styles?.inputMain}`}>
       <Input
-        style={{ boxShadow: '1px 2px 2px 0px rgba(16, 24, 40, 0.12) inset' }}
+        style={{ boxShadow: '1px 2px 2px 0px var(--input-shadow) inset' }}
         className={`focus:outline-none bg-neutral25 text-neutral500 ${styles?.input}`}
         type={type}
         name={name}
