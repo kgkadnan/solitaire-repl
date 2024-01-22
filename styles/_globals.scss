@@ -255,6 +255,10 @@
     }
   }
 
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     /* width */
     ::-webkit-scrollbar {
