@@ -1,4 +1,16 @@
 import Round from '@public/v2/assets/images/shape-round.svg';
+import Pear from '@public/v2/assets/images/shape-pear.svg';
+import Emerald from '@public/v2/assets/images/shape-emerald.svg';
+import Asscher from '@public/v2/assets/images/shape-asscher.svg';
+import Cushion from '@public/v2/assets/images/shape-cushion.svg';
+import Marquise from '@public/v2/assets/images/shape-marquise.svg';
+import Oval from '@public/v2/assets/images/shape-oval.svg';
+import Radiant from '@public/v2/assets/images/shape-radiant.svg';
+import Heart from '@public/v2/assets/images/shape-heart.svg';
+import Others from '@public/v2/assets/images/shape-others.svg';
+import Princess from '@public/v2/assets/images/shape-princess.svg';
+import All from '@public/v2/assets/images/shape-all.svg';
+
 export const shape = [
   {
     title: 'Round',
@@ -8,58 +20,58 @@ export const shape = [
   {
     title: 'Pear',
     short_name: 'PS',
-    src: Round
+    src: Pear
   },
   {
     title: 'Emerald',
     short_name: 'EM',
-    src: Round
+    src: Emerald
   },
   {
     title: 'Asscher',
     short_name: 'AS',
-    src: Round
+    src: Asscher
   },
   {
     title: 'Cushion',
     short_name: 'CU',
-    src: Round
+    src: Cushion
   },
   {
     title: 'Radiant',
     short_name: 'RAD',
-    src: Round
+    src: Radiant
   },
   {
     title: 'Princess',
     short_name: 'PR',
-    src: Round
+    src: Princess
   },
   {
     title: 'Oval',
     short_name: 'OV',
-    src: Round
+    src: Oval
   },
   {
     title: 'Marquise',
     short_name: 'MQ',
-    src: Round
+    src: Marquise
   },
 
   {
     title: 'Heart',
     short_name: 'HS',
-    src: Round
+    src: Heart
   },
 
   {
     title: 'Others',
     short_name: 'OTHER',
-    src: Round
+    src: Others
   },
   {
     title: 'All',
     short_name: 'All',
-    src: Round
+    src: All
   }
 ];
