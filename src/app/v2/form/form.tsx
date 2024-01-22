@@ -14,7 +14,9 @@ const Form = () => {
       setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
     }
   };
-
+  const handleClick = () => {
+    console.log("pp")
+  };
   return (
     <div>
       Form
@@ -23,6 +25,11 @@ const Form = () => {
         selectedTile={selectedShape}
         handleSelectTile={handleChange}
       />
+      {/* <CustomSelectionButton
+        // selectionButtonAllStyles={myStyle}
+        selectionButtonLabel="Button"
+        handleClick={handleClick}
+      /> */}
     </div>
   );
 };
