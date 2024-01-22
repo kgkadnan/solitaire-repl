@@ -199,6 +199,10 @@
     --neutral-800: hsl(214, 47%, 22%);
     --neutral-900: hsl(214, 55%, 11%);
 
+    --neutral-shape-default: hsla(0, 0%, 100%, 0.25);
+    --neutral-shape-hover: hsla(180, 13%, 24%, 0.7);
+    --neutral-shape-selected: hsla(180, 13%, 24%, 0.7);
+
     --primary-main: hsl(214, 39%, 32%);
     --primary-surface: hsl(0, 0%, 98%);
     --primary-border: hsl(210, 17%, 90%);
