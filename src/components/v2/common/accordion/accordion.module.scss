@@ -1,15 +1,22 @@
 .accordionTriggerStyle{
-    border: 1px solid var(--neutral-200);
     border-radius: 4px 4px 0px 0px; 
     background: var(--neutral-50);
     padding: 6px 16px;
-    color: var(--neutral-900);
     text-transform: capitalize;
+    font-weight: 500;
+}
+
+.accordionSuccessStyle{
+    border: 1px solid var(--neutral-200);
+    color: var(--neutral-900);
+}
+
+.accordionErrorStyle {
+    border: 1px solid var(--danger-main);
+    color: var(--danger-main);
 }
 
 .accordionContentStyle{
-    padding: 24px 130px 25px 16px; 
-    border : 1px solid var(--neutral-200);
-    color: var(--neutral-900);
+    padding: 24px 130px 25px 16px;
     
 }
