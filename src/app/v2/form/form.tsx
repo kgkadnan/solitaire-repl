@@ -1,14 +1,27 @@
 'use client';
-import Tooltip from '@/components/v2/common/tooltip';
-import React from 'react';
+import ImageTile from '@/components/v2/common/image-tile';
+import { shape } from '@/constants/v2/form';
+import React, { useState } from 'react';
 
 const Form = () => {
+  const [selectedShape, setSelectedShape] = useState<string[]>([]);
+  const handleChange = (shape: string) => {
+    if (selectedShape.includes(shape)) {
+      setSelectedShape(prevSelectedShape =>
+        prevSelectedShape.filter(selected => selected !== shape)
+      );
+    } else {
+      setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
+    }
+  };
+
   return (
     <div>
       Form
-      <Tooltip
-        tooltipTrigger={<div>jjjj</div>}
-        tooltipContent={<div>jjjj</div>}
+      <ImageTile
+        imageTileData={shape}
+        selectedTile={selectedShape}
+        handleSelectTile={handleChange}
       />
     </div>
   );
