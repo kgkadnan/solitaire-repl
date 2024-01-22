@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { MinMaxInput } from '../min-max-input';
 import { RangeSlider } from '../slider';
 
@@ -41,7 +41,9 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
         handleSliderChange={handleSliderChange}
         sliderValue={sliderValue}
       />
-      <p className="text-[#FA2238] text-[12px] mt-3 font-light">{errorText}</p>
+      <p className="text-dangerMain text-[12px] mt-3 font-normal">
+        {errorText}
+      </p>
     </div>
   );
 };

@@ -1,7 +1,5 @@
 'use client';
 
-import { SliderWithInputExample } from '@/components/v2/common/slider-with-min-max/example';
-import { SliderExample } from '@/components/v2/common/slider/example';
 import logger from 'logging/log-util';
 
 export default function Home() {
@@ -9,7 +7,6 @@ export default function Home() {
 
   return (
     <>
-      <SliderWithInputExample />
       <h1
         style={{
           fontSize: '100px',

@@ -13,7 +13,7 @@ const StyledThumb = styled.div`
   line-height: 25px;
   width: 16px;
   background-color: #fff;
-  border: 3px solid #344444;
+  border: 3px solid var(--primary-main);
   border-radius: 50%;
   cursor: grab;
   position: relative;
@@ -26,7 +26,11 @@ const StyledTrack = styled.div`
   top: 0;
   bottom: 0;
   background: ${props =>
-    props.index === 2 ? '#ddd' : props.index === 1 ? '#344444' : '#ddd'};
+    props.index === 2
+      ? 'var(--neutral-300)'
+      : props.index === 1
+      ? 'var(--primary-main)'
+      : 'var(--neutral-300)'};
   border-radius: 999px;
 `;
 

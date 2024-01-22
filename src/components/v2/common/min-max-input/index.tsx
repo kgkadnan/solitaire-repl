@@ -35,13 +35,15 @@ export const MinMaxInput = ({
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{
                 input:
-                  'h-full p-2 rounded-l-none flex-grow block w-full min-w-0 rounded-r-sm text-[14px] border-l-[1px] w-[92px]'
+                  'h-full p-2 rounded-l-none flex-grow block w-full min-w-0 rounded-r-sm text-[14px] border-l-[1px] border-neutral200 w-[92px]'
               }}
             />
           </div>
         ))}
       </div>
-      <p className="text-dangerMain text-[12px] mt-1 font-light">{errorText}</p>
+      <p className="text-dangerMain text-[12px] mt-1 font-normal">
+        {errorText}
+      </p>
     </>
   );
 };
