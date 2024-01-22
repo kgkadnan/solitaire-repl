@@ -7,7 +7,11 @@ import { IDiamondDetailSlider, ISwitchButtonTabs } from '../interface';
 import { CustomDisplayButton } from '../../buttons/display-button';
 import { handleSwitchImageUrl } from '../helper/handle-switch-image-url';
 import Image from 'next/image';
-import { FILE_URLS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  FILE_URLS,
+  HOLD_STATUS,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 import { CustomFooter } from '../../footer';
 import styles from '../custom-table.module.scss';
 import downloadOutline from '@public/assets/icons/download-outline.svg';
@@ -154,8 +158,10 @@ export const DiamondDetailSlider: React.FC<IDiamondDetailSlider> = ({
           className={`${
             column.accessor === 'lot_id' && row?.diamond_status === MEMO_STATUS
               ? styles.memoOutBackground
+              : row?.diamond_status === HOLD_STATUS
+              ? styles.holdBackground
               : row?.in_cart?.length
-              ? styles.inCartBackground // Add your inCartBackground class
+              ? styles.inCartBackground
               : 'px-[5px]'
           }`}
         >

@@ -6,12 +6,10 @@ import { CustomDisplayButton } from '../../buttons/display-button';
 import { ManageLocales } from '@/utils/translate';
 import { CustomDropdown } from '../../dropdown';
 import { useAddCartMutation } from '@/features/api/cart';
-import confirmImage from '@public/assets/icons/confirmation.svg';
 import { CustomCheckBox } from '../../checkbox';
-import Image from 'next/image';
 import { ITbodyProps } from '../interface';
 import styles from '../custom-table.module.scss';
-import { GIA_LINK, MEMO_STATUS } from '@/constants/business-logic';
+import { GIA_LINK } from '@/constants/business-logic';
 import { handleCheckboxClick } from '../../checkbox/helper/handle-checkbox-click';
 import { useDataTableBodyStateManagement } from '../hooks/data-table-body-state-management';
 import { DetailImageSlider } from './detail-image-slider';
@@ -19,8 +17,8 @@ import { DetailCertificateSlider } from './detail-certificate-slider';
 import { DiamondDetailSlider } from './diamond-detail-slider';
 import { handleConfirmStone } from '../../confirm-stone/helper/handle-confirm';
 import { performDownloadExcel } from '@/utils/perform-download-excel';
-import Link from 'next/link';
-import logger from 'logging/log-util';
+import { handleAddToCart } from '@/utils/my-cart';
+import { useAppDispatch } from '@/hooks/hook';
 
 export const TableBody: React.FC<ITbodyProps> = ({
   tableRows,
@@ -47,6 +45,8 @@ export const TableBody: React.FC<ITbodyProps> = ({
     setIsPersistDialogOpen
   } = modalSetState ?? {};
 
+  const dispatch = useAppDispatch();
+
   const { dataTableBodyState, dataTableBodySetState } =
     useDataTableBodyStateManagement();
 
@@ -54,40 +54,6 @@ export const TableBody: React.FC<ITbodyProps> = ({
 
   const [addCart] = useAddCartMutation();
   const [downloadExcel] = useDownloadExcelMutation();
-
-  /* The above code is defining a function called `addToCart`. */
-  const addToCart = () => {
-    if (sliderData[0].diamond_status === MEMO_STATUS) {
-      logger.info('Memoout');
-    } else if (sliderData[0]) {
-      addCart({
-        variants: [sliderData[0]?.variants[0].id]
-      })
-        .unwrap()
-        .then(res => {
-          setPersistDialogContent?.(
-            <div className="text-center  flex flex-col justify-center items-center ">
-              <div className="w-[350px] flex justify-center items-center mb-3">
-                <Image src={confirmImage} alt="vector image" />
-              </div>
-              <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
-                {res?.message}
-              </div>
-              <Link
-                href={'/my-cart?active-tab=active'}
-                className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
-              >
-                Go To &quot;MyCart&quot;
-              </Link>
-            </div>
-          );
-          setIsPersistDialogOpen?.(true);
-        })
-        .catch(error => {
-          logger.error(error);
-        });
-    }
-  };
 
   /**
    * The `downloadExcelFunction` is a function that downloads an Excel file based on the `sliderData` and
@@ -157,7 +123,18 @@ export const TableBody: React.FC<ITbodyProps> = ({
       id: 3,
       displayButtonLabel: ManageLocales('app.searchResult.footer.addToCart'),
       style: styles.filled,
-      fn: addToCart
+      fn: () =>
+        handleAddToCart({
+          isCheck: [sliderData[0]?.id],
+          setIsError,
+          setErrorText,
+          rows: sliderData,
+          addCart,
+          setIsPersistDialogOpen,
+          setPersistDialogContent,
+          dispatch,
+          setIsCheck
+        })
     }
   ];
 
