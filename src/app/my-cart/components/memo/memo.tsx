@@ -1,35 +1,14 @@
 'use client';
 
 import CustomDataTable from '@/components/common/data-table';
-
 import React from 'react';
 import styles from './memo.module.scss';
 import { CustomFooter } from '@/components/common/footer';
 import { NoDataFound } from '@/components/common/no-data-found';
-
 import { handleCompareStone } from '@/utils/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
-import {
-  IErrorSetState,
-  IErrorState,
-  IModalSetState,
-  ITableColumn
-} from '@/app/search/result/result-interface';
-import {
-  ICheckboxSetState,
-  ICheckboxState
-} from '@/components/common/checkbox/interface';
+import { IMemoOut } from '../../interface/interface';
 
-interface IMemoOut {
-  tableColumns: ITableColumn[];
-  memoRows: any;
-  downloadExcelFunction: () => void;
-  errorSetState: IErrorSetState;
-  errorState: IErrorState;
-  checkboxState: ICheckboxState;
-  checkboxSetState: ICheckboxSetState;
-  modalSetState: IModalSetState;
-}
 const MemoOut: React.FC<IMemoOut> = ({
   tableColumns,
   memoRows,

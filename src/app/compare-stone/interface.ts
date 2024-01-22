@@ -16,6 +16,8 @@ export interface IRightSideContentProps {
   handleClose: (event: React.MouseEvent, id: string) => void;
   setIsError: React.Dispatch<React.SetStateAction<boolean>>;
   setErrorText: React.Dispatch<React.SetStateAction<string>>;
+  setIsCheck: React.Dispatch<React.SetStateAction<string[]>>;
+  isCheck: string[];
 }
 
 export interface ILeftSideContentProps {
