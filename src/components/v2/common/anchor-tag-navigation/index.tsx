@@ -28,16 +28,16 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
       >
-        {linkItems.map(links => (
+        {linkItems.map((links, index) => (
           <Link
             activeClass={styles.active}
             to={links}
             spy={true}
             smooth={true}
-            offset={-100}
+            offset={-50}
             duration={500}
-            key={links}
-            className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular  cursor-pointer whitespace-nowrap text-neutral600`}
+            key={index}
+            className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular capitalize cursor-pointer whitespace-nowrap text-neutral600`}
           >
             {links}
           </Link>

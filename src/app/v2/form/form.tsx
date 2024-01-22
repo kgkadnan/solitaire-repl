@@ -5,80 +5,81 @@ import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import React from 'react';
 
 const Form = () => {
-  let linkItems = ['a', 'b', 'c', 'd', 'f', 'g', 'h'];
+  let linkItems = [
+    'shape',
+    'clarity',
+    'fluorescence',
+    'parameter',
+    'shade',
+    'lab',
+    'inclusions'
+  ];
   return (
     <>
-      <AccordionComponent
-        value="shape"
-        isDisable={true}
-        accordionContent={<>Hello</>}
-        accordionTrigger={'shape'}
-        hasError={false}
-      />
-      <AccordionComponent
-        value="parameter"
-        isDisable={false}
-        accordionContent={<>Hello</>}
-        accordionTrigger={'parameter'}
-        hasError={false}
-      />
       <AnchorLinkNavigation linkItems={linkItems} />
-      <p className="mt-10" id="a">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="b">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="c">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="d">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="f">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="g">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
-      <p className="mt-10" id="h">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
-        maxime adipisci, eaque repellendus minus doloribus, animi molestiae
-        asperiores quod, deleniti veritatis accusamus. Aliquid ut optio libero
-        fugiat dignissimos corporis explicabo, autem consectetur natus vitae,
-        totam amet fugit dolore? Incidunt numquam dolorum ipsum id beatae quo
-        reprehenderit saepe, cum esse quisquam mollitia tempore sunt reiciendis
-      </p>
+      <div className="mt-10" id="shape">
+        <AccordionComponent
+          value="shape"
+          isDisable={true}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'shape'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="clarity">
+        <AccordionComponent
+          value="Clarity"
+          isDisable={true}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Clarity'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="fluorescence">
+        <AccordionComponent
+          value="Fluorescence"
+          isDisable={true}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Fluorescence'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="parameter">
+        <AccordionComponent
+          value="Parameter"
+          isDisable={false}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Parameter'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="shade">
+        <AccordionComponent
+          value="Shade"
+          isDisable={false}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Shade'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="lab">
+        <AccordionComponent
+          value="Lab"
+          isDisable={false}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Lab'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="inclusions">
+        <AccordionComponent
+          value="Inclusions"
+          isDisable={false}
+          accordionContent={<>Hello</>}
+          accordionTrigger={'Inclusions'}
+          hasError={false}
+        />
+      </div>
     </>
   );
 };
