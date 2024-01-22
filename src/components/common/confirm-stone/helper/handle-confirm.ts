@@ -1,6 +1,9 @@
 import { IProduct } from '@/app/search/result/result-interface';
-import { MEMO_STATUS } from '@/constants/business-logic';
-import { SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import {
+  SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH,
+  SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH
+} from '@/constants/error-messages/confirm-stone';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
 
@@ -32,9 +35,18 @@ export const handleConfirmStone = (
     );
   });
 
+  const hasHold = isCheck?.some(id => {
+    return rows.some(
+      row => row.id === id && row.diamond_status === HOLD_STATUS
+    );
+  });
+
   if (hasMemoOut) {
     setErrorText(SOME_STONES_NOT_AVAILABLE_MODIFY_SEARCH);
     setIsError(true);
+  } else if (hasHold) {
+    setIsError(true);
+    setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
   } else if (isCheck?.length) {
     setIsError(false);
     setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
