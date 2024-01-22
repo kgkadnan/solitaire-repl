@@ -5,7 +5,12 @@ import Image from 'next/image';
 import styles from './anchor-tag-navigation.module.scss';
 import { Link } from 'react-scroll';
 
-const AnchorLinkNavigation: React.FC = () => {
+interface IAnchorLinkNavigation {
+  linkItems: string[];
+}
+const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
+  linkItems
+}) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const handleScroll = (scrollOffset: number) => {
@@ -23,22 +28,20 @@ const AnchorLinkNavigation: React.FC = () => {
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
       >
-        {Array(30)
-          .fill('dummy')
-          .map((_, index) => (
-            <Link
-              activeClass={styles.active}
-              to={`section${index}`}
-              spy={true}
-              smooth={true}
-              offset={-100}
-              duration={500}
-              key={index}
-              className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular  cursor-pointer whitespace-nowrap text-neutral600`}
-            >
-              Section {index}
-            </Link>
-          ))}
+        {linkItems.map(links => (
+          <Link
+            activeClass={styles.active}
+            to={links}
+            spy={true}
+            smooth={true}
+            offset={-100}
+            duration={500}
+            key={links}
+            className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular  cursor-pointer whitespace-nowrap text-neutral600`}
+          >
+            {links}
+          </Link>
+        ))}
       </div>
 
       <div className="flex w-[5%] justify-end">
