@@ -30,11 +30,12 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
       >
         {linkItems.map((links, index) => (
           <Link
+            defaultValue={'shade'}
             activeClass={styles.active}
             to={links}
             spy={true}
             smooth={true}
-            offset={-50}
+            offset={-180}
             duration={500}
             key={index}
             className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular capitalize cursor-pointer whitespace-nowrap text-neutral600`}
