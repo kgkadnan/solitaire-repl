@@ -1,16 +1,15 @@
 'use client';
-import Tooltip from '@/components/v2/common/tooltip';
+import { AccordionComp } from '@/components/v2/common/accordion';
 import React from 'react';
 
 const Form = () => {
   return (
-    <div>
-      Form
-      <Tooltip
-        tooltipTrigger={<div>jjjj</div>}
-        tooltipContent={<div>jjjj</div>}
-      />
-    </div>
+    <AccordionComp
+      value="parameter"
+      isDisable={false}
+      accordionContent={<>Hello</>}
+      accordionTrigger={'parameter'}
+    />
   );
 };
 
