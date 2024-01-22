@@ -13,7 +13,7 @@ export const InputLabel: React.FC<IInputLabelProps> = ({
   styles
 }) => {
   return (
-    <Label htmlFor={htmlFor} className={`text-[#667085] ${styles}`}>
+    <Label htmlFor={htmlFor} className={`text-neutral500 ${styles}`}>
       {label}
     </Label>
   );

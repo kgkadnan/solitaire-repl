@@ -19,7 +19,7 @@ export const MinMaxInput = ({
         {minMaxData.map(type => (
           <div
             key={type}
-            className="flex items-center border-[1px] border-[#E4E7EC] rounded"
+            className="flex items-center border-[1px] border-neutral200 rounded"
           >
             <div className="px-2">
               <InputLabel
@@ -41,7 +41,7 @@ export const MinMaxInput = ({
           </div>
         ))}
       </div>
-      <p className="text-[#FA2238] text-[12px] mt-1 font-light">{errorText}</p>
+      <p className="text-dangerMain text-[12px] mt-1 font-light">{errorText}</p>
     </>
   );
 };
