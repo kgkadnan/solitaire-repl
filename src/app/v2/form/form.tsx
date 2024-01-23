@@ -2,12 +2,22 @@
 
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
+import Cta from '@/components/v2/common/cta';
 import ImageTile from '@/components/v2/common/image-tile';
 import { InputLabel } from '@/components/v2/common/input-label';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import { shapes, anchors } from '@/constants/v2/form';
 import React, { useState } from 'react';
+import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
+import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+
+interface ICtaDataItem {
+  variant: 'secondary' | 'primary' | 'disable';
+  svg: string; // Assuming the type of 'svg' is string, update it accordingly
+  label: string;
+  isDisable?: boolean;
+}
 
 const Form = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);

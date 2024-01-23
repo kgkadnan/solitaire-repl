@@ -10,7 +10,11 @@ const buttonVariants = cva(
       variant: {
         default: '',
         destructive: 'bg-destructive text-destructive-foreground ',
-        secondary: 'bg-secondary text-secondary-foreground ',
+        primary: 'bg-primaryMain text-neutral25',
+        secondary:
+          'border border-solid border-neutral200 border-[1px] text-neutral900',
+        disable:
+          'border border-solid border-neutral200 border-[1px] text-neutral900',
         link: 'text-primary underline-offset-4 '
       },
       size: {

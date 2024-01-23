@@ -185,6 +185,37 @@
 
     // v2 UI theme
 
+    --font-size-sRegular: 12px;
+    --font-size-sMedium: 12px;
+    --font-size-sMobileRegular: 10px;
+    --font-size-mRegular: 14px;
+    --font-size-mMedium: 14px;
+    --font-size-mMedium10: 10px;
+    --font-size-lRegular: 16px;
+    --font-size-lMedium: 16px;
+    --font-size-headingS: 20px;
+    --font-size-headingM: 28px;
+    --font-size-headingL: 36px;
+    --font-size-headingXL: 48px;
+
+    --font-weight-regular: 400;
+    --font-weight-medium: 500;
+    --font-weight-semiBold: 600;
+    --font-weight-bold: 700;
+  
+    --line-height-sRegular: 1.33;
+    --line-height-sMedium: 1.33;
+    --line-height-sMobileRegular: 1.6;
+    --line-height-mRegular: 1.5;
+    --line-height-mMedium: 1.5;
+    --line-height-mMedium10: 1.6;
+    --line-height-lRegular: 1.5;
+    --line-height-lMedium: 1.5;
+    --line-height-headingS: 1.5;
+    --line-height-headingM: 1.5;
+    --line-height-headingL: 1.5;
+    --line-height-headingXL: 1.5;
+
     --neutral-0: hsla(0, 0%, 100%, 1);
     --neutral-25: hsla(180, 20%, 99%, 1);
     --neutral-50: hsla(210, 20%, 98%, 1);
