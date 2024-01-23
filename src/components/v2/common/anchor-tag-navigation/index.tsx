@@ -2,7 +2,6 @@ import React, { useRef } from 'react';
 import arrowForward from '@public/assets/icons/arrow-forward.svg';
 import arrowBackward from '@public/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
-import styles from './anchor-tag-navigation.module.scss';
 import { Link } from 'react-scroll';
 
 interface IAnchorLinkNavigation {
@@ -30,11 +29,14 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
       >
         {linkItems.map((links, index) => (
           <Link
-            activeClass={styles.active}
+            activeStyle={{
+              borderBottom: '2px solid var(--neutral-900)',
+              color: 'var(--neutral-900)'
+            }}
             to={links}
             spy={true}
             smooth={true}
-            offset={-50}
+            offset={-180}
             duration={500}
             key={index}
             className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular capitalize cursor-pointer whitespace-nowrap text-neutral600`}

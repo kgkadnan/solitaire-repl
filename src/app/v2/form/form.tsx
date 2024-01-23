@@ -141,7 +141,7 @@ const Form = () => {
           isDisable={false}
           accordionContent={<>Hello</>}
           accordionTrigger={'Shade'}
-          hasError={false}
+          hasError={true}
         />
       </div>
       <div className="mt-10" id="lab">
