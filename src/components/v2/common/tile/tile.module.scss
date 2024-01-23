@@ -1,10 +1,9 @@
-
-.tileContainer{
-    display: flex;
-    gap: 8px;
+.tileContainer {
+  display: flex;
+  gap: 8px;
 }
-.tileDefaultStyles{
-    padding: 8px 16px;
+.tileDefaultStyles {
+  padding: 8px 16px;
   border-radius: 6px;
   color: var(--neutral-900);
   font-weight: 500;
@@ -12,9 +11,9 @@
   font-size: 14px;
 }
 
-.tileDisableStyle{
-    border: 1px solid var(--neutral-200); 
-    background-color: var(--neutral-0);
+.tileDisableStyle {
+  border: 1px solid var(--neutral-200);
+  background-color: var(--neutral-0);
 }
 
 .tileActiveStyle {

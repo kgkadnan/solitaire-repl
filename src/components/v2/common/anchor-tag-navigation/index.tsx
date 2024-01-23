@@ -39,7 +39,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
             offset={-180}
             duration={500}
             key={index}
-            className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular capitalize cursor-pointer whitespace-nowrap text-neutral600`}
+            className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
           >
             {links}
           </Link>

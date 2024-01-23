@@ -33,7 +33,7 @@ module.exports = {
       },
       fontWeight: {
         regular: 400,
-        medium: 500,
+        medium: 550,
         semiBold: 600,
         bold: 700
       },
