@@ -2,35 +2,144 @@
 
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
-import Cta from '@/components/v2/common/cta';
 import ImageTile from '@/components/v2/common/image-tile';
-import { InputLabel } from '@/components/v2/common/input-label';
-import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
-import TopNavigationBar from '@/components/v2/common/top-navigation-bar';
-import { shapes, anchors } from '@/constants/v2/form';
-import React, { useState } from 'react';
-import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
-import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
-
-interface ICtaDataItem {
-  variant: 'secondary' | 'primary' | 'disable';
-  svg: string; // Assuming the type of 'svg' is string, update it accordingly
-  label: string;
-  isDisable?: boolean;
-}
+import Tile from '@/components/v2/common/tile';
+import { shapes, anchors, whites } from '@/constants/v2/form';
+import React, { Dispatch, SetStateAction } from 'react';
+import useFieldStateManagement from './hooks/form-state';
 
 const Form = () => {
-  const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const handleChange = (shape: string) => {
-    if (selectedShape.includes(shape)) {
-      setSelectedShape(prevSelectedShape =>
-        prevSelectedShape.filter(selected => selected !== shape)
+  const { state, setState, carat } = useFieldStateManagement();
+  const {
+    selectedShape,
+    selectedWhiteColor,
+    selectedTinge,
+    selectedClarity,
+    selectedCaratRange,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedKeyToSymbol,
+    selectedLab,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    caratRangeFrom,
+    caratRangeTo,
+    selectedFancyColor,
+    selectedIntensity,
+    selectedOvertone
+  } = state;
+
+  const {
+    setSelectedShape,
+    setSelectedWhiteColor,
+    setSelectedFancyColor,
+    setSelectedIntensity,
+    setSelectedOvertone,
+    setSelectedTinge,
+    setSelectedClarity,
+    setSelectedCaratRange,
+    setSelectedMake,
+    setSelectedCut,
+    setSelectedPolish,
+    setSelectedSymmetry,
+    setSelectedFluorescence,
+    setSelectedKeyToSymbol,
+    setSelectedLab,
+    setSelectedLocation,
+    setSelectedOrigin,
+    setPriceRangeFrom,
+    setPriceRangeTo,
+    setDiscountFrom,
+    setDiscountTo,
+    setPricePerCaratFrom,
+    setPricePerCaratTo,
+    setCaratRangeFrom,
+    setCaratRangeTo
+  } = setState;
+
+  const handleFilterChange = (
+    filterData: string,
+    selectedFilters: string[],
+    setSelectedFilters: Dispatch<SetStateAction<string[]>>
+  ) => {
+    if (selectedFilters.includes(filterData)) {
+      setSelectedFilters((prevSelectedColors: string[]) =>
+        prevSelectedColors.filter(selected => selected !== filterData)
       );
     } else {
-      setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
+      setSelectedFilters((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        filterData
+      ]);
+    }
+  };
+  const compareArrays = (arr1: string[], arr2: string[]) => {
+    // Check if the lengths of the arrays are equal
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    // Convert arrays to sets
+    const set1 = new Set(arr1);
+    const set2 = new Set(arr2);
+    // Compare sets
+    for (const value of set1) {
+      if (!set2.has(value)) {
+        return false;
+      }
+    }
+    // If the loop completes, sets are equal
+    return true;
+  };
+  const handleShapeChange = (shape: string) => {
+    const filteredShape: string[] = shapes.map(data => data.short_name);
+    if (shape.toLowerCase() === 'all') {
+      setSelectedShape(filteredShape);
+      if (selectedShape.includes('All')) {
+        setSelectedShape([]);
+      }
+    } else {
+      if (selectedShape.includes('All')) {
+        const filteredSelectedShape: string[] = selectedShape.filter(
+          (data: any) => data !== 'All' && data !== shape
+        );
+        setSelectedShape(filteredSelectedShape);
+      } else if (
+        compareArrays(
+          selectedShape.filter((data: any) => data !== 'All'),
+          filteredShape.filter(data => data !== 'All' && data !== shape)
+        )
+      ) {
+        setSelectedShape(filteredShape);
+      } else {
+        handleFilterChange(shape, selectedShape, setSelectedShape);
+      }
     }
   };
 
+  // Function to handle color change based on user selection
+  const handleWhiteColorChange = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  }) => {
+    setSelectedFancyColor('');
+    setSelectedIntensity('');
+    setSelectedOvertone('');
+    handleFilterChange(data, selectedTile, setSelectedTile);
+  };
   return (
     <div>
       {/* <TopNavigationBar/> */}
@@ -53,30 +162,41 @@ const Form = () => {
                   <ImageTile
                     imageTileData={shapes}
                     selectedTile={selectedShape}
-                    handleSelectTile={handleChange}
+                    handleSelectTile={handleShapeChange}
                   />
                 }
                 accordionTrigger={'Shape'}
                 hasError={false}
               />
             </div>
-            <div id="Carat">
-              <AccordionComponent
-                value="Carat"
-                isDisable={true}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Carat'}
-                hasError={false}
-              />
-            </div>
-            <div id="Color">
-              <AccordionComponent
-                value="Color"
-                isDisable={true}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Color'}
-                hasError={false}
-              />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <div id="Carat">
+                <AccordionComponent
+                  value="Carat"
+                  isDisable={true}
+                  accordionContent={<div>hello</div>}
+                  accordionTrigger={'Carat'}
+                  hasError={false}
+                />
+              </div>
+              <div id="Color">
+                <AccordionComponent
+                  value="Color"
+                  isDisable={true}
+                  accordionContent={
+                    <div>
+                      <Tile
+                        tileData={whites}
+                        selectedTile={selectedWhiteColor}
+                        setSelectedTile={setSelectedWhiteColor}
+                        handleTileClick={handleWhiteColorChange}
+                      />
+                    </div>
+                  }
+                  accordionTrigger={'Color'}
+                  hasError={false}
+                />
+              </div>
             </div>
             <div id="Clarity">
               <AccordionComponent

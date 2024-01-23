@@ -94,3 +94,5 @@ export const anchors = [
   'Inclusions',
   'Key to Symbol'
 ];
+
+export const whites = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N-Z'];
