@@ -1,0 +1,26 @@
+
+.tileContainer{
+    display: flex;
+    gap: 8px;
+}
+.tileDefaultStyles{
+    padding: 8px 16px;
+  border-radius: 6px;
+  color: var(--neutral-900);
+  font-weight: 500;
+  height: 30px;
+  font-size: 14px;
+}
+
+.tileDisableStyle{
+    border: 1px solid var(--neutral-200); 
+    background-color: var(--neutral-0);
+}
+
+.tileActiveStyle {
+  border: 1px solid var(--primary-icon-color);
+  background: var(--primary-border);
+}
+.tileStyles:hover {
+  background-color: var(--primary-surface);
+}

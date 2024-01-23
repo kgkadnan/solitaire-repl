@@ -4,6 +4,7 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import ImageTile from '@/components/v2/common/image-tile';
 import { shapes, anchors } from '@/constants/v2/form';
+import Tile from '@/components/v2/common/tile';
 import React, { useState } from 'react';
 
 const Form = () => {
@@ -17,6 +18,34 @@ const Form = () => {
       setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
     }
   };
+
+  const [make, setMake] = useState<string[]>([]);
+  const [cut, setCut] = useState<string[]>([]);
+  const handleTileClick = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  }) => {
+    if (selectedTile.includes(data)) {
+      setSelectedTile(prevSelectedTile =>
+        prevSelectedTile.filter(selected => selected !== data)
+      );
+    } else {
+      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
+    }
+  };
+
+  let tileData = ['3EX', '3EX+NON', '3VG+EX', '3G', '3F'];
+  let cutData = [
+    { title: 'Excellent', short_name: 'EX' },
+    { title: 'Very Good', short_name: 'VG' },
+    { title: 'Good', short_name: 'G' },
+    { title: 'Fair', short_name: 'F' }
+  ];
 
   return (
     <div>
