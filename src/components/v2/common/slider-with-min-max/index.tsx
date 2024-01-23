@@ -35,15 +35,12 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
           maxOnchange: handleMaxChange
         }}
         inputGap="gap-[121px]"
-        errorText=""
+        errorText={errorText}
       />
       <RangeSlider
         handleSliderChange={handleSliderChange}
         sliderValue={sliderValue}
       />
-      <p className="text-dangerMain text-[12px] mt-3 font-normal">
-        {errorText}
-      </p>
     </div>
   );
 };

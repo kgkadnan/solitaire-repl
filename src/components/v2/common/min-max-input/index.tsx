@@ -15,7 +15,11 @@ export const MinMaxInput = ({
 
   return (
     <>
-      <div className={`flex my-[16px] ${inputGap}`}>
+      <div
+        className={`flex mt-[16px] ${
+          errorText ? 'mb-[5px]' : 'mb-[16px]'
+        } ${inputGap}`}
+      >
         {minMaxData.map(type => (
           <div key={type} className="flex items-center">
             <div className="">
@@ -33,15 +37,17 @@ export const MinMaxInput = ({
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{
                 input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-[14px] border-[1px] border-neutral200 w-[92px] rounded-r-[4px]
-                ${errorText ? 'border-neutral200' : 'border-dangerMain'}`
+                ${errorText ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
           </div>
         ))}
       </div>
-      <p className="text-dangerMain text-[12px] mt-1 font-normal">
-        {errorText}
-      </p>
+      {errorText && (
+        <p className="text-dangerMain text-[12px] font-normal mb-[5px]">
+          {errorText}
+        </p>
+      )}
     </>
   );
 };
