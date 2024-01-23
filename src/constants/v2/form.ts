@@ -11,7 +11,7 @@ import Others from '@public/v2/assets/images/shape-others.svg';
 import Princess from '@public/v2/assets/images/shape-princess.svg';
 import All from '@public/v2/assets/images/shape-all.svg';
 
-export const shape = [
+export const shapes = [
   {
     title: 'Round',
     short_name: 'BR',
@@ -74,4 +74,23 @@ export const shape = [
     short_name: 'All',
     src: All
   }
+];
+
+export const anchors = [
+  'Shape',
+  'Carat',
+  'Color',
+  'Clarity',
+  'Make Cut Polish Symmetry',
+  'Fluorescence',
+  'Lab',
+  'Location',
+  'Country of Origin',
+  'Shade',
+  'Discount% Price/Ct Amount Range',
+  'Parameters',
+  'Girdle',
+  'Culet',
+  'Inclusions',
+  'Key to Symbol'
 ];

@@ -187,7 +187,7 @@
 
     --neutral-0: hsla(0, 0%, 100%, 1);
     --neutral-25: hsla(180, 20%, 99%, 1);
-    --neutral-50: hsla(210, 20%, 98%), 1;
+    --neutral-50: hsla(210, 20%, 98%, 1);
     --neutral-100: hsla(216, 24%, 96%, 1);
     --neutral-200: hsla(218, 17%, 91%, 1);
     --neutral-300: hsla(217, 16%, 84%, 1);
@@ -244,7 +244,7 @@
     --accent-gold: hsla(34, 100%, 59%, 1);
 
     --input-shadow: hsl(220, 43, 11, 12%);
-    --popups-shadow: hsl(220, 43, 11, 10%);
+    --popups-shadow: hsl(220, 43%, 11%, 0.1);
   }
 }
 

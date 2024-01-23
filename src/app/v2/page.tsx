@@ -6,8 +6,8 @@ import { MinMaxExample } from '@/components/v2/common/min-max-input/example';
 const page = () => {
   return (
     <>
-      <SliderWithInputExample />
-      <MinMaxExample />
+      {/* <SliderWithInputExample />
+      <MinMaxExample /> */}
       <Form />
     </>
   );
