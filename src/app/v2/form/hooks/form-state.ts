@@ -1,12 +1,14 @@
 import { useState } from 'react';
 
-const useFieldStateManagement = () => {
+const useFormStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
+  const [selectedColor, setSelectedColor] = useState<string>('');
+
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
   const [selectedFancyColor, setSelectedFancyColor] = useState<string>('');
   const [selectedIntensity, setSelectedIntensity] = useState<string>('');
   const [selectedOvertone, setSelectedOvertone] = useState<string>('');
-  const [selectedTinge, setSelectedTinge] = useState<string[]>([]);
+  const [selectedShade, setSelectedShade] = useState<string[]>([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();
   const [selectedCaratRange, setSelectedCaratRange] = useState<string[]>([]);
@@ -17,7 +19,7 @@ const useFieldStateManagement = () => {
   const [selectedFluorescence, setSelectedFluorescence] = useState<string[]>(
     []
   );
-  const [selectedCulet, setSelectedCulet] = useState<string>('');
+  const [selectedCulet, setSelectedCulet] = useState<string[]>([]);
 
   const [selectedKeyToSymbol, setSelectedKeyToSymbol] = useState<string[]>([]);
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
@@ -86,7 +88,7 @@ const useFieldStateManagement = () => {
       selectedFancyColor,
       selectedIntensity,
       selectedOvertone,
-      selectedTinge,
+      selectedShade,
       selectedClarity,
       selectedCaratRange,
       selectedMake,
@@ -147,7 +149,8 @@ const useFieldStateManagement = () => {
       pavilionAngleFrom,
       pavilionAngleTo,
       starLengthFrom,
-      starLengthTo
+      starLengthTo,
+      selectedColor
     },
     setState: {
       setGirdleFrom,
@@ -157,7 +160,7 @@ const useFieldStateManagement = () => {
       setSelectedFancyColor,
       setSelectedIntensity,
       setSelectedOvertone,
-      setSelectedTinge,
+      setSelectedShade,
       setSelectedClarity,
       setSelectedGirdleStep,
       setSelectedCaratRange,
@@ -219,7 +222,8 @@ const useFieldStateManagement = () => {
       setPavilionAngleFrom,
       setPavilionAngleTo,
       setStarLengthFrom,
-      setStarLengthTo
+      setStarLengthTo,
+      setSelectedColor
     },
     carat: {
       caratRangeData: caratRangeData,
@@ -227,4 +231,4 @@ const useFieldStateManagement = () => {
     }
   };
 };
-export default useFieldStateManagement;
+export default useFormStateManagement;

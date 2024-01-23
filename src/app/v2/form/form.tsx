@@ -4,16 +4,31 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import ImageTile from '@/components/v2/common/image-tile';
 import Tile from '@/components/v2/common/tile';
-import { shapes, anchors, whites } from '@/constants/v2/form';
+import {
+  shape,
+  anchor,
+  white,
+  color,
+  clarity,
+  fluorescence,
+  lab,
+  location,
+  countryOfOrigin,
+  shade,
+  girdle,
+  culet,
+  keyToSymbol
+} from '@/constants/v2/form';
 import React, { Dispatch, SetStateAction } from 'react';
-import useFieldStateManagement from './hooks/form-state';
+import useFormStateManagement from './hooks/form-state';
+import { Tabs } from '@/components/v2/common/toggle';
 
 const Form = () => {
-  const { state, setState, carat } = useFieldStateManagement();
+  const { state, setState, carat } = useFormStateManagement();
   const {
     selectedShape,
     selectedWhiteColor,
-    selectedTinge,
+    selectedShade,
     selectedClarity,
     selectedCaratRange,
     selectedMake,
@@ -35,7 +50,9 @@ const Form = () => {
     caratRangeTo,
     selectedFancyColor,
     selectedIntensity,
-    selectedOvertone
+    selectedOvertone,
+    selectedColor,
+    selectedCulet
   } = state;
 
   const {
@@ -44,7 +61,7 @@ const Form = () => {
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
-    setSelectedTinge,
+    setSelectedShade,
     setSelectedClarity,
     setSelectedCaratRange,
     setSelectedMake,
@@ -63,7 +80,9 @@ const Form = () => {
     setPricePerCaratFrom,
     setPricePerCaratTo,
     setCaratRangeFrom,
-    setCaratRangeTo
+    setCaratRangeTo,
+    setSelectedColor,
+    setSelectedCulet
   } = setState;
 
   const handleFilterChange = (
@@ -99,9 +118,9 @@ const Form = () => {
     // If the loop completes, sets are equal
     return true;
   };
-  const handleShapeChange = (shape: string) => {
-    const filteredShape: string[] = shapes.map(data => data.short_name);
-    if (shape.toLowerCase() === 'all') {
+  const handleShapeChange = (shapeData: string) => {
+    const filteredShape: string[] = shape.map(data => data.short_name);
+    if (shapeData.toLowerCase() === 'all') {
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);
@@ -115,12 +134,12 @@ const Form = () => {
       } else if (
         compareArrays(
           selectedShape.filter((data: any) => data !== 'All'),
-          filteredShape.filter(data => data !== 'All' && data !== shape)
+          filteredShape.filter(data => data !== 'All' && data !== shapeData)
         )
       ) {
         setSelectedShape(filteredShape);
       } else {
-        handleFilterChange(shape, selectedShape, setSelectedShape);
+        handleFilterChange(shapeData, selectedShape, setSelectedShape);
       }
     }
   };
@@ -140,6 +159,18 @@ const Form = () => {
     setSelectedOvertone('');
     handleFilterChange(data, selectedTile, setSelectedTile);
   };
+
+  const handleChange = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  }) => {
+    handleFilterChange(data, selectedTile, setSelectedTile);
+  };
   return (
     <div>
       {/* <TopNavigationBar/> */}
@@ -152,7 +183,7 @@ const Form = () => {
                 Search for Diamonds
               </span>
             </div>
-            <AnchorLinkNavigation anchorNavigations={anchors} />
+            <AnchorLinkNavigation anchorNavigations={anchor} />
 
             <div id="Shape">
               <AccordionComponent
@@ -160,7 +191,7 @@ const Form = () => {
                 isDisable={true}
                 accordionContent={
                   <ImageTile
-                    imageTileData={shapes}
+                    imageTileData={shape}
                     selectedTile={selectedShape}
                     handleSelectTile={handleShapeChange}
                   />
@@ -185,8 +216,28 @@ const Form = () => {
                   isDisable={true}
                   accordionContent={
                     <div>
+                      <div className="flex justify-end">
+                        <div className="w-[200px]">
+                          <Tabs
+                            onChange={setSelectedColor}
+                            options={color}
+                            backgroundColor={'var(--neutral-0)'}
+                            fontColor={'var(--neutral-900)'}
+                            fontSize="10"
+                            selectedFontColor={'var(--neutral-25)'}
+                            selectedBackgroundColor={'var(--primary-main)'}
+                            border={'1px solid var(--neutral-200)'}
+                            wrapperBorderRadius={'8px'}
+                            optionBorderRadius={
+                              selectedColor === 'white'
+                                ? '8px 0px 0px 8px'
+                                : '0px 8px 8px 0px'
+                            }
+                          />
+                        </div>
+                      </div>
                       <Tile
-                        tileData={whites}
+                        tileData={white}
                         selectedTile={selectedWhiteColor}
                         setSelectedTile={setSelectedWhiteColor}
                         handleTileClick={handleWhiteColorChange}
@@ -202,7 +253,16 @@ const Form = () => {
               <AccordionComponent
                 value="Clarity"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={clarity}
+                      selectedTile={selectedClarity}
+                      setSelectedTile={setSelectedClarity}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Clarity'}
                 hasError={false}
               />
@@ -220,7 +280,16 @@ const Form = () => {
               <AccordionComponent
                 value="Fluorescence"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={fluorescence}
+                      selectedTile={selectedFluorescence}
+                      setSelectedTile={setSelectedFluorescence}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Fluorescence'}
                 hasError={false}
               />
@@ -229,7 +298,16 @@ const Form = () => {
               <AccordionComponent
                 value="Lab"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={lab}
+                      selectedTile={selectedLab}
+                      setSelectedTile={setSelectedLab}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Lab'}
                 hasError={false}
               />
@@ -238,7 +316,16 @@ const Form = () => {
               <AccordionComponent
                 value="Location"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={location}
+                      selectedTile={selectedLocation}
+                      setSelectedTile={setSelectedLocation}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Location'}
                 hasError={false}
               />
@@ -247,7 +334,16 @@ const Form = () => {
               <AccordionComponent
                 value="Country of Origin"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={countryOfOrigin}
+                      selectedTile={selectedOrigin}
+                      setSelectedTile={setSelectedOrigin}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Country of Origin'}
                 hasError={false}
               />
@@ -256,7 +352,16 @@ const Form = () => {
               <AccordionComponent
                 value="Shade"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={shade}
+                      selectedTile={selectedShade}
+                      setSelectedTile={setSelectedShade}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Shade'}
                 hasError={false}
               />
@@ -283,7 +388,16 @@ const Form = () => {
               <AccordionComponent
                 value="Girdle"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={girdle}
+                      selectedTile={selectedLab}
+                      setSelectedTile={setSelectedLab}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Girdle'}
                 hasError={false}
               />
@@ -292,7 +406,16 @@ const Form = () => {
               <AccordionComponent
                 value="Culet"
                 isDisable={true}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={culet}
+                      selectedTile={selectedCulet}
+                      setSelectedTile={setSelectedCulet}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Culet'}
                 hasError={false}
               />
@@ -310,7 +433,16 @@ const Form = () => {
               <AccordionComponent
                 value="Key to Symbol"
                 isDisable={false}
-                accordionContent={<>Hello</>}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={keyToSymbol}
+                      selectedTile={selectedKeyToSymbol}
+                      setSelectedTile={setSelectedKeyToSymbol}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
                 accordionTrigger={'Key to Symbol'}
                 hasError={false}
               />
