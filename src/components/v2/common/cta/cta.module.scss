@@ -1,0 +1,39 @@
+.ctaContainer{
+    display: flex;
+    gap: 8px;
+}
+
+.ctaStyle {
+    padding: 8px 16px; 
+    border-radius: 4px; 
+    height: 40px; 
+    box-shadow: 0px 1px 2px 0px rgba(16, 24, 40, 0.12); 
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: var(--font-size-mMedium); 
+}
+
+.ctaPrimaryStyle:hover{
+    background-color: var(--primary-hover);
+}
+.ctaPrimaryStyle:focus{
+    background-color: var(--primary-main);
+}
+.ctaPrimaryStyle:active{
+    background-color: var(--primary-pressed);
+}
+.ctaSecondaryStyle:hover{
+    background-color: var(--neutral-50);
+}
+.ctaSecondaryStyle:active{
+    background-color: var(--neutral-100);
+}
+.ctaSecondaryStyle:focus{
+    border: 1px solid #CFD1D4; 
+    background: var(--neutral-50); 
+}
+
+.ctaLabel{
+    text-transform: capitalize;
+}
