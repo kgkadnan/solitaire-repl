@@ -43,7 +43,7 @@ import { CustomDisplayButton } from '@/components/common/buttons/display-button'
 import { ManageLocales } from '@/utils/translate';
 import { useRouter } from 'next/navigation';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
-import Loader from '@/components/v2/common/custom-loader';
+import Loader from '@/components/v2/common/loader';
 
 // interface IKYCData {
 //   kyc: {

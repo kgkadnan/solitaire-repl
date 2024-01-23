@@ -2,6 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+
+@layer utilities {
+  /* Hide scrollbar for Chrome, Safari and Opera */
+  .no-scrollbar::-webkit-scrollbar {
+      display: none;
+  }
+ /* Hide scrollbar for IE, Edge and Firefox */
+  .no-scrollbar {
+      -ms-overflow-style: none;  /* IE and Edge */
+      scrollbar-width: none;  /* Firefox */
+}
+}
+
 @layer base {
   :root {
     @apply bg-solitairePrimary text-foreground;
@@ -186,6 +199,10 @@
     --neutral-800: hsl(214, 47%, 22%);
     --neutral-900: hsl(214, 55%, 11%);
 
+    --neutral-shape-default: hsla(0, 0%, 100%, 0.25);
+    --neutral-shape-hover: hsla(180, 13%, 24%, 0.7);
+    --neutral-shape-selected: hsla(180, 13%, 24%, 0.7);
+
     --primary-main: hsl(214, 39%, 32%);
     --primary-surface: hsl(0, 0%, 98%);
     --primary-border: hsl(210, 17%, 90%);
@@ -226,6 +243,9 @@
     --accent-purple: hsl(248, 57.6%, 65.9%);
     --accent-jade: hsl(168, 100%, 35.7%);
     --accent-gold: hsl(38, 100%, 63.1%);
+
+    --input-shadow: hsl(220, 43, 11, 12%);
+    --popups-shadow: hsl(220, 43, 11, 10%);
   }
 }
 
@@ -240,6 +260,10 @@
       -moz-appearance: textfield !important;
       appearance: none;
     }
+  }
+
+  html {
+    scroll-behavior: smooth;
   }
 
   body {

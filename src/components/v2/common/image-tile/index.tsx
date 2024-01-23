@@ -1,8 +1,8 @@
 'use client';
 
-import React, { ReactNode, useState } from 'react';
-import { StaticImageData } from 'next/image';
-import style from './image-tile.module.scss';
+import React from 'react';
+import Image from 'next/image';
+import Tooltip from '../tooltip';
 
 export interface IImageTileStyleProps {
   imageTileMainContainerStyles?: string;
@@ -13,107 +13,60 @@ export interface IImageTileStyleProps {
   imageTileIsNav?: string;
 }
 export interface IImageTileProps {
-  src: string | StaticImageData | object;
+  src: any;
   title: string;
-  link?: string;
-  short_name?: string;
-  isActive?: boolean;
+  short_name: string;
 }
 
 export interface IImageContainerProps {
   imageTileData: IImageTileProps[];
-  overriddenStyles?: IImageTileStyleProps;
-  handleSelectTile?: (shape: string, link?: string) => void;
-  selectedTile?: string[];
-  isNavOption?: boolean;
+  handleSelectTile: (shape: string) => void;
+  selectedTile: string[];
 }
 
 const ImageTile: React.FC<IImageContainerProps> = (
   imageProps: IImageContainerProps
 ) => {
-  const {
-    imageTileData,
-    overriddenStyles,
-    selectedTile,
-    handleSelectTile,
-    isNavOption = false
-  } = imageProps;
-
-  const [hoveredTile, setHoveredTile] = useState<string | null>(null);
+  const { imageTileData, handleSelectTile, selectedTile } = imageProps;
 
   return (
     <div
-      className={`${style.imageTileMainContainer} ${overriddenStyles?.imageTileMainContainerStyles}`}
+      className={`grid xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-[13px] p-[16px] `}
     >
       {imageTileData.map((tileData: IImageTileProps) => {
-        const { src, title, link, short_name, isActive } = tileData;
+        const { src, title, short_name } = tileData;
 
-        const isTileActive =
-          isActive || (short_name && selectedTile?.includes(short_name));
         return (
-          <div
-            key={`image-tile-data-${title}`}
-            role="img"
-            className={`${
-              style.imageTileContainer
-            } ${overriddenStyles?.imageTileContainerStyles} ${
-              isTileActive && overriddenStyles?.activeIndicatorStyles
-            }`}
-            onMouseEnter={() => setHoveredTile(title)}
-            onMouseLeave={() => setHoveredTile(null)}
-            onClick={() => {
-              link
-                ? handleSelectTile?.(title, link)
-                : short_name && handleSelectTile?.(short_name);
-            }}
-          >
-            {typeof src === 'string' ? (
-              //   <CustomTooltip
-              //     tooltipTrigger={
-              //       <>
-              //         <Image
-              //           src={src}
-              //           alt={title}
-              //           width={100}
-              //           height={100}
-              //           className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-              //         />
-              //         {!isNavOption && (
-              //           <div
-              //             className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-              //           >
-              //             {title}
-              //           </div>
-              //         )}
-              //       </>
-              //     }
-              //     tooltipContent={tileData.short_name}
-              //     delayDuration={0}
-              //     tooltipStyles={{ tooltipContent: 'bg-solitaireSenary' }}
-              //   />
-              <></>
-            ) : (
-              <div
-                className={`${style.imageTileImage} ${overriddenStyles?.imageTileImageStyles} `}
-              >
-                {src as ReactNode}
-              </div>
-            )}
+          <>
+            <Tooltip
+              tooltipTrigger={
+                <div
+                  key={`image-tile-data-${title}`}
+                  role="img"
+                  className={`px-[25px] py-[20px] border-[1px] bg-neutralShapeDefault  border-neutral50 grid gap-[8px] w-[93px] h-[106px] rounded-[8px] justify-center text-center hover:border-neutralShapeHover  ${
+                    selectedTile.includes(short_name)
+                      ? 'shadow-[0px_4px_8px_0px_rgba(0, 0, 0, 0.06)] backdrop-blur-[25px] border-neutralShapeSelected'
+                      : ''
+                  }`}
+                  onClick={() => {
+                    handleSelectTile(short_name);
+                  }}
+                >
+                  <Image
+                    src={src}
+                    alt={title}
+                    className="mx-auto justify-center"
+                  />
 
-            {/* <div
-        className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-      >
-        {title}
-      </div> */}
-
-            {isNavOption && hoveredTile === title && (
-              <div
-                className={`${style.imageTileLabel} ${overriddenStyles?.imageTileLabelStyles}`}
-              >
-                {title}
-              </div>
-            )}
-          </div>
+                  <span className="text-neutral400 text-sRegular font-regular">
+                    {title}
+                  </span>
+                </div>
+              }
+              tooltipContent={title}
+              key={`image-tile-data-${title}`}
+            />
+          </>
         );
       })}
     </div>
