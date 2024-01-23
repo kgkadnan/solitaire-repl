@@ -12,7 +12,7 @@ const StyledThumb = styled.div`
   height: 16px;
   line-height: 25px;
   width: 16px;
-  background-color: #fff;
+  background-color: var(--neutral-0);
   border: 3px solid var(--primary-main);
   border-radius: 50%;
   cursor: grab;
