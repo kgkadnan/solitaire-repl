@@ -26,7 +26,7 @@ export const MinMaxInput = ({
               <InputLabel
                 htmlFor={type}
                 label={type === 'min' ? 'Min' : 'Max'}
-                styles="border-y-[1px] border-l-[1px] border-neutral200 rounded-l-[4px] p-2"
+                styles="border-y-[1px] border-l-[1px] text-neutral500 border-neutral200 rounded-l-[4px] p-2"
               />
             </div>
             <InputField

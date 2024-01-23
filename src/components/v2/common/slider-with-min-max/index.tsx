@@ -1,6 +1,7 @@
 import React from 'react';
 import { MinMaxInput } from '../min-max-input';
 import { RangeSlider } from '../slider';
+import { InputLabel } from '../input-label';
 
 interface ISliderWithMinMaxInputProps {
   minValue: string;
@@ -10,6 +11,9 @@ interface ISliderWithMinMaxInputProps {
   handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleSliderChange: (newValue: string[]) => void;
   errorText?: string;
+  label: string;
+  minPlaceHolder: string;
+  maxPlaceHolder: string;
 }
 
 export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
@@ -19,19 +23,27 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
   handleMinChange,
   handleMaxChange,
   handleSliderChange,
-  errorText
+  errorText,
+  label,
+  minPlaceHolder,
+  maxPlaceHolder
 }) => {
   return (
     <div>
+      <InputLabel
+        label={label}
+        htmlFor=""
+        styles="text-neutral900 text-sRegular font-regular"
+      />
       <MinMaxInput
         minInputData={{
           minValue: minValue,
-          minPlaceHolder: 'Min',
+          minPlaceHolder: minPlaceHolder,
           minOnchange: handleMinChange
         }}
         maxInputData={{
           maxValue: maxValue,
-          maxPlaceHolder: 'Max',
+          maxPlaceHolder: maxPlaceHolder,
           maxOnchange: handleMaxChange
         }}
         inputGap="gap-[121px]"

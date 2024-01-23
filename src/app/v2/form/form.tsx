@@ -3,6 +3,7 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import ImageTile from '@/components/v2/common/image-tile';
+import { DiscountPrice } from '@/components/v2/common/min-max-input/discount-price';
 import Tile from '@/components/v2/common/tile';
 import { shape } from '@/constants/v2/form';
 import React, { useState } from 'react';
@@ -58,7 +59,7 @@ const Form = () => {
 
   return (
     <div>
-      {' '}
+      <DiscountPrice />
       <Tile
         tileData={tileData}
         selectedTile={make}
