@@ -1,20 +1,12 @@
-import { Switch } from '@/components/v2/ui/switch';
 import React from 'react';
+import SwitchSelector from 'react-switch-selector';
 
-interface IToggleProps {
-  className: string;
-  onClick: (checked: any) => void;
-  checked: boolean;
-  id: string;
-}
-
-export const Toggle: React.FC<IToggleProps> = ({
-  className,
-  onClick,
-  checked,
-  id
-}) => {
+export const Tabs = ({ handleChange, options, ...stylingProps }: any) => {
   return (
-    <Switch id={id} className={className} onClick={onClick} checked={checked} />
+    <SwitchSelector
+      onChange={handleChange}
+      options={options}
+      {...stylingProps}
+    />
   );
 };
