@@ -40,6 +40,7 @@ const Form = () => {
 
   const [make, setMake] = useState<string[]>([]);
   const [cut, setCut] = useState<string[]>([]);
+  const [girdle, setGirdle] = useState<string[]>([]);
   const handleTileClick = ({
     data,
     selectedTile,
@@ -76,6 +77,54 @@ const Form = () => {
     { variant: 'secondary', svg: bookmarkAdd, label: 'Save Search' },
     { variant: 'primary', svg: searchIcon, label: 'Search' }
   ];
+
+  let girdleData = [
+    'ETN',
+    'VTN',
+    'STN',
+    'THN',
+    'MED',
+    'STK',
+    'THK',
+    'VTK',
+    'ETK '
+  ];
+
+  const handleGirdleTileClick = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  }) => {
+    // Find the index of the clicked item in the data array
+    const clickedIndex = girdleData.indexOf(data);
+    let lastSelectedIndex = -1;
+    // Find the index of the previously selected item in the data array
+    if (!selectedTile.includes(data)) {
+      lastSelectedIndex =
+        selectedTile.length > 0 ? girdleData.indexOf(selectedTile[0]) : -1;
+    }
+
+    if (selectedTile.includes(data)) {
+      setSelectedTile(prevSelectedTile =>
+        prevSelectedTile.filter(selected => selected !== data)
+      );
+    } else if (lastSelectedIndex !== -1) {
+      // Determine the range of items to select
+      const startIndex = Math.min(clickedIndex, lastSelectedIndex);
+      const endIndex = Math.max(clickedIndex, lastSelectedIndex);
+      // Select all items in the range
+      const newSelected = girdleData.slice(startIndex, endIndex + 1);
+      // Update the selected items
+      setSelectedTile(newSelected);
+    } else {
+      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
+    }
+  };
+  console.log('girdle', girdle);
 
   return (
     <div>
@@ -114,6 +163,22 @@ const Form = () => {
           isDisable={true}
           accordionContent={<>Hello</>}
           accordionTrigger={'Clarity'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="girdle">
+        <AccordionComponent
+          value="Girdle"
+          isDisable={true}
+          accordionContent={
+            <Tile
+              tileData={girdleData}
+              selectedTile={girdle}
+              setSelectedTile={setGirdle}
+              handleTileClick={handleGirdleTileClick}
+            />
+          }
+          accordionTrigger={'Girdle'}
           hasError={false}
         />
       </div>
