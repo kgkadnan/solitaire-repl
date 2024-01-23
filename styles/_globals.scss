@@ -2,17 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer utilities {
   /* Hide scrollbar for Chrome, Safari and Opera */
   .no-scrollbar::-webkit-scrollbar {
-      display: none;
+    display: none;
   }
- /* Hide scrollbar for IE, Edge and Firefox */
+  /* Hide scrollbar for IE, Edge and Firefox */
   .no-scrollbar {
-      -ms-overflow-style: none;  /* IE and Edge */
-      scrollbar-width: none;  /* Firefox */
-}
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
 }
 
 @layer base {
@@ -186,63 +185,63 @@
 
     // v2 UI theme
 
-    --neutral-0: hsl(0, 0%, 100%);
-    --neutral-25: hsl(0, 0%, 99%);
-    --neutral-50: hsl(0, 0%, 98%);
-    --neutral-100: hsl(0, 0%, 96%);
-    --neutral-200: hsl(210, 17%, 90%);
-    --neutral-300: hsl(220, 22%, 81%);
-    --neutral-400: hsl(214, 29%, 64%);
-    --neutral-500: hsl(214, 31%, 52%);
-    --neutral-600: hsl(214, 35%, 41%);
-    --neutral-700: hsl(214, 39%, 32%);
-    --neutral-800: hsl(214, 47%, 22%);
-    --neutral-900: hsl(214, 55%, 11%);
+    --neutral-0: hsla(0, 0%, 100%, 1);
+    --neutral-25: hsla(180, 20%, 99%, 1);
+    --neutral-50: hsla(210, 20%, 98%), 1;
+    --neutral-100: hsla(216, 24%, 96%, 1);
+    --neutral-200: hsla(218, 17%, 91%, 1);
+    --neutral-300: hsla(217, 16%, 84%, 1);
+    --neutral-400: hsla(218, 15%, 65%, 1);
+    --neutral-500: hsla(221, 13%, 46%, 1);
+    --neutral-600: hsla(216, 18%, 34%, 1);
+    --neutral-700: hsla(217, 24%, 27%, 1);
+    --neutral-800: hsla(214, 33%, 17%, 1);
+    --neutral-900: hsl(220, 43%, 11%, 1);
 
     --neutral-shape-default: hsla(0, 0%, 100%, 0.25);
     --neutral-shape-hover: hsla(180, 13%, 24%, 0.7);
     --neutral-shape-selected: hsla(180, 13%, 24%, 0.7);
 
-    --primary-main: hsl(214, 39%, 32%);
-    --primary-surface: hsl(0, 0%, 98%);
-    --primary-border: hsl(210, 17%, 90%);
-    --primary-hover: hsl(214, 31%, 52%);
-    --primary-pressed: hsl(214, 47%, 22%);
-    --primary-focus: hsla(214, 55%, 11%, 0.2);
-    --primary-icon-color: hsl(214, 39%, 32%);
+    --primary-main: hsla(180, 13%, 24%, 1);
+    --primary-surface: hsla(210, 20%, 98%, 1);
+    --primary-border: hsla(218, 17%, 91%, 1);
+    --primary-hover: hsla(180, 6%, 39%, 1);
+    --primary-pressed: hsla(180, 15%, 19%, 1);
+    --primary-focus: hsla(220, 43%, 11%, 0.2);
+    --primary-icon-color: hsl(180, 7%, 39%, 1);
 
-    --danger-main: hsl(0, 84.2%, 60.2%);
-    --danger-surface: hsl(0, 100%, 92.9%);
-    --danger-border: hsl(0, 100%, 84.7%);
-    --danger-hover: hsl(0, 100%, 41.2%);
-    --danger-pressed: hsl(0, 100%, 20%);
-    --danger-focus: hsla(0, 84.2%, 60.2%, 0.2);
+    --danger-main: hsla(0, 100%, 44%, 1);
+    --danger-surface: hsla(0, 100%, 96%, 1);
+    --danger-border: hsla(0, 100%, 92%, 1);
+    --danger-hover: hsla(0, 100%, 32%, 1);
+    --danger-pressed: hsla(0, 100%, 19%, 1);
+    --danger-focus: hsla(0, 100%, 44%, 0.2);
 
-    --success-main: hsl(162, 100%, 25.5%);
-    --success-surface: hsl(149, 71%, 94.1%);
-    --success-border: hsl(149, 43%, 76.9%);
-    --success-hover: hsl(162, 100%, 20.8%);
-    --success-pressed: hsl(162, 100%, 16.1%);
-    --success-focus: hsla(162, 100%, 25.5%, 0.2);
+    --success-main: hsla(151, 100%, 25%, 1);
+    --success-surface: hsla(150, 33%, 94%, 1);
+    --success-border: hsla(151, 35%, 78%, 1);
+    --success-hover: hsla(151, 100%, 20%, 1);
+    --success-pressed: hsla(151, 100%, 16%, 1);
+    --success-focus: hsla(151, 100%, 25%, 0.2);
 
-    --warning-main: hsl(30, 92.3%, 46.7%);
-    --warning-surface: hsl(30, 100%, 95.3%);
-    --warning-border: hsl(30, 100%, 72.9%);
-    --warning-hover: hsl(30, 100%, 33.3%);
-    --warning-pressed: hsl(30, 100%, 15.7%);
-    --warning-focus: hsla(30, 92.3%, 46.7%, 0.2);
+    --warning-main: hsla(29, 89%, 49%, 1);
+    --warning-surface: hsla(28, 100%, 95%, 1);
+    --warning-border: hsla(29, 100%, 80%, 1);
+    --warning-hover: hsla(29, 97%, 42%, 1);
+    --warning-pressed: hsla(29, 85%, 21%, 1);
+    --warning-focus: hsla(29, 89%, 49%, 0.2);
 
-    --info-main: hsl(209, 93.3%, 34.5%);
-    --info-surface: hsl(212, 87.8%, 98%);
-    --info-border: hsl(212, 63.1%, 80.4%);
-    --info-hover: hsl(211, 93.1%, 29%);
-    --info-pressed: hsl(211, 93.1%, 22.7%);
-    --info-focus: hsla(209, 93.3%, 34.5%, 0.2);
+    --info-main: hsla(216, 90%, 44%, 1);
+    --info-surface: hsla(218, 73%, 96%, 1);
+    --info-border: hsla(215, 72%, 83%, 1);
+    --info-hover: hsla(216, 96%, 37%, 1);
+    --info-pressed: hsla(216, 95%, 29%, 1);
+    --info-focus: hsla(216, 90%, 44%, 0.2);
 
-    --accent-teal: hsl(198, 33.7%, 33.7%);
-    --accent-purple: hsl(248, 57.6%, 65.9%);
-    --accent-jade: hsl(168, 100%, 35.7%);
-    --accent-gold: hsl(38, 100%, 63.1%);
+    --accent-teal: hsla(193, 35%, 42%, 1);
+    --accent-purple: hsla(244, 68%, 67%, 1);
+    --accent-jade: hsla(165, 100%, 35%, 1);
+    --accent-gold: hsla(34, 100%, 59%, 1);
 
     --input-shadow: hsl(220, 43, 11, 12%);
     --popups-shadow: hsl(220, 43, 11, 10%);
