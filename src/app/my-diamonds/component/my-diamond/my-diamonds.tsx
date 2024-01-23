@@ -177,7 +177,7 @@ export const MyDiamonds: React.FC<IMyDiamondsProps> = ({
           <CustomSlider
             sheetTriggerStyle="w-full"
             sheetTriggenContent={
-              data?.length &&
+              data?.length > 0 &&
               data?.map((items: any) => {
                 return renderMyDiamondCard(items);
               })
