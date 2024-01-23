@@ -17,14 +17,12 @@ export const MinMaxInput = ({
     <>
       <div className={`flex my-[16px] ${inputGap}`}>
         {minMaxData.map(type => (
-          <div
-            key={type}
-            className="flex items-center border-[1px] border-neutral200 rounded"
-          >
-            <div className="px-2">
+          <div key={type} className="flex items-center">
+            <div className="">
               <InputLabel
                 htmlFor={type}
                 label={type === 'min' ? 'Min' : 'Max'}
+                styles="border-y-[1px] border-l-[1px] border-neutral200 rounded-l-[4px] p-2"
               />
             </div>
             <InputField
@@ -34,8 +32,8 @@ export const MinMaxInput = ({
               placeholder={type === 'min' ? minPlaceHolder : maxPlaceHolder}
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{
-                input:
-                  'h-full p-2 rounded-l-none flex-grow block w-full min-w-0 rounded-r-sm text-[14px] border-l-[1px] border-neutral200 w-[92px]'
+                input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-[14px] border-[1px] border-neutral200 w-[92px] rounded-r-[4px]
+                ${errorText ? 'border-neutral200' : 'border-dangerMain'}`
               }}
             />
           </div>
