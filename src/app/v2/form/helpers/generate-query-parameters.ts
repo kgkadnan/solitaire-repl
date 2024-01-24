@@ -141,7 +141,7 @@ export const generateQueryParams = (state: IState) => {
     pavilionAngleMin,
     starLengthMax,
     starLengthMin,
-    selectedColor,
+    selectedWhiteColor,
     selectedGirdle
   } = state;
 
@@ -150,7 +150,8 @@ export const generateQueryParams = (state: IState) => {
 
   // Check if a specific property exists in the state and add it to the queryParams object
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
-  selectedColor?.length !== 0 && (queryParams['color'] = selectedColor);
+  selectedWhiteColor?.length !== 0 &&
+    (queryParams['color'] = selectedWhiteColor);
   selectedFancyColor?.length !== 0 &&
     (queryParams['fancy_color'] = selectedFancyColor);
   selectedIntensity?.length !== 0 &&
