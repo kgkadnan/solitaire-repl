@@ -92,7 +92,7 @@ export const DiscountPrice = () => {
   return (
     <AccordionComponent
       value="Discount% Price/Ct Amount Range"
-      isDisable={false}
+      isDisable={true}
       accordionContent={
         <div className="flex justify-between">
           {discountPriceAmoutData.map(items => {
