@@ -33,6 +33,8 @@ const useFormStateManagement = () => {
   const [pricePerCaratMax, setPricePerCaratMax] = useState<string>('');
   const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
   const [caratRangeTo, setCaratRangeTo] = useState<string>('');
+  const [caratMin, setCaratMin] = useState<string>('');
+  const [caratMax, setCaratMax] = useState<string>('');
   //other parameter Inclsuion state
   const [blackTable, setBlackTable] = useState<string[]>([]);
   const [sideBlack, setSideBlack] = useState<string[]>([]);
@@ -72,8 +74,8 @@ const useFormStateManagement = () => {
   const [ratioTo, setRatioTo] = useState<string>('');
   const [girdlePerFrom, setGirdlePerFrom] = useState<string>('');
   const [girdlePerTo, setGirdlePerTo] = useState<string>('');
-  const [girdleFrom, setGirdleFrom] = useState<string>('');
-  const [girdleTo, setGirdleTo] = useState<string>('');
+  const [selectedGirdle, setSelectedGirdle] = useState<string[]>([]);
+
   const [pavilionAngleFrom, setPavilionAngleFrom] = useState<string>('');
   const [pavilionAngleTo, setPavilionAngleTo] = useState<string>('');
   const [starLengthFrom, setStarLengthFrom] = useState<string>('');
@@ -81,8 +83,6 @@ const useFormStateManagement = () => {
   const [caratRangeData, setCaratRangeData] = useState<string[]>();
   return {
     state: {
-      girdleFrom,
-      girdleTo,
       selectedShape,
       selectedWhiteColor,
       selectedFancyColor,
@@ -105,6 +105,8 @@ const useFormStateManagement = () => {
       amountRangeMax,
       discountMin,
       discountMax,
+      caratMax,
+      caratMin,
       pricePerCaratMin,
       pricePerCaratMax,
       caratRangeFrom,
@@ -150,11 +152,10 @@ const useFormStateManagement = () => {
       pavilionAngleTo,
       starLengthFrom,
       starLengthTo,
-      selectedColor
+      selectedColor,
+      selectedGirdle
     },
     setState: {
-      setGirdleFrom,
-      setGirdleTo,
       setSelectedShape,
       setSelectedWhiteColor,
       setSelectedFancyColor,
@@ -178,6 +179,8 @@ const useFormStateManagement = () => {
       setAmountRangeMax,
       setDiscountMin,
       setDiscountMax,
+      setCaratMin,
+      setCaratMax,
       setPricePerCaratMin,
       setPricePerCaratMax,
       setCaratRangeFrom,
@@ -223,7 +226,8 @@ const useFormStateManagement = () => {
       setPavilionAngleTo,
       setStarLengthFrom,
       setStarLengthTo,
-      setSelectedColor
+      setSelectedColor,
+      setSelectedGirdle
     },
     carat: {
       caratRangeData: caratRangeData,

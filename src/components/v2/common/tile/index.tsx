@@ -26,11 +26,10 @@ const Tile = ({
 }: ITileProps) => {
   return (
     <div className={styles.tileContainer}>
-     
       {tileData.map((tile: string | { title: string; short_name: string }) => {
         return (
           <>
-           {console.log(selectedTile)}
+            {console.log(selectedTile)}
             {typeof tile === 'string' ? (
               <Button
                 key={tile}

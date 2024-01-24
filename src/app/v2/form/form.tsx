@@ -2,7 +2,7 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import useFormStateManagement from './hooks/form-state';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
@@ -27,12 +27,12 @@ import Inclusions from './components/inclusions';
 // import Inclusions from './components/inclusions';
 
 const Form = () => {
-  const { state, setState, carat } = useFormStateManagement();
+  const { state, setState } = useFormStateManagement();
 
   const { setSearchUrl, searchUrl, isValidationError } =
     useValidationStateManagement();
 
-  const { data, error } = useGetProductCountQuery(
+  const { data } = useGetProductCountQuery(
     {
       searchUrl
     },

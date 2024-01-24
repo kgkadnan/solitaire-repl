@@ -66,8 +66,9 @@ export const generateQueryParams = (state: any) => {
     starLengthFrom,
     starLengthTo,
     selectedColor,
-    girdleTo,
-    girdleFrom
+    selectedGirdle
+    // girdleTo,
+    // girdleFrom
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -129,8 +130,7 @@ export const generateQueryParams = (state: any) => {
   sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);
   openCrown?.length !== 0 && (queryParams['crown_open'] = openCrown);
   openTable?.length !== 0 && (queryParams['table_open'] = openTable);
-  openPavilion?.length !== 0 &&
-    (queryParams['pavilion_open'] = openPavilion);
+  openPavilion?.length !== 0 && (queryParams['pavilion_open'] = openPavilion);
   milky?.length !== 0 && (queryParams['milky'] = milky);
   luster?.length !== 0 && (queryParams['luster'] = luster);
   eyeClean?.length !== 0 && (queryParams['eye_clean'] = eyeClean);
@@ -139,8 +139,7 @@ export const generateQueryParams = (state: any) => {
     (queryParams['table_inclusion'] = tableInclusion);
   sideInclusion?.length !== 0 &&
     (queryParams['side_inclusion'] = sideInclusion);
-  naturalCrown?.length !== 0 &&
-    (queryParams['natural_crown'] = naturalCrown);
+  naturalCrown?.length !== 0 && (queryParams['natural_crown'] = naturalCrown);
   naturalGirdle?.length !== 0 &&
     (queryParams['natural_girdle'] = naturalGirdle);
   naturalPavilion?.length !== 0 &&
@@ -149,11 +148,10 @@ export const generateQueryParams = (state: any) => {
     (queryParams['surface_graining'] = surfaceGraining);
   internalGraining?.length !== 0 &&
     (queryParams['internal_graining'] = internalGraining);
-  girdleTo.length &&
-    girdleFrom.length &&
+  selectedGirdle.length &&
     (queryParams['girdle'] = {
-      lte: girdleTo,
-      gte: girdleFrom
+      lte: selectedGirdle[0],
+      gte: selectedGirdle[selectedGirdle.length - 1]
     });
   tablePerFrom &&
     tablePerTo &&
