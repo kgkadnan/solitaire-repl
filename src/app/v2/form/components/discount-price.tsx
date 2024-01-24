@@ -82,7 +82,7 @@ export const DiscountPrice = ({ state, setState }: IFormState) => {
         value="Discount% Price/Ct Amount Range"
         isDisable={true}
         accordionContent={
-          <div className="flex justify-between">
+          <div className="flex justify-between px-[16px] py-[24px]">
             {discountPriceAmoutData.map(items => {
               return (
                 <div key={items.label}>

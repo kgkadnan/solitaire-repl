@@ -16,7 +16,7 @@ export const MinMaxInput = ({
   return (
     <>
       <div
-        className={`flex mt-[16px] ${
+        className={`flex ${
           errorText ? 'mb-[5px]' : 'mb-[16px]'
         } ${inputGap}`}
       >

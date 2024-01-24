@@ -81,8 +81,10 @@ const Form = () => {
             <Shade state={state} setState={setState} />
             <DiscountPrice state={state} setState={setState} />
             <Parameters state={state} setState={setState} />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
             <Girdle state={state} setState={setState} />
             <Culet state={state} setState={setState} />
+            </div>
             <Inclusions state={state} setState={setState} />
             <KeyToSymbol state={state} setState={setState} />
           </div>
