@@ -1,13 +1,16 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { shade } from '@/constants/v2/form';
 import { IFormState } from '../interface/interface';
 import { handleChange } from '../helpers/handle-change';
 
-export const Shade = ({ state, setState }: IFormState) => {
-  const { selectedShade } = state;
-  const { setSelectedShade } = setState;
+interface IShadeProps {
+  selectedShade: string[];
+  setSelectedShade: Dispatch<SetStateAction<string[]>>;
+}
+
+export const Shade = ({ selectedShade, setSelectedShade }: IShadeProps) => {
   return (
     <div id="Shade">
       <AccordionComponent

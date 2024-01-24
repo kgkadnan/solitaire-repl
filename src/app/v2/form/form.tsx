@@ -24,10 +24,56 @@ import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
-// import Inclusions from './components/inclusions';
 
 const Form = () => {
   const { state, setState } = useFormStateManagement();
+  const {
+    caratMax,
+    caratMin,
+    selectedClarity,
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
+    selectedFluorescence,
+    selectedLab,
+    selectedLocation,
+    selectedOrigin,
+    selectedShade,
+    discountMin, //discountFrom
+    discountMax, //discountTo
+    amountRangeMin, //priceRangeFrom
+    amountRangeMax, //priceRangeTo
+    pricePerCaratMin, //pricePerCaratFrom
+    pricePerCaratMax, //pricePerCaratTo
+    selectedGirdle,
+    selectedCulet,
+    selectedKeyToSymbol
+  } = state;
+  const {
+    setCaratMin,
+    setCaratMax,
+    setSelectedClarity,
+    setSelectedShape,
+    setSelectedColor,
+    setSelectedWhiteColor,
+    setSelectedFancyColor,
+    setSelectedIntensity,
+    setSelectedOvertone,
+    setSelectedFluorescence,
+    setSelectedLab,
+    setSelectedLocation,
+    setSelectedOrigin,
+    setSelectedShade,
+    setDiscountMin,
+    setDiscountMax,
+    setAmountRangeMin,
+    setAmountRangeMax,
+    setPricePerCaratMin,
+    setPricePerCaratMax,
+    setSelectedGirdle,
+    setSelectedCulet,
+    setSelectedKeyToSymbol
+  } = setState;
 
   const { setSearchUrl, searchUrl, isValidationError } =
     useValidationStateManagement();
@@ -65,26 +111,79 @@ const Form = () => {
             </div>
             <AnchorLinkNavigation anchorNavigations={anchor} />
 
-            <Shape state={state} setState={setState} />
+            <Shape
+              setSelectedShape={setSelectedShape}
+              selectedShape={selectedShape}
+            />
 
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Carat state={state} setState={setState} />
-              <Color state={state} setState={setState} />
+              <Carat
+                caratMax={caratMax}
+                caratMin={caratMin}
+                setCaratMin={setCaratMin}
+                setCaratMax={setCaratMax}
+              />
+              <Color
+                selectedColor={selectedColor}
+                selectedWhiteColor={selectedWhiteColor}
+                setSelectedColor={setSelectedColor}
+                setSelectedWhiteColor={setSelectedWhiteColor}
+                setSelectedFancyColor={setSelectedFancyColor}
+                setSelectedIntensity={setSelectedIntensity}
+                setSelectedOvertone={setSelectedOvertone}
+              />
             </div>
-            <Clarity state={state} setState={setState} />
+            <Clarity
+              setSelectedClarity={setSelectedClarity}
+              selectedClarity={selectedClarity}
+            />
 
-            <PolishSymmetry state={state} setState={setState} />
-            <Fluorescence state={state} setState={setState} />
-            <Lab state={state} setState={setState} />
-            <Location state={state} setState={setState} />
-            <CountryOfOrigin state={state} setState={setState} />
-            <Shade state={state} setState={setState} />
-            <DiscountPrice state={state} setState={setState} />
-            <Parameters state={state} setState={setState} />
-            <Girdle state={state} setState={setState} />
-            <Culet state={state} setState={setState} />
+            <PolishSymmetry />
+            <Fluorescence
+              selectedFluorescence={selectedFluorescence}
+              setSelectedFluorescence={setSelectedFluorescence}
+            />
+            <Lab selectedLab={selectedLab} setSelectedLab={setSelectedLab} />
+            <Location
+              selectedLocation={selectedLocation}
+              setSelectedLocation={setSelectedLocation}
+            />
+            <CountryOfOrigin
+              selectedOrigin={selectedOrigin}
+              setSelectedOrigin={setSelectedOrigin}
+            />
+            <Shade
+              selectedShade={selectedShade}
+              setSelectedShade={setSelectedShade}
+            />
+            <DiscountPrice
+              setDiscountMin={setDiscountMin}
+              setDiscountMax={setDiscountMax}
+              setAmountRangeMin={setAmountRangeMin}
+              setAmountRangeMax={setAmountRangeMax}
+              setPricePerCaratMin={setPricePerCaratMin}
+              setPricePerCaratMax={setPricePerCaratMax}
+              discountMin={discountMin}
+              discountMax={discountMax}
+              amountRangeMin={amountRangeMin}
+              amountRangeMax={amountRangeMax}
+              pricePerCaratMin={pricePerCaratMin}
+              pricePerCaratMax={pricePerCaratMax}
+            />
+            <Parameters />
+            <Girdle
+              selectedGirdle={selectedGirdle}
+              setSelectedGirdle={setSelectedGirdle}
+            />
+            <Culet
+              selectedCulet={selectedCulet}
+              setSelectedCulet={setSelectedCulet}
+            />
             <Inclusions state={state} setState={setState} />
-            <KeyToSymbol state={state} setState={setState} />
+            <KeyToSymbol
+              selectedKeyToSymbol={selectedKeyToSymbol}
+              setSelectedKeyToSymbol={setSelectedKeyToSymbol}
+            />
           </div>
         </div>
       </div>
