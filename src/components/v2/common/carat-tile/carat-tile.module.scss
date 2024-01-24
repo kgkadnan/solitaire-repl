@@ -1,21 +1,21 @@
-.caratTileContainer{
-    display: flex;
-    padding: 6px 10px;
-    height: 40px; 
-    width: 100%;
-    border: 1px solid var(--neutral-200);
-    border-radius: 4px;
-    box-shadow: var(--input-shadow) inset;
-    gap: 8px;
+.caratTileContainer {
+  display: flex;
+  padding: 6px 10px;
+  height: 40px;
+  width: 100%;
+  border: 1px solid var(--neutral-200);
+  border-radius: 4px;
+  box-shadow: var(--input-shadow) inset;
+  gap: 8px;
 }
 
-.caratTileDefaultStyles{
-    display: flex;
-    align-items: center;
-    background-color: var(--success-surface);
-    border: 1px solid var(--success-border);
-    color: var(--success-main);
-    border-radius: 6px;
-    padding: 6px 12px;
-    gap: 4px;
+.caratTileDefaultStyles {
+  display: flex;
+  align-items: center;
+  background-color: var(--success-surface);
+  border: 1px solid var(--success-border);
+  color: var(--success-main);
+  border-radius: 6px;
+  padding: 6px 12px;
+  gap: 4px;
 }

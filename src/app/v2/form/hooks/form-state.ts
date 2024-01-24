@@ -2,12 +2,12 @@ import { useState } from 'react';
 
 const useFormStateManagement = () => {
   const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const [selectedColor, setSelectedColor] = useState<string>('');
+  const [selectedColor, setSelectedColor] = useState<string>('white');
 
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
-  const [selectedFancyColor, setSelectedFancyColor] = useState<string>('');
-  const [selectedIntensity, setSelectedIntensity] = useState<string>('');
-  const [selectedOvertone, setSelectedOvertone] = useState<string>('');
+  const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
+  const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
+  const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
   const [selectedShade, setSelectedShade] = useState<string[]>([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();

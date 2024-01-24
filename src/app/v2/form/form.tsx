@@ -49,7 +49,8 @@ const Form = () => {
     selectedGirdle,
     selectedCulet,
     selectedKeyToSymbol,
-    selectedCaratRange
+    selectedCaratRange,
+    selectedFancyColor
   } = state;
   const {
     setCaratMin,
@@ -137,6 +138,7 @@ const Form = () => {
               />
               <Color
                 selectedColor={selectedColor}
+                selectedFancyColor={selectedFancyColor}
                 selectedWhiteColor={selectedWhiteColor}
                 setSelectedColor={setSelectedColor}
                 setSelectedWhiteColor={setSelectedWhiteColor}
