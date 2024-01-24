@@ -2,11 +2,21 @@
 
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
+import Cta from '@/components/v2/common/cta';
 import ImageTile from '@/components/v2/common/image-tile';
 import { DiscountPrice } from '@/components/v2/common/min-max-input/discount-price';
 import Tile from '@/components/v2/common/tile';
 import { shape } from '@/constants/v2/form';
 import React, { useState } from 'react';
+import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
+import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+
+interface ICtaDataItem {
+  variant: 'secondary' | 'primary' | 'disable';
+  svg: string; // Assuming the type of 'svg' is string, update it accordingly
+  label: string;
+  isDisable?: boolean;
+}
 
 const Form = () => {
   let linkItems = [
@@ -31,6 +41,7 @@ const Form = () => {
 
   const [make, setMake] = useState<string[]>([]);
   const [cut, setCut] = useState<string[]>([]);
+  const [girdle, setGirdle] = useState<string[]>([]);
   const handleTileClick = ({
     data,
     selectedTile,
@@ -57,9 +68,67 @@ const Form = () => {
     { title: 'Fair', short_name: 'F' }
   ];
 
+  let ctaData: ICtaDataItem[] = [
+    {
+      variant: 'disable',
+      svg: bookmarkAdd,
+      label: 'Save Search',
+      isDisable: true
+    },
+    { variant: 'secondary', svg: bookmarkAdd, label: 'Save Search' },
+    { variant: 'primary', svg: searchIcon, label: 'Search' }
+  ];
+
+  let girdleData = [
+    'ETN',
+    'VTN',
+    'STN',
+    'THN',
+    'MED',
+    'STK',
+    'THK',
+    'VTK',
+    'ETK '
+  ];
+
+  const handleGirdleTileClick = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: {
+    data: string;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+  }) => {
+    // Find the index of the clicked item in the data array
+    const clickedIndex = girdleData.indexOf(data);
+    let lastSelectedIndex = -1;
+    // Find the index of the previously selected item in the data array
+    if (!selectedTile.includes(data)) {
+      lastSelectedIndex =
+        selectedTile.length > 0 ? girdleData.indexOf(selectedTile[0]) : -1;
+    }
+
+    if (selectedTile.includes(data)) {
+      setSelectedTile(prevSelectedTile =>
+        prevSelectedTile.filter(selected => selected !== data)
+      );
+    } else if (lastSelectedIndex !== -1) {
+      // Determine the range of items to select
+      const startIndex = Math.min(clickedIndex, lastSelectedIndex);
+      const endIndex = Math.max(clickedIndex, lastSelectedIndex);
+      // Select all items in the range
+      const newSelected = girdleData.slice(startIndex, endIndex + 1);
+      // Update the selected items
+      setSelectedTile(newSelected);
+    } else {
+      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
+    }
+  };
+  console.log('girdle', girdle);
+
   return (
     <div>
-      <DiscountPrice />
       <Tile
         tileData={tileData}
         selectedTile={make}
@@ -94,6 +163,22 @@ const Form = () => {
           isDisable={true}
           accordionContent={<>Hello</>}
           accordionTrigger={'Clarity'}
+          hasError={false}
+        />
+      </div>
+      <div className="mt-10" id="girdle">
+        <AccordionComponent
+          value="Girdle"
+          isDisable={true}
+          accordionContent={
+            <Tile
+              tileData={girdleData}
+              selectedTile={girdle}
+              setSelectedTile={setGirdle}
+              handleTileClick={handleGirdleTileClick}
+            />
+          }
+          accordionTrigger={'Girdle'}
           hasError={false}
         />
       </div>
