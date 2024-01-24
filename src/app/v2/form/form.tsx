@@ -12,7 +12,7 @@ import useValidationStateManagement from './hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { Clarity } from './components/clarity';
-import { PolishSymmetry } from './components/polish-symmetry';
+import { MakeCutPolishSymmetry } from './components/make-cut-polish-symmetry';
 import { Fluorescence } from './components/fluorescence';
 import { Lab } from './components/lab';
 import { Location } from './components/location';
@@ -137,21 +137,30 @@ const Form = () => {
               setSelectedClarity={setSelectedClarity}
               selectedClarity={selectedClarity}
             />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <MakeCutPolishSymmetry state={state} setState={setState} />
+              <div className="flex flex-col gap-[16px]">
+                <Lab
+                  selectedLab={selectedLab}
+                  setSelectedLab={setSelectedLab}
+                />
+                <Location
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
+                />
+              </div>
+            </div>
 
-            <PolishSymmetry />
-            <Fluorescence
-              selectedFluorescence={selectedFluorescence}
-              setSelectedFluorescence={setSelectedFluorescence}
-            />
-            <Lab selectedLab={selectedLab} setSelectedLab={setSelectedLab} />
-            <Location
-              selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
-            />
-            <CountryOfOrigin
-              selectedOrigin={selectedOrigin}
-              setSelectedOrigin={setSelectedOrigin}
-            />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <Fluorescence
+                selectedFluorescence={selectedFluorescence}
+                setSelectedFluorescence={setSelectedFluorescence}
+              />
+              <CountryOfOrigin
+                selectedOrigin={selectedOrigin}
+                setSelectedOrigin={setSelectedOrigin}
+              />
+            </div>
             <Shade
               selectedShade={selectedShade}
               setSelectedShade={setSelectedShade}
@@ -172,14 +181,14 @@ const Form = () => {
             />
             <Parameters />
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Girdle
-              selectedGirdle={selectedGirdle}
-              setSelectedGirdle={setSelectedGirdle}
-            />
-            <Culet
-              selectedCulet={selectedCulet}
-              setSelectedCulet={setSelectedCulet}
-            />
+              <Girdle
+                selectedGirdle={selectedGirdle}
+                setSelectedGirdle={setSelectedGirdle}
+              />
+              <Culet
+                selectedCulet={selectedCulet}
+                setSelectedCulet={setSelectedCulet}
+              />
             </div>
             <Inclusions state={state} setState={setState} />
             <KeyToSymbol

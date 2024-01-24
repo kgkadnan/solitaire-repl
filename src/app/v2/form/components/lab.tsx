@@ -16,7 +16,7 @@ export const Lab = ({ selectedLab, setSelectedLab }: ILabProps) => {
         value="Lab"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={lab}
               selectedTile={selectedLab}

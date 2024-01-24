@@ -16,7 +16,7 @@ export const Culet = ({ selectedCulet, setSelectedCulet }: ICuletProps) => {
         value="Culet"
         isDisable={true}
         accordionContent={
-          <div className='px-[16px] py-[24px]'>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={culet}
               selectedTile={selectedCulet}

@@ -19,7 +19,7 @@ export const Girdle = ({
         value="Girdle"
         isDisable={true}
         accordionContent={
-          <div className='px-[16px] py-[24px]'>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={girdle}
               selectedTile={selectedGirdle}

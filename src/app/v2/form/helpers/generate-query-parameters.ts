@@ -67,7 +67,7 @@ interface IState {
   pavilionAngleTo: string;
   starLengthFrom: string;
   starLengthTo: string;
-  selectedGirdle:string[]
+  selectedGirdle: string[];
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -139,7 +139,6 @@ export const generateQueryParams = (state: IState) => {
     starLengthTo,
     selectedColor,
     selectedGirdle
-  
   } = state;
 
   // Initialize an empty object to store query parameters

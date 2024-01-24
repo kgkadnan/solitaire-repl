@@ -19,7 +19,7 @@ export const Clarity = ({
         value="Clarity"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={clarity}
               selectedTile={selectedClarity}

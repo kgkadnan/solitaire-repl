@@ -44,7 +44,7 @@ export const Color = ({
         value="Color"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <div className="flex justify-end">
               <div className="w-[200px]">
                 <Tabs
