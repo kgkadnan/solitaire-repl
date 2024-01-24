@@ -2,12 +2,11 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import ImageTile from '@/components/v2/common/image-tile';
 import React from 'react';
 import { shape } from '@/constants/v2/form';
-import useFormStateManagement from '../hooks/form-state';
 import { compareArrays } from '../helpers/compare-arrays';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
+import { IFormState } from '../interface/interface';
 
-export const Shape = () => {
-  const { state, setState } = useFormStateManagement();
+export const Shape = ({ setState, state }: IFormState) => {
   const { selectedShape } = state;
   const { setSelectedShape } = setState;
 

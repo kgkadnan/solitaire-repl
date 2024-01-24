@@ -2,12 +2,11 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import { Tabs } from '@/components/v2/common/toggle';
 import React from 'react';
-import useFormStateManagement from '../hooks/form-state';
 import { color, white } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
+import { IFormState } from '../interface/interface';
 
-export const Color = () => {
-  const { state, setState } = useFormStateManagement();
+export const Color = ({ setState, state }: IFormState) => {
   const { selectedColor, selectedWhiteColor } = state;
   const {
     setSelectedColor,
