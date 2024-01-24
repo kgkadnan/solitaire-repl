@@ -46,7 +46,7 @@ export const Color = ({
         accordionContent={
           <div>
             <div className="flex justify-end">
-              <div className="w-[200px]">
+              <div className="w-[120px] h-[30px] ">
                 <Tabs
                   onChange={setSelectedColor}
                   options={color}

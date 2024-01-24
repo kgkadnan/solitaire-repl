@@ -10,29 +10,35 @@ interface ICtaData {
     label: string;
     isDisable?: boolean;
     handler: () => void;
+    isHidden?: boolean;
   }[];
 }
 
 const ActionButton = ({ actionButtonData }: ICtaData) => {
   return (
     <div className={styles.ctaContainer}>
-      {actionButtonData.map(({ isDisable, variant, svg, label, handler }) => {
-        return (
-          <Button
-            key={label}
-            disabled={isDisable}
-            onClick={handler}
-            variant={variant}
-            className={`${styles.ctaStyle} 
+      {actionButtonData.map(
+        ({ isDisable, variant, svg, label, handler, isHidden }) => {
+          if (isHidden) {
+            return null;
+          }
+          return (
+            <Button
+              key={label}
+              disabled={isDisable}
+              onClick={handler}
+              variant={variant}
+              className={`${styles.ctaStyle} 
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
             }`}
-          >
-            <Image src={svg} alt={svg} />
-            <div className={styles.ctaLabel}>{label}</div>
-          </Button>
-        );
-      })}
+            >
+              <Image src={svg} alt={svg} />
+              <div className={styles.ctaLabel}>{label}</div>
+            </Button>
+          );
+        }
+      )}
     </div>
   );
 };

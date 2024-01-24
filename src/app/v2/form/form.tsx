@@ -24,8 +24,19 @@ import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
+import ActionButton from '@/components/v2/common/action-button';
+import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
+import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+import arrowIcon from '@public/v2/assets/icons/arrows.svg';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ManageLocales } from '@/utils/v2/translate';
+import { useAppSelector } from '@/hooks/hook';
+import { IActionButtonDataItem } from './interface/interface';
+import { handleReset } from './helpers/reset';
 
 const Form = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { state, setState } = useFormStateManagement();
   const {
     caratMax,
@@ -75,6 +86,12 @@ const Form = () => {
     setSelectedKeyToSymbol
   } = setState;
 
+  const modifySearchFrom = searchParams.get('edit');
+
+  const searchResult: any = useAppSelector(
+    (store: { searchResult: any }) => store.searchResult
+  );
+
   const { setSearchUrl, searchUrl, isValidationError } =
     useValidationStateManagement();
 
@@ -96,6 +113,52 @@ const Form = () => {
       setSearchUrl(constructUrlParams(queryParams));
     }
   }, [state]);
+
+  let actionButtonData: IActionButtonDataItem[] = [
+    // {
+    //   variant: 'secondary',
+    //   svg: arrowIcon,
+    //   label: ManageLocales('app.advanceSearch.cancel'),
+    //   handler: () => {
+    //     if (
+    //       modifySearchFrom ===
+    //       `${ManageLocales('app.search.savedSearchesRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales(
+    //           'app.search.savedSearchesRoute'
+    //         )}`
+    //       );
+    //     } else if (
+    //       modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+    //           searchResult.activeTab + 3
+    //         }`
+    //       );
+    //     }
+    //   },
+    //   isHidden:
+    //     modifySearchFrom !==
+    //       `${ManageLocales('app.search.savedSearchesRoute')}` &&
+    //     modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
+    // },
+    {
+      variant: 'secondary',
+      svg: arrowIcon,
+      label: ManageLocales('app.advanceSearch.reset'),
+      handler: () => handleReset(setState)
+    },
+
+    {
+      variant: 'secondary',
+      svg: bookmarkAddIcon,
+      label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
+      handler: () => {}
+    },
+    { variant: 'primary', svg: searchIcon, label: 'Search', handler: () => {} }
+  ];
 
   return (
     <div>
@@ -185,6 +248,9 @@ const Form = () => {
               setSelectedKeyToSymbol={setSelectedKeyToSymbol}
             />
           </div>
+        </div>
+        <div className="w-full bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] px-[32px] border-t-[1px] border-neutral200 flex justify-end">
+          <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>
     </div>
