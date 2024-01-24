@@ -29,7 +29,7 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
   maxPlaceHolder
 }) => {
   return (
-    <div className='flex-col gap-[16px]'>
+    <div className="flex-col gap-[16px]">
       <InputLabel
         label={label}
         htmlFor=""

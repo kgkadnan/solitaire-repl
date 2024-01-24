@@ -67,7 +67,7 @@ interface IState {
   pavilionAngleTo: string;
   starLengthFrom: string;
   starLengthTo: string;
-  selectedGirdle:string[]
+  selectedGirdle: string[];
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -139,7 +139,6 @@ export const generateQueryParams = (state: IState) => {
     starLengthTo,
     selectedColor,
     selectedGirdle
-  
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -157,14 +156,14 @@ export const generateQueryParams = (state: IState) => {
   selectedShade?.length !== 0 && (queryParams['color_shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
-    const caratRanges = selectedCaratRange.map((range: string) => {
-      const [minStr, maxStr] = range.split('-');
-      const min = parseFloat(minStr);
-      const max = parseFloat(maxStr);
-      return { lte: max, gte: min };
+    const formattedCaratData = selectedCaratRange.map(item => {
+      const [min, max] = item.split('-');
+      return { min: parseFloat(min), max: parseFloat(max) };
     });
-    queryParams['carat'] = caratRanges;
+
+    queryParams['carat'] = formattedCaratData;
   }
+
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
   selectedPolish?.length !== 0 && (queryParams['polish'] = selectedPolish);
   selectedSymmetry?.length !== 0 &&

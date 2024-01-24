@@ -13,7 +13,7 @@ interface IAccordionCompProps {
   accordionContent: React.ReactNode;
   accordionTrigger: string;
   value: string;
-  hasError: boolean;
+  hasError?: boolean;
 }
 
 export const AccordionComponent: React.FC<IAccordionCompProps> = ({

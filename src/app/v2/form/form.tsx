@@ -24,10 +24,12 @@ import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
+import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 // import Inclusions from './components/inclusions';
 
 const Form = () => {
   const { state, setState } = useFormStateManagement();
+  const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { setSearchUrl, searchUrl, isValidationError } =
     useValidationStateManagement();
@@ -68,7 +70,12 @@ const Form = () => {
             <Shape state={state} setState={setState} />
 
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Carat state={state} setState={setState} />
+              <Carat
+                state={state}
+                setState={setState}
+                errorState={errorState}
+                errorSetState={errorSetState}
+              />
               <Color state={state} setState={setState} />
             </div>
             <Clarity state={state} setState={setState} />
@@ -82,8 +89,8 @@ const Form = () => {
             <DiscountPrice state={state} setState={setState} />
             <Parameters state={state} setState={setState} />
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Girdle state={state} setState={setState} />
-            <Culet state={state} setState={setState} />
+              <Girdle state={state} setState={setState} />
+              <Culet state={state} setState={setState} />
             </div>
             <Inclusions state={state} setState={setState} />
             <KeyToSymbol state={state} setState={setState} />
