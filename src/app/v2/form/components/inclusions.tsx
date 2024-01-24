@@ -1,4 +1,3 @@
-import { CustomInputlabel } from '@/components/common/input-label';
 import React from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { AccordionComponent } from '@/components/v2/common/accordion';
@@ -17,7 +16,7 @@ interface IInclusions {
   key: string;
   value: IInclusionsData[];
 }
-const Inclusions = ({state, setState}:any) => {
+const Inclusions = ({ state, setState }: any) => {
   // Destructure state variables
   const {
     blackTable,
@@ -53,7 +52,6 @@ const Inclusions = ({state, setState}:any) => {
     setSurfaceGraining,
     setInternalGraining
   } = setState;
-
 
   // Create an array of other parameter data with respective change handlers and state
   let otherParameterDataState = [
@@ -147,23 +145,20 @@ const Inclusions = ({state, setState}:any) => {
       {
         <AccordionComponent
           value="Inclusions"
-          isDisable={true}
+          isDisable={false}
           accordionContent={
-            <div className='grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]'>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]">
               {otherParameterData.map((other: IInclusions) => (
-                <div
-                  key={`other-parameter-${other.key}`}
-                >
-                 <span>{other.key}</span>
+                <div key={`other-parameter-${other.key}`} className='grid gap-[16px]'>
+                  <span className="text-neutral900 text-mRegular font-regular grid gap-[12px]">
+                    {other.key}
+                  </span>
                   {other.value.map(data => (
-                    <div
-                     
-                      key={`${other.key}-${data.elementKey}`}
-                    >
-                      <div >
-                       <span>{data.elementKey}</span>
-                      </div>
-                      <div >
+                    <div key={`${other.key}-${data.elementKey}`} className='flex gap-[20px] items-center'>
+                        <span className="text-neutral900 text-mRegular font-regular min-w-[120px]">
+                          {data.elementKey}
+                        </span>
+                      <div>
                         <Tile
                           tileData={data.elementValue}
                           selectedTile={data.state}
