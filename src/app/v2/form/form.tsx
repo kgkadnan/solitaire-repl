@@ -23,7 +23,7 @@ import { Girdle } from './components/girdle';
 import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
-import Inclusions from './components/inclusions';
+// import Inclusions from './components/inclusions';
 
 const Form = () => {
   const { state, setState } = useFormStateManagement();
@@ -80,13 +80,11 @@ const Form = () => {
             <Location state={state} setState={setState} />
             <CountryOfOrigin state={state} setState={setState} />
             <Shade state={state} setState={setState} />
-            <div id="Discount% Price/Ct Amount Range">
-              <DiscountPrice />
-            </div>
+            <DiscountPrice state={state} setState={setState} />
             <Parameters state={state} setState={setState} />
             <Girdle state={state} setState={setState} />
             <Culet state={state} setState={setState} />
-            <Inclusions state={state} setState={setState} />
+            {/* <Inclusions state={state} setState={setState} /> */}
             <KeyToSymbol state={state} setState={setState} />
           </div>
         </div>
