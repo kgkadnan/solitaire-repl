@@ -1,5 +1,78 @@
+interface IState {
+  selectedShape: string[];
+  selectedColor: string;
+  selectedWhiteColor: string[];
+  selectedFancyColor: string;
+  selectedIntensity: string;
+  selectedOvertone: string;
+  selectedShade: string[];
+  selectedClarity: string[];
+  selectedCaratRange: string[];
+  selectedMake: string;
+  selectedCut: string[];
+  selectedPolish: string[];
+  selectedSymmetry: string[];
+  selectedFluorescence: string[];
+  selectedCulet: string[];
+  selectedKeyToSymbol: string[];
+  selectedLab: string[];
+  selectedLocation: string[];
+  selectedOrigin: string[];
+  amountRangeMin: string;
+  amountRangeMax: string;
+  discountMin: string;
+  discountMax: string;
+  pricePerCaratMin: string;
+  pricePerCaratMax: string;
+  caratRangeFrom: string;
+  caratRangeTo: string;
+  blackTable: string[];
+  sideBlack: string[];
+  openCrown: string[];
+  openTable: string[];
+  openPavilion: string[];
+  milky: string[];
+  luster: string[];
+  eyeClean: string[];
+  tableInclusion: string[];
+  sideInclusion: string[];
+  naturalCrown: string[];
+  naturalGirdle: string[];
+  naturalPavilion: string[];
+  surfaceGraining: string[];
+  internalGraining: string[];
+  tablePerFrom: string;
+  tablePerTo: string;
+  depthTo: string;
+  depthFrom: string;
+  crownAngleFrom: string;
+  crownAngleTo: string;
+  lengthFrom: string;
+  lengthTo: string;
+  pavilionDepthFrom: string;
+  pavilionDepthTo: string;
+  depthPerFrom: string;
+  depthPerTo: string;
+  crownHeightFrom: string;
+  crownHeightTo: string;
+  widthFrom: string;
+  widthTo: string;
+  lowerHalfFrom: string;
+  lowerHalfTo: string;
+  ratioFrom: string;
+  ratioTo: string;
+  girdlePerFrom: string;
+  girdlePerTo: string;
+  girdleFrom: string;
+  girdleTo: string;
+  pavilionAngleFrom: string;
+  pavilionAngleTo: string;
+  starLengthFrom: string;
+  starLengthTo: string;
+}
+
 // Define a function to generate query parameters based on the provided state
-export const generateQueryParams = (state: any) => {
+export const generateQueryParams = (state: IState) => {
   // Destructure values from the state object
   const {
     selectedShape,
@@ -129,8 +202,7 @@ export const generateQueryParams = (state: any) => {
   sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);
   openCrown?.length !== 0 && (queryParams['crown_open'] = openCrown);
   openTable?.length !== 0 && (queryParams['table_open'] = openTable);
-  openPavilion?.length !== 0 &&
-    (queryParams['pavilion_open'] = openPavilion);
+  openPavilion?.length !== 0 && (queryParams['pavilion_open'] = openPavilion);
   milky?.length !== 0 && (queryParams['milky'] = milky);
   luster?.length !== 0 && (queryParams['luster'] = luster);
   eyeClean?.length !== 0 && (queryParams['eye_clean'] = eyeClean);
@@ -139,8 +211,7 @@ export const generateQueryParams = (state: any) => {
     (queryParams['table_inclusion'] = tableInclusion);
   sideInclusion?.length !== 0 &&
     (queryParams['side_inclusion'] = sideInclusion);
-  naturalCrown?.length !== 0 &&
-    (queryParams['natural_crown'] = naturalCrown);
+  naturalCrown?.length !== 0 && (queryParams['natural_crown'] = naturalCrown);
   naturalGirdle?.length !== 0 &&
     (queryParams['natural_girdle'] = naturalGirdle);
   naturalPavilion?.length !== 0 &&
