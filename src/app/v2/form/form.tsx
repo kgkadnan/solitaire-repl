@@ -70,7 +70,9 @@ const Form = () => {
     selectedCulet,
     selectedKeyToSymbol,
     selectedCaratRange,
-    selectedFancyColor
+    selectedFancyColor,
+    selectedIntensity,
+    selectedOvertone
   } = state;
   const {
     setCaratMin,
@@ -272,6 +274,8 @@ const Form = () => {
               <Color
                 selectedColor={selectedColor}
                 selectedFancyColor={selectedFancyColor}
+                selectedIntensity={selectedIntensity}
+                selectedOvertone={selectedOvertone}
                 selectedWhiteColor={selectedWhiteColor}
                 setSelectedColor={setSelectedColor}
                 setSelectedWhiteColor={setSelectedWhiteColor}

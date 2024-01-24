@@ -9,7 +9,9 @@ import { colourStyles } from '../helpers/select-color-style';
 
 interface IColorProps {
   selectedColor: string;
-  selectedFancyColor: string[];
+  selectedFancyColor: any;
+  selectedIntensity: any;
+  selectedOvertone: any;
   selectedWhiteColor: string[];
   setSelectedColor: Dispatch<SetStateAction<string>>;
   setSelectedWhiteColor: Dispatch<SetStateAction<string[]>>;
@@ -21,6 +23,8 @@ interface IColorProps {
 export const Color = ({
   selectedColor,
   selectedFancyColor,
+  selectedIntensity,
+  selectedOvertone,
   selectedWhiteColor,
   setSelectedColor,
   setSelectedWhiteColor,
@@ -54,6 +58,32 @@ export const Color = ({
       ]);
     });
   };
+
+  // Function to handle intensity change based on user selection
+  const handleIntensityChange = (selectedOption: any) => {
+    setSelectedWhiteColor([]);
+    setSelectedIntensity([]);
+    selectedOption.map((data: any) => {
+      setSelectedIntensity((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data
+      ]);
+    });
+  };
+
+  // Function to handle overtone change based on user selection
+  const handleOvertoneChange = (selectedOption: any) => {
+    setSelectedWhiteColor([]);
+    setSelectedOvertone([]);
+    selectedOption.map((data: any) => {
+      setSelectedOvertone((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data
+      ]);
+    });
+  };
+
+  console.log('selectedFancyColor', selectedFancyColor);
   return (
     <div id="Color">
       <AccordionComponent
@@ -90,12 +120,30 @@ export const Color = ({
                   handleTileClick={handleWhiteColorChange}
                 />
               ) : (
-                <div>
+                <div className="flex justify-between">
                   <Select
-                    // value={selectedFancyColor}
+                    value={selectedFancyColor}
                     options={fancy}
                     onChange={handleFancyFilterChange}
                     placeholder={'Color'}
+                    styles={colourStyles}
+                    isMulti
+                    closeMenuOnSelect={false}
+                  />
+                  <Select
+                    value={selectedIntensity}
+                    options={fancy}
+                    onChange={handleIntensityChange}
+                    placeholder={'Intensity'}
+                    styles={colourStyles}
+                    isMulti
+                    closeMenuOnSelect={false}
+                  />
+                  <Select
+                    value={selectedOvertone}
+                    options={fancy}
+                    onChange={handleOvertoneChange}
+                    placeholder={'Overtone'}
                     styles={colourStyles}
                     isMulti
                     closeMenuOnSelect={false}
