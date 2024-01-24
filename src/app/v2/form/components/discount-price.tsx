@@ -1,27 +1,37 @@
 'use client';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
-import { IFormState } from '../interface/interface';
 
-export const DiscountPrice = ({ state, setState }: IFormState) => {
-  const {
-    setDiscountMin,
-    setDiscountMax,
-    setAmountRangeMin,
-    setAmountRangeMax,
-    setPricePerCaratMin,
-    setPricePerCaratMax
-  } = setState;
-  const {
-    discountMin, //discountFrom
-    discountMax, //discountTo
-    amountRangeMin, //priceRangeFrom
-    amountRangeMax, //priceRangeTo
-    pricePerCaratMin, //pricePerCaratFrom
-    pricePerCaratMax //pricePerCaratTo
-  } = state;
+interface IShapeProps {
+  setDiscountMin: Dispatch<SetStateAction<string>>;
+  setDiscountMax: Dispatch<SetStateAction<string>>;
+  setAmountRangeMin: Dispatch<SetStateAction<string>>;
+  setAmountRangeMax: Dispatch<SetStateAction<string>>;
+  setPricePerCaratMin: Dispatch<SetStateAction<string>>;
+  setPricePerCaratMax: Dispatch<SetStateAction<string>>;
+  discountMin: string;
+  discountMax: string;
+  amountRangeMin: string;
+  amountRangeMax: string;
+  pricePerCaratMin: string;
+  pricePerCaratMax: string;
+}
 
+export const DiscountPrice = ({
+  setDiscountMin,
+  setDiscountMax,
+  setAmountRangeMin,
+  setAmountRangeMax,
+  setPricePerCaratMin,
+  setPricePerCaratMax,
+  discountMin,
+  discountMax,
+  amountRangeMin,
+  amountRangeMax,
+  pricePerCaratMin,
+  pricePerCaratMax
+}: IShapeProps) => {
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
