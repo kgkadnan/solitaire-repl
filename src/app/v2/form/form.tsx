@@ -330,7 +330,7 @@ const Form = () => {
               pricePerCaratMin={pricePerCaratMin}
               pricePerCaratMax={pricePerCaratMax}
             />
-            <Parameters state={state} setState={setState} />
+            <Parameters state={state} setState={setState}  errorSetState={errorSetState} errorState={errorState}/>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
               <Girdle
                 selectedGirdle={selectedGirdle}
