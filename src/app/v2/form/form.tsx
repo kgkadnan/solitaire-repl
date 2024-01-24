@@ -24,6 +24,7 @@ import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
+import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 
 const Form = () => {
   const { state, setState } = useFormStateManagement();
@@ -47,7 +48,8 @@ const Form = () => {
     pricePerCaratMax, //pricePerCaratTo
     selectedGirdle,
     selectedCulet,
-    selectedKeyToSymbol
+    selectedKeyToSymbol,
+    selectedCaratRange
   } = state;
   const {
     setCaratMin,
@@ -72,11 +74,17 @@ const Form = () => {
     setPricePerCaratMax,
     setSelectedGirdle,
     setSelectedCulet,
-    setSelectedKeyToSymbol
+    setSelectedKeyToSymbol,
+    setSelectedCaratRange
   } = setState;
 
   const { setSearchUrl, searchUrl, isValidationError } =
     useValidationStateManagement();
+
+  const { errorState, errorSetState } = useNumericFieldValidation();
+
+  const { caratError } = errorState;
+  const { setCaratError } = errorSetState;
 
   const { data } = useGetProductCountQuery(
     {
@@ -122,6 +130,10 @@ const Form = () => {
                 caratMin={caratMin}
                 setCaratMin={setCaratMin}
                 setCaratMax={setCaratMax}
+                selectedCaratRange={selectedCaratRange}
+                setSelectedCaratRange={setSelectedCaratRange}
+                caratError={caratError}
+                setCaratError={setCaratError}
               />
               <Color
                 selectedColor={selectedColor}

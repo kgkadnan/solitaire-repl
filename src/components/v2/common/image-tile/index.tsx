@@ -45,7 +45,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
                   role="img"
                   className={`px-[25px] py-[20px] border-[1px] bg-neutralShapeDefault   grid gap-[8px] w-[93px] h-[106px] rounded-[8px] justify-center text-center hover:border-neutralShapeHover  border-neutral50 ${
                     selectedTile.includes(short_name)
-                      ? 'shadow-[0px_4px_8px_0px_popupsShadow] border-neutralShapeSelected'
+                      ? 'shadow-popupsShadow border-neutralShapeSelected'
                       : ''
                   }`}
                   onClick={() => {
