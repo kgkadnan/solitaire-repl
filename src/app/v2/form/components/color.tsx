@@ -40,13 +40,15 @@ export const Color = ({
   };
   return (
     <div id="Color">
+      
       <AccordionComponent
         value="Color"
         isDisable={true}
         accordionContent={
-          <div className="px-[16px] py-[24px]">
+          <div className="px-[16px] py-[24px] flex flex-col gap-[24px]">
+            
             <div className="flex justify-end">
-              <div className="w-[200px]">
+              <div className="w-[120px] h-[30px]">
                 <Tabs
                   onChange={setSelectedColor}
                   options={color}
@@ -65,12 +67,20 @@ export const Color = ({
                 />
               </div>
             </div>
-            <Tile
-              tileData={white}
-              selectedTile={selectedWhiteColor}
-              setSelectedTile={setSelectedWhiteColor}
-              handleTileClick={handleWhiteColorChange}
-            />
+            <div>
+              {
+                selectedColor==='white' ? <Tile
+                tileData={white}
+                selectedTile={selectedWhiteColor}
+                setSelectedTile={setSelectedWhiteColor}
+                handleTileClick={handleWhiteColorChange}
+              />
+
+              :
+              <div></div>
+              }
+            
+            </div>
           </div>
         }
         accordionTrigger={'Color'}
