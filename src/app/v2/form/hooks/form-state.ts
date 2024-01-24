@@ -34,14 +34,14 @@ const useFormStateManagement = () => {
   const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
   const [caratRangeTo, setCaratRangeTo] = useState<string>('');
   //other parameter Inclsuion state
-  const [blackTableBI, setBlackTableBI] = useState<string[]>([]);
-  const [sideBlackBI, setSideBlackBI] = useState<string[]>([]);
-  const [openCrownBI, setOpenCrownBI] = useState<string[]>([]);
-  const [openTableBI, setOpenTableBI] = useState<string[]>([]);
-  const [openPavilionBI, setOpenPavilionBI] = useState<string[]>([]);
-  const [milkyBI, setMilkyBI] = useState<string[]>([]);
-  const [lusterBI, setLusterBI] = useState<string[]>([]);
-  const [eyeCleanBI, setEyeCleanBI] = useState<string[]>([]);
+  const [blackTableBI, setBlackTable] = useState<string[]>([]);
+  const [sideBlackBI, setSideBlack] = useState<string[]>([]);
+  const [openCrownBI, setOpenCrown] = useState<string[]>([]);
+  const [openTableBI, setOpenTable] = useState<string[]>([]);
+  const [openPavilionBI, setOpenPavilion] = useState<string[]>([]);
+  const [milkyBI, setMilky] = useState<string[]>([]);
+  const [lusterBI, setLuster] = useState<string[]>([]);
+  const [eyeCleanBI, setEyeClean] = useState<string[]>([]);
   const [tableInclusionWI, setTableInclusionWI] = useState<string[]>([]);
   const [sideInclusionWI, setSideInclusionWI] = useState<string[]>([]);
   const [naturalCrownWI, setNaturalCrownWI] = useState<string[]>([]);
@@ -182,14 +182,14 @@ const useFormStateManagement = () => {
       setPricePerCaratTo,
       setCaratRangeFrom,
       setCaratRangeTo,
-      setBlackTableBI,
-      setSideBlackBI,
-      setOpenCrownBI,
-      setOpenTableBI,
-      setOpenPavilionBI,
-      setMilkyBI,
-      setLusterBI,
-      setEyeCleanBI,
+      setBlackTable,
+      setSideBlack,
+      setOpenCrown,
+      setOpenTable,
+      setOpenPavilion,
+      setMilky,
+      setLuster,
+      setEyeClean,
       setTableInclusionWI,
       setSideInclusionWI,
       setNaturalCrownWI,
