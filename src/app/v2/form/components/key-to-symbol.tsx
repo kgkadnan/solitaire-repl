@@ -1,20 +1,25 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
-import React from 'react';
-import { IFormState } from '../interface/interface';
+import React, { Dispatch, SetStateAction } from 'react';
 import { handleChange } from '../helpers/handle-change';
 import { keyToSymbol } from '@/constants/v2/form';
 
-export const KeyToSymbol = ({ setState, state }: IFormState) => {
-  const { selectedKeyToSymbol } = state;
-  const { setSelectedKeyToSymbol } = setState;
+interface IKeyToSymbolProps {
+  selectedKeyToSymbol: string[];
+  setSelectedKeyToSymbol: Dispatch<SetStateAction<string[]>>;
+}
+
+export const KeyToSymbol = ({
+  selectedKeyToSymbol,
+  setSelectedKeyToSymbol
+}: IKeyToSymbolProps) => {
   return (
     <div id="Key to Symbol">
       <AccordionComponent
         value="Key to Symbol"
         isDisable={false}
         accordionContent={
-          <div className='px-[16px] py-[24px]'>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={keyToSymbol}
               selectedTile={selectedKeyToSymbol}

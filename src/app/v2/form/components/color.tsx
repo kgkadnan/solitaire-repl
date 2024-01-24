@@ -1,21 +1,29 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import { Tabs } from '@/components/v2/common/toggle';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { color, white } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
-import { IFormState } from '../interface/interface';
 
-export const Color = ({ setState, state }: IFormState) => {
-  const { selectedColor, selectedWhiteColor } = state;
-  const {
-    setSelectedColor,
-    setSelectedWhiteColor,
-    setSelectedFancyColor,
-    setSelectedIntensity,
-    setSelectedOvertone
-  } = setState;
+interface IColorProps {
+  selectedColor: string;
+  selectedWhiteColor: string[];
+  setSelectedColor: Dispatch<SetStateAction<string>>;
+  setSelectedWhiteColor: Dispatch<SetStateAction<string[]>>;
+  setSelectedFancyColor: Dispatch<SetStateAction<string>>;
+  setSelectedIntensity: Dispatch<SetStateAction<string>>;
+  setSelectedOvertone: Dispatch<SetStateAction<string>>;
+}
 
+export const Color = ({
+  selectedColor,
+  selectedWhiteColor,
+  setSelectedColor,
+  setSelectedWhiteColor,
+  setSelectedFancyColor,
+  setSelectedIntensity,
+  setSelectedOvertone
+}: IColorProps) => {
   const handleWhiteColorChange = ({
     data,
     selectedTile,
@@ -36,7 +44,7 @@ export const Color = ({ setState, state }: IFormState) => {
         value="Color"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <div className="flex justify-end">
               <div className="w-[200px]">
                 <Tabs

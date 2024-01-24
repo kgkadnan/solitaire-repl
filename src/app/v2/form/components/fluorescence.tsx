@@ -1,20 +1,25 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
-import React from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { fluorescence } from '@/constants/v2/form';
-import { IFormState } from '../interface/interface';
 import { handleChange } from '../helpers/handle-change';
 
-export const Fluorescence = ({ state, setState }: IFormState) => {
-  const { selectedFluorescence } = state;
-  const { setSelectedFluorescence } = setState;
+interface IFlouorescenceProps {
+  selectedFluorescence: string[];
+  setSelectedFluorescence: Dispatch<SetStateAction<string[]>>;
+}
+
+export const Fluorescence = ({
+  selectedFluorescence,
+  setSelectedFluorescence
+}: IFlouorescenceProps) => {
   return (
     <div id="Fluorescence">
       <AccordionComponent
         value="Fluorescence"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={fluorescence}
               selectedTile={selectedFluorescence}
