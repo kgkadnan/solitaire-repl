@@ -2,11 +2,22 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import React from 'react';
 import { IFormState } from '../interface/interface';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
-// import ActionButton from '@/components/v2/common/action-button';
+import element from '@public/v2/assets/icons/elements.svg';
+import { IActionButtonDataItem } from '@/components/v2/common/action-button/exmple';
+import ActionButton from '@/components/v2/common/action-button';
 
 export const Carat = ({ state, setState }: IFormState) => {
   const { caratMax, caratMin } = state;
   const { setCaratMin, setCaratMax } = setState;
+
+  let actionButtonData: IActionButtonDataItem[] = [
+    {
+      variant: 'secondary',
+      svg: element,
+      label: 'Add Carat',
+      handler: () => {}
+    }
+  ];
 
   const handleMaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCaratMax(event.target.value);
@@ -20,7 +31,7 @@ export const Carat = ({ state, setState }: IFormState) => {
         value="Carat"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="flex items-center">
             <div>
               <MinMaxInput
                 minInputData={{
@@ -37,7 +48,9 @@ export const Carat = ({ state, setState }: IFormState) => {
                 errorText={''}
               />
             </div>
-            <div>{/* <ActionButton /> */}</div>
+            <div>
+              <ActionButton actionButtonData={actionButtonData} />
+            </div>
           </div>
         }
         accordionTrigger={'Carat'}

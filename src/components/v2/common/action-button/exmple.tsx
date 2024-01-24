@@ -3,7 +3,7 @@ import ActionButton from '.';
 import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
 import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
 
-interface IActionButtonDataItem {
+export interface IActionButtonDataItem {
   variant: 'secondary' | 'primary' | 'disable';
   svg: string; // Assuming the type of 'svg' is string, update it accordingly
   label: string;
