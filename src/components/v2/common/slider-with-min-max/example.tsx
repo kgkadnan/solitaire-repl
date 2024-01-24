@@ -26,6 +26,9 @@ export const SliderWithInputExample = () => {
   };
   return (
     <SliderWithMinMaxInput
+      minPlaceHolder="0"
+      maxPlaceHolder="100"
+      label="test"
       handleMaxChange={handleMaxChange}
       handleMinChange={handleMinChange}
       handleSliderChange={handleSliderChange}

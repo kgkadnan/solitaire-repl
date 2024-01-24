@@ -26,7 +26,7 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
   return (
     <Accordion
       type="single"
-      className="w-full"
+      className="w-[100%]"
       defaultValue={value}
       collapsible
     >

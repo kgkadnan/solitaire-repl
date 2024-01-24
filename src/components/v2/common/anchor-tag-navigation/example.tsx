@@ -2,7 +2,7 @@ import React from 'react';
 import AnchorLinkNavigation from '.';
 
 const ExampleAnchorLinkNavigation = () => {
-  let linkItems = ['a', 'b', 'c', 'd', 'f', 'g', 'h'];
+  let anchorNavigations = ['a', 'b', 'c', 'd', 'f', 'g', 'h'];
   return (
     <>
       <AnchorLinkNavigation linkItems={linkItems} />

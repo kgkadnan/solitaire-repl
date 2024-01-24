@@ -2,46 +2,151 @@
 
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
-import Cta from '@/components/v2/common/cta';
 import ImageTile from '@/components/v2/common/image-tile';
+import { DiscountPrice } from '@/components/v2/common/min-max-input/discount-price';
 import Tile from '@/components/v2/common/tile';
-import { shape } from '@/constants/v2/form';
-import React, { useState } from 'react';
-import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
-import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
-
-interface ICtaDataItem {
-  variant: 'secondary' | 'primary' | 'disable';
-  svg: string; // Assuming the type of 'svg' is string, update it accordingly
-  label: string;
-  isDisable?: boolean;
-}
+import {
+  shape,
+  anchor,
+  white,
+  color,
+  clarity,
+  fluorescence,
+  lab,
+  location,
+  countryOfOrigin,
+  shade,
+  girdle,
+  culet,
+  keyToSymbol
+} from '@/constants/v2/form';
+import React, { Dispatch, SetStateAction } from 'react';
+import useFormStateManagement from './hooks/form-state';
+import { Tabs } from '@/components/v2/common/toggle';
 
 const Form = () => {
-  let linkItems = [
-    'shape',
-    'clarity',
-    'fluorescence',
-    'parameter',
-    'shade',
-    'lab',
-    'inclusions'
-  ];
-  const [selectedShape, setSelectedShape] = useState<string[]>([]);
-  const handleChange = (shape: string) => {
-    if (selectedShape.includes(shape)) {
-      setSelectedShape(prevSelectedShape =>
-        prevSelectedShape.filter(selected => selected !== shape)
+  const { state, setState, carat } = useFormStateManagement();
+  const {
+    selectedShape,
+    selectedWhiteColor,
+    selectedShade,
+    selectedClarity,
+    selectedCaratRange,
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence,
+    selectedKeyToSymbol,
+    selectedLab,
+    selectedLocation,
+    selectedOrigin,
+    priceRangeFrom,
+    priceRangeTo,
+    discountFrom,
+    discountTo,
+    pricePerCaratFrom,
+    pricePerCaratTo,
+    caratRangeFrom,
+    caratRangeTo,
+    selectedFancyColor,
+    selectedIntensity,
+    selectedOvertone,
+    selectedColor,
+    selectedCulet
+  } = state;
+
+  const {
+    setSelectedShape,
+    setSelectedWhiteColor,
+    setSelectedFancyColor,
+    setSelectedIntensity,
+    setSelectedOvertone,
+    setSelectedShade,
+    setSelectedClarity,
+    setSelectedCaratRange,
+    setSelectedMake,
+    setSelectedCut,
+    setSelectedPolish,
+    setSelectedSymmetry,
+    setSelectedFluorescence,
+    setSelectedKeyToSymbol,
+    setSelectedLab,
+    setSelectedLocation,
+    setSelectedOrigin,
+    setPriceRangeFrom,
+    setPriceRangeTo,
+    setDiscountFrom,
+    setDiscountTo,
+    setPricePerCaratFrom,
+    setPricePerCaratTo,
+    setCaratRangeFrom,
+    setCaratRangeTo,
+    setSelectedColor,
+    setSelectedCulet
+  } = setState;
+
+  const handleFilterChange = (
+    filterData: string,
+    selectedFilters: string[],
+    setSelectedFilters: Dispatch<SetStateAction<string[]>>
+  ) => {
+    if (selectedFilters.includes(filterData)) {
+      setSelectedFilters((prevSelectedColors: string[]) =>
+        prevSelectedColors.filter(selected => selected !== filterData)
       );
     } else {
-      setSelectedShape(prevSelectedShape => [...prevSelectedShape, shape]);
+      setSelectedFilters((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        filterData
+      ]);
+    }
+  };
+  const compareArrays = (arr1: string[], arr2: string[]) => {
+    // Check if the lengths of the arrays are equal
+    if (arr1.length !== arr2.length) {
+      return false;
+    }
+    // Convert arrays to sets
+    const set1 = new Set(arr1);
+    const set2 = new Set(arr2);
+    // Compare sets
+    for (const value of set1) {
+      if (!set2.has(value)) {
+        return false;
+      }
+    }
+    // If the loop completes, sets are equal
+    return true;
+  };
+  const handleShapeChange = (shapeData: string) => {
+    const filteredShape: string[] = shape.map(data => data.short_name);
+    if (shapeData.toLowerCase() === 'all') {
+      setSelectedShape(filteredShape);
+      if (selectedShape.includes('All')) {
+        setSelectedShape([]);
+      }
+    } else {
+      if (selectedShape.includes('All')) {
+        const filteredSelectedShape: string[] = selectedShape.filter(
+          (data: any) => data !== 'All' && data !== shape
+        );
+        setSelectedShape(filteredSelectedShape);
+      } else if (
+        compareArrays(
+          selectedShape.filter((data: any) => data !== 'All'),
+          filteredShape.filter(data => data !== 'All' && data !== shapeData)
+        )
+      ) {
+        setSelectedShape(filteredShape);
+      } else {
+        handleFilterChange(shapeData, selectedShape, setSelectedShape);
+      }
     }
   };
 
-  const [make, setMake] = useState<string[]>([]);
-  const [cut, setCut] = useState<string[]>([]);
-  const [girdle, setGirdle] = useState<string[]>([]);
-  const handleTileClick = ({
+  // Function to handle color change based on user selection
+  const handleWhiteColorChange = ({
     data,
     selectedTile,
     setSelectedTile
@@ -50,47 +155,13 @@ const Form = () => {
     selectedTile: string[];
     setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
   }) => {
-    if (selectedTile.includes(data)) {
-      setSelectedTile(prevSelectedTile =>
-        prevSelectedTile.filter(selected => selected !== data)
-      );
-    } else {
-      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
-    }
+    setSelectedFancyColor('');
+    setSelectedIntensity('');
+    setSelectedOvertone('');
+    handleFilterChange(data, selectedTile, setSelectedTile);
   };
 
-  let tileData = ['3EX', '3EX+NON', '3VG+EX', '3G', '3F'];
-  let cutData = [
-    { title: 'Excellent', short_name: 'EX' },
-    { title: 'Very Good', short_name: 'VG' },
-    { title: 'Good', short_name: 'G' },
-    { title: 'Fair', short_name: 'F' }
-  ];
-
-  let ctaData: ICtaDataItem[] = [
-    {
-      variant: 'disable',
-      svg: bookmarkAdd,
-      label: 'Save Search',
-      isDisable: true
-    },
-    { variant: 'secondary', svg: bookmarkAdd, label: 'Save Search' },
-    { variant: 'primary', svg: searchIcon, label: 'Search' }
-  ];
-
-  let girdleData = [
-    'ETN',
-    'VTN',
-    'STN',
-    'THN',
-    'MED',
-    'STK',
-    'THK',
-    'VTK',
-    'ETK '
-  ];
-
-  const handleGirdleTileClick = ({
+  const handleChange = ({
     data,
     selectedTile,
     setSelectedTile
@@ -99,133 +170,286 @@ const Form = () => {
     selectedTile: string[];
     setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
   }) => {
-    // Find the index of the clicked item in the data array
-    const clickedIndex = girdleData.indexOf(data);
-    let lastSelectedIndex = -1;
-    // Find the index of the previously selected item in the data array
-    if (!selectedTile.includes(data)) {
-      lastSelectedIndex =
-        selectedTile.length > 0 ? girdleData.indexOf(selectedTile[0]) : -1;
-    }
-
-    if (selectedTile.includes(data)) {
-      setSelectedTile(prevSelectedTile =>
-        prevSelectedTile.filter(selected => selected !== data)
-      );
-    } else if (lastSelectedIndex !== -1) {
-      // Determine the range of items to select
-      const startIndex = Math.min(clickedIndex, lastSelectedIndex);
-      const endIndex = Math.max(clickedIndex, lastSelectedIndex);
-      // Select all items in the range
-      const newSelected = girdleData.slice(startIndex, endIndex + 1);
-      // Update the selected items
-      setSelectedTile(newSelected);
-    } else {
-      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
-    }
+    handleFilterChange(data, selectedTile, setSelectedTile);
   };
-  console.log('girdle', girdle);
-
   return (
     <div>
-      <Cta ctaData={ctaData} />
-      <Tile
-        tileData={tileData}
-        selectedTile={make}
-        setSelectedTile={setMake}
-        handleTileClick={handleTileClick}
-      />
-      <Tile
-        tileData={cutData}
-        selectedTile={cut}
-        setSelectedTile={setCut}
-        handleTileClick={handleTileClick}
-      />
-      <AnchorLinkNavigation linkItems={linkItems} />
-      <div className="mt-10" id="shape">
-        <AccordionComponent
-          value="Shape"
-          isDisable={true}
-          accordionContent={
-            <ImageTile
-              imageTileData={shape}
-              selectedTile={selectedShape}
-              handleSelectTile={handleChange}
-            />
-          }
-          accordionTrigger={'Shape'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="clarity">
-        <AccordionComponent
-          value="Clarity"
-          isDisable={true}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Clarity'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="girdle">
-        <AccordionComponent
-          value="Girdle"
-          isDisable={true}
-          accordionContent={
-            <Tile
-              tileData={girdleData}
-              selectedTile={girdle}
-              setSelectedTile={setGirdle}
-              handleTileClick={handleGirdleTileClick}
-            />
-          }
-          accordionTrigger={'Girdle'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="fluorescence">
-        <AccordionComponent
-          value="Fluorescence"
-          isDisable={true}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Fluorescence'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="parameter">
-        <AccordionComponent
-          value="Parameter"
-          isDisable={false}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Parameter'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="shade">
-        <AccordionComponent
-          value="Shade"
-          isDisable={false}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Shade'}
-          hasError={true}
-        />
-      </div>
-      <div className="mt-10" id="lab">
-        <AccordionComponent
-          value="Lab"
-          isDisable={false}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Lab'}
-          hasError={false}
-        />
-      </div>
-      <div className="mt-10" id="inclusions">
-        <AccordionComponent
-          value="Inclusions"
-          isDisable={false}
-          accordionContent={<>Hello</>}
-          accordionTrigger={'Inclusions'}
-          hasError={false}
-        />
+      {/* <TopNavigationBar/> */}
+      <div>
+        {/* <SideNavigationBar/> */}{' '}
+        <div>
+          <div className="flex flex-col gap-[16px] w-[calc(100%-148px)]">
+            <div>
+              <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
+                Search for Diamonds
+              </span>
+            </div>
+            <AnchorLinkNavigation anchorNavigations={anchor} />
+
+            <div id="Shape">
+              <AccordionComponent
+                value="Shape"
+                isDisable={true}
+                accordionContent={
+                  <ImageTile
+                    imageTileData={shape}
+                    selectedTile={selectedShape}
+                    handleSelectTile={handleShapeChange}
+                  />
+                }
+                accordionTrigger={'Shape'}
+                hasError={false}
+              />
+            </div>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <div id="Carat">
+                <AccordionComponent
+                  value="Carat"
+                  isDisable={true}
+                  accordionContent={<div>hello</div>}
+                  accordionTrigger={'Carat'}
+                  hasError={false}
+                />
+              </div>
+              <div id="Color">
+                <AccordionComponent
+                  value="Color"
+                  isDisable={true}
+                  accordionContent={
+                    <div>
+                      <div className="flex justify-end">
+                        <div className="w-[200px]">
+                          <Tabs
+                            onChange={setSelectedColor}
+                            options={color}
+                            backgroundColor={'var(--neutral-0)'}
+                            fontColor={'var(--neutral-900)'}
+                            fontSize="10"
+                            selectedFontColor={'var(--neutral-25)'}
+                            selectedBackgroundColor={'var(--primary-main)'}
+                            border={'1px solid var(--neutral-200)'}
+                            wrapperBorderRadius={'8px'}
+                            optionBorderRadius={
+                              selectedColor === 'white'
+                                ? '8px 0px 0px 8px'
+                                : '0px 8px 8px 0px'
+                            }
+                          />
+                        </div>
+                      </div>
+                      <Tile
+                        tileData={white}
+                        selectedTile={selectedWhiteColor}
+                        setSelectedTile={setSelectedWhiteColor}
+                        handleTileClick={handleWhiteColorChange}
+                      />
+                    </div>
+                  }
+                  accordionTrigger={'Color'}
+                  hasError={false}
+                />
+              </div>
+            </div>
+            <div id="Clarity">
+              <AccordionComponent
+                value="Clarity"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={clarity}
+                      selectedTile={selectedClarity}
+                      setSelectedTile={setSelectedClarity}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Clarity'}
+                hasError={false}
+              />
+            </div>
+            <div id="Make Cut Polish Symmetry">
+              <AccordionComponent
+                value="Make Cut Polish Symmetry"
+                isDisable={true}
+                accordionContent={<>Hello</>}
+                accordionTrigger={'Make Cut Polish Symmetry'}
+                hasError={false}
+              />
+            </div>
+            <div id="Fluorescence">
+              <AccordionComponent
+                value="Fluorescence"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={fluorescence}
+                      selectedTile={selectedFluorescence}
+                      setSelectedTile={setSelectedFluorescence}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Fluorescence'}
+                hasError={false}
+              />
+            </div>
+            <div id="Lab">
+              <AccordionComponent
+                value="Lab"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={lab}
+                      selectedTile={selectedLab}
+                      setSelectedTile={setSelectedLab}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Lab'}
+                hasError={false}
+              />
+            </div>
+            <div id="Location">
+              <AccordionComponent
+                value="Location"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={location}
+                      selectedTile={selectedLocation}
+                      setSelectedTile={setSelectedLocation}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Location'}
+                hasError={false}
+              />
+            </div>
+            <div id="Country of Origin">
+              <AccordionComponent
+                value="Country of Origin"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={countryOfOrigin}
+                      selectedTile={selectedOrigin}
+                      setSelectedTile={setSelectedOrigin}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Country of Origin'}
+                hasError={false}
+              />
+            </div>
+            <div id="Shade">
+              <AccordionComponent
+                value="Shade"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={shade}
+                      selectedTile={selectedShade}
+                      setSelectedTile={setSelectedShade}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Shade'}
+                hasError={false}
+              />
+            </div>
+            <div id="Discount% Price/Ct Amount Range">
+              <AccordionComponent
+                value="Discount% Price/Ct Amount Range"
+                isDisable={true}
+                accordionContent={<>Hello</>}
+                accordionTrigger={'Discount% Price/Ct Amount Range'}
+                hasError={false}
+              />
+            </div>
+            <div id="Parameters">
+              <AccordionComponent
+                value="Parameters"
+                isDisable={false}
+                accordionContent={<>Hello</>}
+                accordionTrigger={'Parameters'}
+                hasError={false}
+              />
+            </div>
+            <div id="Girdle">
+              <AccordionComponent
+                value="Girdle"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={girdle}
+                      selectedTile={selectedLab}
+                      setSelectedTile={setSelectedLab}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Girdle'}
+                hasError={false}
+              />
+            </div>
+            <div id="Culet">
+              <AccordionComponent
+                value="Culet"
+                isDisable={true}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={culet}
+                      selectedTile={selectedCulet}
+                      setSelectedTile={setSelectedCulet}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Culet'}
+                hasError={false}
+              />
+            </div>
+            <div id="Inclusions">
+              <AccordionComponent
+                value="Inclusions"
+                isDisable={false}
+                accordionContent={<>Hello</>}
+                accordionTrigger={'Inclusions'}
+                hasError={false}
+              />
+            </div>
+            <div id="Key to Symbol">
+              <AccordionComponent
+                value="Key to Symbol"
+                isDisable={false}
+                accordionContent={
+                  <div>
+                    <Tile
+                      tileData={keyToSymbol}
+                      selectedTile={selectedKeyToSymbol}
+                      setSelectedTile={setSelectedKeyToSymbol}
+                      handleTileClick={handleChange}
+                    />
+                  </div>
+                }
+                accordionTrigger={'Key to Symbol'}
+                hasError={false}
+              />
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
