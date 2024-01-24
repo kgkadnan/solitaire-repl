@@ -33,6 +33,15 @@ import { ManageLocales } from '@/utils/v2/translate';
 import { useAppSelector } from '@/hooks/hook';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
+import {
+  MAX_SEARCH_FORM_COUNT,
+  MIN_SEARCH_FORM_COUNT
+} from '@/constants/business-logic';
+import {
+  EXCEEDS_LIIMITS,
+  NO_STONE_FOUND,
+  SOMETHING_WENT_WRONG
+} from '@/constants/error-messages/form';
 
 const Form = () => {
   const router = useRouter();
@@ -92,10 +101,23 @@ const Form = () => {
     (store: { searchResult: any }) => store.searchResult
   );
 
-  const { setSearchUrl, searchUrl, isValidationError } =
-    useValidationStateManagement();
+  const {
+    setSearchUrl,
+    searchUrl,
+    isValidationError,
+    isError,
+    errorText,
+    setErrorText,
+    setSelectedStep,
+    setSelectedShadeContain,
+    setSearchCount,
+    setMessageColor,
+    messageColor,
+    setIsError,
+    searchCount
+  } = useValidationStateManagement();
 
-  const { data } = useGetProductCountQuery(
+  const { data, error } = useGetProductCountQuery(
     {
       searchUrl
     },
@@ -113,6 +135,53 @@ const Form = () => {
       setSearchUrl(constructUrlParams(queryParams));
     }
   }, [state]);
+
+  //Handle search count and errors
+  useEffect(() => {
+    if (searchCount !== -1) {
+      if (searchUrl) {
+        if (
+          data?.count > MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          setIsError(true);
+          setErrorText(EXCEEDS_LIIMITS);
+          setMessageColor('dangerMain');
+        } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          setErrorText(NO_STONE_FOUND);
+          setMessageColor('dangerMain');
+        } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          data?.count && setErrorText(`${data?.count} stones found`);
+          setMessageColor('successMain');
+        } else {
+          setIsError(false);
+          setErrorText('');
+          setMessageColor('dangerMain');
+        }
+      } else {
+        setIsError(false);
+        setErrorText('');
+        setMessageColor('dangerMain');
+      }
+    }
+    if (error) {
+      setIsError(true);
+      setErrorText(SOMETHING_WENT_WRONG);
+      setMessageColor('dangerMain');
+    }
+    setSearchCount(searchCount + 1);
+  }, [data, error, searchUrl]);
+
+  const handleFormReset = () => {
+    setSelectedStep('');
+    setSelectedShadeContain('');
+    setSearchCount(0);
+    setIsError(false);
+    setErrorText('');
+    handleReset(setState);
+  };
 
   let actionButtonData: IActionButtonDataItem[] = [
     // {
@@ -148,7 +217,7 @@ const Form = () => {
       variant: 'secondary',
       svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.reset'),
-      handler: () => handleReset(setState)
+      handler: handleFormReset
     },
 
     {
@@ -159,6 +228,7 @@ const Form = () => {
     },
     { variant: 'primary', svg: searchIcon, label: 'Search', handler: () => {} }
   ];
+  console.log('messageColor', messageColor);
 
   return (
     <div>
@@ -250,6 +320,14 @@ const Form = () => {
           </div>
         </div>
         <div className="w-full bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] px-[32px] border-t-[1px] border-neutral200 flex justify-end">
+          {isError && (
+            <div className="w-[80%] flex items-center">
+              <span />
+              <p className={`text-mRegular font-medium text-${messageColor}`}>
+                {!isValidationError && errorText}
+              </p>
+            </div>
+          )}
           <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>

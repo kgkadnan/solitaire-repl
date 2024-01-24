@@ -8,6 +8,6 @@ export interface IActionButtonDataItem {
   svg: string; // Assuming the type of 'svg' is string, update it accordingly
   label: string;
   isDisable?: boolean;
-  handler: any;
+  handler: () => void;
   isHidden?: boolean;
 }
