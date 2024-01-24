@@ -25,12 +25,12 @@ const useFormStateManagement = () => {
   const [selectedLab, setSelectedLab] = useState<string[]>([]);
   const [selectedLocation, setSelectedLocation] = useState<string[]>([]);
   const [selectedOrigin, setSelectedOrigin] = useState<string[]>([]);
-  const [priceRangeFrom, setPriceRangeFrom] = useState<string>('');
-  const [priceRangeTo, setPriceRangeTo] = useState<string>('');
-  const [discountFrom, setDiscountFrom] = useState<string>('');
-  const [discountTo, setDiscountTo] = useState<string>('');
-  const [pricePerCaratFrom, setPricePerCaratFrom] = useState<string>('');
-  const [pricePerCaratTo, setPricePerCaratTo] = useState<string>('');
+  const [amountRangeMin, setAmountRangeMin] = useState<string>('');
+  const [amountRangeMax, setAmountRangeMax] = useState<string>('');
+  const [discountMin, setDiscountMin] = useState<string>('');
+  const [discountMax, setDiscountMax] = useState<string>('');
+  const [pricePerCaratMin, setPricePerCaratMin] = useState<string>('');
+  const [pricePerCaratMax, setPricePerCaratMax] = useState<string>('');
   const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
   const [caratRangeTo, setCaratRangeTo] = useState<string>('');
   //other parameter Inclsuion state
@@ -101,12 +101,12 @@ const useFormStateManagement = () => {
       selectedLab,
       selectedLocation,
       selectedOrigin,
-      priceRangeFrom,
-      priceRangeTo,
-      discountFrom,
-      discountTo,
-      pricePerCaratFrom,
-      pricePerCaratTo,
+      amountRangeMin,
+      amountRangeMax,
+      discountMin,
+      discountMax,
+      pricePerCaratMin,
+      pricePerCaratMax,
       caratRangeFrom,
       caratRangeTo,
       blackTableBI,
@@ -174,12 +174,12 @@ const useFormStateManagement = () => {
       setSelectedLab,
       setSelectedLocation,
       setSelectedOrigin,
-      setPriceRangeFrom,
-      setPriceRangeTo,
-      setDiscountFrom,
-      setDiscountTo,
-      setPricePerCaratFrom,
-      setPricePerCaratTo,
+      setAmountRangeMin,
+      setAmountRangeMax,
+      setDiscountMin,
+      setDiscountMax,
+      setPricePerCaratMin,
+      setPricePerCaratMax,
       setCaratRangeFrom,
       setCaratRangeTo,
       setBlackTable,

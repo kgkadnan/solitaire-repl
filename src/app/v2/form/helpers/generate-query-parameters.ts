@@ -19,12 +19,12 @@ export const generateQueryParams = (state: any) => {
 
     selectedLocation,
     selectedOrigin,
-    priceRangeFrom,
-    priceRangeTo,
-    discountFrom,
-    discountTo,
-    pricePerCaratFrom,
-    pricePerCaratTo,
+    amountRangeMin,
+    amountRangeMax,
+    discountMin,
+    discountMax,
+    pricePerCaratMin,
+    pricePerCaratMax,
     blackTableBI,
     sideBlackBI,
     openCrownBI,
@@ -108,23 +108,23 @@ export const generateQueryParams = (state: any) => {
     (queryParams['location'] = selectedLocation);
   selectedOrigin?.length !== 0 &&
     (queryParams['origin_country'] = selectedOrigin);
-  priceRangeFrom &&
-    priceRangeTo &&
+  amountRangeMin &&
+    amountRangeMax &&
     (queryParams['price_range'] = {
-      lte: priceRangeTo,
-      gte: priceRangeFrom
+      lte: amountRangeMax,
+      gte: amountRangeMin
     });
-  discountFrom &&
-    discountTo &&
+  discountMin &&
+    discountMax &&
     (queryParams['discount'] = {
-      lte: discountTo,
-      gte: discountFrom
+      lte: discountMax,
+      gte: discountMin
     });
-  pricePerCaratFrom &&
-    pricePerCaratTo &&
+  pricePerCaratMin &&
+    pricePerCaratMax &&
     (queryParams['price_per_carat'] = {
-      lte: pricePerCaratTo,
-      gte: pricePerCaratFrom
+      lte: pricePerCaratMax,
+      gte: pricePerCaratMax
     });
   blackTableBI?.length !== 0 && (queryParams['table_black'] = blackTableBI);
   sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
