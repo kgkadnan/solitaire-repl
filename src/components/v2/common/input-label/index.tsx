@@ -2,8 +2,8 @@ import React from 'react';
 import { Label } from '@components/ui/label';
 
 interface IInputLabelProps {
-  htmlFor: string;
   label: string;
+  htmlFor?: string;
   styles?: string;
 }
 

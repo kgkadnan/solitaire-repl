@@ -7,9 +7,9 @@ import { FormToggle } from '@/components/v2/common/toggle/example';
 const page = () => {
   return (
     <>
-      <FormToggle />
+      {/* <FormToggle />
       <SliderWithInputExample />
-      <MinMaxExample />
+      <MinMaxExample /> */}
       <Form />
     </>
   );

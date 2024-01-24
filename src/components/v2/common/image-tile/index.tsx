@@ -31,7 +31,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
 
   return (
     <div
-      className={`grid xs:grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-[13px] p-[16px] `}
+      className={`grid  sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-[13px] p-[16px] `}
     >
       {imageTileData.map((tileData: IImageTileProps) => {
         const { src, title, short_name } = tileData;
@@ -43,9 +43,9 @@ const ImageTile: React.FC<IImageContainerProps> = (
                 <div
                   key={`image-tile-data-${title}`}
                   role="img"
-                  className={`px-[25px] py-[20px] border-[1px] bg-neutralShapeDefault  border-neutral50 grid gap-[8px] w-[93px] h-[106px] rounded-[8px] justify-center text-center hover:border-neutralShapeHover  ${
+                  className={`px-[25px] py-[20px] border-[1px] bg-neutralShapeDefault   grid gap-[8px] w-[93px] h-[106px] rounded-[8px] justify-center text-center hover:border-neutralShapeHover  border-neutral50 ${
                     selectedTile.includes(short_name)
-                      ? 'shadow-[0px_4px_8px_0px_rgba(0, 0, 0, 0.06)] backdrop-blur-[25px] border-neutralShapeSelected'
+                      ? 'shadow-[0px_4px_8px_0px_popupsShadow] border-neutralShapeSelected'
                       : ''
                   }`}
                   onClick={() => {
