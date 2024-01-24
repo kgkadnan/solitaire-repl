@@ -4,7 +4,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { clarity } from '@/constants/v2/form';
 import { handleChange } from '../helpers/handle-change';
 
-interface ClarityProps {
+interface IClarityProps {
   selectedClarity: string[];
   setSelectedClarity: Dispatch<SetStateAction<string[]>>;
 }
@@ -12,7 +12,7 @@ interface ClarityProps {
 export const Clarity = ({
   setSelectedClarity,
   selectedClarity
-}: ClarityProps) => {
+}: IClarityProps) => {
   return (
     <div id="Clarity">
       <AccordionComponent

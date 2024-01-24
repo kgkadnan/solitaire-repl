@@ -9,7 +9,8 @@ const SideNavigationBar = () => {
         background: '#333',
         position: 'fixed',
         top: '60px',
-        overflow: 'hidden'
+        overflow: 'hidden',
+        zIndex:10
       }}
     >
       {/* Your sidebar content goes here */}
