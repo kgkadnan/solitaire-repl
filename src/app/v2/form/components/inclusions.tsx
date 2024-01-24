@@ -1,8 +1,7 @@
 import { CustomInputlabel } from '@/components/common/input-label';
 import React from 'react';
-import styles from '../form.module.scss';
+// import styles from '../form.module.scss';
 import { ManageLocales } from '@/utils/translate';
-import advanceSearch from '@/constants/advance-search.json';
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import { handleFilterChange, handleSelection } from '@/app/v2/form/helpers/handle-filter-changes';
@@ -56,6 +55,8 @@ const renderInclusionField = (state: any, setState: any) => {
     setSurfaceGrainingWI,
     setInternalGrainingWI
   } = setState;
+
+  let styles:any=""
 
   // Define individual change handlers
   const handleBlackTableBIChange = (data: string) => {
@@ -238,12 +239,12 @@ const renderInclusionField = (state: any, setState: any) => {
                       />
                     </div>
                     <div className={`${styles.filterSectionData}`}>
-                    <Tile
+                    {/* <Tile
           tileData={data.elementValue}
           selectedTile={data.state}
           setSelectedTile={data.setState}
           handleTileClick={handleSelection}
-        /> 
+        />  */}
                     </div>
                   </div>
                 ))}
