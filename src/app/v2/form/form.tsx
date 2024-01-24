@@ -12,7 +12,7 @@ import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
 
 interface ICtaDataItem {
   variant: 'secondary' | 'primary' | 'disable';
-  svg: string; // Assuming the type of 'svg' is string, update it accordingly
+  svg: string;
   label: string;
   isDisable?: boolean;
 }
@@ -101,30 +101,51 @@ const Form = () => {
   }) => {
     // Find the index of the clicked item in the data array
     const clickedIndex = girdleData.indexOf(data);
-    let lastSelectedIndex = -1;
-    // Find the index of the previously selected item in the data array
-    if (!selectedTile.includes(data)) {
-      lastSelectedIndex =
-        selectedTile.length > 0 ? girdleData.indexOf(selectedTile[0]) : -1;
-    }
 
-    if (selectedTile.includes(data)) {
-      setSelectedTile(prevSelectedTile =>
-        prevSelectedTile.filter(selected => selected !== data)
-      );
-    } else if (lastSelectedIndex !== -1) {
-      // Determine the range of items to select
-      const startIndex = Math.min(clickedIndex, lastSelectedIndex);
-      const endIndex = Math.max(clickedIndex, lastSelectedIndex);
-      // Select all items in the range
-      const newSelected = girdleData.slice(startIndex, endIndex + 1);
-      // Update the selected items
-      setSelectedTile(newSelected);
-    } else {
-      setSelectedTile(prevSelectedTile => [...prevSelectedTile, data]);
+    if (clickedIndex !== -1) {
+      // Find the index of the previously selected item in the data array
+      let lastSelectedIndex;
+
+      if (
+        clickedIndex < girdleData.indexOf(selectedTile[0]) ||
+        clickedIndex < girdleData.indexOf(selectedTile[selectedTile.length - 1])
+      ) {
+        lastSelectedIndex =
+          selectedTile.length > 0
+            ? girdleData.indexOf(selectedTile[selectedTile.length - 1])
+            : -1;
+      } else {
+        lastSelectedIndex =
+          selectedTile.length > 0 ? girdleData.indexOf(selectedTile[0]) : -1;
+      }
+
+      if (lastSelectedIndex !== -1) {
+        // Determine the range of items to select
+        const startIndex = Math.min(clickedIndex, lastSelectedIndex);
+        const endIndex = Math.max(clickedIndex, lastSelectedIndex);
+
+        // If clicked item is the same as the last selected item or the first selected item, deselect the entire range
+        if (
+          data === selectedTile[selectedTile.length - 1] ||
+          data === selectedTile[0]
+        ) {
+          setSelectedTile([]);
+        } else {
+          // Add the clicked item to the existing range if it's next to the last selected item
+          const newSelected = girdleData.slice(
+            startIndex,
+            clickedIndex === endIndex + 1 ? endIndex + 2 : endIndex + 1
+          );
+
+          // Update the selected items
+          setSelectedTile(newSelected);
+        }
+      } else {
+        // Toggle the clicked item
+        setSelectedTile([data]);
+      }
     }
   };
-  console.log('girdle', girdle);
 
   return (
     <div>
