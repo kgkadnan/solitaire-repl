@@ -23,6 +23,11 @@ import {
 import React, { Dispatch, SetStateAction } from 'react';
 import useFormStateManagement from './hooks/form-state';
 import { Tabs } from '@/components/v2/common/toggle';
+import { handleFilterChange } from './helpers/handle-filter-changes';
+import { compareArrays } from './helpers/compare-arrays';
+import { Shape } from './components/shape';
+import { Carat } from './components/carat';
+import { Color } from './components/color';
 
 const Form = () => {
   const { state, setState, carat } = useFormStateManagement();
@@ -86,64 +91,31 @@ const Form = () => {
     setSelectedCulet
   } = setState;
 
-  const handleFilterChange = (
-    filterData: string,
-    selectedFilters: string[],
-    setSelectedFilters: Dispatch<SetStateAction<string[]>>
-  ) => {
-    if (selectedFilters.includes(filterData)) {
-      setSelectedFilters((prevSelectedColors: string[]) =>
-        prevSelectedColors.filter(selected => selected !== filterData)
-      );
-    } else {
-      setSelectedFilters((prevSelectedColors: string[]) => [
-        ...prevSelectedColors,
-        filterData
-      ]);
-    }
-  };
-  const compareArrays = (arr1: string[], arr2: string[]) => {
-    // Check if the lengths of the arrays are equal
-    if (arr1.length !== arr2.length) {
-      return false;
-    }
-    // Convert arrays to sets
-    const set1 = new Set(arr1);
-    const set2 = new Set(arr2);
-    // Compare sets
-    for (const value of set1) {
-      if (!set2.has(value)) {
-        return false;
-      }
-    }
-    // If the loop completes, sets are equal
-    return true;
-  };
-  const handleShapeChange = (shapeData: string) => {
-    const filteredShape: string[] = shape.map(data => data.short_name);
-    if (shapeData.toLowerCase() === 'all') {
-      setSelectedShape(filteredShape);
-      if (selectedShape.includes('All')) {
-        setSelectedShape([]);
-      }
-    } else {
-      if (selectedShape.includes('All')) {
-        const filteredSelectedShape: string[] = selectedShape.filter(
-          (data: any) => data !== 'All' && data !== shape
-        );
-        setSelectedShape(filteredSelectedShape);
-      } else if (
-        compareArrays(
-          selectedShape.filter((data: any) => data !== 'All'),
-          filteredShape.filter(data => data !== 'All' && data !== shapeData)
-        )
-      ) {
-        setSelectedShape(filteredShape);
-      } else {
-        handleFilterChange(shapeData, selectedShape, setSelectedShape);
-      }
-    }
-  };
+  // const handleShapeChange = (shapeData: string) => {
+  //   const filteredShape: string[] = shape.map(data => data.short_name);
+  //   if (shapeData.toLowerCase() === 'all') {
+  //     setSelectedShape(filteredShape);
+  //     if (selectedShape.includes('All')) {
+  //       setSelectedShape([]);
+  //     }
+  //   } else {
+  //     if (selectedShape.includes('All')) {
+  //       const filteredSelectedShape: string[] = selectedShape.filter(
+  //         (data: any) => data !== 'All' && data !== shape
+  //       );
+  //       setSelectedShape(filteredSelectedShape);
+  //     } else if (
+  //       compareArrays(
+  //         selectedShape.filter((data: any) => data !== 'All'),
+  //         filteredShape.filter(data => data !== 'All' && data !== shapeData)
+  //       )
+  //     ) {
+  //       setSelectedShape(filteredShape);
+  //     } else {
+  //       handleFilterChange(shapeData, selectedShape, setSelectedShape);
+  //     }
+  //   }
+  // };
 
   // Function to handle color change based on user selection
   const handleWhiteColorChange = ({
@@ -176,7 +148,7 @@ const Form = () => {
     <div>
       {/* <TopNavigationBar/> */}
       <div>
-        {/* <SideNavigationBar/> */}{' '}
+        {/* <SideNavigationBar/> */}
         <div>
           <div className="flex flex-col gap-[16px] w-[calc(100%-148px)]">
             <div>
@@ -186,69 +158,11 @@ const Form = () => {
             </div>
             <AnchorLinkNavigation anchorNavigations={anchor} />
 
-            <div id="Shape">
-              <AccordionComponent
-                value="Shape"
-                isDisable={true}
-                accordionContent={
-                  <ImageTile
-                    imageTileData={shape}
-                    selectedTile={selectedShape}
-                    handleSelectTile={handleShapeChange}
-                  />
-                }
-                accordionTrigger={'Shape'}
-                hasError={false}
-              />
-            </div>
+            <Shape />
+
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <div id="Carat">
-                <AccordionComponent
-                  value="Carat"
-                  isDisable={true}
-                  accordionContent={<div>hello</div>}
-                  accordionTrigger={'Carat'}
-                  hasError={false}
-                />
-              </div>
-              <div id="Color">
-                <AccordionComponent
-                  value="Color"
-                  isDisable={true}
-                  accordionContent={
-                    <div>
-                      <div className="flex justify-end">
-                        <div className="w-[200px]">
-                          <Tabs
-                            onChange={setSelectedColor}
-                            options={color}
-                            backgroundColor={'var(--neutral-0)'}
-                            fontColor={'var(--neutral-900)'}
-                            fontSize="10"
-                            selectedFontColor={'var(--neutral-25)'}
-                            selectedBackgroundColor={'var(--primary-main)'}
-                            border={'1px solid var(--neutral-200)'}
-                            wrapperBorderRadius={'8px'}
-                            optionBorderRadius={
-                              selectedColor === 'white'
-                                ? '8px 0px 0px 8px'
-                                : '0px 8px 8px 0px'
-                            }
-                          />
-                        </div>
-                      </div>
-                      <Tile
-                        tileData={white}
-                        selectedTile={selectedWhiteColor}
-                        setSelectedTile={setSelectedWhiteColor}
-                        handleTileClick={handleWhiteColorChange}
-                      />
-                    </div>
-                  }
-                  accordionTrigger={'Color'}
-                  hasError={false}
-                />
-              </div>
+              <Carat />
+              <Color />
             </div>
             <div id="Clarity">
               <AccordionComponent
