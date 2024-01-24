@@ -10,67 +10,69 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
 
-    backgroundColor: ' hsl(var(--solitaire-primary))',
-    borderRadius: 'none',
-    border: 'none',
-    borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
+    backgroundColor: 'neutral0',
+    borderRadius: '4px',
+    // border: 'none',
+    border: '1px solid neutral200',
     // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-    outline: '1px solid hsl(var(--solitaire-primary))',
+    outline: '1px solid neutral200',
     width: '100%',
-    ':hover': {
-      border: 'none',
-      borderBottom: '1px solid hsl(var(--solitaire-quaternary))'
-    }
+    // ':hover': {
+    //   border: 'none',
+    //   borderBottom: '1px solid neutral200'
+    // }
   }),
   singleValue: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))'
+    color: 'neutral900'
   }),
   placeholder: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
+    color: 'neutral900',
     border: 'none'
   }),
   menuList: styles => ({
     ...styles,
-    backgroundColor: 'hsl(var(--solitaire-denary))',
+    backgroundColor: 'neutral0',
     minHeight: '10vh',
-    height: '17vh'
+    height: '17vh',
+    zIndex:1000
   }),
   option: styles => {
     return {
       ...styles,
-      backgroundColor: 'hsl(var(--solitaire-denary))',
-      color: 'hsl(var(--solitaire-tertiary))',
+      backgroundColor: 'neutral0',
+      color: 'neutral900',
       ':active': {
         ...styles[':active'],
         border: 'none',
-        backgroundColor: 'hsl(var(--solitaire-denary))'
+        backgroundColor: 'neutral0'
       },
       ':hover': {
-        backgroundColor: 'hsl(var(--solitaire-secondary))',
+        backgroundColor: 'neutral50',
         border: 'none',
-        color: 'hsl(var(--solitaire-tertiary))'
+        color: 'neutral900'
       }
     };
   },
   multiValue: styles => {
     return {
       ...styles,
-      backgroundColor: 'hsl(var(--solitaire-primary))'
+      backgroundColor: 'neutral200',
+      color:'neutral900'
     };
   },
   multiValueLabel: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
-    backgroundColor: 'hsl(var(--solitaire-primary))'
+    color: 'neutral900',
+    backgroundColor: 'neutral200'
   }),
   multiValueRemove: styles => ({
     ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
+    color: 'neutral900',
     ':hover': {
-      backgroundColor: 'hsl(var(--solitaire-primary))',
-      color: 'hsl(var(--solitaire-tertiary))'
+      backgroundColor: 'neutral200',
+      color: 'neutral900'
     }
   })
 };

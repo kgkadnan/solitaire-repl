@@ -246,7 +246,6 @@ const Form = () => {
       handler: () => {}
     }
   ];
-  console.log('messageColor', messageColor);
 
   return (
     <div className="pt-[32px]">
@@ -353,7 +352,7 @@ const Form = () => {
             />
           </div>
         </div>
-        <div className="bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
           <div className=" flex items-center">
             {isError && (
               <p className={`text-mRegular font-medium text-${messageColor}`}>
