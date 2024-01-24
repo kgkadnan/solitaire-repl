@@ -2,7 +2,6 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import React, { Dispatch, SetStateAction } from 'react';
 import { shade } from '@/constants/v2/form';
-import { IFormState } from '../interface/interface';
 import { handleChange } from '../helpers/handle-change';
 
 interface IShadeProps {

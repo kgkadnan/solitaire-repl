@@ -1,6 +1,5 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import React from 'react';
-import { IFormState } from '../interface/interface';
 
 export const PolishSymmetry = () => {
   return (
