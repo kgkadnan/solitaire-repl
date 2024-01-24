@@ -1,6 +1,5 @@
 'use client';
 
-import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';

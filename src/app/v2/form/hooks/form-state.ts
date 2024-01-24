@@ -34,21 +34,21 @@ const useFormStateManagement = () => {
   const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
   const [caratRangeTo, setCaratRangeTo] = useState<string>('');
   //other parameter Inclsuion state
-  const [blackTableBI, setBlackTable] = useState<string[]>([]);
-  const [sideBlackBI, setSideBlack] = useState<string[]>([]);
-  const [openCrownBI, setOpenCrown] = useState<string[]>([]);
-  const [openTableBI, setOpenTable] = useState<string[]>([]);
-  const [openPavilionBI, setOpenPavilion] = useState<string[]>([]);
-  const [milkyBI, setMilky] = useState<string[]>([]);
-  const [lusterBI, setLuster] = useState<string[]>([]);
-  const [eyeCleanBI, setEyeClean] = useState<string[]>([]);
-  const [tableInclusionWI, setTableInclusionWI] = useState<string[]>([]);
-  const [sideInclusionWI, setSideInclusionWI] = useState<string[]>([]);
-  const [naturalCrownWI, setNaturalCrownWI] = useState<string[]>([]);
-  const [naturalGirdleWI, setNaturalGirdleWI] = useState<string[]>([]);
-  const [naturalPavilionWI, setNaturalPavilionWI] = useState<string[]>([]);
-  const [surfaceGrainingWI, setSurfaceGrainingWI] = useState<string[]>([]);
-  const [internalGrainingWI, setInternalGrainingWI] = useState<string[]>([]);
+  const [blackTable, setBlackTable] = useState<string[]>([]);
+  const [sideBlack, setSideBlack] = useState<string[]>([]);
+  const [openCrown, setOpenCrown] = useState<string[]>([]);
+  const [openTable, setOpenTable] = useState<string[]>([]);
+  const [openPavilion, setOpenPavilion] = useState<string[]>([]);
+  const [milky, setMilky] = useState<string[]>([]);
+  const [luster, setLuster] = useState<string[]>([]);
+  const [eyeClean, setEyeClean] = useState<string[]>([]);
+  const [tableInclusion, setTableInclusion] = useState<string[]>([]);
+  const [sideInclusion, setSideInclusion] = useState<string[]>([]);
+  const [naturalCrown, setNaturalCrown] = useState<string[]>([]);
+  const [naturalGirdle, setNaturalGirdle] = useState<string[]>([]);
+  const [naturalPavilion, setNaturalPavilion] = useState<string[]>([]);
+  const [surfaceGraining, setSurfaceGraining] = useState<string[]>([]);
+  const [internalGraining, setInternalGraining] = useState<string[]>([]);
   //parameter state
   const [tablePerFrom, setTablePerFrom] = useState<string>('');
   const [tablePerTo, setTablePerTo] = useState<string>('');
@@ -109,21 +109,21 @@ const useFormStateManagement = () => {
       pricePerCaratTo,
       caratRangeFrom,
       caratRangeTo,
-      blackTableBI,
-      sideBlackBI,
-      openCrownBI,
-      openTableBI,
-      openPavilionBI,
-      milkyBI,
-      lusterBI,
-      eyeCleanBI,
-      tableInclusionWI,
-      sideInclusionWI,
-      naturalCrownWI,
-      naturalGirdleWI,
-      naturalPavilionWI,
-      surfaceGrainingWI,
-      internalGrainingWI,
+      blackTable,
+      sideBlack,
+      openCrown,
+      openTable,
+      openPavilion,
+      milky,
+      luster,
+      eyeClean,
+      tableInclusion,
+      sideInclusion,
+      naturalCrown,
+      naturalGirdle,
+      naturalPavilion,
+      surfaceGraining,
+      internalGraining,
       tablePerFrom,
       tablePerTo,
       depthTo,
@@ -190,13 +190,13 @@ const useFormStateManagement = () => {
       setMilky,
       setLuster,
       setEyeClean,
-      setTableInclusionWI,
-      setSideInclusionWI,
-      setNaturalCrownWI,
-      setNaturalGirdleWI,
-      setNaturalPavilionWI,
-      setSurfaceGrainingWI,
-      setInternalGrainingWI,
+      setTableInclusion,
+      setSideInclusion,
+      setNaturalCrown,
+      setNaturalGirdle,
+      setNaturalPavilion,
+      setSurfaceGraining,
+      setInternalGraining,
       setTablePerFrom,
       setTablePerTo,
       setDepthTo,

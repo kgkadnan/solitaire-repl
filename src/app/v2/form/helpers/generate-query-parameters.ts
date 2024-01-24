@@ -6,7 +6,7 @@ export const generateQueryParams = (state: any) => {
     selectedFancyColor,
     selectedIntensity,
     selectedOvertone,
-    selectedTinge,
+    selectedShade,
     selectedClarity,
     selectedCaratRange,
     selectedCut,
@@ -16,7 +16,6 @@ export const generateQueryParams = (state: any) => {
     selectedCulet,
     selectedKeyToSymbol,
     selectedLab,
-
     selectedLocation,
     selectedOrigin,
     priceRangeFrom,
@@ -25,21 +24,21 @@ export const generateQueryParams = (state: any) => {
     discountTo,
     pricePerCaratFrom,
     pricePerCaratTo,
-    blackTableBI,
-    sideBlackBI,
-    openCrownBI,
-    openTableBI,
-    openPavilionBI,
-    milkyBI,
-    lusterBI,
-    eyeCleanBI,
-    tableInclusionWI,
-    sideInclusionWI,
-    naturalCrownWI,
-    naturalGirdleWI,
-    naturalPavilionWI,
-    surfaceGrainingWI,
-    internalGrainingWI,
+    blackTable,
+    sideBlack,
+    openCrown,
+    openTable,
+    openPavilion,
+    milky,
+    luster,
+    eyeClean,
+    tableInclusion,
+    sideInclusion,
+    naturalCrown,
+    naturalGirdle,
+    naturalPavilion,
+    surfaceGraining,
+    internalGraining,
     tablePerFrom,
     tablePerTo,
     depthTo,
@@ -83,7 +82,7 @@ export const generateQueryParams = (state: any) => {
     (queryParams['fancy_intensity'] = selectedIntensity);
   selectedOvertone?.length !== 0 &&
     (queryParams['fancy_overtone'] = selectedOvertone);
-  selectedTinge?.length !== 0 && (queryParams['color_shade'] = selectedTinge);
+  selectedShade?.length !== 0 && (queryParams['color_shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
     const caratRanges = selectedCaratRange.map((range: string) => {
@@ -126,30 +125,30 @@ export const generateQueryParams = (state: any) => {
       lte: pricePerCaratTo,
       gte: pricePerCaratFrom
     });
-  blackTableBI?.length !== 0 && (queryParams['table_black'] = blackTableBI);
-  sideBlackBI?.length !== 0 && (queryParams['side_black'] = sideBlackBI);
-  openCrownBI?.length !== 0 && (queryParams['crown_open'] = openCrownBI);
-  openTableBI?.length !== 0 && (queryParams['table_open'] = openTableBI);
-  openPavilionBI?.length !== 0 &&
-    (queryParams['pavilion_open'] = openPavilionBI);
-  milkyBI?.length !== 0 && (queryParams['milky'] = milkyBI);
-  lusterBI?.length !== 0 && (queryParams['luster'] = lusterBI);
-  eyeCleanBI?.length !== 0 && (queryParams['eye_clean'] = eyeCleanBI);
+  blackTable?.length !== 0 && (queryParams['table_black'] = blackTable);
+  sideBlack?.length !== 0 && (queryParams['side_black'] = sideBlack);
+  openCrown?.length !== 0 && (queryParams['crown_open'] = openCrown);
+  openTable?.length !== 0 && (queryParams['table_open'] = openTable);
+  openPavilion?.length !== 0 &&
+    (queryParams['pavilion_open'] = openPavilion);
+  milky?.length !== 0 && (queryParams['milky'] = milky);
+  luster?.length !== 0 && (queryParams['luster'] = luster);
+  eyeClean?.length !== 0 && (queryParams['eye_clean'] = eyeClean);
   selectedCulet?.length !== 0 && (queryParams['culet'] = selectedCulet);
-  tableInclusionWI?.length !== 0 &&
-    (queryParams['table_inclusion'] = tableInclusionWI);
-  sideInclusionWI?.length !== 0 &&
-    (queryParams['side_inclusion'] = sideInclusionWI);
-  naturalCrownWI?.length !== 0 &&
-    (queryParams['natural_crown'] = naturalCrownWI);
-  naturalGirdleWI?.length !== 0 &&
-    (queryParams['natural_girdle'] = naturalGirdleWI);
-  naturalPavilionWI?.length !== 0 &&
-    (queryParams['natural_pavilion'] = naturalPavilionWI);
-  surfaceGrainingWI?.length !== 0 &&
-    (queryParams['surface_graining'] = surfaceGrainingWI);
-  internalGrainingWI?.length !== 0 &&
-    (queryParams['internal_graining'] = internalGrainingWI);
+  tableInclusion?.length !== 0 &&
+    (queryParams['table_inclusion'] = tableInclusion);
+  sideInclusion?.length !== 0 &&
+    (queryParams['side_inclusion'] = sideInclusion);
+  naturalCrown?.length !== 0 &&
+    (queryParams['natural_crown'] = naturalCrown);
+  naturalGirdle?.length !== 0 &&
+    (queryParams['natural_girdle'] = naturalGirdle);
+  naturalPavilion?.length !== 0 &&
+    (queryParams['natural_pavilion'] = naturalPavilion);
+  surfaceGraining?.length !== 0 &&
+    (queryParams['surface_graining'] = surfaceGraining);
+  internalGraining?.length !== 0 &&
+    (queryParams['internal_graining'] = internalGraining);
   girdleTo.length &&
     girdleFrom.length &&
     (queryParams['girdle'] = {
