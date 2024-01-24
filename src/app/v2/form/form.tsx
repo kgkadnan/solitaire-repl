@@ -25,8 +25,28 @@ import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
+import ActionButton from '@/components/v2/common/action-button';
+import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
+import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+import arrowIcon from '@public/v2/assets/icons/arrows.svg';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ManageLocales } from '@/utils/v2/translate';
+import { useAppSelector } from '@/hooks/hook';
+import { IActionButtonDataItem } from './interface/interface';
+import { handleReset } from './helpers/reset';
+import {
+  MAX_SEARCH_FORM_COUNT,
+  MIN_SEARCH_FORM_COUNT
+} from '@/constants/business-logic';
+import {
+  EXCEEDS_LIIMITS,
+  NO_STONE_FOUND,
+  SOMETHING_WENT_WRONG
+} from '@/constants/error-messages/form';
 
 const Form = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
   const { state, setState } = useFormStateManagement();
   const {
     caratMax,
@@ -49,7 +69,8 @@ const Form = () => {
     selectedGirdle,
     selectedCulet,
     selectedKeyToSymbol,
-    selectedCaratRange
+    selectedCaratRange,
+    selectedFancyColor
   } = state;
   const {
     setCaratMin,
@@ -78,15 +99,34 @@ const Form = () => {
     setSelectedCaratRange
   } = setState;
 
-  const { setSearchUrl, searchUrl, isValidationError } =
-    useValidationStateManagement();
+  const modifySearchFrom = searchParams.get('edit');
+
+  const searchResult: any = useAppSelector(
+    (store: { searchResult: any }) => store.searchResult
+  );
+
+  const {
+    setSearchUrl,
+    searchUrl,
+    isValidationError,
+    isError,
+    errorText,
+    setErrorText,
+    setSelectedStep,
+    setSelectedShadeContain,
+    setSearchCount,
+    setMessageColor,
+    messageColor,
+    setIsError,
+    searchCount
+  } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError } = errorState;
   const { setCaratError } = errorSetState;
 
-  const { data } = useGetProductCountQuery(
+  const { data, error } = useGetProductCountQuery(
     {
       searchUrl
     },
@@ -104,6 +144,100 @@ const Form = () => {
       setSearchUrl(constructUrlParams(queryParams));
     }
   }, [state]);
+
+  //Handle search count and errors
+  useEffect(() => {
+    if (searchCount !== -1) {
+      if (searchUrl) {
+        if (
+          data?.count > MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          setIsError(true);
+          setErrorText(EXCEEDS_LIIMITS);
+          setMessageColor('dangerMain');
+        } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          setErrorText(NO_STONE_FOUND);
+          setMessageColor('dangerMain');
+        } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          data?.count && setErrorText(`${data?.count} stones found`);
+          setMessageColor('successMain');
+        } else {
+          setIsError(false);
+          setErrorText('');
+          setMessageColor('dangerMain');
+        }
+      } else {
+        setIsError(false);
+        setErrorText('');
+        setMessageColor('dangerMain');
+      }
+    }
+    if (error) {
+      setIsError(true);
+      setErrorText(SOMETHING_WENT_WRONG);
+      setMessageColor('dangerMain');
+    }
+    setSearchCount(searchCount + 1);
+  }, [data, error, searchUrl]);
+
+  const handleFormReset = () => {
+    setSelectedStep('');
+    setSelectedShadeContain('');
+    setSearchCount(0);
+    setIsError(false);
+    setErrorText('');
+    handleReset(setState);
+  };
+
+  let actionButtonData: IActionButtonDataItem[] = [
+    // {
+    //   variant: 'secondary',
+    //   svg: arrowIcon,
+    //   label: ManageLocales('app.advanceSearch.cancel'),
+    //   handler: () => {
+    //     if (
+    //       modifySearchFrom ===
+    //       `${ManageLocales('app.search.savedSearchesRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales(
+    //           'app.search.savedSearchesRoute'
+    //         )}`
+    //       );
+    //     } else if (
+    //       modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+    //           searchResult.activeTab + 3
+    //         }`
+    //       );
+    //     }
+    //   },
+    //   isHidden:
+    //     modifySearchFrom !==
+    //       `${ManageLocales('app.search.savedSearchesRoute')}` &&
+    //     modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
+    // },
+    {
+      variant: 'secondary',
+      svg: arrowIcon,
+      label: ManageLocales('app.advanceSearch.reset'),
+      handler: handleFormReset
+    },
+
+    {
+      variant: 'secondary',
+      svg: bookmarkAddIcon,
+      label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
+      handler: () => {}
+    },
+    { variant: 'primary', svg: searchIcon, label: 'Search', handler: () => {} }
+  ];
+  console.log('messageColor', messageColor);
 
   return (
     <div>
@@ -137,6 +271,7 @@ const Form = () => {
               />
               <Color
                 selectedColor={selectedColor}
+                selectedFancyColor={selectedFancyColor}
                 selectedWhiteColor={selectedWhiteColor}
                 setSelectedColor={setSelectedColor}
                 setSelectedWhiteColor={setSelectedWhiteColor}
@@ -208,6 +343,17 @@ const Form = () => {
               setSelectedKeyToSymbol={setSelectedKeyToSymbol}
             />
           </div>
+        </div>
+        <div className="w-full bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] px-[32px] border-t-[1px] border-neutral200 flex justify-end">
+          {isError && (
+            <div className="w-[80%] flex items-center">
+              <span />
+              <p className={`text-mRegular font-medium text-${messageColor}`}>
+                {!isValidationError && errorText}
+              </p>
+            </div>
+          )}
+          <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>
     </div>

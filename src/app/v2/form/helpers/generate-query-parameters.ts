@@ -2,9 +2,9 @@ interface IState {
   selectedShape: string[];
   selectedColor: string;
   selectedWhiteColor: string[];
-  selectedFancyColor: string;
-  selectedIntensity: string;
-  selectedOvertone: string;
+  selectedFancyColor: string[];
+  selectedIntensity: string[];
+  selectedOvertone: string[];
   selectedShade: string[];
   selectedClarity: string[];
   selectedGirdleStep?: string;

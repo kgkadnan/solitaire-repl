@@ -7,7 +7,8 @@ const TopNavigationBar = () => {
         width: '100%',
         height: '60px',
         borderBottom: '1px solid red',
-        position: 'fixed'
+        position: 'fixed',
+        zIndex:20
       }}
     ></div>
   );

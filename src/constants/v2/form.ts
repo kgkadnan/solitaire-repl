@@ -229,18 +229,18 @@ export const symmetry = [
 ];
 
 export const fancy = [
-  'Yellow',
-  'Pink',
-  'Blue',
-  'Red',
-  'Green',
-  'Purple',
-  'Orange',
-  'Black',
-  'Gray',
-  'Violet',
-  'Brown',
-  'Other'
+  { value: 'Yellow', label: 'Yellow' },
+  { value: 'Pink', label: 'Pink' },
+  { value: 'Blue', label: 'Blue' },
+  { value: 'Red', label: 'Red' },
+  { value: 'Green', label: 'Green' },
+  { value: 'Purple', label: 'Purple' },
+  { value: 'Orange', label: 'Orange' },
+  { value: 'Black', label: 'Black' },
+  { value: 'Gray', label: 'Gray' },
+  { value: 'Violet', label: 'Violet' },
+  { value: 'Brown', label: 'Brown' },
+  { value: 'Other', label: 'Other' }
 ];
 
 export const girdleSortedArray = [

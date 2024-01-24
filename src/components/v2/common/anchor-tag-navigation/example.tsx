@@ -5,7 +5,7 @@ const ExampleAnchorLinkNavigation = () => {
   let anchorNavigations = ['a', 'b', 'c', 'd', 'f', 'g', 'h'];
   return (
     <>
-      <AnchorLinkNavigation linkItems={linkItems} />
+      <AnchorLinkNavigation anchorNavigations={anchorNavigations} />
       <p className="mt-10" id="a">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Est laudantium
         maxime adipisci, eaque repellendus minus doloribus, animi molestiae

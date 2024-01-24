@@ -1,16 +1,21 @@
 import React from 'react';
 import Form from './form/form';
-import { SliderWithInputExample } from '@/components/v2/common/slider-with-min-max/example';
-import { MinMaxExample } from '@/components/v2/common/min-max-input/example';
-import { FormToggle } from '@/components/v2/common/toggle/example';
+import TopNavigationBar from '@/components/v2/common/top-navigation-bar';
+import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 
 const page = () => {
   return (
+   
     <>
-      {/* <FormToggle />
-      <SliderWithInputExample />
-      <MinMaxExample /> */}
-      <Form />
+      <div>
+        {/* <TopNavigationBar /> */}
+        <div className='flex gap-[32px] l-[100px]'>
+          
+          {/* <SideNavigationBar /> */}
+          <Form />
+         
+        </div>
+      </div>
     </>
   );
 };

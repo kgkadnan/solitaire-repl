@@ -11,6 +11,7 @@ const useValidationStateManagement = () => {
   const [isInputDialogOpen, setIsInputDialogOpen] = useState(false);
   const [searchCount, setSearchCount] = useState<number>(-1);
   const [saveSearchName, setSaveSearchName] = useState<string>('');
+  const [messageColor, setMessageColor] = useState<string>('dangerMain');
   const [searchUrl, setSearchUrl] = useState<string>('');
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
@@ -55,7 +56,9 @@ const useValidationStateManagement = () => {
     inputErrorContent,
     setInputErrorContent,
     saveSearchName,
-    setSaveSearchName
+    setSaveSearchName,
+    setMessageColor,
+    messageColor
   };
 };
 
