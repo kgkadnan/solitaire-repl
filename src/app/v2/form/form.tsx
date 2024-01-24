@@ -162,7 +162,7 @@ const Form = () => {
         setSelectedTile={setCut}
         handleTileClick={handleTileClick}
       />
-      <AnchorLinkNavigation linkItems={linkItems} />
+      <AnchorLinkNavigation anchorNavigations={linkItems} />
       <div className="mt-10" id="shape">
         <AccordionComponent
           value="Shape"

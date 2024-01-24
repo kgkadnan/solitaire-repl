@@ -5,10 +5,10 @@ import Image from 'next/image';
 import { Link } from 'react-scroll';
 
 interface IAnchorLinkNavigation {
-  linkItems: string[];
+  anchorNavigations: string[];
 }
 const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
-  linkItems
+  anchorNavigations
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -27,7 +27,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
       >
-        {linkItems.map((links, index) => (
+        {anchorNavigations.map((links, index) => (
           <Link
             activeStyle={{
               borderBottom: '2px solid var(--neutral-900)',
@@ -39,7 +39,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
             offset={-180}
             duration={500}
             key={index}
-            className={`flex-shrink-0 px-4 py-1 text-center text-mMedium font-regular capitalize cursor-pointer whitespace-nowrap text-neutral600`}
+            className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
           >
             {links}
           </Link>

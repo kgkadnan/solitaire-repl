@@ -2,8 +2,8 @@ import React from 'react';
 import { Label } from '@components/ui/label';
 
 interface IInputLabelProps {
-  htmlFor: string;
   label: string;
+  htmlFor?: string;
   styles?: string;
 }
 
@@ -13,7 +13,7 @@ export const InputLabel: React.FC<IInputLabelProps> = ({
   styles
 }) => {
   return (
-    <Label htmlFor={htmlFor} className={`text-neutral500 ${styles}`}>
+    <Label htmlFor={htmlFor} className={styles}>
       {label}
     </Label>
   );
