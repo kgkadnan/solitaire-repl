@@ -2,8 +2,9 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import { InputLabel } from '@/components/v2/common/input-label';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
 import React from 'react';
-
-export const Parameters = ({ state, setState }: any) => {
+import { parameter } from '@/constants/v2/form';
+import { handleNumericRange } from '../helpers/handle-input-range-validation';
+export const Parameters = ({ state, setState, errorSetState, errorState }: any) => {
   const {
     setTablePerMin,
     setTablePerMax,
@@ -61,6 +62,42 @@ export const Parameters = ({ state, setState }: any) => {
     setCrownAngleMax
   } = state;
 
+  const {
+    setTablePerError,
+    setDepthPerError,
+    setRatioError,
+    setLengthError,
+    setWidthError,
+    setDepthError,
+    setCrownAngleError,
+    setCrownHeightError,
+    setGirdlePerError,
+    setPavilionAngleError,
+    setPavilionHeightError,
+    setLowerHalfError,
+    setStarLengthError
+  } = errorSetState;
+
+  const {
+    tablePerError,
+    depthPerError,
+    ratioError,
+    lengthError,
+    widthError,
+    depthError,
+    crownAngleError,
+    crownHeightError,
+    girdlePerError,
+    pavilionAngleError,
+    pavilionHeightError,
+    lowerHalfError,
+    starLengthError
+  } = errorState;
+
+
+
+
+
   let parameters = [
     {
       label: 'Table (%)',
@@ -73,7 +110,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: tablePerMin,
       maxValue: tablePerMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setTablePerError,
+      errorState: tablePerError
     },
     {
       label: 'Depth (%)',
@@ -86,7 +125,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: depthPerMin,
       maxValue: depthPerMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100', 
+      errorSetState: setDepthPerError,
+      errorState: depthPerError
     },
     {
       label: 'Ratio',
@@ -99,7 +140,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: ratioMin,
       maxValue: ratioMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setRatioError,
+      errorState: ratioError
     },
     {
       label: 'Length',
@@ -112,7 +155,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: lengthMin,
       maxValue: lengthMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setLengthError,
+      errorState: lengthError
     },
     {
       label: 'Width',
@@ -125,7 +170,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: widthMin,
       maxValue: widthMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setWidthError,
+      errorState: widthError
     },
     {
       label: 'Depth',
@@ -138,7 +185,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: depthMin,
       maxValue: depthMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setDepthError,
+      errorState: depthError
     },
     {
       label: 'Crown Angle',
@@ -151,7 +200,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: crownAngleMin,
       maxValue: crownAngleMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '360'
+      maxPlaceHolder: '360',
+      errorSetState: setCrownAngleError,
+      errorState: crownAngleError
     },
     {
       label: 'Crown Height',
@@ -164,7 +215,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: crownHeightMin,
       maxValue: crownHeightMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setCrownHeightError,
+      errorState: crownHeightError
     },
     {
       label: 'Girdle %',
@@ -177,7 +230,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: girdlePerMin,
       maxValue: girdlePerMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setGirdlePerError,
+      errorState: girdlePerError
     },
     {
       label: 'Pavilion Angle',
@@ -190,7 +245,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: pavilionAngleMin,
       maxValue: pavilionAngleMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '360'
+      maxPlaceHolder: '360',
+      errorSetState: setPavilionAngleError,
+      errorState: pavilionAngleError
     },
     {
       label: 'Pavilion Height',
@@ -203,7 +260,10 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: pavilionHeightMin,
       maxValue: pavilionHeightMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setPavilionHeightError,
+      errorState: pavilionHeightError
+      
     },
     {
       label: 'Lower Half',
@@ -216,7 +276,9 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: lowerHalfMin,
       maxValue: lowerHalfMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setLowerHalfError,
+      errorState: lowerHalfError
     },
     {
       label: 'Star Length',
@@ -229,9 +291,17 @@ export const Parameters = ({ state, setState }: any) => {
       minValue: starLengthMin,
       maxValue: starLengthMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100'
+      maxPlaceHolder: '100',
+      errorSetState: setStarLengthError,
+      errorState: starLengthError
     }
   ];
+
+     // Map the parameterDataState to create an array of objects with additional data from advanceSearch
+     const parameterData = parameters.map((parameters, index) => {
+      return { ...parameters, ...parameter[index] };
+    });
+
 
   return (
     <div id="Parameters">
@@ -240,7 +310,7 @@ export const Parameters = ({ state, setState }: any) => {
         isDisable={false}
         accordionContent={
           <div className="flex flex-wrap gap-[30px] px-[16px] py-[24px]">
-            {parameters.map(
+            {parameterData.map(
               ({
                 label,
                 maxValue,
@@ -248,7 +318,10 @@ export const Parameters = ({ state, setState }: any) => {
                 maxPlaceHolder,
                 minPlaceHolder,
                 handleMaxChange,
-                handleMinChange
+                handleMinChange,
+                errorState,
+                errorSetState,
+                range
               }) => {
                 return (
                   <div key={label} className="flex flex-col gap-[8px]">
@@ -261,15 +334,33 @@ export const Parameters = ({ state, setState }: any) => {
                       minInputData={{
                         minValue: minValue,
                         minPlaceHolder: minPlaceHolder,
-                        minOnchange: handleMinChange
+                        minOnchange: (e) => {
+                          handleMinChange(e)
+                          errorSetState &&
+                          handleNumericRange({
+                            min: e.target.value,
+                            max: maxValue,
+                            setErrorState: errorSetState,
+                            rangeCondition: range
+                          });
+                        }
                       }}
                       maxInputData={{
                         maxValue: maxValue,
                         maxPlaceHolder: maxPlaceHolder,
-                        maxOnchange: handleMaxChange
+                        maxOnchange: (e) =>{
+                          handleMaxChange(e)
+                          errorSetState &&
+                          handleNumericRange({
+                            min: minValue,
+                            max: e.target.value,
+                            setErrorState: errorSetState,
+                            rangeCondition: range
+                          });
+                        }
                       }}
                       inputGap="gap-[20px]"
-                      errorText={''}
+                      errorText={errorState}
                     />
                   </div>
                 );
