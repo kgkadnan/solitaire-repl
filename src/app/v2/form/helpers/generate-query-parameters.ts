@@ -7,6 +7,7 @@ interface IState {
   selectedOvertone: string;
   selectedShade: string[];
   selectedClarity: string[];
+  selectedGirdleStep?: string;
   selectedCaratRange: string[];
   selectedMake: string;
   selectedCut: string[];
@@ -26,6 +27,8 @@ interface IState {
   pricePerCaratMax: string;
   caratRangeFrom: string;
   caratRangeTo: string;
+  caratMin: string;
+  caratMax: string;
   blackTable: string[];
   sideBlack: string[];
   openCrown: string[];
@@ -41,33 +44,34 @@ interface IState {
   naturalPavilion: string[];
   surfaceGraining: string[];
   internalGraining: string[];
-  tablePerFrom: string;
-  tablePerTo: string;
-  depthTo: string;
-  depthFrom: string;
-  crownAngleFrom: string;
-  crownAngleTo: string;
-  lengthFrom: string;
-  lengthTo: string;
-  pavilionDepthFrom: string;
-  pavilionDepthTo: string;
-  depthPerFrom: string;
-  depthPerTo: string;
-  crownHeightFrom: string;
-  crownHeightTo: string;
-  widthFrom: string;
-  widthTo: string;
-  lowerHalfFrom: string;
-  lowerHalfTo: string;
-  ratioFrom: string;
-  ratioTo: string;
-  girdlePerFrom: string;
-  girdlePerTo: string;
-  pavilionAngleFrom: string;
-  pavilionAngleTo: string;
-  starLengthFrom: string;
-  starLengthTo: string;
+  tablePerMin: string;
+  tablePerMax: string;
+  depthMin: string;
+  depthMax: string;
+  crownAngleMax: string;
+  crownAngleMin: string;
+  lengthMax: string;
+  lengthMin: string;
+  pavilionHeightMax: string;
+  pavilionHeightMin: string;
+  depthPerMax: string;
+  depthPerMin: string;
+  crownHeightMax: string;
+  crownHeightMin: string;
+  widthMax: string;
+  widthMin: string;
+  lowerHalfMax: string;
+  lowerHalfMin: string;
+  ratioMax: string;
+  ratioMin: string;
+  girdlePerMax: string;
+  girdlePerMin: string;
   selectedGirdle: string[];
+  pavilionAngleMax: string;
+  pavilionAngleMin: string;
+  starLengthMax: string;
+  starLengthMin: string;
+  caratRangeData?: string[];
 }
 
 // Define a function to generate query parameters based on the provided state
@@ -111,32 +115,32 @@ export const generateQueryParams = (state: IState) => {
     naturalPavilion,
     surfaceGraining,
     internalGraining,
-    tablePerFrom,
-    tablePerTo,
-    depthTo,
-    depthFrom,
-    crownAngleFrom,
-    crownAngleTo,
-    lengthFrom,
-    lengthTo,
-    pavilionDepthFrom,
-    pavilionDepthTo,
-    depthPerFrom,
-    depthPerTo,
-    crownHeightFrom,
-    crownHeightTo,
-    widthFrom,
-    widthTo,
-    lowerHalfFrom,
-    lowerHalfTo,
-    ratioFrom,
-    ratioTo,
-    girdlePerFrom,
-    girdlePerTo,
-    pavilionAngleFrom,
-    pavilionAngleTo,
-    starLengthFrom,
-    starLengthTo,
+    tablePerMin,
+    tablePerMax,
+    depthMin,
+    depthMax,
+    crownAngleMax,
+    crownAngleMin,
+    lengthMax,
+    lengthMin,
+    pavilionHeightMax,
+    pavilionHeightMin,
+    depthPerMax,
+    depthPerMin,
+    crownHeightMax,
+    crownHeightMin,
+    widthMax,
+    widthMin,
+    lowerHalfMax,
+    lowerHalfMin,
+    ratioMax,
+    ratioMin,
+    girdlePerMax,
+    girdlePerMin,
+    pavilionAngleMax,
+    pavilionAngleMin,
+    starLengthMax,
+    starLengthMin,
     selectedColor,
     selectedGirdle
   } = state;
@@ -187,13 +191,13 @@ export const generateQueryParams = (state: IState) => {
   discountMin &&
     discountMax &&
     (queryParams['discount'] = {
-      lte: discountMax,
-      gte: discountMin
+      lte: discountMin,
+      gte: discountMax
     });
   pricePerCaratMin &&
     pricePerCaratMax &&
     (queryParams['price_per_carat'] = {
-      lte: pricePerCaratMax,
+      lte: pricePerCaratMin,
       gte: pricePerCaratMax
     });
   blackTable?.length !== 0 && (queryParams['table_black'] = blackTable);
@@ -223,83 +227,83 @@ export const generateQueryParams = (state: IState) => {
       lte: selectedGirdle[0],
       gte: selectedGirdle[selectedGirdle.length - 1]
     });
-  tablePerFrom &&
-    tablePerTo &&
+  tablePerMax &&
+    tablePerMin &&
     (queryParams['table_percentage'] = {
-      lte: tablePerTo,
-      gte: tablePerFrom
+      lte: tablePerMax,
+      gte: tablePerMin
     });
-  depthFrom &&
-    depthTo &&
+  depthMax &&
+    depthMin &&
     (queryParams['depth'] = {
-      lte: depthTo,
-      gte: depthFrom
+      lte: depthMax,
+      gte: depthMin
     });
-  crownAngleFrom &&
-    crownAngleTo &&
+  crownAngleMax &&
+    crownAngleMin &&
     (queryParams['crown_angle'] = {
-      lte: crownAngleTo,
-      gte: crownAngleFrom
+      lte: crownAngleMax,
+      gte: crownAngleMin
     });
-  lengthFrom &&
-    lengthTo &&
+  lengthMax &&
+    lengthMin &&
     (queryParams['length'] = {
-      lte: lengthTo,
-      gte: lengthFrom
+      lte: lengthMax,
+      gte: lengthMin
     });
-  pavilionDepthFrom &&
-    pavilionDepthTo &&
+  pavilionHeightMax &&
+    pavilionHeightMin &&
     (queryParams['pavilion_height'] = {
-      lte: pavilionDepthTo,
-      gte: pavilionDepthFrom
+      lte: pavilionHeightMax,
+      gte: pavilionHeightMin
     });
-  depthPerFrom &&
-    depthPerTo &&
+  depthPerMax &&
+    depthPerMin &&
     (queryParams['depth_percentage'] = {
-      lte: depthPerTo,
-      gte: depthPerFrom
+      lte: depthPerMax,
+      gte: depthPerMin
     });
-  crownHeightFrom &&
-    crownHeightTo &&
+  crownHeightMax &&
+    crownHeightMin &&
     (queryParams['crown_height'] = {
-      lte: crownHeightTo,
-      gte: crownHeightFrom
+      lte: crownHeightMax,
+      gte: crownHeightMin
     });
-  widthFrom &&
-    widthTo &&
+  widthMax &&
+    widthMin &&
     (queryParams['width'] = {
-      lte: widthTo,
-      gte: widthFrom
+      lte: widthMax,
+      gte: widthMin
     });
-  lowerHalfFrom &&
-    lowerHalfTo &&
+  lowerHalfMax &&
+    lowerHalfMin &&
     (queryParams['lower_half'] = {
-      lte: lowerHalfTo,
-      gte: lowerHalfFrom
+      lte: lowerHalfMax,
+      gte: lowerHalfMin
     });
-  ratioFrom &&
-    ratioTo &&
+  ratioMax &&
+    ratioMin &&
     (queryParams['ratio'] = {
-      lte: ratioTo,
-      gte: ratioFrom
+      lte: ratioMax,
+      gte: ratioMin
     });
-  girdlePerFrom &&
-    girdlePerTo &&
+  girdlePerMax &&
+    girdlePerMin &&
     (queryParams['girdle_percentage'] = {
-      lte: girdlePerTo,
-      gte: girdlePerFrom
+      lte: girdlePerMax,
+      gte: girdlePerMin
     });
-  pavilionAngleFrom &&
-    pavilionAngleTo &&
+  pavilionAngleMax &&
+    pavilionAngleMin &&
     (queryParams['pavilion_angle'] = {
-      lte: pavilionAngleTo,
-      gte: pavilionAngleFrom
+      lte: pavilionAngleMax,
+      gte: pavilionAngleMin
     });
-  starLengthFrom &&
-    starLengthTo &&
+  starLengthMax &&
+    starLengthMin &&
     (queryParams['star_length'] = {
-      lte: starLengthTo,
-      gte: starLengthFrom
+      lte: starLengthMax,
+      gte: starLengthMin
     });
   return queryParams;
 };
