@@ -1,5 +1,78 @@
+interface IState {
+  selectedShape: string[];
+  selectedColor: string;
+  selectedWhiteColor: string[];
+  selectedFancyColor: string;
+  selectedIntensity: string;
+  selectedOvertone: string;
+  selectedShade: string[];
+  selectedClarity: string[];
+  selectedCaratRange: string[];
+  selectedMake: string;
+  selectedCut: string[];
+  selectedPolish: string[];
+  selectedSymmetry: string[];
+  selectedFluorescence: string[];
+  selectedCulet: string[];
+  selectedKeyToSymbol: string[];
+  selectedLab: string[];
+  selectedLocation: string[];
+  selectedOrigin: string[];
+  amountRangeMin: string;
+  amountRangeMax: string;
+  discountMin: string;
+  discountMax: string;
+  pricePerCaratMin: string;
+  pricePerCaratMax: string;
+  caratRangeFrom: string;
+  caratRangeTo: string;
+  blackTable: string[];
+  sideBlack: string[];
+  openCrown: string[];
+  openTable: string[];
+  openPavilion: string[];
+  milky: string[];
+  luster: string[];
+  eyeClean: string[];
+  tableInclusion: string[];
+  sideInclusion: string[];
+  naturalCrown: string[];
+  naturalGirdle: string[];
+  naturalPavilion: string[];
+  surfaceGraining: string[];
+  internalGraining: string[];
+  tablePerFrom: string;
+  tablePerTo: string;
+  depthTo: string;
+  depthFrom: string;
+  crownAngleFrom: string;
+  crownAngleTo: string;
+  lengthFrom: string;
+  lengthTo: string;
+  pavilionDepthFrom: string;
+  pavilionDepthTo: string;
+  depthPerFrom: string;
+  depthPerTo: string;
+  crownHeightFrom: string;
+  crownHeightTo: string;
+  widthFrom: string;
+  widthTo: string;
+  lowerHalfFrom: string;
+  lowerHalfTo: string;
+  ratioFrom: string;
+  ratioTo: string;
+  girdlePerFrom: string;
+  girdlePerTo: string;
+  girdleFrom: string;
+  girdleTo: string;
+  pavilionAngleFrom: string;
+  pavilionAngleTo: string;
+  starLengthFrom: string;
+  starLengthTo: string;
+}
+
 // Define a function to generate query parameters based on the provided state
-export const generateQueryParams = (state: any) => {
+export const generateQueryParams = (state: IState) => {
   // Destructure values from the state object
   const {
     selectedShape,

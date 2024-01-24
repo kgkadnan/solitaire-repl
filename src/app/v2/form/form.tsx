@@ -41,8 +41,6 @@ const Form = () => {
     }
   );
 
-  console.log('data', data);
-
   // Update search URL when form state changes
   useEffect(() => {
     const queryParams = generateQueryParams(state);
