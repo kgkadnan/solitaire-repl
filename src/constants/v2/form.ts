@@ -243,17 +243,28 @@ export const fancy = [
   'Other'
 ];
 
+export const girdleSortedArray = [
+  'ETN',
+  'VTN',
+  'STN',
+  'THN',
+  'MED',
+  'STK',
+  'THK',
+  'VTK',
+  'ETK'
+];
+
 export const girdle = [
-  
-  {short_name:'ETN',title:""},
-  {short_name:'VTN',title:""},
-  {short_name:'STN',title:""},
-  {short_name:'THN',title:""},
-  {short_name:'MED',title:""},
-  {short_name:'STK',title:""},
-  {short_name:'THK',title:""},
-  {short_name:'VTK',title:""},
-  {short_name:'ETK',title:""},
+  { short_name: 'ETN', title: 'Extremely Thin' },
+  { short_name: 'VTN', title: 'Very Thin' },
+  { short_name: 'STN', title: 'Slightly Thin' },
+  { short_name: 'THN', title: 'Thin' },
+  { short_name: 'MED', title: 'Medium' },
+  { short_name: 'STK', title: 'Slightly Thick' },
+  { short_name: 'THK', title: 'Thick' },
+  { short_name: 'VTK', title: 'Very Thick' },
+  { short_name: 'ETK', title: 'Extremely Thick' }
 ];
 
 export const culet = [
