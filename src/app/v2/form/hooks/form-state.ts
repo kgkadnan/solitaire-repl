@@ -33,6 +33,8 @@ const useFormStateManagement = () => {
   const [pricePerCaratMax, setPricePerCaratMax] = useState<string>('');
   const [caratRangeFrom, setCaratRangeFrom] = useState<string>('');
   const [caratRangeTo, setCaratRangeTo] = useState<string>('');
+  const [caratMin, setCaratMin] = useState<string>('');
+  const [caratMax, setCaratMax] = useState<string>('');
   //other parameter Inclsuion state
   const [blackTable, setBlackTable] = useState<string[]>([]);
   const [sideBlack, setSideBlack] = useState<string[]>([]);
@@ -103,6 +105,8 @@ const useFormStateManagement = () => {
       amountRangeMax,
       discountMin,
       discountMax,
+      caratMax,
+      caratMin,
       pricePerCaratMin,
       pricePerCaratMax,
       caratRangeFrom,
@@ -175,6 +179,8 @@ const useFormStateManagement = () => {
       setAmountRangeMax,
       setDiscountMin,
       setDiscountMax,
+      setCaratMin,
+      setCaratMax,
       setPricePerCaratMin,
       setPricePerCaratMax,
       setCaratRangeFrom,

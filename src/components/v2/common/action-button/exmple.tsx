@@ -1,9 +1,9 @@
 import React from 'react';
-import Cta from '.';
+import ActionButton from '.';
 import bookmarkAdd from '@public/v2/assets/icons/bookmark-add-01.svg';
 import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
 
-interface ICtaDataItem {
+interface IActionButtonDataItem {
   variant: 'secondary' | 'primary' | 'disable';
   svg: string; // Assuming the type of 'svg' is string, update it accordingly
   label: string;
@@ -11,7 +11,7 @@ interface ICtaDataItem {
 }
 
 const ExampleCTA = () => {
-  let ctaData: ICtaDataItem[] = [
+  let actionButtonData: IActionButtonDataItem[] = [
     { variant: 'secondary', svg: bookmarkAdd, label: 'Save Search' },
     { variant: 'primary', svg: searchIcon, label: 'Search' },
     {
@@ -23,7 +23,7 @@ const ExampleCTA = () => {
   ];
   return (
     <div>
-      <Cta ctaData={ctaData} />
+      <ActionButton actionButtonData={actionButtonData} />
     </div>
   );
 };
