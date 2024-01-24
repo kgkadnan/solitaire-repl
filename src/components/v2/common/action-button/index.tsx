@@ -1,10 +1,10 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
-import styles from './cta.module.scss';
+import styles from './action-button.module.scss';
 import Image from 'next/image';
 
 interface ICtaData {
-  ctaData: {
+  actionButtonData: {
     variant: 'secondary' | 'primary' | 'disable';
     svg: string; // Assuming the type of 'svg' is string, update it accordingly
     label: string;
@@ -12,11 +12,11 @@ interface ICtaData {
   }[];
 }
 
-const Cta = ({ ctaData }: ICtaData) => {
+const ActionButton = ({ actionButtonData }: ICtaData) => {
   return (
     <>
       <div className={styles.ctaContainer}>
-        {ctaData.map(({ isDisable, variant, svg, label }) => {
+        {actionButtonData.map(({ isDisable, variant, svg, label }) => {
           return (
             <Button
               key={label}
@@ -37,4 +37,4 @@ const Cta = ({ ctaData }: ICtaData) => {
   );
 };
 
-export default Cta;
+export default ActionButton;

@@ -1,6 +1,5 @@
 import { CustomInputlabel } from '@/components/common/input-label';
 import React from 'react';
-// import styles from '../form.module.scss';
 import { ManageLocales } from '@/utils/translate';
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
@@ -8,15 +7,15 @@ import { handleSelection } from '@/app/v2/form/helpers/handle-filter-changes';
 import { otherParameter } from '@/constants/v2/form';
 
 // Define the interfaces for the component props
-interface IRenderEachOtherParameterData {
+interface IInclusionsData {
   elementKey: string;
   elementValue: string[];
   state: string[];
   setState: any;
 }
-interface IRenderOtherParameterData {
+interface IInclusions {
   key: string;
-  value: IRenderEachOtherParameterData[];
+  value: IInclusionsData[];
 }
 const Inclusions = ({state, setState}:any) => {
   // Destructure state variables
@@ -55,7 +54,6 @@ const Inclusions = ({state, setState}:any) => {
     setInternalGraining
   } = setState;
 
-  let styles: any = '';
 
   // Create an array of other parameter data with respective change handlers and state
   let otherParameterDataState = [
@@ -148,34 +146,24 @@ const Inclusions = ({state, setState}:any) => {
     <>
       {
         <AccordionComponent
-          value="Clarity"
+          value="Inclusions"
           isDisable={true}
           accordionContent={
-            <div>
-              {otherParameterData.map((other: IRenderOtherParameterData) => (
+            <div className='grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]'>
+              {otherParameterData.map((other: IInclusions) => (
                 <div
                   key={`other-parameter-${other.key}`}
-                  className={`${styles.otherParameterContainer}`}
-                  style={{ paddingLeft: '10px' }}
                 >
-                  <CustomInputlabel
-                    htmlfor="text"
-                    label={other.key}
-                    overriddenStyles={{ label: styles.otherParameterHeader }}
-                  />
+                 <span>{other.key}</span>
                   {other.value.map(data => (
                     <div
-                      className={`${styles.filterSection} ${styles.otherParameterDataContainer}`}
+                     
                       key={`${other.key}-${data.elementKey}`}
                     >
-                      <div className={`${styles.otherParameterTitle}`}>
-                        <CustomInputlabel
-                          htmlfor="text"
-                          label={data.elementKey}
-                          overriddenStyles={{ label: styles.labelPlainColor }}
-                        />
+                      <div >
+                       <span>{data.elementKey}</span>
                       </div>
-                      <div className={`${styles.filterSectionData}`}>
+                      <div >
                         <Tile
                           tileData={data.elementValue}
                           selectedTile={data.state}
@@ -189,7 +177,7 @@ const Inclusions = ({state, setState}:any) => {
               ))}
             </div>
           }
-          accordionTrigger={'Clarity'}
+          accordionTrigger={'Inclusions'}
           hasError={false}
         />
       }

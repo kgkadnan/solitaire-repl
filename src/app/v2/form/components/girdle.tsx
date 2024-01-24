@@ -3,11 +3,11 @@ import React from 'react';
 import { IFormState } from '../interface/interface';
 import { girdle } from '@/constants/v2/form';
 import Tile from '@/components/v2/common/tile';
-import { handleChange } from '../helpers/handle-change';
+import { handleGirdleChange } from '../helpers/handle-girdle';
 
 export const Girdle = ({ state, setState }: IFormState) => {
-  const { selectedLab } = state;
-  const { setSelectedLab } = setState;
+  const { selectedGirdle } = state;
+  const { setSelectedGirdle } = setState;
   return (
     <div id="Girdle">
       <AccordionComponent
@@ -17,9 +17,9 @@ export const Girdle = ({ state, setState }: IFormState) => {
           <div>
             <Tile
               tileData={girdle}
-              selectedTile={selectedLab}
-              setSelectedTile={setSelectedLab}
-              handleTileClick={handleChange}
+              selectedTile={selectedGirdle}
+              setSelectedTile={setSelectedGirdle}
+              handleTileClick={handleGirdleChange}
             />
           </div>
         }

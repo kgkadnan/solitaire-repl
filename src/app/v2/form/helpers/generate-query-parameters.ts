@@ -139,8 +139,9 @@ export const generateQueryParams = (state: IState) => {
     starLengthFrom,
     starLengthTo,
     selectedColor,
-    girdleTo,
-    girdleFrom
+    selectedGirdle
+    // girdleTo,
+    // girdleFrom
   } = state;
 
   // Initialize an empty object to store query parameters
@@ -220,11 +221,10 @@ export const generateQueryParams = (state: IState) => {
     (queryParams['surface_graining'] = surfaceGraining);
   internalGraining?.length !== 0 &&
     (queryParams['internal_graining'] = internalGraining);
-  girdleTo.length &&
-    girdleFrom.length &&
+  selectedGirdle.length &&
     (queryParams['girdle'] = {
-      lte: girdleTo,
-      gte: girdleFrom
+      lte: selectedGirdle[0],
+      gte: selectedGirdle[selectedGirdle.length - 1]
     });
   tablePerFrom &&
     tablePerTo &&
