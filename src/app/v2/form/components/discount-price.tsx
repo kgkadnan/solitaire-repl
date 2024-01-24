@@ -1,7 +1,7 @@
 'use client';
 import React, { useState } from 'react';
-import { AccordionComponent } from '../accordion';
-import { SliderWithMinMaxInput } from '../slider-with-min-max';
+import { AccordionComponent } from '../../../../components/v2/common/accordion';
+import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 
 export const DiscountPrice = () => {
   const [discountMinValue, setDiscountMinValue] = useState<string>('');

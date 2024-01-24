@@ -244,15 +244,16 @@ export const fancy = [
 ];
 
 export const girdle = [
-  'ETN',
-  'VTN',
-  'STN',
-  'THN',
-  'MED',
-  'STK',
-  'THK',
-  'VTK',
-  'ETK '
+  
+  {short_name:'ETN',title:""},
+  {short_name:'VTN',title:""},
+  {short_name:'STN',title:""},
+  {short_name:'THN',title:""},
+  {short_name:'MED',title:""},
+  {short_name:'STK',title:""},
+  {short_name:'THK',title:""},
+  {short_name:'VTK',title:""},
+  {short_name:'ETK',title:""},
 ];
 
 export const culet = [

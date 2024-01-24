@@ -3,7 +3,7 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import ImageTile from '@/components/v2/common/image-tile';
-import { DiscountPrice } from '@/components/v2/common/min-max-input/discount-price';
+import { DiscountPrice } from '@/app/v2/form/components/discount-price';
 import Tile from '@/components/v2/common/tile';
 import {
   shape,
@@ -23,7 +23,7 @@ import {
 import React, { Dispatch, SetStateAction } from 'react';
 import useFormStateManagement from './hooks/form-state';
 import { Tabs } from '@/components/v2/common/toggle';
-import { handleFilterChange } from './helpers/handle-filter-changes';
+import { handleFilterChange, handleSelection } from './helpers/handle-filter-changes';
 import { compareArrays } from './helpers/compare-arrays';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
@@ -133,17 +133,7 @@ const Form = () => {
     handleFilterChange(data, selectedTile, setSelectedTile);
   };
 
-  const handleChange = ({
-    data,
-    selectedTile,
-    setSelectedTile
-  }: {
-    data: string;
-    selectedTile: string[];
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => {
-    handleFilterChange(data, selectedTile, setSelectedTile);
-  };
+  
   return (
     <div>
       {/* <TopNavigationBar/> */}
@@ -174,7 +164,7 @@ const Form = () => {
                       tileData={clarity}
                       selectedTile={selectedClarity}
                       setSelectedTile={setSelectedClarity}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -201,7 +191,7 @@ const Form = () => {
                       tileData={fluorescence}
                       selectedTile={selectedFluorescence}
                       setSelectedTile={setSelectedFluorescence}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -219,7 +209,7 @@ const Form = () => {
                       tileData={lab}
                       selectedTile={selectedLab}
                       setSelectedTile={setSelectedLab}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -237,7 +227,7 @@ const Form = () => {
                       tileData={location}
                       selectedTile={selectedLocation}
                       setSelectedTile={setSelectedLocation}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -255,7 +245,7 @@ const Form = () => {
                       tileData={countryOfOrigin}
                       selectedTile={selectedOrigin}
                       setSelectedTile={setSelectedOrigin}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -273,7 +263,7 @@ const Form = () => {
                       tileData={shade}
                       selectedTile={selectedShade}
                       setSelectedTile={setSelectedShade}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -282,16 +272,10 @@ const Form = () => {
               />
             </div>
             <div id="Discount% Price/Ct Amount Range">
-              <AccordionComponent
-                value="Discount% Price/Ct Amount Range"
-                isDisable={true}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Discount% Price/Ct Amount Range'}
-                hasError={false}
-              />
+             <DiscountPrice/>
             </div>
             <div id="Parameters">
-              <AccordionComponent
+              <AccordionComponent    
                 value="Parameters"
                 isDisable={false}
                 accordionContent={<>Hello</>}
@@ -309,7 +293,7 @@ const Form = () => {
                       tileData={girdle}
                       selectedTile={selectedLab}
                       setSelectedTile={setSelectedLab}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -327,7 +311,7 @@ const Form = () => {
                       tileData={culet}
                       selectedTile={selectedCulet}
                       setSelectedTile={setSelectedCulet}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }
@@ -354,7 +338,7 @@ const Form = () => {
                       tileData={keyToSymbol}
                       selectedTile={selectedKeyToSymbol}
                       setSelectedTile={setSelectedKeyToSymbol}
-                      handleTileClick={handleChange}
+                      handleTileClick={handleSelection}
                     />
                   </div>
                 }

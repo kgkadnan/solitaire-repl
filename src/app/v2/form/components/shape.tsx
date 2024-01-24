@@ -13,7 +13,7 @@ export const Shape = () => {
 
   const handleShapeChange = (shapeData: string) => {
     const filteredShape: string[] = shape.map(data => data.short_name);
-    if (shapeData.toLowerCase() === 'all') {
+    if (shapeData === 'All') {
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {
         setSelectedShape([]);

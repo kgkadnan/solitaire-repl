@@ -16,3 +16,15 @@ export const handleFilterChange = (
     ]);
   }
 };
+
+export const handleSelection = ({
+  data,
+  selectedTile,
+  setSelectedTile
+}: {
+  data: string;
+  selectedTile: string[];
+  setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
+}) => {
+  handleFilterChange(data, selectedTile, setSelectedTile);
+};
