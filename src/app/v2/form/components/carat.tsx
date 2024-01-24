@@ -2,6 +2,7 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import React from 'react';
 import { IFormState } from '../interface/interface';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
+// import ActionButton from '@/components/v2/common/action-button';
 
 export const Carat = ({ state, setState }: IFormState) => {
   const { caratMax, caratMin } = state;
@@ -36,7 +37,7 @@ export const Carat = ({ state, setState }: IFormState) => {
                 errorText={''}
               />
             </div>
-            <div></div>
+            <div>{/* <ActionButton /> */}</div>
           </div>
         }
         accordionTrigger={'Carat'}
