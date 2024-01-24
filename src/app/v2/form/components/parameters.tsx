@@ -338,8 +338,8 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
                           handleMinChange(e)
                           errorSetState &&
                           handleNumericRange({
-                            from: e.target.value,
-                            to: maxValue,
+                            min: e.target.value,
+                            max: maxValue,
                             setErrorState: errorSetState,
                             rangeCondition: range
                           });
@@ -352,8 +352,8 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
                           handleMaxChange(e)
                           errorSetState &&
                           handleNumericRange({
-                            from: minValue,
-                            to: e.target.value,
+                            min: minValue,
+                            max: e.target.value,
                             setErrorState: errorSetState,
                             rangeCondition: range
                           });

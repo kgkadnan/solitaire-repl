@@ -1,30 +1,30 @@
 import { Dispatch, SetStateAction } from 'react';
 interface IHandleNumericRange {
-  from: string;
-  to: string;
+  min: string;
+  max: string;
   setErrorState: Dispatch<SetStateAction<string>>;
   rangeCondition: { lte: number; gte: number };
 }
 export const handleNumericRange = ({
-  from,
-  to,
+  min,
+  max,
   setErrorState,
   rangeCondition
 }: IHandleNumericRange) => {
-  const parsedFrom = parseFloat(from);
-  const parsedTo = parseFloat(to);
+  const parsedMin = parseFloat(min);
+  const parsedMax = parseFloat(max);
 
-  if (isNaN(parsedFrom) || isNaN(parsedTo)) {
-    setErrorState('Please enter both "From" and "To".');
+  if (isNaN(parsedMin) || isNaN(parsedMax)) {
+    setErrorState('Please enter both "Min" and "Max".');
     return;
   }
 
-  if (parsedFrom > parsedTo) {
-    setErrorState('"From" value cannot be greater than "To" value.');
+  if (parsedMin > parsedMax) {
+    setErrorState('"Min" value cannot be greater than "Max" value.');
     return;
   }
 
-  if (parsedFrom < rangeCondition.gte || parsedTo > rangeCondition.lte) {
+  if (parsedMin < rangeCondition.gte || parsedMax > rangeCondition.lte) {
     setErrorState(
       `Values must be between ${rangeCondition.gte} and ${rangeCondition.lte}.`
     );
