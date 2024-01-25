@@ -10,13 +10,15 @@ interface IRangeSliderProps {
   handleSliderChange: (newValue: string[]) => void;
   rangeMin?: number;
   rangeMax?: number;
+  steps?: number;
 }
 
 export const RangeSlider = ({
   sliderValue,
   handleSliderChange,
   rangeMin,
-  rangeMax
+  rangeMax,
+  steps
 }: IRangeSliderProps) => {
   return (
     <StyledSliderWrapper
@@ -26,6 +28,7 @@ export const RangeSlider = ({
       renderThumb={ThumbComponent}
       min={rangeMin ? rangeMin : 0}
       max={rangeMax ? rangeMax : 100}
+      step={steps}
     />
   );
 };
