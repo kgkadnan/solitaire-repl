@@ -121,39 +121,39 @@ export const Color = ({
                 />
               ) : (
                 <div className="flex justify-between">
-                  <div className='w-[200px]'>
-                  <Select
-                    value={selectedFancyColor}
-                    options={fancy}
-                    onChange={handleFancyFilterChange}
-                    placeholder={'Color'}
-                    styles={colourStyles}
-                    isMulti
-                    closeMenuOnSelect={false}
-                    autoFocus={false}
-                  />
+                  <div className="w-[200px]">
+                    <Select
+                      value={selectedFancyColor}
+                      options={fancy}
+                      onChange={handleFancyFilterChange}
+                      placeholder={'Color'}
+                      styles={colourStyles}
+                      isMulti
+                      closeMenuOnSelect={false}
+                      autoFocus={false}
+                    />
                   </div>
-                  <div className='w-[200px]'>
-                  <Select
-                    value={selectedIntensity}
-                    options={fancy}
-                    onChange={handleIntensityChange}
-                    placeholder={'Intensity'}
-                    styles={colourStyles}
-                    isMulti
-                    closeMenuOnSelect={false}
-                  />
+                  <div className="w-[200px]">
+                    <Select
+                      value={selectedIntensity}
+                      options={fancy}
+                      onChange={handleIntensityChange}
+                      placeholder={'Intensity'}
+                      styles={colourStyles}
+                      isMulti
+                      closeMenuOnSelect={false}
+                    />
                   </div>
-                  <div className='w-[200px]'>
-                  <Select
-                    value={selectedOvertone}
-                    options={fancy}
-                    onChange={handleOvertoneChange}
-                    placeholder={'Overtone'}
-                    styles={colourStyles}
-                    isMulti
-                    closeMenuOnSelect={false}
-                  />
+                  <div className="w-[200px]">
+                    <Select
+                      value={selectedOvertone}
+                      options={fancy}
+                      onChange={handleOvertoneChange}
+                      placeholder={'Overtone'}
+                      styles={colourStyles}
+                      isMulti
+                      closeMenuOnSelect={false}
+                    />
                   </div>
                 </div>
               )}
