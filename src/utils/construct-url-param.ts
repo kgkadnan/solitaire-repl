@@ -37,16 +37,10 @@ export function constructUrlParams(data: IQueryData): string {
       const value = data[key];
 
       if (Array.isArray(value)) {
-        if (key === 'carat') {
-          // Handle carat separately
-          const caratValues = value.map(range => `${range.min}-${range.max}`);
-          queryParams.push(`carat[]=${caratValues.join(',')}`);
-        } else {
-          // Handle other arrays
-          value.forEach(item => {
-            queryParams.push(`${key}[]=${item}`);
-          });
-        }
+        // Handle other arrays
+        value.forEach(item => {
+          queryParams.push(`${key}[]=${item}`);
+        });
       } else if (typeof value === 'object') {
         // Handle nested objects
         encodeNested(key, value as INestedQuery | INestedQuery[]);

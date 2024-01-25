@@ -1,7 +1,6 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import React, { Dispatch, SetStateAction } from 'react';
-import { handleChange } from '../helpers/handle-change';
 import { keyToSymbol } from '@/constants/v2/form';
 import { compareArrays } from '../helpers/compare-arrays';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
