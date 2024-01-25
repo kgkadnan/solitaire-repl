@@ -2,17 +2,7 @@ import React from 'react';
 
 const SideNavigationBar = () => {
   return (
-    <div
-      style={{
-        width: '84px',
-        height: '100vh',
-        background: '#333',
-        position: 'fixed',
-        top: '60px',
-        overflow: 'hidden',
-        zIndex:10
-      }}
-    >
+    <div>
       {/* Your sidebar content goes here */}
       <div style={{ padding: '16px', color: '#fff', textAlign: 'center' }}>
         <p>Logo</p>

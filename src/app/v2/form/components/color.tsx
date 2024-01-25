@@ -83,7 +83,6 @@ export const Color = ({
     });
   };
 
-  console.log('selectedFancyColor', selectedFancyColor);
   return (
     <div id="Color">
       <AccordionComponent
@@ -108,6 +107,7 @@ export const Color = ({
                       ? '8px 0px 0px 8px'
                       : '0px 8px 8px 0px'
                   }
+                  selectionIndicatorMargin={0}
                 />
               </div>
             </div>
@@ -121,6 +121,7 @@ export const Color = ({
                 />
               ) : (
                 <div className="flex justify-between">
+                  <div className='w-[200px]'>
                   <Select
                     value={selectedFancyColor}
                     options={fancy}
@@ -129,7 +130,10 @@ export const Color = ({
                     styles={colourStyles}
                     isMulti
                     closeMenuOnSelect={false}
+                    autoFocus={false}
                   />
+                  </div>
+                  <div className='w-[200px]'>
                   <Select
                     value={selectedIntensity}
                     options={fancy}
@@ -139,6 +143,8 @@ export const Color = ({
                     isMulti
                     closeMenuOnSelect={false}
                   />
+                  </div>
+                  <div className='w-[200px]'>
                   <Select
                     value={selectedOvertone}
                     options={fancy}
@@ -148,6 +154,7 @@ export const Color = ({
                     isMulti
                     closeMenuOnSelect={false}
                   />
+                  </div>
                 </div>
               )}
             </div>

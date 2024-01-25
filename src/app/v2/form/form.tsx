@@ -28,6 +28,8 @@ import useNumericFieldValidation from './hooks/numeric-field-validation-manageme
 import ActionButton from '@/components/v2/common/action-button';
 import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
 import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+import addDemand from '@public/v2/assets/icons/add.svg';
+
 import arrowIcon from '@public/v2/assets/icons/arrows.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -239,17 +241,19 @@ const Form = () => {
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {}
     },
-    { variant: 'primary', svg: searchIcon, label: 'Search', handler: () => {} }
+    {
+      variant: 'primary',
+      svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
+      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
+      handler: () => {}
+    }
   ];
-  console.log('messageColor', messageColor);
 
   return (
-    <div>
-      {/* <TopNavigationBar/> */}
+    <div className="pt-[32px]">
       <div>
-        {/* <SideNavigationBar/> */}
         <div>
-          <div className="flex flex-col gap-[16px] w-[calc(100%-148px)]">
+          <div className="flex flex-col gap-[16px]">
             <div>
               <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
                 Search for Diamonds
@@ -357,15 +361,14 @@ const Form = () => {
             />
           </div>
         </div>
-        <div className="w-full bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] px-[32px] border-t-[1px] border-neutral200 flex justify-end">
-          {isError && (
-            <div className="w-[80%] flex items-center">
-              <span />
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
+          <div className=" flex items-center">
+            {isError && (
               <p className={`text-mRegular font-medium text-${messageColor}`}>
                 {!isValidationError && errorText}
               </p>
-            </div>
-          )}
+            )}
+          </div>
           <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>
