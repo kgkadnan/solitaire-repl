@@ -35,11 +35,11 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
   steps
 }) => {
   return (
-    <div className="flex flex-col gap-[16px]">
+    <div className="flex flex-col gap-[8px]">
       <InputLabel
         label={label}
         htmlFor=""
-        styles="text-neutral900 text-sRegular font-regular"
+        styles="text-neutral900 text-sRegular font-regular mb-[10px]"
       />
       <MinMaxInput
         minInputData={{

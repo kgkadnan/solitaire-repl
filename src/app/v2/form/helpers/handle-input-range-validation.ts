@@ -14,8 +14,13 @@ export const handleNumericRange = ({
   const parsedMin = parseFloat(min);
   const parsedMax = parseFloat(max);
 
+  if (!parsedMin && !parsedMax) {
+    setErrorState('');
+    return;
+  }
+
   if (isNaN(parsedMin) || isNaN(parsedMax)) {
-    setErrorState('Please enter both "Min" and "Max".');
+    setErrorState('Please enter both “Min” & “Max”');
     return;
   }
 
