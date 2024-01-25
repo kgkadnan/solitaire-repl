@@ -1,454 +1,382 @@
 'use client';
 
-import { AccordionComponent } from '@/components/v2/common/accordion';
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
-import ImageTile from '@/components/v2/common/image-tile';
-import { DiscountPrice } from '@/components/v2/common/min-max-input/discount-price';
-import Tile from '@/components/v2/common/tile';
-import {
-  shape,
-  anchor,
-  white,
-  color,
-  clarity,
-  fluorescence,
-  lab,
-  location,
-  countryOfOrigin,
-  shade,
-  girdle,
-  culet,
-  keyToSymbol
-} from '@/constants/v2/form';
-import React, { Dispatch, SetStateAction } from 'react';
+import { anchor } from '@/constants/v2/form';
+import React, { useEffect } from 'react';
 import useFormStateManagement from './hooks/form-state';
-import { Tabs } from '@/components/v2/common/toggle';
+import { Shape } from './components/shape';
+import { Carat } from './components/carat';
+import { Color } from './components/color';
+import { useGetProductCountQuery } from '@/features/api/product';
+import useValidationStateManagement from './hooks/validation-state-management';
+import { generateQueryParams } from './helpers/generate-query-parameters';
+import { constructUrlParams } from '@/utils/construct-url-param';
+import { Clarity } from './components/clarity';
+import { MakeCutPolishSymmetry } from './components/make-cut-polish-symmetry';
+import { Fluorescence } from './components/fluorescence';
+import { Lab } from './components/lab';
+import { Location } from './components/location';
+import { CountryOfOrigin } from './components/country-of-origin';
+import { Shade } from './components/shade';
+import { Parameters } from './components/parameters';
+import { Girdle } from './components/girdle';
+import { Culet } from './components/culet';
+import { KeyToSymbol } from './components/key-to-symbol';
+import { DiscountPrice } from './components/discount-price';
+import Inclusions from './components/inclusions';
+import useNumericFieldValidation from './hooks/numeric-field-validation-management';
+import ActionButton from '@/components/v2/common/action-button';
+import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
+import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+import addDemand from '@public/v2/assets/icons/add.svg';
+
+import arrowIcon from '@public/v2/assets/icons/arrows.svg';
+import { ManageLocales } from '@/utils/v2/translate';
+import { IActionButtonDataItem } from './interface/interface';
+import { handleReset } from './helpers/reset';
+import {
+  MAX_SEARCH_FORM_COUNT,
+  MIN_SEARCH_FORM_COUNT
+} from '@/constants/business-logic';
+import {
+  EXCEEDS_LIIMITS,
+  NO_STONE_FOUND,
+  SOMETHING_WENT_WRONG
+} from '@/constants/error-messages/form';
 
 const Form = () => {
-  const { state, setState, carat } = useFormStateManagement();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
+  const { state, setState } = useFormStateManagement();
   const {
-    selectedShape,
-    selectedWhiteColor,
-    selectedShade,
+    caratMax,
+    caratMin,
     selectedClarity,
-    selectedCaratRange,
-    selectedMake,
-    selectedCut,
-    selectedPolish,
-    selectedSymmetry,
-    selectedFluorescence,
-    selectedKeyToSymbol,
+    selectedShape,
+    selectedColor,
+    selectedWhiteColor,
     selectedLab,
     selectedLocation,
     selectedOrigin,
-    priceRangeFrom,
-    priceRangeTo,
-    discountFrom,
-    discountTo,
-    pricePerCaratFrom,
-    pricePerCaratTo,
-    caratRangeFrom,
-    caratRangeTo,
+    selectedShade,
+    discountMin, //discountFrom
+    discountMax, //discountTo
+    amountRangeMin, //priceRangeFrom
+    amountRangeMax, //priceRangeTo
+    pricePerCaratMin, //pricePerCaratFrom
+    pricePerCaratMax, //pricePerCaratTo
+    selectedGirdle,
+    selectedCulet,
+    selectedKeyToSymbol,
+    selectedCaratRange,
     selectedFancyColor,
     selectedIntensity,
-    selectedOvertone,
-    selectedColor,
-    selectedCulet
+    selectedOvertone
   } = state;
-
   const {
+    setCaratMin,
+    setCaratMax,
+    setSelectedClarity,
     setSelectedShape,
+    setSelectedColor,
     setSelectedWhiteColor,
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
-    setSelectedShade,
-    setSelectedClarity,
-    setSelectedCaratRange,
-    setSelectedMake,
-    setSelectedCut,
-    setSelectedPolish,
-    setSelectedSymmetry,
-    setSelectedFluorescence,
-    setSelectedKeyToSymbol,
     setSelectedLab,
     setSelectedLocation,
     setSelectedOrigin,
-    setPriceRangeFrom,
-    setPriceRangeTo,
-    setDiscountFrom,
-    setDiscountTo,
-    setPricePerCaratFrom,
-    setPricePerCaratTo,
-    setCaratRangeFrom,
-    setCaratRangeTo,
-    setSelectedColor,
-    setSelectedCulet
+    setSelectedShade,
+    setDiscountMin,
+    setDiscountMax,
+    setAmountRangeMin,
+    setAmountRangeMax,
+    setPricePerCaratMin,
+    setPricePerCaratMax,
+    setSelectedGirdle,
+    setSelectedCulet,
+    setSelectedKeyToSymbol,
+    setSelectedCaratRange
   } = setState;
 
-  const handleFilterChange = (
-    filterData: string,
-    selectedFilters: string[],
-    setSelectedFilters: Dispatch<SetStateAction<string[]>>
-  ) => {
-    if (selectedFilters.includes(filterData)) {
-      setSelectedFilters((prevSelectedColors: string[]) =>
-        prevSelectedColors.filter(selected => selected !== filterData)
-      );
-    } else {
-      setSelectedFilters((prevSelectedColors: string[]) => [
-        ...prevSelectedColors,
-        filterData
-      ]);
+  // const modifySearchFrom = searchParams.get('edit');
+
+  // const searchResult: any = useAppSelector(
+  //   (store: { searchResult: any }) => store.searchResult
+  // );
+
+  const {
+    setSearchUrl,
+    searchUrl,
+    isValidationError,
+    isError,
+    errorText,
+    setErrorText,
+    setSelectedStep,
+    setSelectedShadeContain,
+    setSearchCount,
+    setMessageColor,
+    messageColor,
+    setIsError,
+    searchCount,
+    setValidationError,
+    validationError
+  } = useValidationStateManagement();
+
+  const { errorState, errorSetState } = useNumericFieldValidation();
+
+  const { caratError, discountError, pricePerCaratError, amountRangeError } =
+    errorState;
+  const {
+    setCaratError,
+    setDiscountError,
+    setPricePerCaratError,
+    setAmountRangeError
+  } = errorSetState;
+
+  const { data, error } = useGetProductCountQuery(
+    {
+      searchUrl
+    },
+    {
+      skip: !searchUrl
     }
-  };
-  const compareArrays = (arr1: string[], arr2: string[]) => {
-    // Check if the lengths of the arrays are equal
-    if (arr1.length !== arr2.length) {
-      return false;
+  );
+
+  // Update search URL when form state changes
+  useEffect(() => {
+    const queryParams = generateQueryParams(state);
+
+    // Construct your search URL here
+    if (!isValidationError) {
+      setSearchUrl(constructUrlParams(queryParams));
     }
-    // Convert arrays to sets
-    const set1 = new Set(arr1);
-    const set2 = new Set(arr2);
-    // Compare sets
-    for (const value of set1) {
-      if (!set2.has(value)) {
-        return false;
-      }
-    }
-    // If the loop completes, sets are equal
-    return true;
-  };
-  const handleShapeChange = (shapeData: string) => {
-    const filteredShape: string[] = shape.map(data => data.short_name);
-    if (shapeData.toLowerCase() === 'all') {
-      setSelectedShape(filteredShape);
-      if (selectedShape.includes('All')) {
-        setSelectedShape([]);
-      }
-    } else {
-      if (selectedShape.includes('All')) {
-        const filteredSelectedShape: string[] = selectedShape.filter(
-          (data: any) => data !== 'All' && data !== shape
-        );
-        setSelectedShape(filteredSelectedShape);
-      } else if (
-        compareArrays(
-          selectedShape.filter((data: any) => data !== 'All'),
-          filteredShape.filter(data => data !== 'All' && data !== shapeData)
-        )
-      ) {
-        setSelectedShape(filteredShape);
+  }, [state]);
+
+  //Handle search count and errors
+  useEffect(() => {
+    if (searchCount !== -1) {
+      if (searchUrl) {
+        if (
+          data?.count > MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          setIsError(true);
+          setErrorText(EXCEEDS_LIIMITS);
+          setMessageColor('dangerMain');
+        } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
+          setIsError(true);
+          setErrorText(NO_STONE_FOUND);
+          setMessageColor('dangerMain');
+        } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
+          setMessageColor('successMain');
+          setIsError(true);
+          data?.count && setErrorText(`${data?.count} stones found`);
+        } else {
+          setIsError(false);
+          setErrorText('');
+          setMessageColor('dangerMain');
+        }
       } else {
-        handleFilterChange(shapeData, selectedShape, setSelectedShape);
+        setIsError(false);
+        setErrorText('');
+        setMessageColor('dangerMain');
       }
     }
+    if (error) {
+      setIsError(true);
+      setErrorText(SOMETHING_WENT_WRONG);
+      setMessageColor('dangerMain');
+    }
+    setSearchCount(searchCount + 1);
+  }, [data, error, searchUrl, messageColor]);
+
+  const handleFormReset = () => {
+    setSelectedStep('');
+    setSelectedShadeContain('');
+    setSearchCount(0);
+    setIsError(false);
+    setErrorText('');
+    handleReset(setState);
   };
 
-  // Function to handle color change based on user selection
-  const handleWhiteColorChange = ({
-    data,
-    selectedTile,
-    setSelectedTile
-  }: {
-    data: string;
-    selectedTile: string[];
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => {
-    setSelectedFancyColor('');
-    setSelectedIntensity('');
-    setSelectedOvertone('');
-    handleFilterChange(data, selectedTile, setSelectedTile);
-  };
+  let actionButtonData: IActionButtonDataItem[] = [
+    // {
+    //   variant: 'secondary',
+    //   svg: arrowIcon,
+    //   label: ManageLocales('app.advanceSearch.cancel'),
+    //   handler: () => {
+    //     if (
+    //       modifySearchFrom ===
+    //       `${ManageLocales('app.search.savedSearchesRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales(
+    //           'app.search.savedSearchesRoute'
+    //         )}`
+    //       );
+    //     } else if (
+    //       modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
+    //     ) {
+    //       router.push(
+    //         `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
+    //           searchResult.activeTab + 3
+    //         }`
+    //       );
+    //     }
+    //   },
+    //   isHidden:
+    //     modifySearchFrom !==
+    //       `${ManageLocales('app.search.savedSearchesRoute')}` &&
+    //     modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
+    // },
+    {
+      variant: 'secondary',
+      svg: arrowIcon,
+      label: ManageLocales('app.advanceSearch.reset'),
+      handler: handleFormReset
+    },
 
-  const handleChange = ({
-    data,
-    selectedTile,
-    setSelectedTile
-  }: {
-    data: string;
-    selectedTile: string[];
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
-  }) => {
-    handleFilterChange(data, selectedTile, setSelectedTile);
-  };
+    {
+      variant: 'secondary',
+      svg: bookmarkAddIcon,
+      label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
+      handler: () => {}
+    },
+    {
+      variant: 'primary',
+      svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
+      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
+      handler: () => {}
+    }
+  ];
+
   return (
-    <div>
-      {/* <TopNavigationBar/> */}
+    <div className="pt-[32px]">
       <div>
-        {/* <SideNavigationBar/> */}{' '}
         <div>
-          <div className="flex flex-col gap-[16px] w-[calc(100%-148px)]">
+          <div className="flex flex-col gap-[16px]">
+            {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
             <div>
               <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
                 Search for Diamonds
               </span>
             </div>
             <AnchorLinkNavigation anchorNavigations={anchor} />
+            {/* </div> */}
+            <Shape
+              setSelectedShape={setSelectedShape}
+              selectedShape={selectedShape}
+            />
 
-            <div id="Shape">
-              <AccordionComponent
-                value="Shape"
-                isDisable={true}
-                accordionContent={
-                  <ImageTile
-                    imageTileData={shape}
-                    selectedTile={selectedShape}
-                    handleSelectTile={handleShapeChange}
-                  />
-                }
-                accordionTrigger={'Shape'}
-                hasError={false}
-              />
-            </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <div id="Carat">
-                <AccordionComponent
-                  value="Carat"
-                  isDisable={true}
-                  accordionContent={<div>hello</div>}
-                  accordionTrigger={'Carat'}
-                  hasError={false}
+              <Carat
+                caratMax={caratMax}
+                caratMin={caratMin}
+                setCaratMin={setCaratMin}
+                setCaratMax={setCaratMax}
+                selectedCaratRange={selectedCaratRange}
+                setSelectedCaratRange={setSelectedCaratRange}
+                caratError={caratError}
+                setCaratError={setCaratError}
+                setValidationError={setValidationError}
+                validationError={validationError}
+              />
+              <Color
+                selectedColor={selectedColor}
+                selectedFancyColor={selectedFancyColor}
+                selectedIntensity={selectedIntensity}
+                selectedOvertone={selectedOvertone}
+                selectedWhiteColor={selectedWhiteColor}
+                setSelectedColor={setSelectedColor}
+                setSelectedWhiteColor={setSelectedWhiteColor}
+                setSelectedFancyColor={setSelectedFancyColor}
+                setSelectedIntensity={setSelectedIntensity}
+                setSelectedOvertone={setSelectedOvertone}
+              />
+            </div>
+            <Clarity
+              setSelectedClarity={setSelectedClarity}
+              selectedClarity={selectedClarity}
+            />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <MakeCutPolishSymmetry state={state} setState={setState} />
+              <div className="flex flex-col gap-[16px]">
+                <Lab
+                  selectedLab={selectedLab}
+                  setSelectedLab={setSelectedLab}
                 />
-              </div>
-              <div id="Color">
-                <AccordionComponent
-                  value="Color"
-                  isDisable={true}
-                  accordionContent={
-                    <div>
-                      <div className="flex justify-end">
-                        <div className="w-[200px]">
-                          <Tabs
-                            onChange={setSelectedColor}
-                            options={color}
-                            backgroundColor={'var(--neutral-0)'}
-                            fontColor={'var(--neutral-900)'}
-                            fontSize="10"
-                            selectedFontColor={'var(--neutral-25)'}
-                            selectedBackgroundColor={'var(--primary-main)'}
-                            border={'1px solid var(--neutral-200)'}
-                            wrapperBorderRadius={'8px'}
-                            optionBorderRadius={
-                              selectedColor === 'white'
-                                ? '8px 0px 0px 8px'
-                                : '0px 8px 8px 0px'
-                            }
-                          />
-                        </div>
-                      </div>
-                      <Tile
-                        tileData={white}
-                        selectedTile={selectedWhiteColor}
-                        setSelectedTile={setSelectedWhiteColor}
-                        handleTileClick={handleWhiteColorChange}
-                      />
-                    </div>
-                  }
-                  accordionTrigger={'Color'}
-                  hasError={false}
+                <Location
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
                 />
               </div>
             </div>
-            <div id="Clarity">
-              <AccordionComponent
-                value="Clarity"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={clarity}
-                      selectedTile={selectedClarity}
-                      setSelectedTile={setSelectedClarity}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Clarity'}
-                hasError={false}
+
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <Fluorescence state={state} setState={setState} />
+              <CountryOfOrigin
+                selectedOrigin={selectedOrigin}
+                setSelectedOrigin={setSelectedOrigin}
               />
             </div>
-            <div id="Make Cut Polish Symmetry">
-              <AccordionComponent
-                value="Make Cut Polish Symmetry"
-                isDisable={true}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Make Cut Polish Symmetry'}
-                hasError={false}
+            <Shade
+              selectedShade={selectedShade}
+              setSelectedShade={setSelectedShade}
+            />
+            <DiscountPrice
+              setDiscountMin={setDiscountMin}
+              setDiscountMax={setDiscountMax}
+              setAmountRangeMin={setAmountRangeMin}
+              setAmountRangeMax={setAmountRangeMax}
+              setPricePerCaratMin={setPricePerCaratMin}
+              setPricePerCaratMax={setPricePerCaratMax}
+              discountMin={discountMin}
+              discountMax={discountMax}
+              amountRangeMin={amountRangeMin}
+              amountRangeMax={amountRangeMax}
+              pricePerCaratMin={pricePerCaratMin}
+              pricePerCaratMax={pricePerCaratMax}
+              setDiscountError={setDiscountError}
+              discountError={discountError}
+              pricePerCaratError={pricePerCaratError}
+              setPricePerCaratError={setPricePerCaratError}
+              amountRangeError={amountRangeError}
+              setAmountRangeError={setAmountRangeError}
+            />
+
+            <Parameters
+              state={state}
+              setState={setState}
+              errorSetState={errorSetState}
+              errorState={errorState}
+            />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <Girdle
+                selectedGirdle={selectedGirdle}
+                setSelectedGirdle={setSelectedGirdle}
+              />
+              <Culet
+                selectedCulet={selectedCulet}
+                setSelectedCulet={setSelectedCulet}
               />
             </div>
-            <div id="Fluorescence">
-              <AccordionComponent
-                value="Fluorescence"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={fluorescence}
-                      selectedTile={selectedFluorescence}
-                      setSelectedTile={setSelectedFluorescence}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Fluorescence'}
-                hasError={false}
-              />
-            </div>
-            <div id="Lab">
-              <AccordionComponent
-                value="Lab"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={lab}
-                      selectedTile={selectedLab}
-                      setSelectedTile={setSelectedLab}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Lab'}
-                hasError={false}
-              />
-            </div>
-            <div id="Location">
-              <AccordionComponent
-                value="Location"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={location}
-                      selectedTile={selectedLocation}
-                      setSelectedTile={setSelectedLocation}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Location'}
-                hasError={false}
-              />
-            </div>
-            <div id="Country of Origin">
-              <AccordionComponent
-                value="Country of Origin"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={countryOfOrigin}
-                      selectedTile={selectedOrigin}
-                      setSelectedTile={setSelectedOrigin}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Country of Origin'}
-                hasError={false}
-              />
-            </div>
-            <div id="Shade">
-              <AccordionComponent
-                value="Shade"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={shade}
-                      selectedTile={selectedShade}
-                      setSelectedTile={setSelectedShade}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Shade'}
-                hasError={false}
-              />
-            </div>
-            <div id="Discount% Price/Ct Amount Range">
-              <AccordionComponent
-                value="Discount% Price/Ct Amount Range"
-                isDisable={true}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Discount% Price/Ct Amount Range'}
-                hasError={false}
-              />
-            </div>
-            <div id="Parameters">
-              <AccordionComponent
-                value="Parameters"
-                isDisable={false}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Parameters'}
-                hasError={false}
-              />
-            </div>
-            <div id="Girdle">
-              <AccordionComponent
-                value="Girdle"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={girdle}
-                      selectedTile={selectedLab}
-                      setSelectedTile={setSelectedLab}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Girdle'}
-                hasError={false}
-              />
-            </div>
-            <div id="Culet">
-              <AccordionComponent
-                value="Culet"
-                isDisable={true}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={culet}
-                      selectedTile={selectedCulet}
-                      setSelectedTile={setSelectedCulet}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Culet'}
-                hasError={false}
-              />
-            </div>
-            <div id="Inclusions">
-              <AccordionComponent
-                value="Inclusions"
-                isDisable={false}
-                accordionContent={<>Hello</>}
-                accordionTrigger={'Inclusions'}
-                hasError={false}
-              />
-            </div>
-            <div id="Key to Symbol">
-              <AccordionComponent
-                value="Key to Symbol"
-                isDisable={false}
-                accordionContent={
-                  <div>
-                    <Tile
-                      tileData={keyToSymbol}
-                      selectedTile={selectedKeyToSymbol}
-                      setSelectedTile={setSelectedKeyToSymbol}
-                      handleTileClick={handleChange}
-                    />
-                  </div>
-                }
-                accordionTrigger={'Key to Symbol'}
-                hasError={false}
-              />
-            </div>
+            <Inclusions state={state} setState={setState} />
+            <KeyToSymbol
+              selectedKeyToSymbol={selectedKeyToSymbol}
+              setSelectedKeyToSymbol={setSelectedKeyToSymbol}
+            />
           </div>
+        </div>
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
+          <div className=" flex items-center">
+            {isError && (
+              <p className={`text-mRegular font-medium text-${messageColor}`}>
+                {!isValidationError && errorText}
+              </p>
+            )}
+          </div>
+          <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>
     </div>

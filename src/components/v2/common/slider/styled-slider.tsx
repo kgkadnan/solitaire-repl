@@ -5,7 +5,7 @@ import styled from 'styled-components';
 const StyledSliderWrapper = styled(ReactSlider)`
   width: 390px;
   height: 5px;
-  position:absolute:
+  position: absolute;
 `;
 
 const StyledThumb = styled.div`

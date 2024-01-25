@@ -52,7 +52,7 @@ module.exports = {
         bold: 'var(--font-weight-bold)'
       },
       fontFamily: {
-        custom: ['Inter', 'sans-serif']
+        sans: ['Inter', 'sans-serif']
       },
       colors: {
         //*********Customize**************
@@ -148,7 +148,7 @@ module.exports = {
         warningPressed: 'var(--warning-pressed)',
         warningFocus: 'var(--warning-focus)',
         infoMain: 'var(--info-main)',
-        inputShadow: 'var(--input-shadow)',
+        inputShadow: 'var(--input-shadow) inset',
         popupsShadow: 'var(--popups-shadow)',
         infoSurface: 'var(--info-surface)',
         infoBorder: 'var(--info-border)',

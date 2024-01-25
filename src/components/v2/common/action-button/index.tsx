@@ -1,26 +1,32 @@
 import { Button } from '@/components/ui/button';
 import React from 'react';
-import styles from './cta.module.scss';
+import styles from './action-button.module.scss';
 import Image from 'next/image';
 
 interface ICtaData {
-  ctaData: {
+  actionButtonData: {
     variant: 'secondary' | 'primary' | 'disable';
     svg: string; // Assuming the type of 'svg' is string, update it accordingly
     label: string;
     isDisable?: boolean;
+    handler: () => void;
+    isHidden?: boolean;
   }[];
 }
 
-const Cta = ({ ctaData }: ICtaData) => {
+const ActionButton = ({ actionButtonData }: ICtaData) => {
   return (
-    <>
-      <div className={styles.ctaContainer}>
-        {ctaData.map(({ isDisable, variant, svg, label }) => {
+    <div className={styles.ctaContainer}>
+      {actionButtonData.map(
+        ({ isDisable, variant, svg, label, handler, isHidden }) => {
+          if (isHidden) {
+            return null;
+          }
           return (
             <Button
               key={label}
               disabled={isDisable}
+              onClick={handler}
               variant={variant}
               className={`${styles.ctaStyle} 
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
@@ -31,10 +37,10 @@ const Cta = ({ ctaData }: ICtaData) => {
               <div className={styles.ctaLabel}>{label}</div>
             </Button>
           );
-        })}
-      </div>
-    </>
+        }
+      )}
+    </div>
   );
 };
 
-export default Cta;
+export default ActionButton;

@@ -16,6 +16,8 @@ import {
   v2Routes
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
+import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
+import Head from 'next/head';
 
 const store = setupStore();
 
@@ -39,6 +41,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Inter'"
+        />
+      </Head>
       <body className={inter.className}>
         <Provider store={store}>
           <ThemeProviders isV2Route={isV2Route}>
@@ -62,6 +70,20 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 </div>
                 <BottomNavigationBar />
               </>
+            ) : isV2Route ? (
+              <div className="flex h-screen">
+                <aside className="w-[84px] border-r border-solid"></aside>
+
+                <div className="flex-1 flex flex-col overflow-hidden">
+                  <header className="h-[60px] border-b border-solid">
+                    <V2TopNavigationBar />
+                  </header>
+
+                  <main className="flex-1 overflow-x-hidden overflow-y-auto px-[32px]">
+                    {children}
+                  </main>
+                </div>
+              </div>
             ) : (
               <div>{children}</div>
             )}

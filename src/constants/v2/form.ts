@@ -229,21 +229,21 @@ export const symmetry = [
 ];
 
 export const fancy = [
-  'Yellow',
-  'Pink',
-  'Blue',
-  'Red',
-  'Green',
-  'Purple',
-  'Orange',
-  'Black',
-  'Gray',
-  'Violet',
-  'Brown',
-  'Other'
+  { value: 'Yellow', label: 'Yellow' },
+  { value: 'Pink', label: 'Pink' },
+  { value: 'Blue', label: 'Blue' },
+  { value: 'Red', label: 'Red' },
+  { value: 'Green', label: 'Green' },
+  { value: 'Purple', label: 'Purple' },
+  { value: 'Orange', label: 'Orange' },
+  { value: 'Black', label: 'Black' },
+  { value: 'Gray', label: 'Gray' },
+  { value: 'Violet', label: 'Violet' },
+  { value: 'Brown', label: 'Brown' },
+  { value: 'Other', label: 'Other' }
 ];
 
-export const girdle = [
+export const girdleSortedArray = [
   'ETN',
   'VTN',
   'STN',
@@ -252,7 +252,19 @@ export const girdle = [
   'STK',
   'THK',
   'VTK',
-  'ETK '
+  'ETK'
+];
+
+export const girdle = [
+  { short_name: 'ETN', title: 'Extremely Thin' },
+  { short_name: 'VTN', title: 'Very Thin' },
+  { short_name: 'STN', title: 'Slightly Thin' },
+  { short_name: 'THN', title: 'Thin' },
+  { short_name: 'MED', title: 'Medium' },
+  { short_name: 'STK', title: 'Slightly Thick' },
+  { short_name: 'THK', title: 'Thick' },
+  { short_name: 'VTK', title: 'Very Thick' },
+  { short_name: 'ETK', title: 'Extremely Thick' }
 ];
 
 export const culet = [
@@ -476,3 +488,28 @@ export const otherParameter = [
     ]
   }
 ];
+
+export const discount = {
+  range: {
+    gte: 0,
+    lte: 100
+  }
+};
+export const carat = {
+  range: {
+    gte: 0,
+    lte: 30
+  }
+};
+export const amount_range = {
+  range: {
+    gte: 0,
+    lte: 999999
+  }
+};
+export const price_per_carat = {
+  range: {
+    gte: 0,
+    lte: 999999
+  }
+};

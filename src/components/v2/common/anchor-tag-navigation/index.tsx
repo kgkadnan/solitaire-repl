@@ -22,27 +22,30 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   };
 
   return (
-    <div className="flex items-center w-full bg-neutral0 sticky top-0">
+    <div className="flex items-center w-full bg-neutral0 sticky top-[-1px] z-50">
       <div
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
       >
         {anchorNavigations.map((links, index) => (
-          <Link
-            activeStyle={{
-              borderBottom: '2px solid var(--neutral-900)',
-              color: 'var(--neutral-900)'
-            }}
-            to={links}
-            spy={true}
-            smooth={true}
-            offset={-180}
-            duration={500}
-            key={index}
-            className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
-          >
-            {links}
-          </Link>
+          <>
+            <Link
+              activeStyle={{
+                borderBottom: '2px solid var(--neutral-900)',
+                color: 'var(--neutral-900)'
+              }}
+              to={links}
+              spy={true}
+              smooth={true}
+              offset={-180}
+              duration={500}
+              key={index}
+              className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
+            >
+              {links}
+            </Link>
+            {console.log('hehrhe')}
+          </>
         ))}
       </div>
 

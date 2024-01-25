@@ -8,11 +8,17 @@ import {
 interface IRangeSliderProps {
   sliderValue: string[];
   handleSliderChange: (newValue: string[]) => void;
+  rangeMin?: number;
+  rangeMax?: number;
+  steps?: number;
 }
 
 export const RangeSlider = ({
   sliderValue,
-  handleSliderChange
+  handleSliderChange,
+  rangeMin,
+  rangeMax,
+  steps
 }: IRangeSliderProps) => {
   return (
     <StyledSliderWrapper
@@ -20,6 +26,9 @@ export const RangeSlider = ({
       onChange={handleSliderChange as any}
       renderTrack={TrackComponent}
       renderThumb={ThumbComponent}
+      min={rangeMin ? rangeMin : 0}
+      max={rangeMax ? rangeMax : 100}
+      step={steps}
     />
   );
 };
