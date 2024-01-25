@@ -3,6 +3,7 @@ import Tile from '@/components/v2/common/tile';
 import { cut, make, polish, symmetry } from '@/constants/v2/form';
 import React from 'react';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
+import SingleTile from '@/components/v2/common/tile/single-tile';
 
 export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
   const {
@@ -181,13 +182,6 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
 
   const renderContent = [
     {
-      header: 'Make',
-      data: make,
-      selected: selectedMake,
-      setSelected: setSelectedMake,
-      handleChange: handleMakeChange
-    },
-    {
       header: 'Cut',
       data: cut,
       selected: selectedCut,
@@ -217,6 +211,12 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
         accordionContent={
           <div className="px-[16px] py-[24px]">
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <SingleTile
+                tileData={make}
+                selectedTile={selectedMake}
+                setSelectedTile={setSelectedMake}
+                handleTileClick={handleMakeChange}
+              />
               {renderContent.map(content => {
                 return (
                   <div

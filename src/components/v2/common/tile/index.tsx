@@ -11,15 +11,11 @@ interface ITileProps {
     setSelectedTile
   }: {
     data: string;
-    selectedTile: string[] | string;
-    setSelectedTile:
-      | React.Dispatch<React.SetStateAction<string[]>>
-      | React.Dispatch<React.SetStateAction<string>>;
+    selectedTile: string[];
+    setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
   }) => void;
-  selectedTile: string[] | string;
-  setSelectedTile:
-    | React.Dispatch<React.SetStateAction<string[]>>
-    | React.Dispatch<React.SetStateAction<string>>;
+  selectedTile: string[];
+  setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
 }
 
 const Tile = ({
@@ -40,11 +36,7 @@ const Tile = ({
                   handleTileClick({ data: tile, selectedTile, setSelectedTile })
                 }
                 className={` ${styles.tileDefaultStyles}   ${
-                  (
-                    typeof selectedTile === 'string'
-                      ? tile === selectedTile
-                      : selectedTile.includes(tile)
-                  )
+                  selectedTile.includes(tile)
                     ? styles.tileActiveStyle
                     : `${styles.tileDisableStyle} ${styles.tileStyles}`
                 }`}

@@ -348,12 +348,7 @@ const Form = () => {
               amountRangeError={amountRangeError}
               setAmountRangeError={setAmountRangeError}
             />
-            <Parameters
-              state={state}
-              setState={setState}
-              errorSetState={errorSetState}
-              errorState={errorState}
-            />
+
             <Parameters
               state={state}
               setState={setState}
