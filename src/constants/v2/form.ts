@@ -488,3 +488,10 @@ export const otherParameter = [
     ]
   }
 ];
+
+export const carat = {
+  range: {
+    gte: 0,
+    lte: 100
+  }
+};

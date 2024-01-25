@@ -120,7 +120,9 @@ const Form = () => {
     setMessageColor,
     messageColor,
     setIsError,
-    searchCount
+    searchCount,
+    setValidationError,
+    validationError
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -270,6 +272,8 @@ const Form = () => {
                 setSelectedCaratRange={setSelectedCaratRange}
                 caratError={caratError}
                 setCaratError={setCaratError}
+                setValidationError={setValidationError}
+                validationError={validationError}
               />
               <Color
                 selectedColor={selectedColor}
@@ -330,7 +334,12 @@ const Form = () => {
               pricePerCaratMin={pricePerCaratMin}
               pricePerCaratMax={pricePerCaratMax}
             />
-            <Parameters state={state} setState={setState}  errorSetState={errorSetState} errorState={errorState}/>
+            <Parameters
+              state={state}
+              setState={setState}
+              errorSetState={errorSetState}
+              errorState={errorState}
+            />
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
               <Girdle
                 selectedGirdle={selectedGirdle}

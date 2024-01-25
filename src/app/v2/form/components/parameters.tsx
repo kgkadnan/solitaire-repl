@@ -4,7 +4,12 @@ import { MinMaxInput } from '@/components/v2/common/min-max-input';
 import React from 'react';
 import { parameter } from '@/constants/v2/form';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
-export const Parameters = ({ state, setState, errorSetState, errorState }: any) => {
+export const Parameters = ({
+  state,
+  setState,
+  errorSetState,
+  errorState
+}: any) => {
   const {
     setTablePerMin,
     setTablePerMax,
@@ -94,10 +99,6 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
     starLengthError
   } = errorState;
 
-
-
-
-
   let parameters = [
     {
       label: 'Table (%)',
@@ -125,7 +126,7 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
       minValue: depthPerMin,
       maxValue: depthPerMax,
       minPlaceHolder: '0',
-      maxPlaceHolder: '100', 
+      maxPlaceHolder: '100',
       errorSetState: setDepthPerError,
       errorState: depthPerError
     },
@@ -263,7 +264,6 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
       maxPlaceHolder: '100',
       errorSetState: setPavilionHeightError,
       errorState: pavilionHeightError
-      
     },
     {
       label: 'Lower Half',
@@ -297,11 +297,10 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
     }
   ];
 
-     // Map the parameterDataState to create an array of objects with additional data from advanceSearch
-     const parameterData = parameters.map((parameters, index) => {
-      return { ...parameters, ...parameter[index] };
-    });
-
+  // Map the parameterDataState to create an array of objects with additional data from advanceSearch
+  const parameterData = parameters.map((parameters, index) => {
+    return { ...parameters, ...parameter[index] };
+  });
 
   return (
     <div id="Parameters">
@@ -334,29 +333,29 @@ export const Parameters = ({ state, setState, errorSetState, errorState }: any) 
                       minInputData={{
                         minValue: minValue,
                         minPlaceHolder: minPlaceHolder,
-                        minOnchange: (e) => {
-                          handleMinChange(e)
+                        minOnchange: e => {
+                          handleMinChange(e);
                           errorSetState &&
-                          handleNumericRange({
-                            min: e.target.value,
-                            max: maxValue,
-                            setErrorState: errorSetState,
-                            rangeCondition: range
-                          });
+                            handleNumericRange({
+                              min: e.target.value,
+                              max: maxValue,
+                              setErrorState: errorSetState,
+                              rangeCondition: range
+                            });
                         }
                       }}
                       maxInputData={{
                         maxValue: maxValue,
                         maxPlaceHolder: maxPlaceHolder,
-                        maxOnchange: (e) =>{
-                          handleMaxChange(e)
+                        maxOnchange: e => {
+                          handleMaxChange(e);
                           errorSetState &&
-                          handleNumericRange({
-                            min: minValue,
-                            max: e.target.value,
-                            setErrorState: errorSetState,
-                            rangeCondition: range
-                          });
+                            handleNumericRange({
+                              min: minValue,
+                              max: e.target.value,
+                              setErrorState: errorSetState,
+                              rangeCondition: range
+                            });
                         }
                       }}
                       inputGap="gap-[20px]"
