@@ -16,6 +16,8 @@ import {
   v2Routes
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
+import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
+import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 
 const store = setupStore();
 
@@ -62,6 +64,20 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 </div>
                 <BottomNavigationBar />
               </>
+            ) : isV2Route ? (
+              <div className="flex h-screen">
+                <aside className="w-[84px] border-r border-solid"></aside>
+
+                <div className="flex-1 flex flex-col overflow-hidden">
+                  <header className="h-[60px] border-b border-solid">
+                    <V2TopNavigationBar />
+                  </header>
+
+                  <main className="flex-1 overflow-x-hidden overflow-y-auto px-[32px]">
+                    {children}
+                  </main>
+                </div>
+              </div>
             ) : (
               <div>{children}</div>
             )}

@@ -19,7 +19,7 @@ export const KeyToSymbol = ({
         value="Key to Symbol"
         isDisable={false}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px]">
             <Tile
               tileData={keyToSymbol}
               selectedTile={selectedKeyToSymbol}

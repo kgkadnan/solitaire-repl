@@ -2,21 +2,29 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import { Tabs } from '@/components/v2/common/toggle';
 import React, { Dispatch, SetStateAction } from 'react';
-import { color, white } from '@/constants/v2/form';
+import { color, fancy, white } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
+import Select from 'react-select';
+import { colourStyles } from '../helpers/select-color-style';
 
 interface IColorProps {
   selectedColor: string;
+  selectedFancyColor: any;
+  selectedIntensity: any;
+  selectedOvertone: any;
   selectedWhiteColor: string[];
   setSelectedColor: Dispatch<SetStateAction<string>>;
   setSelectedWhiteColor: Dispatch<SetStateAction<string[]>>;
-  setSelectedFancyColor: Dispatch<SetStateAction<string>>;
-  setSelectedIntensity: Dispatch<SetStateAction<string>>;
-  setSelectedOvertone: Dispatch<SetStateAction<string>>;
+  setSelectedFancyColor: Dispatch<SetStateAction<string[]>>;
+  setSelectedIntensity: Dispatch<SetStateAction<string[]>>;
+  setSelectedOvertone: Dispatch<SetStateAction<string[]>>;
 }
 
 export const Color = ({
   selectedColor,
+  selectedFancyColor,
+  selectedIntensity,
+  selectedOvertone,
   selectedWhiteColor,
   setSelectedColor,
   setSelectedWhiteColor,
@@ -33,20 +41,57 @@ export const Color = ({
     selectedTile: string[];
     setSelectedTile: React.Dispatch<React.SetStateAction<string[]>>;
   }) => {
-    setSelectedFancyColor('');
-    setSelectedIntensity('');
-    setSelectedOvertone('');
+    setSelectedFancyColor([]);
+    setSelectedIntensity([]);
+    setSelectedOvertone([]);
     handleFilterChange(data, selectedTile, setSelectedTile);
   };
+
+  // Function to handle fancy color filter change based on user selection
+  const handleFancyFilterChange = (selectedOption: any) => {
+    setSelectedWhiteColor([]);
+    setSelectedFancyColor([]);
+    selectedOption.map((data: any) => {
+      setSelectedFancyColor((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data
+      ]);
+    });
+  };
+
+  // Function to handle intensity change based on user selection
+  const handleIntensityChange = (selectedOption: any) => {
+    setSelectedWhiteColor([]);
+    setSelectedIntensity([]);
+    selectedOption.map((data: any) => {
+      setSelectedIntensity((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data
+      ]);
+    });
+  };
+
+  // Function to handle overtone change based on user selection
+  const handleOvertoneChange = (selectedOption: any) => {
+    setSelectedWhiteColor([]);
+    setSelectedOvertone([]);
+    selectedOption.map((data: any) => {
+      setSelectedOvertone((prevSelectedColors: string[]) => [
+        ...prevSelectedColors,
+        data
+      ]);
+    });
+  };
+
   return (
     <div id="Color">
       <AccordionComponent
         value="Color"
         isDisable={true}
         accordionContent={
-          <div>
+          <div className="px-[16px] py-[24px] flex flex-col gap-[24px]">
             <div className="flex justify-end">
-              <div className="w-[120px] h-[30px] ">
+              <div className="w-[120px] h-[30px]">
                 <Tabs
                   onChange={setSelectedColor}
                   options={color}
@@ -62,15 +107,57 @@ export const Color = ({
                       ? '8px 0px 0px 8px'
                       : '0px 8px 8px 0px'
                   }
+                  selectionIndicatorMargin={0}
                 />
               </div>
             </div>
-            <Tile
-              tileData={white}
-              selectedTile={selectedWhiteColor}
-              setSelectedTile={setSelectedWhiteColor}
-              handleTileClick={handleWhiteColorChange}
-            />
+            <div>
+              {selectedColor === 'white' ? (
+                <Tile
+                  tileData={white}
+                  selectedTile={selectedWhiteColor}
+                  setSelectedTile={setSelectedWhiteColor}
+                  handleTileClick={handleWhiteColorChange}
+                />
+              ) : (
+                <div className="flex justify-between">
+                  <div className='w-[200px]'>
+                  <Select
+                    value={selectedFancyColor}
+                    options={fancy}
+                    onChange={handleFancyFilterChange}
+                    placeholder={'Color'}
+                    styles={colourStyles}
+                    isMulti
+                    closeMenuOnSelect={false}
+                    autoFocus={false}
+                  />
+                  </div>
+                  <div className='w-[200px]'>
+                  <Select
+                    value={selectedIntensity}
+                    options={fancy}
+                    onChange={handleIntensityChange}
+                    placeholder={'Intensity'}
+                    styles={colourStyles}
+                    isMulti
+                    closeMenuOnSelect={false}
+                  />
+                  </div>
+                  <div className='w-[200px]'>
+                  <Select
+                    value={selectedOvertone}
+                    options={fancy}
+                    onChange={handleOvertoneChange}
+                    placeholder={'Overtone'}
+                    styles={colourStyles}
+                    isMulti
+                    closeMenuOnSelect={false}
+                  />
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         }
         accordionTrigger={'Color'}

@@ -12,7 +12,7 @@ import useValidationStateManagement from './hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { Clarity } from './components/clarity';
-import { PolishSymmetry } from './components/polish-symmetry';
+import { MakeCutPolishSymmetry } from './components/make-cut-polish-symmetry';
 import { Fluorescence } from './components/fluorescence';
 import { Lab } from './components/lab';
 import { Location } from './components/location';
@@ -24,9 +24,12 @@ import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
+import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import ActionButton from '@/components/v2/common/action-button';
 import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
 import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
+import addDemand from '@public/v2/assets/icons/add.svg';
+
 import arrowIcon from '@public/v2/assets/icons/arrows.svg';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -67,7 +70,11 @@ const Form = () => {
     pricePerCaratMax, //pricePerCaratTo
     selectedGirdle,
     selectedCulet,
-    selectedKeyToSymbol
+    selectedKeyToSymbol,
+    selectedCaratRange,
+    selectedFancyColor,
+    selectedIntensity,
+    selectedOvertone
   } = state;
   const {
     setCaratMin,
@@ -92,7 +99,8 @@ const Form = () => {
     setPricePerCaratMax,
     setSelectedGirdle,
     setSelectedCulet,
-    setSelectedKeyToSymbol
+    setSelectedKeyToSymbol,
+    setSelectedCaratRange
   } = setState;
 
   const modifySearchFrom = searchParams.get('edit');
@@ -116,6 +124,11 @@ const Form = () => {
     setIsError,
     searchCount
   } = useValidationStateManagement();
+
+  const { errorState, errorSetState } = useNumericFieldValidation();
+
+  const { caratError } = errorState;
+  const { setCaratError } = errorSetState;
 
   const { data, error } = useGetProductCountQuery(
     {
@@ -226,17 +239,19 @@ const Form = () => {
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {}
     },
-    { variant: 'primary', svg: searchIcon, label: 'Search', handler: () => {} }
+    {
+      variant: 'primary',
+      svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
+      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
+      handler: () => {}
+    }
   ];
-  console.log('messageColor', messageColor);
 
   return (
-    <div>
-      {/* <TopNavigationBar/> */}
+    <div className="pt-[32px]">
       <div>
-        {/* <SideNavigationBar/> */}
         <div>
-          <div className="flex flex-col gap-[16px] w-[calc(100%-148px)]">
+          <div className="flex flex-col gap-[16px]">
             <div>
               <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
                 Search for Diamonds
@@ -255,9 +270,16 @@ const Form = () => {
                 caratMin={caratMin}
                 setCaratMin={setCaratMin}
                 setCaratMax={setCaratMax}
+                selectedCaratRange={selectedCaratRange}
+                setSelectedCaratRange={setSelectedCaratRange}
+                caratError={caratError}
+                setCaratError={setCaratError}
               />
               <Color
                 selectedColor={selectedColor}
+                selectedFancyColor={selectedFancyColor}
+                selectedIntensity={selectedIntensity}
+                selectedOvertone={selectedOvertone}
                 selectedWhiteColor={selectedWhiteColor}
                 setSelectedColor={setSelectedColor}
                 setSelectedWhiteColor={setSelectedWhiteColor}
@@ -270,21 +292,30 @@ const Form = () => {
               setSelectedClarity={setSelectedClarity}
               selectedClarity={selectedClarity}
             />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <MakeCutPolishSymmetry state={state} setState={setState} />
+              <div className="flex flex-col gap-[16px]">
+                <Lab
+                  selectedLab={selectedLab}
+                  setSelectedLab={setSelectedLab}
+                />
+                <Location
+                  selectedLocation={selectedLocation}
+                  setSelectedLocation={setSelectedLocation}
+                />
+              </div>
+            </div>
 
-            <PolishSymmetry />
-            <Fluorescence
-              selectedFluorescence={selectedFluorescence}
-              setSelectedFluorescence={setSelectedFluorescence}
-            />
-            <Lab selectedLab={selectedLab} setSelectedLab={setSelectedLab} />
-            <Location
-              selectedLocation={selectedLocation}
-              setSelectedLocation={setSelectedLocation}
-            />
-            <CountryOfOrigin
-              selectedOrigin={selectedOrigin}
-              setSelectedOrigin={setSelectedOrigin}
-            />
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <Fluorescence
+                selectedFluorescence={selectedFluorescence}
+                setSelectedFluorescence={setSelectedFluorescence}
+              />
+              <CountryOfOrigin
+                selectedOrigin={selectedOrigin}
+                setSelectedOrigin={setSelectedOrigin}
+              />
+            </div>
             <Shade
               selectedShade={selectedShade}
               setSelectedShade={setSelectedShade}
@@ -303,15 +334,17 @@ const Form = () => {
               pricePerCaratMin={pricePerCaratMin}
               pricePerCaratMax={pricePerCaratMax}
             />
-            <Parameters />
-            <Girdle
-              selectedGirdle={selectedGirdle}
-              setSelectedGirdle={setSelectedGirdle}
-            />
-            <Culet
-              selectedCulet={selectedCulet}
-              setSelectedCulet={setSelectedCulet}
-            />
+            <Parameters state={state} setState={setState}  errorSetState={errorSetState} errorState={errorState}/>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <Girdle
+                selectedGirdle={selectedGirdle}
+                setSelectedGirdle={setSelectedGirdle}
+              />
+              <Culet
+                selectedCulet={selectedCulet}
+                setSelectedCulet={setSelectedCulet}
+              />
+            </div>
             <Inclusions state={state} setState={setState} />
             <KeyToSymbol
               selectedKeyToSymbol={selectedKeyToSymbol}
@@ -319,15 +352,14 @@ const Form = () => {
             />
           </div>
         </div>
-        <div className="w-full bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] px-[32px] border-t-[1px] border-neutral200 flex justify-end">
-          {isError && (
-            <div className="w-[80%] flex items-center">
-              <span />
+        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
+          <div className=" flex items-center">
+            {isError && (
               <p className={`text-mRegular font-medium text-${messageColor}`}>
                 {!isValidationError && errorText}
               </p>
-            </div>
-          )}
+            )}
+          </div>
           <ActionButton actionButtonData={actionButtonData} />
         </div>
       </div>
