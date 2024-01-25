@@ -171,7 +171,7 @@ const Form = () => {
           setErrorText(NO_STONE_FOUND);
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
-          setMessageColor('successMain');
+          setMessageColor('[#008243]');
           setIsError(true);
           data?.count && setErrorText(`${data?.count} stones found`);
         } else {
@@ -192,6 +192,8 @@ const Form = () => {
     }
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl, messageColor]);
+
+  console.log('message color', messageColor);
 
   const handleFormReset = () => {
     setSelectedStep('');
@@ -372,9 +374,11 @@ const Form = () => {
         <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
           <div className=" flex items-center">
             {isError && (
-              <p className={`text-mRegular font-medium text-${messageColor}`}>
+              <span
+                className={`text-mRegular font-medium text-${messageColor}`}
+              >
                 {!isValidationError && errorText}
-              </p>
+              </span>
             )}
           </div>
           <ActionButton actionButtonData={actionButtonData} />
