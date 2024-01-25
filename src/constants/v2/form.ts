@@ -92,7 +92,7 @@ export const anchor = [
   'Girdle',
   'Culet',
   'Inclusions',
-  'Key to Symbol',
+  'Key to Symbol'
 ];
 
 export const white = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N-Z'];
@@ -493,6 +493,12 @@ export const discount = {
   range: {
     gte: 0,
     lte: 100
+  }
+};
+export const carat = {
+  range: {
+    gte: 0,
+    lte: 30
   }
 };
 export const amount_range = {

@@ -122,7 +122,9 @@ const Form = () => {
     setMessageColor,
     messageColor,
     setIsError,
-    searchCount
+    searchCount,
+    setValidationError,
+    validationError
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -259,12 +261,12 @@ const Form = () => {
         <div>
           <div className="flex flex-col gap-[16px]">
             {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
-              <div>
-                <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
-                  Search for Diamonds
-                </span>
-              </div>
-              <AnchorLinkNavigation anchorNavigations={anchor} />
+            <div>
+              <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
+                Search for Diamonds
+              </span>
+            </div>
+            <AnchorLinkNavigation anchorNavigations={anchor} />
             {/* </div> */}
             <Shape
               setSelectedShape={setSelectedShape}
@@ -281,6 +283,8 @@ const Form = () => {
                 setSelectedCaratRange={setSelectedCaratRange}
                 caratError={caratError}
                 setCaratError={setCaratError}
+                setValidationError={setValidationError}
+                validationError={validationError}
               />
               <Color
                 selectedColor={selectedColor}
@@ -343,6 +347,12 @@ const Form = () => {
               setPricePerCaratError={setPricePerCaratError}
               amountRangeError={amountRangeError}
               setAmountRangeError={setAmountRangeError}
+            />
+            <Parameters
+              state={state}
+              setState={setState}
+              errorSetState={errorSetState}
+              errorState={errorState}
             />
             <Parameters
               state={state}

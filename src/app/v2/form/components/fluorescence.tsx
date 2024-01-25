@@ -4,24 +4,19 @@ import React from 'react';
 import { fluorescence } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
 
-
-
-
-export const Fluorescence = ({
-  state,
-  setState
-}: any) => {
+export const Fluorescence = ({ state, setState }: any) => {
   const {
     selectedCut,
     selectedPolish,
     selectedSymmetry,
     selectedFluorescence
   } = state;
-  const {
-    setSelectedMake,
-    setSelectedFluorescence
-  } = setState;
-  const handleFluorescenceChange = ({data,selectedTile,setSelectedTile}: any) => {
+  const { setSelectedMake, setSelectedFluorescence } = setState;
+  const handleFluorescenceChange = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: any) => {
     handleFilterChange(data, selectedTile, setSelectedTile);
     const temp: string[] = selectedTile;
     const index = temp.indexOf(data);

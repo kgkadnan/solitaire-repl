@@ -131,6 +131,8 @@ export const Color = ({
                       isMulti
                       closeMenuOnSelect={false}
                       autoFocus={false}
+                      // menuIsOpen={true}
+                      // menuPlacement="top"
                     />
                   </div>
                   <div className="w-[200px]">

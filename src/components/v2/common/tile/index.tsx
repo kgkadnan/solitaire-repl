@@ -12,10 +12,14 @@ interface ITileProps {
   }: {
     data: string;
     selectedTile: string[] | string;
-    setSelectedTile: React.Dispatch<React.SetStateAction<string[] | string>>;
+    setSelectedTile:
+      | React.Dispatch<React.SetStateAction<string[]>>
+      | React.Dispatch<React.SetStateAction<string>>;
   }) => void;
   selectedTile: string[] | string;
-  setSelectedTile: React.Dispatch<React.SetStateAction<string[] | string>>;
+  setSelectedTile:
+    | React.Dispatch<React.SetStateAction<string[]>>
+    | React.Dispatch<React.SetStateAction<string>>;
 }
 
 const Tile = ({

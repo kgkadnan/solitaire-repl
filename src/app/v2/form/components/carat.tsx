@@ -5,6 +5,8 @@ import element from '@public/v2/assets/icons/elements.svg';
 import { IActionButtonDataItem } from '@/components/v2/common/action-button/exmple';
 import ActionButton from '@/components/v2/common/action-button';
 import CaratTile from '@/components/v2/common/carat-tile';
+import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { carat } from '@/constants/v2/form';
 
 // export const Carat = ({
 //   state,
@@ -25,6 +27,8 @@ interface ICaratProps {
   setSelectedCaratRange: Dispatch<SetStateAction<string[]>>;
   caratError: string;
   setCaratError: Dispatch<SetStateAction<string>>;
+  validationError: string;
+  setValidationError: Dispatch<SetStateAction<string>>;
 }
 
 export const Carat = ({
@@ -35,7 +39,9 @@ export const Carat = ({
   selectedCaratRange,
   setSelectedCaratRange,
   caratError,
-  setCaratError
+  setCaratError,
+  setValidationError,
+  validationError
 }: ICaratProps) => {
   const handleMaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setCaratMax(event.target.value);
@@ -80,14 +86,14 @@ export const Carat = ({
 
     if (validatedData) {
       if (selectedcaratTile.length < 5) {
-        setCaratError('');
+        setValidationError('');
         if (!selectedcaratTile.includes(validatedData)) {
           setSelectedcaratTile([...selectedcaratTile, validatedData]);
         }
         setCaratMax('');
         setCaratMin('');
       } else {
-        setCaratError('Max 5 carat ranges can be added');
+        setValidationError('Max 5 carat ranges can be added');
       }
     }
   };
@@ -136,12 +142,28 @@ export const Carat = ({
                   minInputData={{
                     minValue: caratMin,
                     minPlaceHolder: '0.60',
-                    minOnchange: handleMinChange
+                    minOnchange: e => {
+                      handleMinChange(e);
+                      handleNumericRange({
+                        min: e.target.value,
+                        max: caratMax,
+                        setErrorState: setCaratError,
+                        rangeCondition: carat.range
+                      });
+                    }
                   }}
                   maxInputData={{
                     maxValue: caratMax,
                     maxPlaceHolder: '3.80',
-                    maxOnchange: handleMaxChange
+                    maxOnchange: e => {
+                      handleMaxChange(e);
+                      handleNumericRange({
+                        min: caratMin,
+                        max: e.target.value,
+                        setErrorState: setCaratError,
+                        rangeCondition: carat.range
+                      });
+                    }
                   }}
                   inputGap="gap-[10px]"
                   errorText={caratError}
@@ -157,6 +179,9 @@ export const Carat = ({
               selectedcaratTile={selectedCaratRange}
               setSelectedcaratTile={setSelectedCaratRange}
             />
+            <div className="h-[1vh] text-dangerMain">
+              {validationError ?? validationError}
+            </div>
           </div>
         }
         accordionTrigger={'Carat'}
