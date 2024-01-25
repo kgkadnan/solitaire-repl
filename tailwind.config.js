@@ -52,7 +52,7 @@ module.exports = {
         bold: 'var(--font-weight-bold)'
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Inter', 'sans-serif']
       },
       colors: {
         //*********Customize**************

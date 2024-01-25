@@ -36,6 +36,8 @@ export const SliderWithInputExample = () => {
       minValue={minValue}
       sliderValue={sliderValue}
       errorText="Please enter both “Min” & “Max”"
+      rangeMin={0}
+      rangeMax={0}
     />
   );
 };

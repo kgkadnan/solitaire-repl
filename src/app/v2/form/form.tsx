@@ -31,9 +31,7 @@ import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
 import addDemand from '@public/v2/assets/icons/add.svg';
 
 import arrowIcon from '@public/v2/assets/icons/arrows.svg';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
-import { useAppSelector } from '@/hooks/hook';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
 import {
@@ -47,8 +45,8 @@ import {
 } from '@/constants/error-messages/form';
 
 const Form = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
   const { state, setState } = useFormStateManagement();
   const {
     caratMax,
@@ -57,7 +55,6 @@ const Form = () => {
     selectedShape,
     selectedColor,
     selectedWhiteColor,
-    selectedFluorescence,
     selectedLab,
     selectedLocation,
     selectedOrigin,
@@ -86,7 +83,6 @@ const Form = () => {
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
-    setSelectedFluorescence,
     setSelectedLab,
     setSelectedLocation,
     setSelectedOrigin,
@@ -103,11 +99,11 @@ const Form = () => {
     setSelectedCaratRange
   } = setState;
 
-  const modifySearchFrom = searchParams.get('edit');
+  // const modifySearchFrom = searchParams.get('edit');
 
-  const searchResult: any = useAppSelector(
-    (store: { searchResult: any }) => store.searchResult
-  );
+  // const searchResult: any = useAppSelector(
+  //   (store: { searchResult: any }) => store.searchResult
+  // );
 
   const {
     setSearchUrl,
