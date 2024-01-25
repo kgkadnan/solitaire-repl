@@ -191,7 +191,6 @@ const Form = () => {
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl, messageColor]);
 
-
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');

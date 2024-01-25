@@ -210,18 +210,14 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
         accordionContent={
           <div className="px-[16px] py-[24px]">
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-             
-                <div
-                    className="flex flex-col gap-[12px]"
-                    key={'Make'}
-                  >
-            <span className="text-sRegular">Make</span>
-              <SingleTile
-                tileData={make}
-                selectedTile={selectedMake}
-                setSelectedTile={setSelectedMake}
-                handleTileClick={handleMakeChange}
-              />
+              <div className="flex flex-col gap-[12px]" key={'Make'}>
+                <span className="text-sRegular">Make</span>
+                <SingleTile
+                  tileData={make}
+                  selectedTile={selectedMake}
+                  setSelectedTile={setSelectedMake}
+                  handleTileClick={handleMakeChange}
+                />
               </div>
               {renderContent.map(content => {
                 return (
