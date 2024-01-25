@@ -36,7 +36,7 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     backgroundColor: 'neutral0',
     minHeight: '10vh',
     height: '17vh',
-    zIndex: 1000
+    zIndex: 1001
   }),
   option: styles => {
     return {

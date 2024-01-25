@@ -31,9 +31,7 @@ import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
 import addDemand from '@public/v2/assets/icons/add.svg';
 
 import arrowIcon from '@public/v2/assets/icons/arrows.svg';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
-import { useAppSelector } from '@/hooks/hook';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
 import {
@@ -47,8 +45,8 @@ import {
 } from '@/constants/error-messages/form';
 
 const Form = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
+  // const router = useRouter();
+  // const searchParams = useSearchParams();
   const { state, setState } = useFormStateManagement();
   const {
     caratMax,
@@ -57,7 +55,6 @@ const Form = () => {
     selectedShape,
     selectedColor,
     selectedWhiteColor,
-    selectedFluorescence,
     selectedLab,
     selectedLocation,
     selectedOrigin,
@@ -86,7 +83,6 @@ const Form = () => {
     setSelectedFancyColor,
     setSelectedIntensity,
     setSelectedOvertone,
-    setSelectedFluorescence,
     setSelectedLab,
     setSelectedLocation,
     setSelectedOrigin,
@@ -103,11 +99,11 @@ const Form = () => {
     setSelectedCaratRange
   } = setState;
 
-  const modifySearchFrom = searchParams.get('edit');
+  // const modifySearchFrom = searchParams.get('edit');
 
-  const searchResult: any = useAppSelector(
-    (store: { searchResult: any }) => store.searchResult
-  );
+  // const searchResult: any = useAppSelector(
+  //   (store: { searchResult: any }) => store.searchResult
+  // );
 
   const {
     setSearchUrl,
@@ -122,7 +118,9 @@ const Form = () => {
     setMessageColor,
     messageColor,
     setIsError,
-    searchCount
+    searchCount,
+    setValidationError,
+    validationError
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -260,13 +258,14 @@ const Form = () => {
       <div>
         <div>
           <div className="flex flex-col gap-[16px]">
+            {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
             <div>
               <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
                 Search for Diamonds
               </span>
             </div>
             <AnchorLinkNavigation anchorNavigations={anchor} />
-
+            {/* </div> */}
             <Shape
               setSelectedShape={setSelectedShape}
               selectedShape={selectedShape}
@@ -282,6 +281,8 @@ const Form = () => {
                 setSelectedCaratRange={setSelectedCaratRange}
                 caratError={caratError}
                 setCaratError={setCaratError}
+                setValidationError={setValidationError}
+                validationError={validationError}
               />
               <Color
                 selectedColor={selectedColor}
@@ -315,10 +316,7 @@ const Form = () => {
             </div>
 
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Fluorescence
-                selectedFluorescence={selectedFluorescence}
-                setSelectedFluorescence={setSelectedFluorescence}
-              />
+              <Fluorescence state={state} setState={setState} />
               <CountryOfOrigin
                 selectedOrigin={selectedOrigin}
                 setSelectedOrigin={setSelectedOrigin}
@@ -348,6 +346,7 @@ const Form = () => {
               amountRangeError={amountRangeError}
               setAmountRangeError={setAmountRangeError}
             />
+
             <Parameters
               state={state}
               setState={setState}

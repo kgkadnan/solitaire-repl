@@ -5,8 +5,6 @@ import {
   AccordionTrigger
 } from '@/components/v2/ui/accordion';
 import styles from './accordion.module.scss';
-import essentials from '@public/assets/icons/Essentials.svg';
-import Image from 'next/image';
 
 interface IAccordionCompProps {
   isDisable?: boolean;
@@ -37,10 +35,7 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
           } ${styles.accordionTriggerStyle}`}
           disabled={isDisable}
         >
-          <div className="flex items-center gap-2">
-            {hasError ? <Image src={essentials} alt="essentials" /> : null}
-            {accordionTrigger}
-          </div>
+          <div className="flex items-center gap-2">{accordionTrigger}</div>
         </AccordionTrigger>
         <AccordionContent
           className={`${styles.accordionSuccessStyle} ${styles.accordionContentStyle}`}
