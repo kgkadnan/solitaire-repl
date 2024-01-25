@@ -56,15 +56,7 @@ export const Carat = ({
     if (caratRange[0] === '' || caratRange[1] === '') {
       setCaratError(`Please enter a valid carat range.`);
       return;
-    } else if (caratRange[0] === '0' || caratRange[1] === '0') {
-      setCaratError('Please enter value between “0.10 to 50”');
-      return;
-    } else if (caratRange[0] > caratRange[1]) {
-      setCaratError(
-        `Carat range cannot be ${caratRange[0]} to ${caratRange[1]}. Please enter a valid carat range.`
-      );
-      return;
-    } else if (caratRange.length === 2) {
+    }  else if (caratRange.length === 2) {
       const caratFrom = parseFloat(caratRange[0]).toFixed(2);
       const caratTo = parseFloat(caratRange[1]).toFixed(2);
       return `${caratFrom}-${caratTo}`;
