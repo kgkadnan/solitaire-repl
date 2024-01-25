@@ -49,6 +49,8 @@ export const DiscountPrice = ({
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '100',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setDiscountMax(event.target.value);
         handleNumericRange({
@@ -74,10 +76,14 @@ export const DiscountPrice = ({
       maxValue: discountMax,
       minValue: discountMin,
       sliderValue: [discountMin, discountMax],
-      errorText: discountError
+      errorText: discountError,
+      rangeMax: 100,
+      rangeMin: 0
     },
     {
       label: 'Price/Ct',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '999999',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setPricePerCaratMax(event.target.value);
         handleNumericRange({
@@ -103,10 +109,14 @@ export const DiscountPrice = ({
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
       sliderValue: [pricePerCaratMin, pricePerCaratMax],
-      errorText: pricePerCaratError
+      errorText: pricePerCaratError,
+      rangeMax: 999999,
+      rangeMin: 0
     },
     {
       label: 'Amount Range',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '999999',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setAmountRangeMax(event.target.value);
         handleNumericRange({
@@ -132,7 +142,9 @@ export const DiscountPrice = ({
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
       sliderValue: [amountRangeMin, amountRangeMax],
-      errorText: amountRangeError
+      errorText: amountRangeError,
+      rangeMax: 999999,
+      rangeMin: 0
     }
   ];
 
@@ -147,8 +159,8 @@ export const DiscountPrice = ({
               return (
                 <div key={items.label}>
                   <SliderWithMinMaxInput
-                    minPlaceHolder="0"
-                    maxPlaceHolder="100"
+                    minPlaceHolder={items.minPlaceHolder}
+                    maxPlaceHolder={items.maxPlaceHolder}
                     label={items.label}
                     handleMaxChange={items.handleMaxChange}
                     handleMinChange={items.handleMinChange}
@@ -157,6 +169,8 @@ export const DiscountPrice = ({
                     minValue={items.minValue}
                     sliderValue={items.sliderValue}
                     errorText={items.errorText}
+                    rangeMax={items.rangeMax}
+                    rangeMin={items.rangeMin}
                   />
                 </div>
               );

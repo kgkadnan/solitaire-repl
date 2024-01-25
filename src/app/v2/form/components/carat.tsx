@@ -87,7 +87,7 @@ export const Carat = ({
         setCaratMax('');
         setCaratMin('');
       } else {
-        setCaratError('Max upto 5 carat can be added');
+        setCaratError('Max 5 carat ranges can be added');
       }
     }
   };

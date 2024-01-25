@@ -20,13 +20,13 @@ export const handleNumericRange = ({
   }
 
   if (parsedMin > parsedMax) {
-    setErrorState('"Min" value cannot be greater than "Max" value.');
+    setErrorState('“Min” should be less than “Max”');
     return;
   }
 
   if (parsedMin < rangeCondition.gte || parsedMax > rangeCondition.lte) {
     setErrorState(
-      `Values must be between ${rangeCondition.gte} and ${rangeCondition.lte}.`
+      `Please enter a range between ${rangeCondition.gte} to ${rangeCondition.lte} only`
     );
     return;
   }
