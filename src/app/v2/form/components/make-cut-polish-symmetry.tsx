@@ -49,7 +49,10 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
               {renderContent.map(content => {
                 return (
-                  <div className="flex flex-col gap-[12px]">
+                  <div
+                    className="flex flex-col gap-[12px]"
+                    key={content.header}
+                  >
                     <span className="text-sRegular">{content.header}</span>
                     <Tile
                       tileData={content.data}

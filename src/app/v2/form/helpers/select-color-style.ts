@@ -16,7 +16,7 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     border: '1px solid neutral200',
     // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
     outline: '1px solid neutral200',
-    width: '100%',
+    width: '100%'
     // ':hover': {
     //   border: 'none',
     //   borderBottom: '1px solid neutral200'
@@ -36,7 +36,7 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     backgroundColor: 'neutral0',
     minHeight: '10vh',
     height: '17vh',
-    zIndex:1000
+    zIndex: 1001
   }),
   option: styles => {
     return {
@@ -59,7 +59,7 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     return {
       ...styles,
       backgroundColor: 'neutral200',
-      color:'neutral900'
+      color: 'neutral900'
     };
   },
   multiValueLabel: styles => ({
