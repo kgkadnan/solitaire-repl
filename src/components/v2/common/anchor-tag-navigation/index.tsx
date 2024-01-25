@@ -44,7 +44,6 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
             >
               {links}
             </Link>
-            {console.log('hehrhe')}
           </>
         ))}
       </div>
