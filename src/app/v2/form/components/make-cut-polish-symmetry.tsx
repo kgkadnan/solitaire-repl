@@ -99,7 +99,6 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
     firstCriteria: string[],
     secondCriteria: string[]
   ) => {
-    console.log(selectedFluorescence, 'selectedFluorescence');
     handleFilterChange(data, selectedFilter, setSelectedFilter);
     const temp: string[] = [...selectedFilter];
     const index = temp.indexOf(data);
@@ -211,12 +210,15 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
         accordionContent={
           <div className="px-[16px] py-[24px]">
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <SingleTile
-                tileData={make}
-                selectedTile={selectedMake}
-                setSelectedTile={setSelectedMake}
-                handleTileClick={handleMakeChange}
-              />
+              <div className="flex flex-col gap-[12px]" key={'Make'}>
+                <span className="text-sRegular">Make</span>
+                <SingleTile
+                  tileData={make}
+                  selectedTile={selectedMake}
+                  setSelectedTile={setSelectedMake}
+                  handleTileClick={handleMakeChange}
+                />
+              </div>
               {renderContent.map(content => {
                 return (
                   <div
