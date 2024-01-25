@@ -1,5 +1,5 @@
 'use client';
-import React, { Dispatch, SetStateAction } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
@@ -46,6 +46,25 @@ export const DiscountPrice = ({
   pricePerCaratMax,
   discountError
 }: IShapeProps) => {
+  const [priceStep, setPriceStep] = useState<number>(1);
+  const [amountStep, setAmountStep] = useState<number>(1);
+  const [discountStep, setDiscountStep] = useState<number>(1);
+  const handleRangeChange = (minValue: string, maxValue: string) => {
+    const range = parseInt(maxValue) - parseInt(minValue);
+
+    if (range <= 100) {
+      return 1;
+    } else if (range <= 101) {
+      return 10;
+    } else if (range <= 10000) {
+      return 50;
+    } else if (range <= 50000) {
+      return 100;
+    } else {
+      return 500;
+    }
+  };
+
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
@@ -72,13 +91,16 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setDiscountMin(newValue[0]);
         setDiscountMax(newValue[1]);
+        const step = handleRangeChange(discountMin, discountMax);
+        setDiscountStep(step);
       },
       maxValue: discountMax,
       minValue: discountMin,
       sliderValue: [discountMin, discountMax],
       errorText: discountError,
       rangeMax: 100,
-      rangeMin: 0
+      rangeMin: 0,
+      step: discountStep
     },
     {
       label: 'Price/Ct',
@@ -105,13 +127,16 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setPricePerCaratMin(newValue[0]);
         setPricePerCaratMax(newValue[1]);
+        const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
+        setPriceStep(step);
       },
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
       sliderValue: [pricePerCaratMin, pricePerCaratMax],
       errorText: pricePerCaratError,
       rangeMax: 999999,
-      rangeMin: 0
+      rangeMin: 0,
+      step: priceStep
     },
     {
       label: 'Amount Range',
@@ -138,13 +163,16 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setAmountRangeMin(newValue[0]);
         setAmountRangeMax(newValue[1]);
+        const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
+        setAmountStep(step);
       },
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
       sliderValue: [amountRangeMin, amountRangeMax],
       errorText: amountRangeError,
       rangeMax: 999999,
-      rangeMin: 0
+      rangeMin: 0,
+      step: amountStep
     }
   ];
 
@@ -171,6 +199,7 @@ export const DiscountPrice = ({
                     errorText={items.errorText}
                     rangeMax={items.rangeMax}
                     rangeMin={items.rangeMin}
+                    steps={items.step}
                   />
                 </div>
               );
