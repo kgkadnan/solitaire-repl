@@ -308,7 +308,7 @@ export const Parameters = ({
         value="Parameters"
         isDisable={false}
         accordionContent={
-          <div className="flex flex-wrap gap-[30px] px-[16px] py-[24px]">
+          <div className="flex flex-wrap gap-[24px] px-[16px] py-[24px]">
             {parameterData.map(
               ({
                 label,

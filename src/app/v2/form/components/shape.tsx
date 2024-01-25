@@ -1,7 +1,7 @@
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import ImageTile from '@/components/v2/common/image-tile';
 import React, { Dispatch, SetStateAction } from 'react';
-import { shape  } from '@/constants/v2/form';
+import { shape } from '@/constants/v2/form';
 import { compareArrays } from '../helpers/compare-arrays';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
 
@@ -11,11 +11,8 @@ interface IShapeProps {
 }
 
 export const Shape = ({ selectedShape, setSelectedShape }: IShapeProps) => {
-
   const handleShapeChange = (shapeData: string) => {
-    const filteredShape: string[] = shape.map(
-      data => data.short_name
-    );
+    const filteredShape: string[] = shape.map(data => data.short_name);
     if (shapeData.toLowerCase() === 'all') {
       setSelectedShape(filteredShape);
       if (selectedShape.includes('All')) {

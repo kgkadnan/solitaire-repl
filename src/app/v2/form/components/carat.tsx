@@ -56,7 +56,7 @@ export const Carat = ({
     if (caratRange[0] === '' || caratRange[1] === '') {
       setCaratError(`Please enter a valid carat range.`);
       return;
-    }  else if (caratRange.length === 2) {
+    } else if (caratRange.length === 2) {
       const caratFrom = parseFloat(caratRange[0]).toFixed(2);
       const caratTo = parseFloat(caratRange[1]).toFixed(2);
       return `${caratFrom}-${caratTo}`;

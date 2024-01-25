@@ -11,7 +11,11 @@ interface IKeyToSymbolProps {
   setSelectedKeyToSymbol: Dispatch<SetStateAction<string[]>>;
 }
 
-const handleKeyToSymbolChange = ({data,selectedTile,setSelectedTile}: any) => {
+const handleKeyToSymbolChange = ({
+  data,
+  selectedTile,
+  setSelectedTile
+}: any) => {
   if (data.toLowerCase() === 'all') {
     setSelectedTile(keyToSymbol);
     if (selectedTile.includes('All')) {
@@ -26,18 +30,12 @@ const handleKeyToSymbolChange = ({data,selectedTile,setSelectedTile}: any) => {
     } else if (
       compareArrays(
         selectedTile.filter((data: string) => data !== 'All'),
-        keyToSymbol.filter(
-          data1 => data1 !== 'All' && data1 !== data
-        )
+        keyToSymbol.filter(data1 => data1 !== 'All' && data1 !== data)
       )
     ) {
       setSelectedTile(keyToSymbol);
     } else {
-      handleFilterChange(
-        data,
-        selectedTile,
-        setSelectedTile
-      );
+      handleFilterChange(data, selectedTile, setSelectedTile);
     }
   }
 };
