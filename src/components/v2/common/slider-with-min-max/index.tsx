@@ -14,6 +14,9 @@ interface ISliderWithMinMaxInputProps {
   label: string;
   minPlaceHolder: string;
   maxPlaceHolder: string;
+  rangeMin: number;
+  rangeMax: number;
+  steps: number;
 }
 
 export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
@@ -26,7 +29,10 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
   errorText,
   label,
   minPlaceHolder,
-  maxPlaceHolder
+  maxPlaceHolder,
+  rangeMin,
+  rangeMax,
+  steps
 }) => {
   return (
     <div className="flex flex-col gap-[16px]">
@@ -52,6 +58,9 @@ export const SliderWithMinMaxInput: React.FC<ISliderWithMinMaxInputProps> = ({
       <RangeSlider
         handleSliderChange={handleSliderChange}
         sliderValue={sliderValue}
+        rangeMax={rangeMax}
+        rangeMin={rangeMin}
+        steps={steps}
       />
     </div>
   );

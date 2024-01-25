@@ -2,41 +2,205 @@ import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
 import { cut, make, polish, symmetry } from '@/constants/v2/form';
 import React from 'react';
-import { handleChange } from '../helpers/handle-change';
+import { handleFilterChange } from '../helpers/handle-filter-changes';
+import SingleTile from '@/components/v2/common/tile/single-tile';
 
 export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
-  const { selectedMake, selectedCut, selectedPolish, selectedSymmetry } = state;
+  const {
+    selectedMake,
+    selectedCut,
+    selectedPolish,
+    selectedSymmetry,
+    selectedFluorescence
+  } = state;
   const {
     setSelectedMake,
     setSelectedCut,
     setSelectedPolish,
-    setSelectedSymmetry
+    setSelectedSymmetry,
+    setSelectedFluorescence
   } = setState;
 
+  // Function to handle make change based on user selection
+  const handleMakeChange = ({ data, selectedTile, setSelectedTile }: any) => {
+    if (data.toLowerCase() === '3ex') {
+      if (data !== selectedMake) {
+        setSelectedCut(['EX']);
+        setSelectedPolish(['EX']);
+        setSelectedSymmetry(['EX']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+      setSelectedFluorescence(
+        selectedFluorescence.filter((e: string) => e !== 'NON')
+      );
+    }
+    if (data.toLowerCase() === '3ex+non') {
+      if (data !== selectedTile) {
+        setSelectedCut(['EX']);
+        setSelectedPolish(['EX']);
+        setSelectedSymmetry(['EX']);
+        setSelectedFluorescence(['NON']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+        setSelectedFluorescence([]);
+      }
+    }
+    if (data.toLowerCase() === '3vg+ex') {
+      if (data !== selectedTile) {
+        setSelectedCut(['EX', 'VG']);
+        setSelectedPolish(['EX', 'VG']);
+        setSelectedSymmetry(['EX', 'VG']);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+      setSelectedFluorescence(
+        selectedFluorescence.filter((e: string) => e !== 'NON')
+      );
+    }
+    if (data.toLowerCase() === '3g') {
+      if (data !== selectedTile) {
+        setSelectedCut(['G']);
+        setSelectedPolish(['G']);
+        setSelectedSymmetry(['G']);
+        setSelectedFluorescence([]);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+    }
+    if (data.toLowerCase() === '3f') {
+      if (data !== selectedTile) {
+        setSelectedCut(['F']);
+        setSelectedPolish(['F']);
+        setSelectedSymmetry(['F']);
+        setSelectedFluorescence([]);
+      } else {
+        setSelectedCut([]);
+        setSelectedPolish([]);
+        setSelectedSymmetry([]);
+      }
+    }
+    setSelectedTile(data === selectedTile ? '' : data);
+  };
+
+  // Function to handle filter change and make selection based on user input
+  const handleFilterChangeAndMakeSelection = (
+    data: string,
+    selectedFilter: string[],
+    setSelectedFilter: React.Dispatch<React.SetStateAction<string[]>>,
+    firstCriteria: string[],
+    secondCriteria: string[]
+  ) => {
+    console.log(selectedFluorescence, 'selectedFluorescence');
+    handleFilterChange(data, selectedFilter, setSelectedFilter);
+    const temp: string[] = [...selectedFilter];
+    const index = temp.indexOf(data);
+    if (index !== -1) {
+      temp.splice(index, 1);
+    } else {
+      temp.push(data);
+    }
+    if (
+      temp.toString() === 'EX' &&
+      firstCriteria.toString() === 'EX' &&
+      secondCriteria.toString() === 'EX'
+    ) {
+      if (selectedFluorescence.toString() === 'NON') {
+        setSelectedMake('3EX+NON');
+      } else {
+        setSelectedMake('3EX');
+      }
+    } else if (
+      (firstCriteria.toString() === 'EX,VG' ||
+        firstCriteria.toString() === 'VG,EX') &&
+      (secondCriteria.toString() === 'EX,VG' ||
+        secondCriteria.toString() === 'VG,EX') &&
+      (temp.toString() === 'EX,VG' || temp.toString() === 'VG,EX')
+    ) {
+      setSelectedMake('3VG+EX');
+    } else if (
+      temp.toString() === 'G' &&
+      firstCriteria.toString() === 'G' &&
+      secondCriteria.toString() === 'G'
+    ) {
+      setSelectedMake('3G');
+    } else if (
+      temp.toString() === 'F' &&
+      firstCriteria.toString() === 'F' &&
+      secondCriteria.toString() === 'F'
+    ) {
+      setSelectedMake('3F');
+    } else {
+      setSelectedMake('');
+    }
+  };
+
+  // Function to handle filter changes and cut selection based on user input
+  const handleCutChange = ({ data, selectedTile, setSelectedTile }: any) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedTile,
+      setSelectedTile,
+      selectedPolish,
+      selectedSymmetry
+    );
+  };
+
+  // Function to handle filter changes and polish selection based on user input
+  const handlePolishChange = ({ data, selectedTile, setSelectedTile }: any) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedTile,
+      setSelectedTile,
+      selectedCut,
+      selectedSymmetry
+    );
+  };
+
+  // Function to handle filter changes and symmetry selection based on user input
+  const handleSymmetryChange = ({
+    data,
+    selectedTile,
+    setSelectedTile
+  }: any) => {
+    handleFilterChangeAndMakeSelection(
+      data,
+      selectedTile,
+      setSelectedTile,
+      selectedCut,
+      selectedPolish
+    );
+  };
+
   const renderContent = [
-    {
-      header: 'Make',
-      data: make,
-      selected: selectedMake,
-      setSelected: setSelectedMake
-    },
     {
       header: 'Cut',
       data: cut,
       selected: selectedCut,
-      setSelected: setSelectedCut
+      setSelected: setSelectedCut,
+      handleChange: handleCutChange
     },
     {
       header: 'Polish',
       data: polish,
       selected: selectedPolish,
-      setSelected: setSelectedPolish
+      setSelected: setSelectedPolish,
+      handleChange: handlePolishChange
     },
     {
       header: 'Symmetry',
       data: symmetry,
       selected: selectedSymmetry,
-      setSelected: setSelectedSymmetry
+      setSelected: setSelectedSymmetry,
+      handleChange: handleSymmetryChange
     }
   ];
   return (
@@ -47,6 +211,12 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
         accordionContent={
           <div className="px-[16px] py-[24px]">
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+              <SingleTile
+                tileData={make}
+                selectedTile={selectedMake}
+                setSelectedTile={setSelectedMake}
+                handleTileClick={handleMakeChange}
+              />
               {renderContent.map(content => {
                 return (
                   <div
@@ -58,7 +228,7 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
                       tileData={content.data}
                       selectedTile={content.selected}
                       setSelectedTile={content.setSelected}
-                      handleTileClick={handleChange}
+                      handleTileClick={content.handleChange}
                     />
                   </div>
                 );

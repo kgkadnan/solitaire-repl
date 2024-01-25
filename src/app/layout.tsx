@@ -16,8 +16,8 @@ import {
   v2Routes
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
-import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
+import Head from 'next/head';
 
 const store = setupStore();
 
@@ -41,6 +41,12 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   return (
     <html lang="en">
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Inter'"
+        />
+      </Head>
       <body className={inter.className}>
         <Provider store={store}>
           <ThemeProviders isV2Route={isV2Route}>
