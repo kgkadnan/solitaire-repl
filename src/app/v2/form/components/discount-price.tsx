@@ -2,6 +2,8 @@
 import React, { Dispatch, SetStateAction } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
+import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { amount_range, discount, price_per_carat } from '@/constants/v2/form';
 
 interface IShapeProps {
   setDiscountMin: Dispatch<SetStateAction<string>>;
@@ -10,12 +12,18 @@ interface IShapeProps {
   setAmountRangeMax: Dispatch<SetStateAction<string>>;
   setPricePerCaratMin: Dispatch<SetStateAction<string>>;
   setPricePerCaratMax: Dispatch<SetStateAction<string>>;
+  setDiscountError: Dispatch<SetStateAction<string>>;
+  setPricePerCaratError: Dispatch<SetStateAction<string>>;
+  setAmountRangeError: Dispatch<SetStateAction<string>>;
+  pricePerCaratError: string;
   discountMin: string;
   discountMax: string;
   amountRangeMin: string;
   amountRangeMax: string;
   pricePerCaratMin: string;
   pricePerCaratMax: string;
+  discountError: string;
+  amountRangeError: string;
 }
 
 export const DiscountPrice = ({
@@ -25,21 +33,41 @@ export const DiscountPrice = ({
   setAmountRangeMax,
   setPricePerCaratMin,
   setPricePerCaratMax,
+  setDiscountError,
+  setPricePerCaratError,
+  setAmountRangeError,
+  pricePerCaratError,
+  amountRangeError,
   discountMin,
   discountMax,
   amountRangeMin,
   amountRangeMax,
   pricePerCaratMin,
-  pricePerCaratMax
+  pricePerCaratMax,
+  discountError
 }: IShapeProps) => {
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '100',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setDiscountMax(event.target.value);
+        handleNumericRange({
+          min: discountMin,
+          max: event.target.value,
+          setErrorState: setDiscountError,
+          rangeCondition: discount.range
+        });
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setDiscountMin(event.target.value);
+        handleNumericRange({
+          min: event.target.value,
+          max: discountMax,
+          setErrorState: setDiscountError,
+          rangeCondition: discount.range
+        });
       },
       handleSliderChange: (newValue: string[]) => {
         setDiscountMin(newValue[0]);
@@ -48,15 +76,31 @@ export const DiscountPrice = ({
       maxValue: discountMax,
       minValue: discountMin,
       sliderValue: [discountMin, discountMax],
-      errorText: ''
+      errorText: discountError,
+      rangeMax: 100,
+      rangeMin: 0
     },
     {
       label: 'Price/Ct',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '999999',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setPricePerCaratMax(event.target.value);
+        handleNumericRange({
+          min: pricePerCaratMin,
+          max: event.target.value,
+          setErrorState: setPricePerCaratError,
+          rangeCondition: price_per_carat.range
+        });
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setPricePerCaratMin(event.target.value);
+        handleNumericRange({
+          min: event.target.value,
+          max: pricePerCaratMax,
+          setErrorState: setPricePerCaratError,
+          rangeCondition: price_per_carat.range
+        });
       },
       handleSliderChange: (newValue: string[]) => {
         setPricePerCaratMin(newValue[0]);
@@ -65,15 +109,31 @@ export const DiscountPrice = ({
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
       sliderValue: [pricePerCaratMin, pricePerCaratMax],
-      errorText: ''
+      errorText: pricePerCaratError,
+      rangeMax: 999999,
+      rangeMin: 0
     },
     {
       label: 'Amount Range',
+      minPlaceHolder: '0',
+      maxPlaceHolder: '999999',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setAmountRangeMax(event.target.value);
+        handleNumericRange({
+          min: amountRangeMin,
+          max: event.target.value,
+          setErrorState: setAmountRangeError,
+          rangeCondition: amount_range.range
+        });
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setAmountRangeMin(event.target.value);
+        handleNumericRange({
+          min: event.target.value,
+          max: amountRangeMax,
+          setErrorState: setAmountRangeError,
+          rangeCondition: amount_range.range
+        });
       },
       handleSliderChange: (newValue: string[]) => {
         setAmountRangeMin(newValue[0]);
@@ -82,7 +142,9 @@ export const DiscountPrice = ({
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
       sliderValue: [amountRangeMin, amountRangeMax],
-      errorText: ''
+      errorText: amountRangeError,
+      rangeMax: 999999,
+      rangeMin: 0
     }
   ];
 
@@ -97,8 +159,8 @@ export const DiscountPrice = ({
               return (
                 <div key={items.label}>
                   <SliderWithMinMaxInput
-                    minPlaceHolder="0"
-                    maxPlaceHolder="100"
+                    minPlaceHolder={items.minPlaceHolder}
+                    maxPlaceHolder={items.maxPlaceHolder}
                     label={items.label}
                     handleMaxChange={items.handleMaxChange}
                     handleMinChange={items.handleMinChange}
@@ -107,6 +169,8 @@ export const DiscountPrice = ({
                     minValue={items.minValue}
                     sliderValue={items.sliderValue}
                     errorText={items.errorText}
+                    rangeMax={items.rangeMax}
+                    rangeMin={items.rangeMin}
                   />
                 </div>
               );
