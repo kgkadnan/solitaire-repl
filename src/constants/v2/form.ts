@@ -488,3 +488,22 @@ export const otherParameter = [
     ]
   }
 ];
+
+export const discount = {
+  range: {
+    gte: 0,
+    lte: 100
+  }
+};
+export const amount_range = {
+  range: {
+    gte: 0,
+    lte: 999999
+  }
+};
+export const price_per_carat = {
+  range: {
+    gte: 0,
+    lte: 999999
+  }
+};
