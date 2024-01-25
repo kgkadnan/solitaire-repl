@@ -38,6 +38,7 @@ export const SliderWithInputExample = () => {
       errorText="Please enter both “Min” & “Max”"
       rangeMin={0}
       rangeMax={0}
+      steps={0}
     />
   );
 };
