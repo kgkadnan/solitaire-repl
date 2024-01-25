@@ -302,6 +302,8 @@ export const Parameters = ({
     return { ...parameters, ...parameter[index] };
   });
 
+  let isErrorPersist = parameterData.some(error => error.errorState.length > 0);
+
   return (
     <div id="Parameters">
       <AccordionComponent
@@ -368,7 +370,7 @@ export const Parameters = ({
           </div>
         }
         accordionTrigger={'Parameters'}
-        hasError={false}
+        hasError={isErrorPersist}
       />
     </div>
   );
