@@ -1,7 +1,7 @@
 export const handleReset = (
-  setState: any
-  //   errorSetState: any,
-  //   setValidationError: any
+  setState: any,
+  errorSetState: any
+  // setValidationError: any
 ) => {
   const {
     setSelectedShape,
@@ -48,56 +48,56 @@ export const handleReset = (
     setNaturalPavilion,
     setSurfaceGraining,
     setInternalGraining,
-    setTablePerFrom,
-    setTablePerTo,
-    setDepthTo,
-    setDepthFrom,
-    setCrownAngleFrom,
-    setCrownAngleTo,
-    setLengthFrom,
-    setLengthTo,
-    setPavilionDepthFrom,
-    setPavilionDepthTo,
-    setDepthPerFrom,
-    setDepthPerTo,
-    setCrownHeightFrom,
-    setCrownHeightTo,
-    setWidthFrom,
-    setWidthTo,
-    setLowerHalfFrom,
-    setLowerHalfTo,
-    setRatioFrom,
-    setRatioTo,
-    setGirdlePerFrom,
-    setGirdlePerTo,
-    setPavilionAngleFrom,
-    setPavilionAngleTo,
-    setStarLengthFrom,
-    setStarLengthTo,
+    setTablePerMin,
+    setTablePerMax,
+    setDepthMin,
+    setDepthMax,
+    setCrownAngleMax,
+    setCrownAngleMin,
+    setLengthMax,
+    setLengthMin,
+    setPavilionHeightMax,
+    setPavilionHeightMin,
+    setDepthPerMax,
+    setDepthPerMin,
+    setCrownHeightMax,
+    setCrownHeightMin,
+    setWidthMax,
+    setWidthMin,
+    setLowerHalfMax,
+    setLowerHalfMin,
+    setRatioMax,
+    setRatioMin,
+    setGirdlePerMax,
+    setGirdlePerMin,
+    setPavilionAngleMax,
+    setPavilionAngleMin,
+    setStarLengthMax,
+    setStarLengthMin,
     setSelectedColor,
     setSelectedGirdle
   } = setState;
 
-  //   const {
-  //     setTablePerError,
-  //     setDepthPerError,
-  //     setRatioError,
-  //     setLengthError,
-  //     setWidthError,
-  //     setDepthError,
-  //     setCrownAngleError,
-  //     setCrownHeightError,
-  //     setGirdlePerError,
-  //     setPavilionAngleError,
-  //     setPavilionHeightError,
-  //     setLowerHalfError,
-  //     setStarLengthError,
-  //     setGirdleError,
-  //     setCaratError,
-  //     setDiscountError,
-  //     setPricePerCaratError,
-  //     setAmountRangeError
-  //   } = errorSetState;
+  const {
+    setTablePerError,
+    setDepthPerError,
+    setRatioError,
+    setLengthError,
+    setWidthError,
+    setDepthError,
+    setCrownAngleError,
+    setCrownHeightError,
+    setGirdlePerError,
+    setPavilionAngleError,
+    setPavilionHeightError,
+    setLowerHalfError,
+    setStarLengthError,
+    setGirdleError,
+    setCaratError,
+    setDiscountError,
+    setPricePerCaratError,
+    setAmountRangeError
+  } = errorSetState;
 
   setSelectedShape([]);
   setSelectedWhiteColor([]);
@@ -105,8 +105,6 @@ export const handleReset = (
   setSelectedFancyColor('');
   setSelectedIntensity('');
   setSelectedOvertone('');
-  setDepthTo('');
-  setDepthFrom('');
   setSelectedShade([]);
   setSelectedClarity([]);
   setSelectedCaratRange([]);
@@ -116,82 +114,82 @@ export const handleReset = (
   setSelectedSymmetry([]);
   setSelectedFluorescence([]);
   setSelectedLab([]);
-  setAmountRangeMin(''),
-    setAmountRangeMax(''),
-    setDiscountMin(''),
-    setDiscountMax(''),
-    setCaratMin(''),
-    setCaratMax(''),
-    setPricePerCaratMin(''),
-    setPricePerCaratMax(''),
-    setCaratRangeFrom('');
+  setAmountRangeMin('');
+  setAmountRangeMax('');
+  setDiscountMin('');
+  setDiscountMax('');
+  setCaratMin('');
+  setCaratMax('');
+  setPricePerCaratMin('');
+  setPricePerCaratMax('');
+  setCaratRangeFrom('');
   setCaratRangeTo('');
-  setBlackTable([]),
-    setSideBlack([]),
-    setOpenCrown([]),
-    setOpenTable([]),
-    setOpenPavilion([]),
-    setMilky([]),
-    setLuster([]),
-    setEyeClean([]),
-    setTableInclusion([]),
-    setSideInclusion([]),
-    setNaturalCrown([]),
-    setNaturalGirdle([]),
-    setNaturalPavilion([]),
-    setSurfaceGraining([]),
-    setInternalGraining([]),
-    setTablePerFrom('');
-  setTablePerTo('');
-  setCrownAngleFrom('');
-  setCrownAngleTo('');
-  setLengthFrom('');
-  setLengthTo('');
-  setPavilionDepthFrom('');
-  setPavilionDepthTo('');
-  setDepthPerFrom('');
-  setDepthPerTo('');
-  setCrownHeightFrom('');
-  setCrownHeightTo('');
-  setWidthFrom('');
-  setWidthTo('');
-  setLowerHalfFrom('');
-  setLowerHalfTo('');
-  setRatioFrom('');
-  setRatioTo('');
-  setGirdlePerFrom('');
-  setGirdlePerTo('');
-  setPavilionAngleFrom('');
-  setPavilionAngleTo('');
-  setStarLengthFrom('');
-  setStarLengthTo('');
+  setTablePerMin('');
+  setTablePerMax('');
+  setDepthMin('');
+  setDepthMax('');
+  setCrownAngleMax('');
+  setCrownAngleMin('');
+  setLengthMax('');
+  setLengthMin('');
+  setPavilionHeightMax('');
+  setPavilionHeightMin('');
+  setDepthPerMax('');
+  setDepthPerMin('');
+  setCrownHeightMax('');
+  setCrownHeightMin('');
+  setWidthMax('');
+  setWidthMin('');
+  setLowerHalfMax('');
+  setLowerHalfMin('');
+  setRatioMax('');
+  setRatioMin('');
+  setGirdlePerMax('');
+  setGirdlePerMin('');
+  setPavilionAngleMax('');
+  setPavilionAngleMin('');
+  setStarLengthMax('');
+  setStarLengthMin('');
+  setBlackTable([]);
+  setSideBlack([]);
+  setOpenCrown([]);
+  setOpenTable([]);
+  setOpenPavilion([]);
+  setMilky([]);
+  setLuster([]);
+  setEyeClean([]);
+  setTableInclusion([]);
+  setSideInclusion([]);
+  setNaturalCrown([]);
+  setNaturalGirdle([]);
+  setNaturalPavilion([]);
+  setSurfaceGraining([]);
+  setInternalGraining([]);
   setSelectedLocation([]);
   setSelectedOrigin([]);
   setSelectedCulet([]);
-  //   setGirdleFrom('');
-  //   setGirdleTo('');
   setSelectedKeyToSymbol([]);
   setSelectedGirdleStep('');
   setSelectedGirdle([]);
 
   //Empty Error States
-  //   setTablePerError('');
-  //   setDepthPerError('');
-  //   setRatioError('');
-  //   setLengthError('');
-  //   setWidthError('');
-  //   setDepthError('');
-  //   setCrownAngleError('');
-  //   setCrownHeightError('');
-  //   setGirdlePerError('');
-  //   setPavilionAngleError('');
-  //   setPavilionHeightError('');
-  //   setLowerHalfError('');
-  //   setStarLengthError('');
-  //   setGirdleError('');
-  //   setCaratError('');
-  //   setDiscountError('');
-  //   setPricePerCaratError('');
-  //   setAmountRangeError('');
-  //   setValidationError('');
+  setTablePerError('');
+  setDepthPerError('');
+  setRatioError('');
+  setLengthError('');
+  setWidthError('');
+  setDepthError('');
+  setCrownAngleError('');
+  setCrownHeightError('');
+  setGirdlePerError('');
+  setPavilionAngleError('');
+  setPavilionHeightError('');
+  setLowerHalfError('');
+  setStarLengthError('');
+  setGirdleError('');
+  setCaratError('');
+  setDiscountError('');
+  setPricePerCaratError('');
+  setAmountRangeError('');
+  // setValidationError('');
 };
