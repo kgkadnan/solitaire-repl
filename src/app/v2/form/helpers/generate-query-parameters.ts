@@ -2,9 +2,18 @@ interface IState {
   selectedShape: string[];
   selectedColor: string;
   selectedWhiteColor: string[];
-  selectedFancyColor: string[];
-  selectedIntensity: string[];
-  selectedOvertone: string[];
+  selectedFancyColor: {
+    label: string;
+    value: string;
+  }[];
+  selectedIntensity: {
+    label: string;
+    value: string;
+  }[];
+  selectedOvertone: {
+    label: string;
+    value: string;
+  }[];
   selectedShade: string[];
   selectedClarity: string[];
   selectedGirdleStep?: string;
@@ -145,6 +154,8 @@ export const generateQueryParams = (state: IState) => {
     selectedGirdle
   } = state;
 
+  console.log('famcy', selectedFancyColor);
+
   // Initialize an empty object to store query parameters
   const queryParams: any = {};
 
@@ -152,21 +163,29 @@ export const generateQueryParams = (state: IState) => {
   selectedShape?.length !== 0 && (queryParams['shape'] = selectedShape);
   selectedWhiteColor?.length !== 0 &&
     (queryParams['color'] = selectedWhiteColor);
+
   selectedFancyColor?.length !== 0 &&
-    (queryParams['fancy_color'] = selectedFancyColor);
+    (queryParams['fancy_color'] = selectedFancyColor.map(
+      fancyColor => fancyColor.value
+    ));
+
   selectedIntensity?.length !== 0 &&
-    (queryParams['fancy_intensity'] = selectedIntensity);
+    (queryParams['fancy_intensity'] = selectedIntensity.map(
+      intensity => intensity.value
+    ));
   selectedOvertone?.length !== 0 &&
-    (queryParams['fancy_overtone'] = selectedOvertone);
+    (queryParams['fancy_overtone'] = selectedOvertone.map(
+      overtone => overtone.value
+    ));
   selectedShade?.length !== 0 && (queryParams['color_shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
-    const formattedCaratData = selectedCaratRange.map(item => {
-      const [min, max] = item.split('-');
-      return { min: parseFloat(min), max: parseFloat(max) };
-    });
+    // const formattedCaratData = selectedCaratRange.map(item => {
+    //   const [min, max] = item.split('-');
+    //   return { min: parseFloat(min), max: parseFloat(max) };
+    // });
 
-    queryParams['carat'] = formattedCaratData;
+    queryParams['carat'] = selectedCaratRange;
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
@@ -225,8 +244,8 @@ export const generateQueryParams = (state: IState) => {
     (queryParams['internal_graining'] = internalGraining);
   selectedGirdle.length &&
     (queryParams['girdle'] = {
-      lte: selectedGirdle[0],
-      gte: selectedGirdle[selectedGirdle.length - 1]
+      lte: selectedGirdle[selectedGirdle.length - 1],
+      gte: selectedGirdle[0]
     });
   tablePerMax &&
     tablePerMin &&
