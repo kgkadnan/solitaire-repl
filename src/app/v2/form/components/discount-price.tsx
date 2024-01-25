@@ -91,6 +91,12 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setDiscountMin(newValue[0]);
         setDiscountMax(newValue[1]);
+        handleNumericRange({
+          min: newValue[0],
+          max: newValue[1],
+          setErrorState: setDiscountError,
+          rangeCondition: discount.range
+        });
         const step = handleRangeChange(discountMin, discountMax);
         setDiscountStep(step);
       },
@@ -102,6 +108,7 @@ export const DiscountPrice = ({
       rangeMin: 0,
       step: discountStep
     },
+
     {
       label: 'Price/Ct',
       minPlaceHolder: '0',
@@ -127,6 +134,12 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setPricePerCaratMin(newValue[0]);
         setPricePerCaratMax(newValue[1]);
+        handleNumericRange({
+          min: newValue[0],
+          max: newValue[1],
+          setErrorState: setPricePerCaratError,
+          rangeCondition: price_per_carat.range
+        });
         const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
         setPriceStep(step);
       },
@@ -163,6 +176,12 @@ export const DiscountPrice = ({
       handleSliderChange: (newValue: string[]) => {
         setAmountRangeMin(newValue[0]);
         setAmountRangeMax(newValue[1]);
+        handleNumericRange({
+          min: newValue[0],
+          max: newValue[1],
+          setErrorState: setAmountRangeError,
+          rangeCondition: amount_range.range
+        });
         const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
         setAmountStep(step);
       },
