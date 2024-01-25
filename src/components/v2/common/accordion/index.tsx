@@ -35,7 +35,7 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
           } ${styles.accordionTriggerStyle}`}
           disabled={isDisable}
         >
-          <div className="flex items-center gap-2">{accordionTrigger}</div>
+          {accordionTrigger}
         </AccordionTrigger>
         <AccordionContent
           className={`${styles.accordionSuccessStyle} ${styles.accordionContentStyle}`}

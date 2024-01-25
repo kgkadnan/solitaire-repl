@@ -84,12 +84,12 @@ export const Color = ({
   };
 
   return (
-    <div id="Color">
+    <div id="Color" className="relative">
       <AccordionComponent
         value="Color"
         isDisable={true}
         accordionContent={
-          <div className="px-[16px] py-[24px] flex flex-col gap-[24px]">
+          <div className="px-[16px] py-[24px] flex flex-col gap-[24px] absolute ">
             <div className="flex justify-end">
               <div className="w-[120px] h-[30px]">
                 <Tabs
@@ -131,8 +131,6 @@ export const Color = ({
                       isMulti
                       closeMenuOnSelect={false}
                       autoFocus={false}
-                      // menuIsOpen={true}
-                      // menuPlacement="top"
                     />
                   </div>
                   <div className="w-[200px]">
