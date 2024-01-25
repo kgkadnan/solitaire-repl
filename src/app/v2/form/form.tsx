@@ -252,13 +252,14 @@ const Form = () => {
       <div>
         <div>
           <div className="flex flex-col gap-[16px]">
-            <div>
-              <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
-                Search for Diamonds
-              </span>
-            </div>
-            <AnchorLinkNavigation anchorNavigations={anchor} />
-
+            {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
+              <div>
+                <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
+                  Search for Diamonds
+                </span>
+              </div>
+              <AnchorLinkNavigation anchorNavigations={anchor} />
+            {/* </div> */}
             <Shape
               setSelectedShape={setSelectedShape}
               selectedShape={selectedShape}
@@ -307,10 +308,7 @@ const Form = () => {
             </div>
 
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Fluorescence
-                selectedFluorescence={selectedFluorescence}
-                setSelectedFluorescence={setSelectedFluorescence}
-              />
+              <Fluorescence state={state} setState={setState} />
               <CountryOfOrigin
                 selectedOrigin={selectedOrigin}
                 setSelectedOrigin={setSelectedOrigin}

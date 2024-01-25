@@ -92,7 +92,7 @@ export const anchor = [
   'Girdle',
   'Culet',
   'Inclusions',
-  'Key to Symbol'
+  'Key to Symbol',
 ];
 
 export const white = ['D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N-Z'];

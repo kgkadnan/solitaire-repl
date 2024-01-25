@@ -98,6 +98,7 @@ export const MakeCutPolishSymmetry = ({ state, setState }: any) => {
     firstCriteria: string[],
     secondCriteria: string[]
   ) => {
+    console.log(selectedFluorescence,"selectedFluorescence")
     handleFilterChange(data, selectedFilter, setSelectedFilter);
     const temp: string[] = [...selectedFilter];
     const index = temp.indexOf(data);
