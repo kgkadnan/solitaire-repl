@@ -199,7 +199,7 @@ const Form = () => {
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
-    handleReset(setState);
+    handleReset(setState, errorSetState);
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
