@@ -127,8 +127,14 @@ const Form = () => {
 
   const { errorState, errorSetState } = useNumericFieldValidation();
 
-  const { caratError } = errorState;
-  const { setCaratError } = errorSetState;
+  const { caratError, discountError, pricePerCaratError, amountRangeError } =
+    errorState;
+  const {
+    setCaratError,
+    setDiscountError,
+    setPricePerCaratError,
+    setAmountRangeError
+  } = errorSetState;
 
   const { data, error } = useGetProductCountQuery(
     {
@@ -333,6 +339,12 @@ const Form = () => {
               amountRangeMax={amountRangeMax}
               pricePerCaratMin={pricePerCaratMin}
               pricePerCaratMax={pricePerCaratMax}
+              setDiscountError={setDiscountError}
+              discountError={discountError}
+              pricePerCaratError={pricePerCaratError}
+              setPricePerCaratError={setPricePerCaratError}
+              amountRangeError={amountRangeError}
+              setAmountRangeError={setAmountRangeError}
             />
             <Parameters
               state={state}
