@@ -5,9 +5,9 @@ const useFormStateManagement = () => {
   const [selectedColor, setSelectedColor] = useState<string>('white');
 
   const [selectedWhiteColor, setSelectedWhiteColor] = useState<string[]>([]);
-  const [selectedFancyColor, setSelectedFancyColor] = useState<string[]>([]);
-  const [selectedIntensity, setSelectedIntensity] = useState<string[]>([]);
-  const [selectedOvertone, setSelectedOvertone] = useState<string[]>([]);
+  const [selectedFancyColor, setSelectedFancyColor] = useState<any>([]);
+  const [selectedIntensity, setSelectedIntensity] = useState<any>([]);
+  const [selectedOvertone, setSelectedOvertone] = useState<any>([]);
   const [selectedShade, setSelectedShade] = useState<string[]>([]);
   const [selectedClarity, setSelectedClarity] = useState<string[]>([]);
   const [, setSelectedGirdleStep] = useState<string>();

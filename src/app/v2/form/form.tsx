@@ -191,15 +191,13 @@ const Form = () => {
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl, messageColor]);
 
-  console.log('message color', messageColor);
-
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
-    handleReset(setState);
+    handleReset(setState, errorSetState);
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
