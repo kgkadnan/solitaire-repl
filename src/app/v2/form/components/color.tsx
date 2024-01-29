@@ -82,7 +82,7 @@ export const Color = ({
   };
 
   return (
-    <div className="relative border-[1px] border-[var(--neutral-200)] rounded-t-[4px]">
+    <div className="relative border-[1px] border-[var(--neutral-200)] rounded-t-[4px]" id='Color'>
       <div className="border-b-[1px] border-[var(--neutral-200)] bg-[var(--neutral-50)] h-[35px] px-[16px] py-[6px]  text-[var(--neutral-900)] font-medium">
         Color
       </div>
