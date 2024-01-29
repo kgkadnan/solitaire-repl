@@ -57,14 +57,16 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
   multiValue: styles => {
     return {
       ...styles,
-      backgroundColor: 'var(--neutral-200)',
-      color: 'var(--neutral-900)'
+      backgroundColor: 'var(--neutral-0)',
+      color: 'var(--neutral-900)',
+      border: '1px solid var(--neutral-200)',
+      borderRadius: '6px'
     };
   },
   multiValueLabel: styles => ({
     ...styles,
     color: 'var(--neutral-900)',
-    backgroundColor: 'var(--neutral-200)'
+    backgroundColor: 'var(--neutral-0)'
   }),
   multiValueRemove: styles => ({
     ...styles,

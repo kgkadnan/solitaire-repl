@@ -154,8 +154,6 @@ export const generateQueryParams = (state: IState) => {
     selectedGirdle
   } = state;
 
-  console.log('famcy', selectedFancyColor);
-
   // Initialize an empty object to store query parameters
   const queryParams: any = {};
 

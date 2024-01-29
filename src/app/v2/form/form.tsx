@@ -254,132 +254,125 @@ const Form = () => {
   return (
     <div className="pt-[32px]">
       <div>
-        <div>
-          <div className="flex flex-col gap-[16px]">
-            {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
-            <div>
-              <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
-                Search for Diamonds
-              </span>
-            </div>
-            <AnchorLinkNavigation anchorNavigations={anchor} />
-            {/* </div> */}
-            <Shape
-              setSelectedShape={setSelectedShape}
-              selectedShape={selectedShape}
-            />
+        <div className="flex flex-col gap-[16px]">
+          {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
+          <div>
+            <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
+              Search for Diamonds
+            </span>
+          </div>
+          <AnchorLinkNavigation anchorNavigations={anchor} />
+          {/* </div> */}
+          <Shape
+            setSelectedShape={setSelectedShape}
+            selectedShape={selectedShape}
+          />
 
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Carat
-                caratMax={caratMax}
-                caratMin={caratMin}
-                setCaratMin={setCaratMin}
-                setCaratMax={setCaratMax}
-                selectedCaratRange={selectedCaratRange}
-                setSelectedCaratRange={setSelectedCaratRange}
-                caratError={caratError}
-                setCaratError={setCaratError}
-                setValidationError={setValidationError}
-                validationError={validationError}
-              />
-              <Color
-                selectedColor={selectedColor}
-                selectedFancyColor={selectedFancyColor}
-                selectedIntensity={selectedIntensity}
-                selectedOvertone={selectedOvertone}
-                selectedWhiteColor={selectedWhiteColor}
-                setSelectedColor={setSelectedColor}
-                setSelectedWhiteColor={setSelectedWhiteColor}
-                setSelectedFancyColor={setSelectedFancyColor}
-                setSelectedIntensity={setSelectedIntensity}
-                setSelectedOvertone={setSelectedOvertone}
-              />
-            </div>
-            <Clarity
-              setSelectedClarity={setSelectedClarity}
-              selectedClarity={selectedClarity}
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+            <Carat
+              caratMax={caratMax}
+              caratMin={caratMin}
+              setCaratMin={setCaratMin}
+              setCaratMax={setCaratMax}
+              selectedCaratRange={selectedCaratRange}
+              setSelectedCaratRange={setSelectedCaratRange}
+              caratError={caratError}
+              setCaratError={setCaratError}
+              setValidationError={setValidationError}
+              validationError={validationError}
             />
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <MakeCutPolishSymmetry state={state} setState={setState} />
-              <div className="flex flex-col gap-[16px]">
-                <Lab
-                  selectedLab={selectedLab}
-                  setSelectedLab={setSelectedLab}
-                />
-                <Location
-                  selectedLocation={selectedLocation}
-                  setSelectedLocation={setSelectedLocation}
-                />
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Fluorescence state={state} setState={setState} />
-              <CountryOfOrigin
-                selectedOrigin={selectedOrigin}
-                setSelectedOrigin={setSelectedOrigin}
-              />
-            </div>
-            <Shade
-              selectedShade={selectedShade}
-              setSelectedShade={setSelectedShade}
-            />
-            <DiscountPrice
-              setDiscountMin={setDiscountMin}
-              setDiscountMax={setDiscountMax}
-              setAmountRangeMin={setAmountRangeMin}
-              setAmountRangeMax={setAmountRangeMax}
-              setPricePerCaratMin={setPricePerCaratMin}
-              setPricePerCaratMax={setPricePerCaratMax}
-              discountMin={discountMin}
-              discountMax={discountMax}
-              amountRangeMin={amountRangeMin}
-              amountRangeMax={amountRangeMax}
-              pricePerCaratMin={pricePerCaratMin}
-              pricePerCaratMax={pricePerCaratMax}
-              setDiscountError={setDiscountError}
-              discountError={discountError}
-              pricePerCaratError={pricePerCaratError}
-              setPricePerCaratError={setPricePerCaratError}
-              amountRangeError={amountRangeError}
-              setAmountRangeError={setAmountRangeError}
-            />
-
-            <Parameters
-              state={state}
-              setState={setState}
-              errorSetState={errorSetState}
-              errorState={errorState}
-            />
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-              <Girdle
-                selectedGirdle={selectedGirdle}
-                setSelectedGirdle={setSelectedGirdle}
-              />
-              <Culet
-                selectedCulet={selectedCulet}
-                setSelectedCulet={setSelectedCulet}
-              />
-            </div>
-            <Inclusions state={state} setState={setState} />
-            <KeyToSymbol
-              selectedKeyToSymbol={selectedKeyToSymbol}
-              setSelectedKeyToSymbol={setSelectedKeyToSymbol}
+            <Color
+              selectedColor={selectedColor}
+              selectedFancyColor={selectedFancyColor}
+              selectedIntensity={selectedIntensity}
+              selectedOvertone={selectedOvertone}
+              selectedWhiteColor={selectedWhiteColor}
+              setSelectedColor={setSelectedColor}
+              setSelectedWhiteColor={setSelectedWhiteColor}
+              setSelectedFancyColor={setSelectedFancyColor}
+              setSelectedIntensity={setSelectedIntensity}
+              setSelectedOvertone={setSelectedOvertone}
             />
           </div>
-        </div>
-        <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
-          <div className=" flex items-center">
-            {isError && (
-              <span
-                className={`text-mRegular font-medium text-${messageColor}`}
-              >
-                {!isValidationError && errorText}
-              </span>
-            )}
+          <Clarity
+            setSelectedClarity={setSelectedClarity}
+            selectedClarity={selectedClarity}
+          />
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+            <MakeCutPolishSymmetry state={state} setState={setState} />
+            <div className="flex flex-col gap-[16px]">
+              <Lab selectedLab={selectedLab} setSelectedLab={setSelectedLab} />
+              <Location
+                selectedLocation={selectedLocation}
+                setSelectedLocation={setSelectedLocation}
+              />
+            </div>
           </div>
-          <ActionButton actionButtonData={actionButtonData} />
+
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+            <Fluorescence state={state} setState={setState} />
+            <CountryOfOrigin
+              selectedOrigin={selectedOrigin}
+              setSelectedOrigin={setSelectedOrigin}
+            />
+          </div>
+          <Shade
+            selectedShade={selectedShade}
+            setSelectedShade={setSelectedShade}
+          />
+          <DiscountPrice
+            setDiscountMin={setDiscountMin}
+            setDiscountMax={setDiscountMax}
+            setAmountRangeMin={setAmountRangeMin}
+            setAmountRangeMax={setAmountRangeMax}
+            setPricePerCaratMin={setPricePerCaratMin}
+            setPricePerCaratMax={setPricePerCaratMax}
+            discountMin={discountMin}
+            discountMax={discountMax}
+            amountRangeMin={amountRangeMin}
+            amountRangeMax={amountRangeMax}
+            pricePerCaratMin={pricePerCaratMin}
+            pricePerCaratMax={pricePerCaratMax}
+            setDiscountError={setDiscountError}
+            discountError={discountError}
+            pricePerCaratError={pricePerCaratError}
+            setPricePerCaratError={setPricePerCaratError}
+            amountRangeError={amountRangeError}
+            setAmountRangeError={setAmountRangeError}
+          />
+
+          <Parameters
+            state={state}
+            setState={setState}
+            errorSetState={errorSetState}
+            errorState={errorState}
+          />
+          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
+            <Girdle
+              selectedGirdle={selectedGirdle}
+              setSelectedGirdle={setSelectedGirdle}
+            />
+            <Culet
+              selectedCulet={selectedCulet}
+              setSelectedCulet={setSelectedCulet}
+            />
+          </div>
+          <Inclusions state={state} setState={setState} />
+          <KeyToSymbol
+            selectedKeyToSymbol={selectedKeyToSymbol}
+            setSelectedKeyToSymbol={setSelectedKeyToSymbol}
+          />
         </div>
+      </div>
+      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
+        <div className=" flex items-center">
+          {isError && (
+            <span className={`text-mRegular font-medium text-${messageColor}`}>
+              {!isValidationError && errorText}
+            </span>
+          )}
+        </div>
+        <ActionButton actionButtonData={actionButtonData} />
       </div>
     </div>
   );
