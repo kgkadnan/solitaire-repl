@@ -1,6 +1,6 @@
 import Tile from '@/components/v2/common/tile';
 import { Tabs } from '@/components/v2/common/toggle';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { color, fancy, intensity, overtone, white } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
 import Select from 'react-select';

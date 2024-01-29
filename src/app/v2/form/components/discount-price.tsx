@@ -1,5 +1,5 @@
 'use client';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
