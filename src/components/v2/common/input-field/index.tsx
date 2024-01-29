@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Input } from '@components/ui/input';
 import { IInputFieldProps } from './interface';
 
@@ -12,12 +12,16 @@ export const InputField = ({
   disabled,
   onBlur,
   maxLength,
-  onFocus,
   onKeyDown
 }: IInputFieldProps) => {
+  function disableWheel(e: any) {
+    e.preventDefault();
+  }
+  const inputRef = useRef<any>(null);
   return (
     <div className={`${styles?.inputMain}`}>
       <Input
+        ref={inputRef}
         style={{ boxShadow: '1px 2px 2px 0px var(--input-shadow) inset' }}
         className={`focus:outline-none bg-neutral25 text-neutral500 ${styles?.input}`}
         type={type}
@@ -28,7 +32,11 @@ export const InputField = ({
         disabled={disabled}
         onBlur={onBlur}
         maxLength={maxLength}
-        onFocus={onFocus}
+        onFocus={() => {
+          if (inputRef.current) {
+            inputRef.current.addEventListener('wheel', disableWheel);
+          }
+        }}
         onKeyDown={onKeyDown}
       />
     </div>
