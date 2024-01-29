@@ -255,7 +255,6 @@ const Form = () => {
     <div className="pt-[32px]">
       <div>
         <div className="flex flex-col gap-[16px]">
-          {/* <div className='sticky top-[32px] bg-neutral0  z-50'> */}
           <div>
             <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
               Search for Diamonds

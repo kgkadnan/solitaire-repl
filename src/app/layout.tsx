@@ -75,7 +75,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 <aside className="w-[84px] border-r border-solid overflow-hidden h-[100vh] fixed"></aside>
 
                 <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
-                  <header className="min-h-[60px] border-b border-solid sticky top-0">
+                  <header className="min-h-[60px] border-b border-solid sticky top-0 bg-neutral-0">
                     <V2TopNavigationBar />
                   </header>
 

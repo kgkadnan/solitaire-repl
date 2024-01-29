@@ -22,7 +22,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   };
 
   return (
-    <div className="flex items-center w-full bg-neutral0 sticky top-[60px] z-50">
+    <div className="flex items-center w-full bg-neutral0 sticky top-[60px]">
       <div
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
