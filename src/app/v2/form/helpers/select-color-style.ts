@@ -10,69 +10,68 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
 
-    backgroundColor: 'neutral0',
+    backgroundColor: 'var(--neutral-0)',
     borderRadius: '4px',
     // border: 'none',
-    border: '1px solid neutral200',
+    border: '1px solid var(--neutral-200)',
     // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-    outline: '1px solid neutral200',
+    outline: '1px solid var(--neutral-200)',
     width: '100%'
     // ':hover': {
     //   border: 'none',
-    //   borderBottom: '1px solid neutral200'
+    //   borderBottom: '1px solid var(--neutral-200)'
     // }
   }),
   singleValue: styles => ({
     ...styles,
-    color: 'neutral900'
+    color: 'var(--neutral-900)'
   }),
   placeholder: styles => ({
     ...styles,
-    color: 'neutral900',
+    color: 'var(--neutral-900)',
     border: 'none'
   }),
   menuList: styles => ({
     ...styles,
-    backgroundColor: 'neutral0',
+    backgroundColor: 'var(--neutral-0)',
     minHeight: '10vh',
-    height: '17vh',
-    zIndex: 1001
+    height: '17vh'
   }),
   option: styles => {
     return {
       ...styles,
-      backgroundColor: 'neutral0',
-      color: 'neutral900',
+      backgroundColor: 'var(--neutral-0)',
+      color: 'var(--neutral-900)',
       ':active': {
         ...styles[':active'],
         border: 'none',
-        backgroundColor: 'neutral0'
+        backgroundColor: 'var(--neutral-0)'
       },
       ':hover': {
-        backgroundColor: 'neutral50',
+        backgroundColor: 'var(--neutral-50)',
         border: 'none',
-        color: 'neutral900'
+        color: 'var(--neutral-900)'
       }
     };
   },
   multiValue: styles => {
     return {
       ...styles,
-      backgroundColor: 'neutral200',
-      color: 'neutral900'
+      backgroundColor: 'var(--neutral-200)',
+      color: 'var(--neutral-900)'
     };
   },
   multiValueLabel: styles => ({
     ...styles,
-    color: 'neutral900',
-    backgroundColor: 'neutral200'
+    color: 'var(--neutral-900)',
+    backgroundColor: 'var(--neutral-200)'
   }),
   multiValueRemove: styles => ({
     ...styles,
-    color: 'neutral900',
+    color: 'var(--neutral-900)',
     ':hover': {
-      backgroundColor: 'neutral200',
-      color: 'neutral900'
+      backgroundColor: 'var(--neutral-200)',
+      color: 'var(--neutral-900)'
     }
   })
 };

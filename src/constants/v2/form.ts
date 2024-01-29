@@ -277,41 +277,41 @@ export const culet = [
 ];
 
 export const intensity = [
-  'Faint',
-  'Very Light',
-  'Light',
-  'Fancy',
-  'Fancy Light',
-  'Fancy Dark',
-  'Fancy Intense',
-  'Fancy Vivid',
-  'Fancy Deep'
+  { value: 'Faint', label: 'Faint' },
+  { value: 'Very Light', label: 'Very Light' },
+  { value: 'Light', label: 'Light' },
+  { value: 'Fancy', label: 'Fancy' },
+  { value: 'Fancy Light', label: 'Fancy Light' },
+  { value: 'Fancy Dark', label: 'Fancy Dark' },
+  { value: 'Fancy Intense', label: 'Fancy Intense' },
+  { value: 'Fancy Vivid', label: 'Fancy Vivid' },
+  { value: 'Fancy Deep', label: 'Fancy Deep' }
 ];
 
 export const overtone = [
-  'None',
-  'Yellow',
-  'Yellowish',
-  'Pink',
-  'Pinkish',
-  'Blue',
-  'Bluish',
-  'Red',
-  'Reddish',
-  'Green',
-  'Greenish',
-  'Purple',
-  'Purplish',
-  'Orange',
-  'Orangy',
-  'Grey',
-  'Greyish',
-  'Black',
-  'Brown',
-  'Brownish',
-  'Violetish',
-  'Light Brown',
-  'Brownish Orangy'
+  { value: 'None', label: 'None' },
+  { value: 'Yellow', label: 'Yellow' },
+  { value: 'Yellowish', label: 'Yellowish' },
+  { value: 'Pink', label: 'Pink' },
+  { value: 'Pinkish', label: 'Pinkish' },
+  { value: 'Blue', label: 'Blue' },
+  { value: 'Bluish', label: 'Bluish' },
+  { value: 'Red', label: 'Red' },
+  { value: 'Reddish', label: 'Reddish' },
+  { value: 'Green', label: 'Green' },
+  { value: 'Greenish', label: 'Brown' },
+  { value: 'Purple', label: 'Purple' },
+  { value: 'Purplish', label: 'Purplish' },
+  { value: 'Orange', label: 'Orange' },
+  { value: 'Orangy', label: 'Orangy' },
+  { value: 'Grey', label: 'Grey' },
+  { value: 'Greyish', label: 'Greyish' },
+  { value: 'Black', label: 'Black' },
+  { value: 'Brown', label: 'Brown' },
+  { value: 'Brownish', label: 'Brownish' },
+  { value: 'Violetish', label: 'Violetish' },
+  { value: 'Light Brown', label: 'Light Brown' },
+  { value: 'Brownish Orangy', label: 'Brownish Orangy' }
 ];
 export const parameter = [
   {
