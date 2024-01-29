@@ -46,7 +46,7 @@ export const Color = ({
     handleFilterChange(data, selectedTile, setSelectedTile);
   };
 
-  const [containerHeight, setContainerHeight] = useState(150); // Initial height
+  const [, setContainerHeight] = useState(150); // Initial height
 
   useEffect(() => {
     if (
