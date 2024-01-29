@@ -6,7 +6,7 @@ interface IColourOption {
 }
 
 export const colourStyles: StylesConfig<IColourOption, true> = {
-  control: styles => ({
+  control: (styles, state) => ({
     ...styles,
     color: 'hsl(var(--solitaire-tertiary))',
 
@@ -16,7 +16,12 @@ export const colourStyles: StylesConfig<IColourOption, true> = {
     border: '1px solid var(--neutral-200)',
     // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
     outline: '1px solid var(--neutral-200)',
-    width: '100%'
+    width: '100%',
+    boxShadow: state.menuIsOpen ? 'var(--input-shadow) inset' : '',
+    // This line disable the blue border
+    '&:hover': {
+      border: '1px solid var(--neutral-200) !important'
+    }
     // ':hover': {
     //   border: 'none',
     //   borderBottom: '1px solid var(--neutral-200)'
