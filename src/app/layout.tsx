@@ -71,15 +71,15 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 <BottomNavigationBar />
               </>
             ) : isV2Route ? (
-              <div className="flex h-screen">
-                <aside className="w-[84px] border-r border-solid"></aside>
+              <div className="flex h-screen w-full">
+                <aside className="w-[84px] border-r border-solid overflow-hidden h-[100vh]"></aside>
 
-                <div className="flex-1 flex flex-col">
-                  <header className="h-[60px] border-b border-solid">
+                <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
+                  <header className="h-[10vh] border-b border-solid">
                     <V2TopNavigationBar />
                   </header>
 
-                  <main className="flex-1  px-[32px]">{children}</main>
+                  <main className="flex-1 px-[32px]">{children}</main>
                 </div>
               </div>
             ) : (

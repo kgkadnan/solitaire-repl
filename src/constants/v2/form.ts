@@ -501,13 +501,13 @@ export const carat = {
     lte: 30
   }
 };
-export const amount_range = {
+export const amountRange = {
   range: {
     gte: 0,
     lte: 999999
   }
 };
-export const price_per_carat = {
+export const pricePerCarat = {
   range: {
     gte: 0,
     lte: 999999

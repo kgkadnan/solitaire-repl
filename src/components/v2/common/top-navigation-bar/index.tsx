@@ -1,7 +1,7 @@
 import React from 'react';
 
 const TopNavigationBar = () => {
-  return <div></div>;
+  return <></>;
 };
 
 export default TopNavigationBar;
