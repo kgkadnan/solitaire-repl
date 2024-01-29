@@ -148,7 +148,7 @@ module.exports = {
         warningPressed: 'var(--warning-pressed)',
         warningFocus: 'var(--warning-focus)',
         infoMain: 'var(--info-main)',
-        inputShadow: 'var(--input-shadow) inset',
+        inputShadow: 'var(--input-shadow)',
         popupsShadow: 'var(--popups-shadow)',
         infoSurface: 'var(--info-surface)',
         infoBorder: 'var(--info-border)',
