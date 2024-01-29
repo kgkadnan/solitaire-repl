@@ -169,7 +169,7 @@ const Form = () => {
           setErrorText(NO_STONE_FOUND);
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
-          setMessageColor('[#008243]');
+          setMessageColor('successMain');
           setIsError(true);
           data?.count && setErrorText(`${data?.count} stones found`);
         } else {
@@ -197,6 +197,7 @@ const Form = () => {
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
+    setValidationError('');
     handleReset(setState, errorSetState);
   };
 
@@ -367,9 +368,13 @@ const Form = () => {
       <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
         <div className=" flex items-center">
           {isError && (
-            <span className={`text-mRegular font-medium text-${messageColor}`}>
-              {!isValidationError && errorText}
-            </span>
+            <>
+              <span
+                className={`text-mRegular font-medium text-${messageColor}`}
+              >
+                {!isValidationError && errorText}
+              </span>
+            </>
           )}
         </div>
         <ActionButton actionButtonData={actionButtonData} />

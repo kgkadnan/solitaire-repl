@@ -31,7 +31,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
 
   return (
     <div
-      className={`grid  sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-[13px] p-[16px] `}
+      className={`grid  sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-[13px] p-[16px] cursor-pointer`}
     >
       {imageTileData.map((tileData: IImageTileProps) => {
         const { src, title, short_name } = tileData;
