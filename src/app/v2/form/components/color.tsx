@@ -1,6 +1,6 @@
 import Tile from '@/components/v2/common/tile';
 import { Tabs } from '@/components/v2/common/toggle';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { color, fancy, intensity, overtone, white } from '@/constants/v2/form';
 import { handleFilterChange } from '../helpers/handle-filter-changes';
 import Select from 'react-select';
@@ -44,38 +44,6 @@ export const Color = ({
     setSelectedIntensity([]);
     setSelectedOvertone([]);
     handleFilterChange(data, selectedTile, setSelectedTile);
-  };
-
-  const [, setContainerHeight] = useState(150); // Initial height
-
-  useEffect(() => {
-    if (
-      selectedFancyColor.length !== 0 ||
-      selectedIntensity.length !== 0 ||
-      selectedOvertone.length !== 0
-    ) {
-      console.log(
-        'aww',
-        selectedFancyColor,
-        selectedIntensity,
-        selectedOvertone
-      );
-      // Update the container height whenever the selected options change
-      setContainerHeight(calculateContainerHeight());
-    }
-  }, [selectedFancyColor, selectedIntensity, selectedOvertone]);
-
-  const calculateContainerHeight = () => {
-    // Calculate the dynamic height based on the content inside
-    let dynamicHeight = 150; // Initial height
-
-    // Adjust the dynamicHeight based on the selected options in the Select components
-    dynamicHeight += selectedFancyColor.length * 30; // Adjust as needed
-    dynamicHeight += selectedIntensity.length * 30; // Adjust as needed
-    dynamicHeight += selectedOvertone.length * 30; // Adjust as needed
-
-    const additionalHeight = 50; // Additional height for padding/margin
-    return dynamicHeight + additionalHeight;
   };
 
   // Function to handle fancy color filter change based on user selection

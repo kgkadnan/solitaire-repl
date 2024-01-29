@@ -1,5 +1,5 @@
 'use client';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { Dispatch, SetStateAction } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
@@ -46,30 +46,11 @@ export const DiscountPrice = ({
   pricePerCaratMax,
   discountError
 }: IShapeProps) => {
-  const [priceStep, setPriceStep] = useState<number>(1);
-  const [amountStep, setAmountStep] = useState<number>(1);
-  const [discountStep, setDiscountStep] = useState<number>(1);
-  const handleRangeChange = (minValue: string, maxValue: string) => {
-    const range = parseInt(maxValue) - parseInt(minValue);
-
-    if (range <= 100) {
-      return 1;
-    } else if (range <= 101) {
-      return 10;
-    } else if (range <= 10000) {
-      return 50;
-    } else if (range <= 50000) {
-      return 100;
-    } else {
-      return 500;
-    }
-  };
-
   const discountPriceAmoutData = [
     {
       label: 'Discount %',
-      minPlaceHolder: '0',
-      maxPlaceHolder: '100',
+      minPlaceHolder: `${discount.range.gte}`,
+      maxPlaceHolder: `${discount.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setDiscountMax(event.target.value);
         handleNumericRange({
@@ -97,22 +78,20 @@ export const DiscountPrice = ({
           setErrorState: setDiscountError,
           rangeCondition: discount.range
         });
-        const step = handleRangeChange(discountMin, discountMax);
-        setDiscountStep(step);
       },
       maxValue: discountMax,
       minValue: discountMin,
       sliderValue: [discountMin, discountMax],
       errorText: discountError,
-      rangeMax: 100,
-      rangeMin: 0,
-      step: discountStep
+      rangeMax: discount.range.lte,
+      rangeMin: discount.range.gte,
+      step: (discount.range.lte - discount.range.gte) / 100
     },
 
     {
       label: 'Price/Ct',
-      minPlaceHolder: '0',
-      maxPlaceHolder: '999999',
+      minPlaceHolder: `${price_per_carat.range.gte}`,
+      maxPlaceHolder: `${price_per_carat.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setPricePerCaratMax(event.target.value);
         handleNumericRange({
@@ -140,21 +119,19 @@ export const DiscountPrice = ({
           setErrorState: setPricePerCaratError,
           rangeCondition: price_per_carat.range
         });
-        const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
-        setPriceStep(step);
       },
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
       sliderValue: [pricePerCaratMin, pricePerCaratMax],
       errorText: pricePerCaratError,
-      rangeMax: 999999,
-      rangeMin: 0,
-      step: priceStep
+      rangeMax: price_per_carat.range.lte,
+      rangeMin: price_per_carat.range.gte,
+      step: (price_per_carat.range.lte - price_per_carat.range.gte) / 100
     },
     {
       label: 'Amount Range',
-      minPlaceHolder: '0',
-      maxPlaceHolder: '999999',
+      minPlaceHolder: `${amount_range.range.gte}`,
+      maxPlaceHolder: `${amount_range.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setAmountRangeMax(event.target.value);
         handleNumericRange({
@@ -182,16 +159,14 @@ export const DiscountPrice = ({
           setErrorState: setAmountRangeError,
           rangeCondition: amount_range.range
         });
-        const step = handleRangeChange(pricePerCaratMin, pricePerCaratMax);
-        setAmountStep(step);
       },
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
       sliderValue: [amountRangeMin, amountRangeMax],
       errorText: amountRangeError,
-      rangeMax: 999999,
-      rangeMin: 0,
-      step: amountStep
+      rangeMax: amount_range.range.lte,
+      rangeMin: amount_range.range.gte,
+      step: (amount_range.range.lte - amount_range.range.gte) / 100
     }
   ];
 
