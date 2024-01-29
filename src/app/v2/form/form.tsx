@@ -169,7 +169,7 @@ const Form = () => {
           setErrorText(NO_STONE_FOUND);
           setMessageColor('dangerMain');
         } else if (data?.count !== MIN_SEARCH_FORM_COUNT) {
-          setMessageColor('[#008243]');
+          setMessageColor('successMain');
           setIsError(true);
           data?.count && setErrorText(`${data?.count} stones found`);
         } else {

@@ -3,7 +3,7 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { AccordionComponent } from '../../../../components/v2/common/accordion';
 import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
-import { amount_range, discount, price_per_carat } from '@/constants/v2/form';
+import { amountRange, discount, pricePerCarat } from '@/constants/v2/form';
 
 interface IShapeProps {
   setDiscountMin: Dispatch<SetStateAction<string>>;
@@ -90,15 +90,15 @@ export const DiscountPrice = ({
 
     {
       label: 'Price/Ct',
-      minPlaceHolder: `${price_per_carat.range.gte}`,
-      maxPlaceHolder: `${price_per_carat.range.lte}`,
+      minPlaceHolder: `${pricePerCarat.range.gte}`,
+      maxPlaceHolder: `${pricePerCarat.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setPricePerCaratMax(event.target.value);
         handleNumericRange({
           min: pricePerCaratMin,
           max: event.target.value,
           setErrorState: setPricePerCaratError,
-          rangeCondition: price_per_carat.range
+          rangeCondition: pricePerCarat.range
         });
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -107,7 +107,7 @@ export const DiscountPrice = ({
           min: event.target.value,
           max: pricePerCaratMax,
           setErrorState: setPricePerCaratError,
-          rangeCondition: price_per_carat.range
+          rangeCondition: pricePerCarat.range
         });
       },
       handleSliderChange: (newValue: string[]) => {
@@ -117,28 +117,28 @@ export const DiscountPrice = ({
           min: newValue[0],
           max: newValue[1],
           setErrorState: setPricePerCaratError,
-          rangeCondition: price_per_carat.range
+          rangeCondition: pricePerCarat.range
         });
       },
       maxValue: pricePerCaratMax,
       minValue: pricePerCaratMin,
       sliderValue: [pricePerCaratMin, pricePerCaratMax],
       errorText: pricePerCaratError,
-      rangeMax: price_per_carat.range.lte,
-      rangeMin: price_per_carat.range.gte,
-      step: (price_per_carat.range.lte - price_per_carat.range.gte) / 100
+      rangeMax: pricePerCarat.range.lte,
+      rangeMin: pricePerCarat.range.gte,
+      step: (pricePerCarat.range.lte - pricePerCarat.range.gte) / 100
     },
     {
       label: 'Amount Range',
-      minPlaceHolder: `${amount_range.range.gte}`,
-      maxPlaceHolder: `${amount_range.range.lte}`,
+      minPlaceHolder: `${amountRange.range.gte}`,
+      maxPlaceHolder: `${amountRange.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
         setAmountRangeMax(event.target.value);
         handleNumericRange({
           min: amountRangeMin,
           max: event.target.value,
           setErrorState: setAmountRangeError,
-          rangeCondition: amount_range.range
+          rangeCondition: amountRange.range
         });
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -147,7 +147,7 @@ export const DiscountPrice = ({
           min: event.target.value,
           max: amountRangeMax,
           setErrorState: setAmountRangeError,
-          rangeCondition: amount_range.range
+          rangeCondition: amountRange.range
         });
       },
       handleSliderChange: (newValue: string[]) => {
@@ -157,16 +157,16 @@ export const DiscountPrice = ({
           min: newValue[0],
           max: newValue[1],
           setErrorState: setAmountRangeError,
-          rangeCondition: amount_range.range
+          rangeCondition: amountRange.range
         });
       },
       maxValue: amountRangeMax,
       minValue: amountRangeMin,
       sliderValue: [amountRangeMin, amountRangeMax],
       errorText: amountRangeError,
-      rangeMax: amount_range.range.lte,
-      rangeMin: amount_range.range.gte,
-      step: (amount_range.range.lte - amount_range.range.gte) / 100
+      rangeMax: amountRange.range.lte,
+      rangeMin: amountRange.range.gte,
+      step: (amountRange.range.lte - amountRange.range.gte) / 100
     }
   ];
 
