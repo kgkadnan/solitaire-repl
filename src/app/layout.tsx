@@ -44,7 +44,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       <Head>
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Inter'"
+          href="https://fonts.googleapis.com/css?family=Inter"
         />
       </Head>
       <body className={inter.className}>
