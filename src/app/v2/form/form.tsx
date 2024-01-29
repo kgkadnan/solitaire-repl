@@ -370,7 +370,7 @@ const Form = () => {
             <>
               <span className="hidden  text-[#008243] text-[#E00000]" />
               <span
-                className={`text-mRegular font-medium !text-${messageColor}`}
+                className={`text-mRegular font-medium text-${messageColor}`}
               >
                 {!isValidationError && errorText}
               </span>

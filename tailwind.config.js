@@ -148,8 +148,6 @@ module.exports = {
         warningPressed: 'var(--warning-pressed)',
         warningFocus: 'var(--warning-focus)',
         infoMain: 'var(--info-main)',
-        inputShadow: 'var(--input-shadow)',
-        popupsShadow: 'var(--popups-shadow)',
         infoSurface: 'var(--info-surface)',
         infoBorder: 'var(--info-border)',
         infoHover: 'var(--info-hover)',
@@ -174,6 +172,10 @@ module.exports = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: 0 }
         }
+      },
+      boxShadow: {
+        inputShadow: 'var(--input-shadow)',
+        popupsShadow: 'var(--popups-shadow)',
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
