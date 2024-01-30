@@ -43,8 +43,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     },
     muiTableHeadCellProps: {
       sx: {
-        width: '10%',
-        minWidth: '10%'
+        color: 'var(--neutral-700)'
       }
     },
     muiSelectAllCheckboxProps: {
@@ -86,13 +85,6 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         '&.MuiTableRow-root:active .MuiTableCell-root::after': {
           backgroundColor: 'var(--neutral-100)'
         }
-      }
-    },
-
-    muiTableHeadCellProps: {
-      //simple styling with the `sx` prop, works just like a style prop in this example
-      sx: {
-        color: 'var(--neutral-700)'
       }
     }
   });
