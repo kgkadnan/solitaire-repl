@@ -105,6 +105,11 @@ export const TopNavigationBar = () => {
 
   const topNavData = [
     {
+      label: ManageLocales('app.topNav.newv2'),
+      link: '/v2',
+      isActive: currentRoute === '/for-you'
+    },
+    {
       label: ManageLocales('app.topNav.forYou'),
       link: '/for-you',
       isActive: currentRoute === '/for-you'
@@ -129,12 +134,19 @@ export const TopNavigationBar = () => {
   ];
 
   const handleRoute = (label: string, link: string) => {
-    router.push(`${link}`);
-    topNavData.forEach(navData => {
-      if (navData.label !== label) {
-        navData.isActive = false;
-      }
-    });
+    if (link === '/v2') {
+      // Redirect and reload the browser for 'new'
+      window.location.href = link;
+    } else {
+      // Use router.push for other cases
+      router.push(link);
+      topNavData.forEach(navData => {
+        if (navData.label !== label) {
+          navData.isActive = false;
+        }
+      });
+    }
+   
   };
 
   const handleScroll = useCallback(() => {

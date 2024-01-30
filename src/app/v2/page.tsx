@@ -1,14 +1,11 @@
 'use client';
 import React from 'react';
-import Result from './result/result';
-// import Form from './form/form';
-// import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
+import Form from './search/form/form';
 
 const page = () => {
   return (
     <>
-      {/* <Form /> */}
-      <Result />
+     <Form/>
     </>
   );
 };
