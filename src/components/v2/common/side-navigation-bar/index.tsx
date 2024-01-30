@@ -14,10 +14,17 @@ import Tooltip from '../tooltip';
 import { Button } from '@/components/ui/button';
 import { Routes } from '@/constants/v2/enums/routes';
 
+interface ISideNavigationBar {
+  src: React.ReactNode;
+  title: string;
+  link: string;
+  isActive: boolean;
+}
+
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
   const router = useRouter();
-  const SideNavigationData = [
+  const SideNavigationData: ISideNavigationBar[] = [
     {
       src: <DashboardIcon />,
       title: ManageLocales('app.sideNavigationBar.dashboard'),
@@ -67,7 +74,7 @@ const SideNavigationBar = () => {
         <Image src={KgkIcon} alt="KGK logo" onClick={() => router.push('/')} />
       </div>
       <div className="z-50">
-        {SideNavigationData.map((items: any) => {
+        {SideNavigationData.map((items: ISideNavigationBar) => {
           return (
             <div
               className="my-[8px] first:border-b-[1px] last:border-t-[1px] border-neutral200"
