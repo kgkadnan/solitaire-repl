@@ -2,5 +2,13 @@
   "app.search.savedSearchesRoute": "saved-searches",
   "app.advanceSearch.cancel": "Cancel",
   "app.advanceSearch.reset": "Reset",
-  "app.advanceSearch.saveSearch": "Save Search"
+  "app.advanceSearch.saveSearch": "Save Search",
+
+  "app.sideNavigationBar.search": "Search",
+  "app.sideNavigationBar.dashboard": "Dashboard",
+  "app.sideNavigationBar.myDiamonds": "My Diamonds",
+  "app.sideNavigationBar.bookmark": "Saved Search ",
+  "app.sideNavigationBar.appointments": "Appointments",
+  "app.sideNavigationBar.myCart": "My Cart",
+  "app.sideNavigationBar.settings": "Settings"
 }
