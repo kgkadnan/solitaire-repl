@@ -20,10 +20,11 @@ interface ISideNavigationBar {
   link: string;
   isActive: boolean;
 }
-
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
   const router = useRouter();
+  console.log(currentRoute, 'currentRoute');
+
   const SideNavigationData: ISideNavigationBar[] = [
     {
       src: <DashboardIcon />,
@@ -34,20 +35,20 @@ const SideNavigationBar = () => {
     {
       src: <SearchIcon />,
       title: ManageLocales('app.sideNavigationBar.search'),
-      link: Routes.SEARCH,
+      link: `${Routes.SEARCH}?active-tab=new-search`,
       isActive: currentRoute === Routes.SEARCH
     },
     {
       src: <MyDaimondsIcon />,
       title: ManageLocales('app.sideNavigationBar.myDiamonds'),
-      link: Routes.MYDIAMONDS,
-      isActive: currentRoute === Routes.MYDIAMONDS
+      link: Routes.MY_DIAMONDS,
+      isActive: currentRoute === Routes.MY_DIAMONDS
     },
     {
       src: <BookmarkIcon />,
       title: ManageLocales('app.sideNavigationBar.bookmark'),
-      link: Routes.SAVEDSEARCH,
-      isActive: currentRoute === Routes.SAVEDSEARCH
+      link: Routes.SAVED_SEARCH,
+      isActive: currentRoute === Routes.SAVED_SEARCH
     },
     {
       src: <AppointmentIcon />,
@@ -58,8 +59,8 @@ const SideNavigationBar = () => {
     {
       src: <CartIcon />,
       title: ManageLocales('app.sideNavigationBar.myCart'),
-      link: Routes.MYCART,
-      isActive: currentRoute === Routes.MYCART
+      link: Routes.MY_CART,
+      isActive: currentRoute === Routes.MY_CART
     },
     {
       src: <SettingIcon />,

@@ -7,6 +7,12 @@ const TopNavigationBar = () => {
   return (
     <div className="min-h-[60px] border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3] flex justify-end items-center pr-[32px]">
       <div className="z-50 flex gap-[16px]">
+        <div
+          className="flex items-center cursor-pointer"
+          onClick={() => (window.location.href = '/')}
+        >
+          Back to old theme
+        </div>
         <Image src={NotificationIcon} alt="Notification Icon" />
         <Avatar>
           <AvatarImage
