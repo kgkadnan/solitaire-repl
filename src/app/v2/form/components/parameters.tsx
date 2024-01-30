@@ -315,10 +315,7 @@ export const Parameters = ({
         isDisable={false}
         accordionContent={
           <div className="flex flex-wrap gap-[24px] px-[16px] py-[24px]">
-            <div
-              id="Parameters"
-              className="flex flex-wrap gap-[24px] justify-between"
-            >
+            <div id="Parameters" className="flex flex-wrap gap-[24px]">
               {parameterData.map(
                 ({
                   label,
@@ -376,7 +373,7 @@ export const Parameters = ({
                 }
               )}
             </div>
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] justify-between">
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] w-[100%]">
               <div className="flex flex-col gap-[8px]">
                 <InputLabel
                   label={'Girdle'}
