@@ -27,5 +27,6 @@ export const manageListingSequenceApi = createApi({
 
 export const {
   useAddManageListingSequenceMutation,
-  useGetManageListingSequenceQuery
+  useGetManageListingSequenceQuery,
+  useLazyGetManageListingSequenceQuery
 } = manageListingSequenceApi;

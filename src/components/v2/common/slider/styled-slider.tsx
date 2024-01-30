@@ -17,6 +17,9 @@ const StyledThumb = styled.div`
   cursor: grab;
   position: relative;
   top: -5px;
+  
+&:focus-visible {
+  outline: 2px solid var(--primary-focus);
 `;
 
 const ThumbComponent = (props: any) => <StyledThumb {...props}></StyledThumb>;

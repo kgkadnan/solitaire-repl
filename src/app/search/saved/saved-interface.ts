@@ -161,5 +161,5 @@ export interface IProductResponse {
   count: number;
   offset: number;
   limit: number;
-  search_id: string;
+  search_id?: string;
 }

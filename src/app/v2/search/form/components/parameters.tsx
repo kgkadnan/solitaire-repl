@@ -4,6 +4,8 @@ import { MinMaxInput } from '@/components/v2/common/min-max-input';
 import React from 'react';
 import { parameter } from '@/constants/v2/form';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
+import { Girdle } from './girdle';
+import { Culet } from './culet';
 export const Parameters = ({
   state,
   setState,
@@ -35,7 +37,9 @@ export const Parameters = ({
     setPavilionAngleMax,
     setPavilionAngleMin,
     setStarLengthMax,
-    setStarLengthMin
+    setStarLengthMin,
+    setSelectedCulet,
+    setSelectedGirdle
   } = setState;
   const {
     tablePerMin,
@@ -64,7 +68,9 @@ export const Parameters = ({
     pavilionAngleMin,
     starLengthMax,
     starLengthMin,
-    setCrownAngleMax
+    setCrownAngleMax,
+    selectedGirdle,
+    selectedCulet
   } = state;
 
   const {
@@ -303,68 +309,94 @@ export const Parameters = ({
   });
   let isErrorPersist = parameterData.some(error => error.errorState.length > 0);
   return (
-    <div id="Parameters">
+    <div>
       <AccordionComponent
         value="Parameters"
         isDisable={false}
         accordionContent={
           <div className="flex flex-wrap gap-[24px] px-[16px] py-[24px]">
-            {parameterData.map(
-              ({
-                label,
-                maxValue,
-                minValue,
-                maxPlaceHolder,
-                minPlaceHolder,
-                handleMaxChange,
-                handleMinChange,
-                errorState,
-                errorSetState,
-                range
-              }) => {
-                return (
-                  <div key={label} className="flex flex-col gap-[8px]">
-                    <InputLabel
-                      label={label}
-                      htmlFor=""
-                      styles="text-neutral900 text-sRegular font-regular"
-                    />
-                    <MinMaxInput
-                      minInputData={{
-                        minValue: minValue,
-                        minPlaceHolder: minPlaceHolder,
-                        minOnchange: e => {
-                          handleMinChange(e);
-                          errorSetState &&
-                            handleNumericRange({
-                              min: e.target.value,
-                              max: maxValue,
-                              setErrorState: errorSetState,
-                              rangeCondition: range
-                            });
-                        }
-                      }}
-                      maxInputData={{
-                        maxValue: maxValue,
-                        maxPlaceHolder: maxPlaceHolder,
-                        maxOnchange: e => {
-                          handleMaxChange(e);
-                          errorSetState &&
-                            handleNumericRange({
-                              min: minValue,
-                              max: e.target.value,
-                              setErrorState: errorSetState,
-                              rangeCondition: range
-                            });
-                        }
-                      }}
-                      inputGap="gap-[20px]"
-                      errorText={errorState}
-                    />
-                  </div>
-                );
-              }
-            )}
+            <div id="Parameters" className="flex flex-wrap gap-[24px]">
+              {parameterData.map(
+                ({
+                  label,
+                  maxValue,
+                  minValue,
+                  maxPlaceHolder,
+                  minPlaceHolder,
+                  handleMaxChange,
+                  handleMinChange,
+                  errorState,
+                  errorSetState,
+                  range
+                }) => {
+                  return (
+                    <div key={label} className="flex flex-col gap-[8px]">
+                      <InputLabel
+                        label={label}
+                        htmlFor=""
+                        styles="text-neutral900 text-sRegular font-regular"
+                      />
+                      <MinMaxInput
+                        minInputData={{
+                          minValue: minValue,
+                          minPlaceHolder: minPlaceHolder,
+                          minOnchange: e => {
+                            handleMinChange(e);
+                            errorSetState &&
+                              handleNumericRange({
+                                min: e.target.value,
+                                max: maxValue,
+                                setErrorState: errorSetState,
+                                rangeCondition: range
+                              });
+                          }
+                        }}
+                        maxInputData={{
+                          maxValue: maxValue,
+                          maxPlaceHolder: maxPlaceHolder,
+                          maxOnchange: e => {
+                            handleMaxChange(e);
+                            errorSetState &&
+                              handleNumericRange({
+                                min: minValue,
+                                max: e.target.value,
+                                setErrorState: errorSetState,
+                                rangeCondition: range
+                              });
+                          }
+                        }}
+                        inputGap="gap-[20px]"
+                        errorText={errorState}
+                      />
+                    </div>
+                  );
+                }
+              )}
+            </div>
+            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] w-[100%]">
+              <div className="flex flex-col gap-[8px]">
+                <InputLabel
+                  label={'Girdle'}
+                  htmlFor=""
+                  styles="text-neutral900 text-sRegular font-regular"
+                />
+                <Girdle
+                  selectedGirdle={selectedGirdle}
+                  setSelectedGirdle={setSelectedGirdle}
+                />
+              </div>
+              <div className="flex flex-col gap-[8px]">
+                <InputLabel
+                  label={'Culet'}
+                  htmlFor=""
+                  styles="text-neutral900 text-sRegular font-regular"
+                />
+                <Culet
+                  selectedCulet={selectedCulet}
+                  setSelectedCulet={setSelectedCulet}
+                />
+              </div>
+            </div>
           </div>
         }
         accordionTrigger={'Parameters'}

@@ -1,9 +1,9 @@
 'use client';
 import React, { Dispatch, SetStateAction } from 'react';
-import { AccordionComponent } from '../../../../components/v2/common/accordion';
-import { SliderWithMinMaxInput } from '../../../../components/v2/common/slider-with-min-max';
 import { handleNumericRange } from '../helpers/handle-input-range-validation';
 import { amountRange, discount, pricePerCarat } from '@/constants/v2/form';
+import { SliderWithMinMaxInput } from '@/components/v2/common/slider-with-min-max';
+import { AccordionComponent } from '@/components/v2/common/accordion';
 
 interface IShapeProps {
   setDiscountMin: Dispatch<SetStateAction<string>>;
