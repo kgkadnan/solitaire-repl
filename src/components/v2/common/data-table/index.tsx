@@ -3,7 +3,7 @@ import {
   useMaterialReactTable
 } from 'material-react-table';
 
-const DataTable = ({ rows, columns }: any) => {
+const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -11,25 +11,76 @@ const DataTable = ({ rows, columns }: any) => {
 
     //state
     getRowId: originalRow => originalRow.id,
-
+    onRowSelectionChange: setRowSelection,
+    state: { rowSelection },
     //filters
+    positionToolbarAlertBanner: 'none',
     enableRowSelection: true, //enable some features
     enableFilters: true,
     enableColumnActions: false,
-    enablePagination: true,
     enableSorting: true,
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
+    enablePagination: false,
     initialState: {
       showGlobalFilter: true,
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select'],
         right: ['mrt-row-actions']
       }
+    },
+    //styling
+    muiTableHeadRowProps: {
+      sx: {
+        backgroundColor: 'var(--neutral-50)'
+      }
+    },
+    muiSelectAllCheckboxProps: {
+      sx: {
+        color: 'var(--neutral-200)',
+        '& .MuiSvgIcon-root': {
+          fontSize: '25px'
+        },
+        '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        }
+      }
+    },
+    muiSelectCheckboxProps: {
+      sx: {
+        color: 'var(--neutral-200)',
+
+        '& .MuiSvgIcon-root': {
+          fontSize: '25px'
+          // fill: 'var(--neutral-200)'
+        },
+        '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        }
+      }
+    },
+    muiTableBodyRowProps: {
+      sx: {
+        '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-50)'
+        },
+        '&.MuiTableRow-root .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-25)'
+        },
+        '&.MuiTableRow-root:active .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-100)'
+        }
+      }
+    },
+
+    muiTableHeadCellProps: {
+      //simple styling with the `sx` prop, works just like a style prop in this example
+      sx: {
+        color: 'var(--neutral-700)'
+      }
     }
   });
-  // console.log("table")
 
   return <MaterialReactTable table={table} />;
 };
