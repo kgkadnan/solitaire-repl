@@ -17,7 +17,15 @@ export const notificationRoutes = [
   '/notification/all-notification',
   '/notification/setting'
 ];
-export const v2Routes = ['/v2', '/v2/search'];
+export const v2Routes = [
+  '/v2',
+  '/v2/search',
+  '/v2/my-diamonds',
+  '/v2/saved-searches',
+  '/v2/appointments',
+  '/v2/my-cart',
+  '/v2/setting'
+];
 export const protectedRoutes = [
   '/',
   '/search',
@@ -36,5 +44,6 @@ export const applicationRoutes = [
   '/new-arrival',
   '/layouts',
   '/appointments',
-  '/for-you'
+  '/for-you',
+  ...v2Routes
 ];
