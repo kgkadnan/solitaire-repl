@@ -6,11 +6,11 @@ import Form from './form/form';
 import Result from './result/result';
 
 const Search = () => {
-  const editSubRoute = useSearchParams().get('edit');
+  const subRoute = useSearchParams().get('active-tab');
 
   return (
     <>
-      <div>{editSubRoute === SubRoutes.NEW_SEARCH ? <Form /> : <Result />}</div>
+      <div>{subRoute === SubRoutes.NEW_SEARCH ? <Form /> : <Result />}</div>
     </>
   );
 };
