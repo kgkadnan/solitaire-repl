@@ -19,8 +19,6 @@ import { Location } from './components/location';
 import { CountryOfOrigin } from './components/country-of-origin';
 import { Shade } from './components/shade';
 import { Parameters } from './components/parameters';
-import { Girdle } from './components/girdle';
-import { Culet } from './components/culet';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
@@ -65,8 +63,6 @@ const Form = () => {
     amountRangeMax, //priceRangeTo
     pricePerCaratMin, //pricePerCaratFrom
     pricePerCaratMax, //pricePerCaratTo
-    selectedGirdle,
-    selectedCulet,
     selectedKeyToSymbol,
     selectedCaratRange,
     selectedFancyColor,
@@ -93,8 +89,6 @@ const Form = () => {
     setAmountRangeMax,
     setPricePerCaratMin,
     setPricePerCaratMax,
-    setSelectedGirdle,
-    setSelectedCulet,
     setSelectedKeyToSymbol,
     setSelectedCaratRange
   } = setState;
@@ -347,16 +341,7 @@ const Form = () => {
             errorSetState={errorSetState}
             errorState={errorState}
           />
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px]">
-            <Girdle
-              selectedGirdle={selectedGirdle}
-              setSelectedGirdle={setSelectedGirdle}
-            />
-            <Culet
-              selectedCulet={selectedCulet}
-              setSelectedCulet={setSelectedCulet}
-            />
-          </div>
+
           <Inclusions state={state} setState={setState} />
           <KeyToSymbol
             selectedKeyToSymbol={selectedKeyToSymbol}
