@@ -146,7 +146,6 @@ export const TopNavigationBar = () => {
         }
       });
     }
-   
   };
 
   const handleScroll = useCallback(() => {

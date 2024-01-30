@@ -17,7 +17,7 @@ export const notificationRoutes = [
   '/notification/all-notification',
   '/notification/setting'
 ];
-export const v2Routes = ['/v2','/v2/search'];
+export const v2Routes = ['/v2', '/v2/search'];
 export const protectedRoutes = [
   '/',
   '/search',

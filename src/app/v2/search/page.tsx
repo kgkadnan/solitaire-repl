@@ -10,17 +10,7 @@ const Search = () => {
 
   return (
     <>
-     <div>
-          {
-          editSubRoute === Routes.NEW_SEARCH ?
-            <Form />
-           : (
-            
-            <Result
-              
-            />
-          )}
-        </div>
+      <div>{editSubRoute === Routes.NEW_SEARCH ? <Form /> : <Result />}</div>
     </>
   );
 };

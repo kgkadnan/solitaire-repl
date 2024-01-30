@@ -175,7 +175,7 @@ module.exports = {
       },
       boxShadow: {
         inputShadow: 'var(--input-shadow)',
-        popupsShadow: 'var(--popups-shadow)',
+        popupsShadow: 'var(--popups-shadow)'
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',

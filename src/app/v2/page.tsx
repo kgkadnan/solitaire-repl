@@ -5,7 +5,7 @@ import Form from './search/form/form';
 const page = () => {
   return (
     <>
-     <Form/>
+      <Form />
     </>
   );
 };
