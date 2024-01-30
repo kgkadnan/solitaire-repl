@@ -1,6 +1,6 @@
 export enum Routes {
-  DASHBOARD = '/v2',
-  SEARCH = '/',
+  DASHBOARD = '/',
+  SEARCH = '/v2',
   MYDIAMONDS = '/',
   SAVEDSEARCH = '/',
   APPOINTMENTS = '/',

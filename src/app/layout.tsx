@@ -73,13 +73,10 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
               </>
             ) : isV2Route ? (
               <div className="flex w-full">
-                {/* <aside className="w-[84px] border-r border-solid overflow-hidden h-[100vh] fixed"></aside> */}
                 <SideNavigationBar />
 
                 <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
-                  <header className="min-h-[60px]  border-b-[1px] border-neutral200 sticky top-0 bg-neutral0 z-[3]">
-                    <V2TopNavigationBar />
-                  </header>
+                  <V2TopNavigationBar />
 
                   <main className="flex-1 px-[32px] ml-[84px]">{children}</main>
                 </div>

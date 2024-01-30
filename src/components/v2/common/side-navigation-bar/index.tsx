@@ -69,8 +69,12 @@ const SideNavigationBar = () => {
       <div className="z-50">
         {SideNavigationData.map((items: any) => {
           return (
-            <div className="my-[8px]" key={items.title}>
+            <div
+              className="my-[8px] first:border-b-[1px] last:border-t-[1px] border-neutral200"
+              key={items.title}
+            >
               <Tooltip
+                tooltipContentSide="right"
                 tooltipTrigger={
                   <div className="">
                     <Button
@@ -78,7 +82,7 @@ const SideNavigationBar = () => {
                       className={
                         items.isActive
                           ? 'bg-primaryMain p-[8px] rounded stroke-neutral25'
-                          : 'p-[8px] stroke-primaryIconColor'
+                          : 'p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50'
                       }
                     >
                       {items.src}
