@@ -26,14 +26,25 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     initialState: {
       showGlobalFilter: true,
       columnPinning: {
-        left: ['mrt-row-expand', 'mrt-row-select'],
+        left: ['mrt-row-expand', 'mrt-row-select', 'lot_id'],
         right: ['mrt-row-actions']
       }
     },
+    positionGlobalFilter: 'left',
     //styling
     muiTableHeadRowProps: {
       sx: {
-        backgroundColor: 'var(--neutral-50)'
+        backgroundColor: 'var(--neutral-50)',
+        '&.MuiTableCell-root': {
+          width: '10%',
+          minWidth: '10%'
+        }
+      }
+    },
+    muiTableHeadCellProps: {
+      sx: {
+        width: '10%',
+        minWidth: '10%'
       }
     },
     muiSelectAllCheckboxProps: {
@@ -43,6 +54,10 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
           fontSize: '25px'
         },
         '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        },
+        '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
+          /* Your styles for the element */
           color: 'var(--primary-main)'
         }
       }

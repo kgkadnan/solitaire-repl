@@ -2,8 +2,8 @@ import React from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { AccordionComponent } from '@/components/v2/common/accordion';
 import Tile from '@/components/v2/common/tile';
-import { handleSelection } from '@/app/v2/form/helpers/handle-filter-changes';
 import { otherParameter } from '@/constants/v2/form';
+import { handleSelection } from '../helpers/handle-filter-changes';
 
 // Define the interfaces for the component props
 interface IInclusionsData {
