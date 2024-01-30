@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import { Routes } from '@/constants/v2/enums/routes';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 import { useSearchParams } from 'next/navigation';
 import Form from './form/form';
 import Result from './result/result';
@@ -10,7 +10,7 @@ const Search = () => {
 
   return (
     <>
-      <div>{editSubRoute === Routes.NEW_SEARCH ? <Form /> : <Result />}</div>
+      <div>{editSubRoute === SubRoutes.NEW_SEARCH ? <Form /> : <Result />}</div>
     </>
   );
 };
