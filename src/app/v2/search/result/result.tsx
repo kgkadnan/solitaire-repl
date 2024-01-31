@@ -232,20 +232,22 @@ const Result = () => {
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
-          <Pill
-            isActive={true}
-            label={'Result'}
-            handlePillClick={() => {}}
-            handlePillEdit={() => {}}
-            handlePillDelete={() => {}}
-          />{' '}
-          <Pill
-            isActive={false}
-            label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-            handlePillClick={() => {}}
-            handlePillEdit={() => {}}
-            handlePillDelete={() => {}}
-          />
+          <div className="flex">
+            <Pill
+              isActive={true}
+              label={'Result'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />{' '}
+            <Pill
+              isActive={false}
+              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />
+          </div>
           <div className="pr-[2px] flex gap-[12px]">
             <ActionButton
               actionButtonData={[
