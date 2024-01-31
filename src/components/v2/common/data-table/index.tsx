@@ -22,6 +22,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableHiding: false,
     enableColumnFilters: false,
     enablePagination: false,
+    enableStickyHeader: true,
 
     initialState: {
       showGlobalFilter: true,
@@ -38,7 +39,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     muiTableContainerProps: {
       sx: {
         minHeight: '10vh',
-        height: '75vh'
+        height: '60vh'
       }
     },
     muiTableHeadRowProps: {
@@ -108,7 +109,11 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     }
   });
 
-  return <MaterialReactTable table={table} />;
+  return (
+    <form action="" autoComplete="off">
+      <MaterialReactTable table={table} />
+    </form>
+  );
 };
 
 export default DataTable;
