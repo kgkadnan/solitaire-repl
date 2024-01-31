@@ -98,17 +98,22 @@ const Result = () => {
                   svg: Add,
                   label: ManageLocales('app.search.newSearch'),
                   handler: handleNewSearch
+                },
+                {
+                  variant: 'secondary',
+                  svg: Bin,
+                  handler: handleNewSearch
                 }
               ]}
             />
-            <div className="flex border-[1px] border-neutral200 rounded-[4px] p-[8px] gap-[4px]">
+            {/* <div className="flex border-[1px] border-neutral200 rounded-[4px] p-[8px] gap-[4px]">
               {' '}
               <Image
                 src={Bin}
                 alt={'close all results'}
                 className="mx-auto justify-center"
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div>pieces</div>
