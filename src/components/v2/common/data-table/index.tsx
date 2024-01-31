@@ -13,7 +13,6 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
     state: { rowSelection },
-
     //filters
     positionToolbarAlertBanner: 'none',
     enableRowSelection: true, //enable some features
@@ -26,6 +25,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     initialState: {
       showGlobalFilter: true,
+
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select', 'lot_id'],
         right: ['mrt-row-actions']
@@ -34,6 +34,13 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     positionGlobalFilter: 'left',
     //styling
+
+    muiTableContainerProps: {
+      sx: {
+        minHeight: '10vh',
+        height: '75vh'
+      }
+    },
     muiTableHeadRowProps: {
       sx: {
         backgroundColor: 'var(--neutral-50)'
@@ -60,7 +67,8 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
       sx: {
         color: 'var(--neutral-200)',
         '& .MuiSvgIcon-root': {
-          fontSize: '25px'
+          fontWeight: 100,
+          fontSize: '26px'
         },
         '&.Mui-checked': {
           color: 'var(--primary-main)'
@@ -76,7 +84,8 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         color: 'var(--neutral-200)',
 
         '& .MuiSvgIcon-root': {
-          fontSize: '25px'
+          fontSize: '26px',
+          fontWeight: 100
           // fill: 'var(--neutral-200)'
         },
         '&.Mui-checked': {
