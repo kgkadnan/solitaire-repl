@@ -23,7 +23,6 @@ interface ISideNavigationBar {
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
   const router = useRouter();
-  console.log(currentRoute, 'currentRoute');
 
   const SideNavigationData: ISideNavigationBar[] = [
     {
