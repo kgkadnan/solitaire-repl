@@ -26,6 +26,7 @@ import Ind from '@public/v2/assets/png/data-table/IND.png';
 import Usa from '@public/v2/assets/png/data-table/USA.png';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import Tooltip from '@/components/v2/common/tooltip';
+import Pill from '@/components/v2/common/search-breadcrum/pill';
 
 interface ITableColumn {
   accessorKey: any;
@@ -97,8 +98,6 @@ const Result = () => {
     return <Image src={imageSrc} alt={renderedCellValue} />;
   };
   const RenderLotId = ({ renderedCellValue, row }: any) => {
-    console.log('row', row.original.diamond_status);
-
     let statusClass = '';
     let borderClass = '';
 
@@ -233,7 +232,20 @@ const Result = () => {
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
-          Breadcrum
+          <Pill
+            isActive={true}
+            label={'Result'}
+            handlePillClick={() => {}}
+            handlePillEdit={() => {}}
+            handlePillDelete={() => {}}
+          />{' '}
+          <Pill
+            isActive={false}
+            label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
+            handlePillClick={() => {}}
+            handlePillEdit={() => {}}
+            handlePillDelete={() => {}}
+          />
           <div className="pr-[2px] flex gap-[12px]">
             <ActionButton
               actionButtonData={[
