@@ -9,12 +9,12 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { MRT_RowSelectionState } from 'material-react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
-import Image from 'next/image';
 import Bin from '@public/v2/assets/icons/bin.svg';
 import Add from '@public/v2/assets/icons/add.svg';
 
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import CalculatedField from '@/components/v2/common/calculated-field';
 
 const Result = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -77,7 +77,6 @@ const Result = () => {
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
-
   return (
     <div>
       <div className="flex h-[81px] items-center ">
@@ -88,7 +87,7 @@ const Result = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
-        <div className="flex h-[72px] items-center justify-between border-b-[1px]">
+        <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
           Breadcrum
           <div className="pr-[2px] flex gap-[12px]">
             <ActionButton
@@ -106,25 +105,21 @@ const Result = () => {
                 }
               ]}
             />
-            {/* <div className="flex border-[1px] border-neutral200 rounded-[4px] p-[8px] gap-[4px]">
-              {' '}
-              <Image
-                src={Bin}
-                alt={'close all results'}
-                className="mx-auto justify-center"
-              />
-            </div> */}
           </div>
         </div>
-        <div>pieces</div>
+        <div>
+          <CalculatedField rows={rows} selectedProducts={rowSelection} />
+        </div>
+        <div className="border-b-[1px] border-t-[1px] border-neutral200">
+          <DataTable
+            rows={rows}
+            columns={columns}
+            setRowSelection={setRowSelection}
+            rowSelection={rowSelection}
+          />
+        </div>
       </div>
     </div>
-    // <DataTable
-    //   rows={rows}
-    //   columns={columns}
-    //   setRowSelection={setRowSelection}
-    //   rowSelection={rowSelection}
-    // />
   );
 };
 

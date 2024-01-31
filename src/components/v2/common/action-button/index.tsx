@@ -32,7 +32,7 @@ const ActionButton = ({ actionButtonData }: ICtaData) => {
             return null;
           }
           return (
-            <div className={`${customStyle}`}>
+            <div className={`${customStyle}`} key={label}>
               <Button
                 key={label}
                 disabled={isDisable}

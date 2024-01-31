@@ -24,11 +24,6 @@ import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import ActionButton from '@/components/v2/common/action-button';
-import bookmarkAddIcon from '@public/v2/assets/icons/bookmark-add-01.svg';
-import searchIcon from '@public/v2/assets/icons/searchIcon.svg';
-import addDemand from '@public/v2/assets/icons/add.svg';
-
-import arrowIcon from '@public/v2/assets/icons/arrows.svg';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
