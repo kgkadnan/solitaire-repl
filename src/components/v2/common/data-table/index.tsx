@@ -23,6 +23,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableColumnFilters: false,
     enablePagination: false,
     enableStickyHeader: true,
+    enableBottomToolbar: false,
 
     initialState: {
       showGlobalFilter: true,
