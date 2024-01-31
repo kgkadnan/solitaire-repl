@@ -227,20 +227,20 @@ const Form = () => {
     // },
     {
       variant: 'secondary',
-      svg: arrowIcon,
+      // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.reset'),
       handler: handleFormReset
     },
 
     {
       variant: 'secondary',
-      svg: bookmarkAddIcon,
+      // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {}
     },
     {
       variant: 'primary',
-      svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
+      // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
       label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
       handler: () => {}
     }

@@ -7,8 +7,8 @@ export interface IFormState {
 
 export interface IActionButtonDataItem {
   variant: 'secondary' | 'primary' | 'disable';
-  svg: string; // Assuming the type of 'svg' is string, update it accordingly
-  label: string;
+  svg?: string; // Assuming the type of 'svg' is string, update it accordingly
+  label?: string;
   isDisable?: boolean;
   handler: () => void;
   isHidden?: boolean;
