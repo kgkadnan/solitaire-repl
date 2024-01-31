@@ -98,7 +98,6 @@ const Result = () => {
     return <Image src={imageSrc} alt={renderedCellValue} />;
   };
   const RenderLotId = ({ renderedCellValue, row }: any) => {
-
     let statusClass = '';
     let borderClass = '';
 
@@ -222,28 +221,16 @@ const Result = () => {
           <Pill
             isActive={true}
             label={'Result'}
-            handlePillClick={() => {
-                ('kokok');
-            }}
-            handlePillEdit={() => {
-              console.log('eeeee');
-            }}
-            handlePillDelete={() => {
-              console.log('dddddd');
-            }}
+            handlePillClick={() => {}}
+            handlePillEdit={() => {}}
+            handlePillDelete={() => {}}
           />{' '}
           <Pill
             isActive={false}
             label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-            handlePillClick={() => {
-              console.log('kokok');
-            }}
-            handlePillEdit={() => {
-              console.log('eeeee');
-            }}
-            handlePillDelete={() => {
-              console.log('dddddd');
-            }}
+            handlePillClick={() => {}}
+            handlePillEdit={() => {}}
+            handlePillDelete={() => {}}
           />
           <div className="pr-[2px] flex gap-[12px]">
             <ActionButton
