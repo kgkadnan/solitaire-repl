@@ -1,4 +1,6 @@
 'use client';
+// eslint-disable-next-line no-unused-vars
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import React, { ReactNode, FC } from 'react';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
