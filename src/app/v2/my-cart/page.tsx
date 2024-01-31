@@ -1,25 +1,18 @@
+'use client';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import CalculatedField from '@/components/v2/common/calculated-field';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
-import React, { useEffect, useState } from 'react';
 import {
+  AVAILABLE_STATUS,
   GIA_LINK,
   HOLD_STATUS,
-  LISTING_PAGE_DATA_LIMIT,
-  MEMO_STATUS
+  MEMO_STATUS,
+  SOLD_STATUS
 } from '@/constants/business-logic';
-import { useLazyGetAllProductQuery } from '@/features/api/product';
-import { constructUrlParams } from '@/utils/v2/construct-url-params';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { MRT_RowSelectionState } from 'material-react-table';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
-import Bin from '@public/v2/assets/icons/bin.svg';
-import Add from '@public/v2/assets/icons/add.svg';
-
-import ActionButton from '@/components/v2/common/action-button';
-import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import CalculatedField from '@/components/v2/common/calculated-field';
+import { MRT_RowSelectionState } from 'material-react-table';
 import Link from 'next/link';
 import Image from 'next/image';
 import Ind from '@public/v2/assets/png/data-table/IND.png';
@@ -27,6 +20,9 @@ import Usa from '@public/v2/assets/png/data-table/USA.png';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import Tooltip from '@/components/v2/common/tooltip';
 
+import React, { useEffect, useState } from 'react';
+import { useLazyGetCartQuery } from '@/features/api/cart';
+import { IProductItem } from '@/app/my-cart/interface/interface';
 interface ITableColumn {
   accessorKey: any;
   header: any;
@@ -41,42 +37,35 @@ interface ITableColumn {
   size?: number;
   // Add other properties as needed
 }
-
-const Result = () => {
+const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
+  const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-  const editRoute = useSearchParams().get('edit');
-  const router = useRouter();
 
-  let [triggerProductApi] = useLazyGetAllProductQuery();
+  const [tiggerCart] = useLazyGetCartQuery({});
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
   useEffect(() => {
     const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
-
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
-
-        // Always fetch data, even on initial load
-        const url = constructUrlParams(parseYourSelection[0]?.queryParams);
-        triggerProductApi({
-          offset: 0,
-          limit: LISTING_PAGE_DATA_LIMIT,
-          url: url
-        }).then(res => {
-          if (res?.data?.products?.length) {
-            setRows(res?.data?.products);
-          }
-        });
-      }
+      tiggerCart({}).then(res => {
+        if (res.data.cart.items.length) {
+          let cartData = res.data.cart.items;
+          const rowData = cartData
+            ?.filter(
+              (item: IProductItem) =>
+                item?.product?.diamond_status === activeTab
+            )
+            .map((row: IProductItem) => row?.product);
+          setRows(rowData);
+        }
+      });
     };
     fetchMyAPI();
-  }, []);
+  }, [activeTab, setActiveTab]);
 
   // const columnHelper = createMRTColumnHelper<any>();
 
@@ -217,37 +206,54 @@ const Result = () => {
     });
   }, []);
 
-  const handleNewSearch = () => {
-    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+  const myCartTabs = [
+    {
+      label: 'Active',
+      status: AVAILABLE_STATUS
+    },
+    {
+      label: 'Memo',
+      status: MEMO_STATUS
+    },
+    {
+      label: 'Hold',
+      status: HOLD_STATUS
+    },
+    {
+      label: 'Sold',
+      status: SOLD_STATUS
+    }
+  ];
+
+  const handleTabs = ({ tab }: { tab: string }) => {
+    setActiveTab(tab);
   };
+
   return (
     <div>
       <div className="flex h-[81px] items-center ">
         <p className="text-headingM font-medium text-neutral900">
-          {editRoute
-            ? ManageLocales('app.result.headerEdit')
-            : ManageLocales('app.result.headerResult')}
+          {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
-        <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
-          Breadcrum
-          <div className="pr-[2px] flex gap-[12px]">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  svg: Add,
-                  label: ManageLocales('app.search.newSearch'),
-                  handler: handleNewSearch
-                },
-                {
-                  variant: 'secondary',
-                  svg: Bin,
-                  handler: handleNewSearch
-                }
-              ]}
-            />
+        <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
+          <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
+            {myCartTabs.map(({ label, status }) => {
+              return (
+                <button
+                  className={`px-[16px] py-[8px] ${
+                    activeTab === status
+                      ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                      : 'text-neutral600'
+                  }`}
+                  key={label}
+                  onClick={() => handleTabs({ tab: status })}
+                >
+                  {label}
+                </button>
+              );
+            })}
           </div>
         </div>
         <div>
@@ -266,4 +272,4 @@ const Result = () => {
   );
 };
 
-export default Result;
+export default MyCart;

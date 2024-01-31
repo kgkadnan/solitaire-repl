@@ -15,7 +15,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     state: { rowSelection },
     //filters
     positionToolbarAlertBanner: 'none',
-    enableRowSelection: true, //enable some features
+    enableRowSelection: true,
     enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
@@ -111,7 +111,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
   });
 
   return (
-    <form action="" autoComplete="off">
+    <form autoComplete="off">
       <MaterialReactTable table={table} />
     </form>
   );

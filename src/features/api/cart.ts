@@ -31,5 +31,9 @@ export const cartApi = createApi({
   })
 });
 
-export const { useAddCartMutation, useGetCartQuery, useDeleteCartMutation } =
-  cartApi;
+export const {
+  useAddCartMutation,
+  useGetCartQuery,
+  useLazyGetCartQuery,
+  useDeleteCartMutation
+} = cartApi;
