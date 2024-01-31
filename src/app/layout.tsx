@@ -1,7 +1,6 @@
 'use client';
-// eslint-disable-next-line no-unused-vars
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import React, { ReactNode, FC } from 'react';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
 import { TopNavigationBar } from '@/components/common/top-navigation-bar';
@@ -90,6 +89,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
             )}
           </ThemeProviders>
         </Provider>
+        <SpeedInsights />
       </body>
     </html>
   );
