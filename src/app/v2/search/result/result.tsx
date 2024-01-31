@@ -12,6 +12,14 @@ import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { ManageLocales } from '@/utils/v2/translate';
+import Bin from '@public/v2/assets/icons/bin.svg';
+import Add from '@public/v2/assets/icons/add.svg';
+
+import ActionButton from '@/components/v2/common/action-button';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import CalculatedField from '@/components/v2/common/calculated-field';
 import Link from 'next/link';
 import Image from 'next/image';
 import Ind from '@public/v2/assets/png/data-table/IND.png';
@@ -39,6 +47,8 @@ const Result = () => {
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const editRoute = useSearchParams().get('edit');
+  const router = useRouter();
 
   let [triggerProductApi] = useLazyGetAllProductQuery();
 
@@ -195,13 +205,52 @@ const Result = () => {
     });
   }, []);
 
+  const handleNewSearch = () => {
+    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+  };
   return (
-    <DataTable
-      rows={rows}
-      columns={columns}
-      setRowSelection={setRowSelection}
-      rowSelection={rowSelection}
-    />
+    <div>
+      <div className="flex h-[81px] items-center ">
+        <p className="text-headingM font-medium text-neutral900">
+          {editRoute
+            ? ManageLocales('app.result.headerEdit')
+            : ManageLocales('app.result.headerResult')}
+        </p>
+      </div>
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
+        <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
+          Breadcrum
+          <div className="pr-[2px] flex gap-[12px]">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  svg: Add,
+                  label: ManageLocales('app.search.newSearch'),
+                  handler: handleNewSearch
+                },
+                {
+                  variant: 'secondary',
+                  svg: Bin,
+                  handler: handleNewSearch
+                }
+              ]}
+            />
+          </div>
+        </div>
+        <div>
+          <CalculatedField rows={rows} selectedProducts={rowSelection} />
+        </div>
+        <div className="border-b-[1px] border-t-[1px] border-neutral200">
+          <DataTable
+            rows={rows}
+            columns={columns}
+            setRowSelection={setRowSelection}
+            rowSelection={rowSelection}
+          />
+        </div>
+      </div>
+    </div>
   );
 };
 

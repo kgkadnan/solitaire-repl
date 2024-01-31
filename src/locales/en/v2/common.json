@@ -10,5 +10,15 @@
   "app.sideNavigationBar.bookmark": "Saved Search ",
   "app.sideNavigationBar.appointments": "Appointments",
   "app.sideNavigationBar.myCart": "My Cart",
-  "app.sideNavigationBar.settings": "Settings"
+  "app.sideNavigationBar.settings": "Settings",
+
+  "app.result.headerResult": "Here are the relevant results for your search",
+  "app.result.headerEdit": "You are editing your",
+  "app.search.newSearch": "New Search",
+
+  "app.calculatedField.pieces": "No. of Pieces",
+  "app.calculatedField.carat": "Total Carats",
+  "app.calculatedField.discount": "Total Avg. Dis",
+  "app.calculatedField.pr/ct": "Avg. Pr/Ct",
+  "app.calculatedField.amount": "Total Amount"
 }
