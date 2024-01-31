@@ -27,6 +27,10 @@ interface ITableColumn {
   Cell?: React.ComponentType<any>; // Define the Cell property
   accessorFn?: any;
   id?: any;
+  enableSorting: any;
+  minSize?: number;
+  maxSize?: number;
+  size?: number;
   // Add other properties as needed
 }
 
@@ -130,12 +134,16 @@ const Result = () => {
   };
 
   const mapColumns = (columns: any) => {
-    console.log('columns', columns);
     return columns.map((col: any) => {
       let columnDefinition: ITableColumn = {
         accessorKey: col.accessor,
         header: col.short_label,
         enableGlobalFilter: false,
+        enableSorting: true,
+        minSize: 5, //min size enforced during resizing
+        maxSize: 200, //max size enforced during resizing
+        size: 5, //medium column,
+
         Header: ({ column }: any) => (
           <Tooltip
             tooltipTrigger={<span>{column.columnDef.header}</span>}
@@ -145,6 +153,10 @@ const Result = () => {
         ) //arrow function
         // Add other properties as needed
       };
+
+      if (col.accessor === 'shape') {
+        columnDefinition.enableSorting = false;
+      }
 
       // Check if the column accessor is 'lot_id'
       if (col.accessor === 'lot_id') {

@@ -19,7 +19,6 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableRowSelection: true, //enable some features
     enableFilters: true,
     enableColumnActions: false,
-    enableSorting: true,
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
@@ -43,20 +42,18 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     muiTableBodyCellProps: {
       sx: {
-        color: 'var(--neutral-900)'
-        // '&.MuiTableCell-root': {
-        //   width: '10%',
-        //   minWidth: '10%'
-        // }
+        color: 'var(--neutral-900)',
+        '&.MuiTableCell-root': {
+          padding: '4px 8px'
+        }
       }
     },
     muiTableHeadCellProps: {
       sx: {
-        color: 'var(--neutral-700)'
-        // '&.MuiTableCell-root': {
-        //   width: '10%',
-        //   minWidth: '10%'
-        // }
+        color: 'var(--neutral-700)',
+        '&.MuiTableCell-root': {
+          padding: '4px 8px'
+        }
       }
     },
     muiSelectAllCheckboxProps: {
@@ -97,13 +94,6 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         },
         '&.MuiTableRow-root:active .MuiTableCell-root::after': {
           backgroundColor: 'var(--neutral-100)'
-        },
-        '&.MuiTableRow-root:hover .MuiTableSortLabel-icon': {
-          opacity: 4
-        },
-        '&.MuiTableRow-root .MuiTableSortLabel-icon': {
-          opacity: 0,
-          transition: 'opacity 0.3s ease'
         }
       }
     }
