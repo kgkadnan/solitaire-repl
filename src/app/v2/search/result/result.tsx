@@ -143,6 +143,16 @@ const Result = () => {
     return <Image src={Media} alt="Media" />;
   };
 
+  const RenderDiscount = ({ renderedCellValue }: any) => {
+    return (
+      <div
+        className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
+      >
+        {`${renderedCellValue.toFixed(2)}%`}
+      </div>
+    );
+  };
+
   const mapColumns = (columns: any) => {
     return columns.map((col: any) => {
       let columnDefinition: ITableColumn = {
@@ -166,6 +176,10 @@ const Result = () => {
 
       if (col.accessor === 'shape') {
         columnDefinition.enableSorting = false;
+      }
+
+      if (col.accessor === 'discount') {
+        columnDefinition.Cell = RenderDiscount;
       }
 
       // Check if the column accessor is 'lot_id'
