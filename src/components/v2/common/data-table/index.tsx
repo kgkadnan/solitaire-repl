@@ -13,6 +13,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
     state: { rowSelection },
+
     //filters
     positionToolbarAlertBanner: 'none',
     enableRowSelection: true, //enable some features
@@ -23,6 +24,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableHiding: false,
     enableColumnFilters: false,
     enablePagination: false,
+
     initialState: {
       showGlobalFilter: true,
       columnPinning: {
@@ -30,20 +32,31 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         right: ['mrt-row-actions']
       }
     },
+
     positionGlobalFilter: 'left',
     //styling
     muiTableHeadRowProps: {
       sx: {
-        backgroundColor: 'var(--neutral-50)',
-        '&.MuiTableCell-root': {
-          width: '10%',
-          minWidth: '10%'
-        }
+        backgroundColor: 'var(--neutral-50)'
+      }
+    },
+
+    muiTableBodyCellProps: {
+      sx: {
+        color: 'var(--neutral-900)'
+        // '&.MuiTableCell-root': {
+        //   width: '10%',
+        //   minWidth: '10%'
+        // }
       }
     },
     muiTableHeadCellProps: {
       sx: {
         color: 'var(--neutral-700)'
+        // '&.MuiTableCell-root': {
+        //   width: '10%',
+        //   minWidth: '10%'
+        // }
       }
     },
     muiSelectAllCheckboxProps: {
@@ -84,6 +97,13 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         },
         '&.MuiTableRow-root:active .MuiTableCell-root::after': {
           backgroundColor: 'var(--neutral-100)'
+        },
+        '&.MuiTableRow-root:hover .MuiTableSortLabel-icon': {
+          opacity: 4
+        },
+        '&.MuiTableRow-root .MuiTableSortLabel-icon': {
+          opacity: 0,
+          transition: 'opacity 0.3s ease'
         }
       }
     }
