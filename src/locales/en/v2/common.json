@@ -20,5 +20,8 @@
   "app.calculatedField.carat": "Total Carats",
   "app.calculatedField.discount": "Total Avg. Dis",
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
-  "app.calculatedField.amount": "Total Amount"
+  "app.calculatedField.amount": "Total Amount",
+
+
+  "app.myCart.mycart" : "My Cart"
 }
