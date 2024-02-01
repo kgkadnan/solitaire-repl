@@ -21,8 +21,13 @@ import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import Tooltip from '@/components/v2/common/tooltip';
 
 import React, { useEffect, useState } from 'react';
-import { useLazyGetCartQuery } from '@/features/api/cart';
+import {
+  useDeleteCartMutation,
+  useLazyGetCartQuery
+} from '@/features/api/cart';
 import { IProductItem } from '@/app/my-cart/interface/interface';
+import ActionButton from '@/components/v2/common/action-button';
+import logger from 'logging/log-util';
 interface ITableColumn {
   accessorKey: any;
   header: any;
@@ -43,29 +48,66 @@ const MyCart = () => {
   const { setRows, setColumns } = dataTableSetState;
   const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-
+  const [cartItems, setCartItems] = useState<any>([]);
+  const [diamondStatusCounts, setDiamondStatusCounts] = useState({
+    Available: 0,
+    Memo: 0,
+    Hold: 0,
+    Sold: 0
+  });
   const [tiggerCart] = useLazyGetCartQuery({});
+  // Mutation for deleting items from the cart
+  const [deleteCart] = useDeleteCartMutation();
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
+  const processCartItems = ({
+    cartItems,
+    activeTab
+  }: {
+    cartItems: any;
+    activeTab: string;
+  }) => {
+    const counts = {
+      Available: 0,
+      Memo: 0,
+      Hold: 0,
+      Sold: 0
+    };
+
+    const filteredRows = cartItems.filter((item: IProductItem) => {
+      counts[item?.product?.diamond_status]++;
+      return item?.product?.diamond_status === activeTab;
+    });
+
+    const mappedRows = filteredRows.map((row: any) => row?.product);
+
+    return { filteredRows, mappedRows, counts };
+  };
+
   useEffect(() => {
     const fetchMyAPI = async () => {
-      tiggerCart({}).then(res => {
-        if (res.data.cart.items.length) {
-          let cartData = res.data.cart.items;
-          const rowData = cartData
-            ?.filter(
-              (item: IProductItem) =>
-                item?.product?.diamond_status === activeTab
-            )
-            .map((row: IProductItem) => row?.product);
-          setRows(rowData);
+      try {
+        const cartResponse = await tiggerCart({});
+        if (cartResponse.data.cart.items.length) {
+          const { filteredRows, mappedRows, counts } = processCartItems({
+            cartItems: cartResponse.data.cart.items,
+            activeTab
+          });
+
+          setCartItems(filteredRows);
+          setDiamondStatusCounts(counts);
+          setRowSelection({});
+          setRows(mappedRows);
         }
-      });
+      } catch (error) {
+        logger.error(error);
+      }
     };
+
     fetchMyAPI();
-  }, [activeTab, setActiveTab]);
+  }, [activeTab]);
 
   // const columnHelper = createMRTColumnHelper<any>();
 
@@ -209,24 +251,60 @@ const MyCart = () => {
   const myCartTabs = [
     {
       label: 'Active',
-      status: AVAILABLE_STATUS
+      status: AVAILABLE_STATUS,
+      count: diamondStatusCounts.Available
     },
     {
       label: 'Memo',
-      status: MEMO_STATUS
+      status: MEMO_STATUS,
+      count: diamondStatusCounts.Memo
     },
     {
       label: 'Hold',
-      status: HOLD_STATUS
+      status: HOLD_STATUS,
+      count: diamondStatusCounts.Hold
     },
     {
       label: 'Sold',
-      status: SOLD_STATUS
+      status: SOLD_STATUS,
+      count: diamondStatusCounts.Sold
     }
   ];
 
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
+  };
+
+  // Handle the actual deletion of stones
+  const deleteCartHandler = () => {
+    let selectedIds = Object.keys(rowSelection);
+    if (selectedIds?.length) {
+      const deleteCartIds = selectedIds.map((id: string) => {
+        const selectedRow = cartItems.find(
+          (row: IProductItem) => row.product.id === id
+        );
+        return selectedRow?.id;
+      });
+
+      deleteCart({
+        items: deleteCartIds
+      })
+        .unwrap()
+        .then(res => {
+          const { filteredRows, mappedRows, counts } = processCartItems({
+            cartItems: res.cart.items,
+            activeTab
+          });
+
+          setCartItems(filteredRows);
+          setDiamondStatusCounts(counts);
+          setRowSelection({});
+          setRows(mappedRows);
+        })
+        .catch(error => {
+          logger.error(error);
+        });
+    }
   };
 
   return (
@@ -239,7 +317,7 @@ const MyCart = () => {
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
-            {myCartTabs.map(({ label, status }) => {
+            {myCartTabs.map(({ label, status, count }) => {
               return (
                 <button
                   className={`px-[16px] py-[8px] ${
@@ -250,21 +328,61 @@ const MyCart = () => {
                   key={label}
                   onClick={() => handleTabs({ tab: status })}
                 >
-                  {label}
+                  {label}({count})
                 </button>
               );
             })}
           </div>
         </div>
-        <div>
-          <CalculatedField rows={rows} selectedProducts={rowSelection} />
-        </div>
+        {activeTab !== SOLD_STATUS && (
+          <div>
+            <CalculatedField rows={rows} selectedProducts={rowSelection} />
+          </div>
+        )}
+
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
           <DataTable
             rows={rows}
             columns={columns}
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
+          />
+        </div>
+        <div className="p-[16px]">
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.myCart.actionButton.delete'),
+                handler: deleteCartHandler
+              },
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.myCart.actionButton.bookAppointment'),
+                handler: () => {},
+                isHidden: activeTab !== AVAILABLE_STATUS
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.myCart.actionButton.confirmStone'),
+                handler: () => {},
+                isHidden: activeTab !== AVAILABLE_STATUS
+              },
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.myCart.actionButton.compareStone'),
+                handler: () => {},
+                isHidden: activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales(
+                  'app.myCart.actionButton.viewSimilarStone'
+                ),
+                handler: () => {},
+                isHidden: activeTab === AVAILABLE_STATUS
+              }
+            ]}
           />
         </div>
       </div>

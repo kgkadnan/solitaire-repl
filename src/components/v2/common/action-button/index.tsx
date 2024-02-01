@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './action-button.module.scss';
 import Image from 'next/image';
 
-interface ICtaData {
+interface IActionButtonData {
   actionButtonData: {
     variant: 'secondary' | 'primary' | 'disable';
     svg?: any; // Assuming the type of 'svg' is string, update it accordingly
@@ -15,7 +15,7 @@ interface ICtaData {
   }[];
 }
 
-const ActionButton = ({ actionButtonData }: ICtaData) => {
+const ActionButton = ({ actionButtonData }: IActionButtonData) => {
   return (
     <div className={styles.ctaContainer}>
       {actionButtonData.map(

@@ -23,5 +23,11 @@
   "app.calculatedField.amount": "Total Amount",
 
 
-  "app.myCart.mycart" : "My Cart"
+  "app.myCart.mycart" : "My Cart",
+  "app.myCart.actionButton.delete" : "Delete",
+  "app.myCart.actionButton.bookAppointment" :"Book Appointment",
+  "app.myCart.actionButton.confirmStone" : "Confirm Stone",
+  "app.myCart.actionButton.viewSimilarStone" : "View Similar Stone",
+  "app.myCart.actionButton.compareStone" :"Compare Stone"
+
 }
