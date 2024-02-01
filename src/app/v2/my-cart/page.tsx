@@ -28,6 +28,8 @@ import {
 import { IProductItem } from '@/app/my-cart/interface/interface';
 import ActionButton from '@/components/v2/common/action-button';
 import logger from 'logging/log-util';
+import EmptyScreen from '@/components/v2/common/empty-screen';
+import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 interface ITableColumn {
   accessorKey: any;
   header: any;
@@ -127,32 +129,7 @@ const MyCart = () => {
 
     return <Image src={imageSrc} alt={renderedCellValue} />;
   };
-  const RenderLotId = ({ renderedCellValue, row }: any) => {
-    let statusClass = '';
-    let borderClass = '';
 
-    if (row.original.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill';
-      borderClass = 'border-lengendMemoBorder';
-    } else if (row.original.diamond_status === HOLD_STATUS) {
-      statusClass = 'bg-legendHoldFill';
-      borderClass = 'border-lengendHoldBorder';
-    } else if (row.original.in_cart?.length) {
-      statusClass = 'bg-legendInCartFill';
-      borderClass = 'border-lengendInCardBorder';
-    } else {
-      statusClass = 'bg-lneutral0';
-      borderClass = 'border-neutral0';
-    }
-
-    return (
-      <span
-        className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
-      >
-        {renderedCellValue}
-      </span>
-    );
-  };
   const RenderLab = ({ renderedCellValue, row }: any) => {
     return (
       <>
@@ -214,7 +191,6 @@ const MyCart = () => {
       // Check if the column accessor is 'lot_id'
       if (col.accessor === 'lot_id') {
         columnDefinition.enableGlobalFilter = true;
-        columnDefinition.Cell = RenderLotId;
       }
 
       if (col.accessor === 'details') {
@@ -334,57 +310,75 @@ const MyCart = () => {
             })}
           </div>
         </div>
-        {activeTab !== SOLD_STATUS && (
-          <div>
-            <CalculatedField rows={rows} selectedProducts={rowSelection} />
-          </div>
-        )}
 
-        <div className="border-b-[1px] border-t-[1px] border-neutral200">
-          <DataTable
-            rows={rows}
-            columns={columns}
-            setRowSelection={setRowSelection}
-            rowSelection={rowSelection}
+        {rows.length ? (
+          <div>
+            {activeTab !== SOLD_STATUS && (
+              <div>
+                <CalculatedField rows={rows} selectedProducts={rowSelection} />
+              </div>
+            )}
+            <div className="border-b-[1px] border-t-[1px] border-neutral200">
+              <DataTable
+                rows={rows}
+                columns={columns}
+                setRowSelection={setRowSelection}
+                rowSelection={rowSelection}
+              />
+            </div>
+            <div className="p-[16px]">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.myCart.actionButton.delete'),
+                    handler: deleteCartHandler
+                  },
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.bookAppointment'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.confirmStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.compareStone'
+                    ),
+                    handler: () => {},
+                    isHidden:
+                      activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.viewSimilarStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab === AVAILABLE_STATUS
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        ) : (
+          <EmptyScreen
+            label={ManageLocales('app.emptyCart.actionButton.searchDiamonds')}
+            message="No diamonds in your cart yet. Let’s change that!"
+            onClickHandler={() => {}}
+            imageSrc={empty}
           />
-        </div>
-        <div className="p-[16px]">
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myCart.actionButton.delete'),
-                handler: deleteCartHandler
-              },
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myCart.actionButton.bookAppointment'),
-                handler: () => {},
-                isHidden: activeTab !== AVAILABLE_STATUS
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.myCart.actionButton.confirmStone'),
-                handler: () => {},
-                isHidden: activeTab !== AVAILABLE_STATUS
-              },
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myCart.actionButton.compareStone'),
-                handler: () => {},
-                isHidden: activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales(
-                  'app.myCart.actionButton.viewSimilarStone'
-                ),
-                handler: () => {},
-                isHidden: activeTab === AVAILABLE_STATUS
-              }
-            ]}
-          />
-        </div>
+        )}
       </div>
     </div>
   );

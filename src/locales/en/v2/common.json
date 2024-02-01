@@ -22,6 +22,8 @@
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
   "app.calculatedField.amount": "Total Amount",
 
+  "app.emptyCart.actionButton.searchDiamonds" : "Search Diamonds",
+
 
   "app.myCart.mycart" : "My Cart",
   "app.myCart.actionButton.delete" : "Delete",
