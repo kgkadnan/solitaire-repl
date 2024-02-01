@@ -23,6 +23,10 @@
   "app.calculatedField.amount": "Total Amount",
 
   "app.emptyCart.actionButton.searchDiamonds" : "Search Diamonds",
+  
+  "app.modal.okay" : "Okay",
+  "app.modal.yes" : "Yes",
+  "app.modal.no" : "No",
 
 
   "app.myCart.mycart" : "My Cart",

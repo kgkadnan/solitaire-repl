@@ -17,7 +17,7 @@ interface IActionButtonData {
 
 const ActionButton = ({ actionButtonData }: IActionButtonData) => {
   return (
-    <div className={styles.ctaContainer}>
+    <div className={`${styles.ctaContainer}`}>
       {actionButtonData.map(
         ({
           isDisable,

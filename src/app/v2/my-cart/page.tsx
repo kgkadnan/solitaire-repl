@@ -30,6 +30,10 @@ import ActionButton from '@/components/v2/common/action-button';
 import logger from 'logging/log-util';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import deleteIcon from '@public/v2/assets/icons/modal/delete-icon.svg';
+import confirmIcon from '@public/v2/assets/icons/modal/featured-icon.svg';
 interface ITableColumn {
   accessorKey: any;
   header: any;
@@ -46,6 +50,9 @@ interface ITableColumn {
 }
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isDialogOpen, dialogContent } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
   const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
@@ -251,40 +258,95 @@ const MyCart = () => {
     setActiveTab(tab);
   };
 
+  const handleDelete = ({ selectedIds }: { selectedIds: string[] }) => {
+    const deleteCartIds = selectedIds.map((id: string) => {
+      const selectedRow = cartItems.find(
+        (row: IProductItem) => row.product.id === id
+      );
+      return selectedRow?.id;
+    });
+
+    deleteCart({
+      items: deleteCartIds
+    })
+      .unwrap()
+      .then(res => {
+        const { filteredRows, mappedRows, counts } = processCartItems({
+          cartItems: res.cart.items,
+          activeTab
+        });
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <Image src={confirmIcon} alt="confirmIcon" />
+            <h1 className="text-headingS text-neutral900">
+              Item successfully deleted from “My Cart”
+            </h1>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => setIsDialogOpen(false),
+                  customStyle: 'flex-1 w-full'
+                }
+              ]}
+            />
+          </>
+        );
+        setCartItems(filteredRows);
+        setDiamondStatusCounts(counts);
+        setRowSelection({});
+        setRows(mappedRows);
+      })
+      .catch(error => {
+        logger.error(error);
+      });
+  };
+
   // Handle the actual deletion of stones
   const deleteCartHandler = () => {
     let selectedIds = Object.keys(rowSelection);
     if (selectedIds?.length) {
-      const deleteCartIds = selectedIds.map((id: string) => {
-        const selectedRow = cartItems.find(
-          (row: IProductItem) => row.product.id === id
-        );
-        return selectedRow?.id;
-      });
+      setDialogContent(
+        <>
+          <Image src={deleteIcon} alt="deleteIcon" />
 
-      deleteCart({
-        items: deleteCartIds
-      })
-        .unwrap()
-        .then(res => {
-          const { filteredRows, mappedRows, counts } = processCartItems({
-            cartItems: res.cart.items,
-            activeTab
-          });
-
-          setCartItems(filteredRows);
-          setDiamondStatusCounts(counts);
-          setRowSelection({});
-          setRows(mappedRows);
-        })
-        .catch(error => {
-          logger.error(error);
-        });
+          <div>
+            <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+            <p className="text-neutral600 text-mRegular">
+              Do you want to delete the selected stones?
+            </p>
+          </div>
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.no'),
+                handler: () => setIsDialogOpen(false),
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.yes'),
+                handler: () => handleDelete({ selectedIds }),
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </>
+      );
+      setIsDialogOpen(true);
     }
   };
 
   return (
     <div>
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="flex h-[81px] items-center ">
         <p className="text-headingM font-medium text-neutral900">
           {ManageLocales('app.myCart.mycart')}
