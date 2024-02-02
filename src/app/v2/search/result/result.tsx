@@ -79,67 +79,70 @@ const Result = () => {
   }, []);
 
   const mapColumns = (columns: any) => {
-    return columns.map((col: any) => {
-      let columnDefinition: ITableColumn = {
-        accessorKey: col.accessor,
-        header: col.short_label,
-        enableGlobalFilter: false,
-        enableSorting: true,
-        minSize: 5, //min size enforced during resizing
-        maxSize: 200, //max size enforced during resizing
-        size: 5, //medium column,
+    return columns
+      ?.filter((column: any) => !column.is_disabled)
+      ?.sort((a: any, b: any) => a.sequence - b.sequence)
+      .map((col: any) => {
+        let columnDefinition: ITableColumn = {
+          accessorKey: col.accessor,
+          header: col.short_label,
+          enableGlobalFilter: false,
+          enableSorting: true,
+          minSize: 5, //min size enforced during resizing
+          maxSize: 200, //max size enforced during resizing
+          size: 5, //medium column,
 
-        Header: ({ column }: any) => (
-          <Tooltip
-            tooltipTrigger={<span>{column.columnDef.header}</span>}
-            tooltipContent={col.label}
-            tooltipContentStyles={'z-[4]'}
-          />
-        ) //arrow function
-        // Add other properties as needed
-      };
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={col.label}
+              tooltipContentStyles={'z-[4]'}
+            />
+          ) //arrow function
+          // Add other properties as needed
+        };
 
-      if (col.accessor === 'carat') {
-        columnDefinition.Cell = RenderCarat;
-      }
+        if (col.accessor === 'carat') {
+          columnDefinition.Cell = RenderCarat;
+        }
 
-      if (col.accessor === 'shape') {
-        columnDefinition.enableSorting = false;
-      }
+        if (col.accessor === 'shape') {
+          columnDefinition.enableSorting = false;
+        }
 
-      if (col.accessor === 'discount') {
-        columnDefinition.Cell = RenderDiscount;
-      }
+        if (col.accessor === 'discount') {
+          columnDefinition.Cell = RenderDiscount;
+        }
 
-      // Check if the column accessor is 'lot_id'
-      if (col.accessor === 'lot_id') {
-        columnDefinition.enableGlobalFilter = true;
-        columnDefinition.Cell = RenderLotId;
-      }
+        // Check if the column accessor is 'lot_id'
+        if (col.accessor === 'lot_id') {
+          columnDefinition.enableGlobalFilter = true;
+          columnDefinition.Cell = RenderLotId;
+        }
 
-      if (col.accessor === 'details') {
-        columnDefinition.Cell = RenderDetails;
-      }
-      if (col.accessor === 'amount') {
-        columnDefinition.id = 'amount';
-        columnDefinition.accessorFn = (row: any) =>
-          row.variants[0].prices[0].amount;
-      }
+        if (col.accessor === 'details') {
+          columnDefinition.Cell = RenderDetails;
+        }
+        if (col.accessor === 'amount') {
+          columnDefinition.id = 'amount';
+          columnDefinition.accessorFn = (row: any) =>
+            row.variants[0].prices[0].amount;
+        }
 
-      if (col.accessor === 'lab') {
-        columnDefinition.Cell = RenderLab;
-      }
+        if (col.accessor === 'lab') {
+          columnDefinition.Cell = RenderLab;
+        }
 
-      // Check if the column accessor is 'some_column'
-      if (col.accessor === 'location') {
-        // Map the Cell property for 'some_column'
-        columnDefinition.Cell = RednderLocation;
-      }
+        // Check if the column accessor is 'some_column'
+        if (col.accessor === 'location') {
+          // Map the Cell property for 'some_column'
+          columnDefinition.Cell = RednderLocation;
+        }
 
-      // Add more conditions for other columns as needed
+        // Add more conditions for other columns as needed
 
-      return columnDefinition;
-    });
+        return columnDefinition;
+      });
   };
 
   useEffect(() => {
