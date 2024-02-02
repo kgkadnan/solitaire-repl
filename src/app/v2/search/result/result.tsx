@@ -15,7 +15,8 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import Bin from '@public/v2/assets/icons/bin.svg';
-import Add from '@public/v2/assets/icons/add.svg';
+import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
+import Arrow from '@public/v2/assets/icons/chevron.svg';
 
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
@@ -231,8 +232,12 @@ const Result = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
-        <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
-          <div className="flex">
+        <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
+          <div className="flex col-span-2 gap-[12px] flex-wrap">
+            <div className=' text-neutral-600 text-mMedium flex gap-[8px] '>
+              <p className='flex items-center'>Search</p>
+              <Image src={Arrow} alt={'search-breadcrum'}/>
+            </div>
             <Pill
               isActive={true}
               label={'Result'}
@@ -247,13 +252,46 @@ const Result = () => {
               handlePillEdit={() => {}}
               handlePillDelete={() => {}}
             />
+             <Pill
+              isActive={true}
+              label={'Result'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />{' '}
+            <Pill
+              isActive={false}
+              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />
+             <Pill
+              isActive={true}
+              label={'Result'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />{' '}
+            <Pill
+              isActive={false}
+              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
+              handlePillClick={() => {}}
+              handlePillEdit={() => {}}
+              handlePillDelete={() => {}}
+            />
           </div>
-          <div className="pr-[2px] flex gap-[12px]">
+          <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
             <ActionButton
               actionButtonData={[
                 {
                   variant: 'secondary',
-                  svg: Add,
+                  label: ManageLocales('app.search.saveSearch'),
+                  handler: handleNewSearch
+                },
+                {
+                  variant: 'secondary',
+                  svg: NewSearchIcon,
                   label: ManageLocales('app.search.newSearch'),
                   handler: handleNewSearch
                 },
