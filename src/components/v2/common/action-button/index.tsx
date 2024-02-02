@@ -36,7 +36,7 @@ const ActionButton = ({ actionButtonData }: ICtaData) => {
               <Button
                 key={label}
                 disabled={isDisable}
-                onClick={handler}
+                onClick={() => handler()}
                 variant={variant}
                 className={`${styles.ctaStyle} 
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${

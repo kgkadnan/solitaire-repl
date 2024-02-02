@@ -2,13 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useFormStateManagement from './hooks/form-state';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
 import { useGetProductCountQuery } from '@/features/api/product';
-import useValidationStateManagement from './hooks/validation-state-management';
+import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { Clarity } from './components/clarity';
@@ -29,18 +29,35 @@ import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIIMITS,
+  MAX_LIMIT_REACHED,
   NO_STONE_FOUND,
+  SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { setModifySearch } from './helpers/modify-search';
+import { useAppSelector } from '@/hooks/hook';
+import logger from 'logging/log-util';
+import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 
-const Form = () => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  const { state, setState } = useFormStateManagement();
+const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<SetStateAction<string>>}) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const modifySearchFrom = searchParams.get('edit');
+  const savedSearch: any = useAppSelector(
+    (store: { savedSearch: any }) => store.savedSearch
+  );
+  const searchResult: any = useAppSelector(
+    (store: { searchResult: any }) => store.searchResult
+  );
+  const { state, setState, carat } = useFormStateManagement();
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
+
   const {
     caratMax,
     caratMin,
@@ -90,13 +107,9 @@ const Form = () => {
 
   // const modifySearchFrom = searchParams.get('edit');
 
-  // const searchResult: any = useAppSelector(
-  //   (store: { searchResult: any }) => store.searchResult
-  // );
-
   const {
-    setSearchUrl,
-    searchUrl,
+    // setSearchUrl,
+    // searchUrl,
     isValidationError,
     isError,
     errorText,
@@ -109,7 +122,9 @@ const Form = () => {
     setIsError,
     searchCount,
     setValidationError,
-    validationError
+    validationError,
+    saveSearchName,
+    addSearches
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -180,6 +195,117 @@ const Form = () => {
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl, messageColor]);
 
+  // Load saved search data when component mounts
+  useEffect(() => {
+    let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+    if (
+      modifySearchFrom ===
+        `${ManageLocales('app.search.savedSearchesRoute')}` &&
+      modifysavedSearchData
+    ) {
+      setModifySearch(modifysavedSearchData, setState, carat);
+    } else if (
+      modifySearchFrom === `${ManageLocales('app.search.resultRoute')}` &&
+      modifySearchResult
+    ) {
+      setModifySearch(
+        modifySearchResult[searchResult.activeTab]?.queryParams,
+        setState,
+        carat
+      );
+    }
+  }, [modifySearchFrom]);
+
+  const handleFormSearch = async (
+    isSavedParams: boolean = false,
+    id?: string
+  ) => {
+    console.log(isSavedParams, 'ooooooo');
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
+    ) {
+      setIsError(true);
+      setErrorText(MAX_LIMIT_REACHED);
+    } else {
+      if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+        if (
+          data?.count < MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          const queryParams = generateQueryParams(state);
+          if (
+            modifySearchFrom ===
+            `${ManageLocales('app.search.savedSearchesRoute')}`
+          ) {
+            if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
+              const updatedMeta = [...savedSearch.savedSearch.meta_data];
+              updatedMeta[savedSearch.activeTab] = queryParams;
+              let data = {
+                id: savedSearch.savedSearch.id,
+                meta_data: updatedMeta
+              };
+              updateSavedSearch(data);
+            }
+          }
+          if (
+            modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
+          ) {
+            let modifySearchResult = JSON.parse(
+              localStorage.getItem('Search')!
+            );
+            let setDataOnLocalStorage = {
+              id: modifySearchResult[searchResult.activeTab]?.id,
+              saveSearchName:
+                modifySearchResult[searchResult.activeTab]?.saveSearchName ||
+                saveSearchName,
+              isSavedSearch: isSavedParams,
+              searchId: data?.search_id,
+              queryParams
+            };
+            if (modifySearchResult[searchResult.activeTab]) {
+              const updatedData = [...modifySearchResult];
+              updatedData[searchResult.activeTab] = setDataOnLocalStorage;
+              localStorage.setItem('Search', JSON.stringify(updatedData));
+            }
+            router.push(
+              `/v2/search?active-tab=${ManageLocales(
+                'app.search.resultRoute'
+              )}-${searchResult.activeTab + 1}`
+            );
+          } else {
+            let setDataOnLocalStorage = {
+              id: id,
+              saveSearchName: saveSearchName,
+              searchId: data?.search_id,
+              isSavedSearch: isSavedParams,
+              queryParams
+            };
+            console.log(
+              [...addSearches, setDataOnLocalStorage],
+              'setDataOnLocalStorage'
+            );
+            localStorage.setItem(
+              'Search',
+              JSON.stringify([...addSearches, setDataOnLocalStorage])
+            );
+            router.push(
+              `/v2/search?active-tab=${ManageLocales(
+                'app.search.resultRoute'
+              )}-${JSON.parse(localStorage.getItem('Search')!).length}`
+            );
+          }
+          // return;
+        }
+      } else {
+        setIsError(true);
+        setErrorText(SELECT_SOME_PARAM);
+      }
+    }
+  };
+
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -188,6 +314,9 @@ const Form = () => {
     setErrorText('');
     setValidationError('');
     handleReset(setState, errorSetState);
+  };
+  const handleAddDemand = () => {
+    logger.info('Add demand');
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
@@ -237,7 +366,7 @@ const Form = () => {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
       label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
-      handler: () => {}
+      handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
     }
   ];
 
