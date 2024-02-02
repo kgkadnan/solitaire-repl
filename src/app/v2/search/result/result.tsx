@@ -91,6 +91,9 @@ const Result = () => {
           minSize: 5, //min size enforced during resizing
           maxSize: 200, //max size enforced during resizing
           size: 5, //medium column,
+          Cell: ({ renderedCellValue }: any) => (
+            <span>{renderedCellValue ?? `-`}</span>
+          ),
 
           Header: ({ column }: any) => (
             <Tooltip
