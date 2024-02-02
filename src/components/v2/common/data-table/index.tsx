@@ -1,3 +1,4 @@
+import { Stack } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable
@@ -24,10 +25,25 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enablePagination: false,
     enableStickyHeader: true,
     enableBottomToolbar: false,
+    enableGrouping: true,
+    enableExpandAll: false,
+    enableColumnDragging: false,
+    groupedColumnMode: 'remove',
+
+    displayColumnDefOptions: {
+      'mrt-row-expand': {
+        Header: () => <Stack direction="row" alignItems="center"></Stack>,
+        GroupedCell: ({ row, table }) => {
+          const { grouping } = table.getState();
+          return row.original[grouping[0]];
+        }
+      }
+    },
 
     initialState: {
       showGlobalFilter: true,
-
+      expanded: true,
+      grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-expand', 'mrt-row-select', 'lot_id'],
         right: ['mrt-row-actions']
