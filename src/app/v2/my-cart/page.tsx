@@ -26,7 +26,7 @@ import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import deleteIcon from '@public/v2/assets/icons/modal/delete.svg';
+import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
 import {
