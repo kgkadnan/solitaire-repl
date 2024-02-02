@@ -22,18 +22,16 @@
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
   "app.calculatedField.amount": "Total Amount",
 
-  "app.emptyCart.actionButton.searchDiamonds" : "Search Diamonds",
-  
-  "app.modal.okay" : "Okay",
-  "app.modal.yes" : "Yes",
-  "app.modal.no" : "No",
+  "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
+  "app.modal.okay": "Okay",
+  "app.modal.yes": "Yes",
+  "app.modal.no": "No",
 
-  "app.myCart.mycart" : "My Cart",
-  "app.myCart.actionButton.delete" : "Delete",
-  "app.myCart.actionButton.bookAppointment" :"Book Appointment",
-  "app.myCart.actionButton.confirmStone" : "Confirm Stone",
-  "app.myCart.actionButton.viewSimilarStone" : "View Similar Stone",
-  "app.myCart.actionButton.compareStone" :"Compare Stone"
-
+  "app.myCart.mycart": "My Cart",
+  "app.myCart.actionButton.delete": "Delete",
+  "app.myCart.actionButton.bookAppointment": "Book Appointment",
+  "app.myCart.actionButton.confirmStone": "Confirm Stone",
+  "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
+  "app.myCart.actionButton.compareStone": "Compare Stone"
 }
