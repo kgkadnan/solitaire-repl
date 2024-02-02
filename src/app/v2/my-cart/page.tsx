@@ -5,7 +5,6 @@ import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
   AVAILABLE_STATUS,
-  GIA_LINK,
   HOLD_STATUS,
   MEMO_STATUS,
   SOLD_STATUS
@@ -13,13 +12,9 @@ import {
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { ManageLocales } from '@/utils/v2/translate';
 import { MRT_RowSelectionState } from 'material-react-table';
-import Link from 'next/link';
-import Image from 'next/image';
-import Ind from '@public/v2/assets/png/data-table/IND.png';
-import Usa from '@public/v2/assets/png/data-table/USA.png';
-import Media from '@public/v2/assets/icons/data-table/Media.svg';
-import Tooltip from '@/components/v2/common/tooltip';
 
+import Image from 'next/image';
+import Tooltip from '@/components/v2/common/tooltip';
 import React, { useEffect, useState } from 'react';
 import {
   useDeleteCartMutation,
@@ -27,19 +22,26 @@ import {
 } from '@/features/api/cart';
 import { IProductItem } from '@/app/my-cart/interface/interface';
 import ActionButton from '@/components/v2/common/action-button';
-import logger from 'logging/log-util';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
-import deleteIcon from '@public/v2/assets/icons/modal/delete-icon.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/featured-icon.svg';
+import deleteIcon from '@public/v2/assets/icons/modal/delete.svg';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import errorIcon from '@public/v2/assets/icons/modal/error.svg';
+import {
+  RednderLocation,
+  RenderCarat,
+  RenderDetails,
+  RenderDiscount,
+  RenderLab
+} from '@/components/v2/common/data-table/helpers/render-cell';
 interface ITableColumn {
   accessorKey: any;
   header: any;
   Header: any;
   enableGlobalFilter: boolean;
-  Cell?: React.ComponentType<any>; // Define the Cell property
+  Cell?: React.ComponentType<any>;
   accessorFn?: any;
   id?: any;
   enableSorting: any;
@@ -110,61 +112,35 @@ const MyCart = () => {
           setRowSelection({});
           setRows(mappedRows);
         }
-      } catch (error) {
-        logger.error(error);
+      } catch (error: any) {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={errorIcon} alt="errorIcon" />
+            </div>
+            <h1 className="text-headingS text-neutral900">
+              {error.data.message}
+            </h1>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       }
     };
 
     fetchMyAPI();
   }, [activeTab]);
-
-  // const columnHelper = createMRTColumnHelper<any>();
-
-  const RednderLocation = ({ renderedCellValue }: any) => {
-    let imageSrc;
-
-    switch (renderedCellValue) {
-      case 'IND':
-        imageSrc = Ind;
-        break;
-      case 'USA':
-        imageSrc = Usa;
-        break;
-      default:
-        return null; // or any other fallback JSX
-    }
-
-    return <Image src={imageSrc} alt={renderedCellValue} />;
-  };
-
-  const RenderLab = ({ renderedCellValue, row }: any) => {
-    return (
-      <>
-        {' '}
-        {row.original.lab === 'GIA' ? (
-          <Link href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
-            {renderedCellValue}
-          </Link>
-        ) : (
-          <span>{renderedCellValue}</span>
-        )}
-      </>
-    );
-  };
-
-  const RenderDetails = () => {
-    return <Image src={Media} alt="Media" />;
-  };
-
-  const RenderDiscount = ({ renderedCellValue }: any) => {
-    return (
-      <div
-        className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
-      >
-        {`${renderedCellValue.toFixed(2)}%`}
-      </div>
-    );
-  };
 
   const mapColumns = (columns: any) => {
     return columns.map((col: any) => {
@@ -186,6 +162,10 @@ const MyCart = () => {
         ) //arrow function
         // Add other properties as needed
       };
+
+      if (col.accessor === 'carat') {
+        columnDefinition.Cell = RenderCarat;
+      }
 
       if (col.accessor === 'shape') {
         columnDefinition.enableSorting = false;
@@ -278,20 +258,24 @@ const MyCart = () => {
         setIsDialogOpen(true);
         setDialogContent(
           <>
-            <Image src={confirmIcon} alt="confirmIcon" />
-            <h1 className="text-headingS text-neutral900">
-              Item successfully deleted from “My Cart”
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.okay'),
-                  handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1 w-full'
-                }
-              ]}
-            />
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <h1 className="text-headingS text-neutral900">
+                Item successfully deleted from “My Cart”
+              </h1>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full'
+                  }
+                ]}
+              />
+            </div>
           </>
         );
         setCartItems(filteredRows);
@@ -300,7 +284,29 @@ const MyCart = () => {
         setRows(mappedRows);
       })
       .catch(error => {
-        logger.error(error);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={errorIcon} alt="errorIcon" />
+            </div>
+            <h1 className="text-headingS text-neutral900">
+              {error.data.message}
+            </h1>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       });
   };
 
@@ -310,30 +316,34 @@ const MyCart = () => {
     if (selectedIds?.length) {
       setDialogContent(
         <>
-          <Image src={deleteIcon} alt="deleteIcon" />
-
-          <div>
-            <h1 className="text-headingS text-neutral900">Are you sure?</h1>
-            <p className="text-neutral600 text-mRegular">
-              Do you want to delete the selected stones?
-            </p>
+          {' '}
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={deleteIcon} alt="deleteIcon" />
           </div>
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.modal.no'),
-                handler: () => setIsDialogOpen(false),
-                customStyle: 'flex-1'
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.modal.yes'),
-                handler: () => handleDelete({ selectedIds }),
-                customStyle: 'flex-1'
-              }
-            ]}
-          />
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+              <p className="text-neutral600 text-mRegular">
+                Do you want to delete the selected stones?
+              </p>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.no'),
+                  handler: () => setIsDialogOpen(false),
+                  customStyle: 'flex-1'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.yes'),
+                  handler: () => handleDelete({ selectedIds }),
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          </div>
         </>
       );
       setIsDialogOpen(true);
@@ -341,7 +351,7 @@ const MyCart = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -352,7 +362,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(90vh-160px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
@@ -388,50 +398,6 @@ const MyCart = () => {
                 rowSelection={rowSelection}
               />
             </div>
-            <div className="p-[16px]">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.myCart.actionButton.delete'),
-                    handler: deleteCartHandler
-                  },
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.bookAppointment'
-                    ),
-                    handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS
-                  },
-                  {
-                    variant: 'primary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.confirmStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeTab !== AVAILABLE_STATUS
-                  },
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.compareStone'
-                    ),
-                    handler: () => {},
-                    isHidden:
-                      activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
-                  },
-                  {
-                    variant: 'primary',
-                    label: ManageLocales(
-                      'app.myCart.actionButton.viewSimilarStone'
-                    ),
-                    handler: () => {},
-                    isHidden: activeTab === AVAILABLE_STATUS
-                  }
-                ]}
-              />
-            </div>
           </div>
         ) : (
           <EmptyScreen
@@ -441,6 +407,51 @@ const MyCart = () => {
             imageSrc={empty}
           />
         )}
+
+        <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
+          {rows.length > 0 ? (
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.myCart.actionButton.delete'),
+                  handler: deleteCartHandler
+                },
+                {
+                  variant: 'secondary',
+                  label: ManageLocales(
+                    'app.myCart.actionButton.bookAppointment'
+                  ),
+                  handler: () => {},
+                  isHidden: activeTab !== AVAILABLE_STATUS
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.myCart.actionButton.confirmStone'),
+                  handler: () => {},
+                  isHidden: activeTab !== AVAILABLE_STATUS
+                },
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.myCart.actionButton.compareStone'),
+                  handler: () => {},
+                  isHidden:
+                    activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales(
+                    'app.myCart.actionButton.viewSimilarStone'
+                  ),
+                  handler: () => {},
+                  isHidden: activeTab === AVAILABLE_STATUS
+                }
+              ]}
+            />
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   );

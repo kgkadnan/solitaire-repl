@@ -178,11 +178,6 @@ export const generateQueryParams = (state: IState) => {
   selectedShade?.length !== 0 && (queryParams['shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
-    // const formattedCaratData = selectedCaratRange.map(item => {
-    //   const [min, max] = item.split('-');
-    //   return { min: parseFloat(min), max: parseFloat(max) };
-    // });
-
     queryParams['carat'] = selectedCaratRange;
   }
 
@@ -247,7 +242,7 @@ export const generateQueryParams = (state: IState) => {
     });
   tablePerMax?.length !== 0 &&
     tablePerMin?.length !== 0 &&
-    (queryParams['table_percentage'] = {
+    (queryParams['table%'] = {
       lte: tablePerMax,
       gte: tablePerMin
     });
@@ -277,7 +272,7 @@ export const generateQueryParams = (state: IState) => {
     });
   depthPerMax?.length !== 0 &&
     depthPerMin?.length !== 0 &&
-    (queryParams['depth_percentage'] = {
+    (queryParams['depth%'] = {
       lte: depthPerMax,
       gte: depthPerMin
     });
@@ -307,7 +302,7 @@ export const generateQueryParams = (state: IState) => {
     });
   girdlePerMax?.length !== 0 &&
     girdlePerMin?.length !== 0 &&
-    (queryParams['girdle_percentage'] = {
+    (queryParams['girdle%'] = {
       lte: girdlePerMax,
       gte: girdlePerMin
     });
