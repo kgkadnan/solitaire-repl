@@ -16,7 +16,6 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import Bin from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-import Arrow from '@public/v2/assets/icons/chevron.svg';
 
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
@@ -27,8 +26,8 @@ import Ind from '@public/v2/assets/png/data-table/IND.png';
 import Usa from '@public/v2/assets/png/data-table/USA.png';
 import Media from '@public/v2/assets/icons/data-table/Media.svg';
 import Tooltip from '@/components/v2/common/tooltip';
-import Pill from '@/components/v2/common/search-breadcrum/pill';
 import { useCommonStateManagement } from './hooks/common-state-management';
+import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 
 interface ITableColumn {
   accessorKey: any;
@@ -45,95 +44,56 @@ interface ITableColumn {
   // Add other properties as needed
 }
 
-const Result = ({searchUrl,setSearchUrl,activeTab,searchParameters,setSearchParameters}:{searchUrl:String,setSearchUrl:Dispatch<SetStateAction<string>>,activeTab:number,searchParameters:any,setSearchParameters:any}) => {
+const Result = ({
+  searchUrl,
+  setSearchUrl,
+  activeTab,
+  setActiveTab,
+  searchParameters,
+  setSearchParameters
+}: {
+  searchUrl: String;
+  setSearchUrl: Dispatch<SetStateAction<string>>;
+  activeTab: number;
+  setActiveTab: Dispatch<SetStateAction<number>>;
+  searchParameters: any;
+  setSearchParameters: any;
+}) => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
+  const subRoute = useSearchParams().get('active-tab');
 
-  const { commonSetState, commonState } = useCommonStateManagement();
-  const { saveSearchName } = commonState;
-  const {
-    setYourSelectionData,
-    setTotalAmount,
-    setAverageDiscount,
-    setSaveSearchName,
-    setProductTotalCarats,
-    setAveragePricePerCarat
-  } = commonSetState;
+  const { commonSetState } = useCommonStateManagement();
+  // const { saveSearchName } = commonState;
+  const { setYourSelectionData } = commonSetState;
   let [triggerProductApi] = useLazyGetAllProductQuery();
-
-
-  
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
+  console.log(searchUrl);
+  useEffect(() => {
+    const fetchMyAPI = async () => {
+      const yourSelection = localStorage.getItem('Search');
 
-    useEffect(() => {
-      const fetchMyAPI = async () => {  
-        const yourSelection = localStorage.getItem('Search');
-  
-        if (yourSelection) {  
-          const parseYourSelection = JSON.parse(yourSelection);
+      if (yourSelection) {
+        const parseYourSelection = JSON.parse(yourSelection);
         //   setMaxTab(parseYourSelection.length);
-  
+
         //   // Always fetch data, even on initial load
-          const url = constructUrlParams(
-            parseYourSelection[activeTab - 1]?.queryParams
-          );
-          setSearchUrl(url);
-          setSearchParameters(parseYourSelection)
-          }
-          
-        //   const newRoutes = parseYourSelection
-        //     .map((data: any, index: number) => ({
-        //       id: index + 3,
-        //       pathName: {
-        //         shortName: `R ${index + 1}`,
-        //         fullName: `Result ${index + 1}`
-        //       },
-  
-        //       path: index + 1
-        //     }))
-        //     .filter(
-        //       (newRoute: any) =>
-        //         !myProfileRoutes.some(
-        //           existingRoute => existingRoute.path === newRoute.path
-        //         )
-        //     );
-  
-        //   if (parseYourSelection.length) {
-        //     setMyProfileRoutes([...myProfileRoutes, ...newRoutes]);
-        //     if (isLoading) {
-        //       refetch();
-        //     }
-        //   } else {
-        //     setMyProfileRoutes([
-        //       {
-        //         id: 1,
-        //         pathName: {
-        //           shortName: `${ManageLocales('app.search.newSearchHeader')}`,
-        //           fullName: `${ManageLocales('app.search.newSearchHeader')}`
-        //         },
-        //         path: ManageLocales('app.search.newSearchRoute')
-        //       },
-        //       {
-        //         id: 2,
-        //         pathName: {
-        //           shortName: `${ManageLocales('app.search.savedSearchHeader')}`,
-        //           fullName: `${ManageLocales('app.search.savedSearchHeader')}`
-        //         },
-        //         path: ManageLocales('app.search.savedSearchesRoute')
-        //       }
-        //     ]);
-        //   }
-        // }
-      };
-  
-      fetchMyAPI();
-    }, [localStorage.getItem('Search')!]);
+        const url = constructUrlParams(
+          parseYourSelection[activeTab - 1]?.queryParams
+        );
+        setSearchUrl(url);
+        setSearchParameters(parseYourSelection);
+      }
+    };
+
+    fetchMyAPI();
+  }, [localStorage.getItem('Search')!]);
 
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -299,26 +259,41 @@ const Result = ({searchUrl,setSearchUrl,activeTab,searchParameters,setSearchPara
 
   /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
 variable changes. */
-useEffect(() => {
-  const selection = localStorage.getItem('Search');
-  if (selection) {
-    const yourSelection = JSON.parse(selection);
-    setYourSelectionData(yourSelection);
-    // if (rows?.length) {
-    //   // setIsCheck([]);
-    //   // setIsCheckAll(false);
-    //   setRows(data?.products);
-    // }
-  }
-}, [
-  // data,
-  // refetchDataToDefault,
-  // setIsCheck,
-  // setIsCheckAll,
-  // setRows,
-  // setYourSelectionData
-]);
+  useEffect(
+    () => {
+      const selection = localStorage.getItem('Search');
+      if (selection) {
+        const yourSelection = JSON.parse(selection);
+        setYourSelectionData(yourSelection);
+        // if (rows?.length) {
+        //   // setIsCheck([]);
+        //   // setIsCheckAll(false);
+        //   setRows(data?.products);
+        // }
+      }
+    },
+    [
+      // data,
+      // refetchDataToDefault,
+      // setIsCheck,
+      // setIsCheckAll,
+      // setRows,
+      // setYourSelectionData
+    ]
+  );
 
+  useEffect(() => {
+    if (
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute')
+    ) {
+      const replaceSubrouteWithSearchResult = subRoute?.replace(
+        `${ManageLocales('app.search.resultRoute')}-`,
+        ''
+      );
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
+    }
+  }, [subRoute]);
 
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
@@ -335,54 +310,9 @@ useEffect(() => {
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
         <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
           <div className="flex col-span-2 gap-[12px] flex-wrap">
-            <div className=" text-neutral-600 text-mMedium flex gap-[8px] ">
-              <p className="flex items-center">Search</p>
-              <Image src={Arrow} alt={'search-breadcrum'} />
-            </div>
-            {
-              
-            }
-            <Pill
-              isActive={true}
-              label={'Result'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
-            />{' '}
-            <Pill
-              isActive={false}
-              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
-            />
-            <Pill
-              isActive={true}
-              label={'Result'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
-            />{' '}
-            <Pill
-              isActive={false}
-              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
-            />
-            <Pill
-              isActive={true}
-              label={'Result'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
-            />{' '}
-            <Pill
-              isActive={false}
-              label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-              handlePillClick={() => {}}
-              handlePillEdit={() => {}}
-              handlePillDelete={() => {}}
+            <Breadcrum
+              searchParameters={searchParameters}
+              isActive={activeTab}
             />
           </div>
           <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">

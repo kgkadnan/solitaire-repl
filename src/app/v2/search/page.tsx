@@ -7,21 +7,36 @@ import Result from './result/result';
 import useValidationStateManagement from './hooks/validation-state-management';
 
 const Search = () => {
-  const [breadcrumRoutes, setBreadcrumRoutes] = useState([
-  ]);
   const subRoute = useSearchParams().get('active-tab');
+  const editRoute = useSearchParams().get('edit');
+
   const [activeTab, setActiveTab] = useState(0);
-const [searchParameters,setSearchParameters]=useState([])
+  const [searchParameters, setSearchParameters] = useState([]);
 
-const {
-  setSearchUrl,
-  searchUrl,
-
-} = useValidationStateManagement();
+  const { setSearchUrl, searchUrl } = useValidationStateManagement();
   return (
     <>
-      <div>{subRoute === SubRoutes.NEW_SEARCH ? <Form searchUrl={searchUrl} setSearchUrl={setSearchUrl}/> : <Result searchUrl={searchUrl} setSearchUrl={setSearchUrl} activeTab={activeTab} searchParameters={searchParameters} setSearchParameters={setSearchParameters}
-      />}</div>
+      <div>
+        {subRoute === SubRoutes.NEW_SEARCH || editRoute === SubRoutes.RESULT ? (
+          <Form
+            searchUrl={searchUrl}
+            setSearchUrl={setSearchUrl}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            searchParameters={searchParameters}
+            setSearchParameters={setSearchParameters}
+          />
+        ) : (
+          <Result
+            searchUrl={searchUrl}
+            setSearchUrl={setSearchUrl}
+            activeTab={activeTab}
+            setActiveTab={setActiveTab}
+            searchParameters={searchParameters}
+            setSearchParameters={setSearchParameters}
+          />
+        )}
+      </div>
     </>
   );
 };

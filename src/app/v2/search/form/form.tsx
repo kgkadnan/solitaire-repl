@@ -44,8 +44,29 @@ import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
 import logger from 'logging/log-util';
 import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
+import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 
-const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<SetStateAction<string>>}) => {
+export interface ISavedSearch {
+  saveSearchName: string;
+  isSavedSearch: boolean;
+  queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
+}
+const Form = ({
+  searchUrl,
+  setSearchUrl,
+  activeTab,
+  setActiveTab,
+  searchParameters,
+  setSearchParameters
+}: {
+  searchUrl: String;
+  setSearchUrl: Dispatch<SetStateAction<string>>;
+  activeTab: number;
+  setActiveTab: Dispatch<SetStateAction<number>>;
+
+  searchParameters: any;
+  setSearchParameters: any;
+}) => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const modifySearchFrom = searchParams.get('edit');
@@ -55,6 +76,9 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
   const searchResult: any = useAppSelector(
     (store: { searchResult: any }) => store.searchResult
   );
+
+  const subRoute = useSearchParams().get('active-tab');
+
   const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
@@ -124,7 +148,8 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
     setValidationError,
     validationError,
     saveSearchName,
-    addSearches
+    addSearches,
+    setAddSearches
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -156,6 +181,19 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
       setSearchUrl(constructUrlParams(queryParams));
     }
   }, [state]);
+
+  useEffect(() => {
+    if (
+      subRoute !== ManageLocales('app.search.newSearchRoute') &&
+      subRoute !== ManageLocales('app.search.savedSearchesRoute')
+    ) {
+      const replaceSubrouteWithSearchResult = subRoute?.replace(
+        `${ManageLocales('app.search.resultRoute')}-`,
+        ''
+      );
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
+    }
+  }, [subRoute]);
 
   //Handle search count and errors
   useEffect(() => {
@@ -217,11 +255,18 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
     }
   }, [modifySearchFrom]);
 
+  useEffect(() => {
+    let data: ISavedSearch[] | [] =
+      JSON.parse(localStorage.getItem('Search')!) || [];
+    if (data?.length > 0 && data[data?.length - 1]) {
+      setAddSearches(data);
+    }
+  }, []);
+
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string
   ) => {
-    console.log(isSavedParams, 'ooooooo');
     if (
       JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
@@ -283,10 +328,7 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
               isSavedSearch: isSavedParams,
               queryParams
             };
-            console.log(
-              [...addSearches, setDataOnLocalStorage],
-              'setDataOnLocalStorage'
-            );
+
             localStorage.setItem(
               'Search',
               JSON.stringify([...addSearches, setDataOnLocalStorage])
@@ -370,6 +412,26 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
     }
   ];
 
+  useEffect(() => {
+    const fetchMyAPI = async () => {
+      const yourSelection = localStorage.getItem('Search');
+
+      if (yourSelection) {
+        const parseYourSelection = JSON.parse(yourSelection);
+        //   setMaxTab(parseYourSelection.length);
+
+        //   // Always fetch data, even on initial load
+        const url = constructUrlParams(
+          parseYourSelection[activeTab - 1]?.queryParams
+        );
+        setSearchUrl(url);
+        setSearchParameters(parseYourSelection);
+      }
+    };
+
+    fetchMyAPI();
+  }, [localStorage.getItem('Search')!]);
+
   return (
     <div className="pt-[32px]">
       <div>
@@ -378,6 +440,12 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
             <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
               Search for Diamonds
             </span>
+          </div>
+          <div className="flex gap-[12px] flex-wrap border-[1px] border-neutral200 p-[16px]">
+            <Breadcrum
+              searchParameters={searchParameters}
+              isActive={activeTab}
+            />
           </div>
           <AnchorLinkNavigation anchorNavigations={anchor} />
           {/* </div> */}
@@ -473,8 +541,14 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
           />
         </div>
       </div>
-      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
-        <div className=" flex items-center">
+      <div
+        className={`grid  gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex ${'justify-end'} `}
+      >
+        <div
+          className={` flex items-center md:grid-cols-1 lg:grid-cols-2 w-full ${
+            isError ? 'justify-between' : 'justify-end'
+          } `}
+        >
           {isError && (
             <>
               <span className="hidden  text-successMain" />
@@ -485,8 +559,8 @@ const Form = ({searchUrl,setSearchUrl}:{searchUrl:String,setSearchUrl:Dispatch<S
               </span>
             </>
           )}
+          <ActionButton actionButtonData={actionButtonData} />
         </div>
-        <ActionButton actionButtonData={actionButtonData} />
       </div>
     </div>
   );
