@@ -20,7 +20,7 @@ export interface IProductItem {
   product: IProduct;
 }
 
-interface ICart {
+export interface ICart {
   id: string;
   created_at: string;
   updated_at: string;

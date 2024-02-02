@@ -39,8 +39,8 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     muiTableContainerProps: {
       sx: {
-        minHeight: '10vh',
-        height: '60vh'
+        minHeight: 'calc(100vh - 420px)',
+        maxHeight: 'calc(100vh - 420px)'
       }
     },
     muiTableHeadRowProps: {
