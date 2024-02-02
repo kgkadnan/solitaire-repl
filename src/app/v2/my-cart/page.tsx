@@ -36,6 +36,7 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/common/data-table/helpers/render-cell';
+import Loader from '@/components/v2/common/loader';
 interface ITableColumn {
   accessorKey: any;
   header: any;
@@ -66,7 +67,7 @@ const MyCart = () => {
     Hold: 0,
     Sold: 0
   });
-  const [tiggerCart] = useLazyGetCartQuery({});
+  const [tiggerCart, { isLoading }] = useLazyGetCartQuery({});
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
 
@@ -155,7 +156,9 @@ const MyCart = () => {
           minSize: 5, //min size enforced during resizing
           maxSize: 200, //max size enforced during resizing
           size: 5, //medium column,
-
+          Cell: ({ renderedCellValue }: any) => (
+            <span>{renderedCellValue ?? `-`}</span>
+          ),
           Header: ({ column }: any) => (
             <Tooltip
               tooltipTrigger={<span>{column.columnDef.header}</span>}
@@ -386,7 +389,9 @@ const MyCart = () => {
           </div>
         </div>
 
-        {rows.length ? (
+        {isLoading ? (
+          <Loader />
+        ) : rows.length ? (
           <div>
             {activeTab !== SOLD_STATUS && (
               <div>

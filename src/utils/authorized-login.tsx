@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation'; // Correct import for useRouter
 import useUser from '../lib/use-auth';
-import CustomLoader from '@/components/common/loader';
+import Loader from '@/components/v2/common/loader';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -22,7 +22,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     }, [authToken, userLoggedOut, router]);
 
     if (isLoading) {
-      return <CustomLoader />; // Or any other loading indicator
+      return <Loader />; // Or any other loading indicator
     }
     return isAuthorized ? <WrappedComponent {...props} /> : null;
   };
