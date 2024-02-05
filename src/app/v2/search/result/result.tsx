@@ -35,11 +35,11 @@ import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { NOT_MORE_THAN_100 } from '@/constants/error-messages/search';
-import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+// import { NOT_MORE_THAN_100 } from '@/constants/error-messages/search';
+// import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { IProduct } from '@/app/search/result/result-interface';
-import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
-import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+// import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+// import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
@@ -212,7 +212,7 @@ const Result = ({
             variants: variantIds
           })
             .unwrap()
-            .then((res: any) => {
+            .then(() => {
               // On success, show confirmation dialog and update badge
               // setIsError(false);
               // setErrorText('');
@@ -236,7 +236,7 @@ const Result = ({
               dispatch(notificationBadge(true));
               // refetchRow();
             })
-            .catch((error: any) => {
+            .catch(() => {
               // On error, set error state and error message
               // setIsError(true);
               // setErrorText(error?.data?.message);

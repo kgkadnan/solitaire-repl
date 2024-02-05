@@ -8,7 +8,7 @@ import { useRouter } from 'next/navigation';
 const Breadcrum = ({
   searchParameters,
   activeTab,
-  setActiveTab,
+  // setActiveTab,
   handleCloseSpecificTab
 }: {
   searchParameters: any;
