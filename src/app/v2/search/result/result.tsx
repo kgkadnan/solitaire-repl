@@ -1,6 +1,6 @@
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
-import React, { useEffect, useState } from 'react';
+import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
 
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
@@ -45,15 +45,22 @@ interface ITableColumn {
 
 const Result = ({
   activeTab,
-  searchParameters
+  searchParameters,
+  setActiveTab,
+  handleCloseAllTabs,
+  handleCloseSpecificTab
 }: {
   activeTab: number;
   searchParameters: any;
+  setActiveTab: Dispatch<SetStateAction<number>>;
+  handleCloseAllTabs: () => void;
+  handleCloseSpecificTab: (id: number) => void;
 }) => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
 
@@ -62,7 +69,6 @@ const Result = ({
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-
   useEffect(() => {
     const fetchMyAPI = async () => {
       const yourSelection = localStorage.getItem('Search');
@@ -187,11 +193,9 @@ const Result = ({
       setColumns(mapColumns(res.data));
     });
   }, []);
-
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
-  console.log('rows', rowSelection);
   return (
     <div>
       <div className="flex h-[81px] items-center ">
@@ -206,7 +210,9 @@ const Result = ({
           <div className="flex col-span-2 gap-[12px] flex-wrap">
             <Breadcrum
               searchParameters={searchParameters}
-              isActive={activeTab}
+              activeTab={activeTab}
+              setActiveTab={setActiveTab}
+              handleCloseSpecificTab={handleCloseSpecificTab}
             />
           </div>
           <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
@@ -226,7 +232,7 @@ const Result = ({
                 {
                   variant: 'secondary',
                   svg: Bin,
-                  handler: handleNewSearch
+                  handler: handleCloseAllTabs
                 }
               ]}
             />
