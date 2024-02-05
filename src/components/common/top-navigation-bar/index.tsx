@@ -134,7 +134,7 @@ export const TopNavigationBar = () => {
   ];
 
   const handleRoute = (label: string, link: string) => {
-    if (link === '/v2') {
+    if (link === 'v2/search?active-tab=new-search') {
       // Redirect and reload the browser for 'new'
       window.location.href = link;
     } else {
