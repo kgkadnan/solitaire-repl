@@ -133,7 +133,7 @@ export const Carat = ({
                 <MinMaxInput
                   minInputData={{
                     minValue: caratMin,
-                    minPlaceHolder: '0.60',
+                    minPlaceHolder: '0',
                     minOnchange: e => {
                       handleMinChange(e);
                       handleNumericRange({
@@ -146,7 +146,7 @@ export const Carat = ({
                   }}
                   maxInputData={{
                     maxValue: caratMax,
-                    maxPlaceHolder: '3.80',
+                    maxPlaceHolder: '10',
                     maxOnchange: e => {
                       handleMaxChange(e);
                       handleNumericRange({

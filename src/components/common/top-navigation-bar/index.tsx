@@ -106,8 +106,8 @@ export const TopNavigationBar = () => {
   const topNavData = [
     {
       label: ManageLocales('app.topNav.newv2'),
-      link: '/v2',
-      isActive: currentRoute === '/for-you'
+      link: '/v2/search?active-tab=new-search',
+      isActive: currentRoute === '/v2'
     },
     {
       label: ManageLocales('app.topNav.forYou'),
