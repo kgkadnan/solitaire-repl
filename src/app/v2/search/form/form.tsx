@@ -3,7 +3,6 @@
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import useFormStateManagement from './hooks/form-state';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
@@ -22,7 +21,6 @@ import { Parameters } from './components/parameters';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
-import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
@@ -46,6 +44,7 @@ import logger from 'logging/log-util';
 import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import BinIcon from '@public/v2/assets/icons/bin.svg';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -419,6 +418,17 @@ const Form = ({
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
               />
+              <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      svg: BinIcon,
+                      handler: handleCloseAllTabs
+                    }
+                  ]}
+                />
+              </div>
             </div>
           ) : (
             ''

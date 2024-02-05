@@ -131,19 +131,19 @@ const Search = () => {
     yourSelection: ISavedSearch[]
   ) => {
     let closeSpecificSearch = yourSelection.filter(
-      (items: ISavedSearch, index: number) => {
+      (_items: ISavedSearch, index: number) => {
         return index !== removeDataIndex - 1;
       }
     );
 
     if (removeDataIndex === 1) {
-      router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`);
       setSearchParameters([]);
       handleReset(setState, errorSetState);
+      router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
     } else {
       setActiveTab(removeDataIndex);
       router.push(
-        `/v2/search?active-tab=${SubRoutes.RESULT}-${removeDataIndex}`
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex}`
       );
     }
 

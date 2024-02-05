@@ -1,4 +1,10 @@
-import React, { useEffect, useMemo, useState, useCallback, SetStateAction, Dispatch } from 'react';
+import React, {
+  useEffect,
+  useMemo,
+  useState,
+  SetStateAction,
+  Dispatch
+} from 'react';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
@@ -85,8 +91,7 @@ const Result = ({
   handleCloseSpecificTab: (id: number) => void;
 }) => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
-  const { rows, columns } = dataTableState;
-  const { setRows, setColumns } = dataTableSetState;
+  const { setRows } = dataTableSetState;
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   const editRoute = useSearchParams().get('edit');
@@ -116,10 +121,9 @@ const Result = ({
           }
         });
       }
-    }
-    fetchMyAPI()
+    };
+    fetchMyAPI();
   });
-  
 
   // Fetch Products
   useEffect(() => {
@@ -130,10 +134,8 @@ const Result = ({
 
       const selections = JSON.parse(storedSelection);
 
-      console.log('activeTab', activeTab);
-
       //   // Always fetch data, even on initial load
-      const url = constructUrlParams(selections[0]?.queryParams);
+      const url = constructUrlParams(selections[activeTab]?.queryParams);
       // const url = constructUrlParams(queryParams);
       const response = await triggerProductApi({
         offset: 0,
@@ -160,15 +162,14 @@ const Result = ({
     fetchColumns();
   }, []);
 
-
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
-  const handleNewSearch = useCallback(() => {
-    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
-  }, [router]);
 
+  const handleNewSearch = () => {
+    router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
+  };
   return (
     <div>
       <div className="flex h-[81px] items-center">
@@ -212,20 +213,19 @@ const Result = ({
           </div>
         </div>
         <div>
-        <CalculatedField
-          rows={dataTableState.rows}
-          selectedProducts={rowSelection}
-        />
+          <CalculatedField
+            rows={dataTableState.rows}
+            selectedProducts={rowSelection}
+          />
         </div>
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
-        <DataTable
-          rows={dataTableState.rows}
-          columns={memoizedColumns}
-          setRowSelection={setRowSelection}
-          rowSelection={rowSelection}
-        />
+          <DataTable
+            rows={dataTableState.rows}
+            columns={memoizedColumns}
+            setRowSelection={setRowSelection}
+            rowSelection={rowSelection}
+          />
         </div>
-       
       </div>
     </div>
   );
