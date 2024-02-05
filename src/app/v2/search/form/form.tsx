@@ -3,7 +3,6 @@
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
 import React, { Dispatch, SetStateAction, useEffect } from 'react';
-import useFormStateManagement from './hooks/form-state';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
@@ -22,7 +21,6 @@ import { Parameters } from './components/parameters';
 import { KeyToSymbol } from './components/key-to-symbol';
 import { DiscountPrice } from './components/discount-price';
 import Inclusions from './components/inclusions';
-import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
@@ -46,6 +44,7 @@ import logger from 'logging/log-util';
 import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import BinIcon from '@public/v2/assets/icons/bin.svg';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -56,22 +55,39 @@ const Form = ({
   searchUrl,
   setSearchUrl,
   activeTab,
-  searchParameters
+  setActiveTab,
+  searchParameters,
+  handleCloseAllTabs,
+  handleCloseSpecificTab,
+  state,
+  setState,
+  carat,
+  errorState,
+  errorSetState
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
-
+  setActiveTab: Dispatch<SetStateAction<number>>;
   searchParameters: any;
+  handleCloseAllTabs: () => void;
+  handleCloseSpecificTab: (id: number) => void;
+  state: any;
+  setState: any;
+  carat: any;
+  errorState: any;
+  errorSetState: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const subRoute = useSearchParams().get('active-tab');
+
   const modifySearchFrom = searchParams.get('edit');
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
   );
 
-  const { state, setState, carat } = useFormStateManagement();
+  // const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
 
   const {
@@ -144,7 +160,7 @@ const Form = ({
     setAddSearches
   } = useValidationStateManagement();
 
-  const { errorState, errorSetState } = useNumericFieldValidation();
+  // const { errorState, errorSetState } = useNumericFieldValidation();
 
   const { caratError, discountError, pricePerCaratError, amountRangeError } =
     errorState;
@@ -217,8 +233,7 @@ const Form = ({
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (
-      modifySearchFrom ===
-        `${ManageLocales('app.search.savedSearchesRoute')}` &&
+      modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
       modifysavedSearchData
     ) {
       setModifySearch(modifysavedSearchData, setState, carat);
@@ -226,8 +241,14 @@ const Form = ({
       modifySearchFrom === `${SubRoutes.RESULT}` &&
       modifySearchResult
     ) {
+      const replaceSubrouteWithSearchResult = subRoute?.replace(
+        `${SubRoutes.RESULT}-`,
+        ''
+      );
+      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
       setModifySearch(
-        modifySearchResult[activeTab]?.queryParams,
+        modifySearchResult[parseInt(replaceSubrouteWithSearchResult!) - 1]
+          ?.queryParams,
         setState,
         carat
       );
@@ -271,22 +292,22 @@ const Form = ({
               updateSavedSearch(data);
             }
           }
-          console.log(modifySearchFrom, 'modifySearchFrom', queryParams);
           if (modifySearchFrom === `${SubRoutes.RESULT}`) {
             let modifySearchResult = JSON.parse(
               localStorage.getItem('Search')!
             );
             let setDataOnLocalStorage = {
-              id: modifySearchResult[activeTab]?.id,
+              id: modifySearchResult[activeTab - 1]?.id,
               saveSearchName:
-                modifySearchResult[activeTab]?.saveSearchName || saveSearchName,
+                modifySearchResult[activeTab - 1]?.saveSearchName ||
+                saveSearchName,
               isSavedSearch: isSavedParams,
               searchId: data?.search_id,
               queryParams
             };
-            if (modifySearchResult[activeTab]) {
+            if (modifySearchResult[activeTab - 1]) {
               const updatedData = [...modifySearchResult];
-              updatedData[activeTab] = setDataOnLocalStorage;
+              updatedData[activeTab - 1] = setDataOnLocalStorage;
               localStorage.setItem('Search', JSON.stringify(updatedData));
             }
             router.push(
@@ -389,12 +410,30 @@ const Form = ({
               Search for Diamonds
             </span>
           </div>
-          <div className="flex gap-[12px] flex-wrap border-[1px] border-neutral200 p-[16px]">
-            <Breadcrum
-              searchParameters={searchParameters}
-              isActive={activeTab}
-            />
-          </div>
+          {searchParameters.length > 0 ? (
+            <div className="flex gap-[12px] flex-wrap border-[1px] border-neutral200 p-[16px]">
+              <Breadcrum
+                searchParameters={searchParameters}
+                activeTab={activeTab}
+                setActiveTab={setActiveTab}
+                handleCloseSpecificTab={handleCloseSpecificTab}
+              />
+              <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      svg: BinIcon,
+                      handler: handleCloseAllTabs
+                    }
+                  ]}
+                />
+              </div>
+            </div>
+          ) : (
+            ''
+          )}
+
           <AnchorLinkNavigation anchorNavigations={anchor} />
           {/* </div> */}
           <Shape
