@@ -49,6 +49,7 @@ interface ITableColumn {
   minSize?: number;
   maxSize?: number;
   size?: number;
+  enableGrouping?: boolean;
   // Add other properties as needed
 }
 const MyCart = () => {
