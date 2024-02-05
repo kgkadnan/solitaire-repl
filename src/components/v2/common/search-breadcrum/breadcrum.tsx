@@ -37,7 +37,7 @@ const Breadcrum = ({
                   : `Result ${index + 1}`
               }
               handlePillClick={() => {
-                setActiveTab(index + 1);
+                // setActiveTab(index + 1);
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${index + 1}`
                 );
