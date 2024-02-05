@@ -70,29 +70,6 @@ const Result = ({
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
 
-        // Always fetch data, even on initial load
-        const url = constructUrlParams(parseYourSelection[0]?.queryParams);
-        triggerProductApi({
-          offset: 0,
-          limit: LISTING_PAGE_DATA_LIMIT,
-          url: url
-        }).then(res => {
-          if (res?.data?.products?.length) {
-            setRows(res?.data?.products);
-          }
-        });
-      }
-    };
-    fetchMyAPI();
-  }, []);
-
-  useEffect(() => {
-    const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
-
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
-
         //   // Always fetch data, even on initial load
         const url = constructUrlParams(
           parseYourSelection[activeTab - 1]?.queryParams
@@ -130,11 +107,13 @@ const Result = ({
           ),
 
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={col.label}
-              tooltipContentStyles={'z-[4]'}
-            />
+            <>
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={col.label}
+                tooltipContentStyles={'z-[4]'}
+              />
+            </>
           ) //arrow function
           // Add other properties as needed
         };
@@ -191,7 +170,7 @@ const Result = ({
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
-  console.log('rows', rowSelection);
+
   return (
     <div>
       <div className="flex h-[81px] items-center ">
