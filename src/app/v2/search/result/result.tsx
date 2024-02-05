@@ -1,48 +1,76 @@
+import React, { useEffect, useMemo, useState, useCallback, SetStateAction, Dispatch } from 'react';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
-
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
-import { useLazyGetAllProductQuery } from '@/features/api/product';
+
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { MRT_RowSelectionState } from 'material-react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
-import Bin from '@public/v2/assets/icons/bin.svg';
-import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import CalculatedField from '@/components/v2/common/calculated-field';
-
 import Tooltip from '@/components/v2/common/tooltip';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import {
-  RednderLocation,
   RenderCarat,
-  RenderDetails,
   RenderDiscount,
+  RenderDetails,
   RenderLab,
-  RenderLotId
+  RenderLotId,
+  RednderLocation
 } from '@/components/v2/common/data-table/helpers/render-cell';
+import BinIcon from '@public/v2/assets/icons/bin.svg';
+import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
+import { useLazyGetAllProductQuery } from '@/features/api/product';
+import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
+import { MRT_RowSelectionState } from 'material-react-table';
+import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 
-interface ITableColumn {
-  accessorKey: any;
-  header: any;
-  Header: any;
-  enableGlobalFilter: boolean;
-  Cell?: React.ComponentType<any>; // Define the Cell property
-  accessorFn?: any;
-  id?: any;
-  enableSorting: any;
-  minSize?: number;
-  maxSize?: number;
-  size?: number;
-  // Add other properties as needed
-}
+// Column mapper outside the component to avoid re-creation on each render
+const mapColumns = (columns: any) =>
+  columns
+    ?.filter(({ is_disabled }: any) => !is_disabled)
+    ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+    .map(({ accessor, short_label, label }: any) => {
+      const commonProps = {
+        accessorKey: accessor,
+        header: short_label,
+        enableGlobalFilter: accessor === 'lot_id',
+        enableSorting: accessor !== 'shape',
+        minSize: 5,
+        maxSize: accessor === 'details' ? 100 : 200,
+        size: 5,
+        Header: ({ column }: any) => (
+          <Tooltip
+            tooltipTrigger={<span>{column.columnDef.header}</span>}
+            tooltipContent={label}
+            tooltipContentStyles={'z-[4]'}
+          />
+        )
+      };
 
+      switch (accessor) {
+        case 'carat':
+          return { ...commonProps, Cell: RenderCarat };
+        case 'discount':
+          return { ...commonProps, Cell: RenderDiscount };
+        case 'details':
+          return { ...commonProps, Cell: RenderDetails };
+        case 'lab':
+          return { ...commonProps, Cell: RenderLab };
+        case 'location':
+          return { ...commonProps, Cell: RednderLocation };
+        case 'lot_id':
+          return { ...commonProps, Cell: RenderLotId };
+        default:
+          return {
+            ...commonProps,
+            Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+              <span>{renderedCellValue ?? '-'}</span>
+            )
+          };
+      }
+    });
 const Result = ({
   activeTab,
   searchParameters,
@@ -88,117 +116,62 @@ const Result = ({
           }
         });
       }
-    };
-    fetchMyAPI();
-  }, []);
+    }
+    fetchMyAPI()
+  });
+  
 
+  // Fetch Products
   useEffect(() => {
-    const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
+    const fetchProducts = async () => {
+      const storedSelection = localStorage.getItem('Search');
 
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
+      if (!storedSelection) return;
 
-        //   // Always fetch data, even on initial load
-        const url = constructUrlParams(
-          parseYourSelection[activeTab - 1]?.queryParams
-        );
-        triggerProductApi({
-          offset: 0,
-          limit: LISTING_PAGE_DATA_LIMIT,
-          url: url
-        }).then(res => {
-          if (res?.data?.products?.length) {
-            setRows(res?.data?.products);
-          }
-        });
+      const selections = JSON.parse(storedSelection);
+
+      console.log('activeTab', activeTab);
+
+      //   // Always fetch data, even on initial load
+      const url = constructUrlParams(selections[0]?.queryParams);
+      // const url = constructUrlParams(queryParams);
+      const response = await triggerProductApi({
+        offset: 0,
+        limit: LISTING_PAGE_DATA_LIMIT,
+        url
+      });
+      if (response?.data?.products?.length) {
+        dataTableSetState.setRows(response.data.products);
       }
     };
 
-    fetchMyAPI();
-  }, [localStorage.getItem('Search')!]);
+    fetchProducts();
+  }, [activeTab]);
 
-  const mapColumns = (columns: any) => {
-    return columns
-      ?.filter((column: any) => !column.is_disabled)
-      ?.sort((a: any, b: any) => a.sequence - b.sequence)
-      .map((col: any) => {
-        let columnDefinition: ITableColumn = {
-          accessorKey: col.accessor,
-          header: col.short_label,
-          enableGlobalFilter: false,
-          enableSorting: true,
-          minSize: 5, //min size enforced during resizing
-          maxSize: 200, //max size enforced during resizing
-          size: 5, //medium column,
-          Cell: ({ renderedCellValue }: any) => (
-            <span>{renderedCellValue ?? `-`}</span>
-          ),
-
-          Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={col.label}
-              tooltipContentStyles={'z-[4]'}
-            />
-          ) //arrow function
-          // Add other properties as needed
-        };
-
-        if (col.accessor === 'carat') {
-          columnDefinition.Cell = RenderCarat;
-        }
-
-        if (col.accessor === 'shape') {
-          columnDefinition.enableSorting = false;
-        }
-
-        if (col.accessor === 'discount') {
-          columnDefinition.Cell = RenderDiscount;
-        }
-
-        // Check if the column accessor is 'lot_id'
-        if (col.accessor === 'lot_id') {
-          columnDefinition.enableGlobalFilter = true;
-          columnDefinition.Cell = RenderLotId;
-        }
-
-        if (col.accessor === 'details') {
-          columnDefinition.Cell = RenderDetails;
-        }
-        if (col.accessor === 'amount') {
-          columnDefinition.id = 'amount';
-          columnDefinition.accessorFn = (row: any) =>
-            row.variants[0].prices[0].amount;
-        }
-
-        if (col.accessor === 'lab') {
-          columnDefinition.Cell = RenderLab;
-        }
-
-        // Check if the column accessor is 'some_column'
-        if (col.accessor === 'location') {
-          // Map the Cell property for 'some_column'
-          columnDefinition.Cell = RednderLocation;
-        }
-
-        // Add more conditions for other columns as needed
-
-        return columnDefinition;
-      });
-  };
-
+  // Fetch Columns
   useEffect(() => {
-    triggerColumn({}).then(res => {
-      setColumns(mapColumns(res.data));
-    });
+    const fetchColumns = async () => {
+      const response = await triggerColumn({});
+      if (response.data) {
+        dataTableSetState.setColumns(response.data);
+      }
+    };
+
+    fetchColumns();
   }, []);
-  const handleNewSearch = () => {
+
+
+  const memoizedColumns = useMemo(
+    () => mapColumns(dataTableState.columns),
+    [dataTableState.columns]
+  );
+  const handleNewSearch = useCallback(() => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
-  };
+  }, [router]);
+
   return (
     <div>
-      <div className="flex h-[81px] items-center ">
+      <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
           {editRoute
             ? ManageLocales('app.result.headerEdit')
@@ -231,7 +204,7 @@ const Result = ({
                 },
                 {
                   variant: 'secondary',
-                  svg: Bin,
+                  svg: BinIcon,
                   handler: handleCloseAllTabs
                 }
               ]}
@@ -242,16 +215,25 @@ const Result = ({
           <CalculatedField rows={rows} selectedProducts={rowSelection} />
         </div>
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
-          <DataTable
-            rows={rows}
-            columns={columns}
-            setRowSelection={setRowSelection}
-            rowSelection={rowSelection}
-          />
+        <DataTable
+          rows={dataTableState.rows}
+          columns={memoizedColumns}
+          setRowSelection={setRowSelection}
+          rowSelection={rowSelection}
+        />
         </div>
+        <CalculatedField
+          rows={dataTableState.rows}
+          selectedProducts={rowSelection}
+        />
+        <DataTable
+          rows={dataTableState.rows}
+          columns={memoizedColumns}
+          setRowSelection={setRowSelection}
+          rowSelection={rowSelection}
+        />
       </div>
     </div>
   );
 };
-
 export default Result;
