@@ -7,7 +7,11 @@ import React, {
 } from 'react';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
-import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
+import {
+  HOLD_STATUS,
+  LISTING_PAGE_DATA_LIMIT,
+  MEMO_STATUS
+} from '@/constants/business-logic';
 
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -31,6 +35,14 @@ import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
+import { NOT_MORE_THAN_100 } from '@/constants/error-messages/search';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { IProduct } from '@/app/search/result/result-interface';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import { notificationBadge } from '@/features/notification/notification-slice';
+import { useAddCartMutation } from '@/features/api/cart';
+import { useAppDispatch } from '@/hooks/hook';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -90,9 +102,12 @@ const Result = ({
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (id: number) => void;
 }) => {
+  const dispatch = useAppDispatch();
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
-  const { setRows } = dataTableSetState;
+
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  // UseMutation to add items to the cart
+  const [addCart] = useAddCartMutation();
 
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
@@ -102,28 +117,6 @@ const Result = ({
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  useEffect(() => {
-    const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
-
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
-
-        // Always fetch data, even on initial load
-        const url = constructUrlParams(parseYourSelection[0]?.queryParams);
-        triggerProductApi({
-          offset: 0,
-          limit: LISTING_PAGE_DATA_LIMIT,
-          url: url
-        }).then(res => {
-          if (res?.data?.products?.length) {
-            setRows(res?.data?.products);
-          }
-        });
-      }
-    };
-    fetchMyAPI();
-  });
 
   // Fetch Products
   useEffect(() => {
@@ -170,6 +163,92 @@ const Result = ({
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
+
+  const handleAddToCart = () => {
+    let selectedIds = Object.keys(rowSelection);
+    if (selectedIds.length > 100) {
+      // setIsError(true);
+      // setErrorText(NOT_MORE_THAN_100);
+    } else if (!selectedIds.length) {
+      // setIsError(true);
+      // setErrorText(NO_STONES_SELECTED);
+    } else {
+      const hasMemoOut = selectedIds.some((id: string) => {
+        return dataTableState.rows.some(
+          (row: IProduct) => row.id === id && row.diamond_status === MEMO_STATUS
+        );
+      });
+
+      const hasHold = selectedIds.some((id: string) => {
+        return dataTableState.rows.some(
+          (row: IProduct) => row.id === id && row.diamond_status === HOLD_STATUS
+        );
+      });
+
+      if (hasMemoOut) {
+        // setErrorText(NO_STONES_AVAILABLE);
+        // setIsError(true);
+      } else if (hasHold) {
+        // setIsError(true);
+        // setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+      } else {
+        // Extract variant IDs for selected stones
+        const variantIds = selectedIds?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            dataTableState.rows.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
+
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+
+          return null;
+        });
+
+        // If there are variant IDs, add to the cart
+        if (variantIds.length) {
+          addCart({
+            variants: variantIds
+          })
+            .unwrap()
+            .then((res: any) => {
+              // On success, show confirmation dialog and update badge
+              // setIsError(false);
+              // setErrorText('');
+              // setIsPersistDialogOpen(true);
+              // setPersistDialogContent(
+              //   <div className="text-center  flex flex-col justify-center items-center ">
+              //     <div className="w-[350px] flex justify-center items-center mb-3">
+              //       <Image src={confirmImage} alt="vector image" />
+              //     </div>
+              //     <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
+              //       {res?.message}
+              //     </div>
+              //     <Link
+              //       href={'/my-cart?active-tab=active'}
+              //       className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
+              //     >
+              //       Go To &quot;MyCart&quot;
+              //     </Link>
+              //   </div>
+              // );
+              dispatch(notificationBadge(true));
+              // refetchRow();
+            })
+            .catch((error: any) => {
+              // On error, set error state and error message
+              // setIsError(true);
+              // setErrorText(error?.data?.message);
+            });
+          // Clear the selected checkboxes
+          // setIsCheck([]);
+          // setIsCheckAll && setIsCheckAll(false);
+        }
+      }
+    }
+  };
+
   return (
     <div>
       <div className="flex h-[81px] items-center">
@@ -225,6 +304,27 @@ const Result = ({
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
           />
+        </div>
+        <div className="p-[16px] ">
+          {dataTableState.rows.length > 0 ? (
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.searchResult.addToCart'),
+                  handler: handleAddToCart
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.searchResult.confirmStone'),
+                  handler: () => {}
+                }
+              ]}
+            />
+          ) : (
+            <></>
+          )}
         </div>
       </div>
     </div>

@@ -37,6 +37,9 @@
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
 
+  "app.searchResult.addToCart" : "Add to Cart",
+  "app.searchResult.confirmStone" : "Confirm Stone",
+
   "app.search.closeTabs": "Are you sure you want to close all active search tabs?",
   "app.search.confirmHeader": "Are you sure?",
   "app.search.closeSpecificTabs": "Are you sure you want to close the search tabs?"
