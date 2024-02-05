@@ -155,7 +155,7 @@ const Breadcrum = ({
               }}
               handlePillEdit={() => {
                 router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}-${
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
                     index + 1
                   }&edit=${SubRoutes.RESULT}`
                 );

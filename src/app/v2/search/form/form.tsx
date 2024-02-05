@@ -45,6 +45,7 @@ import { useAppSelector } from '@/hooks/hook';
 import logger from 'logging/log-util';
 import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -55,17 +56,13 @@ const Form = ({
   searchUrl,
   setSearchUrl,
   activeTab,
-  setActiveTab,
-  searchParameters,
-  setSearchParameters
+  searchParameters
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
-  setActiveTab: Dispatch<SetStateAction<number>>;
 
   searchParameters: any;
-  setSearchParameters: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -73,11 +70,6 @@ const Form = ({
   const savedSearch: any = useAppSelector(
     (store: { savedSearch: any }) => store.savedSearch
   );
-  const searchResult: any = useAppSelector(
-    (store: { searchResult: any }) => store.searchResult
-  );
-
-  const subRoute = useSearchParams().get('active-tab');
 
   const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
@@ -182,19 +174,6 @@ const Form = ({
     }
   }, [state]);
 
-  useEffect(() => {
-    if (
-      subRoute !== ManageLocales('app.search.newSearchRoute') &&
-      subRoute !== ManageLocales('app.search.savedSearchesRoute')
-    ) {
-      const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${ManageLocales('app.search.resultRoute')}-`,
-        ''
-      );
-      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
-    }
-  }, [subRoute]);
-
   //Handle search count and errors
   useEffect(() => {
     if (searchCount !== -1) {
@@ -244,11 +223,11 @@ const Form = ({
     ) {
       setModifySearch(modifysavedSearchData, setState, carat);
     } else if (
-      modifySearchFrom === `${ManageLocales('app.search.resultRoute')}` &&
+      modifySearchFrom === `${SubRoutes.RESULT}` &&
       modifySearchResult
     ) {
       setModifySearch(
-        modifySearchResult[searchResult.activeTab]?.queryParams,
+        modifySearchResult[activeTab]?.queryParams,
         setState,
         carat
       );
@@ -270,7 +249,7 @@ const Form = ({
     if (
       JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
-      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
+      modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
       setIsError(true);
       setErrorText(MAX_LIMIT_REACHED);
@@ -281,10 +260,7 @@ const Form = ({
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           const queryParams = generateQueryParams(state);
-          if (
-            modifySearchFrom ===
-            `${ManageLocales('app.search.savedSearchesRoute')}`
-          ) {
+          if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
             if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
               const updatedMeta = [...savedSearch.savedSearch.meta_data];
               updatedMeta[savedSearch.activeTab] = queryParams;
@@ -295,30 +271,26 @@ const Form = ({
               updateSavedSearch(data);
             }
           }
-          if (
-            modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
-          ) {
+          console.log(modifySearchFrom, 'modifySearchFrom', queryParams);
+          if (modifySearchFrom === `${SubRoutes.RESULT}`) {
             let modifySearchResult = JSON.parse(
               localStorage.getItem('Search')!
             );
             let setDataOnLocalStorage = {
-              id: modifySearchResult[searchResult.activeTab]?.id,
+              id: modifySearchResult[activeTab]?.id,
               saveSearchName:
-                modifySearchResult[searchResult.activeTab]?.saveSearchName ||
-                saveSearchName,
+                modifySearchResult[activeTab]?.saveSearchName || saveSearchName,
               isSavedSearch: isSavedParams,
               searchId: data?.search_id,
               queryParams
             };
-            if (modifySearchResult[searchResult.activeTab]) {
+            if (modifySearchResult[activeTab]) {
               const updatedData = [...modifySearchResult];
-              updatedData[searchResult.activeTab] = setDataOnLocalStorage;
+              updatedData[activeTab] = setDataOnLocalStorage;
               localStorage.setItem('Search', JSON.stringify(updatedData));
             }
             router.push(
-              `/v2/search?active-tab=${ManageLocales(
-                'app.search.resultRoute'
-              )}-${searchResult.activeTab + 1}`
+              `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
             );
           } else {
             let setDataOnLocalStorage = {
@@ -334,9 +306,9 @@ const Form = ({
               JSON.stringify([...addSearches, setDataOnLocalStorage])
             );
             router.push(
-              `/v2/search?active-tab=${ManageLocales(
-                'app.search.resultRoute'
-              )}-${JSON.parse(localStorage.getItem('Search')!).length}`
+              `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                JSON.parse(localStorage.getItem('Search')!).length
+              }`
             );
           }
           // return;
@@ -362,35 +334,31 @@ const Form = ({
   };
 
   let actionButtonData: IActionButtonDataItem[] = [
-    // {
-    //   variant: 'secondary',
-    //   svg: arrowIcon,
-    //   label: ManageLocales('app.advanceSearch.cancel'),
-    //   handler: () => {
-    //     if (
-    //       modifySearchFrom ===
-    //       `${ManageLocales('app.search.savedSearchesRoute')}`
-    //     ) {
-    //       router.push(
-    //         `/search?active-tab=${ManageLocales(
-    //           'app.search.savedSearchesRoute'
-    //         )}`
-    //       );
-    //     } else if (
-    //       modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
-    //     ) {
-    //       router.push(
-    //         `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
-    //           searchResult.activeTab + 3
-    //         }`
-    //       );
-    //     }
-    //   },
-    //   isHidden:
-    //     modifySearchFrom !==
-    //       `${ManageLocales('app.search.savedSearchesRoute')}` &&
-    //     modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
-    // },
+    {
+      variant: 'secondary',
+      // svg: arrowIcon,
+      label: ManageLocales('app.advanceSearch.cancel'),
+      handler: () => {
+        if (
+          modifySearchFrom ===
+          `${ManageLocales('app.search.savedSearchesRoute')}`
+        ) {
+          router.push(
+            `/search?active-tab=${ManageLocales(
+              'app.search.savedSearchesRoute'
+            )}`
+          );
+        } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
+          router.push(
+            `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
+          );
+        }
+      },
+      isHidden:
+        modifySearchFrom !==
+          `${ManageLocales('app.search.savedSearchesRoute')}` &&
+        modifySearchFrom !== `${SubRoutes.RESULT}`
+    },
     {
       variant: 'secondary',
       // svg: arrowIcon,
@@ -411,26 +379,6 @@ const Form = ({
       handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
     }
   ];
-
-  useEffect(() => {
-    const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
-
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
-        //   setMaxTab(parseYourSelection.length);
-
-        //   // Always fetch data, even on initial load
-        const url = constructUrlParams(
-          parseYourSelection[activeTab - 1]?.queryParams
-        );
-        setSearchUrl(url);
-        setSearchParameters(parseYourSelection);
-      }
-    };
-
-    fetchMyAPI();
-  }, [localStorage.getItem('Search')!]);
 
   return (
     <div className="pt-[32px]">

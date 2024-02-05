@@ -1,6 +1,6 @@
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
-import React, { Dispatch, SetStateAction, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
@@ -18,7 +18,6 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import CalculatedField from '@/components/v2/common/calculated-field';
 
 import Tooltip from '@/components/v2/common/tooltip';
-import { useCommonStateManagement } from './hooks/common-state-management';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import {
   RednderLocation,
@@ -45,19 +44,11 @@ interface ITableColumn {
 }
 
 const Result = ({
-  searchUrl,
-  setSearchUrl,
   activeTab,
-  setActiveTab,
-  searchParameters,
-  setSearchParameters
+  searchParameters
 }: {
-  searchUrl: String;
-  setSearchUrl: Dispatch<SetStateAction<string>>;
   activeTab: number;
-  setActiveTab: Dispatch<SetStateAction<number>>;
   searchParameters: any;
-  setSearchParameters: any;
 }) => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, columns } = dataTableState;
@@ -65,35 +56,12 @@ const Result = ({
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
-  const subRoute = useSearchParams().get('active-tab');
 
-  const { commonSetState } = useCommonStateManagement();
   // const { saveSearchName } = commonState;
-  const { setYourSelectionData } = commonSetState;
   let [triggerProductApi] = useLazyGetAllProductQuery();
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  console.log(searchUrl);
-  useEffect(() => {
-    const fetchMyAPI = async () => {
-      const yourSelection = localStorage.getItem('Search');
-
-      if (yourSelection) {
-        const parseYourSelection = JSON.parse(yourSelection);
-        //   setMaxTab(parseYourSelection.length);
-
-        //   // Always fetch data, even on initial load
-        const url = constructUrlParams(
-          parseYourSelection[activeTab - 1]?.queryParams
-        );
-        setSearchUrl(url);
-        setSearchParameters(parseYourSelection);
-      }
-    };
-
-    fetchMyAPI();
-  }, [localStorage.getItem('Search')!]);
 
   useEffect(() => {
     const fetchMyAPI = async () => {
@@ -117,6 +85,32 @@ const Result = ({
     };
     fetchMyAPI();
   }, []);
+
+  useEffect(() => {
+    const fetchMyAPI = async () => {
+      const yourSelection = localStorage.getItem('Search');
+
+      if (yourSelection) {
+        const parseYourSelection = JSON.parse(yourSelection);
+
+        //   // Always fetch data, even on initial load
+        const url = constructUrlParams(
+          parseYourSelection[activeTab - 1]?.queryParams
+        );
+        triggerProductApi({
+          offset: 0,
+          limit: LISTING_PAGE_DATA_LIMIT,
+          url: url
+        }).then(res => {
+          if (res?.data?.products?.length) {
+            setRows(res?.data?.products);
+          }
+        });
+      }
+    };
+
+    fetchMyAPI();
+  }, [localStorage.getItem('Search')!]);
 
   const mapColumns = (columns: any) => {
     return columns
@@ -194,47 +188,10 @@ const Result = ({
     });
   }, []);
 
-  /* The above code is using the useEffect hook in a React component. It is triggered whenever the `data`
-variable changes. */
-  useEffect(
-    () => {
-      const selection = localStorage.getItem('Search');
-      if (selection) {
-        const yourSelection = JSON.parse(selection);
-        setYourSelectionData(yourSelection);
-        // if (rows?.length) {
-        //   // setIsCheck([]);
-        //   // setIsCheckAll(false);
-        //   setRows(data?.products);
-        // }
-      }
-    },
-    [
-      // data,
-      // refetchDataToDefault,
-      // setIsCheck,
-      // setIsCheckAll,
-      // setRows,
-      // setYourSelectionData
-    ]
-  );
-
-  useEffect(() => {
-    if (
-      subRoute !== ManageLocales('app.search.newSearchRoute') &&
-      subRoute !== ManageLocales('app.search.savedSearchesRoute')
-    ) {
-      const replaceSubrouteWithSearchResult = subRoute?.replace(
-        `${ManageLocales('app.search.resultRoute')}-`,
-        ''
-      );
-      setActiveTab(parseInt(replaceSubrouteWithSearchResult!));
-    }
-  }, [subRoute]);
-
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
+  console.log('rows', rowSelection);
   return (
     <div>
       <div className="flex h-[81px] items-center ">

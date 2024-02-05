@@ -65,7 +65,6 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setGirdleFrom,
     setGirdleTo
   } = setState;
-
   data?.shape && setSelectedShape(data?.shape);
   data?.carat &&
     setSelectedCaratRange(
@@ -102,8 +101,8 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.length && setLengthTo(data?.length?.lte);
   data?.table_per && setTablePerFrom(data?.table_per?.gte);
   data?.table_per && setTablePerTo(data?.table_per?.lte);
-  data?.girdle_per && setGirdlePerFrom(data?.girdle_per?.gte);
-  data?.girdle_per && setGirdlePerTo(data?.girdle_per?.lte);
+  data?.['girdle%'] && setGirdlePerFrom(data['girdle%']?.gte);
+  data?.['girdle%'] && setGirdlePerTo(data['girdle%']?.lte);
   data?.depth_per && setDepthPerFrom(data?.depth_per?.gte);
   data?.depth_per && setDepthPerTo(data?.depth_per?.lte);
   data?.lower_half && setLowerHalfFrom(data?.lower_half?.gte);
