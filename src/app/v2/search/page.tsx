@@ -3,7 +3,6 @@ import React, { useEffect, useState } from 'react';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Form, { ISavedSearch } from './form/form';
-import Result from './result/result';
 import useValidationStateManagement from './hooks/validation-state-management';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import EmptyScreen from '@/components/v2/common/empty-screen';
@@ -17,6 +16,7 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { handleReset } from './form/helpers/reset';
 import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
+import Result from './result/result';
 
 const Search = () => {
   const subRoute = useSearchParams().get('active-tab');
