@@ -1,9 +1,37 @@
+import { Stack } from '@mui/material';
 import {
+  MRT_ExpandButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
 
 const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
+  const getShapeDisplayName = ({ value }: { value: string }) => {
+    switch (value) {
+      case 'EM':
+        return 'Emerald';
+      case 'BR':
+        return 'Round';
+      case 'PR':
+        return 'Pear';
+      case 'PS':
+        return 'Princess';
+      case 'AS':
+        return 'Asscher';
+      case 'RAD':
+        return 'Radiant';
+      case 'OV':
+        return 'Oval';
+      case 'CU':
+        return 'Cushion';
+      case 'MQ':
+        return 'Marquise';
+      case 'HS':
+        return 'Heart';
+      default:
+        return value;
+    }
+  };
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -27,7 +55,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
-    groupedColumnMode: false,
+    groupedColumnMode: 'remove',
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
@@ -48,28 +76,35 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        // muiTableHeadCellProps: {
-        //   sx: {
-        //     display: 'none'
-        //   }
-        // },
+        size: 110,
+
+        muiTableHeadCellProps: {
+          sx: {
+            display: 'none'
+          }
+        },
         // muiTableBodyCellProps: ({ row }) => {
         //   console.log('celll', row);
         //   return {};
         // },
-        // muiTableBodyCellProps: ({ cell }) => ({
-        //   sx: {
-        //     display: !cell.id.includes('shape') ? 'none' : 'flex'
-        //   }
-        // }),
-        // Cell: ({ row, table }) => {
-        //   return (
-        //     <>
-        //       <MRT_ExpandButton row={row} table={table} />
-        //       {/*custom content*/}
-        //     </>
-        //   );
-        // },
+        muiTableBodyCellProps: ({ cell }) => {
+          return {
+            sx: {
+              display: !cell.id.includes('shape') ? 'none' : 'flex'
+            }
+          };
+        },
+        Cell: ({ row, table }) => {
+          return (
+            <div className="flex items-center">
+              <MRT_ExpandButton row={row} table={table} />
+              <Stack>
+                {getShapeDisplayName({ value: row.original.shape })}
+              </Stack>
+            </div>
+          );
+        },
+
         GroupedCell: ({ row, table }) => {
           const { grouping } = table.getState();
           return row.original[grouping[0]];
@@ -83,8 +118,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
       expanded: true,
       grouping: ['shape'],
       columnPinning: {
-        left: ['mrt-row-expand', 'mrt-row-select', 'lot_id'],
-        right: ['mrt-row-actions']
+        left: ['mrt-row-select', 'lot_id']
       }
     },
 
