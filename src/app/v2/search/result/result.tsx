@@ -96,11 +96,13 @@ const Result = () => {
           ),
 
           Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={col.label}
-              tooltipContentStyles={'z-[4]'}
-            />
+            <>
+              <Tooltip
+                tooltipTrigger={<span>{column.columnDef.header}</span>}
+                tooltipContent={col.label}
+                tooltipContentStyles={'z-[4]'}
+              />
+            </>
           ) //arrow function
           // Add other properties as needed
         };

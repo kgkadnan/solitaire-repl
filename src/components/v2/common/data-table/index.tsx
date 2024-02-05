@@ -1,4 +1,3 @@
-import { Stack } from '@mui/material';
 import {
   MaterialReactTable,
   useMaterialReactTable
@@ -16,7 +15,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     state: { rowSelection },
     //filters
     positionToolbarAlertBanner: 'none',
-    enableRowSelection: true,
+    // enableRowSelection: true,
     enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
@@ -28,20 +27,59 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
-    groupedColumnMode: 'remove',
+    groupedColumnMode: false,
+
+    muiTableBodyRowProps: ({ row }) => ({
+      onClick: row.getToggleSelectedHandler(),
+      sx: {
+        cursor: 'pointer',
+        '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-50)'
+        },
+        '&.MuiTableRow-root .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-25)'
+        },
+        '&.MuiTableRow-root:active .MuiTableCell-root::after': {
+          backgroundColor: 'var(--neutral-100)'
+        }
+      }
+    }),
+    enableRowSelection: true,
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
-        Header: () => <Stack direction="row" alignItems="center"></Stack>,
+        // muiTableHeadCellProps: {
+        //   sx: {
+        //     display: 'none'
+        //   }
+        // },
+        // muiTableBodyCellProps: ({ row }) => {
+        //   console.log('celll', row);
+        //   return {};
+        // },
+        // muiTableBodyCellProps: ({ cell }) => ({
+        //   sx: {
+        //     display: !cell.id.includes('shape') ? 'none' : 'flex'
+        //   }
+        // }),
+        // Cell: ({ row, table }) => {
+        //   return (
+        //     <>
+        //       <MRT_ExpandButton row={row} table={table} />
+        //       {/*custom content*/}
+        //     </>
+        //   );
+        // },
         GroupedCell: ({ row, table }) => {
           const { grouping } = table.getState();
           return row.original[grouping[0]];
         }
       }
     },
-
+    sortDescFirst: false,
     initialState: {
       showGlobalFilter: true,
+
       expanded: true,
       grouping: ['shape'],
       columnPinning: {
@@ -79,6 +117,10 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         '&.MuiTableCell-root': {
           padding: '4px 8px'
         }
+
+        // '&.MuiTableCell-root :hover': {
+        //   opacity: 1
+        // }
       }
     },
     muiSelectAllCheckboxProps: {
@@ -97,6 +139,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         }
       }
     },
+
     muiSelectCheckboxProps: {
       sx: {
         color: 'var(--neutral-200)',
@@ -106,21 +149,11 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
           fontWeight: 100
           // fill: 'var(--neutral-200)'
         },
+        '& .MuiCheckbox-indeterminate': {
+          display: 'none'
+        },
         '&.Mui-checked': {
           color: 'var(--primary-main)'
-        }
-      }
-    },
-    muiTableBodyRowProps: {
-      sx: {
-        '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-50)'
-        },
-        '&.MuiTableRow-root .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-25)'
-        },
-        '&.MuiTableRow-root:active .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-100)'
         }
       }
     }
