@@ -1,6 +1,7 @@
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import React, { useEffect, useState } from 'react';
+
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
@@ -10,14 +11,14 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import Bin from '@public/v2/assets/icons/bin.svg';
-import Add from '@public/v2/assets/icons/add.svg';
+import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
 
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import CalculatedField from '@/components/v2/common/calculated-field';
 
 import Tooltip from '@/components/v2/common/tooltip';
-import Pill from '@/components/v2/common/search-breadcrum/pill';
+import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import {
   RednderLocation,
   RenderCarat,
@@ -42,7 +43,13 @@ interface ITableColumn {
   // Add other properties as needed
 }
 
-const Result = () => {
+const Result = ({
+  activeTab,
+  searchParameters
+}: {
+  activeTab: number;
+  searchParameters: any;
+}) => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { rows, columns } = dataTableState;
   const { setRows, setColumns } = dataTableSetState;
@@ -50,6 +57,7 @@ const Result = () => {
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
 
+  // const { saveSearchName } = commonState;
   let [triggerProductApi] = useLazyGetAllProductQuery();
 
   const [triggerColumn] =
@@ -77,6 +85,32 @@ const Result = () => {
     };
     fetchMyAPI();
   }, []);
+
+  useEffect(() => {
+    const fetchMyAPI = async () => {
+      const yourSelection = localStorage.getItem('Search');
+
+      if (yourSelection) {
+        const parseYourSelection = JSON.parse(yourSelection);
+
+        //   // Always fetch data, even on initial load
+        const url = constructUrlParams(
+          parseYourSelection[activeTab - 1]?.queryParams
+        );
+        triggerProductApi({
+          offset: 0,
+          limit: LISTING_PAGE_DATA_LIMIT,
+          url: url
+        }).then(res => {
+          if (res?.data?.products?.length) {
+            setRows(res?.data?.products);
+          }
+        });
+      }
+    };
+
+    fetchMyAPI();
+  }, [localStorage.getItem('Search')!]);
 
   const mapColumns = (columns: any) => {
     return columns
@@ -157,6 +191,7 @@ const Result = () => {
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
+  console.log('rows', rowSelection);
   return (
     <div>
       <div className="flex h-[81px] items-center ">
@@ -167,27 +202,24 @@ const Result = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
-        <div className="flex h-[72px] items-center justify-between border-b-[1px] border-neutral200">
-          <Pill
-            isActive={true}
-            label={'Result'}
-            handlePillClick={() => {}}
-            handlePillEdit={() => {}}
-            handlePillDelete={() => {}}
-          />{' '}
-          <Pill
-            isActive={false}
-            label={'wwwwwwwwwwwwwwwwwwwwwwwww'}
-            handlePillClick={() => {}}
-            handlePillEdit={() => {}}
-            handlePillDelete={() => {}}
-          />
-          <div className="pr-[2px] flex gap-[12px]">
+        <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
+          <div className="flex col-span-2 gap-[12px] flex-wrap">
+            <Breadcrum
+              searchParameters={searchParameters}
+              isActive={activeTab}
+            />
+          </div>
+          <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
             <ActionButton
               actionButtonData={[
                 {
                   variant: 'secondary',
-                  svg: Add,
+                  label: ManageLocales('app.search.saveSearch'),
+                  handler: handleNewSearch
+                },
+                {
+                  variant: 'secondary',
+                  svg: NewSearchIcon,
                   label: ManageLocales('app.search.newSearch'),
                   handler: handleNewSearch
                 },

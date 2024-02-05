@@ -10,5 +10,6 @@ export enum Routes {
 // Enum using the enum keyword
 export enum SubRoutes {
   NEW_SEARCH = 'new-search',
-  RESULT = 'result'
+  RESULT = 'result',
+  SAVED_SEARCH = 'saved-search'
 }

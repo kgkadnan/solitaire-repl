@@ -1,13 +1,8 @@
 'use client';
 import React from 'react';
-import Form from './search/form/form';
 
 const page = () => {
-  return (
-    <>
-      <Form />
-    </>
-  );
+  return <div>Dashboard</div>;
 };
 
 export default page;

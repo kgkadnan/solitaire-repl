@@ -2,13 +2,13 @@
 
 import AnchorLinkNavigation from '@/components/v2/common/anchor-tag-navigation';
 import { anchor } from '@/constants/v2/form';
-import React, { useEffect } from 'react';
+import React, { Dispatch, SetStateAction, useEffect } from 'react';
 import useFormStateManagement from './hooks/form-state';
 import { Shape } from './components/shape';
 import { Carat } from './components/carat';
 import { Color } from './components/color';
 import { useGetProductCountQuery } from '@/features/api/product';
-import useValidationStateManagement from './hooks/validation-state-management';
+import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
 import { constructUrlParams } from '@/utils/construct-url-param';
 import { Clarity } from './components/clarity';
@@ -29,18 +29,51 @@ import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
 import {
   MAX_SEARCH_FORM_COUNT,
+  MAX_SEARCH_TAB_LIMIT,
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIIMITS,
+  MAX_LIMIT_REACHED,
   NO_STONE_FOUND,
+  SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { setModifySearch } from './helpers/modify-search';
+import { useAppSelector } from '@/hooks/hook';
+import logger from 'logging/log-util';
+import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
+import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 
-const Form = () => {
-  // const router = useRouter();
-  // const searchParams = useSearchParams();
-  const { state, setState } = useFormStateManagement();
+export interface ISavedSearch {
+  saveSearchName: string;
+  isSavedSearch: boolean;
+  queryParams: Record<string, string | string[] | { lte: number; gte: number }>;
+}
+const Form = ({
+  searchUrl,
+  setSearchUrl,
+  activeTab,
+  searchParameters
+}: {
+  searchUrl: String;
+  setSearchUrl: Dispatch<SetStateAction<string>>;
+  activeTab: number;
+
+  searchParameters: any;
+}) => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const modifySearchFrom = searchParams.get('edit');
+  const savedSearch: any = useAppSelector(
+    (store: { savedSearch: any }) => store.savedSearch
+  );
+
+  const { state, setState, carat } = useFormStateManagement();
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
+
   const {
     caratMax,
     caratMin,
@@ -90,13 +123,9 @@ const Form = () => {
 
   // const modifySearchFrom = searchParams.get('edit');
 
-  // const searchResult: any = useAppSelector(
-  //   (store: { searchResult: any }) => store.searchResult
-  // );
-
   const {
-    setSearchUrl,
-    searchUrl,
+    // setSearchUrl,
+    // searchUrl,
     isValidationError,
     isError,
     errorText,
@@ -109,7 +138,10 @@ const Form = () => {
     setIsError,
     searchCount,
     setValidationError,
-    validationError
+    validationError,
+    saveSearchName,
+    addSearches,
+    setAddSearches
   } = useValidationStateManagement();
 
   const { errorState, errorSetState } = useNumericFieldValidation();
@@ -180,6 +212,114 @@ const Form = () => {
     setSearchCount(searchCount + 1);
   }, [data, error, searchUrl, messageColor]);
 
+  // Load saved search data when component mounts
+  useEffect(() => {
+    let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
+    if (
+      modifySearchFrom ===
+        `${ManageLocales('app.search.savedSearchesRoute')}` &&
+      modifysavedSearchData
+    ) {
+      setModifySearch(modifysavedSearchData, setState, carat);
+    } else if (
+      modifySearchFrom === `${SubRoutes.RESULT}` &&
+      modifySearchResult
+    ) {
+      setModifySearch(
+        modifySearchResult[activeTab]?.queryParams,
+        setState,
+        carat
+      );
+    }
+  }, [modifySearchFrom]);
+
+  useEffect(() => {
+    let data: ISavedSearch[] | [] =
+      JSON.parse(localStorage.getItem('Search')!) || [];
+    if (data?.length > 0 && data[data?.length - 1]) {
+      setAddSearches(data);
+    }
+  }, []);
+
+  const handleFormSearch = async (
+    isSavedParams: boolean = false,
+    id?: string
+  ) => {
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${SubRoutes.RESULT}`
+    ) {
+      setIsError(true);
+      setErrorText(MAX_LIMIT_REACHED);
+    } else {
+      if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+        if (
+          data?.count < MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          const queryParams = generateQueryParams(state);
+          if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+            if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
+              const updatedMeta = [...savedSearch.savedSearch.meta_data];
+              updatedMeta[savedSearch.activeTab] = queryParams;
+              let data = {
+                id: savedSearch.savedSearch.id,
+                meta_data: updatedMeta
+              };
+              updateSavedSearch(data);
+            }
+          }
+          console.log(modifySearchFrom, 'modifySearchFrom', queryParams);
+          if (modifySearchFrom === `${SubRoutes.RESULT}`) {
+            let modifySearchResult = JSON.parse(
+              localStorage.getItem('Search')!
+            );
+            let setDataOnLocalStorage = {
+              id: modifySearchResult[activeTab]?.id,
+              saveSearchName:
+                modifySearchResult[activeTab]?.saveSearchName || saveSearchName,
+              isSavedSearch: isSavedParams,
+              searchId: data?.search_id,
+              queryParams
+            };
+            if (modifySearchResult[activeTab]) {
+              const updatedData = [...modifySearchResult];
+              updatedData[activeTab] = setDataOnLocalStorage;
+              localStorage.setItem('Search', JSON.stringify(updatedData));
+            }
+            router.push(
+              `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
+            );
+          } else {
+            let setDataOnLocalStorage = {
+              id: id,
+              saveSearchName: saveSearchName,
+              searchId: data?.search_id,
+              isSavedSearch: isSavedParams,
+              queryParams
+            };
+
+            localStorage.setItem(
+              'Search',
+              JSON.stringify([...addSearches, setDataOnLocalStorage])
+            );
+            router.push(
+              `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                JSON.parse(localStorage.getItem('Search')!).length
+              }`
+            );
+          }
+          // return;
+        }
+      } else {
+        setIsError(true);
+        setErrorText(SELECT_SOME_PARAM);
+      }
+    }
+  };
+
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -189,37 +329,36 @@ const Form = () => {
     setValidationError('');
     handleReset(setState, errorSetState);
   };
+  const handleAddDemand = () => {
+    logger.info('Add demand');
+  };
 
   let actionButtonData: IActionButtonDataItem[] = [
-    // {
-    //   variant: 'secondary',
-    //   svg: arrowIcon,
-    //   label: ManageLocales('app.advanceSearch.cancel'),
-    //   handler: () => {
-    //     if (
-    //       modifySearchFrom ===
-    //       `${ManageLocales('app.search.savedSearchesRoute')}`
-    //     ) {
-    //       router.push(
-    //         `/search?active-tab=${ManageLocales(
-    //           'app.search.savedSearchesRoute'
-    //         )}`
-    //       );
-    //     } else if (
-    //       modifySearchFrom === `${ManageLocales('app.search.resultRoute')}`
-    //     ) {
-    //       router.push(
-    //         `/search?active-tab=${ManageLocales('app.search.resultRoute')}-${
-    //           searchResult.activeTab + 3
-    //         }`
-    //       );
-    //     }
-    //   },
-    //   isHidden:
-    //     modifySearchFrom !==
-    //       `${ManageLocales('app.search.savedSearchesRoute')}` &&
-    //     modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}`
-    // },
+    {
+      variant: 'secondary',
+      // svg: arrowIcon,
+      label: ManageLocales('app.advanceSearch.cancel'),
+      handler: () => {
+        if (
+          modifySearchFrom ===
+          `${ManageLocales('app.search.savedSearchesRoute')}`
+        ) {
+          router.push(
+            `/search?active-tab=${ManageLocales(
+              'app.search.savedSearchesRoute'
+            )}`
+          );
+        } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
+          router.push(
+            `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
+          );
+        }
+      },
+      isHidden:
+        modifySearchFrom !==
+          `${ManageLocales('app.search.savedSearchesRoute')}` &&
+        modifySearchFrom !== `${SubRoutes.RESULT}`
+    },
     {
       variant: 'secondary',
       // svg: arrowIcon,
@@ -237,7 +376,7 @@ const Form = () => {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
       label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
-      handler: () => {}
+      handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
     }
   ];
 
@@ -249,6 +388,12 @@ const Form = () => {
             <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
               Search for Diamonds
             </span>
+          </div>
+          <div className="flex gap-[12px] flex-wrap border-[1px] border-neutral200 p-[16px]">
+            <Breadcrum
+              searchParameters={searchParameters}
+              isActive={activeTab}
+            />
           </div>
           <AnchorLinkNavigation anchorNavigations={anchor} />
           {/* </div> */}
@@ -344,8 +489,14 @@ const Form = () => {
           />
         </div>
       </div>
-      <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex justify-between">
-        <div className=" flex items-center">
+      <div
+        className={`grid  gap-[8px] bg-neutral0 sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex ${'justify-end'} `}
+      >
+        <div
+          className={` flex items-center md:grid-cols-1 lg:grid-cols-2 w-full ${
+            isError ? 'justify-between' : 'justify-end'
+          } `}
+        >
           {isError && (
             <>
               <span className="hidden  text-successMain" />
@@ -356,8 +507,8 @@ const Form = () => {
               </span>
             </>
           )}
+          <ActionButton actionButtonData={actionButtonData} />
         </div>
-        <ActionButton actionButtonData={actionButtonData} />
       </div>
     </div>
   );

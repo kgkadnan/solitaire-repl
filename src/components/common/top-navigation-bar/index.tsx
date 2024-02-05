@@ -106,8 +106,8 @@ export const TopNavigationBar = () => {
   const topNavData = [
     {
       label: ManageLocales('app.topNav.newv2'),
-      link: '/v2',
-      isActive: currentRoute === '/for-you'
+      link: '/v2/search?active-tab=new-search',
+      isActive: currentRoute === '/v2'
     },
     {
       label: ManageLocales('app.topNav.forYou'),
@@ -134,7 +134,7 @@ export const TopNavigationBar = () => {
   ];
 
   const handleRoute = (label: string, link: string) => {
-    if (link === '/v2') {
+    if (link === '/v2/search?active-tab=new-search') {
       // Redirect and reload the browser for 'new'
       window.location.href = link;
     } else {
