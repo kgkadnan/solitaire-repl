@@ -212,7 +212,10 @@ const Result = ({
           </div>
         </div>
         <div>
-          <CalculatedField rows={rows} selectedProducts={rowSelection} />
+        <CalculatedField
+          rows={dataTableState.rows}
+          selectedProducts={rowSelection}
+        />
         </div>
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
         <DataTable
@@ -222,16 +225,7 @@ const Result = ({
           rowSelection={rowSelection}
         />
         </div>
-        <CalculatedField
-          rows={dataTableState.rows}
-          selectedProducts={rowSelection}
-        />
-        <DataTable
-          rows={dataTableState.rows}
-          columns={memoizedColumns}
-          setRowSelection={setRowSelection}
-          rowSelection={rowSelection}
-        />
+       
       </div>
     </div>
   );
