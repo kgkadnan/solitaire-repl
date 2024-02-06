@@ -169,7 +169,11 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
           /* Your styles for the element */
           color: 'var(--primary-main)'
-        }
+        },
+        '&.MuiButtonBase-root-MuiCheckbox-root.Mui-checked, .MuiCheckbox-indeterminate':
+          {
+            color: 'var(--primary-main)'
+          }
       }
     },
 

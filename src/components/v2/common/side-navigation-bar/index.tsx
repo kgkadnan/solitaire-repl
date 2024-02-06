@@ -77,7 +77,7 @@ const SideNavigationBar = () => {
         {SideNavigationData.map((items: ISideNavigationBar) => {
           return (
             <div
-              className="my-[8px] first:border-b-[1px] last:border-t-[1px] border-neutral200"
+              className={`my-[8px] first:border-b-[1px] last:border-t-[1px] border-neutral200 `}
               key={items.title}
             >
               <Tooltip
@@ -88,8 +88,12 @@ const SideNavigationBar = () => {
                       onClick={() => router.push(items.link)}
                       className={
                         items.isActive
-                          ? 'bg-primaryMain p-[8px] rounded stroke-neutral25'
-                          : 'p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50'
+                          ? `bg-primaryMain p-[8px] rounded stroke-neutral25 ${
+                              items.title === 'Settings' && 'mt-[8px]'
+                            }`
+                          : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 ${
+                              items.title === 'Settings' && 'mt-[10px]'
+                            }`
                       }
                     >
                       {items.src}
