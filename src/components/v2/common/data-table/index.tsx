@@ -1,9 +1,12 @@
-import { Stack } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
+  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import Image from 'next/image';
 
 const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
@@ -193,7 +196,26 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
           color: 'var(--primary-main)'
         }
       }
-    }
+    },
+    renderToolbarInternalActions: ({ table }) => (
+      <>
+      {/* <div>hello</div>
+      <div><img src={warningIcon}></img></div>
+      <IconButton onClick={() => {}}>
+        hello
+      </IconButton> */}
+      {/* <div><Image src={warningIcon} alt="warningIcon" /></div> */}
+        {/* add your own custom print button or something */}
+        {/* <IconButton onClick={() =>{}}>
+        <Image src={warningIcon} alt="warningIcon" />
+
+        </IconButton>
+        <Image src={warningIcon} alt="warningIcon" />
+hello
+        {/* built-in buttons (must pass in table prop for them to work!) */}
+        <MRT_ToggleFullScreenButton table={table} /> 
+      </>
+    ),
   });
 
   return (
