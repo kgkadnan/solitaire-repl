@@ -268,6 +268,13 @@ const Form = ({
     }
   }, []);
 
+  // Reset form when a new search is initiated
+  useEffect(() => {
+    if (subRoute === SubRoutes.NEW_SEARCH) {
+      handleFormReset();
+    }
+  }, [subRoute]);
+
   const handleFormSearch = async (
     isSavedParams: boolean = false,
     id?: string
@@ -377,7 +384,7 @@ const Form = ({
       }
     }
   };
-
+  console.log(state);
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -568,22 +575,22 @@ const Form = ({
         </div>
       </div>
       <div
-        className={`grid backdrop-blur-sm  gap-[8px]  sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex ${'justify-end'} `}
+        className={`grid backdrop-blur-sm  gap-[8px]  sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex w-full `}
       >
         <div
-          className={` flex items-center md:grid-cols-1 lg:grid-cols-2 w-full  ${
+          className={` flex items-center w-full  ${
             isError ? 'justify-between' : 'justify-end'
           } `}
         >
           {isError && (
-            <>
+            <div>
               <span className="hidden  text-successMain" />
               <span
-                className={`text-mRegular font-medium text-${messageColor}`}
+                className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
               >
                 {!isValidationError && errorText}
               </span>
-            </>
+            </div>
           )}
           <ActionButton actionButtonData={actionButtonData} />
         </div>

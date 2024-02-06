@@ -76,7 +76,7 @@ export const Carat = ({
   }) => {
     const validatedData = normalizeValue(data);
 
-    if (validatedData) {
+    if (!caratError.length && validatedData) {
       if (selectedcaratTile.length < 5) {
         setValidationError('');
         if (!selectedcaratTile.includes(validatedData)) {
