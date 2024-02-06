@@ -5,6 +5,20 @@ import {
   useMaterialReactTable
 } from 'material-react-table';
 
+// theme.js
+import { ThemeProvider, createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: ['inherit'].join(','),
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 600,
+    fontWeightBold: 700
+    // You can also customize other typography aspects here
+  }
+});
+
 const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
@@ -198,7 +212,9 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
   return (
     <form autoComplete="off">
-      <MaterialReactTable table={table} />
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable table={table} />
+      </ThemeProvider>
     </form>
   );
 };
