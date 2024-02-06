@@ -43,5 +43,8 @@
 
   "app.search.closeTabs": "Are you sure you want to close all active search tabs?",
   "app.search.confirmHeader": "Are you sure?",
-  "app.search.closeSpecificTabs": "Are you sure you want to close the search tabs?"
+  "app.search.closeSpecificTabs": "Are you sure you want to close the unsaved search tab?",
+
+  "app.search.maxLimit": "Are you sure you want to close the unsaved search tab?",
+  "app.search.manageLimit": "Manage Tabs"
 }

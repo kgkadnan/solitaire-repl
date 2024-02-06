@@ -32,7 +32,6 @@ import {
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIIMITS,
-  MAX_LIMIT_REACHED,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -45,6 +44,8 @@ import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import Image from 'next/image';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -63,7 +64,9 @@ const Form = ({
   setState,
   carat,
   errorState,
-  errorSetState
+  errorSetState,
+  setIsDialogOpen,
+  setDialogContent
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -77,6 +80,8 @@ const Form = ({
   carat: any;
   errorState: any;
   errorSetState: any;
+  setIsDialogOpen: any;
+  setDialogContent: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -279,9 +284,40 @@ const Form = ({
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
-      setIsError(true);
-      setMessageColor('dangerMain');
-      setErrorText(MAX_LIMIT_REACHED);
+      setDialogContent(
+        <>
+          {' '}
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={warningIcon} alt="warningIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">
+                {' '}
+                {ManageLocales('app.search.confirmHeader')}
+              </h1>
+              <p className="text-neutral600 text-mRegular">
+                {ManageLocales('app.search.maxLimit')}
+              </p>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.search.manageLimit'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          </div>
+        </>
+      );
+      setIsDialogOpen(true);
+      // setIsError(true);
+      // setErrorText(MAX_LIMIT_REACHED);
     } else {
       if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
         if (
@@ -419,13 +455,15 @@ const Form = ({
             </span>
           </div>
           {searchParameters.length > 0 ? (
-            <div className="flex gap-[12px] flex-wrap border-[1px] border-neutral200 p-[16px]">
-              <Breadcrum
-                searchParameters={searchParameters}
-                activeTab={activeTab}
-                setActiveTab={setActiveTab}
-                handleCloseSpecificTab={handleCloseSpecificTab}
-              />
+            <div className="flex justify-between border-[1px] border-neutral200  p-[16px]">
+              <div className="flex gap-[12px] flex-wrap ">
+                <Breadcrum
+                  searchParameters={searchParameters}
+                  activeTab={activeTab}
+                  setActiveTab={setActiveTab}
+                  handleCloseSpecificTab={handleCloseSpecificTab}
+                />
+              </div>
               <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
                 <ActionButton
                   actionButtonData={[
