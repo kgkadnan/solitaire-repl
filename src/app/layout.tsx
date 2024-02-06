@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
                   <V2TopNavigationBar />
 
-                  <main className="flex-1 px-[32px] ml-[84px]">
+                  <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
                     <SecureComponent>{children}</SecureComponent>
                   </main>
                 </div>
