@@ -227,12 +227,23 @@ const Result = ({
       const response = await triggerColumn({});
       if (response.data) {
         dataTableSetState.setColumns(response.data);
+        dataTableSetState.setColumns((prev: any) => [
+          ...prev,
+          {
+            accessor: 'shape_full',
+            id: 'cus_ma-lis-seq_01HHM4RTY66QR24P4RCXHF53XB',
+            is_disabled: false,
+            is_fixed: false,
+            label: 'Shape',
+            sequence: -1,
+            short_label: 'Shape'
+          }
+        ]);
       }
     };
 
     fetchColumns();
   }, []);
-
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
@@ -357,7 +368,7 @@ const Result = ({
             : ManageLocales('app.result.headerResult')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-180px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
         <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 flex p-[16px]">
           <div className="flex lg-w-[calc(100%-400px)] gap-[12px] flex-wrap">
             <Breadcrum
@@ -408,13 +419,13 @@ const Result = ({
           {dataTableState.rows.length > 0 ? (
             <div className="flex items-center justify-between">
               <div className="flex gap-4">
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                <div className="py-[4px] px-[6px] border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
                   In Cart
                 </div>
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                <div className="py-[4px] px-[6px] border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
                   Hold
                 </div>
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                <div className="py-[4px] px-[6px] border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
                   Memo
                 </div>
               </div>

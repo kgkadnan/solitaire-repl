@@ -104,9 +104,8 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
           );
         },
 
-        GroupedCell: ({ row, table }) => {
-          const { grouping } = table.getState();
-          return row.original[grouping[0]];
+        GroupedCell: ({ row }) => {
+          return row.original['shape'];
         }
       }
     },
@@ -116,7 +115,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
       showGlobalFilter: true,
 
       expanded: true,
-      grouping: ['shape'],
+      grouping: ['shape_full'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
       }
@@ -140,13 +139,15 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
       }
     },
 
-    muiTableBodyCellProps: {
-      sx: {
-        color: 'var(--neutral-900)',
-        '&.MuiTableCell-root': {
-          padding: '4px 8px'
+    muiTableBodyCellProps: () => {
+      return {
+        sx: {
+          color: 'var(--neutral-900)',
+          '&.MuiTableCell-root': {
+            padding: '4px 8px'
+          }
         }
-      }
+      };
     },
 
     muiTableHeadCellProps: () => {
