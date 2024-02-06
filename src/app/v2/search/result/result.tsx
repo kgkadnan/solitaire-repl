@@ -47,7 +47,6 @@ import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import { setModifySearch } from '../form/helpers/modify-search';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>

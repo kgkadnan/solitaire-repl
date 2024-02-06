@@ -252,9 +252,7 @@ const Form = ({
         setState,
         carat
       );
-      
     }
-   
   }, [modifySearchFrom]);
 
   useEffect(() => {
@@ -264,6 +262,13 @@ const Form = ({
       setAddSearches(data);
     }
   }, []);
+
+  // Reset form when a new search is initiated
+  useEffect(() => {
+    if (subRoute === SubRoutes.NEW_SEARCH) {
+      handleFormReset();
+    }
+  }, [subRoute]);
 
   const handleFormSearch = async (
     isSavedParams: boolean = false,
@@ -343,7 +348,7 @@ const Form = ({
       }
     }
   };
-
+  console.log(state);
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -543,7 +548,7 @@ const Form = ({
             <div>
               <span className="hidden  text-successMain" />
               <span
-                className={`text-mRegular font-medium text-${messageColor}`}
+                className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
               >
                 {!isValidationError && errorText}
               </span>
