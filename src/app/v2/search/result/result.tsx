@@ -223,12 +223,23 @@ const Result = ({
       const response = await triggerColumn({});
       if (response.data) {
         dataTableSetState.setColumns(response.data);
+        dataTableSetState.setColumns((prev: any) => [
+          ...prev,
+          {
+            accessor: 'shape_full',
+            id: 'cus_ma-lis-seq_01HHM4RTY66QR24P4RCXHF53XB',
+            is_disabled: false,
+            is_fixed: false,
+            label: 'Shape',
+            sequence: -1,
+            short_label: 'Shape'
+          }
+        ]);
       }
     };
 
     fetchColumns();
   }, []);
-
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
