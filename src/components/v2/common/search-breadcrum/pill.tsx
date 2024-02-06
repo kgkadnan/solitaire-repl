@@ -42,7 +42,7 @@ const Pill = (props: {
               >
                 {label}
               </p>
-              <div onClick={handlePillDelete}>
+              <div onClick={handlePillDelete} className="flex items-center">
                 <Cross
                   style={{
                     stroke: isActive ? 'var(--info-main)' : 'var(--neutral-500)'

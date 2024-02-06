@@ -26,7 +26,6 @@ const Search = () => {
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
-  const [tabCount, setTabCount] = useState(0);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
@@ -65,7 +64,6 @@ const Search = () => {
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
-        setTabCount(parseYourSelection.length);
 
         //   // Always fetch data, even on initial load
         const url = constructUrlParams(
@@ -78,7 +76,6 @@ const Search = () => {
 
     fetchMyAPI();
   }, [localStorage.getItem('Search')!]);
-  console.log(tabCount);
 
   const handleCloseAllTabs = () => {
     setDialogContent(
@@ -143,7 +140,7 @@ const Search = () => {
     } else {
       setActiveTab(removeDataIndex);
       router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex}`
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
       );
     }
 
@@ -178,7 +175,7 @@ const Search = () => {
                   label: ManageLocales('app.modal.no'),
                   handler: () => {
                     setIsDialogOpen(false);
-                    closeSearch(id, yourSelection);
+                    // closeSearch(id, yourSelection);
                   },
                   customStyle: 'flex-1'
                 },
@@ -225,6 +222,8 @@ const Search = () => {
             carat={carat}
             errorState={errorState}
             errorSetState={errorSetState}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
           />
         ) : activeTab === -1 ? (
           <div className="h-screen">

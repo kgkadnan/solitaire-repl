@@ -358,8 +358,8 @@ const Result = ({
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-180px)] shadow-inputShadow">
-        <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
-          <div className="flex col-span-2 gap-[12px] flex-wrap">
+        <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 flex p-[16px]">
+          <div className="flex lg-w-[calc(100%-400px)] gap-[12px] flex-wrap">
             <Breadcrum
               searchParameters={searchParameters}
               activeTab={activeTab}
