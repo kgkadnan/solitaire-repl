@@ -26,7 +26,6 @@ const Search = () => {
   const [searchParameters, setSearchParameters] = useState<ISavedSearch[] | []>(
     []
   );
-  const [tabCount, setTabCount] = useState(0);
 
   const { setSearchUrl, searchUrl } = useValidationStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
@@ -65,7 +64,6 @@ const Search = () => {
 
       if (yourSelection) {
         const parseYourSelection = JSON.parse(yourSelection);
-        setTabCount(parseYourSelection.length);
 
         //   // Always fetch data, even on initial load
         const url = constructUrlParams(
@@ -78,7 +76,6 @@ const Search = () => {
 
     fetchMyAPI();
   }, [localStorage.getItem('Search')!]);
-  console.log(tabCount);
 
   const handleCloseAllTabs = () => {
     setDialogContent(
