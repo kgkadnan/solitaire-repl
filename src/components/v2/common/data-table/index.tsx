@@ -5,11 +5,14 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import shareIcon from '@public/v2/assets/png/data-table/share.png';
+import downloadIcon from '@public/v2/assets/png/data-table/download.png';
+import saveIcon from '@public/v2/assets/png/data-table/save.png';
+
 import Image from 'next/image';
 
 // theme.js
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 
 const theme = createTheme({
   typography: {
@@ -22,7 +25,13 @@ const theme = createTheme({
   }
 });
 
-const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
+const DataTable = ({
+  rows,
+  columns,
+  setRowSelection,
+  rowSelection,
+  isResult = false
+}: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
       case 'EM':
@@ -49,6 +58,18 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         return value;
     }
   };
+
+  const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
+    () => ({
+      border: `1px solid #E4E7EC`,
+      background: 'neutral-0',
+      padding: '4px',
+      width: '35px',
+      height: '35px',
+      borderRadius: '4px'
+    })
+  );
+
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -212,24 +233,26 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
       }
     },
     renderToolbarInternalActions: ({ table }) => (
-      <>
-      {/* <div>hello</div>
-      <div><img src={warningIcon}></img></div>
-      <IconButton onClick={() => {}}>
-        hello
-      </IconButton> */}
-      {/* <div><Image src={warningIcon} alt="warningIcon" /></div> */}
-        {/* add your own custom print button or something */}
-        {/* <IconButton onClick={() =>{}}>
-        <Image src={warningIcon} alt="warningIcon" />
-
+      <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
+        {isResult && (
+          <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center">
+            <Image src={saveIcon} alt={'save search'} />
+            <p className="pl-1 text-mMedium font-medium">Save Search</p>
+          </div>
+        )}
+        <IconButton onClick={() => {}}>
+          <div className="p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
+            <Image src={downloadIcon} alt={'download'} />
+          </div>
         </IconButton>
-        <Image src={warningIcon} alt="warningIcon" />
-hello
-        {/* built-in buttons (must pass in table prop for them to work!) */}
-        <MRT_ToggleFullScreenButton table={table} /> 
-      </>
-    ),
+        <StyledToggleFullScreenButton table={table} />
+        <IconButton onClick={() => {}}>
+          <div className="flex p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
+            <Image src={shareIcon} alt={'share'} />
+          </div>
+        </IconButton>
+      </div>
+    )
   });
 
   return (
