@@ -119,7 +119,7 @@ const Result = ({
   const router = useRouter();
 
   // const { saveSearchName } = commonState;
-  let [triggerProductApi, { refetch }] = useLazyGetAllProductQuery();
+  let [triggerProductApi] = useLazyGetAllProductQuery();
 
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -133,8 +133,7 @@ const Result = ({
 
       const selections = JSON.parse(storedSelection);
 
-      //   // Always fetch data, even on initial load
-      const url = constructUrlParams(selections[activeTab]?.queryParams);
+      const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
 
       const response = await triggerProductApi({
         offset: 0,
@@ -255,7 +254,7 @@ const Result = ({
               // setErrorText('');
 
               dispatch(notificationBadge(true));
-              refetch();
+
               // refetchRow();
             })
             .catch(() => {
@@ -290,7 +289,7 @@ const Result = ({
             : ManageLocales('app.result.headerResult')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-180px)] shadow-inputShadow">
         <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
           <div className="flex col-span-2 gap-[12px] flex-wrap">
             <Breadcrum
@@ -337,7 +336,7 @@ const Result = ({
             rowSelection={rowSelection}
           />
         </div>
-        <div className="p-[16px] ">
+        <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
           {dataTableState.rows.length > 0 ? (
             <ActionButton
               actionButtonData={[
