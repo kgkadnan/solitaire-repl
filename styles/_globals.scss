@@ -318,13 +318,13 @@
 
     /* Track */
     ::-webkit-scrollbar-track {
-      background-color: hsl(var(--solitaire-senary));
+      background-color: var(--neutral-200);
       border-radius: 10px;
     }
 
     /* Handle */
     ::-webkit-scrollbar-thumb {
-      background: hsl(var(--solitaire-tertiary));
+      background: var(--primary-icon-color);
       border-radius: 10px;
     }
 

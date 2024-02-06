@@ -27,7 +27,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm"
         ref={containerRef}
       >
-        {anchorNavigations.map((links, index) => (
+        {anchorNavigations.map(links => (
           <div key={links}>
             <Link
               activeStyle={{

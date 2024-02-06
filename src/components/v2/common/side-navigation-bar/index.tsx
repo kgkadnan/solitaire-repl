@@ -16,9 +16,9 @@ import { Routes } from '@/constants/v2/enums/routes';
 
 interface ISideNavigationBar {
   src: React.ReactNode;
-  title: string;
-  link: string;
-  isActive: boolean;
+  title?: string;
+  link?: string;
+  isActive?: boolean;
 }
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
@@ -30,6 +30,9 @@ const SideNavigationBar = () => {
       title: ManageLocales('app.sideNavigationBar.dashboard'),
       link: Routes.DASHBOARD,
       isActive: currentRoute === Routes.DASHBOARD
+    },
+    {
+      src: <CartIcon />
     },
     {
       src: <SearchIcon />,
@@ -62,6 +65,9 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.MY_CART
     },
     {
+      src: <CartIcon />
+    },
+    {
       src: <SettingIcon />,
       title: ManageLocales('app.sideNavigationBar.settings'),
       link: Routes.SETTINGS,
@@ -73,36 +79,33 @@ const SideNavigationBar = () => {
       <div className="mb-[16px] cursor-pointer">
         <Image src={KgkIcon} alt="KGK logo" onClick={() => router.push('/')} />
       </div>
-      <div className="z-50">
+      <div className="z-50 flex flex-col gap-2">
         {SideNavigationData.map((items: ISideNavigationBar) => {
           return (
-            <div
-              className={`my-[8px] first:border-b-[1px] last:border-t-[1px] border-neutral200 `}
-              key={items.title}
-            >
-              <Tooltip
-                tooltipContentSide="right"
-                tooltipTrigger={
-                  <div className="">
-                    <Button
-                      onClick={() => router.push(items.link)}
-                      className={
-                        items.isActive
-                          ? `bg-primaryMain p-[8px] rounded stroke-neutral25 ${
-                              items.title === 'Settings' && 'mt-[8px]'
-                            }`
-                          : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 ${
-                              items.title === 'Settings' && 'mt-[10px]'
-                            }`
-                      }
-                    >
-                      {items.src}
-                    </Button>
-                  </div>
-                }
-                tooltipContentStyles={'z-50 text-sMedium'}
-                tooltipContent={items.title}
-              />
+            <div className={` border-neutral200 `} key={items.title}>
+              {items.link ? (
+                <Tooltip
+                  tooltipContentSide="right"
+                  tooltipTrigger={
+                    <div className="">
+                      <Button
+                        onClick={() => router.push(items.link!)}
+                        className={
+                          items.isActive
+                            ? `bg-primaryMain p-[8px] rounded stroke-neutral25 `
+                            : `p-[8px] stroke-primaryIconColor rounded hover:bg-neutral50 `
+                        }
+                      >
+                        {items.src}
+                      </Button>
+                    </div>
+                  }
+                  tooltipContentStyles={'z-50 text-sMedium'}
+                  tooltipContent={items.title}
+                />
+              ) : (
+                <hr className="border-none h-[1px] bg-neutral200" />
+              )}
             </div>
           );
         })}

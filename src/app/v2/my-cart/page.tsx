@@ -1,6 +1,5 @@
 'use client';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import CalculatedField from '@/components/v2/common/calculated-field';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
@@ -369,7 +368,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(90vh-160px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-150px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
@@ -394,11 +393,6 @@ const MyCart = () => {
           <Loader />
         ) : rows.length ? (
           <div>
-            {activeTab !== SOLD_STATUS && (
-              <div>
-                <CalculatedField rows={rows} selectedProducts={rowSelection} />
-              </div>
-            )}
             <div className="border-b-[1px] border-t-[1px] border-neutral200">
               <DataTable
                 rows={rows}
@@ -417,8 +411,8 @@ const MyCart = () => {
           />
         )}
 
-        <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
-          {rows.length > 0 ? (
+        {rows.length > 0 ? (
+          <div className="p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
             <ActionButton
               actionButtonData={[
                 {
@@ -456,11 +450,11 @@ const MyCart = () => {
                   isHidden: activeTab === AVAILABLE_STATUS
                 }
               ]}
-            />
-          ) : (
-            <></>
-          )}
-        </div>
+            />{' '}
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );

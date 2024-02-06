@@ -19,9 +19,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
-import CalculatedField from '@/components/v2/common/calculated-field';
 import Tooltip from '@/components/v2/common/tooltip';
-import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
 import {
   RenderCarat,
   RenderDiscount,
@@ -30,8 +28,6 @@ import {
   RenderLotId,
   RednderLocation
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import BinIcon from '@public/v2/assets/icons/bin.svg';
-import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
@@ -357,45 +353,7 @@ const Result = ({
             : ManageLocales('app.result.headerResult')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-180px)] shadow-inputShadow">
-        <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 flex p-[16px]">
-          <div className="flex lg-w-[calc(100%-400px)] gap-[12px] flex-wrap">
-            <Breadcrum
-              searchParameters={searchParameters}
-              activeTab={activeTab}
-              setActiveTab={setActiveTab}
-              handleCloseSpecificTab={handleCloseSpecificTab}
-            />
-          </div>
-          <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.search.saveSearch'),
-                  handler: handleNewSearch
-                },
-                {
-                  variant: 'secondary',
-                  svg: NewSearchIcon,
-                  label: ManageLocales('app.search.newSearch'),
-                  handler: handleNewSearch
-                },
-                {
-                  variant: 'secondary',
-                  svg: BinIcon,
-                  handler: handleCloseAllTabs
-                }
-              ]}
-            />
-          </div>
-        </div>
-        <div>
-          <CalculatedField
-            rows={dataTableState.rows}
-            selectedProducts={rowSelection}
-          />
-        </div>
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-150px)] shadow-inputShadow">
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
           <DataTable
             rows={dataTableState.rows}
@@ -403,20 +361,34 @@ const Result = ({
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
             isResult={true}
+            activeTab={activeTab}
+            searchParameters={searchParameters}
+            setActiveTab={setActiveTab}
+            handleCloseAllTabs={handleCloseAllTabs}
+            handleCloseSpecificTab={handleCloseSpecificTab}
+            handleNewSearch={handleNewSearch}
           />
         </div>
-        <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
-          {dataTableState.rows.length > 0 ? (
+        {dataTableState.rows.length > 0 ? (
+          <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
             <div className="flex items-center justify-between">
               <div className="flex gap-4">
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                  In Cart
+                <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    In Cart
+                  </p>
                 </div>
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                  Hold
+                <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    {' '}
+                    Hold
+                  </p>
                 </div>
-                <div className="px-[4px] py-[6px] border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                  Memo
+                <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    {' '}
+                    Memo
+                  </p>
                 </div>
               </div>
               <ActionButton
@@ -435,10 +407,10 @@ const Result = ({
                 ]}
               />
             </div>
-          ) : (
-            <></>
-          )}
-        </div>
+          </div>
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   );
