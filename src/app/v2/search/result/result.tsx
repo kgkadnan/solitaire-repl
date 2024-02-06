@@ -12,6 +12,7 @@ import {
   LISTING_PAGE_DATA_LIMIT,
   MEMO_STATUS
 } from '@/constants/business-logic';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import { useRouter, useSearchParams } from 'next/navigation';
@@ -43,6 +44,9 @@ import { IProduct } from '@/app/search/result/result-interface';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
+import Image from 'next/image';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import { DialogComponent } from '@/components/v2/common/dialog';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -104,7 +108,9 @@ const Result = ({
 }) => {
   const dispatch = useAppDispatch();
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
-
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isDialogOpen, dialogContent } = modalState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
@@ -125,11 +131,12 @@ const Result = ({
 
       if (!storedSelection) return;
 
+      if (activeTab <= 0) return;
+
       const selections = JSON.parse(storedSelection);
 
-      //   // Always fetch data, even on initial load
-      const url = constructUrlParams(selections[activeTab]?.queryParams);
-      // const url = constructUrlParams(queryParams);
+      const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
+
       const response = await triggerProductApi({
         offset: 0,
         limit: LISTING_PAGE_DATA_LIMIT,
@@ -212,28 +219,44 @@ const Result = ({
             variants: variantIds
           })
             .unwrap()
-            .then(() => {
+            .then((res: any) => {
+              setIsDialogOpen(true);
+              setDialogContent(
+                <>
+                  <div className="absolute left-[-84px] top-[-84px]">
+                    <Image src={confirmIcon} alt="confirmIcon" />
+                  </div>
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                    <h1 className="text-headingS text-neutral900">
+                      {res?.message}
+                    </h1>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.modal.continue'),
+                          handler: () => setIsDialogOpen(false),
+                          customStyle: 'flex-1 w-full'
+                        },
+                        {
+                          variant: 'primary',
+                          label: 'Go to "My Cart"',
+                          handler: () => {
+                            router.push('/v2/my-cart');
+                          },
+                          customStyle: 'flex-1 w-full'
+                        }
+                      ]}
+                    />
+                  </div>
+                </>
+              );
               // On success, show confirmation dialog and update badge
               // setIsError(false);
               // setErrorText('');
-              // setIsPersistDialogOpen(true);
-              // setPersistDialogContent(
-              //   <div className="text-center  flex flex-col justify-center items-center ">
-              //     <div className="w-[350px] flex justify-center items-center mb-3">
-              //       <Image src={confirmImage} alt="vector image" />
-              //     </div>
-              //     <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
-              //       {res?.message}
-              //     </div>
-              //     <Link
-              //       href={'/my-cart?active-tab=active'}
-              //       className={` p-[6px] w-[150px] bg-solitaireQuaternary text-[#fff] text-[14px] rounded-[5px]`}
-              //     >
-              //       Go To &quot;MyCart&quot;
-              //     </Link>
-              //   </div>
-              // );
+
               dispatch(notificationBadge(true));
+
               // refetchRow();
             })
             .catch(() => {
@@ -251,6 +274,11 @@ const Result = ({
 
   return (
     <div>
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
           {editRoute
@@ -258,7 +286,7 @@ const Result = ({
             : ManageLocales('app.result.headerResult')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-160px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-180px)] shadow-inputShadow">
         <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 grid grid-cols-3 p-[16px]">
           <div className="flex col-span-2 gap-[12px] flex-wrap">
             <Breadcrum
@@ -305,7 +333,7 @@ const Result = ({
             rowSelection={rowSelection}
           />
         </div>
-        <div className="p-[16px] ">
+        <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
           {dataTableState.rows.length > 0 ? (
             <ActionButton
               actionButtonData={[
