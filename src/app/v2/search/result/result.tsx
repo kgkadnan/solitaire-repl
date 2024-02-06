@@ -131,6 +131,8 @@ const Result = ({
 
       if (!storedSelection) return;
 
+      if (activeTab <= 0) return;
+
       const selections = JSON.parse(storedSelection);
 
       const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
@@ -270,11 +272,6 @@ const Result = ({
     }
   };
 
-  const memoizedRows = useMemo(
-    () => dataTableState.rows,
-    [dataTableState.rows]
-  );
-
   return (
     <div>
       <DialogComponent
@@ -330,7 +327,7 @@ const Result = ({
         </div>
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
           <DataTable
-            rows={memoizedRows}
+            rows={dataTableState.rows}
             columns={memoizedColumns}
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
