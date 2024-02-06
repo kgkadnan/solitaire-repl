@@ -143,7 +143,7 @@ const Search = () => {
     } else {
       setActiveTab(removeDataIndex);
       router.push(
-        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex}`
+        `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${removeDataIndex - 1}`
       );
     }
 
@@ -178,7 +178,7 @@ const Search = () => {
                   label: ManageLocales('app.modal.no'),
                   handler: () => {
                     setIsDialogOpen(false);
-                    closeSearch(id, yourSelection);
+                    // closeSearch(id, yourSelection);
                   },
                   customStyle: 'flex-1'
                 },
@@ -225,6 +225,8 @@ const Search = () => {
             carat={carat}
             errorState={errorState}
             errorSetState={errorSetState}
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
           />
         ) : activeTab === -1 ? (
           <div className="h-screen">

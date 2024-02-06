@@ -39,6 +39,7 @@ const ActionButton = ({ actionButtonData }: IActionButtonData) => {
                 onClick={() => handler()}
                 variant={variant}
                 className={`${styles.ctaStyle} 
+                ${svg ? 'p-[8px]' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
             }`}

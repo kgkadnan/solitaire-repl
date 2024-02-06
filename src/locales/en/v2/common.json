@@ -29,7 +29,7 @@
   "app.modal.okay": "Okay",
   "app.modal.yes": "Yes",
   "app.modal.no": "No",
-  "app.modal.continue" : "Continue",
+  "app.modal.continue": "Continue",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
@@ -38,10 +38,13 @@
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
 
-  "app.searchResult.addToCart" : "Add to Cart",
-  "app.searchResult.confirmStone" : "Confirm Stone",
+  "app.searchResult.addToCart": "Add to Cart",
+  "app.searchResult.confirmStone": "Confirm Stone",
 
   "app.search.closeTabs": "Are you sure you want to close all active search tabs?",
   "app.search.confirmHeader": "Are you sure?",
-  "app.search.closeSpecificTabs": "Are you sure you want to close the search tabs?"
+  "app.search.closeSpecificTabs": "Are you sure you want to close the unsaved search tab?",
+
+  "app.search.maxLimit": "Are you sure you want to close the unsaved search tab?",
+  "app.search.manageLimit": "Manage Tabs"
 }
