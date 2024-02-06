@@ -52,22 +52,26 @@ export const DiscountPrice = ({
       minPlaceHolder: `${discount.range.gte}`,
       maxPlaceHolder: `${discount.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDiscountMax(event.target.value);
-        handleNumericRange({
-          min: discountMin,
-          max: event.target.value,
-          setErrorState: setDiscountError,
-          rangeCondition: discount.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDiscountMax(event.target.value);
+          handleNumericRange({
+            min: discountMin,
+            max: event.target.value,
+            setErrorState: setDiscountError,
+            rangeCondition: discount.range
+          });
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDiscountMin(event.target.value);
-        handleNumericRange({
-          min: event.target.value,
-          max: discountMax,
-          setErrorState: setDiscountError,
-          rangeCondition: discount.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDiscountMin(event.target.value);
+          handleNumericRange({
+            min: event.target.value,
+            max: discountMax,
+            setErrorState: setDiscountError,
+            rangeCondition: discount.range
+          });
+        }
       },
       handleSliderChange: (newValue: string[]) => {
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
@@ -99,22 +103,26 @@ export const DiscountPrice = ({
       minPlaceHolder: `${pricePerCarat.range.gte}`,
       maxPlaceHolder: `${pricePerCarat.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPricePerCaratMax(event.target.value);
-        handleNumericRange({
-          min: pricePerCaratMin,
-          max: event.target.value,
-          setErrorState: setPricePerCaratError,
-          rangeCondition: pricePerCarat.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPricePerCaratMax(event.target.value);
+          handleNumericRange({
+            min: pricePerCaratMin,
+            max: event.target.value,
+            setErrorState: setPricePerCaratError,
+            rangeCondition: pricePerCarat.range
+          });
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPricePerCaratMin(event.target.value);
-        handleNumericRange({
-          min: event.target.value,
-          max: pricePerCaratMax,
-          setErrorState: setPricePerCaratError,
-          rangeCondition: pricePerCarat.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPricePerCaratMin(event.target.value);
+          handleNumericRange({
+            min: event.target.value,
+            max: pricePerCaratMax,
+            setErrorState: setPricePerCaratError,
+            rangeCondition: pricePerCarat.range
+          });
+        }
       },
       handleSliderChange: (newValue: string[]) => {
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
@@ -145,22 +153,26 @@ export const DiscountPrice = ({
       minPlaceHolder: `${amountRange.range.gte}`,
       maxPlaceHolder: `${amountRange.range.lte}`,
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAmountRangeMax(event.target.value);
-        handleNumericRange({
-          min: amountRangeMin,
-          max: event.target.value,
-          setErrorState: setAmountRangeError,
-          rangeCondition: amountRange.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setAmountRangeMax(event.target.value);
+          handleNumericRange({
+            min: amountRangeMin,
+            max: event.target.value,
+            setErrorState: setAmountRangeError,
+            rangeCondition: amountRange.range
+          });
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setAmountRangeMin(event.target.value);
-        handleNumericRange({
-          min: event.target.value,
-          max: amountRangeMax,
-          setErrorState: setAmountRangeError,
-          rangeCondition: amountRange.range
-        });
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setAmountRangeMin(event.target.value);
+          handleNumericRange({
+            min: event.target.value,
+            max: amountRangeMax,
+            setErrorState: setAmountRangeError,
+            rangeCondition: amountRange.range
+          });
+        }
       },
       handleSliderChange: (newValue: string[]) => {
         if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {

@@ -47,6 +47,13 @@ import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -72,6 +79,70 @@ const mapColumns = (columns: any) =>
       };
 
       switch (accessor) {
+        case 'clarity':
+          return {
+            ...commonProps,
+            sortingFn: (rowA: any, rowB: any, columnId: string) => {
+              const indexA = clarity.indexOf(rowA.original[columnId]);
+              const indexB = clarity.indexOf(rowB.original[columnId]);
+              return indexA - indexB;
+            }
+          };
+        case 'table_inclusion':
+          return {
+            ...commonProps,
+            sortingFn: (rowA: any, rowB: any, columnId: string) => {
+              const indexA = tableInclusionSortOrder.indexOf(
+                rowA.original[columnId]
+              );
+              const indexB = tableInclusionSortOrder.indexOf(
+                rowB.original[columnId]
+              );
+              return indexA - indexB;
+            }
+          };
+        case 'table_black':
+          return {
+            ...commonProps,
+            sortingFn: (rowA: any, rowB: any, columnId: string) => {
+              const indexA = tableBlackSortOrder.indexOf(
+                rowA.original[columnId]
+              );
+              const indexB = tableBlackSortOrder.indexOf(
+                rowB.original[columnId]
+              );
+              return indexA - indexB;
+            }
+          };
+
+        case 'side_black':
+          return {
+            ...commonProps,
+            sortingFn: (rowA: any, rowB: any, columnId: string) => {
+              const indexA = sideBlackSortOrder.indexOf(
+                rowA.original[columnId]
+              );
+              const indexB = sideBlackSortOrder.indexOf(
+                rowB.original[columnId]
+              );
+              return indexA - indexB;
+            }
+          };
+
+        case 'fluorescence':
+          return {
+            ...commonProps,
+            sortingFn: (rowA: any, rowB: any, columnId: string) => {
+              const indexA = fluorescenceSortOrder.indexOf(
+                rowA.original[columnId]
+              );
+              const indexB = fluorescenceSortOrder.indexOf(
+                rowB.original[columnId]
+              );
+              return indexA - indexB;
+            }
+          };
+
         case 'carat':
           return { ...commonProps, Cell: RenderCarat };
         case 'discount':
@@ -336,21 +407,34 @@ const Result = ({
         </div>
         <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
           {dataTableState.rows.length > 0 ? (
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.searchResult.addToCart'),
-                  handler: handleAddToCart
-                },
+            <div className="flex items-center justify-between">
+              <div className="flex gap-4">
+                <div className="px-[4px] py-[6px] border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                  In Cart
+                </div>
+                <div className="px-[4px] py-[6px] border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                  Hold
+                </div>
+                <div className="px-[4px] py-[6px] border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                  Memo
+                </div>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.searchResult.addToCart'),
+                    handler: handleAddToCart
+                  },
 
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.searchResult.confirmStone'),
-                  handler: () => {}
-                }
-              ]}
-            />
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    handler: () => {}
+                  }
+                ]}
+              />
+            </div>
           ) : (
             <></>
           )}

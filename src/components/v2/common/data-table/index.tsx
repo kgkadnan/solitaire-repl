@@ -94,6 +94,7 @@ const DataTable = ({
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
     enableRowSelection: true,
+
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
@@ -170,7 +171,10 @@ const DataTable = ({
     },
     muiTableHeadRowProps: {
       sx: {
-        backgroundColor: 'var(--neutral-50)'
+        backgroundColor: 'var(--neutral-50)',
+        '& .MuiTableSortLabel-root': {
+          color: 'red'
+        }
       }
     },
 
@@ -182,17 +186,16 @@ const DataTable = ({
         }
       }
     },
-    muiTableHeadCellProps: {
-      sx: {
-        color: 'var(--neutral-700)',
-        '&.MuiTableCell-root': {
-          padding: '4px 8px'
-        }
 
-        // '&.MuiTableCell-root :hover': {
-        //   opacity: 1
-        // }
-      }
+    muiTableHeadCellProps: () => {
+      return {
+        sx: {
+          color: 'var(--neutral-700)',
+          '&.MuiTableCell-root': {
+            padding: '4px 8px'
+          }
+        }
+      };
     },
     muiSelectAllCheckboxProps: {
       sx: {
@@ -208,10 +211,9 @@ const DataTable = ({
           /* Your styles for the element */
           color: 'var(--primary-main)'
         },
-        '&.MuiButtonBase-root-MuiCheckbox-root.Mui-checked, .MuiCheckbox-indeterminate':
-          {
-            color: 'var(--primary-main)'
-          }
+        '&.MuiCheckbox-indeterminate': {
+          color: 'var(--primary-main)'
+        }
       }
     },
 
@@ -228,6 +230,9 @@ const DataTable = ({
           display: 'none'
         },
         '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        },
+        '&.MuiCheckbox-indeterminate': {
           color: 'var(--primary-main)'
         }
       }

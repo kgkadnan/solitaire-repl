@@ -44,10 +44,14 @@ export const Carat = ({
   validationError
 }: ICaratProps) => {
   const handleMaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCaratMax(event.target.value);
+    if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+      setCaratMax(event.target.value);
+    }
   };
   const handleMinChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCaratMin(event.target.value);
+    if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+      setCaratMin(event.target.value);
+    }
   };
 
   const normalizeValue = (value: string) => {
