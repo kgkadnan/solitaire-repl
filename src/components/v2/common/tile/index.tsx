@@ -28,7 +28,7 @@ const Tile = ({
     <div className={styles.tileContainer}>
       {tileData.map((tile: string | { title: string; short_name: string }) => {
         return (
-          <>
+          <div key={`${typeof tile === 'string' ? tile : tile.short_name}`}>
             {typeof tile === 'string' ? (
               <Button
                 key={tile}
@@ -66,7 +66,7 @@ const Tile = ({
                 tooltipContent={tile.title}
               />
             )}
-          </>
+          </div>
         );
       })}
     </div>

@@ -124,10 +124,14 @@ const DataTable = ({
         //   console.log('celll', row);
         //   return {};
         // },
+
         muiTableBodyCellProps: ({ cell }) => {
           return {
             sx: {
-              display: !cell.id.includes('shape') ? 'none' : 'flex'
+              display: !cell.id.includes('shape') ? 'none' : 'flex',
+              borderBottom: '1px solid var(--neutral-50)',
+              left: '-120px',
+              zIndex: 99
             }
           };
         },
@@ -183,7 +187,9 @@ const DataTable = ({
         color: 'var(--neutral-900)',
         '&.MuiTableCell-root': {
           padding: '4px 8px'
-        }
+        },
+        whiteSpace: 'nowrap',
+        borderBottom: '1px solid var(--neutral-50)'
       }
     },
 
@@ -240,7 +246,7 @@ const DataTable = ({
     renderToolbarInternalActions: ({ table }) => (
       <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
         {isResult && (
-          <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center">
+          <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer">
             <Image src={saveIcon} alt={'save search'} />
             <p className="pl-1 text-mMedium font-medium">Save Search</p>
           </div>
@@ -257,7 +263,16 @@ const DataTable = ({
           </div>
         </IconButton>
       </div>
-    )
+    ),
+    muiTablePaperProps: {
+      elevation: 0, //change the mui box shadow
+      //customize paper styles
+
+      sx: {
+        borderRadius: '0',
+        border: '1px solid var(--neutral-50)'
+      }
+    }
   });
 
   return (

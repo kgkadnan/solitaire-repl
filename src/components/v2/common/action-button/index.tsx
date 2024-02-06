@@ -17,24 +17,21 @@ interface IActionButtonData {
 
 const ActionButton = ({ actionButtonData }: IActionButtonData) => {
   return (
-    <div className={`${styles.ctaContainer}`}>
+    <div className={`${styles.ctaContainer} `}>
       {actionButtonData.map(
-        ({
-          isDisable,
-          variant,
-          svg,
-          label,
-          handler,
-          isHidden,
-          customStyle
-        }) => {
+        (
+          { isDisable, variant, svg, label, handler, isHidden, customStyle },
+          index
+        ) => {
           if (isHidden) {
             return null;
           }
           return (
-            <div className={`${customStyle}`} key={label}>
+            <div
+              className={`${customStyle}`}
+              key={label ?? `icon-button-${index}`}
+            >
               <Button
-                key={label}
                 disabled={isDisable}
                 onClick={() => handler()}
                 variant={variant}

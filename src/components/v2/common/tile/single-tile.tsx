@@ -27,9 +27,8 @@ const SingleTile = ({
     <div className={styles.tileContainer}>
       {tileData.map((tile: string) => {
         return (
-          <>
+          <div key={tile}>
             <Button
-              key={tile}
               onClick={() =>
                 handleTileClick({ data: tile, selectedTile, setSelectedTile })
               }
@@ -41,7 +40,7 @@ const SingleTile = ({
             >
               {tile}
             </Button>
-          </>
+          </div>
         );
       })}
     </div>

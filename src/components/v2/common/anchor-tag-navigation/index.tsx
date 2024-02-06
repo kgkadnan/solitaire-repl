@@ -28,7 +28,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
         ref={containerRef}
       >
         {anchorNavigations.map((links, index) => (
-          <>
+          <div key={links}>
             <Link
               activeStyle={{
                 borderBottom: '2px solid var(--neutral-900)',
@@ -39,12 +39,11 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               smooth={true}
               offset={-210}
               duration={500}
-              key={index}
               className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
             >
               {links}
             </Link>
-          </>
+          </div>
         ))}
       </div>
 
