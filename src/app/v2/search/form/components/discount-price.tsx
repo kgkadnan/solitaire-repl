@@ -70,8 +70,14 @@ export const DiscountPrice = ({
         });
       },
       handleSliderChange: (newValue: string[]) => {
-        setDiscountMin(newValue[0]);
-        setDiscountMax(newValue[1]);
+        if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
+          setDiscountMin('');
+          setDiscountMax('');
+        } else {
+          setDiscountMin(newValue[0]);
+          setDiscountMax(newValue[1]);
+        }
+
         handleNumericRange({
           min: newValue[0],
           max: newValue[1],
@@ -111,8 +117,14 @@ export const DiscountPrice = ({
         });
       },
       handleSliderChange: (newValue: string[]) => {
-        setPricePerCaratMin(newValue[0]);
-        setPricePerCaratMax(newValue[1]);
+        if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
+          setPricePerCaratMin('');
+          setPricePerCaratMax('');
+        } else {
+          setPricePerCaratMin(newValue[0]);
+          setPricePerCaratMax(newValue[1]);
+        }
+
         handleNumericRange({
           min: newValue[0],
           max: newValue[1],
@@ -151,8 +163,13 @@ export const DiscountPrice = ({
         });
       },
       handleSliderChange: (newValue: string[]) => {
-        setAmountRangeMin(newValue[0]);
-        setAmountRangeMax(newValue[1]);
+        if (Number(newValue[0]) === 0 && Number(newValue[1]) === 0) {
+          setAmountRangeMin('');
+          setAmountRangeMax('');
+        } else {
+          setAmountRangeMin(newValue[0]);
+          setAmountRangeMax(newValue[1]);
+        }
         handleNumericRange({
           min: newValue[0],
           max: newValue[1],

@@ -2,8 +2,11 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   const { setCaratRangeData } = carat;
   const {
     setSelectedShape,
+    setSelectedWhiteColor,
+    setSelectedFancyColor,
+    setSelectedIntensity,
     setSelectedOvertone,
-    setSelectedTinge,
+    setSelectedShade,
     setSelectedClarity,
     setSelectedCaratRange,
     setSelectedCut,
@@ -15,55 +18,54 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedLab,
     setSelectedLocation,
     setSelectedOrigin,
-    setPriceRangeFrom,
-    setPriceRangeTo,
-    setDiscountFrom,
-    setDiscountTo,
-    setPricePerCaratFrom,
-    setPricePerCaratTo,
-    setBlackTableBI,
-    setSideBlackBI,
-    setOpenCrownBI,
-    setOpenTableBI,
-    setOpenPavilionBI,
-    setMilkyBI,
-    setLusterBI,
-    setEyeCleanBI,
-    setTableInclusionWI,
-    setSideInclusionWI,
-    setNaturalCrownWI,
-    setNaturalGirdleWI,
-    setNaturalPavilionWI,
-    setSurfaceGrainingWI,
-    setInternalGrainingWI,
-    setTablePerFrom,
-    setTablePerTo,
-    setDepthTo,
-    setDepthFrom,
-    setCrownAngleFrom,
-    setCrownAngleTo,
-    setLengthFrom,
-    setLengthTo,
-    setPavilionDepthFrom,
-    setPavilionDepthTo,
-    setDepthPerFrom,
-    setDepthPerTo,
-    setCrownHeightFrom,
-    setCrownHeightTo,
-    setWidthFrom,
-    setWidthTo,
-    setLowerHalfFrom,
-    setLowerHalfTo,
-    setRatioFrom,
-    setRatioTo,
-    setGirdlePerFrom,
-    setGirdlePerTo,
-    setPavilionAngleFrom,
-    setPavilionAngleTo,
-    setStarLengthFrom,
-    setStarLengthTo,
-    setGirdleFrom,
-    setGirdleTo
+    setAmountRangeMin,
+    setAmountRangeMax,
+    setDiscountMin,
+    setDiscountMax,
+    setPricePerCaratMin,
+    setPricePerCaratMax,
+    setBlackTable,
+    setSideBlack,
+    setOpenCrown,
+    setOpenTable,
+    setOpenPavilion,
+    setMilky,
+    setLuster,
+    setEyeClean,
+    setTableInclusion,
+    setSideInclusion,
+    setNaturalCrown,
+    setNaturalGirdle,
+    setNaturalPavilion,
+    setSurfaceGraining,
+    setInternalGraining,
+    setTablePerMin,
+    setTablePerMax,
+    setDepthMin,
+    setDepthMax,
+    setCrownAngleMax,
+    setCrownAngleMin,
+    setLengthMax,
+    setLengthMin,
+    setPavilionHeightMax,
+    setPavilionHeightMin,
+    setDepthPerMax,
+    setDepthPerMin,
+    setCrownHeightMax,
+    setCrownHeightMin,
+    setWidthMax,
+    setWidthMin,
+    setLowerHalfMax,
+    setLowerHalfMin,
+    setRatioMax,
+    setRatioMin,
+    setGirdlePerMax,
+    setGirdlePerMin,
+    setPavilionAngleMax,
+    setPavilionAngleMin,
+    setStarLengthMax,
+    setStarLengthMin,
+    setSelectedGirdle
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
   data?.carat &&
@@ -81,60 +83,62 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.location && setSelectedLocation(data?.location);
   data?.symmetry && setSelectedSymmetry(data?.symmetry);
   data?.fluoroscence && setSelectedFluorescence(data?.fluoroscence);
-  data?.country_of_origin && setSelectedOrigin(data?.country_of_origin);
-  data?.color_shade && setSelectedTinge(data?.color_shade);
-  data?.overtone && setSelectedOvertone(data?.overtone);
-  data?.priceRange && setPriceRangeFrom(data?.priceRange?.gte);
-  data?.priceRange && setPriceRangeTo(data?.priceRange?.lte);
-  data?.discount && setDiscountFrom(data?.discount?.gte);
-  data?.discount && setDiscountTo(data?.discount?.lte);
-  data?.pricePerCarat && setPricePerCaratFrom(data?.pricePerCarat?.gte);
-  data?.pricePerCarat && setPricePerCaratTo(data?.pricePerCarat?.lte);
+  data?.origin_country && setSelectedOrigin(data?.origin_country);
+  data?.shade && setSelectedShade(data?.shade);
+  data?.color && setSelectedWhiteColor(data?.color);
+  data?.fancy_overtone && setSelectedOvertone(data?.fancy_overtone);
+  data?.fancy_intensity && setSelectedIntensity(data?.fancy_intensity);
+  data?.fancy_color && setSelectedFancyColor(data?.fancy_color);
+  data?.priceRange && setAmountRangeMin(data?.priceRange?.gte);
+  data?.priceRange && setAmountRangeMax(data?.priceRange?.lte);
+  data?.discount && setDiscountMin(data?.discount?.gte);
+  data?.discount && setDiscountMax(data?.discount?.lte);
+  data?.price_per_carat && setPricePerCaratMin(data?.price_per_carat?.gte);
+  data?.price_per_carat && setPricePerCaratMax(data?.price_per_carat?.lte);
   //measurements States
-  data?.depth && setDepthFrom(data?.depth?.gte);
-  data?.depth && setDepthTo(data?.depth?.lte);
-  data?.ratio && setRatioFrom(data?.ratio?.gte);
-  data?.ratio && setRatioTo(data?.ratio?.lte);
-  data?.width && setWidthFrom(data?.width?.gte);
-  data?.width && setWidthTo(data?.width?.lte);
-  data?.length && setLengthFrom(data?.length?.gte);
-  data?.length && setLengthTo(data?.length?.lte);
-  data?.table_per && setTablePerFrom(data?.table_per?.gte);
-  data?.table_per && setTablePerTo(data?.table_per?.lte);
-  data?.['girdle%'] && setGirdlePerFrom(data['girdle%']?.gte);
-  data?.['girdle%'] && setGirdlePerTo(data['girdle%']?.lte);
-  data?.depth_per && setDepthPerFrom(data?.depth_per?.gte);
-  data?.depth_per && setDepthPerTo(data?.depth_per?.lte);
-  data?.lower_half && setLowerHalfFrom(data?.lower_half?.gte);
-  data?.lower_half && setLowerHalfTo(data?.lower_half?.lte);
-  data?.crown_angle && setCrownAngleFrom(data?.crown_angle?.gte);
-  data?.crown_angle && setCrownAngleTo(data?.crown_angle?.lte);
-  data?.star_length && setStarLengthFrom(data?.star_length?.gte);
-  data?.star_length && setStarLengthTo(data?.star_length?.lte);
-  data?.crown_height && setCrownHeightFrom(data?.crown_height?.gte);
-  data?.crown_height && setCrownHeightTo(data?.crown_height?.lte);
-  data?.pavilion_angle && setPavilionAngleFrom(data?.pavilion_angle?.gte);
-  data?.pavilion_angle && setPavilionAngleTo(data?.pavilion_angle?.lte);
-  data?.pavilion_height && setPavilionDepthFrom(data?.pavilion_height?.gte);
-  data?.pavilion_height && setPavilionDepthTo(data?.pavilion_height?.lte);
+  data?.depth && setDepthMin(data?.depth?.gte);
+  data?.depth && setDepthMax(data?.depth?.lte);
+  data?.ratio && setRatioMin(data?.ratio?.gte);
+  data?.ratio && setRatioMax(data?.ratio?.lte);
+  data?.width && setWidthMin(data?.width?.gte);
+  data?.width && setWidthMax(data?.width?.lte);
+  data?.length && setLengthMin(data?.length?.gte);
+  data?.length && setLengthMax(data?.length?.lte);
+  data?.['table%'] && setTablePerMin(data?.['table%']?.gte);
+  data?.['table%'] && setTablePerMax(data?.['table%']?.lte);
+  data?.['girdle%'] && setGirdlePerMin(data['girdle%']?.gte);
+  data?.['girdle%'] && setGirdlePerMax(data['girdle%']?.lte);
+  data?.['depth%'] && setDepthPerMin(data?.['depth%']?.gte);
+  data?.['depth%'] && setDepthPerMax(data?.['depth%']?.lte);
+  data?.lower_half && setLowerHalfMin(data?.lower_half?.gte);
+  data?.lower_half && setLowerHalfMax(data?.lower_half?.lte);
+  data?.crown_angle && setCrownAngleMin(data?.crown_angle?.gte);
+  data?.crown_angle && setCrownAngleMax(data?.crown_angle?.lte);
+  data?.star_length && setStarLengthMin(data?.star_length?.gte);
+  data?.star_length && setStarLengthMax(data?.star_length?.lte);
+  data?.crown_height && setCrownHeightMin(data?.crown_height?.gte);
+  data?.crown_height && setCrownHeightMax(data?.crown_height?.lte);
+  data?.pavilion_angle && setPavilionAngleMin(data?.pavilion_angle?.gte);
+  data?.pavilion_angle && setPavilionAngleMax(data?.pavilion_angle?.lte);
+  data?.pavilion_height && setPavilionHeightMin(data?.pavilion_height?.gte);
+  data?.pavilion_height && setPavilionHeightMax(data?.pavilion_height?.lte);
   //inclusion_details States
-  data?.milky && setMilkyBI(data?.milky);
-  data?.luster && setLusterBI(data?.luster);
-  data?.eye_clean && setEyeCleanBI(data?.eye_clean);
-  data?.crown_open && setOpenCrownBI(data?.crown_open);
-  data?.table_open && setOpenTableBI(data?.table_open);
-  data?.side_table && setSideBlackBI(data?.side_table);
-  data?.table_black && setBlackTableBI(data?.table_black);
-  data?.natural_crown && setNaturalCrownWI(data?.natural_crown);
-  data?.pavilion_open && setOpenPavilionBI(data?.pavilion_open);
-  data?.natural_girdle && setNaturalGirdleWI(data?.natural_girdle);
-  data?.side_inclusion && setSideInclusionWI(data?.side_inclusion);
-  data?.table_inclusion && setTableInclusionWI(data?.table_inclusion);
-  data?.natural_pavilion && setNaturalPavilionWI(data?.natural_pavilion);
-  data?.surface_graining && setSurfaceGrainingWI(data?.surface_graining);
-  data?.internal_graining && setInternalGrainingWI(data?.internal_graining);
+  data?.milky && setMilky(data?.milky);
+  data?.luster && setLuster(data?.luster);
+  data?.eye_clean && setEyeClean(data?.eye_clean);
+  data?.crown_open && setOpenCrown(data?.crown_open);
+  data?.table_open && setOpenTable(data?.table_open);
+  data?.side_table && setSideBlack(data?.side_table);
+  data?.table_black && setBlackTable(data?.table_black);
+  data?.natural_crown && setNaturalCrown(data?.natural_crown);
+  data?.pavilion_open && setOpenPavilion(data?.pavilion_open);
+  data?.natural_girdle && setNaturalGirdle(data?.natural_girdle);
+  data?.side_inclusion && setSideInclusion(data?.side_inclusion);
+  data?.table_inclusion && setTableInclusion(data?.table_inclusion);
+  data?.natural_pavilion && setNaturalPavilion(data?.natural_pavilion);
+  data?.surface_graining && setSurfaceGraining(data?.surface_graining);
+  data?.internal_graining && setInternalGraining(data?.internal_graining);
   //other_information States
-  data?.girdle && setGirdleFrom(data?.girdle?.gte);
-  data?.girdle && setGirdleTo(data?.girdle?.lte);
+  data?.girdle && setSelectedGirdle(data?.girdle?.lte);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
 };
