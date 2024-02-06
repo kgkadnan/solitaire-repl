@@ -159,10 +159,13 @@ module.exports = {
         accentGold: 'var(--accent-gold)',
         legendInCartFill: 'var(--legend-InCart-Fill)',
         lengendInCardBorder: 'var(--legend-Incart-border)',
+        legendInCart : "var(--legend-Incart)",
         legendHoldFill: 'var(--legend-OnHold-Fill)',
         lengendHoldBorder: 'var(--legend-OnHold-border)',
+        legendHold : 'var(--legend-Hold)',
         legendMemoFill: 'var(--legend-Memo-fill)',
-        lengendMemoBorder: 'var(--legend-memo-border)'
+        lengendMemoBorder: 'var(--legend-memo-border)',
+        legendMemo : 'var(--legend-Memo)',
       },
       borderRadius: {
         lg: 'var(--radius)',

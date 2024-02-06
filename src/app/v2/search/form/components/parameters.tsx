@@ -109,10 +109,14 @@ export const Parameters = ({
     {
       label: 'Table (%)',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTablePerMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setTablePerMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setTablePerMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setTablePerMin(event.target.value);
+        }
       },
       minValue: tablePerMin,
       maxValue: tablePerMax,
@@ -124,10 +128,14 @@ export const Parameters = ({
     {
       label: 'Depth (%)',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDepthPerMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDepthPerMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDepthPerMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDepthPerMin(event.target.value);
+        }
       },
       minValue: depthPerMin,
       maxValue: depthPerMax,
@@ -139,10 +147,14 @@ export const Parameters = ({
     {
       label: 'Ratio',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRatioMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setRatioMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setRatioMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setRatioMin(event.target.value);
+        }
       },
       minValue: ratioMin,
       maxValue: ratioMax,
@@ -154,10 +166,14 @@ export const Parameters = ({
     {
       label: 'Length',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLengthMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setLengthMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLengthMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setLengthMin(event.target.value);
+        }
       },
       minValue: lengthMin,
       maxValue: lengthMax,
@@ -169,10 +185,14 @@ export const Parameters = ({
     {
       label: 'Width',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWidthMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setWidthMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setWidthMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setWidthMin(event.target.value);
+        }
       },
       minValue: widthMin,
       maxValue: widthMax,
@@ -184,10 +204,14 @@ export const Parameters = ({
     {
       label: 'Depth',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDepthMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDepthMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setDepthMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setDepthMin(event.target.value);
+        }
       },
       minValue: depthMin,
       maxValue: depthMax,
@@ -199,10 +223,14 @@ export const Parameters = ({
     {
       label: 'Crown Angle',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCrownAngleMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setCrownAngleMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCrownAngleMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setCrownAngleMin(event.target.value);
+        }
       },
       minValue: crownAngleMin,
       maxValue: crownAngleMax,
@@ -214,10 +242,14 @@ export const Parameters = ({
     {
       label: 'Crown Height',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCrownHeightMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setCrownHeightMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setCrownHeightMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setCrownHeightMin(event.target.value);
+        }
       },
       minValue: crownHeightMin,
       maxValue: crownHeightMax,
@@ -229,10 +261,14 @@ export const Parameters = ({
     {
       label: 'Girdle %',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setGirdlePerMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setGirdlePerMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setGirdlePerMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setGirdlePerMin(event.target.value);
+        }
       },
       minValue: girdlePerMin,
       maxValue: girdlePerMax,
@@ -244,10 +280,14 @@ export const Parameters = ({
     {
       label: 'Pavilion Angle',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPavilionAngleMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPavilionAngleMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPavilionAngleMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPavilionAngleMin(event.target.value);
+        }
       },
       minValue: pavilionAngleMin,
       maxValue: pavilionAngleMax,
@@ -259,10 +299,14 @@ export const Parameters = ({
     {
       label: 'Pavilion Height',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPavilionHeightMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPavilionHeightMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setPavilionHeightMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setPavilionHeightMin(event.target.value);
+        }
       },
       minValue: pavilionHeightMin,
       maxValue: pavilionHeightMax,
@@ -274,10 +318,14 @@ export const Parameters = ({
     {
       label: 'Lower Half',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLowerHalfMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setLowerHalfMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setLowerHalfMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setLowerHalfMin(event.target.value);
+        }
       },
       minValue: lowerHalfMin,
       maxValue: lowerHalfMax,
@@ -289,10 +337,14 @@ export const Parameters = ({
     {
       label: 'Star Length',
       handleMaxChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStarLengthMax(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setStarLengthMax(event.target.value);
+        }
       },
       handleMinChange: (event: React.ChangeEvent<HTMLInputElement>) => {
-        setStarLengthMin(event.target.value);
+        if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+          setStarLengthMin(event.target.value);
+        }
       },
       minValue: starLengthMin,
       maxValue: starLengthMax,

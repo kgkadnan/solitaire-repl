@@ -1,4 +1,7 @@
+import { girdleSortedArray } from '@/constants/v2/form';
+
 export const setModifySearch = (data: any, setState: any, carat: any) => {
+  console.log('Data', data);
   const { setCaratRangeData } = carat;
   const {
     setSelectedShape,
@@ -139,6 +142,9 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.surface_graining && setSurfaceGraining(data?.surface_graining);
   data?.internal_graining && setInternalGraining(data?.internal_graining);
   //other_information States
-  data?.girdle && setSelectedGirdle(data?.girdle?.lte);
+  let minIndex = girdleSortedArray.indexOf(data?.girdle?.gte);
+  let maxIndex = girdleSortedArray.indexOf(data?.girdle?.lte);
+  const girdleData = girdleSortedArray.slice(minIndex, maxIndex + 1);
+  data?.girdle && setSelectedGirdle(girdleData);
   data?.key_to_symbol && setSelectedKeyToSymbol(data?.key_to_symbol);
 };
