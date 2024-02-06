@@ -43,20 +43,19 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     state: { rowSelection },
     //filters
     positionToolbarAlertBanner: 'none',
-    // enableRowSelection: true,
     enableFilters: true,
     enableColumnActions: false,
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
     enableStickyHeader: true,
-    enableBottomToolbar: false,
+    // enableBottomToolbar: false,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
-
+    enableRowSelection: true,
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
@@ -72,7 +71,6 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         }
       }
     }),
-    enableRowSelection: true,
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
@@ -111,6 +109,7 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         }
       }
     },
+
     sortDescFirst: false,
     initialState: {
       showGlobalFilter: true,
