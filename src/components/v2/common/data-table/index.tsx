@@ -1,11 +1,37 @@
-import { Stack } from '@mui/material';
+import { IconButton, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
+  MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
+import shareIcon from '@public/v2/assets/png/data-table/share.png';
+import downloadIcon from '@public/v2/assets/png/data-table/download.png';
+import saveIcon from '@public/v2/assets/png/data-table/save.png';
 
-const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
+import Image from 'next/image';
+
+// theme.js
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: ['inherit'].join(','),
+    fontWeightLight: 400,
+    fontWeightRegular: 500,
+    fontWeightMedium: 600,
+    fontWeightBold: 700
+    // You can also customize other typography aspects here
+  }
+});
+
+const DataTable = ({
+  rows,
+  columns,
+  setRowSelection,
+  rowSelection,
+  isResult = false
+}: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
       case 'EM':
@@ -32,6 +58,18 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
         return value;
     }
   };
+
+  const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
+    () => ({
+      border: `1px solid #E4E7EC`,
+      background: 'neutral-0',
+      padding: '4px',
+      width: '35px',
+      height: '35px',
+      borderRadius: '4px'
+    })
+  );
+
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -198,12 +236,35 @@ const DataTable = ({ rows, columns, setRowSelection, rowSelection }: any) => {
           color: 'var(--primary-main)'
         }
       }
-    }
+    },
+    renderToolbarInternalActions: ({ table }) => (
+      <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
+        {isResult && (
+          <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center">
+            <Image src={saveIcon} alt={'save search'} />
+            <p className="pl-1 text-mMedium font-medium">Save Search</p>
+          </div>
+        )}
+        <IconButton onClick={() => {}}>
+          <div className="p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
+            <Image src={downloadIcon} alt={'download'} />
+          </div>
+        </IconButton>
+        <StyledToggleFullScreenButton table={table} />
+        <IconButton onClick={() => {}}>
+          <div className="flex p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
+            <Image src={shareIcon} alt={'share'} />
+          </div>
+        </IconButton>
+      </div>
+    )
   });
 
   return (
     <form autoComplete="off">
-      <MaterialReactTable table={table} />
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable table={table} />
+      </ThemeProvider>
     </form>
   );
 };

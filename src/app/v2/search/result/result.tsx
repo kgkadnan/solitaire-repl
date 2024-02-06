@@ -402,6 +402,7 @@ const Result = ({
             columns={memoizedColumns}
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
+            isResult={true}
           />
         </div>
         <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
