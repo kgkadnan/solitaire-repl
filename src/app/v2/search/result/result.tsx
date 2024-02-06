@@ -240,7 +240,7 @@ const Result = ({
                           variant: 'primary',
                           label: 'Go to "My Cart"',
                           handler: () => {
-                            router.push('/my-cart');
+                            router.push('/v2/my-cart');
                           },
                           customStyle: 'flex-1 w-full'
                         }
