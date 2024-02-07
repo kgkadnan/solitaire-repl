@@ -399,6 +399,7 @@ const MyCart = () => {
                 columns={columns}
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
+                hideCalculatedField={activeTab !== SOLD_STATUS}
               />
             </div>
           </div>
@@ -412,7 +413,7 @@ const MyCart = () => {
         )}
 
         {rows.length > 0 ? (
-          <div className="p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
+          <div className="p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 shadow-inputShadow ">
             <ActionButton
               actionButtonData={[
                 {
