@@ -1,6 +1,7 @@
 import { Box, IconButton, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
+  MRT_GlobalFilterTextField,
   MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
@@ -133,10 +134,6 @@ const DataTable = ({
             display: 'none'
           }
         },
-        // muiTableBodyCellProps: ({ row }) => {
-        //   console.log('celll', row);
-        //   return {};
-        // },
 
         muiTableBodyCellProps: ({ cell }) => {
           return {
@@ -168,7 +165,6 @@ const DataTable = ({
     sortDescFirst: false,
     initialState: {
       showGlobalFilter: true,
-
       expanded: true,
       grouping: ['shape_full'],
       columnPinning: {
@@ -309,7 +305,10 @@ const DataTable = ({
             alignItems: 'center'
           }}
         >
-          <div>Search field</div>
+          <div>
+            <MRT_GlobalFilterTextField table={table} />
+          </div>
+
           <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
             {isResult && (
               <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer">
