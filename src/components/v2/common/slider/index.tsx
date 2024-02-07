@@ -22,7 +22,7 @@ export const RangeSlider = ({
 }: IRangeSliderProps) => {
   return (
     <StyledSliderWrapper
-      value={sliderValue as any}
+      value={sliderValue.map(data => (data ? parseInt(data) : 0)) as number[]}
       onChange={handleSliderChange as any}
       renderTrack={TrackComponent}
       renderThumb={ThumbComponent}

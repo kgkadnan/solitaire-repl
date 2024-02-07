@@ -22,7 +22,9 @@ const StyledThumb = styled.div`
   outline: 2px solid var(--primary-focus);
 `;
 
-const ThumbComponent = (props: any) => <StyledThumb {...props}></StyledThumb>;
+const ThumbComponent = ({ key, ...restProps }: any) => (
+  <StyledThumb key={key} {...restProps}></StyledThumb>
+);
 
 const StyledTrack = styled.div`
   top: 0;
@@ -36,8 +38,8 @@ const StyledTrack = styled.div`
   border-radius: 999px;
 `;
 
-const TrackComponent = (props: any, state: any) => (
-  <StyledTrack {...props} index={state.index} />
+const TrackComponent = ({ key, ...restProps }: any, state: any) => (
+  <StyledTrack key={key} {...restProps} index={state.index} />
 );
 
 export { StyledSliderWrapper, ThumbComponent, TrackComponent };

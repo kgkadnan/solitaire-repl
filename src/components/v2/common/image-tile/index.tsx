@@ -37,7 +37,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
         const { src, title, short_name } = tileData;
 
         return (
-          <>
+          <div key={title}>
             <Tooltip
               tooltipTrigger={
                 <div
@@ -66,7 +66,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
               tooltipContent={title}
               key={`image-tile-data-${title}`}
             />
-          </>
+          </div>
         );
       })}
     </div>

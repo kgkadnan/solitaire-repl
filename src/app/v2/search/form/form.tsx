@@ -384,7 +384,6 @@ const Form = ({
       }
     }
   };
-  console.log(state);
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');

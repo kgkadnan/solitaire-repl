@@ -81,7 +81,7 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
   };
 
   return (
-    <div className="flex bg-primarySurface flex-wrap">
+    <div className="flex bg-primarySurface flex-wrap border-b-[1px] border-neutral200">
       {computeField().map(element => {
         return (
           <div
