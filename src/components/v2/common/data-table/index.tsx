@@ -286,8 +286,7 @@ const DataTable = ({
                     variant: 'secondary',
                     svg: NewSearchIcon,
                     label: ManageLocales('app.search.newSearch'),
-                    handler: e => {
-                      e.preventDefault();
+                    handler: () => {
                       handleNewSearch();
                     }
                   },
@@ -312,7 +311,7 @@ const DataTable = ({
           }}
         >
           <div className="pl-[7px]">
-            <MRT_GlobalFilterTextField table={table} />
+            <MRT_GlobalFilterTextField table={table} autoComplete="false" />
           </div>
 
           <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
@@ -340,11 +339,9 @@ const DataTable = ({
   });
 
   return (
-    <form autoComplete="off">
-      <ThemeProvider theme={theme}>
-        <MaterialReactTable table={table} />
-      </ThemeProvider>
-    </form>
+    <ThemeProvider theme={theme}>
+      <MaterialReactTable table={table} />
+    </ThemeProvider>
   );
 };
 

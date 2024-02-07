@@ -318,72 +318,67 @@ const Form = ({
       setIsDialogOpen(true);
       // setIsError(true);
       // setErrorText(MAX_LIMIT_REACHED);
-    } else {
-      if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
-        if (
-          data?.count < MAX_SEARCH_FORM_COUNT &&
-          data?.count > MIN_SEARCH_FORM_COUNT
-        ) {
-          const queryParams = generateQueryParams(state);
-          if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-            if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
-              const updatedMeta = [...savedSearch.savedSearch.meta_data];
-              updatedMeta[savedSearch.activeTab] = queryParams;
-              let data = {
-                id: savedSearch.savedSearch.id,
-                meta_data: updatedMeta
-              };
-              updateSavedSearch(data);
-            }
-          }
-          if (modifySearchFrom === `${SubRoutes.RESULT}`) {
-            let modifySearchResult = JSON.parse(
-              localStorage.getItem('Search')!
-            );
-            let setDataOnLocalStorage = {
-              id: modifySearchResult[activeTab - 1]?.id,
-              saveSearchName:
-                modifySearchResult[activeTab - 1]?.saveSearchName ||
-                saveSearchName,
-              isSavedSearch: isSavedParams,
-              searchId: data?.search_id,
-              queryParams
+    } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+      if (
+        data?.count < MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
+        const queryParams = generateQueryParams(state);
+        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
+            const updatedMeta = [...savedSearch.savedSearch.meta_data];
+            updatedMeta[savedSearch.activeTab] = queryParams;
+            let data = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta
             };
-            if (modifySearchResult[activeTab - 1]) {
-              const updatedData = [...modifySearchResult];
-              updatedData[activeTab - 1] = setDataOnLocalStorage;
-              localStorage.setItem('Search', JSON.stringify(updatedData));
-            }
-            router.push(
-              `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`
-            );
-          } else {
-            let setDataOnLocalStorage = {
-              id: id,
-              saveSearchName: saveSearchName,
-              searchId: data?.search_id,
-              isSavedSearch: isSavedParams,
-              queryParams
-            };
-
-            localStorage.setItem(
-              'Search',
-              JSON.stringify([...addSearches, setDataOnLocalStorage])
-            );
-            router.push(
-              `/v2/search?active-tab=${SubRoutes.RESULT}-${
-                JSON.parse(localStorage.getItem('Search')!).length
-              }`
-            );
+            updateSavedSearch(data);
           }
-          // return;
         }
+        if (modifySearchFrom === `${SubRoutes.RESULT}`) {
+          let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+          let setDataOnLocalStorage = {
+            id: modifySearchResult[activeTab - 1]?.id,
+            saveSearchName:
+              modifySearchResult[activeTab - 1]?.saveSearchName ||
+              saveSearchName,
+            isSavedSearch: isSavedParams,
+            searchId: data?.search_id,
+            queryParams
+          };
+          if (modifySearchResult[activeTab - 1]) {
+            const updatedData = [...modifySearchResult];
+            updatedData[activeTab - 1] = setDataOnLocalStorage;
+            localStorage.setItem('Search', JSON.stringify(updatedData));
+          }
+          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
+        } else {
+          let setDataOnLocalStorage = {
+            id: id,
+            saveSearchName: saveSearchName,
+            searchId: data?.search_id,
+            isSavedSearch: isSavedParams,
+            queryParams
+          };
+
+          localStorage.setItem(
+            'Search',
+            JSON.stringify([...addSearches, setDataOnLocalStorage])
+          );
+          router.push(
+            `/v2/search?active-tab=${SubRoutes.RESULT}-${
+              JSON.parse(localStorage.getItem('Search')!).length
+            }`
+          );
+        }
+        // return;
       } else {
         setIsError(true);
         setErrorText(SELECT_SOME_PARAM);
       }
     }
   };
+
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
