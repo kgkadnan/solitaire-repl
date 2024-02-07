@@ -390,7 +390,7 @@ const Result = ({
             : ManageLocales('app.result.headerResult')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-150px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         <div className="border-b-[1px] border-t-[1px] border-neutral200">
           <DataTable
             rows={dataTableState.rows}
