@@ -14,7 +14,7 @@ import { MRT_RowSelectionState } from 'material-react-table';
 
 import Image from 'next/image';
 import Tooltip from '@/components/v2/common/tooltip';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   useDeleteCartMutation,
   useLazyGetCartQuery
@@ -36,28 +36,21 @@ import {
   RenderLab
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Loader from '@/components/v2/common/loader';
-interface ITableColumn {
-  accessorKey: any;
-  header: any;
-  Header: any;
-  enableGlobalFilter: boolean;
-  Cell?: React.ComponentType<any>;
-  accessorFn?: any;
-  id?: any;
-  enableSorting: any;
-  minSize?: number;
-  maxSize?: number;
-  size?: number;
-  enableGrouping?: boolean;
-  // Add other properties as needed
-}
+import {
+  clarity,
+  fluorescenceSortOrder,
+  sideBlackSortOrder,
+  tableBlackSortOrder,
+  tableInclusionSortOrder
+} from '@/constants/v2/form';
+
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
-  const { rows, columns } = dataTableState;
-  const { setRows, setColumns } = dataTableSetState;
+  const { rows } = dataTableState;
+  const { setRows } = dataTableSetState;
   const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
   const [cartItems, setCartItems] = useState<any>([]);
@@ -143,79 +136,141 @@ const MyCart = () => {
     fetchMyAPI();
   }, [activeTab]);
 
-  const mapColumns = (columns: any) => {
-    return columns
-      ?.filter((column: any) => !column.is_disabled)
-      ?.sort((a: any, b: any) => a.sequence - b.sequence)
-      .map((col: any) => {
-        let columnDefinition: ITableColumn = {
-          accessorKey: col.accessor,
-          header: col.short_label,
-          enableGlobalFilter: false,
-          enableSorting: true,
-          minSize: 5, //min size enforced during resizing
-          maxSize: 200, //max size enforced during resizing
-          size: 5, //medium column,
-          Cell: ({ renderedCellValue }: any) => (
-            <span>{renderedCellValue ?? `-`}</span>
-          ),
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          enableSorting: accessor !== 'shape',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: 5,
           Header: ({ column }: any) => (
             <Tooltip
               tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={col.label}
+              tooltipContent={label}
               tooltipContentStyles={'z-[4]'}
             />
-          ) //arrow function
-          // Add other properties as needed
+          )
         };
 
-        if (col.accessor === 'carat') {
-          columnDefinition.Cell = RenderCarat;
-        }
+        switch (accessor) {
+          case 'clarity':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = clarity.indexOf(rowA.original[columnId]);
+                const indexB = clarity.indexOf(rowB.original[columnId]);
+                return indexA - indexB;
+              }
+            };
+          case 'table_inclusion':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableInclusionSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableInclusionSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'table_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
 
-        if (col.accessor === 'shape') {
-          columnDefinition.enableSorting = false;
-        }
+          case 'side_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = sideBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = sideBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
 
-        if (col.accessor === 'discount') {
-          columnDefinition.Cell = RenderDiscount;
-        }
+          case 'fluorescence':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = fluorescenceSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = fluorescenceSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
 
-        // Check if the column accessor is 'lot_id'
-        if (col.accessor === 'lot_id') {
-          columnDefinition.enableGlobalFilter = true;
-        }
+          case 'carat':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return { ...commonProps, Cell: RenderDetails };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
 
-        if (col.accessor === 'details') {
-          columnDefinition.Cell = RenderDetails;
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
         }
-        if (col.accessor === 'amount') {
-          columnDefinition.id = 'amount';
-          columnDefinition.accessorFn = (row: any) =>
-            row.variants[0].prices[0].amount;
-        }
-
-        if (col.accessor === 'lab') {
-          columnDefinition.Cell = RenderLab;
-        }
-
-        // Check if the column accessor is 'some_column'
-        if (col.accessor === 'location') {
-          // Map the Cell property for 'some_column'
-          columnDefinition.Cell = RednderLocation;
-        }
-
-        // Add more conditions for other columns as needed
-
-        return columnDefinition;
       });
-  };
 
+  // Fetch Columns
   useEffect(() => {
-    triggerColumn({}).then(res => {
-      setColumns(mapColumns(res.data));
-    });
+    const fetchColumns = async () => {
+      const response = await triggerColumn({});
+      if (response.data) {
+        dataTableSetState.setColumns(response.data);
+        dataTableSetState.setColumns((prev: any) => [
+          ...prev,
+          {
+            accessor: 'shape_full',
+            id: 'cus_ma-lis-seq_01HHM4RTY66QR24P4RCXHF53XB',
+            is_disabled: false,
+            is_fixed: false,
+            label: 'Shape',
+            sequence: -1,
+            short_label: 'Shape'
+          }
+        ]);
+      }
+    };
+
+    fetchColumns();
   }, []);
+  const memoizedColumns = useMemo(
+    () => mapColumns(dataTableState.columns),
+    [dataTableState.columns]
+  );
 
   const myCartTabs = [
     {
@@ -396,7 +451,7 @@ const MyCart = () => {
             <div className="border-b-[1px] border-t-[1px] border-neutral200">
               <DataTable
                 rows={rows}
-                columns={columns}
+                columns={memoizedColumns}
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
                 hideCalculatedField={activeTab !== SOLD_STATUS}
