@@ -32,15 +32,12 @@ import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-// import { NOT_MORE_THAN_100 } from '@/constants/error-messages/search';
-// import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { IProduct } from '@/app/search/result/result-interface';
-// import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
-// import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
+import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import {
@@ -50,6 +47,11 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
+import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -175,6 +177,9 @@ const Result = ({
 }) => {
   const dispatch = useAppDispatch();
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText, messageColor } = errorState;
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -185,7 +190,6 @@ const Result = ({
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
 
-  // const { saveSearchName } = commonState;
   let [triggerProductApi] = useLazyGetAllProductQuery();
 
   const [triggerColumn] =
@@ -251,12 +255,12 @@ const Result = ({
 
   const handleAddToCart = () => {
     let selectedIds = Object.keys(rowSelection);
-    if (selectedIds.length > 100) {
-      // setIsError(true);
-      // setErrorText(NOT_MORE_THAN_100);
+    if (selectedIds.length > 300) {
+      setIsError(true);
+      setErrorText(NOT_MORE_THAN_300);
     } else if (!selectedIds.length) {
-      // setIsError(true);
-      // setErrorText(NO_STONES_SELECTED);
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
     } else {
       const hasMemoOut = selectedIds.some((id: string) => {
         return dataTableState.rows.some(
@@ -271,11 +275,11 @@ const Result = ({
       });
 
       if (hasMemoOut) {
-        // setErrorText(NO_STONES_AVAILABLE);
-        // setIsError(true);
+        setErrorText(NO_STONES_AVAILABLE);
+        setIsError(true);
       } else if (hasHold) {
-        // setIsError(true);
-        // setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+        setIsError(true);
+        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
       } else {
         // Extract variant IDs for selected stones
         const variantIds = selectedIds?.map((id: string) => {
@@ -330,21 +334,43 @@ const Result = ({
                 </>
               );
               // On success, show confirmation dialog and update badge
-              // setIsError(false);
-              // setErrorText('');
-
+              setIsError(false);
+              setErrorText('');
               dispatch(notificationBadge(true));
 
               // refetchRow();
             })
-            .catch(() => {
+            .catch(error => {
               // On error, set error state and error message
-              // setIsError(true);
-              // setErrorText(error?.data?.message);
+
+              setIsDialogOpen(true);
+              setDialogContent(
+                <>
+                  <div className="absolute left-[-84px] top-[-84px]">
+                    <Image src={errorSvg} alt="errorSvg" />
+                  </div>
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                    <h1 className="text-headingS text-neutral900">
+                      {error?.data?.message}
+                    </h1>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.modal.editSelection'),
+                          handler: () => {
+                            router.push('/v2/my-cart');
+                          },
+                          customStyle: 'flex-1 w-full'
+                        }
+                      ]}
+                    />
+                  </div>
+                </>
+              );
             });
           // Clear the selected checkboxes
-          // setIsCheck([]);
-          // setIsCheckAll && setIsCheckAll(false);
+          setRowSelection({});
         }
       }
     }
@@ -402,21 +428,33 @@ const Result = ({
                   </p>
                 </div>
               </div>
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'secondary',
-                    label: ManageLocales('app.searchResult.addToCart'),
-                    handler: handleAddToCart
-                  },
+              <div className="flex items-center gap-3">
+                {isError && (
+                  <div>
+                    <span className="hidden  text-successMain" />
+                    <span
+                      className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
+                    >
+                      {errorText}
+                    </span>
+                  </div>
+                )}
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      label: ManageLocales('app.searchResult.addToCart'),
+                      handler: handleAddToCart
+                    },
 
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.searchResult.confirmStone'),
-                    handler: () => {}
-                  }
-                ]}
-              />
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.searchResult.confirmStone'),
+                      handler: () => {}
+                    }
+                  ]}
+                />
+              </div>
             </div>
           </div>
         ) : (

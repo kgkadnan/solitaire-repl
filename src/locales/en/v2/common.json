@@ -30,6 +30,7 @@
   "app.modal.yes": "Yes",
   "app.modal.no": "No",
   "app.modal.continue": "Continue",
+  "app.modal.editSelection" : "Edit Selection",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",

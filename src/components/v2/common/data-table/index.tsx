@@ -308,7 +308,7 @@ const DataTable = ({
             alignItems: 'center'
           }}
         >
-          <div>
+          <div className="pl-[7px]">
             <MRT_GlobalFilterTextField table={table} />
           </div>
 
