@@ -286,7 +286,10 @@ const DataTable = ({
                     variant: 'secondary',
                     svg: NewSearchIcon,
                     label: ManageLocales('app.search.newSearch'),
-                    handler: handleNewSearch
+                    handler: e => {
+                      e.preventDefault();
+                      handleNewSearch();
+                    }
                   },
                   {
                     variant: 'secondary',
