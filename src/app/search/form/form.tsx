@@ -336,6 +336,7 @@ used for managing the state of a form field or input element in a React componen
               isSavedSearch: isSaved,
               queryParams
             };
+
             localStorage.setItem(
               'Search',
               JSON.stringify([...addSearches, setDataOnLocalStorage])
