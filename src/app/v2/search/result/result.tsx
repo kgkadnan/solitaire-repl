@@ -48,10 +48,10 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-messages/confirm-stone';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
-import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
