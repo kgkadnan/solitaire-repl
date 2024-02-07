@@ -37,7 +37,7 @@ export const handleAddToCart = ({
   setIsCheckAll,
   refetchRow
 }: IHandleAddToCart) => {
-  if (isCheck.length > 100) {
+  if (isCheck.length > 300) {
     setIsError(true);
     setErrorText(NOT_MORE_THAN_300);
   } else if (!isCheck.length) {
