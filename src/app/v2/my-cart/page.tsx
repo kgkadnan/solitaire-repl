@@ -454,7 +454,7 @@ const MyCart = () => {
                 columns={memoizedColumns}
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
-                hideCalculatedField={activeTab !== SOLD_STATUS}
+                showCalculatedField={activeTab !== SOLD_STATUS}
               />
             </div>
           </div>

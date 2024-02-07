@@ -37,14 +37,14 @@ const DataTable = ({
   columns,
   setRowSelection,
   rowSelection,
+  showCalculatedField = false,
   isResult = false,
   activeTab,
   searchParameters,
   setActiveTab,
   handleCloseAllTabs,
   handleCloseSpecificTab,
-  handleNewSearch,
-  hideCalculatedField = false
+  handleNewSearch
 }: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
@@ -300,7 +300,7 @@ const DataTable = ({
             </div>
           </div>
         )}
-        {hideCalculatedField && (
+        {showCalculatedField && (
           <CalculatedField rows={rows} selectedProducts={rowSelection} />
         )}
         <Box

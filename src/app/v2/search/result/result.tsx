@@ -397,6 +397,7 @@ const Result = ({
             columns={memoizedColumns}
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
+            showCalculatedField={true}
             isResult={true}
             activeTab={activeTab}
             searchParameters={searchParameters}
