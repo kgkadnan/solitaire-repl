@@ -9,7 +9,9 @@ export const savedSearchesApi = createApi({
   endpoints: builder => ({
     getAllSavedSearches: builder.query({
       query: ({ limit, offset, searchByName, dateSearchUrl }) =>
-        `saved-search?limit=${limit}&offset=${offset}&name=${searchByName}${dateSearchUrl}`,
+        `saved-search?${offset ? `offset=${offset}&` : ''}${
+          limit ? `limit=${limit}&` : ''
+        }${searchByName ? `name=${searchByName}&` : ''}${dateSearchUrl}`,
       providesTags: ['SavedSearch']
     }),
     getSavedSearchList: builder.query({
@@ -45,6 +47,7 @@ export const savedSearchesApi = createApi({
 
 export const {
   useGetAllSavedSearchesQuery,
+  useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation,
   useGetSavedSearchListQuery,
   useAddSavedSearchMutation,

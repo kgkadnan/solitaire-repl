@@ -17,6 +17,7 @@ import { handleReset } from './form/helpers/reset';
 import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
+import SavedSearch from './saved-search/saved-search';
 
 const Search = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -225,6 +226,8 @@ const Search = () => {
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
           />
+        ) : subRoute === SubRoutes.SAVED_SEARCH ? (
+          <SavedSearch />
         ) : activeTab === -1 ? (
           <div className="h-screen">
             {' '}
