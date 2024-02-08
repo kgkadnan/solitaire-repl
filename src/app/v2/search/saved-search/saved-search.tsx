@@ -24,6 +24,12 @@ interface ISavedSearch {
   deleted_at: string | null;
 }
 
+import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
+import Image from 'next/image';
+import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
+import { handleSelectAll } from '@/components/v2/common/checkbox/helpers/handle-select-all-checkbox';
+import { handleCheckbox } from '@/components/v2/common/checkbox/helpers/handle-checkbox';
+
 const SavedSearch = () => {
   // Fetching saved search data
   const [triggerSavedSearches] = useLazyGetAllSavedSearchesQuery({});
@@ -32,6 +38,9 @@ const SavedSearch = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
+  const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
+  const { selectedCheckboxes, selectAllChecked } = checkboxState;
+  const { setSelectedCheckboxes, setSelectAllChecked } = checkboxSetState;
 
   const coloumn = [
     {
@@ -105,7 +114,17 @@ const SavedSearch = () => {
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         <div className="flex items-center gap-5 rounded-t-[4px] py-[12px] bg-neutral50 border-b-[1px] border-neutral200 px-[16px]">
           <div className="flex items-center gap-3">
-            <CheckboxComponent />
+            <CheckboxComponent
+              onChange={() => {
+                handleSelectAll({
+                  selectAllChecked,
+                  setSelectedCheckboxes,
+                  setSelectAllChecked,
+                  data: savedSearchState.savedSearchData
+                });
+              }}
+              isChecked={selectAllChecked}
+            />
             <p className="text-lRegular text-neutral900 font-medium">
               {ManageLocales('app.savedSearch.selectAll')}
             </p>
@@ -117,11 +136,20 @@ const SavedSearch = () => {
             ({ id, name, meta_data, created_at }: ISavedSearch) => {
               return (
                 <div
-                  className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer"
+                  className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
                   key={id}
                 >
                   <div className="flex items-center gap-[18px] md:w-[40%]">
-                    <CheckboxComponent />
+                    <CheckboxComponent
+                      onChange={() =>
+                        handleCheckbox({
+                          id,
+                          selectedCheckboxes,
+                          setSelectedCheckboxes
+                        })
+                      }
+                      isChecked={selectedCheckboxes.includes(id)}
+                    />
                     <div className="bg-slate-500 text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center">
                       {name
                         .split(' ') // Split the name into words
@@ -140,7 +168,9 @@ const SavedSearch = () => {
                   <div className="w-full md:w-[50%] mt-4 md:mt-0">
                     <DisplayTable column={coloumn} row={[meta_data]} />
                   </div>
-                  <div className="w-full md:w-[10%]"></div>
+                  <div className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    <Image src={editIcon} alt="editIcon" />
+                  </div>
                 </div>
               );
             }
