@@ -3,12 +3,23 @@ import { useState } from 'react';
 export const useSavedSearchStateManagement = () => {
   const [savedSearchData, setSavedSearchData] = useState([]);
 
+  //Search Bar States
+  const [search, setSearch] = useState<string>('');
+  const [searchByName, setSearchByName] = useState<string>('');
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
   return {
     savedSearchState: {
-      savedSearchData
+      savedSearchData,
+      search,
+      searchByName,
+      suggestions
     },
     savedSearchSetState: {
-      setSavedSearchData
+      setSavedSearchData,
+      setSearch,
+      setSearchByName,
+      setSuggestions
     }
   };
 };

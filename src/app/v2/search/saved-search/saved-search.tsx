@@ -1,15 +1,20 @@
 'use client';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import { useLazyGetAllSavedSearchesQuery } from '@/features/api/saved-searches';
+import {
+  useDeleteSavedSearchMutation,
+  useGetAllSavedSearchesQuery,
+  useGetSavedSearchListQuery
+} from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSavedSearchStateManagement } from './hooks/saved-search-state-management';
 import { DisplayTable } from '@/components/v2/common/display-table';
 import ActionButton from '@/components/v2/common/action-button';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { formatCreatedAt } from '@/utils/format-date';
+import styles from './saved-search.module.scss';
 
 interface ISavedSearch {
   diamond_count: string;
@@ -24,23 +29,44 @@ interface ISavedSearch {
   deleted_at: string | null;
 }
 
+export interface IItem {
+  name: string;
+}
+
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import Image from 'next/image';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { handleSelectAll } from '@/components/v2/common/checkbox/helpers/handle-select-all-checkbox';
 import { handleCheckbox } from '@/components/v2/common/checkbox/helpers/handle-checkbox';
+import { deleteSavedSearchHandler } from './helpers/delete-saved-search-handler';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { handleDelete } from './helpers/handle-delete';
+import SearchInputField from '@/components/v2/common/search-input/search-input';
+import { handleSearch } from './helpers/debounce';
 
 const SavedSearch = () => {
-  // Fetching saved search data
-  const [triggerSavedSearches] = useLazyGetAllSavedSearchesQuery({});
   const { savedSearchSetState, savedSearchState } =
     useSavedSearchStateManagement();
+  // Fetching saved search data
+  const { data } = useGetAllSavedSearchesQuery({
+    searchByName: savedSearchState.searchByName
+  });
+
+  const { data: searchList }: { data?: IItem[] } = useGetSavedSearchListQuery(
+    savedSearchState.search
+  );
+  // Mutation for deleting items from the saved search
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes, selectAllChecked } = checkboxState;
   const { setSelectedCheckboxes, setSelectAllChecked } = checkboxSetState;
+  const { errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  // const { isError, errorText, messageColor } = errorState;
 
   const coloumn = [
     {
@@ -94,10 +120,46 @@ const SavedSearch = () => {
   ];
 
   useEffect(() => {
-    triggerSavedSearches({}).then(res => {
-      savedSearchSetState.setSavedSearchData(res.data.savedSearches);
-    });
-  }, []);
+    savedSearchSetState.setSavedSearchData(data?.savedSearches);
+  }, [data]);
+
+  // Debounced search function
+  const debouncedSave = useCallback(
+    (inputValue: string) => {
+      // Filter data based on input value
+      const filteredSuggestions =
+        searchList &&
+        searchList.filter((item: IItem) =>
+          item.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
+      // Extract card titles from filtered suggestions
+      const suggestionTitles =
+        filteredSuggestions &&
+        filteredSuggestions.map((item: IItem) => item.name);
+
+      savedSearchSetState.setSuggestions(suggestionTitles || []);
+      // Update state with an array of strings
+    },
+    [searchList]
+  );
+
+  // Handler for suggestion click
+  const handleSuggestionClick = (suggestion: string) => {
+    console.log('susgge', suggestion);
+    setSelectedCheckboxes([]);
+    setSelectAllChecked(false);
+    savedSearchSetState.setSearch(suggestion);
+    savedSearchSetState.setSearchByName(suggestion);
+    savedSearchSetState.setSuggestions([]);
+  };
+
+  const gradientClasses = [
+    styles.gradient1,
+    styles.gradient2,
+    styles.gradient3,
+    styles.gradient4,
+    styles.gradient5
+  ];
 
   return (
     <div>
@@ -115,7 +177,7 @@ const SavedSearch = () => {
         <div className="flex items-center gap-5 rounded-t-[4px] py-[12px] bg-neutral50 border-b-[1px] border-neutral200 px-[16px]">
           <div className="flex items-center gap-3">
             <CheckboxComponent
-              onChange={() => {
+              onClick={() => {
                 handleSelectAll({
                   selectAllChecked,
                   setSelectedCheckboxes,
@@ -125,15 +187,48 @@ const SavedSearch = () => {
               }}
               isChecked={selectAllChecked}
             />
-            <p className="text-lRegular text-neutral900 font-medium">
+            <button
+              className="text-lRegular text-neutral900 font-medium cursor-pointer"
+              onClick={() => {
+                handleSelectAll({
+                  selectAllChecked,
+                  setSelectedCheckboxes,
+                  setSelectAllChecked,
+                  data: savedSearchState.savedSearchData
+                });
+              }}
+            >
               {ManageLocales('app.savedSearch.selectAll')}
-            </p>
+            </button>
           </div>
-          <div>search input</div>
+          <div>
+            <SearchInputField
+              type="text"
+              name="Search"
+              value={data?.searchValue}
+              onChange={e =>
+                handleSearch({
+                  e,
+                  setSearch: savedSearchSetState.setSearch,
+                  debouncedSave,
+                  setSearchByName: savedSearchSetState.setSearchByName,
+                  setSelectedCheckboxes,
+                  setSelectAllChecked
+                })
+              }
+              handleSuggestionClick={handleSuggestionClick}
+              suggestions={savedSearchState.suggestions}
+            />
+          </div>
         </div>
         <div className="h-[70vh] overflow-auto">
-          {savedSearchState.savedSearchData.map(
+          {savedSearchState?.savedSearchData?.map(
             ({ id, name, meta_data, created_at }: ISavedSearch) => {
+              const randomIndex = Math.floor(
+                Math.random() * gradientClasses.length
+              );
+              // Get the random gradient class
+              const randomGradientClass = gradientClasses[randomIndex];
               return (
                 <div
                   className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
@@ -141,7 +236,7 @@ const SavedSearch = () => {
                 >
                   <div className="flex items-center gap-[18px] md:w-[40%]">
                     <CheckboxComponent
-                      onChange={() =>
+                      onClick={() =>
                         handleCheckbox({
                           id,
                           selectedCheckboxes,
@@ -150,7 +245,9 @@ const SavedSearch = () => {
                       }
                       isChecked={selectedCheckboxes.includes(id)}
                     />
-                    <div className="bg-slate-500 text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center">
+                    <div
+                      className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                    >
                       {name
                         .split(' ') // Split the name into words
                         .map(word => word.charAt(0)) // Extract the first character of each word
@@ -183,7 +280,24 @@ const SavedSearch = () => {
                 variant: 'secondary',
                 label: ManageLocales('app.savedSearch.delete'),
                 svg: BinIcon,
-                handler: () => {}
+                handler: () =>
+                  deleteSavedSearchHandler({
+                    selectedCheckboxes,
+                    setIsError,
+                    setErrorText,
+                    setIsDialogOpen,
+                    setDialogContent,
+                    handleDelete: () =>
+                      handleDelete({
+                        deleteSavedSearch,
+                        selectedCheckboxes,
+                        setDialogContent,
+                        setIsDialogOpen,
+                        setSelectedCheckboxes,
+                        setSelectAllChecked,
+                        setIsError
+                      })
+                  })
               }
             ]}
           />
