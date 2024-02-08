@@ -61,7 +61,7 @@ export const PasswordField = ({
           {isPasswordVisible ? <EyeSlash /> : <Eye />}
         </div>
       </div>
-      <p className="text-dangerMain h-1">{errorText && errorText}</p>
+      <p className="text-dangerMain">{errorText && errorText}</p>
     </div>
   );
 };
