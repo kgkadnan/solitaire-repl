@@ -18,6 +18,10 @@
   "app.search.saveSearch": "Save Search",
   "app.search.resultRoute": "result",
 
+  "app.savedSearch.header" : "Discover & manage your saved searches",
+  "app.savedSearch.selectAll" : "Select All",
+  "app.savedSearch.delete" :"Delete",
+
   "app.calculatedField.pieces": "No. of Pieces",
   "app.calculatedField.carat": "Total Carats",
   "app.calculatedField.discount": "Total Avg. Dis",
