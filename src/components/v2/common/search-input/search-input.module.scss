@@ -2,9 +2,10 @@
     height: 40px;
     border: 1px solid var(--neutral-200);
     border-radius: 4px;
-    font-size: var(--font-size-sMedium);
-    padding: 10px;
-    color: hsl(var(--solitaire-tertiary));
+    font-weight: var(--font-weight-regular);
+    font-size: var(--font-size-lMedium);
+    padding: 10px 40px;
+    color: var(--neutral-900);
     background-color: var(--neutral-0);
     margin: 0;
     width: 312px;
@@ -23,10 +24,10 @@
   /* input-field.module.scss */
   .dropdown {
     position: absolute;
-    width: 250px;
+    width:312px;
+    top: 200px;
     z-index: 1;
-    background-color: hsl(var(--solitaire-secondary));
-    // border: 1px solid hsl(var(--solitaire-quaternary));
+    background-color: var(--neutral-0);
     border-radius: 5px;
     list-style: none;
     padding: 0;
@@ -35,16 +36,20 @@
   }
   
   .dropdown li {
+    color: var(--neutral-900);
     padding: 8px 12px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-lMedium);
     cursor: pointer;
+    border: 1px solid var(--neutral-200);
   }
   .selectedSuggestion {
-    background-color: hsl(
-      var(--solitaire-senary)
-    ); /* Change this to your desired background color */
+    background-color: var(--neutral-200);/* Change this to your desired background color */
   }
   
   .dropdown li:hover {
-    background-color: hsl(var(--solitaire-senary));
+    background-color: var(--neutral-200);
   }
   

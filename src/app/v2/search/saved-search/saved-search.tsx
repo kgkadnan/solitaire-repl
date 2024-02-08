@@ -14,6 +14,7 @@ import { DisplayTable } from '@/components/v2/common/display-table';
 import ActionButton from '@/components/v2/common/action-button';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { formatCreatedAt } from '@/utils/format-date';
+import styles from './saved-search.module.scss';
 
 interface ISavedSearch {
   diamond_count: string;
@@ -144,12 +145,21 @@ const SavedSearch = () => {
 
   // Handler for suggestion click
   const handleSuggestionClick = (suggestion: string) => {
+    console.log('susgge', suggestion);
     setSelectedCheckboxes([]);
     setSelectAllChecked(false);
     savedSearchSetState.setSearch(suggestion);
     savedSearchSetState.setSearchByName(suggestion);
     savedSearchSetState.setSuggestions([]);
   };
+
+  const gradientClasses = [
+    styles.gradient1,
+    styles.gradient2,
+    styles.gradient3,
+    styles.gradient4,
+    styles.gradient5
+  ];
 
   return (
     <div>
@@ -214,6 +224,11 @@ const SavedSearch = () => {
         <div className="h-[70vh] overflow-auto">
           {savedSearchState?.savedSearchData?.map(
             ({ id, name, meta_data, created_at }: ISavedSearch) => {
+              const randomIndex = Math.floor(
+                Math.random() * gradientClasses.length
+              );
+              // Get the random gradient class
+              const randomGradientClass = gradientClasses[randomIndex];
               return (
                 <div
                   className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
@@ -230,7 +245,9 @@ const SavedSearch = () => {
                       }
                       isChecked={selectedCheckboxes.includes(id)}
                     />
-                    <div className="bg-slate-500 text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center">
+                    <div
+                      className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                    >
                       {name
                         .split(' ') // Split the name into words
                         .map(word => word.charAt(0)) // Extract the first character of each word

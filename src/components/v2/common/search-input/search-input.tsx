@@ -12,7 +12,6 @@ interface ISearchInputProps {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   suggestions?: any[];
   handleSuggestionClick?: (suggestion: string) => void;
-  handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const SearchInputField: React.FC<ISearchInputProps> = ({
@@ -22,12 +21,10 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
   onChange,
   placeholder,
   suggestions,
-  handleSuggestionClick,
-  handleKeyPress
+  handleSuggestionClick
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
-
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown') {
       event.preventDefault();
@@ -44,8 +41,9 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
     } else if (event.key === 'Enter') {
       event.preventDefault();
       if (suggestions && suggestions.length > 0) {
-        handleSuggestionClick?.(value || '');
+        handleSuggestionClick?.(suggestions[selectedSuggestionIndex]);
       }
+      setShowSuggestions(false); // Close suggestions after hitting Enter
     }
   };
 
@@ -70,12 +68,13 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
           className={`${styles.defaultSearchInputStyle} ${styles.searchInput}`}
           type={type}
           name={name}
+          autoComplete="off"
           value={value}
           onChange={onChange}
           placeholder={placeholder}
           onFocus={() => setShowSuggestions(true)}
           onBlur={handleInputBlur}
-          onKeyDown={handleKeyPress ?? handleKeyDown}
+          onKeyDown={handleKeyDown}
         />
       </div>
       {showSuggestions && suggestions && (
@@ -89,6 +88,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
                   : ''
               } ${styles.suggestion}`}
               onClick={() => {
+                console.log('helosuggestion', suggestion);
                 handleSuggestionClick?.(suggestion);
                 setShowSuggestions(false);
               }}
