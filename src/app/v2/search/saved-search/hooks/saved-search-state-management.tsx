@@ -8,18 +8,22 @@ export const useSavedSearchStateManagement = () => {
   const [searchByName, setSearchByName] = useState<string>('');
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
+  const [searchUrl, setSearchUrl] = useState('');
+
   return {
     savedSearchState: {
       savedSearchData,
       search,
       searchByName,
-      suggestions
+      suggestions,
+      setSearchUrl
     },
     savedSearchSetState: {
       setSavedSearchData,
       setSearch,
       setSearchByName,
-      setSuggestions
+      setSuggestions,
+      searchUrl
     }
   };
 };

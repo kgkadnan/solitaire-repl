@@ -23,6 +23,8 @@
   "app.savedSearch.delete" :"Delete",
   "app.savedSearch.deleteConfirmation" : "Do you want to delete the selected saved search?",
   "app.savedSearch.successfully.deleted" :"Item successfully deleted from “Saved Search”",
+  "app.savedSearch.maxTabReached" : "Maximum Tabs Reached",
+  "app.savedSearch.maxTabReached.content" : "You've reached the limit of 10 open tabs. Please close an existing tab to open a new one.",
 
   "app.calculatedField.pieces": "No. of Pieces",
   "app.calculatedField.carat": "Total Carats",
@@ -37,6 +39,8 @@
   "app.modal.no": "No",
   "app.modal.continue": "Continue",
   "app.modal.editSelection": "Edit Selection",
+  "app.modal.cancel" : "Cancel",
+  "app.modal.manageTabs" : "Manage Tabs",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",

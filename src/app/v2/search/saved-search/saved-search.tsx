@@ -16,7 +16,7 @@ import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { formatCreatedAt } from '@/utils/format-date';
 import styles from './saved-search.module.scss';
 
-interface ISavedSearch {
+export interface ISavedSearches {
   diamond_count: string;
   name: string;
   customer_id: string;
@@ -43,10 +43,20 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleDelete } from './helpers/handle-delete';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
 import { handleSearch } from './helpers/debounce';
+import { useRouter } from 'next/navigation';
+import { useLazyGetProductCountQuery } from '@/features/api/product';
+import { handleCardClick } from './helpers/handle-card-click';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { useAppDispatch } from '@/hooks/hook';
+import { modifySavedSearch } from '@/features/saved-search/saved-search';
 
 const SavedSearch = () => {
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const { savedSearchSetState, savedSearchState } =
     useSavedSearchStateManagement();
+
+  let [triggerProductCountApi] = useLazyGetProductCountQuery();
   // Fetching saved search data
   const { data } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
@@ -145,7 +155,6 @@ const SavedSearch = () => {
 
   // Handler for suggestion click
   const handleSuggestionClick = (suggestion: string) => {
-    console.log('susgge', suggestion);
     setSelectedCheckboxes([]);
     setSelectAllChecked(false);
     savedSearchSetState.setSearch(suggestion);
@@ -160,6 +169,21 @@ const SavedSearch = () => {
     styles.gradient4,
     styles.gradient5
   ];
+
+  // Function to handle edit action
+  const handleEdit = (stone: string) => {
+    let savedSearchEditData = savedSearchState.savedSearchData.filter(
+      (items: any) => {
+        return items.id === stone;
+      }
+    );
+
+    dispatch(modifySavedSearch({ savedSearch: savedSearchEditData[0] }));
+
+    router.push(
+      `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}&edit=${SubRoutes.SAVED_SEARCH}`
+    );
+  };
 
   return (
     <div>
@@ -223,7 +247,7 @@ const SavedSearch = () => {
         </div>
         <div className="h-[70vh] overflow-auto">
           {savedSearchState?.savedSearchData?.map(
-            ({ id, name, meta_data, created_at }: ISavedSearch) => {
+            ({ id, name, meta_data, created_at }: ISavedSearches) => {
               const randomIndex = Math.floor(
                 Math.random() * gradientClasses.length
               );
@@ -233,6 +257,18 @@ const SavedSearch = () => {
                 <div
                   className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
                   key={id}
+                  onClick={() =>
+                    handleCardClick({
+                      id,
+                      savedSearchData: savedSearchState.savedSearchData,
+                      router,
+                      triggerProductCountApi,
+                      setIsError,
+                      setErrorText,
+                      setDialogContent,
+                      setIsDialogOpen
+                    })
+                  }
                 >
                   <div className="flex items-center gap-[18px] md:w-[40%]">
                     <CheckboxComponent
@@ -265,9 +301,15 @@ const SavedSearch = () => {
                   <div className="w-full md:w-[50%] mt-4 md:mt-0">
                     <DisplayTable column={coloumn} row={[meta_data]} />
                   </div>
-                  <div className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button
+                    className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    onClick={e => {
+                      e.stopPropagation();
+                      handleEdit(id);
+                    }}
+                  >
                     <Image src={editIcon} alt="editIcon" />
-                  </div>
+                  </button>
                 </div>
               );
             }
