@@ -21,6 +21,8 @@
   "app.savedSearch.header" : "Discover & manage your saved searches",
   "app.savedSearch.selectAll" : "Select All",
   "app.savedSearch.delete" :"Delete",
+  "app.savedSearch.deleteConfirmation" : "Do you want to delete the selected saved search?",
+  "app.savedSearch.successfully.deleted" :"Item successfully deleted from “Saved Search”",
 
   "app.calculatedField.pieces": "No. of Pieces",
   "app.calculatedField.carat": "Total Carats",

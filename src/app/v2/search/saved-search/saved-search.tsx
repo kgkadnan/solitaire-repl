@@ -1,7 +1,10 @@
 'use client';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import { useLazyGetAllSavedSearchesQuery } from '@/features/api/saved-searches';
+import {
+  useDeleteSavedSearchMutation,
+  useGetAllSavedSearchesQuery
+} from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect } from 'react';
@@ -29,18 +32,27 @@ import Image from 'next/image';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
 import { handleSelectAll } from '@/components/v2/common/checkbox/helpers/handle-select-all-checkbox';
 import { handleCheckbox } from '@/components/v2/common/checkbox/helpers/handle-checkbox';
+import { deleteSavedSearchHandler } from './helpers/delete-saved-search-handler';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { handleDelete } from './helpers/handle-delete';
+import CustomSearchInputField from '@/components/v2/common/search-input/search-input';
 
 const SavedSearch = () => {
   // Fetching saved search data
-  const [triggerSavedSearches] = useLazyGetAllSavedSearchesQuery({});
+  const { data } = useGetAllSavedSearchesQuery({});
+  // Mutation for deleting items from the saved search
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
   const { savedSearchSetState, savedSearchState } =
     useSavedSearchStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen } = modalSetState;
+  const { setIsDialogOpen, setDialogContent } = modalSetState;
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes, selectAllChecked } = checkboxState;
   const { setSelectedCheckboxes, setSelectAllChecked } = checkboxSetState;
+  const { errorSetState } = useErrorStateManagement();
+  const { setIsError, setErrorText } = errorSetState;
+  // const { isError, errorText, messageColor } = errorState;
 
   const coloumn = [
     {
@@ -94,10 +106,8 @@ const SavedSearch = () => {
   ];
 
   useEffect(() => {
-    triggerSavedSearches({}).then(res => {
-      savedSearchSetState.setSavedSearchData(res.data.savedSearches);
-    });
-  }, []);
+    savedSearchSetState.setSavedSearchData(data?.savedSearches);
+  }, [data]);
 
   return (
     <div>
@@ -115,7 +125,7 @@ const SavedSearch = () => {
         <div className="flex items-center gap-5 rounded-t-[4px] py-[12px] bg-neutral50 border-b-[1px] border-neutral200 px-[16px]">
           <div className="flex items-center gap-3">
             <CheckboxComponent
-              onChange={() => {
+              onClick={() => {
                 handleSelectAll({
                   selectAllChecked,
                   setSelectedCheckboxes,
@@ -125,14 +135,33 @@ const SavedSearch = () => {
               }}
               isChecked={selectAllChecked}
             />
-            <p className="text-lRegular text-neutral900 font-medium">
+            <button
+              className="text-lRegular text-neutral900 font-medium cursor-pointer"
+              onClick={() => {
+                handleSelectAll({
+                  selectAllChecked,
+                  setSelectedCheckboxes,
+                  setSelectAllChecked,
+                  data: savedSearchState.savedSearchData
+                });
+              }}
+            >
               {ManageLocales('app.savedSearch.selectAll')}
-            </p>
+            </button>
           </div>
-          <div>search input</div>
+          <div>
+            <CustomSearchInputField
+              type="text"
+              name="Search"
+              value={data?.searchValue}
+              onChange={data?.handleSearch}
+              handleSuggestionClick={data.handleSuggestionClick}
+              suggestions={data.suggestions}
+            />
+          </div>
         </div>
         <div className="h-[70vh] overflow-auto">
-          {savedSearchState.savedSearchData.map(
+          {savedSearchState?.savedSearchData?.map(
             ({ id, name, meta_data, created_at }: ISavedSearch) => {
               return (
                 <div
@@ -141,7 +170,7 @@ const SavedSearch = () => {
                 >
                   <div className="flex items-center gap-[18px] md:w-[40%]">
                     <CheckboxComponent
-                      onChange={() =>
+                      onClick={() =>
                         handleCheckbox({
                           id,
                           selectedCheckboxes,
@@ -183,7 +212,24 @@ const SavedSearch = () => {
                 variant: 'secondary',
                 label: ManageLocales('app.savedSearch.delete'),
                 svg: BinIcon,
-                handler: () => {}
+                handler: () =>
+                  deleteSavedSearchHandler({
+                    selectedCheckboxes,
+                    setIsError,
+                    setErrorText,
+                    setIsDialogOpen,
+                    setDialogContent,
+                    handleDelete: () =>
+                      handleDelete({
+                        deleteSavedSearch,
+                        selectedCheckboxes,
+                        setDialogContent,
+                        setIsDialogOpen,
+                        setSelectedCheckboxes,
+                        setSelectAllChecked,
+                        setIsError
+                      })
+                  })
               }
             ]}
           />
