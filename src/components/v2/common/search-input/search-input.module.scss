@@ -1,12 +1,19 @@
 .defaultSearchInputStyle {
     height: 40px;
-    outline: none;
-    border-bottom: 0.5px solid #8c7459;
-    font-size: 12px;
-    padding: 10px, 10px, 10px, 5px;
+    border: 1px solid var(--neutral-200);
+    border-radius: 4px;
+    font-size: var(--font-size-sMedium);
+    padding: 10px;
     color: hsl(var(--solitaire-tertiary));
-    background-color: transparent;
+    background-color: var(--neutral-0);
     margin: 0;
+    width: 312px;
+    box-shadow: var(--input-shadow) inset;
+  }
+  .searchIcon{
+    position: absolute;
+    top: 8px;
+    left: 8px;
   }
   
   .defaultSearchInputStyle:focus {

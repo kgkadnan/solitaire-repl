@@ -1,6 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styles from './search-input.module.scss';
 import { Input } from '@components/ui/input';
+import searchIcon from '@public/v2/assets/icons/saved-search/search-icon.svg';
+import Image from 'next/image';
 
 interface ISearchInputProps {
   type: string;
@@ -13,7 +15,7 @@ interface ISearchInputProps {
   handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
-const CustomSearchInputField: React.FC<ISearchInputProps> = ({
+const SearchInputField: React.FC<ISearchInputProps> = ({
   type,
   value,
   name,
@@ -59,18 +61,23 @@ const CustomSearchInputField: React.FC<ISearchInputProps> = ({
 
   return (
     <div className={styles.searchInputMain}>
-      <Input
-        data-testid="custom-search-input"
-        className={`${styles.defaultSearchInputStyle} ${styles.searchInput}`}
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        onFocus={() => setShowSuggestions(true)}
-        onBlur={handleInputBlur}
-        onKeyDown={handleKeyPress ?? handleKeyDown}
-      />
+      <div className="relative">
+        <div className={styles.searchIcon}>
+          <Image src={searchIcon} alt="Search Icon" />
+        </div>
+        <Input
+          data-testid="custom-search-input"
+          className={`${styles.defaultSearchInputStyle} ${styles.searchInput}`}
+          type={type}
+          name={name}
+          value={value}
+          onChange={onChange}
+          placeholder={placeholder}
+          onFocus={() => setShowSuggestions(true)}
+          onBlur={handleInputBlur}
+          onKeyDown={handleKeyPress ?? handleKeyDown}
+        />
+      </div>
       {showSuggestions && suggestions && (
         <ul className={styles.dropdown}>
           {suggestions.map((suggestion: string, index: number) => (
@@ -95,4 +102,4 @@ const CustomSearchInputField: React.FC<ISearchInputProps> = ({
   );
 };
 
-export default CustomSearchInputField;
+export default SearchInputField;

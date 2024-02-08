@@ -3,11 +3,12 @@ import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import {
   useDeleteSavedSearchMutation,
-  useGetAllSavedSearchesQuery
+  useGetAllSavedSearchesQuery,
+  useGetSavedSearchListQuery
 } from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { useSavedSearchStateManagement } from './hooks/saved-search-state-management';
 import { DisplayTable } from '@/components/v2/common/display-table';
 import ActionButton from '@/components/v2/common/action-button';
@@ -27,6 +28,10 @@ interface ISavedSearch {
   deleted_at: string | null;
 }
 
+export interface IItem {
+  name: string;
+}
+
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
 import Image from 'next/image';
 import { useCheckboxStateManagement } from '@/components/v2/common/checkbox/hooks/checkbox-state-management';
@@ -35,15 +40,23 @@ import { handleCheckbox } from '@/components/v2/common/checkbox/helpers/handle-c
 import { deleteSavedSearchHandler } from './helpers/delete-saved-search-handler';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { handleDelete } from './helpers/handle-delete';
-import CustomSearchInputField from '@/components/v2/common/search-input/search-input';
+import SearchInputField from '@/components/v2/common/search-input/search-input';
+import { handleSearch } from './helpers/debounce';
 
 const SavedSearch = () => {
-  // Fetching saved search data
-  const { data } = useGetAllSavedSearchesQuery({});
-  // Mutation for deleting items from the saved search
-  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
   const { savedSearchSetState, savedSearchState } =
     useSavedSearchStateManagement();
+  // Fetching saved search data
+  const { data } = useGetAllSavedSearchesQuery({
+    searchByName: savedSearchState.searchByName
+  });
+
+  const { data: searchList }: { data?: IItem[] } = useGetSavedSearchListQuery(
+    savedSearchState.search
+  );
+  // Mutation for deleting items from the saved search
+  const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
@@ -109,6 +122,35 @@ const SavedSearch = () => {
     savedSearchSetState.setSavedSearchData(data?.savedSearches);
   }, [data]);
 
+  // Debounced search function
+  const debouncedSave = useCallback(
+    (inputValue: string) => {
+      // Filter data based on input value
+      const filteredSuggestions =
+        searchList &&
+        searchList.filter((item: IItem) =>
+          item.name.toLowerCase().includes(inputValue.toLowerCase())
+        );
+      // Extract card titles from filtered suggestions
+      const suggestionTitles =
+        filteredSuggestions &&
+        filteredSuggestions.map((item: IItem) => item.name);
+
+      savedSearchSetState.setSuggestions(suggestionTitles || []);
+      // Update state with an array of strings
+    },
+    [searchList]
+  );
+
+  // Handler for suggestion click
+  const handleSuggestionClick = (suggestion: string) => {
+    setSelectedCheckboxes([]);
+    setSelectAllChecked(false);
+    savedSearchSetState.setSearch(suggestion);
+    savedSearchSetState.setSearchByName(suggestion);
+    savedSearchSetState.setSuggestions([]);
+  };
+
   return (
     <div>
       <DialogComponent
@@ -150,13 +192,22 @@ const SavedSearch = () => {
             </button>
           </div>
           <div>
-            <CustomSearchInputField
+            <SearchInputField
               type="text"
               name="Search"
               value={data?.searchValue}
-              onChange={data?.handleSearch}
-              handleSuggestionClick={data.handleSuggestionClick}
-              suggestions={data.suggestions}
+              onChange={e =>
+                handleSearch({
+                  e,
+                  setSearch: savedSearchSetState.setSearch,
+                  debouncedSave,
+                  setSearchByName: savedSearchSetState.setSearchByName,
+                  setSelectedCheckboxes,
+                  setSelectAllChecked
+                })
+              }
+              handleSuggestionClick={handleSuggestionClick}
+              suggestions={savedSearchState.suggestions}
             />
           </div>
         </div>
