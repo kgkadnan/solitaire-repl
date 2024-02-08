@@ -33,7 +33,7 @@ export const handleVerifyOtp = ({
     .unwrap()
     .then((res: any) => {
       if (res) {
-        if (role === 'register' || role === 'guest') {
+        if (role === 'register') {
           setCurrentState('successfullyCreated');
           if (setToken)
             setToken(prev => ({

@@ -2,7 +2,8 @@ export const headerlessRoutes = [
   '/login',
   '/forgot-password',
   '/reset-password',
-  '/register'
+  '/register',
+  '/v2/register'
 ];
 
 export const myAccountRoutes = [
@@ -24,7 +25,8 @@ export const v2Routes = [
   '/v2/saved-searches',
   '/v2/appointments',
   '/v2/my-cart',
-  '/v2/setting'
+  '/v2/setting',
+  '/v2/register'
 ];
 export const protectedRoutes = [
   '/',

@@ -1,8 +1,11 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import { Input } from '@components/ui/input';
 import { IInputFieldProps } from './interface';
-export const InputField = ({
-  type,
+import EyeSlash from '@public/v2/assets/icons/eye-slash.svg?url';
+import Eye from '@public/v2/assets/icons/eye.svg?url';
+type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
+
+export const PasswordField = ({
   name,
   value,
   label,
@@ -14,11 +17,16 @@ export const InputField = ({
   onBlur,
   maxLength,
   onKeyDown
-}: IInputFieldProps) => {
+}: IPasswordInputProps) => {
   function disableWheel(e: any) {
     e.preventDefault();
   }
   const inputRef = useRef<any>(null);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setIsPasswordVisible(prev => !prev);
+  };
 
   return (
     <div className={` text-left w-full gap-1 ${styles?.inputMain}`}>
@@ -30,7 +38,7 @@ export const InputField = ({
           className={`focus:outline-none bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${styles?.input} ${
             errorText ? 'border-dangerMain' : 'border-neutral200'
           }`}
-          type={type}
+          type={isPasswordVisible ? 'text' : 'password'}
           name={name}
           value={value}
           onChange={onChange}
@@ -45,6 +53,13 @@ export const InputField = ({
           }}
           onKeyDown={onKeyDown}
         />
+
+        <div
+          className="absolute right-2 cursor-pointer "
+          onClick={togglePasswordVisibility}
+        >
+          {isPasswordVisible ? <EyeSlash /> : <Eye />}
+        </div>
       </div>
       <p className="text-dangerMain h-1">{errorText && errorText}</p>
     </div>

@@ -18,9 +18,9 @@
   "app.search.saveSearch": "Save Search",
   "app.search.resultRoute": "result",
 
-  "app.savedSearch.header" : "Discover & manage your saved searches",
-  "app.savedSearch.selectAll" : "Select All",
-  "app.savedSearch.delete" :"Delete",
+  "app.savedSearch.header": "Discover & manage your saved searches",
+  "app.savedSearch.selectAll": "Select All",
+  "app.savedSearch.delete": "Delete",
 
   "app.calculatedField.pieces": "No. of Pieces",
   "app.calculatedField.carat": "Total Carats",
@@ -51,5 +51,18 @@
   "app.search.closeSpecificTabs": "Are you sure you want to close the unsaved search tab?",
 
   "app.search.maxLimit": "Are you sure you want to close all the active search tabs?",
-  "app.search.manageLimit": "Manage Tabs"
+  "app.search.manageLimit": "Manage Tabs",
+
+  "app.register": "Register",
+  "app.register.okay": "Okay!",
+  "app.register.welcomeMessage": "Welcome! Please register to create account",
+  "app.register.firstName": "First Name*",
+  "app.register.lastName": "Last Name*",
+  "app.register.email": "Email*",
+  "app.register.mobileNumber": "Mobile Number*",
+  "app.register.companyName": "Company Name*",
+  "app.register.password": "Password*",
+  "app.register.confirmPassword": "Confirm Password*",
+
+  "app.register.accountExistLogin": "Already have an account? Login"
 }

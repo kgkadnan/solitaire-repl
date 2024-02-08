@@ -30,8 +30,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
 
-  const showHeader =
+  const showOldThemeWithHeader =
     isApplicationRoutes && !(headerlessRoutes.includes(path) || isV2Route);
+  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
@@ -52,7 +53,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       <body className={inter.className}>
         <Provider store={store}>
           <ThemeProviders isV2Route={isV2Route}>
-            {showHeader ? (
+            {showOldThemeWithHeader ? (
               <>
                 <SideBar />
                 <TopNavigationBar />
@@ -73,17 +74,23 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                 <BottomNavigationBar />
               </>
             ) : isV2Route ? (
-              <div className="flex w-full">
-                <SideNavigationBar />
+              <>
+                {showHeader ? (
+                  <div className="flex w-full">
+                    <SideNavigationBar />
 
-                <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
-                  <V2TopNavigationBar />
+                    <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
+                      <V2TopNavigationBar />
 
-                  <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
-                    <SecureComponent>{children}</SecureComponent>
-                  </main>
-                </div>
-              </div>
+                      <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
+                        <SecureComponent>{children}</SecureComponent>
+                      </main>
+                    </div>
+                  </div>
+                ) : (
+                  <div>{children}</div>
+                )}{' '}
+              </>
             ) : (
               <div>{children}</div>
             )}
