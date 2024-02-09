@@ -39,8 +39,8 @@ const RegisterComponent = ({
   const { registerFormState, registerFormErrors } = registerState;
   const { setRegisterFormState, setRegisterFormErrors } = registerSetState;
   return (
-    <div className="mx-[20px]">
-      <div className="flex flex-col w-[450px] min-h-[880px] p-8 gap-[16px] rounded-[8px] border-[1px] border-neutral-200">
+    <div className="my-[20px]">
+      <div className="flex flex-col w-[450px] min-h-[880px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200">
         <div className="flex flex-col items-center">
           <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
         </div>
@@ -65,6 +65,7 @@ const RegisterComponent = ({
               registerFormState
             })
           }
+          placeholder={ManageLocales('app.register.firstName.placeholder')}
         />
 
         {/* Input field for last Name */}
@@ -82,6 +83,7 @@ const RegisterComponent = ({
               registerFormState
             })
           }
+          placeholder={ManageLocales('app.register.lastName.placeholder')}
         />
         {/* Input field for email */}
         <InputField
@@ -98,12 +100,11 @@ const RegisterComponent = ({
           name="email"
           value={registerFormState.email}
           errorText={registerFormErrors.email}
+          placeholder={ManageLocales('app.register.email.placeholder')}
         />
         {/* Input field for mobile Number */}
-        <MobileInput />
-        {/* Input field for companyName */}
-        <InputField
-          label={ManageLocales('app.register.companyName')}
+        <MobileInput
+          label={ManageLocales('app.register.mobileNumber')}
           onChange={event =>
             handleRegisterChange({
               event,
@@ -112,10 +113,14 @@ const RegisterComponent = ({
               registerFormState
             })
           }
-          type="text"
-          name="companyName"
-          value={registerFormState.companyName}
-          errorText={registerFormErrors.companyName}
+          type="number"
+          name="mobileNumber"
+          value={registerFormState.mobileNumber}
+          errorText={registerFormErrors.mobileNumber}
+          state={registerFormState.countryCode}
+          setRegisterFormState={setRegisterFormState}
+          errorState={registerFormErrors.countryCode}
+          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
         />
 
         {/* Input field for  password */}
@@ -132,6 +137,7 @@ const RegisterComponent = ({
           name="password"
           value={registerFormState.password}
           errorText={registerFormErrors.password}
+          placeholder={ManageLocales('app.register.password.placeholder')}
         />
         {/* Input field for confirm password */}
         <PasswordField
@@ -147,6 +153,9 @@ const RegisterComponent = ({
           name="confirmPassword"
           value={registerFormState.confirmPassword}
           errorText={registerFormErrors.confirmPassword}
+          placeholder={ManageLocales(
+            'app.register.confirmPassword.placeholder'
+          )}
         />
         <IndividualActionButton
           onClick={() =>

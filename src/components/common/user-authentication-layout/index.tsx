@@ -20,7 +20,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
           />
         </div>
       </div>
-      <div className="w-[50%] flex justify-center text-center h-[100vh]  overflow-y-scroll items-center">
+      <div className="w-[50%] flex justify-center text-center h-[100vh]  overflow-y-scroll">
         {formData}
       </div>
     </div>

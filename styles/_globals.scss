@@ -337,10 +337,19 @@
       cursor: grabbing !important;
     }
 
+    /* Remove autofill background color */
+
     font-size: 14px;
     // font-family: 'Manrope, sans-serif';
   }
   body::-webkit-scrollbar {
     width: 0.1rem;
+  }
+
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--neutral-25) inset !important;
   }
 }

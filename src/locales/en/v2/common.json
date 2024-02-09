@@ -62,7 +62,14 @@
   "app.register.mobileNumber": "Mobile Number*",
   "app.register.companyName": "Company Name*",
   "app.register.password": "Password*",
-  "app.register.confirmPassword": "Confirm Password*",
+  "app.register.confirmPassword": "Re-enter Password*",
 
-  "app.register.accountExistLogin": "Already have an account? Login"
+  "app.register.accountExistLogin": "Already have an account? Login",
+
+  "app.register.firstName.placeholder": "Enter first name",
+  "app.register.lastName.placeholder": "Enter last name",
+  "app.register.email.placeholder": "Enter email id",
+  "app.register.password.placeholder": "Create a secure password",
+  "app.register.confirmPassword.placeholder": "Confirm your password",
+  "app.register.mobileNumber.placeholder": "Enter mobile number"
 }

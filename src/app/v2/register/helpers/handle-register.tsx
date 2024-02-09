@@ -40,7 +40,6 @@ export const handleRegister = async ({
     last_name: registerFormState.lastName,
     email: registerFormState.email,
     password: registerFormState.password,
-    company_name: registerFormState.companyName,
     country_code: registerFormState.countryCode,
     phone: registerFormState.mobileNumber
   })
