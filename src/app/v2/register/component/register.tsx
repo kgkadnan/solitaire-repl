@@ -155,6 +155,7 @@ const RegisterComponent = ({
           placeholder={ManageLocales(
             'app.register.confirmPassword.placeholder'
           )}
+          isConfirmPassword={true}
         />
         <IndividualActionButton
           onClick={() =>
