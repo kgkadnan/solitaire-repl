@@ -117,9 +117,8 @@ const RegisterComponent = ({
           name="mobileNumber"
           value={registerFormState.mobileNumber}
           errorText={registerFormErrors.mobileNumber}
-          state={registerFormState.countryCode}
+          registerFormState={registerFormState}
           setRegisterFormState={setRegisterFormState}
-          errorState={registerFormErrors.countryCode}
           placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
         />
 

@@ -3,14 +3,13 @@ import { InputField } from '..';
 import { IInputFieldProps } from '../interface';
 import Select, { SingleValue } from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
-import { handleSelectChange } from '@/app/v2/register/helpers/handle-select-change';
-import { countryCodeSelectStyle } from './country-select';
+import { colourStyles } from './country-select';
 
 interface IMobileInputField extends IInputFieldProps {
-  state: string;
+  registerFormState: any;
   setRegisterFormState: any;
-  errorState: any;
 }
+
 export const MobileInput = ({
   name,
   value,
@@ -18,14 +17,19 @@ export const MobileInput = ({
   errorText,
   onChange,
   placeholder,
-  state,
-  setRegisterFormState,
-  errorState
+  registerFormState,
+  setRegisterFormState
 }: IMobileInputField) => {
   const computeCountryDropdownField = (countryCode: any) => {
     return countryCode?.countries?.map(({ code }: any) => ({
       label: code,
       value: code
+    }));
+  };
+  const handleSelectChange = (selectValue: any) => {
+    setRegisterFormState(() => ({
+      ...registerFormState,
+      countryCode: selectValue?.value
     }));
   };
 
@@ -34,29 +38,23 @@ export const MobileInput = ({
       <div className={`flex text-left  flex-col`}>
         {label && <p className="text-mRegular text-neutral-900">{label}</p>}
 
-        <div className="flex">
-          <div className="">
-            <div
-              style={{ boxShadow: 'var(--input-shadow) inset' }}
-              className={` rounded-l-[4px] border-t-[1px] border-b-[1px] border-l-[1px] p-2 ${
-                errorText ? 'border-dangerMain' : 'border-neutral200'
-              }`}
-            >
-              <Select
-                name="countryCode"
-                options={computeCountryDropdownField(countryCode)}
-                onChange={(
-                  selectValue: SingleValue<{ label: string; value: string }>
-                ) => handleSelectChange({ selectValue, setRegisterFormState })}
-                styles={countryCodeSelectStyle(errorState)}
-                value={{
-                  label: state,
-                  value: state
-                }}
-              />
-            </div>
+        <div className={`flex`}>
+          <div>
+            <Select
+              name="countryCode"
+              options={computeCountryDropdownField(countryCode)}
+              onChange={handleSelectChange}
+              styles={colourStyles(errorText)}
+              value={{
+                label: registerFormState.countryCode,
+                value: registerFormState.countryCode
+              }}
+              closeMenuOnSelect={false}
+              autoFocus={false}
+            />
           </div>
           <InputField
+            label={''}
             onChange={onChange}
             type="number"
             name={name}
@@ -65,9 +63,10 @@ export const MobileInput = ({
             styles={{
               input: 'rounded-l-[0px]'
             }}
+            errorText={errorText}
           />
         </div>
-        <p className="text-dangerMain h-1">{errorText && errorText}</p>
+        {/* <p className="text-dangerMain h-1">{errorText && errorText}</p> */}
       </div>
     </>
   );

@@ -5,166 +5,83 @@ interface IColourOption {
   readonly label: string;
 }
 
-export const countryCodeSelectStyles: StylesConfig<IColourOption, true> = {
-  control: styles => ({
-    ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
-    border: 'none',
-    borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-    backgroundColor: ' hsl(var(--solitaire-primary))',
-    borderRadius: 'none',
-    padding: '2.5px',
-    // borderBottom: '1px solid hsl(var(--solitaire-quaternary))',
-    outline: '1px solid hsl(var(--solitaire-primary))',
-    width: '100%',
-    ':hover': {
-      border: 'none',
-      borderBottom: '1px solid hsl(var(--solitaire-quaternary))'
-    }
-  }),
-  singleValue: styles => ({
-    ...styles,
-    color: 'hsl(var(--solitaire-tertiary))'
-  }),
-  indicatorSeparator: styles => ({
-    ...styles,
-    display: 'none'
-  }),
-  placeholder: styles => ({
-    ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
-    border: 'none'
-  }),
-  menuList: styles => ({
-    ...styles,
-    backgroundColor: 'hsl(var(--solitaire-denary))',
-    minHeight: '23vh',
-    height: '23vh'
-  }),
-  option: styles => {
-    return {
-      ...styles,
-      backgroundColor: 'hsl(var(--solitaire-denary))',
-      minHeight: '5.5vh',
-      height: '5.5vh',
-      color: 'hsl(var(--solitaire-tertiary))',
-      ':active': {
-        ...styles[':active'],
-        border: 'none',
-        backgroundColor: 'hsl(var(--solitaire-denary))'
-      },
-      ':hover': {
-        backgroundColor: 'hsl(var(--solitaire-secondary))',
-        border: 'none',
-        color: 'hsl(var(--solitaire-tertiary))'
-      }
-    };
-  },
-  multiValue: styles => {
-    return {
-      ...styles,
-      backgroundColor: 'hsl(var(--solitaire-primary))'
-    };
-  },
-  multiValueLabel: styles => ({
-    ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
-    backgroundColor: 'hsl(var(--solitaire-primary))'
-  }),
-  multiValueRemove: styles => ({
-    ...styles,
-    color: 'hsl(var(--solitaire-tertiary))',
-    ':hover': {
-      backgroundColor: 'hsl(var(--solitaire-primary))',
-      color: 'hsl(var(--solitaire-tertiary))'
-    }
-  })
-};
-
-export const countryCodeSelectStyle = (error: any, isDisabled?: boolean) => {
+export const colourStyles = (error: any, isDisabled?: boolean) => {
   return {
-    control: (styles: any) => ({
+    control: (styles: any, state: { menuIsOpen: boolean }) => ({
       ...styles,
       color: 'hsl(var(--solitaire-tertiary))',
-      border: 'none',
-      borderBottom: error.length
-        ? '1px solid hsl(var(--solitaire-error))'
-        : isDisabled
-        ? '1px solid hsl(var(--solitaire-denary))'
-        : '1px solid hsl(var(--solitaire-quaternary))',
-      backgroundColor: 'hsl(var(--solitaire-primary))',
-      borderRadius: 'none',
-      padding: '2.5px',
-      outline: '1px solid hsl(var(--solitaire-primary))',
-      cursor: isDisabled ? 'not-allowed' : 'default', // Change cursor to "not allowed" if isDisabled is true
-      opacity: isDisabled && 0.6,
-      width: '100%',
-      ':hover': {
-        border: 'none',
-        borderBottom: error.length
-          ? '1px solid hsl(var(--solitaire-error))'
-          : '1px solid hsl(var(--solitaire-quaternary))'
+
+      backgroundColor: 'var(--neutral-0)',
+      borderRadius: '4px 0px 0px 4px',
+      // border: 'none',
+      border: error.length
+        ? '1px solid var(--danger-main)'
+        : '1px solid var(--neutral-200)',
+      borderRight: 'none',
+      // outline: '1px solid var(--neutral-200)',
+      width: '90px',
+      boxShadow: 'var(--input-shadow) inset',
+      // This line disable the blue border
+      '&:hover': {
+        border: '1px solid var(--neutral-200) !important'
       }
-    }),
-    dropdownIndicator: (styles: any) => ({
-      ...styles,
-      color: error.length ? 'hsl(var(--solitaire-error))' : styles.color
+      // ':hover': {
+      //   border: 'none',
+      //   borderBottom: '1px solid var(--neutral-200)'
+      // }
     }),
     singleValue: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))'
-    }),
-    indicatorSeparator: (styles: any) => ({
-      ...styles,
-      display: 'none'
+      color: 'var(--neutral-900)'
     }),
     placeholder: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
+      color: 'var(--neutral-900)',
       border: 'none'
     }),
     menuList: (styles: any) => ({
       ...styles,
-      backgroundColor: 'hsl(var(--solitaire-denary))',
-      minHeight: '23vh',
-      height: '23vh'
+      backgroundColor: 'var(--neutral-0)',
+      minHeight: '10vh',
+      height: '17vh'
     }),
-    option: (styles: any) => {
+    option: (styles: { [x: string]: any }) => {
       return {
         ...styles,
-        backgroundColor: 'hsl(var(--solitaire-denary))',
-        minHeight: '5.5vh',
-        height: '5.5vh',
-        color: 'hsl(var(--solitaire-tertiary))',
+        backgroundColor: 'var(--neutral-0)',
+        color: 'var(--neutral-900)',
         ':active': {
           ...styles[':active'],
           border: 'none',
-          backgroundColor: 'hsl(var(--solitaire-denary))'
+          backgroundColor: 'var(--neutral-0)'
         },
         ':hover': {
-          backgroundColor: 'hsl(var(--solitaire-secondary))',
+          backgroundColor: 'var(--neutral-50)',
           border: 'none',
-          color: 'hsl(var(--solitaire-tertiary))'
+          color: 'var(--neutral-900)'
         }
       };
     },
     multiValue: (styles: any) => {
       return {
         ...styles,
-        backgroundColor: 'hsl(var(--solitaire-primary))'
+        backgroundColor: 'var(--neutral-0)',
+        color: 'var(--neutral-900)',
+        border: '1px solid var(--neutral-200)',
+        borderRadius: '6px'
       };
     },
     multiValueLabel: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
-      backgroundColor: 'hsl(var(--solitaire-primary))'
+      color: 'var(--neutral-900)',
+      backgroundColor: 'var(--neutral-0)'
     }),
     multiValueRemove: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
+      color: 'var(--neutral-900)',
       ':hover': {
-        backgroundColor: 'hsl(var(--solitaire-primary))',
-        color: 'hsl(var(--solitaire-tertiary))'
+        backgroundColor: 'var(--neutral-200)',
+        color: 'var(--neutral-900)'
       }
     })
   };
