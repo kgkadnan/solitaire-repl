@@ -1,13 +1,6 @@
-import { StylesConfig } from 'react-select';
-
-interface IColourOption {
-  readonly value: string;
-  readonly label: string;
-}
-
-export const colourStyles = (error: any, isDisabled?: boolean) => {
+export const colourStyles = (error: any) => {
   return {
-    control: (styles: any, state: { menuIsOpen: boolean }) => ({
+    control: (styles: any) => ({
       ...styles,
       color: 'hsl(var(--solitaire-tertiary))',
 

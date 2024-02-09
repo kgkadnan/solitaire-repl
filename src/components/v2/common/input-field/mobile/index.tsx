@@ -1,7 +1,7 @@
 import React from 'react';
 import { InputField } from '..';
 import { IInputFieldProps } from '../interface';
-import Select, { SingleValue } from 'react-select';
+import Select from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
 
