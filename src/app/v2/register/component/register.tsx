@@ -174,7 +174,7 @@ const RegisterComponent = ({
           }
           variant={'primary'}
           size={'custom'}
-          className="rounded-[4px]"
+          className="rounded-[4px] w-[100%]"
         >
           {ManageLocales('app.register')}
         </IndividualActionButton>

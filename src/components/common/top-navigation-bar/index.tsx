@@ -316,7 +316,7 @@ export const TopNavigationBar = () => {
                             dispatch,
                             handleRoute,
                             label: ManageLocales('app.topNav.myAccount'),
-                            link: topNavData[3].link,
+                            link: '/my-account/kyc',
                             styles,
                             currentRoute
                           });
@@ -359,7 +359,7 @@ export const TopNavigationBar = () => {
                                 dispatch,
                                 handleRoute,
                                 label: ManageLocales('app.topNav.myAccount'),
-                                link: topNavData[3].link,
+                                link: '/my-account/kyc',
                                 styles,
                                 currentRoute
                               });
