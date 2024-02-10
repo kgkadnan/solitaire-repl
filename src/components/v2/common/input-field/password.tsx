@@ -6,6 +6,7 @@ import Eye from '@public/v2/assets/icons/eye.svg?url';
 import PasswordSuccess from '@public/v2/assets/icons/password/password-success.svg?url';
 import PasswordFail from '@public/v2/assets/icons/password/password-fail.svg?url';
 import PasswordDefault from '@public/v2/assets/icons/password/password-default.svg?url'; // Default check icon, replace with your icon
+import { PASSWORD_NOT_MATCH } from '@/constants/error-messages/register';
 
 type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
 interface IPasswordProps extends IPasswordInputProps {
@@ -114,6 +115,7 @@ export const PasswordField = ({
       </div>
       <div className="mt-2">
         {!isConfirmPassword ? (
+          errorText !== PASSWORD_NOT_MATCH &&
           Object.entries(passwordRules).map(([rule, isValid]) => (
             <div key={rule} className="flex items-center">
               {renderIcon(isValid)}

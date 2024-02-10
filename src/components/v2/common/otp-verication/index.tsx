@@ -3,14 +3,12 @@ import Image from 'next/image';
 import React, { useEffect } from 'react';
 import Edit from '@public/v2/assets/icons/edit-number.svg?url';
 import { ManageLocales } from '@/utils/translate';
-import OtpInput from '@/components/common/otp-verification';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
-import { handleGoBack } from './helpers/handle-go-back';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
 import { handleResendOTP } from './helpers/handle-resend-otp';
 import { IToken } from '@/app/register/page';
-import { IndividualActionButton } from '../v2/common/action-button/individual-button';
+import { IndividualActionButton } from '../action-button/individual-button';
+import OtpInput from '../otp';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -99,7 +97,7 @@ const OTPVerification = ({
           <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-20' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral-200' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0

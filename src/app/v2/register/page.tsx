@@ -1,13 +1,10 @@
 'use client';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import UserAuthenticationLayout from '@/components/common/user-authentication-layout';
 import React, { useEffect, useState } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { useRegisterMutation } from '@/features/api/register';
-import { CustomDialog } from '@/components/common/dialog';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
-import OTPVerification from '@/components/otp-verication';
 import RegisterComponent from './component/register';
 import { FloatingLabelInput } from '@/components/common/floating-input';
 import {
@@ -24,15 +21,15 @@ import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-
 import { handleOTPSelectChange } from '@/components/otp-verication/helpers/handle-otp-select-change';
 import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { useRegisterStateManagement } from './hooks/register-state-management';
-import {
-  initialOTPFormState,
-  useOtpVerificationStateManagement
-} from '@/components/otp-verication/hooks/otp-verification-state-management';
 import ConfirmScreen from '@/components/common/confirmation-screen';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { countryCodeSelectStyle } from '@/app/my-account/kyc/styles/country-code-select-style';
 import { computeCountryDropdownField } from '@/app/my-account/kyc/helper/compute-country-dropdown';
 import countryCode from '../../../constants/country-code.json';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
+import OTPVerification from '@/components/v2/common/otp-verication';
+import { initialOTPFormState, useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -73,7 +70,7 @@ const Register = () => {
   } = otpVerificationSetState;
 
   //common states
-  const [currentState, setCurrentState] = useState('register');
+  const [currentState, setCurrentState] = useState('OTPVerification');
   const [role, setRole] = useState('');
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -273,12 +270,15 @@ const Register = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      <CustomDialog
+      <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <UserAuthenticationLayout formData={renderContent()} />
+      <UserAuthenticationLayout
+        formData={renderContent()}
+        screen={currentState}
+      />
     </>
   );
 };
