@@ -1,16 +1,15 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
-import Edit from '@public/v2/assets/icons/edit-number.svg?url';
+import { CustomInputlabel } from '@/components/common/input-label';
 import { ManageLocales } from '@/utils/translate';
 import OtpInput from '@/components/common/otp-verification';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
-import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
+import KGKlogo from '@public/assets/icons/vector.svg';
 import { handleGoBack } from './helpers/handle-go-back';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
 import { handleResendOTP } from './helpers/handle-resend-otp';
 import { IToken } from '@/app/register/page';
-import { IndividualActionButton } from '../v2/common/action-button/individual-button';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -68,80 +67,97 @@ const OTPVerification = ({
     return () => clearInterval(countdownInterval);
   }, [resendTimer]);
   return (
-    <div className="flex  items-center">
-      <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200">
-        <div className="flex flex-col items-center">
-          <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
-        </div>
-
-        <div className="parent relative">
-          <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
-        </div>
-        <div className="text-headingM text-neutral-900 font-medium text-left">
-          {ManageLocales('app.OTPVerification')}
-        </div>
-
-        <div className="flex ">
-          <p className="text-neutral-900">
+    <div className="flex justify-center gap-5 flex-col w-[500px]">
+      <div className="flex flex-col gap-[5px] mb-[20px] items-center">
+        <Image src={KGKlogo} alt="KGKlogo" width={60} height={60} />
+        <CustomInputlabel
+          htmlfor={''}
+          label={ManageLocales('app.OTPVerification')}
+          overriddenStyles={{
+            label: 'text-solitaireQuaternary text-[40px] font-semibold'
+          }}
+        />
+      </div>
+      <div className="flex flex-col justify-between gap-5">
+        <div className="flex gap-2 items-center justify-center">
+          <p className="text-solitaireTertiary">
             OTP has been sent to {otpVerificationFormState.codeAndNumber}
           </p>
-          <div
+          <button
             onClick={() => setIsInputDialogOpen(true)}
-            className="font-bold pl-1"
+            className="font-bold"
           >
-            <Edit />
-          </div>
+            (Edit)
+          </button>
         </div>
 
         <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
 
-        <div className="flex ">
-          <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
-          <p
-            className={`${
-              resendTimer > 0 ? 'text-neutral-20' : 'text-infoMain'
-            } cursor-pointer`}
-            onClick={() =>
-              resendTimer > 0
-                ? {}
-                : handleResendOTP({
-                    otpVerificationFormState,
-                    setResendTimer,
-                    sendOtp,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    setToken
-                  })
-            }
-          >
-            {ManageLocales('app.OTPVerification.resend')} {resendLabel}
-          </p>
-        </div>
+        <div className="flex justify-center gap-3 items-center">
+          <p className="text-solitaireTertiary">Haven’t received any OTP ?</p>
 
-        <IndividualActionButton
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px]"
-          onClick={() =>
-            handleVerifyOtp({
-              otpValues,
-              setCurrentState,
-              token,
-              userLoggedIn,
-              setIsDialogOpen,
-              setDialogContent,
-              verifyOTP,
-              role,
-              setToken
-            })
-          }
-        >
-          {' '}
-          {ManageLocales('app.OTPVerification.verify')}
-        </IndividualActionButton>
+          <CustomDisplayButton
+            displayButtonLabel={`${ManageLocales(
+              'app.OTPVerification.resend'
+            )} ${resendLabel}`}
+            displayButtonAllStyle={{
+              displayLabelStyle: 'text-[14px] font-medium'
+            }}
+            isDisable={resendTimer > 0}
+            handleClick={() => {
+              handleResendOTP({
+                otpVerificationFormState,
+                setResendTimer,
+                sendOtp,
+                setIsDialogOpen,
+                setDialogContent,
+                setToken
+              });
+            }}
+          />
+        </div>
+      </div>
+      <div className="mt-10">
+        <div className="flex flex-col gap-3">
+          {/* Button to trigger the register action */}
+
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.goBack')}
+            displayButtonAllStyle={{
+              displayButtonStyle:
+                'bg-transparent  border-[1px] border-solitaireQuaternary w-[500px] h-[54px]',
+              displayLabelStyle:
+                'text-solitaireTertiary text-[16px] font-medium'
+            }}
+            handleClick={() => handleGoBack({ setCurrentState, state })}
+          />
+          <CustomDisplayButton
+            displayButtonLabel={ManageLocales('app.OTPVerification.verify')}
+            displayButtonAllStyle={{
+              displayButtonStyle: 'bg-solitaireQuaternary w-[500px] h-[54px]',
+              displayLabelStyle:
+                'text-solitaireTertiary !text-[16px] font-medium'
+            }}
+            handleClick={() =>
+              handleVerifyOtp({
+                otpValues,
+                setCurrentState,
+                token,
+                userLoggedIn,
+                setIsDialogOpen,
+                setDialogContent,
+                verifyOTP,
+                role,
+                setToken
+              })
+            }
+          />
+        </div>
       </div>
     </div>
   );
 };
 
 export default OTPVerification;
+
+// Define the Login component

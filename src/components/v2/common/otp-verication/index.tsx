@@ -23,7 +23,6 @@ interface IOTPVerification {
   otpValues: string[];
   resendTimer: number;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
-  state: string;
   token: IToken;
   userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -42,7 +41,6 @@ const OTPVerification = ({
   otpValues,
   resendTimer,
   setCurrentState,
-  state,
   token,
   userLoggedIn,
   setIsDialogOpen,

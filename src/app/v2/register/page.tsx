@@ -29,7 +29,10 @@ import countryCode from '../../../constants/country-code.json';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import OTPVerification from '@/components/v2/common/otp-verication';
-import { initialOTPFormState, useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+import {
+  initialOTPFormState,
+  useOtpVerificationStateManagement
+} from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -221,7 +224,6 @@ const Register = () => {
             sendOtp={sendOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
-            state={'register'}
             token={token}
             userLoggedIn={userLoggedIn}
             setIsInputDialogOpen={setIsInputDialogOpen}
