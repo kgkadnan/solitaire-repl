@@ -23,9 +23,8 @@ const LoginComponent = ({
   emailErrorText,
   password,
   passwordErrorText,
-  handleLogin // isError,
-} // errorText
-: any) => {
+  handleLogin
+}: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
 

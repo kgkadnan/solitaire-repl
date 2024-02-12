@@ -163,6 +163,7 @@ const Login = () => {
           <InvalidCreds
             content={INCORRECT_LOGIN_CREDENTIALS}
             handleClick={() => setIsDialogOpen(false)}
+            header="Login Failed"
           />
         );
       } else if (res.error) {

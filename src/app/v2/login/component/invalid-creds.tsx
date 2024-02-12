@@ -2,34 +2,43 @@
 import Image from 'next/image';
 import React from 'react';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { ManageLocales } from '@/utils/v2/translate';
 
 interface IInvalidCredsProps {
   content: React.ReactNode;
   handleClick?: () => void;
+  header?: string;
 }
 
 const InvalidCreds: React.FC<IInvalidCredsProps> = ({
   content,
-  handleClick
+  handleClick,
+  header
 }) => {
   return (
     <div className="flex gap-[12px] flex-col items-center">
-      <Image src={errorIcon} alt="errorIcon" />
-
-      <div className="text-[16px] text-solitaireTertiary">
-        <p>{content}</p>
+      <div className="absolute left-[-84px] top-[-84px]">
+        <Image src={errorIcon} alt="errorIcon" />
       </div>
-      {handleClick && (
-        <CustomDisplayButton
-          displayButtonAllStyle={{
-            displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[36px]',
-            displayLabelStyle: 'text-solitaireTertiary text-[16px] font-medium'
-          }}
-          displayButtonLabel="Okay!"
-          handleClick={handleClick}
-        />
-      )}
+      <div className="flex gap-[12px] flex-col mt-[80px]">
+        {header && (
+          <p className="text-headingS text-neutral-900 font-medium">{header}</p>
+        )}
+        <div className="text-mRegular text-neutral-600">
+          <p>{content}</p>
+        </div>
+        {handleClick && (
+          <IndividualActionButton
+            onClick={handleClick}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%]"
+          >
+            {ManageLocales('app.modal.editSelection')}
+          </IndividualActionButton>
+        )}
+      </div>
     </div>
   );
 };
