@@ -15,13 +15,11 @@ import {
 import Select from 'react-select';
 import { CustomInputDialog } from '@/components/common/input-dialog';
 
-import Link from 'next/link';
 import useUser from '@/lib/use-auth';
 import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
 import { handleOTPSelectChange } from '@/components/otp-verication/helpers/handle-otp-select-change';
 import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { useRegisterStateManagement } from './hooks/register-state-management';
-import ConfirmScreen from '@/components/common/confirmation-screen';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { countryCodeSelectStyle } from '@/app/my-account/kyc/styles/country-code-select-style';
 import { computeCountryDropdownField } from '@/app/my-account/kyc/helper/compute-country-dropdown';
@@ -33,6 +31,7 @@ import {
   initialOTPFormState,
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+import ConfirmScreen from './component/confirmation-screen';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -73,7 +72,7 @@ const Register = () => {
   } = otpVerificationSetState;
 
   //common states
-  const [currentState, setCurrentState] = useState('OTPVerification');
+  const [currentState, setCurrentState] = useState('register');
   const [role, setRole] = useState('');
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -237,31 +236,7 @@ const Register = () => {
         );
 
       case 'successfullyCreated':
-        return (
-          <ConfirmScreen
-            buttons={
-              <>
-                <div className="flex flex-col justify-center bg-transparent  border-2 border-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
-                  <Link
-                    href={'/'}
-                    className="text-[16px] font-medium text-solitaireTertiary"
-                  >
-                    {ManageLocales('app.successfullyCreated.exploreWebsite')}
-                  </Link>
-                </div>
-                <div className="flex flex-col justify-center bg-solitaireQuaternary w-[500px] h-[54px] cursor-pointer">
-                  <Link
-                    href={'/my-account/kyc'}
-                    className="text-[16px] font-medium text-solitaireTertiary"
-                  >
-                    {ManageLocales('app.successfullyCreated.finishKYCProcess')}
-                  </Link>
-                </div>
-              </>
-            }
-            message={'Your account has been successfully created!'}
-          />
-        );
+        return <ConfirmScreen />;
     }
   };
 
