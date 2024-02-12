@@ -29,8 +29,8 @@ export const MinMaxInput = ({
             </div>
             <InputField
               type="number"
-              value={type === 'min' ? minValue : maxValue}
               name={type}
+              value={type === 'min' ? minValue : maxValue}
               placeholder={type === 'min' ? minPlaceHolder : maxPlaceHolder}
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{

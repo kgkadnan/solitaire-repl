@@ -6,10 +6,12 @@ export interface IInputStyles {
 }
 
 export interface IInputFieldProps {
-  styles?: IInputStyles;
   type: string;
-  value?: string | number;
   name: string;
+  value: string | number;
+  label?: string;
+  errorText?: string;
+  styles?: IInputStyles;
   placeholder?: string;
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   disabled?: boolean;
