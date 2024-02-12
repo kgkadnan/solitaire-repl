@@ -3,8 +3,8 @@
   "app.advanceSearch.cancel": "Cancel",
   "app.advanceSearch.reset": "Reset",
   "app.advanceSearch.saveSearch": "Save Search",
-  "app.advanceSearch.savedSearch.input.header" : "Save search parameters",
-  "app.advanceSearch.savedSearch.input.content" : "Great news! You can save your current search parameters for quick access later. This will help you pick up right where you left off. Give your saved search a name and click 'Save' to keep things organized.",
+  "app.advanceSearch.savedSearch.input.header": "Save search parameters",
+  "app.advanceSearch.savedSearch.input.content": "Great news! You can save your current search parameters for quick access later. This will help you pick up right where you left off. Give your saved search a name and click 'Save' to keep things organized.",
 
   "app.sideNavigationBar.search": "Search",
   "app.sideNavigationBar.dashboard": "Dashboard",
@@ -42,8 +42,8 @@
   "app.modal.no": "No",
   "app.modal.continue": "Continue",
   "app.modal.editSelection": "Edit Selection",
-  "app.modal.cancel" : "Cancel",
-  "app.modal.manageTabs" : "Manage Tabs",
+  "app.modal.cancel": "Cancel",
+  "app.modal.manageTabs": "Manage Tabs",
   "app.modal.save": "Save",
 
   "app.myCart.mycart": "My Cart",
