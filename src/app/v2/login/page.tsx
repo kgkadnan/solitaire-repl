@@ -5,10 +5,8 @@ import {
   useVerifyLoginMutation
 } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
-import Select from 'react-select';
 import useUser from '@/lib/use-auth';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
-import ErrorModel from '@/components/common/error-model';
 import {
   ENTER_PASSWORD,
   INCORRECT_LOGIN_CREDENTIALS,
@@ -66,8 +64,6 @@ const Login = () => {
   );
   const [verifyLogin] = useVerifyLoginMutation();
 
-  const [isError, setIsError] = useState(false);
-  const [errorText, setErrorText] = useState<string>('');
   const [emailErrorText, setEmailErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -88,8 +84,8 @@ const Login = () => {
   const {
     otpValues,
     resendTimer,
-    otpVerificationFormState,
-    otpVerificationFormErrors
+    otpVerificationFormState
+    // otpVerificationFormErrors
   } = otpVericationState;
   const {
     setOtpValues,
@@ -298,10 +294,10 @@ const Login = () => {
             setPhoneNumber={setPhoneNumber}
             isPhoneNumberValid={isPhoneNumberValid}
             setEmailErrorText={setEmailErrorText}
-            setErrorText={setErrorText}
+            // setErrorText={setErrorText}
             setPasswordErrorText={setPasswordErrorText}
             setPassword={setPassword}
-            setIsError={setIsError}
+            // setIsError={setIsError}
             handleKeyDown={handleKeyDown}
             phoneNumber={phoneNumber}
             emailErrorText={emailErrorText}
