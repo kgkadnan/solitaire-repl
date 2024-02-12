@@ -7,7 +7,6 @@ import {
 import { useRouter } from 'next/navigation';
 import Select from 'react-select';
 import useUser from '@/lib/use-auth';
-import { isEmailValid } from '@/utils/validate-email';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import ErrorModel from '@/components/common/error-model';
 import {
@@ -23,22 +22,21 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/otp-verication/hooks/otp-verification-state-management';
 import { ManageLocales } from '@/utils/translate';
-import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
 import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { CustomInputDialog } from '@/components/common/input-dialog';
-import { FloatingLabelInput } from '@/components/common/floating-input';
 import {
   useSendOtpMutation,
   useVerifyOTPMutation,
   useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
-import Link from 'next/link';
 import { statusCode } from '@/constants/enums/status-code';
 import { IAuthDataResponse } from './interface';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import ConfirmScreen from '../register/component/confirmation-screen';
+import { isPhoneNumberValid } from '@/utils/validate-phone';
+import InvalidCreds from './component/invalid-creds';
 
 export interface IToken {
   token: string;
@@ -55,7 +53,10 @@ const initialTokenState = {
 // Define the Login component
 const Login = () => {
   // State variables for email, password, and error handling
-  const [emailAndNumber, setEmailAndNumber] = useState<string>('');
+  const [phoneNumber, setPhoneNumber] = useState<{
+    country_code: string;
+    mobileNumber: string;
+  }>({ country_code: '91', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
 
   const [token, setToken] = useState(initialTokenState);
@@ -136,7 +137,7 @@ const Login = () => {
           .catch(_e => {
             setIsDialogOpen(true);
             setDialogContent(
-              <ErrorModel
+              <InvalidCreds
                 content={_e.data.message}
                 handleClick={() => setIsDialogOpen(false)}
               />
@@ -151,18 +152,19 @@ const Login = () => {
       !emailErrorText.length &&
       !passwordErrorText.length &&
       password.length &&
-      emailAndNumber.length
+      phoneNumber.mobileNumber.length
     ) {
       let res: any = await verifyLogin({
-        email: emailAndNumber,
-        password: password
+        phone: phoneNumber.mobileNumber,
+        password: password,
+        country_code: phoneNumber.country_code
       });
 
       if (res?.error?.status === statusCode.UNAUTHORIZED) {
         // Display error message if login fails
         setIsDialogOpen(true);
         setDialogContent(
-          <ErrorModel
+          <InvalidCreds
             content={INCORRECT_LOGIN_CREDENTIALS}
             handleClick={() => setIsDialogOpen(false)}
           />
@@ -170,7 +172,7 @@ const Login = () => {
       } else if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
-          <ErrorModel
+          <InvalidCreds
             content={res.error.data.message}
             handleClick={() => setIsDialogOpen(false)}
           />
@@ -182,12 +184,12 @@ const Login = () => {
           tempToken: res.data.access_token
         }));
       }
-    } else if (!password.length && !emailAndNumber.length) {
+    } else if (!password.length && !phoneNumber.mobileNumber.length) {
       setPasswordErrorText(ENTER_PASSWORD);
       setEmailErrorText(INVALID_EMAIL_FORMAT);
     } else if (!password.length) {
       setPasswordErrorText(ENTER_PASSWORD);
-    } else if (!emailAndNumber.length) {
+    } else if (!phoneNumber.mobileNumber.length) {
       setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
@@ -293,21 +295,21 @@ const Login = () => {
       case 'login':
         return (
           <LoginComponent
-            setEmailAndNumber={setEmailAndNumber}
-            isEmailValid={isEmailValid}
+            setPhoneNumber={setPhoneNumber}
+            isPhoneNumberValid={isPhoneNumberValid}
             setEmailErrorText={setEmailErrorText}
             setErrorText={setErrorText}
             setPasswordErrorText={setPasswordErrorText}
             setPassword={setPassword}
             setIsError={setIsError}
             handleKeyDown={handleKeyDown}
-            emailAndNumber={emailAndNumber}
+            phoneNumber={phoneNumber}
             emailErrorText={emailErrorText}
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
-            isError={isError}
-            errorText={errorText}
+            // isError={isError}
+            // errorText={errorText}
           />
         );
       case 'otpVerification':
@@ -332,10 +334,7 @@ const Login = () => {
           />
         );
       case 'successfullyCreated':
-        return (
-          <ConfirmScreen
-             />
-        );
+        return <ConfirmScreen />;
     }
   };
 
@@ -352,7 +351,10 @@ const Login = () => {
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
-      <UserAuthenticationLayout formData={renderLoginContent()} screen={currentState}/>
+      <UserAuthenticationLayout
+        formData={renderLoginContent()}
+        screen={currentState}
+      />
     </>
   );
 };

@@ -1,16 +1,10 @@
-// Function to validate phone number format
-// const isPhoneNumberValid = (number: string) => {
-//   const phoneRegex = PHONE_REGEX;
-//   return phoneRegex.test(number);
-// };
-
-import { INVALID_EMAIL_FORMAT } from '@/constants/error-messages/register';
+import { INVALID_PHONE } from '@/constants/error-messages/register';
 
 export const handleLoginInputChange = ({
   event,
   type,
-  setEmailAndNumber,
-  isEmailValid,
+  setPhoneNumber,
+  isPhoneNumberValid,
   setEmailErrorText,
   setErrorText,
   setPasswordErrorText,
@@ -19,15 +13,18 @@ export const handleLoginInputChange = ({
 }: any) => {
   const inputValue = event.target.value;
 
-  if (type === 'email') {
-    setEmailAndNumber(inputValue);
+  if (type === 'phone') {
+    console.log(inputValue, 'sdas');
+    setPhoneNumber((prev: any) => ({ ...prev, mobileNumber: inputValue }));
+
+    // setPhoneNumber(inputValue);
 
     // if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
-    if (isEmailValid(inputValue)) {
+    if (isPhoneNumberValid(inputValue)) {
       setEmailErrorText('');
       setErrorText('');
     } else {
-      setEmailErrorText(INVALID_EMAIL_FORMAT);
+      setEmailErrorText(INVALID_PHONE);
       setErrorText('');
     }
   } else if (type === 'password') {
