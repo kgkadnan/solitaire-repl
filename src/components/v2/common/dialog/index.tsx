@@ -22,7 +22,7 @@ export const DialogComponent: React.FC<IDialog> = ({
   return (
     <Dialog open={isOpens} onOpenChange={onclose} defaultOpen={false}>
       <DialogContent
-        className={`max-w-[400px] h-[222px] bg-neutral25 flex flex-col justify-center  !rounded-[8px] p-[24px] ${dialogStyle?.dialogContent}`}
+        className={`max-w-[400px] min-h-[222px] bg-neutral25 flex flex-col justify-center  !rounded-[8px] p-[24px] ${dialogStyle?.dialogContent}`}
       >
         {dialogContent}
       </DialogContent>

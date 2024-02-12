@@ -17,7 +17,8 @@ export const colourStyles = (error: any) => {
       // This line disable the blue border
       '&:hover': {
         border: '1px solid var(--neutral-200) !important'
-      }
+      },
+      height: '39px'
       // ':hover': {
       //   border: 'none',
       //   borderBottom: '1px solid var(--neutral-200)'
@@ -30,7 +31,8 @@ export const colourStyles = (error: any) => {
     placeholder: (styles: any) => ({
       ...styles,
       color: 'var(--neutral-900)',
-      border: 'none'
+      border: 'none',
+      height: '38px'
     }),
     menuList: (styles: any) => ({
       ...styles,
