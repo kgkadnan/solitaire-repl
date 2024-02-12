@@ -9,6 +9,8 @@ export const useDataTableStateManagement = () => {
 
   const [activeTab, setActiveTab] = useState('');
 
+  const [storedSelection, setStoredSelection] = useState([]);
+
   const [diamondDetailImageUrl, setDiamondDetailImageUrl] = useState('');
   const [diamondDetailIframeUrl, setDiamondDetailIframeUrl] = useState('');
   return {
@@ -18,7 +20,8 @@ export const useDataTableStateManagement = () => {
       sliderData,
       activeTab,
       diamondDetailImageUrl,
-      diamondDetailIframeUrl
+      diamondDetailIframeUrl,
+      storedSelection
     },
     dataTableSetState: {
       setRows,
@@ -26,7 +29,8 @@ export const useDataTableStateManagement = () => {
       setSliderData,
       setActiveTab,
       setDiamondDetailImageUrl,
-      setDiamondDetailIframeUrl
+      setDiamondDetailIframeUrl,
+      setStoredSelection
     }
   };
 };

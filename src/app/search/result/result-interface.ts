@@ -285,6 +285,14 @@ export interface IProduct {
   }[];
 }
 
+export interface IProductItem {
+  count: number;
+  limit: number;
+  offset: number;
+  product: IProduct;
+  search_id: string;
+}
+
 export interface IYourSelection {
   saveSearchName: string;
   isSavedSearch: boolean;
