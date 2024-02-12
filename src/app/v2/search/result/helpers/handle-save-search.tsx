@@ -29,7 +29,6 @@ export const handleSaveSearch = async ({
 }: IHandleSaveSearch) => {
   // Retrieve the array from localStorage
   const searchData = localStorage.getItem('Search');
-  console.log('Data', data);
 
   if (searchData !== null) {
     const parseData = JSON.parse(searchData) || [];

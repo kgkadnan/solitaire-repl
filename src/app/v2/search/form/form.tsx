@@ -490,7 +490,6 @@ const Form = ({
           updateSavedSearch(updateSaveSearchData)
             .unwrap()
             .then(() => {
-              console.log('hererere');
               handleFormSearch(true);
             })
             .catch((error: any) => {
@@ -567,7 +566,6 @@ const Form = ({
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           if (activeTab !== undefined) {
-            console.log('addSearches', addSearches, activeTab);
             const isSearchName: number =
               addSearches[activeTab - 1]?.saveSearchName.length;
 

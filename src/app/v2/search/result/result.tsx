@@ -220,7 +220,6 @@ const Result = ({
       if (activeTab <= 0) return;
 
       const selections = JSON.parse(storedSelection);
-      console.log('selection', selections);
 
       const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
 
