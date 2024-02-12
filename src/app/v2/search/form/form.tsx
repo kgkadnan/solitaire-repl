@@ -34,18 +34,27 @@ import {
   EXCEEDS_LIIMITS,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
-  SOMETHING_WENT_WRONG
+  SOMETHING_WENT_WRONG,
+  TITLE_ALREADY_EXISTS
 } from '@/constants/error-messages/form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
 import logger from 'logging/log-util';
-import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation
+} from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
+import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
+import { InputField } from '@/components/v2/common/input-field';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -94,6 +103,7 @@ const Form = ({
 
   // const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   const {
     caratMax,
@@ -161,9 +171,17 @@ const Form = ({
     setValidationError,
     validationError,
     saveSearchName,
+    setSaveSearchName,
+    setInputError,
+    inputError,
     addSearches,
     setAddSearches
   } = useValidationStateManagement();
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isInputDialogOpen } = modalState;
+
+  const { setIsInputDialogOpen } = modalSetState;
 
   // const { errorState, errorSetState } = useNumericFieldValidation();
 
@@ -236,6 +254,7 @@ const Form = ({
   // Load saved search data when component mounts
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+    console.log('modifySearchResult', modifySearchResult);
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -306,7 +325,7 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
-                    setIsDialogOpen(false);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
                   },
                   customStyle: 'flex-1'
                 }
@@ -316,26 +335,44 @@ const Form = ({
         </>
       );
       setIsDialogOpen(true);
-      // setIsError(true);
-      // setErrorText(MAX_LIMIT_REACHED);
     } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
       if (
         data?.count < MAX_SEARCH_FORM_COUNT &&
         data?.count > MIN_SEARCH_FORM_COUNT
       ) {
         const queryParams = generateQueryParams(state);
+
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-          if (savedSearch?.savedSearch?.meta_data[savedSearch.activeTab]) {
-            const updatedMeta = [...savedSearch.savedSearch.meta_data];
-            updatedMeta[savedSearch.activeTab] = queryParams;
-            let data = {
+          if (savedSearch?.savedSearch?.meta_data) {
+            let updatedMeta = queryParams;
+
+            let updateSavedSearchData = {
               id: savedSearch.savedSearch.id,
-              meta_data: updatedMeta
+              meta_data: updatedMeta,
+              diamond_count: parseInt(data?.count)
             };
-            updateSavedSearch(data);
+
+            updateSavedSearch(updateSavedSearchData).then(() => {
+              let setDataOnLocalStorage = {
+                id: savedSearch?.savedSearch.id,
+                saveSearchName: savedSearch?.savedSearch?.name,
+                searchId: data?.search_id,
+                isSavedSearch: true,
+                queryParams
+              };
+
+              localStorage.setItem(
+                'Search',
+                JSON.stringify([...addSearches, setDataOnLocalStorage])
+              );
+              router.push(
+                `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                  JSON.parse(localStorage.getItem('Search')!).length
+                }`
+              );
+            });
           }
-        }
-        if (modifySearchFrom === `${SubRoutes.RESULT}`) {
+        } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
             id: modifySearchResult[activeTab - 1]?.id,
@@ -379,6 +416,108 @@ const Form = ({
     }
   };
 
+  // Function: Save and search
+  const handleSaveAndSearch: any = async () => {
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
+      modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
+    ) {
+      setDialogContent(
+        <>
+          {' '}
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={warningIcon} alt="warningIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">
+                {' '}
+                {ManageLocales('app.search.confirmHeader')}
+              </h1>
+              <p className="text-neutral600 text-mRegular">
+                {ManageLocales('app.search.maxLimit')}
+              </p>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.search.manageLimit'),
+                  handler: () => {
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
+                  },
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          </div>
+        </>
+      );
+      setIsDialogOpen(true);
+    } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+      if (
+        data?.count < MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
+        const queryParams = generateQueryParams(state);
+
+        const activeSearch: number =
+          addSearches[activeTab]?.saveSearchName.length;
+
+        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+          if (savedSearch?.savedSearch?.meta_data) {
+            let updatedMeta = queryParams;
+            let updateSavedData = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta,
+              diamond_count: parseInt(data?.count)
+            };
+            updateSavedSearch(updateSavedData);
+            router.push(
+              `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
+            );
+          }
+        } else if (activeSearch) {
+          const updatedMeta = addSearches;
+          updatedMeta[activeTab].queryParams = queryParams;
+          let updateSaveSearchData = {
+            id: updatedMeta[activeTab].id,
+            meta_data: updatedMeta[activeTab].queryParams,
+            diamond_count: parseInt(data?.count)
+          };
+          updateSavedSearch(updateSaveSearchData)
+            .unwrap()
+            .then(() => {
+              handleFormSearch(true);
+            })
+            .catch((error: any) => {
+              logger.error(error);
+            });
+        } else {
+          await addSavedSearch({
+            name: saveSearchName,
+            diamond_count: parseInt(data?.count),
+            meta_data: queryParams,
+            is_deleted: false
+          })
+            .unwrap()
+            .then((res: any) => {
+              handleFormSearch(true, res.id);
+            })
+            .catch((error: any) => {
+              logger.error(error);
+              setInputError(TITLE_ALREADY_EXISTS);
+            });
+        }
+      }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_SOME_PARAM);
+    }
+  };
+
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -398,15 +537,8 @@ const Form = ({
       // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
-        if (
-          modifySearchFrom ===
-          `${ManageLocales('app.search.savedSearchesRoute')}`
-        ) {
-          router.push(
-            `/search?active-tab=${ManageLocales(
-              'app.search.savedSearchesRoute'
-            )}`
-          );
+        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+          router.push(`/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
           router.push(
             `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
@@ -414,8 +546,7 @@ const Form = ({
         }
       },
       isHidden:
-        modifySearchFrom !==
-          `${ManageLocales('app.search.savedSearchesRoute')}` &&
+        modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}` &&
         modifySearchFrom !== `${SubRoutes.RESULT}`
     },
     {
@@ -429,7 +560,32 @@ const Form = ({
       variant: 'secondary',
       // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
-      handler: () => {}
+      handler: () => {
+        if (
+          data?.count < MAX_SEARCH_FORM_COUNT &&
+          data?.count > MIN_SEARCH_FORM_COUNT
+        ) {
+          if (activeTab !== undefined) {
+            const isSearchName: number =
+              addSearches[activeTab]?.saveSearchName.length;
+
+            const isSaved: boolean = addSearches[activeTab]?.isSavedSearch;
+            // Check if the active search is not null and isSavedSearch is true
+            if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+              handleSaveAndSearch();
+            } else if (isSaved) {
+              handleSaveAndSearch();
+            } else if (!isSaved && isSearchName) {
+              handleSaveAndSearch();
+            } else {
+              searchUrl && setIsInputDialogOpen(true);
+            }
+          }
+        } else {
+          setIsError(true);
+          setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+        }
+      }
     },
     {
       variant: 'primary',
@@ -439,8 +595,85 @@ const Form = ({
     }
   ];
 
+  const handleInputChange = (e: any) => {
+    setInputError('');
+    setSaveSearchName(e.target.value);
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <>
+        {' '}
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={bookmarkIcon} alt="bookmarkIcon" />
+        </div>
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div>
+            <h1 className="text-headingS text-neutral900">
+              {' '}
+              {ManageLocales('app.advanceSearch.savedSearch.input.header')}
+            </h1>
+            <p className="text-neutral600 text-mRegular">
+              {ManageLocales('app.advanceSearch.savedSearch.input.content')}
+            </p>
+          </div>
+          <div>
+            <InputField
+              type="text"
+              value={saveSearchName}
+              name={'savedSearch'}
+              placeholder={'Search Name'}
+              onChange={handleInputChange}
+              styles={{
+                inputMain: 'w-full',
+                input: `h-full p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
+                ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
+              }}
+            />
+
+            <div className=" text-dangerMain text-sRegular font-regular flex text-left h-[5px]">
+              {inputError ?? ''}
+            </div>
+          </div>
+
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.cancel'),
+                handler: () => {
+                  setSaveSearchName('');
+                  setInputError('');
+                  setIsInputDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.save'),
+                handler: () => {
+                  if (!saveSearchName.length) {
+                    setInputError('Please enter name');
+                  } else {
+                    handleSaveAndSearch();
+                  }
+                },
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </div>
+      </>
+    );
+  };
+
   return (
     <div className="pt-[32px]">
+      <InputDialogComponent
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
+      />
       <div>
         <div className="flex flex-col gap-[16px]">
           <div>

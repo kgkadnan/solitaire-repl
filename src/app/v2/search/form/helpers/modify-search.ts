@@ -70,12 +70,7 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedGirdle
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
-  data?.carat &&
-    setSelectedCaratRange(
-      data?.carat.map(
-        (carat: any) => `${carat?.gte.toFixed(2)}-${carat?.lte.toFixed(2)}`
-      )
-    );
+  data?.carat && setSelectedCaratRange(data?.carat);
   data?.carat && setCaratRangeData;
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);

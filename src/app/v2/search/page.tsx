@@ -200,55 +200,54 @@ const Search = () => {
     }
   };
   return (
-    <>
-      <div>
-        <DialogComponent
-          dialogContent={dialogContent}
-          isOpens={isDialogOpen}
-          setIsOpen={setIsDialogOpen}
+    <div>
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
+
+      {subRoute === SubRoutes.NEW_SEARCH ||
+      editRoute === SubRoutes.SAVED_SEARCH ||
+      editRoute === SubRoutes.RESULT ? (
+        <Form
+          searchUrl={searchUrl}
+          setSearchUrl={setSearchUrl}
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          searchParameters={searchParameters}
+          handleCloseAllTabs={handleCloseAllTabs}
+          handleCloseSpecificTab={handleCloseSpecificTab}
+          state={state}
+          setState={setState}
+          carat={carat}
+          errorState={errorState}
+          errorSetState={errorSetState}
+          setIsDialogOpen={setIsDialogOpen}
+          setDialogContent={setDialogContent}
         />
-        {subRoute === SubRoutes.NEW_SEARCH ||
-        editRoute === SubRoutes.SAVED_SEARCH ||
-        editRoute === SubRoutes.RESULT ? (
-          <Form
-            searchUrl={searchUrl}
-            setSearchUrl={setSearchUrl}
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
-            searchParameters={searchParameters}
-            handleCloseAllTabs={handleCloseAllTabs}
-            handleCloseSpecificTab={handleCloseSpecificTab}
-            state={state}
-            setState={setState}
-            carat={carat}
-            errorState={errorState}
-            errorSetState={errorSetState}
-            setIsDialogOpen={setIsDialogOpen}
-            setDialogContent={setDialogContent}
+      ) : subRoute === SubRoutes.SAVED_SEARCH ? (
+        <SavedSearch />
+      ) : activeTab === -1 ? (
+        <div className="h-screen">
+          {' '}
+          <EmptyScreen
+            label="Page not found"
+            message="Page you are looking for doesnot exists"
+            onClickHandler={() => {}}
+            imageSrc={empty}
           />
-        ) : subRoute === SubRoutes.SAVED_SEARCH ? (
-          <SavedSearch />
-        ) : activeTab === -1 ? (
-          <div className="h-screen">
-            {' '}
-            <EmptyScreen
-              label="Page not found"
-              message="Page you are looking for doesnot exists"
-              onClickHandler={() => {}}
-              imageSrc={empty}
-            />
-          </div>
-        ) : (
-          <Result
-            activeTab={activeTab}
-            searchParameters={searchParameters}
-            setActiveTab={setActiveTab}
-            handleCloseAllTabs={handleCloseAllTabs}
-            handleCloseSpecificTab={handleCloseSpecificTab}
-          />
-        )}
-      </div>
-    </>
+        </div>
+      ) : (
+        <Result
+          activeTab={activeTab}
+          searchParameters={searchParameters}
+          setActiveTab={setActiveTab}
+          handleCloseAllTabs={handleCloseAllTabs}
+          handleCloseSpecificTab={handleCloseSpecificTab}
+        />
+      )}
+    </div>
   );
 };
 

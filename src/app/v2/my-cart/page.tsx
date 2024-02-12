@@ -30,6 +30,7 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
 import {
   RednderLocation,
+  RenderAmount,
   RenderCarat,
   RenderDetails,
   RenderDiscount,
@@ -223,6 +224,8 @@ const MyCart = () => {
               }
             };
 
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
           case 'carat':
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
