@@ -26,7 +26,8 @@ import {
   RenderDetails,
   RenderLab,
   RenderLotId,
-  RednderLocation
+  RednderLocation,
+  RenderAmount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
@@ -140,7 +141,8 @@ const mapColumns = (columns: any) =>
               return indexA - indexB;
             }
           };
-
+        case 'amount':
+          return { ...commonProps, Cell: RenderAmount };
         case 'carat':
           return { ...commonProps, Cell: RenderCarat };
         case 'discount':

@@ -12,7 +12,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
 import { Button } from '@/components/ui/button';
-import { Routes } from '@/constants/v2/enums/routes';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 
 interface ISideNavigationBar {
   src: React.ReactNode;
@@ -37,7 +37,7 @@ const SideNavigationBar = () => {
     {
       src: <SearchIcon />,
       title: ManageLocales('app.sideNavigationBar.search'),
-      link: `${Routes.SEARCH}?active-tab=new-search`,
+      link: `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`,
       isActive: currentRoute === Routes.SEARCH
     },
     {
@@ -49,7 +49,7 @@ const SideNavigationBar = () => {
     {
       src: <BookmarkIcon />,
       title: ManageLocales('app.sideNavigationBar.bookmark'),
-      link: Routes.SAVED_SEARCH,
+      link: `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`,
       isActive: currentRoute === Routes.SAVED_SEARCH
     },
     {

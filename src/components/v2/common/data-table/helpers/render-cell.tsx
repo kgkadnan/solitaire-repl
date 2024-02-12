@@ -94,3 +94,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
 export const RenderCarat = ({ renderedCellValue }: any) => {
   return <span>{`${renderedCellValue && renderedCellValue.toFixed(2)}`}</span>;
 };
+
+export const RenderAmount = ({ row }: any) => {
+  return <span>{`${row.original.variants[0].prices[0].amount}`}</span>;
+};

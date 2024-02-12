@@ -4,6 +4,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Image from 'next/image';
 import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
+import errorIcon from '@public/v2/assets/icons/modal/error.svg';
 
 interface IDeleteSavedSearchHandler {
   selectedCheckboxes: string[];
@@ -41,7 +42,7 @@ export const deleteSavedSearchHandler = ({
     // Check if there are matching data
     if (matchingData.length > 0) {
       // Display error message if any of the selected stones are open in search result tabs
-      setIsError(true);
+
       const searchNames = matchingData.map(
         (items: any) => items.saveSearchName
       );
@@ -61,8 +62,30 @@ export const deleteSavedSearchHandler = ({
             )} is already opened in ${resultPositions.join(
               ', '
             )}. Please close the tab and then try deleting it.`;
-
-      setErrorText(errorMessage);
+      setDialogContent(
+        <>
+          {' '}
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={errorIcon} alt="errorIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">{errorMessage}</h1>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.okay'),
+                  handler: () => setIsDialogOpen(false),
+                  customStyle: 'flex-1'
+                }
+              ]}
+            />
+          </div>
+        </>
+      );
+      setIsDialogOpen(true);
     } else {
       setDialogContent(
         <>

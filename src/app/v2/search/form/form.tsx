@@ -32,6 +32,7 @@ import {
 } from '@/constants/business-logic';
 import {
   EXCEEDS_LIIMITS,
+  MAX_LIMIT_REACHED,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -40,12 +41,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
 import { useAppSelector } from '@/hooks/hook';
 import logger from 'logging/log-util';
-import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useUpdateSavedSearchMutation
+} from '@/features/api/saved-searches';
 import Breadcrum from '@/components/v2/common/search-breadcrum/breadcrum';
-import { SubRoutes } from '@/constants/v2/enums/routes';
+import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
+import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -92,8 +97,10 @@ const Form = ({
     (store: { savedSearch: any }) => store.savedSearch
   );
 
+  console.log('savedSearch', savedSearch);
   // const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
+  let [addSavedSearch] = useAddSavedSearchMutation();
 
   const {
     caratMax,
@@ -332,6 +339,7 @@ const Form = ({
               id: savedSearch.savedSearch.id,
               meta_data: updatedMeta
             };
+            console.log('data', data);
             updateSavedSearch(data);
           }
         }
@@ -379,6 +387,82 @@ const Form = ({
     }
   };
 
+  // Function: Save and search
+  const handleSaveAndSearch: any = async () => {
+    console.log('handleSaveAndSearch', handleSaveAndSearch);
+    if (
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
+        MAX_SEARCH_TAB_LIMIT &&
+      modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
+      modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
+    ) {
+      setIsError(true);
+      setErrorText(MAX_LIMIT_REACHED);
+    } else if (searchUrl && data?.count > MIN_SEARCH_FORM_COUNT) {
+      if (
+        data?.count < MAX_SEARCH_FORM_COUNT &&
+        data?.count > MIN_SEARCH_FORM_COUNT
+      ) {
+        const queryParams = generateQueryParams(state);
+
+        const activeSearch: number =
+          addSearches[activeTab]?.saveSearchName.length;
+
+        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+          if (savedSearch?.savedSearch?.meta_data) {
+            let updatedMeta = savedSearch.savedSearch.meta_data;
+            updatedMeta = queryParams;
+            let updateSavedData = {
+              id: savedSearch.savedSearch.id,
+              meta_data: updatedMeta,
+              diamond_count: parseInt(data?.count)
+            };
+            updateSavedSearch(updateSavedData);
+            router.push(
+              `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
+            );
+          }
+        } else if (activeSearch) {
+          const updatedMeta = addSearches;
+          updatedMeta[activeTab].queryParams = queryParams;
+          let updateSaveSearchData = {
+            id: updatedMeta[activeTab].id,
+            meta_data: updatedMeta[activeTab].queryParams,
+            diamond_count: parseInt(data?.count)
+          };
+          updateSavedSearch(updateSaveSearchData)
+            .unwrap()
+            .then(() => {
+              handleFormSearch(true);
+            })
+            .catch((error: any) => {
+              logger.error(error);
+            });
+        } else {
+          await addSavedSearch({
+            name: saveSearchName,
+            diamond_count: parseInt(data?.count),
+            meta_data: queryParams,
+            is_deleted: false
+          })
+            .unwrap()
+            .then((res: any) => {
+              handleFormSearch(true, res.id);
+            })
+            .catch((error: any) => {
+              logger.error(error);
+              //need to be done
+              // setInputError(true);
+              // setInputErrorContent(TITLE_ALREADY_EXISTS);
+            });
+        }
+      }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_SOME_PARAM);
+    }
+  };
+
   const handleFormReset = () => {
     setSelectedStep('');
     setSelectedShadeContain('');
@@ -398,15 +482,8 @@ const Form = ({
       // svg: arrowIcon,
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
-        if (
-          modifySearchFrom ===
-          `${ManageLocales('app.search.savedSearchesRoute')}`
-        ) {
-          router.push(
-            `/search?active-tab=${ManageLocales(
-              'app.search.savedSearchesRoute'
-            )}`
-          );
+        if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+          router.push(`/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
           router.push(
             `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
@@ -414,8 +491,7 @@ const Form = ({
         }
       },
       isHidden:
-        modifySearchFrom !==
-          `${ManageLocales('app.search.savedSearchesRoute')}` &&
+        modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}` &&
         modifySearchFrom !== `${SubRoutes.RESULT}`
     },
     {
@@ -429,7 +505,47 @@ const Form = ({
       variant: 'secondary',
       // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
-      handler: () => {}
+      handler: () => {
+        if (
+          JSON.parse(localStorage.getItem('Search')!)?.length >=
+            MAX_SEARCH_TAB_LIMIT &&
+          modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
+          modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
+        ) {
+          //need to be done
+          setIsError(true);
+          // setErrorText(MAX_LIMIT_REACHED);
+        } else {
+          if (
+            data?.count < MAX_SEARCH_FORM_COUNT &&
+            data?.count > MIN_SEARCH_FORM_COUNT
+          ) {
+            console.log('handleSaveAndSearch213123');
+            if (activeTab !== undefined) {
+              console.log('activeTab', activeTab);
+              const isSearchName: number =
+                addSearches[activeTab]?.saveSearchName.length;
+              console.log('modifySearchFrom', modifySearchFrom);
+              const isSaved: boolean = addSearches[activeTab]?.isSavedSearch;
+              // Check if the active search is not null and isSavedSearch is true
+              if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+                handleSaveAndSearch();
+              } else if (isSaved) {
+                handleSaveAndSearch();
+              } else if (!isSaved && isSearchName) {
+                handleSaveAndSearch();
+              } else {
+                console.log('handleSaveAndSearchhandleSaveAndSearch');
+                //need to done
+                // searchUrl && setIsInputDialogOpen(true);
+              }
+            }
+          } else {
+            setIsError(true);
+            setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+          }
+        }
+      }
     },
     {
       variant: 'primary',
