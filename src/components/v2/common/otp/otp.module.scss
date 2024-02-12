@@ -1,0 +1,18 @@
+.otpContainer {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.otpInput {
+  background-color: 'neutral0';
+  border-radius: 10px;
+  width: 56px;
+  height: 56px;
+  text-align: center;
+  font-size: 18px;
+  gap: 6px;
+  border: 1px solid var(--neutral-200);
+  box-shadow: var(--input-shadow) inset;
+  color: var(--neutral-900);
+}
