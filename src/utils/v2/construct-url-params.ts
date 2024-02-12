@@ -17,9 +17,12 @@ export function constructUrlParams(data: IQueryData): string {
   ) => {
     if (Array.isArray(nestedData)) {
       nestedData.forEach(item => {
-        for (const subKey in item) {
-          if (subKey in item) {
-            queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
+        if (typeof item === 'object' && item !== null) {
+          // Iterate over the keys of the object
+          for (const subKey in item) {
+            if (Object.prototype.hasOwnProperty.call(item, subKey)) {
+              queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
+            }
           }
         }
       });
