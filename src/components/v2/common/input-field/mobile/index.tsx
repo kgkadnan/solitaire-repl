@@ -49,7 +49,7 @@ export const MobileInput = ({
                 label: registerFormState.countryCode,
                 value: registerFormState.countryCode
               }}
-              closeMenuOnSelect={false}
+              // closeMenuOnSelect={false}
               autoFocus={false}
             />
           </div>

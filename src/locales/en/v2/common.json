@@ -81,5 +81,11 @@
   "app.register.email.placeholder": "Enter email id",
   "app.register.password.placeholder": "Create a secure password",
   "app.register.confirmPassword.placeholder": "Confirm your password",
-  "app.register.mobileNumber.placeholder": "Enter mobile number"
+  "app.register.mobileNumber.placeholder": "Enter mobile number",
+
+  "app.login": "Login",
+  "app.login.forgotPassword": "Forgot Password?",
+  "app.login.newUser": "Don't have an account yet?",
+  "app.login.keepSignedIn": "Keep me signed in",
+  "app.login.password.placeholder": "Enter your password"
 }

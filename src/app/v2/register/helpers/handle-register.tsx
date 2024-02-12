@@ -2,7 +2,7 @@ import { validateAllFields } from './handle-validate-all-fields';
 
 import { IRegister } from '../interface';
 import { IOtp, IToken } from '../page';
-import ErrorModel from '@/components/common/error-model';
+import InvalidCreds from '../../login/component/invalid-creds';
 
 interface IHandleRegister {
   role: string;
@@ -64,7 +64,7 @@ export const handleRegister = async ({
     .catch((e: any) => {
       setIsDialogOpen(true);
       setDialogContent(
-        <ErrorModel
+        <InvalidCreds
           content={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}
         />

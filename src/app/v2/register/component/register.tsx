@@ -180,7 +180,7 @@ const RegisterComponent = ({
         </IndividualActionButton>
         <IndividualActionButton
           onClick={() => {
-            router.push(`login`);
+            router.push(`/v2/login`);
           }}
           className="rounded-[4px] text-neutral-600"
           size={'custom'}
