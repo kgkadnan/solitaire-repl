@@ -17,7 +17,7 @@ const useValidationStateManagement = () => {
   const [errorText, setErrorText] = useState('');
   const [addSearches, setAddSearches] = useState<any[]>([]);
   const [isValidationError, setIsValidationError] = useState<boolean>(false);
-  const [inputError, setInputError] = useState(false);
+  const [inputError, setInputError] = useState('');
   const [inputErrorContent, setInputErrorContent] = useState('');
   const [selectedStep, setSelectedStep] = useState('');
   const [selectedShadeContain, setSelectedShadeContain] = useState('');
