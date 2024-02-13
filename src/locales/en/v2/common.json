@@ -34,6 +34,13 @@
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
   "app.calculatedField.amount": "Total Amount",
 
+  "app.myDiamonds.yourOrders" : "Your Orders",
+  "app.myDiamonds.tabs.pendingInvoice" : "Pending Invoice",
+  "app.myDiamonds.tabs.activeInvoice" : "Active Invoice",
+  "app.myDiamonds.tabs.invoiceHistory" : "Invoice History",
+  "app.myDiamonds.pendingInvoice.searchByOrderId": "Search by Order ID",
+  "app.myDiamonds.activeInvoice.searchByInvoiceId": "Search by Invoice ID",
+
   "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
   "app.modal.okay": "Okay",
