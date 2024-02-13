@@ -13,7 +13,6 @@ import {
   useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
 import Select from 'react-select';
-import { CustomInputDialog } from '@/components/common/input-dialog';
 
 import useUser from '@/lib/use-auth';
 import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
@@ -32,6 +31,7 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import ConfirmScreen from './component/confirmation-screen';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -242,7 +242,7 @@ const Register = () => {
 
   return (
     <>
-      <CustomInputDialog
+      <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}

@@ -17,7 +17,7 @@ export const InputDialogComponent: React.FC<IDialog> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose} defaultOpen={false}>
       <DialogContent
-        className={`max-w-[400px] h-[360px] bg-neutral25 flex flex-col justify-center  !rounded-[8px] p-[24px]  ${dialogStyle}`}
+        className={`max-w-[400px] min-h-[360px] bg-neutral25 flex flex-col justify-center  !rounded-[8px] p-[24px]  ${dialogStyle}`}
       >
         {renderContent()}
       </DialogContent>

@@ -12,14 +12,19 @@ import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
 
+export const isSearchAlreadyExcist = (data: any, nameToFind: string) => {
+  const foundSearch = data.find(
+    (search: any) => search.saveSearchName === nameToFind
+  );
+  return foundSearch ? data.indexOf(foundSearch) : null;
+};
+
 //Handles the click event on a saved search card.
 export const handleCardClick = ({
   id,
   savedSearchData,
   router,
   triggerProductCountApi,
-  setIsError,
-  setErrorText,
   setDialogContent,
   setIsDialogOpen
 }: {
@@ -27,8 +32,6 @@ export const handleCardClick = ({
   savedSearchData: ISavedSearchData[];
   router: any;
   triggerProductCountApi: any;
-  setIsError: React.Dispatch<React.SetStateAction<boolean>>;
-  setErrorText: React.Dispatch<React.SetStateAction<string>>;
   setDialogContent: React.Dispatch<React.SetStateAction<ReactNode>>;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
@@ -52,8 +55,35 @@ export const handleCardClick = ({
       );
       // Check if the product data count exceeds the maximum limit
       if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
-        setIsError(true);
-        setErrorText(MODIFY_SEARCH_STONES_EXCEEDS_LIMIT);
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            {' '}
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={warningIcon} alt="warningIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">
+                  {' '}
+                  {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
+                </h1>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       } else {
         const data: any = JSON.parse(localStorage.getItem('Search')!);
 
@@ -106,23 +136,35 @@ export const handleCardClick = ({
             setIsDialogOpen(true);
           } else {
             // Add the clicked search to local storage and navigate to the search result page
-            const localStorageData = [
-              ...data,
-              {
-                saveSearchName: specificCardData[0].name,
-                isSavedSearch: true,
-                searchId: response?.data?.search_id,
-                queryParams: specificCardData[0].meta_data,
-                id: specificCardData[0].id
-              }
-            ];
-
-            localStorage.setItem('Search', JSON.stringify(localStorageData));
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                data.length + 1
-              }`
+            let isAlreadyOpenIndex = isSearchAlreadyExcist(
+              data,
+              specificCardData[0].name
             );
+            if (isAlreadyOpenIndex) {
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  isAlreadyOpenIndex + 1
+                }`
+              );
+            } else {
+              const localStorageData = [
+                ...data,
+                {
+                  saveSearchName: specificCardData[0].name,
+                  isSavedSearch: true,
+                  searchId: response?.data?.search_id,
+                  queryParams: specificCardData[0].meta_data,
+                  id: specificCardData[0].id
+                }
+              ];
+
+              localStorage.setItem('Search', JSON.stringify(localStorageData));
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  data.length + 1
+                }`
+              );
+            }
           }
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
