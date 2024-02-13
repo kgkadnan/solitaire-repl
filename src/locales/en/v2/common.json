@@ -17,7 +17,7 @@
   "app.result.headerResult": "Here are the relevant results for your search",
   "app.result.headerEdit": "You are editing your",
   "app.search.newSearch": "New Search",
-  "app.search.saveSearch": "Save Search",
+  "app.search.savedSearch": "Saved Search",
   "app.search.resultRoute": "result",
 
   "app.savedSearch.header": "Discover & manage your saved searches",

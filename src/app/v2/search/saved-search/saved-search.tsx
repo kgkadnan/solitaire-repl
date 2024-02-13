@@ -74,9 +74,9 @@ const SavedSearch = () => {
   const { checkboxState, checkboxSetState } = useCheckboxStateManagement();
   const { selectedCheckboxes, selectAllChecked } = checkboxState;
   const { setSelectedCheckboxes, setSelectAllChecked } = checkboxSetState;
-  const { errorSetState } = useErrorStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText } = errorSetState;
-  // const { isError, errorText, messageColor } = errorState;
+  const { isError, errorText } = errorState;
 
   const coloumn = [
     {
@@ -263,8 +263,6 @@ const SavedSearch = () => {
                       savedSearchData: savedSearchState.savedSearchData,
                       router,
                       triggerProductCountApi,
-                      setIsError,
-                      setErrorText,
                       setDialogContent,
                       setIsDialogOpen
                     })
@@ -315,7 +313,19 @@ const SavedSearch = () => {
             }
           )}
         </div>
-        <div className="p-[16px] border-t-[1px] border-neutral200">
+        <div className="p-[16px] flex items-center justify-between border-t-[1px] border-neutral200">
+          <div>
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
+          </div>
           <ActionButton
             actionButtonData={[
               {
