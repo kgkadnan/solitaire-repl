@@ -32,7 +32,6 @@ export const handleResetOTP = ({
     .unwrap()
     .then((res: any) => {
       if (res) {
-        console.log('jyoti', res);
         userLoggedIn(res.access_token);
 
         setCurrentState('resetPassword');
