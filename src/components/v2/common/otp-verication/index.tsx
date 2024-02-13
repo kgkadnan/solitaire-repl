@@ -18,7 +18,7 @@ export interface IOtp {
 
 interface IOTPVerification {
   otpVerificationFormState: IOtp;
-  setIsInputDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsInputDialogOpen?: React.Dispatch<React.SetStateAction<boolean>>;
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   otpValues: string[];
   resendTimer: number;
@@ -77,18 +77,19 @@ const OTPVerification = ({
           {ManageLocales('app.OTPVerification')}
         </div>
 
-        <div className="flex ">
-          <p className="text-neutral-900">
-            OTP has been sent to {otpVerificationFormState.codeAndNumber}
-          </p>
-          <div
-            onClick={() => setIsInputDialogOpen(true)}
-            className="font-bold pl-1"
-          >
-            <Edit />
+        {setIsInputDialogOpen && (
+          <div className="flex ">
+            <p className="text-neutral-900">
+              OTP has been sent to {otpVerificationFormState.codeAndNumber}
+            </p>
+            <div
+              onClick={() => setIsInputDialogOpen(true)}
+              className="font-bold pl-1"
+            >
+              <Edit />
+            </div>
           </div>
-        </div>
-
+        )}
         <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
 
         <div className="flex ">

@@ -1,50 +1,39 @@
 import { IToken } from '@/app/register/page';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 
-interface IHandleVerifyOtp {
+interface IHandleResetOTP {
   otpValues: string[];
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
   userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
-  verifyOTP: any;
-  role: string;
-  setToken?: React.Dispatch<React.SetStateAction<IToken>>;
+  verifyResetOTP: any;
+  phoneNumber?: any;
 }
-export const handleVerifyOtp = ({
+export const handleResetOTP = ({
   otpValues,
   token,
   setCurrentState,
   userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
-  verifyOTP,
-  role,
-  setToken
-}: IHandleVerifyOtp) => {
+  verifyResetOTP,
+  phoneNumber
+}: IHandleResetOTP) => {
   const enteredOtp = otpValues.join('');
 
-  verifyOTP({
-    token: token.phoneToken,
+  verifyResetOTP({
+    token: token,
     otp: enteredOtp,
-    resend_token: token.tempToken
+    phone: phoneNumber.phoneNumber,
+    country_code: phoneNumber.countryCode
   })
     .unwrap()
     .then((res: any) => {
       if (res) {
-        if (role === 'register') {
-          setCurrentState('successfullyCreated');
-          if (setToken)
-            setToken(prev => ({
-              ...prev,
-              token: res.access_token
-            }));
-          userLoggedIn(res.access_token);
-        } else if (role === 'login') {
-          setCurrentState('successfullyCreated');
-          userLoggedIn(res.access_token);
-        }
+        setCurrentState('successfullyCreated');
+        userLoggedIn(res.access_token);
       }
     })
     .catch((e: any) => {
