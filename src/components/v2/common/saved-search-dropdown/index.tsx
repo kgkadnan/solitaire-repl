@@ -9,7 +9,6 @@ interface ISavedSearchDropDownProps {
   handleClose: () => void;
   isOpen: boolean;
   options: any;
-  onInputValueChange: any;
   onDropDwonClick: any;
 }
 
@@ -17,12 +16,11 @@ const SavedSearchDropDown = ({
   handleClose,
   isOpen,
   options,
-  onInputValueChange,
   onDropDwonClick
 }: ISavedSearchDropDownProps) => {
   const computeDropdownFieldFromJson = (fieldData: any) => {
     return fieldData.map((data: any) => {
-      return { value: data, label: data };
+      return { value: data.name, label: data.name };
     });
   };
 
@@ -46,7 +44,6 @@ const SavedSearchDropDown = ({
             />
             <Select
               onChange={onDropDwonClick}
-              onInputChange={onInputValueChange}
               options={computeDropdownFieldFromJson(options)}
               styles={savedSearchDropDownStyle}
               menuIsOpen={true}

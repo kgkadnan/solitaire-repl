@@ -12,6 +12,13 @@ import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
 
+export const isSearchAlreadyExcist = (data: any, nameToFind: string) => {
+  const foundSearch = data.find(
+    (search: any) => search.saveSearchName === nameToFind
+  );
+  return foundSearch ? data.indexOf(foundSearch) : null;
+};
+
 //Handles the click event on a saved search card.
 export const handleCardClick = ({
   id,
@@ -129,23 +136,35 @@ export const handleCardClick = ({
             setIsDialogOpen(true);
           } else {
             // Add the clicked search to local storage and navigate to the search result page
-            const localStorageData = [
-              ...data,
-              {
-                saveSearchName: specificCardData[0].name,
-                isSavedSearch: true,
-                searchId: response?.data?.search_id,
-                queryParams: specificCardData[0].meta_data,
-                id: specificCardData[0].id
-              }
-            ];
-
-            localStorage.setItem('Search', JSON.stringify(localStorageData));
-            router.push(
-              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                data.length + 1
-              }`
+            let isAlreadyOpenIndex = isSearchAlreadyExcist(
+              data,
+              specificCardData[0].name
             );
+            if (isAlreadyOpenIndex) {
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  isAlreadyOpenIndex + 1
+                }`
+              );
+            } else {
+              const localStorageData = [
+                ...data,
+                {
+                  saveSearchName: specificCardData[0].name,
+                  isSavedSearch: true,
+                  searchId: response?.data?.search_id,
+                  queryParams: specificCardData[0].meta_data,
+                  id: specificCardData[0].id
+                }
+              ];
+
+              localStorage.setItem('Search', JSON.stringify(localStorageData));
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  data.length + 1
+                }`
+              );
+            }
           }
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page
