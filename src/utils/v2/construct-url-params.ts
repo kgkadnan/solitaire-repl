@@ -1,10 +1,10 @@
 type IQueryDataValue = string | number | INestedQuery | INestedQuery[];
 
-export interface IQueryData {
+interface INestedQuery {
   [key: string]: IQueryDataValue;
 }
 
-interface INestedQuery {
+export interface IQueryData {
   [key: string]: IQueryDataValue;
 }
 
@@ -17,12 +17,9 @@ export function constructUrlParams(data: IQueryData): string {
   ) => {
     if (Array.isArray(nestedData)) {
       nestedData.forEach(item => {
-        if (typeof item === 'object' && item !== null) {
-          // Iterate over the keys of the object
-          for (const subKey in item) {
-            if (Object.prototype.hasOwnProperty.call(item, subKey)) {
-              queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
-            }
+        for (const subKey in item) {
+          if (subKey in item) {
+            queryParams.push(`${prefix}[${subKey}]=${item[subKey]}`);
           }
         }
       });
@@ -40,17 +37,15 @@ export function constructUrlParams(data: IQueryData): string {
       const value = data[key];
 
       if (Array.isArray(value)) {
-        if (key === 'carat') {
-          encodeNested(key, value); // Handle carat separately
-          //test
-        } else {
-          value.forEach(item => {
-            queryParams.push(`${key}[]=${item}`);
-          });
-        }
+        // Handle other arrays
+        value.forEach(item => {
+          queryParams.push(`${key}[]=${item}`);
+        });
       } else if (typeof value === 'object') {
+        // Handle nested objects
         encodeNested(key, value as INestedQuery | INestedQuery[]);
       } else {
+        // Handle other types
         queryParams.push(`${key}=${value}`);
       }
     }

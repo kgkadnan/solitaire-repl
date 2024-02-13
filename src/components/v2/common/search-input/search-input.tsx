@@ -88,7 +88,6 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
                   : ''
               } ${styles.suggestion}`}
               onClick={() => {
-                console.log('helosuggestion', suggestion);
                 handleSuggestionClick?.(suggestion);
                 setShowSuggestions(false);
               }}

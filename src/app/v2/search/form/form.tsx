@@ -254,7 +254,7 @@ const Form = ({
   // Load saved search data when component mounts
   useEffect(() => {
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
-    console.log('modifySearchResult', modifySearchResult);
+
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
     if (
       modifySearchFrom === `${SubRoutes.SAVED_SEARCH}` &&
@@ -375,7 +375,7 @@ const Form = ({
         } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
           let setDataOnLocalStorage = {
-            id: modifySearchResult[activeTab - 1]?.id,
+            id: modifySearchResult[activeTab - 1]?.id || id,
             saveSearchName:
               modifySearchResult[activeTab - 1]?.saveSearchName ||
               saveSearchName,
@@ -464,7 +464,7 @@ const Form = ({
         const queryParams = generateQueryParams(state);
 
         const activeSearch: number =
-          addSearches[activeTab]?.saveSearchName.length;
+          addSearches[activeTab - 1]?.saveSearchName.length;
 
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
           if (savedSearch?.savedSearch?.meta_data) {
@@ -481,10 +481,10 @@ const Form = ({
           }
         } else if (activeSearch) {
           const updatedMeta = addSearches;
-          updatedMeta[activeTab].queryParams = queryParams;
+          updatedMeta[activeTab - 1].queryParams = queryParams;
           let updateSaveSearchData = {
-            id: updatedMeta[activeTab].id,
-            meta_data: updatedMeta[activeTab].queryParams,
+            id: updatedMeta[activeTab - 1].id,
+            meta_data: updatedMeta[activeTab - 1].queryParams,
             diamond_count: parseInt(data?.count)
           };
           updateSavedSearch(updateSaveSearchData)
@@ -567,9 +567,9 @@ const Form = ({
         ) {
           if (activeTab !== undefined) {
             const isSearchName: number =
-              addSearches[activeTab]?.saveSearchName.length;
+              addSearches[activeTab - 1]?.saveSearchName.length;
 
-            const isSaved: boolean = addSearches[activeTab]?.isSavedSearch;
+            const isSaved: boolean = addSearches[activeTab - 1]?.isSavedSearch;
             // Check if the active search is not null and isSavedSearch is true
             if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
               handleSaveAndSearch();
@@ -595,9 +595,15 @@ const Form = ({
     }
   ];
 
-  const handleInputChange = (e: any) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');
-    setSaveSearchName(e.target.value);
+    const inputValue = e.target.value;
+    if (inputValue.length <= 20) {
+      setSaveSearchName(inputValue);
+    } else {
+      setSaveSearchName(inputValue.slice(0, 20));
+      setInputError('Input cannot exceed 20 characters');
+    }
   };
 
   const renderContentWithInput = () => {

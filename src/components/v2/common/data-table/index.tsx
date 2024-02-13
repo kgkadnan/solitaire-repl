@@ -20,6 +20,7 @@ import CalculatedField from '../calculated-field';
 import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Breadcrum from '../search-breadcrum/breadcrum';
+import { useUpdateSavedSearchMutation } from '@/features/api/saved-searches';
 
 const theme = createTheme({
   typography: {
@@ -44,7 +45,10 @@ const DataTable = ({
   setActiveTab,
   handleCloseAllTabs,
   handleCloseSpecificTab,
-  handleNewSearch
+  handleNewSearch,
+  setSearchParameters,
+  modalSetState,
+  data
 }: any) => {
   const getShapeDisplayName = ({ value }: { value: string }) => {
     switch (value) {
@@ -71,6 +75,28 @@ const DataTable = ({
       default:
         return value;
     }
+  };
+  const [updateSavedSearch] = useUpdateSavedSearchMutation();
+
+  const handleUpdateSaveSearch = () => {
+    const yourSelection = JSON.parse(localStorage.getItem('Search')!);
+
+    const updateSaveSearchData = {
+      id: yourSelection[activeTab - 1]?.id,
+      meta_data: yourSelection[activeTab - 1]?.queryParams,
+      diamond_count: parseInt(data?.count)
+    };
+
+    yourSelection[activeTab - 1] = {
+      id: yourSelection[activeTab - 1]?.id,
+      saveSearchName: yourSelection[activeTab - 1]?.saveSearchName,
+      searchId: data?.search_id,
+      isSavedSearch: true,
+      queryParams: yourSelection[activeTab - 1].queryParams
+    };
+    localStorage.setItem('Search', JSON.stringify(yourSelection));
+    setSearchParameters(yourSelection);
+    updateSavedSearch(updateSaveSearchData);
   };
 
   const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
@@ -315,12 +341,25 @@ const DataTable = ({
           </div>
 
           <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
-            {isResult && (
-              <div className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer">
-                <Image src={saveIcon} alt={'save search'} />
-                <p className="pl-1 text-mMedium font-medium">Save Search</p>
-              </div>
-            )}
+            {isResult &&
+              (searchParameters &&
+              !searchParameters[activeTab - 1]?.isSavedSearch ? (
+                <button
+                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer"
+                  onClick={() => {
+                    searchParameters[activeTab - 1].saveSearchName.length
+                      ? handleUpdateSaveSearch()
+                      : modalSetState.setIsInputDialogOpen(true);
+                  }}
+                >
+                  <Image src={saveIcon} alt={'save search'} />
+                  <p className="pl-1 text-mMedium font-medium text-primaryMain">
+                    Save Search
+                  </p>
+                </button>
+              ) : (
+                ''
+              ))}
             <IconButton onClick={() => {}}>
               <div className="p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
                 <Image src={downloadIcon} alt={'download'} />

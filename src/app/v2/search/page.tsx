@@ -152,7 +152,7 @@ const Search = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    if (!yourSelection[id]?.isSavedSearch) {
+    if (!yourSelection[id - 1]?.isSavedSearch) {
       setDialogContent(
         <>
           {' '}
@@ -242,6 +242,7 @@ const Search = () => {
         <Result
           activeTab={activeTab}
           searchParameters={searchParameters}
+          setSearchParameters={setSearchParameters}
           setActiveTab={setActiveTab}
           handleCloseAllTabs={handleCloseAllTabs}
           handleCloseSpecificTab={handleCloseSpecificTab}

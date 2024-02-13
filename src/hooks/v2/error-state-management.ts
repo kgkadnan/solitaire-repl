@@ -4,8 +4,7 @@ export const useErrorStateManagement = () => {
   const [isError, setIsError] = useState(false);
   const [errorText, setErrorText] = useState('');
 
-  const [inputError, setInputError] = useState(false);
-  const [inputErrorContent, setInputErrorContent] = useState('');
+  const [inputError, setInputError] = useState('');
 
   const [isSliderError, setIsSliderError] = useState(false);
   const [sliderErrorText, setSliderErrorText] = useState('');
@@ -17,7 +16,6 @@ export const useErrorStateManagement = () => {
       isError,
       errorText,
       inputError,
-      inputErrorContent,
       isSliderError,
       sliderErrorText,
       messageColor
@@ -26,7 +24,6 @@ export const useErrorStateManagement = () => {
       setIsError,
       setErrorText,
       setInputError,
-      setInputErrorContent,
       setIsSliderError,
       setSliderErrorText,
       setMessageColor

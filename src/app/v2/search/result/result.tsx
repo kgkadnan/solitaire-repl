@@ -38,6 +38,7 @@ import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
 import Image from 'next/image';
+import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -53,6 +54,11 @@ import { SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH } from '@/constants/error-message
 import { NOT_MORE_THAN_300 } from '@/constants/error-messages/search';
 import { NO_STONES_AVAILABLE } from '@/constants/error-messages/compare-stone';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
+import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { InputField } from '@/components/v2/common/input-field';
+import { handleSaveSearch } from './helpers/handle-save-search';
+import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import { ISavedSearch } from '../form/form';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -169,10 +175,12 @@ const Result = ({
   searchParameters,
   setActiveTab,
   handleCloseAllTabs,
-  handleCloseSpecificTab
+  handleCloseSpecificTab,
+  setSearchParameters
 }: {
   activeTab: number;
   searchParameters: any;
+  setSearchParameters: Dispatch<SetStateAction<ISavedSearch[]>>;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (id: number) => void;
@@ -180,18 +188,23 @@ const Result = ({
   const dispatch = useAppDispatch();
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
-  const { setIsError, setErrorText } = errorSetState;
-  const { isError, errorText, messageColor } = errorState;
+  const { setIsError, setErrorText, setInputError } = errorSetState;
+  const { isError, errorText, messageColor, inputError } = errorState;
   const { modalState, modalSetState } = useModalStateManagement();
-  const { isDialogOpen, dialogContent } = modalState;
-  const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { isDialogOpen, dialogContent, isInputDialogOpen } = modalState;
+  const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
+    modalSetState;
+  const [saveSearchName, setSaveSearchName] = useState('');
+  const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
 
+  const [addSavedSearch] = useAddSavedSearchMutation();
   let [triggerProductApi] = useLazyGetAllProductQuery();
 
   const [triggerColumn] =
@@ -217,6 +230,7 @@ const Result = ({
       });
       if (response?.data?.products?.length) {
         dataTableSetState.setRows(response.data.products);
+        setData(response.data);
       }
     };
 
@@ -378,12 +392,104 @@ const Result = ({
     }
   };
 
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setInputError('');
+    const inputValue = e.target.value;
+    if (inputValue.length <= 20) {
+      setSaveSearchName(inputValue);
+    } else {
+      setSaveSearchName(inputValue.slice(0, 20));
+      setInputError('Input cannot exceed 20 characters');
+    }
+  };
+
+  const renderContentWithInput = () => {
+    return (
+      <>
+        {' '}
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={bookmarkIcon} alt="bookmarkIcon" />
+        </div>
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div>
+            <h1 className="text-headingS text-neutral900">
+              {' '}
+              {ManageLocales('app.advanceSearch.savedSearch.input.header')}
+            </h1>
+            <p className="text-neutral600 text-mRegular">
+              {ManageLocales('app.advanceSearch.savedSearch.input.content')}
+            </p>
+          </div>
+          <div>
+            <InputField
+              type="text"
+              value={saveSearchName}
+              name={'savedSearch'}
+              placeholder={'Search Name'}
+              onChange={handleInputChange}
+              styles={{
+                inputMain: 'w-full',
+                input: `h-full p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
+                ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
+              }}
+            />
+
+            <div className=" text-dangerMain text-sRegular font-regular flex text-left h-[5px]">
+              {inputError ?? ''}
+            </div>
+          </div>
+
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.cancel'),
+                handler: () => {
+                  setSaveSearchName('');
+                  setInputError('');
+                  setIsInputDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.save'),
+                handler: () => {
+                  if (!saveSearchName.length) {
+                    setInputError('Please enter name');
+                  } else {
+                    handleSaveSearch({
+                      addSavedSearch,
+                      saveSearchName,
+                      activeTab,
+                      data,
+                      setIsInputDialogOpen,
+                      setStoredSelection: setSearchParameters,
+                      setSaveSearchName,
+                      setInputError
+                    });
+                  }
+                },
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </div>
+      </>
+    );
+  };
+
   return (
     <div>
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+      />
+      <InputDialogComponent
+        isOpen={isInputDialogOpen}
+        onClose={() => setIsInputDialogOpen(false)}
+        renderContent={renderContentWithInput}
       />
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
@@ -407,6 +513,9 @@ const Result = ({
             handleCloseAllTabs={handleCloseAllTabs}
             handleCloseSpecificTab={handleCloseSpecificTab}
             handleNewSearch={handleNewSearch}
+            setSearchParameters={setSearchParameters}
+            modalSetState={modalSetState}
+            data={data}
           />
         </div>
         {dataTableState.rows.length > 0 ? (
