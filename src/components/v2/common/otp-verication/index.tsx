@@ -77,14 +77,14 @@ const OTPVerification = ({
           {ManageLocales('app.OTPVerification')}
         </div>
 
-        <div className="flex ">
+        <div
+          className="flex cursor-pointer "
+          onClick={() => setIsInputDialogOpen(true)}
+        >
           <p className="text-neutral-900">
             OTP has been sent to {otpVerificationFormState.codeAndNumber}
           </p>
-          <div
-            onClick={() => setIsInputDialogOpen(true)}
-            className="font-bold pl-1"
-          >
+          <div className="font-bold pl-1 cursor-pointer">
             <Edit />
           </div>
         </div>
