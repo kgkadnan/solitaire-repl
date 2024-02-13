@@ -8,7 +8,6 @@ import { statusCode } from '@/constants/enums/status-code';
 import InvalidCreds from '../login/component/invalid-creds';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import { DialogComponent } from '@/components/v2/common/dialog';
-import ConfirmScreen from '../register/component/confirmation-screen';
 import ForgotComponent from './component/forgot-password';
 import { isPhoneNumberValid } from '@/utils/validate-phone';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
@@ -18,6 +17,7 @@ import {
 } from '@/features/api/otp-verification';
 import useUser from '@/lib/use-auth';
 import OTPComponent from './component/otp';
+import ResetComponent from './component/reset-password';
 const initialTokenState = {
   token: '',
   phoneToken: '',
@@ -135,8 +135,13 @@ const ForgotPassword = () => {
             phoneNumber={phoneNumber}
           />
         );
-      case 'successfullyCreated':
-        return <ConfirmScreen />;
+      case 'resetPassword':
+        return (
+          <ResetComponent
+            setIsDialogOpen={setIsDialogOpen}
+            setDialogContent={setDialogContent}
+          />
+        );
     }
   };
   return (
