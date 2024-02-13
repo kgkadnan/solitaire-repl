@@ -86,5 +86,8 @@
   "app.login.forgotPassword": "Forgot Password?",
   "app.login.newUser": "Don't have an account yet?",
   "app.login.keepSignedIn": "Keep me signed in",
-  "app.login.password.placeholder": "Enter your password"
+  "app.login.password.placeholder": "Enter your password",
+
+  "app.OTPVerification.cancel": "Cancel",
+  "app.OTPVerification.save": "Save"
 }
