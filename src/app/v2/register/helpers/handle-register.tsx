@@ -52,7 +52,7 @@ export const handleRegister = async ({
           ...prev,
           otpMobileNumber: `${registerFormState.mobileNumber}`,
           otpCountryCode: `${registerFormState.countryCode}`,
-          codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+          codeAndNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
         }));
         setToken(prev => ({
           ...prev,

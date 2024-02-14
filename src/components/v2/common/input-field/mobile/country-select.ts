@@ -16,13 +16,10 @@ export const colourStyles = (error: any) => {
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
-        border: '1px solid var(--neutral-200) !important'
+        border: '1px solid var(--neutral-200) !important',
+        borderRight: 'none'
       },
       height: '39px'
-      // ':hover': {
-      //   border: 'none',
-      //   borderBottom: '1px solid var(--neutral-200)'
-      // }
     }),
     singleValue: (styles: any) => ({
       ...styles,
