@@ -1,28 +1,23 @@
 'use client';
-import { CustomDisplayButton } from '@/components/common/buttons/display-button';
 import React, { useEffect, useState } from 'react';
 import { ManageLocales } from '@/utils/translate';
 import { useRegisterMutation } from '@/features/api/register';
 import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 import RegisterComponent from './component/register';
-import { FloatingLabelInput } from '@/components/common/floating-input';
+import editIcon from '@public/v2/assets/icons/modal/edit.svg';
 import {
   useSendOtpMutation,
   useVerifyOTPMutation,
   useVerifyPhoneQuery
 } from '@/features/api/otp-verification';
-import Select from 'react-select';
+import Image from 'next/image';
 
 import useUser from '@/lib/use-auth';
 import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
-import { handleOTPSelectChange } from '@/components/otp-verication/helpers/handle-otp-select-change';
 import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { useRegisterStateManagement } from './hooks/register-state-management';
 import { useGetAuthDataQuery } from '@/features/api/login';
-import { countryCodeSelectStyle } from '@/app/my-account/kyc/styles/country-code-select-style';
-import { computeCountryDropdownField } from '@/app/my-account/kyc/helper/compute-country-dropdown';
-import countryCode from '../../../constants/country-code.json';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import OTPVerification from '@/components/v2/common/otp-verication';
@@ -32,6 +27,8 @@ import {
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import ConfirmScreen from './component/confirmation-screen';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
+import { MobileInput } from '@/components/v2/common/input-field/mobile';
+import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -102,7 +99,11 @@ const Register = () => {
     if (data) {
       setRegisterFormState({
         ...registerFormState,
-        countryCode: data.country_calling_code
+        countryCode: data.country_calling_code.replace('+', '')
+      });
+      setOTPVerificationFormState({
+        ...otpVerificationFormState,
+        otpCountryCode: data.country_calling_code.replace('+', '')
       });
     } else if (error) {
       console.error('Error fetching country code', error);
@@ -117,69 +118,45 @@ const Register = () => {
 
   const renderContentWithInput = () => {
     return (
-      <div className="w-full flex flex-col gap-6">
-        <div className=" flex justify-center align-middle items-center">
-          <p> Change Mobile Number</p>
+      <div className="flex gap-[12px] flex-col w-full">
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={editIcon} alt="update phone number" />
         </div>
-        <div className="flex text-center justify-between  w-[350px]">
-          <div className="w-[25%]">
-            <Select
-              name="otpCountryCode"
-              options={computeCountryDropdownField(countryCode)}
-              onChange={selectValue =>
-                handleOTPSelectChange({
-                  selectValue,
-                  setOTPVerificationFormState
-                })
-              }
-              styles={countryCodeSelectStyle(
-                otpVerificationFormErrors.otpCountryCode
-              )}
-              value={{
-                label: otpVerificationFormState.otpCountryCode,
-                value: otpVerificationFormState.otpCountryCode
-              }}
-            />
-          </div>
-
-          <div className="w-[70%]">
-            <FloatingLabelInput
-              label={ManageLocales('app.register.mobileNumber')}
-              onChange={event =>
-                handleOTPChange({ event, setOTPVerificationFormState })
-              }
-              type="number"
-              name="otpMobileNumber"
-              value={otpVerificationFormState.otpMobileNumber}
-              errorText={otpVerificationFormErrors.otpMobileNumber}
-            />
-          </div>
+        <div className="flex gap-[12px] flex-col mt-[80px] align-left">
+          <p className="text-headingS text-neutral-900 font-medium">
+            Enter new mobile number
+          </p>
         </div>
-        <div className="flex justify-center  gap-5">
-          {/* Button to trigger the register action */}
+        <MobileInput
+          label={ManageLocales('app.register.mobileNumber')}
+          onChange={
+            event => handleOTPChange({ event, setOTPVerificationFormState })
+            // {}
+          }
+          type="number"
+          name="otpMobileNumber"
+          errorText={otpVerificationFormErrors.otpMobileNumber}
+          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+          registerFormState={otpVerificationFormState}
+          setRegisterFormState={setOTPVerificationFormState}
+          value={otpVerificationFormState.otpMobileNumber}
+        />
 
-          <CustomDisplayButton
-            displayButtonLabel={ManageLocales('app.OTPVerification.cancel')}
-            displayButtonAllStyle={{
-              displayButtonStyle:
-                ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-              displayLabelStyle:
-                'text-solitaireTertiary text-[16px] font-medium'
-            }}
-            handleClick={() => {
+        <div className="flex justify-between gap-[12px]">
+          <IndividualActionButton
+            onClick={() => {
               setOTPVerificationFormState(prev => ({ ...prev }));
               setOTPVerificationFormErrors(initialOTPFormState);
               setIsInputDialogOpen(false);
             }}
-          />
-          <CustomDisplayButton
-            displayButtonLabel={ManageLocales('app.OTPVerification.save')}
-            displayButtonAllStyle={{
-              displayButtonStyle: 'bg-solitaireQuaternary w-[150px] h-[35px]',
-              displayLabelStyle:
-                'text-solitaireTertiary text-[16px] font-medium'
-            }}
-            handleClick={() => {
+            variant={'secondary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px]"
+          >
+            {ManageLocales('app.OTPVerification.cancel')}
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => {
               handleEditMobileNumber({
                 verifyNumber,
                 otpVerificationFormState,
@@ -192,7 +169,12 @@ const Register = () => {
                 setToken
               });
             }}
-          />
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[170px]"
+          >
+            {ManageLocales('app.OTPVerification.save')}
+          </IndividualActionButton>
         </div>
       </div>
     );

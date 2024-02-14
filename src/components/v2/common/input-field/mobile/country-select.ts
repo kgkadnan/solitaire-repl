@@ -16,7 +16,9 @@ export const colourStyles = (error: any) => {
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
-        border: '1px solid var(--neutral-200) !important',
+        border: error.length
+          ? '1px solid var(--danger-main)'
+          : '1px solid var(--neutral-200)',
         borderRight: 'none'
       },
       height: '39px'
