@@ -39,6 +39,7 @@ import Image from 'next/image';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
 import { ManageLocales } from '@/utils/v2/translate';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 export interface IToken {
   token: string;
@@ -56,9 +57,9 @@ const initialTokenState = {
 const Login = () => {
   // State variables for email, password, and error handling
   const [phoneNumber, setPhoneNumber] = useState<{
-    country_code: string;
+    countryCode: string;
     mobileNumber: string;
-  }>({ country_code: '91', mobileNumber: '' });
+  }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
 
   const [token, setToken] = useState(initialTokenState);
@@ -77,14 +78,24 @@ const Login = () => {
   const router = useRouter();
   const { isTokenChecked, authToken, userLoggedIn } = useUser();
 
-  const [currentState, setCurrentState] = useState('otpVerification');
+  const [currentState, setCurrentState] = useState('login');
 
   const [verifyOTP] = useVerifyOTPMutation();
   const [sendOtp] = useSendOtpMutation();
 
   const { otpVericationState, otpVerificationSetState } =
     useOtpVerificationStateManagement();
-
+  const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
+  useEffect(() => {
+    if (currentCountryCode) {
+      setPhoneNumber((prev: any) => ({
+        ...prev,
+        countryCode: currentCountryCode.country_calling_code.replace('+', '')
+      }));
+    } else if (error) {
+      console.error('Error fetching country code', error);
+    }
+  }, [currentCountryCode, error]);
   const {
     otpValues,
     resendTimer,
@@ -121,7 +132,7 @@ const Login = () => {
           ...prev,
           otpMobileNumber: `${data.customer.phone}`,
           otpCountryCode: `${data.customer.country_code}`,
-          codeAndNumber: `${data.customer.country_code} ${data.customer.phone}`
+          codeAndNumber: `+${data.customer.country_code} ${data.customer.phone}`
         }));
         sendOtp({
           phone: data.customer.phone,
@@ -157,7 +168,7 @@ const Login = () => {
       let res: any = await verifyLogin({
         phone: phoneNumber.mobileNumber,
         password: password,
-        country_code: phoneNumber.country_code
+        country_code: phoneNumber.countryCode
       });
 
       if (res?.error?.status === statusCode.UNAUTHORIZED) {

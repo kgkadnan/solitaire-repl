@@ -14,12 +14,8 @@ export const handleLoginInputChange = ({
   const inputValue = event.target.value;
 
   if (type === 'phone') {
-    console.log(inputValue, 'sdas');
     setPhoneNumber((prev: any) => ({ ...prev, mobileNumber: inputValue }));
 
-    // setPhoneNumber(inputValue);
-
-    // if (isEmailValid(inputValue) || isPhoneNumberValid(inputValue)) {
     if (isPhoneNumberValid(inputValue)) {
       setEmailErrorText('');
       setErrorText('');

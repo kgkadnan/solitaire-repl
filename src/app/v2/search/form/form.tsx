@@ -661,7 +661,7 @@ const Form = ({
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    handleSaveAndSearch();
+                    !inputError.length && handleSaveAndSearch();
                   }
                 },
                 customStyle: 'flex-1'

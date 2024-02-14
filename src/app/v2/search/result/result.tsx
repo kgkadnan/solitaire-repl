@@ -458,16 +458,17 @@ const Result = ({
                   if (!saveSearchName.length) {
                     setInputError('Please enter name');
                   } else {
-                    handleSaveSearch({
-                      addSavedSearch,
-                      saveSearchName,
-                      activeTab,
-                      data,
-                      setIsInputDialogOpen,
-                      setStoredSelection: setSearchParameters,
-                      setSaveSearchName,
-                      setInputError
-                    });
+                    !inputError.length &&
+                      handleSaveSearch({
+                        addSavedSearch,
+                        saveSearchName,
+                        activeTab,
+                        data,
+                        setIsInputDialogOpen,
+                        setStoredSelection: setSearchParameters,
+                        setSaveSearchName,
+                        setInputError
+                      });
                   }
                 },
                 customStyle: 'flex-1'

@@ -21,7 +21,7 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
       <div className="absolute left-[-84px] top-[-84px]">
         <Image src={errorIcon} alt="errorIcon" />
       </div>
-      <div className="flex gap-[12px] flex-col mt-[80px]">
+      <div className="flex gap-[12px] flex-col mt-[80px] w-[100%]">
         {header && (
           <p className="text-headingS text-neutral-900 font-medium">{header}</p>
         )}
