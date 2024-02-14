@@ -5,7 +5,7 @@ import {
   PopoverTrigger
 } from '@radix-ui/react-popover';
 import React from 'react';
-import styles from '../my-diamonds.module.scss';
+import styles from '../your-orders.module.scss';
 import CalenderIcon from '@public/v2/assets/icons/my-diamonds/calender.svg';
 import { IFilterByDaysProps } from '../interface';
 import ActionButton from '@/components/v2/common/action-button';

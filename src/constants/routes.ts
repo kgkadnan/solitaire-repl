@@ -23,7 +23,7 @@ export const notificationRoutes = [
 export const v2Routes = [
   '/v2',
   '/v2/search',
-  '/v2/my-diamonds',
+  '/v2/your-orders',
   '/v2/saved-searches',
   '/v2/appointments',
   '/v2/my-cart',

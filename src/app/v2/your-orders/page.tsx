@@ -24,6 +24,7 @@ import Link from 'next/link';
 
 const MyDiamonds = () => {
   const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
+
   const [pendinInvoiceSearchUrl, setPendinInvoiceSearchUrl] = useState('');
   const [activeInvoiceSearchUrl, setActiveInvoiceSearchUrl] = useState('');
   const [invoiceHistorySearchUrl, setInvoiceHistorySearchUrl] = useState('');
@@ -34,8 +35,6 @@ const MyDiamonds = () => {
     useState('');
   const [invoiceHistorySelectedDays, setInvoiceHistorySelectedDays] =
     useState('');
-
-  console.log('pendinInvoiceSearchUrl', pendinInvoiceSearchUrl);
 
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
