@@ -5,6 +5,7 @@ import { IHeaderSearchBarProps } from '../interface';
 import ClearIcon from '@public/assets/icons/close-outline.svg?url';
 import { ManageLocales } from '@/utils/v2/translate';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
+import { PENDING_INVOICE } from '@/constants/business-logic';
 
 export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   activeTab,
@@ -47,7 +48,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           onChange={handleSearch}
           placeholder={
             // Dynamic placeholder based on the active tab
-            activeTab === ManageLocales('app.myDiamonds.tabs.pendingInvoice')
+            activeTab === PENDING_INVOICE
               ? ManageLocales('app.myDiamonds.pendingInvoice.searchByOrderId')
               : ManageLocales('app.myDiamonds.activeInvoice.searchByInvoiceId')
           }

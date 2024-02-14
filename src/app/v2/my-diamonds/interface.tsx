@@ -17,9 +17,9 @@ export interface ITabsProps {
 
 export interface IFilterByDaysProps {
   activeTab: string;
-  setRecentConfirmationSelectedDays: (selectedDays: string) => void;
-  setMyInvoiceSelectedDays: (selectedDays: string) => void;
-  setPreviousConfirmationSelectedDays: (selectedDays: string) => void;
+  setPendingInvoiceSelectedDays: (selectedDays: string) => void;
+  setActiveInvoiceSelectedDays: (selectedDays: string) => void;
+  setInvoiceHistorySelectedDays: (selectedDays: string) => void;
 }
 
 export interface IPageTitles {

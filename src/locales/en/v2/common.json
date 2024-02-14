@@ -41,6 +41,8 @@
   "app.myDiamonds.pendingInvoice.searchByOrderId": "Search by Order ID",
   "app.myDiamonds.activeInvoice.searchByInvoiceId": "Search by Invoice ID",
 
+  "app.myDiamonds.selectDate" : "Select date",
+
   "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
   "app.modal.okay": "Okay",

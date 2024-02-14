@@ -8,7 +8,7 @@ import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url
 import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
 import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
-import { usePathname, useRouter } from 'next/navigation';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
 import { Button } from '@/components/ui/button';
@@ -22,6 +22,8 @@ interface ISideNavigationBar {
 }
 const SideNavigationBar = () => {
   const currentRoute = usePathname();
+  const currentSubRoute = useSearchParams().get('active-tab');
+
   const router = useRouter();
 
   const SideNavigationData: ISideNavigationBar[] = [
@@ -38,7 +40,9 @@ const SideNavigationBar = () => {
       src: <SearchIcon />,
       title: ManageLocales('app.sideNavigationBar.search'),
       link: `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`,
-      isActive: currentRoute === Routes.SEARCH
+      isActive:
+        currentRoute === Routes.SEARCH &&
+        currentSubRoute !== SubRoutes.SAVED_SEARCH
     },
     {
       src: <MyDaimondsIcon />,
@@ -50,7 +54,9 @@ const SideNavigationBar = () => {
       src: <BookmarkIcon />,
       title: ManageLocales('app.sideNavigationBar.bookmark'),
       link: `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`,
-      isActive: currentRoute === Routes.SAVED_SEARCH
+      isActive:
+        currentRoute === Routes.SEARCH &&
+        currentSubRoute === SubRoutes.SAVED_SEARCH
     },
     {
       src: <AppointmentIcon />,

@@ -9,7 +9,7 @@ interface IActionButtonData {
     svg?: any; // Assuming the type of 'svg' is string, update it accordingly
     label?: string;
     isDisable?: boolean;
-    handler: () => void;
+    handler?: () => void;
     isHidden?: boolean;
     customStyle?: string;
   }[];
@@ -33,7 +33,7 @@ const ActionButton = ({ actionButtonData }: IActionButtonData) => {
             >
               <Button
                 disabled={isDisable}
-                onClick={() => handler()}
+                onClick={() => handler!()}
                 variant={variant}
                 className={`${styles.ctaStyle} 
                 ${svg ? 'p-[8px]' : 'px-[16px] py-[8px]'}

@@ -39,6 +39,7 @@ import {
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
+import { isSearchAlreadyExcist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 
 const theme = createTheme({
   typography: {
@@ -69,7 +70,6 @@ const DataTable = ({
   data
 }: any) => {
   // Fetching saved search data
-  const [suggestions, setSuggestions] = useState<string[]>([]);
   const router = useRouter();
 
   const { data: searchList }: { data?: IItem[] } =
@@ -79,12 +79,10 @@ const DataTable = ({
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
   const handleDropdown = () => {
     setIsDropDownOpen(!isDropDownOpen);
-    setSuggestions([]);
   };
 
   const onDropDwonClick = (data: any) => {
     setIsDropDownOpen(false);
-    setSuggestions([]);
     triggerSavedSearch({
       searchByName: data.value
     }).then(res => {
@@ -172,50 +170,43 @@ const DataTable = ({
               );
               modalSetState.setIsDialogOpen(true);
             } else {
-              // Add the clicked search to local storage and navigate to the search result page
-              const localStorageData = [
-                ...data,
-                {
-                  saveSearchName: res.data.savedSearches[0].name,
-                  isSavedSearch: true,
-                  searchId: response?.data?.search_id,
-                  queryParams: res.data.savedSearches[0].meta_data,
-                  id: res.data.savedSearches[0].id
-                }
-              ];
-
-              localStorage.setItem('Search', JSON.stringify(localStorageData));
-              router.push(
-                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                  data.length + 1
-                }`
+              let isAlreadyOpenIndex = isSearchAlreadyExcist(
+                data,
+                res.data.savedSearches[0].name
               );
+              if (isAlreadyOpenIndex) {
+                router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                );
+              } else {
+                const localStorageData = [
+                  ...data,
+                  {
+                    saveSearchName: res.data.savedSearches[0].name,
+                    isSavedSearch: true,
+                    searchId: response?.data?.search_id,
+                    queryParams: res.data.savedSearches[0].meta_data,
+                    id: res.data.savedSearches[0].id
+                  }
+                ];
+
+                localStorage.setItem(
+                  'Search',
+                  JSON.stringify(localStorageData)
+                );
+                router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    data.length + 1
+                  }`
+                );
+              }
             }
           }
         }
       });
     });
-  };
-
-  const onInputValueChange = (data: any) => {
-    // Filter data based on input value
-    if (data.length) {
-      const filteredSuggestions =
-        searchList &&
-        searchList.filter((item: IItem) =>
-          item.name.toLowerCase().includes(data.toLowerCase())
-        );
-      // Extract card titles from filtered suggestions
-      const suggestionTitles =
-        filteredSuggestions &&
-        filteredSuggestions.map((item: IItem) => item.name);
-
-      setSuggestions(suggestionTitles ?? []);
-    } else {
-      setSuggestions([]);
-    }
-
-    // Update state with an array of strings
   };
 
   const getShapeDisplayName = ({ value }: { value: string }) => {
@@ -497,8 +488,7 @@ const DataTable = ({
               <SavedSearchDropDown
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
-                options={suggestions}
-                onInputValueChange={onInputValueChange}
+                options={searchList}
                 onDropDwonClick={onDropDwonClick}
               />
             </div>
