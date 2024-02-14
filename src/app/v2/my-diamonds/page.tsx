@@ -17,11 +17,11 @@ import { HeaderSearchBar } from './components/search-bar';
 import { FilterByDays } from './components/filter-by-days';
 import icon from '@public/v2/assets/icons/my-diamonds/avatar.svg';
 import Image from 'next/image';
+import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
+import { formatCreatedAt } from '@/utils/format-date';
 
 const MyDiamonds = () => {
-  const [activeTab, setActiveTab] = useState(
-    ManageLocales('app.myDiamonds.tabs.pendingInvoice')
-  );
+  const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
   const [pendinInvoiceSearchUrl, setPendinInvoiceSearchUrl] = useState('');
   const [activeInvoiceSearchUrl, setActiveInvoiceSearchUrl] = useState('');
   const [invoiceHistorySearchUrl, setInvoiceHistorySearchUrl] = useState('');
@@ -108,17 +108,16 @@ const MyDiamonds = () => {
     setActiveTab(tab);
   };
 
+  console.log('pendingInvoiceDataState', pendingInvoiceDataState);
+
   const tabsData: any = {
     pendingInvoice: {
       keys: [
-        { label: 'Order ID', accessor: 'order_id' },
+        { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
         { label: 'Details', accessor: '' }
       ],
-      data: [
-        { order_id: '123112', created_at: '232323' },
-        { order_id: '123323112', created_at: '2323232' }
-      ]
+      data: pendingInvoiceDataState
     }
     // Add similar structures for other tabs here
   };
@@ -170,7 +169,7 @@ const MyDiamonds = () => {
         <div className="max-w-full overflow-x-auto">
           {/* header */}
           <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
-            {keys.map(({ label }: any) => (
+            {keys?.map(({ label }: any) => (
               <div key={label} className="p-4 text-left font-medium">
                 {label}
               </div>
@@ -178,18 +177,28 @@ const MyDiamonds = () => {
           </div>
           {/* rows */}
           <div>
-            {data.map((items: any) => (
+            {data?.map((items: any) => (
               <div
                 key={items.order_id}
                 className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-white border-b border-neutral-200"
               >
-                {keys.map(({ accessor }: any, index: number) => (
+                {keys?.map(({ accessor }: any, index: number) => (
                   <div
                     key={index}
                     className="flex items-center space-x-2 p-3 text-left text-gray-800"
                   >
-                    {accessor === 'order_id' && <Image src={icon} alt="icon" />}
-                    <span>{items[accessor]}</span>
+                    {accessor === 'display_id' ? (
+                      <>
+                        <Image src={icon} alt="icon" />
+                        <span>
+                          {formatNumberWithLeadingZeros(items[accessor])}
+                        </span>
+                      </>
+                    ) : accessor === 'created_at' ? (
+                      <span>{formatCreatedAt(items[accessor])}</span>
+                    ) : (
+                      <span>{items[accessor]}</span>
+                    )}
                   </div>
                 ))}
               </div>
