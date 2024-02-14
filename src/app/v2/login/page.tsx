@@ -268,7 +268,7 @@ const Login = () => {
                 setIsDialogOpen,
                 setDialogContent,
                 sendOtp,
-                setToken
+                setToken,token
               });
             }}
             variant={'primary'}

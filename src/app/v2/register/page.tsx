@@ -15,7 +15,6 @@ import Image from 'next/image';
 
 import useUser from '@/lib/use-auth';
 import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
-import { handleEditMobileNumber } from '@/components/otp-verication/helpers/handle-edit-mobile-number';
 import { useRegisterStateManagement } from './hooks/register-state-management';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { DialogComponent } from '@/components/v2/common/dialog';
@@ -29,6 +28,7 @@ import ConfirmScreen from './component/confirmation-screen';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
+import { handleEditMobileNumber } from '@/components/v2/common/otp-verication/helpers/handle-edit-mobile-number';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -166,7 +166,8 @@ const Register = () => {
                 setIsDialogOpen,
                 setDialogContent,
                 sendOtp,
-                setToken
+                setToken,
+                token
               });
             }}
             variant={'primary'}
