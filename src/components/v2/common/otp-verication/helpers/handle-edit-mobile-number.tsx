@@ -12,7 +12,7 @@ interface IHandleEditMobileNumber {
   verifyNumber: any;
   sendOtp: any;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
-  token?:any
+  token?: any;
 }
 export const handleEditMobileNumber = ({
   verifyNumber,
@@ -23,7 +23,8 @@ export const handleEditMobileNumber = ({
   setIsDialogOpen,
   setDialogContent,
   sendOtp,
-  setToken,token
+  setToken,
+  token
 }: IHandleEditMobileNumber) => {
   if (
     !otpVerificationFormState.otpCountryCode ||
@@ -42,7 +43,7 @@ export const handleEditMobileNumber = ({
       sendOtp({
         phone: otpVerificationFormState.otpMobileNumber,
         country_code: otpVerificationFormState.otpCountryCode,
-        
+        resend_token: token.tempToken
       })
         .unwrap()
         .then((res: any) => {
