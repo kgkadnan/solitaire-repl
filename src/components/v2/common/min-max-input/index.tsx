@@ -24,8 +24,9 @@ export const MinMaxInput = ({
               <InputLabel
                 htmlFor={type}
                 label={type === 'min' ? 'Min' : 'Max'}
-                styles="border-y-[1px] border-l-[1px] text-neutral500 border-neutral200 rounded-l-[4px] p-2"
+                styles="border-y-[1px] border-l-[1px] text-neutral500 border-neutral200 rounded-l-[4px] p-2 mb-[4px]"
               />
+              <p className="h-1"></p>
             </div>
             <InputField
               type="number"
@@ -34,7 +35,7 @@ export const MinMaxInput = ({
               placeholder={type === 'min' ? minPlaceHolder : maxPlaceHolder}
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{
-                input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 w-[92px] rounded-r-[4px]
+                input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 w-[92px] rounded-r-[4px] rounded-l-[0px]
                 ${errorText ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />

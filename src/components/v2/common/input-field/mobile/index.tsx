@@ -61,12 +61,13 @@ export const MobileInput = ({
             value={value}
             placeholder={placeholder}
             styles={{
-              input: 'rounded-l-[0px]'
+              input: `rounded-l-[0px] ${
+                errorText ? 'border-dangerMain' : 'border-neutral200'
+              }`
             }}
-            errorText={errorText}
           />
         </div>
-        {/* <p className="text-dangerMain h-1">{errorText && errorText}</p> */}
+        <p className="text-dangerMain h-1">{errorText && errorText}</p>
       </div>
     </>
   );

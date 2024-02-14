@@ -14,10 +14,10 @@ const LoginComponent = ({
   setPhoneNumber,
   isPhoneNumberValid,
   setEmailErrorText,
-  setErrorText,
+  // setErrorText,
   setPasswordErrorText,
   setPassword,
-  setIsError,
+  // setIsError,
   handleKeyDown,
   phoneNumber,
   emailErrorText,
@@ -52,10 +52,10 @@ const LoginComponent = ({
               setPhoneNumber,
               isPhoneNumberValid,
               setEmailErrorText,
-              setErrorText,
+              // setErrorText,
               setPasswordErrorText,
-              setPassword,
-              setIsError
+              setPassword
+              // setIsError
             })
           }
           type="number"
@@ -79,10 +79,10 @@ const LoginComponent = ({
               setPhoneNumber,
               isPhoneNumberValid,
               setEmailErrorText,
-              setErrorText,
+              // setErrorText,
               setPasswordErrorText,
-              setPassword,
-              setIsError
+              setPassword
+              // setIsError
             })
           }
           name="password"
@@ -102,7 +102,7 @@ const LoginComponent = ({
           </div> */}
 
         <div className="flex justify-between text-mRegualar text-neutral-900">
-          <p className="flex items-center gap-2">
+          <div className="flex items-center gap-2">
             {' '}
             <CheckboxComponent
               onClick={() => {
@@ -111,7 +111,7 @@ const LoginComponent = ({
               isChecked={isKeepSignedIn}
             />{' '}
             <p>{ManageLocales('app.login.keepSignedIn')}</p>
-          </p>
+          </div>
           <Link href={'/forgot-password'}>
             {ManageLocales('app.login.forgotPassword')}
           </Link>
