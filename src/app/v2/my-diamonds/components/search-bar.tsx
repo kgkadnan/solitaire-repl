@@ -5,7 +5,7 @@ import { IHeaderSearchBarProps } from '../interface';
 import ClearIcon from '@public/assets/icons/close-outline.svg?url';
 import { ManageLocales } from '@/utils/v2/translate';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
-import { PENDING_INVOICE } from '@/constants/business-logic';
+import { ACTIVE_INVOICE, PENDING_INVOICE } from '@/constants/business-logic';
 
 export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   activeTab,
@@ -30,6 +30,19 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      handleSearch(e);
+      if (activeTab === PENDING_INVOICE) {
+        setPendinInvoiceSearchUrl(`display_id=${search}`);
+      } else if (activeTab === ACTIVE_INVOICE) {
+        setActiveInvoiceSearchUrl(`invoice_id=${search}`);
+      } else {
+        setInvoiceHistorySearchUrl(`invoice_id=${search}`);
+      }
+    }
+  };
+
   const handleClearInput = () => {
     setsearch('');
     setPendinInvoiceSearchUrl('');
@@ -46,6 +59,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
           name="Search"
           value={search}
           onChange={handleSearch}
+          handleKeyPress={handleKeyDown}
           placeholder={
             // Dynamic placeholder based on the active tab
             activeTab === PENDING_INVOICE
@@ -56,7 +70,7 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
         {search && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-1">
             <ClearIcon
-              className="stroke-solitaireQuaternary cursor-pointer"
+              className="stroke-neutral900 cursor-pointer"
               onClick={handleClearInput}
             />
           </div>

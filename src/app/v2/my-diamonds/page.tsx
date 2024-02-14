@@ -19,6 +19,8 @@ import icon from '@public/v2/assets/icons/my-diamonds/avatar.svg';
 import Image from 'next/image';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import { formatCreatedAt } from '@/utils/format-date';
+import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
+import Link from 'next/link';
 
 const MyDiamonds = () => {
   const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
@@ -32,6 +34,8 @@ const MyDiamonds = () => {
     useState('');
   const [invoiceHistorySelectedDays, setInvoiceHistorySelectedDays] =
     useState('');
+
+  console.log('pendinInvoiceSearchUrl', pendinInvoiceSearchUrl);
 
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
@@ -92,12 +96,12 @@ const MyDiamonds = () => {
     {
       label: ManageLocales('app.myDiamonds.tabs.pendingInvoice'),
       status: PENDING_INVOICE,
-      count: pendingInvoicesData?.length
+      count: pendingInvoiceDataState?.length
     },
     {
       label: ManageLocales('app.myDiamonds.tabs.activeInvoice'),
       status: ACTIVE_INVOICE,
-      count: activeInvoicesData?.length
+      count: activeInvoiceDataState?.length
     },
     {
       label: ManageLocales('app.myDiamonds.tabs.invoiceHistory'),
@@ -108,16 +112,32 @@ const MyDiamonds = () => {
     setActiveTab(tab);
   };
 
-  console.log('pendingInvoiceDataState', pendingInvoiceDataState);
-
   const tabsData: any = {
     pendingInvoice: {
       keys: [
         { label: 'Order ID', accessor: 'display_id' },
         { label: 'Confirmation Date', accessor: 'created_at' },
-        { label: 'Details', accessor: '' }
+        { label: 'Details', accessor: 'details' }
       ],
       data: pendingInvoiceDataState
+    },
+    activeInvoice: {
+      keys: [
+        { label: 'Invoice Number', accessor: 'invoice_id' },
+        { label: 'Invoice Date', accessor: 'created_at' },
+        { label: 'Tracking Details', accessor: 'delivery' },
+        { label: 'Details', accessor: 'details' }
+      ],
+      data: activeInvoiceDataState
+    },
+    invoiceHistory: {
+      keys: [
+        { label: 'Invoice Number', accessor: 'invoice_id' },
+        { label: 'Invoice Date', accessor: 'created_at' },
+        { label: 'Tracking Details', accessor: 'delivery' },
+        { label: 'Details', accessor: 'details' }
+      ],
+      data: invoiceHistoryDataState
     }
     // Add similar structures for other tabs here
   };
@@ -125,6 +145,45 @@ const MyDiamonds = () => {
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
+  const renderCellContent = (accessor: string, value: any) => {
+    switch (accessor) {
+      case 'display_id':
+        return (
+          <>
+            <Image src={icon} alt="icon" />
+            <span>{formatNumberWithLeadingZeros(value)}</span>
+          </>
+        );
+      case 'delivery':
+        return (
+          <Link
+            href={value?.link}
+            target="_blank"
+            className="pl-1 text-infoMain cursor-pointer"
+          >
+            Track Order
+          </Link>
+        );
+      case 'invoice_id':
+        return (
+          <>
+            <Image src={icon} alt="icon" />
+            <span>{value}</span>
+          </>
+        );
+      case 'created_at':
+        return <span>{formatCreatedAt(value)}</span>;
+      case 'details':
+        return (
+          <div className="flex items-center cursor-pointer">
+            <span>Show Details</span>
+            <Image src={arrow} alt="arrow" />
+          </div>
+        );
+      default:
+        return <span>{value}</span>;
+    }
+  };
   return (
     <div>
       <div className="flex h-[81px] items-center">
@@ -141,12 +200,12 @@ const MyDiamonds = () => {
                   className={`px-[16px] py-[8px] ${
                     activeTab === status
                       ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                      : 'text-neutral600'
+                      : 'text-neutral600 border-b-[2px] border-transparent'
                   }`}
                   key={label}
                   onClick={() => handleTabs({ tab: status })}
                 >
-                  {label}({count ?? 0})
+                  {label} {count && `(${count})`}
                 </button>
               );
             })}
@@ -168,7 +227,7 @@ const MyDiamonds = () => {
         </div>
         <div className="max-w-full overflow-x-auto">
           {/* header */}
-          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
+          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
             {keys?.map(({ label }: any) => (
               <div key={label} className="p-4 text-left font-medium">
                 {label}
@@ -185,20 +244,9 @@ const MyDiamonds = () => {
                 {keys?.map(({ accessor }: any, index: number) => (
                   <div
                     key={index}
-                    className="flex items-center space-x-2 p-3 text-left text-gray-800"
+                    className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
                   >
-                    {accessor === 'display_id' ? (
-                      <>
-                        <Image src={icon} alt="icon" />
-                        <span>
-                          {formatNumberWithLeadingZeros(items[accessor])}
-                        </span>
-                      </>
-                    ) : accessor === 'created_at' ? (
-                      <span>{formatCreatedAt(items[accessor])}</span>
-                    ) : (
-                      <span>{items[accessor]}</span>
-                    )}
+                    {renderCellContent(accessor, items[accessor])}
                   </div>
                 ))}
               </div>

@@ -1,5 +1,4 @@
 'use client';
-import { RadioButton } from '@/components/common/custom-input-radio';
 import {
   Popover,
   PopoverContent,
@@ -12,6 +11,7 @@ import { IFilterByDaysProps } from '../interface';
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ACTIVE_INVOICE, PENDING_INVOICE } from '@/constants/business-logic';
+import { RadioButton } from '@/components/v2/common/radio';
 
 export const FilterByDays: React.FC<IFilterByDaysProps> = ({
   activeTab,
@@ -92,7 +92,8 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
               {
                 label: ManageLocales('app.myDiamonds.selectDate'),
                 svg: CalenderIcon,
-                variant: 'secondary'
+                variant: 'secondary',
+                handler: () => {}
               }
             ]}
           />
@@ -102,11 +103,12 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
           <div className="">
             {/* Mapping through radio button data and rendering RadioButton component */}
             {myDiamondsRadioButtons?.map((radioData: any) => (
-              <div className="mb-3" key={radioData.id}>
+              <div className="p-[11px] flex items-center" key={radioData.id}>
                 <RadioButton
                   radioMetaData={radioData}
                   onChange={handleMyDiamondsRadioChange}
                   key={radioData?.id}
+                  customStyle={{ radio: '!text-mMedium !text-neutral900' }}
                 />
               </div>
             ))}
