@@ -12,6 +12,7 @@ interface ISearchInputProps {
   onChange?: (event: ChangeEvent<HTMLInputElement>) => void;
   suggestions?: any[];
   handleSuggestionClick?: (suggestion: string) => void;
+  handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 const SearchInputField: React.FC<ISearchInputProps> = ({
@@ -21,7 +22,8 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
   onChange,
   placeholder,
   suggestions,
-  handleSuggestionClick
+  handleSuggestionClick,
+  handleKeyPress
 }) => {
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
@@ -74,7 +76,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
           placeholder={placeholder}
           onFocus={() => setShowSuggestions(true)}
           onBlur={handleInputBlur}
-          onKeyDown={handleKeyDown}
+          onKeyDown={handleKeyPress ? handleKeyPress : handleKeyDown}
         />
       </div>
       {showSuggestions && suggestions && (

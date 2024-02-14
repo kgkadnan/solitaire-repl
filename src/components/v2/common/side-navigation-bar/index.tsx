@@ -46,9 +46,9 @@ const SideNavigationBar = () => {
     },
     {
       src: <MyDaimondsIcon />,
-      title: ManageLocales('app.sideNavigationBar.myDiamonds'),
-      link: Routes.MY_DIAMONDS,
-      isActive: currentRoute === Routes.MY_DIAMONDS
+      title: ManageLocales('app.sideNavigationBar.yourOrders'),
+      link: Routes.YOUR_ORDERS,
+      isActive: currentRoute === Routes.YOUR_ORDERS
     },
     {
       src: <BookmarkIcon />,
