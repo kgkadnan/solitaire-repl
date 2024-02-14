@@ -42,7 +42,9 @@ export const myDiamondApi = createApi({
         previousConfirmationSearchUrl,
         previousConfirmationSelectedDays
       }) =>
-        `/store/customers/me/orders?limit=${limit}&offset=${offset}&status=${previousConfirmStatus}&${previousConfirmationSearchUrl}&created_at[gte]=${previousConfirmationSelectedDays}`,
+        `/store/customers/me/orders?${offset ? `offset=${offset}&` : ''}${
+          limit ? `limit=${limit}&` : ''
+        }&status=${previousConfirmStatus}&${previousConfirmationSearchUrl}&created_at[gte]=${previousConfirmationSelectedDays}`,
       providesTags: ['myDiamond']
     })
   })
