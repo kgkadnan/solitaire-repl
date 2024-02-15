@@ -9,7 +9,8 @@ import {
 import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
-  useCardRecentConfirmationQuery
+  useCardRecentConfirmationQuery,
+  useLazyGetProductDetailsQuery
 } from '@/features/api/my-diamonds/my-diamond';
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
@@ -21,6 +22,7 @@ import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZ
 import { formatCreatedAt } from '@/utils/format-date';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
 import Link from 'next/link';
+import OrderDetail from './components/order-detail';
 
 const MyDiamonds = () => {
   const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
@@ -39,6 +41,9 @@ const MyDiamonds = () => {
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
   const [invoiceHistoryDataState, setInvoiceHistoryDataState] = useState([]);
+
+  const [showDetail, setShowDetail] = useState(false);
+  const [productDetailData, setProductDetailData] = useState([]);
   // Query parameters for API request
   let resentConfiramtionStatus = 'pending';
   let resentConfiramtionInvoiceStatus = 'pending';
@@ -48,6 +53,9 @@ const MyDiamonds = () => {
   let previousConfirmStatus = 'completed';
   let recentConfirmlimit = MAX_RECENT_CONFIRMATION_COUNT;
   let myInvoicelimit = MAX_MY_INVOICE_LIMIT_COUNT;
+  const singleExpand = 'items.variant.product%2Citems.variant.prices';
+
+  const [triggerProductDetail] = useLazyGetProductDetailsQuery();
 
   // Fetch recent confirmation data
   const { data: pendingInvoicesData } = useCardRecentConfirmationQuery({
@@ -144,19 +152,31 @@ const MyDiamonds = () => {
   // Get the keys and data for the active tab
   const { keys, data } = tabsData[activeTab] || { keys: [], data: [] };
 
+  const handleShowDetails = (itemId: string) => {
+    setShowDetail(true);
+    triggerProductDetail({ id: itemId, singleExpand }).then(res => {
+      setProductDetailData(res.data.order);
+    });
+  };
+
+  const goBackToListView = () => {
+    setShowDetail(false);
+    setProductDetailData([]);
+  };
+
   const renderCellContent = (accessor: string, value: any) => {
     switch (accessor) {
       case 'display_id':
         return (
           <>
             <Image src={icon} alt="icon" />
-            <span>{formatNumberWithLeadingZeros(value)}</span>
+            <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
       case 'delivery':
         return (
           <Link
-            href={value?.link}
+            href={value[accessor]?.link}
             target="_blank"
             className="pl-1 text-infoMain cursor-pointer"
           >
@@ -167,22 +187,125 @@ const MyDiamonds = () => {
         return (
           <>
             <Image src={icon} alt="icon" />
-            <span>{value}</span>
+            <span>{value[accessor]}</span>
           </>
         );
       case 'created_at':
-        return <span>{formatCreatedAt(value)}</span>;
+        return <span>{formatCreatedAt(value[accessor])}</span>;
       case 'details':
         return (
-          <div className="flex items-center cursor-pointer">
+          <button
+            className="flex items-center cursor-pointer"
+            onClick={() => handleShowDetails(value?.id)}
+          >
             <span>Show Details</span>
             <Image src={arrow} alt="arrow" />
-          </div>
+          </button>
         );
       default:
-        return <span>{value}</span>;
+        return <span>{value[accessor]}</span>;
     }
   };
+
+  const renderContent = () => {
+    if (showDetail) {
+      switch (activeTab) {
+        case PENDING_INVOICE:
+          return (
+            <OrderDetail
+              productDetailData={productDetailData}
+              goBackToListView={goBackToListView}
+            />
+          );
+        case ACTIVE_INVOICE:
+          return (
+            <OrderDetail
+              productDetailData={productDetailData}
+              goBackToListView={goBackToListView}
+            />
+          );
+        case INVOICE_HISTORY:
+          return (
+            <OrderDetail
+              productDetailData={productDetailData}
+              goBackToListView={goBackToListView}
+            />
+          );
+        // Add more cases as needed for other tabs
+        default:
+          return <div>Unknown tab or error...</div>;
+      }
+    } else {
+      // Render the main list view if not showing detail
+      return (
+        <>
+          {' '}
+          <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
+            <div className="flex border-b border-neutral200 w-[50%]  text-mMedium font-medium">
+              {myDiamondsTabs.map(({ label, count, status }) => {
+                return (
+                  <button
+                    className={`px-[16px] py-[8px] ${
+                      activeTab === status
+                        ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                        : 'text-neutral600 border-b-[2px] border-transparent'
+                    }`}
+                    key={label}
+                    onClick={() => handleTabs({ tab: status })}
+                  >
+                    {label} {count && `(${count})`}
+                  </button>
+                );
+              })}
+            </div>
+            <div className="flex items-center gap-2">
+              <HeaderSearchBar
+                activeTab={activeTab}
+                setPendinInvoiceSearchUrl={setPendinInvoiceSearchUrl}
+                setActiveInvoiceSearchUrl={setActiveInvoiceSearchUrl}
+                setInvoiceHistorySearchUrl={setInvoiceHistorySearchUrl}
+              />
+              <FilterByDays
+                activeTab={activeTab}
+                setPendingInvoiceSelectedDays={setPendingInvoiceSelectedDays}
+                setActiveInvoiceSelectedDays={setActiveInvoiceSelectedDays}
+                setInvoiceHistorySelectedDays={setInvoiceHistorySelectedDays}
+              />
+            </div>
+          </div>
+          <div className="max-w-full overflow-x-auto">
+            {/* header */}
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
+              {keys?.map(({ label }: any) => (
+                <div key={label} className="p-4 text-left font-medium">
+                  {label}
+                </div>
+              ))}
+            </div>
+            {/* rows */}
+            <div>
+              {data?.map((items: any) => (
+                <div
+                  key={items.order_id}
+                  className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-white border-b border-neutral-200"
+                >
+                  {keys?.map(({ accessor }: any, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                    >
+                      {renderCellContent(accessor, items)}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </>
+      );
+    }
+  };
+
   return (
     <div>
       <div className="flex h-[81px] items-center">
@@ -191,67 +314,7 @@ const MyDiamonds = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-          <div className="flex border-b border-neutral200 w-[50%]  text-mMedium font-medium">
-            {myDiamondsTabs.map(({ label, count, status }) => {
-              return (
-                <button
-                  className={`px-[16px] py-[8px] ${
-                    activeTab === status
-                      ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                      : 'text-neutral600 border-b-[2px] border-transparent'
-                  }`}
-                  key={label}
-                  onClick={() => handleTabs({ tab: status })}
-                >
-                  {label} {count && `(${count})`}
-                </button>
-              );
-            })}
-          </div>
-          <div className="flex items-center gap-2">
-            <HeaderSearchBar
-              activeTab={activeTab}
-              setPendinInvoiceSearchUrl={setPendinInvoiceSearchUrl}
-              setActiveInvoiceSearchUrl={setActiveInvoiceSearchUrl}
-              setInvoiceHistorySearchUrl={setInvoiceHistorySearchUrl}
-            />
-            <FilterByDays
-              activeTab={activeTab}
-              setPendingInvoiceSelectedDays={setPendingInvoiceSelectedDays}
-              setActiveInvoiceSelectedDays={setActiveInvoiceSelectedDays}
-              setInvoiceHistorySelectedDays={setInvoiceHistorySelectedDays}
-            />
-          </div>
-        </div>
-        <div className="max-w-full overflow-x-auto">
-          {/* header */}
-          <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
-            {keys?.map(({ label }: any) => (
-              <div key={label} className="p-4 text-left font-medium">
-                {label}
-              </div>
-            ))}
-          </div>
-          {/* rows */}
-          <div>
-            {data?.map((items: any) => (
-              <div
-                key={items.order_id}
-                className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-white border-b border-neutral-200"
-              >
-                {keys?.map(({ accessor }: any, index: number) => (
-                  <div
-                    key={index}
-                    className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                  >
-                    {renderCellContent(accessor, items[accessor])}
-                  </div>
-                ))}
-              </div>
-            ))}
-          </div>
-        </div>
+        {renderContent()}
       </div>
     </div>
   );

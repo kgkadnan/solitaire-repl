@@ -1,6 +1,6 @@
 // Function to format the created_at date
 export const formatCreatedAt = (createdAt: Date) => {
-  const createdAtDate = new Date(createdAt);
+  const createdAtDate = new Date(createdAt && createdAt);
 
   const dateFormatter = new Intl.DateTimeFormat('en-US', {
     day: '2-digit',
