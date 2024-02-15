@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Edit from '@public/v2/assets/icons/edit-number.svg?url';
 import { ManageLocales } from '@/utils/translate';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
@@ -52,6 +52,7 @@ const OTPVerification = ({
   setToken
 }: IOTPVerification) => {
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
+  const [error, setError] = useState('');
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
 
@@ -63,6 +64,16 @@ const OTPVerification = ({
 
     return () => clearInterval(countdownInterval);
   }, [resendTimer]);
+
+  function checkOTPEntry(otpEntry: string[]) {
+    for (let i = 0; i < otpEntry.length; i++) {
+      if (otpEntry[i] === '') {
+        return false;
+      }
+    }
+    return true;
+  }
+
   return (
     <div className="flex  items-center">
       <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200">
@@ -78,9 +89,10 @@ const OTPVerification = ({
         </div>
 
         {setIsInputDialogOpen && (
-          <div className="flex ">
+          <div className="flex cursor-pointer">
             <p className="text-neutral-900">
-              OTP has been sent to {otpVerificationFormState.codeAndNumber}
+              OTP has been sent to{' '}
+              {`+${otpVerificationFormState.codeAndNumber}`}
             </p>
             <div
               onClick={() => setIsInputDialogOpen(true)}
@@ -90,7 +102,11 @@ const OTPVerification = ({
             </div>
           </div>
         )}
-        <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
+        <OtpInput
+          setOtpValues={setOtpValues}
+          otpValues={otpValues}
+          error={error}
+        />
 
         <div className="flex ">
           <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
@@ -120,17 +136,22 @@ const OTPVerification = ({
           size={'custom'}
           className="rounded-[4px]"
           onClick={() =>
-            handleVerifyOtp({
-              otpValues,
-              setCurrentState,
-              token,
-              userLoggedIn,
-              setIsDialogOpen,
-              setDialogContent,
-              verifyOTP,
-              role,
-              setToken
-            })
+            checkOTPEntry(otpValues)
+              ? (handleVerifyOtp({
+                  otpValues,
+                  setCurrentState,
+                  token,
+                  userLoggedIn,
+                  setIsDialogOpen,
+                  setDialogContent,
+                  verifyOTP,
+                  role,
+                  setToken
+                }),
+                setError(''))
+              : setError(
+                  `We're sorry, but the OTP you entered is incorrect or has expired`
+                )
           }
         >
           {' '}

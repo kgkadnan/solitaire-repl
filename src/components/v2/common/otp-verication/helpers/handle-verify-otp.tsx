@@ -41,9 +41,11 @@ export const handleVerifyOtp = ({
               token: res.access_token
             }));
           userLoggedIn(res.access_token);
+          localStorage.setItem('user', JSON.stringify(res));
         } else if (role === 'login') {
           setCurrentState('successfullyCreated');
           userLoggedIn(res.access_token);
+          localStorage.setItem('user', JSON.stringify(res));
         }
       }
     })

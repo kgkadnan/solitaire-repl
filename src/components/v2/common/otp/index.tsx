@@ -10,9 +10,10 @@ import { Events } from '@/constants/enums/event';
 interface IOtpInput {
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   otpValues: string[];
+  error?: string;
 }
 
-const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues }) => {
+const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues, error }) => {
   const otpFieldsRef = useRef<HTMLInputElement[]>([]);
 
   const handleInput = (index: number, value: string) => {
@@ -52,28 +53,33 @@ const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues }) => {
   };
 
   return (
-    <div className={styles.otpContainer}>
-      {otpValues.map((value, index) => (
-        <input
-          key={index}
-          type="number"
-          maxLength={1}
-          className={styles.otpInput}
-          value={value}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            handleInput(index, e.target.value)
-          }
-          onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
-            if (e.key === Events.BACKSPACPE) {
-              handleBackspace(index);
+    <div className="flex text-center flex-col">
+      <div className={styles.otpContainer}>
+        {otpValues.map((value, index) => (
+          <input
+            key={index}
+            type="number"
+            maxLength={1}
+            className={`${
+              error ? 'border-dangerMain' : 'border-neutral-200'
+            } border-[1px] ${styles.otpInput}`}
+            value={value}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              handleInput(index, e.target.value)
             }
-          }}
-          onPaste={handlePaste}
-          ref={el => {
-            otpFieldsRef.current[index] = el as HTMLInputElement;
-          }}
-        />
-      ))}
+            onKeyDown={(e: KeyboardEvent<HTMLInputElement>) => {
+              if (e.key === Events.BACKSPACPE) {
+                handleBackspace(index);
+              }
+            }}
+            onPaste={handlePaste}
+            ref={el => {
+              otpFieldsRef.current[index] = el as HTMLInputElement;
+            }}
+          />
+        ))}
+      </div>
+      <p className="text-dangerMain">{error}</p>
     </div>
   );
 };
