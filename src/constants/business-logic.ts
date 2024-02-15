@@ -30,6 +30,10 @@ export const PENDING_INVOICE = 'pendingInvoice';
 export const ACTIVE_INVOICE = 'activeInvoice';
 export const INVOICE_HISTORY = 'invoiceHistory';
 
+export const PENING_INVOICE_BREADCRUMB_LABEL = 'Pending Invoice';
+export const ACTIVE_INVOICE_BREADCRUMB_LABEL = 'Active Invoices';
+export const INVOICE_HISTORY_BREADCRUMB_LABEL = 'Invoices History';
+
 export const NOTIFICATION_READ_STATUS = 'read';
 export const NOTIFICATION_UNSEEN_STATUS = 'unseen';
 export const NOTIFICATION_UNREAD_STATUS = 'unread';

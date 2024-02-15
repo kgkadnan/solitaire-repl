@@ -1,10 +1,13 @@
 'use client';
 import {
   ACTIVE_INVOICE,
+  ACTIVE_INVOICE_BREADCRUMB_LABEL,
   INVOICE_HISTORY,
+  INVOICE_HISTORY_BREADCRUMB_LABEL,
   MAX_MY_INVOICE_LIMIT_COUNT,
   MAX_RECENT_CONFIRMATION_COUNT,
-  PENDING_INVOICE
+  PENDING_INVOICE,
+  PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
 import {
   useCardMyInvoiceQuery,
@@ -215,6 +218,7 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
+              breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
             />
           );
         case ACTIVE_INVOICE:
@@ -222,6 +226,7 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
+              breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
             />
           );
         case INVOICE_HISTORY:
@@ -229,6 +234,7 @@ const MyDiamonds = () => {
             <OrderDetail
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
+              breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
             />
           );
         // Add more cases as needed for other tabs
@@ -310,7 +316,14 @@ const MyDiamonds = () => {
     <div>
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
-          {ManageLocales('app.myDiamonds.yourOrders')}
+          {showDetail
+            ? activeTab === PENDING_INVOICE
+              ? ManageLocales('app.yourOrder.header.pendingInvoiceDetails')
+              : activeTab === ACTIVE_INVOICE
+              ? ManageLocales('app.yourOrder.header.activeInvoiceDetails')
+              : activeTab === INVOICE_HISTORY &&
+                ManageLocales('app.yourOrder.header.invoicesHistoryDetails')
+            : ManageLocales('app.myDiamonds.yourOrders')}
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
