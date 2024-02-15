@@ -71,8 +71,8 @@ const Table = ({ rows, columns, setRowSelection, rowSelection }: any) => {
 
     muiTableContainerProps: {
       sx: {
-        minHeight: 'calc(100vh - 399px)',
-        maxHeight: 'calc(100vh - 399px)'
+        minHeight: 'calc(100vh - 440px)',
+        maxHeight: 'calc(100vh - 440px)'
       }
     },
     muiTableHeadRowProps: {
