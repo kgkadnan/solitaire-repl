@@ -37,7 +37,6 @@ const Share = () => {
   const dispatch = useAppDispatch();
 
   const handleClear = () => {
-    console.log('jyoti');
     setSelectAll(false);
     shareOptions.map(item => {
       dispatch(
