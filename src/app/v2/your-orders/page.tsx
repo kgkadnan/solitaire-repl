@@ -30,23 +30,16 @@ import OrderDetail from './components/order-detail';
 const MyDiamonds = () => {
   const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
 
-  const [pendinInvoiceSearchUrl, setPendinInvoiceSearchUrl] = useState('');
-  const [activeInvoiceSearchUrl, setActiveInvoiceSearchUrl] = useState('');
-  const [invoiceHistorySearchUrl, setInvoiceHistorySearchUrl] = useState('');
-
-  const [pendingInvoiceSelectedDays, setPendingInvoiceSelectedDays] =
-    useState('');
-  const [activeInvoiceSelectedDays, setActiveInvoiceSelectedDays] =
-    useState('');
-  const [invoiceHistorySelectedDays, setInvoiceHistorySelectedDays] =
-    useState('');
-
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
   const [invoiceHistoryDataState, setInvoiceHistoryDataState] = useState([]);
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
+  const [radioState, setRadioState] = useState<string>('');
+
+  // State to manage the search input value
+  const [search, setSearch] = useState<string>('');
   // Query parameters for API request
   let resentConfiramtionStatus = 'pending';
   let resentConfiramtionInvoiceStatus = 'pending';
@@ -65,27 +58,19 @@ const MyDiamonds = () => {
     resentConfiramtionStatus,
     resentConfiramtionInvoiceStatus,
     expand,
-    recentConfiramtionSearchUrl: pendinInvoiceSearchUrl,
-    recentConfirmlimit,
-    recentConfirmationSelectedDays: pendingInvoiceSelectedDays
+    recentConfirmlimit
   });
 
   // Fetch my-invoice data
   const { data: activeInvoicesData } = useCardMyInvoiceQuery({
     myInvoiceStatus,
     myInvoiceInvoiceStatus,
-    myInvoiceSearchUrl: activeInvoiceSearchUrl,
-    myInvoicelimit,
-    myInvoiceSelectedDays: activeInvoiceSelectedDays
+    myInvoicelimit
   });
 
   // Fetch previous-confiramtion-data
   const { data: invoiceHistoryData } = useCardPreviousConfirmationQuery({
-    // limit,
-    // offset,
-    previousConfirmStatus,
-    previousConfirmationSearchUrl: invoiceHistorySearchUrl,
-    previousConfirmationSelectedDays: invoiceHistorySelectedDays
+    previousConfirmStatus
   });
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
@@ -165,6 +150,96 @@ const MyDiamonds = () => {
   const goBackToListView = () => {
     setShowDetail(false);
     setProductDetailData([]);
+  };
+
+  const handleSearch = (e: any) => {
+    const inputValue = e.target.value;
+    setSearch(inputValue);
+
+    if (activeTab === PENDING_INVOICE) {
+      const filteredData = pendingInvoiceDataState.filter((item: any) => {
+        const formattedValue = formatNumberWithLeadingZeros(item.display_id);
+        return (
+          String(item.display_id).includes(inputValue) ||
+          formattedValue.includes(inputValue)
+        );
+      });
+      setPendingInvoiceDataState(filteredData);
+    } else if (activeTab === ACTIVE_INVOICE) {
+      const filteredData = activeInvoiceDataState.filter((item: any) =>
+        String(item.invoice_id).includes(inputValue)
+      );
+      setActiveInvoiceDataState(filteredData);
+    } else {
+      const filteredData = invoiceHistoryDataState.filter((item: any) =>
+        String(item.invoice_id).includes(inputValue)
+      );
+      setInvoiceHistoryDataState(filteredData);
+    }
+
+    if (!inputValue) {
+      setPendingInvoiceDataState(pendingInvoicesData?.orders);
+      setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+      setActiveInvoiceDataState(activeInvoicesData?.orders);
+    }
+  };
+
+  const handleClearInput = () => {
+    setSearch('');
+    setPendingInvoiceDataState(pendingInvoicesData?.orders);
+    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+    setActiveInvoiceDataState(activeInvoicesData?.orders);
+  };
+
+  const filterByDate = (
+    data: any[],
+    filterOption: '7days' | '30days' | '90days'
+  ): any => {
+    const currentDate = new Date();
+    let startDate: Date;
+
+    switch (filterOption) {
+      case '7days':
+        startDate = new Date(currentDate.getTime() - 7 * 24 * 60 * 60 * 1000);
+        break;
+      case '30days':
+        startDate = new Date(currentDate.getTime() - 30 * 24 * 60 * 60 * 1000);
+        break;
+      case '90days':
+        startDate = new Date(currentDate.getTime() - 90 * 24 * 60 * 60 * 1000);
+        break;
+      default:
+        startDate = new Date(0); // Default to epoch date if filter option is invalid
+    }
+
+    return data.filter((item: any) => {
+      const itemDate = new Date(item.created_at);
+      return itemDate >= startDate && itemDate <= currentDate;
+    });
+  };
+
+  const filterFunction = (value: '7days' | '30days' | '90days') => {
+    setRadioState(value);
+    switch (activeTab) {
+      case PENDING_INVOICE:
+        setPendingInvoiceDataState(
+          pendingInvoicesData &&
+            filterByDate(pendingInvoicesData?.orders, value)
+        );
+        break;
+      case ACTIVE_INVOICE:
+        setActiveInvoiceDataState(
+          activeInvoicesData && filterByDate(activeInvoicesData?.orders, value)
+        );
+        break;
+      case INVOICE_HISTORY:
+        setInvoiceHistoryDataState(
+          invoiceHistoryData && filterByDate(invoiceHistoryData?.orders, value)
+        );
+        break;
+      default:
+        break;
+    }
   };
 
   const renderCellContent = (accessor: string, value: any) => {
@@ -267,15 +342,13 @@ const MyDiamonds = () => {
             <div className="flex items-center gap-2">
               <HeaderSearchBar
                 activeTab={activeTab}
-                setPendinInvoiceSearchUrl={setPendinInvoiceSearchUrl}
-                setActiveInvoiceSearchUrl={setActiveInvoiceSearchUrl}
-                setInvoiceHistorySearchUrl={setInvoiceHistorySearchUrl}
+                handleSearch={handleSearch}
+                search={search}
+                handleClearInput={handleClearInput}
               />
               <FilterByDays
-                activeTab={activeTab}
-                setPendingInvoiceSelectedDays={setPendingInvoiceSelectedDays}
-                setActiveInvoiceSelectedDays={setActiveInvoiceSelectedDays}
-                setInvoiceHistorySelectedDays={setInvoiceHistorySelectedDays}
+                filterFunction={filterFunction}
+                radioState={radioState}
               />
             </div>
           </div>

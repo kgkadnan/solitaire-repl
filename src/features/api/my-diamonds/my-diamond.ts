@@ -15,7 +15,13 @@ export const myDiamondApi = createApi({
         recentConfirmlimit,
         recentConfirmationSelectedDays
       }) =>
-        `/store/customers/me/orders?status=${resentConfiramtionStatus}&invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${recentConfiramtionSearchUrl}&limit=${recentConfirmlimit}&created_at[gte]=${recentConfirmationSelectedDays}`,
+        `/store/customers/me/orders?status=${resentConfiramtionStatus}&invoice_status=${resentConfiramtionInvoiceStatus}&expand=${expand}&${
+          recentConfiramtionSearchUrl ? recentConfiramtionSearchUrl : ''
+        }&limit=${recentConfirmlimit}&${
+          recentConfirmationSelectedDays
+            ? `created_at[gte]=${recentConfirmationSelectedDays}`
+            : ''
+        }`,
       providesTags: ['myDiamond']
     }),
     getProductDetails: builder.query({
@@ -31,7 +37,13 @@ export const myDiamondApi = createApi({
         myInvoicelimit,
         myInvoiceSelectedDays
       }) =>
-        `/store/customers/me/orders?status=${myInvoiceStatus}&invoice_status=${myInvoiceInvoiceStatus}&${myInvoiceSearchUrl}&limit=${myInvoicelimit}&created_at[gte]=${myInvoiceSelectedDays}`,
+        `/store/customers/me/orders?status=${myInvoiceStatus}&invoice_status=${myInvoiceInvoiceStatus}&${
+          myInvoiceSearchUrl ? myInvoiceSearchUrl : ''
+        }&limit=${myInvoicelimit}&${
+          myInvoiceSelectedDays
+            ? `created_at[gte]=${myInvoiceSelectedDays}`
+            : ''
+        }`,
       providesTags: ['myDiamond']
     }),
     cardPreviousConfirmation: builder.query({
@@ -44,7 +56,13 @@ export const myDiamondApi = createApi({
       }) =>
         `/store/customers/me/orders?${offset ? `offset=${offset}&` : ''}${
           limit ? `limit=${limit}&` : ''
-        }&status=${previousConfirmStatus}&${previousConfirmationSearchUrl}&created_at[gte]=${previousConfirmationSelectedDays}`,
+        }&status=${previousConfirmStatus}&${
+          previousConfirmationSearchUrl ? previousConfirmationSearchUrl : ''
+        }&${
+          previousConfirmationSelectedDays
+            ? `created_at[gte]=${previousConfirmationSelectedDays}`
+            : ''
+        }`,
       providesTags: ['myDiamond']
     })
   })
