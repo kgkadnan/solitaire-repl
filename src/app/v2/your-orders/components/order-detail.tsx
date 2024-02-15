@@ -98,7 +98,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     <div>
       {' '}
       {productDetailData && Object.keys(productDetailData).length > 0 && (
-        <div>
+        <div
+          onClick={() => {
+            goBackToListView;
+          }}
+        >
           <div className="">
             <div className="flex gap-[10px]">
               {' '}
