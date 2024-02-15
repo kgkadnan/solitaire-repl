@@ -3,22 +3,63 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ShareDialog } from './share-dialog';
 import { IndividualActionButton } from '../action-button/individual-button';
 import CheckboxComponent from '../checkbox';
+import { useAppDispatch } from '@/hooks/hook';
+import { updateShare } from '@/features/share';
+import { useSelector } from 'react-redux';
 
 const Share = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { isInputDialogOpen } = modalState;
   const [copied, setCopied] = useState(false);
+  const {
+    stockNo,
+    shape,
+    carat,
+    color,
+    clarity,
+    cut,
+    polish,
+    symmetry,
+    fluorescence,
+    measurements,
+    table,
+    depth,
+    rapVal,
+    rap,
+    disc,
+    prct,
+    amt,
+    publicURL
+  } = useSelector((state: any) => state);
 
   const { setIsInputDialogOpen } = modalSetState;
   const [selectAll, setSelectAll] = useState<boolean>(true);
+  const dispatch = useAppDispatch();
+
   const handleClear = () => {
+    console.log('jyoti');
     setSelectAll(false);
+    shareOptions.map(item => {
+      dispatch(
+        updateShare({
+          name: item.state,
+          value: false
+        })
+      );
+    });
   };
 
   const handleSelectAll = () => {
     setSelectAll(true);
+    shareOptions.map(item => {
+      dispatch(
+        updateShare({
+          name: item.state,
+          value: true
+        })
+      );
+    });
   };
-
   const copyToClipboard = async (text: any) => {
     try {
       await navigator.clipboard.writeText(text);
@@ -29,24 +70,24 @@ const Share = () => {
   };
 
   const shareOptions = [
-    { name: 'Stock No', state: true, setState: 'any' },
-    { name: 'Shape', state: true, setState: 'any' },
-    { name: 'Carat', state: true, setState: 'any' },
-    { name: 'Color', state: true, setState: 'any' },
-    { name: 'Clarity', state: true, setState: 'any' },
-    { name: 'Cut', state: true, setState: 'any' },
-    { name: 'Polish', state: true, setState: 'any' },
-    { name: 'Symmetry', state: true, setState: 'any' },
-    { name: 'Fluorescence', state: true, setState: 'any' },
-    { name: 'Measurements', state: true, setState: 'any' },
-    { name: 'Table %', state: true, setState: 'any' },
-    { name: 'Depth %', state: true, setState: 'any' },
-    { name: 'Rap Val ($)', state: true, setState: 'any' },
-    { name: 'Rap ($)', state: true, setState: 'any' },
-    { name: 'Disc%', state: true, setState: 'any' },
-    { name: 'Pr/Ct', state: true, setState: 'any' },
-    { name: 'Amt ($)', state: true, setState: 'any' },
-    { name: 'Public URL', state: true, setState: 'any' }
+    { name: 'Stock No', state: 'stockNo', value: stockNo },
+    { name: 'Shape', state: 'shape', value: shape },
+    { name: 'Carat', state: 'carat', value: carat },
+    { name: 'Color', state: 'color', value: color },
+    { name: 'Clarity', state: 'clarity', value: clarity },
+    { name: 'Cut', state: 'cut', value: cut },
+    { name: 'Polish', state: 'polish', value: polish },
+    { name: 'Symmetry', state: 'symmetry', value: symmetry },
+    { name: 'Fluorescence', state: 'fluorescence', value: fluorescence },
+    { name: 'Measurements', state: 'measurements', value: measurements },
+    { name: 'Table %', state: 'table', value: table },
+    { name: 'Depth %', state: 'depth', value: depth },
+    { name: 'Rap Val ($)', state: 'rapVal', value: rapVal },
+    { name: 'Rap ($)', state: 'rap', value: rap },
+    { name: 'Disc%', state: 'disc', value: disc },
+    { name: 'Pr/Ct', state: 'prct', value: prct },
+    { name: 'Amt ($)', state: 'amt', value: amt },
+    { name: 'Public URL', state: 'publicURL', value: publicURL }
   ];
 
   const renderContentWithInput = () => {
@@ -64,24 +105,38 @@ const Share = () => {
           </p>
           <div
             className="text-infoMain text-mRegular cursor-pointer"
-            onClick={selectAll ? handleClear : handleSelectAll}
+            onClick={() => {
+              selectAll ? handleClear() : handleSelectAll();
+            }}
           >
             {selectAll ? 'Clear' : 'Select All'}
           </div>
         </div>
-        <div className="flex gap-[14px] flex-wrap">
+        <div className="flex gap-[14px] flex-wrap items-center">
           {shareOptions.map((item, index) => (
             <div
               key={index}
-              className="w-[187px] border-[1px] text-neutral-900 text-mMedium font-medium flex items-center"
+              className={`w-[187px] border-[1px]  text-mMedium font-medium flex items-center rounded-[4px] border-neutral-200 ${
+                item.name === 'Public URL'
+                  ? 'text-infoMain'
+                  : 'text-neutral-900'
+              }`}
             >
-               <CheckboxComponent
-            onClick={() => {
-              // setIsKeepSignedIn(!isKeepSignedIn);
-            }}
-            isChecked={true}
-          />
-              <p className="py-1 pr-1 pl-[6px]">{item.name}</p>
+              <div className="p-[6px]">
+                <CheckboxComponent
+                  onClick={() => {
+                    dispatch(
+                      updateShare({
+                        name: item.state,
+                        value: !item.state
+                      })
+                    );
+                  }}
+                  isChecked={item.value}
+                  styles={'&:focus-visible {  border:none}'}
+                />
+              </div>
+              <p className="py-1 pr-1">{item.name}</p>
             </div>
           ))}
         </div>

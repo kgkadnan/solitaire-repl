@@ -41,11 +41,11 @@
   "app.myDiamonds.pendingInvoice.searchByOrderId": "Search by Order ID",
   "app.myDiamonds.activeInvoice.searchByInvoiceId": "Search by Invoice ID",
 
-  "app.myDiamonds.selectDate" : "Select date",
-  "app.yourOrder.description.dataAndTime" : "Date & Time",
-  "app.yourOrder.description.invoiceNumber" : "Invoice Number",
-  "app.yourOrder.description.noOfStones" : "No. of Stones",
-  "app.yourOrder.description.Payable Amount" : "Payable Amount",
+  "app.myDiamonds.selectDate": "Select date",
+  "app.yourOrder.description.dataAndTime": "Date & Time",
+  "app.yourOrder.description.invoiceNumber": "Invoice Number",
+  "app.yourOrder.description.noOfStones": "No. of Stones",
+  "app.yourOrder.description.Payable Amount": "Payable Amount",
 
   "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
