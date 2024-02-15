@@ -32,7 +32,7 @@ import { isPhoneNumberValid } from '@/utils/validate-phone';
 import InvalidCreds from './component/invalid-creds';
 import OTPVerification from '@/components/v2/common/otp-verication';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
-import editIdon from '@public/v2/assets/icons/modal/edit.svg';
+import editIcon from '@public/v2/assets/icons/modal/edit.svg';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { handleEditMobileNumber } from '@/components/v2/common/otp-verication/helpers/handle-edit-mobile-number';
 import Image from 'next/image';
@@ -157,7 +157,7 @@ const Login = () => {
       }
     }
   }, [data]);
-  // Handle the login logic
+
   const handleLogin = async () => {
     if (
       !emailErrorText.length &&
@@ -170,7 +170,6 @@ const Login = () => {
         password: password,
         country_code: phoneNumber.countryCode
       });
-
       if (res?.error?.status === statusCode.UNAUTHORIZED) {
         // Display error message if login fails
         setIsDialogOpen(true);
@@ -195,6 +194,13 @@ const Login = () => {
           token: res.data.access_token,
           tempToken: res.data.access_token
         }));
+      } else if (res.data.customer.phone_token) {
+        setCurrentState('otpVerification');
+        setToken((prev: any) => ({
+          ...prev,
+          phoneToken: res.data.customer.phone_token,
+          tempToken: res.data.customer.temp_token
+        }));
       }
     } else if (!password.length && !phoneNumber.mobileNumber.length) {
       setPasswordErrorText(ENTER_PASSWORD);
@@ -205,7 +211,6 @@ const Login = () => {
       setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
-
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === Events.ENTER) {
@@ -217,7 +222,7 @@ const Login = () => {
     return (
       <div className="flex gap-[12px] flex-col w-full">
         <div className="absolute left-[-84px] top-[-84px]">
-          <Image src={editIdon} alt="update phone number" />
+          <Image src={editIcon} alt="update phone number" />
         </div>
         <div className="flex gap-[12px] flex-col mt-[80px] align-left">
           <p className="text-headingS text-neutral-900 font-medium">
@@ -231,10 +236,7 @@ const Login = () => {
           }
           type="number"
           name="otpMobileNumber"
-          // value={registerFormState.mobileNumber}
           errorText={otpVerificationFormErrors.otpMobileNumber}
-          // registerFormState={registerFormState}
-          // setRegisterFormState={setRegisterFormState}
           placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
           registerFormState={otpVerificationFormState}
           setRegisterFormState={setOTPVerificationFormState}
@@ -266,7 +268,8 @@ const Login = () => {
                 setIsDialogOpen,
                 setDialogContent,
                 sendOtp,
-                setToken
+                setToken,
+                token
               });
             }}
             variant={'primary'}

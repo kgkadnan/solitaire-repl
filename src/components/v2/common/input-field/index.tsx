@@ -27,9 +27,9 @@ export const InputField = ({
         <Input
           ref={inputRef}
           style={{ boxShadow: 'var(--input-shadow) inset' }}
-          className={`focus:outline-none bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${styles?.input} ${
+          className={`focus:outline-none bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${
             errorText ? 'border-dangerMain' : 'border-neutral200'
-          }`}
+          } ${styles?.input} `}
           type={type}
           name={name}
           value={value}

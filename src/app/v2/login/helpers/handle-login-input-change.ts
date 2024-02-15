@@ -6,10 +6,9 @@ export const handleLoginInputChange = ({
   setPhoneNumber,
   isPhoneNumberValid,
   setEmailErrorText,
-  setErrorText,
+  // setErrorText,
   setPasswordErrorText,
-  setPassword,
-  setIsError
+  setPassword // setIsError
 }: any) => {
   const inputValue = event.target.value;
 
@@ -18,15 +17,15 @@ export const handleLoginInputChange = ({
 
     if (isPhoneNumberValid(inputValue)) {
       setEmailErrorText('');
-      setErrorText('');
+      // setErrorText('');
     } else {
       setEmailErrorText(INVALID_PHONE);
-      setErrorText('');
+      // setErrorText('');
     }
   } else if (type === 'password') {
     setPassword(inputValue);
-    setIsError(false);
-    setErrorText('');
+    // setIsError(false);
+    // setErrorText('');
     setPasswordErrorText('');
   }
 };

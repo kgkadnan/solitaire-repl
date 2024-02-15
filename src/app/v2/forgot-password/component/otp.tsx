@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import keyIcon from '@public/v2/assets/icons/modal/key.svg';
 import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 
@@ -27,6 +27,8 @@ const OTPComponent = ({
   userLoggedIn
 }: any) => {
   const router = useRouter();
+  const [error, setError] = useState('');
+
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -39,6 +41,15 @@ const OTPComponent = ({
 
     return () => clearInterval(countdownInterval);
   }, [resendTimer]);
+
+  function checkOTPEntry(otpEntry: string[]) {
+    for (let i = 0; i < otpEntry.length; i++) {
+      if (otpEntry[i] === '') {
+        return false;
+      }
+    }
+    return true;
+  }
   return (
     <div className="flex items-center text-center">
       <div className="flex flex-col w-[450px]  p-8 gap-[24px] mt-[-60px]">
@@ -60,7 +71,11 @@ const OTPComponent = ({
           </div>
         </div>
 
-        <OtpInput setOtpValues={setOtpValues} otpValues={otpValues} />
+        <OtpInput
+          setOtpValues={setOtpValues}
+          otpValues={otpValues}
+          error={error}
+        />
 
         <div className="flex justify-center">
           <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
@@ -87,16 +102,21 @@ const OTPComponent = ({
 
         <IndividualActionButton
           onClick={() =>
-            handleResetOTP({
-              otpValues,
-              setCurrentState,
-              token,
-              userLoggedIn,
-              setIsDialogOpen,
-              setDialogContent,
-              verifyResetOTP,
-              phoneNumber
-            })
+            checkOTPEntry(otpValues)
+              ? (handleResetOTP({
+                  otpValues,
+                  setCurrentState,
+                  token,
+                  userLoggedIn,
+                  setIsDialogOpen,
+                  setDialogContent,
+                  verifyResetOTP,
+                  phoneNumber
+                }),
+                setError(''))
+              : setError(
+                  `We're sorry, but the OTP you entered is incorrect or has expired`
+                )
           }
           variant={'primary'}
           size={'custom'}
