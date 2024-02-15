@@ -2,9 +2,9 @@ import { IModalSetState } from '@/app/search/result/result-interface';
 
 export interface IHeaderSearchBarProps {
   activeTab: string;
-  setPendinInvoiceSearchUrl: (url: string) => void;
-  setActiveInvoiceSearchUrl: (url: string) => void;
-  setInvoiceHistorySearchUrl: (url: string) => void;
+  handleSearch: any;
+  search: any;
+  handleClearInput: any;
 }
 
 export interface ITabsProps {
@@ -16,10 +16,8 @@ export interface ITabsProps {
 }
 
 export interface IFilterByDaysProps {
-  activeTab: string;
-  setPendingInvoiceSelectedDays: (selectedDays: string) => void;
-  setActiveInvoiceSelectedDays: (selectedDays: string) => void;
-  setInvoiceHistorySelectedDays: (selectedDays: string) => void;
+  filterFunction: any;
+  radioState: string;
 }
 
 export interface IPageTitles {

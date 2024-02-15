@@ -46,6 +46,15 @@
   "app.yourOrder.description.invoiceNumber": "Invoice Number",
   "app.yourOrder.description.noOfStones": "No. of Stones",
   "app.yourOrder.description.Payable Amount": "Payable Amount",
+  "app.yourOrder.header.pendingInvoiceDetails": "Pending Invoice Details",
+  "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
+  "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
+
+  "app.yourOrder.description.payableAmount": "Payable Amount",
+  "app.yourOrder.description.paidAmount": "Paid Amount",
+  "app.yourOrder.description.comments": "Comments",
+  "app.yourOrder.description.donwloadExcel": "Download Excel",
+  "app.yourOrder.description.downloadInvoice": "Download Invoice",
 
   "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
