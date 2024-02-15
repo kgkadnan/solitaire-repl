@@ -4,12 +4,17 @@ import React from 'react';
 interface ICheckboxComponentProps {
   onClick: (evt: any) => void;
   isChecked: boolean;
+  styles?: any;
 }
 
-const CheckboxComponent = ({ onClick, isChecked }: ICheckboxComponentProps) => {
+const CheckboxComponent = ({
+  onClick,
+  isChecked,
+  styles
+}: ICheckboxComponentProps) => {
   return (
     <Checkbox
-      className="rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25"
+      className={`rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 ${styles}`}
       onClick={onClick}
       checked={isChecked}
     />
