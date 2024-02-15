@@ -54,5 +54,6 @@ export const {
   useCardRecentConfirmationQuery,
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
-  useGetProductDetailsQuery
+  useGetProductDetailsQuery,
+  useLazyGetProductDetailsQuery
 } = myDiamondApi;
