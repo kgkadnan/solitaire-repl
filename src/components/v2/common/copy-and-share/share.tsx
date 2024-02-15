@@ -27,7 +27,15 @@ const Share = () => {
     }
   };
 
-  const shareOptions = ['Stock No', 'Shape'];
+  const shareOptions = [{name:"Stock No",state:true,setState:"any"},{name:"Shape",state:true,setState:"any"},
+  {name:"Carat",state:true,setState:"any"},{name:"Color",state:true,setState:"any"},
+  {name:"Clarity",state:true,setState:"any"},{name:"Cut",state:true,setState:"any"},
+  {name:"Polish",state:true,setState:"any"},{name:"Symmetry",state:true,setState:"any"},
+  {name:"Fluorescence",state:true,setState:"any"},{name:"Measurements",state:true,setState:"any"},
+  {name:"Table %",state:true,setState:"any"},{name:"Depth %",state:true,setState:"any"},
+  {name:"Rap Val ($)",state:true,setState:"any"},{name:"Rap ($)",state:true,setState:"any"},
+  {name:"Disc%",state:true,setState:"any"},{name:"Pr/Ct",state:true,setState:"any"},
+  {name:"Amt ($)",state:true,setState:"any"},{name:"Public URL",state:true,setState:"any"},];
 
   const renderContentWithInput = () => {
     return (
@@ -49,9 +57,9 @@ const Share = () => {
             {selectAll ? 'Clear' : 'Select All'}
           </div>
         </div>
-        <div>
+        <div className='flex gap-[14px] flex-wrap'>
           {shareOptions.map((item, index) => (
-            <div key={index}>{item}</div>
+            <div key={index} className='w-[187px] border-[1px] text-neutral-900 text-mMedium font-medium'><p className='py-1 pr-1 pl-[6px]'>{item.name}</p></div>
           ))}
         </div>
         <div className="flex  gap-[16px]">
