@@ -1,12 +1,17 @@
 import {
   MRT_ColumnDef,
+  MRT_GlobalFilterTextField,
   MRT_RowData,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
+import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 
 // theme.js
 import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { Box } from '@mui/material';
+import Image from 'next/image';
+import { ManageLocales } from '@/utils/v2/translate';
 
 const theme = createTheme({
   typography: {
@@ -22,9 +27,13 @@ const theme = createTheme({
 interface ITable {
   rows: MRT_ColumnDef<MRT_RowData, any>[];
   columns: MRT_ColumnDef<MRT_RowData, any>[];
-  setRowSelection?: React.Dispatch<React.SetStateAction<{}>>;
-  rowSelection: {};
+  setRowSelection?: any;
+  rowSelection?: any;
   isRowSelectionNeeded?: boolean;
+  isEnableTopToolBar?: boolean;
+  showGloablFilter?: boolean;
+  goBackToListView?: () => void;
+  breadCrumLabel?: string;
 }
 
 const Table = ({
@@ -32,7 +41,11 @@ const Table = ({
   columns,
   setRowSelection,
   rowSelection,
-  isRowSelectionNeeded = true
+  isRowSelectionNeeded = true,
+  isEnableTopToolBar = false,
+  showGloablFilter = false,
+  goBackToListView,
+  breadCrumLabel
 }: ITable) => {
   // Fetching saved search data
 
@@ -42,12 +55,12 @@ const Table = ({
     data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
-    getRowId: originalRow => originalRow.id,
+    getRowId: originalRow => originalRow?.id,
     onRowSelectionChange: setRowSelection,
     state: { rowSelection },
     //filters
     positionToolbarAlertBanner: 'none',
-    enableFilters: false,
+    enableFilters: showGloablFilter,
     enableColumnActions: false,
     enableSorting: false,
     enableDensityToggle: false,
@@ -56,7 +69,7 @@ const Table = ({
     enablePagination: false,
     enableStickyHeader: true,
     enableBottomToolbar: false,
-    enableTopToolbar: false,
+    enableTopToolbar: isEnableTopToolBar,
     enableRowSelection: isRowSelectionNeeded,
     enableToolbarInternalActions: false,
 
@@ -77,7 +90,7 @@ const Table = ({
     }),
 
     initialState: {
-      showGlobalFilter: false,
+      showGlobalFilter: showGloablFilter,
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
       }
@@ -170,7 +183,58 @@ const Table = ({
         borderRadius: '0',
         border: '1px solid var(--neutral-50)'
       }
-    }
+    },
+
+    renderTopToolbar: ({ table }) => (
+      <div>
+        {isEnableTopToolBar && (
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '16px'
+            }}
+          >
+            <div className="flex items-center">
+              <Image
+                src={backWardArrow}
+                alt="backWardArrow"
+                onClick={() => {
+                  goBackToListView!();
+                }}
+                className="cursor-pointer"
+              />
+              <div className="flex gap-[8px] items-center">
+                <button
+                  className="text-neutral600 text-sMedium font-regular cursor-pointer"
+                  onClick={() => {
+                    goBackToListView!();
+                  }}
+                >
+                  {breadCrumLabel}
+                </button>
+                <span className="text-neutral600">/</span>
+                <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+                  {ManageLocales('app.confirmStone')}
+                </p>
+              </div>
+            </div>
+            <div>
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                style={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  borderColor: 'var(--neutral-200) !important',
+                  outline: 'none'
+                }}
+              />
+            </div>
+          </Box>
+        )}
+      </div>
+    )
   });
 
   return (
