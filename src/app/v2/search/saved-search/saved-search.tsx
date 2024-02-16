@@ -319,7 +319,7 @@ const SavedSearch = () => {
           ) : (
             <EmptyScreen
               label="Search Diamonds"
-              message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+              message="No saved searches so far. Let’s save some searches!"
               onClickHandler={() =>
                 router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
               }
