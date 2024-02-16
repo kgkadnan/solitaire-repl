@@ -9,6 +9,7 @@ import {
   PENDING_INVOICE,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
+import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
@@ -26,8 +27,12 @@ import { formatCreatedAt } from '@/utils/format-date';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
 import Link from 'next/link';
 import OrderDetail from './components/order-detail';
+import EmptyScreen from '@/components/v2/common/empty-screen';
+import { useRouter } from 'next/navigation';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 
 const MyDiamonds = () => {
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
 
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
@@ -362,22 +367,37 @@ const MyDiamonds = () => {
               ))}
             </div>
             {/* rows */}
-            <div>
-              {data?.map((items: any) => (
-                <div
-                  key={items.order_id}
-                  className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-white border-b border-neutral-200"
-                >
-                  {keys?.map(({ accessor }: any, index: number) => (
-                    <div
-                      key={index}
-                      className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                    >
-                      {renderCellContent(accessor, items)}
-                    </div>
-                  ))}
+            <div className="">
+              {data?.length > 0 ? (
+                data?.map((items: any) => (
+                  <div
+                    key={items.order_id}
+                    className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                  >
+                    {keys?.map(({ accessor }: any, index: number) => (
+                      <div
+                        key={index}
+                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                      >
+                        {renderCellContent(accessor, items)}
+                      </div>
+                    ))}
+                  </div>
+                ))
+              ) : (
+                <div className="min-h-[65vh] h-[65vh]">
+                  <EmptyScreen
+                    label="Search Diamonds"
+                    message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                    onClickHandler={() =>
+                      router.push(
+                        `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
+                      )
+                    }
+                    imageSrc={empty}
+                  />
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </>

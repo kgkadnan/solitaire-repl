@@ -15,6 +15,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { formatCreatedAt } from '@/utils/format-date';
 import styles from './saved-search.module.scss';
+import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 
 export interface ISavedSearches {
   diamond_count: string;
@@ -49,6 +50,7 @@ import { handleCardClick } from './helpers/handle-card-click';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
+import EmptyScreen from '@/components/v2/common/empty-screen';
 
 const SavedSearch = () => {
   const router = useRouter();
@@ -246,72 +248,83 @@ const SavedSearch = () => {
           </div>
         </div>
         <div className="h-[70vh] overflow-auto">
-          {savedSearchState?.savedSearchData?.map(
-            ({ id, name, meta_data, created_at }: ISavedSearches) => {
-              const randomIndex = Math.floor(
-                Math.random() * gradientClasses.length
-              );
-              // Get the random gradient class
-              const randomGradientClass = gradientClasses[randomIndex];
-              return (
-                <div
-                  className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                  key={id}
-                  onClick={() =>
-                    handleCardClick({
-                      id,
-                      savedSearchData: savedSearchState.savedSearchData,
-                      router,
-                      triggerProductCountApi,
-                      setDialogContent,
-                      setIsDialogOpen
-                    })
-                  }
-                >
-                  <div className="flex items-center gap-[18px] md:w-[40%]">
-                    <CheckboxComponent
-                      onClick={e => {
-                        e.stopPropagation();
-                        handleCheckbox({
-                          id,
-                          selectedCheckboxes,
-                          setSelectedCheckboxes
-                        });
-                      }}
-                      isChecked={selectedCheckboxes.includes(id)}
-                    />
-                    <div
-                      className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                    >
-                      {name
-                        .split(' ') // Split the name into words
-                        .map(word => word.charAt(0)) // Extract the first character of each word
-                        .join('')}
-                    </div>
-                    <div className="flex flex-col gap-[18px]">
-                      <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                        {name}
-                      </h1>
-                      <div className="text-neutral700 font-regular text-sMedium">
-                        {formatCreatedAt(created_at)}
+          {savedSearchState?.savedSearchData?.length ? (
+            savedSearchState?.savedSearchData?.map(
+              ({ id, name, meta_data, created_at }: ISavedSearches) => {
+                const randomIndex = Math.floor(
+                  Math.random() * gradientClasses.length
+                );
+                // Get the random gradient class
+                const randomGradientClass = gradientClasses[randomIndex];
+                return (
+                  <div
+                    className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                    key={id}
+                    onClick={() =>
+                      handleCardClick({
+                        id,
+                        savedSearchData: savedSearchState.savedSearchData,
+                        router,
+                        triggerProductCountApi,
+                        setDialogContent,
+                        setIsDialogOpen
+                      })
+                    }
+                  >
+                    <div className="flex items-center gap-[18px] md:w-[40%]">
+                      <CheckboxComponent
+                        onClick={e => {
+                          e.stopPropagation();
+                          handleCheckbox({
+                            id,
+                            selectedCheckboxes,
+                            setSelectedCheckboxes
+                          });
+                        }}
+                        isChecked={selectedCheckboxes.includes(id)}
+                      />
+                      <div
+                        className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                      >
+                        {name
+                          .split(' ') // Split the name into words
+                          .map(word => word.charAt(0)) // Extract the first character of each word
+                          .join('')}
+                      </div>
+                      <div className="flex flex-col gap-[18px]">
+                        <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                          {name}
+                        </h1>
+                        <div className="text-neutral700 font-regular text-sMedium">
+                          {formatCreatedAt(created_at)}
+                        </div>
                       </div>
                     </div>
+                    <div className="w-full md:w-[50%] mt-4 md:mt-0">
+                      <DisplayTable column={coloumn} row={[meta_data]} />
+                    </div>
+                    <button
+                      className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleEdit(id);
+                      }}
+                    >
+                      <Image src={editIcon} alt="editIcon" />
+                    </button>
                   </div>
-                  <div className="w-full md:w-[50%] mt-4 md:mt-0">
-                    <DisplayTable column={coloumn} row={[meta_data]} />
-                  </div>
-                  <button
-                    className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                    onClick={e => {
-                      e.stopPropagation();
-                      handleEdit(id);
-                    }}
-                  >
-                    <Image src={editIcon} alt="editIcon" />
-                  </button>
-                </div>
-              );
-            }
+                );
+              }
+            )
+          ) : (
+            <EmptyScreen
+              label="Search Diamonds"
+              message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+              onClickHandler={() =>
+                router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+              }
+              imageSrc={empty}
+            />
           )}
         </div>
         <div className="p-[16px] flex items-center justify-between border-t-[1px] border-neutral200">
