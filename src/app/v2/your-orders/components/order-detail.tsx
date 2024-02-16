@@ -104,12 +104,12 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
 
   return (
-    <div>
+    <>
       {' '}
       {productDetailData && Object.keys(productDetailData).length > 0 && (
         <div>
-          <div className="bg-neutral0  border-b-[1px] border-solid border-neutral200">
-            <div className="flex items-center p-[16px]">
+          <div className="bg-neutral0 border-b-[1px] rounded-t-[8px] border-solid border-neutral200">
+            <div className="flex items-center p-[16px] ">
               <Image
                 src={backWardArrow}
                 alt="backWardArrow"
@@ -260,7 +260,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 };
 

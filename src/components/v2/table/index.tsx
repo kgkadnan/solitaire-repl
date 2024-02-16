@@ -1,4 +1,6 @@
 import {
+  MRT_ColumnDef,
+  MRT_RowData,
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
@@ -17,7 +19,21 @@ const theme = createTheme({
   }
 });
 
-const Table = ({ rows, columns, setRowSelection, rowSelection }: any) => {
+interface ITable {
+  rows: MRT_ColumnDef<MRT_RowData, any>[];
+  columns: MRT_ColumnDef<MRT_RowData, any>[];
+  setRowSelection?: React.Dispatch<React.SetStateAction<{}>>;
+  rowSelection: {};
+  isRowSelectionNeeded?: boolean;
+}
+
+const Table = ({
+  rows,
+  columns,
+  setRowSelection,
+  rowSelection,
+  isRowSelectionNeeded = true
+}: ITable) => {
   // Fetching saved search data
 
   //pass table options to useMaterialReactTable
@@ -41,7 +57,7 @@ const Table = ({ rows, columns, setRowSelection, rowSelection }: any) => {
     enableStickyHeader: true,
     enableBottomToolbar: false,
     enableTopToolbar: false,
-    enableRowSelection: true,
+    enableRowSelection: isRowSelectionNeeded,
     enableToolbarInternalActions: false,
 
     muiTableBodyRowProps: ({ row }) => ({
