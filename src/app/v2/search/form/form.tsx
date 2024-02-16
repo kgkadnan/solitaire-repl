@@ -55,6 +55,7 @@ import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
+import { isSearchAlreadyExcist } from '../saved-search/helpers/handle-card-click';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -360,20 +361,37 @@ const Form = ({
                 isSavedSearch: true,
                 queryParams
               };
+              let localStorageData = JSON.parse(
+                localStorage.getItem('Search')!
+              );
 
-              localStorage.setItem(
-                'Search',
-                JSON.stringify([...addSearches, setDataOnLocalStorage])
+              let isAlreadyOpenIndex = isSearchAlreadyExcist(
+                localStorageData,
+                savedSearch?.savedSearch?.name
               );
-              router.push(
-                `/v2/search?active-tab=${SubRoutes.RESULT}-${
-                  JSON.parse(localStorage.getItem('Search')!).length
-                }`
-              );
+
+              if (isAlreadyOpenIndex) {
+                router.push(
+                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                    isAlreadyOpenIndex + 1
+                  }`
+                );
+              } else {
+                localStorage.setItem(
+                  'Search',
+                  JSON.stringify([...addSearches, setDataOnLocalStorage])
+                );
+                router.push(
+                  `/v2/search?active-tab=${SubRoutes.RESULT}-${
+                    JSON.parse(localStorage.getItem('Search')!).length
+                  }`
+                );
+              }
             });
           }
         } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
+          console.log('modifySearchResult', modifySearchResult);
           let setDataOnLocalStorage = {
             id: modifySearchResult[activeTab - 1]?.id || id,
             saveSearchName:
