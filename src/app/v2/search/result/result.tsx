@@ -20,6 +20,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
+import corssIcon from '@public/v2/assets/icons/modal/cross.svg';
 import {
   RenderCarat,
   RenderDiscount,
@@ -29,7 +30,10 @@ import {
   RednderLocation,
   RenderAmount
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import { useLazyGetAllProductQuery } from '@/features/api/product';
+import {
+  useConfirmProductMutation,
+  useGetAllProductQuery
+} from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
@@ -59,6 +63,10 @@ import { InputField } from '@/components/v2/common/input-field';
 import { handleSaveSearch } from './helpers/handle-save-search';
 import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
+import ConfirmStone from './components';
+import { handleConfirmStone } from './helpers/handle-confirm-stone';
+import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
+import { handleComment } from './helpers/handle-comment';
 
 // Column mapper outside the component to avoid re-creation on each render
 const mapColumns = (columns: any) =>
@@ -194,46 +202,60 @@ const Result = ({
   const { isDialogOpen, dialogContent, isInputDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
+  const [isAddCommentDialogOpen, setIsAddCommentDialogOpen] = useState(false);
   const [saveSearchName, setSaveSearchName] = useState('');
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+
+  const [isConfirmStone, setIsConfirmStone] = useState(false);
+  const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [commentValue, setCommentValue] = useState('');
+  const [textAreaValue, setTextAreaValue] = useState('');
 
   // UseMutation to add items to the cart
   const [addCart] = useAddCartMutation();
 
   const editRoute = useSearchParams().get('edit');
   const router = useRouter();
+  const [searchUrl, setSearchUrl] = useState('');
 
   const [addSavedSearch] = useAddSavedSearchMutation();
-  let [triggerProductApi] = useLazyGetAllProductQuery();
 
-  const [triggerColumn] =
+  const { data: ProductApiData, refetch } = useGetAllProductQuery({
+    offset: 0,
+    limit: LISTING_PAGE_DATA_LIMIT,
+    url: searchUrl
+  });
+  const [confirmProduct] = useConfirmProductMutation();
+
+  const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
   // Fetch Products
+
+  const fetchProducts = async () => {
+    const storedSelection = localStorage.getItem('Search');
+
+    if (!storedSelection) return;
+
+    if (activeTab <= 0) return;
+
+    const selections = JSON.parse(storedSelection);
+
+    const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
+    setSearchUrl(url);
+  };
+
   useEffect(() => {
-    const fetchProducts = async () => {
-      const storedSelection = localStorage.getItem('Search');
+    if (ProductApiData?.products?.length) {
+      dataTableSetState.setRows(ProductApiData.products);
+      setRowSelection({});
+      setData(ProductApiData);
+      setIsError(false);
+    }
+  }, [ProductApiData]);
 
-      if (!storedSelection) return;
-
-      if (activeTab <= 0) return;
-
-      const selections = JSON.parse(storedSelection);
-
-      const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
-
-      const response = await triggerProductApi({
-        offset: 0,
-        limit: LISTING_PAGE_DATA_LIMIT,
-        url
-      });
-      if (response?.data?.products?.length) {
-        dataTableSetState.setRows(response.data.products);
-        setData(response.data);
-      }
-    };
-
+  useEffect(() => {
     fetchProducts();
   }, [activeTab]);
 
@@ -366,16 +388,16 @@ const Result = ({
                     <Image src={errorSvg} alt="errorSvg" />
                   </div>
                   <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
-                    <h1 className="text-headingS text-neutral900">
+                    <p className="text-neutral600 text-mRegular">
                       {error?.data?.message}
-                    </h1>
+                    </p>
                     <ActionButton
                       actionButtonData={[
                         {
                           variant: 'primary',
-                          label: ManageLocales('app.modal.editSelection'),
+                          label: ManageLocales('app.modal.okay'),
                           handler: () => {
-                            router.push('/v2/my-cart');
+                            setIsDialogOpen(false);
                           },
                           customStyle: 'flex-1 w-full'
                         }
@@ -480,6 +502,171 @@ const Result = ({
     );
   };
 
+  const goBackToListView = () => {
+    setIsConfirmStone(false);
+    setConfirmStoneData([]);
+  };
+
+  const rederAddCommentDialogs = () => {
+    return (
+      <>
+        {' '}
+        <div className="flex flex-col gap-[15px] p-[24px]">
+          <div>
+            <div className="flex justify-between pb-[16px]">
+              <h1 className="text-headingS text-neutral900">
+                {' '}
+                {ManageLocales('app.modal.addComment')}
+              </h1>
+              <button
+                onClick={() => {
+                  setIsAddCommentDialogOpen(false);
+                }}
+              >
+                <Image src={corssIcon} alt="corssIcon" />
+              </button>
+            </div>
+            <p className="text-neutral600 text-mRegular">
+              {ManageLocales('app.modal.addComment.content')}
+            </p>
+          </div>
+          <div className="pt-[12px]">
+            <textarea
+              value={textAreaValue}
+              name="textarea"
+              rows={10}
+              // placeholder='Write Description'
+              className="w-full bg-neutral0 text-neutral900 rounded-xl resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
+              style={{ boxShadow: 'var(--input-shadow) inset' }}
+              onChange={e => handleComment(e, setTextAreaValue)}
+            />
+          </div>
+        </div>
+        <div
+          className="border-t-neutral-200 border-t-[1px] rounded-b-[8px] p-[24px]"
+          style={{ background: 'var(--neutral-25)' }}
+        >
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.addComment.cancel'),
+                handler: () => {
+                  setIsAddCommentDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.addComment.saveComment'),
+                handler: () => {
+                  setCommentValue(textAreaValue);
+                  setIsAddCommentDialogOpen(false);
+                },
+                customStyle: 'flex-1'
+              }
+            ]}
+          />
+        </div>
+      </>
+    );
+  };
+
+  const confirmStoneApiCall = () => {
+    const variantIds: string[] = [];
+
+    confirmStoneData.forEach((ids: any) => {
+      variantIds.push(ids.variants[0].id);
+    });
+
+    if (variantIds.length) {
+      confirmProduct({
+        variants: variantIds,
+        comments: commentValue
+      })
+        .unwrap()
+        .then(res => {
+          if (res) {
+            setCommentValue('');
+            setIsDialogOpen(true);
+
+            setRowSelection({});
+            setDialogContent(
+              <>
+                {' '}
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={confirmIcon} alt="confirmIcon" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                  <h1 className="text-headingS text-neutral900">
+                    {variantIds.length} stones have been successfully added to
+                    “My Diamond
+                  </h1>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.modal.continue'),
+                        handler: () => {
+                          goBackToListView();
+                          setIsAddCommentDialogOpen(false);
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full'
+                      },
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.goToYourOrder'),
+                        handler: () => {
+                          router.push('/v2/your-orders');
+                        },
+                        customStyle: 'flex-1 w-full'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+            setCommentValue('');
+
+            if (refetch) {
+              refetch();
+            }
+          }
+        })
+        .catch(e => {
+          setCommentValue('');
+
+          setIsDialogOpen(true);
+          setDialogContent(
+            <>
+              {' '}
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={errorSvg} alt="errorSvg" />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                <p className="text-neutral600 text-mRegular">
+                  {e?.data?.message}
+                </p>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 w-full'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+        });
+    }
+  };
+
   return (
     <div>
       <DialogComponent
@@ -492,6 +679,11 @@ const Result = ({
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
+      <AddCommentDialog
+        isOpen={isAddCommentDialogOpen}
+        onClose={() => setIsAddCommentDialogOpen(false)}
+        renderContent={rederAddCommentDialogs}
+      />
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
           {editRoute
@@ -500,79 +692,124 @@ const Result = ({
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        <div className="border-b-[1px] border-t-[1px] border-neutral200">
-          <DataTable
-            rows={dataTableState.rows}
-            columns={memoizedColumns}
-            setRowSelection={setRowSelection}
-            rowSelection={rowSelection}
-            showCalculatedField={true}
-            isResult={true}
+        {isConfirmStone ? (
+          <ConfirmStone
+            rows={confirmStoneData}
+            columns={columnData}
+            goBackToListView={goBackToListView}
             activeTab={activeTab}
-            searchParameters={searchParameters}
-            setActiveTab={setActiveTab}
-            handleCloseAllTabs={handleCloseAllTabs}
-            handleCloseSpecificTab={handleCloseSpecificTab}
-            handleNewSearch={handleNewSearch}
-            setSearchParameters={setSearchParameters}
-            modalSetState={modalSetState}
-            data={data}
           />
-        </div>
-        {dataTableState.rows.length > 0 ? (
-          <div className="p-[16px] border-[1px] border-t-0 border-neutral200 rounded-b-[8px] shadow-inputShadow ">
-            <div className="flex items-center justify-between">
-              <div className="flex gap-4">
-                <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
-                    In Cart
-                  </p>
-                </div>
-                <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
-                    {' '}
-                    Hold
-                  </p>
-                </div>
-                <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                  <p className="text-mMedium font-medium px-[4px] py-[6px]">
-                    {' '}
-                    Memo
-                  </p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3">
-                {isError && (
-                  <div>
-                    <span className="hidden  text-successMain" />
-                    <span
-                      className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
-                    >
-                      {errorText}
-                    </span>
-                  </div>
-                )}
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.searchResult.addToCart'),
-                      handler: handleAddToCart
-                    },
-
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.searchResult.confirmStone'),
-                      handler: () => {}
-                    }
-                  ]}
-                />
-              </div>
-            </div>
-          </div>
         ) : (
-          <></>
+          <div className="border-b-[1px] border-t-[1px] border-neutral200">
+            <DataTable
+              rows={dataTableState.rows}
+              columns={memoizedColumns}
+              setRowSelection={setRowSelection}
+              rowSelection={rowSelection}
+              showCalculatedField={true}
+              isResult={true}
+              activeTab={activeTab}
+              searchParameters={searchParameters}
+              setActiveTab={setActiveTab}
+              handleCloseAllTabs={handleCloseAllTabs}
+              handleCloseSpecificTab={handleCloseSpecificTab}
+              handleNewSearch={handleNewSearch}
+              setSearchParameters={setSearchParameters}
+              modalSetState={modalSetState}
+              data={data}
+            />
+          </div>
         )}
+        <div className="p-[16px] border-[1px] border-t border-neutral200 rounded-b-[8px] shadow-inputShadow ">
+          {isConfirmStone ? (
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.back'),
+                  handler: () => {
+                    goBackToListView();
+                  }
+                },
+
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.confirmStone.footer.addComment'),
+                  handler: () => {
+                    setCommentValue('');
+                    setIsAddCommentDialogOpen(true);
+                  }
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.confirmStone.footer.confirmStone'),
+                  handler: () => confirmStoneApiCall()
+                }
+              ]}
+            />
+          ) : (
+            dataTableState.rows.length > 0 && (
+              <div className="flex items-center justify-between">
+                <div className="flex gap-4">
+                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                      In Cart
+                    </p>
+                  </div>
+                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                      {' '}
+                      Hold
+                    </p>
+                  </div>
+                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                      {' '}
+                      Memo
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-3">
+                  {isError && (
+                    <div>
+                      <span className="hidden  text-successMain" />
+                      <span
+                        className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
+                      >
+                        {errorText}
+                      </span>
+                    </div>
+                  )}
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.searchResult.addToCart'),
+                        handler: handleAddToCart
+                      },
+
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.searchResult.confirmStone'),
+                        handler: () => {
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData
+                          });
+                        }
+                      }
+                    ]}
+                  />
+                </div>
+              </div>
+            )
+          )}
+        </div>
       </div>
     </div>
   );
