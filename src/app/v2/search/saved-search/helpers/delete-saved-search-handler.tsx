@@ -69,9 +69,8 @@ export const deleteSavedSearchHandler = ({
             <Image src={errorIcon} alt="errorIcon" />
           </div>
           <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">{errorMessage}</h1>
-            </div>
+            <p className="text-neutral600 text-mRegular">{errorMessage}</p>
+
             <ActionButton
               actionButtonData={[
                 {
