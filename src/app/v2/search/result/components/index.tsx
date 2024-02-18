@@ -80,7 +80,7 @@ const ConfirmStone = ({ rows, columns, goBackToListView, activeTab }: any) => {
   }, []);
 
   return (
-    <div className="min-h-[75vh]">
+    <div className="">
       {memoizedColumns?.length > 0 && rows?.length > 0 && (
         <Table
           rows={rows}

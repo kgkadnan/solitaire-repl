@@ -115,7 +115,7 @@ const MyCart = () => {
               <Image src={errorIcon} alt="errorIcon" />
             </div>
             <h1 className="text-headingS text-neutral900">
-              {error.data.message}
+              {error?.data?.message}
             </h1>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
               <ActionButton
@@ -355,7 +355,7 @@ const MyCart = () => {
               <Image src={errorIcon} alt="errorIcon" />
             </div>
             <h1 className="text-headingS text-neutral900">
-              {error.data.message}
+              {error?.data?.message}
             </h1>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
               <ActionButton

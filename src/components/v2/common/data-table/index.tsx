@@ -460,8 +460,8 @@ const DataTable = ({
       //customize paper styles
 
       sx: {
-        borderRadius: '0',
-        border: '1px solid var(--neutral-50)'
+        borderRadius: '8px',
+        border: 'none'
       }
     },
     renderTopToolbar: ({ table }) => (
