@@ -12,7 +12,10 @@ export const changePasswordApi = createApi({
       query: data => ({
         url: `change-password`,
         method: 'POST',
-        body: data
+        body: data,
+        headers: {
+          Authorization: `Bearer ${data.token}`
+        }
       }),
       invalidatesTags: ['changePassword']
     })

@@ -110,7 +110,7 @@ export const PasswordField = ({
           className="absolute right-2 cursor-pointer"
           onClick={togglePasswordVisibility}
         >
-          {isPasswordVisible ? <EyeSlash /> : <Eye />}
+          {isPasswordVisible ? <Eye /> : <EyeSlash />}
         </div>
       </div>
       <div className="mt-2">

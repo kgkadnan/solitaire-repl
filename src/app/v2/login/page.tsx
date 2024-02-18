@@ -15,10 +15,6 @@ import {
 import { Events } from '@/constants/enums/event';
 import LoginComponent from './component/login';
 import {
-  initialOTPFormState,
-  useOtpVerificationStateManagement
-} from '@/components/otp-verication/hooks/otp-verification-state-management';
-import {
   useSendOtpMutation,
   useVerifyOTPMutation,
   useVerifyPhoneQuery
@@ -40,6 +36,10 @@ import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import {
+  initialOTPFormState,
+  useOtpVerificationStateManagement
+} from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 
 export interface IToken {
   token: string;
@@ -92,6 +92,10 @@ const Login = () => {
         ...prev,
         countryCode: currentCountryCode.country_calling_code.replace('+', '')
       }));
+      setOTPVerificationFormState({
+        ...otpVerificationFormState,
+        countryCode: currentCountryCode.country_calling_code.replace('+', '')
+      });
     } else if (error) {
       console.error('Error fetching country code', error);
     }
@@ -110,13 +114,13 @@ const Login = () => {
   } = otpVerificationSetState;
 
   const { data: verifyNumber } = useVerifyPhoneQuery({
-    country_code: otpVerificationFormState.otpCountryCode,
+    country_code: otpVerificationFormState.countryCode,
     phone_number: otpVerificationFormState.otpMobileNumber
   });
 
   useEffect(() => {
     if (isTokenChecked) {
-      authToken && router.push('/');
+      authToken && router.push('/v2/');
     }
   }, [isTokenChecked]);
 
@@ -125,13 +129,13 @@ const Login = () => {
       localStorage.setItem('user', JSON.stringify(data));
       if (data.customer.is_phone_verified) {
         userLoggedIn(token.token);
-        router.push('/');
+        router.push('/v2/');
       } else {
         setCurrentState('otpVerification');
         setOTPVerificationFormState(prev => ({
           ...prev,
           otpMobileNumber: `${data.customer.phone}`,
-          otpCountryCode: `${data.customer.country_code}`,
+          countryCode: `${data.customer.country_code}`,
           codeAndNumber: `+${data.customer.country_code} ${data.customer.phone}`
         }));
         sendOtp({
@@ -170,6 +174,12 @@ const Login = () => {
         password: password,
         country_code: phoneNumber.countryCode
       });
+      setOTPVerificationFormState(prev => ({
+        ...prev,
+        otpMobileNumber: `${phoneNumber.mobileNumber}`,
+        countryCode: `${phoneNumber.countryCode}`,
+        codeAndNumber: `${phoneNumber.countryCode} ${phoneNumber.mobileNumber}`
+      }));
       if (res?.error?.status === statusCode.UNAUTHORIZED) {
         // Display error message if login fails
         setIsDialogOpen(true);

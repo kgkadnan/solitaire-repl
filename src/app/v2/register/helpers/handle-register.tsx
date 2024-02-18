@@ -45,14 +45,14 @@ export const handleRegister = async ({
   })
     .unwrap()
     .then((res: any) => {
-      if (res) {
+      if (res?.customer) {
         setCurrentState('OTPVerification');
         setRole(role);
         setOTPVerificationFormState(prev => ({
           ...prev,
           otpMobileNumber: `${registerFormState.mobileNumber}`,
-          otpCountryCode: `${registerFormState.countryCode}`,
-          codeAndNumber: `+${registerFormState.countryCode} ${registerFormState.mobileNumber}`
+          countryCode: `${registerFormState.countryCode}`,
+          codeAndNumber: `${registerFormState.countryCode} ${registerFormState.mobileNumber}`
         }));
         setToken(prev => ({
           ...prev,

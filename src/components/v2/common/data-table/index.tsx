@@ -39,7 +39,7 @@ import {
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
-import { isSearchAlreadyExcist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
+import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 
 const theme = createTheme({
   typography: {
@@ -48,7 +48,23 @@ const theme = createTheme({
     fontWeightRegular: 500,
     fontWeightMedium: 600,
     fontWeightBold: 700
-    // You can also customize other typography aspects here
+  },
+
+  components: {
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          // Default state for the badge inside the cell
+          '& .MuiBadge-root': {
+            visibility: 'hidden'
+          },
+          // Hover state for the cell
+          '&:hover .MuiBadge-root': {
+            visibility: 'visible'
+          }
+        }
+      }
+    }
   }
 });
 
@@ -170,7 +186,7 @@ const DataTable = ({
               );
               modalSetState.setIsDialogOpen(true);
             } else {
-              let isAlreadyOpenIndex = isSearchAlreadyExcist(
+              let isAlreadyOpenIndex = isSearchAlreadyExist(
                 data,
                 res.data.savedSearches[0].name
               );

@@ -5,26 +5,26 @@ interface IHandleResetOTP {
   otpValues: string[];
   token: IToken;
   setCurrentState: React.Dispatch<React.SetStateAction<string>>;
-  userLoggedIn: any;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   verifyResetOTP: any;
   phoneNumber?: any;
+  setToken?: any;
 }
 export const handleResetOTP = ({
   otpValues,
   token,
   setCurrentState,
-  userLoggedIn,
   setIsDialogOpen,
   setDialogContent,
   verifyResetOTP,
-  phoneNumber
+  phoneNumber,
+  setToken
 }: IHandleResetOTP) => {
   const enteredOtp = otpValues.join('');
 
   verifyResetOTP({
-    token: token,
+    token: token.phoneToken,
     otp: enteredOtp,
     phone: phoneNumber.phoneNumber,
     country_code: phoneNumber.countryCode
@@ -32,8 +32,12 @@ export const handleResetOTP = ({
     .unwrap()
     .then((res: any) => {
       if (res) {
-        userLoggedIn(res.access_token);
-
+        // router.push('/v2/login')
+        // userLoggedIn(res.access_token);
+        setToken((prev: any) => ({
+          ...prev,
+          token: res.access_token || ''
+        }));
         setCurrentState('resetPassword');
       }
     })

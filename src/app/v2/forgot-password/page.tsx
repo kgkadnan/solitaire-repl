@@ -12,8 +12,8 @@ import ForgotComponent from './component/forgot-password';
 import { isPhoneNumberValid } from '@/utils/validate-phone';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import {
-  useSendOtpMutation,
-  useVerifyOTPMutation
+  useSendResetOtpMutation,
+  useVerifyResetOTPMutation
 } from '@/features/api/otp-verification';
 import useUser from '@/lib/use-auth';
 import OTPComponent from './component/otp';
@@ -39,8 +39,8 @@ const ForgotPassword = () => {
   // Use the forgot password mutation hook
   const [forgotPassword] = useForgotPasswordMutation();
 
-  const [verifyResetOTP] = useVerifyOTPMutation();
-  const [sendOtp] = useSendOtpMutation();
+  const [verifyResetOTP] = useVerifyResetOTPMutation();
+  const [sendResetOtp] = useSendResetOtpMutation();
 
   const [token, setToken] = useState(initialTokenState);
   const { userLoggedIn } = useUser();
@@ -83,6 +83,12 @@ const ForgotPassword = () => {
       // setIsConfirmed(true);
 
       if (res?.data?.statusCode === statusCode.SUCCESS) {
+        setToken((prev: any) => ({
+          ...prev,
+          phoneToken: res?.data.data.token || '',
+          tempToken: res?.data.data.token || ''
+        }));
+
         setCurrentState('otpVerification');
       } else if (res.error) {
         setIsDialogOpen(true);
@@ -133,7 +139,8 @@ const ForgotPassword = () => {
             otpVerificationFormState={otpVerificationFormState}
             setOtpValues={setOtpValues}
             otpValues={otpValues}
-            sendOtp={sendOtp}
+            // sendOtp={sendOtp}
+            sendOtp={sendResetOtp}
             resendTimer={resendTimer}
             setCurrentState={setCurrentState}
             token={token}
@@ -152,6 +159,7 @@ const ForgotPassword = () => {
           <ResetComponent
             setIsDialogOpen={setIsDialogOpen}
             setDialogContent={setDialogContent}
+            token={token}
           />
         );
     }

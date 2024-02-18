@@ -3,7 +3,7 @@ import { IOtp } from '..';
 
 export const initialOTPFormState: IOtp = {
   otpMobileNumber: '',
-  otpCountryCode: '',
+  countryCode: '',
   codeAndNumber: ''
 };
 

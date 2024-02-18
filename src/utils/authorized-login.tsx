@@ -13,7 +13,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     useEffect(() => {
       setIsLoading(true);
       if (authToken === null && isTokenChecked) {
-        router.push('/login');
+        router.push('/v2/login');
         return;
       }
 

@@ -27,7 +27,7 @@ export const handleEditMobileNumber = ({
   token
 }: IHandleEditMobileNumber) => {
   if (
-    !otpVerificationFormState.otpCountryCode ||
+    !otpVerificationFormState.countryCode ||
     !otpVerificationFormState.otpMobileNumber
   ) {
     setOTPVerificationFormErrors(prev => ({
@@ -38,11 +38,11 @@ export const handleEditMobileNumber = ({
     if (verifyNumber?.exists === false) {
       setOTPVerificationFormState(prev => ({
         ...prev,
-        codeAndNumber: `${otpVerificationFormState.otpCountryCode} ${otpVerificationFormState.otpMobileNumber}`
+        codeAndNumber: `${otpVerificationFormState.countryCode} ${otpVerificationFormState.otpMobileNumber}`
       }));
       sendOtp({
         phone: otpVerificationFormState.otpMobileNumber,
-        country_code: otpVerificationFormState.otpCountryCode,
+        country_code: otpVerificationFormState.countryCode,
         resend_token: token.tempToken
       })
         .unwrap()

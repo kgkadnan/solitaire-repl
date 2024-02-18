@@ -55,7 +55,7 @@ import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
-import { isSearchAlreadyExcist } from '../saved-search/helpers/handle-card-click';
+import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -365,7 +365,7 @@ const Form = ({
                 localStorage.getItem('Search')!
               );
 
-              let isAlreadyOpenIndex = isSearchAlreadyExcist(
+              let isAlreadyOpenIndex = isSearchAlreadyExist(
                 localStorageData,
                 savedSearch?.savedSearch?.name
               );
@@ -391,7 +391,6 @@ const Form = ({
           }
         } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
           let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
-          console.log('modifySearchResult', modifySearchResult);
           let setDataOnLocalStorage = {
             id: modifySearchResult[activeTab - 1]?.id || id,
             saveSearchName:
