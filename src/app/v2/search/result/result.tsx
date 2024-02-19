@@ -267,7 +267,7 @@ const Result = ({
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
-
+console.log(response,"response")
       const shapeColumn = response.data.find(
         (column: any) => column.accessor === 'shape'
       );
