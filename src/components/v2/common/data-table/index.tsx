@@ -96,7 +96,10 @@ const DataTable = ({
   const handleDropdown = () => {
     setIsDropDownOpen(!isDropDownOpen);
   };
-
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen);
+  };
   const onDropDwonClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
@@ -377,8 +380,11 @@ const DataTable = ({
 
     muiTableContainerProps: {
       sx: {
-        minHeight: 'calc(100vh - 399px)',
-        maxHeight: 'calc(100vh - 399px)'
+        // minHeight: 'calc(100vh - 399px)',
+        // maxHeight: 'calc(100vh - 399px)'
+        height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
+        minHeight: isFullScreen ? '80vh' : 'calc(100vh - 399px)',
+        maxHeight: isFullScreen ? '80vh' : 'calc(100vh - 399px)'
       }
     },
     muiTableHeadRowProps: {
@@ -546,7 +552,9 @@ const DataTable = ({
                 <Image src={downloadIcon} alt={'download'} />
               </div>
             </IconButton>
-            <StyledToggleFullScreenButton table={table} />
+            <IconButton onClick={toggleFullScreen}>
+              <StyledToggleFullScreenButton table={table} />
+            </IconButton>
             <IconButton onClick={() => {}}>
               <div className="flex p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
                 <Image src={shareIcon} alt={'share'} />
