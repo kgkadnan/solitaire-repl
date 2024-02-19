@@ -563,10 +563,10 @@ const Form = ({
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-          router.push(`/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
+          router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
           router.push(
-            `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
+            `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
           );
         }
       },
