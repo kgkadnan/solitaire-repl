@@ -310,7 +310,7 @@ const DataTable = ({
     groupedColumnMode: 'remove',
     enableRowSelection: true,
     enableToolbarInternalActions: true,
-    globalFilterFn: 'startsWith', 
+    globalFilterFn: 'startsWith',
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
