@@ -101,12 +101,14 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
   data?.width && setWidthMax(data?.width?.lte);
   data?.length && setLengthMin(data?.length?.gte);
   data?.length && setLengthMax(data?.length?.lte);
-  data?.['table%'] && setTablePerMin(data?.['table%']?.gte);
-  data?.['table%'] && setTablePerMax(data?.['table%']?.lte);
-  data?.['girdle%'] && setGirdlePerMin(data['girdle%']?.gte);
-  data?.['girdle%'] && setGirdlePerMax(data['girdle%']?.lte);
-  data?.['depth%'] && setDepthPerMin(data?.['depth%']?.gte);
-  data?.['depth%'] && setDepthPerMax(data?.['depth%']?.lte);
+  data?.table_percentage && setTablePerMin(data?.table_percentage?.gte);
+  data?.table_percentage && setTablePerMax(data?.table_percentage?.lte);
+  data?.['girdle_percentage'] &&
+    setGirdlePerMin(data['girdle_percentage']?.gte);
+  data?.['girdle_percentage'] &&
+    setGirdlePerMax(data['girdle_percentage']?.lte);
+  data?.['depth_percentage'] && setDepthPerMin(data?.['depth_percentage']?.gte);
+  data?.['depth_percentage'] && setDepthPerMax(data?.['depth_percentage']?.lte);
   data?.lower_half && setLowerHalfMin(data?.lower_half?.gte);
   data?.lower_half && setLowerHalfMax(data?.lower_half?.lte);
   data?.crown_angle && setCrownAngleMin(data?.crown_angle?.gte);

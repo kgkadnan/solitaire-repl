@@ -3,10 +3,10 @@ export interface IMeasurements {
   depth: string;
   ratio: string;
   width: string;
-  'depth%': string;
+  depth_percentage: string;
   length: string;
-  'table%': string;
-  'girdle%': string;
+  table_percentage: string;
+  girdle_percentage: string;
   lower_half: string;
   crown_angle: string;
   star_length: string;
