@@ -311,6 +311,7 @@ const DataTable = ({
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
+    selectAllMode: 'all',
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
