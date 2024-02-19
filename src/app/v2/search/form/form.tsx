@@ -563,10 +563,8 @@ const Form = ({
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
           router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
-        } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
-          router.push(
-            `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
-          );
+        } else if (modifySearchFrom === `${SubRoutes.RESULT}`) {
+          router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab}`);
         }
       },
       isHidden:
