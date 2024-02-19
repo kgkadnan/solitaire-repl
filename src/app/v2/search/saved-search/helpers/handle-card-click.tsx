@@ -12,7 +12,7 @@ import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 import { ReactNode } from 'react';
 
-export const isSearchAlreadyExcist = (data: any, nameToFind: string) => {
+export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
   const foundSearch = data.find(
     (search: any) => search.saveSearchName === nameToFind
   );
@@ -136,7 +136,7 @@ export const handleCardClick = ({
             setIsDialogOpen(true);
           } else {
             // Add the clicked search to local storage and navigate to the search result page
-            let isAlreadyOpenIndex = isSearchAlreadyExcist(
+            let isAlreadyOpenIndex = isSearchAlreadyExist(
               data,
               specificCardData[0].name
             );

@@ -37,16 +37,29 @@ export const otpVerificationApi = createApi({
       query: filter => ({
         url: `/store/customers/sms/password-reset-otp/verify`,
         method: 'POST',
-        body: filter,
-        headers: {
-          Authorization: `Bearer ${filter.resend_token}`
-        }
+        body: filter
+        // headers: {
+        //   Authorization: `Bearer ${filter.resend_token}`
+        // }
       }),
 
+      invalidatesTags: ['OtpVerification']
+    }),
+    sendResetOtp: builder.mutation({
+      query: filter => ({
+        url: `/store/customers/sms/password-reset-otp/send`,
+        method: 'POST',
+        body: filter
+      }),
       invalidatesTags: ['OtpVerification']
     })
   })
 });
 
-export const { useVerifyOTPMutation, useSendOtpMutation, useVerifyPhoneQuery } =
-  otpVerificationApi;
+export const {
+  useVerifyOTPMutation,
+  useVerifyResetOTPMutation,
+  useSendOtpMutation,
+  useVerifyPhoneQuery,
+  useSendResetOtpMutation
+} = otpVerificationApi;

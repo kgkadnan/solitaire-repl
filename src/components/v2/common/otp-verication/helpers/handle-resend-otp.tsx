@@ -1,7 +1,8 @@
-import { IOtp, IToken } from '@/app/register/page';
 import Image from 'next/image';
 import confirmImage from '@public/assets/icons/confirmation.svg';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import { IOtp } from '..';
+import { IToken } from '@/app/v2/register/page';
 interface IHandleResendOTP {
   otpVerificationFormState: IOtp;
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
@@ -20,7 +21,7 @@ export const handleResendOTP = ({
 }: IHandleResendOTP) => {
   sendOtp({
     phone: otpVerificationFormState.otpMobileNumber,
-    country_code: otpVerificationFormState.otpCountryCode
+    country_code: otpVerificationFormState.countryCode
   })
     .unwrap()
     .then((res: any) => {

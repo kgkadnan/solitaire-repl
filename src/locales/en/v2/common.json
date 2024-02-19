@@ -59,7 +59,7 @@
   "app.emptyCart.actionButton.searchDiamonds": "Search Diamonds",
 
   "app.modal.okay": "Okay",
-  "app.modal.goToYourOrder" : "Go to Your Order",
+  "app.modal.goToYourOrder": "Go to Your Order",
   "app.modal.yes": "Yes",
   "app.modal.no": "No",
   "app.modal.continue": "Continue",
@@ -75,16 +75,15 @@
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
 
-  "app.confirmStone" : "Confirm Stone",
-  "app.confirmStone.footer.back" : "Back",
-  "app.confirmStone.footer.addComment" : "Add Comment",
-  "app.confirmStone.footer.confirmStone" : "Confirm Stone",
+  "app.confirmStone": "Confirm Stone",
+  "app.confirmStone.footer.back": "Back",
+  "app.confirmStone.footer.addComment": "Add Comment",
+  "app.confirmStone.footer.confirmStone": "Confirm Stone",
 
   "app.modal.addComment": "Add Comment",
   "app.modal.addComment.content": "Comments written here will show up in your Invoice",
-  "app.modal.addComment.cancel" : "Cancel",
-  "app.modal.addComment.saveComment" : "Save Comment",
-  
+  "app.modal.addComment.cancel": "Cancel",
+  "app.modal.addComment.saveComment": "Save Comment",
 
   "app.searchResult.addToCart": "Add to Cart",
   "app.searchResult.confirmStone": "Confirm Stone",

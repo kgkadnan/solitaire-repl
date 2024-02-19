@@ -13,14 +13,13 @@ import { useChangePasswordMutation } from '@/features/api/change-password';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import ActionButton from '@/components/v2/common/action-button';
 
-const ResetComponent = ({ setIsDialogOpen, setDialogContent }: any) => {
+const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
   const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
   const [resetConfirmPassword, setResetConfirmPassword] = useState<string>('');
   const [confirmPasswordError, setConfirmPasswordError] = useState<string>('');
   const [passwordError, setPasswordError] = useState<string>('');
   const router = useRouter();
   const [ChangePassword] = useChangePasswordMutation();
-
   const handleResetPassword = async () => {
     if (
       resetPasswordValue &&
@@ -31,7 +30,8 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent }: any) => {
     ) {
       const res: any = await ChangePassword({
         new_password: resetPasswordValue,
-        confirm_password: resetConfirmPassword
+        confirm_password: resetConfirmPassword,
+        token: token.token
       });
 
       if (res.error) {
@@ -59,8 +59,10 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent }: any) => {
                 actionButtonData={[
                   {
                     variant: 'primary',
-                    label: ManageLocales('app.Login'),
-                    handler: () => setIsDialogOpen(false),
+                    label: ManageLocales('app.login'),
+                    handler: () => {
+                      setIsDialogOpen(false), router.push('/v2/login');
+                    },
                     customStyle: 'flex-1 w-full'
                   }
                 ]}

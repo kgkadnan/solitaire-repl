@@ -26,7 +26,7 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
           <p className="text-headingS text-neutral-900 font-medium">{header}</p>
         )}
         <div className="text-mRegular text-neutral-600">
-          <p>{content}</p>
+          <p>{content ?? 'Something went wrong'}</p>
         </div>
         {handleClick && (
           <IndividualActionButton

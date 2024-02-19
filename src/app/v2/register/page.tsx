@@ -14,25 +14,26 @@ import {
 import Image from 'next/image';
 
 import useUser from '@/lib/use-auth';
-import { handleOTPChange } from '@/components/otp-verication/helpers/handle-otp-change';
 import { useRegisterStateManagement } from './hooks/register-state-management';
 import { useGetAuthDataQuery } from '@/features/api/login';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import UserAuthenticationLayout from '@/components/v2/common/user-authentication-layout';
 import OTPVerification from '@/components/v2/common/otp-verication';
-import {
-  initialOTPFormState,
-  useOtpVerificationStateManagement
-} from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+
 import ConfirmScreen from './component/confirmation-screen';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { handleEditMobileNumber } from '@/components/v2/common/otp-verication/helpers/handle-edit-mobile-number';
+import {
+  initialOTPFormState,
+  useOtpVerificationStateManagement
+} from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
 
 export interface IOtp {
   otpMobileNumber: string;
-  otpCountryCode: string;
+  countryCode: string;
   codeAndNumber: string;
 }
 export interface IToken {
@@ -78,7 +79,7 @@ const Register = () => {
     modalSetState;
 
   const { data: verifyNumber } = useVerifyPhoneQuery({
-    country_code: otpVerificationFormState.otpCountryCode,
+    country_code: otpVerificationFormState.countryCode,
     phone_number: otpVerificationFormState.otpMobileNumber
   });
 
@@ -103,7 +104,7 @@ const Register = () => {
       });
       setOTPVerificationFormState({
         ...otpVerificationFormState,
-        otpCountryCode: data.country_calling_code.replace('+', '')
+        countryCode: data.country_calling_code.replace('+', '')
       });
     } else if (error) {
       console.error('Error fetching country code', error);
@@ -129,9 +130,8 @@ const Register = () => {
         </div>
         <MobileInput
           label={ManageLocales('app.register.mobileNumber')}
-          onChange={
-            event => handleOTPChange({ event, setOTPVerificationFormState })
-            // {}
+          onChange={event =>
+            handleOTPChange({ event, setOTPVerificationFormState })
           }
           type="number"
           name="otpMobileNumber"

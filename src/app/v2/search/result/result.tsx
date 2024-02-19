@@ -700,7 +700,7 @@ const Result = ({
             activeTab={activeTab}
           />
         ) : (
-          <div className="border-b-[1px] border-t-[1px] border-neutral200">
+          <div className="border-b-[1px] border-neutral200">
             <DataTable
               rows={dataTableState.rows}
               columns={memoizedColumns}
@@ -720,7 +720,7 @@ const Result = ({
             />
           </div>
         )}
-        <div className="p-[16px] border-[1px] border-t border-neutral200 rounded-b-[8px] shadow-inputShadow ">
+        <div className="p-[16px] rounded-b-[8px] shadow-inputShadow ">
           {isConfirmStone ? (
             <ActionButton
               actionButtonData={[

@@ -30,7 +30,7 @@ const ConfirmScreen = () => {
         </IndividualActionButton>
         <IndividualActionButton
           onClick={() => {
-            router.push(`/`);
+            router.push(`/v2/`);
           }}
           className="rounded-[4px] text-neutral-600 w-[450px]"
           size={'custom'}

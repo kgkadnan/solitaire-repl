@@ -12,7 +12,7 @@ import OtpInput from '../otp';
 
 export interface IOtp {
   otpMobileNumber: string;
-  otpCountryCode: string;
+  countryCode: string;
   codeAndNumber: string;
 }
 

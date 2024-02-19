@@ -23,8 +23,7 @@ const OTPComponent = ({
   setDialogContent,
   setToken,
   setCurrentState,
-  token,
-  userLoggedIn
+  token
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
@@ -65,7 +64,7 @@ const OTPComponent = ({
           OTP has been sent to {phoneNumber.phoneNumber}
           <div
             className="cursor-pointer"
-            onClick={() => router.push('/v2/forgot-password')}
+            onClick={() => setCurrentState('forgotPassword')}
           >
             Not My Number
           </div>
@@ -107,11 +106,11 @@ const OTPComponent = ({
                   otpValues,
                   setCurrentState,
                   token,
-                  userLoggedIn,
                   setIsDialogOpen,
                   setDialogContent,
                   verifyResetOTP,
-                  phoneNumber
+                  phoneNumber,
+                  setToken
                 }),
                 setError(''))
               : setError(
