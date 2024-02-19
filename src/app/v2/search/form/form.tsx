@@ -34,8 +34,7 @@ import {
   EXCEEDS_LIIMITS,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
-  SOMETHING_WENT_WRONG,
-  TITLE_ALREADY_EXISTS
+  SOMETHING_WENT_WRONG
 } from '@/constants/error-messages/form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { setModifySearch } from './helpers/modify-search';
@@ -302,7 +301,7 @@ const Form = ({
     id?: string
   ) => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+      JSON.parse(localStorage.getItem('Search')!)?.length >
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
@@ -328,7 +327,7 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
                   },
                   customStyle: 'flex-1'
                 }
@@ -438,7 +437,7 @@ const Form = ({
   // Function: Save and search
   const handleSaveAndSearch: any = async () => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >=
+      JSON.parse(localStorage.getItem('Search')!)?.length >
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
       modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
@@ -465,7 +464,7 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
                   },
                   customStyle: 'flex-1'
                 }
@@ -526,8 +525,7 @@ const Form = ({
               handleFormSearch(true, res.id);
             })
             .catch((error: any) => {
-              logger.error(error);
-              setInputError(TITLE_ALREADY_EXISTS);
+              setInputError(error.data.message);
             });
         }
       }
