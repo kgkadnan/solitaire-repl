@@ -15,7 +15,6 @@ export const RenderDetails = () => {
 export const RenderLotId = ({ renderedCellValue, row }: any) => {
   let statusClass = '';
   let borderClass = '';
-  console.log('row.original', row.original);
   if (row.original.diamond_status === MEMO_STATUS) {
     statusClass = 'bg-legendMemoFill';
     borderClass = 'border-lengendMemoBorder';
