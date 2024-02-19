@@ -39,7 +39,8 @@ export const Parameters = ({
     setStarLengthMax,
     setStarLengthMin,
     setSelectedCulet,
-    setSelectedGirdle
+    setSelectedGirdle,
+    setCrownAngleMax
   } = setState;
   const {
     tablePerMin,
@@ -68,7 +69,6 @@ export const Parameters = ({
     pavilionAngleMin,
     starLengthMax,
     starLengthMin,
-    setCrownAngleMax,
     selectedGirdle,
     selectedCulet
   } = state;
