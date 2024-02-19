@@ -112,7 +112,7 @@ const LoginComponent = ({
             />{' '}
             <p>{ManageLocales('app.login.keepSignedIn')}</p>
           </div>
-          <Link href={'/forgot-password'}>
+          <Link href={'/v2/forgot-password'}>
             {ManageLocales('app.login.forgotPassword')}
           </Link>
         </div>
