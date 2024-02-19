@@ -76,7 +76,9 @@ const Form = ({
   errorState,
   errorSetState,
   setIsDialogOpen,
-  setDialogContent
+  setDialogContent,
+  addSearches,
+  setAddSearches
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -92,6 +94,8 @@ const Form = ({
   errorSetState: any;
   setIsDialogOpen: any;
   setDialogContent: any;
+  addSearches: any;
+  setAddSearches: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -174,9 +178,7 @@ const Form = ({
     saveSearchName,
     setSaveSearchName,
     setInputError,
-    inputError,
-    addSearches,
-    setAddSearches
+    inputError
   } = useValidationStateManagement();
 
   const { modalState, modalSetState } = useModalStateManagement();
