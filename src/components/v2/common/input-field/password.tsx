@@ -80,6 +80,9 @@ export const PasswordField = ({
     }
     return isValid ? <PasswordSuccess /> : <PasswordFail />;
   };
+  const allRulesValid = Object.values(passwordRules).every(
+    isValid => isValid === true
+  );
 
   return (
     <div className={`text-left w-full gap-1 ${styles?.inputMain}`}>
@@ -116,6 +119,7 @@ export const PasswordField = ({
       <div className="mt-2">
         {!isConfirmPassword ? (
           errorText !== PASSWORD_NOT_MATCH &&
+          !allRulesValid &&
           Object.entries(passwordRules).map(([rule, isValid]) => (
             <div key={rule} className="flex items-center">
               {renderIcon(isValid)}
