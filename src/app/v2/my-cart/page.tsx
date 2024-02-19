@@ -34,7 +34,8 @@ import {
   RenderCarat,
   RenderDetails,
   RenderDiscount,
-  RenderLab
+  RenderLab,
+  RenderShape
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Loader from '@/components/v2/common/loader';
 import {
@@ -228,6 +229,8 @@ const MyCart = () => {
             return { ...commonProps, Cell: RenderAmount };
           case 'carat':
             return { ...commonProps, Cell: RenderCarat };
+          case 'shape_full':
+            return { ...commonProps, Cell: RenderShape };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
           case 'details':
@@ -251,20 +254,24 @@ const MyCart = () => {
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
+
+      const shapeColumn = response.data.find(
+        (column: any) => column.accessor === 'shape'
+      );
+
       if (response.data) {
-        dataTableSetState.setColumns(response.data);
-        dataTableSetState.setColumns((prev: any) => [
-          ...prev,
-          {
-            accessor: 'shape_full',
-            id: 'cus_ma-lis-seq_01HHM4RTY66QR24P4RCXHF53XB',
-            is_disabled: false,
-            is_fixed: false,
-            label: 'Shape',
-            sequence: -1,
-            short_label: 'Shape'
-          }
-        ]);
+        let additionalColumn = {
+          accessor: 'shape_full',
+          id: shapeColumn.id,
+          is_disabled: shapeColumn.is_disabled,
+          is_fixed: shapeColumn.is_fixed,
+          label: shapeColumn.label,
+          sequence: shapeColumn.sequence,
+          short_label: shapeColumn.short_label
+        };
+
+        const updatedColumns = [...response.data, additionalColumn];
+        dataTableSetState.setColumns(updatedColumns);
       }
     };
 

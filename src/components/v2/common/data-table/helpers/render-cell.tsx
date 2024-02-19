@@ -98,3 +98,7 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 export const RenderAmount = ({ row }: any) => {
   return <span>{`${row.original.variants[0].prices[0].amount}`}</span>;
 };
+
+export const RenderShape = ({ row }: any) => {
+  return <span>{`${row.original.shape}`}</span>;
+};
