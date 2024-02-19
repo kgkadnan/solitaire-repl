@@ -350,7 +350,6 @@ const DataTable = ({
         },
 
         Cell: ({ row, table }) => {
-          console.log('row.original.shape', row.original.shape);
           return (
             <div className="flex items-center">
               <MRT_ExpandButton row={row} table={table} />
