@@ -15,8 +15,8 @@ import { Button } from '@/components/ui/button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 
 interface ISideNavigationBar {
-  src: React.ReactNode;
-  title?: string;
+  src?: React.ReactNode;
+  title: string;
   link?: string;
   isActive?: boolean;
 }
@@ -34,7 +34,7 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.DASHBOARD
     },
     {
-      src: <CartIcon />
+      title: 'line-separator-1'
     },
     {
       src: <SearchIcon />,
@@ -71,7 +71,7 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.MY_CART
     },
     {
-      src: <CartIcon />
+      title: 'line-separator-2'
     },
     {
       src: <SettingIcon />,

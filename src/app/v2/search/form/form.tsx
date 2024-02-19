@@ -49,7 +49,6 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
-import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
@@ -328,6 +327,7 @@ const Form = ({
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
+                    setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
                 }
@@ -431,6 +431,9 @@ const Form = ({
         setIsError(true);
         setErrorText(SELECT_SOME_PARAM);
       }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_SOME_PARAM);
     }
   };
 
@@ -465,6 +468,7 @@ const Form = ({
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
+                    setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
                 }
@@ -528,6 +532,9 @@ const Form = ({
               setInputError(error.data.message);
             });
         }
+      } else {
+        setIsError(true);
+        setErrorText(SELECT_SOME_PARAM);
       }
     } else {
       setIsError(true);
@@ -555,10 +562,10 @@ const Form = ({
       label: ManageLocales('app.advanceSearch.cancel'),
       handler: () => {
         if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-          router.push(`/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
+          router.push(`/v2/search?active-tab=${SubRoutes.SAVED_SEARCH}`);
         } else if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH})}`) {
           router.push(
-            `/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
+            `/v2/search?active-tab=${SubRoutes.RESULT}-${activeTab + 1}`
           );
         }
       },
@@ -600,7 +607,7 @@ const Form = ({
           }
         } else {
           setIsError(true);
-          setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+          setErrorText(SELECT_SOME_PARAM);
         }
       }
     },
