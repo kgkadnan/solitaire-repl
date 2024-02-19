@@ -188,6 +188,7 @@ const RegisterComponent = ({
           {ManageLocales('app.register.accountExistLogin')}
         </IndividualActionButton>
       </div>
+      <div className="h-[20px]"></div>
     </div>
   );
 };
