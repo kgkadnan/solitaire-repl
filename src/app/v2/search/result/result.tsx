@@ -383,6 +383,7 @@ const Result = ({
               // On success, show confirmation dialog and update badge
               setIsError(false);
               setErrorText('');
+              refetch();
               dispatch(notificationBadge(true));
 
               // refetchRow();
