@@ -28,7 +28,8 @@ const Search = () => {
     []
   );
 
-  const { setSearchUrl, searchUrl } = useValidationStateManagement();
+  const { setSearchUrl, searchUrl, addSearches, setAddSearches } =
+    useValidationStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
 
@@ -113,6 +114,7 @@ const Search = () => {
                       `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
                     ),
                     setSearchParameters([]);
+                  setAddSearches([]);
                 },
                 customStyle: 'flex-1'
               }
@@ -225,6 +227,8 @@ const Search = () => {
           errorSetState={errorSetState}
           setIsDialogOpen={setIsDialogOpen}
           setDialogContent={setDialogContent}
+          addSearches={addSearches}
+          setAddSearches={setAddSearches}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch />
