@@ -275,12 +275,12 @@ const Result = ({
       if (response.data) {
         let additionalColumn = {
           accessor: 'shape_full',
-          id: shapeColumn.id,
-          is_disabled: shapeColumn.is_disabled,
-          is_fixed: shapeColumn.is_fixed,
-          label: shapeColumn.label,
-          sequence: shapeColumn.sequence,
-          short_label: shapeColumn.short_label
+          id: shapeColumn?.id,
+          is_disabled: shapeColumn?.is_disabled,
+          is_fixed: shapeColumn?.is_fixed,
+          label: shapeColumn?.label,
+          sequence: shapeColumn?.sequence,
+          short_label: shapeColumn?.short_label
         };
 
         const updatedColumns = [...response.data, additionalColumn];
