@@ -154,6 +154,9 @@ export const generateQueryParams = (state: IState) => {
     selectedGirdle
   } = state;
 
+  console.log('tablePermax', tablePerMax);
+  console.log('tableper', tablePerMin);
+
   // Initialize an empty object to store query parameters
   const queryParams: any = {};
 
@@ -242,7 +245,7 @@ export const generateQueryParams = (state: IState) => {
     });
   tablePerMax?.length !== 0 &&
     tablePerMin?.length !== 0 &&
-    (queryParams['table%'] = {
+    (queryParams['table%25'] = {
       lte: tablePerMax,
       gte: tablePerMin
     });
@@ -272,7 +275,7 @@ export const generateQueryParams = (state: IState) => {
     });
   depthPerMax?.length !== 0 &&
     depthPerMin?.length !== 0 &&
-    (queryParams['depth%'] = {
+    (queryParams['depth%25'] = {
       lte: depthPerMax,
       gte: depthPerMin
     });
@@ -302,7 +305,7 @@ export const generateQueryParams = (state: IState) => {
     });
   girdlePerMax?.length !== 0 &&
     girdlePerMin?.length !== 0 &&
-    (queryParams['girdle%'] = {
+    (queryParams['girdle%25'] = {
       lte: girdlePerMax,
       gte: girdlePerMin
     });
