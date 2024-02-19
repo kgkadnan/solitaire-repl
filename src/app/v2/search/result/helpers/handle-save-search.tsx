@@ -1,4 +1,3 @@
-import { TITLE_ALREADY_EXISTS } from '@/constants/error-messages/search';
 import { Dispatch, SetStateAction } from 'react';
 
 /**
@@ -54,8 +53,8 @@ export const handleSaveSearch = async ({
         setSaveSearchName('');
       })
 
-      .catch(() => {
-        setInputError(TITLE_ALREADY_EXISTS);
+      .catch((error: any) => {
+        setInputError(error.data.message);
       });
   }
 };
