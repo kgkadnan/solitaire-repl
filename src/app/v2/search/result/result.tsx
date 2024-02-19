@@ -28,7 +28,8 @@ import {
   RenderLab,
   RenderLotId,
   RednderLocation,
-  RenderAmount
+  RenderAmount,
+  RenderShape
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
@@ -69,6 +70,7 @@ import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 
 // Column mapper outside the component to avoid re-creation on each render
+
 const mapColumns = (columns: any) =>
   columns
     ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -157,6 +159,8 @@ const mapColumns = (columns: any) =>
           };
         case 'amount':
           return { ...commonProps, Cell: RenderAmount };
+        case 'shape_full':
+          return { ...commonProps, Cell: RenderShape };
         case 'carat':
           return { ...commonProps, Cell: RenderCarat };
         case 'discount':
@@ -263,25 +267,30 @@ const Result = ({
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
+
+      const shapeColumn = response.data.find(
+        (column: any) => column.accessor === 'shape'
+      );
+
       if (response.data) {
-        dataTableSetState.setColumns(response.data);
-        dataTableSetState.setColumns((prev: any) => [
-          ...prev,
-          {
-            accessor: 'shape_full',
-            id: 'cus_ma-lis-seq_01HHM4RTY66QR24P4RCXHF53XB',
-            is_disabled: false,
-            is_fixed: false,
-            label: 'Shape',
-            sequence: -1,
-            short_label: 'Shape'
-          }
-        ]);
+        let additionalColumn = {
+          accessor: 'shape_full',
+          id: shapeColumn.id,
+          is_disabled: shapeColumn.is_disabled,
+          is_fixed: shapeColumn.is_fixed,
+          label: shapeColumn.label,
+          sequence: shapeColumn.sequence,
+          short_label: shapeColumn.short_label
+        };
+
+        const updatedColumns = [...response.data, additionalColumn];
+        dataTableSetState.setColumns(updatedColumns);
       }
     };
 
     fetchColumns();
   }, []);
+
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]

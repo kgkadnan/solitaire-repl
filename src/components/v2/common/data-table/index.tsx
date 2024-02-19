@@ -348,7 +348,9 @@ const DataTable = ({
             }
           };
         },
+
         Cell: ({ row, table }) => {
+          console.log('row.original.shape', row.original.shape);
           return (
             <div className="flex items-center">
               <MRT_ExpandButton row={row} table={table} />
@@ -357,10 +359,6 @@ const DataTable = ({
               </Stack>
             </div>
           );
-        },
-
-        GroupedCell: ({ row }) => {
-          return row.original['shape'];
         }
       }
     },
@@ -369,7 +367,7 @@ const DataTable = ({
     initialState: {
       showGlobalFilter: true,
       expanded: true,
-      grouping: ['shape_full'],
+      grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
       }
