@@ -49,7 +49,6 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
-import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
