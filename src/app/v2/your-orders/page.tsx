@@ -105,7 +105,8 @@ const MyDiamonds = () => {
     },
     {
       label: ManageLocales('app.myDiamonds.tabs.invoiceHistory'),
-      status: INVOICE_HISTORY
+      status: INVOICE_HISTORY,
+      count: invoiceHistoryData?.length
     }
   ];
   const handleTabs = ({ tab }: { tab: string }) => {

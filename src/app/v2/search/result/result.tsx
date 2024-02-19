@@ -271,7 +271,7 @@ const Result = ({
         (column: any) => column.accessor === 'shape'
       );
 
-      if (response.data) {
+      if (response.data.length) {
         let additionalColumn = {
           accessor: 'shape_full',
           id: shapeColumn?.id,
