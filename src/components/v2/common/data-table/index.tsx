@@ -172,10 +172,9 @@ const DataTable = ({
                           label: ManageLocales('app.modal.manageTabs'),
                           handler: () => {
                             router.push(
-                              `${Routes.SEARCH}?active-tab=${
-                                SubRoutes.RESULT
-                              }-${1}`
+                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
                             );
+                            modalSetState.setIsDialogOpen(false);
                           },
                           customStyle: 'flex-1'
                         }

@@ -328,7 +328,8 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                    setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
                 }
@@ -432,6 +433,9 @@ const Form = ({
         setIsError(true);
         setErrorText(SELECT_SOME_PARAM);
       }
+    } else {
+      setIsError(true);
+      setErrorText(SELECT_SOME_PARAM);
     }
   };
 
@@ -465,7 +469,8 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.search.manageLimit'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
+                    setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
                 }
@@ -530,6 +535,9 @@ const Form = ({
               setInputError(TITLE_ALREADY_EXISTS);
             });
         }
+      } else {
+        setIsError(true);
+        setErrorText(SELECT_SOME_PARAM);
       }
     } else {
       setIsError(true);
@@ -602,7 +610,7 @@ const Form = ({
           }
         } else {
           setIsError(true);
-          setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
+          setErrorText(SELECT_SOME_PARAM);
         }
       }
     },
