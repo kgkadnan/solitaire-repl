@@ -139,8 +139,17 @@ const DataTable = ({
           const data: any = JSON.parse(localStorage.getItem('Search')!);
 
           if (data?.length) {
-            // Check if the maximum search tab limit is reached
-            if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+            let isAlreadyOpenIndex = isSearchAlreadyExist(
+              data,
+              res.data.savedSearches[0].name
+            );
+            if (isAlreadyOpenIndex) {
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  isAlreadyOpenIndex + 1
+                }`
+              );
+            } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
               modalSetState.setDialogContent(
                 <>
                   {' '}
@@ -185,38 +194,23 @@ const DataTable = ({
               );
               modalSetState.setIsDialogOpen(true);
             } else {
-              let isAlreadyOpenIndex = isSearchAlreadyExist(
-                data,
-                res.data.savedSearches[0].name
-              );
-              if (isAlreadyOpenIndex) {
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    isAlreadyOpenIndex + 1
-                  }`
-                );
-              } else {
-                const localStorageData = [
-                  ...data,
-                  {
-                    saveSearchName: res.data.savedSearches[0].name,
-                    isSavedSearch: true,
-                    searchId: response?.data?.search_id,
-                    queryParams: res.data.savedSearches[0].meta_data,
-                    id: res.data.savedSearches[0].id
-                  }
-                ];
+              const localStorageData = [
+                ...data,
+                {
+                  saveSearchName: res.data.savedSearches[0].name,
+                  isSavedSearch: true,
+                  searchId: response?.data?.search_id,
+                  queryParams: res.data.savedSearches[0].meta_data,
+                  id: res.data.savedSearches[0].id
+                }
+              ];
 
-                localStorage.setItem(
-                  'Search',
-                  JSON.stringify(localStorageData)
-                );
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    data.length + 1
-                  }`
-                );
-              }
+              localStorage.setItem('Search', JSON.stringify(localStorageData));
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  data.length + 1
+                }`
+              );
             }
           }
         }

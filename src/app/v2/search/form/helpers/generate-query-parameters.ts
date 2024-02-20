@@ -154,9 +154,6 @@ export const generateQueryParams = (state: IState) => {
     selectedGirdle
   } = state;
 
-  console.log('tablePermax', tablePerMax);
-  console.log('tableper', tablePerMin);
-
   // Initialize an empty object to store query parameters
   const queryParams: any = {};
 
