@@ -255,7 +255,7 @@ const MyCart = () => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
 
-      const shapeColumn = response.data.find(
+      const shapeColumn = response.data?.find(
         (column: any) => column.accessor === 'shape'
       );
 

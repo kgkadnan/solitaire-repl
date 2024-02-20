@@ -25,7 +25,7 @@ import renderContent from './components/render-form-field';
 import { ISavedSearch } from '@/components/common/top-navigation-bar';
 import useNumericFieldValidation from './hooks/numeric-field-validation-management';
 import {
-  EXCEEDS_LIIMITS,
+  EXCEEDS_LIMITS,
   MAX_LIMIT_REACHED,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG,
@@ -167,7 +167,7 @@ used for managing the state of a form field or input element in a React componen
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(EXCEEDS_LIIMITS);
+          setErrorText(EXCEEDS_LIMITS);
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
           setErrorText(NO_STONE_FOUND);

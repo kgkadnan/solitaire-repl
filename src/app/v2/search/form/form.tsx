@@ -9,7 +9,6 @@ import { Color } from './components/color';
 import { useGetProductCountQuery } from '@/features/api/product';
 import useValidationStateManagement from '../hooks/validation-state-management';
 import { generateQueryParams } from './helpers/generate-query-parameters';
-import { constructUrlParams } from '@/utils/construct-url-param';
 import { Clarity } from './components/clarity';
 import { MakeCutPolishSymmetry } from './components/make-cut-polish-symmetry';
 import { Fluorescence } from './components/fluorescence';
@@ -31,7 +30,7 @@ import {
   MIN_SEARCH_FORM_COUNT
 } from '@/constants/business-logic';
 import {
-  EXCEEDS_LIIMITS,
+  EXCEEDS_LIMITS,
   NO_STONE_FOUND,
   SELECT_SOME_PARAM,
   SOMETHING_WENT_WRONG
@@ -54,6 +53,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
+import { constructUrlParams } from '@/utils/v2/construct-url-params';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -223,7 +223,7 @@ const Form = ({
           data?.count > MIN_SEARCH_FORM_COUNT
         ) {
           setIsError(true);
-          setErrorText(EXCEEDS_LIIMITS);
+          setErrorText(EXCEEDS_LIMITS);
           setMessageColor('dangerMain');
         } else if (data?.count === MIN_SEARCH_FORM_COUNT) {
           setIsError(true);
@@ -429,7 +429,7 @@ const Form = ({
         // return;
       } else {
         setIsError(true);
-        setErrorText(SELECT_SOME_PARAM);
+        setErrorText(EXCEEDS_LIMITS);
       }
     } else {
       setIsError(true);
@@ -583,25 +583,31 @@ const Form = ({
       // svg: bookmarkAddIcon,
       label: `${ManageLocales('app.advanceSearch.saveSearch')}`,
       handler: () => {
-        if (
-          data?.count < MAX_SEARCH_FORM_COUNT &&
-          data?.count > MIN_SEARCH_FORM_COUNT
-        ) {
-          if (activeTab !== undefined) {
-            const isSearchName: number =
-              addSearches[activeTab - 1]?.saveSearchName.length;
+        if (searchUrl) {
+          if (
+            data?.count < MAX_SEARCH_FORM_COUNT &&
+            data?.count > MIN_SEARCH_FORM_COUNT
+          ) {
+            if (activeTab !== undefined) {
+              const isSearchName: number =
+                addSearches[activeTab - 1]?.saveSearchName.length;
 
-            const isSaved: boolean = addSearches[activeTab - 1]?.isSavedSearch;
-            // Check if the active search is not null and isSavedSearch is true
-            if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
-              handleSaveAndSearch();
-            } else if (isSaved) {
-              handleSaveAndSearch();
-            } else if (!isSaved && isSearchName) {
-              handleSaveAndSearch();
-            } else {
-              searchUrl && setIsInputDialogOpen(true);
+              const isSaved: boolean =
+                addSearches[activeTab - 1]?.isSavedSearch;
+              // Check if the active search is not null and isSavedSearch is true
+              if (modifySearchFrom === `${SubRoutes.SAVED_SEARCH}`) {
+                handleSaveAndSearch();
+              } else if (isSaved) {
+                handleSaveAndSearch();
+              } else if (!isSaved && isSearchName) {
+                handleSaveAndSearch();
+              } else {
+                searchUrl && setIsInputDialogOpen(true);
+              }
             }
+          } else {
+            setIsError(true);
+            setErrorText(EXCEEDS_LIMITS);
           }
         } else {
           setIsError(true);

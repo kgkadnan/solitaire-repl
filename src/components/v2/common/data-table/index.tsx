@@ -459,8 +459,8 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 flex p-[16px]">
-            <div className="flex lg-w-[calc(100%-400px)] gap-[12px] flex-wrap">
+          <div className=" min-h-[72px] items-start justify-between border-b-[1px] border-neutral200 flex p-[16px] ">
+            <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
                 activeTab={activeTab}
@@ -468,7 +468,7 @@ const DataTable = ({
                 handleCloseSpecificTab={handleCloseSpecificTab}
               />
             </div>
-            <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap relative">
+            <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
               <button
                 onClick={handleDropdown}
                 className={`flex items-center px-[16px] py-[8px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}

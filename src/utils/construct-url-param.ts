@@ -39,7 +39,6 @@ export function constructUrlParams(data: IQueryData): string {
 
       if (Array.isArray(value)) {
         // Handle other arrays
-        console.log('lllllllllllllllllllll', value);
 
         if (!value?.includes('All')) {
           value.forEach(item => {
