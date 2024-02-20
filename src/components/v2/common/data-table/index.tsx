@@ -503,7 +503,7 @@ const DataTable = ({
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
                 options={searchList}
-                onDropDwonClick={onDropDwonClick}
+                onDropDownClick={onDropDownClick}
               />
             </div>
           </div>

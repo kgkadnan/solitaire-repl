@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import arrowForward from '@public/assets/icons/arrow-forward.svg';
 import arrowBackward from '@public/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
@@ -12,8 +12,10 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeLink, setActiveLink] = useState('');
+  const [allowScrollReset, setAllowScrollReset] = useState(true);
 
   const handleScroll = (scrollOffset: number) => {
+    // setActiveLink('')
     if (containerRef.current) {
       containerRef.current.scrollBy({
         left: scrollOffset,
@@ -22,6 +24,27 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
     }
   };
 
+  const handleLinkClick = (link: string) => {
+    setAllowScrollReset(false);
+    setTimeout(() => {
+      setAllowScrollReset(true);
+    }, 2000); // Delay to re-enable scroll reset
+    setActiveLink(link);
+  };
+
+  useEffect(() => {
+    const handleUserScroll = () => {
+      if (allowScrollReset) {
+        setActiveLink('');
+      }
+    };
+
+    window.addEventListener('scroll', handleUserScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleUserScroll);
+    };
+  }, [allowScrollReset]);
   return (
     <div className="flex items-center w-full bg-neutral0 sticky top-[60px] z-[3] ">
       <div
@@ -45,7 +68,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
                   ? 'border-b-2 border-neutral-900 text-neutral-900'
                   : ''
               }`}
-              onClick={() => setActiveLink(links)}
+              onClick={() => handleLinkClick(links)}
             >
               {links}
             </Link>
