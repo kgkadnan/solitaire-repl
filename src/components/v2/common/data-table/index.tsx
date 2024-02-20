@@ -100,7 +100,7 @@ const DataTable = ({
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
-  const onDropDwonClick = (data: any) => {
+  const onDropDownClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
       searchByName: data.value
