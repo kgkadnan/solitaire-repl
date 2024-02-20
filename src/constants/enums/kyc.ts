@@ -27,6 +27,13 @@ export enum supportedCountries {
   OTHER = 'Other'
 }
 
+export enum countries {
+  INDIA = 'India',
+  BELGIUM = 'Belgium',
+  USA = 'USA',
+  DUBAI = 'Dubai'
+}
+
 export enum kycScreenIdentifierNames {
   PERSONAL_DETAILS = 'personal_details',
   COMPANY_DETAILS = 'company_details',

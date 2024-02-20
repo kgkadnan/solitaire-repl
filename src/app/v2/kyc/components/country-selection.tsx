@@ -6,6 +6,7 @@ import BEL from '@public/v2/assets/png/data-table/BEL.png';
 import USA from '@public/v2/assets/png/data-table/USA.png';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
+import { countries } from '@/constants/enums/kyc';
 
 interface ICountrySelectionProps {
   handleCountrySelection: (country: string) => void;
@@ -19,43 +20,43 @@ const CountrySelection = ({
     {
       name: 'country',
       id: '1',
-      value: 'IND',
+      value: countries.INDIA,
       label: (
         <div className="flex gap-3">
           <Image src={IND} alt="IND" />
           <p>India</p>
         </div>
       ),
-      checked: selectedCountry === 'IND'
+      checked: selectedCountry === countries.INDIA
     },
     {
       name: 'country',
       id: '2',
-      value: 'BEL',
+      value: countries.BELGIUM,
       label: (
         <div className="flex gap-3">
           <Image src={BEL} alt="BEL" />
           <p>Belgium</p>
         </div>
       ),
-      checked: selectedCountry === 'BEL'
+      checked: selectedCountry === countries.BELGIUM
     },
     {
       name: 'country',
       id: '3',
-      value: 'USA',
+      value: countries.USA,
       label: (
         <div className="flex gap-3">
           <Image src={USA} alt="USA" />
           <p>U.S</p>
         </div>
       ),
-      checked: selectedCountry === 'USA'
+      checked: selectedCountry === countries.USA
     },
     {
       name: 'country',
       id: '3',
-      value: 'DUB',
+      value: countries.DUBAI,
       label: (
         <>
           <div className="flex gap-3">
@@ -69,7 +70,7 @@ const CountrySelection = ({
           </div>
         </>
       ),
-      checked: selectedCountry === 'DUB'
+      checked: selectedCountry === countries.DUBAI
     }
   ];
   return (
