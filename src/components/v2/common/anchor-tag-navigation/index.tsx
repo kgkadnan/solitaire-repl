@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import arrowForward from '@public/assets/icons/arrow-forward.svg';
 import arrowBackward from '@public/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
@@ -11,6 +11,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   anchorNavigations
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [activeLink, setActiveLink] = useState('');
 
   const handleScroll = (scrollOffset: number) => {
     if (containerRef.current) {
@@ -39,7 +40,12 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               smooth={true}
               offset={-210}
               duration={500}
-              className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600`}
+              className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${
+                activeLink === links
+                  ? 'border-b-2 border-neutral-900 text-neutral-900'
+                  : ''
+              }`}
+              onClick={() => setActiveLink(links)}
             >
               {links}
             </Link>
