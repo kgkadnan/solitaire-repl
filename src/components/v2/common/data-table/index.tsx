@@ -27,7 +27,7 @@ import {
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
 import { IItem } from '@/app/v2/search/saved-search/saved-search';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
@@ -97,7 +97,7 @@ const DataTable = ({
     setIsDropDownOpen(!isDropDownOpen);
   };
 
-  const onDropDwonClick = (data: any) => {
+  const onDropDownClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
       searchByName: data.value
@@ -497,7 +497,7 @@ const DataTable = ({
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
                 options={searchList}
-                onDropDwonClick={onDropDwonClick}
+                onDropDownClick={onDropDownClick}
               />
             </div>
           </div>
