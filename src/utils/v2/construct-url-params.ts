@@ -1,4 +1,4 @@
-type IQueryDataValue = string | number | INestedQuery | INestedQuery[];
+type IQueryDataValue = any;
 
 interface INestedQuery {
   [key: string]: IQueryDataValue;
@@ -38,9 +38,11 @@ export function constructUrlParams(data: IQueryData): string {
 
       if (Array.isArray(value)) {
         // Handle other arrays
-        value.forEach(item => {
-          queryParams.push(`${key}[]=${item}`);
-        });
+        if (!value?.includes('All')) {
+          value.forEach(item => {
+            queryParams.push(`${key}[]=${item}`);
+          });
+        }
       } else if (typeof value === 'object') {
         // Handle nested objects
         encodeNested(key, value as INestedQuery | INestedQuery[]);
