@@ -23,6 +23,7 @@ export const notificationRoutes = [
 export const v2Routes = [
   '/v2',
   '/v2/search',
+  '/v2/kyc',
   '/v2/your-orders',
   '/v2/saved-searches',
   '/v2/appointments',

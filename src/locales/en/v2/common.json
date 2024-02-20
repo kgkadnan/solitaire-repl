@@ -132,5 +132,8 @@
 
   "app.setPassword": "Set new password",
   "app.setPassword.title": "Your new password must be different to previously used passwords.",
-  "app.resetPassword": "Reset password"
+  "app.resetPassword": "Reset password",
+
+  "app.kyc.countrySelection.header.title" : "Welcome, Select Country for KYC",
+  "app.kyc.countrySelection.header.content" : "Please select your country to initiate the KYC process. Your choice will determine the specific KYC requirements for your location."
 }
