@@ -142,8 +142,17 @@ const DataTable = ({
           const data: any = JSON.parse(localStorage.getItem('Search')!);
 
           if (data?.length) {
-            // Check if the maximum search tab limit is reached
-            if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+            let isAlreadyOpenIndex = isSearchAlreadyExist(
+              data,
+              res.data.savedSearches[0].name
+            );
+            if (isAlreadyOpenIndex) {
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  isAlreadyOpenIndex + 1
+                }`
+              );
+            } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
               modalSetState.setDialogContent(
                 <>
                   {' '}
@@ -188,38 +197,23 @@ const DataTable = ({
               );
               modalSetState.setIsDialogOpen(true);
             } else {
-              let isAlreadyOpenIndex = isSearchAlreadyExist(
-                data,
-                res.data.savedSearches[0].name
-              );
-              if (isAlreadyOpenIndex) {
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    isAlreadyOpenIndex + 1
-                  }`
-                );
-              } else {
-                const localStorageData = [
-                  ...data,
-                  {
-                    saveSearchName: res.data.savedSearches[0].name,
-                    isSavedSearch: true,
-                    searchId: response?.data?.search_id,
-                    queryParams: res.data.savedSearches[0].meta_data,
-                    id: res.data.savedSearches[0].id
-                  }
-                ];
+              const localStorageData = [
+                ...data,
+                {
+                  saveSearchName: res.data.savedSearches[0].name,
+                  isSavedSearch: true,
+                  searchId: response?.data?.search_id,
+                  queryParams: res.data.savedSearches[0].meta_data,
+                  id: res.data.savedSearches[0].id
+                }
+              ];
 
-                localStorage.setItem(
-                  'Search',
-                  JSON.stringify(localStorageData)
-                );
-                router.push(
-                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                    data.length + 1
-                  }`
-                );
-              }
+              localStorage.setItem('Search', JSON.stringify(localStorageData));
+              router.push(
+                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                  data.length + 1
+                }`
+              );
             }
           }
         }
@@ -314,6 +308,7 @@ const DataTable = ({
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
+    selectAllMode: 'all',
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
@@ -470,8 +465,8 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[72px] items-center justify-between border-b-[1px] border-neutral200 flex p-[16px]">
-            <div className="flex lg-w-[calc(100%-400px)] gap-[12px] flex-wrap">
+          <div className=" min-h-[72px] items-start justify-between border-b-[1px] border-neutral200 flex p-[16px] ">
+            <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
                 activeTab={activeTab}
@@ -479,7 +474,7 @@ const DataTable = ({
                 handleCloseSpecificTab={handleCloseSpecificTab}
               />
             </div>
-            <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap relative">
+            <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
               <button
                 onClick={handleDropdown}
                 className={`flex items-center px-[16px] py-[8px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}

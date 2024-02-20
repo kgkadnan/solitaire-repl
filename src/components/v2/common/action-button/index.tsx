@@ -13,11 +13,15 @@ interface IActionButtonData {
     isHidden?: boolean;
     customStyle?: string;
   }[];
+  containerStyle?: string;
 }
 
-const ActionButton = ({ actionButtonData }: IActionButtonData) => {
+const ActionButton = ({
+  actionButtonData,
+  containerStyle
+}: IActionButtonData) => {
   return (
-    <div className={`${styles.ctaContainer} `}>
+    <div className={`${styles.ctaContainer} ${containerStyle}`}>
       {actionButtonData.map(
         (
           { isDisable, variant, svg, label, handler, isHidden, customStyle },

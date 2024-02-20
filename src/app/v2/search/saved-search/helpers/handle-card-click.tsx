@@ -88,8 +88,19 @@ export const handleCardClick = ({
         const data: any = JSON.parse(localStorage.getItem('Search')!);
 
         if (data?.length) {
+          let isAlreadyOpenIndex = isSearchAlreadyExist(
+            data,
+            specificCardData[0].name
+          );
+          if (isAlreadyOpenIndex) {
+            router.push(
+              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                isAlreadyOpenIndex + 1
+              }`
+            );
+          }
           // Check if the maximum search tab limit is reached
-          if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+          else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
             setDialogContent(
               <>
                 {' '}
@@ -136,35 +147,24 @@ export const handleCardClick = ({
             setIsDialogOpen(true);
           } else {
             // Add the clicked search to local storage and navigate to the search result page
-            let isAlreadyOpenIndex = isSearchAlreadyExist(
-              data,
-              specificCardData[0].name
-            );
-            if (isAlreadyOpenIndex) {
-              router.push(
-                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                  isAlreadyOpenIndex + 1
-                }`
-              );
-            } else {
-              const localStorageData = [
-                ...data,
-                {
-                  saveSearchName: specificCardData[0].name,
-                  isSavedSearch: true,
-                  searchId: response?.data?.search_id,
-                  queryParams: specificCardData[0].meta_data,
-                  id: specificCardData[0].id
-                }
-              ];
 
-              localStorage.setItem('Search', JSON.stringify(localStorageData));
-              router.push(
-                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                  data.length + 1
-                }`
-              );
-            }
+            const localStorageData = [
+              ...data,
+              {
+                saveSearchName: specificCardData[0].name,
+                isSavedSearch: true,
+                searchId: response?.data?.search_id,
+                queryParams: specificCardData[0].meta_data,
+                id: specificCardData[0].id
+              }
+            ];
+
+            localStorage.setItem('Search', JSON.stringify(localStorageData));
+            router.push(
+              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                data.length + 1
+              }`
+            );
           }
         } else {
           // If no data in local storage, create a new entry and navigate to the search result page

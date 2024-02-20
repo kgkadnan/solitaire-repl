@@ -242,7 +242,7 @@ export const generateQueryParams = (state: IState) => {
     });
   tablePerMax?.length !== 0 &&
     tablePerMin?.length !== 0 &&
-    (queryParams['table%'] = {
+    (queryParams['table_percentage'] = {
       lte: tablePerMax,
       gte: tablePerMin
     });
@@ -272,7 +272,7 @@ export const generateQueryParams = (state: IState) => {
     });
   depthPerMax?.length !== 0 &&
     depthPerMin?.length !== 0 &&
-    (queryParams['depth%'] = {
+    (queryParams['depth_percentage'] = {
       lte: depthPerMax,
       gte: depthPerMin
     });
@@ -302,7 +302,7 @@ export const generateQueryParams = (state: IState) => {
     });
   girdlePerMax?.length !== 0 &&
     girdlePerMin?.length !== 0 &&
-    (queryParams['girdle%'] = {
+    (queryParams['girdle_percentage'] = {
       lte: girdlePerMax,
       gte: girdlePerMin
     });
