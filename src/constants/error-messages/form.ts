@@ -1,4 +1,4 @@
-export const EXCEEDS_LIIMITS =
+export const EXCEEDS_LIMITS =
   'Your selection is more than 300 stones, please modify your search';
 export const SOMETHING_WENT_WRONG = 'Something went wrong';
 export const MAX_LIMIT_REACHED =
