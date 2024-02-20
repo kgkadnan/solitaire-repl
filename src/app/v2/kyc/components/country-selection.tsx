@@ -74,7 +74,7 @@ const CountrySelection = ({
     }
   ];
   return (
-    <div className="flex flex-col gap-[16px] px-[110px] pt-[32px] h-[93.6vh] min-h-[70vh]">
+    <div className="flex flex-col gap-[16px] px-[110px] pt-[32px] h-[calc(100vh-60px)] min-h-[70vh]">
       <div className="flex flex-col gap-[8px]">
         <h1 className="text-neutral900 text-headingS font-medium">
           {ManageLocales('app.kyc.countrySelection.header.title')}

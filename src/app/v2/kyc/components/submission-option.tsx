@@ -9,10 +9,12 @@ import ActionButton from '@/components/v2/common/action-button';
 interface ISubmissionOptionProps {
   handleSubmissionOptionClick: (option: string) => void;
   selectedSubmissionOption: string;
+  handleBack: (currentState: string) => void;
 }
 const SubmissionOption = ({
   handleSubmissionOptionClick,
-  selectedSubmissionOption
+  selectedSubmissionOption,
+  handleBack
 }: ISubmissionOptionProps) => {
   const renderImage = (src: string) => <Image src={src} alt={src} />;
 
@@ -58,16 +60,17 @@ const SubmissionOption = ({
           </div>
         ))}
       </div>
-      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] mt-auto">
+      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[
             {
-              variant: 'primary',
-              label: ManageLocales('app.login'),
-              handler: () => {}
+              variant: 'secondary',
+              label: ManageLocales('app.kyc.footer.back'),
+              handler: () => handleBack('country_selection')
             }
           ]}
+          containerStyle="!justify-start"
         />
       </div>
     </div>

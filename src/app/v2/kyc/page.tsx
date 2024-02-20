@@ -25,6 +25,16 @@ const KYC = () => {
 
   const handleSubmissionOptionClick = (selection: string) => {
     setSelectedSubmissionOption(selection);
+    dispatch(
+      updateFormState({
+        name: 'formState.offline',
+        value: selection === 'online' ? false : true
+      })
+    );
+  };
+
+  const handleBack = (currentState: string) => {
+    setCurrentState(currentState);
   };
 
   const renderContent = () => {
@@ -41,6 +51,7 @@ const KYC = () => {
           <SubmissionOption
             handleSubmissionOptionClick={handleSubmissionOptionClick}
             selectedSubmissionOption={selectedSubmissionOption}
+            handleBack={handleBack}
           />
         );
     }
