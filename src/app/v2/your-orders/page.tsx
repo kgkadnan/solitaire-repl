@@ -106,7 +106,7 @@ const MyDiamonds = () => {
     {
       label: ManageLocales('app.myDiamonds.tabs.invoiceHistory'),
       status: INVOICE_HISTORY,
-      count: invoiceHistoryData?.length
+      count: invoiceHistoryDataState?.length
     }
   ];
   const handleTabs = ({ tab }: { tab: string }) => {
@@ -135,7 +135,7 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        { label: 'Tracking Details', accessor: 'delivery' },
+        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: invoiceHistoryDataState
