@@ -477,7 +477,7 @@ const DataTable = ({
             <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap relative">
               <button
                 onClick={handleDropdown}
-                className={`flex items-center px-[16px] py-[8px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
+                className={`flex items-center px-[16px] py-[8px] text-mMedium font-medium text-neutral-900 ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
               >
                 {ManageLocales('app.search.savedSearch')}
                 <Image src={chevronDown} alt="chevronDown" />
