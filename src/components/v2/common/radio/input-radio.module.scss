@@ -38,7 +38,6 @@
   border-radius: 50%;
 }
 
-
 .radio input[type='radio']:checked ~ span:after {
   transform: translate(-50%, -50%) scale(1);
 }
@@ -46,7 +45,7 @@
 .radio input[type='radio']:checked ~ span {
   /* This styles the span when the radio is checked */
   box-shadow: 0 0 0 1px var(--primary-main); /* Creates an outline effect */
-  border-color: var(--primary-main); 
+  border-color: var(--primary-main);
 }
 
 .radio input[type='radio']:focus ~ span {

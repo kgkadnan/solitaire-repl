@@ -27,7 +27,7 @@ import {
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
-import { useCallback, useState } from 'react';
+import { useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
 import { IItem } from '@/app/v2/search/saved-search/saved-search';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
