@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Select from 'react-select';
 import { savedSearchDropDownStyle } from './styles';
 import cross from '@public/v2/assets/icons/data-table/cross.svg';
@@ -18,12 +18,16 @@ const SavedSearchDropDown = ({
   options,
   onDropDwonClick
 }: ISavedSearchDropDownProps) => {
+  const [inputValue, setInputValue] = useState('');
+
   const computeDropdownFieldFromJson = (fieldData: any) => {
     return fieldData.map((data: any) => {
       return { value: data.name, label: data.name };
     });
   };
-
+  const handleInputChange = (newValue: string) => {
+    setInputValue(newValue);
+  };
   return (
     <>
       {isOpen && (
@@ -48,6 +52,9 @@ const SavedSearchDropDown = ({
               styles={savedSearchDropDownStyle}
               menuIsOpen={true}
               placeholder={'Search by Saved Filter Parameter'}
+              inputValue={inputValue}
+              onInputChange={handleInputChange}
+              // clearFocusValueOnUpdate={false}
             />
           </div>
         </div>
