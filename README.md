@@ -1,5 +1,10 @@
 # SOLITAIRE
 
+Prod Website URL: https://solitaire.kgkit.net/
+Test Website URL: https://solitaire-test.kgkit.net/
+
+Changes to "Dev" branch will automatically get deployed to the test website.
+
 ## Requirements:
 
 For development, you will only need Node.js installed on your environement.
