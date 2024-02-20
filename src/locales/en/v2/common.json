@@ -135,5 +135,8 @@
   "app.resetPassword": "Reset password",
 
   "app.kyc.countrySelection.header.title" : "Welcome, Select Country for KYC",
-  "app.kyc.countrySelection.header.content" : "Please select your country to initiate the KYC process. Your choice will determine the specific KYC requirements for your location."
+
+  "app.kyc.submissionOption.header.title" : "KYC Form Submission Options",
+
+  "app.kyc.footer.back" : "back"
 }
