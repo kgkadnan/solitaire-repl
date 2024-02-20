@@ -378,8 +378,16 @@ const DataTable = ({
         // minHeight: 'calc(100vh - 399px)',
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
-        minHeight: isFullScreen ? '80vh' : 'calc(100vh - 399px)',
-        maxHeight: isFullScreen ? '80vh' : 'calc(100vh - 399px)'
+        minHeight: isFullScreen
+          ? isResult
+            ? 'calc(100vh - 200px)'
+            : 'calc(100vh - 120px)'
+          : 'calc(100vh - 399px)',
+        maxHeight: isFullScreen
+          ? isResult
+            ? 'calc(100vh - 200px)'
+            : 'calc(100vh - 120px)'
+          : 'calc(100vh - 399px)'
       }
     },
     muiTableHeadRowProps: {
