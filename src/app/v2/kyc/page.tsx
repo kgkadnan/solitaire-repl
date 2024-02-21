@@ -4,9 +4,13 @@ import CountrySelection from './components/country-selection';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import SubmissionOption from './components/submission-option';
+import CompanyOwnerDetail from './components/company-owner-detail';
+import { useSelector } from 'react-redux';
+import BankingDetails from './components/banking-details';
 
 const KYC = () => {
-  const [currentState, setCurrentState] = useState('country_selection');
+  const { formState, formErrorState } = useSelector((state: any) => state.kyc);
+  const [currentState, setCurrentState] = useState('banking_details');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
 
@@ -28,7 +32,7 @@ const KYC = () => {
     dispatch(
       updateFormState({
         name: 'formState.offline',
-        value: selection === 'online' ? false : true
+        value: selection !== 'online'
       })
     );
   };
@@ -52,6 +56,24 @@ const KYC = () => {
             handleSubmissionOptionClick={handleSubmissionOptionClick}
             selectedSubmissionOption={selectedSubmissionOption}
             handleBack={handleBack}
+          />
+        );
+
+      case 'company_owner_detail':
+        return (
+          <CompanyOwnerDetail
+            formErrorState={formErrorState}
+            formState={formState}
+            dispatch={dispatch}
+          />
+        );
+      case 'banking_details':
+        return (
+          <BankingDetails
+            formErrorState={formErrorState}
+            formState={formState}
+            dispatch={dispatch}
+            country={'India'}
           />
         );
     }

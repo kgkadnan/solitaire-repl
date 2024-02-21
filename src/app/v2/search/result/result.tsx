@@ -80,6 +80,7 @@ const mapColumns = (columns: any) =>
         accessorKey: accessor,
         header: short_label,
         enableGlobalFilter: accessor === 'lot_id',
+        enableGrouping: accessor === 'shape',
         enableSorting: accessor !== 'shape',
         minSize: 5,
         maxSize: accessor === 'details' ? 100 : 200,
@@ -225,11 +226,16 @@ const Result = ({
 
   const [addSavedSearch] = useAddSavedSearchMutation();
 
-  const { data: ProductApiData, refetch } = useGetAllProductQuery({
-    offset: 0,
-    limit: LISTING_PAGE_DATA_LIMIT,
-    url: searchUrl
-  });
+  const { data: ProductApiData, refetch } = useGetAllProductQuery(
+    {
+      offset: 0,
+      limit: LISTING_PAGE_DATA_LIMIT,
+      url: searchUrl
+    },
+    {
+      skip: !searchUrl
+    }
+  );
   const [confirmProduct] = useConfirmProductMutation();
 
   const [triggerColumn, { data: columnData }] =
@@ -254,14 +260,19 @@ const Result = ({
     if (ProductApiData?.products?.length) {
       dataTableSetState.setRows(ProductApiData.products);
       setRowSelection({});
+      setErrorText('');
       setData(ProductApiData);
-      setIsError(false);
     }
   }, [ProductApiData]);
 
   useEffect(() => {
     fetchProducts();
   }, [activeTab]);
+
+  useEffect(() => {
+    setErrorText('');
+    setIsError(false);
+  }, [rowSelection]);
 
   // Fetch Columns
   useEffect(() => {
@@ -301,6 +312,7 @@ const Result = ({
 
   const handleAddToCart = () => {
     let selectedIds = Object.keys(rowSelection);
+
     if (selectedIds.length > 300) {
       setIsError(true);
       setErrorText(NOT_MORE_THAN_300);
@@ -328,18 +340,19 @@ const Result = ({
         setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
       } else {
         // Extract variant IDs for selected stones
-        const variantIds = selectedIds?.map((id: string) => {
-          const myCartCheck: IProduct | object =
-            dataTableState.rows.find((row: IProduct) => {
-              return row?.id === id;
-            }) ?? {};
+        const variantIds = selectedIds
+          ?.map((id: string) => {
+            const myCartCheck: IProduct | object =
+              dataTableState.rows.find((row: IProduct) => {
+                return row?.id === id;
+              }) ?? {};
 
-          if (myCartCheck && 'variants' in myCartCheck) {
-            return myCartCheck.variants[0]?.id;
-          }
-
-          return null;
-        });
+            if (myCartCheck && 'variants' in myCartCheck) {
+              return myCartCheck.variants[0]?.id;
+            }
+            return '';
+          })
+          .filter(Boolean);
 
         // If there are variant IDs, add to the cart
         if (variantIds.length) {
@@ -726,6 +739,7 @@ const Result = ({
               setSearchParameters={setSearchParameters}
               modalSetState={modalSetState}
               data={data}
+              setErrorText={setErrorText}
             />
           </div>
         )}

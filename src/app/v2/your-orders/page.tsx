@@ -106,7 +106,7 @@ const MyDiamonds = () => {
     {
       label: ManageLocales('app.myDiamonds.tabs.invoiceHistory'),
       status: INVOICE_HISTORY,
-      count: invoiceHistoryData?.length
+      count: invoiceHistoryDataState?.length
     }
   ];
   const handleTabs = ({ tab }: { tab: string }) => {
@@ -135,7 +135,7 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        { label: 'Tracking Details', accessor: 'delivery' },
+        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: invoiceHistoryDataState
@@ -373,7 +373,10 @@ const MyDiamonds = () => {
                 data?.map((items: any) => (
                   <div
                     key={items.order_id}
-                    className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                    onClick={() => {
+                      handleShowDetails(items?.id);
+                    }}
+                    className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
                   >
                     {keys?.map(({ accessor }: any, index: number) => (
                       <div

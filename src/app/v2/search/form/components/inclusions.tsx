@@ -143,44 +143,46 @@ const Inclusions = ({ state, setState }: any) => {
   return (
     <>
       {
-        <AccordionComponent
-          value="Inclusions"
-          isDisable={false}
-          accordionContent={
-            <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]">
-              {otherParameterData.map((other: IInclusions) => (
-                <div
-                  key={`other-parameter-${other.key}`}
-                  className="grid gap-[16px]"
-                >
-                  <span className="text-neutral900 text-mRegular font-regular grid gap-[12px]">
-                    {other.key}
-                  </span>
-                  {other.value.map(data => (
-                    <div
-                      key={`${other.key}-${data.elementKey}`}
-                      className="flex gap-[20px] items-center"
-                    >
-                      <span className="text-neutral900 text-mRegular font-regular min-w-[120px]">
-                        {data.elementKey}
-                      </span>
-                      <div>
-                        <Tile
-                          tileData={data.elementValue}
-                          selectedTile={data.state}
-                          setSelectedTile={data.setState}
-                          handleTileClick={handleSelection}
-                        />
+        <div id="Inclusions">
+          <AccordionComponent
+            value="Inclusions"
+            isDisable={false}
+            accordionContent={
+              <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]">
+                {otherParameterData.map((other: IInclusions) => (
+                  <div
+                    key={`other-parameter-${other.key}`}
+                    className="grid gap-[16px]"
+                  >
+                    <span className="text-neutral900 text-mRegular font-regular grid gap-[12px]">
+                      {other.key}
+                    </span>
+                    {other.value.map(data => (
+                      <div
+                        key={`${other.key}-${data.elementKey}`}
+                        className="flex gap-[20px] items-center"
+                      >
+                        <span className="text-neutral900 text-mRegular font-regular min-w-[120px]">
+                          {data.elementKey}
+                        </span>
+                        <div>
+                          <Tile
+                            tileData={data.elementValue}
+                            selectedTile={data.state}
+                            setSelectedTile={data.setState}
+                            handleTileClick={handleSelection}
+                          />
+                        </div>
                       </div>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          }
-          accordionTrigger={'Inclusions'}
-          hasError={false}
-        />
+                    ))}
+                  </div>
+                ))}
+              </div>
+            }
+            accordionTrigger={'Inclusions'}
+            hasError={false}
+          />
+        </div>
       }
     </>
   );

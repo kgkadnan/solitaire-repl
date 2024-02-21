@@ -107,6 +107,7 @@ export const Carat = ({
       setSelectedcaratTile(prevSelectedTile =>
         prevSelectedTile.filter(selected => selected !== data)
       );
+      setValidationError('');
     }
   };
 
@@ -150,7 +151,7 @@ export const Carat = ({
                   }}
                   maxInputData={{
                     maxValue: caratMax,
-                    maxPlaceHolder: '10',
+                    maxPlaceHolder: '30',
                     maxOnchange: e => {
                       handleMaxChange(e);
                       handleNumericRange({

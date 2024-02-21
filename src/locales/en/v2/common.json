@@ -44,6 +44,7 @@
   "app.myDiamonds.selectDate": "Select date",
   "app.yourOrder.description.dataAndTime": "Date & Time",
   "app.yourOrder.description.invoiceNumber": "Invoice Number",
+  "app.yourOrder.description.orderId": "Order ID",
   "app.yourOrder.description.noOfStones": "No. of Stones",
   "app.yourOrder.description.Payable Amount": "Payable Amount",
   "app.yourOrder.header.pendingInvoiceDetails": "Pending Invoice Details",
@@ -137,6 +138,7 @@
   "app.kyc.countrySelection.header.title": "Welcome, Select Country for KYC",
 
   "app.kyc.submissionOption.header.title": "KYC Form Submission Options",
-
+  "app.kyc.companyOwnerDetail.header.title": "Company Owner Details",
+  "app.kyc.bankingDetail.header.title": "Banking Details",
   "app.kyc.footer.back": "back"
 }
