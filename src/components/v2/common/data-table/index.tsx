@@ -362,9 +362,9 @@ const DataTable = ({
 
     sortDescFirst: false,
     initialState: {
+      grouping: ['shape'],
       showGlobalFilter: true,
       expanded: true,
-      grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
       }
