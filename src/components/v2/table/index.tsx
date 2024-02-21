@@ -100,8 +100,8 @@ const Table = ({
 
     muiTableContainerProps: {
       sx: {
-        minHeight: 'calc(100vh - 275px)',
-        maxHeight: 'calc(100vh - 440px)'
+        minHeight: 'calc(100vh - 450px)',
+        maxHeight: 'calc(100vh - 450px)'
       }
     },
     muiTableHeadRowProps: {
