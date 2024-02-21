@@ -373,7 +373,10 @@ const MyDiamonds = () => {
                 data?.map((items: any) => (
                   <div
                     key={items.order_id}
-                    className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                    onClick={() => {
+                      handleShowDetails(items?.id);
+                    }}
+                    className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
                   >
                     {keys?.map(({ accessor }: any, index: number) => (
                       <div
