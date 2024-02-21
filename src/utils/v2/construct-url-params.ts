@@ -38,7 +38,9 @@ export function constructUrlParams(data: IQueryData): string {
 
       if (Array.isArray(value)) {
         // Handle other arrays
-        if (!value?.includes('All')) {
+        if (value?.includes('All')) {
+          queryParams.push(`${key}[]=All`);
+        } else {
           value.forEach(item => {
             queryParams.push(`${key}[]=${item}`);
           });
