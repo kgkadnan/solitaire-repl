@@ -97,7 +97,7 @@ const DataTable = ({
     setIsDropDownOpen(!isDropDownOpen);
   };
 
-  const onDropDwonClick = (data: any) => {
+  const onDropDownClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
       searchByName: data.value
@@ -497,7 +497,7 @@ const DataTable = ({
                 handleClose={handleDropdown}
                 isOpen={isDropDownOpen}
                 options={searchList}
-                onDropDwonClick={onDropDwonClick}
+                onDropDownClick={onDropDownClick}
               />
             </div>
           </div>

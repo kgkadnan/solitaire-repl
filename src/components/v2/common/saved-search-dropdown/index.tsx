@@ -1,5 +1,5 @@
 import React from 'react';
-import Select from 'react-select';
+import Select, { InputActionMeta } from 'react-select';
 import { savedSearchDropDownStyle } from './styles';
 import cross from '@public/v2/assets/icons/data-table/cross.svg';
 import searchIcon from '@public/v2/assets/icons/save-search-dropdown/Essentials.svg';
@@ -9,19 +9,27 @@ interface ISavedSearchDropDownProps {
   handleClose: () => void;
   isOpen: boolean;
   options: any;
-  onDropDwonClick: any;
+  onDropDownClick: any;
 }
 
 const SavedSearchDropDown = ({
   handleClose,
   isOpen,
   options,
-  onDropDwonClick
+  onDropDownClick
 }: ISavedSearchDropDownProps) => {
   const computeDropdownFieldFromJson = (fieldData: any) => {
     return fieldData.map((data: any) => {
       return { value: data.name, label: data.name };
     });
+  };
+  const onInputChange = (
+    inputValue: string,
+    { action, prevInputValue }: InputActionMeta
+  ) => {
+    if (action === 'input-change') return inputValue;
+
+    return prevInputValue;
   };
 
   return (
@@ -43,11 +51,12 @@ const SavedSearchDropDown = ({
               className="absolute top-[7px] left-[10px] z-[1]"
             />
             <Select
-              onChange={onDropDwonClick}
+              onChange={onDropDownClick}
               options={computeDropdownFieldFromJson(options)}
               styles={savedSearchDropDownStyle}
               menuIsOpen={true}
               placeholder={'Search by Saved Filter Parameter'}
+              onInputChange={onInputChange}
             />
           </div>
         </div>
