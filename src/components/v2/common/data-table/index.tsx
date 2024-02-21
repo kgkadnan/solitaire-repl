@@ -288,9 +288,7 @@ const DataTable = ({
     data: rows, //must be memoized or stable (useState, useMemo, defined outside of this component, etc.)
 
     //state
-    getRowId: originalRow => {
-      originalRow.id;
-    },
+    getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
     state: { rowSelection },
     //filters
