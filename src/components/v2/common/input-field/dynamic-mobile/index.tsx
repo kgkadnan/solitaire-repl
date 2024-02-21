@@ -20,7 +20,7 @@ export const DynamicMobileInput = ({
   handleInputChange,
   containerStyle,
   placeholder,
-  isEditable = true
+  isEditable = false
 }: IDynamicMobileInputField) => {
   const computeCountryDropdownField = (countryCode: any) => {
     return countryCode?.countries?.map(({ code }: any) => ({
