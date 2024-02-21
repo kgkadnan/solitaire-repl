@@ -168,7 +168,11 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-popupsShadow">
                   <div className="flex flex-col p-[16px]">
                     <p className="text-neutral600 text-mRegular font-regular">
-                      {ManageLocales('app.yourOrder.description.invoiceNumber')}
+                      {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
+                        ? ManageLocales('app.yourOrder.description.orderId')
+                        : ManageLocales(
+                            'app.yourOrder.description.invoiceNumber'
+                          )}
                     </p>
                     <span className="text-neutral900 text-mMedium font-medium">
                       {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
