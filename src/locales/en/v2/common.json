@@ -137,6 +137,7 @@
   "app.kyc.countrySelection.header.title": "Welcome, Select Country for KYC",
 
   "app.kyc.submissionOption.header.title": "KYC Form Submission Options",
-
+  "app.kyc.companyOwnerDetail.header.title": "Company Owner Details",
+  "app.kyc.bankingDetail.header.title": "Banking Details",
   "app.kyc.footer.back": "back"
 }

@@ -7,15 +7,15 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
 
-const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
+const BankingDetails = ({ formErrorState, formState, dispatch }: any) => {
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
         <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
-          3
+          4
         </span>
         <h1 className="text-headingS font-medium text-neutral900">
-          {ManageLocales('app.kyc.companyOwnerDetail.header.title')}
+          {ManageLocales('app.kyc.bankingDetail.header.title')}
         </h1>
       </div>
       <hr className="border-neutral200" />
@@ -27,11 +27,11 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             onChange={e =>
               handleInputChange(
                 `formState.online.sections[${[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]}][owner_full_name]`,
                 e.target.value,
                 dispatch,
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS,
                 'owner_full_name'
                 // formState
               )
@@ -40,19 +40,19 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             name={'First Name*'}
             value={
               formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_full_name'] ?? ''
             }
             errorText={
               formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_full_name'] ?? ''
             }
             placeholder={'Enter first name'}
             styles={{
               input: `rounded-l-[0px] ${
                 formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]?.['owner_full_name']
                   ? 'border-dangerMain'
                   : 'border-neutral200'
@@ -64,10 +64,10 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             label={'PAN or Aadhar Number*'}
             onChange={e =>
               handleInputChange(
-                `formState.online.sections[${kycScreenIdentifierNames.COMPANY_OWNER_DETAILS}][owner_pan_number]`,
+                `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][owner_pan_number]`,
                 e.target.value,
                 dispatch,
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS,
                 'owner_pan_number'
                 // formState
               )
@@ -76,19 +76,19 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             name={'PAN or Aadhar Number*'}
             value={
               formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_pan_number'] ?? ''
             }
             errorText={
               formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_pan_number'] ?? ''
             }
             placeholder={'Enter pan or adhar'}
             styles={{
               input: `rounded-l-[0px] ${
                 formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]?.['owner_pan_number']
                   ? 'border-dangerMain'
                   : 'border-neutral200'
@@ -104,18 +104,18 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               e.target.value.trim().length <= 15
                 ? handleInputChange(
                     `formState.online.sections[${[
-                      kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                      kycScreenIdentifierNames.BANKING_DETAILS
                     ]}][owner_phone]`,
                     e.target.value,
                     dispatch,
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                    kycScreenIdentifierNames.BANKING_DETAILS,
                     'owner_phone'
                     // formState
                   )
                 : dispatch(
                     updateFormState({
                       name: `formErrorState.online.sections[${[
-                        kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                        kycScreenIdentifierNames.BANKING_DETAILS
                       ]}][owner_phone]}`,
                       value: RANGE_VALIDATION('Contact Number*', 0, 15)
                     })
@@ -124,11 +124,11 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             handleSelectChange={({ value }: any) => {
               handleInputChange(
                 `formState.online.sections[${[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]}][owner_country_code]`,
                 value,
                 dispatch,
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS,
                 'owner_country_code'
               );
             }}
@@ -136,24 +136,24 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             name="Contact Number*"
             errorText={
               formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_phone'] ?? ''
             }
             placeholder={'Enter contact number'}
             phoneValue={
               formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_phone'] ?? ''
             }
             containerStyle={'!w-[368px]'}
             countryCodeValue={{
               label:
                 formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]?.['owner_country_code'] ?? '',
               value:
                 formState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]?.['owner_country_code'] ?? ''
             }}
           />
@@ -161,10 +161,10 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             label={'Email*'}
             onChange={e =>
               handleInputChange(
-                `formState.online.sections[${kycScreenIdentifierNames.COMPANY_OWNER_DETAILS}][owner_email]`,
+                `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][owner_email]`,
                 e.target.value,
                 dispatch,
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                kycScreenIdentifierNames.BANKING_DETAILS,
                 'owner_email'
                 // formState
               )
@@ -173,19 +173,19 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
             name={'Email*'}
             value={
               formState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_email'] ?? ''
             }
             errorText={
               formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                kycScreenIdentifierNames.BANKING_DETAILS
               ]?.['owner_email'] ?? ''
             }
             placeholder={'Enter email id'}
             styles={{
               input: `rounded-l-[0px] ${
                 formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  kycScreenIdentifierNames.BANKING_DETAILS
                 ]?.['owner_email']
                   ? 'border-dangerMain'
                   : 'border-neutral200'
@@ -199,4 +199,4 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
   );
 };
 
-export default CompanyOwnerDetail;
+export default BankingDetails;

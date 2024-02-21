@@ -6,10 +6,11 @@ import { updateFormState } from '@/features/kyc/kyc';
 import SubmissionOption from './components/submission-option';
 import CompanyOwnerDetail from './components/company-owner-detail';
 import { useSelector } from 'react-redux';
+import BankingDetails from './components/banking-details';
 
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('company_owner_detail');
+  const [currentState, setCurrentState] = useState('banking_details');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
 
@@ -61,6 +62,14 @@ const KYC = () => {
       case 'company_owner_detail':
         return (
           <CompanyOwnerDetail
+            formErrorState={formErrorState}
+            formState={formState}
+            dispatch={dispatch}
+          />
+        );
+      case 'banking_details':
+        return (
+          <BankingDetails
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
