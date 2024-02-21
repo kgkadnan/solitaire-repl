@@ -59,7 +59,6 @@ const Search = () => {
       setActiveTab(0);
     }
   }, [subRoute]);
-
   useEffect(() => {
     const fetchMyAPI = async () => {
       const yourSelection = localStorage.getItem('Search');

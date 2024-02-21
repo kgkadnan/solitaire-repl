@@ -104,7 +104,6 @@ const Form = ({
     (store: { savedSearch: any }) => store.savedSearch
   );
 
-  // const { state, setState, carat } = useFormStateManagement();
   const [updateSavedSearch] = useUpdateSavedSearchMutation();
   let [addSavedSearch] = useAddSavedSearchMutation();
 
@@ -618,7 +617,7 @@ const Form = ({
     {
       variant: 'primary',
       // svg: errorText === NO_STONE_FOUND ? addDemand : searchIcon,
-      label: `${errorText === NO_STONE_FOUND ? 'Add Demand' : 'Search'} `,
+      label: `${errorText === NO_STONE_FOUND ? 'Search' : 'Search'} `,
       handler: errorText === NO_STONE_FOUND ? handleAddDemand : handleFormSearch
     }
   ];
@@ -700,7 +699,6 @@ const Form = ({
       </>
     );
   };
-
   return (
     <div className="pt-[32px]">
       <InputDialogComponent
