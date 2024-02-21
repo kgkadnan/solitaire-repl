@@ -308,7 +308,7 @@ const DataTable = ({
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
-    selectAllMode: 'all',
+    selectAllMode: 'page',
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
@@ -362,9 +362,9 @@ const DataTable = ({
 
     sortDescFirst: false,
     initialState: {
-      grouping: ['shape'],
       showGlobalFilter: true,
       expanded: true,
+      grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id']
       }
