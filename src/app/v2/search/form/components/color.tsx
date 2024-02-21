@@ -80,7 +80,7 @@ export const Color = ({
       ]);
     });
   };
-console.log(selectedColor,"lolo")
+  console.log(selectedColor, 'lolo');
   return (
     <div
       className="relative border-[1px] border-[var(--neutral-200)] rounded-t-[4px]"

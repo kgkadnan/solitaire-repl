@@ -312,8 +312,8 @@
   body {
     /* width */
     ::-webkit-scrollbar {
-      width: 12px !important;
-      height: 12px;
+      width: 8px !important;
+      height: 8px;
       cursor: grabbing !important;
     }
 
@@ -326,7 +326,7 @@
     /* Handle */
     ::-webkit-scrollbar-thumb {
       background: var(--primary-icon-color);
-      // border-radius: 10px;
+      border-radius: 10px;
     }
 
     /* Pointer cursor on hover */

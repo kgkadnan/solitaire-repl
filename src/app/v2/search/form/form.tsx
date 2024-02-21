@@ -699,7 +699,7 @@ const Form = ({
       </>
     );
   };
-console.log(selectedColor,"selectedColor")
+  console.log(selectedColor, 'selectedColor');
   return (
     <div className="pt-[32px]">
       <InputDialogComponent
