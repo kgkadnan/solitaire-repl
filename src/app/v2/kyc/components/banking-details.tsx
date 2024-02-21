@@ -1,13 +1,15 @@
 import { InputField } from '@/components/v2/common/input-field';
-import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import React from 'react';
 import { handleInputChange } from '../helper/handle-change';
-import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
-import { updateFormState } from '@/features/kyc/kyc';
-import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
 
-const BankingDetails = ({ formErrorState, formState, dispatch }: any) => {
+const BankingDetails = ({
+  formErrorState,
+  formState,
+  dispatch,
+  country
+}: any) => {
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -19,180 +21,219 @@ const BankingDetails = ({ formErrorState, formState, dispatch }: any) => {
         </h1>
       </div>
       <hr className="border-neutral200" />
-      <div className="flex flex-col gap-[16px] items-center">
-        {' '}
-        <div className="flex gap-[16px]">
-          <InputField
-            label={'First Name*'}
-            onChange={e =>
-              handleInputChange(
-                `formState.online.sections[${[
+      <div className="flex justify-center">
+        <div className="flex flex-col gap-[16px]  w-[760px]">
+          {' '}
+          <div className="flex gap-[16px]">
+            <InputField
+              label={'Bank Name*'}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]}][bank_name]`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.BANKING_DETAILS,
+                  'bank_name'
+                  // formState
+                )
+              }
+              type="text"
+              name={'Bank Name*'}
+              value={
+                formState?.online?.sections?.[
                   kycScreenIdentifierNames.BANKING_DETAILS
-                ]}][owner_full_name]`,
-                e.target.value,
-                dispatch,
-                kycScreenIdentifierNames.BANKING_DETAILS,
-                'owner_full_name'
-                // formState
-              )
-            }
-            type="text"
-            name={'First Name*'}
-            value={
-              formState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_full_name'] ?? ''
-            }
-            errorText={
-              formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_full_name'] ?? ''
-            }
-            placeholder={'Enter first name'}
-            styles={{
-              input: `rounded-l-[0px] ${
+                ]?.['bank_name'] ?? ''
+              }
+              errorText={
                 formErrorState?.online?.sections?.[
                   kycScreenIdentifierNames.BANKING_DETAILS
-                ]?.['owner_full_name']
-                  ? 'border-dangerMain'
-                  : 'border-neutral200'
-              }`,
-              inputMain: '!w-[368px]'
-            }}
-          />
-          <InputField
-            label={'PAN or Aadhar Number*'}
-            onChange={e =>
-              handleInputChange(
-                `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][owner_pan_number]`,
-                e.target.value,
-                dispatch,
-                kycScreenIdentifierNames.BANKING_DETAILS,
-                'owner_pan_number'
-                // formState
-              )
-            }
-            type="text"
-            name={'PAN or Aadhar Number*'}
-            value={
-              formState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_pan_number'] ?? ''
-            }
-            errorText={
-              formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_pan_number'] ?? ''
-            }
-            placeholder={'Enter pan or adhar'}
-            styles={{
-              input: `rounded-l-[0px] ${
+                ]?.['bank_name'] ?? ''
+              }
+              placeholder={'Enter name'}
+              styles={{
+                input: `rounded-l-[0px] ${
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.['bank_name']
+                    ? 'border-dangerMain'
+                    : 'border-neutral200'
+                }`
+              }}
+            />
+            <InputField
+              label={'Account Holder Name*'}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][account_holder_name]`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.BANKING_DETAILS,
+                  'account_holder_name'
+                  // formState
+                )
+              }
+              type="text"
+              name={'Account Holder Name*'}
+              value={
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]?.['account_holder_name'] ?? ''
+              }
+              errorText={
                 formErrorState?.online?.sections?.[
                   kycScreenIdentifierNames.BANKING_DETAILS
-                ]?.['owner_pan_number']
-                  ? 'border-dangerMain'
-                  : 'border-neutral200'
-              }`,
-              inputMain: '!w-[368px]'
-            }}
-          />
-        </div>
-        <div className="flex gap-[16px]">
-          <DynamicMobileInput
-            label={'Contact Number*'}
-            handleInputChange={e =>
-              e.target.value.trim().length <= 15
-                ? handleInputChange(
-                    `formState.online.sections[${[
-                      kycScreenIdentifierNames.BANKING_DETAILS
-                    ]}][owner_phone]`,
+                ]?.['account_holder_name'] ?? ''
+              }
+              placeholder={'Enter name'}
+              styles={{
+                input: `rounded-l-[0px] ${
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.['account_holder_name']
+                    ? 'border-dangerMain'
+                    : 'border-neutral200'
+                }`
+              }}
+            />
+          </div>
+          <div className="flex gap-[16px]">
+            <InputField
+              label={`${
+                country === countries.INDIA
+                  ? 'Account Number*'
+                  : 'Account Number/IBN Number*'
+              }`}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][account_number]`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.BANKING_DETAILS,
+                  'account_number'
+                  // formState
+                )
+              }
+              type="number"
+              name={`${
+                country === countries.INDIA
+                  ? 'Account Number*'
+                  : 'Account Number/IBN Number*'
+              }`}
+              value={
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]?.['account_number'] ?? ''
+              }
+              errorText={
+                formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]?.['account_number'] ?? ''
+              }
+              placeholder={'Enter number'}
+              styles={{
+                input: `rounded-l-[0px] ${
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.['account_number']
+                    ? 'border-dangerMain'
+                    : 'border-neutral200'
+                }`
+              }}
+            />
+            <InputField
+              label={`${
+                country === countries.INDIA ? 'IFSC Code*' : 'Swift Code*'
+              }`}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  }].${
+                    country === countries.INDIA ? 'ifsc_code' : 'swift_code'
+                  }`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.BANKING_DETAILS,
+                  `${country === countries.INDIA ? 'ifsc_code' : 'swift_code'}`
+                  // formState
+                )
+              }
+              type="email"
+              name={`${
+                country === countries.INDIA ? 'IFSC Code*' : 'Swift Code*'
+              }`}
+              value={
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]?.[
+                  `${country === countries.INDIA ? 'ifsc_code' : 'swift_code'}`
+                ] ?? ''
+              }
+              errorText={
+                formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.BANKING_DETAILS
+                ]?.[
+                  `${country === countries.INDIA ? 'ifsc_code' : 'swift_code'}`
+                ] ?? ''
+              }
+              placeholder={'Enter code'}
+              styles={{
+                input: `rounded-l-[0px] ${
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.[
+                    `${
+                      country === countries.INDIA ? 'ifsc_code' : 'swift_code'
+                    }`
+                  ]
+                    ? 'border-dangerMain'
+                    : 'border-neutral200'
+                }`
+              }}
+            />
+          </div>
+          {country === countries.INDIA && (
+            <div>
+              <InputField
+                label={`Bank Address`}
+                onChange={e =>
+                  handleInputChange(
+                    `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][bank_address]`,
                     e.target.value,
                     dispatch,
                     kycScreenIdentifierNames.BANKING_DETAILS,
-                    'owner_phone'
+                    'bank_address'
                     // formState
                   )
-                : dispatch(
-                    updateFormState({
-                      name: `formErrorState.online.sections[${[
-                        kycScreenIdentifierNames.BANKING_DETAILS
-                      ]}][owner_phone]}`,
-                      value: RANGE_VALIDATION('Contact Number*', 0, 15)
-                    })
-                  )
-            }
-            handleSelectChange={({ value }: any) => {
-              handleInputChange(
-                `formState.online.sections[${[
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ]}][owner_country_code]`,
-                value,
-                dispatch,
-                kycScreenIdentifierNames.BANKING_DETAILS,
-                'owner_country_code'
-              );
-            }}
-            type="number"
-            name="Contact Number*"
-            errorText={
-              formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_phone'] ?? ''
-            }
-            placeholder={'Enter contact number'}
-            phoneValue={
-              formState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_phone'] ?? ''
-            }
-            containerStyle={'!w-[368px]'}
-            countryCodeValue={{
-              label:
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ]?.['owner_country_code'] ?? '',
-              value:
-                formState?.online?.sections?.[
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ]?.['owner_country_code'] ?? ''
-            }}
-          />
-          <InputField
-            label={'Email*'}
-            onChange={e =>
-              handleInputChange(
-                `formState.online.sections[${kycScreenIdentifierNames.BANKING_DETAILS}][owner_email]`,
-                e.target.value,
-                dispatch,
-                kycScreenIdentifierNames.BANKING_DETAILS,
-                'owner_email'
-                // formState
-              )
-            }
-            type="email"
-            name={'Email*'}
-            value={
-              formState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_email'] ?? ''
-            }
-            errorText={
-              formErrorState?.online?.sections?.[
-                kycScreenIdentifierNames.BANKING_DETAILS
-              ]?.['owner_email'] ?? ''
-            }
-            placeholder={'Enter email id'}
-            styles={{
-              input: `rounded-l-[0px] ${
-                formErrorState?.online?.sections?.[
-                  kycScreenIdentifierNames.BANKING_DETAILS
-                ]?.['owner_email']
-                  ? 'border-dangerMain'
-                  : 'border-neutral200'
-              }`,
-              inputMain: '!w-[368px]'
-            }}
-          />
+                }
+                type="text"
+                name={`Bank Address`}
+                value={
+                  formState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.['bank_address'] ?? ''
+                }
+                errorText={
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]?.['bank_address'] ?? ''
+                }
+                placeholder={'Enter address'}
+                styles={{
+                  input: `rounded-l-[0px] ${
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.BANKING_DETAILS
+                    ]?.['bank_address']
+                      ? 'border-dangerMain'
+                      : 'border-neutral200'
+                  }`
+                }}
+              />
+            </div>
+          )}
+          <hr className="border-neutral200" />
         </div>
       </div>
     </div>
