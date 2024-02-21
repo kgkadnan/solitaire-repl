@@ -80,7 +80,7 @@ export const savedSearchDropDownStyle: StylesConfig<IColourOption, true> = {
         backgroundColor: 'var(--neutral-50)',
         color: 'var(--neutral-900)'
       },
-      cursor:"pointer",
+      cursor: 'pointer'
     };
   },
 
