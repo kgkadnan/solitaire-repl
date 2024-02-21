@@ -74,7 +74,7 @@ export const handleReset = (
     setPavilionAngleMin,
     setStarLengthMax,
     setStarLengthMin,
-    setSelectedColor,
+    // setSelectedColor,
     setSelectedGirdle
   } = setState;
 
@@ -101,7 +101,7 @@ export const handleReset = (
 
   setSelectedShape([]);
   setSelectedWhiteColor([]);
-  setSelectedColor('');
+  // setSelectedColor('');
   setSelectedFancyColor('');
   setSelectedIntensity('');
   setSelectedOvertone('');

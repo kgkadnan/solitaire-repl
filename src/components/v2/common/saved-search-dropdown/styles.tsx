@@ -31,7 +31,7 @@ export const savedSearchDropDownStyle: StylesConfig<IColourOption, true> = {
   valueContainer: styles => ({
     ...styles,
     padding: '2px 4px 2px 40px',
-    cursor: 'pointers'
+    cursor: 'text'
   }),
   dropdownIndicator: styles => ({
     ...styles,
@@ -79,7 +79,8 @@ export const savedSearchDropDownStyle: StylesConfig<IColourOption, true> = {
       ':hover': {
         backgroundColor: 'var(--neutral-50)',
         color: 'var(--neutral-900)'
-      }
+      },
+      cursor: 'pointer'
     };
   },
 

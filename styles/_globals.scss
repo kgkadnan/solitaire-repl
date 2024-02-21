@@ -312,8 +312,9 @@
   body {
     /* width */
     ::-webkit-scrollbar {
-      width: 6px !important;
-      height: 0.6rem;
+      width: 8px !important;
+      height: 8px;
+      cursor: grabbing !important;
     }
 
     /* Track */
@@ -337,20 +338,12 @@
       cursor: grabbing !important;
     }
 
-    /* Remove autofill background color */
-
     font-size: 14px;
-    // font-family: 'Manrope, sans-serif';
   }
   body::-webkit-scrollbar {
     width: 0.1rem;
+    cursor: grabbing !important;
   }
-
-  //   input:-webkit-autofill
-
-  //  {
-  //     -webkit-box-shadow: 0 0 0 30px var(--neutral-0) inset !important;
-  //   }
 
   /* Remove autofill blue color */
   input:-webkit-autofill,

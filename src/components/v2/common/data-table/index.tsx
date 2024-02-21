@@ -64,6 +64,22 @@ const theme = createTheme({
           }
         }
       }
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          '& .Mui-TableHeadCell-Content-Wrapper': {
+            whiteSpace: 'nowrap'
+          }
+        }
+      }
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontStyle: 'normal !important'
+        }
+      }
     }
   }
 });
@@ -332,7 +348,8 @@ const DataTable = ({
 
         muiTableHeadCellProps: {
           sx: {
-            display: 'none'
+            display: 'none',
+            whiteSpace: 'nowrap'
           }
         },
 
@@ -485,7 +502,7 @@ const DataTable = ({
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
               <button
                 onClick={handleDropdown}
-                className={`flex items-center px-[16px] py-[8px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
+                className={`flex items-center px-[16px] py-[8px] text-mMedium font-medium text-neutral-900 ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
               >
                 {ManageLocales('app.search.savedSearch')}
                 <Image src={chevronDown} alt="chevronDown" />
