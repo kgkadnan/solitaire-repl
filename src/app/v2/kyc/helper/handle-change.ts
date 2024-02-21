@@ -22,7 +22,7 @@ export const handleInputChange = async (
       value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
     })
   );
-  console.log('value', value);
+
   dispatch(updateFormState({ name: path, value: value }));
   dispatch(isEditingKYC(true));
   //   if (
