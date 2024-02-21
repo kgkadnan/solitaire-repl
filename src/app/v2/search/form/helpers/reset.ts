@@ -101,7 +101,7 @@ export const handleReset = (
 
   setSelectedShape([]);
   setSelectedWhiteColor([]);
-  setSelectedColor('');
+  // setSelectedColor('');
   setSelectedFancyColor('');
   setSelectedIntensity('');
   setSelectedOvertone('');

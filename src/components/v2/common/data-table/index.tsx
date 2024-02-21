@@ -64,7 +64,23 @@ const theme = createTheme({
           }
         }
       }
-    }
+    },
+    MuiTableHead: {
+      styleOverrides: {
+        root: {
+          '& .Mui-TableHeadCell-Content-Wrapper': {
+            whiteSpace:'nowrap'
+          },
+        },
+      },
+    },
+    MuiTypography: {
+      styleOverrides: {
+        root: {
+          fontStyle:"normal !important",
+        },
+      },
+    },
   }
 });
 
@@ -332,7 +348,8 @@ const DataTable = ({
 
         muiTableHeadCellProps: {
           sx: {
-            display: 'none'
+            display: 'none',
+            whiteSpace: 'nowrap',
           }
         },
 
@@ -416,7 +433,8 @@ const DataTable = ({
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
             padding: '4px 8px'
-          }
+          },
+         
         }
       };
     },

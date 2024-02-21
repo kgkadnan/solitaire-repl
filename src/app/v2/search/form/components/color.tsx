@@ -80,13 +80,13 @@ export const Color = ({
       ]);
     });
   };
-
+console.log(selectedColor,"lolo")
   return (
     <div
       className="relative border-[1px] border-[var(--neutral-200)] rounded-t-[4px]"
       id="Color"
     >
-      <div className="border-b-[1px] border-[var(--neutral-200)] bg-[var(--neutral-50)] h-[35px] px-[16px] py-[6px]  text-[var(--neutral-900)] font-medium">
+      <div className="border-b-[1px] border-[var(--neutral-200)] bg-[var(--neutral-50)] h-[35px] px-[16px] py-[6px] rounded-t-[4px] text-[var(--neutral-900)] font-medium">
         Color
       </div>
       <div className={`px-[16px] py-[24px] flex flex-col gap-[18px]`}>
