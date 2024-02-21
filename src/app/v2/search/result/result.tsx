@@ -260,14 +260,19 @@ const Result = ({
     if (ProductApiData?.products?.length) {
       dataTableSetState.setRows(ProductApiData.products);
       setRowSelection({});
+      setErrorText('');
       setData(ProductApiData);
-      setIsError(false);
     }
   }, [ProductApiData]);
 
   useEffect(() => {
     fetchProducts();
   }, [activeTab]);
+
+  useEffect(() => {
+    setErrorText('');
+    setIsError(false);
+  }, [rowSelection]);
 
   // Fetch Columns
   useEffect(() => {
@@ -734,6 +739,7 @@ const Result = ({
               setSearchParameters={setSearchParameters}
               modalSetState={modalSetState}
               data={data}
+              setErrorText={setErrorText}
             />
           </div>
         )}
