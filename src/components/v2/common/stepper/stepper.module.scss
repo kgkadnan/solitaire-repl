@@ -1,0 +1,29 @@
+.stepperContainer {
+  display: flex;
+  justify-content: space-between;
+  // Add more styles as needed for your layout
+}
+
+.step {
+  padding: 10px;
+  cursor: pointer;
+  // Default styles for a step
+}
+
+.active {
+  background-color: blue;
+  color: white;
+  // Styles for the active step
+}
+
+.completed {
+  background-color: green;
+  color: white;
+  // Styles for completed steps
+}
+
+.rejected {
+  background-color: red;
+  color: white;
+  // Styles for rejected steps
+}
