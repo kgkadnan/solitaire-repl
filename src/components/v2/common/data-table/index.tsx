@@ -453,8 +453,17 @@ const DataTable = ({
           '&.MuiTableCell-root': {
             padding: '4px 8px',
             display:
-              (cell.id === 'shape:PR_lot_id' ||
-                cell.id === 'shape:RAD_lot_id') &&
+              (cell.id === 'shape:RAD_lot_id' ||
+                cell.id === 'shape:EM_lot_id' ||
+                cell.id === 'shape:BR_lot_id' ||
+                cell.id === 'shape:PR_lot_id' ||
+                cell.id === 'shape:PS_lot_id' ||
+                cell.id === 'shape:AS_lot_id' ||
+                cell.id === 'shape:OV_lot_id' ||
+                cell.id === 'shape:CU_lot_id' ||
+                cell.id === 'shape:MQ_lot_id' ||
+                cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:RMB_lot_id') &&
               'none'
 
             // padding:'0px',
