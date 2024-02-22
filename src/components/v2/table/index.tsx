@@ -6,9 +6,9 @@ import {
   useMaterialReactTable
 } from 'material-react-table';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
-
+import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 // theme.js
-import { ThemeProvider, createTheme } from '@mui/material/styles';
+import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -47,6 +47,35 @@ const Table = ({
   goBackToListView,
   breadCrumLabel
 }: ITable) => {
+  const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
+    boxShadow: 'var(--input-shadow) inset',
+    border: 'none',
+    borderRadius: '4px',
+    ':hover': {
+      border: 'none'
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& :hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+    '& :focus .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& .MuiOutlinedInput-notchedOutline:hover': {
+      borderColor: 'var(--neutral-200)'
+    },
+    '& .MuiInputAdornment-root': {
+      display: 'none'
+    }
+  }));
   // Fetching saved search data
 
   //pass table options to useMaterialReactTable
@@ -73,6 +102,11 @@ const Table = ({
     enableRowSelection: isRowSelectionNeeded,
     enableToolbarInternalActions: false,
 
+    icons: {
+      SearchIcon: () => (
+        <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      )
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
@@ -221,15 +255,7 @@ const Table = ({
               </div>
             </div>
             <div>
-              <MRT_GlobalFilterTextField
-                table={table}
-                autoComplete="false"
-                style={{
-                  boxShadow: 'var(--input-shadow) inset',
-                  borderColor: 'var(--neutral-200) !important',
-                  outline: 'none'
-                }}
-              />
+              <StylesSearchBar table={table} autoComplete="false" />
             </div>
           </Box>
         )}
