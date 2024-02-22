@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
@@ -306,18 +306,6 @@ const DataTable = ({
     })
   );
 
-  // const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
-  //   boxShadow: 'var(--input-shadow) inset'
-  //   // border: 'none',
-  //   // borderRadius: '4px',
-  //   // ':hover': {
-  //   //   border: 'none'
-  //   // },
-  //   // '& .MuiOutlinedInput-notchedOutline': {
-  //   //   borderColor: 'var(--neutral-200)'
-  //   // }
-  // }));
-
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -453,8 +441,17 @@ const DataTable = ({
           '&.MuiTableCell-root': {
             padding: '4px 8px',
             display:
-              (cell.id === 'shape:PR_lot_id' ||
-                cell.id === 'shape:RAD_lot_id') &&
+              (cell.id === 'shape:RAD_lot_id' ||
+                cell.id === 'shape:EM_lot_id' ||
+                cell.id === 'shape:BR_lot_id' ||
+                cell.id === 'shape:PR_lot_id' ||
+                cell.id === 'shape:PS_lot_id' ||
+                cell.id === 'shape:AS_lot_id' ||
+                cell.id === 'shape:OV_lot_id' ||
+                cell.id === 'shape:CU_lot_id' ||
+                cell.id === 'shape:MQ_lot_id' ||
+                cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:RMB_lot_id') &&
               'none'
 
             // padding:'0px',
@@ -583,7 +580,39 @@ const DataTable = ({
           }}
         >
           <div className="pl-[7px]">
-            <MRT_GlobalFilterTextField table={table} autoComplete="false" />
+            <MRT_GlobalFilterTextField
+              table={table}
+              autoComplete="false"
+              sx={{
+                boxShadow: 'var(--input-shadow) inset',
+                border: 'none',
+                borderRadius: '4px',
+                ':hover': {
+                  border: 'none'
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& :hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& :focus .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .MuiOutlinedInput-notchedOutline:hover': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& .MuiInputAdornment-root': {
+                  display: 'none'
+                }
+              }}
+            />
             {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
@@ -617,9 +646,9 @@ const DataTable = ({
               />
             </div>
 
-            <IconButton onClick={toggleFullScreen}>
+            <div onClick={toggleFullScreen}>
               <StyledToggleFullScreenButton table={table} />{' '}
-            </IconButton>
+            </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Image
