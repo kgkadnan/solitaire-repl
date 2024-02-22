@@ -7,7 +7,7 @@ import { colourStyles } from './country-select';
 
 interface IDynamicMobileInputField extends IDynamicInputFieldProps {
   containerStyle?: string;
-  isEditable?: boolean;
+  isNotEditable?: boolean;
 }
 
 export const DynamicMobileInput = ({
@@ -20,7 +20,7 @@ export const DynamicMobileInput = ({
   handleInputChange,
   containerStyle,
   placeholder,
-  isEditable = false
+  isNotEditable = false
 }: IDynamicMobileInputField) => {
   const computeCountryDropdownField = (countryCode: any) => {
     return countryCode?.countries?.map(({ code }: any) => ({
@@ -42,7 +42,7 @@ export const DynamicMobileInput = ({
             styles={colourStyles(errorText)}
             value={countryCodeValue}
             autoFocus={false}
-            isDisabled={isEditable}
+            isDisabled={isNotEditable}
           />
         </div>
         <InputField
@@ -51,7 +51,7 @@ export const DynamicMobileInput = ({
           type="number"
           name={name}
           value={phoneValue}
-          disabled={isEditable}
+          disabled={isNotEditable}
           placeholder={placeholder}
           styles={{
             input: `rounded-l-[0px] ${
