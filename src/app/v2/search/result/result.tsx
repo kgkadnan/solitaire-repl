@@ -33,7 +33,6 @@ import {
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
-  useGetAllProductQuery,
   useLazyGetAllProductQuery
 } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';

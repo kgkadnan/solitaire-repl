@@ -458,8 +458,8 @@ const DataTable = ({
         backgroundColor: 'var(--neutral-50)'
       }
     },
-
-    muiTableBodyCellProps: ({ cell }) => {
+    // muiTableBodyCellProps: ({ cell }) => {
+    muiTableBodyCellProps: () => {
       return {
         sx: {
           color: 'var(--neutral-900)',
