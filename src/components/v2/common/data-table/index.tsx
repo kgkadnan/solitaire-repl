@@ -69,7 +69,9 @@ const theme = createTheme({
       styleOverrides: {
         root: {
           '& .Mui-TableHeadCell-Content-Wrapper': {
-            whiteSpace: 'nowrap'
+            whiteSpace: 'nowrap',
+            color: 'var(--neutral-700)',
+            fontWeight: 'var(--medium)'
           }
         }
       }
@@ -132,7 +134,7 @@ const DataTable = ({
               <div className="absolute left-[-84px] top-[-84px]">
                 <Image src={warningIcon} alt="warningIcon" />
               </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                 <div>
                   <h1 className="text-headingS text-neutral900">
                     {' '}
@@ -175,7 +177,7 @@ const DataTable = ({
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={warningIcon} alt="warningIcon" />
                   </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                     <div>
                       <h1 className="text-headingS text-neutral900">
                         {' '}
@@ -409,10 +411,7 @@ const DataTable = ({
     },
     muiTableHeadRowProps: {
       sx: {
-        backgroundColor: 'var(--neutral-50)',
-        '& .MuiTableSortLabel-root': {
-          color: 'red'
-        }
+        backgroundColor: 'var(--neutral-50)'
       }
     },
 
@@ -483,7 +482,7 @@ const DataTable = ({
       //customize paper styles
 
       sx: {
-        borderRadius: '8px',
+        borderRadius: '8px 8px 0px 0px',
         border: 'none'
       }
     },

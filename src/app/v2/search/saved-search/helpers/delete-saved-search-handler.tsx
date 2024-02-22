@@ -68,7 +68,7 @@ export const deleteSavedSearchHandler = ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={errorIcon} alt="errorIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
             <p className="text-neutral600 text-mRegular">{errorMessage}</p>
 
             <ActionButton
@@ -92,7 +92,7 @@ export const deleteSavedSearchHandler = ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={deleteIcon} alt="deleteIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
             <div>
               <h1 className="text-headingS text-neutral900">Are you sure?</h1>
               <p className="text-neutral600 text-mRegular">

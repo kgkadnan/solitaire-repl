@@ -81,7 +81,7 @@ const mapColumns = (columns: any) =>
         header: short_label,
         enableGlobalFilter: accessor === 'lot_id',
         enableGrouping: accessor === 'shape',
-        enableSorting: accessor !== 'shape',
+        enableSorting: accessor !== 'shape_full' && accessor !== 'details',
         minSize: 5,
         maxSize: accessor === 'details' ? 100 : 200,
         size: 5,
@@ -367,7 +367,7 @@ const Result = ({
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={confirmIcon} alt="confirmIcon" />
                   </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                     <h1 className="text-headingS text-neutral900">
                       {res?.message}
                     </h1>
@@ -409,7 +409,7 @@ const Result = ({
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={errorSvg} alt="errorSvg" />
                   </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                     <p className="text-neutral600 text-mRegular">
                       {error?.data?.message}
                     </p>
@@ -454,7 +454,7 @@ const Result = ({
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={bookmarkIcon} alt="bookmarkIcon" />
         </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
           <div>
             <h1 className="text-headingS text-neutral900">
               {' '}
@@ -619,7 +619,7 @@ const Result = ({
                 <div className="absolute left-[-84px] top-[-84px]">
                   <Image src={confirmIcon} alt="confirmIcon" />
                 </div>
-                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                   <h1 className="text-headingS text-neutral900">
                     {variantIds.length} stones have been successfully added to
                     “My Diamond
@@ -666,7 +666,7 @@ const Result = ({
               <div className="absolute left-[-84px] top-[-84px]">
                 <Image src={errorSvg} alt="errorSvg" />
               </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                 <p className="text-neutral600 text-mRegular">
                   {e?.data?.message}
                 </p>
@@ -776,18 +776,18 @@ const Result = ({
               <div className="flex items-center justify-between">
                 <div className="flex gap-4">
                   <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
                       In Cart
                     </p>
                   </div>
                   <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
                       {' '}
                       Hold
                     </p>
                   </div>
                   <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                    <p className="text-mMedium font-medium px-[4px] py-[6px]">
+                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
                       {' '}
                       Memo
                     </p>

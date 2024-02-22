@@ -21,7 +21,7 @@ export const handleDelete = async ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={confirmIcon} alt="confirmIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
             <h1 className="text-headingS text-neutral900">
               {ManageLocales('app.savedSearch.successfully.deleted')}
             </h1>
@@ -48,7 +48,7 @@ export const handleDelete = async ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={errorSvg} alt="errorSvg" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
             <h1 className="text-headingS text-neutral900">
               {error?.data?.message}
             </h1>

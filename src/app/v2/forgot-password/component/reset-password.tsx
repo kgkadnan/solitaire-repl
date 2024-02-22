@@ -54,7 +54,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
             <h1 className="text-headingS text-neutral900">
               Your password has reset successfully
             </h1>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <ActionButton
                 actionButtonData={[
                   {
