@@ -1,4 +1,4 @@
-import { Box, Stack } from '@mui/material';
+import { Box, IconButton, Stack } from '@mui/material';
 import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
@@ -294,44 +294,29 @@ const DataTable = ({
   const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
     () => ({
       border: `1px solid #E4E7EC`,
-      background: 'neutral-0',
+      background: 'var(--neutral-0)',
       padding: '4px',
       width: '35px',
       height: '35px',
       borderRadius: '4px',
-      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)'
+      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)',
+      ':hover': {
+        backgroundColor: 'var(--neutral-0) !important'
+      }
     })
   );
 
-  const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
-    boxShadow: 'var(--input-shadow) inset',
-    border: 'none',
-    borderRadius: '4px',
-    ':hover': {
-      border: 'none'
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& :hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& :focus .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .MuiOutlinedInput-notchedOutline:hover': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& .MuiInputAdornment-root': {
-      display: 'none'
-    }
-  }));
+  // const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
+  //   boxShadow: 'var(--input-shadow) inset'
+  //   // border: 'none',
+  //   // borderRadius: '4px',
+  //   // ':hover': {
+  //   //   border: 'none'
+  //   // },
+  //   // '& .MuiOutlinedInput-notchedOutline': {
+  //   //   borderColor: 'var(--neutral-200)'
+  //   // }
+  // }));
 
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -399,9 +384,9 @@ const DataTable = ({
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
-              borderBottom: '1px solid var(--neutral-50)',
-              left: '-120px',
-              zIndex: 99
+              borderBottom: '1px solid var(--neutral-50)'
+              // left: '-120px',
+              // zIndex: 99
               // position: "sticky",
               // '&:hover': {
               //   backgroundColor: 'rgba(255, 0, 0, 0.5)', // This will change the background color to a semi-transparent red on hover
@@ -429,7 +414,7 @@ const DataTable = ({
       expanded: true,
       grouping: ['shape'],
       columnPinning: {
-        left: ['mrt-row-select', 'lot_id']
+        left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       }
     },
 
@@ -455,16 +440,23 @@ const DataTable = ({
     },
     muiTableHeadRowProps: {
       sx: {
-        backgroundColor: 'var(--neutral-50)'
+        backgroundColor: 'var(--neutral-50)',
+        boxShadow: 'none'
       }
     },
     // muiTableBodyCellProps: ({ cell }) => {
-    muiTableBodyCellProps: () => {
+    muiTableBodyCellProps: ({ cell }) => {
+      console.log('column', cell);
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px'
+            padding: '4px 8px',
+            display:
+              (cell.id === 'shape:PR_lot_id' ||
+                cell.id === 'shape:RAD_lot_id') &&
+              'none'
+
             // padding:'0px',
             // boxShadow: cell.id.includes('lot_id') ? '10px 0 5px -5px rgba(16, 24, 40, 0.1)': ''
           },
@@ -591,8 +583,8 @@ const DataTable = ({
           }}
         >
           <div className="pl-[7px]">
-            {/* <MRT_GlobalFilterTextField table={table} autoComplete="false" /> */}
-            <StylesSearchBar table={table} autoComplete="false" />
+            <MRT_GlobalFilterTextField table={table} autoComplete="false" />
+            {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
           <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
@@ -616,7 +608,7 @@ const DataTable = ({
                 ''
               ))}
 
-            <div className="p-[4px] rounded-[4px]">
+            <div className="p-[4px] rounded-[4px] cursor-pointer">
               <Image
                 src={downloadIcon}
                 alt={'download'}
@@ -625,12 +617,11 @@ const DataTable = ({
               />
             </div>
 
-            <StyledToggleFullScreenButton
-              table={table}
-              onClick={toggleFullScreen}
-            />
+            <IconButton onClick={toggleFullScreen}>
+              <StyledToggleFullScreenButton table={table} />{' '}
+            </IconButton>
 
-            <div className="flex p-[4px] rounded-[4px] ">
+            <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Image
                 src={shareButtonSvg}
                 alt={'share'}
