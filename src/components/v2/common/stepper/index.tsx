@@ -1,52 +1,103 @@
-import React, { useState } from 'react';
-import styles from './stepper.module.scss'; // Your CSS module with styles
+import React from 'react';
+import styles from './stepper.module.scss'; // Ensure you have the corresponding CSS module file
+import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import Image from 'next/image';
+import Completed from '@public/v2/assets/icons/stepper/completed.svg';
+import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
+import NotStarted from '@public/v2/assets/icons/stepper/not-started.svg';
+import Rejected from '@public/v2/assets/icons/stepper/rejected.svg';
 
-// Define the steps
+interface IStepperComponentProps {
+  country: string;
+  currentStepperStep: number;
+  setCurrentStepperStep: any;
+  completedSteps: any;
+  rejectedSteps: any;
+}
+// Define the steps with label and name
 const steps = [
-  'Personal Details',
-  'Company Details',
-  'Owner Details',
-  'Banking Details',
-  'Attachment'
+  {
+    name: 'Personal Details',
+    identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
+  },
+  {
+    name: 'Company Details',
+    identifier: kycScreenIdentifierNames.COMPANY_DETAILS
+  },
+  {
+    name: 'Owner Details',
+    identifier: kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+  },
+  {
+    name: 'Banking Details',
+    identifier: kycScreenIdentifierNames.BANKING_DETAILS
+  },
+  { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
 ];
 
-// Define a function to determine the step's class based on its state
-const getStepClass = (
-  index: number,
-  currentStep: number,
-  rejectedSteps: any
-) => {
-  if (rejectedSteps.includes(index)) return styles.rejected;
-  if (index < currentStep) return styles.completed;
-  if (index === currentStep) return styles.active;
-  return styles.default;
-};
+const StepperComponent: React.FC<IStepperComponentProps> = ({
+  country,
+  currentStepperStep,
+  setCurrentStepperStep,
+  completedSteps,
+  rejectedSteps
+}) => {
+  // Function to mark a step as completed
 
-const StepperComponent = () => {
-  const [currentStep, setCurrentStep] = useState(0); // Current active step
-  const [rejectedSteps, setRejectedSteps] = useState([]); // Array of rejected steps
-
-  // Handle clicking a step
+  // Function to handle step click
   const handleStepClick = (index: number) => {
-    setCurrentStep(index);
-    // Optionally handle rejected logic here
+    if (index < currentStepperStep || completedSteps.has(index)) {
+      setCurrentStepperStep(index);
+    }
+  };
+
+  // Include the "Company Owner Details" only if the country is India
+  const filteredSteps = steps.filter(
+    step =>
+      step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
+      country === countries.INDIA
+  );
+
+  const renderStepperIcon = (index: number) => {
+    if (index === currentStepperStep) {
+      return InProgress;
+    } else if (completedSteps.has(index)) {
+      return Completed;
+    } else if (rejectedSteps.has(index)) {
+      return Rejected;
+    } else {
+      return NotStarted;
+    }
   };
 
   return (
-    <div className={styles.stepperContainer}>
-      {steps.map((step, index) => (
-        <div
-          key={step}
-          className={`${styles.step} ${getStepClass(
-            index,
-            currentStep,
-            rejectedSteps
-          )}`}
-          onClick={() => handleStepClick(index)}
-        >
-          {step}
-        </div>
-      ))}
+    <div>
+      <div className={styles.stepperContainer}>
+        {filteredSteps.map((step, index) => {
+          let stepStatusClass = '';
+          if (completedSteps.has(index)) stepStatusClass = styles.completed;
+          else if (rejectedSteps.has(index)) stepStatusClass = styles.rejected;
+          else if (index === currentStepperStep)
+            stepStatusClass = styles.active;
+          return (
+            <div
+              key={step.name}
+              className={`${styles.step} ${stepStatusClass}`}
+              onClick={() => handleStepClick(index)}
+            >
+              <div className="p-[10px] flex gap-2">
+                {' '}
+                <Image
+                  style={{ width: '20px', height: '20px' }}
+                  src={renderStepperIcon(index)}
+                  alt="Banner image"
+                />
+                {step.name}
+              </div>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 };
