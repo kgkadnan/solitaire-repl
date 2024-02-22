@@ -41,6 +41,10 @@ const KYC = () => {
   const [sendResetOtp] = useSendResetOtpMutation();
   const [verifyResetOTP] = useVerifyResetOTPMutation();
 
+  // const [currentStepperStep, setCurrentStepperStep] = useState(2);
+  // const [completedSteps, setCompletedSteps] = useState(new Set());
+  // const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
+
   const [phoneNumber] = useState<{
     countryCode: string;
     phoneNumber: string;
@@ -103,6 +107,38 @@ const KYC = () => {
     return true;
   }
 
+  //   // Function to move to the next step if the current step is completed
+  // const handleStepperNext = () => {
+  //   if (completedSteps.has(currentStepperStep)) {
+  //     setCurrentStepperStep(prevStep => prevStep + 1);
+  //   }
+  // };
+
+  // // Function to move back to the previous step
+  // const handleStepperBack = () => {
+  //   setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+  // };
+
+  // const validateStep = (index: number) => {
+  //   const isValid = onValidation(index);
+  //   if (isValid) {
+  //     completedSteps.add(index);
+  //     setCompletedSteps(new Set(completedSteps));
+  //     rejectedSteps.delete(index);
+  //     setRejectedSteps(new Set(rejectedSteps));
+  //   } else {
+  //     rejectedSteps.add(index);
+  //     setRejectedSteps(new Set(rejectedSteps));
+  //   }
+  // };
+
+  // const completeStepperStep = (stepIndex: number) => {
+  //   setCompletedSteps(prevCompletedSteps => {
+  //     const newCompletedSteps = new Set(prevCompletedSteps);
+  //     newCompletedSteps.add(stepIndex);
+  //     return newCompletedSteps;
+  //   });
+  // };
   const renderContent = () => {
     switch (currentState) {
       case 'country_selection':

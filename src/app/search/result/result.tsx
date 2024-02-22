@@ -165,7 +165,7 @@ variable changes. */
         <div className=" flex justify-center align-middle items-center">
           <p>Save Search</p>
         </div>
-        <div className="flex text-center gap-6 w-[350px]">
+        <div className="flex text-center gap-6 w-[352px]">
           <FloatingLabelInput
             label={'Enter name'}
             onChange={handleInputChange}

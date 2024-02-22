@@ -90,10 +90,10 @@ export const handleAddToCart = ({
             setIsPersistDialogOpen(true);
             setPersistDialogContent(
               <div className="text-center  flex flex-col justify-center items-center ">
-                <div className="w-[350px] flex justify-center items-center mb-3">
+                <div className="w-[352px] flex justify-center items-center mb-3">
                   <Image src={confirmImage} alt="vector image" />
                 </div>
-                <div className="w-[350px]  text-center text-solitaireTertiary pb-3">
+                <div className="w-[352px]  text-center text-solitaireTertiary pb-3">
                   {res?.message}
                 </div>
                 <Link

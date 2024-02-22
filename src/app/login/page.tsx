@@ -215,7 +215,7 @@ const Login = () => {
         <div className=" flex justify-center align-middle items-center">
           <p> Change Mobile Number</p>
         </div>
-        <div className="flex text-center justify-between  w-[350px]">
+        <div className="flex text-center justify-between  w-[352px]">
           <div className="w-[25%]">
             <Select
               name="countryCode"
