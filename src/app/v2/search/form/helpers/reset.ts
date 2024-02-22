@@ -74,7 +74,7 @@ export const handleReset = (
     setPavilionAngleMin,
     setStarLengthMax,
     setStarLengthMin,
-    setSelectedColor,
+    // setSelectedColor,
     setSelectedGirdle
   } = setState;
 
