@@ -69,7 +69,6 @@
   "app.modal.manageTabs": "Manage Tabs",
   "app.modal.save": "Save",
 
-
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
   "app.myCart.actionButton.bookAppointment": "Book Appointment",
@@ -127,7 +126,7 @@
   "app.sendOTP": "Send OTP",
   "app.goBackToLogin": "Go back to Login",
   "app.verifyOTP": "Verify OTP",
-  "app.verifyOtp.goBack" : "Go back",
+  "app.verifyOtp.goBack": "Go back",
   "app.OTPVerification.resend": "Resend",
 
   "app.OTPVerification.cancel": "Cancel",
@@ -144,5 +143,5 @@
   "app.kyc.bankingDetail.header.title": "Banking Details",
   "app.kyc.personalDetail.header.title": "Personal Details",
   "app.kyc.footer.back": "back",
-  "app.modal.kyc.emailVerification" : "Email Verification"
+  "app.modal.kyc.emailVerification": "Email Verification"
 }

@@ -367,7 +367,7 @@ used for managing the state of a form field or input element in a React componen
         <div className=" flex justify-center align-middle items-center">
           <p>Save And Search</p>
         </div>
-        <div className="flex text-center gap-6 w-[350px] h-[7vh]">
+        <div className="flex text-center gap-6 w-[352px] h-[7vh]">
           <FloatingLabelInput
             label={'Enter name'}
             onChange={handleInputChange}

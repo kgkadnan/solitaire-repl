@@ -85,7 +85,7 @@ const Search = () => {
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={warningIcon} alt="warningIcon" />
         </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
           <div>
             <h1 className="text-headingS text-neutral900">
               {' '}
@@ -160,7 +160,7 @@ const Search = () => {
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={warningIcon} alt="warningIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[350px]">
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
             <div>
               <h1 className="text-headingS text-neutral900">
                 {' '}
