@@ -131,6 +131,7 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
                   'country_code'
                 );
               }}
+              isNotEditable={true}
               containerStyle={'!w-full'}
               type="number"
               name="Contact Number*"
