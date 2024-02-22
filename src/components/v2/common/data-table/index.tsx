@@ -362,6 +362,10 @@ const DataTable = ({
               borderBottom: '1px solid var(--neutral-50)',
               left: '-120px',
               zIndex: 99
+              // position: "sticky",
+              // '&:hover': {
+              //   backgroundColor: 'rgba(255, 0, 0, 0.5)', // This will change the background color to a semi-transparent red on hover
+              // },
             }
           };
         },
@@ -415,15 +419,19 @@ const DataTable = ({
       }
     },
 
-    muiTableBodyCellProps: {
-      sx: {
-        color: 'var(--neutral-900)',
-        '&.MuiTableCell-root': {
-          padding: '4px 8px'
-        },
-        whiteSpace: 'nowrap',
-        borderBottom: '1px solid var(--neutral-50)'
-      }
+    muiTableBodyCellProps: ({ cell }) => {
+      return {
+        sx: {
+          color: 'var(--neutral-900)',
+          '&.MuiTableCell-root': {
+            padding: '4px 8px'
+            // padding:'0px',
+            // boxShadow: cell.id.includes('lot_id') ? '10px 0 5px -5px rgba(16, 24, 40, 0.1)': ''
+          },
+          whiteSpace: 'nowrap',
+          borderBottom: '1px solid var(--neutral-50)'
+        }
+      };
     },
 
     muiTableHeadCellProps: () => {
