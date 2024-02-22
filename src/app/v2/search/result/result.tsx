@@ -33,7 +33,7 @@ import {
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
-  useGetAllProductQuery
+  useLazyGetAllProductQuery
 } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
@@ -226,21 +226,11 @@ const Result = ({
 
   const [addSavedSearch] = useAddSavedSearchMutation();
 
-  const { data: ProductApiData, refetch } = useGetAllProductQuery(
-    {
-      offset: 0,
-      limit: LISTING_PAGE_DATA_LIMIT,
-      url: searchUrl
-    },
-    {
-      skip: !searchUrl
-    }
-  );
   const [confirmProduct] = useConfirmProductMutation();
 
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-
+  const [triggerProductApi] = useLazyGetAllProductQuery();
   // Fetch Products
 
   const fetchProducts = async () => {
@@ -254,16 +244,15 @@ const Result = ({
 
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
+    triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
+      res => {
+        dataTableSetState.setRows(res.data.products);
+        setRowSelection({});
+        setErrorText('');
+        setData(res.data);
+      }
+    );
   };
-
-  useEffect(() => {
-    if (ProductApiData?.products?.length) {
-      dataTableSetState.setRows(ProductApiData.products);
-      setRowSelection({});
-      setErrorText('');
-      setData(ProductApiData);
-    }
-  }, [ProductApiData]);
 
   useEffect(() => {
     fetchProducts();
@@ -395,7 +384,16 @@ const Result = ({
               // On success, show confirmation dialog and update badge
               setIsError(false);
               setErrorText('');
-              refetch();
+              triggerProductApi({
+                url: searchUrl,
+                limit: LISTING_PAGE_DATA_LIMIT,
+                offset: 0
+              }).then(res => {
+                dataTableSetState.setRows(res.data.products);
+                setRowSelection({});
+                setErrorText('');
+                setData(res.data);
+              });
               dispatch(notificationBadge(true));
 
               // refetchRow();
@@ -651,9 +649,16 @@ const Result = ({
             );
             setCommentValue('');
 
-            if (refetch) {
-              refetch();
-            }
+            triggerProductApi({
+              url: searchUrl,
+              limit: LISTING_PAGE_DATA_LIMIT,
+              offset: 0
+            }).then(res => {
+              dataTableSetState.setRows(res.data.products);
+              setRowSelection({});
+              setErrorText('');
+              setData(res.data);
+            });
           }
         })
         .catch(e => {
