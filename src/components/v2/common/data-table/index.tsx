@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
@@ -7,14 +7,16 @@ import {
   MaterialReactTable,
   useMaterialReactTable
 } from 'material-react-table';
-import shareIcon from '@public/v2/assets/png/data-table/share.png';
-import downloadIcon from '@public/v2/assets/png/data-table/download.png';
-import saveIcon from '@public/v2/assets/png/data-table/save.png';
+
+import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
+import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
+import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 
 // theme.js
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
@@ -296,9 +298,40 @@ const DataTable = ({
       padding: '4px',
       width: '35px',
       height: '35px',
-      borderRadius: '4px'
+      borderRadius: '4px',
+      boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)'
     })
   );
+
+  const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
+    boxShadow: 'var(--input-shadow) inset',
+    border: 'none',
+    borderRadius: '4px',
+    ':hover': {
+      border: 'none'
+    },
+    '& .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& :hover .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+    '& :focus .MuiOutlinedInput-notchedOutline': {
+      borderColor: 'var(--neutral-200)'
+    },
+
+    '& .MuiOutlinedInput-notchedOutline:hover': {
+      borderColor: 'var(--neutral-200)'
+    },
+    '& .MuiInputAdornment-root': {
+      display: 'none'
+    }
+  }));
 
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -326,7 +359,14 @@ const DataTable = ({
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
-    selectAllMode: 'page',
+
+    icons: {
+      SearchIcon: () => (
+        <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
+      )
+    },
+
+    // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
@@ -543,7 +583,8 @@ const DataTable = ({
           }}
         >
           <div className="pl-[7px]">
-            <MRT_GlobalFilterTextField table={table} autoComplete="false" />
+            {/* <MRT_GlobalFilterTextField table={table} autoComplete="false" /> */}
+            <StylesSearchBar table={table} autoComplete="false" />
           </div>
 
           <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
@@ -566,19 +607,29 @@ const DataTable = ({
               ) : (
                 ''
               ))}
-            <IconButton onClick={() => {}}>
-              <div className="p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
-                <Image src={downloadIcon} alt={'download'} />
-              </div>
-            </IconButton>
-            <IconButton onClick={toggleFullScreen}>
-              <StyledToggleFullScreenButton table={table} />
-            </IconButton>
-            <IconButton onClick={() => {}}>
-              <div className="flex p-[4px] rounded-[4px] border-[1px] border-neutral200 bg-neutral0">
-                <Image src={shareIcon} alt={'share'} />
-              </div>
-            </IconButton>
+
+            <div className="p-[4px] rounded-[4px]">
+              <Image
+                src={downloadIcon}
+                alt={'download'}
+                width={38}
+                height={38}
+              />
+            </div>
+
+            <StyledToggleFullScreenButton
+              table={table}
+              onClick={toggleFullScreen}
+            />
+
+            <div className="flex p-[4px] rounded-[4px] ">
+              <Image
+                src={shareButtonSvg}
+                alt={'share'}
+                width={38}
+                height={38}
+              />
+            </div>
           </div>
         </Box>
       </div>
