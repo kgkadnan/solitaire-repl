@@ -306,18 +306,6 @@ const DataTable = ({
     })
   );
 
-  // const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
-  //   boxShadow: 'var(--input-shadow) inset'
-  //   // border: 'none',
-  //   // borderRadius: '4px',
-  //   // ':hover': {
-  //   //   border: 'none'
-  //   // },
-  //   // '& .MuiOutlinedInput-notchedOutline': {
-  //   //   borderColor: 'var(--neutral-200)'
-  //   // }
-  // }));
-
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -597,11 +585,31 @@ const DataTable = ({
               autoComplete="false"
               sx={{
                 boxShadow: 'var(--input-shadow) inset',
+                border: 'none',
+                borderRadius: '4px',
                 ':hover': {
                   border: 'none'
                 },
                 '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200)'
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& :hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& :focus .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .MuiOutlinedInput-notchedOutline:hover': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& .MuiInputAdornment-root': {
+                  display: 'none'
                 }
               }}
             />
