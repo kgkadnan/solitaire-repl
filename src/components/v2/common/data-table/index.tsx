@@ -472,8 +472,8 @@ const DataTable = ({
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background:'White',
-            opacity:1
+            background: 'White',
+            opacity: 1
           }
         }
       };
