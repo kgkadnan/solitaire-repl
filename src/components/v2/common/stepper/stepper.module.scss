@@ -1,0 +1,48 @@
+.stepperContainer {
+  display: flex;
+  justify-content: space-between;
+}
+
+.step {
+  // padding: 10px;
+  cursor: pointer;
+  width: 100%;
+  font-size: var(--lMedium);
+  font-weight: var(--medium);
+  color: var(--neutral-200);
+  &:not(:first-child) {
+    border-top: 1px solid var(--neutral-200);
+    border-bottom: 1px solid var(--neutral-200);
+    border-right: 1px solid var(--neutral-200); /* Overlaps the border with the previous element */
+  }
+
+  &:first-child {
+    border: 1px solid var(--neutral-200);
+    border-radius: 8px 0px 0px 8px;
+    //  border-bottom: 1px solid red;
+    //  border-left: 1px solid red; /* Rounds the bottom left corner of the first step */
+  }
+
+  &:last-child {
+    border-top: 1px solid var(--neutral-200);
+    border-bottom: 1px solid var(--neutral-200);
+    border-right: 1px solid var(--neutral-200);
+    border-radius: 0px 8px 8px 0px;
+    /* Rounds the bottom right corner of the last step */
+  }
+}
+
+.active {
+  border-bottom: 4px solid var(--neutral-900) !important;
+  color: var(--neutral-900);
+}
+
+.completed {
+  border-bottom: 4px solid var(--neutral-900) !important;
+  color: var(--neutral-900);
+}
+
+.rejected {
+  border-bottom: 4px solid var(--danger-main) !important;
+  color: var(--danger-main);
+}
