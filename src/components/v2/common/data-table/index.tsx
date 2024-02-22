@@ -1,4 +1,4 @@
-import { Box, IconButton, Stack } from '@mui/material';
+import { Box, Stack } from '@mui/material';
 import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
@@ -592,7 +592,19 @@ const DataTable = ({
           }}
         >
           <div className="pl-[7px]">
-            <MRT_GlobalFilterTextField table={table} autoComplete="false" />
+            <MRT_GlobalFilterTextField
+              table={table}
+              autoComplete="false"
+              sx={{
+                boxShadow: 'var(--input-shadow) inset',
+                ':hover': {
+                  border: 'none'
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200)'
+                }
+              }}
+            />
             {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
@@ -626,9 +638,9 @@ const DataTable = ({
               />
             </div>
 
-            <IconButton onClick={toggleFullScreen}>
+            <div onClick={toggleFullScreen}>
               <StyledToggleFullScreenButton table={table} />{' '}
-            </IconButton>
+            </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Image
