@@ -68,6 +68,8 @@ import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -225,7 +227,7 @@ const Result = ({
   const [searchUrl, setSearchUrl] = useState('');
 
   const [addSavedSearch] = useAddSavedSearchMutation();
-
+  const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
   const [triggerColumn, { data: columnData }] =
@@ -694,8 +696,19 @@ const Result = ({
     }
   };
 
+  const donwloadAllSearchTabsExcelHandler = () => {
+    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
+    downloadExcelHandler({
+      previousSearch: allTabsIds,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection
+    });
+  };
+
   return (
-    <div>
+    <div className="relative">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -745,6 +758,7 @@ const Result = ({
               modalSetState={modalSetState}
               data={data}
               setErrorText={setErrorText}
+              downloadExcel={downloadExcel}
             />
           </div>
         )}
@@ -830,6 +844,13 @@ const Result = ({
                             setConfirmStoneData
                           });
                         }
+                      },
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales(
+                          'app.searchResult.downloadALlResult'
+                        ),
+                        handler: donwloadAllSearchTabsExcelHandler
                       }
                     ]}
                   />
