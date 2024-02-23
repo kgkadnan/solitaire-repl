@@ -695,7 +695,7 @@ const Result = ({
   };
 
   return (
-    <div>
+    <div className="mb-[20px]">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
