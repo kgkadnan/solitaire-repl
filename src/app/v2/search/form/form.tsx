@@ -700,7 +700,7 @@ const Form = ({
     );
   };
   return (
-    <div className="pt-[32px]">
+    <div className=" flex flex-col pt-[32px] gap-[24px]">
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
