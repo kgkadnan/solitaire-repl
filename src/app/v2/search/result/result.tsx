@@ -29,7 +29,8 @@ import {
   RenderLotId,
   RednderLocation,
   RenderAmount,
-  RenderShape
+  RenderShape,
+  RenderMeasurements
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
@@ -68,6 +69,11 @@ import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import { Dropdown } from '@/components/v2/common/dropdown-menu';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -160,6 +166,8 @@ const mapColumns = (columns: any) =>
           };
         case 'amount':
           return { ...commonProps, Cell: RenderAmount };
+        case 'measurements':
+          return { ...commonProps, Cell: RenderMeasurements };
         case 'shape_full':
           return { ...commonProps, Cell: RenderShape };
         case 'carat':
@@ -225,7 +233,7 @@ const Result = ({
   const [searchUrl, setSearchUrl] = useState('');
 
   const [addSavedSearch] = useAddSavedSearchMutation();
-
+  const [downloadExcel] = useDownloadExcelMutation();
   const [confirmProduct] = useConfirmProductMutation();
 
   const [triggerColumn, { data: columnData }] =
@@ -694,8 +702,19 @@ const Result = ({
     }
   };
 
+  const donwloadAllSearchTabsExcelHandler = () => {
+    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
+    downloadExcelHandler({
+      previousSearch: allTabsIds,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection
+    });
+  };
+
   return (
-    <div className="mb-[20px]">
+    <div className="mb-[20px] relative">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -745,6 +764,7 @@ const Result = ({
               modalSetState={modalSetState}
               data={data}
               setErrorText={setErrorText}
+              downloadExcel={downloadExcel}
             />
           </div>
         )}
@@ -830,6 +850,24 @@ const Result = ({
                             setConfirmStoneData
                           });
                         }
+                      }
+                    ]}
+                  />
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={40}
+                        height={40}
+                      />
+                    }
+                    dropdownMenu={[
+                      {
+                        label: ManageLocales(
+                          'app.searchResult.downloadALlResult'
+                        ),
+                        handler: donwloadAllSearchTabsExcelHandler
                       }
                     ]}
                   />

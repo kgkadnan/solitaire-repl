@@ -35,6 +35,7 @@ import {
   RenderDetails,
   RenderDiscount,
   RenderLab,
+  RenderMeasurements,
   RenderShape
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Loader from '@/components/v2/common/loader';
@@ -45,6 +46,7 @@ import {
   tableBlackSortOrder,
   tableInclusionSortOrder
 } from '@/constants/v2/form';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -55,6 +57,7 @@ const MyCart = () => {
   const { setRows } = dataTableSetState;
   const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [downloadExcel] = useDownloadExcelMutation();
   const [cartItems, setCartItems] = useState<any>([]);
   const [diamondStatusCounts, setDiamondStatusCounts] = useState({
     Available: 0,
@@ -227,6 +230,8 @@ const MyCart = () => {
 
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
           case 'carat':
             return { ...commonProps, Cell: RenderCarat };
           case 'shape_full':
@@ -465,6 +470,8 @@ const MyCart = () => {
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
                 showCalculatedField={activeTab !== SOLD_STATUS}
+                modalSetState={modalSetState}
+                downloadExcel={downloadExcel}
               />
             </div>
           </div>

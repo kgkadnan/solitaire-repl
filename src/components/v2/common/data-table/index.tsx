@@ -9,6 +9,7 @@ import {
 } from 'material-react-table';
 
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
+import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
@@ -42,6 +43,7 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
+import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 const theme = createTheme({
   typography: {
@@ -103,6 +105,7 @@ const DataTable = ({
   handleNewSearch,
   setSearchParameters,
   modalSetState,
+  downloadExcel,
   data
 }: any) => {
   // Fetching saved search data
@@ -139,7 +142,6 @@ const DataTable = ({
               <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                 <div>
                   <h1 className="text-headingS text-neutral900">
-                    {' '}
                     {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
                   </h1>
                 </div>
@@ -175,7 +177,6 @@ const DataTable = ({
             } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
               modalSetState.setDialogContent(
                 <>
-                  {' '}
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={warningIcon} alt="warningIcon" />
                   </div>
@@ -289,6 +290,71 @@ const DataTable = ({
     localStorage.setItem('Search', JSON.stringify(yourSelection));
     setSearchParameters(yourSelection);
     updateSavedSearch(updateSaveSearchData);
+  };
+
+  const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
+    if (selectedIds.length > 0) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <>
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={downloadExcelIcon} alt="downloadExcelIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+            <h1 className="text-headingS text-neutral900">
+              Do you want to download “Selected Stones” or “Entire Search
+              Results” ?
+            </h1>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.selectedStones'),
+                  handler: () => {
+                    downloadExcelHandler({
+                      products: selectedIds,
+                      downloadExcelApi: downloadExcel,
+                      modalSetState,
+                      setRowSelection
+                    });
+                  },
+                  customStyle: 'flex-1 w-full'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.entireSearchResult'),
+                  handler: () => {
+                    const allProductIds = rows.map(({ id }: { id: string }) => {
+                      return id;
+                    });
+
+                    downloadExcelHandler({
+                      products: allProductIds,
+                      downloadExcelApi: downloadExcel,
+                      modalSetState,
+                      setRowSelection
+                    });
+                  },
+                  customStyle: 'flex-1 w-full'
+                }
+              ]}
+            />
+          </div>
+        </>
+      );
+    } else {
+      const allProductIds = rows.map(({ id }: { id: string }) => {
+        return id;
+      });
+
+      downloadExcelHandler({
+        products: allProductIds,
+        downloadExcelApi: downloadExcel,
+        modalSetState,
+        setRowSelection
+      });
+    }
   };
 
   const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
@@ -651,7 +717,10 @@ const DataTable = ({
                 ''
               ))}
 
-            <div className="p-[4px] rounded-[4px] cursor-pointer">
+            <div
+              className="p-[4px] rounded-[4px] cursor-pointer"
+              onClick={handleDownloadExcel}
+            >
               <Image
                 src={downloadIcon}
                 alt={'download'}
