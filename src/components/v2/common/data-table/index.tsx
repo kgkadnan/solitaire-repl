@@ -434,12 +434,13 @@ const DataTable = ({
     },
     // muiTableBodyCellProps: ({ cell }) => {
     muiTableBodyCellProps: ({ cell }) => {
-      console.log('column', cell);
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
+            background: 'White',
+            opacity: 1,
             display:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
@@ -469,7 +470,7 @@ const DataTable = ({
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: 'White',
+            background: 'var(--neutral-50)',
             opacity: 1
           }
         }
