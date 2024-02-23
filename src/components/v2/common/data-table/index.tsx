@@ -373,7 +373,10 @@ const DataTable = ({
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
-              paddingLeft: '0px'
+              paddingLeft: '0px',
+              ':hover': {
+                border: 'none'
+              }
             }
           };
         },
@@ -436,6 +439,19 @@ const DataTable = ({
             padding: '4px 8px',
             background: 'White',
             opacity: 1,
+            visibility:
+              (cell.id === 'shape:RAD_lot_id' ||
+                cell.id === 'shape:EM_lot_id' ||
+                cell.id === 'shape:BR_lot_id' ||
+                cell.id === 'shape:PR_lot_id' ||
+                cell.id === 'shape:PS_lot_id' ||
+                cell.id === 'shape:AS_lot_id' ||
+                cell.id === 'shape:OV_lot_id' ||
+                cell.id === 'shape:CU_lot_id' ||
+                cell.id === 'shape:MQ_lot_id' ||
+                cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:RMB_lot_id') &&
+              'hidden',
             display:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
