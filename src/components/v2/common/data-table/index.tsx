@@ -449,9 +449,6 @@ const DataTable = ({
                 cell.id === 'shape:HS_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
-
-            // paddingLeft:'0px',
-            // boxShadow: cell.id.includes('lot_id') ? '10px 0 5px -5px rgba(16, 24, 40, 0.1)': ''
           },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
