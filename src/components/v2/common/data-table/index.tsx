@@ -469,7 +469,7 @@ const DataTable = ({
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: 'White',
+            background: 'inherit',
             opacity: 1
           }
         }
@@ -561,6 +561,7 @@ const DataTable = ({
                     handler: handleCloseAllTabs
                   }
                 ]}
+                containerStyle="flex gap-[12px]!important"
               />
               <SavedSearchDropDown
                 handleClose={handleDropdown}
@@ -578,10 +579,11 @@ const DataTable = ({
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            padding: '16px'
           }}
         >
-          <div className="pl-[7px]">
+          <div>
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
@@ -618,7 +620,7 @@ const DataTable = ({
             {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
-          <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
+          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {isResult &&
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
