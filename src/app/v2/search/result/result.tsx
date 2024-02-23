@@ -72,6 +72,9 @@ import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
+import { Dropdown } from '@/components/v2/common/dropdown-menu';
+
 // Column mapper outside the component to avoid re-creation on each render
 
 const mapColumns = (columns: any) =>
@@ -847,9 +850,20 @@ const Result = ({
                             setConfirmStoneData
                           });
                         }
-                      },
+                      }
+                    ]}
+                  />
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={40}
+                        height={40}
+                      />
+                    }
+                    dropdownMenu={[
                       {
-                        variant: 'secondary',
                         label: ManageLocales(
                           'app.searchResult.downloadALlResult'
                         ),
