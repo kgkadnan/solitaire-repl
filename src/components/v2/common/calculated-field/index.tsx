@@ -69,11 +69,11 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
       },
       {
         label: ManageLocales('app.calculatedField.pr/ct'),
-        value: `$ ${calculateAverage('pr/ct')}`
+        value: `$${calculateAverage('pr/ct')}`
       },
       {
         label: ManageLocales('app.calculatedField.amount'),
-        value: `$ ${computeTotal('amount')}`
+        value: `$${computeTotal('amount')}`
       }
     ];
 
