@@ -73,7 +73,7 @@ const theme = createTheme({
           '& .Mui-TableHeadCell-Content-Wrapper': {
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
-            fontWeight: 'var(--medium)'
+            fontWeight: 500
           }
         }
       }
@@ -372,13 +372,8 @@ const DataTable = ({
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
-              borderBottom: '1px solid var(--neutral-50)'
-              // left: '-120px',
-              // zIndex: 99
-              // position: "sticky",
-              // '&:hover': {
-              //   backgroundColor: 'rgba(255, 0, 0, 0.5)', // This will change the background color to a semi-transparent red on hover
-              // },
+              borderBottom: '1px solid var(--neutral-50)',
+              paddingLeft: '0px'
             }
           };
         },
@@ -455,7 +450,7 @@ const DataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
 
-            // padding:'0px',
+            // paddingLeft:'0px',
             // boxShadow: cell.id.includes('lot_id') ? '10px 0 5px -5px rgba(16, 24, 40, 0.1)': ''
           },
           whiteSpace: 'nowrap',
@@ -470,8 +465,9 @@ const DataTable = ({
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: 'inherit',
-            opacity: 1
+            background: 'var(--neutral-50)',
+            opacity: 1,
+            borderTop: '1px solid var(--neutral-200)'
           }
         }
       };
