@@ -29,7 +29,8 @@ import {
   RenderLotId,
   RednderLocation,
   RenderAmount,
-  RenderShape
+  RenderShape,
+  RenderMeasurements
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
@@ -162,6 +163,8 @@ const mapColumns = (columns: any) =>
           };
         case 'amount':
           return { ...commonProps, Cell: RenderAmount };
+        case 'measurements':
+          return { ...commonProps, Cell: RenderMeasurements };
         case 'shape_full':
           return { ...commonProps, Cell: RenderShape };
         case 'carat':

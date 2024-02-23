@@ -9,6 +9,7 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
+import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { formatCreatedAt } from '@/utils/format-date';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
@@ -22,11 +23,16 @@ import {
 } from '@/constants/business-logic';
 import Link from 'next/link';
 import ActionButton from '@/components/v2/common/action-button';
+import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
+import { RenderMeasurements } from '@/components/v2/common/data-table/helpers/render-cell';
 
 interface IOrderDetail {
   productDetailData: any;
   goBackToListView: () => void;
   breadCrumLabel: string;
+  modalSetState: any;
 }
 
 const mapColumns = (columns: any) =>
@@ -62,6 +68,8 @@ const mapColumns = (columns: any) =>
           return { ...commonProps, Cell: RenderLab };
         case 'location':
           return { ...commonProps, Cell: RednderLocation };
+        case 'measurements':
+          return { ...commonProps, Cell: RenderMeasurements };
 
         default:
           return {
@@ -76,10 +84,14 @@ const mapColumns = (columns: any) =>
 const OrderDetail: React.FC<IOrderDetail> = ({
   goBackToListView,
   productDetailData,
-  breadCrumLabel
+  breadCrumLabel,
+  modalSetState
 }) => {
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
+
+  const [downloadExcel] = useDownloadExcelMutation();
+  const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
 
   const [rowSelection, setRowSelection] = useState({});
   const [columns, setColumns] = useState([]);
@@ -102,6 +114,82 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   }, []);
 
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
+
+  const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
+    if (selectedIds.length > 0) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <>
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={downloadExcelIcon} alt="downloadExcelIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+            <h1 className="text-headingS text-neutral900">
+              Do you want to download “Selected Stones” or “Entire Your Orders”
+              ?
+            </h1>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.selectedStones'),
+                  handler: () => {
+                    downloadExcelHandler({
+                      products: selectedIds,
+                      orderId: productDetailData.id,
+                      downloadExcelApi: downloadExcel,
+                      modalSetState,
+                      setRowSelection
+                    });
+                  },
+                  customStyle: 'flex-1 w-full'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.entireSearchResult'),
+                  handler: () => {
+                    const allProductIds = rows.map(({ id }: { id: string }) => {
+                      return id;
+                    });
+
+                    downloadExcelHandler({
+                      products: allProductIds,
+                      orderId: productDetailData.id,
+                      downloadExcelApi: downloadExcel,
+                      modalSetState,
+                      setRowSelection
+                    });
+                  },
+                  customStyle: 'flex-1 w-full'
+                }
+              ]}
+            />
+          </div>
+        </>
+      );
+    } else {
+      const allProductIds = rows.map(({ id }: { id: string }) => {
+        return id;
+      });
+
+      downloadExcelHandler({
+        products: allProductIds,
+        orderId: productDetailData.id,
+        downloadExcelApi: downloadExcel,
+        modalSetState,
+        setRowSelection
+      });
+    }
+  };
+
+  const handleDownloadInvoice = () => {
+    triggerDownloadInvoice({ invoiceId: productDetailData?.invoice_id }).then(
+      res => {
+        console.log('Res', res);
+      }
+    );
+  };
 
   return (
     <>
@@ -239,7 +327,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         label: ManageLocales(
                           'app.yourOrder.description.donwloadExcel'
                         ),
-                        handler: () => {}
+                        handler: () => handleDownloadExcel()
                       }
                     ]
                   : [
@@ -248,7 +336,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         label: ManageLocales(
                           'app.yourOrder.description.donwloadExcel'
                         ),
-                        handler: () => {}
+                        handler: () => handleDownloadExcel()
                       },
 
                       {
@@ -256,7 +344,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                         label: ManageLocales(
                           'app.yourOrder.description.downloadInvoice'
                         ),
-                        handler: () => {}
+                        handler: () => handleDownloadInvoice()
                       }
                     ]
               }

@@ -1,3 +1,4 @@
+import { RenderMeasurements } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import Table from '@/components/v2/table';
 import {
@@ -37,6 +38,8 @@ const mapColumns = (columns: any) =>
           return { ...commonProps, Cell: RenderAmount };
         case 'carat':
           return { ...commonProps, Cell: RenderCarat };
+        case 'measurements':
+          return { ...commonProps, Cell: RenderMeasurements };
         case 'discount':
           return { ...commonProps, Cell: RenderDiscount };
         case 'details':

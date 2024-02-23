@@ -30,6 +30,8 @@ import OrderDetail from './components/order-detail';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { useRouter } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 
 const MyDiamonds = () => {
   const router = useRouter();
@@ -57,6 +59,10 @@ const MyDiamonds = () => {
   const singleExpand = 'items.variant.product%2Citems.variant.prices';
 
   const [triggerProductDetail] = useLazyGetProductDetailsQuery();
+
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isDialogOpen, dialogContent } = modalState;
+  const { setIsDialogOpen } = modalSetState;
 
   // Fetch recent confirmation data
   const { data: pendingInvoicesData } = useCardRecentConfirmationQuery({
@@ -300,6 +306,7 @@ const MyDiamonds = () => {
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
               breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
+              modalSetState={modalSetState}
             />
           );
         case ACTIVE_INVOICE:
@@ -308,6 +315,7 @@ const MyDiamonds = () => {
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
               breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
+              modalSetState={modalSetState}
             />
           );
         case INVOICE_HISTORY:
@@ -316,6 +324,7 @@ const MyDiamonds = () => {
               productDetailData={productDetailData}
               goBackToListView={goBackToListView}
               breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
+              modalSetState={modalSetState}
             />
           );
         // Add more cases as needed for other tabs
@@ -410,7 +419,12 @@ const MyDiamonds = () => {
   };
 
   return (
-    <div>
+    <div className="relative">
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
           {showDetail

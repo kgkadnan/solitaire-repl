@@ -101,3 +101,9 @@ export const RenderAmount = ({ row }: any) => {
 export const RenderShape = ({ row }: any) => {
   return <span>{`${row.original.shape}`}</span>;
 };
+
+export const RenderMeasurements = ({ row }: any) => {
+  return (
+    <span>{`${row.original.length}*${row.original.width}*${row.original.depth}`}</span>
+  );
+};
