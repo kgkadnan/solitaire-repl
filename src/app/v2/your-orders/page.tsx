@@ -419,7 +419,7 @@ const MyDiamonds = () => {
   };
 
   return (
-    <div className="relative">
+    <div className="relative mb-[20px]">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

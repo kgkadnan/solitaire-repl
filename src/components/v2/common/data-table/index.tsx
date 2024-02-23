@@ -75,7 +75,7 @@ const theme = createTheme({
           '& .Mui-TableHeadCell-Content-Wrapper': {
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
-            fontWeight: 'var(--medium)'
+            fontWeight: 500
           }
         }
       }
@@ -438,13 +438,11 @@ const DataTable = ({
           return {
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
-              borderBottom: '1px solid var(--neutral-50)'
-              // left: '-120px',
-              // zIndex: 99
-              // position: "sticky",
-              // '&:hover': {
-              //   backgroundColor: 'rgba(255, 0, 0, 0.5)', // This will change the background color to a semi-transparent red on hover
-              // },
+              borderBottom: '1px solid var(--neutral-50)',
+              paddingLeft: '0px',
+              ':hover': {
+                border: 'none'
+              }
             }
           };
         },
@@ -507,6 +505,19 @@ const DataTable = ({
             padding: '4px 8px',
             background: 'White',
             opacity: 1,
+            visibility:
+              (cell.id === 'shape:RAD_lot_id' ||
+                cell.id === 'shape:EM_lot_id' ||
+                cell.id === 'shape:BR_lot_id' ||
+                cell.id === 'shape:PR_lot_id' ||
+                cell.id === 'shape:PS_lot_id' ||
+                cell.id === 'shape:AS_lot_id' ||
+                cell.id === 'shape:OV_lot_id' ||
+                cell.id === 'shape:CU_lot_id' ||
+                cell.id === 'shape:MQ_lot_id' ||
+                cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:RMB_lot_id') &&
+              'hidden',
             display:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
@@ -520,9 +531,6 @@ const DataTable = ({
                 cell.id === 'shape:HS_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
-
-            // padding:'0px',
-            // boxShadow: cell.id.includes('lot_id') ? '10px 0 5px -5px rgba(16, 24, 40, 0.1)': ''
           },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
@@ -537,7 +545,8 @@ const DataTable = ({
           '&.MuiTableCell-root': {
             padding: '4px 8px',
             background: 'var(--neutral-50)',
-            opacity: 1
+            opacity: 1,
+            borderTop: '1px solid var(--neutral-200)'
           }
         }
       };
@@ -628,6 +637,7 @@ const DataTable = ({
                     handler: handleCloseAllTabs
                   }
                 ]}
+                containerStyle="flex gap-[12px]!important"
               />
               <SavedSearchDropDown
                 handleClose={handleDropdown}
@@ -645,10 +655,11 @@ const DataTable = ({
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center'
+            alignItems: 'center',
+            padding: '16px'
           }}
         >
-          <div className="pl-[7px]">
+          <div>
             <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
@@ -685,7 +696,7 @@ const DataTable = ({
             {/* <StylesSearchBar table={table} autoComplete="false" /> */}
           </div>
 
-          <div className="flex gap-[4px]" style={{ alignItems: 'inherit' }}>
+          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             {isResult &&
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (

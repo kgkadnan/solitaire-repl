@@ -32,7 +32,7 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
         }
       });
     }
-    return total;
+    return total.toFixed(2);
   };
 
   let calculateAverage = (type: string) => {
@@ -50,7 +50,7 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
       average = sum / selectedRows.length;
     }
 
-    return average;
+    return average.toFixed(2);
   };
 
   let computeField = () => {
@@ -69,11 +69,11 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
       },
       {
         label: ManageLocales('app.calculatedField.pr/ct'),
-        value: `$ ${calculateAverage('pr/ct')}`
+        value: `$${calculateAverage('pr/ct')}`
       },
       {
         label: ManageLocales('app.calculatedField.amount'),
-        value: `$ ${computeTotal('amount')}`
+        value: `$${computeTotal('amount')}`
       }
     ];
 
