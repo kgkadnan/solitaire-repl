@@ -410,7 +410,7 @@ const MyDiamonds = () => {
   };
 
   return (
-    <div>
+    <div className="mb-[20px]">
       <div className="flex h-[81px] items-center">
         <p className="text-headingM font-medium text-neutral900">
           {showDetail
