@@ -25,8 +25,8 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
     statusClass = 'bg-legendInCartFill';
     borderClass = 'border-lengendInCardBorder';
   } else {
-    statusClass = 'bg-lneutral0';
-    borderClass = 'border-neutral0';
+    statusClass = 'border-none';
+    // borderClass = 'border-neutral0';
   }
 
   return (
