@@ -116,7 +116,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
             {
               variant: 'secondary',
               label: ManageLocales('app.kyc.footer.back'),
-              handler: () => handleStepperBack
+              handler: () => handleStepperBack()
             },
             {
               variant: 'primary',
