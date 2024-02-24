@@ -2,7 +2,7 @@ import {
   FIELD_INVALID,
   OWNER_COUNTRY_CODE_MANDATORY,
   OWNER_EMAIL_MANDATORY,
-  OWNER_FULL_NAME_MANDATORY,
+  OWNER_FIRST_NAME_MANDATORY,
   OWNER_PAN_NUMBER_MANDATORY,
   OWNER_PHONE_MANDATORY
 } from '@/constants/error-messages/kyc';
@@ -17,7 +17,7 @@ import {
 } from 'class-validator';
 
 export class IndiaKycPostCompanyOwnerInformation {
-  @IsNotEmpty({ message: OWNER_FULL_NAME_MANDATORY })
+  @IsNotEmpty({ message: OWNER_FIRST_NAME_MANDATORY })
   @Length(1, 140, {
     message: FIELD_INVALID('Owner Full Name')
   })

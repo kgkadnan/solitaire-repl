@@ -29,11 +29,11 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
                 handleInputChange(
                   `formState.online.sections[${[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]}][owner_full_name]`,
+                  ]}][owner_first_name]`,
                   e.target.value,
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                  'owner_full_name'
+                  'owner_first_name'
                   // formState
                 )
               }
@@ -42,33 +42,72 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               value={
                 formState?.online?.sections?.[
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]?.['owner_full_name'] ?? ''
+                ]?.['owner_first_name'] ?? ''
               }
               errorText={
                 formErrorState?.online?.sections?.[
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]?.['owner_full_name'] ?? ''
+                ]?.['owner_first_name'] ?? ''
               }
               placeholder={'Enter first name'}
               styles={{
                 input: `rounded-l-[0px] ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_full_name']
+                  ]?.['owner_first_name']
                     ? 'border-dangerMain'
                     : 'border-neutral200'
                 }`
               }}
             />
             <InputField
-              label={'PAN or Aadhar Number*'}
+              label={'Last Name*'}
               onChange={e =>
                 handleInputChange(
-                  `formState.online.sections[${kycScreenIdentifierNames.COMPANY_OWNER_DETAILS}][owner_pan_number]`,
+                  `formState.online.sections[${[
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  ]}][owner_last_name]`,
                   e.target.value,
                   dispatch,
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                  'owner_pan_number'
+                  'owner_last_name'
+                  // formState
+                )
+              }
+              type="text"
+              name={'Last Name*'}
+              value={
+                formState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]?.['owner_last_name'] ?? ''
+              }
+              errorText={
+                formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                ]?.['owner_last_name'] ?? ''
+              }
+              placeholder={'Enter last name'}
+              styles={{
+                input: `rounded-l-[0px] ${
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+                  ]?.['owner_last_name']
+                    ? 'border-dangerMain'
+                    : 'border-neutral200'
+                }`
+              }}
+            />
+          </div>
+          <div className="flex gap-[16px]">
+            <InputField
+              label={'PAN or Aadhar Number*'}
+              onChange={e =>
+                handleInputChange(
+                  `formState.online.sections[${kycScreenIdentifierNames.COMPANY_OWNER_DETAILS}][owner_pan_or_aadhaar_number]`,
+                  e.target.value,
+                  dispatch,
+                  kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                  'owner_pan_or_aadhaar_number'
                   // formState
                 )
               }
@@ -77,26 +116,24 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               value={
                 formState?.online?.sections?.[
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]?.['owner_pan_number'] ?? ''
+                ]?.['owner_pan_or_aadhaar_number'] ?? ''
               }
               errorText={
                 formErrorState?.online?.sections?.[
                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                ]?.['owner_pan_number'] ?? ''
+                ]?.['owner_pan_or_aadhaar_number'] ?? ''
               }
               placeholder={'Enter pan or adhar'}
               styles={{
                 input: `rounded-l-[0px] ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-                  ]?.['owner_pan_number']
+                  ]?.['owner_pan_or_aadhaar_number']
                     ? 'border-dangerMain'
                     : 'border-neutral200'
                 }`
               }}
             />
-          </div>
-          <div className="flex gap-[16px]">
             <DynamicMobileInput
               label={'Contact Number*'}
               handleInputChange={e =>
@@ -156,6 +193,8 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
                   ]?.['owner_country_code'] ?? ''
               }}
             />
+          </div>
+          <div>
             <InputField
               label={'Email*'}
               onChange={e =>
@@ -188,7 +227,8 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
                   ]?.['owner_email']
                     ? 'border-dangerMain'
                     : 'border-neutral200'
-                }`
+                }`,
+                inputMain: '!w-[368px]'
               }}
             />
           </div>
