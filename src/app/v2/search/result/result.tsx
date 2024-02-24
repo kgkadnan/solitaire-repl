@@ -20,7 +20,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import ActionButton from '@/components/v2/common/action-button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import Tooltip from '@/components/v2/common/tooltip';
-import corssIcon from '@public/v2/assets/icons/modal/cross.svg';
+import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import {
   RenderCarat,
   RenderDiscount,
@@ -551,7 +551,7 @@ const Result = ({
                   setIsAddCommentDialogOpen(false);
                 }}
               >
-                <Image src={corssIcon} alt="corssIcon" />
+                <Image src={crossIcon} alt="crossIcon" />
               </button>
             </div>
             <p className="text-neutral600 text-mRegular">

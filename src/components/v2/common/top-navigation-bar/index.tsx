@@ -5,11 +5,11 @@ import { Avatar, AvatarImage } from '../../ui/avatar';
 import { kycStatus } from '@/constants/enums/kyc';
 import { usePathname, useRouter } from 'next/navigation';
 import ActionButton from '../action-button';
+import { v2Routes } from '@/constants/routes';
 
 const TopNavigationBar = () => {
   const router = useRouter();
   const currentPath = usePathname();
-  console.log(currentPath, 'currentPath');
   const [showNudge, setShowNudge] = useState(
     localStorage.getItem('show-nudge')
   );
@@ -32,8 +32,13 @@ const TopNavigationBar = () => {
       {showNudge === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED) &&
-        currentPath !== '/v2/kyc' && (
-          <div className="bg-primaryMain pr-[32px] flex justify-between px-[32px] py-[8px]">
+        currentPath !== '/v2/kyc' &&
+        v2Routes.includes(currentPath) && (
+          <div
+            className={`bg-primaryMain pr-[32px] flex justify-between px-[32px] py-[8px] transition ease-in-out duration-500 ${
+              showNudge === 'MINI' ? 'translate-y-0' : '-translate-y-full'
+            }`}
+          >
             <div className="flex">
               <div className="w-[84px]"></div>
               <div>
