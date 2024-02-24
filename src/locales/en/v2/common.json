@@ -145,6 +145,7 @@
   "app.kyc.companyOwnerDetail.header.title": "Company Owner Details",
   "app.kyc.bankingDetail.header.title": "Banking Details",
   "app.kyc.personalDetail.header.title": "Personal Details",
-  "app.kyc.footer.back": "back",
+  "app.kyc.footer.back": "Back",
+  "app.kyc.footer.saveAndNext":"Save and next",
   "app.modal.kyc.emailVerification": "Email Verification"
 }

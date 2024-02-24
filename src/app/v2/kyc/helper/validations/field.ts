@@ -28,7 +28,7 @@ import {
   MSME_TYPE_INVALID,
   MSME_TYPE_MANDATORY,
   ORGANISATION_TYPE_MANDATORY,
-  OWNER_PAN_NUMBER_MANDATORY,
+  OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY,
   PHONE_NUMBER_MANDATORY,
   PINCODE_MANDATORY,
   STATE_MANDATORY,
@@ -206,8 +206,13 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
 
       break;
 
-    case 'owner_full_name':
-      instance = new ValidationOwnerNameCriteria(fieldValue);
+    case 'owner_first_name':
+      instance = new ValidationOwnerFirstNameCriteria(fieldValue);
+
+      break;
+
+    case 'owner_last_name':
+      instance = new ValidationOwnerLastNameCriteria(fieldValue);
 
       break;
 
@@ -225,7 +230,7 @@ export async function validateKYCField(fieldType: string, fieldValue: any) {
 
       break;
 
-    case 'owner_pan_number':
+    case 'owner_pan_or_aadhaar_number':
       instance = new ValidationPanCriteria(fieldValue);
 
       break;
@@ -388,29 +393,44 @@ class ValidationSwitfCriteria {
 
 ///company owner details
 
-class ValidationOwnerNameCriteria {
+class ValidationOwnerFirstNameCriteria {
   @Length(1, 140, {
-    message: FIELD_INVALID('Owner Full Name')
+    message: FIELD_INVALID('Owner First Name')
   })
-  @IsNotEmpty({ message: FIELD_INVALID('Owner Full Name') })
+  @IsNotEmpty({ message: FIELD_INVALID('Owner First Name') })
   @Matches(NAME_REGEX, {
-    message: FIELD_INVALID('Owner Full Name')
+    message: FIELD_INVALID('Owner First Name')
   })
-  owner_full_name: string;
+  owner_first_name: string;
 
-  constructor(owner_full_name: string) {
-    this.owner_full_name = owner_full_name;
+  constructor(owner_first_name: string) {
+    this.owner_first_name = owner_first_name;
+  }
+}
+
+class ValidationOwnerLastNameCriteria {
+  @Length(1, 140, {
+    message: FIELD_INVALID('Owner Last Name')
+  })
+  @IsNotEmpty({ message: FIELD_INVALID('Owner Last Name') })
+  @Matches(NAME_REGEX, {
+    message: FIELD_INVALID('Owner Last Name')
+  })
+  owner_last_name: string;
+
+  constructor(owner_last_name: string) {
+    this.owner_last_name = owner_last_name;
   }
 }
 class ValidationPanCriteria {
-  @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
-  @IsNotEmpty({ message: OWNER_PAN_NUMBER_MANDATORY })
-  @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Number') })
-  @MinLength(10, { message: FIELD_INVALID('PAN Number') })
-  owner_pan_number: string;
+  // @Matches(PAN_MATCH, { message: FIELD_INVALID('PAN Number') })
+  @IsNotEmpty({ message: OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY })
+  @IsAlphanumeric(undefined, { message: FIELD_INVALID('PAN Or Adhaar Number') })
+  @MinLength(10, { message: FIELD_INVALID('PAN Or Adhaar Number') })
+  owner_pan_or_aadhaar_number: string;
 
-  constructor(owner_pan_number: string) {
-    this.owner_pan_number = owner_pan_number;
+  constructor(owner_pan_or_aadhaar_number: string) {
+    this.owner_pan_or_aadhaar_number = owner_pan_or_aadhaar_number;
   }
 }
 

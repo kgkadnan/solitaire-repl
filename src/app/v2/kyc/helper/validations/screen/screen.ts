@@ -128,11 +128,12 @@ export const validateScreen = async (
       case kycScreenIdentifierNames.COMPANY_OWNER_DETAILS:
         if (country === supportedCountries.INDIA) {
           kycForm = new IndiaKycPostCompanyOwnerInformation(
-            formData.owner_full_name,
+            formData.owner_first_name,
+            formData.owner_last_name,
             formData.owner_email,
             formData.owner_country_code,
             formData.owner_phone,
-            formData.owner_pan_number
+            formData.owner_pan_or_aadhaar_number
           );
         }
         break;
