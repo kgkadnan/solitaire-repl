@@ -180,6 +180,7 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
+            setIsInputDialogOpen={setIsInputDialogOpen}
           />
         );
     }

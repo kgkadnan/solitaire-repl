@@ -49,6 +49,24 @@ export const kycApi = createApi({
         return { data: response, statusCode: meta?.response?.status };
       },
       invalidatesTags: ['kyc']
+    }),
+    resendEmailOTP: builder.mutation({
+      query: data => ({
+        url: `/store/customers/email/otp/send`,
+        method: 'POST',
+        body: data
+      }),
+
+      invalidatesTags: ['kyc']
+    }),
+    verifyEmailOTP: builder.mutation({
+      query: data => ({
+        url: `/store/customers/email/otp/verify`,
+        method: 'POST',
+        body: data
+      }),
+
+      invalidatesTags: ['kyc']
     })
   })
 });
@@ -59,5 +77,7 @@ export const {
   useLazyGetKycDetailQuery,
   useSubmitKYCMutation,
   useResetKycMutation,
+  useVerifyEmailOTPMutation,
+  useResendEmailOTPMutation,
   useLazyGetKycPdfQuery
 } = kycApi;

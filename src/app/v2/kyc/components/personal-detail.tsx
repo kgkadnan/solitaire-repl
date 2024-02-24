@@ -6,8 +6,14 @@ import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
+import ActionButton from '@/components/v2/common/action-button';
 
-const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
+const PersonalDetail = ({
+  formErrorState,
+  formState,
+  dispatch,
+  setIsInputDialogOpen
+}: any) => {
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -194,6 +200,18 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
             />
           </div>
           <hr className="border-neutral200" />
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'primary',
+                label: 'Verify Email',
+                handler: () => {
+                  setIsInputDialogOpen(true);
+                },
+                customStyle: 'flex-1 w-full'
+              }
+            ]}
+          />
         </div>
       </div>
     </div>
