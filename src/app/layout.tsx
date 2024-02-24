@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, FC, useState, useEffect } from 'react';
+import React, { ReactNode, FC } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
@@ -20,7 +20,6 @@ import { ThemeProviders } from './theme-providers';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
 import Head from 'next/head';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
-import KycNudgeModal from '@/components/v2/common/kyc-nudge';
 
 const store = setupStore();
 
@@ -30,7 +29,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
-  const [showKycNudge, setShowKycNudge] = useState(false);
 
   const showOldThemeWithHeader =
     isApplicationRoutes && !(headerlessRoutes.includes(path) || isV2Route);
@@ -44,14 +42,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  useEffect(() => {
-    // Check if the user is KYC verified
-    const isKycVerified = false; // Replace with actual check
-
-    if (!isKycVerified) {
-      setShowKycNudge(true);
-    }
-  }, []);
   return (
     <html lang="en">
       <Head>
@@ -93,12 +83,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
                       <V2TopNavigationBar />
 
                       <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
-                        {showKycNudge && (
-                          <KycNudgeModal
-                            onClose={() => setShowKycNudge(false)}
-                          />
-                        )}
-
                         <SecureComponent>{children}</SecureComponent>
                       </main>
                     </div>

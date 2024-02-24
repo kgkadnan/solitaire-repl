@@ -9,6 +9,9 @@
   display: flex;
   justify-content: center;
   z-index: 1000;
+  // width: 100vh;
+  height: 100vh;
+  align-items: end;
 }
 
 .bottomSheetContent {
