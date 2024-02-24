@@ -318,7 +318,11 @@ const KYC = () => {
 
   // Function to move back to the previous step
   const handleStepperBack = () => {
-    setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+    if (currentStepperStep === 0) {
+      setCurrentState('submission_option');
+    } else {
+      setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
+    }
   };
 
   // const validateStep = (index: number) => {
