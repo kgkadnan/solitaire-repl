@@ -34,7 +34,7 @@ const initialTokenState = {
 };
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('online');
+  const [currentState, setCurrentState] = useState('country_selection');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
