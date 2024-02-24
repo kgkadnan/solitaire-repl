@@ -46,7 +46,11 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
     };
   }, [allowScrollReset]);
   return (
-    <div className="flex items-center w-full bg-neutral0 sticky top-[60px] z-[3] ">
+    <div
+      className={`flex items-center w-full bg-neutral0 sticky  z-[3] ${
+        localStorage.getItem('show-nudge') ? 'top-[121.5px]' : 'top-[60px]'
+      } `}
+    >
       <div
         className="flex overflow-x-auto no-scrollbar w-[95%] shadow-sm py-[10px]"
         ref={containerRef}

@@ -68,8 +68,8 @@
   "app.modal.cancel": "Cancel",
   "app.modal.manageTabs": "Manage Tabs",
   "app.modal.save": "Save",
-  "app.modal.selectedStones" : "Selected Stones",
-  "app.modal.entireSearchResult" : "Entire Search Results",
+  "app.modal.selectedStones": "Selected Stones",
+  "app.modal.entireSearchResult": "Entire Search Results",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
@@ -90,7 +90,7 @@
 
   "app.searchResult.addToCart": "Add to Cart",
   "app.searchResult.confirmStone": "Confirm Stone",
-  "app.searchResult.downloadALlResult" :"Download All Search Result",
+  "app.searchResult.downloadALlResult": "Download All Search Result",
 
   "app.search.closeTabs": "Are you sure you want to close all active search tabs?",
   "app.search.confirmHeader": "Are you sure?",
