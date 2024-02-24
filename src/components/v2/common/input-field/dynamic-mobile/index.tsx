@@ -39,7 +39,7 @@ export const DynamicMobileInput = ({
             name="countryCode"
             options={computeCountryDropdownField(countryCode)}
             onChange={handleSelectChange}
-            styles={colourStyles(errorText)}
+            styles={colourStyles(errorText, isNotEditable)}
             value={countryCodeValue}
             autoFocus={false}
             isDisabled={isNotEditable}
@@ -55,8 +55,9 @@ export const DynamicMobileInput = ({
           placeholder={placeholder}
           styles={{
             input: `rounded-l-[0px] ${
-              errorText ? 'border-dangerMain' : 'border-neutral200'
-            }`
+              isNotEditable &&
+              'border-primaryBorder bg-neutral100 text-neutral500'
+            } ${errorText ? 'border-dangerMain' : 'border-neutral200'}`
           }}
         />
       </div>

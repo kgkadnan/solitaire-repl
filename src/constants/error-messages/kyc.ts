@@ -79,13 +79,17 @@ export const ANTI_MONEY_LAUNDERING_POLICY_NAME_MANDATORY = MANDATORY_ERROR(
 // ... (repeat for other fields)
 
 // For company owner details
-export const OWNER_FULL_NAME_MANDATORY = MANDATORY_ERROR('Owner Full Name');
+export const OWNER_FIRST_NAME_MANDATORY = MANDATORY_ERROR('Owner First Name');
+export const OWNER_LAST_NAME_MANDATORY = MANDATORY_ERROR('Owner Last Name');
 export const OWNER_EMAIL_MANDATORY = MANDATORY_ERROR('Owner Email');
 export const OWNER_COUNTRY_CODE_MANDATORY =
   MANDATORY_ERROR('Owner Country Code');
 export const OWNER_PHONE_MANDATORY = MANDATORY_ERROR('Owner Phone');
 export const OWNER_PAN_NUMBER_MANDATORY = MANDATORY_ERROR('Owner PAN Number');
-// ... (repeat for other fields)
+export const OWNER_PAN_NUMBER_OR_ADHAAR_MANDATORY = MANDATORY_ERROR(
+  'Owner PAN Or Adhaar Number'
+);
+// ... (repeat for other fields)d
 
 // For PersonalDetails
 export const FIRST_NAME_MANDATORY = MANDATORY_ERROR('First Name');

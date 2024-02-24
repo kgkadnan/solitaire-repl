@@ -1,8 +1,8 @@
-export const colourStyles = (error: any) => {
+export const colourStyles = (error: any, isDisabled?: boolean) => {
   return {
     control: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
 
       backgroundColor: 'var(--neutral-0)',
       borderRadius: '4px 0px 0px 4px',
@@ -15,6 +15,8 @@ export const colourStyles = (error: any) => {
       width: '60px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
+      cursor: isDisabled ? 'not-allowed' : 'default', // Change cursor to "not allowed" if isDisabled is true
+
       '&:hover': {
         border: error.length
           ? '1px solid var(--danger-main)'
@@ -33,11 +35,11 @@ export const colourStyles = (error: any) => {
     }),
     singleValue: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)'
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)'
     }),
     placeholder: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)',
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
       border: 'none',
       height: '38px'
     }),
@@ -51,7 +53,7 @@ export const colourStyles = (error: any) => {
       return {
         ...styles,
         backgroundColor: 'var(--neutral-0)',
-        color: 'var(--neutral-900)',
+        color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
         ':active': {
           ...styles[':active'],
           border: 'none',
@@ -74,19 +76,19 @@ export const colourStyles = (error: any) => {
       return {
         ...styles,
         backgroundColor: 'var(--neutral-0)',
-        color: 'var(--neutral-900)',
+        color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
         border: '1px solid var(--neutral-200)',
         borderRadius: '6px'
       };
     },
     multiValueLabel: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)',
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
       backgroundColor: 'var(--neutral-0)'
     }),
     multiValueRemove: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)',
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
       ':hover': {
         backgroundColor: 'var(--neutral-200)',
         color: 'var(--neutral-900)'

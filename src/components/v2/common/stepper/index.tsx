@@ -6,6 +6,8 @@ import Completed from '@public/v2/assets/icons/stepper/completed.svg';
 import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
 import NotStarted from '@public/v2/assets/icons/stepper/not-started.svg';
 import Rejected from '@public/v2/assets/icons/stepper/rejected.svg';
+import ActionButton from '../action-button';
+import { ManageLocales } from '@/utils/v2/translate';
 
 interface IStepperComponentProps {
   country: string;
@@ -13,6 +15,9 @@ interface IStepperComponentProps {
   setCurrentStepperStep: any;
   completedSteps: any;
   rejectedSteps: any;
+  renderCompoent: any;
+  handleStepperNext: any;
+  handleStepperBack: any;
 }
 // Define the steps with label and name
 const steps = [
@@ -40,7 +45,10 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   currentStepperStep,
   setCurrentStepperStep,
   completedSteps,
-  rejectedSteps
+  rejectedSteps,
+  renderCompoent,
+  handleStepperNext,
+  handleStepperBack
 }) => {
   // Function to mark a step as completed
 
@@ -71,7 +79,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   };
 
   return (
-    <div>
+    <div className="flex flex-col gap-[32px] h-[93.6vh] min-h-[70vh] px-[110px] pt-[32px]">
       <div className={styles.stepperContainer}>
         {filteredSteps.map((step, index) => {
           let stepStatusClass = '';
@@ -97,6 +105,31 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
             </div>
           );
         })}
+      </div>
+      <div className="">
+        {renderCompoent(filteredSteps[currentStepperStep].identifier)}
+      </div>
+      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  rounded-t-[8px] mt-auto p-[16px]">
+        {' '}
+        <ActionButton
+          actionButtonData={[
+            {
+              variant: 'secondary',
+              label: ManageLocales('app.kyc.footer.back'),
+              handler: () => handleStepperBack
+            },
+            {
+              variant: 'primary',
+              label: ManageLocales('app.kyc.footer.saveAndNext'),
+              handler: () =>
+                handleStepperNext({
+                  screenName: filteredSteps[currentStepperStep].identifier,
+                  currentState: currentStepperStep
+                })
+            }
+          ]}
+          containerStyle="!justify-between"
+        />
       </div>
     </div>
   );
