@@ -14,6 +14,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import OtpInput from '@/components/v2/common/otp';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { handleResendOTP } from '@/components/v2/common/otp-verication/helpers/handle-resend-otp';
+import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useSendResetOtpMutation,
   useVerifyResetOTPMutation
@@ -26,6 +27,8 @@ import StepperComponent from '@/components/v2/common/stepper';
 import { validateScreen } from './helper/validations/screen/screen';
 import { useKycMutation, useLazyGetKycDetailQuery } from '@/features/api/kyc';
 import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
+import ActionButton from '@/components/v2/common/action-button';
+import { DialogComponent } from '@/components/v2/common/dialog';
 
 const initialTokenState = {
   token: '',
@@ -38,7 +41,7 @@ const KYC = () => {
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
-  const { isInputDialogOpen } = modalState;
+  const { isInputDialogOpen, isDialogOpen, dialogContent } = modalState;
   const { setIsInputDialogOpen, setDialogContent, setIsDialogOpen } =
     modalSetState;
   const [kyc] = useKycMutation();
@@ -47,11 +50,11 @@ const KYC = () => {
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
   const [currentStepperStep, setCurrentStepperStep] = useState(0);
-  // const [completedSteps, setCompletedSteps] = useState(new Set());
-  // const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
+  const [completedSteps, setCompletedSteps] = useState(new Set());
+  const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
-  const [completedSteps] = useState(new Set());
-  const [rejectedSteps] = useState(new Set<number>());
+  // const [completedSteps] = useState(new Set());
+  // const [rejectedSteps] = useState(new Set<number>());
 
   const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
 
@@ -240,12 +243,20 @@ const KYC = () => {
                 value: kycDetails?.kyc?.profile_data?.country
               })
             );
+
             dispatch(
               updateFormState({
                 name: 'formState.isEmailVerified',
                 value: kycDetails?.kyc?.is_email_verified
               })
             );
+
+            setSelectedSubmissionOption(
+              kycDetails?.kyc?.profile_data?.mode
+                ? kycDetails?.kyc?.profile_data?.mode
+                : ''
+            );
+
             break;
           case kycStatus.PENDING:
             setCurrentState(kycStatus.PENDING);
@@ -278,8 +289,8 @@ const KYC = () => {
     screenName: string;
     currentState: number;
   }) => {
-    const nextStep = currentStepperStep + 1;
-
+    // const nextStep = currentStepperStep + 1;
+    console.log('hello');
     // Perform data validation
     const validationError = await validateScreen(
       formState.online.sections[screenName],
@@ -296,30 +307,97 @@ const KYC = () => {
           })
         );
       });
-      return;
+    } else {
+      dispatch(
+        updateFormState({
+          name: `formErrorState.online.sections.${[screenName]}`,
+          value: {}
+        })
+      );
     }
 
     // Make the API call to submit the form data
-    try {
-      const response: any = await kyc({
-        data: {
-          country: formState.country,
-          offline: false,
-          data: { ...formState.online.sections[screenName] }
-        },
-        ID: currentState
-      });
 
-      if (response?.data?.statusCode) {
-        // Step was successfully completed, move to the next step
-        setCurrentStepperStep(nextStep);
-      } else {
+    await kyc({
+      data: {
+        country: formState.country,
+        offline: false,
+        data: { ...formState.online.sections[screenName] }
+      },
+      ID: currentState + 1
+    })
+      .then((response: any) => {
+        if (!validationError.length) {
+          // Step was successfully completed, move to the next step
+          // console.log('nextStep', nextStep);
+          completedSteps.add(currentState);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(currentState);
+          setRejectedSteps(new Set(rejectedSteps));
+
+          // setCurrentStepperStep(nextStep);
+        } else {
+          rejectedSteps.add(currentState);
+          setRejectedSteps(new Set(rejectedSteps));
+
+          setIsDialogOpen(true); // Show error dialog
+          setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={errorSvg} alt="errorSvg" />
+              </div>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <p className="text-neutral600 text-mRegular">
+                  {response?.error?.data?.message}
+                </p>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => {
+                        setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 w-full'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+        }
+      })
+      .catch(error => {
+        console.log('');
+        rejectedSteps.add(currentState);
+        setRejectedSteps(new Set(rejectedSteps));
+        console.log('error');
         setIsDialogOpen(true); // Show error dialog
-        setDialogContent(<></>);
-      }
-    } catch (error) {
-      console.error(error); // Log any API call errors
-    }
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={errorSvg} alt="errorSvg" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <p className="text-neutral600 text-mRegular">
+                {error?.data?.message}
+              </p>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+      });
   };
 
   // Function to move back to the previous step
@@ -330,19 +408,6 @@ const KYC = () => {
       setCurrentStepperStep(prevStep => (prevStep > 0 ? prevStep - 1 : 0));
     }
   };
-
-  // const validateStep = (index: number) => {
-  //   const isValid = onValidation(index);
-  //   if (isValid) {
-  //     completedSteps.add(index);
-  //     setCompletedSteps(new Set(completedSteps));
-  //     rejectedSteps.delete(index);
-  //     setRejectedSteps(new Set(rejectedSteps));
-  //   } else {
-  //     rejectedSteps.add(index);
-  //     setRejectedSteps(new Set(rejectedSteps));
-  //   }
-  // };
 
   // const completeStepperStep = (stepIndex: number) => {
   //   setCompletedSteps(prevCompletedSteps => {
@@ -511,6 +576,11 @@ const KYC = () => {
   return (
     <div className="relative ">
       {' '}
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
