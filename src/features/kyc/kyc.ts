@@ -17,7 +17,8 @@ const initialState = {
     },
     offline: {},
     attachment: {},
-    termAndCondition: false
+    termAndCondition: false,
+    isEmailVerified: false
   },
   formErrorState: {
     country: '',

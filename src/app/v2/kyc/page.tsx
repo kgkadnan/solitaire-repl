@@ -131,6 +131,7 @@ const KYC = () => {
   useEffect(() => {
     triggerKycDetail({}).then(res => {
       let kycDetails = res?.data;
+      console.log(kycDetails, 'kycDetails');
       if (kycDetails?.kyc?.status) {
         switch (kycDetails?.kyc?.status) {
           case kycStatus.INPROGRESS:
@@ -239,7 +240,12 @@ const KYC = () => {
                 value: kycDetails?.kyc?.profile_data?.country
               })
             );
-
+            dispatch(
+              updateFormState({
+                name: 'formState.isEmailVerified',
+                value: kycDetails?.kyc?.is_email_verified
+              })
+            );
             break;
           case kycStatus.PENDING:
             setCurrentState(kycStatus.PENDING);
@@ -345,8 +351,8 @@ const KYC = () => {
   //     return newCompletedSteps;
   //   });
   // };
-
-  const renderCompoent = (state: string) => {
+  console.log(formState, 'formState');
+  const renderComponent = (state: string) => {
     switch (state) {
       case kycScreenIdentifierNames.COMPANY_OWNER_DETAILS:
         return (
@@ -371,7 +377,6 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
-            setIsInputDialogOpen={setIsInputDialogOpen}
           />
         );
     }
@@ -403,9 +408,10 @@ const KYC = () => {
             setCurrentStepperStep={setCurrentStepperStep}
             completedSteps={completedSteps}
             rejectedSteps={rejectedSteps}
-            renderCompoent={renderCompoent}
+            renderComponent={renderComponent}
             handleStepperNext={handleStepperNext}
             handleStepperBack={handleStepperBack}
+            isEmailVerified={formState.isEmailVerified}
           />
         );
     }

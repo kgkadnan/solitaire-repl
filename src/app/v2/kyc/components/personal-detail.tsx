@@ -200,18 +200,6 @@ const PersonalDetail = ({
             />
           </div>
           <hr className="border-neutral200" />
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'primary',
-                label: 'Verify Email',
-                handler: () => {
-                  setIsInputDialogOpen(true);
-                },
-                customStyle: 'flex-1 w-full'
-              }
-            ]}
-          />
         </div>
       </div>
     </div>
