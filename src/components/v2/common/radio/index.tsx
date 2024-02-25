@@ -45,7 +45,7 @@ export const RadioButton: React.FC<any> = ({
           checked={checked}
           onChange={handleRadioChange}
         />
-        <p>{label}</p>
+        <div>{label}</div>
         <span></span>
       </label>
 
