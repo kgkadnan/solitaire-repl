@@ -50,7 +50,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   renderComponent,
   handleStepperNext,
   handleStepperBack,
-  isEmailVerified
+  isEmailVerified,
 }) => {
   // Function to mark a step as completed
 
@@ -126,14 +126,17 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
                 filteredSteps[currentStepperStep].identifier ===
                 kycScreenIdentifierNames.PERSONAL_DETAILS
                   ? isEmailVerified
-                    ? 'Verify Email'
-                    : 'Next'
+                    ? 'Next'
+                    :  'Verify Email'
                   : ManageLocales('app.kyc.footer.saveAndNext'),
-              handler: () =>
+              handler: () =>{
                 handleStepperNext({
                   screenName: filteredSteps[currentStepperStep].identifier,
                   currentState: currentStepperStep
                 })
+            
+               
+              }
             }
           ]}
           containerStyle="!justify-between"

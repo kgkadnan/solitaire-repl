@@ -334,7 +334,9 @@ const KYC = () => {
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
-
+          screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
+            !formState.isEmailVerified &&
+            setIsInputDialogOpen(true);
           // setCurrentStepperStep(nextStep);
         } else {
           rejectedSteps.add(currentState);
