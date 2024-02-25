@@ -243,6 +243,13 @@ const KYC = () => {
               })
             );
 
+            dispatch(
+              updateFormState({
+                name: 'formState.isEmailVerified',
+                value: kycDetails?.is_email_verified
+              })
+            );
+
             setSelectedSubmissionOption(
               kycDetails?.kyc?.profile_data?.mode
                 ? kycDetails?.kyc?.profile_data?.mode
