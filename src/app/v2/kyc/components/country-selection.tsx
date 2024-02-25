@@ -24,7 +24,7 @@ const CountrySelection = ({
       label: (
         <div className="flex gap-3">
           <Image src={IND} alt="IND" />
-          <p>India</p>
+          <div>India</div>
         </div>
       ),
       checked: selectedCountry === countries.INDIA
@@ -36,7 +36,7 @@ const CountrySelection = ({
       label: (
         <div className="flex gap-3">
           <Image src={BEL} alt="BEL" />
-          <p>Belgium</p>
+          <div>Belgium</div>
         </div>
       ),
       checked: selectedCountry === countries.BELGIUM
@@ -48,21 +48,21 @@ const CountrySelection = ({
       label: (
         <div className="flex gap-3">
           <Image src={USA} alt="USA" />
-          <p>U.S</p>
+          <div>U.S</div>
         </div>
       ),
       checked: selectedCountry === countries.USA
     },
     {
       name: 'country',
-      id: '3',
+      id: '4',
       value: countries.DUBAI,
       label: (
         <>
           <div className="flex gap-3">
             <Image src={DUB} alt="DUB" height={24} width={24} />
             <div className="flex flex-col">
-              <p>Dubai</p>
+              <div>Dubai</div>
             </div>
           </div>
           <div className="text-neutral600 textmRegular font-regular pl-[35px]">
@@ -79,12 +79,12 @@ const CountrySelection = ({
         <h1 className="text-neutral900 text-headingS font-medium">
           {ManageLocales('app.kyc.countrySelection.header.title')}
         </h1>
-        <p className="text-neutral600 text-mRegular font-regular">
+        <div className="text-neutral600 text-mRegular font-regular">
           {' '}
           Please select your country to initiate the KYC process. <br />
           Your choice will determine the specific KYC requirements for your
           location.
-        </p>
+        </div>
       </div>
       <hr className="border-neutral200" />
       <div className="w-[100%] flex flex-col gap-[16px] mt-4 items-center flex-1">
