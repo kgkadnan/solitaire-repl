@@ -13,7 +13,6 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
 import OtpInput from '@/components/v2/common/otp';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
-import { handleResendOTP } from '@/components/v2/common/otp-verication/helpers/handle-resend-otp';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
   useVerifyEmailOTPMutation,
@@ -57,11 +56,6 @@ const KYC = () => {
   // const [rejectedSteps] = useState(new Set<number>());
 
   const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
-
-  const [phoneNumber] = useState<{
-    countryCode: string;
-    phoneNumber: string;
-  }>({ countryCode: '', phoneNumber: '' });
 
   const [token, setToken] = useState(initialTokenState);
   const [errorOtp, setOtpError] = useState('');
