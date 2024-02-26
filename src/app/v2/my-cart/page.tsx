@@ -47,12 +47,17 @@ import {
   tableInclusionSortOrder
 } from '@/constants/v2/form';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen, setDialogContent } = modalSetState;
+  const { errorState, errorSetState } = useErrorStateManagement();
+  const { isError, errorText } = errorState;
+  const { setErrorText, setIsError } = errorSetState;
   const { rows } = dataTableState;
   const { setRows } = dataTableSetState;
   const [activeTab, setActiveTab] = useState<string>(AVAILABLE_STATUS);
@@ -390,6 +395,7 @@ const MyCart = () => {
   const deleteCartHandler = () => {
     let selectedIds = Object.keys(rowSelection);
     if (selectedIds?.length) {
+      setIsError(false);
       setDialogContent(
         <>
           {' '}
@@ -423,6 +429,9 @@ const MyCart = () => {
         </>
       );
       setIsDialogOpen(true);
+    } else {
+      setIsError(true);
+      setErrorText(NO_STONES_SELECTED);
     }
   };
 
@@ -452,7 +461,7 @@ const MyCart = () => {
                   key={label}
                   onClick={() => handleTabs({ tab: status })}
                 >
-                  {label}({count})
+                  {label} {count > 0 && `(${count})`}
                 </button>
               );
             })}
@@ -485,7 +494,17 @@ const MyCart = () => {
         )}
 
         {rows.length > 0 ? (
-          <div className="p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 shadow-inputShadow ">
+          <div className="flex gap-3 justify-end items-center p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 shadow-inputShadow ">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
             <ActionButton
               actionButtonData={[
                 {
