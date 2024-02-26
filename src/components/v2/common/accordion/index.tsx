@@ -12,6 +12,7 @@ interface IAccordionCompProps {
   accordionTrigger: string;
   value: string;
   hasError?: boolean;
+  defaultValue?: string;
 }
 
 export const AccordionComponent: React.FC<IAccordionCompProps> = ({
@@ -19,7 +20,8 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
   accordionContent,
   accordionTrigger,
   value,
-  hasError
+  hasError,
+  defaultValue
 }) => {
   return (
     <Accordion
@@ -28,7 +30,7 @@ export const AccordionComponent: React.FC<IAccordionCompProps> = ({
       defaultValue={value}
       collapsible
     >
-      <AccordionItem value={value}>
+      <AccordionItem value={defaultValue ? defaultValue : value}>
         <AccordionTrigger
           className={`${
             hasError ? styles.accordionErrorStyle : styles.accordionSuccessStyle

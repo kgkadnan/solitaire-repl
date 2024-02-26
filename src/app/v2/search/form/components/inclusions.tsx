@@ -147,6 +147,7 @@ const Inclusions = ({ state, setState }: any) => {
           <AccordionComponent
             value="Inclusions"
             isDisable={false}
+            defaultValue="closed"
             accordionContent={
               <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] px-[16px] py-[24px]">
                 {otherParameterData.map((other: IInclusions) => (
