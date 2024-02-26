@@ -21,7 +21,10 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
   } else if (row.original.diamond_status === HOLD_STATUS) {
     statusClass = 'bg-legendHoldFill';
     borderClass = 'border-lengendHoldBorder';
-  } else if (row.original.in_cart?.length) {
+  } else if (
+    row?.original?.in_cart &&
+    Object.keys(row.original.in_cart).length
+  ) {
     statusClass = 'bg-legendInCartFill';
     borderClass = 'border-lengendInCardBorder';
   } else {

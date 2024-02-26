@@ -41,41 +41,43 @@ export const downloadExcelHandler = async ({
       const { data, fileName } = res;
 
       if (data && modalSetState.setDialogContent) {
-        downloadExcelFromBase64(data, fileName);
+        downloadExcelFromBase64(data, fileName, {
+          onSave: () => {
+            // Handle any post-download actions here
+            if (modalSetState.setIsDialogOpen)
+              modalSetState.setIsDialogOpen(true);
+            if (setRowSelection) setRowSelection({});
+            if (setIsError) setIsError(false);
 
-        if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
-        if (setRowSelection) setRowSelection({});
-        if (setIsError) setIsError(false);
-
-        if (modalSetState.setDialogContent) {
-          modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={confirmIcon} alt="confirmIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <h1 className="text-headingS text-neutral900">
-                  Download Excel Successfully
-                </h1>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => modalSetState.setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        }
+            if (modalSetState.setDialogContent) {
+              modalSetState.setDialogContent(
+                <>
+                  <div className="absolute left-[-84px] top-[-84px]">
+                    <Image src={confirmIcon} alt="confirmIcon" />
+                  </div>
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                    <h1 className="text-headingS text-neutral900">
+                      Download Excel Successfully
+                    </h1>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.modal.okay'),
+                          handler: () => modalSetState.setIsDialogOpen(false),
+                          customStyle: 'flex-1 w-full'
+                        }
+                      ]}
+                    />
+                  </div>
+                </>
+              );
+            }
+          }
+        });
       }
     })
     .catch((error: any) => {
-      console.log('error', error);
-
       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
       if (modalSetState.setDialogContent) {
         if (error.data.type === 'not_allowed') {
@@ -99,7 +101,7 @@ export const downloadExcelHandler = async ({
                   actionButtonData={[
                     {
                       variant: 'primary',
-                      label: ManageLocales('app.search.okay'),
+                      label: ManageLocales('app.modal.okay'),
                       handler: () => {
                         modalSetState.setIsDialogOpen(false);
                       },

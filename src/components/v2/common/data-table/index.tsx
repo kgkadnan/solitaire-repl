@@ -249,9 +249,9 @@ const DataTable = ({
       case 'BR':
         return 'Round';
       case 'PR':
-        return 'Pear';
-      case 'PS':
         return 'Princess';
+      case 'PS':
+        return 'Pear';
       case 'AS':
         return 'Asscher';
       case 'RAD':

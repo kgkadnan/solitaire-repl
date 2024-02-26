@@ -206,7 +206,6 @@ const Form = ({
   // Update search URL when form state changes
   useEffect(() => {
     const queryParams = generateQueryParams(state);
-
     // Construct your search URL here
     if (!isValidationError) {
       setSearchUrl(constructUrlParams(queryParams));
