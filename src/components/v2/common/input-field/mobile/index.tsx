@@ -46,7 +46,7 @@ export const MobileInput = ({
               onChange={handleSelectChange}
               styles={colourStyles(errorText)}
               value={{
-                label: registerFormState.countryCode,
+                label: `+${registerFormState.countryCode}`,
                 value: registerFormState.countryCode
               }}
               // closeMenuOnSelect={false}

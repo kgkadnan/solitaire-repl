@@ -101,7 +101,7 @@ const Search = () => {
                 variant: 'secondary',
                 label: ManageLocales('app.modal.no'),
                 handler: () => setIsDialogOpen(false),
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               },
               {
                 variant: 'primary',
@@ -115,7 +115,7 @@ const Search = () => {
                     setSearchParameters([]);
                   setAddSearches([]);
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               }
             ]}
           />
@@ -179,7 +179,7 @@ const Search = () => {
                     setIsDialogOpen(false);
                     // closeSearch(id, yourSelection);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 },
                 {
                   variant: 'primary',
@@ -188,7 +188,7 @@ const Search = () => {
                     setIsDialogOpen(false);
                     closeSearch(id, yourSelection);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />

@@ -9,12 +9,14 @@ interface IInvalidCredsProps {
   content: React.ReactNode;
   handleClick?: () => void;
   header?: string;
+  buttonText?: string;
 }
 
 const InvalidCreds: React.FC<IInvalidCredsProps> = ({
   content,
   handleClick,
-  header
+  header,
+  buttonText
 }) => {
   return (
     <div className="flex gap-[12px] flex-col items-center">
@@ -33,9 +35,9 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
             onClick={handleClick}
             variant={'primary'}
             size={'custom'}
-            className="rounded-[4px] w-[100%]"
+            className="rounded-[4px] w-[100%] h-10"
           >
-            {ManageLocales('app.modal.editSelection')}
+            {buttonText ?? ManageLocales('app.modal.editSelection')}
           </IndividualActionButton>
         )}
       </div>

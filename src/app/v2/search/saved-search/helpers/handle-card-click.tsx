@@ -77,7 +77,7 @@ export const handleCardClick = ({
                     handler: () => {
                       setIsDialogOpen(false);
                     },
-                    customStyle: 'flex-1'
+                    customStyle: 'flex-1 h-10'
                   }
                 ]}
               />
@@ -125,7 +125,7 @@ export const handleCardClick = ({
                         handler: () => {
                           setIsDialogOpen(false);
                         },
-                        customStyle: 'flex-1'
+                        customStyle: 'flex-1 h-10'
                       },
                       {
                         variant: 'primary',
@@ -137,7 +137,7 @@ export const handleCardClick = ({
                             }-${1}`
                           );
                         },
-                        customStyle: 'flex-1'
+                        customStyle: 'flex-1 h-10'
                       }
                     ]}
                   />

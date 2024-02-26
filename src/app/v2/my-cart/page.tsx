@@ -133,7 +133,7 @@ const MyCart = () => {
                       variant: 'primary',
                       label: ManageLocales('app.modal.okay'),
                       handler: () => setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />
@@ -354,7 +354,7 @@ const MyCart = () => {
                     variant: 'primary',
                     label: ManageLocales('app.modal.okay'),
                     handler: () => setIsDialogOpen(false),
-                    customStyle: 'flex-1 w-full'
+                    customStyle: 'flex-1 w-full h-10'
                   }
                 ]}
               />
@@ -382,7 +382,7 @@ const MyCart = () => {
                     variant: 'primary',
                     label: ManageLocales('app.modal.okay'),
                     handler: () => setIsDialogOpen(false),
-                    customStyle: 'flex-1 w-full'
+                    customStyle: 'flex-1 w-full h-10'
                   }
                 ]}
               />
@@ -416,13 +416,13 @@ const MyCart = () => {
                   variant: 'secondary',
                   label: ManageLocales('app.modal.no'),
                   handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 },
                 {
                   variant: 'primary',
                   label: ManageLocales('app.modal.yes'),
                   handler: () => handleDelete({ selectedIds }),
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />

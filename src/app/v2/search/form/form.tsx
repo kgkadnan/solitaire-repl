@@ -326,7 +326,7 @@ const Form = ({
                   handler: () => {
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 },
                 {
                   variant: 'primary',
@@ -335,7 +335,7 @@ const Form = ({
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />
@@ -475,7 +475,7 @@ const Form = ({
                   handler: () => {
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 },
                 {
                   variant: 'primary',
@@ -484,7 +484,7 @@ const Form = ({
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />
@@ -694,7 +694,7 @@ const Form = ({
                   setInputError('');
                   setIsInputDialogOpen(false);
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               },
               {
                 variant: 'primary',
@@ -706,7 +706,7 @@ const Form = ({
                     !inputError.length && handleSaveAndSearch();
                   }
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               }
             ]}
           />

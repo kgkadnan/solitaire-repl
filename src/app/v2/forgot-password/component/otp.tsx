@@ -80,7 +80,7 @@ const OTPComponent = ({
           <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-200' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral-500' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0

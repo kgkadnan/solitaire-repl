@@ -43,57 +43,58 @@ const LoginComponent = ({
         </div>
 
         {/* Input fields */}
-        <MobileInput
-          label={ManageLocales('app.register.mobileNumber')}
-          onChange={event =>
-            handleLoginInputChange({
-              event,
-              type: 'phone',
-              setPhoneNumber,
-              isPhoneNumberValid,
-              setEmailErrorText,
-              // setErrorText,
-              setPasswordErrorText,
-              setPassword
-              // setIsError
-            })
-          }
-          type="number"
-          name="mobileNumber"
-          // value={registerFormState.mobileNumber}
-          errorText={emailErrorText}
-          // registerFormState={registerFormState}
-          // setRegisterFormState={setRegisterFormState}
-          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
-          registerFormState={phoneNumber}
-          setRegisterFormState={setPhoneNumber}
-          value={phoneNumber.mobileNumber}
-          onKeyDown={handleKeyDown}
-        />
-        <PasswordField
-          label={ManageLocales('app.register.password')}
-          onChange={event =>
-            handleLoginInputChange({
-              event,
-              type: 'password',
-              setPhoneNumber,
-              isPhoneNumberValid,
-              setEmailErrorText,
-              // setErrorText,
-              setPasswordErrorText,
-              setPassword
-              // setIsError
-            })
-          }
-          name="password"
-          value={password}
-          errorText={passwordErrorText}
-          placeholder={ManageLocales('app.login.password.placeholder')}
-          isConfirmPassword={true}
-          onKeyDown={handleKeyDown}
-        />
+        <div className="flex flex-col gap-5">
+          <MobileInput
+            label={ManageLocales('app.register.mobileNumber')}
+            onChange={event =>
+              handleLoginInputChange({
+                event,
+                type: 'phone',
+                setPhoneNumber,
+                isPhoneNumberValid,
+                setEmailErrorText,
+                // setErrorText,
+                setPasswordErrorText,
+                setPassword
+                // setIsError
+              })
+            }
+            type="number"
+            name="mobileNumber"
+            // value={registerFormState.mobileNumber}
+            errorText={emailErrorText}
+            // registerFormState={registerFormState}
+            // setRegisterFormState={setRegisterFormState}
+            placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+            registerFormState={phoneNumber}
+            setRegisterFormState={setPhoneNumber}
+            value={phoneNumber.mobileNumber}
+            onKeyDown={handleKeyDown}
+          />
+          <PasswordField
+            label={ManageLocales('app.register.password')}
+            onChange={event =>
+              handleLoginInputChange({
+                event,
+                type: 'password',
+                setPhoneNumber,
+                isPhoneNumberValid,
+                setEmailErrorText,
+                // setErrorText,
+                setPasswordErrorText,
+                setPassword
+                // setIsError
+              })
+            }
+            name="password"
+            value={password}
+            errorText={passwordErrorText}
+            placeholder={ManageLocales('app.login.password.placeholder')}
+            isConfirmPassword={true}
+            onKeyDown={handleKeyDown}
+          />
 
-        {/* <div className="flex justify-center items-center text-sm sm:text-base h-10">
+          {/* <div className="flex justify-center items-center text-sm sm:text-base h-10">
             {isError && (
               <div className="text-solitaireError flex text-left">
                 {errorText}
@@ -101,44 +102,51 @@ const LoginComponent = ({
             )}
           </div> */}
 
-        <div className="flex justify-between text-mRegualar text-neutral-900">
-          <div className="flex items-center gap-2">
-            {' '}
-            <CheckboxComponent
-              onClick={() => {
-                setIsKeepSignedIn(!isKeepSignedIn);
-              }}
-              isChecked={isKeepSignedIn}
-            />{' '}
-            <p>{ManageLocales('app.login.keepSignedIn')}</p>
+          <div className="flex justify-between text-mRegualar text-neutral-900">
+            <div className="flex items-center gap-2">
+              {' '}
+              <CheckboxComponent
+                onClick={() => {
+                  setIsKeepSignedIn(!isKeepSignedIn);
+                }}
+                isChecked={isKeepSignedIn}
+              />{' '}
+              <p>{ManageLocales('app.login.keepSignedIn')}</p>
+            </div>
+            <Link href={'/v2/forgot-password'}>
+              {ManageLocales('app.login.forgotPassword')}
+            </Link>
           </div>
-          <Link href={'/v2/forgot-password'}>
-            {ManageLocales('app.login.forgotPassword')}
-          </Link>
         </div>
+        <div className="flex flex-col gap-1">
+          <IndividualActionButton
+            onClick={handleLogin}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%]"
+          >
+            {ManageLocales('app.login')}
+          </IndividualActionButton>
 
-        <IndividualActionButton
-          onClick={handleLogin}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px] w-[100%]"
-        >
-          {ManageLocales('app.login')}
-        </IndividualActionButton>
-
-        <IndividualActionButton
-          onClick={() => router.push('/v2/register')}
-          variant={'secondary'}
-          size={'custom'}
-          className="border-none w-[100%]"
-        >
-          <div className="text-mMedium font-medium flex">
-            <p className="text-neutral-600">
-              {ManageLocales('app.login.newUser')}
-            </p>
-            <p className="text-neutral-900">{ManageLocales('app.register')}</p>
-          </div>
-        </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => {
+              router.push('/v2/register');
+            }}
+            variant={'secondary'}
+            size={'custom'}
+            className="border-none w-[100%]"
+          >
+            <div className="text-mMedium font-medium flex">
+              <p className="text-neutral-600">
+                {ManageLocales('app.login.newUser')}
+              </p>{' '}
+              &nbsp;
+              <p className="text-neutral-900">
+                {ManageLocales('app.register')}
+              </p>
+            </div>
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
     // </div>

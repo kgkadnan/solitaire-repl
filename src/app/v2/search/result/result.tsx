@@ -378,7 +378,7 @@ const Result = ({
                           variant: 'primary',
                           label: ManageLocales('app.modal.continue'),
                           handler: () => setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         },
                         {
                           variant: 'primary',
@@ -386,7 +386,7 @@ const Result = ({
                           handler: () => {
                             router.push('/v2/my-cart');
                           },
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         }
                       ]}
                     />
@@ -431,7 +431,7 @@ const Result = ({
                           handler: () => {
                             setIsDialogOpen(false);
                           },
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         }
                       ]}
                     />
@@ -464,7 +464,7 @@ const Result = ({
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={bookmarkIcon} alt="bookmarkIcon" />
         </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px] ">
           <div>
             <h1 className="text-headingS text-neutral900">
               {' '}
@@ -503,7 +503,7 @@ const Result = ({
                   setInputError('');
                   setIsInputDialogOpen(false);
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               },
               {
                 variant: 'primary',
@@ -525,7 +525,7 @@ const Result = ({
                       });
                   }
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               }
             ]}
           />
@@ -644,7 +644,7 @@ const Result = ({
                           setIsAddCommentDialogOpen(false);
                           setIsDialogOpen(false);
                         },
-                        customStyle: 'flex-1 w-full'
+                        customStyle: 'flex-1 w-full h-10'
                       },
                       {
                         variant: 'primary',
@@ -652,7 +652,7 @@ const Result = ({
                         handler: () => {
                           router.push('/v2/your-orders');
                         },
-                        customStyle: 'flex-1 w-full'
+                        customStyle: 'flex-1 w-full h-10'
                       }
                     ]}
                   />
@@ -695,7 +695,7 @@ const Result = ({
                       handler: () => {
                         setIsDialogOpen(false);
                       },
-                      customStyle: 'flex-1 w-full'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />

@@ -77,7 +77,7 @@ export const deleteSavedSearchHandler = ({
                   variant: 'primary',
                   label: ManageLocales('app.modal.okay'),
                   handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />
@@ -105,7 +105,7 @@ export const deleteSavedSearchHandler = ({
                   variant: 'secondary',
                   label: ManageLocales('app.modal.no'),
                   handler: () => setIsDialogOpen(false),
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 },
                 {
                   variant: 'primary',
@@ -114,7 +114,7 @@ export const deleteSavedSearchHandler = ({
                     setIsDialogOpen(false);
                     handleDelete();
                   },
-                  customStyle: 'flex-1'
+                  customStyle: 'flex-1 h-10'
                 }
               ]}
             />

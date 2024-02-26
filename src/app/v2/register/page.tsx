@@ -151,7 +151,7 @@ const Register = () => {
             }}
             variant={'secondary'}
             size={'custom'}
-            className="rounded-[4px] w-[170px]"
+            className="rounded-[4px] w-[170px] h-10"
           >
             {ManageLocales('app.OTPVerification.cancel')}
           </IndividualActionButton>
@@ -172,7 +172,7 @@ const Register = () => {
             }}
             variant={'primary'}
             size={'custom'}
-            className="rounded-[4px] w-[170px]"
+            className="rounded-[4px] w-[170px] h-10"
           >
             {ManageLocales('app.OTPVerification.save')}
           </IndividualActionButton>
