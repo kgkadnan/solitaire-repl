@@ -61,8 +61,7 @@ const KYC = () => {
   const [errorOtp, setOtpError] = useState('');
   const { otpVericationState, otpVerificationSetState } =
     useOtpVerificationStateManagement();
-  const { otpValues, resendTimer, otpVerificationFormState } =
-    otpVericationState;
+  const { otpValues, resendTimer } = otpVericationState;
   const { setOtpValues, setResendTimer } = otpVerificationSetState;
 
   const dispatch = useAppDispatch();
