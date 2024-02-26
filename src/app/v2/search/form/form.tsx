@@ -298,7 +298,7 @@ const Form = ({
     id?: string
   ) => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${SubRoutes.RESULT}`
     ) {
@@ -308,21 +308,29 @@ const Form = ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={warningIcon} alt="warningIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+          <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
             <div>
               <h1 className="text-headingS text-neutral900">
                 {' '}
-                {ManageLocales('app.search.confirmHeader')}
+                {ManageLocales('app.search.maxTabReached')}
               </h1>
               <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.maxLimit')}
+                {ManageLocales('app.search.maxTabReached.content')}
               </p>
             </div>
             <ActionButton
               actionButtonData={[
                 {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.cancel'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                },
+                {
                   variant: 'primary',
-                  label: ManageLocales('app.search.manageLimit'),
+                  label: ManageLocales('app.modal.manageTabs'),
                   handler: () => {
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
                     setIsDialogOpen(false);
@@ -438,7 +446,7 @@ const Form = ({
   // Function: Save and search
   const handleSaveAndSearch: any = async () => {
     if (
-      JSON.parse(localStorage.getItem('Search')!)?.length >
+      JSON.parse(localStorage.getItem('Search')!)?.length >=
         MAX_SEARCH_TAB_LIMIT &&
       modifySearchFrom !== `${ManageLocales('app.search.resultRoute')}` &&
       modifySearchFrom !== `${SubRoutes.SAVED_SEARCH}`
@@ -449,21 +457,29 @@ const Form = ({
           <div className="absolute left-[-84px] top-[-84px]">
             <Image src={warningIcon} alt="warningIcon" />
           </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+          <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
             <div>
               <h1 className="text-headingS text-neutral900">
                 {' '}
-                {ManageLocales('app.search.confirmHeader')}
+                {ManageLocales('app.search.maxTabReached')}
               </h1>
               <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.maxLimit')}
+                {ManageLocales('app.search.maxTabReached.content')}
               </p>
             </div>
             <ActionButton
               actionButtonData={[
                 {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.cancel'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1'
+                },
+                {
                   variant: 'primary',
-                  label: ManageLocales('app.search.manageLimit'),
+                  label: ManageLocales('app.modal.manageTabs'),
                   handler: () => {
                     router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
                     setIsDialogOpen(false);
