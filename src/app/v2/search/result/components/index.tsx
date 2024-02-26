@@ -1,4 +1,7 @@
-import { RenderMeasurements } from '@/components/v2/common/data-table/helpers/render-cell';
+import {
+  RenderMeasurements,
+  RenderTracerId
+} from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import Table from '@/components/v2/table';
 import {
@@ -48,7 +51,8 @@ const mapColumns = (columns: any) =>
           return { ...commonProps, Cell: RenderLab };
         case 'location':
           return { ...commonProps, Cell: RednderLocation };
-
+        case 'tracr_id':
+          return { ...commonProps, Cell: RenderTracerId };
         default:
           return {
             ...commonProps,
@@ -78,7 +82,7 @@ const ConfirmStone = ({ rows, columns, goBackToListView, activeTab }: any) => {
     if (isExcist.length > 0) {
       setBreadCrumLabel(isExcist);
     } else {
-      setBreadCrumLabel(`Result-${activeTab}`);
+      setBreadCrumLabel(`Result ${activeTab}`);
     }
   }, []);
 

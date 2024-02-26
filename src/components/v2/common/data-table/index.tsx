@@ -97,6 +97,7 @@ const DataTable = ({
   rowSelection,
   showCalculatedField = false,
   isResult = false,
+  myCart = false,
   activeTab,
   searchParameters,
   setActiveTab,
@@ -180,7 +181,7 @@ const DataTable = ({
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={warningIcon} alt="warningIcon" />
                   </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
                     <div>
                       <h1 className="text-headingS text-neutral900">
                         {' '}
@@ -249,9 +250,9 @@ const DataTable = ({
       case 'BR':
         return 'Round';
       case 'PR':
-        return 'Pear';
-      case 'PS':
         return 'Princess';
+      case 'PS':
+        return 'Pear';
       case 'AS':
         return 'Asscher';
       case 'RAD':
@@ -482,14 +483,18 @@ const DataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? isResult
+          ? isResult || myCart
             ? 'calc(100vh - 200px)'
             : 'calc(100vh - 120px)'
+          : myCart
+          ? 'calc(100vh - 460px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
-          ? isResult
+          ? isResult || myCart
             ? 'calc(100vh - 200px)'
             : 'calc(100vh - 120px)'
+          : myCart
+          ? 'calc(100vh - 460px)'
           : 'calc(100vh - 399px)'
       }
     },

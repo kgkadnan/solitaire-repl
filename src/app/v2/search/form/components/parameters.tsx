@@ -361,13 +361,14 @@ export const Parameters = ({
   });
   let isErrorPersist = parameterData.some(error => error.errorState.length > 0);
   return (
-    <div>
+    <div id="Parameters">
       <AccordionComponent
         value="Parameters"
+        defaultValue="closed"
         isDisable={false}
         accordionContent={
           <div className="flex flex-wrap gap-[24px] px-[16px] py-[24px]">
-            <div id="Parameters" className="flex flex-wrap gap-[24px]">
+            <div className="flex flex-wrap gap-[24px]">
               {parameterData.map(
                 ({
                   label,
@@ -426,7 +427,7 @@ export const Parameters = ({
               )}
             </div>
             <div className="grid md:grid-cols-1 lg:grid-cols-2 gap-[16px] w-[100%]">
-              <div className="flex flex-col gap-[8px]">
+              <div className="flex flex-col gap-[8px]" id="Girdle">
                 <InputLabel
                   label={'Girdle'}
                   htmlFor=""
@@ -437,7 +438,7 @@ export const Parameters = ({
                   setSelectedGirdle={setSelectedGirdle}
                 />
               </div>
-              <div className="flex flex-col gap-[8px]">
+              <div id="Culet" className="flex flex-col gap-[8px]">
                 <InputLabel
                   label={'Culet'}
                   htmlFor=""

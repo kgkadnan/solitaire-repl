@@ -28,6 +28,8 @@ export const InputField = ({
           ref={inputRef}
           style={{ boxShadow: 'var(--input-shadow) inset' }}
           className={`focus:outline-none bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${
+            disabled && 'cursor-not-allowed'
+          } ${
             errorText ? 'border-dangerMain' : 'border-neutral200'
           } ${styles?.input} `}
           type={type}

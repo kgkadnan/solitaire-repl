@@ -36,7 +36,8 @@ import {
   RenderDiscount,
   RenderLab,
   RenderMeasurements,
-  RenderShape
+  RenderShape,
+  RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Loader from '@/components/v2/common/loader';
 import {
@@ -96,51 +97,50 @@ const MyCart = () => {
       return item?.product?.diamond_status === activeTab;
     });
 
+    console.log('filteredRows', filteredRows);
     const mappedRows = filteredRows.map((row: any) => row?.product);
-
-    return { filteredRows, mappedRows, counts };
+    setRows(mappedRows);
+    return { filteredRows, counts };
   };
 
   useEffect(() => {
     const fetchMyAPI = async () => {
-      try {
-        const cartResponse = await tiggerCart({});
-        if (cartResponse.data.cart.items.length) {
-          const { filteredRows, mappedRows, counts } = processCartItems({
-            cartItems: cartResponse.data.cart.items,
+      await tiggerCart({})
+        .then((response: any) => {
+          const { filteredRows, counts } = processCartItems({
+            cartItems: response.data.cart.items,
             activeTab
           });
 
           setCartItems(filteredRows);
           setDiamondStatusCounts(counts);
           setRowSelection({});
-          setRows(mappedRows);
-        }
-      } catch (error: any) {
-        setIsDialogOpen(true);
-        setDialogContent(
-          <>
-            <div className="absolute left-[-84px] top-[-84px]">
-              <Image src={errorIcon} alt="errorIcon" />
-            </div>
-            <h1 className="text-headingS text-neutral900">
-              {error?.data?.message}
-            </h1>
-            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-              <ActionButton
-                actionButtonData={[
-                  {
-                    variant: 'primary',
-                    label: ManageLocales('app.modal.okay'),
-                    handler: () => setIsDialogOpen(false),
-                    customStyle: 'flex-1 w-full'
-                  }
-                ]}
-              />
-            </div>
-          </>
-        );
-      }
+        })
+        .catch(error => {
+          setIsDialogOpen(true);
+          setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={errorIcon} alt="errorIcon" />
+              </div>
+              <h1 className="text-headingS text-neutral900">
+                {error?.data?.message}
+              </h1>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: ManageLocales('app.modal.okay'),
+                      handler: () => setIsDialogOpen(false),
+                      customStyle: 'flex-1 w-full'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+        });
     };
 
     fetchMyAPI();
@@ -249,6 +249,8 @@ const MyCart = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
 
           default:
             return {
@@ -264,20 +266,19 @@ const MyCart = () => {
   useEffect(() => {
     const fetchColumns = async () => {
       const response = await triggerColumn({});
-
       const shapeColumn = response.data?.find(
         (column: any) => column.accessor === 'shape'
       );
 
-      if (response.data) {
+      if (response.data?.length) {
         let additionalColumn = {
           accessor: 'shape_full',
-          id: shapeColumn.id,
-          is_disabled: shapeColumn.is_disabled,
-          is_fixed: shapeColumn.is_fixed,
-          label: shapeColumn.label,
-          sequence: shapeColumn.sequence,
-          short_label: shapeColumn.short_label
+          id: shapeColumn?.id,
+          is_disabled: shapeColumn?.is_disabled,
+          is_fixed: shapeColumn?.is_fixed,
+          label: shapeColumn?.label,
+          sequence: shapeColumn?.sequence,
+          short_label: shapeColumn?.short_label
         };
 
         const updatedColumns = [...response.data, additionalColumn];
@@ -287,6 +288,7 @@ const MyCart = () => {
 
     fetchColumns();
   }, []);
+
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
@@ -332,7 +334,7 @@ const MyCart = () => {
     })
       .unwrap()
       .then(res => {
-        const { filteredRows, mappedRows, counts } = processCartItems({
+        const { filteredRows, counts } = processCartItems({
           cartItems: res.cart.items,
           activeTab
         });
@@ -362,7 +364,6 @@ const MyCart = () => {
         setCartItems(filteredRows);
         setDiamondStatusCounts(counts);
         setRowSelection({});
-        setRows(mappedRows);
       })
       .catch(error => {
         setIsDialogOpen(true);
@@ -447,7 +448,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-150px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-185px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
@@ -472,7 +473,7 @@ const MyCart = () => {
           <Loader />
         ) : rows.length ? (
           <div>
-            <div className="border-b-[1px] border-t-[1px] border-neutral200">
+            <div className="">
               <DataTable
                 rows={rows}
                 columns={memoizedColumns}
@@ -481,6 +482,7 @@ const MyCart = () => {
                 showCalculatedField={activeTab !== SOLD_STATUS}
                 modalSetState={modalSetState}
                 downloadExcel={downloadExcel}
+                myCart={true}
               />
             </div>
           </div>

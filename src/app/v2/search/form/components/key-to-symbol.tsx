@@ -48,6 +48,7 @@ export const KeyToSymbol = ({
       <AccordionComponent
         value="Key to Symbol"
         isDisable={false}
+        defaultValue="closed"
         accordionContent={
           <div className="px-[16px] py-[24px]">
             <Tile

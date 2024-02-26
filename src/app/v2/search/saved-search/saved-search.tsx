@@ -278,7 +278,10 @@ const SavedSearch = () => {
                           handleCheckbox({
                             id,
                             selectedCheckboxes,
-                            setSelectedCheckboxes
+                            setSelectedCheckboxes,
+                            setSelectAllChecked,
+                            selectAllChecked,
+                            data: savedSearchState.savedSearchData
                           });
                         }}
                         isChecked={selectedCheckboxes.includes(id)}

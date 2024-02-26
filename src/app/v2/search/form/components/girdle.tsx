@@ -13,7 +13,7 @@ export const Girdle = ({
   setSelectedGirdle
 }: ISGirdleProps) => {
   return (
-    <div id="Girdle">
+    <div>
       <div className="px-[16px] py-[24px] border-[1px] border-neutral200 rounded-[4px]">
         <Tile
           tileData={girdle}

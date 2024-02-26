@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Arrow from '@public/v2/assets/icons/chevron.svg';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 
 const Breadcrum = ({
   searchParameters,
@@ -22,7 +23,12 @@ const Breadcrum = ({
     <>
       {searchParameters.length > 0 && (
         <div className=" text-neutral-600 text-mMedium flex gap-[8px] ">
-          <p className="flex items-center">Search</p>
+          <Link
+            className={'flex items-center cursor-pointer'}
+            href={`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`}
+          >
+            Search
+          </Link>
           <Image src={Arrow} alt={'search-breadcrum'} />
         </div>
       )}

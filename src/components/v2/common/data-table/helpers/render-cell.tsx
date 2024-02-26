@@ -21,7 +21,10 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
   } else if (row.original.diamond_status === HOLD_STATUS) {
     statusClass = 'bg-legendHoldFill';
     borderClass = 'border-lengendHoldBorder';
-  } else if (row.original.in_cart?.length) {
+  } else if (
+    row?.original?.in_cart &&
+    Object.keys(row.original.in_cart).length
+  ) {
     statusClass = 'bg-legendInCartFill';
     borderClass = 'border-lengendInCardBorder';
   } else {
@@ -35,6 +38,33 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
     >
       {renderedCellValue}
     </span>
+  );
+};
+
+export const RenderTracerId = ({ row, renderedCellValue }: any) => {
+  let link = row?.original?.tracr_id ?? '';
+  const value =
+    renderedCellValue?.length > 18
+      ? `${renderedCellValue.slice(0, 18)}...`
+      : renderedCellValue;
+
+  return (
+    <Link
+      href={link}
+      target="_blank"
+      className="cursor-pointer"
+      onClick={e => {
+        e.stopPropagation();
+      }}
+      style={{
+        display: 'inline-block',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
+      }}
+    >
+      {value}
+    </Link>
   );
 };
 
@@ -70,7 +100,7 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
     <>
       {' '}
       {row.original.lab === 'GIA' ? (
-        <Link href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
+        <Link href={`${GIA_LINK}${row.original.rpt_number}`} target="_blank">
           {renderedCellValue}
         </Link>
       ) : (
