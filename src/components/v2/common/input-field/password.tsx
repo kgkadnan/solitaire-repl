@@ -28,6 +28,8 @@ export const PasswordField = ({
 }: IPasswordProps) => {
   const inputRef = useRef<any>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
+
   const [passwordRules, setPasswordRules] = useState<{
     'Must be at least 8 characters': boolean | null;
     'Use minimum 1 Number (0-9)': boolean | null;
@@ -92,7 +94,9 @@ export const PasswordField = ({
           ref={inputRef}
           style={{ boxShadow: 'var(--input-shadow) inset' }}
           className={`focus:outline-none focus:border-[3px] focus:border-[#CFD1D4] focus-visible:border-[#CFD1D4] hover:border-neutral900 bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${styles?.input} ${
-            errorText ? 'border-dangerMain' : 'border-neutral200'
+            errorText
+              ? 'border-dangerMain hover:border-dangerMain focus:border-dangerMain focus-visible:border-dangerMain'
+              : 'border-neutral200'
           }`}
           type={isPasswordVisible ? 'text' : 'password'}
           name={name}
@@ -100,12 +104,16 @@ export const PasswordField = ({
           onChange={onChange}
           placeholder={placeholder}
           disabled={disabled}
-          onBlur={onBlur}
+          onBlur={() => {
+            setIsInputFocused(false);
+            onBlur;
+          }}
           maxLength={maxLength}
           onFocus={() => {
             if (inputRef.current) {
               inputRef.current.addEventListener('wheel', disableWheel);
             }
+            setIsInputFocused(true);
           }}
           onKeyDown={onKeyDown}
         />
@@ -117,7 +125,7 @@ export const PasswordField = ({
         </div>
       </div>
       <div className="mt-2">
-        {!isConfirmPassword ? (
+        {isInputFocused && !isConfirmPassword ? (
           errorText !== PASSWORD_NOT_MATCH &&
           !allRulesValid &&
           Object.entries(passwordRules).map(([rule, isValid]) => (
@@ -127,7 +135,7 @@ export const PasswordField = ({
             </div>
           ))
         ) : (
-          <p className="text-dangerMain h-1">{errorText && errorText}</p>
+          <p className="text-dangerMain">{errorText && errorText}</p>
         )}
       </div>
     </div>

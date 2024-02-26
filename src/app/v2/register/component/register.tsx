@@ -124,6 +124,7 @@ const RegisterComponent = ({
           />
 
           {/* Input field for  password */}
+          {/* <div> */}
           <PasswordField
             label={'Enter Password*'}
             onChange={event =>
@@ -158,6 +159,7 @@ const RegisterComponent = ({
             )}
             isConfirmPassword={true}
           />
+          {/* </div> */}
           <div className="flex flex-col gap-1">
             <IndividualActionButton
               onClick={() =>

@@ -1,8 +1,9 @@
 import Image from 'next/image';
-import confirmImage from '@public/assets/icons/confirmation.svg';
+import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 import { IOtp } from '..';
 import { IToken } from '@/app/v2/register/page';
+import ActionButton from '../../action-button';
 interface IHandleResendOTP {
   otpVerificationFormState: IOtp;
   setResendTimer: React.Dispatch<React.SetStateAction<number>>;
@@ -32,11 +33,25 @@ export const handleResendOTP = ({
       setIsDialogOpen(true);
       setDialogContent(
         <>
-          <div className="max-w-[380px] flex justify-center align-middle">
-            <Image src={confirmImage} alt="vector image" />
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={successIcon} alt="successIcon" />
           </div>
-          <div className="max-w-[380px] flex justify-center align-middle text-solitaireTertiary">
-            OTP Send Successfully..
+          <h1 className="text-headingS text-neutral900">
+            OTP sent successfully
+          </h1>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: 'Okay',
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
           </div>
         </>
       );
