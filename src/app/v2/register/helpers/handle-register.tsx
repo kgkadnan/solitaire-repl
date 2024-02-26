@@ -3,7 +3,6 @@ import { validateAllFields } from './handle-validate-all-fields';
 import { IRegister } from '../interface';
 import { IOtp, IToken } from '../page';
 import InvalidCreds from '../../login/component/invalid-creds';
-import { useState } from 'react';
 import { statusCode } from '@/constants/enums/status-code';
 
 interface IHandleRegister {

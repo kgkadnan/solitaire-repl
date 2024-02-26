@@ -11,12 +11,19 @@ interface IOtpInput {
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;
   otpValues: string[];
   error?: string;
+  setError?: any;
 }
 
-const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues, error }) => {
+const OtpInput: React.FC<IOtpInput> = ({
+  setOtpValues,
+  otpValues,
+  error,
+  setError
+}) => {
   const otpFieldsRef = useRef<HTMLInputElement[]>([]);
 
   const handleInput = (index: number, value: string) => {
+    setError('');
     if (value.length > 1) {
       return;
     }
@@ -30,6 +37,7 @@ const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues, error }) => {
   };
 
   const handleBackspace = (index: number) => {
+    setError('');
     if (otpValues[index] !== '') {
       const newOtpValues = [...otpValues];
       newOtpValues[index] = '';
@@ -41,6 +49,7 @@ const OtpInput: React.FC<IOtpInput> = ({ setOtpValues, otpValues, error }) => {
 
   const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
     event.preventDefault();
+    setError('');
     const pasteData = event.clipboardData
       .getData('text')
       .trim()

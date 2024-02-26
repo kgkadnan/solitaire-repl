@@ -61,7 +61,7 @@ export const MobileInput = ({
             value={value}
             placeholder={placeholder}
             styles={{
-              input: `rounded-l-[0px] ${
+              input: `rounded-l-[0px] focus:border-[1px] focus:border-inherit focus-visible:border-inherit hover:border-inherit ${
                 errorText ? 'border-dangerMain' : 'border-neutral200'
               }`
             }}
