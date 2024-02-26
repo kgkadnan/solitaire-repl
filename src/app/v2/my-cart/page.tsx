@@ -452,7 +452,7 @@ const MyCart = () => {
                   key={label}
                   onClick={() => handleTabs({ tab: status })}
                 >
-                  {label}({count})
+                  {label} {count > 0 && `(${count})`}
                 </button>
               );
             })}
