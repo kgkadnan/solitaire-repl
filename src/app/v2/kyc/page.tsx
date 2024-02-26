@@ -289,7 +289,6 @@ const KYC = () => {
     currentState: number;
   }) => {
     // const nextStep = currentStepperStep + 1;
-    console.log('hello');
     // Perform data validation
     const validationError = await validateScreen(
       formState.online.sections[screenName],
