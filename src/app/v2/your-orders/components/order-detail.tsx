@@ -28,7 +28,10 @@ import ActionButton from '@/components/v2/common/action-button';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
-import { RenderMeasurements } from '@/components/v2/common/data-table/helpers/render-cell';
+import {
+  RenderMeasurements,
+  RenderTracerId
+} from '@/components/v2/common/data-table/helpers/render-cell';
 import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
 
 interface IOrderDetail {
