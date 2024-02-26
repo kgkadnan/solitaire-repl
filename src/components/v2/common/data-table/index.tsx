@@ -97,6 +97,7 @@ const DataTable = ({
   rowSelection,
   showCalculatedField = false,
   isResult = false,
+  myCart = false,
   activeTab,
   searchParameters,
   setActiveTab,
@@ -482,14 +483,18 @@ const DataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? isResult
+          ? isResult || myCart
             ? 'calc(100vh - 200px)'
             : 'calc(100vh - 120px)'
+          : myCart
+          ? 'calc(100vh - 460px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
-          ? isResult
+          ? isResult || myCart
             ? 'calc(100vh - 200px)'
             : 'calc(100vh - 120px)'
+          : myCart
+          ? 'calc(100vh - 460px)'
           : 'calc(100vh - 399px)'
       }
     },
