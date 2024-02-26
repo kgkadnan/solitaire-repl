@@ -332,7 +332,7 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.modal.manageTabs'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                     setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
@@ -481,7 +481,7 @@ const Form = ({
                   variant: 'primary',
                   label: ManageLocales('app.modal.manageTabs'),
                   handler: () => {
-                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-10`);
+                    router.push(`/v2/search?active-tab=${SubRoutes.RESULT}-1`);
                     setIsDialogOpen(false);
                   },
                   customStyle: 'flex-1'
