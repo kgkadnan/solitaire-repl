@@ -445,7 +445,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-150px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-185px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
@@ -470,7 +470,7 @@ const MyCart = () => {
           <Loader />
         ) : rows.length ? (
           <div>
-            <div className="border-b-[1px] border-t-[1px] border-neutral200">
+            <div className="">
               <DataTable
                 rows={rows}
                 columns={memoizedColumns}
@@ -479,6 +479,7 @@ const MyCart = () => {
                 showCalculatedField={activeTab !== SOLD_STATUS}
                 modalSetState={modalSetState}
                 downloadExcel={downloadExcel}
+                myCart={true}
               />
             </div>
           </div>

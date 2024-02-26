@@ -1,11 +1,11 @@
-export interface IDownloadExcelOptions {
+export interface IDownloadPdfOptions {
   onSave?: () => void;
 }
 
-export function downloadExcelFromBase64(
+export function downloadPdfFromBase64(
   base64String: string,
   fileName: string,
-  options?: IDownloadExcelOptions
+  options?: IDownloadPdfOptions
 ) {
   // Convert the base64 string to a Blob
   const byteCharacters = atob(base64String);
@@ -15,7 +15,7 @@ export function downloadExcelFromBase64(
   }
   const byteArray = new Uint8Array(byteNumbers);
   const blob = new Blob([byteArray], {
-    type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    type: 'application/pdf'
   });
 
   // Create URL for the Blob
