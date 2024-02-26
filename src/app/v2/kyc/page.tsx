@@ -16,11 +16,10 @@ import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-ve
 import { handleResendOTP } from '@/components/v2/common/otp-verication/helpers/handle-resend-otp';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import {
-  useSendResetOtpMutation,
-  useVerifyResetOTPMutation
-} from '@/features/api/otp-verification';
+  useVerifyEmailOTPMutation,
+  useResendEmailOTPMutation
+} from '@/features/api/kyc';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
-import { handleResetOTP } from '../forgot-password/hooks/verify-reset-otp';
 import arrowBackwar from '@public/v2/assets/icons/kyc/arrow-backward.svg';
 import Image from 'next/image';
 import StepperComponent from '@/components/v2/common/stepper';
@@ -29,6 +28,7 @@ import { useKycMutation, useLazyGetKycDetailQuery } from '@/features/api/kyc';
 import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import InvalidCreds from '../login/component/invalid-creds';
 
 const initialTokenState = {
   token: '',
@@ -45,8 +45,8 @@ const KYC = () => {
   const { setIsInputDialogOpen, setDialogContent, setIsDialogOpen } =
     modalSetState;
   const [kyc] = useKycMutation();
-  const [sendResetOtp] = useSendResetOtpMutation();
-  const [verifyResetOTP] = useVerifyResetOTPMutation();
+  const [verifyEmailOTP] = useVerifyEmailOTPMutation();
+  const [resendEmailOTP] = useResendEmailOTPMutation();
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
   const [currentStepperStep, setCurrentStepperStep] = useState(0);
@@ -134,7 +134,6 @@ const KYC = () => {
   useEffect(() => {
     triggerKycDetail({}).then(res => {
       let kycDetails = res?.data;
-      console.log(kycDetails, 'kycDetails');
       if (kycDetails?.kyc?.status) {
         switch (kycDetails?.kyc?.status) {
           case kycStatus.INPROGRESS:
@@ -290,7 +289,6 @@ const KYC = () => {
     currentState: number;
   }) => {
     // const nextStep = currentStepperStep + 1;
-    console.log('hello');
     // Perform data validation
     const validationError = await validateScreen(
       formState.online.sections[screenName],
@@ -335,8 +333,13 @@ const KYC = () => {
           rejectedSteps.delete(currentState);
           setRejectedSteps(new Set(rejectedSteps));
           screenName === kycScreenIdentifierNames.PERSONAL_DETAILS &&
-            !formState.isEmailVerified &&
-            setIsInputDialogOpen(true);
+          !formState.isEmailVerified
+            ? (setIsInputDialogOpen(true),
+              setToken((prev: any) => ({
+                ...prev,
+                token: response?.data?.data?.token || ''
+              })))
+            : {};
           // setCurrentStepperStep(nextStep);
         } else {
           rejectedSteps.add(currentState);
@@ -370,10 +373,8 @@ const KYC = () => {
         }
       })
       .catch(error => {
-        console.log('');
         rejectedSteps.add(currentState);
         setRejectedSteps(new Set(rejectedSteps));
-        console.log('error');
         setIsDialogOpen(true); // Show error dialog
         setDialogContent(
           <>
@@ -401,7 +402,7 @@ const KYC = () => {
         );
       });
   };
-
+  console.log(token, 'pppppppppp');
   // Function to move back to the previous step
   const handleStepperBack = () => {
     if (currentStepperStep === 0) {
@@ -418,7 +419,6 @@ const KYC = () => {
   //     return newCompletedSteps;
   //   });
   // };
-  console.log(formState, 'formState');
   const renderComponent = (state: string) => {
     switch (state) {
       case kycScreenIdentifierNames.COMPANY_OWNER_DETAILS:
@@ -517,14 +517,29 @@ const KYC = () => {
             onClick={() =>
               resendTimer > 0
                 ? {}
-                : handleResendOTP({
-                    otpVerificationFormState,
-                    setResendTimer,
-                    sendOtp: sendResetOtp,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    setToken
-                  })
+                : resendEmailOTP({})
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        setResendTimer(60);
+                        //  setIsInputDialogOpen(false)
+                        //  dispatch(
+                        //   updateFormState({
+                        //     name: 'formState.isEmailVerified',
+                        //     value: true
+                        //   })
+                        // );
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <InvalidCreds
+                          content={e?.data?.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    })
             }
           >
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
@@ -535,16 +550,31 @@ const KYC = () => {
           <IndividualActionButton
             onClick={() =>
               checkOTPEntry(otpValues)
-                ? (handleResetOTP({
-                    otpValues,
-                    setCurrentState,
-                    token,
-                    setIsDialogOpen,
-                    setDialogContent,
-                    verifyResetOTP,
-                    phoneNumber,
-                    setToken
-                  }),
+                ? (verifyEmailOTP({
+                    token: token.token,
+                    otp: otpValues.join('')
+                  })
+                    .unwrap()
+                    .then((res: any) => {
+                      if (res) {
+                        setIsInputDialogOpen(false);
+                        dispatch(
+                          updateFormState({
+                            name: 'formState.isEmailVerified',
+                            value: true
+                          })
+                        );
+                      }
+                    })
+                    .catch((e: any) => {
+                      setIsDialogOpen(true);
+                      setDialogContent(
+                        <InvalidCreds
+                          content={e?.data?.message}
+                          handleClick={() => setIsDialogOpen(false)}
+                        />
+                      );
+                    }),
                   setOtpError(''))
                 : setOtpError(
                     `We're sorry, but the OTP you entered is incorrect or has expired`
