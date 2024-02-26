@@ -364,6 +364,7 @@ export const Parameters = ({
     <div id="Parameters">
       <AccordionComponent
         value="Parameters"
+        defaultValue="closed"
         isDisable={false}
         accordionContent={
           <div className="flex flex-wrap gap-[24px] px-[16px] py-[24px]">
