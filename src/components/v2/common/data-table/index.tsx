@@ -470,6 +470,9 @@ const DataTable = ({
       }
     },
 
+    // renderEmptyRowsFallback: () => {
+    //   return <>no result</>;
+    // },
     positionGlobalFilter: 'left',
     //styling
 

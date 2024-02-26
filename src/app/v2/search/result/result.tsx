@@ -210,7 +210,7 @@ const Result = ({
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText, setInputError } = errorSetState;
-  const { isError, errorText, messageColor, inputError } = errorState;
+  const { isError, errorText, inputError } = errorState;
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent, isInputDialogOpen } = modalState;
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
@@ -823,7 +823,7 @@ const Result = ({
                     <div>
                       <span className="hidden  text-successMain" />
                       <span
-                        className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
+                        className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
                       >
                         {errorText}
                       </span>
