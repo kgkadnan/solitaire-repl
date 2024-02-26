@@ -82,7 +82,7 @@ const ConfirmStone = ({ rows, columns, goBackToListView, activeTab }: any) => {
     if (isExcist.length > 0) {
       setBreadCrumLabel(isExcist);
     } else {
-      setBreadCrumLabel(`Result-${activeTab}`);
+      setBreadCrumLabel(`Result ${activeTab}`);
     }
   }, []);
 
