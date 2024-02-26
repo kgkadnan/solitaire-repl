@@ -41,6 +41,33 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
   );
 };
 
+export const RenderTracerId = ({ row, renderedCellValue }: any) => {
+  let link = row?.original?.tracr_id ?? '';
+  const value =
+    renderedCellValue?.length > 18
+      ? `${renderedCellValue.slice(0, 18)}...`
+      : renderedCellValue;
+
+  return (
+    <Link
+      href={link}
+      target="_blank"
+      className="cursor-pointer"
+      onClick={e => {
+        e.stopPropagation();
+      }}
+      style={{
+        display: 'inline-block',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis'
+      }}
+    >
+      {value}
+    </Link>
+  );
+};
+
 export const RednderLocation = ({ renderedCellValue }: any) => {
   let imageSrc;
 
@@ -73,7 +100,7 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
     <>
       {' '}
       {row.original.lab === 'GIA' ? (
-        <Link href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
+        <Link href={`${GIA_LINK}${row.original.rpt_number}`} target="_blank">
           {renderedCellValue}
         </Link>
       ) : (

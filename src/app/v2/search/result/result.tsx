@@ -30,7 +30,8 @@ import {
   RednderLocation,
   RenderAmount,
   RenderShape,
-  RenderMeasurements
+  RenderMeasurements,
+  RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import {
   useConfirmProductMutation,
@@ -182,6 +183,9 @@ const mapColumns = (columns: any) =>
           return { ...commonProps, Cell: RednderLocation };
         case 'lot_id':
           return { ...commonProps, Cell: RenderLotId };
+
+        case 'tracr_id':
+          return { ...commonProps, Cell: RenderTracerId };
         default:
           return {
             ...commonProps,

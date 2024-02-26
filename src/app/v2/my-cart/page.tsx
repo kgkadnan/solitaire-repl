@@ -36,7 +36,8 @@ import {
   RenderDiscount,
   RenderLab,
   RenderMeasurements,
-  RenderShape
+  RenderShape,
+  RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Loader from '@/components/v2/common/loader';
 import {
@@ -248,6 +249,8 @@ const MyCart = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
 
           default:
             return {
