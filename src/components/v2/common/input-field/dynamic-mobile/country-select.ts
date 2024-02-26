@@ -14,6 +14,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
       // outline: '1px solid var(--neutral-200)',
       width: '60px',
       boxShadow: 'var(--input-shadow) inset',
+
       // This line disable the blue border
       cursor: isDisabled ? 'not-allowed' : 'default', // Change cursor to "not allowed" if isDisabled is true
 
@@ -54,6 +55,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
         ...styles,
         backgroundColor: 'var(--neutral-0)',
         color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
+        cursor: isDisabled ? 'not-allowed' : 'default',
         ':active': {
           ...styles[':active'],
           border: 'none',
