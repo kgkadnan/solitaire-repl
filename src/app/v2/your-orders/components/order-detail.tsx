@@ -74,6 +74,9 @@ const mapColumns = (columns: any) =>
         case 'measurements':
           return { ...commonProps, Cell: RenderMeasurements };
 
+        case 'tracr_id':
+          return { ...commonProps, Cell: RenderTracerId };
+
         default:
           return {
             ...commonProps,
