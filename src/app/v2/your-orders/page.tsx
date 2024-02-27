@@ -352,7 +352,7 @@ const MyDiamonds = () => {
                     key={label}
                     onClick={() => handleTabs({ tab: status })}
                   >
-                    {label} {count && `(${count})`}
+                    {label} {count > 0 && `(${count})`}
                   </button>
                 );
               })}
