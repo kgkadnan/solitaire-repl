@@ -13,8 +13,8 @@ interface ISearchInputProps {
   suggestions?: any[];
   handleSuggestionClick?: (suggestion: string) => void;
   handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
-  setShowSuggestions: any;
-  showSuggestions: boolean;
+  setShowSuggestions?: any;
+  showSuggestions?: boolean;
 }
 
 const SearchInputField: React.FC<ISearchInputProps> = ({

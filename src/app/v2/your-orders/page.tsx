@@ -58,6 +58,8 @@ const MyDiamonds = () => {
   let myInvoicelimit = MAX_MY_INVOICE_LIMIT_COUNT;
   const singleExpand = 'items.variant.product%2Citems.variant.prices';
 
+  const [showSuggestions, setShowSuggestions] = useState(false);
+
   const [triggerProductDetail] = useLazyGetProductDetailsQuery();
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -166,6 +168,7 @@ const MyDiamonds = () => {
 
   const handleSearch = (e: any) => {
     const inputValue = e.target.value;
+    setShowSuggestions(true);
     setSearch(inputValue);
 
     if (activeTab === PENDING_INVOICE) {
@@ -360,6 +363,8 @@ const MyDiamonds = () => {
                 handleSearch={handleSearch}
                 search={search}
                 handleClearInput={handleClearInput}
+                setShowSuggestions={setShowSuggestions}
+                showSuggestions={showSuggestions}
               />
               <FilterByDays
                 filterFunction={filterFunction}
