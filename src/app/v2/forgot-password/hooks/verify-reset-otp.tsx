@@ -32,8 +32,6 @@ export const handleResetOTP = ({
     .unwrap()
     .then((res: any) => {
       if (res) {
-        // router.push('/v2/login')
-        // userLoggedIn(res.access_token);
         setToken((prev: any) => ({
           ...prev,
           token: res.access_token || ''

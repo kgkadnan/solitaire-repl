@@ -66,7 +66,10 @@ const KycNudgeModal = ({ onClose }: any) => {
                 {
                   variant: 'primary',
                   label: 'Complete KYC Now',
-                  handler: () => router.push('/v2/kyc'),
+                  handler: () => {
+                    localStorage.setItem('show-nudge', 'MINI'),
+                      router.push('/v2/kyc');
+                  },
                   customStyle: 'flex-1 w-full'
                 }
               ]}
