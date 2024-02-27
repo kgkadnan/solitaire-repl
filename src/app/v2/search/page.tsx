@@ -153,52 +153,52 @@ const Search = () => {
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    if (!yourSelection[id - 1]?.isSavedSearch) {
-      setDialogContent(
-        <>
-          {' '}
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={warningIcon} alt="warningIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-            <div>
-              <h1 className="text-headingS text-neutral900">
-                {' '}
-                {ManageLocales('app.search.confirmHeader')}
-              </h1>
-              <p className="text-neutral600 text-mRegular">
-                {ManageLocales('app.search.closeSpecificTabs')}
-              </p>
-            </div>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.modal.no'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                    // closeSearch(id, yourSelection);
-                  },
-                  customStyle: 'flex-1 h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.yes'),
-                  handler: () => {
-                    setIsDialogOpen(false);
-                    closeSearch(id, yourSelection);
-                  },
-                  customStyle: 'flex-1 h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
-      );
-      setIsDialogOpen(true);
-    } else {
-      closeSearch(id, yourSelection);
-    }
+    // if (!yourSelection[id - 1]?.isSavedSearch) {
+    //   setDialogContent(
+    //     <>
+    //       {' '}
+    //       <div className="absolute left-[-84px] top-[-84px]">
+    //         <Image src={warningIcon} alt="warningIcon" />
+    //       </div>
+    //       <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+    //         <div>
+    //           <h1 className="text-headingS text-neutral900">
+    //             {' '}
+    //             {ManageLocales('app.search.confirmHeader')}
+    //           </h1>
+    //           <p className="text-neutral600 text-mRegular">
+    //             {ManageLocales('app.search.closeSpecificTabs')}
+    //           </p>
+    //         </div>
+    //         <ActionButton
+    //           actionButtonData={[
+    //             {
+    //               variant: 'secondary',
+    //               label: ManageLocales('app.modal.no'),
+    //               handler: () => {
+    //                 setIsDialogOpen(false);
+    //                 // closeSearch(id, yourSelection);
+    //               },
+    //               customStyle: 'flex-1'
+    //             },
+    //             {
+    //               variant: 'primary',
+    //               label: ManageLocales('app.modal.yes'),
+    //               handler: () => {
+    //                 setIsDialogOpen(false);
+    //                 closeSearch(id, yourSelection);
+    //               },
+    //               customStyle: 'flex-1'
+    //             }
+    //           ]}
+    //         />
+    //       </div>
+    //     </>
+    //   );
+    //   setIsDialogOpen(true);
+    // } else {
+    closeSearch(id, yourSelection);
+    // }
   };
   return (
     <div>
