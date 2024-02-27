@@ -45,9 +45,7 @@
   border: 1px solid var(--neutral-200);
 }
 .selectedSuggestion {
-  background-color: var(
-    --neutral-200
-  ); /* Change this to your desired background color */
+  background-color: var(--neutral-100);
 }
 
 .dropdown li:hover {
