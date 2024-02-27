@@ -2,8 +2,8 @@ import { Checkbox } from '@components/v2/ui/checkbox';
 import React from 'react';
 
 interface ICheckboxComponentProps {
-  onClick: (evt: any) => void;
   isChecked: boolean;
+  onClick?: (evt: any) => void;
   styles?: any;
 }
 

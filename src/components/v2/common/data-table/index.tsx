@@ -13,7 +13,7 @@ import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
+// import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
@@ -44,6 +44,7 @@ import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+import Share from '../copy-and-share/share';
 
 const theme = createTheme({
   typography: {
@@ -107,7 +108,9 @@ const DataTable = ({
   setSearchParameters,
   modalSetState,
   downloadExcel,
-  data
+  data,
+  setErrorText,
+  setIsError
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -124,6 +127,7 @@ const DataTable = ({
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
+  console.log(rowSelection, 'rowSelection');
   const onDropDownClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
@@ -750,11 +754,11 @@ const DataTable = ({
             </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
-              <Image
-                src={shareButtonSvg}
-                alt={'share'}
-                width={38}
-                height={38}
+              <Share
+                rows={rows}
+                selectedProducts={rowSelection}
+                setErrorText={setErrorText}
+                setIsError={setIsError}
               />
             </div>
           </div>

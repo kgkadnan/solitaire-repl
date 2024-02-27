@@ -8,7 +8,12 @@ const page = () => {
     <div>
       Dashboard
       <CopyToShare />
-      <Share />
+      <Share
+        products={[
+          { stockNo: 1, shape: 'BR' },
+          { stockNo: 2, shape: 'PR' }
+        ]}
+      />
     </div>
   );
 };

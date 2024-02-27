@@ -306,7 +306,7 @@ const Result = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
-
+  console.log(errorText, 'llllllllll');
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
@@ -769,6 +769,7 @@ const Result = ({
               data={data}
               setErrorText={setErrorText}
               downloadExcel={downloadExcel}
+              setIsError={setIsError}
             />
           </div>
         )}
