@@ -179,7 +179,7 @@ const Search = () => {
     //                 setIsDialogOpen(false);
     //                 // closeSearch(id, yourSelection);
     //               },
-    //               customStyle: 'flex-1'
+    //               customStyle: 'flex-1 h-10'
     //             },
     //             {
     //               variant: 'primary',
@@ -188,7 +188,7 @@ const Search = () => {
     //                 setIsDialogOpen(false);
     //                 closeSearch(id, yourSelection);
     //               },
-    //               customStyle: 'flex-1'
+    //               customStyle: 'flex-1 h-10'
     //             }
     //           ]}
     //         />
