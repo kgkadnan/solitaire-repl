@@ -528,22 +528,22 @@ const MyCart = () => {
                   label: ManageLocales('app.myCart.actionButton.confirmStone'),
                   handler: () => {},
                   isHidden: activeTab !== AVAILABLE_STATUS
-                },
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.myCart.actionButton.compareStone'),
-                  handler: () => {},
-                  isHidden:
-                    activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales(
-                    'app.myCart.actionButton.viewSimilarStone'
-                  ),
-                  handler: () => {},
-                  isHidden: activeTab === AVAILABLE_STATUS
                 }
+                // {
+                //   variant: 'secondary',
+                //   label: ManageLocales('app.myCart.actionButton.compareStone'),
+                //   handler: () => {},
+                //   isHidden:
+                //     activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
+                // }
+                // {
+                //   variant: 'primary',
+                //   label: ManageLocales(
+                //     'app.myCart.actionButton.viewSimilarStone'
+                //   ),
+                //   handler: () => {},
+                //   isHidden: activeTab === AVAILABLE_STATUS
+                // }
               ]}
             />{' '}
           </div>
