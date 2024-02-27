@@ -205,7 +205,7 @@ export const DiscountPrice = ({
         value="Discount% Price/Ct Amount Range"
         isDisable={true}
         accordionContent={
-          <div className="grid md:grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 justify-between px-[16px] py-[24px] gap-[16px] ">
+          <div className="flex flex-wrap justify-between px-[16px] py-[24px] gap-[16px] ">
             {discountPriceAmoutData.map(items => {
               return (
                 <div key={items.label}>
