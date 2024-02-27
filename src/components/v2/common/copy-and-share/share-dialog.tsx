@@ -17,7 +17,7 @@ export const ShareDialog: React.FC<IDialog> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose} defaultOpen={false}>
       <DialogContent
-        className={`min-w-[650px] min-h-[360px] bg-neutral25 flex flex-col  p-[24px]  ${dialogStyle}`}
+        className={`min-w-[650px] min-h-[360px] bg-neutral25 flex flex-col !rounded-[8px]  p-[24px]  ${dialogStyle}`}
       >
         {renderContent()}
       </DialogContent>

@@ -483,6 +483,8 @@ const MyCart = () => {
                 modalSetState={modalSetState}
                 downloadExcel={downloadExcel}
                 myCart={true}
+                setIsError={setIsError}
+                setErrorText={setErrorText}
               />
             </div>
           </div>
