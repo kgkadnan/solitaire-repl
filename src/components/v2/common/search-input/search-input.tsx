@@ -59,6 +59,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
     }, 200);
   };
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   return (
     <div className={styles.searchInputMain}>
       <div className="relative">
@@ -80,7 +81,11 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
         />
       </div>
       {showSuggestions && suggestions && (
-        <ul className={styles.dropdown}>
+        <ul
+          className={`${styles.dropdown} ${
+            isNudge ? 't-[300px]' : 't-[200px]'
+          }`}
+        >
           {suggestions.map((suggestion: string, index: number) => (
             <li
               key={index}

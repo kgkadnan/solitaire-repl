@@ -231,7 +231,7 @@ const SavedSearch = () => {
             <SearchInputField
               type="text"
               name="Search"
-              value={data?.searchValue}
+              value={savedSearchState.search}
               onChange={e =>
                 handleSearch({
                   e,
