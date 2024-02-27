@@ -106,6 +106,7 @@ const OTPVerification = ({
           setOtpValues={setOtpValues}
           otpValues={otpValues}
           error={error}
+          setError={setError}
         />
 
         <div className="flex ">
@@ -146,7 +147,8 @@ const OTPVerification = ({
                   setDialogContent,
                   verifyOTP,
                   role,
-                  setToken
+                  setToken,
+                  setError
                 }),
                 setError(''))
               : setError(

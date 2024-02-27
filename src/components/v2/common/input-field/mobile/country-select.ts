@@ -2,7 +2,7 @@ export const colourStyles = (error: any) => {
   return {
     control: (styles: any) => ({
       ...styles,
-      color: 'hsl(var(--solitaire-tertiary))',
+      color: 'var(--neutral-500)',
 
       backgroundColor: 'var(--neutral-0)',
       borderRadius: '4px 0px 0px 4px',
@@ -12,7 +12,7 @@ export const colourStyles = (error: any) => {
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
       // outline: '1px solid var(--neutral-200)',
-      width: '60px',
+      width: '65px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {
@@ -33,11 +33,11 @@ export const colourStyles = (error: any) => {
     }),
     singleValue: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)'
+      color: 'var(--neutral-500)'
     }),
     placeholder: (styles: any) => ({
       ...styles,
-      color: 'var(--neutral-900)',
+      color: 'var(--neutral-500)',
       border: 'none',
       height: '38px'
     }),

@@ -152,7 +152,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       setRowSelection
                     });
                   },
-                  customStyle: 'flex-1 w-full'
+                  customStyle: 'flex-1 w-full h-10'
                 },
                 {
                   variant: 'primary',
@@ -170,7 +170,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       setRowSelection
                     });
                   },
-                  customStyle: 'flex-1 w-full'
+                  customStyle: 'flex-1 w-full h-10'
                 }
               ]}
             />
@@ -219,7 +219,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                           variant: 'primary',
                           label: ManageLocales('app.modal.okay'),
                           handler: () => modalSetState.setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         }
                       ]}
                     />
@@ -248,7 +248,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       variant: 'primary',
                       label: ManageLocales('app.modal.okay'),
                       handler: () => modalSetState.setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />

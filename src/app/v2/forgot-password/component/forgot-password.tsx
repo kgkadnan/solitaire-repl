@@ -46,29 +46,30 @@ const ForgotComponent = ({
           value={value}
           onKeyDown={handleKeyDown}
         />
+        <div className="flex flex-col gap-1">
+          <IndividualActionButton
+            onClick={handleForgotPassword}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%]"
+          >
+            {ManageLocales('app.sendOTP')}
+          </IndividualActionButton>
 
-        <IndividualActionButton
-          onClick={handleForgotPassword}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px] w-[100%]"
-        >
-          {ManageLocales('app.sendOTP')}
-        </IndividualActionButton>
-
-        <IndividualActionButton
-          onClick={() => router.push('/v2/login')}
-          variant={'secondary'}
-          size={'custom'}
-          className="border-none w-[100%]"
-        >
-          <div className="text-mMedium font-medium flex items-center">
-            <Image src={backArrow} alt="backArrow" />
-            <p className="text-neutral-900">
-              {ManageLocales('app.goBackToLogin')}
-            </p>
-          </div>
-        </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => router.push('/v2/login')}
+            variant={'secondary'}
+            size={'custom'}
+            className="border-none w-[100%]"
+          >
+            <div className="text-mMedium font-medium flex items-center">
+              <Image src={backArrow} alt="backArrow" />
+              <p className="text-neutral-900">
+                {ManageLocales('app.goBackToLogin')}
+              </p>
+            </div>
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
   );
