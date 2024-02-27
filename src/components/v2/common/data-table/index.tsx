@@ -483,18 +483,26 @@ const DataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? isResult || myCart
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 120px)'
+          ? myCart
+            ? showCalculatedField
+              ? 'calc(100vh - 150px)'
+              : 'calc(100vh - 100px)'
+            : 'calc(100vh - 220px)'
           : myCart
-          ? 'calc(100vh - 460px)'
+          ? showCalculatedField
+            ? 'calc(100vh - 460px)'
+            : 'calc(100vh - 400px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
-          ? isResult || myCart
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 120px)'
+          ? myCart
+            ? showCalculatedField
+              ? 'calc(100vh - 150px)'
+              : 'calc(100vh - 100px)'
+            : 'calc(100vh - 220px)'
           : myCart
-          ? 'calc(100vh - 460px)'
+          ? showCalculatedField
+            ? 'calc(100vh - 460px)'
+            : 'calc(100vh - 400px)'
           : 'calc(100vh - 399px)'
       }
     },

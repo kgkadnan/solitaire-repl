@@ -448,7 +448,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-top-[8px] h-[calc(100vh-185px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-185px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
@@ -496,7 +496,7 @@ const MyCart = () => {
         )}
 
         {rows.length > 0 ? (
-          <div className="flex gap-3 justify-end items-center p-[16px] border-[1px] border-t-0 border-b-0 border-neutral200 shadow-inputShadow ">
+          <div className="flex gap-3 justify-end items-center p-[16px]  ">
             {isError && (
               <div>
                 <span className="hidden  text-successMain" />
