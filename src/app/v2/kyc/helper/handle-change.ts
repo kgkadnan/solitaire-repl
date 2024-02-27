@@ -16,6 +16,8 @@ export const handleInputChange = async (
     typeof value === 'string' ? value.trim() : value
   );
 
+  console.log('path', path, value);
+
   dispatch(
     updateFormState({
       name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
