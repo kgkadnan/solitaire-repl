@@ -26,13 +26,11 @@ import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Breadcrum from '../search-breadcrum/breadcrum';
 import {
-  useGetSavedSearchListQuery,
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
-import { IItem } from '@/app/v2/search/saved-search/saved-search';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
@@ -110,13 +108,12 @@ const DataTable = ({
   downloadExcel,
   data,
   setErrorText,
-  setIsError
+  setIsError,
+  searchList
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
 
-  const { data: searchList }: { data?: IItem[] } =
-    useGetSavedSearchListQuery('');
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
