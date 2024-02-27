@@ -3,6 +3,7 @@ import arrowForward from '@public/assets/icons/arrow-forward.svg';
 import arrowBackward from '@public/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
 import { Link } from 'react-scroll';
+import { kycStatus } from '@/constants/enums/kyc';
 
 interface IAnchorLinkNavigation {
   anchorNavigations: string[];
@@ -13,6 +14,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const [activeLink, setActiveLink] = useState('');
   const [allowScrollReset, setAllowScrollReset] = useState(true);
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   const handleScroll = (scrollOffset: number) => {
     // setActiveLink('')
@@ -48,7 +50,11 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   return (
     <div
       className={`flex items-center w-full bg-neutral0 sticky  z-[3] ${
-        localStorage.getItem('show-nudge') ? 'top-[121.5px]' : 'top-[60px]'
+        localStorage.getItem('show-nudge') === 'MINI' &&
+        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'top-[121.5px]'
+          : 'top-[60px]'
       } `}
     >
       <div

@@ -181,7 +181,7 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
                   kycScreenIdentifierNames.PERSONAL_DETAILS
                 ]?.['email'] ?? ''
               }
-              disabled={formState.is_email_verified}
+              disabled={formState.isEmailVerified}
               placeholder={'Enter email id'}
               styles={{
                 input: `rounded-l-[0px] ${
