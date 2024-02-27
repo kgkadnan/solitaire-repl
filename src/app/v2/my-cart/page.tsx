@@ -71,7 +71,7 @@ const MyCart = () => {
     Hold: 0,
     Sold: 0
   });
-  const [tiggerCart, { isLoading }] = useLazyGetCartQuery({});
+  const [tiggerCart, { isLoading }] = useLazyGetCartQuery();
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
 
@@ -97,7 +97,6 @@ const MyCart = () => {
       return item?.product?.diamond_status === activeTab;
     });
 
-    console.log('filteredRows', filteredRows);
     const mappedRows = filteredRows.map((row: any) => row?.product);
     setRows(mappedRows);
     return { filteredRows, counts };
@@ -471,7 +470,7 @@ const MyCart = () => {
 
         {isLoading ? (
           <Loader />
-        ) : rows.length ? (
+        ) : rows.length && memoizedColumns.length ? (
           <div>
             <div className="">
               <DataTable
