@@ -516,14 +516,14 @@ const MyCart = () => {
                   label: ManageLocales('app.myCart.actionButton.delete'),
                   handler: deleteCartHandler
                 },
-                {
-                  variant: 'secondary',
-                  label: ManageLocales(
-                    'app.myCart.actionButton.bookAppointment'
-                  ),
-                  handler: () => {},
-                  isHidden: activeTab !== AVAILABLE_STATUS
-                },
+                // {
+                //   variant: 'secondary',
+                //   label: ManageLocales(
+                //     'app.myCart.actionButton.bookAppointment'
+                //   ),
+                //   handler: () => {},
+                //   isHidden: activeTab !== AVAILABLE_STATUS
+                // },
                 {
                   variant: 'primary',
                   label: ManageLocales('app.myCart.actionButton.confirmStone'),

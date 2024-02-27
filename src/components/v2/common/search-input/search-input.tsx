@@ -13,6 +13,8 @@ interface ISearchInputProps {
   suggestions?: any[];
   handleSuggestionClick?: (suggestion: string) => void;
   handleKeyPress?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
+  setShowSuggestions?: any;
+  showSuggestions?: boolean;
 }
 
 const SearchInputField: React.FC<ISearchInputProps> = ({
@@ -23,9 +25,10 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
   placeholder,
   suggestions,
   handleSuggestionClick,
+  setShowSuggestions,
+  showSuggestions,
   handleKeyPress
 }) => {
-  const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(0);
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'ArrowDown') {
@@ -59,6 +62,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
     }, 200);
   };
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   return (
     <div className={styles.searchInputMain}>
       <div className="relative">
@@ -80,7 +84,11 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
         />
       </div>
       {showSuggestions && suggestions && (
-        <ul className={styles.dropdown}>
+        <ul
+          className={`${styles.dropdown} ${
+            isNudge ? 't-[300px]' : 't-[200px]'
+          }`}
+        >
           {suggestions.map((suggestion: string, index: number) => (
             <li
               key={index}

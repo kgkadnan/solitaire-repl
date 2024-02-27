@@ -11,7 +11,9 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
   activeTab,
   handleSearch,
   search,
-  handleClearInput
+  handleClearInput,
+  setShowSuggestions,
+  showSuggestions
 }) => {
   return (
     <div className="flex">
@@ -28,6 +30,8 @@ export const HeaderSearchBar: React.FC<IHeaderSearchBarProps> = ({
               ? ManageLocales('app.myDiamonds.pendingInvoice.searchByOrderId')
               : ManageLocales('app.myDiamonds.activeInvoice.searchByInvoiceId')
           }
+          setShowSuggestions={setShowSuggestions}
+          showSuggestions={showSuggestions}
         />
         {search && (
           <div className="absolute inset-y-0 right-0 flex items-center pr-1">
