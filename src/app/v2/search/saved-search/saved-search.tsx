@@ -253,12 +253,12 @@ const SavedSearch = () => {
         <div className="h-[70vh] overflow-auto">
           {savedSearchState?.savedSearchData?.length ? (
             savedSearchState?.savedSearchData?.map(
-              ({ id, name, meta_data, created_at }: ISavedSearches) => {
-                const randomIndex = Math.floor(
-                  Math.random() * gradientClasses.length
-                );
-                // Get the random gradient class
-                const randomGradientClass = gradientClasses[randomIndex];
+              ({ id, name, meta_data, created_at }: ISavedSearches, index) => {
+                // Calculate the gradient index based on the item's index
+                const gradientIndex = index % gradientClasses.length;
+                // Get the gradient class for the calculated index
+                const gradientClass = gradientClasses[gradientIndex];
+
                 return (
                   <div
                     className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
@@ -290,7 +290,7 @@ const SavedSearch = () => {
                         isChecked={selectedCheckboxes.includes(id)}
                       />
                       <div
-                        className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                        className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
                       >
                         {name
                           .split(' ') // Split the name into words
