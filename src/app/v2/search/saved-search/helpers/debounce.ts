@@ -14,6 +14,7 @@ interface IHandleSearchProps {
   setSearchByName: React.Dispatch<React.SetStateAction<string>>;
   setSelectedCheckboxes: React.Dispatch<React.SetStateAction<string[]>>;
   setSelectAllChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  setShowSuggestions: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const handleSearch = ({
@@ -22,7 +23,8 @@ export const handleSearch = ({
   debouncedSave,
   setSearchByName,
   setSelectedCheckboxes,
-  setSelectAllChecked
+  setSelectAllChecked,
+  setShowSuggestions
 }: IHandleSearchProps) => {
   const inputValue = e.target.value;
   setSearch(inputValue);
@@ -30,6 +32,7 @@ export const handleSearch = ({
   // Use the debounce function to wrap the debouncedSave function
   const delayedSave = debounce(inputValue => debouncedSave(inputValue), 1000);
   delayedSave(inputValue);
+  setShowSuggestions(true);
 
   if (inputValue.length < 1) {
     setSearchByName('');

@@ -8,7 +8,7 @@ import {
 } from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSavedSearchStateManagement } from './hooks/saved-search-state-management';
 import { DisplayTable } from '@/components/v2/common/display-table';
 import ActionButton from '@/components/v2/common/action-button';
@@ -69,6 +69,7 @@ const SavedSearch = () => {
   );
   // Mutation for deleting items from the saved search
   const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
@@ -168,8 +169,7 @@ const SavedSearch = () => {
     styles.gradient1,
     styles.gradient2,
     styles.gradient3,
-    styles.gradient4,
-    styles.gradient5
+    styles.gradient4
   ];
 
   // Function to handle edit action
@@ -239,9 +239,12 @@ const SavedSearch = () => {
                   debouncedSave,
                   setSearchByName: savedSearchSetState.setSearchByName,
                   setSelectedCheckboxes,
-                  setSelectAllChecked
+                  setSelectAllChecked,
+                  setShowSuggestions
                 })
               }
+              setShowSuggestions={setShowSuggestions}
+              showSuggestions={showSuggestions}
               handleSuggestionClick={handleSuggestionClick}
               suggestions={savedSearchState.suggestions}
             />
