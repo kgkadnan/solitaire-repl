@@ -28,6 +28,8 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
+
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import {
   RednderLocation,
   RenderAmount,
@@ -58,6 +60,7 @@ import { handleComment } from '../search/result/helpers/handle-comment';
 import { useRouter } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useConfirmProductMutation } from '@/features/api/product';
+import { Dropdown } from '@/components/v2/common/dropdown-menu';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -789,6 +792,47 @@ const MyCart = () => {
                     //   isHidden: activeTab === AVAILABLE_STATUS
                     // }
                   ]}
+                />
+                <Dropdown
+                  dropdownTrigger={
+                    <Image
+                      src={threeDotsSvg}
+                      alt="threeDotsSvg"
+                      width={40}
+                      height={40}
+                    />
+                  }
+                  dropdownMenu={[
+                    {
+                      label: ManageLocales(
+                        'app.myCart.actionButton.compareStone'
+                      ),
+                      handler: () => {},
+                      isHidden: activeTab === SOLD_STATUS
+                    },
+                    {
+                      label: ManageLocales(
+                        'app.myCart.actionButton.findMatchingPair'
+                      ),
+                      handler: () => {},
+                      isHidden: activeTab !== AVAILABLE_STATUS
+                    },
+                    {
+                      label: ManageLocales(
+                        'app.myCart.actionButton.bookAppointment'
+                      ),
+                      handler: () => {},
+                      isHidden: activeTab !== AVAILABLE_STATUS
+                    },
+                    {
+                      label: ManageLocales(
+                        'app.myCart.actionButton.viewSimilarStone'
+                      ),
+                      handler: () => {},
+                      isHidden: activeTab === AVAILABLE_STATUS
+                    }
+                  ]}
+                  isDisable={true}
                 />
               </>
             )}

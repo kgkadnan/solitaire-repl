@@ -4,23 +4,27 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger
 } from '@/components/v2/ui/dropdown-menu';
+import Image from 'next/image';
 import React, { useState } from 'react';
+import comingSoon from '@public/v2/assets/icons/coming-soon.svg';
 
 interface IDropdownMenu {
   label: string;
   handler: any;
+  isHidden?: any;
 }
 export interface IDropdownData {
   dropdownTrigger: React.ReactNode;
   dropdownMenu: IDropdownMenu[];
+  isDisable?: boolean;
 }
 
 export const Dropdown: React.FC<IDropdownData> = ({
   dropdownTrigger,
-  dropdownMenu
+  dropdownMenu,
+  isDisable = false
 }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -35,17 +39,32 @@ export const Dropdown: React.FC<IDropdownData> = ({
         {dropdownTrigger}
       </DropdownMenuTrigger>
       {isDropdownOpen && (
-        <DropdownMenuContent className="border-[1px] border-solid border-neutral200 bg-neutral0 text-neutral900 rounded-[8px] hover:bg-neutral-100">
-          {dropdownMenu.map(items => (
-            <div
-              key={items.label}
-              onClick={() => handleItemClick(items.handler)}
-              className="cursor-pointer z-[1112px]"
-            >
-              <DropdownMenuLabel>{items.label}</DropdownMenuLabel>
+        <DropdownMenuContent
+          className={`border-[1px] items-center border-solid border-neutral200  text-neutral900 rounded-[8px]`}
+        >
+          {isDisable && (
+            <div className="flex justify-center border-b-[1px] border-solid border-neutral200 bg-neutral0 py-[8px]">
+              <Image src={comingSoon} alt="comingSoon" />
             </div>
-          ))}
-          <DropdownMenuSeparator className="border-neutral200 bg-neutral200" />
+          )}
+          {dropdownMenu.map(items => {
+            if (items.isHidden) {
+              return null;
+            }
+            return (
+              <div
+                key={items.label}
+                onClick={() => {
+                  isDisable ? null : handleItemClick(items.handler);
+                }}
+                className={`cursor-pointer hover:bg-neutral-100  p-[6px] ${
+                  isDisable ? 'text-neutral400' : 'text-neutral900'
+                }  ${isDisable ? 'bg-neutral100' : 'bg-neutral0'}`}
+              >
+                <DropdownMenuLabel>{items.label}</DropdownMenuLabel>
+              </div>
+            );
+          })}
         </DropdownMenuContent>
       )}
     </DropdownMenu>
