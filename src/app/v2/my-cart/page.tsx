@@ -639,7 +639,7 @@ const MyCart = () => {
           {ManageLocales('app.myCart.mycart')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-185px)] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-165px)] shadow-inputShadow">
         <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
           <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
             {myCartTabs.map(({ label, status, count }) => {
