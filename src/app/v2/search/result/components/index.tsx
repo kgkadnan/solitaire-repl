@@ -63,26 +63,36 @@ const mapColumns = (columns: any) =>
       }
     });
 
-const ConfirmStone = ({ rows, columns, goBackToListView, activeTab }: any) => {
+const ConfirmStone = ({
+  rows,
+  columns,
+  goBackToListView,
+  activeTab,
+  isFromMyCart = false
+}: any) => {
   const [rowSelection, setRowSelection] = useState({});
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   useEffect(() => {
-    const storedSelection = localStorage.getItem('Search');
-
-    if (!storedSelection) return;
-
-    if (activeTab <= 0) return;
-
-    const selections = JSON.parse(storedSelection);
-
-    const isExcist = selections[activeTab - 1]?.saveSearchName;
-
-    if (isExcist.length > 0) {
-      setBreadCrumLabel(isExcist);
+    if (isFromMyCart) {
+      setBreadCrumLabel('My Cart');
     } else {
-      setBreadCrumLabel(`Result ${activeTab}`);
+      const storedSelection = localStorage.getItem('Search');
+
+      if (!storedSelection) return;
+
+      if (activeTab <= 0) return;
+
+      const selections = JSON.parse(storedSelection);
+
+      const isExcist = selections[activeTab - 1]?.saveSearchName;
+
+      if (isExcist.length > 0) {
+        setBreadCrumLabel(isExcist);
+      } else {
+        setBreadCrumLabel(`Result ${activeTab}`);
+      }
     }
   }, []);
 
