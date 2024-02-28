@@ -397,9 +397,11 @@ const DataTable = ({
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
-    enableRowSelection: true,
+    enableRowSelection: row => !row.id.includes('shape'),
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
+    selectAllMode: 'all',
+    enableSubRowSelection: true,
 
     icons: {
       SearchIcon: () => (
@@ -471,6 +473,7 @@ const DataTable = ({
       showGlobalFilter: true,
       expanded: true,
       grouping: ['shape'],
+
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       }
@@ -553,6 +556,7 @@ const DataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
+
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -572,45 +576,54 @@ const DataTable = ({
         }
       };
     },
-    muiSelectAllCheckboxProps: {
-      sx: {
-        color: 'var(--neutral-200)',
-        '& .MuiSvgIcon-root': {
-          fontWeight: 100,
-          fontSize: '26px'
-        },
-        '&.Mui-checked': {
-          color: 'var(--primary-main)'
-        },
-        '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
-          /* Your styles for the element */
-          color: 'var(--primary-main)'
-        },
-        '&.MuiCheckbox-indeterminate': {
-          color: 'var(--primary-main)'
+    muiSelectAllCheckboxProps: () => {
+      return {
+        indeterminate: false,
+        sx: {
+          color: 'var(--neutral-200)',
+          '& .MuiSvgIcon-root': {
+            fontWeight: 100,
+            fontSize: '26px'
+          },
+          '&.Mui-checked': {
+            color: 'var(--primary-main)'
+          },
+          '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
+            /* Your styles for the element */
+            color: 'var(--primary-main)'
+          },
+          '&.MuiCheckbox-indeterminate': {
+            color: 'var(--primary-main)'
+          }
         }
-      }
+      };
     },
 
-    muiSelectCheckboxProps: {
-      sx: {
-        color: 'var(--neutral-200)',
+    muiSelectCheckboxProps: ({ row }) => {
+      return {
+        indeterminate: false,
+        sx: {
+          color: 'var(--neutral-200)',
 
-        '& .MuiSvgIcon-root': {
-          fontSize: '26px',
-          fontWeight: 100
-          // fill: 'var(--neutral-200)'
-        },
-        '& .MuiCheckbox-indeterminate': {
-          display: 'none'
-        },
-        '&.Mui-checked': {
-          color: 'var(--primary-main)'
-        },
-        '&.MuiCheckbox-indeterminate': {
-          color: 'var(--primary-main)'
+          display: row.id.includes('shape') ? 'none' : 'contents',
+          visibility: row.id.includes('shape') ? 'hidden' : 'visible',
+
+          '& .MuiSvgIcon-root': {
+            fontSize: '26px',
+            fontWeight: 100
+            // fill: 'var(--neutral-200)'
+          },
+          '& .MuiCheckbox-indeterminate': {
+            display: 'none'
+          },
+          '&.Mui-checked': {
+            color: 'var(--primary-main)'
+          },
+          '&.MuiCheckbox-indeterminate': {
+            color: 'var(--primary-main)'
+          }
         }
-      }
+      };
     },
 
     muiTablePaperProps: {
