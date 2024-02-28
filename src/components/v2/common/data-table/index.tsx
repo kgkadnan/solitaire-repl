@@ -397,11 +397,9 @@ const DataTable = ({
     enableExpandAll: false,
     enableColumnDragging: false,
     groupedColumnMode: 'remove',
-    enableRowSelection: row => !row.id.includes('shape'),
+    enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
-    selectAllMode: 'all',
-    enableSubRowSelection: true,
 
     icons: {
       SearchIcon: () => (
@@ -447,8 +445,7 @@ const DataTable = ({
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
-
-              paddingLeft: '0px',
+              padding: '0px',
               ':hover': {
                 border: 'none'
               }
@@ -474,7 +471,6 @@ const DataTable = ({
       showGlobalFilter: true,
       expanded: true,
       grouping: ['shape'],
-
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       }
@@ -494,24 +490,24 @@ const DataTable = ({
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
-              ? 'calc(100vh - 150px)'
-              : 'calc(100vh - 100px)'
-            : 'calc(100vh - 220px)'
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 460px)'
-            : 'calc(100vh - 400px)'
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
-              ? 'calc(100vh - 150px)'
-              : 'calc(100vh - 100px)'
-            : 'calc(100vh - 220px)'
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 460px)'
-            : 'calc(100vh - 400px)'
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)'
       }
     },
@@ -557,7 +553,6 @@ const DataTable = ({
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
-
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }
@@ -577,54 +572,45 @@ const DataTable = ({
         }
       };
     },
-    muiSelectAllCheckboxProps: () => {
-      return {
-        // indeterminate: false,
-        sx: {
-          color: 'var(--neutral-200)',
-          '& .MuiSvgIcon-root': {
-            fontWeight: 100,
-            fontSize: '26px'
-          },
-          '&.Mui-checked': {
-            color: 'var(--primary-main)'
-          },
-          '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
-            /* Your styles for the element */
-            color: 'var(--primary-main)'
-          },
-          '&.MuiCheckbox-indeterminate': {
-            color: 'var(--primary-main)'
-          }
+    muiSelectAllCheckboxProps: {
+      sx: {
+        color: 'var(--neutral-200)',
+        '& .MuiSvgIcon-root': {
+          fontWeight: 100,
+          fontSize: '26px'
+        },
+        '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        },
+        '&.MuiButtonBase-root.MuiCheckbox-root.MuiCheckbox-indeterminate': {
+          /* Your styles for the element */
+          color: 'var(--primary-main)'
+        },
+        '&.MuiCheckbox-indeterminate': {
+          color: 'var(--primary-main)'
         }
-      };
+      }
     },
 
-    muiSelectCheckboxProps: ({ row }) => {
-      return {
-        // indeterminate: false,
-        sx: {
-          color: 'var(--neutral-200)',
+    muiSelectCheckboxProps: {
+      sx: {
+        color: 'var(--neutral-200)',
 
-          display: row.id.includes('shape') ? 'none' : 'contents',
-          visibility: row.id.includes('shape') ? 'hidden' : 'visible',
-
-          '& .MuiSvgIcon-root': {
-            fontSize: '26px',
-            fontWeight: 100
-            // fill: 'var(--neutral-200)'
-          },
-          '& .MuiCheckbox-indeterminate': {
-            display: 'none'
-          },
-          '&.Mui-checked': {
-            color: 'var(--primary-main)'
-          },
-          '&.MuiCheckbox-indeterminate': {
-            color: 'var(--primary-main)'
-          }
+        '& .MuiSvgIcon-root': {
+          fontSize: '26px',
+          fontWeight: 100
+          // fill: 'var(--neutral-200)'
+        },
+        '& .MuiCheckbox-indeterminate': {
+          display: 'none'
+        },
+        '&.Mui-checked': {
+          color: 'var(--primary-main)'
+        },
+        '&.MuiCheckbox-indeterminate': {
+          color: 'var(--primary-main)'
         }
-      };
+      }
     },
 
     muiTablePaperProps: {
@@ -639,7 +625,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[72px] items-start justify-between border-b-[1px] border-neutral200 flex p-[16px] ">
+          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[12px] items-center">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -691,7 +677,7 @@ const DataTable = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '16px'
+            padding: '12px 16px'
           }}
         >
           <div>
