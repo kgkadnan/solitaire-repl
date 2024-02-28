@@ -74,6 +74,7 @@
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
   "app.myCart.actionButton.bookAppointment": "Book Appointment",
+  "app.myCart.actionButton.findMatchingPair": "Find Matching Pair",
   "app.myCart.actionButton.confirmStone": "Confirm Stone",
   "app.myCart.actionButton.viewSimilarStone": "View Similar Stone",
   "app.myCart.actionButton.compareStone": "Compare Stone",
@@ -99,6 +100,11 @@
   "app.search.maxTabReached.content": "You've reached the limit of 10 open tabs. Please close an existing tab to open a new one.",
   "app.search.maxLimit": "Are you sure you want to close all the active search tabs?",
   "app.search.manageLimit": "Manage Tabs",
+
+  "app.search.actionButton.bookAppointment": "Book Appointment",
+  "app.search.actionButton.findMatchingPair": "Find Matching Pair",
+  "app.search.actionButton.compareStone": "Compare Stone",
+
 
   "app.register": "Register",
   "app.register.okay": "Okay!",

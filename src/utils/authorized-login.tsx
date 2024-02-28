@@ -13,7 +13,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     const { authToken, isTokenChecked, userLoggedOut } = useUser();
     const router = useRouter();
     const currentPath = usePathname();
-
+    const isV2Route = v2Routes.includes(currentPath);
     const [isAuthorized, setIsAuthorized] = useState(false);
     const [isLoading, setIsLoading] = useState(true); // New loading state
     const [showKycNudge, setShowKycNudge] = useState(false);
@@ -51,20 +51,23 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
       localStorage.setItem('show-nudge', 'MINI');
     };
     return isAuthorized ? (
-      <div>
-        <div className="flex w-full">
-          <SideNavigationBar />
+      isV2Route ? (
+        <div>
+          <div className="flex w-full">
+            <SideNavigationBar />
 
-          <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
-            <V2TopNavigationBar />
-
-            <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
-              <WrappedComponent {...props} />{' '}
-            </main>
+            <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
+              <V2TopNavigationBar />
+              <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
+                <WrappedComponent {...props} />{' '}
+              </main>
+            </div>
           </div>
+          {showKycNudge && <KycNudgeModal onClose={() => handleNudgeClose()} />}
         </div>
-        {showKycNudge && <KycNudgeModal onClose={() => handleNudgeClose()} />}
-      </div>
+      ) : (
+        <WrappedComponent {...props} />
+      )
     ) : null;
   };
 

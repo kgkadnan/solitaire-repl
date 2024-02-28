@@ -11,6 +11,7 @@ interface IHandleVerifyOtp {
   verifyOTP: any;
   role: string;
   setToken?: React.Dispatch<React.SetStateAction<IToken>>;
+  setError: any;
 }
 export const handleVerifyOtp = ({
   otpValues,
@@ -21,7 +22,8 @@ export const handleVerifyOtp = ({
   setDialogContent,
   verifyOTP,
   role,
-  setToken
+  setToken,
+  setError
 }: IHandleVerifyOtp) => {
   const enteredOtp = otpValues.join('');
 
@@ -50,6 +52,9 @@ export const handleVerifyOtp = ({
       }
     })
     .catch((e: any) => {
+      setError(
+        `We're sorry, but the OTP you entered is incorrect or has expired`
+      );
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds

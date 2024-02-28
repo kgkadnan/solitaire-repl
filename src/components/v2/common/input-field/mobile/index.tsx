@@ -46,7 +46,7 @@ export const MobileInput = ({
               onChange={handleSelectChange}
               styles={colourStyles(errorText)}
               value={{
-                label: registerFormState.countryCode,
+                label: `+${registerFormState.countryCode}`,
                 value: registerFormState.countryCode
               }}
               // closeMenuOnSelect={false}
@@ -61,7 +61,7 @@ export const MobileInput = ({
             value={value}
             placeholder={placeholder}
             styles={{
-              input: `rounded-l-[0px] ${
+              input: `rounded-l-[0px] focus:border-[1px] focus:border-inherit focus-visible:border-inherit hover:border-inherit ${
                 errorText ? 'border-dangerMain' : 'border-neutral200'
               }`
             }}

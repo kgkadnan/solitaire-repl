@@ -63,7 +63,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
                     handler: () => {
                       setIsDialogOpen(false), router.push('/v2/login');
                     },
-                    customStyle: 'flex-1 w-full'
+                    customStyle: 'flex-1 w-full h-10'
                   }
                 ]}
               />
@@ -129,51 +129,53 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
         <div className="text-mRegular text-neutral-900">
           {ManageLocales('app.setPassword.title')}
         </div>
+        <div className="flex flex-col p-8 gap-[20px] rounded-[8px] border-[1px] border-neutral-200 ">
+          <PasswordField
+            label={'Enter Password*'}
+            onChange={event => handlePasswordInput(event)}
+            name="password"
+            value={resetPasswordValue}
+            errorText={passwordError}
+            placeholder={ManageLocales('app.register.password.placeholder')}
+          />
+          {/* Input field for confirm password */}
+          <PasswordField
+            label={ManageLocales('app.register.confirmPassword')}
+            onChange={event => handleConfirmPasswordInput(event)}
+            name="confirmPassword"
+            value={resetConfirmPassword}
+            errorText={confirmPasswordError}
+            placeholder={ManageLocales(
+              'app.register.confirmPassword.placeholder'
+            )}
+            isConfirmPassword={true}
+            onKeyDown={handleKeyDown}
+          />
+          <div className="flex flex-col gap-1">
+            <IndividualActionButton
+              onClick={handleResetPassword}
+              variant={'primary'}
+              size={'custom'}
+              className="rounded-[4px] w-[100%]"
+            >
+              {ManageLocales('app.resetPassword')}
+            </IndividualActionButton>
 
-        <PasswordField
-          label={ManageLocales('app.register.password')}
-          onChange={event => handlePasswordInput(event)}
-          name="password"
-          value={resetPasswordValue}
-          errorText={passwordError}
-          placeholder={ManageLocales('app.register.password.placeholder')}
-        />
-        {/* Input field for confirm password */}
-        <PasswordField
-          label={ManageLocales('app.register.confirmPassword')}
-          onChange={event => handleConfirmPasswordInput(event)}
-          name="confirmPassword"
-          value={resetConfirmPassword}
-          errorText={confirmPasswordError}
-          placeholder={ManageLocales(
-            'app.register.confirmPassword.placeholder'
-          )}
-          isConfirmPassword={true}
-          onKeyDown={handleKeyDown}
-        />
-
-        <IndividualActionButton
-          onClick={handleResetPassword}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px] w-[100%]"
-        >
-          {ManageLocales('app.resetPassword')}
-        </IndividualActionButton>
-
-        <IndividualActionButton
-          onClick={() => router.push('/v2/login')}
-          variant={'secondary'}
-          size={'custom'}
-          className="border-none w-[100%]"
-        >
-          <div className="text-mMedium font-medium flex items-center">
-            <Image src={backArrow} alt="backArrow" />
-            <p className="text-neutral-900">
-              {ManageLocales('app.goBackToLogin')}
-            </p>
+            <IndividualActionButton
+              onClick={() => router.push('/v2/login')}
+              variant={'secondary'}
+              size={'custom'}
+              className="border-none w-[100%]"
+            >
+              <div className="text-mMedium font-medium flex items-center">
+                <Image src={backArrow} alt="backArrow" />
+                <p className="text-neutral-900">
+                  {ManageLocales('app.goBackToLogin')}
+                </p>
+              </div>
+            </IndividualActionButton>
           </div>
-        </IndividualActionButton>
+        </div>
       </div>
     </div>
   );

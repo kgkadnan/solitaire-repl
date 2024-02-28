@@ -14,8 +14,10 @@ import { ReactNode } from 'react';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
   const foundSearch = data.find(
-    (search: any) => search.saveSearchName === nameToFind
+    (search: any) =>
+      search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
+  console.log('foundSearch', foundSearch);
   return foundSearch ? data.indexOf(foundSearch) : null;
 };
 
@@ -77,7 +79,7 @@ export const handleCardClick = ({
                     handler: () => {
                       setIsDialogOpen(false);
                     },
-                    customStyle: 'flex-1'
+                    customStyle: 'flex-1 h-10'
                   }
                 ]}
               />
@@ -125,7 +127,7 @@ export const handleCardClick = ({
                         handler: () => {
                           setIsDialogOpen(false);
                         },
-                        customStyle: 'flex-1'
+                        customStyle: 'flex-1 h-10'
                       },
                       {
                         variant: 'primary',
@@ -137,7 +139,7 @@ export const handleCardClick = ({
                             }-${1}`
                           );
                         },
-                        customStyle: 'flex-1'
+                        customStyle: 'flex-1 h-10'
                       }
                     ]}
                   />

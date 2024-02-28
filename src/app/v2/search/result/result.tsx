@@ -64,7 +64,10 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import { handleSaveSearch } from './helpers/handle-save-search';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useGetSavedSearchListQuery
+} from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
 import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
@@ -75,6 +78,7 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
+import { IItem } from '../saved-search/saved-search';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -211,6 +215,9 @@ const Result = ({
   handleCloseSpecificTab: (id: number) => void;
 }) => {
   const dispatch = useAppDispatch();
+
+  const { data: searchList }: { data?: IItem[] } =
+    useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText, setInputError } = errorSetState;
@@ -306,7 +313,7 @@ const Result = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
-
+  console.log(errorText, 'llllllllll');
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
@@ -378,7 +385,7 @@ const Result = ({
                           variant: 'primary',
                           label: ManageLocales('app.modal.continue'),
                           handler: () => setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         },
                         {
                           variant: 'primary',
@@ -386,7 +393,7 @@ const Result = ({
                           handler: () => {
                             router.push('/v2/my-cart');
                           },
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         }
                       ]}
                     />
@@ -431,7 +438,7 @@ const Result = ({
                           handler: () => {
                             setIsDialogOpen(false);
                           },
-                          customStyle: 'flex-1 w-full'
+                          customStyle: 'flex-1 w-full h-10'
                         }
                       ]}
                     />
@@ -464,7 +471,7 @@ const Result = ({
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={bookmarkIcon} alt="bookmarkIcon" />
         </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px] ">
           <div>
             <h1 className="text-headingS text-neutral900">
               {' '}
@@ -503,7 +510,7 @@ const Result = ({
                   setInputError('');
                   setIsInputDialogOpen(false);
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               },
               {
                 variant: 'primary',
@@ -525,7 +532,7 @@ const Result = ({
                       });
                   }
                 },
-                customStyle: 'flex-1'
+                customStyle: 'flex-1 h-10'
               }
             ]}
           />
@@ -644,7 +651,7 @@ const Result = ({
                           setIsAddCommentDialogOpen(false);
                           setIsDialogOpen(false);
                         },
-                        customStyle: 'flex-1 w-full'
+                        customStyle: 'flex-1 w-full h-10'
                       },
                       {
                         variant: 'primary',
@@ -652,7 +659,7 @@ const Result = ({
                         handler: () => {
                           router.push('/v2/your-orders');
                         },
-                        customStyle: 'flex-1 w-full'
+                        customStyle: 'flex-1 w-full h-10'
                       }
                     ]}
                   />
@@ -684,7 +691,7 @@ const Result = ({
                 <Image src={errorSvg} alt="errorSvg" />
               </div>
               <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
+                <p className="text-neutral600 text-mRegular font-sans">
                   {e?.data?.message}
                 </p>
                 <ActionButton
@@ -695,7 +702,7 @@ const Result = ({
                       handler: () => {
                         setIsDialogOpen(false);
                       },
-                      customStyle: 'flex-1 w-full'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />
@@ -769,6 +776,8 @@ const Result = ({
               data={data}
               setErrorText={setErrorText}
               downloadExcel={downloadExcel}
+              setIsError={setIsError}
+              searchList={searchList}
             />
           </div>
         )}
@@ -837,6 +846,13 @@ const Result = ({
                     actionButtonData={[
                       {
                         variant: 'secondary',
+                        label: ManageLocales(
+                          'app.searchResult.downloadALlResult'
+                        ),
+                        handler: donwloadAllSearchTabsExcelHandler
+                      },
+                      {
+                        variant: 'secondary',
                         label: ManageLocales('app.searchResult.addToCart'),
                         handler: handleAddToCart
                       },
@@ -869,11 +885,24 @@ const Result = ({
                     dropdownMenu={[
                       {
                         label: ManageLocales(
-                          'app.searchResult.downloadALlResult'
+                          'app.search.actionButton.bookAppointment'
                         ),
-                        handler: donwloadAllSearchTabsExcelHandler
+                        handler: () => {}
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.compareStone'
+                        ),
+                        handler: () => {}
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.findMatchingPair'
+                        ),
+                        handler: () => {}
                       }
                     ]}
+                    isDisable={true}
                   />
                 </div>
               </div>

@@ -35,7 +35,7 @@ const SavedSearchDropDown = ({
   return (
     <>
       {isOpen && (
-        <div className="flex flex-col border-[1px] border-solid border-neutral200 bg-neutral0 h-auto min-h-[410px] w-[345px] rounded-[8px] p-[24px] gap-[16px] absolute top-[45px] right-[189px] z-[3]">
+        <div className="flex flex-col border-[1px] border-solid border-neutral200 bg-neutral0 max-h-[410px] w-[345px] rounded-[8px] p-[24px] gap-[16px] absolute top-[45px] right-[189px] z-[3]">
           <div className="flex justify-between">
             <h1 className="text-headingS font-medium text-neutral900">
               Saved Search list

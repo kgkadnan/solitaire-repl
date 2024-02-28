@@ -13,7 +13,7 @@ import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
-import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
+// import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
@@ -26,13 +26,11 @@ import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import Breadcrum from '../search-breadcrum/breadcrum';
 import {
-  useGetSavedSearchListQuery,
   useLazyGetAllSavedSearchesQuery,
   useUpdateSavedSearchMutation
 } from '@/features/api/saved-searches';
 import { useState } from 'react';
 import SavedSearchDropDown from '../saved-search-dropdown';
-import { IItem } from '@/app/v2/search/saved-search/saved-search';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
@@ -44,6 +42,7 @@ import { useRouter } from 'next/navigation';
 import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/saved';
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+import Share from '../copy-and-share/share';
 
 const theme = createTheme({
   typography: {
@@ -107,13 +106,14 @@ const DataTable = ({
   setSearchParameters,
   modalSetState,
   downloadExcel,
-  data
+  data,
+  setErrorText,
+  setIsError,
+  searchList
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
 
-  const { data: searchList }: { data?: IItem[] } =
-    useGetSavedSearchListQuery('');
   const [triggerSavedSearch] = useLazyGetAllSavedSearchesQuery({});
   let [triggerProductCountApi] = useLazyGetProductCountQuery();
   const [isDropDownOpen, setIsDropDownOpen] = useState(false);
@@ -124,6 +124,7 @@ const DataTable = ({
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
   };
+
   const onDropDownClick = (data: any) => {
     setIsDropDownOpen(false);
     triggerSavedSearch({
@@ -408,21 +409,25 @@ const DataTable = ({
 
     // selectAllMode: undefined,
 
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: row.getToggleSelectedHandler(),
-      sx: {
-        cursor: 'pointer',
-        '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-50)'
-        },
-        '&.MuiTableRow-root .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-25)'
-        },
-        '&.MuiTableRow-root:active .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-100)'
+    muiTableBodyRowProps: ({ row }) => {
+      return {
+        onClick: row.id.includes('shape')
+          ? row.getToggleExpandedHandler()
+          : row.getToggleSelectedHandler(),
+        sx: {
+          cursor: 'pointer',
+          '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-50)'
+          },
+          '&.MuiTableRow-root .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-25)'
+          },
+          '&.MuiTableRow-root:active .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-100)'
+          }
         }
-      }
-    }),
+      };
+    },
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
@@ -440,7 +445,7 @@ const DataTable = ({
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
-              paddingLeft: '0px',
+              padding: '0px',
               ':hover': {
                 border: 'none'
               }
@@ -483,18 +488,26 @@ const DataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? isResult || myCart
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 120px)'
+          ? myCart
+            ? showCalculatedField
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
-          ? 'calc(100vh - 460px)'
+          ? showCalculatedField
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
-          ? isResult || myCart
-            ? 'calc(100vh - 200px)'
-            : 'calc(100vh - 120px)'
+          ? myCart
+            ? showCalculatedField
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
-          ? 'calc(100vh - 460px)'
+          ? showCalculatedField
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)'
       }
     },
@@ -612,7 +625,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[72px] items-start justify-between border-b-[1px] border-neutral200 flex p-[16px] ">
+          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[12px] items-center">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -664,7 +677,7 @@ const DataTable = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '16px'
+            padding: '12px 16px'
           }}
         >
           <div>
@@ -742,11 +755,11 @@ const DataTable = ({
             </div>
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
-              <Image
-                src={shareButtonSvg}
-                alt={'share'}
-                width={38}
-                height={38}
+              <Share
+                rows={rows}
+                selectedProducts={rowSelection}
+                setErrorText={setErrorText}
+                setIsError={setIsError}
               />
             </div>
           </div>

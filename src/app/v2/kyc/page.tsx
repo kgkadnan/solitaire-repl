@@ -357,7 +357,7 @@ const KYC = () => {
                       handler: () => {
                         setIsDialogOpen(false);
                       },
-                      customStyle: 'flex-1 w-full'
+                      customStyle: 'flex-1 w-full h-10'
                     }
                   ]}
                 />
@@ -387,7 +387,7 @@ const KYC = () => {
                     handler: () => {
                       setIsDialogOpen(false);
                     },
-                    customStyle: 'flex-1 w-full'
+                    customStyle: 'flex-1 w-full h-10'
                   }
                 ]}
               />
@@ -514,7 +514,7 @@ const KYC = () => {
           <p className="text-neutral-900 pr-10">Didn’t receive the email?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-200' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral-500' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0
@@ -584,7 +584,7 @@ const KYC = () => {
             }
             variant={'primary'}
             size={'custom'}
-            className="rounded-[4px] w-[100%] "
+            className="rounded-[4px] w-[100%] h-10"
           >
             {ManageLocales('app.verifyOTP')}
           </IndividualActionButton>
@@ -594,7 +594,7 @@ const KYC = () => {
             }}
             variant={'secondary'}
             size={'custom'}
-            className="rounded-[4px] w-[100%] !border-none"
+            className="rounded-[4px] w-[100%] !border-none h-10"
           >
             <Image src={arrowBackwar} alt="arrowBackwar" />
             <span className="ml-[4px]">

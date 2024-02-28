@@ -33,7 +33,7 @@ export const handleDelete = async ({
                   handler: () => {
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1 w-full'
+                  customStyle: 'flex-1 w-full h-10'
                 }
               ]}
             />
@@ -60,7 +60,7 @@ export const handleDelete = async ({
                   handler: () => {
                     setIsDialogOpen(false);
                   },
-                  customStyle: 'flex-1 w-full'
+                  customStyle: 'flex-1 w-full h-10'
                 }
               ]}
             />
