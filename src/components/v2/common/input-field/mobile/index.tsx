@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { InputField } from '..';
 import { IInputFieldProps } from '../interface';
 import Select from 'react-select';
 import countryCode from '../../../../../constants/country-code.json';
 import { colourStyles } from './country-select';
+import { useGetAllCountryCodeQuery } from '@/features/api/get-country-code';
 
 interface IMobileInputField extends IInputFieldProps {
   registerFormState: any;
@@ -20,8 +21,17 @@ export const MobileInput = ({
   registerFormState,
   setRegisterFormState
 }: IMobileInputField) => {
+  const { data: getAllCountryCode } = useGetAllCountryCodeQuery({});
+  const [countryOption, setCountryOption] = useState<any>([]);
+  useEffect(() => {
+    if (getAllCountryCode?.length > 0) {
+      setCountryOption(getAllCountryCode);
+    } else {
+      setCountryOption(countryCode?.countries);
+    }
+  }, [getAllCountryCode]);
   const computeCountryDropdownField = (countryCode: any) => {
-    return countryCode?.countries?.map(({ code }: any) => ({
+    return countryCode?.map(({ code }: any) => ({
       label: code,
       value: code
     }));
@@ -42,7 +52,7 @@ export const MobileInput = ({
           <div>
             <Select
               name="countryCode"
-              options={computeCountryDropdownField(countryCode)}
+              options={computeCountryDropdownField(countryOption)}
               onChange={handleSelectChange}
               styles={colourStyles(errorText)}
               value={{
