@@ -235,7 +235,7 @@ const Login = () => {
           <Image src={editIcon} alt="update phone number" />
         </div>
         <div className="flex gap-[12px] flex-col mt-[80px] align-left">
-          <p className="text-headingS text-neutral-900 font-medium">
+          <p className="text-headingS text-neutral900 font-medium">
             Enter new mobile number
           </p>
         </div>

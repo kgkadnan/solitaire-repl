@@ -31,7 +31,7 @@ export const DynamicMobileInput = ({
 
   return (
     <div className={`flex text-left flex-col ${containerStyle}`}>
-      {label && <p className="text-mRegular text-neutral-900">{label}</p>}
+      {label && <p className="text-mRegular text-neutral900">{label}</p>}
 
       <div className={`flex`}>
         <div>

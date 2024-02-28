@@ -22,7 +22,7 @@ const Pill = (props: {
               className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[12px] py-[6px]  font-medium text-sMedium cursor-pointer ${
                 isActive
                   ? 'border-infoBorder text-infoMain bg-infoSurface'
-                  : 'border-neutral-200 text-neutral-500 bg-neutral-0'
+                  : 'border-neutral200 text-neutral500 bg-neutral-0'
               }`}
             >
               {isActive && (
@@ -59,7 +59,7 @@ const Pill = (props: {
           className={`flex border-[1px]  rounded-[20px] gap-[4px] px-[12px] py-[6px]  font-medium text-sMedium cursor-pointer ${
             isActive
               ? 'border-infoBorder text-infoMain bg-infoSurface'
-              : 'border-neutral-200 text-neutral-500 bg-neutral-0'
+              : 'border-neutral200 text-neutral500 bg-neutral-0'
           }`}
         >
           {isActive && (

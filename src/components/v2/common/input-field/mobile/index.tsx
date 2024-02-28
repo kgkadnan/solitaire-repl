@@ -36,7 +36,7 @@ export const MobileInput = ({
   return (
     <>
       <div className={`flex text-left  flex-col`}>
-        {label && <p className="text-mRegular text-neutral-900">{label}</p>}
+        {label && <p className="text-mRegular text-neutral900">{label}</p>}
 
         <div className={`flex`}>
           <div>
@@ -61,8 +61,10 @@ export const MobileInput = ({
             value={value}
             placeholder={placeholder}
             styles={{
-              input: `rounded-l-[0px] focus:border-[1px] focus:border-inherit focus-visible:border-inherit hover:border-inherit ${
-                errorText ? 'border-dangerMain' : 'border-neutral200'
+              input: `rounded-l-[0px]  focus:border-[1px] ${
+                errorText
+                  ? 'border-dangerMain focus:border-dangerMain hover:border-dangerMain focus-visible:border-dangerMain'
+                  : 'border-neutral200'
               }`
             }}
           />

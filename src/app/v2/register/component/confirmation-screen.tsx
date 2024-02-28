@@ -18,25 +18,27 @@ const ConfirmScreen = () => {
           To unlock full access and enhance your experience, please complete
           your KYC verification.
         </p>
-        <IndividualActionButton
-          onClick={() => {
-            router.push(`/v2/kyc`);
-          }}
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px] w-[450px]"
-        >
-          Finish KYC Process
-        </IndividualActionButton>
-        <IndividualActionButton
-          onClick={() => {
-            router.push(`/v2/`);
-          }}
-          className="rounded-[4px] text-neutral-600 w-[450px]"
-          size={'custom'}
-        >
-          Explore website as a guest
-        </IndividualActionButton>
+        <div className="flex flex-col gap-1">
+          <IndividualActionButton
+            onClick={() => {
+              router.push(`/v2/kyc`);
+            }}
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[450px]"
+          >
+            Finish KYC Process
+          </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => {
+              router.push(`/v2/`);
+            }}
+            className="rounded-[4px] text-neutral600 w-[450px]"
+            size={'custom'}
+          >
+            Explore website as a guest
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
   );

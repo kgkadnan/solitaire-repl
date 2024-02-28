@@ -69,7 +69,11 @@ export const handleRegister = async ({
         <InvalidCreds
           content={e?.data?.message}
           handleClick={() => setIsDialogOpen(false)}
-          buttonText={e.status === statusCode.DUPLICATE ? 'Change Number' : ''}
+          buttonText={
+            e.status === statusCode.DUPLICATE
+              ? 'Change Number'
+              : 'Edit Selection'
+          }
         />
       );
     });

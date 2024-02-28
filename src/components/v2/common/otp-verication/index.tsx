@@ -76,7 +76,7 @@ const OTPVerification = ({
 
   return (
     <div className="flex  items-center">
-      <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200">
+      <div className="flex flex-col w-[450px] p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral200">
         <div className="flex flex-col items-center">
           <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
         </div>
@@ -84,13 +84,13 @@ const OTPVerification = ({
         <div className="parent relative">
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
-        <div className="text-headingM text-neutral-900 font-medium text-left">
+        <div className="text-headingM text-neutral900 font-medium text-left">
           {ManageLocales('app.OTPVerification')}
         </div>
 
         {setIsInputDialogOpen && (
           <div className="flex cursor-pointer">
-            <p className="text-neutral-900">
+            <p className="text-neutral900">
               OTP has been sent to{' '}
               {`+${otpVerificationFormState.codeAndNumber}`}
             </p>
@@ -110,10 +110,10 @@ const OTPVerification = ({
         />
 
         <div className="flex ">
-          <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
+          <p className="text-neutral900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-200' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral200' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0
