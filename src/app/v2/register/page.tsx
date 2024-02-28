@@ -30,6 +30,8 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/handle-otp-change';
+import { PHONE_REGEX } from '@/constants/validation-regex/regex';
+import { INVALID_PHONE } from '@/constants/error-messages/register';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -119,24 +121,35 @@ const Register = () => {
 
   const renderContentWithInput = () => {
     return (
-      <div className="flex gap-[12px] flex-col w-full">
+      <div className="flex gap-[20px] flex-col w-full">
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={editIcon} alt="update phone number" />
         </div>
-        <div className="flex gap-[12px] flex-col mt-[80px] align-left">
+        <div className="flex gap-[16px] flex-col mt-[80px] align-left">
           <p className="text-headingS text-neutral900 font-medium">
             Enter new mobile number
           </p>
         </div>
         <MobileInput
           label={ManageLocales('app.register.mobileNumber')}
-          onChange={event =>
-            handleOTPChange({ event, setOTPVerificationFormState })
-          }
+          onChange={event => {
+            if (!PHONE_REGEX.test(event.target.value)) {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: INVALID_PHONE
+              }));
+            } else {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: ''
+              }));
+            }
+            handleOTPChange({ event, setOTPVerificationFormState });
+          }}
           type="number"
           name="otpMobileNumber"
           errorText={otpVerificationFormErrors.otpMobileNumber}
-          placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+          placeholder={'Enter mobile number'}
           registerFormState={otpVerificationFormState}
           setRegisterFormState={setOTPVerificationFormState}
           value={otpVerificationFormState.otpMobileNumber}
