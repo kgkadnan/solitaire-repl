@@ -6,7 +6,7 @@ import backArrow from '@public/v2/assets/icons/back-arrow.svg';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const ForgotComponent = ({
   handlePhone,
@@ -18,6 +18,7 @@ const ForgotComponent = ({
   errorText
 }: any) => {
   const router = useRouter();
+  const pathName = useSearchParams().get('path');
 
   return (
     <div className="flex items-center text-center">
@@ -57,7 +58,11 @@ const ForgotComponent = ({
           </IndividualActionButton>
 
           <IndividualActionButton
-            onClick={() => router.push('/v2/login')}
+            onClick={() => {
+              pathName === 'login'
+                ? router.back()
+                : router.replace('/v2/login');
+            }}
             variant={'secondary'}
             size={'custom'}
             className="border-none w-[100%]"

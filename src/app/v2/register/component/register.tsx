@@ -9,7 +9,7 @@ import { InputField } from '@/components/v2/common/input-field';
 import { PasswordField } from '@/components/v2/common/input-field/password';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { MobileInput } from '@/components/v2/common/input-field/mobile';
 
 interface IRegisterComponent {
@@ -35,6 +35,7 @@ const RegisterComponent = ({
   setOTPVerificationFormState
 }: IRegisterComponent) => {
   const router = useRouter();
+  const pathName = useSearchParams().get('path');
 
   const { registerFormState, registerFormErrors } = registerState;
   const { setRegisterFormState, setRegisterFormErrors } = registerSetState;
@@ -121,6 +122,7 @@ const RegisterComponent = ({
             registerFormState={registerFormState}
             setRegisterFormState={setRegisterFormState}
             placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
+            maxLength={15}
           />
 
           {/* Input field for  password */}
@@ -184,7 +186,9 @@ const RegisterComponent = ({
             </IndividualActionButton>
             <IndividualActionButton
               onClick={() => {
-                router.push(`/v2/login`);
+                pathName === 'login'
+                  ? router.back()
+                  : router.push(`/v2/login?path=register`);
               }}
               className="rounded-[4px] text-neutral-600"
               size={'custom'}

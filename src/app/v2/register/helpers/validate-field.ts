@@ -2,13 +2,15 @@ import React from 'react';
 
 import {
   INVALID_EMAIL_FORMAT,
+  INVALID_PHONE,
   MINIMUM_CHAR_PASSWORD,
   PASSWORD_NOT_MATCH,
   REQUIRED_FIELD
 } from '@/constants/error-messages/register';
 import {
   EMAIL_REGEX,
-  PASSWORD_REGEX
+  PASSWORD_REGEX,
+  PHONE_REGEX
 } from '@/constants/validation-regex/regex';
 import { IRegister } from '../interface';
 
@@ -36,6 +38,12 @@ export const validateField = ({
           error = INVALID_EMAIL_FORMAT;
         }
         break;
+      case 'mobileNumber':
+        if (!PHONE_REGEX.test(value)) {
+          error = INVALID_PHONE;
+        }
+        break;
+
       // Inside your form validation logic
       case 'password':
         if (!PASSWORD_REGEX.test(value)) {

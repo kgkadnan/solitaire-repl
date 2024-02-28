@@ -8,7 +8,7 @@ import { PasswordField } from '@/components/v2/common/input-field/password';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import CheckboxComponent from '@/components/v2/common/checkbox';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const LoginComponent = ({
   setPhoneNumber,
@@ -27,6 +27,7 @@ const LoginComponent = ({
 }: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
+  const pathName = useSearchParams().get('path');
 
   return (
     <div className="flex items-center text-center">
@@ -113,7 +114,7 @@ const LoginComponent = ({
               />{' '}
               <p>{ManageLocales('app.login.keepSignedIn')}</p>
             </div>
-            <Link href={'/v2/forgot-password'}>
+            <Link href={'/v2/forgot-password?path=login'}>
               {ManageLocales('app.login.forgotPassword')}
             </Link>
           </div>
@@ -130,7 +131,9 @@ const LoginComponent = ({
 
           <IndividualActionButton
             onClick={() => {
-              router.push('/v2/register');
+              pathName === 'register'
+                ? router.back()
+                : router.push('/v2/register?path=login');
             }}
             variant={'secondary'}
             size={'custom'}

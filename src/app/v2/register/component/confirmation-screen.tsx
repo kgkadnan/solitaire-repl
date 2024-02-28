@@ -20,7 +20,7 @@ const ConfirmScreen = () => {
         </p>
         <IndividualActionButton
           onClick={() => {
-            router.push(`/my-account/kyc`);
+            router.push(`/v2/kyc`);
           }}
           variant={'primary'}
           size={'custom'}
