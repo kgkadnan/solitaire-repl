@@ -846,6 +846,13 @@ const Result = ({
                     actionButtonData={[
                       {
                         variant: 'secondary',
+                        label: ManageLocales(
+                          'app.searchResult.downloadALlResult'
+                        ),
+                        handler: donwloadAllSearchTabsExcelHandler
+                      },
+                      {
+                        variant: 'secondary',
                         label: ManageLocales('app.searchResult.addToCart'),
                         handler: handleAddToCart
                       },
@@ -878,11 +885,24 @@ const Result = ({
                     dropdownMenu={[
                       {
                         label: ManageLocales(
-                          'app.searchResult.downloadALlResult'
+                          'app.search.actionButton.bookAppointment'
                         ),
-                        handler: donwloadAllSearchTabsExcelHandler
+                        handler: () => {}
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.compareStone'
+                        ),
+                        handler: () => {}
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.search.actionButton.findMatchingPair'
+                        ),
+                        handler: () => {}
                       }
                     ]}
+                    isDisable={true}
                   />
                 </div>
               </div>
