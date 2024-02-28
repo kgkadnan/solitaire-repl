@@ -14,8 +14,10 @@ import { ReactNode } from 'react';
 
 export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
   const foundSearch = data.find(
-    (search: any) => search.saveSearchName === nameToFind
+    (search: any) =>
+      search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
+  console.log('foundSearch', foundSearch);
   return foundSearch ? data.indexOf(foundSearch) : null;
 };
 
