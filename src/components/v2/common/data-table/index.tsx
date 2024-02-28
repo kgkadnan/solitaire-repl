@@ -409,21 +409,25 @@ const DataTable = ({
 
     // selectAllMode: undefined,
 
-    muiTableBodyRowProps: ({ row }) => ({
-      onClick: row.getToggleSelectedHandler(),
-      sx: {
-        cursor: 'pointer',
-        '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-50)'
-        },
-        '&.MuiTableRow-root .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-25)'
-        },
-        '&.MuiTableRow-root:active .MuiTableCell-root::after': {
-          backgroundColor: 'var(--neutral-100)'
+    muiTableBodyRowProps: ({ row }) => {
+      return {
+        onClick: row.id.includes('shape')
+          ? row.getToggleExpandedHandler()
+          : row.getToggleSelectedHandler(),
+        sx: {
+          cursor: 'pointer',
+          '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-50)'
+          },
+          '&.MuiTableRow-root .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-25)'
+          },
+          '&.MuiTableRow-root:active .MuiTableCell-root::after': {
+            backgroundColor: 'var(--neutral-100)'
+          }
         }
-      }
-    }),
+      };
+    },
 
     displayColumnDefOptions: {
       'mrt-row-expand': {
