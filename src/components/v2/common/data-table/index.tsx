@@ -447,6 +447,7 @@ const DataTable = ({
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
+
               paddingLeft: '0px',
               ':hover': {
                 border: 'none'
@@ -578,7 +579,7 @@ const DataTable = ({
     },
     muiSelectAllCheckboxProps: () => {
       return {
-        indeterminate: false,
+        // indeterminate: false,
         sx: {
           color: 'var(--neutral-200)',
           '& .MuiSvgIcon-root': {
@@ -601,7 +602,7 @@ const DataTable = ({
 
     muiSelectCheckboxProps: ({ row }) => {
       return {
-        indeterminate: false,
+        // indeterminate: false,
         sx: {
           color: 'var(--neutral-200)',
 
