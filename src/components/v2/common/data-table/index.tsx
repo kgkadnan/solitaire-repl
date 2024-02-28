@@ -447,7 +447,7 @@ const DataTable = ({
             sx: {
               display: !cell.id.includes('shape') ? 'none' : 'flex',
               borderBottom: '1px solid var(--neutral-50)',
-              paddingLeft: '0px',
+              padding: '0px',
               ':hover': {
                 border: 'none'
               }
@@ -493,24 +493,24 @@ const DataTable = ({
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
-              ? 'calc(100vh - 150px)'
-              : 'calc(100vh - 100px)'
-            : 'calc(100vh - 220px)'
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 460px)'
-            : 'calc(100vh - 400px)'
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
-              ? 'calc(100vh - 150px)'
-              : 'calc(100vh - 100px)'
-            : 'calc(100vh - 220px)'
+              ? 'calc(100vh - 130px)'
+              : 'calc(100vh - 90px)'
+            : 'calc(100vh - 200px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 460px)'
-            : 'calc(100vh - 400px)'
+            ? 'calc(100vh - 415px)'
+            : 'calc(100vh - 375px)'
           : 'calc(100vh - 399px)'
       }
     },
@@ -638,7 +638,7 @@ const DataTable = ({
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[72px] items-start justify-between border-b-[1px] border-neutral200 flex p-[16px] ">
+          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[12px] items-center">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -690,7 +690,7 @@ const DataTable = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '16px'
+            padding: '12px 16px'
           }}
         >
           <div>
