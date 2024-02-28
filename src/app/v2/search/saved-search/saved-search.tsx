@@ -8,7 +8,7 @@ import {
 } from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useSavedSearchStateManagement } from './hooks/saved-search-state-management';
 import { DisplayTable } from '@/components/v2/common/display-table';
 import ActionButton from '@/components/v2/common/action-button';
@@ -69,6 +69,7 @@ const SavedSearch = () => {
   );
   // Mutation for deleting items from the saved search
   const [deleteSavedSearch] = useDeleteSavedSearchMutation();
+  const [showSuggestions, setShowSuggestions] = useState(false);
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
@@ -168,8 +169,7 @@ const SavedSearch = () => {
     styles.gradient1,
     styles.gradient2,
     styles.gradient3,
-    styles.gradient4,
-    styles.gradient5
+    styles.gradient4
   ];
 
   // Function to handle edit action
@@ -231,7 +231,7 @@ const SavedSearch = () => {
             <SearchInputField
               type="text"
               name="Search"
-              value={data?.searchValue}
+              value={savedSearchState.search}
               onChange={e =>
                 handleSearch({
                   e,
@@ -239,9 +239,12 @@ const SavedSearch = () => {
                   debouncedSave,
                   setSearchByName: savedSearchSetState.setSearchByName,
                   setSelectedCheckboxes,
-                  setSelectAllChecked
+                  setSelectAllChecked,
+                  setShowSuggestions
                 })
               }
+              setShowSuggestions={setShowSuggestions}
+              showSuggestions={showSuggestions}
               handleSuggestionClick={handleSuggestionClick}
               suggestions={savedSearchState.suggestions}
             />
@@ -250,12 +253,12 @@ const SavedSearch = () => {
         <div className="h-[70vh] overflow-auto">
           {savedSearchState?.savedSearchData?.length ? (
             savedSearchState?.savedSearchData?.map(
-              ({ id, name, meta_data, created_at }: ISavedSearches) => {
-                const randomIndex = Math.floor(
-                  Math.random() * gradientClasses.length
-                );
-                // Get the random gradient class
-                const randomGradientClass = gradientClasses[randomIndex];
+              ({ id, name, meta_data, created_at }: ISavedSearches, index) => {
+                // Calculate the gradient index based on the item's index
+                const gradientIndex = index % gradientClasses.length;
+                // Get the gradient class for the calculated index
+                const gradientClass = gradientClasses[gradientIndex];
+
                 return (
                   <div
                     className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
@@ -287,7 +290,7 @@ const SavedSearch = () => {
                         isChecked={selectedCheckboxes.includes(id)}
                       />
                       <div
-                        className={` ${randomGradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
+                        className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
                       >
                         {name
                           .split(' ') // Split the name into words

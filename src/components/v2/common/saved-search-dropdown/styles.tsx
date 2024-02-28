@@ -55,7 +55,8 @@ export const savedSearchDropDownStyle: StylesConfig<IColourOption, true> = {
     ...styles,
     boxShadow: 'none',
     borderRadius: '8px',
-    marginTop: '12px'
+    marginTop: '12px',
+    position: 'relative'
   }),
   menuList: styles => ({
     ...styles,

@@ -64,7 +64,10 @@ import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { InputDialogComponent } from '@/components/v2/common/input-dialog';
 import { InputField } from '@/components/v2/common/input-field';
 import { handleSaveSearch } from './helpers/handle-save-search';
-import { useAddSavedSearchMutation } from '@/features/api/saved-searches';
+import {
+  useAddSavedSearchMutation,
+  useGetSavedSearchListQuery
+} from '@/features/api/saved-searches';
 import { ISavedSearch } from '../form/form';
 import ConfirmStone from './components';
 import { handleConfirmStone } from './helpers/handle-confirm-stone';
@@ -75,6 +78,7 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
+import { IItem } from '../saved-search/saved-search';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -211,6 +215,9 @@ const Result = ({
   handleCloseSpecificTab: (id: number) => void;
 }) => {
   const dispatch = useAppDispatch();
+
+  const { data: searchList }: { data?: IItem[] } =
+    useGetSavedSearchListQuery('');
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const { setIsError, setErrorText, setInputError } = errorSetState;
@@ -684,7 +691,7 @@ const Result = ({
                 <Image src={errorSvg} alt="errorSvg" />
               </div>
               <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular">
+                <p className="text-neutral600 text-mRegular font-sans">
                   {e?.data?.message}
                 </p>
                 <ActionButton
@@ -770,6 +777,7 @@ const Result = ({
               setErrorText={setErrorText}
               downloadExcel={downloadExcel}
               setIsError={setIsError}
+              searchList={searchList}
             />
           </div>
         )}
