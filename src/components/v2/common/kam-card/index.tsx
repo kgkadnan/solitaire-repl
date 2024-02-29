@@ -1,4 +1,3 @@
-import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
 import Avatar from '@public/v2/assets/icons/kam/avatar.svg?url';
 
 import Phone from '@public/v2/assets/icons/kam/phone.svg?url';
