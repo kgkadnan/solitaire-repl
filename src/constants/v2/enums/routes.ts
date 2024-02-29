@@ -6,7 +6,8 @@ export enum Routes {
   APPOINTMENTS = '/v2/appointments',
   MY_CART = '/v2/my-cart',
   SETTINGS = '/v2/setting',
-  KYC = '/v2/kyc'
+  KYC = '/v2/kyc',
+  NEW_ARRIVAL = '/v2/new-arrival'
 }
 // Enum using the enum keyword
 export enum SubRoutes {
