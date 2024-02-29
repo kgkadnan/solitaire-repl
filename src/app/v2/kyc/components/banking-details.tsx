@@ -53,7 +53,7 @@ const BankingDetails = ({
               }
               placeholder={'Enter name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.BANKING_DETAILS
                   ]?.['bank_name']
@@ -88,7 +88,7 @@ const BankingDetails = ({
               }
               placeholder={'Enter name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.BANKING_DETAILS
                   ]?.['account_holder_name']
@@ -133,7 +133,7 @@ const BankingDetails = ({
               }
               placeholder={'Enter number'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.BANKING_DETAILS
                   ]?.['account_number']
@@ -180,7 +180,7 @@ const BankingDetails = ({
               }
               placeholder={'Enter code'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.BANKING_DETAILS
                   ]?.[
@@ -222,7 +222,7 @@ const BankingDetails = ({
                 }
                 placeholder={'Enter address'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: ` ${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.BANKING_DETAILS
                     ]?.['bank_address']

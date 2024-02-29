@@ -93,6 +93,7 @@ export const handleCardClick = ({
             data,
             specificCardData[0].name
           );
+          console.log('isAlreadyOpenIndex', isAlreadyOpenIndex);
           if (isAlreadyOpenIndex) {
             router.push(
               `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
