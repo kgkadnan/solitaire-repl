@@ -95,10 +95,10 @@ const SavedSearch = () => {
       short_label: 'Shape'
     },
     {
-      accessor: 'carat',
-      label: 'Carat',
+      accessor: 'carats',
+      label: 'Carats',
       sequence: 3,
-      short_label: 'carat'
+      short_label: 'carats'
     },
     {
       accessor: 'color',

@@ -2,6 +2,8 @@ import { ManageLocales } from '@/utils/v2/translate';
 import React from 'react';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import DashboardIcon from '@public/v2/assets/icons/sidebar-icons/dashboard-square.svg?url';
+import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
+
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
@@ -34,7 +36,7 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.DASHBOARD
     },
     {
-      src: <DashboardIcon />,
+      src: <ArrivalIcon />,
       title: ManageLocales('app.sideNavigationBar.newArrivals'),
       link: Routes.NEW_ARRIVAL,
       isActive: currentRoute === Routes.NEW_ARRIVAL
