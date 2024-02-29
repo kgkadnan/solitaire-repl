@@ -125,146 +125,146 @@ const KYC = () => {
     }
   }
 
-  // useEffect(() => {
-  //   triggerKycDetail({}).then(res => {
-  //     let kycDetails = res?.data;
-  //     if (kycDetails?.kyc?.status) {
-  //       switch (kycDetails?.kyc?.status) {
-  //         case kycStatus.INPROGRESS:
-  //           if (
-  //             kycDetails &&
-  //             kycDetails?.kyc &&
-  //             !isResumeCalled &&
-  //             (kycDetails?.kyc?.profile_data?.country !== null ||
-  //               Object.keys(kycDetails?.kyc?.profile_data?.online).length >
-  //                 1) &&
-  //             Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
-  //           ) {
-  //             setIsResumeCalled(true);
-  //             const { online, offline } = kycDetails.kyc.profile_data;
+  useEffect(() => {
+    triggerKycDetail({}).then(res => {
+      let kycDetails = res?.data;
+      if (kycDetails?.kyc?.status) {
+        switch (kycDetails?.kyc?.status) {
+          case kycStatus.INPROGRESS:
+            if (
+              kycDetails &&
+              kycDetails?.kyc &&
+              !isResumeCalled &&
+              (kycDetails?.kyc?.profile_data?.country !== null ||
+                Object.keys(kycDetails?.kyc?.profile_data?.online).length >
+                  1) &&
+              Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+            ) {
+              setIsResumeCalled(true);
+              const { online, offline } = kycDetails.kyc.profile_data;
 
-  //             const onlineData = online || {};
+              const onlineData = online || {};
 
-  //             let firstNonFilledScreens =
-  //               findFirstNonFilledScreens(onlineData)[0] - 1;
+              let firstNonFilledScreens =
+                findFirstNonFilledScreens(onlineData)[0] - 1;
 
-  //             if (firstNonFilledScreens > 0) {
-  //               setCurrentState('online');
-  //               setCurrentStepperStep(firstNonFilledScreens);
+              if (firstNonFilledScreens > 0) {
+                setCurrentState('online');
+                setCurrentStepperStep(firstNonFilledScreens);
 
-  //               offline
-  //                 ? setSelectedSubmissionOption('online')
-  //                 : setSelectedSubmissionOption('offline');
+                offline
+                  ? setSelectedSubmissionOption('online')
+                  : setSelectedSubmissionOption('offline');
 
-  //               setIsDialogOpen(true);
-  //               //need to work
-  //               // setDialogContent(
-  //               //   <>
-  //               //     <div className="text-center align-middle text-solitaireTertiary">
-  //               //       <p className="text-[20px] font-semibold">Are you sure?</p>
-  //               //     </div>
-  //               //     <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
-  //               //       Do you want to resume KYC process or restart it?
-  //               //     </div>
-  //               //     <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-  //               //       <CustomDisplayButton
-  //               //         displayButtonLabel="Restart"
-  //               //         handleClick={handleResetButton}
-  //               //         displayButtonAllStyle={{
-  //               //           displayButtonStyle:
-  //               //             ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-  //               //           displayLabelStyle:
-  //               //             'text-solitaireTertiary text-[14px] font-medium'
-  //               //         }}
-  //               //       />
-  //               //       <CustomDisplayButton
-  //               //         displayButtonLabel="Resume"
-  //               //         handleClick={() => {
-  //               //           setIsDialogOpen(false);
-  //               //           setDialogContent('');
-  //               //         }}
-  //               //         displayButtonAllStyle={{
-  //               //           displayButtonStyle:
-  //               //             'bg-solitaireQuaternary w-[150px] h-[35px]',
-  //               //           displayLabelStyle:
-  //               //             'text-solitaireTertiary text-[14px] font-medium'
-  //               //         }}
-  //               //       />
-  //               //     </div>
-  //               //   </>
-  //               // );
-  //             }
-  //           } else {
-  //             setCurrentState('country_selection');
-  //           }
+                setIsDialogOpen(true);
+                //need to work
+                // setDialogContent(
+                //   <>
+                //     <div className="text-center align-middle text-solitaireTertiary">
+                //       <p className="text-[20px] font-semibold">Are you sure?</p>
+                //     </div>
+                //     <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
+                //       Do you want to resume KYC process or restart it?
+                //     </div>
+                //     <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
+                //       <CustomDisplayButton
+                //         displayButtonLabel="Restart"
+                //         handleClick={handleResetButton}
+                //         displayButtonAllStyle={{
+                //           displayButtonStyle:
+                //             ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
+                //           displayLabelStyle:
+                //             'text-solitaireTertiary text-[14px] font-medium'
+                //         }}
+                //       />
+                //       <CustomDisplayButton
+                //         displayButtonLabel="Resume"
+                //         handleClick={() => {
+                //           setIsDialogOpen(false);
+                //           setDialogContent('');
+                //         }}
+                //         displayButtonAllStyle={{
+                //           displayButtonStyle:
+                //             'bg-solitaireQuaternary w-[150px] h-[35px]',
+                //           displayLabelStyle:
+                //             'text-solitaireTertiary text-[14px] font-medium'
+                //         }}
+                //       />
+                //     </div>
+                //   </>
+                // );
+              }
+            } else {
+              setCurrentState('country_selection');
+            }
 
-  //           let sectionKeys: string[] =
-  //             kycDetails?.kyc?.profile_data?.country === 'India'
-  //               ? [
-  //                   kycScreenIdentifierNames.PERSONAL_DETAILS,
-  //                   kycScreenIdentifierNames.COMPANY_DETAILS,
-  //                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-  //                   kycScreenIdentifierNames.BANKING_DETAILS
-  //                 ]
-  //               : [
-  //                   kycScreenIdentifierNames.PERSONAL_DETAILS,
-  //                   kycScreenIdentifierNames.COMPANY_DETAILS,
-  //                   kycScreenIdentifierNames.BANKING_DETAILS
-  //                 ];
+            let sectionKeys: string[] =
+              kycDetails?.kyc?.profile_data?.country === 'India'
+                ? [
+                    kycScreenIdentifierNames.PERSONAL_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ]
+                : [
+                    kycScreenIdentifierNames.PERSONAL_DETAILS,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    kycScreenIdentifierNames.BANKING_DETAILS
+                  ];
 
-  //           sectionKeys.forEach((key, index: number) => {
-  //             let screenIndex = (index + 1).toString();
+            sectionKeys.forEach((key, index: number) => {
+              let screenIndex = (index + 1).toString();
 
-  //             let onlineValue = kycDetails?.kyc?.profile_data?.online;
+              let onlineValue = kycDetails?.kyc?.profile_data?.online;
 
-  //             dispatch(
-  //               updateFormState({
-  //                 name: `formState.online.sections[${key}]`,
-  //                 value:
-  //                   onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
-  //               })
-  //             );
-  //           });
-  //           setSelectedCountry(
-  //             kycDetails?.kyc?.profile_data?.country
-  //               ? kycDetails?.kyc?.profile_data?.country
-  //               : ''
-  //           );
-  //           dispatch(
-  //             updateFormState({
-  //               name: 'formState.country',
-  //               value: kycDetails?.kyc?.profile_data?.country
-  //             })
-  //           );
+              dispatch(
+                updateFormState({
+                  name: `formState.online.sections[${key}]`,
+                  value:
+                    onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+                })
+              );
+            });
+            setSelectedCountry(
+              kycDetails?.kyc?.profile_data?.country
+                ? kycDetails?.kyc?.profile_data?.country
+                : ''
+            );
+            dispatch(
+              updateFormState({
+                name: 'formState.country',
+                value: kycDetails?.kyc?.profile_data?.country
+              })
+            );
 
-  //           dispatch(
-  //             updateFormState({
-  //               name: 'formState.isEmailVerified',
-  //               value: kycDetails?.kyc?.is_email_verified
-  //             })
-  //           );
+            dispatch(
+              updateFormState({
+                name: 'formState.isEmailVerified',
+                value: kycDetails?.kyc?.is_email_verified
+              })
+            );
 
-  //           setSelectedSubmissionOption(
-  //             kycDetails?.kyc?.profile_data?.mode
-  //               ? kycDetails?.kyc?.profile_data?.mode
-  //               : ''
-  //           );
+            setSelectedSubmissionOption(
+              kycDetails?.kyc?.profile_data?.mode
+                ? kycDetails?.kyc?.profile_data?.mode
+                : ''
+            );
 
-  //           break;
-  //         case kycStatus.PENDING:
-  //           setCurrentState(kycStatus.PENDING);
-  //           break;
+            break;
+          case kycStatus.PENDING:
+            setCurrentState(kycStatus.PENDING);
+            break;
 
-  //         case kycStatus.APPROVED:
-  //           setCurrentState(kycStatus.APPROVED);
-  //           break;
-  //         case kycStatus.REJECTED:
-  //           setCurrentState(kycStatus.REJECTED);
-  //           break;
-  //       }
-  //     }
-  //   });
-  // }, []);
+          case kycStatus.APPROVED:
+            setCurrentState(kycStatus.APPROVED);
+            break;
+          case kycStatus.REJECTED:
+            setCurrentState(kycStatus.REJECTED);
+            break;
+        }
+      }
+    });
+  }, []);
 
   function checkOTPEntry(otpEntry: string[]) {
     for (let i = 0; i < otpEntry.length; i++) {
