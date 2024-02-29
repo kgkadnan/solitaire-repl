@@ -12,6 +12,7 @@ import InvalidCreds from '../../login/component/invalid-creds';
 import { useChangePasswordMutation } from '@/features/api/change-password';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import ActionButton from '@/components/v2/common/action-button';
+import useUser from '@/lib/use-auth';
 
 const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
   const [resetPasswordValue, setResetPasswordValue] = useState<string>('');
@@ -20,6 +21,8 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
   const [passwordError, setPasswordError] = useState<string>('');
   const router = useRouter();
   const [ChangePassword] = useChangePasswordMutation();
+  const { userLoggedOut } = useUser();
+
   const handleResetPassword = async () => {
     if (
       resetPasswordValue &&
@@ -33,7 +36,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
         confirm_password: resetConfirmPassword,
         token: token.token
       });
-
+      userLoggedOut();
       if (res.error) {
         setIsDialogOpen(true);
         setDialogContent(
