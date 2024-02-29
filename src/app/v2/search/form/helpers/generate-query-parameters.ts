@@ -178,7 +178,7 @@ export const generateQueryParams = (state: IState) => {
   selectedShade?.length !== 0 && (queryParams['shade'] = selectedShade);
   selectedClarity?.length !== 0 && (queryParams['clarity'] = selectedClarity);
   if (selectedCaratRange && selectedCaratRange.length > 0) {
-    queryParams['carat'] = selectedCaratRange;
+    queryParams['carats'] = selectedCaratRange;
   }
 
   selectedCut?.length !== 0 && (queryParams['cut'] = selectedCut);
