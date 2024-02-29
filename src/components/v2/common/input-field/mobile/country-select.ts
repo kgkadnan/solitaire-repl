@@ -12,7 +12,7 @@ export const colourStyles = (error: any) => {
         : '1px solid var(--neutral-200)',
       borderRight: 'none',
       // outline: '1px solid var(--neutral-200)',
-      width: '65px',
+      width: '78px',
       boxShadow: 'var(--input-shadow) inset',
       // This line disable the blue border
       '&:hover': {

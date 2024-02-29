@@ -10,7 +10,8 @@ import { useModalStateManagement } from '@/hooks/modal-state-management';
 import {
   ENTER_PASSWORD,
   INCORRECT_LOGIN_CREDENTIALS,
-  INVALID_EMAIL_FORMAT
+  INVALID_EMAIL_FORMAT,
+  INVALID_PHONE
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import LoginComponent from './component/login';
@@ -40,6 +41,7 @@ import {
   initialOTPFormState,
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
+import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 
 export interface IToken {
   token: string;
@@ -230,20 +232,31 @@ const Login = () => {
 
   const renderContentWithInput = () => {
     return (
-      <div className="flex gap-[12px] flex-col w-full">
+      <div className="flex gap-[20px] flex-col w-full">
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={editIcon} alt="update phone number" />
         </div>
-        <div className="flex gap-[12px] flex-col mt-[80px] align-left">
-          <p className="text-headingS text-neutral-900 font-medium">
+        <div className="flex gap-[16px] flex-col mt-[80px] align-left">
+          <p className="text-headingS text-neutral900 font-medium">
             Enter new mobile number
           </p>
         </div>
         <MobileInput
           label={ManageLocales('app.register.mobileNumber')}
-          onChange={event =>
-            handleOTPChange({ event, setOTPVerificationFormState })
-          }
+          onChange={event => {
+            if (!PHONE_REGEX.test(event.target.value)) {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: INVALID_PHONE
+              }));
+            } else {
+              setOTPVerificationFormErrors(prev => ({
+                ...prev,
+                otpMobileNumber: ''
+              }));
+            }
+            handleOTPChange({ event, setOTPVerificationFormState });
+          }}
           type="number"
           name="otpMobileNumber"
           errorText={otpVerificationFormErrors.otpMobileNumber}

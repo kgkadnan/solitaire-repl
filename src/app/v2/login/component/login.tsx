@@ -29,8 +29,15 @@ const LoginComponent = ({
   const router = useRouter();
   const pathName = useSearchParams().get('path');
 
+  const handleSubmit = (event: any) => {
+    event.preventDefault(); // Prevent default form submission behavior
+    handleLogin(); // Your login handler
+  };
+
   return (
-    <div className="flex items-center text-center">
+    <form onSubmit={handleSubmit} className="flex items-center text-center">
+      {' '}
+      {/* Wrap with form and handle onSubmit */}
       <div className="flex flex-col w-[450px]  p-8 gap-[24px] rounded-[8px] border-[1px] border-neutral-200 ">
         <div className="flex flex-col items-center">
           <Image src={KgkIcon} alt="KGKlogo" width={60} height={84} />
@@ -39,7 +46,7 @@ const LoginComponent = ({
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
 
-        <div className="text-headingM text-neutral-900 font-medium text-left">
+        <div className="text-headingM text-neutral900 font-medium text-left">
           {ManageLocales('app.login')}
         </div>
 
@@ -93,6 +100,7 @@ const LoginComponent = ({
             placeholder={ManageLocales('app.login.password.placeholder')}
             isConfirmPassword={true}
             onKeyDown={handleKeyDown}
+            styles={{ inputMain: 'h-[64px]' }}
           />
 
           {/* <div className="flex justify-center items-center text-sm sm:text-base h-10">
@@ -103,7 +111,7 @@ const LoginComponent = ({
             )}
           </div> */}
 
-          <div className="flex justify-between text-mRegualar text-neutral-900">
+          <div className="flex justify-between text-mRegualar text-neutral900">
             <div className="flex items-center gap-2">
               {' '}
               <CheckboxComponent
@@ -121,10 +129,11 @@ const LoginComponent = ({
         </div>
         <div className="flex flex-col gap-1">
           <IndividualActionButton
-            onClick={handleLogin}
+            // onClick={handleLogin}
             variant={'primary'}
             size={'custom'}
             className="rounded-[4px] w-[100%]"
+            type={'submit'}
           >
             {ManageLocales('app.login')}
           </IndividualActionButton>
@@ -140,18 +149,16 @@ const LoginComponent = ({
             className="border-none w-[100%]"
           >
             <div className="text-mMedium font-medium flex">
-              <p className="text-neutral-600">
+              <p className="text-neutral600">
                 {ManageLocales('app.login.newUser')}
               </p>{' '}
               &nbsp;
-              <p className="text-neutral-900">
-                {ManageLocales('app.register')}
-              </p>
+              <p className="text-neutral900">{ManageLocales('app.register')}</p>
             </div>
           </IndividualActionButton>
         </div>
       </div>
-    </div>
+    </form>
     // </div>
   );
 };

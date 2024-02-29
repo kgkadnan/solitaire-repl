@@ -88,7 +88,7 @@ export const PasswordField = ({
 
   return (
     <div className={`text-left w-full gap-1 ${styles?.inputMain}`}>
-      {label && <p className="text-mRegular text-neutral-900">{label}</p>}
+      {label && <p className="text-mRegular text-neutral900">{label}</p>}
       <div className="flex relative items-center">
         <Input
           ref={inputRef}
@@ -125,17 +125,18 @@ export const PasswordField = ({
         </div>
       </div>
       <div className="mt-2">
-        {isInputFocused && !isConfirmPassword ? (
-          errorText !== PASSWORD_NOT_MATCH &&
+        {!isConfirmPassword ? (
+          // errorText !== PASSWORD_NOT_MATCH &&
+          isInputFocused &&
           !allRulesValid &&
           Object.entries(passwordRules).map(([rule, isValid]) => (
             <div key={rule} className="flex items-center">
               {renderIcon(isValid)}
-              <span className={`text-neutral-900 ml-1`}>{rule}</span>
+              <span className={`text-neutral900 ml-1`}>{rule}</span>
             </div>
           ))
         ) : (
-          <p className="text-dangerMain">{errorText && errorText}</p>
+          <p className="text-dangerMain">{errorText && PASSWORD_NOT_MATCH}</p>
         )}
       </div>
     </div>

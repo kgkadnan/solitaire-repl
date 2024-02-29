@@ -122,11 +122,11 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
           <Image src={keyIcon} alt="keyIcon" />
         </div>
 
-        <div className="text-headingM text-neutral-900 font-medium mt-[-170px]">
+        <div className="text-headingM text-neutral900 font-medium mt-[-170px]">
           {ManageLocales('app.setPassword')}
         </div>
 
-        <div className="text-mRegular text-neutral-900">
+        <div className="text-mRegular text-neutral900">
           {ManageLocales('app.setPassword.title')}
         </div>
         <div className="flex flex-col p-8 gap-[20px] rounded-[8px] border-[1px] border-neutral-200 ">
@@ -169,7 +169,7 @@ const ResetComponent = ({ setIsDialogOpen, setDialogContent, token }: any) => {
             >
               <div className="text-mMedium font-medium flex items-center">
                 <Image src={backArrow} alt="backArrow" />
-                <p className="text-neutral-900">
+                <p className="text-neutral900">
                   {ManageLocales('app.goBackToLogin')}
                 </p>
               </div>

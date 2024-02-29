@@ -374,7 +374,7 @@ const MyDiamonds = () => {
           </div>
           <div className="max-w-full overflow-x-auto">
             {/* header */}
-            <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral-700">
+            <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
               {keys?.map(({ label }: any) => (
                 <div key={label} className="p-4 text-left font-medium">
                   {label}

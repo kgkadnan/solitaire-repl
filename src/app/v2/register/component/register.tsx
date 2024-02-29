@@ -49,7 +49,7 @@ const RegisterComponent = ({
           <hr className="absolute bottom-0 left-0 border-none h-[1px] w-full bg-neutral200" />
         </div>
 
-        <div className="text-headingM text-neutral-900 font-medium text-left">
+        <div className="text-headingM text-neutral900 font-medium text-left">
           {ManageLocales('app.register')}
         </div>
         <InputField
@@ -67,6 +67,7 @@ const RegisterComponent = ({
             })
           }
           placeholder={ManageLocales('app.register.firstName.placeholder')}
+          styles={{ inputMain: 'h-[64px]' }}
         />
 
         {/* Input field for last Name */}
@@ -86,6 +87,7 @@ const RegisterComponent = ({
               })
             }
             placeholder={ManageLocales('app.register.lastName.placeholder')}
+            styles={{ inputMain: 'h-[64px]' }}
           />
           {/* Input field for email */}
           <InputField
@@ -103,6 +105,7 @@ const RegisterComponent = ({
             value={registerFormState.email}
             errorText={registerFormErrors.email}
             placeholder={ManageLocales('app.register.email.placeholder')}
+            styles={{ inputMain: 'h-[64px]' }}
           />
           {/* Input field for mobile Number */}
           <MobileInput
@@ -190,7 +193,7 @@ const RegisterComponent = ({
                   ? router.back()
                   : router.push(`/v2/login?path=register`);
               }}
-              className="rounded-[4px] text-neutral-600"
+              className="rounded-[4px] text-neutral600"
               size={'custom'}
             >
               {ManageLocales('app.register.accountExistLogin')}
