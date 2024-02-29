@@ -6,6 +6,7 @@ const page = () => {
   return (
     <div>
       {' '}
+      <div>search</div>
       <KAMCard
         name="Mr. Rajeev Sinha"
         role="Key Account Manager"

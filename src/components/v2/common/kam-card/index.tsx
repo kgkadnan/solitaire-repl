@@ -1,6 +1,13 @@
 import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?url';
 import Avatar from '@public/v2/assets/icons/kam/avatar.svg?url';
 
+import Phone from '@public/v2/assets/icons/kam/phone.svg?url';
+import WhatsApp from '@public/v2/assets/icons/kam/whatsapp.svg?url';
+import Mail from '@public/v2/assets/icons/kam/mail.svg?url';
+import Copy from '@public/v2/assets/icons/kam/copy.svg?url';
+import { Toast } from '../copy-and-share/toast';
+import { useState } from 'react';
+
 interface IKAMCardProps {
   name: string;
   role: string;
@@ -8,28 +15,79 @@ interface IKAMCardProps {
   email: string;
 }
 
+const styles = {
+  background: `
+    linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, white 100%),
+    linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 50%)
+  `,
+  backdropFilter: 'blur(40px)'
+};
+
 const KAMCard: React.FC<IKAMCardProps> = ({
   name,
   role,
   phoneNumber,
   email
 }) => {
+  const [showToast, setShowToast] = useState(false);
+  const handleCopy = (email: string) => {
+    navigator.clipboard.writeText(email);
+    // setCopied(true);
+    setShowToast(true); // Show the toast notification
+    setTimeout(() => {
+      // setCopied(false);
+      setShowToast(false); // Hide the toast notification after some time
+    }, 2000);
+  };
   return (
-    <div className="max-w-sm bg-gradient-to-br from-custom-lightblue to-custom-darkblue rounded-4xl shadow-md p-6">
-      <div className="flex flex-col items-center pb-10">
-        <Avatar />
-        <h3 className="mb-1 text-xl font-medium text-gray-900">{name}</h3>
-        <span className="text-sm text-gray-500">{role}</span>
-        <div className="flex items-center mt-4 text-gray-700">
-          <ArrivalIcon className="h-5 w-5" />
-          <span className="ml-4">{phoneNumber}</span>
+    <>
+      <Toast show={showToast} message="Copied Successfully" />
+
+      <div
+        className="w-[300px] h-[400px] rounded-[8px] border-[1px] border-primaryBorder flex flex-col gap-[24px]"
+        style={{ boxShadow: 'var(--input-shadow)' }}
+      >
+        <div
+          style={styles}
+          className="w-[100%]  rounded-[8px] flex justify-center"
+        >
+          <div className="mt-[24px]">
+            <Avatar />
+          </div>
         </div>
-        <div className="flex items-center mt-2 text-gray-700">
-          <ArrivalIcon className="h-5 w-5" />
-          <span className="ml-4">{email}</span>
+        <div className="flex flex-col items-center gap-3">
+          <h3 className="text-headingM medium text-neutral900">{name}</h3>
+          <span className="text-lRegular  text-neutral900">{role}</span>
+          <div className="parent relative">
+            <hr className=" bottom-0 left-0 border-none h-[1px] w-[250px] bg-neutral200" />
+          </div>
+          <div className="flex flex-col gap-4 text-mRegular text-neutral600">
+            <div className="flex items-center gap-2 cursor-pointer">
+              <a href={`tel:${phoneNumber}`}>
+                {' '}
+                <Phone />
+              </a>
+              <a href={`tel:${phoneNumber}`}>
+                {' '}
+                <WhatsApp />
+              </a>
+              <span className="">{phoneNumber}</span>
+            </div>
+            <div className="flex items-center gap-2  cursor-pointer">
+              <a href={`mailto:${email}`}>
+                {' '}
+                <Mail />
+              </a>
+              <span className="">{email}</span>{' '}
+              <div onClick={() => handleCopy(email)}>
+                {' '}
+                <Copy />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

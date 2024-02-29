@@ -6,7 +6,7 @@ export const Toast = ({ message, show }: any) => {
   if (!show) return null;
 
   return (
-    <div className="fixed  w-[320px] bottom-[4px] left-1/2 transform -translate-x-1/2 bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4">
+    <div className="fixed  w-[320px] bottom-[4px] left-1/2 transform -translate-x-1/2 bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900">
       {message}
     </div>
   );
