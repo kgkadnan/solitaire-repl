@@ -35,7 +35,7 @@ export const MinMaxInput = ({
               placeholder={type === 'min' ? minPlaceHolder : maxPlaceHolder}
               onChange={type === 'min' ? minOnchange : maxOnchange}
               styles={{
-                input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 w-[92px] rounded-r-[4px] rounded-l-[0px]
+                input: `h-full p-2 flex-grow block w-full min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 w-[92px] rounded-r-[4px] rounded-l-[0px] focus:border-[1px] 
                 ${errorText ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
