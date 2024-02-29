@@ -8,6 +8,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import Select from 'react-select';
 import { colourStyles } from '../style/select-style';
+import CheckboxComponent from '@/components/v2/common/checkbox';
 
 const cities = [
   'AHMEDABAD',
@@ -72,6 +73,7 @@ const CompanyDetail = ({
   console.log(
     formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS].city
   );
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -889,7 +891,34 @@ const CompanyDetail = ({
                 }}
               />
             )}
-            <div></div>
+            <div className="w-full flex flex-col gap-[5px]">
+              <p className="text-mRegular text-neutral900">Type of Industry</p>
+
+              <div className="flex justify-between flex-wrap gap-[10px]">
+                {' '}
+                <div className="w-[50%]">
+                  <CheckboxComponent
+                    onClick={() => {}}
+                    isChecked={false}
+                    checkboxLabel={'Diamonds'}
+                  />
+                </div>
+                <div className="">
+                  <CheckboxComponent
+                    onClick={() => {}}
+                    isChecked={false}
+                    checkboxLabel={'Colour Stones'}
+                  />
+                </div>
+                <div className="">
+                  <CheckboxComponent
+                    onClick={() => {}}
+                    isChecked={false}
+                    checkboxLabel={'Jewellery'}
+                  />
+                </div>
+              </div>
+            </div>
           </div>
           <hr className="border-neutral200" />
         </div>
