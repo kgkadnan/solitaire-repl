@@ -18,7 +18,9 @@ const page = () => {
           <p>Terms & Conditions</p>
           <p>Privacy Policy</p>
         </div>
-        <p className='text-neutral500'>Copyright © 2022 KGK Live.All rights reserved.</p>
+        <p className="text-neutral500">
+          Copyright © 2022 KGK Live.All rights reserved.
+        </p>
       </div>
     </div>
   );
