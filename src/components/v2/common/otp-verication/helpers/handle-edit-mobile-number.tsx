@@ -2,6 +2,9 @@ import { IOtp } from '..';
 import { IToken } from '@/app/register/page';
 import logger from 'logging/log-util';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import ActionButton from '../../action-button';
+import Image from 'next/image';
+import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -51,8 +54,41 @@ export const handleEditMobileNumber = ({
             ...prev,
             phoneToken: res.token
           }));
+          setIsDialogOpen(true);
+          setDialogContent(
+            <>
+              <div className="absolute left-[-84px] top-[-84px]">
+                <Image src={successIcon} alt="successIcon" />
+              </div>
+              <h1 className="text-headingS text-neutral900">
+                OTP sent successfully
+              </h1>
+              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'primary',
+                      label: 'Okay',
+                      handler: () => {
+                        setIsDialogOpen(false);
+                      },
+                      customStyle: 'flex-1 w-full h-10'
+                    }
+                  ]}
+                />
+              </div>
+            </>
+          );
+          // setResendTimer(60);
         })
         .catch((e: any) => {
+          setIsDialogOpen(true);
+          setDialogContent(
+            <InvalidCreds
+              content={e?.data?.message}
+              handleClick={() => setIsDialogOpen(false)}
+            />
+          );
           logger.error(`something went wrong while sending OTP ${e}`);
         });
     } else {
