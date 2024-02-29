@@ -252,7 +252,11 @@ const SavedSearch = () => {
             />
           </div>
         </div>
-        <div className={` overflow-auto ${isNudge ? 'h-[63vh]' : 'h-[70vh]'}`}>
+        <div
+          className={` overflow-auto ${
+            isNudge ? 'h-[calc(100vh-380px)]' : 'h-[calc(100vh-310px)]'
+          }`}
+        >
           {savedSearchState?.savedSearchData?.length ? (
             savedSearchState?.savedSearchData?.map(
               ({ id, name, meta_data, created_at }: ISavedSearches, index) => {

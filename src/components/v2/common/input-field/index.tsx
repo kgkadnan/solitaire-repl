@@ -21,7 +21,7 @@ export const InputField = ({
   const inputRef = useRef<any>(null);
 
   return (
-    <div className={` text-left w-full gap-1 ${styles?.inputMain}`}>
+    <div className={`text-left w-full gap-1   h-[63px] ${styles?.inputMain}`}>
       {label && <p className="text-mRegular text-neutral900">{label}</p>}
       <div className="flex relative items-center">
         <Input

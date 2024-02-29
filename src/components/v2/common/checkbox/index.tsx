@@ -11,6 +11,8 @@ interface ICheckboxComponentProps {
   inputValue?: any;
   inputError?: any;
   checkboxLabel?: string;
+  inputPlaceHolder?: string;
+  inputName?: string;
 }
 
 const CheckboxComponent = ({
@@ -21,10 +23,12 @@ const CheckboxComponent = ({
   onInputChange,
   inputValue,
   inputError,
-  checkboxLabel
+  checkboxLabel,
+  inputPlaceHolder,
+  inputName
 }: ICheckboxComponentProps) => {
   return (
-    <div>
+    <div className="flex flex-col gap-[5px]">
       <div className="flex gap-[5px]">
         <Checkbox
           className={`rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 ${styles}`}
@@ -39,14 +43,14 @@ const CheckboxComponent = ({
       </div>
       {showInput && isChecked && (
         <InputField
-          label={'Subsidiary/Affiliated Company'}
           onChange={onInputChange}
           type="text"
-          name={'Subsidiary/Affiliated Company'}
+          name={inputName ?? ''}
           value={inputValue}
           errorText={inputError}
-          placeholder={'Enter name'}
+          placeholder={inputPlaceHolder}
           styles={{
+            inputMain: 'h-64px',
             input: `${inputError ? 'border-dangerMain' : 'border-neutral200'}`
           }}
         />
