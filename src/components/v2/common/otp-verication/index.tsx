@@ -9,6 +9,7 @@ import { handleResendOTP } from './helpers/handle-resend-otp';
 import { IToken } from '@/app/register/page';
 import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
+import { handleRegisterResendOTP } from './helpers/handle-register-resent';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -118,13 +119,14 @@ const OTPVerification = ({
             onClick={() =>
               resendTimer > 0
                 ? {}
-                : handleResendOTP({
+                : handleRegisterResendOTP({
                     otpVerificationFormState,
                     setResendTimer,
                     sendOtp,
                     setIsDialogOpen,
                     setDialogContent,
-                    setToken
+                    setToken,
+                    token
                   })
             }
           >

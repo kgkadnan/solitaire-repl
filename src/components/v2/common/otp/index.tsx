@@ -23,7 +23,7 @@ const OtpInput: React.FC<IOtpInput> = ({
   const otpFieldsRef = useRef<HTMLInputElement[]>([]);
 
   const handleInput = (index: number, value: string) => {
-    setError('');
+    setError && setError('');
     if (value.length > 1) {
       return;
     }

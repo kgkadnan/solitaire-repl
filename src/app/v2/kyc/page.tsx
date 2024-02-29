@@ -395,7 +395,6 @@ const KYC = () => {
         );
       });
   };
-  console.log(token, 'pppppppppp');
   // Function to move back to the previous step
   const handleStepperBack = () => {
     if (currentStepperStep === 0) {

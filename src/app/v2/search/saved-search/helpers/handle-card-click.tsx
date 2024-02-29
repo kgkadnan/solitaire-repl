@@ -17,7 +17,6 @@ export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
     (search: any) =>
       search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
-  console.log('foundSearch', foundSearch);
   return foundSearch ? data.indexOf(foundSearch) : null;
 };
 

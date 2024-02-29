@@ -27,7 +27,6 @@ const OTPComponent = ({
 }: any) => {
   const router = useRouter();
   const [error, setError] = useState('');
-
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
   useEffect(() => {
     let countdownInterval: NodeJS.Timeout;
@@ -98,45 +97,46 @@ const OTPComponent = ({
             {ManageLocales('app.OTPVerification.resend')} {resendLabel}
           </p>
         </div>
+        <div className="flex flex-col gap-1">
+          <IndividualActionButton
+            onClick={() =>
+              checkOTPEntry(otpValues)
+                ? (handleResetOTP({
+                    otpValues,
+                    setCurrentState,
+                    token,
+                    setIsDialogOpen,
+                    setDialogContent,
+                    verifyResetOTP,
+                    phoneNumber,
+                    setToken
+                  }),
+                  setError(''))
+                : setError(
+                    `We're sorry, but the OTP you entered is incorrect or has expired`
+                  )
+            }
+            variant={'primary'}
+            size={'custom'}
+            className="rounded-[4px] w-[100%]"
+          >
+            {ManageLocales('app.verifyOTP')}
+          </IndividualActionButton>
 
-        <IndividualActionButton
-          onClick={() =>
-            checkOTPEntry(otpValues)
-              ? (handleResetOTP({
-                  otpValues,
-                  setCurrentState,
-                  token,
-                  setIsDialogOpen,
-                  setDialogContent,
-                  verifyResetOTP,
-                  phoneNumber,
-                  setToken
-                }),
-                setError(''))
-              : setError(
-                  `We're sorry, but the OTP you entered is incorrect or has expired`
-                )
-          }
-          variant={'primary'}
-          size={'custom'}
-          className="rounded-[4px] w-[100%]"
-        >
-          {ManageLocales('app.verifyOTP')}
-        </IndividualActionButton>
-
-        <IndividualActionButton
-          onClick={() => router.push('/v2/login')}
-          variant={'secondary'}
-          size={'custom'}
-          className="border-none w-[100%]"
-        >
-          <div className="text-mMedium font-medium flex items-center">
-            <Image src={backArrow} alt="backArrow" />
-            <p className="text-neutral900">
-              {ManageLocales('app.goBackToLogin')}
-            </p>
-          </div>
-        </IndividualActionButton>
+          <IndividualActionButton
+            onClick={() => router.push('/v2/login')}
+            variant={'secondary'}
+            size={'custom'}
+            className="border-none w-[100%]"
+          >
+            <div className="text-mMedium font-medium flex items-center">
+              <Image src={backArrow} alt="backArrow" />
+              <p className="text-neutral900">
+                {ManageLocales('app.goBackToLogin')}
+              </p>
+            </div>
+          </IndividualActionButton>
+        </div>
       </div>
     </div>
     // </div>
