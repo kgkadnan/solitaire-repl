@@ -27,7 +27,7 @@ export const InputField = ({
         <Input
           ref={inputRef}
           style={{ boxShadow: 'var(--input-shadow) inset' }}
-          className={`focus:outline-none focus:border-[3px] focus:border-[#CFD1D4] focus-visible:border-[#CFD1D4] hover:border-neutral900 bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${
+          className={`h-[40px] focus:outline-none focus:border-[3px] focus:border-[#CFD1D4] focus-visible:border-[#CFD1D4] hover:border-neutral900 bg-neutral25 text-neutral900 border-[1px] w-full p-2 rounded-[4px] ${
             disabled &&
             'cursor-not-allowed bg-neutral-100 text-neutral-400 hover:border-neutral-200'
           } ${
