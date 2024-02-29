@@ -19,7 +19,7 @@ const SavedSearchDropDown = ({
   onDropDownClick
 }: ISavedSearchDropDownProps) => {
   const computeDropdownFieldFromJson = (fieldData: any) => {
-    return fieldData.map((data: any) => {
+    return fieldData?.map((data: any) => {
       return { value: data.name, label: data.name };
     });
   };

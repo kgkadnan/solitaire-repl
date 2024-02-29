@@ -170,12 +170,14 @@ const DataTable = ({
               data,
               res.data.savedSearches[0].name
             );
-            if (isAlreadyOpenIndex) {
+
+            if (isAlreadyOpenIndex >= 0) {
               router.push(
                 `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
                   isAlreadyOpenIndex + 1
                 }`
               );
+              return;
             } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
               modalSetState.setDialogContent(
                 <>

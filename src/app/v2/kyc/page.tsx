@@ -28,6 +28,7 @@ import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
 import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import InvalidCreds from '../login/component/invalid-creds';
+import CompanyDetail from './components/company-detail';
 
 const initialTokenState = {
   token: '',
@@ -36,7 +37,7 @@ const initialTokenState = {
 };
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('country_selection');
+  const [currentState, setCurrentState] = useState('online');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -48,7 +49,7 @@ const KYC = () => {
   const [resendEmailOTP] = useResendEmailOTPMutation();
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(0);
+  const [currentStepperStep, setCurrentStepperStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -395,7 +396,6 @@ const KYC = () => {
         );
       });
   };
-  console.log(token, 'pppppppppp');
   // Function to move back to the previous step
   const handleStepperBack = () => {
     if (currentStepperStep === 0) {
@@ -428,7 +428,7 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
-            country={'India'}
+            country={formState.country}
           />
         );
       case kycScreenIdentifierNames.PERSONAL_DETAILS:
@@ -437,6 +437,15 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
+          />
+        );
+      case kycScreenIdentifierNames.COMPANY_DETAILS:
+        return (
+          <CompanyDetail
+            formErrorState={formErrorState}
+            formState={formState}
+            dispatch={dispatch}
+            country={'India'}
           />
         );
     }

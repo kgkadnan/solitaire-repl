@@ -51,7 +51,7 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'First name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.PERSONAL_DETAILS
                   ]?.['first_name']
@@ -86,7 +86,7 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'Last name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.PERSONAL_DETAILS
                   ]?.['last_name']
@@ -184,7 +184,7 @@ const PersonalDetail = ({ formErrorState, formState, dispatch }: any) => {
               disabled={formState.isEmailVerified}
               placeholder={'Enter email id'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.PERSONAL_DETAILS
                   ]?.['email']
