@@ -232,11 +232,11 @@ const Login = () => {
 
   const renderContentWithInput = () => {
     return (
-      <div className="flex gap-[20px] flex-col w-full">
+      <div className="flex gap-[12px] flex-col w-full">
         <div className="absolute left-[-84px] top-[-84px]">
           <Image src={editIcon} alt="update phone number" />
         </div>
-        <div className="flex gap-[16px] flex-col mt-[80px] align-left">
+        <div className="flex gap-[16px] flex-col mt-[60px] align-left">
           <p className="text-headingS text-neutral900 font-medium">
             Enter new mobile number
           </p>
@@ -366,6 +366,7 @@ const Login = () => {
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
+        dialogStyle="min-h-[280px]"
       />
       <UserAuthenticationLayout
         formData={renderLoginContent()}

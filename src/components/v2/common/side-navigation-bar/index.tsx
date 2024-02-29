@@ -34,6 +34,12 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.DASHBOARD
     },
     {
+      src: <DashboardIcon />,
+      title: ManageLocales('app.sideNavigationBar.newArrivals'),
+      link: Routes.NEW_ARRIVAL,
+      isActive: currentRoute === Routes.NEW_ARRIVAL
+    },
+    {
       title: 'line-separator-1'
     },
     {
