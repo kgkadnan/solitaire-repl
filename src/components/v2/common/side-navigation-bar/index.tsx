@@ -7,9 +7,9 @@ import ArrivalIcon from '@public/v2/assets/icons/sidebar-icons/new-arrivals.svg?
 import SearchIcon from '@public/v2/assets/icons/sidebar-icons/search.svg?url';
 import MyDaimondsIcon from '@public/v2/assets/icons/sidebar-icons/diamond.svg?url';
 import BookmarkIcon from '@public/v2/assets/icons/sidebar-icons/bookmark.svg?url';
-import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
+// import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
 import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?url';
-import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
+// import SettingIcon from '@public/v2/assets/icons/sidebar-icons/setting.svg?url';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';

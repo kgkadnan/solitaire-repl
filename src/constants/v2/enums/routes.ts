@@ -7,7 +7,7 @@ export enum Routes {
   MY_CART = '/v2/my-cart',
   SETTINGS = '/v2/setting',
   KYC = '/v2/kyc',
-  NEW_ARRIVAL = '/v2/new-arrival'
+  NEW_ARRIVAL = '/v2/new-arrivals'
 }
 // Enum using the enum keyword
 export enum SubRoutes {
