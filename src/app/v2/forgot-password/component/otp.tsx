@@ -56,11 +56,11 @@ const OTPComponent = ({
           <Image src={keyIcon} alt="keyIcon" />
         </div>
 
-        <div className="text-headingM text-neutral-900 font-medium mt-[-170px]">
+        <div className="text-headingM text-neutral900 font-medium mt-[-170px]">
           {ManageLocales('app.forgotPassword')}
         </div>
 
-        <div className="text-mRegular text-neutral-900">
+        <div className="text-mRegular text-neutral900">
           OTP has been sent to {phoneNumber.phoneNumber}
           <div
             className="cursor-pointer"
@@ -77,10 +77,10 @@ const OTPComponent = ({
         />
 
         <div className="flex justify-center">
-          <p className="text-neutral-900 pr-10">Haven’t received any OTP ?</p>
+          <p className="text-neutral900 pr-10">Haven’t received any OTP ?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-500' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0
@@ -132,7 +132,7 @@ const OTPComponent = ({
         >
           <div className="text-mMedium font-medium flex items-center">
             <Image src={backArrow} alt="backArrow" />
-            <p className="text-neutral-900">
+            <p className="text-neutral900">
               {ManageLocales('app.goBackToLogin')}
             </p>
           </div>

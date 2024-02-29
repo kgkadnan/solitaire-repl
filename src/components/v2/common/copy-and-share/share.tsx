@@ -109,7 +109,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
     return (
       <div className="flex flex-col gap-[24px] ">
         <div className="flex justify-between">
-          <p className="text-headingS font-medium text-neutral-900">
+          <p className="text-headingS font-medium text-neutral900">
             Share Diamond Details
           </p>
           <div
@@ -121,7 +121,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
           </div>
         </div>
         <div className="flex justify-between">
-          <p className="text-lMedium font-medium text-neutral-900">
+          <p className="text-lMedium font-medium text-neutral900">
             Select Columns to share
           </p>
           <div
@@ -145,10 +145,8 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
           {shareOptions.map(item => (
             <div
               key={item.state}
-              className={`w-[187px] border-[1px] text-mMedium font-medium flex items-center rounded-[4px] border-neutral-200  ${
-                item.name === 'Public URL'
-                  ? 'text-infoMain'
-                  : 'text-neutral-900'
+              className={`w-[187px] border-[1px] text-mMedium font-medium flex items-center rounded-[4px] border-neutral200  ${
+                item.name === 'Public URL' ? 'text-infoMain' : 'text-neutral900'
               }`}
               onClick={() => handleAttributeToggle(item.state)}
             >

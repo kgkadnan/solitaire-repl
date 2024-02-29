@@ -85,7 +85,7 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
       {computeField().map(element => {
         return (
           <div
-            className="text-mMedium font-medium text-neutral-900 px-[16px]"
+            className="text-mMedium font-medium text-neutral900 px-[16px]"
             key={element.label}
           >
             {element.label}: {element.value}

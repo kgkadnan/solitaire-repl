@@ -25,9 +25,9 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
       </div>
       <div className="flex gap-[12px] flex-col mt-[80px] w-[100%]">
         {header && (
-          <p className="text-headingS text-neutral-900 font-medium">{header}</p>
+          <p className="text-headingS text-neutral900 font-medium">{header}</p>
         )}
-        <div className="text-mRegular text-neutral-600">
+        <div className="text-mRegular text-neutral600">
           <p>{content ?? 'Something went wrong'}</p>
         </div>
         {handleClick && (

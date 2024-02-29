@@ -27,11 +27,11 @@ const ForgotComponent = ({
           <Image src={keyIcon} alt="keyIcon" />
         </div>
 
-        <div className="text-headingM text-neutral-900 font-medium mt-[-170px]">
+        <div className="text-headingM text-neutral900 font-medium mt-[-170px]">
           {ManageLocales('app.forgotPassword')}
         </div>
 
-        <div className="text-mRegular text-neutral-900">
+        <div className="text-mRegular text-neutral900">
           {ManageLocales('app.forgotPassword.title')}
         </div>
 
@@ -67,9 +67,9 @@ const ForgotComponent = ({
             size={'custom'}
             className="border-none w-[100%]"
           >
-            <div className="text-mMedium font-medium flex items-center">
+            <div className="text-mMedium font-medium flex items-center gap-2">
               <Image src={backArrow} alt="backArrow" />
-              <p className="text-neutral-900">
+              <p className="text-neutral900">
                 {ManageLocales('app.goBackToLogin')}
               </p>
             </div>

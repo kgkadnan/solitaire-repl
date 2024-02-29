@@ -22,7 +22,7 @@ const Breadcrum = ({
   return (
     <>
       {searchParameters.length > 0 && (
-        <div className=" text-neutral-600 text-mMedium flex gap-[8px] ">
+        <div className=" text-neutral600 text-mMedium flex gap-[8px] ">
           <Link
             className={'flex items-center cursor-pointer'}
             href={`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`}

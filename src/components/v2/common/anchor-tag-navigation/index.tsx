@@ -76,7 +76,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               delay={0}
               className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${
                 activeLink === links
-                  ? 'border-b-2 border-neutral-900 text-neutral-900'
+                  ? 'border-b-2 border-neutral900 text-neutral900'
                   : ''
               }`}
               onClick={() => handleLinkClick(links)}

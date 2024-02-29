@@ -511,10 +511,10 @@ const KYC = () => {
         </div>
 
         <div className="flex justify-center py-[10px]">
-          <p className="text-neutral-900 pr-10">Didn’t receive the email?</p>
+          <p className="text-neutral900 pr-10">Didn’t receive the email?</p>
           <p
             className={`${
-              resendTimer > 0 ? 'text-neutral-500' : 'text-infoMain'
+              resendTimer > 0 ? 'text-neutral500' : 'text-infoMain'
             } cursor-pointer`}
             onClick={() =>
               resendTimer > 0

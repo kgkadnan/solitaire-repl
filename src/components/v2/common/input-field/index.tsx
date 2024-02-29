@@ -22,7 +22,7 @@ export const InputField = ({
 
   return (
     <div className={` text-left w-full gap-1 ${styles?.inputMain}`}>
-      {label && <p className="text-mRegular text-neutral-900">{label}</p>}
+      {label && <p className="text-mRegular text-neutral900">{label}</p>}
       <div className="flex relative items-center">
         <Input
           ref={inputRef}

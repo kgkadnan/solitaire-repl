@@ -70,7 +70,7 @@ const OtpInput: React.FC<IOtpInput> = ({
             type="number"
             maxLength={1}
             className={`${
-              error ? 'border-dangerMain' : 'border-neutral-200'
+              error ? 'border-dangerMain' : 'border-neutral200'
             } border-[1px] ${styles.otpInput}`}
             value={value}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
