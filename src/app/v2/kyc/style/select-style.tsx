@@ -4,7 +4,7 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
       ...styles,
       color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
 
-      backgroundColor: 'var(--neutral-0)',
+      backgroundColor: 'var(--neutral-25)',
       borderRadius: '4px 4px 4px 4px',
       // border: 'none',
       border: error.length
@@ -39,9 +39,10 @@ export const colourStyles = (error: any, isDisabled?: boolean) => {
     }),
     placeholder: (styles: any) => ({
       ...styles,
-      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-900)',
+      color: isDisabled ? 'var(--neutral-500)' : 'var(--neutral-400)',
       border: 'none',
-      height: '38px'
+      height: '38px',
+      padding: '7px 0px'
     }),
     menuList: (styles: any) => ({
       ...styles,

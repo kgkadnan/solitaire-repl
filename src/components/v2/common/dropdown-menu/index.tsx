@@ -40,7 +40,7 @@ export const Dropdown: React.FC<IDropdownData> = ({
       </DropdownMenuTrigger>
       {isDropdownOpen && (
         <DropdownMenuContent
-          className={`border-[1px] items-center border-solid border-neutral200  text-neutral900 rounded-[8px]`}
+          className={`border-[1px] items-center border-solid border-neutral200  text-neutral900 rounded-[8px] `}
         >
           {isDisable && (
             <div className="flex justify-center border-b-[1px] border-solid border-neutral200 bg-neutral0 py-[8px]">

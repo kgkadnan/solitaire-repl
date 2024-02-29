@@ -17,7 +17,7 @@ export const isSearchAlreadyExist = (data: any, nameToFind: string) => {
     (search: any) =>
       search.saveSearchName.toLowerCase() === nameToFind.toLowerCase()
   );
-  console.log('foundSearch', foundSearch);
+
   return foundSearch ? data.indexOf(foundSearch) : null;
 };
 
@@ -94,6 +94,7 @@ export const handleCardClick = ({
             data,
             specificCardData[0].name
           );
+          console.log('isAlreadyOpenIndex', isAlreadyOpenIndex);
           if (isAlreadyOpenIndex) {
             router.push(
               `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${

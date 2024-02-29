@@ -52,6 +52,7 @@ const cities = [
   'VISAKHAPATNAM',
   'BHUBANESWAR',
   'DEHRADUN'
+
   // Other states and cities...
 ];
 
@@ -62,13 +63,15 @@ const computeCountryDropdownField = (cities: any) => {
   }));
 };
 
-console.log('computeCountryDropdownField', computeCountryDropdownField(cities));
 const CompanyDetail = ({
   formErrorState,
   formState,
   dispatch,
   country
 }: any) => {
+  console.log(
+    formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS].city
+  );
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -112,7 +115,7 @@ const CompanyDetail = ({
               }
               placeholder={'Enter name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: `${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
                   ]?.['company_name']
@@ -149,7 +152,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter number'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['business_registration_number']
@@ -187,7 +190,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Enter email id'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['company_email']
@@ -227,7 +230,7 @@ const CompanyDetail = ({
               }
               placeholder={'Enter year'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: `${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
                   ]?.['year_of_establishment']
@@ -267,7 +270,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter number'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['vat_number']
@@ -307,7 +310,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Enter number'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['company_pan_number']
@@ -348,7 +351,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Address line'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['address']
@@ -388,7 +391,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter address line 1'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['address_line_1']
@@ -428,7 +431,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Enter number'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['gst_number']
@@ -469,7 +472,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter number'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['fax_number']
@@ -487,7 +490,7 @@ const CompanyDetail = ({
                 <p className="text-mRegular text-neutral-900">City*</p>
                 <Select
                   name="city"
-                  placeholder={'Select city'}
+                  placeholder={'Search by Saved Filter Parameter'}
                   options={computeCountryDropdownField(cities)}
                   onChange={({ value }: any) => {
                     handleInputChange(
@@ -509,13 +512,13 @@ const CompanyDetail = ({
                     label:
                       formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city'] ?? '',
+                      ]?.['city'],
                     value:
                       formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['city'] ?? ''
+                      ]?.['city']
                   }}
-                  autoFocus={false}
+                  // autoFocus={false}
                 />
               </div>
             )}
@@ -549,7 +552,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter address line 2'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['address_line_2']
@@ -588,7 +591,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Enter number'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['business_registration_number']
@@ -628,7 +631,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter name'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['subsidiary_company']
@@ -647,11 +650,11 @@ const CompanyDetail = ({
                   handleInputChange(
                     `formState.online.sections[${[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]}][State*]`,
+                    ]}][state]`,
                     e.target.value,
                     dispatch,
                     kycScreenIdentifierNames.COMPANY_DETAILS,
-                    'State*'
+                    'state'
                     // formState
                   )
                 }
@@ -660,19 +663,20 @@ const CompanyDetail = ({
                 value={
                   formState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
-                  ]?.['State*'] ?? ''
+                  ]?.['state'] ?? ''
                 }
                 errorText={
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
-                  ]?.['State*'] ?? ''
+                  ]?.['state'] ?? ''
                 }
+                disabled={true}
                 placeholder={'Enter state'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['State*']
+                    ]?.['state']
                       ? 'border-dangerMain'
                       : 'border-neutral200'
                   }`
@@ -771,7 +775,7 @@ const CompanyDetail = ({
                 }
                 placeholder={'Enter name'}
                 styles={{
-                  input: `rounded-l-[0px] ${
+                  input: `${
                     formErrorState?.online?.sections?.[
                       kycScreenIdentifierNames.COMPANY_DETAILS
                     ]?.['subsidiary_company']
@@ -811,7 +815,7 @@ const CompanyDetail = ({
                   }
                   placeholder={'Enter name'}
                   styles={{
-                    input: `rounded-l-[0px] ${
+                    input: `${
                       formErrorState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['ultimate_beneficiary_name']
@@ -821,6 +825,71 @@ const CompanyDetail = ({
                   }}
                 />
               ))}
+          </div>
+          <div className="flex gap-[16px]">
+            {country === countries.INDIA && (
+              <DynamicMobileInput
+                label={'Contact Number*'}
+                handleInputChange={e =>
+                  e.target.value.trim().length <= 15
+                    ? handleInputChange(
+                        `formState.online.sections[${[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]}][company_phone_number]`,
+                        e.target.value,
+                        dispatch,
+                        kycScreenIdentifierNames.COMPANY_DETAILS,
+                        'company_phone_number'
+                        // formState
+                      )
+                    : dispatch(
+                        updateFormState({
+                          name: `formErrorState.online.sections[${[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]}][company_phone_number]}`,
+                          value: RANGE_VALIDATION('Contact Number*', 0, 15)
+                        })
+                      )
+                }
+                handleSelectChange={({ value }: any) => {
+                  handleInputChange(
+                    `formState.online.sections[${[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]}][company_country_code]`,
+                    value,
+                    dispatch,
+                    kycScreenIdentifierNames.COMPANY_DETAILS,
+                    'company_country_code'
+                  );
+                }}
+                isNotEditable={true}
+                containerStyle={'!w-full'}
+                type="number"
+                name="Contact Number*"
+                errorText={
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_phone_number'] ?? ''
+                }
+                placeholder={'Enter contact number'}
+                phoneValue={
+                  formState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['company_phone_number'] ?? ''
+                }
+                countryCodeValue={{
+                  label:
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['company_country_code'] ?? '',
+                  value:
+                    formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['company_country_code'] ?? ''
+                }}
+              />
+            )}
+            <div></div>
           </div>
           <hr className="border-neutral200" />
         </div>

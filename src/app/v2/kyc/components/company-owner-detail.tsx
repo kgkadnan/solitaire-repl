@@ -51,7 +51,7 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'Enter first name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
                   ]?.['owner_first_name']
@@ -88,7 +88,7 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'Enter last name'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
                   ]?.['owner_last_name']
@@ -125,7 +125,7 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'Enter pan or adhar'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
                   ]?.['owner_pan_or_aadhaar_number']
@@ -221,7 +221,7 @@ const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
               }
               placeholder={'Enter email id'}
               styles={{
-                input: `rounded-l-[0px] ${
+                input: ` ${
                   formErrorState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
                   ]?.['owner_email']
