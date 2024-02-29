@@ -52,12 +52,7 @@ const SideNavigationBar = () => {
         currentRoute === Routes.SEARCH &&
         currentSubRoute !== SubRoutes.SAVED_SEARCH
     },
-    {
-      src: <MyDaimondsIcon />,
-      title: ManageLocales('app.sideNavigationBar.yourOrders'),
-      link: Routes.YOUR_ORDERS,
-      isActive: currentRoute === Routes.YOUR_ORDERS
-    },
+
     {
       src: <BookmarkIcon />,
       title: ManageLocales('app.sideNavigationBar.bookmark'),
@@ -66,12 +61,12 @@ const SideNavigationBar = () => {
         currentRoute === Routes.SEARCH &&
         currentSubRoute === SubRoutes.SAVED_SEARCH
     },
-    {
-      src: <AppointmentIcon />,
-      title: ManageLocales('app.sideNavigationBar.appointments'),
-      link: Routes.APPOINTMENTS,
-      isActive: currentRoute === Routes.APPOINTMENTS
-    },
+    // {
+    //   src: <AppointmentIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.appointments'),
+    //   link: Routes.APPOINTMENTS,
+    //   isActive: currentRoute === Routes.APPOINTMENTS
+    // },
     {
       src: <CartIcon />,
       title: ManageLocales('app.sideNavigationBar.myCart'),
@@ -79,14 +74,20 @@ const SideNavigationBar = () => {
       isActive: currentRoute === Routes.MY_CART
     },
     {
-      title: 'line-separator-2'
-    },
-    {
-      src: <SettingIcon />,
-      title: ManageLocales('app.sideNavigationBar.settings'),
-      link: Routes.SETTINGS,
-      isActive: currentRoute === Routes.SETTINGS
+      src: <MyDaimondsIcon />,
+      title: ManageLocales('app.sideNavigationBar.yourOrders'),
+      link: Routes.YOUR_ORDERS,
+      isActive: currentRoute === Routes.YOUR_ORDERS
     }
+    // {
+    //   title: 'line-separator-2'
+    // },
+    // {
+    //   src: <SettingIcon />,
+    //   title: ManageLocales('app.sideNavigationBar.settings'),
+    //   link: Routes.SETTINGS,
+    //   isActive: currentRoute === Routes.SETTINGS
+    // }
   ];
   return (
     <div className="w-[84px] border-r-[1px] border-neutral200 overflow-hidden h-[100vh] fixed z-50 pt-[8px] flex flex-col items-center bg-neutral0">
