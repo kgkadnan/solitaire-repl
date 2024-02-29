@@ -298,6 +298,7 @@ const Login = () => {
             variant={'primary'}
             size={'custom'}
             className="rounded-[4px] w-[170px] h-10"
+            type="button"
           >
             {ManageLocales('app.OTPVerification.save')}
           </IndividualActionButton>

@@ -63,7 +63,6 @@ export const handleRegister = async ({
       }
     })
     .catch((e: any) => {
-      console.log('error', e);
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds

@@ -147,6 +147,7 @@ const LoginComponent = ({
             variant={'secondary'}
             size={'custom'}
             className="border-none w-[100%]"
+            type="button"
           >
             <div className="text-mMedium font-medium flex">
               <p className="text-neutral600">

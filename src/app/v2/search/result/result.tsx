@@ -313,7 +313,6 @@ const Result = ({
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
   );
-  console.log(errorText, 'llllllllll');
   const handleNewSearch = () => {
     router.push(`${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`);
   };
