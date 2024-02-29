@@ -49,7 +49,7 @@ const OtpInput: React.FC<IOtpInput> = ({
 
   const handlePaste = (event: ClipboardEvent<HTMLInputElement>) => {
     event.preventDefault();
-    setError &&  setError('');
+    setError && setError('');
     const pasteData = event.clipboardData
       .getData('text')
       .trim()

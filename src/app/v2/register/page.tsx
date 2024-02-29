@@ -242,7 +242,7 @@ const Register = () => {
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
-        dialogStyle='min-h-[280px]'
+        dialogStyle="min-h-[280px]"
       />
       <DialogComponent
         dialogContent={dialogContent}

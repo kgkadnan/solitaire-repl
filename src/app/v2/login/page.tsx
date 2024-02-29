@@ -366,7 +366,7 @@ const Login = () => {
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
-        dialogStyle='min-h-[280px]'
+        dialogStyle="min-h-[280px]"
       />
       <UserAuthenticationLayout
         formData={renderLoginContent()}
