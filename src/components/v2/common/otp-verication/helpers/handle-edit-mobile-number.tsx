@@ -1,7 +1,7 @@
 import { IOtp } from '..';
 import { IToken } from '@/app/register/page';
 import logger from 'logging/log-util';
-import ErrorModel from '@/components/common/error-model';
+import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -59,7 +59,7 @@ export const handleEditMobileNumber = ({
       setIsDialogOpen(true);
 
       setDialogContent(
-        <ErrorModel
+        <InvalidCreds
           content={'Mobile number already exists'}
           handleClick={() => setIsDialogOpen(false)}
         />
