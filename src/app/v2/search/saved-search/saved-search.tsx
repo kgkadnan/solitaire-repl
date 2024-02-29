@@ -187,6 +187,8 @@ const SavedSearch = () => {
     );
   };
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+
   return (
     <div className="mb-[20px]">
       <DialogComponent
@@ -250,7 +252,7 @@ const SavedSearch = () => {
             />
           </div>
         </div>
-        <div className="h-[70vh] overflow-auto">
+        <div className={` overflow-auto ${isNudge ? 'h-[63px]' : 'h-[70px]'}`}>
           {savedSearchState?.savedSearchData?.length ? (
             savedSearchState?.savedSearchData?.map(
               ({ id, name, meta_data, created_at }: ISavedSearches, index) => {
