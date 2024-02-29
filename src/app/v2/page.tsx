@@ -1,12 +1,21 @@
 'use client';
 
+import Carousel from '@/components/v2/common/carousel';
 import KAMCard from '@/components/v2/common/kam-card';
 
 const page = () => {
+  const images = [
+    {
+      original: 'https://example.com/photo1.jpg',
+      thumbnail: 'https://example.com/photo1_thumb.jpg'
+    }
+    // Add more images as needed
+  ];
   return (
     <div>
       {' '}
       <div>search</div>
+      <Carousel images={images} />
       <KAMCard
         name="Mr. Rajeev Sinha"
         role="Key Account Manager"
@@ -18,7 +27,9 @@ const page = () => {
           <p>Terms & Conditions</p>
           <p>Privacy Policy</p>
         </div>
-        <p className='text-neutral500'>Copyright © 2022 KGK Live.All rights reserved.</p>
+        <p className="text-neutral500">
+          Copyright © 2022 KGK Live.All rights reserved.
+        </p>
       </div>
     </div>
   );
