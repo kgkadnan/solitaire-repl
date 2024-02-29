@@ -377,7 +377,7 @@ const Form = ({
                 savedSearch?.savedSearch?.name
               );
 
-              if (isAlreadyOpenIndex) {
+              if (isAlreadyOpenIndex >= 0) {
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
                     isAlreadyOpenIndex + 1
