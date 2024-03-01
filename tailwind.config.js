@@ -165,7 +165,10 @@ module.exports = {
         legendHold: 'var(--legend-Hold)',
         legendMemoFill: 'var(--legend-Memo-fill)',
         lengendMemoBorder: 'var(--legend-memo-border)',
-        legendMemo: 'var(--legend-Memo)'
+        legendMemo: 'var(--legend-Memo)',
+
+        gradientStart: 'hsla(198, 85%, 92%, 1)',
+        gradientEnd: 'hsla(240, 100%, 95%, 1)'
       },
       borderRadius: {
         lg: 'var(--radius)',
