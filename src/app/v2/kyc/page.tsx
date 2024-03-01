@@ -29,6 +29,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import InvalidCreds from '../login/component/invalid-creds';
 import CompanyDetail from './components/company-detail';
+import { RenderAttachment } from './components/attachement';
 
 const initialTokenState = {
   token: '',
@@ -49,7 +50,7 @@ const KYC = () => {
   const [resendEmailOTP] = useResendEmailOTPMutation();
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(1);
+  const [currentStepperStep, setCurrentStepperStep] = useState(3);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -445,6 +446,17 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
+            country={'India'}
+          />
+        );
+
+      case kycScreenIdentifierNames.ATTACHMENT:
+        return (
+          <RenderAttachment
+            formErrorState={formErrorState}
+            formState={formState}
+            modalSetState={modalSetState}
+            modalState={modalState}
             country={'India'}
           />
         );
