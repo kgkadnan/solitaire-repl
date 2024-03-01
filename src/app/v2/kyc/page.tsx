@@ -126,6 +126,21 @@ const KYC = () => {
     }
   }
 
+  const handleTermAndCondition = (state: boolean) => {
+    dispatch(
+      updateFormState({
+        name: `formErrorState.termAndCondition`,
+        value: false
+      })
+    );
+    dispatch(
+      updateFormState({
+        name: `formState.termAndCondition`,
+        value: state
+      })
+    );
+  };
+
   useEffect(() => {
     triggerKycDetail({}).then(res => {
       let kycDetails = res?.data;
@@ -458,6 +473,7 @@ const KYC = () => {
             modalSetState={modalSetState}
             modalState={modalState}
             country={'India'}
+            handleTermAndCondition={handleTermAndCondition}
           />
         );
     }

@@ -511,6 +511,28 @@ const Form = ({
               diamond_count: parseInt(data?.count)
             };
             updateSavedSearch(updateSavedData);
+
+            let localStorageData = JSON.parse(localStorage.getItem('Search')!);
+
+            let isAlreadyOpenIndex = isSearchAlreadyExist(
+              localStorageData,
+              savedSearch?.savedSearch?.name
+            );
+
+            if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
+              let setDataOnLocalStorage = {
+                id: savedSearch.savedSearch.id,
+                queryParams: updatedMeta,
+                saveSearchName: savedSearch?.savedSearch?.name,
+                searchId: data?.search_id,
+                isSavedSearch: true
+              };
+
+              const updatedData = [...localStorageData];
+              updatedData[isAlreadyOpenIndex] = setDataOnLocalStorage;
+              localStorage.setItem('Search', JSON.stringify(updatedData));
+            }
+
             router.push(
               `${Routes.SEARCH}?active-tab=${SubRoutes.SAVED_SEARCH}`
             );

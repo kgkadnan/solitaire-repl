@@ -6,7 +6,7 @@
 
 .format {
   color: var(--neutral-600);
-  font-size: 14px;
+  font-size: var(--font-size-sRegular);
   font-weight: 400;
 }
 .errorFormat {
