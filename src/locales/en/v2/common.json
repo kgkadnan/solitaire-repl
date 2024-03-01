@@ -153,6 +153,7 @@
   "app.kyc.bankingDetail.header.title": "Banking Details",
   "app.kyc.personalDetail.header.title": "Personal Details",
   "app.kyc.companyDetail.header.title": "Company Details",
+  "app.kyc.attachment.header.title": "Attachment",
   "app.kyc.footer.back": "Back",
   "app.kyc.footer.saveAndNext": "Save and next",
   "app.modal.kyc.emailVerification": "Email Verification"
