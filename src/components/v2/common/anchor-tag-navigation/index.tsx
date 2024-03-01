@@ -47,6 +47,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
       window.removeEventListener('scroll', handleUserScroll);
     };
   }, [allowScrollReset]);
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   return (
     <div
       className={`flex items-center w-full bg-neutral0 sticky  z-[3] ${
@@ -71,7 +72,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               to={links}
               spy={true}
               smooth={true}
-              offset={-120}
+              offset={isNudge ? -170 : -120}
               duration={100}
               delay={0}
               className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${
