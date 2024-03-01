@@ -14,22 +14,35 @@ import { ManageLocales } from '@/utils/v2/translate';
 import OtpInput from '@/components/v2/common/otp';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import {
   useVerifyEmailOTPMutation,
-  useResendEmailOTPMutation
+  useResendEmailOTPMutation,
+  useSubmitKYCMutation
 } from '@/features/api/kyc';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import arrowBackwar from '@public/v2/assets/icons/kyc/arrow-backward.svg';
 import Image from 'next/image';
 import StepperComponent from '@/components/v2/common/stepper';
-import { validateScreen } from './helper/validations/screen/screen';
+import {
+  validateAttachment,
+  validateManualAttachment,
+  validateScreen
+} from './helper/validations/screen/screen';
 import { useKycMutation, useLazyGetKycDetailQuery } from '@/features/api/kyc';
-import { kycScreenIdentifierNames, kycStatus } from '@/constants/enums/kyc';
+import {
+  countries,
+  kycScreenIdentifierNames,
+  kycStatus
+} from '@/constants/enums/kyc';
 import ActionButton from '@/components/v2/common/action-button';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import InvalidCreds from '../login/component/invalid-creds';
 import CompanyDetail from './components/company-detail';
 import { RenderAttachment } from './components/attachement';
+import { RenderOffline } from './components/render-offline';
+import { useLazyGetAuthDataQuery } from '@/features/api/login';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 const initialTokenState = {
   token: '',
@@ -50,7 +63,10 @@ const KYC = () => {
   const [resendEmailOTP] = useResendEmailOTPMutation();
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(3);
+  const [submitKYC] = useSubmitKYCMutation();
+  const [triggerAuth] = useLazyGetAuthDataQuery();
+
+  const [currentStepperStep, setCurrentStepperStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -421,6 +437,185 @@ const KYC = () => {
     }
   };
 
+  const kycSubmitted = async () => {
+    setIsDialogOpen(false);
+    await submitKYC({
+      country: selectedCountry,
+      offline:
+        formState.country === countries.DUBAI ||
+        selectedSubmissionOption === 'offline'
+          ? true
+          : false
+    })
+      .unwrap()
+      .then(() => {
+        const authToken = JSON.parse(localStorage.getItem('auth')!);
+
+        triggerAuth(authToken).then(res => {
+          localStorage.setItem('user', JSON.stringify(res?.data));
+        });
+        dispatch(isEditingKYC(false));
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+                <p className="text-neutral600 text-mRegular">
+                  Please review all the information you have entered before
+                  submitting the form!
+                </p>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+      })
+      .catch(e => {
+        setIsDialogOpen(true); // Show error dialog
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={errorSvg} alt="errorSvg" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <p className="text-neutral600 text-mRegular">
+                {e?.data?.message}
+              </p>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+      });
+  };
+
+  const handleSubmit = async () => {
+    let manualValidationError: any = [];
+    let onlineValidator: any = [];
+
+    if (
+      formState.country === countries.DUBAI ||
+      selectedSubmissionOption === 'offline'
+    ) {
+      manualValidationError = await validateManualAttachment(
+        formState.attachment
+      );
+      if (Array.isArray(manualValidationError)) {
+        manualValidationError.forEach(error => {
+          dispatch(
+            updateFormState({
+              name: `formErrorState.attachment.${[error.property]}`,
+              value: Object.values(error.constraints ?? {})[0] || ''
+            })
+          );
+        });
+      }
+    } else {
+      const screenValidationError = formErrorState?.online?.sections;
+      onlineValidator = [];
+
+      for (const key of Object.keys(screenValidationError)) {
+        let validationErrors = await validateScreen(
+          formState.online.sections[key],
+          key,
+          formState.country
+        );
+        // If validationErrors is an array, add its elements to onlineValidator
+        if (Array.isArray(validationErrors)) {
+          onlineValidator.push(...validationErrors);
+        }
+      }
+    }
+
+    let validationError = await validateAttachment(
+      formState.attachment,
+      selectedCountry
+    );
+
+    if (Array.isArray(validationError)) {
+      validationError.forEach(error => {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment.${[error.property]}`,
+            value: Object.values(error.constraints ?? {})[0] || ''
+          })
+        );
+      });
+    }
+
+    if (
+      !validationError?.length &&
+      !onlineValidator.length &&
+      !manualValidationError.length
+    ) {
+      if (!formState.termAndCondition) {
+        dispatch(
+          updateFormState({
+            name: `formErrorState.termAndCondition`,
+            value: true
+          })
+        );
+      } else {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+                <p className="text-neutral600 text-mRegular">
+                  Please review all the information you have entered before
+                  submitting the form!
+                </p>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.cancel'),
+                    handler: () => setIsDialogOpen(false)
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.submit'),
+                    handler: () => {
+                      kycSubmitted();
+                    }
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
+      }
+    }
+  };
+
   // const completeStepperStep = (stepIndex: number) => {
   //   setCompletedSteps(prevCompletedSteps => {
   //     const newCompletedSteps = new Set(prevCompletedSteps);
@@ -428,7 +623,7 @@ const KYC = () => {
   //     return newCompletedSteps;
   //   });
   // };
-  const renderComponent = (state: string) => {
+  const renderStepperComponent = (state: string) => {
     switch (state) {
       case kycScreenIdentifierNames.COMPANY_OWNER_DETAILS:
         return (
@@ -470,6 +665,7 @@ const KYC = () => {
           <RenderAttachment
             formErrorState={formErrorState}
             formState={formState}
+            selectedSubmissionOption={selectedSubmissionOption}
             modalSetState={modalSetState}
             modalState={modalState}
             country={'India'}
@@ -500,15 +696,32 @@ const KYC = () => {
       case 'online':
         return (
           <StepperComponent
-            country={selectedCountry}
+            country={'India'}
             currentStepperStep={currentStepperStep}
             setCurrentStepperStep={setCurrentStepperStep}
             completedSteps={completedSteps}
             rejectedSteps={rejectedSteps}
-            renderComponent={renderComponent}
+            renderStepperComponent={renderStepperComponent}
             handleStepperNext={handleStepperNext}
             handleStepperBack={handleStepperBack}
             isEmailVerified={formState.isEmailVerified}
+          />
+        );
+
+      case countries.DUBAI:
+      case 'offline':
+        return (
+          <RenderOffline
+            formErrorState={formErrorState}
+            formState={formState}
+            fromWhere={currentState}
+            selectedSubmissionOption={selectedSubmissionOption}
+            modalSetState={modalSetState}
+            modalState={modalState}
+            country={'Dubai'}
+            handleTermAndCondition={handleTermAndCondition}
+            handleBack={handleBack}
+            handleSubmit={handleSubmit}
           />
         );
     }

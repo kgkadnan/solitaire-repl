@@ -1,6 +1,6 @@
 import logger from 'logging/log-util';
 import {
-  kycAttachmentIdentifierNames,
+  kycAttachmentIdentifier,
   kycScreenIdentifierNames,
   supportedCountries
 } from '@/constants/enums/kyc';
@@ -20,7 +20,7 @@ import { IndiaKycPostCompanyOwnerInformation } from './company-owner-details-val
 import {
   BelgiumAttachmentValidation,
   IndianAttachmentValidation,
-  OtherAttachmentValidation,
+  DubaiAttachmentValidation,
   UsaAttachmentValidation
 } from './attachment-validators';
 import { ManualAttachmentValidation } from './manual-attachment-validator';
@@ -186,7 +186,7 @@ export const validateAttachment = async (formData: any, country: string) => {
   let attachments = {};
   if (formData) {
     switch (country) {
-      case kycAttachmentIdentifierNames.INDIA:
+      case kycAttachmentIdentifier.INDIA:
         attachments = new IndianAttachmentValidation(
           formData?.pan_card?.selectedFile,
           formData?.gst_certificate?.selectedFile,
@@ -202,22 +202,22 @@ export const validateAttachment = async (formData: any, country: string) => {
           formData?.section_194q?.selectedFile
         );
         break;
-      case kycAttachmentIdentifierNames.BELGIUM:
+      case kycAttachmentIdentifier.BELGIUM:
         attachments = new BelgiumAttachmentValidation(
           formData?.registration_number?.selectedFile,
           formData?.passport?.selectedFile,
           formData?.id_copy?.selectedFile
         );
         break;
-      case kycAttachmentIdentifierNames.USA:
+      case kycAttachmentIdentifier.USA:
         attachments = new UsaAttachmentValidation(
           formData?.registration_number?.selectedFile,
           formData?.passport?.selectedFile,
           formData?.id_copy?.selectedFile
         );
         break;
-      case kycAttachmentIdentifierNames.OTHER:
-        attachments = new OtherAttachmentValidation(
+      case kycAttachmentIdentifier.DUBAI:
+        attachments = new DubaiAttachmentValidation(
           formData?.incumbency_certificate?.selectedFile,
           formData?.trade_license?.selectedFile,
           formData?.gst_certificate?.selectedFile,
