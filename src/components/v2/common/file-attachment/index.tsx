@@ -16,8 +16,9 @@ import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import { IModalSetState } from '@/app/search/result/result-interface';
 import { Label } from '@/components/ui/label';
-import Loader from '../loader';
+
 import { handleDeleteAttachment } from '@/app/v2/kyc/helper/handle-delete-attachment';
+import Loader from './component/loader';
 
 interface IFileAttachments {
   lable: string;
