@@ -60,7 +60,7 @@ const SubmissionOption = ({
           </div>
         ))}
       </div>
-      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] mt-auto p-[16px]">
+      <div className="h-[72px] sticky bottom-0 bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[

@@ -1,23 +1,13 @@
 import React, { useRef } from 'react';
 import styles from './input-radio.module.scss';
+import { InputField } from '../input-field';
 
 export const RadioButton: React.FC<any> = ({
   radioMetaData,
   onChange,
-  handleInputChange,
-  inputValue,
   customStyle
 }) => {
-  const {
-    label,
-    value,
-    name,
-    checked,
-    isInput,
-    inputName,
-    placeholder,
-    inputStyle
-  } = radioMetaData;
+  const { label, value, name, checked, inputs } = radioMetaData;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleRadioChange = () => {
@@ -27,15 +17,15 @@ export const RadioButton: React.FC<any> = ({
     }
   };
 
-  const handleInputClick = () => {
-    if (inputRef.current) {
-      onChange(value);
-      inputRef.current.focus();
-    }
-  };
+  // const handleInputClick = () => {
+  //   if (inputRef.current) {
+  //     onChange(value);
+  //     inputRef.current.focus();
+  //   }
+  // };
 
   return (
-    <div className="radio-group ">
+    <div className="flex flex-col gap-[10px] relative">
       <label htmlFor={value} className={`${styles.radio} ${customStyle.radio}`}>
         <input
           type="radio"
@@ -43,26 +33,33 @@ export const RadioButton: React.FC<any> = ({
           name={name}
           value={value}
           checked={checked}
-          onChange={handleRadioChange}
+          onClick={handleRadioChange}
         />
         <div>{label}</div>
         <span></span>
       </label>
 
-      {isInput && (
-        <input
-          className={`${styles.Border} ${inputStyle} bg-transparent focus:outline-none text-solitaireTertiary ml-2`}
-          type="text"
-          name={inputName}
-          value={inputValue}
-          onChange={e => {
-            handleInputChange(e);
-          }}
-          onClick={handleInputClick}
-          ref={inputRef}
-          placeholder={placeholder}
-        />
-      )}
+      <div className="absolute top-[100%]">
+        {checked &&
+          inputs &&
+          inputs.map((input: any) => (
+            <InputField
+              key={input.id}
+              onChange={input.onInputChange}
+              type={input.type}
+              name={input.name}
+              value={input.value}
+              errorText={input.error}
+              placeholder={input.placeholder}
+              styles={{
+                inputMain: `h-64px !w-[380px]`,
+                input: `${
+                  input.error ? 'border-dangerMain' : 'border-neutral200'
+                }`
+              }}
+            />
+          ))}
+      </div>
     </div>
   );
 };

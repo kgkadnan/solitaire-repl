@@ -15,7 +15,7 @@ interface IStepperComponentProps {
   setCurrentStepperStep: any;
   completedSteps: any;
   rejectedSteps: any;
-  renderComponent: any;
+  renderStepperComponent: any;
   handleStepperNext: any;
   handleStepperBack: any;
   isEmailVerified: boolean;
@@ -47,7 +47,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   setCurrentStepperStep,
   completedSteps,
   rejectedSteps,
-  renderComponent,
+  renderStepperComponent,
   handleStepperNext,
   handleStepperBack,
   isEmailVerified
@@ -109,9 +109,9 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
         })}
       </div>
       <div className="">
-        {renderComponent(filteredSteps[currentStepperStep].identifier)}
+        {renderStepperComponent(filteredSteps[currentStepperStep].identifier)}
       </div>
-      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  rounded-t-[8px] mt-auto p-[16px]">
+      <div className="h-[72px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[

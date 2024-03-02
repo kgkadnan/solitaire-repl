@@ -17,7 +17,7 @@ export let AttachmentData: any = {
         {
           id: '2',
           label: 'GST Certificate',
-          isRequired: true,
+          isRequired: false,
           formKey: 'gst_certificate',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES,
@@ -44,7 +44,7 @@ export let AttachmentData: any = {
         {
           id: '6',
           label: 'Section 194Q',
-          isRequired: true,
+          isRequired: false,
           formKey: 'section_194q',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES,
@@ -130,7 +130,7 @@ export let AttachmentData: any = {
     {
       id: '1',
       label: 'FEIN No. / Tax No. / Business Registration Copy',
-      isRequired: true,
+      isRequired: false,
       formKey: 'registration_number',
       maxFile: fileLimit.MAX_FILES,
       minFile: fileLimit.MIN_FILES,
@@ -159,7 +159,7 @@ export let AttachmentData: any = {
     {
       id: '1',
       label: 'FEIN No. / Tax No. / Business Registration Copy',
-      isRequired: true,
+      isRequired: false,
       formKey: 'registration_number',
       maxFile: fileLimit.MAX_FILES,
       minFile: fileLimit.MIN_FILES,
@@ -182,6 +182,62 @@ export let AttachmentData: any = {
       maxFile: fileLimit.MAX_FILES,
       minFile: fileLimit.MIN_FILES,
       fileSize: 20 * 1024 * 1024
+    }
+  ],
+  Dubai: [
+    {
+      id: '1',
+      label: 'Certificate of Incumbency/Extract of Registry',
+      isRequired: true,
+      formKey: 'incumbency_certificate',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 20 * 1024 * 1024
+    },
+    {
+      id: '2',
+      label: 'Business Registration/Trade license',
+      isRequired: true,
+      formKey: 'trade_license',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 20 * 1024 * 1024
+    },
+    {
+      id: '3',
+      label: 'TRN/VAT/GST Certificate',
+      isRequired: true,
+      formKey: 'gst_certificate',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 20 * 1024 * 1024
+    },
+    {
+      id: '4',
+      label: 'MOA/AOA/Partnership Deed',
+      isRequired: false,
+      formKey: 'moa',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 10 * 1024 * 1024
+    },
+    {
+      id: '5',
+      label: 'ID Copy/Passport of Ultimate Beneficial Owners',
+      isRequired: true,
+      formKey: 'owner_id_copy',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 15 * 1024 * 1024
+    },
+    {
+      id: '6',
+      label: 'ID Copy/Passport of Authorised Signatory/Manager',
+      isRequired: true,
+      formKey: 'manager_id_copy',
+      maxFile: fileLimit.MAX_FILES,
+      minFile: fileLimit.MIN_FILES,
+      fileSize: 15 * 1024 * 1024
     }
   ]
 };

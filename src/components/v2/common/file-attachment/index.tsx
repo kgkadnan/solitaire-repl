@@ -7,7 +7,6 @@ import mediaIcon from '@public/v2/assets/icons/attachment/media-icon.svg';
 import styles from './file-attachment.module.scss';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 
-import { handleFileupload } from '@/app/my-account/kyc/helper/handle-file-upload';
 // import { IModalSetState } from '@/app/search/result/result-interface';
 
 import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
@@ -30,6 +29,7 @@ interface IFileAttachments {
   formErrorState: any;
   modalState: any;
   modalSetState: IModalSetState;
+  fileUpload: ({ acceptedFiles, key }: any) => void;
 }
 
 const FileAttachments: React.FC<IFileAttachments> = ({
@@ -40,14 +40,15 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   maxFile,
   minFile,
   formErrorState,
-  fileSize
+  fileSize,
+  fileUpload
   // modalState,
-  // modalSetState
+  // fileUpload
 }) => {
   const dispatch = useAppDispatch();
   const dropzoneStyle = {
-    borderRadius: '10px',
-    padding: '13px 20px',
+    borderRadius: '8px',
+    padding: '15px 20px',
     textAlign: 'center',
     width: '100%',
     cursor: 'pointer',
@@ -59,20 +60,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   };
 
   const onDrop = (acceptedFiles: any) => {
-    console.log('acceptedFiles', acceptedFiles);
-    handleFileupload({
-      acceptedFiles,
-      setUploadProgress: `formState.attachment[${formKey}].uploadProgress`,
-      setIsFileUploaded: `formState.attachment[${formKey}].isFileUploaded`,
-      setSelectedFile: `formState.attachment[${formKey}].selectedFile`,
-      dispatch
-    });
-    dispatch(
-      updateFormState({
-        name: `formErrorState.attachment[${formKey}]`,
-        value: ''
-      })
-    );
+    fileUpload({ acceptedFiles, key: formKey });
   };
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
@@ -123,7 +111,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             {selectedFile.length < maxFile && (
               <input {...getInputProps()} name="attachment" />
             )}
-            <div className=" flex flex-col w-[80%] text-left ">
+            <div className=" flex flex-col w-[100%] text-left ">
               <div className="flex ">
                 <Label className={` ${styles.label} `}>{lable}</Label>
 

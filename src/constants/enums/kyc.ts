@@ -34,6 +34,13 @@ export enum countries {
   DUBAI = 'Dubai'
 }
 
+export enum kycAttachmentIdentifier {
+  INDIA = 'India',
+  BELGIUM = 'Belgium',
+  USA = 'USA',
+  DUBAI = 'Dubai'
+}
+
 export enum kycScreenIdentifierNames {
   PERSONAL_DETAILS = 'personal_details',
   COMPANY_DETAILS = 'company_details',
