@@ -402,6 +402,7 @@ const DataTable = ({
     enableRowSelection: true,
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
+    selectAllMode: 'page',
 
     icons: {
       SearchIcon: () => (
