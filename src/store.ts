@@ -29,6 +29,7 @@ import { otpVerificationApi } from './features/api/otp-verification';
 import { verifyEmailApi } from './features/api/verify-email';
 import { downloadInvoiceApi } from './features/api/download-invoice';
 import { getAllCountryCodeApi } from './features/api/get-country-code';
+import { dashboardApi } from './features/api/dashboard';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -55,7 +56,8 @@ const rootReducer = combineReducers({
   [verifyEmailApi.reducerPath]: verifyEmailApi.reducer,
   [otpVerificationApi.reducerPath]: otpVerificationApi.reducer,
   [downloadInvoiceApi.reducerPath]: downloadInvoiceApi.reducer,
-  [getAllCountryCodeApi.reducerPath]: getAllCountryCodeApi.reducer
+  [getAllCountryCodeApi.reducerPath]: getAllCountryCodeApi.reducer,
+  [dashboardApi.reducerPath]: dashboardApi.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -82,7 +84,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         kycApi.middleware,
         otpVerificationApi.middleware,
         downloadInvoiceApi.middleware,
-        getAllCountryCodeApi.middleware
+        getAllCountryCodeApi.middleware,
+        dashboardApi.middleware
       ),
     preloadedState
   });

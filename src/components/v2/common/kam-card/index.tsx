@@ -1,9 +1,9 @@
-import Avatar from '@public/v2/assets/icons/kam/avatar.svg?url';
+import Avatar from '@public/v2/assets/icons/dashboard/avatar.svg?url';
 
-import Phone from '@public/v2/assets/icons/kam/phone.svg?url';
-import WhatsApp from '@public/v2/assets/icons/kam/whatsapp.svg?url';
-import Mail from '@public/v2/assets/icons/kam/mail.svg?url';
-import Copy from '@public/v2/assets/icons/kam/copy.svg?url';
+import Phone from '@public/v2/assets/icons/dashboard/phone.svg?url';
+import WhatsApp from '@public/v2/assets/icons/dashboard/whatsapp.svg?url';
+import Mail from '@public/v2/assets/icons/dashboard/mail.svg?url';
+import Copy from '@public/v2/assets/icons/dashboard/copy.svg?url';
 import { Toast } from '../copy-and-share/toast';
 import { useState } from 'react';
 

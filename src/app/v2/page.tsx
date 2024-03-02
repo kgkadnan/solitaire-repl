@@ -8,6 +8,13 @@ import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?ur
 import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.svg?url';
 // import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
+import { useGetCustomerQuery } from '@/features/api/dashboard';
+import { useState } from 'react';
+import Background from '@public/v2/assets/icons/dashboard/input-background.svg';
+import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
+import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
+
+import Image from 'next/image';
 
 const Dashboard = () => {
   const router = useRouter();
@@ -45,21 +52,52 @@ const Dashboard = () => {
       link: '/v2/my-cart'
     }
   ];
+
+  const { data: customerData } = useGetCustomerQuery({});
+  console.log(customerData, 'customerData');
+  const [activeTab, setActiveTab] = useState<string>('');
+
+  const tabs = [
+    {
+      label: 'Saved Search'
+    },
+    {
+      label: 'Active Invoice'
+    },
+    {
+      label: 'Pending Invoice'
+    }
+  ];
+
+  const handleTabs = ({ tab }: { tab: string }) => {
+    setActiveTab(tab);
+  };
+
   return (
     <>
       <div className="flex flex-col gap-4 ">
         {' '}
-        <div>
-          <div>
-            <p>Hello</p>
+        <div
+          className="bg-cover bg-no-repeat flex justify-center flex-col items-center h-[220px]"
+          style={{ backgroundImage: `url(${Background})` }}
+        >
+          <p>Hello, User</p>
+          <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
+            <div className="relative flex-grow items-center">
+              <input
+                className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
+                type="text"
+                placeholder="Search for Diamonds"
+              />
+              <div className="absolute left-0 top-[5px]">
+                <Image src={searchIcon} alt={'searchIcon'} />
+              </div>
+              <div className="absolute right-0 top-[5px]">
+                <Image src={micIcon} alt={'micIcon'} />
+              </div>
+            </div>
           </div>
         </div>
-        <iframe
-          src="https://drive.google.com/file/d/1DsQMFAsZPnEsDGX9TkiCHWhp7WXeMnO0/preview"
-          width="640"
-          height="480"
-          allow="autoplay"
-        ></iframe>
         <div className="flex justify-between gap-4">
           {options.map(data => {
             return (
@@ -107,6 +145,28 @@ const Dashboard = () => {
               email="rajeev.sinha@kgkmail.com"
             />
           </div>
+        </div>
+        <div className="w-full border-[1px] border-neutral200 rounded-[8px]">
+          <div className="border-b-[1px] border-neutral200 p-4">
+            <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
+              {tabs.map(({ label }) => {
+                return (
+                  <button
+                    className={`p-2 ${
+                      activeTab === label
+                        ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                        : 'text-neutral600 '
+                    }`}
+                    key={label}
+                    onClick={() => handleTabs({ tab: label })}
+                  >
+                    {label}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+          hiii
         </div>
       </div>
       <div
