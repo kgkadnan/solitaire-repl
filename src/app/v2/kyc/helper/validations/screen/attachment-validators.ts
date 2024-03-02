@@ -6,12 +6,9 @@ import {
   INCORPORATION_CERTIFICATE,
   INCUMBENCY_CERTIFICATE,
   MANAGER_ID_COPY,
-  MOA,
   OWNER_ID_COPY,
   PAN_CARD,
   PASSPORT,
-  REGISTRATION_NUMBER,
-  SECTION_194Q,
   TRADE_LICENSE
 } from '@/constants/error-messages/kyc';
 import { IsNotEmpty, IsOptional } from 'class-validator';
@@ -20,7 +17,7 @@ export class IndianAttachmentValidation {
   @IsNotEmpty({ message: PAN_CARD })
   pan_card: string;
 
-  @IsNotEmpty({ message: GST_CERTIFICATE })
+  @IsOptional()
   gst_certificate: string;
 
   @IsNotEmpty({ message: INCORPORATION_CERTIFICATE })
@@ -29,7 +26,7 @@ export class IndianAttachmentValidation {
   @IsNotEmpty({ message: CANCEL_CHAQUE })
   cancel_cheque: string;
 
-  @IsNotEmpty({ message: SECTION_194Q })
+  @IsOptional()
   section_194q: string;
   @IsOptional()
   government_registration_certificate: string;
@@ -84,7 +81,7 @@ export class IndianAttachmentValidation {
 }
 
 export class BelgiumAttachmentValidation {
-  @IsNotEmpty({ message: REGISTRATION_NUMBER })
+  @IsOptional()
   registration_number: string;
 
   @IsNotEmpty({ message: PASSPORT })
@@ -101,7 +98,7 @@ export class BelgiumAttachmentValidation {
 }
 
 export class UsaAttachmentValidation {
-  @IsNotEmpty({ message: REGISTRATION_NUMBER })
+  @IsOptional()
   registration_number: string;
 
   @IsNotEmpty({ message: PASSPORT })
@@ -116,7 +113,7 @@ export class UsaAttachmentValidation {
     this.id_copy = id_copy;
   }
 }
-export class OtherAttachmentValidation {
+export class DubaiAttachmentValidation {
   @IsNotEmpty({ message: INCUMBENCY_CERTIFICATE })
   incumbency_certificate: string;
 
@@ -126,7 +123,7 @@ export class OtherAttachmentValidation {
   @IsNotEmpty({ message: GST_CERTIFICATE })
   gst_certificate: string;
 
-  @IsNotEmpty({ message: MOA })
+  @IsOptional()
   moa: string;
 
   @IsNotEmpty({ message: OWNER_ID_COPY })

@@ -65,6 +65,7 @@
   "app.modal.yes": "Yes",
   "app.modal.no": "No",
   "app.modal.continue": "Continue",
+  "app.modal.submit": "Submit",
   "app.modal.editSelection": "Edit Selection",
   "app.modal.cancel": "Cancel",
   "app.modal.manageTabs": "Manage Tabs",
@@ -156,5 +157,6 @@
   "app.kyc.attachment.header.title": "Attachment",
   "app.kyc.footer.back": "Back",
   "app.kyc.footer.saveAndNext": "Save and next",
+  "app.kyc.footer.submit": "Submit",
   "app.modal.kyc.emailVerification": "Email Verification"
 }

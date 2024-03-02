@@ -50,6 +50,15 @@ export const kycApi = createApi({
       },
       invalidatesTags: ['kyc']
     }),
+    uploadDocument: builder.mutation({
+      query: data => ({
+        url: `/store/kyc/document-upload`,
+        method: 'POST',
+        body: data
+      }),
+
+      invalidatesTags: ['kyc']
+    }),
     resendEmailOTP: builder.mutation({
       query: data => ({
         url: `/store/customers/email/otp/send`,
@@ -79,5 +88,6 @@ export const {
   useResetKycMutation,
   useVerifyEmailOTPMutation,
   useResendEmailOTPMutation,
-  useLazyGetKycPdfQuery
+  useLazyGetKycPdfQuery,
+  useUploadDocumentMutation
 } = kycApi;

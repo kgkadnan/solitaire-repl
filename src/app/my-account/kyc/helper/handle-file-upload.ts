@@ -1,4 +1,5 @@
 import { updateFormState } from '@/features/kyc/kyc';
+
 export const handleFileupload = async ({
   acceptedFiles,
   setUploadProgress,

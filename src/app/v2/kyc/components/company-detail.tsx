@@ -71,37 +71,141 @@ const CompanyDetail = ({
   dispatch,
   country
 }: any) => {
+  const handleRadioChange = ({ value, formKey }: any) => {
+    handleInputChange(
+      `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
+      value,
+      dispatch,
+      kycScreenIdentifierNames.COMPANY_DETAILS,
+      formKey
+    );
+  };
+
   const memberOfAnyBusinessOrganisation = [
     {
-      name: 'country',
+      name: 'isMemberOfBusiness',
       id: '1',
-      value: countries.INDIA,
-      label: 'Yes'
-      // checked: selectedCountry === countries.INDIA
+      value: true,
+      label: 'Yes',
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === true,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Name If you select “Yes”',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][member_of_business_name]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'member_of_business_name'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? '',
+          placeholder: 'Name If you select “Yes”',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? ''
+        }
+      ]
     },
     {
-      name: 'country',
+      name: 'isMemberOfBusiness',
       id: '2',
-      value: countries.BELGIUM,
-      label: 'No'
-      // checked: selectedCountry === countries.BELGIUM
+      value: false,
+      label: 'No',
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === false
     }
   ];
 
   const msmeData = [
     {
-      name: 'country',
+      name: 'isMsmeRegistered',
       id: '1',
-      value: countries.INDIA,
-      label: 'Yes'
-      // checked: selectedCountry === countries.INDIA
+      value: true,
+      label: 'Yes',
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_msme_registered'] === true,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'MSME type If you select “Yes”',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][msme_type]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'msme_type'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['msme_type'] ?? '',
+          placeholder: 'MSME type If you select “Yes”',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['msme_type'] ?? ''
+        },
+        {
+          id: '2',
+          type: 'number',
+          name: 'Registration Number If you select “Yes”',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][msme_registration_number]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'msme_registration_number'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['msme_registration_number'] ?? '',
+          placeholder: 'Registration Number If you select “Yes”',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['msme_registration_number'] ?? ''
+        }
+      ]
     },
     {
-      name: 'country',
+      name: 'isMsmeRegistered',
       id: '2',
-      value: countries.BELGIUM,
-      label: 'No'
-      // checked: selectedCountry === countries.BELGIUM
+      value: false,
+      label: 'No',
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_msme_registered'] === false
     }
   ];
 
@@ -109,16 +213,49 @@ const CompanyDetail = ({
     {
       name: 'country',
       id: '1',
-      value: countries.INDIA,
-      label: 'Yes'
-      // checked: selectedCountry === countries.INDIA
+      value: true,
+      label: 'Yes',
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === true,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Specify here',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][no_anti_money_laundering_policy_reason]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'no_anti_money_laundering_policy_reason'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? '',
+          placeholder: 'Specify here',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? ''
+        }
+      ]
     },
     {
       name: 'country',
       id: '2',
-      value: countries.BELGIUM,
-      label: 'No'
-      // checked: selectedCountry === countries.BELGIUM
+      value: false,
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === false
     }
   ];
 
@@ -134,7 +271,7 @@ const CompanyDetail = ({
       </div>
       <hr className="border-neutral200" />
       <div className="flex justify-center">
-        <div className="flex flex-col flex-wrap h-[920px] gap-[16px]  w-[760px]">
+        <div className="flex flex-col flex-wrap h-[967px] gap-[16px]  w-[760px]">
           {' '}
           {/* <div className="flex gap-[16px]"> */}
           <div className={'w-[50%]'}>
@@ -647,35 +784,55 @@ const CompanyDetail = ({
                   <div className="w-[46%]">
                     <CheckboxComponent
                       onClick={() => {}}
-                      isChecked={false}
+                      isChecked={
+                        formState.online.sections[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']
+                      }
                       checkboxLabel={'Manufacturer'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
                       onClick={() => {}}
-                      isChecked={false}
+                      isChecked={
+                        formState.online.sections[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']
+                      }
                       checkboxLabel={'Retailer'}
                     />
                   </div>
                   <div className="w-[46%]">
                     <CheckboxComponent
                       onClick={() => {}}
-                      isChecked={false}
+                      isChecked={
+                        formState.online.sections[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']
+                      }
                       checkboxLabel={'Wholesaler'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
                       onClick={() => {}}
-                      isChecked={false}
+                      isChecked={
+                        formState.online.sections[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']
+                      }
                       checkboxLabel={'Corporate Retailer'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
                       onClick={() => {}}
-                      isChecked={false}
+                      isChecked={
+                        formState.online.sections[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']
+                      }
                       checkboxLabel={'Other'}
                       showInput={true}
                       onInputChange={(e: any) => {
@@ -708,115 +865,203 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.INDIA && (
-            <div className="w-[50%] flex flex-col gap-[10px]">
+            <div className="w-[50%] flex flex-col gap-[10px] h-[24vh]">
               <p className="text-mRegular text-neutral900">
                 Organisation Type*
               </p>
 
-              <div className="flex  w-full justify-between flex-wrap  h-[13vh]">
+              <div className="flex  w-full justify-between flex-wrap  ">
                 {' '}
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '1',
-                      value: countries.INDIA,
-                      label: 'Individual'
-                      // checked: selectedCountry === countries.INDIA
+                      value: 'Individual',
+                      label: 'Individual',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Individual'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '2',
-                      value: countries.BELGIUM,
-                      label: 'Partnership Firm'
-                      // checked: selectedCountry === countries.BELGIUM
+                      value: 'Partnership Firm',
+                      label: 'Partnership Firm',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Partnership Firm'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '3',
-                      value: countries.BELGIUM,
-                      label: 'Private Ltd.'
-                      // checked: selectedCountry === countries.BELGIUM
+                      value: 'Private Ltd.',
+                      label: 'Private Ltd.',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Private Ltd.'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>{' '}
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '4',
-                      value: countries.BELGIUM,
-                      label: 'LLP'
-                      // checked: selectedCountry === countries.BELGIUM
+                      value: 'LLP',
+                      label: 'LLP',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'LLP'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>{' '}
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '5',
-                      value: countries.BELGIUM,
-                      label: 'Public Ltd.'
-                      // checked: selectedCountry === countries.BELGIUM
+                      value: 'Public Ltd.',
+                      label: 'Public Ltd.',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Public Ltd.'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>{' '}
-                <div className="w-[50%]">
+                <div className="w-[50%] mb-3">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
+                      name: 'organisationType',
                       id: '6',
-                      value: countries.BELGIUM,
-                      label: 'OPC'
-                      // checked: selectedCountry === countries.BELGIUM
+                      value: 'OPC',
+                      label: 'OPC',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'OPC'
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
                       radio: '!text-mRegular !text-neutral900'
                     }}
                   />
                 </div>{' '}
-                <div className="w-[50%]">
+                <div className="w-[100%] relative">
                   <RadioButton
                     radioMetaData={{
-                      name: 'country',
-                      id: '7',
-                      value: countries.BELGIUM,
-                      label: 'Other'
-                      // checked: selectedCountry === countries.BELGIUM
+                      name: 'organisationType',
+                      id: '1',
+                      value: 'Other',
+                      label: 'Other',
+                      checked:
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Other',
+                      inputs: [
+                        {
+                          id: '1',
+                          type: 'text',
+                          name: 'If other please specify',
+                          onInputChange: (e: any) => {
+                            handleInputChange(
+                              `formState.online.sections[${[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]}][organisationType_Other]`,
+                              e.target.value,
+                              dispatch,
+                              kycScreenIdentifierNames.COMPANY_DETAILS,
+                              'organisationType_Other'
+                              // formState
+                            );
+                          },
+                          error:
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisationType_Other'] ?? '',
+                          placeholder: 'If other please specify',
+                          value:
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisationType_Other'] ?? ''
+                        }
+                      ]
                     }}
-                    onChange={() => {}}
+                    onChange={(value: any) => {
+                      handleRadioChange({
+                        value: value,
+                        formKey: 'organisation_type'
+                      });
+                    }}
                     customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
+                      radio: `!text-mRegular !text-neutral900 ${
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Other' && 'mb-[10px]'
+                      }`
                     }}
                   />
                 </div>{' '}
@@ -1432,7 +1677,13 @@ const CompanyDetail = ({
               </div>
             </div>
           )}
-          <div className="w-[50%] flex flex-col gap-[25px]">
+          <div
+            className={`w-[50%] flex flex-col gap-[25px]  ${
+              formState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_member_of_business'] === true && 'mb-[45px]'
+            }`}
+          >
             <div>
               <p className="text-mRegular text-neutral900">
                 Member of any Business Organisation / Council*
@@ -1441,15 +1692,26 @@ const CompanyDetail = ({
                 If yes then provide the name
               </p>
             </div>
-            <div className="flex justify-between w-[60%]">
+            <div className="flex justify-between w-[60%] ">
               {' '}
               {memberOfAnyBusinessOrganisation.map(data => {
                 return (
                   <div key={data.id}>
                     <RadioButton
                       radioMetaData={data}
-                      onChange={() => {}}
-                      customStyle={{ radio: '!text-mRegular !text-neutral900' }}
+                      onChange={(value: any) => {
+                        handleRadioChange({
+                          value: value,
+                          formKey: 'is_member_of_business'
+                        });
+                      }}
+                      customStyle={{
+                        radio: `!text-mRegular !text-neutral900  ${
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['is_member_of_business'] === true && 'mb-[10px]'
+                        }`
+                      }}
                     />
                   </div>
                 );
@@ -1466,16 +1728,25 @@ const CompanyDetail = ({
                   If yes then provide the name field & registration number
                 </p>
               </div>
-              <div className="flex justify-between w-[60%]">
+              <div className="flex justify-between w-[60%] relative">
                 {' '}
                 {msmeData.map(data => {
                   return (
                     <div key={data.id}>
                       <RadioButton
                         radioMetaData={data}
-                        onChange={() => {}}
+                        onChange={() => {
+                          handleRadioChange({
+                            value: data.value,
+                            formKey: 'is_msme_registered'
+                          });
+                        }}
                         customStyle={{
-                          radio: '!text-mRegular !text-neutral900'
+                          radio: `!text-mRegular !text-neutral900  ${
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['is_msme_registered'] === true && 'mb-[10px]'
+                          }`
                         }}
                       />
                     </div>
@@ -1495,16 +1766,26 @@ const CompanyDetail = ({
                   If “No” please specify why?
                 </p>
               </div>
-              <div className="flex justify-between w-[60%]">
+              <div className="flex justify-between w-[60%] relative">
                 {' '}
                 {moneyLaundering.map(data => {
                   return (
                     <div key={data.id}>
                       <RadioButton
                         radioMetaData={data}
-                        onChange={() => {}}
+                        onChange={() => {
+                          handleRadioChange({
+                            value: data.value,
+                            formKey: 'is_anti_money_laundering'
+                          });
+                        }}
                         customStyle={{
-                          radio: '!text-mRegular !text-neutral900'
+                          radio: `!text-mRegular !text-neutral900 ${
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['is_anti_money_laundering'] === true &&
+                            'mb-[10px]'
+                          }`
                         }}
                       />
                     </div>
