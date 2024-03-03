@@ -15,10 +15,12 @@ import OtpInput from '@/components/v2/common/otp';
 import { useOtpVerificationStateManagement } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
 import {
   useVerifyEmailOTPMutation,
   useResendEmailOTPMutation,
-  useSubmitKYCMutation
+  useSubmitKYCMutation,
+  useResetKycMutation
 } from '@/features/api/kyc';
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import arrowBackwar from '@public/v2/assets/icons/kyc/arrow-backward.svg';
@@ -43,6 +45,9 @@ import { RenderAttachment } from './components/attachement';
 import { RenderOffline } from './components/render-offline';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
+import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
+import logger from 'logging/log-util';
+import { statusCode } from '@/constants/enums/status-code';
 
 const initialTokenState = {
   token: '',
@@ -65,6 +70,7 @@ const KYC = () => {
 
   const [submitKYC] = useSubmitKYCMutation();
   const [triggerAuth] = useLazyGetAuthDataQuery();
+  const [resetKyc] = useResetKycMutation();
 
   const [currentStepperStep, setCurrentStepperStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set());
@@ -157,6 +163,88 @@ const KYC = () => {
     );
   };
 
+  const handleConfirmRestartKyc = () => {
+    resetKyc({})
+      .then((res: any) => {
+        if (res.data.statusCode === statusCode.SUCCESS) {
+          setCurrentState('country_selection');
+          setSelectedCountry('');
+          setSelectedSubmissionOption('');
+          setCurrentStepperStep(0);
+          dispatch(
+            updateFormState({
+              name: 'formState.country',
+              value: null
+            })
+          );
+          dispatch(
+            updateFormState({
+              name: 'formState.online.sections',
+              value: {
+                personal_details:
+                  res.data.data?.kyc?.profile_data?.online?.['1'],
+                company_details: {},
+                company_owner_details: {},
+                banking_details: {}
+              }
+            })
+          );
+          dispatch(
+            updateFormState({
+              name: 'formErrorState.online.sections',
+              value: {
+                personal_details: {},
+                company_details: {},
+                company_owner_details: {},
+                banking_details: {}
+              }
+            })
+          );
+
+          setIsDialogOpen(false);
+        }
+      })
+      .catch((e: any) => {
+        logger.error(`something went wrong while restart kyc ${e}`);
+      });
+  };
+
+  const handleResetButton = () => {
+    setIsDialogOpen(true);
+    setIsDialogOpen(true);
+    setDialogContent(
+      <>
+        <div className="absolute left-[-84px] top-[-84px]">
+          <Image src={warningIcon} alt="warningIcon" />
+        </div>
+        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+          <div>
+            <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+            <p className="text-neutral600 text-mRegular">
+              Do you want to restart KYC process
+            </p>
+          </div>
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.modal.yes'),
+                handler: () => handleConfirmRestartKyc()
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.modal.no'),
+                handler: () => {
+                  setIsDialogOpen(false);
+                }
+              }
+            ]}
+          />
+        </div>
+      </>
+    );
+  };
+
   useEffect(() => {
     triggerKycDetail({}).then(res => {
       let kycDetails = res?.data;
@@ -189,42 +277,36 @@ const KYC = () => {
                   : setSelectedSubmissionOption('offline');
 
                 setIsDialogOpen(true);
-                //need to work
-                // setDialogContent(
-                //   <>
-                //     <div className="text-center align-middle text-solitaireTertiary">
-                //       <p className="text-[20px] font-semibold">Are you sure?</p>
-                //     </div>
-                //     <div className="text-center align-middle text-solitaireTertiary text-[16px] px-[20px]">
-                //       Do you want to resume KYC process or restart it?
-                //     </div>
-                //     <div className=" flex justify-around align-middle text-solitaireTertiary gap-[25px] ">
-                //       <CustomDisplayButton
-                //         displayButtonLabel="Restart"
-                //         handleClick={handleResetButton}
-                //         displayButtonAllStyle={{
-                //           displayButtonStyle:
-                //             ' bg-transparent   border-[1px] border-solitaireQuaternary  w-[150px] h-[35px]',
-                //           displayLabelStyle:
-                //             'text-solitaireTertiary text-[14px] font-medium'
-                //         }}
-                //       />
-                //       <CustomDisplayButton
-                //         displayButtonLabel="Resume"
-                //         handleClick={() => {
-                //           setIsDialogOpen(false);
-                //           setDialogContent('');
-                //         }}
-                //         displayButtonAllStyle={{
-                //           displayButtonStyle:
-                //             'bg-solitaireQuaternary w-[150px] h-[35px]',
-                //           displayLabelStyle:
-                //             'text-solitaireTertiary text-[14px] font-medium'
-                //         }}
-                //       />
-                //     </div>
-                //   </>
-                // );
+                setDialogContent(
+                  <>
+                    <div className="absolute left-[-84px] top-[-84px]">
+                      <Image src={warningIcon} alt="warningIcon" />
+                    </div>
+                    <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                      <div>
+                        <h1 className="text-headingS text-neutral900">
+                          Do you want to resume KYC process or restart it?
+                        </h1>
+                      </div>
+                      <ActionButton
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: ManageLocales('app.modal.no'),
+                            handler: () => handleResetButton()
+                          },
+                          {
+                            variant: 'primary',
+                            label: ManageLocales('app.modal.yes'),
+                            handler: () => {
+                              setIsDialogOpen(false);
+                            }
+                          }
+                        ]}
+                      />
+                    </div>
+                  </>
+                );
               }
             } else {
               setCurrentState('country_selection');
@@ -677,6 +759,12 @@ const KYC = () => {
 
   const renderContent = () => {
     switch (currentState) {
+      case kycStatus.PENDING:
+        return <KycStatusScreen status={kycStatus.PENDING} />;
+      case kycStatus.APPROVED:
+        return <KycStatusScreen status={kycStatus.APPROVED} />;
+      case kycStatus.REJECTED:
+        return <KycStatusScreen status={kycStatus.REJECTED} />;
       case 'country_selection':
         return (
           <CountrySelection

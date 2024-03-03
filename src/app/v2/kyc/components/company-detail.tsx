@@ -309,7 +309,7 @@ const CompanyDetail = ({
       </div>
       <hr className="border-neutral200" />
       <div className="flex justify-center">
-        <div className="flex flex-col flex-wrap h-[967px] gap-[16px]  w-[760px]">
+        <div className="flex flex-col flex-wrap h-[990px] gap-[16px]  w-[760px]">
           {' '}
           {/* <div className="flex gap-[16px]"> */}
           <div className={'w-[50%]'}>
@@ -1779,7 +1779,7 @@ const CompanyDetail = ({
 
                 <div className="flex flex-wrap gap-[14px]">
                   {' '}
-                  <div className="w-[30%]">
+                  <div className="w-[17%]">
                     <CheckboxComponent
                       onClick={() => {
                         handleCheckbox(
@@ -1830,7 +1830,7 @@ const CompanyDetail = ({
                       checkboxLabel={'Jewellery'}
                     />
                   </div>
-                  <div className="w-[100%]">
+                  <div className="w-[380px]">
                     <CheckboxComponent
                       onClick={() => {
                         handleCheckbox(
