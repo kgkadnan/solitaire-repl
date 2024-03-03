@@ -166,6 +166,9 @@ module.exports = {
         legendMemoFill: 'var(--legend-Memo-fill)',
         lengendMemoBorder: 'var(--legend-memo-border)',
         legendMemo: 'var(--legend-Memo)',
+        primaryModalRing: 'var(--primary-modal-ring)',
+        primaryModalRingRed: 'var(--primary-modal-ring-red)',
+        primaryModalFillRed: 'var(--primary-modal-fill-red)',
 
         gradientStart: 'hsla(198, 85%, 92%, 1)',
         gradientEnd: 'hsla(240, 100%, 95%, 1)'
