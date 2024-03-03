@@ -72,7 +72,7 @@ const KYC = () => {
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(1);
+  const [currentStepperStep, setCurrentStepperStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
