@@ -9,7 +9,7 @@ export const manageListingSequenceApi = createApi({
   endpoints: builder => ({
     addManageListingSequence: builder.mutation({
       query: data => ({
-        url: `customer-manage-listing-sequence`,
+        url: `/store/account/customer-manage-listing-sequence`,
         method: 'POST',
         body: data
       }),
@@ -17,7 +17,7 @@ export const manageListingSequenceApi = createApi({
     }),
     getManageListingSequence: builder.query({
       query: () => ({
-        url: `customer-manage-listing-sequence`,
+        url: `/store/account/customer-manage-listing-sequence`,
         method: 'GET'
       }),
       providesTags: ['manageListingSequence']

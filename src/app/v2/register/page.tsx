@@ -8,8 +8,7 @@ import RegisterComponent from './component/register';
 import editIcon from '@public/v2/assets/icons/modal/edit.svg';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation,
-  useVerifyPhoneQuery
+  useVerifyOTPMutation
 } from '@/features/api/otp-verification';
 import Image from 'next/image';
 
@@ -80,10 +79,13 @@ const Register = () => {
   const { setIsDialogOpen, setDialogContent, setIsInputDialogOpen } =
     modalSetState;
 
-  const { data: verifyNumber } = useVerifyPhoneQuery({
-    country_code: otpVerificationFormState.countryCode,
-    phone_number: otpVerificationFormState.otpMobileNumber
-  });
+  // const { data: verifyNumber } = useVerifyPhoneQuery({
+  //   country_code: otpVerificationFormState.countryCode,
+  //   phone_number: otpVerificationFormState.otpMobileNumber
+  // },
+  // {
+  //   skip:true
+  // });
 
   const [token, setToken] = useState(initialTokenState);
 
@@ -171,7 +173,7 @@ const Register = () => {
           <IndividualActionButton
             onClick={() => {
               handleEditMobileNumber({
-                verifyNumber,
+                // verifyNumber,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
