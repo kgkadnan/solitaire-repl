@@ -56,7 +56,7 @@ const initialTokenState = {
 };
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('online');
+  const [currentState, setCurrentState] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -72,7 +72,7 @@ const KYC = () => {
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(1);
+  const [currentStepperStep, setCurrentStepperStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
