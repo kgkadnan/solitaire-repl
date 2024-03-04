@@ -37,6 +37,7 @@ const DashboardCarousel = ({ images }: any) => {
             src={data.image_web}
             alt={`banner-${index}`}
             className="w-full h-[400px] rounded-[8px]"
+            key={index}
           />
           // </div>
         );

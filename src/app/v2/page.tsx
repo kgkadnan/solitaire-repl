@@ -10,7 +10,6 @@ import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?u
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
 import { useEffect, useState } from 'react';
-import Background from '@public/v2/assets/icons/dashboard/Pattern.png';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
@@ -471,7 +470,7 @@ const Dashboard = () => {
             <div className="border-b-[1px] border-neutral200 p-4">
               <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium justify-between pr-4">
                 <div>
-                  {tabs.map(({ data, label }: any) => {
+                  {tabs.map(({ label }: any) => {
                     return (
                       <button
                         className={`p-2 ${
