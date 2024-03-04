@@ -9,7 +9,7 @@ export const dashboardApi = createApi({
 
   endpoints: builder => ({
     getCustomer: builder.query({
-      query: () => `store/customers/me/`,
+      query: () => `store/customers/me`,
       providesTags: ['dashboard']
     })
   })

@@ -28,14 +28,18 @@ import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
 import Link from 'next/link';
 import OrderDetail from './components/order-detail';
 import EmptyScreen from '@/components/v2/common/empty-screen';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 
 const MyDiamonds = () => {
   const router = useRouter();
-  const [activeTab, setActiveTab] = useState(PENDING_INVOICE);
+  const pathName = useSearchParams().get('path');
+
+  const [activeTab, setActiveTab] = useState(
+    pathName === 'active' ? ACTIVE_INVOICE : PENDING_INVOICE
+  );
 
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
