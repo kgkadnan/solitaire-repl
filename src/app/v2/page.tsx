@@ -44,7 +44,8 @@ const Dashboard = () => {
   const router = useRouter();
   const dispatch = useDispatch();
 
-  const { data: customerData } = useGetCustomerQuery({});
+  const { data: customerData, refetch: refetchCustomerData } =
+    useGetCustomerQuery({});
   const [activeTab, setActiveTab] = useState<string>('');
   const [tabs, setTabs] = useState<ITabs[]>([]);
 
@@ -125,55 +126,92 @@ const Dashboard = () => {
       short_label: 'Symmetry'
     }
   ];
-
+  useEffect(() => {
+    console.log('called');
+    refetchCustomerData();
+  }, []);
   useEffect(() => {
     if (customerData) {
+      const tabsCopy = [...tabs]; // Make a copy of the current tabs
+
+      // Check if there are saved searches and add the "Saved Search" tab
       if (customerData.customer.saved_searches.length > 0) {
-        setTabs((prev: any) => [
-          ...prev,
-          {
-            label: 'Saved Search',
-            link: '/v2/search?active-tab=saved-search',
-            data: customerData?.customer?.saved_searches?.slice(0, 5)
-          }
-        ]);
+        tabsCopy.push({
+          label: 'Saved Search',
+          link: '/v2/search?active-tab=saved-search',
+          data: customerData.customer.saved_searches.slice(0, 5)
+        });
+      } else {
+        // Remove the "Saved Search" tab if there are no saved searches
+        const index = tabsCopy.findIndex(tab => tab.label === 'Saved Search');
+        if (index !== -1) {
+          tabsCopy.splice(index, 1);
+        }
       }
-      if (customerData?.customer.orders.length > 0) {
-        if (
-          customerData?.customer.orders.filter(
-            (item: any) => item.invoice_id === null
-          ).length > 0
-        ) {
-          setTabs((prev: any) => [
-            ...prev,
-            {
+
+      // Update the tabs state
+      setTabs(tabsCopy);
+
+      // Check for pending and active invoices
+      if (customerData.customer.orders.length > 0) {
+        const pendingInvoices = customerData.customer.orders
+          .filter((item: any) => item.invoice_id === null)
+          .slice(0, 5);
+
+        const activeInvoices = customerData.customer.orders
+          .filter(
+            (item: any) => item.invoice_id !== null && item.status === 'pending'
+          )
+          .slice(0, 5);
+
+        // Update or add "Pending Invoice" tab
+        const pendingTab = tabsCopy.find(
+          tab => tab.label === 'Pending Invoice'
+        );
+        if (pendingInvoices.length > 0) {
+          if (pendingTab) {
+            pendingTab.data = pendingInvoices;
+          } else {
+            tabsCopy.push({
               label: 'Pending Invoice',
               link: '/v2/your-orders',
-              data: customerData?.customer.orders
-                .filter((item: any) => item.invoice_id === null)
-                .slice(0, 5)
-            }
-          ]);
+              data: pendingInvoices
+            });
+          }
+        } else {
+          // Remove "Pending Invoice" tab if there are no pending invoices
+          const index = tabsCopy.findIndex(
+            tab => tab.label === 'Pending Invoice'
+          );
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
         }
-        if (
-          customerData?.customer.orders.filter(
-            (item: any) => item.invoice_id !== null && item.status === 'pending'
-          ).length > 0
-        ) {
-          setTabs((prev: any) => [
-            ...prev,
-            {
+
+        // Update or add "Active Invoice" tab
+        const activeTab = tabsCopy.find(tab => tab.label === 'Active Invoice');
+        if (activeInvoices.length > 0) {
+          if (activeTab) {
+            activeTab.data = activeInvoices;
+          } else {
+            tabsCopy.push({
               label: 'Active Invoice',
               link: '/v2/your-orders',
-              data: customerData?.customer.orders
-                .filter(
-                  (item: any) =>
-                    item.invoice_id !== null && item.status === 'pending'
-                )
-                .slice(0, 5)
-            }
-          ]);
+              data: activeInvoices
+            });
+          }
+        } else {
+          // Remove "Active Invoice" tab if there are no active invoices
+          const index = tabsCopy.findIndex(
+            tab => tab.label === 'Active Invoice'
+          );
+          if (index !== -1) {
+            tabsCopy.splice(index, 1);
+          }
         }
+
+        // Update the tabs state
+        setTabs(tabsCopy);
       }
     }
   }, [customerData]);
@@ -458,10 +496,10 @@ const Dashboard = () => {
           {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
           <div className="flex-shrink-0 w-[300px] max-w-full">
             <KAMCard
-              name={customerData?.customer.kam.kam_name ?? '-'}
-              role={customerData?.customer.kam.post ?? 'Key Account Manager'}
-              phoneNumber={customerData?.customer.kam.phone ?? '-'}
-              email={customerData?.customer.kam.email ?? '-'}
+              name={customerData?.customer.kam?.kam_name ?? '-'}
+              role={customerData?.customer.kam?.post ?? 'Key Account Manager'}
+              phoneNumber={customerData?.customer.kam?.phone ?? '-'}
+              email={customerData?.customer.kam?.email ?? '-'}
             />
           </div>
         </div>
@@ -509,7 +547,9 @@ const Dashboard = () => {
                         onClick={() =>
                           handleCardClick({
                             id: searchData.id,
-                            savedSearchData: searchData,
+                            savedSearchData: tabs.find(
+                              tab => tab.label === activeTab
+                            )?.data,
                             router,
                             triggerProductCountApi,
                             setDialogContent,
