@@ -10,6 +10,8 @@ import Select from 'react-select';
 import { colourStyles } from '../style/select-style';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { RadioButton } from '@/components/v2/common/radio';
+import { validateKYCField } from '../helper/validations/field';
+import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 
 const cities = [
   'AHMEDABAD',
@@ -259,6 +261,42 @@ const CompanyDetail = ({
     }
   ];
 
+  const handleCheckbox = async (
+    path: string,
+    value: string | string[] | number,
+    dispatch: any,
+    screenName: string,
+    key: string
+  ) => {
+    let errors = await validateKYCField(
+      key,
+      typeof value === 'string' ? value.trim() : value
+    );
+
+    dispatch(
+      updateFormState({
+        name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
+        value: Object.values(errors?.[0]?.constraints ?? {})[0] || ''
+      })
+    );
+
+    if (formState.online.sections[screenName]?.[key]?.includes(value)) {
+      // Value is already in the array, so remove it
+      let newArr = formState.online.sections[screenName]?.[key].filter(
+        (data: any) => data !== value
+      );
+      dispatch(updateFormState({ name: path, value: newArr }));
+    } else {
+      let currentArray = formState.online.sections[screenName]?.[key];
+      let newArr = Array.isArray(currentArray)
+        ? [...currentArray, value]
+        : [value];
+      dispatch(updateFormState({ name: path, value: newArr }));
+    }
+
+    dispatch(isEditingKYC(true));
+  };
+
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
@@ -271,7 +309,7 @@ const CompanyDetail = ({
       </div>
       <hr className="border-neutral200" />
       <div className="flex justify-center">
-        <div className="flex flex-col flex-wrap h-[967px] gap-[16px]  w-[760px]">
+        <div className="flex flex-col flex-wrap h-[990px] gap-[16px]  w-[760px]">
           {' '}
           {/* <div className="flex gap-[16px]"> */}
           <div className={'w-[50%]'}>
@@ -783,56 +821,86 @@ const CompanyDetail = ({
                   {' '}
                   <div className="w-[46%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={
-                        formState.online.sections[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['business_type']
-                      }
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Manufacturer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Manufacturer')}
                       checkboxLabel={'Manufacturer'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={
-                        formState.online.sections[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['business_type']
-                      }
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Retailer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Retailer')}
                       checkboxLabel={'Retailer'}
                     />
                   </div>
                   <div className="w-[46%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={
-                        formState.online.sections[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['business_type']
-                      }
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Wholesaler',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Wholesaler')}
                       checkboxLabel={'Wholesaler'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={
-                        formState.online.sections[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['business_type']
-                      }
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Corporate Retailer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Corporate Retailer')}
                       checkboxLabel={'Corporate Retailer'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={
-                        formState.online.sections[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['business_type']
-                      }
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Other',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Other')}
                       checkboxLabel={'Other'}
                       showInput={true}
                       onInputChange={(e: any) => {
@@ -1117,36 +1185,86 @@ const CompanyDetail = ({
                   {' '}
                   <div className="w-[46%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Manufacturer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Manufacturer')}
                       checkboxLabel={'Manufacturer'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Retailer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Retailer')}
                       checkboxLabel={'Retailer'}
                     />
                   </div>
                   <div className="w-[46%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Wholesaler',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Wholesaler')}
                       checkboxLabel={'Wholesaler'}
                     />
                   </div>
                   <div className="w-[50%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Corporate Retailer',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Corporate Retailer')}
                       checkboxLabel={'Corporate Retailer'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                          'Other',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'business_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Other')}
                       checkboxLabel={'Other'}
                       showInput={true}
                       onInputChange={(e: any) => {
@@ -1189,29 +1307,69 @@ const CompanyDetail = ({
                   {' '}
                   <div className="w-[30%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Diamonds',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Diamonds')}
                       checkboxLabel={'Diamonds'}
                     />
                   </div>
                   <div className="pl-[30px]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Colour Stones',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Colour Stones')}
                       checkboxLabel={'Colour Stones'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Jewellery',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Jewellery')}
                       checkboxLabel={'Jewellery'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Other',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Other')}
                       checkboxLabel={'Other'}
                       showInput={true}
                       onInputChange={(e: any) => {
@@ -1621,31 +1779,71 @@ const CompanyDetail = ({
 
                 <div className="flex flex-wrap gap-[14px]">
                   {' '}
-                  <div className="w-[30%]">
+                  <div className="w-[17%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Diamonds',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Diamonds')}
                       checkboxLabel={'Diamonds'}
                     />
                   </div>
                   <div className="pl-[30px]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Colour Stones',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Colour Stones')}
                       checkboxLabel={'Colour Stones'}
                     />
                   </div>
                   <div className="w-[100%]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Jewellery',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Jewellery')}
                       checkboxLabel={'Jewellery'}
                     />
                   </div>
-                  <div className="w-[100%]">
+                  <div className="w-[380px]">
                     <CheckboxComponent
-                      onClick={() => {}}
-                      isChecked={false}
+                      onClick={() => {
+                        handleCheckbox(
+                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                          'Other',
+                          dispatch,
+                          kycScreenIdentifierNames.COMPANY_DETAILS,
+                          'industry_type'
+                        );
+                      }}
+                      isChecked={formState.online.sections[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Other')}
                       checkboxLabel={'Other'}
                       showInput={true}
                       onInputChange={(e: any) => {
