@@ -1,15 +1,22 @@
 interface IHandleDeleteAttachment {
-  // setIsFileUploaded: string;
+  deleteApi: any;
   setSelectedFile: string;
   dispatch: any;
+  selectedFile: any;
 }
 
 import { updateFormState } from '@/features/kyc/kyc';
 export const handleDeleteAttachment = ({
-  // setIsFileUploaded,
+  deleteApi,
   setSelectedFile,
-  dispatch
+  dispatch,
+  selectedFile
 }: IHandleDeleteAttachment) => {
+  deleteApi({
+    offline: true,
+    fieldName: selectedFile.url,
+    country: 'India'
+  });
   dispatch(
     updateFormState({
       name: setSelectedFile,

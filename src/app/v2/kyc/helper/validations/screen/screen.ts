@@ -188,42 +188,42 @@ export const validateAttachment = async (formData: any, country: string) => {
     switch (country) {
       case kycAttachmentIdentifier.INDIA:
         attachments = new IndianAttachmentValidation(
-          formData?.pan_card?.selectedFile,
-          formData?.gst_certificate?.selectedFile,
-          formData?.incorporation_certificate?.selectedFile,
-          formData?.cancel_cheque?.selectedFile,
-          formData?.government_registration_certificate?.selectedFile,
-          formData?.business_card?.selectedFile,
-          formData?.company_owner_passport?.selectedFile,
-          formData?.person_to_contact_1?.selectedFile,
-          formData?.person_to_contact_2?.selectedFile,
-          formData?.person_to_contact_3?.selectedFile,
-          formData?.company_owner_pan_card?.selectedFile,
-          formData?.section_194q?.selectedFile
+          formData?.pan_card,
+          formData?.gst_certificate,
+          formData?.incorporation_certificate,
+          formData?.cancel_cheque,
+          formData?.government_registration_certificate,
+          formData?.business_card,
+          formData?.company_owner_passport,
+          formData?.person_to_contact_1,
+          formData?.person_to_contact_2,
+          formData?.person_to_contact_3,
+          formData?.company_owner_pan_card,
+          formData?.section_194q
         );
         break;
       case kycAttachmentIdentifier.BELGIUM:
         attachments = new BelgiumAttachmentValidation(
-          formData?.registration_number?.selectedFile,
-          formData?.passport?.selectedFile,
-          formData?.id_copy?.selectedFile
+          formData?.registration_number,
+          formData?.passport,
+          formData?.id_copy
         );
         break;
       case kycAttachmentIdentifier.USA:
         attachments = new UsaAttachmentValidation(
-          formData?.registration_number?.selectedFile,
-          formData?.passport?.selectedFile,
-          formData?.id_copy?.selectedFile
+          formData?.registration_number,
+          formData?.passport,
+          formData?.id_copy
         );
         break;
       case kycAttachmentIdentifier.DUBAI:
         attachments = new DubaiAttachmentValidation(
-          formData?.incumbency_certificate?.selectedFile,
-          formData?.trade_license?.selectedFile,
-          formData?.gst_certificate?.selectedFile,
-          formData?.owner_id_copy?.selectedFile,
-          formData?.manager_id_copy?.selectedFile,
-          formData?.moa?.selectedFile
+          formData?.incumbency_certificate,
+          formData?.trade_license,
+          formData?.gst_certificate,
+          formData?.owner_id_copy,
+          formData?.manager_id_copy,
+          formData?.moa
         );
         break;
     }
@@ -237,9 +237,7 @@ export const validateManualAttachment = async (formData: any) => {
   let validationErrors;
   let attachments = {};
   if (formData) {
-    attachments = new ManualAttachmentValidation(
-      formData?.upload_form?.selectedFile
-    );
+    attachments = new ManualAttachmentValidation(formData?.upload_form);
 
     validationErrors = await validate(attachments!);
   }

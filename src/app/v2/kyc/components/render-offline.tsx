@@ -3,7 +3,10 @@ import React from 'react';
 import { AttachmentData } from './attachment-data/attachement-data';
 import FileAttachments from '@/components/v2/common/file-attachment';
 import CheckboxComponent from '@/components/v2/common/checkbox';
-import { useUploadDocumentMutation } from '@/features/api/kyc';
+import {
+  useDeleteDocumentMutation,
+  useUploadDocumentMutation
+} from '@/features/api/kyc';
 import { handleFileupload } from '../helper/handle-file-upload';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
@@ -24,6 +27,7 @@ export const RenderOffline = ({
   fromWhere
 }: any) => {
   const [uploadDocument] = useUploadDocumentMutation({});
+  const [deleteDocument] = useDeleteDocumentMutation({});
   const dispatch = useAppDispatch();
 
   const buildFormData = ({ acceptedFiles, key }: any) => {
@@ -53,25 +57,48 @@ export const RenderOffline = ({
   const fileUpload = ({ acceptedFiles, key }: any) => {
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(res => {
-        if (res.data) {
-          handleFileupload({
-            acceptedFiles,
-            setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-            setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-            setSelectedFile: `formState.attachment[${key}].selectedFile`,
-            dispatch
-          });
-          dispatch(
-            updateFormState({
-              name: `formErrorState.attachment[${key}]`,
-              value: ''
-            })
-          );
-        }
+      .then(() => {
+        handleFileupload({
+          acceptedFiles,
+          setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+          setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+          setSelectedFile: `formState.attachment[${key}]`,
+          dispatch
+        });
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${key}]`,
+            value: ''
+          })
+        );
       })
       .catch(error => {
         console.log('Error', error);
+      });
+  };
+
+  const handleDeleteAttachment = ({
+    key
+  }: {
+    key: string;
+    selectedFile: any;
+  }) => {
+    deleteDocument({
+      offline:
+        country === 'Other' || selectedSubmissionOption === 'offline'
+          ? true
+          : false,
+      fieldName: key,
+      country: country
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          updateFormState({
+            name: `formState.attachment[${key}]`,
+            value: {}
+          })
+        );
       });
   };
 
@@ -91,6 +118,7 @@ export const RenderOffline = ({
         maxFile={1}
         selectedCountry={country}
         fileUpload={fileUpload}
+        handleDeleteAttachment={handleDeleteAttachment}
       />
 
       {fromWhere === countries.DUBAI && (
@@ -125,7 +153,7 @@ export const RenderOffline = ({
           <div
             className={` ${
               country === countries.INDIA
-                ? 'max-h-[650px]'
+                ? 'max-h-[660px]'
                 : country === countries.DUBAI
                 ? 'max-h-[360px]'
                 : 'max-h-[200px]'
@@ -163,6 +191,7 @@ export const RenderOffline = ({
                               minFile={minFile}
                               fileSize={fileSize}
                               fileUpload={fileUpload}
+                              handleDeleteAttachment={handleDeleteAttachment}
                             />
                           )
                         )}
@@ -183,6 +212,7 @@ export const RenderOffline = ({
                         minFile={attch.minFile}
                         fileSize={attch.fileSize}
                         fileUpload={fileUpload}
+                        handleDeleteAttachment={handleDeleteAttachment}
                       />
                     </div>
                   );

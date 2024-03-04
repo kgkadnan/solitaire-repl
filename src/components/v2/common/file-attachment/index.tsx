@@ -15,7 +15,6 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { IModalSetState } from '@/app/search/result/result-interface';
 import { Label } from '@/components/ui/label';
 
-import { handleDeleteAttachment } from '@/app/v2/kyc/helper/handle-delete-attachment';
 import Loader from './component/loader';
 
 interface IFileAttachments {
@@ -30,6 +29,7 @@ interface IFileAttachments {
   modalState: any;
   modalSetState: IModalSetState;
   fileUpload: ({ acceptedFiles, key }: any) => void;
+  handleDeleteAttachment: any;
 }
 
 const FileAttachments: React.FC<IFileAttachments> = ({
@@ -41,7 +41,8 @@ const FileAttachments: React.FC<IFileAttachments> = ({
   minFile,
   formErrorState,
   fileSize,
-  fileUpload
+  fileUpload,
+  handleDeleteAttachment
   // modalState,
   // fileUpload
 }) => {
@@ -82,9 +83,9 @@ const FileAttachments: React.FC<IFileAttachments> = ({
     }
   }, [fileRejections]);
 
-  let uploadProgress = formState?.attachment?.[formKey]?.uploadProgress ?? '';
+  let uploadProgress = formState?.attachment?.[formKey]?.uploadProgress ?? 0;
   let isFileUploaded = formState?.attachment?.[formKey]?.isFileUploaded ?? '';
-  let selectedFile = formState?.attachment?.[formKey]?.selectedFile ?? '';
+  let selectedFile = formState?.attachment?.[formKey] ?? '';
   let error = formErrorState?.attachment?.[formKey] ?? '';
 
   return (
@@ -108,7 +109,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
               )}
             </div>
 
-            {selectedFile.length < maxFile && (
+            {Object.keys(selectedFile).length < maxFile && (
               <input {...getInputProps()} name="attachment" />
             )}
             <div className=" flex flex-col w-[100%] text-left ">
@@ -117,21 +118,16 @@ const FileAttachments: React.FC<IFileAttachments> = ({
 
                 <p className={styles.label}>{isRequired && '*'}</p>
               </div>
-              {selectedFile.length > 0 &&
+              {Object.keys(selectedFile).length > 0 &&
                 uploadProgress === 0 &&
                 isFileUploaded && (
                   <div className="flex items-center gap-2">
-                    {selectedFile.map((file: any) => (
-                      <div
-                        key={file.path}
-                        className="flex text-neutral-600 text-sRegular items-center gap-2"
-                      >
-                        <p>{file.path}</p>
-                      </div>
-                    ))}
+                    <div className="flex text-neutral-600 text-sRegular items-center gap-2">
+                      <p>{selectedFile.url}</p>
+                    </div>
                   </div>
                 )}
-              {(!isFileUploaded || !selectedFile.length) && (
+              {!Object.keys(selectedFile).length && (
                 <p className={styles.format}>
                   Max File Size: {`${(fileSize / (1024 * 1024)).toFixed(0)}`}
                   mb
@@ -142,20 +138,16 @@ const FileAttachments: React.FC<IFileAttachments> = ({
               {uploadProgress > 0 ? (
                 <Loader />
               ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
-              !isFileUploaded ? (
+              !Object.keys(selectedFile).length ? (
                 <AttachMentIcon
                   className={error?.length ? styles.errorStroke : styles.stroke}
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
-                  {isFileUploaded && (
+                  {Object.keys(selectedFile).length && (
                     <button
                       onClick={() => {
-                        handleDeleteAttachment({
-                          // setIsFileUploaded: `formState.attachment[${formKey}]`,
-                          setSelectedFile: `formState.attachment[${formKey}]`,
-                          dispatch
-                        });
+                        handleDeleteAttachment({ key: formKey });
                       }}
                     >
                       <Image src={deleteIcon} alt="deleteIcon" />
@@ -166,7 +158,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
             </div>
           </div>
         </div>
-        {error?.length > 0 && <p className={styles.errorFormat}>{error}</p>}
+        <p className={styles.errorFormat}>{error}</p>
       </div>
     </>
   );

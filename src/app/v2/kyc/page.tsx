@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import CountrySelection from './components/country-selection';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
@@ -72,7 +72,7 @@ const KYC = () => {
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(0);
+  const [currentStepperStep, setCurrentStepperStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -117,17 +117,17 @@ const KYC = () => {
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
-  useEffect(() => {
-    let countdownInterval: NodeJS.Timeout;
+  // useEffect(() => {
+  //   let countdownInterval: NodeJS.Timeout;
 
-    if (resendTimer > 0) {
-      countdownInterval = setInterval(() => {
-        setResendTimer((prevTimer: number) => prevTimer - 1);
-      }, 1000);
-    }
+  //   if (resendTimer > 0) {
+  //     countdownInterval = setInterval(() => {
+  //       setResendTimer((prevTimer: number) => prevTimer - 1);
+  //     }, 1000);
+  //   }
 
-    return () => clearInterval(countdownInterval);
-  }, [resendTimer]);
+  //   return () => clearInterval(countdownInterval);
+  // }, [resendTimer]);
 
   function findFirstNonFilledScreens(data: any) {
     const filledScreens = Object.keys(data).map(Number);
@@ -245,140 +245,159 @@ const KYC = () => {
     );
   };
 
-  useEffect(() => {
-    triggerKycDetail({}).then(res => {
-      let kycDetails = res?.data;
-      if (kycDetails?.kyc?.status) {
-        switch (kycDetails?.kyc?.status) {
-          case kycStatus.INPROGRESS:
-            if (
-              kycDetails &&
-              kycDetails?.kyc &&
-              !isResumeCalled &&
-              (kycDetails?.kyc?.profile_data?.country !== null ||
-                Object.keys(kycDetails?.kyc?.profile_data?.online).length >
-                  1) &&
-              Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
-            ) {
-              setIsResumeCalled(true);
-              const { online, offline } = kycDetails.kyc.profile_data;
+  // useEffect(() => {
+  //   triggerKycDetail({}).then(res => {
+  //     let kycDetails = res?.data;
+  //     if (kycDetails?.kyc?.status) {
+  //       switch (kycDetails?.kyc?.status) {
+  //         case kycStatus.INPROGRESS:
+  //           if (
+  //             kycDetails &&
+  //             kycDetails?.kyc &&
+  //             !isResumeCalled &&
+  //             (kycDetails?.kyc?.profile_data?.country !== null ||
+  //               Object.keys(kycDetails?.kyc?.profile_data?.online).length >
+  //                 1) &&
+  //             Object?.keys(kycDetails?.kyc?.profile_data?.offline).length === 0
+  //           ) {
+  //             setIsResumeCalled(true);
+  //             const { online, offline } = kycDetails.kyc.profile_data;
 
-              const onlineData = online || {};
+  //             const onlineData = online || {};
 
-              let firstNonFilledScreens =
-                findFirstNonFilledScreens(onlineData)[0] - 1;
+  //             let firstNonFilledScreens =
+  //               findFirstNonFilledScreens(onlineData)[0] - 1;
 
-              if (firstNonFilledScreens > 0) {
-                setCurrentState('online');
-                setCurrentStepperStep(firstNonFilledScreens);
+  //             if (firstNonFilledScreens > 0) {
+  //               setCurrentState('online');
+  //               setCurrentStepperStep(firstNonFilledScreens);
 
-                offline
-                  ? setSelectedSubmissionOption('online')
-                  : setSelectedSubmissionOption('offline');
+  //               offline
+  //                 ? setSelectedSubmissionOption('online')
+  //                 : setSelectedSubmissionOption('offline');
 
-                setIsDialogOpen(true);
-                setDialogContent(
-                  <>
-                    <div className="absolute left-[-84px] top-[-84px]">
-                      <Image src={warningIcon} alt="warningIcon" />
-                    </div>
-                    <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                      <div>
-                        <h1 className="text-headingS text-neutral900">
-                          Do you want to resume KYC process or restart it?
-                        </h1>
-                      </div>
-                      <ActionButton
-                        actionButtonData={[
-                          {
-                            variant: 'secondary',
-                            label: ManageLocales('app.modal.no'),
-                            handler: () => handleResetButton()
-                          },
-                          {
-                            variant: 'primary',
-                            label: ManageLocales('app.modal.yes'),
-                            handler: () => {
-                              setIsDialogOpen(false);
-                            }
-                          }
-                        ]}
-                      />
-                    </div>
-                  </>
-                );
-              }
-            } else {
-              setCurrentState('country_selection');
-            }
+  //               setIsDialogOpen(true);
+  //               setDialogContent(
+  //                 <>
+  //                   <div className="absolute left-[-84px] top-[-84px]">
+  //                     <Image src={warningIcon} alt="warningIcon" />
+  //                   </div>
+  //                   <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+  //                     <div>
+  //                       <h1 className="text-headingS text-neutral900">
+  //                         Do you want to resume KYC process or restart it?
+  //                       </h1>
+  //                     </div>
+  //                     <ActionButton
+  //                       actionButtonData={[
+  //                         {
+  //                           variant: 'secondary',
+  //                           label: ManageLocales('app.modal.no'),
+  //                           handler: () => handleResetButton()
+  //                         },
+  //                         {
+  //                           variant: 'primary',
+  //                           label: ManageLocales('app.modal.yes'),
+  //                           handler: () => {
+  //                             setIsDialogOpen(false);
+  //                           }
+  //                         }
+  //                       ]}
+  //                     />
+  //                   </div>
+  //                 </>
+  //               );
+  //             }
+  //           } else {
+  //             setCurrentState('country_selection');
+  //           }
 
-            let sectionKeys: string[] =
-              kycDetails?.kyc?.profile_data?.country === 'India'
-                ? [
-                    kycScreenIdentifierNames.PERSONAL_DETAILS,
-                    kycScreenIdentifierNames.COMPANY_DETAILS,
-                    kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
-                    kycScreenIdentifierNames.BANKING_DETAILS
-                  ]
-                : [
-                    kycScreenIdentifierNames.PERSONAL_DETAILS,
-                    kycScreenIdentifierNames.COMPANY_DETAILS,
-                    kycScreenIdentifierNames.BANKING_DETAILS
-                  ];
+  //           let sectionKeys: string[] =
+  //             kycDetails?.kyc?.profile_data?.country === 'India'
+  //               ? [
+  //                   kycScreenIdentifierNames.PERSONAL_DETAILS,
+  //                   kycScreenIdentifierNames.COMPANY_DETAILS,
+  //                   kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+  //                   kycScreenIdentifierNames.BANKING_DETAILS
+  //                 ]
+  //               : [
+  //                   kycScreenIdentifierNames.PERSONAL_DETAILS,
+  //                   kycScreenIdentifierNames.COMPANY_DETAILS,
+  //                   kycScreenIdentifierNames.BANKING_DETAILS
+  //                 ];
 
-            sectionKeys.forEach((key, index: number) => {
-              let screenIndex = (index + 1).toString();
+  //           sectionKeys.forEach((key, index: number) => {
+  //             let screenIndex = (index + 1).toString();
 
-              let onlineValue = kycDetails?.kyc?.profile_data?.online;
+  //             let onlineValue = kycDetails?.kyc?.profile_data?.online;
 
-              dispatch(
-                updateFormState({
-                  name: `formState.online.sections[${key}]`,
-                  value:
-                    onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
-                })
-              );
-            });
-            setSelectedCountry(
-              kycDetails?.kyc?.profile_data?.country
-                ? kycDetails?.kyc?.profile_data?.country
-                : ''
-            );
-            dispatch(
-              updateFormState({
-                name: 'formState.country',
-                value: kycDetails?.kyc?.profile_data?.country
-              })
-            );
+  //             dispatch(
+  //               updateFormState({
+  //                 name: `formState.online.sections[${key}]`,
+  //                 value:
+  //                   onlineValue?.[screenIndex as keyof typeof onlineValue] ?? {}
+  //               })
+  //             );
+  //           });
+  //           setSelectedCountry(
+  //             kycDetails?.kyc?.profile_data?.country
+  //               ? kycDetails?.kyc?.profile_data?.country
+  //               : ''
+  //           );
 
-            dispatch(
-              updateFormState({
-                name: 'formState.isEmailVerified',
-                value: kycDetails?.kyc?.is_email_verified
-              })
-            );
+  //           dispatch(
+  //             updateFormState({
+  //               name: 'formState.country',
+  //               value: kycDetails?.kyc?.profile_data?.country
+  //             })
+  //           );
 
-            setSelectedSubmissionOption(
-              kycDetails?.kyc?.profile_data?.mode
-                ? kycDetails?.kyc?.profile_data?.mode
-                : ''
-            );
+  //           dispatch(
+  //             updateFormState({
+  //               name: 'formState.isEmailVerified',
+  //               value: kycDetails?.kyc?.is_email_verified
+  //             })
+  //           );
 
-            break;
-          case kycStatus.PENDING:
-            setCurrentState(kycStatus.PENDING);
-            break;
+  //           setSelectedSubmissionOption(
+  //             kycDetails?.kyc?.profile_data?.mode
+  //               ? kycDetails?.kyc?.profile_data?.mode
+  //               : ''
+  //           );
 
-          case kycStatus.APPROVED:
-            setCurrentState(kycStatus.APPROVED);
-            break;
-          case kycStatus.REJECTED:
-            setCurrentState(kycStatus.REJECTED);
-            break;
-        }
-      }
-    });
-  }, []);
+  //           dispatch(
+  //             updateFormState({
+  //               name: 'formState.attachment',
+  //               value: kycDetails?.kyc?.profile_data?.offline['2']
+  //             })
+  //           );
+
+  //           Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
+  //             key => {
+  //               console.log(key);
+  //               dispatch(
+  //                 updateFormState({
+  //                   name: `formState.attachment[${key}].isFileUploaded`,
+  //                   value: true
+  //                 })
+  //               );
+  //             }
+  //           );
+  //           break;
+  //         case kycStatus.PENDING:
+  //           setCurrentState(kycStatus.PENDING);
+  //           break;
+
+  //         case kycStatus.APPROVED:
+  //           setCurrentState(kycStatus.APPROVED);
+  //           break;
+  //         case kycStatus.REJECTED:
+  //           setCurrentState(kycStatus.REJECTED);
+  //           break;
+  //       }
+  //     }
+  //   });
+  // }, []);
 
   function checkOTPEntry(otpEntry: string[]) {
     for (let i = 0; i < otpEntry.length; i++) {
@@ -784,7 +803,7 @@ const KYC = () => {
       case 'online':
         return (
           <StepperComponent
-            country={'India'}
+            country={selectedCountry ?? formState.country}
             currentStepperStep={currentStepperStep}
             setCurrentStepperStep={setCurrentStepperStep}
             completedSteps={completedSteps}
@@ -806,7 +825,7 @@ const KYC = () => {
             selectedSubmissionOption={selectedSubmissionOption}
             modalSetState={modalSetState}
             modalState={modalState}
-            country={'Dubai'}
+            country={selectedCountry ?? formState.country}
             handleTermAndCondition={handleTermAndCondition}
             handleBack={handleBack}
             handleSubmit={handleSubmit}

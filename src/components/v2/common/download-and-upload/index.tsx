@@ -3,7 +3,6 @@ import Image from 'next/image';
 import { useDropzone } from 'react-dropzone';
 import downloadKycIcon from '@public/v2/assets/icons/attachment/download-kyc.svg';
 import styles from './download-and-upload.module.scss';
-import { handleDeleteAttachment } from '@/app/my-account/kyc/helper/handle-delete-attachment';
 import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
@@ -21,6 +20,7 @@ interface IDownloadAndUpload {
   selectedCountry: string;
   formErrorState: any;
   fileUpload: any;
+  handleDeleteAttachment: any;
 }
 
 export const DownloadAndUpload = ({
@@ -28,7 +28,8 @@ export const DownloadAndUpload = ({
   formErrorState,
   maxFile,
   selectedCountry,
-  fileUpload
+  fileUpload,
+  handleDeleteAttachment
 }: IDownloadAndUpload) => {
   const [fetchTrigger] = useLazyGetKycPdfQuery({});
 
@@ -67,9 +68,9 @@ export const DownloadAndUpload = ({
     }
   }, [fileRejections]);
 
-  let uploadProgress = formState?.attachment.upload_form?.uploadProgress ?? '';
+  let uploadProgress = formState?.attachment.upload_form?.uploadProgress ?? 0;
   let isFileUploaded = formState?.attachment.upload_form?.isFileUploaded ?? '';
-  let selectedFile = formState?.attachment.upload_form?.selectedFile ?? '';
+  let selectedFile = formState?.attachment.upload_form ?? '';
 
   let error = formErrorState?.attachment?.upload_form ?? '';
 
@@ -137,28 +138,23 @@ export const DownloadAndUpload = ({
                   )}
                 </div>
 
-                {selectedFile.length < maxFile && (
+                {Object.keys(selectedFile).length < maxFile && (
                   <input {...getInputProps()} name="attachment" />
                 )}
                 <div className=" flex flex-col w-[80%] text-left ">
                   <div className="flex ">
                     <Label className={` ${styles.label} `}>Upload KYC</Label>
                   </div>
-                  {selectedFile.length > 0 &&
+                  {Object.keys(selectedFile).length > 0 &&
                     uploadProgress === 0 &&
                     isFileUploaded && (
                       <div className="flex items-center gap-2">
-                        {selectedFile.map((file: any) => (
-                          <div
-                            key={file.path}
-                            className="flex text-neutral-600 text-sRegular items-center gap-2"
-                          >
-                            <p>{file.path}</p>
-                          </div>
-                        ))}
+                        <div className="flex text-neutral-600 text-sRegular items-center gap-2">
+                          <p>{selectedFile.url}</p>
+                        </div>
                       </div>
                     )}
-                  {(!isFileUploaded || !selectedFile.length) && (
+                  {!Object.keys(selectedFile).length && (
                     <p className={styles.format}>
                       Upload the filled KYC form here | Max file size: 20 mb
                     </p>
@@ -168,7 +164,7 @@ export const DownloadAndUpload = ({
                   {uploadProgress > 0 ? (
                     <Loader />
                   ) : // <p className="text-[14px]">{`${uploadProgress}%`}</p>
-                  !isFileUploaded ? (
+                  !Object.keys(selectedFile).length ? (
                     <AttachMentIcon
                       className={
                         error?.length ? styles.errorStroke : styles.stroke
@@ -176,14 +172,10 @@ export const DownloadAndUpload = ({
                     />
                   ) : (
                     <div onClick={e => e.stopPropagation()}>
-                      {isFileUploaded && (
+                      {Object.keys(selectedFile).length && (
                         <button
                           onClick={() => {
-                            handleDeleteAttachment({
-                              // setIsFileUploaded: `formState.attachment[${formKey}]`,
-                              setSelectedFile: `formState.attachment.upload_form`,
-                              dispatch
-                            });
+                            handleDeleteAttachment({ key: 'upload_form' });
                           }}
                         >
                           <Image src={deleteIcon} alt="deleteIcon" />
