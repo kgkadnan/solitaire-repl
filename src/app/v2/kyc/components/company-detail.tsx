@@ -71,7 +71,8 @@ const CompanyDetail = ({
   formErrorState,
   formState,
   dispatch,
-  country
+  country,
+  currentStepperStep
 }: any) => {
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
@@ -257,7 +258,7 @@ const CompanyDetail = ({
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
         <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
-          2
+          {currentStepperStep + 1}
         </span>
         <h1 className="text-headingS font-medium text-neutral900">
           {ManageLocales('app.kyc.companyDetail.header.title')}
@@ -740,7 +741,7 @@ const CompanyDetail = ({
                     'company_country_code'
                   );
                 }}
-                isNotEditable={true}
+                isNotEditable={false}
                 containerStyle={'!w-full'}
                 type="number"
                 name="Contact Number*"

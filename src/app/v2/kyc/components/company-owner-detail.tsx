@@ -7,12 +7,17 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
 
-const CompanyOwnerDetail = ({ formErrorState, formState, dispatch }: any) => {
+const CompanyOwnerDetail = ({
+  formErrorState,
+  formState,
+  dispatch,
+  currentStepperStep
+}: any) => {
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">
         <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
-          3
+          {currentStepperStep + 1}
         </span>
         <h1 className="text-headingS font-medium text-neutral900">
           {ManageLocales('app.kyc.companyOwnerDetail.header.title')}

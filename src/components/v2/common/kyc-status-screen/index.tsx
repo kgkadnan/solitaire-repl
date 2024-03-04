@@ -11,6 +11,7 @@ import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useRouter } from 'next/navigation';
 import { kycStatus } from '@/constants/enums/kyc';
+import { useGetCustomerQuery } from '@/features/api/dashboard';
 
 interface IKycStatusScreen {
   status: string;
@@ -18,6 +19,7 @@ interface IKycStatusScreen {
 
 export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
   const router = useRouter();
+  const { data: customerData } = useGetCustomerQuery({});
   return (
     <div className="flex flex-col gap-y-10 justify-center items-center absolute">
       {/* {status === kycStatus.PENDING ? (
@@ -57,10 +59,10 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
           <div className="mx-auto my-[24px] flex flex-col justify-center items-center gap-y-4">
             <div className="flex flex-col justify-center items-center gap-y-[10px]">
               <p className="font-medium text-headingS text-neutral900">
-                Mr. Rajeev Sinha
+                {customerData?.customer.kam?.kam_name ?? '-'}
               </p>
               <p className="font-regular text-lRegular text-neutral700">
-                Key Account Manager
+                {customerData?.customer.kam?.post ?? 'Key Account Manager'}
               </p>
             </div>
             <div className="border-t border-neutral200 w-[265px]"></div>
@@ -69,13 +71,13 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
                 <Image src={phoneIcon} alt="phon_icon" />
                 <Image src={whatsappIcon} alt="whatsapp_icon" />
                 <p className="font-regular text-mRegular text-neutral600">
-                  +91 910 876 6432
+                  {customerData?.customer.kam?.phone ?? '-'}
                 </p>
               </div>
               <div className="flex justify-center items-center gap-x-2">
                 <Image src={mailIcon} alt="mail_icon" />
                 <p className="font-regular text-mRegular text-neutral600">
-                  rajeev.sinha@kgkmail.com
+                  {customerData?.customer.kam?.email ?? '-'}
                 </p>
                 <Image src={copyIcon} alt="copy_icon" />
               </div>

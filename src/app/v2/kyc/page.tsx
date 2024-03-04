@@ -56,7 +56,7 @@ const initialTokenState = {
 };
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('');
+  const [currentState, setCurrentState] = useState('country_selection');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -72,7 +72,7 @@ const KYC = () => {
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(0);
+  const [currentStepperStep, setCurrentStepperStep] = useState(1);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -330,6 +330,8 @@ const KYC = () => {
               let screenIndex = (index + 1).toString();
 
               let onlineValue = kycDetails?.kyc?.profile_data?.online;
+
+              console.log('onlineValue', onlineValue);
 
               dispatch(
                 updateFormState({
@@ -732,6 +734,7 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
+            currentStepperStep={currentStepperStep}
           />
         );
       case kycScreenIdentifierNames.BANKING_DETAILS:
@@ -741,6 +744,7 @@ const KYC = () => {
             formState={formState}
             dispatch={dispatch}
             country={formState.country}
+            currentStepperStep={currentStepperStep}
           />
         );
       case kycScreenIdentifierNames.PERSONAL_DETAILS:
@@ -749,6 +753,7 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
+            currentStepperStep={currentStepperStep}
           />
         );
       case kycScreenIdentifierNames.COMPANY_DETAILS:
@@ -757,7 +762,8 @@ const KYC = () => {
             formErrorState={formErrorState}
             formState={formState}
             dispatch={dispatch}
-            country={'India'}
+            country={formState.country}
+            currentStepperStep={currentStepperStep}
           />
         );
 
@@ -769,8 +775,9 @@ const KYC = () => {
             selectedSubmissionOption={selectedSubmissionOption}
             modalSetState={modalSetState}
             modalState={modalState}
-            country={'India'}
+            country={formState.country}
             handleTermAndCondition={handleTermAndCondition}
+            currentStepperStep={currentStepperStep}
           />
         );
     }
@@ -812,6 +819,7 @@ const KYC = () => {
             handleStepperNext={handleStepperNext}
             handleStepperBack={handleStepperBack}
             isEmailVerified={formState.isEmailVerified}
+            handleSubmit={handleSubmit}
           />
         );
 
