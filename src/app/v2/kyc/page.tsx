@@ -433,7 +433,11 @@ const KYC = () => {
       ID: currentState + 1
     })
       .then((response: any) => {
-        if (!validationError.length) {
+        if (
+          (response?.data?.statusCode === statusCode.SUCCESS ||
+            response?.data?.statusCode === statusCode.NO_CONTENT) &&
+          !validationError.length
+        ) {
           // Step was successfully completed, move to the next step
           // console.log('nextStep', nextStep);
           completedSteps.add(currentState);
@@ -445,9 +449,11 @@ const KYC = () => {
             ? (setIsInputDialogOpen(true),
               setToken((prev: any) => ({
                 ...prev,
-                token: response?.data?.data?.token || ''
+                token: response?.data?.data?.token ?? ''
               })))
             : {};
+          goToNextStep();
+
           // setCurrentStepperStep(nextStep);
         } else {
           rejectedSteps.add(currentState);
@@ -481,6 +487,7 @@ const KYC = () => {
         }
       })
       .catch(error => {
+        console.log('llllllll', error);
         rejectedSteps.add(currentState);
         setRejectedSteps(new Set(rejectedSteps));
         setIsDialogOpen(true); // Show error dialog
@@ -697,7 +704,47 @@ const KYC = () => {
       }
     }
   };
+  const steps = [
+    {
+      name: 'Personal Details',
+      identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
+    },
+    {
+      name: 'Company Details',
+      identifier: kycScreenIdentifierNames.COMPANY_DETAILS
+    },
+    {
+      name: 'Owner Details',
+      identifier: kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+    },
+    {
+      name: 'Banking Details',
+      identifier: kycScreenIdentifierNames.BANKING_DETAILS
+    },
+    { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
+  ];
+  const filteredSteps = steps.filter(
+    step =>
+      step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
+      selectedCountry === countries.INDIA
+  );
 
+  function goToNextStep() {
+    // Find the index of the current step, ignoring case
+    let currentIndex = filteredSteps.findIndex(
+      (_step, index) => index === currentStepperStep
+    );
+
+    // If currentStep is found and it is not the last element in the array
+    if (currentIndex !== -1 && currentIndex < steps.length - 1) {
+      // Set currentStep to the next element in the array
+      console.log(steps[currentIndex + 1]),
+        setCurrentStepperStep(currentIndex + 1);
+      // currentStep = steps[currentIndex + 1];
+    } else {
+      console.log('You are on the last step or current step was not found.');
+    }
+  }
   // const completeStepperStep = (stepIndex: number) => {
   //   setCompletedSteps(prevCompletedSteps => {
   //     const newCompletedSteps = new Set(prevCompletedSteps);
@@ -784,7 +831,6 @@ const KYC = () => {
       case 'online':
         return (
           <StepperComponent
-            country={'India'}
             currentStepperStep={currentStepperStep}
             setCurrentStepperStep={setCurrentStepperStep}
             completedSteps={completedSteps}
@@ -793,6 +839,7 @@ const KYC = () => {
             handleStepperNext={handleStepperNext}
             handleStepperBack={handleStepperBack}
             isEmailVerified={formState.isEmailVerified}
+            filteredSteps={filteredSteps}
           />
         );
 
