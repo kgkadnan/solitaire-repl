@@ -32,14 +32,13 @@ const DashboardCarousel = ({ images }: any) => {
     <Slider {...settings}>
       {images?.map((data: any, index: number) => {
         return (
-          // <div className="w-full custom-dots" key={index}>
-          <img
-            src={data.image_web}
-            alt={`banner-${index}`}
-            className="w-full h-[400px] rounded-[8px]"
-            key={index}
-          />
-          // </div>
+          <a href={data.link} target="_blank" key={index}>
+            <img
+              src={data.image_web}
+              alt={`banner-${index}`}
+              className="w-full h-[400px] rounded-[8px]"
+            />
+          </a>
         );
       })}
     </Slider>

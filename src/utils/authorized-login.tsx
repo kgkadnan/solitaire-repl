@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation'; // Correct import for useRouter
 import useUser from '../lib/use-auth';
-import Loader from '@/components/v2/common/loader';
 import KycNudgeModal from '@/components/v2/common/kyc-nudge';
 import { kycStatus } from '@/constants/enums/kyc';
 import { v2Routes } from '@/constants/routes';
 import SideNavigationBar from '@/components/v2/common/side-navigation-bar';
 import V2TopNavigationBar from '@/components/v2/common/top-navigation-bar';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const authorizedLogin = (WrappedComponent: React.ComponentType) => {
   const Wrapper: React.FC<any> = props => {
@@ -44,7 +44,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     }, [authToken, userLoggedOut, router]);
 
     if (isLoading) {
-      return <Loader />; // Or any other loading indicator
+      return <CustomKGKLoader />; // Or any other loading indicator
     }
     const handleNudgeClose = () => {
       setShowKycNudge(false);
