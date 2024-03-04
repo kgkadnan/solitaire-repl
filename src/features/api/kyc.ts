@@ -59,6 +59,15 @@ export const kycApi = createApi({
 
       invalidatesTags: ['kyc']
     }),
+    deleteDocument: builder.mutation({
+      query: data => ({
+        url: `/store/kyc/document-remove`,
+        method: 'Delete',
+        body: data
+      }),
+
+      invalidatesTags: ['kyc']
+    }),
     resendEmailOTP: builder.mutation({
       query: data => ({
         url: `/store/customers/email/otp/send`,
@@ -89,5 +98,6 @@ export const {
   useVerifyEmailOTPMutation,
   useResendEmailOTPMutation,
   useLazyGetKycPdfQuery,
-  useUploadDocumentMutation
+  useUploadDocumentMutation,
+  useDeleteDocumentMutation
 } = kycApi;
