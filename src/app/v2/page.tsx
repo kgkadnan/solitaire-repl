@@ -389,10 +389,10 @@ const Dashboard = () => {
         <div
           className={`bg-cover bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
           style={{
-            backgroundImage: 'url(/Pattern.png)',
-            background: `
-      linear-gradient(90deg, #DBF2FC 30%, #E8E8FF 100%)
-    `
+            backgroundImage: 'url(/gradient.png)'
+            //         background: `
+            //   linear-gradient(90deg, #DBF2FC 30%, #E8E8FF 100%)
+            // `
           }}
         >
           <p className="text-headingM medium text-neutral900">
