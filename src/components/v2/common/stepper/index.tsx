@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './stepper.module.scss'; // Ensure you have the corresponding CSS module file
-import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import Image from 'next/image';
 import Completed from '@public/v2/assets/icons/stepper/completed.svg';
 import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
