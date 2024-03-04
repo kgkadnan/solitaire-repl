@@ -17,8 +17,7 @@ import { Events } from '@/constants/enums/event';
 import LoginComponent from './component/login';
 import {
   useSendOtpMutation,
-  useVerifyOTPMutation,
-  useVerifyPhoneQuery
+  useVerifyOTPMutation
 } from '@/features/api/otp-verification';
 import { statusCode } from '@/constants/enums/status-code';
 import { IAuthDataResponse } from './interface';
@@ -115,10 +114,10 @@ const Login = () => {
     setOTPVerificationFormErrors
   } = otpVerificationSetState;
 
-  const { data: verifyNumber } = useVerifyPhoneQuery({
-    country_code: otpVerificationFormState.countryCode,
-    phone_number: otpVerificationFormState.otpMobileNumber
-  });
+  // const { data: verifyNumber } = useVerifyPhoneQuery({
+  //   country_code: otpVerificationFormState.countryCode,
+  //   phone_number: otpVerificationFormState.otpMobileNumber
+  // });
 
   useEffect(() => {
     if (isTokenChecked) {
@@ -283,7 +282,7 @@ const Login = () => {
           <IndividualActionButton
             onClick={() => {
               handleEditMobileNumber({
-                verifyNumber,
+                // verifyNumber,
                 otpVerificationFormState,
                 setOTPVerificationFormErrors,
                 setOTPVerificationFormState,
