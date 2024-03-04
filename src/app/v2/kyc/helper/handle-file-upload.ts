@@ -19,7 +19,7 @@ export const handleFileupload = async ({
         dispatch(
           updateFormState({
             name: setSelectedFile,
-            value: [file]
+            value: { url: file.name }
           })
         );
       });

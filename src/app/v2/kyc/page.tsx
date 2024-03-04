@@ -56,7 +56,7 @@ const initialTokenState = {
 };
 const KYC = () => {
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
-  const [currentState, setCurrentState] = useState('online');
+  const [currentState, setCurrentState] = useState('');
   const [selectedCountry, setSelectedCountry] = useState('');
   const [selectedSubmissionOption, setSelectedSubmissionOption] = useState('');
   const { modalState, modalSetState } = useModalStateManagement();
@@ -344,6 +344,7 @@ const KYC = () => {
                 ? kycDetails?.kyc?.profile_data?.country
                 : ''
             );
+
             dispatch(
               updateFormState({
                 name: 'formState.country',
@@ -364,6 +365,24 @@ const KYC = () => {
                 : ''
             );
 
+            dispatch(
+              updateFormState({
+                name: 'formState.attachment',
+                value: kycDetails?.kyc?.profile_data?.offline['2']
+              })
+            );
+
+            Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
+              key => {
+                console.log(key);
+                dispatch(
+                  updateFormState({
+                    name: `formState.attachment[${key}].isFileUploaded`,
+                    value: true
+                  })
+                );
+              }
+            );
             break;
           case kycStatus.PENDING:
             setCurrentState(kycStatus.PENDING);
@@ -784,7 +803,7 @@ const KYC = () => {
       case 'online':
         return (
           <StepperComponent
-            country={'India'}
+            country={selectedCountry ?? formState.country}
             currentStepperStep={currentStepperStep}
             setCurrentStepperStep={setCurrentStepperStep}
             completedSteps={completedSteps}
@@ -806,7 +825,7 @@ const KYC = () => {
             selectedSubmissionOption={selectedSubmissionOption}
             modalSetState={modalSetState}
             modalState={modalState}
-            country={'Dubai'}
+            country={selectedCountry ?? formState.country}
             handleTermAndCondition={handleTermAndCondition}
             handleBack={handleBack}
             handleSubmit={handleSubmit}

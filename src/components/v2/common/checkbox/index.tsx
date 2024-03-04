@@ -27,7 +27,6 @@ const CheckboxComponent = ({
   inputPlaceHolder,
   inputName
 }: ICheckboxComponentProps) => {
-  console.log('isChecked', isChecked);
   return (
     <div className="flex flex-col gap-[5px]">
       <div className="flex gap-[5px]">

@@ -3,7 +3,10 @@ import React from 'react';
 import { AttachmentData } from './attachment-data/attachement-data';
 import FileAttachments from '@/components/v2/common/file-attachment';
 import CheckboxComponent from '@/components/v2/common/checkbox';
-import { useUploadDocumentMutation } from '@/features/api/kyc';
+import {
+  useDeleteDocumentMutation,
+  useUploadDocumentMutation
+} from '@/features/api/kyc';
 import { handleFileupload } from '../helper/handle-file-upload';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
@@ -19,8 +22,33 @@ export const RenderAttachment = ({
   selectedSubmissionOption
 }: any) => {
   const [uploadDocument] = useUploadDocumentMutation({});
+  const [deleteDocument] = useDeleteDocumentMutation({});
   const dispatch = useAppDispatch();
 
+  const handleDeleteAttachment = ({
+    key
+  }: {
+    key: string;
+    selectedFile: any;
+  }) => {
+    deleteDocument({
+      offline:
+        country === 'Other' || selectedSubmissionOption === 'offline'
+          ? true
+          : false,
+      fieldName: key,
+      country: country
+    })
+      .unwrap()
+      .then(() => {
+        dispatch(
+          updateFormState({
+            name: `formState.attachment[${key}]`,
+            value: {}
+          })
+        );
+      });
+  };
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
@@ -48,22 +76,20 @@ export const RenderAttachment = ({
   const fileUpload = ({ acceptedFiles, key }: any) => {
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
-      .then(res => {
-        if (res.data) {
-          handleFileupload({
-            acceptedFiles,
-            setUploadProgress: `formState.attachment[${key}].uploadProgress`,
-            setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
-            setSelectedFile: `formState.attachment[${key}].selectedFile`,
-            dispatch
-          });
-          dispatch(
-            updateFormState({
-              name: `formErrorState.attachment[${key}]`,
-              value: ''
-            })
-          );
-        }
+      .then(() => {
+        handleFileupload({
+          acceptedFiles,
+          setUploadProgress: `formState.attachment[${key}].uploadProgress`,
+          setIsFileUploaded: `formState.attachment[${key}].isFileUploaded`,
+          setSelectedFile: `formState.attachment[${key}]`,
+          dispatch
+        });
+        dispatch(
+          updateFormState({
+            name: `formErrorState.attachment[${key}]`,
+            value: ''
+          })
+        );
       })
       .catch(error => {
         console.log('Error', error);
@@ -130,6 +156,7 @@ export const RenderAttachment = ({
                               minFile={minFile}
                               fileSize={fileSize}
                               fileUpload={fileUpload}
+                              handleDeleteAttachment={handleDeleteAttachment}
                             />
                           )
                         )}
@@ -150,6 +177,7 @@ export const RenderAttachment = ({
                         minFile={attch.minFile}
                         fileSize={attch.fileSize}
                         fileUpload={fileUpload}
+                        handleDeleteAttachment={handleDeleteAttachment}
                       />
                     </div>
                   );
