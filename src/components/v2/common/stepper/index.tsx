@@ -1,6 +1,6 @@
 import React from 'react';
 import styles from './stepper.module.scss'; // Ensure you have the corresponding CSS module file
-import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
+import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
 import Image from 'next/image';
 import Completed from '@public/v2/assets/icons/stepper/completed.svg';
 import InProgress from '@public/v2/assets/icons/stepper/in-progress.svg';
@@ -10,7 +10,6 @@ import ActionButton from '../action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 
 interface IStepperComponentProps {
-  country: string;
   currentStepperStep: number;
   setCurrentStepperStep: any;
   completedSteps: any;
@@ -20,30 +19,11 @@ interface IStepperComponentProps {
   handleStepperBack: any;
   isEmailVerified: boolean;
   handleSubmit: any;
+  filteredSteps: any;
 }
 // Define the steps with label and name
-const steps = [
-  {
-    name: 'Personal Details',
-    identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
-  },
-  {
-    name: 'Company Details',
-    identifier: kycScreenIdentifierNames.COMPANY_DETAILS
-  },
-  {
-    name: 'Owner Details',
-    identifier: kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
-  },
-  {
-    name: 'Banking Details',
-    identifier: kycScreenIdentifierNames.BANKING_DETAILS
-  },
-  { name: 'Attachment', identifier: kycScreenIdentifierNames.ATTACHMENT }
-];
 
 const StepperComponent: React.FC<IStepperComponentProps> = ({
-  country,
   currentStepperStep,
   setCurrentStepperStep,
   completedSteps,
@@ -52,7 +32,8 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   handleStepperNext,
   handleStepperBack,
   isEmailVerified,
-  handleSubmit
+  handleSubmit,
+  filteredSteps
 }) => {
   // Function to mark a step as completed
 
@@ -64,11 +45,6 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   };
 
   // Include the "Company Owner Details" only if the country is India
-  const filteredSteps = steps.filter(
-    step =>
-      step.identifier !== kycScreenIdentifierNames.COMPANY_OWNER_DETAILS ||
-      country === countries.INDIA
-  );
 
   const renderStepperIcon = (index: number) => {
     if (index === currentStepperStep) {
@@ -85,7 +61,7 @@ const StepperComponent: React.FC<IStepperComponentProps> = ({
   return (
     <div className="flex flex-col gap-[32px] h-[93.6vh] min-h-[70vh] px-[110px] pt-[32px]">
       <div className={styles.stepperContainer}>
-        {filteredSteps.map((step, index) => {
+        {filteredSteps.map((step: any, index: number) => {
           let stepStatusClass = '';
           if (completedSteps.has(index)) stepStatusClass = styles.completed;
           else if (rejectedSteps.has(index)) stepStatusClass = styles.rejected;

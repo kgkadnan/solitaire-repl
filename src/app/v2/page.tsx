@@ -488,7 +488,7 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex w-full gap-2">
+        <div className="flex w-full gap-4">
           {' '}
           {/* Ensure the container takes up full width */}
           {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
