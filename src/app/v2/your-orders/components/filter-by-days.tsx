@@ -16,44 +16,10 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
   filterFunction,
   radioState
 }) => {
-  // //Handles the change of radio button and sets the selected days based on the value.
-  // const handleMyDiamondsRadioChange = (value: string) => {
-  //   //Calculates the date a certain number of days ago from the current date.
-  //   const calculateDaysAgo = (days: number) => {
-  //     const dateAgo = new Date();
-  //     dateAgo.setDate(dateAgo.getDate() - days);
-  //     return dateAgo.toISOString();
-  //   };
-
-  //   let selectedDays: string = '';
-
-  //   if (value === '7') {
-  //     selectedDays = calculateDaysAgo(7);
-  //   } else if (value === '30') {
-  //     selectedDays = calculateDaysAgo(30);
-  //   } else if (value === '90') {
-  //     selectedDays = calculateDaysAgo(90);
-  //   }
-
-  //   // Set selected days based on the active tab
-  //   switch (activeTab) {
-  //     case PENDING_INVOICE:
-  //       setPendingInvoiceSelectedDays(selectedDays);
-  //       break;
-  //     case ACTIVE_INVOICE:
-  //       setActiveInvoiceSelectedDays(selectedDays);
-  //       break;
-  //     default:
-  //       setInvoiceHistorySelectedDays(selectedDays);
-  //       break;
-  //   }
-  // };
-
   // Data for the radio buttons
   const myDiamondsRadioButtons = [
     {
       name: 'days',
-      // onChange: handleMyDiamondsRadioChange,
       id: '1',
       value: '7days',
       label: 'Last Week',
@@ -61,7 +27,6 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
     },
     {
       name: 'days',
-      // onChange: handleMyDiamondsRadioChange,
       id: '2',
       value: '30days',
       label: 'Last Month',
@@ -69,7 +34,6 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
     },
     {
       name: 'days',
-      // onChange: handleMyDiamondsRadioChange,
       id: '3',
       value: '90days',
       label: 'Last 3 Months',
