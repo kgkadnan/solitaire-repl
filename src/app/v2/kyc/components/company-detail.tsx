@@ -84,8 +84,6 @@ const CompanyDetail = ({
     );
   };
 
-  console.log(formState, 'fadasd');
-
   const memberOfAnyBusinessOrganisation = [
     {
       id: '1',
@@ -94,7 +92,7 @@ const CompanyDetail = ({
       requiresInput: true
     },
     {
-      id: '1',
+      id: '2',
       value: false,
       label: 'No',
       requiresInput: false
@@ -186,7 +184,7 @@ const CompanyDetail = ({
       requiresInput: true
     },
     {
-      id: '1',
+      id: '2',
       value: false,
       label: 'No',
       requiresInput: false
@@ -194,6 +192,8 @@ const CompanyDetail = ({
   ];
 
   const [selectedOption, setSelectedOption] = useState();
+
+  console.log('selectedOption', selectedOption);
 
   const handleSelect = (value: any, formKey: string) => {
     setSelectedOption(value);
@@ -234,8 +234,6 @@ const CompanyDetail = ({
     path: any,
     requiresInput: any
   ) => {
-    console.log(formState.online.sections[screenName]);
-
     let newData: any = formState.online.sections[screenName]?.[key]?.filter(
       (item: any) => item[0] !== label
     );
@@ -638,7 +636,7 @@ const CompanyDetail = ({
                     // formState
                   )
                 }
-                type="text"
+                type="number"
                 name={'Pin-Code*'}
                 value={
                   formState?.online?.sections?.[
@@ -779,6 +777,9 @@ const CompanyDetail = ({
                   <div className="w-[46%]">
                     <CheckboxWithInput
                       label="Manufacturer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Manufacturer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -799,6 +800,9 @@ const CompanyDetail = ({
                   <div className="w-[50%]">
                     <CheckboxWithInput
                       label="Retailer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Retailer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -819,6 +823,9 @@ const CompanyDetail = ({
                   <div className="w-[46%]">
                     <CheckboxWithInput
                       label="Wholesaler"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Wholesaler')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -839,6 +846,9 @@ const CompanyDetail = ({
                   <div className="w-[50%]">
                     <CheckboxWithInput
                       label="Corporate Retailer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Corporate Retailer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -859,6 +869,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Other"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Other')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -898,6 +911,11 @@ const CompanyDetail = ({
                     value={'Individual'}
                     requiresInput={false}
                     selectedOption={selectedOption}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'Individual'
+                    }
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -910,6 +928,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Partnership Firm'}
                     value={'Partnership Firm'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'Partnership Firm'
+                    }
                     requiresInput={false}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -924,6 +947,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Private Ltd.'}
                     value={'Private Ltd.'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'Private Ltd.'
+                    }
                     requiresInput={false}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -938,6 +966,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'LLP'}
                     value={'LLP'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'LLP'
+                    }
                     requiresInput={false}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -952,6 +985,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Public Ltd.'}
                     value={'Public Ltd.'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'Public Ltd.'
+                    }
                     requiresInput={false}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -966,6 +1004,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'OPC'}
                     value={'OPC'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'OPC'
+                    }
                     requiresInput={false}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -980,6 +1023,11 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
+                    defaultSelected={
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type'] === 'Other'
+                    }
                     requiresInput={true}
                     selectedOption={selectedOption}
                     onSelect={handleSelect}
@@ -1044,6 +1092,9 @@ const CompanyDetail = ({
                   <div className="w-[46%]">
                     <CheckboxWithInput
                       label="Manufacturer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Manufacturer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1064,6 +1115,9 @@ const CompanyDetail = ({
                   <div className="w-[50%]">
                     <CheckboxWithInput
                       label="Retailer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Retailer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1084,6 +1138,9 @@ const CompanyDetail = ({
                   <div className="w-[46%]">
                     <CheckboxWithInput
                       label="Wholesaler"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Wholesaler')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1104,6 +1161,9 @@ const CompanyDetail = ({
                   <div className="w-[50%]">
                     <CheckboxWithInput
                       label="Corporate Retailer"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Corporate Retailer')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1124,6 +1184,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Other"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.includes('Other')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1160,6 +1223,9 @@ const CompanyDetail = ({
                   <div className="w-[30%]">
                     <CheckboxWithInput
                       label="Diamonds"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Diamonds')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1180,6 +1246,9 @@ const CompanyDetail = ({
                   <div className="pl-[30px]">
                     <CheckboxWithInput
                       label="Colour Stones"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Colour Stones')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1200,6 +1269,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Jewellery"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Jewellery')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1220,6 +1292,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Other"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Other')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1625,6 +1700,9 @@ const CompanyDetail = ({
                   <div className="w-[30%]">
                     <CheckboxWithInput
                       label="Diamonds"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Diamonds')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1645,6 +1723,9 @@ const CompanyDetail = ({
                   <div className="pl-[30px]">
                     <CheckboxWithInput
                       label="Colour Stones"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Colour Stones')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1665,6 +1746,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Jewellery"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Jewellery')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1685,6 +1769,9 @@ const CompanyDetail = ({
                   <div className="w-[100%]">
                     <CheckboxWithInput
                       label="Other"
+                      defaultChecked={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.includes('Other')}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1731,6 +1818,11 @@ const CompanyDetail = ({
                       name="isMemberOfBusiness"
                       label={data.label}
                       value={data.value}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['is_member_of_business'] === data.value
+                      }
                       requiresInput={data.requiresInput}
                       selectedOption={selectedOption}
                       onSelect={handleSelect}
@@ -1805,6 +1897,11 @@ const CompanyDetail = ({
                         name="antiMoneyLaunderingPolicyName"
                         label={data.label}
                         value={data.value}
+                        defaultSelected={
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['is_anti_money_laundering'] === data.value
+                        }
                         requiresInput={data.requiresInput}
                         selectedOption={selectedOption}
                         onSelect={handleSelect}

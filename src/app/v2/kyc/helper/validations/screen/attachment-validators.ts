@@ -9,6 +9,7 @@ import {
   OWNER_ID_COPY,
   PAN_CARD,
   PASSPORT,
+  SECTION_194Q,
   TRADE_LICENSE
 } from '@/constants/error-messages/kyc';
 import { IsNotEmpty, IsOptional } from 'class-validator';
@@ -17,7 +18,7 @@ export class IndianAttachmentValidation {
   @IsNotEmpty({ message: PAN_CARD })
   pan_card: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: GST_CERTIFICATE })
   gst_certificate: string;
 
   @IsNotEmpty({ message: INCORPORATION_CERTIFICATE })
@@ -26,7 +27,7 @@ export class IndianAttachmentValidation {
   @IsNotEmpty({ message: CANCEL_CHAQUE })
   cancel_cheque: string;
 
-  @IsOptional()
+  @IsNotEmpty({ message: SECTION_194Q })
   section_194q: string;
   @IsOptional()
   government_registration_certificate: string;

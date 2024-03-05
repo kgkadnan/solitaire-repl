@@ -67,12 +67,11 @@ const KYC = () => {
   const [verifyEmailOTP] = useVerifyEmailOTPMutation();
   const [resendEmailOTP] = useResendEmailOTPMutation();
   const [triggerKycDetail] = useLazyGetKycDetailQuery({});
-
   const [submitKYC] = useSubmitKYCMutation();
   const [triggerAuth] = useLazyGetAuthDataQuery();
   const [resetKyc] = useResetKycMutation();
 
-  const [currentStepperStep, setCurrentStepperStep] = useState(1);
+  const [currentStepperStep, setCurrentStepperStep] = useState(0);
   const [completedSteps, setCompletedSteps] = useState(new Set());
   const [rejectedSteps, setRejectedSteps] = useState(new Set<number>());
 
@@ -229,14 +228,16 @@ const KYC = () => {
               {
                 variant: 'secondary',
                 label: ManageLocales('app.modal.yes'),
-                handler: () => handleConfirmRestartKyc()
+                handler: () => handleConfirmRestartKyc(),
+                customStyle: 'flex-1 w-full h-10'
               },
               {
                 variant: 'primary',
                 label: ManageLocales('app.modal.no'),
                 handler: () => {
                   setIsDialogOpen(false);
-                }
+                },
+                customStyle: 'flex-1 w-full h-10'
               }
             ]}
           />
@@ -293,14 +294,16 @@ const KYC = () => {
                           {
                             variant: 'secondary',
                             label: ManageLocales('app.modal.no'),
-                            handler: () => handleResetButton()
+                            handler: () => handleResetButton(),
+                            customStyle: 'flex-1 w-full h-10'
                           },
                           {
                             variant: 'primary',
                             label: ManageLocales('app.modal.yes'),
                             handler: () => {
                               setIsDialogOpen(false);
-                            }
+                            },
+                            customStyle: 'flex-1 w-full h-10'
                           }
                         ]}
                       />
@@ -326,12 +329,9 @@ const KYC = () => {
                     kycScreenIdentifierNames.BANKING_DETAILS
                   ];
 
-            sectionKeys.forEach((key, index: number) => {
+            sectionKeys.forEach(async (key, index: number) => {
               let screenIndex = (index + 1).toString();
-
               let onlineValue = kycDetails?.kyc?.profile_data?.online;
-
-              console.log('onlineValue', onlineValue);
 
               dispatch(
                 updateFormState({
@@ -367,24 +367,69 @@ const KYC = () => {
                 : ''
             );
 
-            dispatch(
-              updateFormState({
-                name: 'formState.attachment',
-                value: kycDetails?.kyc?.profile_data?.offline['2']
-              })
+            console.log(
+              'kycDetails?.kyc?.profile_data?.mode',
+              kycDetails?.kyc?.profile_data?.mode
             );
 
-            Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
-              key => {
-                console.log(key);
+            if (kycDetails?.kyc?.profile_data?.mode === 'online') {
+              if (kycDetails?.kyc?.profile_data?.country === 'India') {
                 dispatch(
                   updateFormState({
-                    name: `formState.attachment[${key}].isFileUploaded`,
-                    value: true
+                    name: 'formState.attachment',
+                    value: kycDetails?.kyc?.profile_data?.online['5']
                   })
                 );
+
+                Object.keys(kycDetails?.kyc?.profile_data?.online['5']).map(
+                  key => {
+                    dispatch(
+                      updateFormState({
+                        name: `formState.attachment[${key}].isFileUploaded`,
+                        value: true
+                      })
+                    );
+                  }
+                );
+              } else {
+                dispatch(
+                  updateFormState({
+                    name: 'formState.attachment',
+                    value: kycDetails?.kyc?.profile_data?.online['4']
+                  })
+                );
+
+                Object.keys(kycDetails?.kyc?.profile_data?.online['4']).map(
+                  key => {
+                    dispatch(
+                      updateFormState({
+                        name: `formState.attachment[${key}].isFileUploaded`,
+                        value: true
+                      })
+                    );
+                  }
+                );
               }
-            );
+            } else {
+              dispatch(
+                updateFormState({
+                  name: 'formState.attachment',
+                  value: kycDetails?.kyc?.profile_data?.offline['2']
+                })
+              );
+
+              Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
+                key => {
+                  dispatch(
+                    updateFormState({
+                      name: `formState.attachment[${key}].isFileUploaded`,
+                      value: true
+                    })
+                  );
+                }
+              );
+            }
+
             break;
           case kycStatus.PENDING:
             setCurrentState(kycStatus.PENDING);
@@ -400,6 +445,37 @@ const KYC = () => {
       }
     });
   }, []);
+
+  useEffect(() => {
+    let sectionKeys: string[] =
+      formState.country === 'India'
+        ? [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ]
+        : [
+            kycScreenIdentifierNames.PERSONAL_DETAILS,
+            kycScreenIdentifierNames.COMPANY_DETAILS,
+            kycScreenIdentifierNames.BANKING_DETAILS
+          ];
+
+    sectionKeys.forEach(async (key, index: number) => {
+      let validationErrors = await validateScreen(
+        formState.online.sections[key],
+        key,
+        formState.country
+      );
+
+      if (!validationErrors.length) {
+        completedSteps.add(index);
+        setCompletedSteps(new Set(completedSteps));
+        rejectedSteps.delete(index);
+        setRejectedSteps(new Set(rejectedSteps));
+      }
+    });
+  }, [formState]);
 
   function checkOTPEntry(otpEntry: string[]) {
     for (let i = 0; i < otpEntry.length; i++) {
@@ -444,6 +520,55 @@ const KYC = () => {
     }
 
     // Make the API call to submit the form data
+
+    // const processData = (dataArray: any) => {
+    //   console.log('dataArray', dataArray);
+    //   return dataArray.map((item: any) => {
+    //     // Check if the item is an array
+    //     if (Array.isArray(item)) {
+    //       // If the item is an array and has a second element, take the second element
+    //       return item[1] ?? item[0]; // Fallback to the first element if the second one is not available
+    //     }
+    //     // If the item is not an array, take it as is
+
+    //     return item;
+    //   });
+    // };
+
+    // if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
+    //   const companyDetails =
+    //     formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
+    //   if (companyDetails) {
+    //     const { business_type, industry_type } = companyDetails;
+    //     if (business_type?.length > 0) {
+    //       // Process the data here
+    //       // For example, you can update the Redux store
+    //       dispatch(
+    //         updateFormState({
+    //           name: `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}]['business_type']`,
+    //           value: processData(
+    //             formState.online.sections[
+    //               kycScreenIdentifierNames.COMPANY_DETAILS
+    //             ]['business_type']
+    //           )
+    //         })
+    //       );
+    //     } else if (industry_type?.length > 0) {
+    //       dispatch(
+    //         updateFormState({
+    //           name: `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}]['industry_type']`,
+    //           value: processData(
+    //             formState.online.sections[
+    //               kycScreenIdentifierNames.COMPANY_DETAILS
+    //             ]['industry_type']
+    //           )
+    //         })
+    //       );
+    //     }
+    //   }
+    // }
+
+    // console.log('formstate', formState);
 
     await kyc({
       data: {
@@ -708,14 +833,16 @@ const KYC = () => {
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.modal.cancel'),
-                    handler: () => setIsDialogOpen(false)
+                    handler: () => setIsDialogOpen(false),
+                    customStyle: 'w-full flex-1'
                   },
                   {
                     variant: 'primary',
                     label: ManageLocales('app.modal.submit'),
                     handler: () => {
                       kycSubmitted();
-                    }
+                    },
+                    customStyle: 'w-full flex-1'
                   }
                 ]}
               />
@@ -759,8 +886,8 @@ const KYC = () => {
     // If currentStep is found and it is not the last element in the array
     if (currentIndex !== -1 && currentIndex < steps.length - 1) {
       // Set currentStep to the next element in the array
-      console.log(steps[currentIndex + 1]),
-        setCurrentStepperStep(currentIndex + 1);
+
+      setCurrentStepperStep(currentIndex + 1);
       // currentStep = steps[currentIndex + 1];
     } else {
       console.log('You are on the last step or current step was not found.');
