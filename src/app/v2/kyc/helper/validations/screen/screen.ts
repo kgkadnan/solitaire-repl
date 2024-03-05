@@ -216,7 +216,7 @@ export const validateAttachment = async (formData: any, country: string) => {
           formData?.id_copy
         );
         break;
-      case kycAttachmentIdentifier.DUBAI:
+      case kycAttachmentIdentifier.OTHER:
         attachments = new DubaiAttachmentValidation(
           formData?.incumbency_certificate,
           formData?.trade_license,

@@ -33,7 +33,7 @@ export const RenderOffline = ({
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
-    if (country === countries.DUBAI || selectedSubmissionOption === 'offline') {
+    if (country === countries.OTHER || selectedSubmissionOption === 'offline') {
       formState.attachment?.upload_form?.selectedFile.forEach((file: any) => {
         formData.append('upload_form', file);
       });
@@ -42,7 +42,7 @@ export const RenderOffline = ({
     formData.append(
       'offline',
       `${
-        country === countries.DUBAI || selectedSubmissionOption === 'offline'
+        country === countries.OTHER || selectedSubmissionOption === 'offline'
           ? 'true'
           : 'false'
       }`
@@ -121,7 +121,7 @@ export const RenderOffline = ({
         handleDeleteAttachment={handleDeleteAttachment}
       />
 
-      {fromWhere === countries.DUBAI && (
+      {fromWhere === countries.OTHER && (
         <p className="text-neutral-900 w-[920px] pt-3 text-mRegular">
           Note* (Mandatory): Please upload signed & stamped filled KYC form with
           3 Self Declarations
@@ -143,7 +143,7 @@ export const RenderOffline = ({
 
         <div
           className={` ${'max-h-[670px]'} ${
-            country === countries.DUBAI
+            country === countries.OTHER
               ? 'h-[380px]'
               : country !== countries.INDIA
               ? 'h-[548px]'
@@ -154,7 +154,7 @@ export const RenderOffline = ({
             className={` ${
               country === countries.INDIA
                 ? 'max-h-[660px]'
-                : country === countries.DUBAI
+                : country === countries.OTHER
                 ? 'max-h-[360px]'
                 : 'max-h-[200px]'
             } w-[100%] flex justify-center`}
@@ -219,7 +219,7 @@ export const RenderOffline = ({
                 })}
             </div>
           </div>
-          {fromWhere === countries.DUBAI && (
+          {fromWhere === countries.OTHER && (
             <p className="text-mRegular text-neutral-600 pb-5 ">
               Note*: Applicable for non UAE clients
             </p>
@@ -277,7 +277,7 @@ export const RenderOffline = ({
               variant: 'secondary',
               label: ManageLocales('app.kyc.footer.back'),
               handler: () =>
-                fromWhere === countries.DUBAI
+                fromWhere === countries.OTHER
                   ? handleBack('country_selection')
                   : handleBack('submission_option')
             },

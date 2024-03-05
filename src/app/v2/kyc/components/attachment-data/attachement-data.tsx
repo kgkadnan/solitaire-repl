@@ -184,7 +184,7 @@ export let AttachmentData: any = {
       fileSize: 20 * 1024 * 1024
     }
   ],
-  Dubai: [
+  Other: [
     {
       id: '1',
       label: 'Certificate of Incumbency/Extract of Registry',

@@ -677,7 +677,7 @@ const KYC = () => {
     await submitKYC({
       country: selectedCountry,
       offline:
-        formState.country === countries.DUBAI ||
+        formState.country === countries.OTHER ||
         selectedSubmissionOption === 'offline'
           ? true
           : false
@@ -752,7 +752,7 @@ const KYC = () => {
     let onlineValidator: any = [];
 
     if (
-      formState.country === countries.DUBAI ||
+      formState.country === countries.OTHER ||
       selectedSubmissionOption === 'offline'
     ) {
       manualValidationError = await validateManualAttachment(
@@ -997,7 +997,7 @@ const KYC = () => {
           />
         );
 
-      case countries.DUBAI:
+      case countries.OTHER:
       case 'offline':
         return (
           <RenderOffline

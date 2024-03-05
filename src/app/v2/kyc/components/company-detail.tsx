@@ -191,12 +191,12 @@ const CompanyDetail = ({
     }
   ];
 
-  const [selectedOption, setSelectedOption] = useState();
+  const [memberOfAnyBusiness, setMenberOfAnyBusiness] = useState();
+  const [moneyLaunderingState, setMoneyLaunderingState] = useState();
+  const [organisationType, setOrganisationType] = useState();
 
-  console.log('selectedOption', selectedOption);
-
-  const handleSelect = (value: any, formKey: string) => {
-    setSelectedOption(value);
+  const handleSelect = (value: any, formKey: string, setState: any) => {
+    setState(value);
     // Update the data array to include only the selected option, removing any previous selections
     // setData([value]);
 
@@ -871,7 +871,19 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Other')}
+                      ]?.['business_type']?.some((items: any) => {
+                        if (Array.isArray(items)) {
+                          return items[0] === 'Other';
+                        }
+                        return false; // Default value if items is not an array
+                      })}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.map((items: any) => {
+                        if (Array.isArray(items)) {
+                          return items[1];
+                        }
+                      })}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -910,12 +922,13 @@ const CompanyDetail = ({
                     label={'Individual'}
                     value={'Individual'}
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
                     defaultSelected={
                       formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
                       ]?.['organisation_type'] === 'Individual'
                     }
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -934,7 +947,8 @@ const CompanyDetail = ({
                       ]?.['organisation_type'] === 'Partnership Firm'
                     }
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -953,7 +967,8 @@ const CompanyDetail = ({
                       ]?.['organisation_type'] === 'Private Ltd.'
                     }
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    setState={setOrganisationType}
+                    selectedOption={organisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -972,7 +987,8 @@ const CompanyDetail = ({
                       ]?.['organisation_type'] === 'LLP'
                     }
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -991,7 +1007,8 @@ const CompanyDetail = ({
                       ]?.['organisation_type'] === 'Public Ltd.'
                     }
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -1010,7 +1027,8 @@ const CompanyDetail = ({
                       ]?.['organisation_type'] === 'OPC'
                     }
                     requiresInput={false}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     formKey={'organisation_type'}
                     customStyle={{
@@ -1023,13 +1041,12 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'Other'
-                    }
+                    defaultSelected={formState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type'].includes('Other')}
                     requiresInput={true}
-                    selectedOption={selectedOption}
+                    selectedOption={organisationType}
+                    setState={setOrganisationType}
                     onSelect={handleSelect}
                     onInputValueChange={handleInputValueChange}
                     formKey={'organisation_type'}
@@ -1186,7 +1203,19 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Other')}
+                      ]?.['business_type']?.some((items: any) => {
+                        if (Array.isArray(items)) {
+                          return items[0] === 'Other';
+                        }
+                        return false; // Default value if items is not an array
+                      })}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']?.map((items: any) => {
+                        if (Array.isArray(items)) {
+                          return items[1];
+                        }
+                      })}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1798,7 +1827,7 @@ const CompanyDetail = ({
           )}
           <div
             className={`w-[50%] flex flex-col gap-[25px]  ${
-              selectedOption === true && 'mb-[45px]'
+              memberOfAnyBusiness === true && 'mb-[45px]'
             }`}
           >
             <div>
@@ -1824,14 +1853,15 @@ const CompanyDetail = ({
                         ]?.['is_member_of_business'] === data.value
                       }
                       requiresInput={data.requiresInput}
-                      selectedOption={selectedOption}
+                      selectedOption={memberOfAnyBusiness}
+                      setState={setMenberOfAnyBusiness}
                       onSelect={handleSelect}
                       onInputValueChange={handleInputValueChange}
                       formKey={'is_member_of_business'}
                       placeholder={'Name If you select “Yes”'}
                       customStyle={{
                         radio: `!text-mRegular !text-neutral900  ${
-                          selectedOption === 'true' && 'mb-[10px]'
+                          memberOfAnyBusiness === 'true' && 'mb-[10px]'
                         }`
                       }}
                     />
@@ -1903,14 +1933,15 @@ const CompanyDetail = ({
                           ]?.['is_anti_money_laundering'] === data.value
                         }
                         requiresInput={data.requiresInput}
-                        selectedOption={selectedOption}
+                        selectedOption={moneyLaunderingState}
+                        setState={setMoneyLaunderingState}
                         onSelect={handleSelect}
                         onInputValueChange={handleInputValueChange}
                         formKey={'is_anti_money_laundering'}
                         placeholder={'Specify here'}
                         customStyle={{
                           radio: `!text-mRegular !text-neutral900  ${
-                            selectedOption === 'true' && 'mb-[10px]'
+                            moneyLaunderingState === 'true' && 'mb-[10px]'
                           }`
                         }}
                       />
