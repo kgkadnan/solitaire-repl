@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 // import pendingIcon from '@public/v2/assets/icons/kyc/pending.svg';
 // import rejectedIcon from '@public/v2/assets/icons/kyc/rejected.svg';
 // import approvedIcon from '@public/v2/assets/icons/kyc/approved.svg';
@@ -15,6 +15,7 @@ import { useGetCustomerQuery } from '@/features/api/dashboard';
 import pendingIcon from '@public/v2/assets/icons/kyc/pending.svg';
 import rejectedIcon from '@public/v2/assets/icons/kyc/rejected.svg';
 import approvedIcon from '@public/v2/assets/icons/kyc/completed.svg';
+import { Toast } from '../copy-and-share/toast';
 
 interface IKycStatusScreen {
   status: string;
@@ -23,8 +24,19 @@ interface IKycStatusScreen {
 export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
   const router = useRouter();
   const { data: customerData } = useGetCustomerQuery({});
+  const [showToast, setShowToast] = useState(false);
+  const handleCopy = (email: string) => {
+    navigator.clipboard.writeText(email);
+    // setCopied(true);
+    setShowToast(true); // Show the toast notification
+    setTimeout(() => {
+      // setCopied(false);
+      setShowToast(false); // Hide the toast notification after some time
+    }, 2000);
+  };
   return (
     <div className="relative w-full h-[100%]">
+      <Toast show={showToast} message="Copied Successfully" />
       <div className="flex flex-col gap-y-10 justify-center items-center">
         <div className="">
           {status === kycStatus.PENDING ? (
@@ -77,18 +89,37 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
                 <div className="border-t border-neutral200 w-[265px]"></div>
                 <div className="flex flex-col justify-center items-center gap-y-[10px]">
                   <div className="flex justify-center items-center gap-x-2">
-                    <Image src={phoneIcon} alt="phon_icon" />
-                    <Image src={whatsappIcon} alt="whatsapp_icon" />
+                    <a href={`tel:${customerData?.customer.kam?.phone ?? '-'}`}>
+                      {' '}
+                      <Image src={phoneIcon} alt="phon_icon" />
+                    </a>
+                    <a href={`tel:${customerData?.customer.kam?.phone ?? '-'}`}>
+                      {' '}
+                      <Image src={whatsappIcon} alt="whatsapp_icon" />
+                    </a>
+
                     <p className="font-regular text-mRegular text-neutral600">
                       {customerData?.customer.kam?.phone ?? '-'}
                     </p>
                   </div>
                   <div className="flex justify-center items-center gap-x-2">
-                    <Image src={mailIcon} alt="mail_icon" />
+                    <a
+                      href={`mailto:${
+                        customerData?.customer.kam?.email ?? '-'
+                      }`}
+                    >
+                      <Image src={mailIcon} alt="mail_icon" />
+                    </a>
                     <p className="font-regular text-mRegular text-neutral600">
                       {customerData?.customer.kam?.email ?? '-'}
                     </p>
-                    <Image src={copyIcon} alt="copy_icon" />
+                    <button
+                      onClick={() =>
+                        handleCopy(customerData?.customer.kam?.email ?? '-')
+                      }
+                    >
+                      <Image src={copyIcon} alt="copy_icon" />
+                    </button>
                   </div>
                 </div>
               </div>
