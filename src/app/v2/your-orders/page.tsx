@@ -379,52 +379,49 @@ const MyDiamonds = () => {
               />
             </div>
           </div>
-          <div className="max-w-full overflow-x-auto">
-            {/* header */}
-            <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
-              {keys?.map(({ label }: any) => (
-                <div key={label} className="p-4 text-left font-medium">
-                  {label}
+          {data?.length > 0 ? (
+            <div className="max-w-full overflow-x-auto">
+              {/* header */}
+              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+                {keys?.map(({ label }: any) => (
+                  <div key={label} className="p-4 text-left font-medium">
+                    {label}
+                  </div>
+                ))}
+              </div>
+              {/* rows */}
+
+              {data?.map((items: any) => (
+                <div
+                  key={items.order_id}
+                  onClick={() => {
+                    handleShowDetails(items?.id);
+                  }}
+                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                >
+                  {keys?.map(({ accessor }: any, index: number) => (
+                    <div
+                      key={index}
+                      className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
+                    >
+                      {renderCellContent(accessor, items)}
+                    </div>
+                  ))}
                 </div>
               ))}
             </div>
-            {/* rows */}
-            <div className="">
-              {data?.length > 0 ? (
-                data?.map((items: any) => (
-                  <div
-                    key={items.order_id}
-                    onClick={() => {
-                      handleShowDetails(items?.id);
-                    }}
-                    className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
-                  >
-                    {keys?.map(({ accessor }: any, index: number) => (
-                      <div
-                        key={index}
-                        className="flex items-center text-lRegular space-x-2 py-3 pr-3 pl-4 text-left text-gray-800"
-                      >
-                        {renderCellContent(accessor, items)}
-                      </div>
-                    ))}
-                  </div>
-                ))
-              ) : (
-                <div className="min-h-[65vh] h-[65vh]">
-                  <EmptyScreen
-                    label="Search Diamonds"
-                    message="Looks like you haven't placed any orders yet. Let’s place some orders!"
-                    onClickHandler={() =>
-                      router.push(
-                        `/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`
-                      )
-                    }
-                    imageSrc={empty}
-                  />
-                </div>
-              )}
+          ) : (
+            <div className="min-h-[65vh] h-[65vh]">
+              <EmptyScreen
+                label="Search Diamonds"
+                message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                onClickHandler={() =>
+                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                }
+                imageSrc={empty}
+              />
             </div>
-          </div>
+          )}
         </>
       );
     }

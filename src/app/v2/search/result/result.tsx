@@ -549,7 +549,7 @@ const Result = ({
     return (
       <>
         {' '}
-        <div className="flex flex-col gap-[15px] p-[24px]">
+        <div className="flex flex-col gap-[15px] px-[24px] pt-[24px]">
           <div>
             <div className="flex justify-between pb-[16px]">
               <h1 className="text-headingS text-neutral900">
@@ -568,13 +568,13 @@ const Result = ({
               {ManageLocales('app.modal.addComment.content')}
             </p>
           </div>
-          <div className="pt-[12px]">
+          <div className="pt-[4px]">
             <textarea
               value={textAreaValue}
               name="textarea"
               rows={10}
               // placeholder='Write Description'
-              className="w-full bg-neutral0 text-neutral900 rounded-xl resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
+              className="w-full bg-neutral0 text-neutral900 rounded-[4px] resize-none focus:outline-none p-2 border-neutral-200 border-[1px] mt-2"
               style={{ boxShadow: 'var(--input-shadow) inset' }}
               onChange={e => handleComment(e, setTextAreaValue)}
             />
@@ -638,7 +638,7 @@ const Result = ({
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                   <h1 className="text-headingS text-neutral900">
                     {variantIds.length} stones have been successfully added to
-                    “My Diamond
+                    &quot;My Diamond&quot;
                   </h1>
                   <ActionButton
                     actionButtonData={[
@@ -682,32 +682,73 @@ const Result = ({
         .catch(e => {
           setCommentValue('');
 
-          setIsDialogOpen(true);
-          setDialogContent(
-            <>
-              {' '}
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular font-sans">
-                  {e?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
+          if (e.data.type === 'unauthorized') {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <div>
+                    <h1 className="text-headingS text-neutral900">
+                      Important KYC Verification Required!
+                    </h1>
+                    <p className="text-neutral600 text-mRegular">
+                      To confirm a stone or make a purchase, KYC verification is
+                      mandatory. Without verification, access to certain
+                      features is restricted.
+                    </p>
+                  </div>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.modal.cancel'),
+                        handler: () => setIsDialogOpen(false),
+                        customStyle: 'w-full flex-1'
                       },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.verifyMyKYCNow'),
+                        handler: () => {
+                          router.push('/v2/kyc');
+                        },
+                        customStyle: 'w-full flex-1'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          } else {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                {' '}
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular font-sans">
+                    {e?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          }
         });
     }
   };
@@ -729,6 +770,7 @@ const Result = ({
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
       />
       <InputDialogComponent
         isOpen={isInputDialogOpen}

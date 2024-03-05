@@ -34,6 +34,7 @@ interface ITable {
   showGloablFilter?: boolean;
   goBackToListView?: () => void;
   breadCrumLabel?: string;
+  isOrderDetail?: boolean;
 }
 
 const Table = ({
@@ -45,7 +46,8 @@ const Table = ({
   isEnableTopToolBar = false,
   showGloablFilter = false,
   goBackToListView,
-  breadCrumLabel
+  breadCrumLabel,
+  isOrderDetail = false
 }: ITable) => {
   const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
     boxShadow: 'var(--input-shadow) inset',
@@ -77,6 +79,8 @@ const Table = ({
     }
   }));
   // Fetching saved search data
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
 
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -134,8 +138,16 @@ const Table = ({
 
     muiTableContainerProps: {
       sx: {
-        minHeight: 'calc(100vh - 450px)',
-        maxHeight: 'calc(100vh - 450px)'
+        minHeight: isNudge
+          ? isOrderDetail
+            ? 'calc(100vh - 490px)'
+            : 'calc(100vh - 385px)'
+          : 'calc(100vh - 450px)',
+        maxHeight: isNudge
+          ? isOrderDetail
+            ? 'calc(100vh - 490px)'
+            : 'calc(100vh - 385px)'
+          : 'calc(100vh - 450px)'
       }
     },
     muiTableHeadRowProps: {

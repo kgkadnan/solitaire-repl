@@ -51,7 +51,7 @@ const mapColumns = (columns: any) =>
         header: short_label,
         minSize: 5,
         maxSize: accessor === 'details' ? 100 : 200,
-        size: 5,
+        size: accessor === 'measurements' ? 183 : 5,
         Header: ({ column }: any) => (
           <Tooltip
             tooltipTrigger={<span>{column.columnDef.header}</span>}
@@ -308,7 +308,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                   </span>
                 </div>
                 {breadCrumLabel !== PENING_INVOICE_BREADCRUMB_LABEL && (
-                  <div>
+                  <div className="mr-3">
                     {' '}
                     <Link
                       href={productDetailData?.delivery?.link}
@@ -321,7 +321,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 )}
               </div>
               <div className="bg-neutral25 flex gap-[8px] py-[8px]">
-                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-popupsShadow">
+                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                   <div className="flex flex-col p-[16px]">
                     <p className="text-neutral600 text-mRegular font-regular">
                       {breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
@@ -339,7 +339,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     </span>
                   </div>
                 </div>
-                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-popupsShadow">
+                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                   <div className="flex flex-col p-[16px]">
                     <p className="text-neutral600 text-mRegular font-regular">
                       {ManageLocales('app.yourOrder.description.noOfStones')}
@@ -349,7 +349,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     </span>
                   </div>
                 </div>
-                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-popupsShadow">
+                <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
                   <div className="flex flex-col p-[16px]">
                     <p className="text-neutral600 text-mRegular font-regular">
                       {breadCrumLabel === INVOICE_HISTORY_BREADCRUMB_LABEL
@@ -384,6 +384,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
             columns={memoizedColumns}
             setRowSelection={setRowSelection}
             rowSelection={rowSelection}
+            isOrderDetail={true}
           />
           <div className="p-[16px]">
             <ActionButton

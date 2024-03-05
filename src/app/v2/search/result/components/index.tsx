@@ -26,7 +26,7 @@ const mapColumns = (columns: any) =>
         enableGlobalFilter: accessor === 'lot_id',
         minSize: 5,
         maxSize: accessor === 'details' ? 100 : 200,
-        size: 5,
+        size: accessor === 'measurements' ? 183 : 5,
         Header: ({ column }: any) => (
           <Tooltip
             tooltipTrigger={<span>{column.columnDef.header}</span>}

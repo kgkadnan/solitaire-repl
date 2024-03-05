@@ -16,7 +16,7 @@ const EmptyScreen: React.FC<IEmptyScreenProps> = ({
   return (
     <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
       <Image src={imageSrc} alt={imageSrc} />
-      <p className="text-black  w-[15%] text-center">{message}</p>
+      <p className="text-black  w-[17%] text-center">{message}</p>
       <ActionButton
         actionButtonData={[
           {

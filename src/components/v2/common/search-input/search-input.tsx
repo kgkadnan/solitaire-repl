@@ -71,7 +71,7 @@ const SearchInputField: React.FC<ISearchInputProps> = ({
         </div>
         <Input
           data-testid="custom-search-input"
-          className={`${styles.defaultSearchInputStyle} ${styles.searchInput}`}
+          className={`${styles.defaultSearchInputStyle} ${styles.searchInput} placeholder:text-mMedium placeholder:font-mMedium`}
           type={type}
           name={name}
           autoComplete="off"

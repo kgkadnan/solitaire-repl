@@ -79,7 +79,7 @@ const KYC: React.FC = () => {
   const [isResumeCalled, setIsResumeCalled] = useState<boolean>(false);
 
   const [selectedKYCOption, setSelectedKYCOption] = useState('');
-  const [currentState, setCurrentState] = useState('');
+  const [currentState, setCurrentState] = useState('country_selection');
   const [data, setData] = useState<any>({});
   const [activeStep, setActiveStep] = useState(0);
   const [stepperData, setStepperData] = useState<IStepper[]>([]);
