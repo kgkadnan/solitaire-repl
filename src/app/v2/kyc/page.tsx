@@ -91,7 +91,12 @@ const KYC = () => {
 
   const handleCountrySelection = (country: string) => {
     setSelectedCountry(country);
-    setCurrentState('submission_option');
+    if (country === countries.OTHER) {
+      setCurrentState(countries.OTHER);
+    } else {
+      setCurrentState('submission_option');
+    }
+
     dispatch(
       updateFormState({
         name: 'formState.country',
@@ -365,11 +370,6 @@ const KYC = () => {
               kycDetails?.kyc?.profile_data?.mode
                 ? kycDetails?.kyc?.profile_data?.mode
                 : ''
-            );
-
-            console.log(
-              'kycDetails?.kyc?.profile_data?.mode',
-              kycDetails?.kyc?.profile_data?.mode
             );
 
             if (kycDetails?.kyc?.profile_data?.mode === 'online') {
