@@ -123,6 +123,8 @@ const MyDiamonds = () => {
   ];
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
+    setSearch('');
+    setShowSuggestions(false);
   };
 
   const tabsData: any = {
