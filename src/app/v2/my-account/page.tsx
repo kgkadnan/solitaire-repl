@@ -47,7 +47,9 @@ enum myAccount {
 }
 const MyAccount = () => {
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  const [activeTab, setActiveTab] = useState<string>(myAccount.PRIVACY_POLICY);
+  const [activeTab, setActiveTab] = useState<string>(
+    myAccount.TERM_AND_CONDITION
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
