@@ -558,53 +558,38 @@ const KYC = () => {
     }
 
     // Make the API call to submit the form data
+    let updatedCompanyDetails;
+    if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
+      const companyDetails =
+        formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
+      if (companyDetails) {
+        updatedCompanyDetails = {
+          ...companyDetails,
+          business_type: processTypeData(companyDetails.business_type),
+          industry_type: processTypeData(companyDetails.industry_type)
+        };
 
-    // const processData = (dataArray: any) => {
-    //   console.log('dataArray', dataArray);
-    //   return dataArray.map((item: any) => {
-    //     // Check if the item is an array
-    //     if (Array.isArray(item)) {
-    //       // If the item is an array and has a second element, take the second element
-    //       return item[1] ?? item[0]; // Fallback to the first element if the second one is not available
-    //     }
-    //     // If the item is not an array, take it as is
+        dispatch(
+          updateFormState({
+            name: `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}]`,
+            value: updatedCompanyDetails
+          })
+        );
+      }
+    }
 
-    //     return item;
-    //   });
-    // };
+    function processTypeData(typeData: any[] | undefined) {
+      if (!typeData || typeData.length === 0) {
+        return undefined;
+      }
 
-    // if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
-    //   const companyDetails =
-    //     formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS];
-    //   if (companyDetails) {
-    //     const { business_type, industry_type } = companyDetails;
-    //     if (business_type?.length > 0) {
-    //       // Process the data here
-    //       // For example, you can update the Redux store
-    //       dispatch(
-    //         updateFormState({
-    //           name: `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}]['business_type']`,
-    //           value: processData(
-    //             formState.online.sections[
-    //               kycScreenIdentifierNames.COMPANY_DETAILS
-    //             ]['business_type']
-    //           )
-    //         })
-    //       );
-    //     } else if (industry_type?.length > 0) {
-    //       dispatch(
-    //         updateFormState({
-    //           name: `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}]['industry_type']`,
-    //           value: processData(
-    //             formState.online.sections[
-    //               kycScreenIdentifierNames.COMPANY_DETAILS
-    //             ]['industry_type']
-    //           )
-    //         })
-    //       );
-    //     }
-    //   }
-    // }
+      return typeData.map((item: any) => {
+        if (Array.isArray(item)) {
+          return item[1] ?? item[0];
+        }
+        return item;
+      });
+    }
 
     // console.log('formstate', formState);
 
@@ -612,7 +597,10 @@ const KYC = () => {
       data: {
         country: formState.country,
         offline: false,
-        data: { ...formState.online.sections[screenName] }
+        data:
+          screenName === kycScreenIdentifierNames.COMPANY_DETAILS
+            ? updatedCompanyDetails
+            : { ...formState.online.sections[screenName] }
       },
       ID: currentState + 1
     })
