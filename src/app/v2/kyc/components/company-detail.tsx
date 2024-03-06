@@ -84,6 +84,13 @@ const CompanyDetail = ({
     );
   };
 
+  console.log(
+    'dsadadasd',
+    formState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]?.[
+      'organisation_type'
+    ]
+  );
+
   const memberOfAnyBusinessOrganisation = [
     {
       id: '1',
@@ -191,6 +198,15 @@ const CompanyDetail = ({
     }
   ];
 
+  const organisationTypes = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual'
+  ];
+
   const [memberOfAnyBusiness, setMenberOfAnyBusiness] = useState();
   const [moneyLaunderingState, setMoneyLaunderingState] = useState();
   const [organisationType, setOrganisationType] = useState();
@@ -209,7 +225,11 @@ const CompanyDetail = ({
     );
   };
 
-  const handleInputValueChange = (inputValue: any, formKey: string) => {
+  const handleInputValueChange = (
+    radioValue: any,
+    inputValue: any,
+    formKey: string
+  ) => {
     // Update the data array to include the input value associated with the selected radio button
 
     handleInputChange(
@@ -1037,9 +1057,20 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    defaultSelected={formState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type'].includes('Other')}
+                    // defaultValue={
+                    //   formState?.online?.sections?.[
+                    //     kycScreenIdentifierNames.COMPANY_DETAILS
+                    //   ]?.['organisation_type']
+                    // }
+                    defaultSelected={
+                      organisationTypes.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? false
+                        : true
+                    }
                     requiresInput={true}
                     selectedOption={organisationType}
                     setState={setOrganisationType}
