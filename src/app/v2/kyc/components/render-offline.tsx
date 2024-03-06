@@ -33,11 +33,6 @@ export const RenderOffline = ({
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
-    if (country === countries.OTHER || selectedSubmissionOption === 'offline') {
-      formState.attachment?.upload_form?.selectedFile.forEach((file: any) => {
-        formData.append('upload_form', file);
-      });
-    }
     formData.append('country', country);
     formData.append(
       'offline',
@@ -58,6 +53,7 @@ export const RenderOffline = ({
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
       .then(() => {
+        console.log('acceptedFilesdsdasda', acceptedFiles);
         handleFileupload({
           acceptedFiles,
           setUploadProgress: `formState.attachment[${key}].uploadProgress`,

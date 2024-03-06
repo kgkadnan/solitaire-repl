@@ -117,7 +117,11 @@ const KYC = () => {
   };
 
   const handleBack = (currentState: string) => {
-    setCurrentState(currentState);
+    if (currentState === countries.OTHER) {
+      setCurrentState('country_selection');
+    } else {
+      setCurrentState(currentState);
+    }
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
@@ -372,8 +376,11 @@ const KYC = () => {
                 : ''
             );
 
-            if (kycDetails?.kyc?.profile_data?.mode === 'online') {
-              if (kycDetails?.kyc?.profile_data?.country === 'India') {
+            if (
+              kycDetails?.kyc?.profile_data?.mode === 'online' &&
+              kycDetails?.kyc?.profile_data?.country !== countries.OTHER
+            ) {
+              if (kycDetails?.kyc?.profile_data?.country === countries.INDIA) {
                 dispatch(
                   updateFormState({
                     name: 'formState.attachment',

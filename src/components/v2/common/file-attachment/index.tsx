@@ -144,7 +144,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
-                  {Object.keys(selectedFile).length && (
+                  {Object.keys(selectedFile).length && isFileUploaded && (
                     <button
                       onClick={() => {
                         handleDeleteAttachment({ key: formKey });
