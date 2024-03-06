@@ -52,12 +52,11 @@
   "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
   "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
 
-
-  "app.myAccount.tabs.tablePrefrences" : "Table Preferences",
-  "app.myAccount.tabs.changePassword" : "Change Password",
-  "app.myAccount.tabs.notificationPrefrences" : "Notifications Preferences",
+  "app.myAccount.tabs.tablePrefrences": "Table Preferences",
+  "app.myAccount.tabs.changePassword": "Change Password",
+  "app.myAccount.tabs.notificationPrefrences": "Notifications Preferences",
   "app.myAccount.tabs.term&Conditions": "Term & Conditions",
-  "app.myAccount.tabs.privacyPolicy" : "Privacy Policy",
+  "app.myAccount.tabs.privacyPolicy": "Privacy Policy",
 
   "app.yourOrder.description.payableAmount": "Payable Amount",
   "app.yourOrder.description.paidAmount": "Paid Amount",
@@ -79,7 +78,7 @@
   "app.modal.save": "Save",
   "app.modal.selectedStones": "Selected Stones",
   "app.modal.entireSearchResult": "Entire Search Results",
-  "app.modal.verifyMyKYCNow" : "Verify My KYC Now",
+  "app.modal.verifyMyKYCNow": "Verify My KYC Now",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
@@ -167,6 +166,5 @@
   "app.kyc.footer.saveAndNext": "Save and next",
   "app.kyc.footer.submit": "Submit",
   "app.modal.kyc.emailVerification": "Email Verification",
-  "app.kyc.statusScreen.exploreWebsite" : "Explore Website"
-  
+  "app.kyc.statusScreen.exploreWebsite": "Explore Website"
 }
