@@ -1,12 +1,12 @@
 .stepperContainer {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .step {
   // padding: 10px;
   cursor: pointer;
-  width: 100%;
+  width:299px;
   font-size: var(--lMedium);
   font-weight: var(--medium);
   color: var(--neutral-200);

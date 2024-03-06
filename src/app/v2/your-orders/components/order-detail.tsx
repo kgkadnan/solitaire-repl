@@ -359,7 +359,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                           )}
                     </p>
                     <span className="text-neutral900 text-mMedium font-medium">
-                      {`${productDetailData?.total} $`}
+                      {`$ ${productDetailData?.total}`}
                     </span>
                   </div>
                 </div>

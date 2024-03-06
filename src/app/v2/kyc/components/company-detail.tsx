@@ -209,16 +209,12 @@ const CompanyDetail = ({
     );
   };
 
-  const handleInputValueChange = (
-    radioValue: any,
-    inputValue: any,
-    formKey: string
-  ) => {
+  const handleInputValueChange = (inputValue: any, formKey: string) => {
     // Update the data array to include the input value associated with the selected radio button
 
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
-      [radioValue, inputValue],
+      inputValue,
       dispatch,
       kycScreenIdentifierNames.COMPANY_DETAILS,
       formKey
