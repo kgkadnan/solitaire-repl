@@ -8,7 +8,7 @@ import {
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -38,35 +38,6 @@ const Table = ({
   breadCrumLabel,
   isOrderDetail = false
 }: ITable) => {
-  const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
-    boxShadow: 'var(--input-shadow) inset',
-    border: 'none',
-    borderRadius: '4px',
-    ':hover': {
-      border: 'none'
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& :hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& :focus .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .MuiOutlinedInput-notchedOutline:hover': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& .MuiInputAdornment-root': {
-      display: 'none'
-    }
-  }));
   // Fetching saved search data
 
   const theme = createTheme({
@@ -187,12 +158,12 @@ const Table = ({
         minHeight: isNudge
           ? isOrderDetail
             ? 'calc(100vh - 450px)'
-            : 'calc(100vh - 385px)'
+            : 'calc(100vh - 315px)'
           : 'calc(100vh - 450px)',
         maxHeight: isNudge
           ? isOrderDetail
             ? 'calc(100vh - 450px)'
-            : 'calc(100vh - 385px)'
+            : 'calc(100vh - 315px)'
           : 'calc(100vh - 450px)'
       }
     },
@@ -306,7 +277,39 @@ const Table = ({
               </div>
             </div>
             <div>
-              <StylesSearchBar table={table} autoComplete="false" />
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                sx={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  border: 'none',
+                  borderRadius: '4px',
+                  ':hover': {
+                    border: 'none'
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& :hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& :focus .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .MuiOutlinedInput-notchedOutline:hover': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    display: 'none'
+                  }
+                }}
+              />
             </div>
           </Box>
         )}
