@@ -26,7 +26,7 @@ export const validateField = ({
 }: IValidateField) => {
   let error = '';
 
-  // Validation logic
+  // Validation logic here
   if (value.trim() === '') {
     error = REQUIRED_FIELD;
   } else {
