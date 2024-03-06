@@ -14,6 +14,7 @@ const RadioButtonWithInput = ({
   placeholder,
   inputName,
   formKey,
+  setState,
   defaultSelected = false, // New prop for default radio selection
   defaultValue = '' // New prop for default input value
 }: any) => {
@@ -22,7 +23,7 @@ const RadioButtonWithInput = ({
   useEffect(() => {
     // Check if this radio button should be selected by default
     if (defaultSelected) {
-      onSelect(value, formKey);
+      onSelect(value, formKey, setState);
     }
     // Set the default input value
     setInputValue(defaultValue);
@@ -45,7 +46,7 @@ const RadioButtonWithInput = ({
           name={name}
           value={value}
           checked={selectedOption === value}
-          onClick={() => onSelect(value, formKey)}
+          onClick={() => onSelect(value, formKey, setState)}
         />
         <div>{label}</div>
         <span></span>

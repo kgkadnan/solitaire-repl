@@ -65,7 +65,11 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
                   : 'border-successBorder bg-primaryModalRing text-successMain'
               } rounded py-[1px] px-[6px] flex justify-center items-center`}
             >
-              Pending
+              {status === kycStatus.PENDING
+                ? 'Pending'
+                : status === kycStatus.REJECTED
+                ? 'Rejected'
+                : 'Approved'}
             </p>
             <p className="text-lRegular font-regular text-neutral600 text-center">
               {status === kycStatus.PENDING

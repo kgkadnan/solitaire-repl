@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import NotificationIcon from '@public/v2/assets/icons/topbar-icons/notification.svg';
 import Image from 'next/image';
-import { Avatar, AvatarImage } from '../../ui/avatar';
+import { Avatar } from '../../ui/avatar';
 import { kycStatus } from '@/constants/enums/kyc';
 import { usePathname, useRouter } from 'next/navigation';
 import ActionButton from '../action-button';
@@ -11,7 +11,6 @@ import {
   PopoverContent,
   PopoverTrigger
 } from '@radix-ui/react-popover';
-import avatarIcon from '@public/v2/assets/icons/topbar-icons/ListItem/Avatar.svg';
 import myAccountIcon from '@public/v2/assets/icons/topbar-icons/searchIcon.svg';
 import logoutIcon from '@public/v2/assets/icons/topbar-icons/logout-icon.svg';
 import Link from 'next/link';
@@ -122,19 +121,29 @@ const TopNavigationBar = () => {
 
         <Popover>
           <PopoverTrigger className="flex justify-center">
-            <Avatar>
-              <AvatarImage
-                className="h-[40px] w-[40px]"
-                src="https://github.com/shadcn.png"
-                alt="Avatar Icon"
-              />
+            <Avatar className="bg-primaryMain flex items-center justify-center">
+              <p className="text-center text-mRegular text-neutral0">
+                {`${userAccountInfo?.customer?.first_name
+                  ?.charAt(0)
+                  .toUpperCase()}${userAccountInfo?.customer?.last_name
+                  ?.charAt(0)
+                  .toUpperCase()}`}
+              </p>
             </Avatar>
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
           <PopoverContent>
             <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
-                <Image src={avatarIcon} alt="avatarIcon" />
+                <Avatar className="bg-primaryMain flex items-center justify-center">
+                  <p className="text-center text-mRegular text-neutral0">
+                    {`${userAccountInfo?.customer?.first_name
+                      ?.charAt(0)
+                      .toUpperCase()}${userAccountInfo?.customer?.last_name
+                      ?.charAt(0)
+                      .toUpperCase()}`}
+                  </p>
+                </Avatar>
                 <div>
                   <h1 className="text-lRegular font-regular text-neutral-900">
                     {' '}
@@ -142,7 +151,7 @@ const TopNavigationBar = () => {
                   </h1>
                   <p className="text-mRegular font-regular text-neutral-600">
                     {' '}
-                    {userAccountInfo?.customer?.email}
+                    {userAccountInfo?.customer?.email ?? '-'}
                   </p>
                 </div>
               </div>

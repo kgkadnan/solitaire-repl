@@ -31,14 +31,14 @@ export enum countries {
   INDIA = 'India',
   BELGIUM = 'Belgium',
   USA = 'USA',
-  DUBAI = 'Dubai'
+  OTHER = 'Other'
 }
 
 export enum kycAttachmentIdentifier {
   INDIA = 'India',
   BELGIUM = 'Belgium',
   USA = 'USA',
-  DUBAI = 'Dubai'
+  OTHER = 'Other'
 }
 
 export enum kycScreenIdentifierNames {

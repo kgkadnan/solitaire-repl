@@ -13,23 +13,18 @@ const CheckboxWithInput = ({
   defaultChecked = false, // Added prop for initial checked state
   defaultValue = '' // Added prop for initial input value
 }: any) => {
-  const [isChecked, setIsChecked] = useState(false);
-  const [inputValue, setInputValue] = useState('');
+  const [isChecked, setIsChecked] = useState(defaultChecked); // Initialize with defaultChecked value
+  const [inputValue, setInputValue] = useState(defaultValue); // Initialize with defaultValue
 
   const handleCheckboxChange = () => {
     const updatedChecked = !isChecked;
     setIsChecked(updatedChecked);
 
     // Update the parent component with the new data
-    onDataUpdate(label, updatedChecked, inputValue);
+    onDataUpdate(label, updatedChecked, inputValue); // Pass updatedChecked value
   };
 
-  useEffect(() => {
-    setIsChecked(defaultChecked);
-    setInputValue(defaultValue);
-  }, [defaultChecked, defaultValue]);
-
-  const handleInputChange = (event: any) => {
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const updatedInputValue = event.target.value;
     setInputValue(updatedInputValue);
 
@@ -38,6 +33,12 @@ const CheckboxWithInput = ({
       onDataUpdate(label, isChecked, updatedInputValue);
     }
   };
+
+  // Use effect to update the state when props change
+  useEffect(() => {
+    setIsChecked(defaultChecked);
+    setInputValue(defaultValue);
+  }, [defaultChecked, defaultValue]);
 
   return (
     <div className="flex flex-col gap-[5px]">
@@ -50,7 +51,7 @@ const CheckboxWithInput = ({
         {label && (
           <button
             onClick={handleCheckboxChange}
-            className=" text-neutral-900 font-mRegular"
+            className="text-neutral-900 font-mRegular"
           >
             {label}
           </button>

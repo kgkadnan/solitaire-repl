@@ -32,7 +32,8 @@ export const v2Routes = [
   '/v2/register',
   '/v2/login',
   '/v2/forgot-password',
-  '/v2/new-arrivals'
+  '/v2/new-arrivals',
+  '/v2/my-account'
 ];
 export const protectedRoutes = [
   '/',

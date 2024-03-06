@@ -91,7 +91,12 @@ const KYC = () => {
 
   const handleCountrySelection = (country: string) => {
     setSelectedCountry(country);
-    setCurrentState('submission_option');
+    if (country === countries.OTHER) {
+      setCurrentState(countries.OTHER);
+    } else {
+      setCurrentState('submission_option');
+    }
+
     dispatch(
       updateFormState({
         name: 'formState.country',
@@ -112,7 +117,11 @@ const KYC = () => {
   };
 
   const handleBack = (currentState: string) => {
-    setCurrentState(currentState);
+    if (currentState === countries.OTHER) {
+      setCurrentState('country_selection');
+    } else {
+      setCurrentState(currentState);
+    }
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
@@ -367,13 +376,11 @@ const KYC = () => {
                 : ''
             );
 
-            console.log(
-              'kycDetails?.kyc?.profile_data?.mode',
-              kycDetails?.kyc?.profile_data?.mode
-            );
-
-            if (kycDetails?.kyc?.profile_data?.mode === 'online') {
-              if (kycDetails?.kyc?.profile_data?.country === 'India') {
+            if (
+              kycDetails?.kyc?.profile_data?.mode === 'online' &&
+              kycDetails?.kyc?.profile_data?.country !== countries.OTHER
+            ) {
+              if (kycDetails?.kyc?.profile_data?.country === countries.INDIA) {
                 dispatch(
                   updateFormState({
                     name: 'formState.attachment',
@@ -677,7 +684,7 @@ const KYC = () => {
     await submitKYC({
       country: selectedCountry,
       offline:
-        formState.country === countries.DUBAI ||
+        formState.country === countries.OTHER ||
         selectedSubmissionOption === 'offline'
           ? true
           : false
@@ -752,7 +759,7 @@ const KYC = () => {
     let onlineValidator: any = [];
 
     if (
-      formState.country === countries.DUBAI ||
+      formState.country === countries.OTHER ||
       selectedSubmissionOption === 'offline'
     ) {
       manualValidationError = await validateManualAttachment(
@@ -997,7 +1004,7 @@ const KYC = () => {
           />
         );
 
-      case countries.DUBAI:
+      case countries.OTHER:
       case 'offline':
         return (
           <RenderOffline

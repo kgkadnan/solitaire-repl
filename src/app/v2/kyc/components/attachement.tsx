@@ -53,16 +53,11 @@ export const RenderAttachment = ({
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
-    if (country === countries.DUBAI || selectedSubmissionOption === 'offline') {
-      formState.attachment?.upload_form?.selectedFile.forEach((file: any) => {
-        formData.append('upload_form', file);
-      });
-    }
     formData.append('country', country);
     formData.append(
       'offline',
       `${
-        country === countries.DUBAI || selectedSubmissionOption === 'offline'
+        country === countries.OTHER || selectedSubmissionOption === 'offline'
           ? 'true'
           : 'false'
       }`

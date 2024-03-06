@@ -56,7 +56,7 @@ const CountrySelection = ({
     {
       name: 'country',
       id: '4',
-      value: countries.DUBAI,
+      value: countries.OTHER,
       label: (
         <>
           <div className="flex gap-3">
@@ -70,7 +70,7 @@ const CountrySelection = ({
           </div>
         </>
       ),
-      checked: selectedCountry === countries.DUBAI
+      checked: selectedCountry === countries.OTHER
     }
   ];
   return (
