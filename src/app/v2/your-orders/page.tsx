@@ -124,6 +124,9 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setPendingInvoiceDataState(pendingInvoicesData?.orders);
+    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+    setActiveInvoiceDataState(activeInvoicesData?.orders);
     setRadioState('90days');
     setShowSuggestions(false);
   };
