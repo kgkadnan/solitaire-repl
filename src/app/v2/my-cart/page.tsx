@@ -551,7 +551,7 @@ const MyCart = () => {
                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                   <h1 className="text-headingS text-neutral900">
                     {variantIds.length} stones have been successfully added to
-                    “My Diamond
+                    &quot;My Diamond&quot;
                   </h1>
                   <ActionButton
                     actionButtonData={[
@@ -595,32 +595,73 @@ const MyCart = () => {
         .catch(e => {
           setCommentValue('');
 
-          setIsDialogOpen(true);
-          setDialogContent(
-            <>
-              {' '}
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorSvg} alt="errorSvg" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <p className="text-neutral600 text-mRegular font-sans">
-                  {e?.data?.message}
-                </p>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        setIsDialogOpen(false);
+          if (e.data.type === 'unauthorized') {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <div>
+                    <h1 className="text-headingS text-neutral900">
+                      Important KYC Verification Required!
+                    </h1>
+                    <p className="text-neutral600 text-mRegular">
+                      To confirm a stone or make a purchase, KYC verification is
+                      mandatory. Without verification, access to certain
+                      features is restricted.
+                    </p>
+                  </div>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.modal.cancel'),
+                        handler: () => setIsDialogOpen(false),
+                        customStyle: 'w-full flex-1'
                       },
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.verifyMyKYCNow'),
+                        handler: () => {
+                          router.push('/v2/kyc');
+                        },
+                        customStyle: 'w-full flex-1'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          } else {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                {' '}
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular font-sans">
+                    {e?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          }
         });
     }
   };
@@ -631,6 +672,7 @@ const MyCart = () => {
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
+        dialogStyle={{ dialogContent: isConfirmStone ? 'h-[240px]' : '' }}
       />
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
