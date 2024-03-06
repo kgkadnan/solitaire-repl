@@ -47,7 +47,7 @@ const MyDiamonds = () => {
 
   const [showDetail, setShowDetail] = useState(false);
   const [productDetailData, setProductDetailData] = useState([]);
-  const [radioState, setRadioState] = useState<string>('');
+  const [radioState, setRadioState] = useState<string>('90days');
 
   // State to manage the search input value
   const [search, setSearch] = useState<string>('');
@@ -124,6 +124,7 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setRadioState('90days');
     setShowSuggestions(false);
   };
 
