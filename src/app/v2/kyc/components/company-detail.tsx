@@ -1115,12 +1115,21 @@ const CompanyDetail = ({
                     }}
                   />
                 </div>{' '}
-                <div className="w-[100%] relative">
+                <div
+                  className={`w-[100%] relative ${
+                    organisationTypes.includes(
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    ) && 'mb-[45px]'
+                  }`}
+                >
                   <RadioButtonWithInput
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
                     // defaultValue={
+
                     //   formState?.online?.sections?.[
                     //     kycScreenIdentifierNames.COMPANY_DETAILS
                     //   ]?.['organisation_type']
