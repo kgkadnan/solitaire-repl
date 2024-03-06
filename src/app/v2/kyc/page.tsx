@@ -48,6 +48,8 @@ import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
 import logger from 'logging/log-util';
 import { statusCode } from '@/constants/enums/status-code';
+import { Router } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const initialTokenState = {
   token: '',
@@ -55,6 +57,7 @@ const initialTokenState = {
   tempToken: ''
 };
 const KYC = () => {
+  const router = useRouter();
   const { formState, formErrorState } = useSelector((state: any) => state.kyc);
   const [currentState, setCurrentState] = useState('country_selection');
   const [selectedCountry, setSelectedCountry] = useState('');
@@ -724,18 +727,16 @@ const KYC = () => {
             </div>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <div>
-                <h1 className="text-headingS text-neutral900">Are you sure?</h1>
-                <p className="text-neutral600 text-mRegular">
-                  Please review all the information you have entered before
-                  submitting the form!
-                </p>
+                <h1 className="text-headingS text-neutral900">
+                  Your KYC has been submitted for approval
+                </h1>
               </div>
               <ActionButton
                 actionButtonData={[
                   {
                     variant: 'secondary',
-                    label: ManageLocales('app.modal.cancel'),
-                    handler: () => setIsDialogOpen(false),
+                    label: ManageLocales('app.modal.browseWebsite'),
+                    handler: () => router.push('/v2'),
                     customStyle: 'w-full flex-1'
                   }
                 ]}
