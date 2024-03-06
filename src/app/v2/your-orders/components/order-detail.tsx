@@ -20,6 +20,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import Image from 'next/image';
 import {
+  ACTIVE_INVOICE_BREADCRUMB_LABEL,
   INVOICE_HISTORY_BREADCRUMB_LABEL,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
@@ -307,7 +308,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     {formatCreatedAt(productDetailData?.created_at)}
                   </span>
                 </div>
-                {breadCrumLabel !== PENING_INVOICE_BREADCRUMB_LABEL && (
+                {breadCrumLabel === ACTIVE_INVOICE_BREADCRUMB_LABEL && (
                   <div className="mr-3">
                     {' '}
                     <Link

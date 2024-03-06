@@ -80,6 +80,7 @@
   "app.modal.selectedStones": "Selected Stones",
   "app.modal.entireSearchResult": "Entire Search Results",
   "app.modal.verifyMyKYCNow" : "Verify My KYC Now",
+  "app.modal.browseWebsite":"Browse Website",
 
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",

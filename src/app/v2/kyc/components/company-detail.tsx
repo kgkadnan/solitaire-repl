@@ -60,6 +60,15 @@ const cities = [
   // Other states and cities...
 ];
 
+const businessTypes = [
+  'Manufacturer',
+  'Retailer',
+  'Wholesaler',
+  'Corporate Retailer'
+];
+
+const typesOfIndustryTypes = ['Diamonds', 'Colour Stones', 'Jewellery'];
+
 const computeCountryDropdownField = (cities: any) => {
   return cities?.map((city: any) => ({
     label: city,
@@ -303,6 +312,23 @@ const CompanyDetail = ({
       formKey
     );
   };
+
+  // const processData = (dataArray: any) => {
+  //   return dataArray.map((item: any) => {
+  //     // Check if the item is an array
+  //     if (Array.isArray(item)) {
+  //       // If the item is an array and has a second element, take the second element
+  //       return item[1] ?? item[0]; // Fallback to the first element if the second one is not available
+  //     }
+  //     // If the item is not an array, take it as is
+  //     return item;
+  //   });
+  // };
+
+  // const handleProcessDataClick = () => {
+  //   const processedData = processData(data);
+  //   console.log(processedData); // Or update some state to display this in your UI
+  // };
   const handleDataUpdate = (
     label: any,
     isChecked: any,
@@ -950,19 +976,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[0] === 'Other';
-                        }
-                        return false; // Default value if items is not an array
-                      })}
+                      ]?.['business_type'].some(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.map((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[1];
-                        }
-                      })}
+                      ]?.['business_type'].find(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1200,7 +1221,7 @@ const CompanyDetail = ({
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className="flex w-[50%]">
-              <div className="w-full flex flex-col gap-[5px]">
+              <div className="w-full flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">Business Type*</p>
 
                 <div className="flex flex-wrap gap-[14px]">
@@ -1302,19 +1323,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[0] === 'Other';
-                        }
-                        return false; // Default value if items is not an array
-                      })}
+                      ]?.['business_type'].some(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.map((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[1];
-                        }
-                      })}
+                      ]?.['business_type'].find(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1422,7 +1438,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Other')}
+                      ]?.['industry_type'].some(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type'].find(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1899,7 +1922,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Other')}
+                      ]?.['industry_type'].some(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type'].find(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
