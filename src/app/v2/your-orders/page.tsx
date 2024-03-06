@@ -124,6 +124,9 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setPendingInvoiceDataState(pendingInvoicesData?.orders);
+    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+    setActiveInvoiceDataState(activeInvoicesData?.orders);
     setRadioState('90days');
     setShowSuggestions(false);
   };
@@ -174,7 +177,8 @@ const MyDiamonds = () => {
   };
 
   const handleSearch = (e: any) => {
-    const inputValue = e.target.value;
+    let inputValue = e.target.value;
+    inputValue = inputValue.toLowerCase();
     setShowSuggestions(true);
     setSearch(inputValue);
 
@@ -189,12 +193,12 @@ const MyDiamonds = () => {
       setPendingInvoiceDataState(filteredData);
     } else if (activeTab === ACTIVE_INVOICE) {
       const filteredData = activeInvoiceDataState.filter((item: any) =>
-        String(item.invoice_id).includes(inputValue)
+        String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setActiveInvoiceDataState(filteredData);
     } else {
       const filteredData = invoiceHistoryDataState.filter((item: any) =>
-        String(item.invoice_id).includes(inputValue)
+        String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setInvoiceHistoryDataState(filteredData);
     }
