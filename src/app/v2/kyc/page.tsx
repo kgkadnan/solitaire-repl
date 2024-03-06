@@ -48,7 +48,6 @@ import { isEditingKYC } from '@/features/kyc/is-editing-kyc';
 import { KycStatusScreen } from '@/components/v2/common/kyc-status-screen';
 import logger from 'logging/log-util';
 import { statusCode } from '@/constants/enums/status-code';
-import { Router } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const initialTokenState = {
