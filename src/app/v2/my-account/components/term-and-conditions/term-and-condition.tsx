@@ -1,39 +1,94 @@
 import React, { useEffect, useState } from 'react';
-import { useLazyGetPublicDataQuery } from '@/features/api/public';
 
 const TermAndCondtions = () => {
   const [activeTab, setActiveTab] = useState<string>('KGK Website');
-  const [tiriggerPublicData] = useLazyGetPublicDataQuery({});
+  const [data, setData] = useState<any>();
 
-  const handleTabs = ({ tab, url }: { tab: string; url: string }) => {
+  const handleTabs = async ({ tab, url }: { tab: string; url: string }) => {
     setActiveTab(tab);
-    tiriggerPublicData({ query: url }).then(res => {
-      console.log(res);
+    try {
+      // Place your async logic here
+      const response = await fetch(
+        `https://medusa-test.kgkit.net/public/page/${url}`,
+        {
+          headers: {
+            Accept: 'text/html'
+          }
+        }
+      );
+      const data = await response.text();
       setData(data);
-    });
+    } catch (error) {
+      // Handle any errors
+      console.error('Error fetching data:', error);
+    }
   };
 
-  const [data, setData] = useState();
-
   useEffect(() => {
-    tiriggerPublicData({ query: 'terms-and-condition-kgk-website' })
-      .unwrap()
-      .then(res => {
-        console.log(res);
+    const callAPi = async () => {
+      try {
+        // Place your async logic here
+        const response = await fetch(
+          'https://medusa-test.kgkit.net/public/page/terms-and-condition-kgk-website',
+          {
+            headers: {
+              Accept: 'text/html'
+            }
+          }
+        );
+        const data = await response.text();
         setData(data);
-      });
+      } catch (error) {
+        // Handle any errors
+        console.error('Error fetching data:', error);
+      }
+    };
+    callAPi();
+    // t({ query: 'terms-and-condition-kgk-website' })
+    //   .unwrap()
+    //   .then(res => {
+    //     console.log(res);
+    //     setData(data);
+    //   });
   }, []);
 
   const renderCotent = () => {
     switch (activeTab) {
       case 'KGK Website':
-        return <>{data}</>;
+        return (
+          <>
+            {data && (
+              <div
+                dangerouslySetInnerHTML={{ __html: data }}
+                className="text-neutral-900"
+              />
+            )}
+          </>
+        );
 
       case 'KGK Diamonds BV':
-        return <>{data}</>;
+        return (
+          <>
+            {data && (
+              <div
+                dangerouslySetInnerHTML={{ __html: data }}
+                className="text-neutral-900"
+              />
+            )}
+          </>
+        );
 
       case 'SPV T&C':
-        return <>{data}</>;
+        return (
+          <>
+            {data && (
+              <div
+                dangerouslySetInnerHTML={{ __html: data }}
+                className="text-neutral-900"
+              />
+            )}
+          </>
+        );
     }
   };
 
