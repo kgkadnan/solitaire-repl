@@ -45,7 +45,7 @@ const ImageTile: React.FC<IImageContainerProps> = (
                   role="img"
                   className={`px-[25px] py-[20px] border-[1px] bg-neutralShapeDefault   grid gap-[8px] w-[93px] h-[106px] rounded-[8px] justify-center text-center hover:border-neutralShapeHover  border-neutral50 ${
                     selectedTile.includes(short_name)
-                      ? 'shadow-popupsShadow border-neutralShapeSelected'
+                      ? 'shadow-popupsShadow border-primaryMain'
                       : ''
                   }`}
                   onClick={() => {
@@ -55,10 +55,20 @@ const ImageTile: React.FC<IImageContainerProps> = (
                   <Image
                     src={src}
                     alt={title}
-                    className="mx-auto justify-center"
+                    className={`mx-auto justify-center ${
+                      selectedTile.includes(short_name)
+                        ? 'stroke-primaryMain fill-primaryMain'
+                        : ''
+                    }`}
                   />
 
-                  <span className="text-neutral400 text-sRegular font-regular">
+                  <span
+                    className={`text-neutral400 text-sRegular font-regular ${
+                      selectedTile.includes(short_name)
+                        ? 'text-primaryMain'
+                        : ''
+                    }`}
+                  >
                     {title}
                   </span>
                 </div>
