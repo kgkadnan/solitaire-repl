@@ -46,6 +46,7 @@ const Dashboard = () => {
 
   const { data: customerData, refetch: refetchCustomerData } =
     useGetCustomerQuery({});
+
   const [activeTab, setActiveTab] = useState<string>('');
   const [tabs, setTabs] = useState<ITabs[]>([]);
 

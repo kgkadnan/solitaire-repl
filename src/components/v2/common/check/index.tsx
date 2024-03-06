@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Checkbox } from '@components/v2/ui/checkbox';
 import { InputField } from '../input-field';
 
@@ -9,7 +9,9 @@ const CheckboxWithInput = ({
   inputName,
   inputError,
   inputPlaceHolder,
-  styles
+  styles,
+  defaultChecked = false, // Added prop for initial checked state
+  defaultValue = '' // Added prop for initial input value
 }: any) => {
   const [isChecked, setIsChecked] = useState(false);
   const [inputValue, setInputValue] = useState('');
@@ -21,6 +23,11 @@ const CheckboxWithInput = ({
     // Update the parent component with the new data
     onDataUpdate(label, updatedChecked, inputValue);
   };
+
+  useEffect(() => {
+    setIsChecked(defaultChecked);
+    setInputValue(defaultValue);
+  }, [defaultChecked, defaultValue]);
 
   const handleInputChange = (event: any) => {
     const updatedInputValue = event.target.value;

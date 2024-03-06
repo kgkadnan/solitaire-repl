@@ -17,7 +17,7 @@ export let AttachmentData: any = {
         {
           id: '2',
           label: 'GST Certificate',
-          isRequired: false,
+          isRequired: true,
           formKey: 'gst_certificate',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES,
@@ -44,7 +44,7 @@ export let AttachmentData: any = {
         {
           id: '6',
           label: 'Section 194Q',
-          isRequired: false,
+          isRequired: true,
           formKey: 'section_194q',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES,

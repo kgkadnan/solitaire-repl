@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styles from './input-radio.module.scss';
 import { InputField } from '../input-field';
 
@@ -13,9 +13,20 @@ const RadioButtonWithInput = ({
   customStyle,
   placeholder,
   inputName,
-  formKey
+  formKey,
+  defaultSelected = false, // New prop for default radio selection
+  defaultValue = '' // New prop for default input value
 }: any) => {
   const [inputValue, setInputValue] = useState('');
+
+  useEffect(() => {
+    // Check if this radio button should be selected by default
+    if (defaultSelected) {
+      onSelect(value, formKey);
+    }
+    // Set the default input value
+    setInputValue(defaultValue);
+  }, [defaultSelected, defaultValue]);
 
   const handleInputChange = (e: any) => {
     onInputValueChange(value, e.target.value, formKey);

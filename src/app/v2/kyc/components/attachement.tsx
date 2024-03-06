@@ -19,7 +19,8 @@ export const RenderAttachment = ({
   modalState,
   country,
   handleTermAndCondition,
-  selectedSubmissionOption
+  selectedSubmissionOption,
+  currentStepperStep
 }: any) => {
   const [uploadDocument] = useUploadDocumentMutation({});
   const [deleteDocument] = useDeleteDocumentMutation({});
@@ -101,7 +102,7 @@ export const RenderAttachment = ({
       <div className="flex flex-col gap-[16px]">
         <div className="flex items-center gap-[16px]">
           <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
-            5
+            {currentStepperStep + 1}
           </span>
           <div>
             <h1 className="text-headingS font-medium text-neutral900">
@@ -121,7 +122,7 @@ export const RenderAttachment = ({
         >
           <div
             className={` ${
-              country === countries.INDIA ? 'max-h-[650px]' : 'max-h-[200px]'
+              country === countries.INDIA ? 'max-h-[660px]' : 'max-h-[200px]'
             } w-[100%] flex justify-center`}
           >
             <div className="w-[920px] flex flex-wrap flex-col  gap-[20px]">
