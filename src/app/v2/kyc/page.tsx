@@ -390,16 +390,17 @@ const KYC = () => {
                   })
                 );
 
-                Object.keys(kycDetails?.kyc?.profile_data?.online['5']).map(
-                  key => {
-                    dispatch(
-                      updateFormState({
-                        name: `formState.attachment[${key}].isFileUploaded`,
-                        value: true
-                      })
-                    );
-                  }
-                );
+                kycDetails?.kyc?.profile_data?.online['5'] &&
+                  Object.keys(kycDetails?.kyc?.profile_data?.online['5']).map(
+                    key => {
+                      dispatch(
+                        updateFormState({
+                          name: `formState.attachment[${key}].isFileUploaded`,
+                          value: true
+                        })
+                      );
+                    }
+                  );
               } else {
                 dispatch(
                   updateFormState({
@@ -427,16 +428,17 @@ const KYC = () => {
                 })
               );
 
-              Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
-                key => {
-                  dispatch(
-                    updateFormState({
-                      name: `formState.attachment[${key}].isFileUploaded`,
-                      value: true
-                    })
-                  );
-                }
-              );
+              kycDetails?.kyc?.profile_data?.offline['2'] &&
+                Object.keys(kycDetails?.kyc?.profile_data?.offline['2']).map(
+                  key => {
+                    dispatch(
+                      updateFormState({
+                        name: `formState.attachment[${key}].isFileUploaded`,
+                        value: true
+                      })
+                    );
+                  }
+                );
             }
 
             break;
@@ -477,10 +479,50 @@ const KYC = () => {
         formState.country
       );
 
-      if (!validationErrors.length) {
+      const screenValidationError = formErrorState?.online?.sections[key];
+
+      if (index === currentStepperStep) {
+        rejectedSteps.delete(index);
+        setRejectedSteps(new Set(rejectedSteps));
+        completedSteps.delete(index);
+        setCompletedSteps(new Set(completedSteps));
+      } else if (!validationErrors.length) {
+        rejectedSteps.delete(index);
+        setRejectedSteps(new Set(rejectedSteps));
         completedSteps.add(index);
         setCompletedSteps(new Set(completedSteps));
+      } else if (
+        currentStepperStep < index &&
+        screenValidationError &&
+        !Object.keys(screenValidationError).length
+      ) {
+        completedSteps.delete(index);
+        setCompletedSteps(new Set(completedSteps));
         rejectedSteps.delete(index);
+        setRejectedSteps(new Set(rejectedSteps));
+      } else if (validationErrors.length) {
+        if (Array.isArray(validationErrors)) {
+          validationErrors.forEach(error => {
+            dispatch(
+              updateFormState({
+                name: `formErrorState.online.sections.${[key]}.${[
+                  error.property
+                ]}`,
+                value: Object.values(error.constraints ?? {})[0] || ''
+              })
+            );
+          });
+        } else {
+          dispatch(
+            updateFormState({
+              name: `formErrorState.online.sections.${[key]}`,
+              value: {}
+            })
+          );
+        }
+        completedSteps.delete(index);
+        setCompletedSteps(new Set(completedSteps));
+        rejectedSteps.add(index);
         setRejectedSteps(new Set(rejectedSteps));
       }
     });
@@ -491,27 +533,80 @@ const KYC = () => {
         formState.country
       );
 
-      if (!validationError?.length) {
-        if (formState.country === countries.INDIA) {
+      const screenValidationError = formErrorState?.attachment;
+
+      if (formState.country === countries.INDIA) {
+        if (4 === currentStepperStep) {
+          rejectedSteps.delete(4);
+          setRejectedSteps(new Set(rejectedSteps));
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+        } else if (!validationError?.length) {
           completedSteps.add(4);
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(4);
           setRejectedSteps(new Set(rejectedSteps));
-        } else {
+        } else if (
+          currentStepperStep < 4 &&
+          screenValidationError &&
+          !Object.keys(screenValidationError).length
+        ) {
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(4);
+          setRejectedSteps(new Set(rejectedSteps));
+        } else if (validationError.length) {
+          if (Array.isArray(validationError)) {
+            validationError.forEach(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.attachment.${[error.property]}`,
+                  value: Object.values(error.constraints ?? {})[0] || ''
+                })
+              );
+            });
+          }
+          completedSteps.delete(4);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.add(4);
+          setRejectedSteps(new Set(rejectedSteps));
+        }
+      } else {
+        if (3 === currentStepperStep) {
+          rejectedSteps.delete(3);
+          setRejectedSteps(new Set(rejectedSteps));
+          completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
+        } else if (!validationError?.length) {
           completedSteps.add(3);
           setCompletedSteps(new Set(completedSteps));
           rejectedSteps.delete(3);
           setRejectedSteps(new Set(rejectedSteps));
+        } else if (
+          currentStepperStep < 3 &&
+          screenValidationError &&
+          !Object.keys(screenValidationError).length
+        ) {
+          completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(3);
+          setRejectedSteps(new Set(rejectedSteps));
+        } else if (validationError.length) {
+          if (Array.isArray(validationError)) {
+            validationError.forEach(error => {
+              dispatch(
+                updateFormState({
+                  name: `formErrorState.attachment.${[error.property]}`,
+                  value: Object.values(error.constraints ?? {})[0] || ''
+                })
+              );
+            });
+          }
+          completedSteps.delete(3);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.add(3);
+          setRejectedSteps(new Set(rejectedSteps));
         }
-      } else if (Array.isArray(validationError)) {
-        validationError.forEach(error => {
-          dispatch(
-            updateFormState({
-              name: `formErrorState.attachment.${[error.property]}`,
-              value: Object.values(error.constraints ?? {})[0] || ''
-            })
-          );
-        });
       }
     };
     validate();
@@ -626,7 +721,7 @@ const KYC = () => {
                 token: response?.data?.data?.token ?? ''
               })))
             : {};
-          goToNextStep();
+          formState.isEmailVerified && goToNextStep();
 
           // setCurrentStepperStep(nextStep);
         } else {

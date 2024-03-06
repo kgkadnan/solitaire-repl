@@ -68,9 +68,9 @@ export const DownloadAndUpload = ({
     }
   }, [fileRejections]);
 
-  let uploadProgress = formState?.attachment.upload_form?.uploadProgress ?? 0;
-  let isFileUploaded = formState?.attachment.upload_form?.isFileUploaded ?? '';
-  let selectedFile = formState?.attachment.upload_form ?? '';
+  let uploadProgress = formState?.attachment?.upload_form?.uploadProgress ?? 0;
+  let isFileUploaded = formState?.attachment?.upload_form?.isFileUploaded ?? '';
+  let selectedFile = formState?.attachment?.upload_form ?? '';
 
   let error = formErrorState?.attachment?.upload_form ?? '';
 
