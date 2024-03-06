@@ -224,7 +224,6 @@ const CompanyDetail = ({
       formKey
     );
   };
-
   const handleDataUpdate = (
     label: any,
     isChecked: any,
@@ -235,13 +234,14 @@ const CompanyDetail = ({
     requiresInput: any
   ) => {
     let newData: any = formState.online.sections[screenName]?.[key]?.filter(
-      (item: any) => item[0] !== label
+      (item: any) => (Array.isArray(item) ? item[0] !== label : item !== label)
     );
     newData = newData ?? [];
 
     if (isChecked) {
       // If the checkbox requires input and it's provided, add both label and input value
-      if (requiresInput && inputValue.trim()) {
+      if (requiresInput) {
+        inputValue = inputValue.replace(',', '');
         newData.push([label, inputValue]);
       } else if (!requiresInput) {
         // If the checkbox doesn't require input, add only the label
