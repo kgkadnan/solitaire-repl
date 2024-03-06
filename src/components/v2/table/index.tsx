@@ -13,17 +13,6 @@ import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
 
-const theme = createTheme({
-  typography: {
-    fontFamily: ['inherit'].join(','),
-    fontWeightLight: 400,
-    fontWeightRegular: 500,
-    fontWeightMedium: 600,
-    fontWeightBold: 700
-    // You can also customize other typography aspects here
-  }
-});
-
 interface ITable {
   rows: MRT_ColumnDef<MRT_RowData, any>[];
   columns: MRT_ColumnDef<MRT_RowData, any>[];
@@ -80,6 +69,51 @@ const Table = ({
   }));
   // Fetching saved search data
 
+  const theme = createTheme({
+    typography: {
+      fontFamily: ['inherit'].join(','),
+      fontWeightLight: 400,
+      fontWeightRegular: 500,
+      fontWeightMedium: 600,
+      fontWeightBold: 700
+    },
+
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            // Default state for the badge inside the cell
+            '& .MuiBadge-root': {
+              visibility: 'hidden'
+            },
+            // Hover state for the cell
+            '&:hover .MuiBadge-root': {
+              visibility: 'visible'
+            }
+          }
+        }
+      },
+      MuiTableHead: {
+        styleOverrides: {
+          root: {
+            '& .Mui-TableHeadCell-Content-Wrapper': {
+              whiteSpace: 'nowrap',
+              color: 'var(--neutral-700)',
+              fontWeight: 500
+            }
+          }
+        }
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            fontStyle: 'normal !important'
+          }
+        }
+      }
+    }
+  });
+
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
 
   //pass table options to useMaterialReactTable
@@ -111,6 +145,18 @@ const Table = ({
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       )
     },
+    muiTablePaperProps: {
+      elevation: 0, //change the mui box shadow
+      //customize paper styles
+
+      sx: {
+        '&.MuiPaper-root': {
+          borderRadius: '0px !important'
+        },
+        borderRadius: '0px',
+        border: 'none'
+      }
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
@@ -140,12 +186,12 @@ const Table = ({
       sx: {
         minHeight: isNudge
           ? isOrderDetail
-            ? 'calc(100vh - 490px)'
+            ? 'calc(100vh - 450px)'
             : 'calc(100vh - 385px)'
           : 'calc(100vh - 450px)',
         maxHeight: isNudge
           ? isOrderDetail
-            ? 'calc(100vh - 490px)'
+            ? 'calc(100vh - 450px)'
             : 'calc(100vh - 385px)'
           : 'calc(100vh - 450px)'
       }
@@ -169,17 +215,20 @@ const Table = ({
         borderBottom: '1px solid var(--neutral-50)'
       }
     },
-
     muiTableHeadCellProps: () => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px'
+            padding: '4px 8px',
+            background: 'var(--neutral-50)',
+            opacity: 1,
+            borderTop: '1px solid var(--neutral-200)'
           }
         }
       };
     },
+
     muiSelectAllCheckboxProps: {
       sx: {
         color: 'var(--neutral-200)',
@@ -218,16 +267,6 @@ const Table = ({
         '&.MuiCheckbox-indeterminate': {
           color: 'var(--primary-main)'
         }
-      }
-    },
-
-    muiTablePaperProps: {
-      elevation: 0, //change the mui box shadow
-      //customize paper styles
-
-      sx: {
-        borderRadius: '8px',
-        border: 'none'
       }
     },
 

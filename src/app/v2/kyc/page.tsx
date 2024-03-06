@@ -884,6 +884,17 @@ const KYC = () => {
       selectedCountry === countries.INDIA
   );
 
+  const indianManualSteps = [
+    {
+      name: 'Personal Details',
+      identifier: kycScreenIdentifierNames.PERSONAL_DETAILS
+    },
+    {
+      name: 'Download And Upload Hub',
+      identifier: kycScreenIdentifierNames.ATTACHMENT
+    }
+  ];
+
   function goToNextStep() {
     // Find the index of the current step, ignoring case
     let currentIndex = filteredSteps.findIndex(
@@ -964,48 +975,18 @@ const KYC = () => {
     }
   };
 
-  const renderContent = () => {
-    switch (currentState) {
-      case kycStatus.PENDING:
-        return <KycStatusScreen status={kycStatus.PENDING} />;
-      case kycStatus.APPROVED:
-        return <KycStatusScreen status={kycStatus.APPROVED} />;
-      case kycStatus.REJECTED:
-        return <KycStatusScreen status={kycStatus.REJECTED} />;
-      case 'country_selection':
+  const renderStepperComponentForIndiaOffline = (state: string) => {
+    switch (state) {
+      case kycScreenIdentifierNames.PERSONAL_DETAILS:
         return (
-          <CountrySelection
-            handleCountrySelection={handleCountrySelection}
-            selectedCountry={selectedCountry}
-          />
-        );
-      case 'submission_option':
-        return (
-          <SubmissionOption
-            handleSubmissionOptionClick={handleSubmissionOptionClick}
-            selectedSubmissionOption={selectedSubmissionOption}
-            handleBack={handleBack}
-          />
-        );
-
-      case 'online':
-        return (
-          <StepperComponent
+          <PersonalDetail
+            formErrorState={formErrorState}
+            formState={formState}
+            dispatch={dispatch}
             currentStepperStep={currentStepperStep}
-            setCurrentStepperStep={setCurrentStepperStep}
-            completedSteps={completedSteps}
-            rejectedSteps={rejectedSteps}
-            renderStepperComponent={renderStepperComponent}
-            handleStepperNext={handleStepperNext}
-            handleStepperBack={handleStepperBack}
-            isEmailVerified={formState.isEmailVerified}
-            handleSubmit={handleSubmit}
-            filteredSteps={filteredSteps}
           />
         );
-
-      case countries.OTHER:
-      case 'offline':
+      case kycScreenIdentifierNames.ATTACHMENT:
         return (
           <RenderOffline
             formErrorState={formErrorState}
@@ -1020,6 +1001,78 @@ const KYC = () => {
             handleSubmit={handleSubmit}
           />
         );
+    }
+  };
+  const renderContent = () => {
+    if (currentState === kycStatus.PENDING) {
+      return <KycStatusScreen status={kycStatus.PENDING} />;
+    } else if (currentState === kycStatus.APPROVED) {
+      return <KycStatusScreen status={kycStatus.APPROVED} />;
+    } else if (currentState === kycStatus.REJECTED) {
+      return <KycStatusScreen status={kycStatus.REJECTED} />;
+    } else if (currentState === 'country_selection') {
+      return (
+        <CountrySelection
+          handleCountrySelection={handleCountrySelection}
+          selectedCountry={selectedCountry}
+        />
+      );
+    } else if (currentState === 'submission_option') {
+      return (
+        <SubmissionOption
+          handleSubmissionOptionClick={handleSubmissionOptionClick}
+          selectedSubmissionOption={selectedSubmissionOption}
+          handleBack={handleBack}
+        />
+      );
+    } else if (currentState === 'online') {
+      return (
+        <StepperComponent
+          currentStepperStep={currentStepperStep}
+          setCurrentStepperStep={setCurrentStepperStep}
+          completedSteps={completedSteps}
+          rejectedSteps={rejectedSteps}
+          renderStepperComponent={renderStepperComponent}
+          handleStepperNext={handleStepperNext}
+          handleStepperBack={handleStepperBack}
+          isEmailVerified={formState.isEmailVerified}
+          handleSubmit={handleSubmit}
+          filteredSteps={filteredSteps}
+        />
+      );
+    } else if (
+      currentState === 'offline' &&
+      selectedCountry === countries.INDIA
+    ) {
+      return (
+        <StepperComponent
+          currentStepperStep={currentStepperStep}
+          setCurrentStepperStep={setCurrentStepperStep}
+          completedSteps={completedSteps}
+          rejectedSteps={rejectedSteps}
+          renderStepperComponent={renderStepperComponentForIndiaOffline}
+          handleStepperNext={handleStepperNext}
+          handleStepperBack={handleStepperBack}
+          isEmailVerified={formState.isEmailVerified}
+          handleSubmit={handleSubmit}
+          filteredSteps={indianManualSteps}
+        />
+      );
+    } else if (currentState === countries.OTHER || currentState === 'offline') {
+      return (
+        <RenderOffline
+          formErrorState={formErrorState}
+          formState={formState}
+          fromWhere={currentState}
+          selectedSubmissionOption={selectedSubmissionOption}
+          modalSetState={modalSetState}
+          modalState={modalState}
+          country={selectedCountry ?? formState.country}
+          handleTermAndCondition={handleTermAndCondition}
+          handleBack={handleBack}
+          handleSubmit={handleSubmit}
+        />
+      );
     }
   };
 
