@@ -482,6 +482,37 @@ const KYC = () => {
         setRejectedSteps(new Set(rejectedSteps));
       }
     });
+
+    const validate = async () => {
+      let validationError = await validateAttachment(
+        formState.attachment,
+        formState.country
+      );
+
+      if (!validationError?.length) {
+        if (formState.country === countries.INDIA) {
+          completedSteps.add(4);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(4);
+          setRejectedSteps(new Set(rejectedSteps));
+        } else {
+          completedSteps.add(3);
+          setCompletedSteps(new Set(completedSteps));
+          rejectedSteps.delete(3);
+          setRejectedSteps(new Set(rejectedSteps));
+        }
+      } else if (Array.isArray(validationError)) {
+        validationError.forEach(error => {
+          dispatch(
+            updateFormState({
+              name: `formErrorState.attachment.${[error.property]}`,
+              value: Object.values(error.constraints ?? {})[0] || ''
+            })
+          );
+        });
+      }
+    };
+    validate();
   }, [formState]);
 
   function checkOTPEntry(otpEntry: string[]) {

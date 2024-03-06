@@ -86,16 +86,52 @@ const CompanyDetail = ({
 
   const memberOfAnyBusinessOrganisation = [
     {
+      name: 'isMemberOfBusiness',
       id: '1',
       value: true,
       label: 'Yes',
-      requiresInput: true
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === true,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Name If you select “Yes”',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][member_of_business_name]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'member_of_business_name'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? '',
+          placeholder: 'Name If you select “Yes”',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? ''
+        }
+      ]
     },
     {
+      name: 'isMemberOfBusiness',
       id: '2',
       value: false,
       label: 'No',
-      requiresInput: false
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === false
     }
   ];
 
@@ -178,21 +214,64 @@ const CompanyDetail = ({
 
   const moneyLaundering = [
     {
+      name: 'antiMoneyLaunderingPolicyName',
       id: '1',
       value: true,
       label: 'Yes',
-      requiresInput: true
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === true
     },
     {
+      name: 'antiMoneyLaunderingPolicyName',
       id: '2',
       value: false,
       label: 'No',
-      requiresInput: false
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === false,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Specify here',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][no_anti_money_laundering_policy_reason]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'no_anti_money_laundering_policy_reason'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? '',
+          placeholder: 'Specify here',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? ''
+        }
+      ]
     }
   ];
 
-  const [memberOfAnyBusiness, setMenberOfAnyBusiness] = useState();
-  const [moneyLaunderingState, setMoneyLaunderingState] = useState();
+  const organisationTypes = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual'
+  ];
+
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -209,7 +288,11 @@ const CompanyDetail = ({
     );
   };
 
-  const handleInputValueChange = (inputValue: any, formKey: string) => {
+  const handleInputValueChange = (
+    radioValue: any,
+    inputValue: any,
+    formKey: string
+  ) => {
     // Update the data array to include the input value associated with the selected radio button
 
     handleInputChange(
@@ -1032,14 +1115,34 @@ const CompanyDetail = ({
                     }}
                   />
                 </div>{' '}
-                <div className="w-[100%] relative">
+                <div
+                  className={`w-[100%] relative ${
+                    organisationTypes.includes(
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    ) && 'mb-[45px]'
+                  }`}
+                >
                   <RadioButtonWithInput
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    defaultSelected={formState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type'].includes('Other')}
+                    // defaultValue={
+
+                    //   formState?.online?.sections?.[
+                    //     kycScreenIdentifierNames.COMPANY_DETAILS
+                    //   ]?.['organisation_type']
+                    // }
+                    defaultSelected={
+                      organisationTypes.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? false
+                        : true
+                    }
                     requiresInput={true}
                     selectedOption={organisationType}
                     setState={setOrganisationType}
@@ -1823,7 +1926,9 @@ const CompanyDetail = ({
           )}
           <div
             className={`w-[50%] flex flex-col gap-[25px]  ${
-              memberOfAnyBusiness === true && 'mb-[45px]'
+              formState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_member_of_business'] === true && 'mb-[45px]'
             }`}
           >
             <div>
@@ -1839,25 +1944,19 @@ const CompanyDetail = ({
               {memberOfAnyBusinessOrganisation.map(data => {
                 return (
                   <div key={data.id}>
-                    <RadioButtonWithInput
-                      name="isMemberOfBusiness"
-                      label={data.label}
-                      value={data.value}
-                      defaultSelected={
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['is_member_of_business'] === data.value
-                      }
-                      requiresInput={data.requiresInput}
-                      selectedOption={memberOfAnyBusiness}
-                      setState={setMenberOfAnyBusiness}
-                      onSelect={handleSelect}
-                      onInputValueChange={handleInputValueChange}
-                      formKey={'is_member_of_business'}
-                      placeholder={'Name If you select “Yes”'}
+                    <RadioButton
+                      radioMetaData={data}
+                      onChange={() => {
+                        handleRadioChange({
+                          value: data.value,
+                          formKey: 'is_member_of_business'
+                        });
+                      }}
                       customStyle={{
                         radio: `!text-mRegular !text-neutral900  ${
-                          memberOfAnyBusiness === 'true' && 'mb-[10px]'
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['is_member_of_business'] === true && 'mb-[10px]'
                         }`
                       }}
                     />
@@ -1919,25 +2018,20 @@ const CompanyDetail = ({
                 {moneyLaundering.map(data => {
                   return (
                     <div key={data.id}>
-                      <RadioButtonWithInput
-                        name="antiMoneyLaunderingPolicyName"
-                        label={data.label}
-                        value={data.value}
-                        defaultSelected={
-                          formState?.online?.sections?.[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['is_anti_money_laundering'] === data.value
-                        }
-                        requiresInput={data.requiresInput}
-                        selectedOption={moneyLaunderingState}
-                        setState={setMoneyLaunderingState}
-                        onSelect={handleSelect}
-                        onInputValueChange={handleInputValueChange}
-                        formKey={'is_anti_money_laundering'}
-                        placeholder={'Specify here'}
+                      <RadioButton
+                        radioMetaData={data}
+                        onChange={() => {
+                          handleRadioChange({
+                            value: data.value,
+                            formKey: 'is_anti_money_laundering'
+                          });
+                        }}
                         customStyle={{
                           radio: `!text-mRegular !text-neutral900  ${
-                            moneyLaunderingState === 'true' && 'mb-[10px]'
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['is_anti_money_laundering'] === true &&
+                            'mb-[10px]'
                           }`
                         }}
                       />
