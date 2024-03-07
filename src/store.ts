@@ -31,6 +31,7 @@ import { downloadInvoiceApi } from './features/api/download-invoice';
 import { getAllCountryCodeApi } from './features/api/get-country-code';
 import { dashboardApi } from './features/api/dashboard';
 import { publicApi } from './features/api/public';
+import { manageSubscriptionApi } from './features/api/manage-subscription';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -59,7 +60,8 @@ const rootReducer = combineReducers({
   [downloadInvoiceApi.reducerPath]: downloadInvoiceApi.reducer,
   [getAllCountryCodeApi.reducerPath]: getAllCountryCodeApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
-  [publicApi.reducerPath]: publicApi.reducer
+  [publicApi.reducerPath]: publicApi.reducer,
+  [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -88,7 +90,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         downloadInvoiceApi.middleware,
         getAllCountryCodeApi.middleware,
         dashboardApi.middleware,
-        publicApi.middleware
+        publicApi.middleware,
+        manageSubscriptionApi.middleware
       ),
     preloadedState
   });
