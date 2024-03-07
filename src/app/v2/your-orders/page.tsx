@@ -351,14 +351,14 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex border-b border-neutral200 w-[50%]  text-mMedium font-medium">
+            <div className="flex  w-[50%]  text-mMedium font-medium">
               {myDiamondsTabs.map(({ label, count, status }) => {
                 return (
                   <button
                     className={`px-[16px] py-[8px] ${
                       activeTab === status
                         ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                        : 'text-neutral600 border-b-[2px] border-transparent'
+                        : 'text-neutral600 border-b-[1px] border-neutral200'
                     }`}
                     key={label}
                     onClick={() => handleTabs({ tab: status })}

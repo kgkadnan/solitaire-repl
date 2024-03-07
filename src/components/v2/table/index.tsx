@@ -170,12 +170,9 @@ const Table = ({
     muiTableHeadRowProps: {
       sx: {
         backgroundColor: 'var(--neutral-50)',
-        '& .MuiTableSortLabel-root': {
-          color: 'red'
-        }
+        boxShadow: 'none'
       }
     },
-
     muiTableBodyCellProps: {
       sx: {
         color: 'var(--neutral-900)',
