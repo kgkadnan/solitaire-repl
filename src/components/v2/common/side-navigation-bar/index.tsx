@@ -92,7 +92,11 @@ const SideNavigationBar = () => {
   return (
     <div className="w-[84px] border-r-[1px] border-neutral200 overflow-hidden h-[100vh] fixed z-50 pt-[8px] flex flex-col items-center bg-neutral0">
       <div className="mb-[16px] cursor-pointer">
-        <Image src={KgkIcon} alt="KGK logo" onClick={() => router.push('/')} />
+        <Image
+          src={KgkIcon}
+          alt="KGK logo"
+          onClick={() => router.push(Routes.DASHBOARD)}
+        />
       </div>
       <div className="z-50 flex flex-col gap-2">
         {SideNavigationData.map((items: ISideNavigationBar) => {

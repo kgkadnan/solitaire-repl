@@ -36,6 +36,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 const MyDiamonds = () => {
   const router = useRouter();
   const pathName = useSearchParams().get('path');
+  const detailId = useSearchParams().get('id');
 
   const [activeTab, setActiveTab] = useState(
     pathName === 'active' ? ACTIVE_INVOICE : PENDING_INVOICE
@@ -94,6 +95,12 @@ const MyDiamonds = () => {
   useEffect(() => {
     setPendingInvoiceDataState(pendingInvoicesData?.orders);
   }, [pendingInvoicesData]);
+
+  useEffect(() => {
+    if (detailId) {
+      handleShowDetails(detailId);
+    }
+  }, [detailId]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
