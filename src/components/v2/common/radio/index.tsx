@@ -26,7 +26,10 @@ export const RadioButton: React.FC<any> = ({
 
   return (
     <div className="flex flex-col gap-[10px] relative">
-      <label htmlFor={value} className={`${styles.radio} ${customStyle.radio}`}>
+      <label
+        htmlFor={value}
+        className={`${styles.radio} ${customStyle?.radio}`}
+      >
         <input
           type="radio"
           id={value}
