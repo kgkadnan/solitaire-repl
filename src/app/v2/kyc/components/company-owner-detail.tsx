@@ -1,11 +1,12 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { RANGE_VALIDATION } from '@/constants/error-messages/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
 import { ManageLocales } from '@/utils/v2/translate';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 const CompanyOwnerDetail = ({
   formErrorState,
@@ -13,6 +14,21 @@ const CompanyOwnerDetail = ({
   dispatch,
   currentStepperStep
 }: any) => {
+  const { data, error } = useGetCountryCodeQuery({});
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          ]}][owner_country_code]`,
+          value: data.country_calling_code
+        })
+      );
+    } else if (error) {
+      console.error('Error fetching country code', error);
+    }
+  }, [data, error]);
   return (
     <div className="flex flex-col gap-[16px]">
       <div className="flex items-center gap-[16px]">

@@ -53,7 +53,6 @@ export const RenderOffline = ({
     uploadDocument(buildFormData({ acceptedFiles, key }))
       .unwrap()
       .then(() => {
-        console.log('acceptedFilesdsdasda', acceptedFiles);
         handleFileupload({
           acceptedFiles,
           setUploadProgress: `formState.attachment[${key}].uploadProgress`,

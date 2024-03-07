@@ -13,6 +13,8 @@ import ChangePassword from './components/change-password/change-password';
 import NotificationPrefrences from './components/notification-prefrences/notification-prefrences';
 import PrivacyPolicy from './components/privacy-policy/privacy-policy';
 import TermAndCondtions from './components/term-and-conditions/term-and-condition';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 
 interface IUserAccountInfo {
   customer: {
@@ -46,8 +48,11 @@ enum myAccount {
   PRIVACY_POLICY = 'privacy policy'
 }
 const MyAccount = () => {
+  const { modalState, modalSetState } = useModalStateManagement();
+  const { isDialogOpen, dialogContent } = modalState;
+  const { setIsDialogOpen } = modalSetState;
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  const [activeTab, setActiveTab] = useState<string>(myAccount.PRIVACY_POLICY);
+  const [activeTab, setActiveTab] = useState<string>(myAccount.CHANGE_PASSWORD);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -103,7 +108,12 @@ const MyAccount = () => {
   };
 
   return (
-    <div className="py-[16px]">
+    <div className="py-[16px] relative">
+      <DialogComponent
+        dialogContent={dialogContent}
+        isOpens={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+      />
       <div
         className="border-[1px] border-solid border-neutral-200 rounded-[8px]"
         style={{

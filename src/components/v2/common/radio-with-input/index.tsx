@@ -27,7 +27,7 @@ const RadioButtonWithInput = ({
     }
     // Set the default input value
     setInputValue(defaultValue);
-  }, [defaultSelected, defaultValue]);
+  }, []);
 
   const handleInputChange = (e: any) => {
     onInputValueChange(value, e.target.value, formKey);
@@ -52,7 +52,7 @@ const RadioButtonWithInput = ({
         <span></span>
       </label>
 
-      <div className="absolute top-[100%]">
+      <div className="absolute top-[30px]">
         {requiresInput && selectedOption === value && (
           <InputField
             onChange={e => handleInputChange(e)}

@@ -1,6 +1,6 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { ManageLocales } from '@/utils/v2/translate';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
@@ -12,6 +12,7 @@ import { RadioButton } from '@/components/v2/common/radio';
 
 import CheckboxWithInput from '@/components/v2/common/check';
 import RadioButtonWithInput from '@/components/v2/common/radio-with-input';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 const cities = [
   'AHMEDABAD',
@@ -83,6 +84,21 @@ const CompanyDetail = ({
   country,
   currentStepperStep
 }: any) => {
+  const { data, error } = useGetCountryCodeQuery({});
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          ]}][company_country_code]`,
+          value: data.country_calling_code
+        })
+      );
+    } else if (error) {
+      console.error('Error fetching country code', error);
+    }
+  }, [data, error]);
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
@@ -281,6 +297,15 @@ const CompanyDetail = ({
     'Individual'
   ];
 
+  const organisationTypesNew = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual',
+    'Other'
+  ];
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -313,22 +338,6 @@ const CompanyDetail = ({
     );
   };
 
-  // const processData = (dataArray: any) => {
-  //   return dataArray.map((item: any) => {
-  //     // Check if the item is an array
-  //     if (Array.isArray(item)) {
-  //       // If the item is an array and has a second element, take the second element
-  //       return item[1] ?? item[0]; // Fallback to the first element if the second one is not available
-  //     }
-  //     // If the item is not an array, take it as is
-  //     return item;
-  //   });
-  // };
-
-  // const handleProcessDataClick = () => {
-  //   const processedData = processData(data);
-  //   console.log(processedData); // Or update some state to display this in your UI
-  // };
   const handleDataUpdate = (
     label: any,
     isChecked: any,
@@ -976,12 +985,12 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type'].some(
+                      ]?.['business_type']?.some(
                         (item: any) => !businessTypes.includes(item)
                       )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type'].find(
+                      ]?.['business_type']?.find(
                         (item: any) => !businessTypes.includes(item)
                       )}
                       onDataUpdate={(
@@ -1149,12 +1158,17 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    // defaultValue={
-
-                    //   formState?.online?.sections?.[
-                    //     kycScreenIdentifierNames.COMPANY_DETAILS
-                    //   ]?.['organisation_type']
-                    // }
+                    defaultValue={
+                      organisationTypesNew.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? ''
+                        : formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                    }
                     defaultSelected={
                       organisationTypes.includes(
                         formState?.online?.sections?.[
@@ -1323,12 +1337,12 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type'].some(
+                      ]?.['business_type']?.some(
                         (item: any) => !businessTypes.includes(item)
                       )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type'].find(
+                      ]?.['business_type']?.find(
                         (item: any) => !businessTypes.includes(item)
                       )}
                       onDataUpdate={(
@@ -1438,12 +1452,12 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type'].some(
+                      ]?.['industry_type']?.some(
                         (item: any) => !typesOfIndustryTypes.includes(item)
                       )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type'].find(
+                      ]?.['industry_type']?.find(
                         (item: any) => !typesOfIndustryTypes.includes(item)
                       )}
                       onDataUpdate={(
@@ -1922,12 +1936,12 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type'].some(
+                      ]?.['industry_type']?.some(
                         (item: any) => !typesOfIndustryTypes.includes(item)
                       )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type'].find(
+                      ]?.['industry_type']?.find(
                         (item: any) => !typesOfIndustryTypes.includes(item)
                       )}
                       onDataUpdate={(

@@ -127,7 +127,7 @@ const FileAttachments: React.FC<IFileAttachments> = ({
                     </div>
                   </div>
                 )}
-              {!Object.keys(selectedFile).length && (
+              {!isFileUploaded && (
                 <p className={styles.format}>
                   Max File Size: {`${(fileSize / (1024 * 1024)).toFixed(0)}`}
                   mb
