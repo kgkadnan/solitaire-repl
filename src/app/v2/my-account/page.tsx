@@ -15,6 +15,7 @@ import PrivacyPolicy from './components/privacy-policy/privacy-policy';
 import TermAndCondtions from './components/term-and-conditions/term-and-condition';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import { useSearchParams } from 'next/navigation';
 
 interface IUserAccountInfo {
   customer: {
@@ -48,11 +49,15 @@ enum myAccount {
   PRIVACY_POLICY = 'privacy policy'
 }
 const MyAccount = () => {
+  const subRoute = useSearchParams().get('path');
+
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  const [activeTab, setActiveTab] = useState<string>(myAccount.CHANGE_PASSWORD);
+  const [activeTab, setActiveTab] = useState<string>(
+    myAccount.NOTIFICATION_PREFRENCES
+  );
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -61,6 +66,14 @@ const MyAccount = () => {
       setUserAccountInfo(JSON.parse(storedUser));
     }
   }, []);
+
+  useEffect(() => {
+    if (subRoute === 'privacy-policy') {
+      setActiveTab(myAccount.PRIVACY_POLICY);
+    } else if (subRoute === 'terms-and-conditions') {
+      setActiveTab(myAccount.TERM_AND_CONDITION);
+    }
+  }, [subRoute]);
 
   const myAccountTabs = [
     {
@@ -106,8 +119,6 @@ const MyAccount = () => {
         return <TermAndCondtions />;
     }
   };
-
-  console.log('isDialogOpen', isDialogOpen);
 
   return (
     <div className="py-[16px] relative">

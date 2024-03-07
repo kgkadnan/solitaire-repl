@@ -276,7 +276,10 @@ const ChangePassword = ({ modalSetState }: any) => {
             {
               variant: 'secondary',
               label: ManageLocales('app.myAccount.footer.cancel'),
-              handler: () => {}
+              handler: () => {
+                setChangePasswordState(initialFormState);
+                setChangePasswordFormErrors(initialFormState);
+              }
             },
             {
               variant: 'primary',
