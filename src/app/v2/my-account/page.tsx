@@ -95,7 +95,7 @@ const MyAccount = () => {
         return <TablePrefrences />;
 
       case myAccount.CHANGE_PASSWORD:
-        return <ChangePassword />;
+        return <ChangePassword modalSetState={modalSetState} />;
 
       case myAccount.NOTIFICATION_PREFRENCES:
         return <NotificationPrefrences />;
@@ -106,6 +106,8 @@ const MyAccount = () => {
         return <TermAndCondtions />;
     }
   };
+
+  console.log('isDialogOpen', isDialogOpen);
 
   return (
     <div className="py-[16px] relative">
@@ -139,8 +141,11 @@ const MyAccount = () => {
               )}
 
               <p
-                className={`w-[95px] h-[24px] text-sRegular  border ${
-                  userAccountInfo?.customer?.kyc?.status === kycStatus.PENDING
+                className={`h-[24px] text-sRegular  border ${
+                  userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.PENDING ||
+                  userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS
                     ? 'border-lengendInCardBorder bg-legendInCartFill text-legendInCart'
                     : userAccountInfo?.customer?.kyc?.status ===
                       kycStatus.REJECTED
@@ -153,14 +158,15 @@ const MyAccount = () => {
                   : userAccountInfo?.customer?.kyc?.status ===
                     kycStatus.REJECTED
                   ? 'KYC Rejected'
+                  : userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.INPROGRESS
+                  ? 'KYC In-progress'
                   : 'KYC Approved'}
               </p>
             </div>
             <div className="flex items-center gap-[6px]">
-              <a href={`mailto:${userAccountInfo?.customer?.email ?? '-'}`}>
-                {' '}
-                <Mail />
-              </a>
+              {' '}
+              <Mail />
               <p className="text-mRegular font-regular text-neutral-600">
                 {' '}
                 {userAccountInfo?.customer?.email ?? '-'}

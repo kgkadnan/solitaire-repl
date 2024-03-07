@@ -1117,6 +1117,7 @@ const KYC = () => {
         );
     }
   };
+
   const renderContent = () => {
     if (currentState === kycStatus.PENDING) {
       return <KycStatusScreen status={kycStatus.PENDING} />;
