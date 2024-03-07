@@ -32,6 +32,7 @@ import { getAllCountryCodeApi } from './features/api/get-country-code';
 import { dashboardApi } from './features/api/dashboard';
 import { publicApi } from './features/api/public';
 import { manageSubscriptionApi } from './features/api/manage-subscription';
+import { myAccountApi } from './features/api/my-account';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
@@ -61,7 +62,8 @@ const rootReducer = combineReducers({
   [getAllCountryCodeApi.reducerPath]: getAllCountryCodeApi.reducer,
   [dashboardApi.reducerPath]: dashboardApi.reducer,
   [publicApi.reducerPath]: publicApi.reducer,
-  [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer
+  [manageSubscriptionApi.reducerPath]: manageSubscriptionApi.reducer,
+  [myAccountApi.reducerPath]: myAccountApi.reducer
 });
 
 export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
@@ -91,7 +93,8 @@ export const setupStore = (preloadedState?: PreloadedState<RootState>) => {
         getAllCountryCodeApi.middleware,
         dashboardApi.middleware,
         publicApi.middleware,
-        manageSubscriptionApi.middleware
+        manageSubscriptionApi.middleware,
+        myAccountApi.middleware
       ),
     preloadedState
   });

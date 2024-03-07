@@ -1,11 +1,19 @@
 import ActionButton from '@/components/v2/common/action-button';
 import { RadioButton } from '@/components/v2/common/radio';
-import { useLazyGetSubscriptionQuery } from '@/features/api/manage-subscription';
+import {
+  useLazyGetSubscriptionQuery,
+  useManageSubscriptionMutation
+} from '@/features/api/manage-subscription';
 import { ManageLocales } from '@/utils/v2/translate';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
+import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
 
-const NotificationPrefrences = () => {
-  const [triggerGetSubscription] = useLazyGetSubscriptionQuery({});
+const NotificationPrefrences = ({ modalSetState }: any) => {
+  const [triggerGetSubscription, { data }] = useLazyGetSubscriptionQuery({});
+  const [manageSubscription] = useManageSubscriptionMutation({});
+
+  const { setDialogContent, setIsDialogOpen } = modalSetState;
 
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
   const [allNotification, setAllNotification] = useState('');
@@ -14,9 +22,56 @@ const NotificationPrefrences = () => {
     if (!selectedOptions.includes(value)) {
       setSelectedOptions([...selectedOptions, value]);
     } else {
-      setSelectedOptions(
-        selectedOptions.filter((option: any) => option !== value)
-      );
+      if (value.includes('Email')) {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <div className="h-[270px]">
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={warningIcon} alt="warningIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">Warning</h1>
+                <p className="text-neutral600 text-mRegular">
+                  Disabling email notifications may result in missed updates.
+                  Consider selecting &ldquo;Important Only&ldquo; notifications
+                  to continue receiving critical information on the platform.
+                  Are you sure you want to turn off all email notifications?
+                </p>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.modal.no'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  },
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.yes'),
+                    handler: () => {
+                      setSelectedOptions(
+                        selectedOptions.filter(
+                          (option: any) => option !== value
+                        )
+                      );
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
+          </div>
+        );
+      } else {
+        setSelectedOptions(
+          selectedOptions.filter((option: any) => option !== value)
+        );
+      }
     }
   };
 
@@ -27,7 +82,6 @@ const NotificationPrefrences = () => {
         .then(res => {
           setSelectedOptions(res.platforms);
           setAllNotification(res.type);
-          console.log(res);
         });
     };
 
@@ -45,7 +99,7 @@ const NotificationPrefrences = () => {
     {
       name: 'notifications',
       id: '2',
-      value: 'All',
+      value: 'Important',
       label: 'Important Only',
       checked: !allNotification.includes('All')
     }
@@ -72,16 +126,16 @@ const NotificationPrefrences = () => {
     {
       name: 'mobile',
       id: '1',
-      value: 'App',
+      value: 'Mobile',
       label: 'On',
-      checked: selectedOptions.includes('App')
+      checked: selectedOptions.includes('Mobile')
     },
     {
       name: 'mobile',
       id: '2',
-      value: 'App',
+      value: 'Mobile',
       label: 'Off',
-      checked: !selectedOptions.includes('App')
+      checked: !selectedOptions.includes('Mobile')
     }
   ];
 
@@ -102,12 +156,72 @@ const NotificationPrefrences = () => {
     }
   ];
 
+  const handleUpdateNotification = async () => {
+    await manageSubscription({
+      type: allNotification,
+      platforms: selectedOptions
+    })
+      .unwrap()
+      .then(res => {
+        console.log('res', res);
+      })
+      .catch(e => {
+        console.log('eeeee', e);
+      });
+  };
+
+  const handleNotification = ({ value }: { value: string }) => {
+    if (value.includes('Important')) {
+      setIsDialogOpen(true);
+      setDialogContent(
+        <div className="h-[210px]">
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={warningIcon} alt="warningIcon" />
+          </div>
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">Are you sure?</h1>
+              <p className="text-neutral600 text-mRegular">
+                Are you sure you want to turn off the “Important Only”
+                notifications as you might miss some important notifications
+              </p>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.no'),
+                  handler: () => {
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.yes'),
+                  handler: () => {
+                    setAllNotification(value);
+                    setIsDialogOpen(false);
+                  },
+                  customStyle: 'flex-1 w-full h-10'
+                }
+              ]}
+            />
+          </div>
+        </div>
+      );
+    } else {
+      setAllNotification(value);
+    }
+  };
+
   return (
     <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[71vh]">
       <div className="w-[760px] flex flex-col gap-[16px]">
         <h1 className="text-neutral-900 text-headingS font-medium">
           Notification Preferences
         </h1>
+
         <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
           <div className="flex flex-col gap-[24px]">
             <div className="flex flex-col gap-[16px]">
@@ -122,7 +236,7 @@ const NotificationPrefrences = () => {
                     <RadioButton
                       radioMetaData={radioData}
                       onChange={(value: string) => {
-                        setAllNotification(value);
+                        handleNotification({ value });
                       }}
                       customStyle={{ radio: '!text-mMedium !text-neutral900' }}
                     />
@@ -224,12 +338,15 @@ const NotificationPrefrences = () => {
             {
               variant: 'secondary',
               label: ManageLocales('app.myAccount.footer.cancel'),
-              handler: () => {}
+              handler: () => {
+                setSelectedOptions(data.platforms);
+                setAllNotification(data.type);
+              }
             },
             {
               variant: 'primary',
               label: ManageLocales('app.myAccount.footer.update'),
-              handler: () => {}
+              handler: () => handleUpdateNotification()
             }
           ]}
         />
