@@ -2,33 +2,52 @@ import ActionButton from '@/components/v2/common/action-button';
 import { RadioButton } from '@/components/v2/common/radio';
 import { useLazyGetSubscriptionQuery } from '@/features/api/manage-subscription';
 import { ManageLocales } from '@/utils/v2/translate';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 
 const NotificationPrefrences = () => {
   const [triggerGetSubscription] = useLazyGetSubscriptionQuery({});
 
+  const [selectedOptions, setSelectedOptions] = useState<any>([]);
+  const [allNotification, setAllNotification] = useState('');
+
+  const handleRadioChange = (value: string) => {
+    if (!selectedOptions.includes(value)) {
+      setSelectedOptions([...selectedOptions, value]);
+    } else {
+      setSelectedOptions(
+        selectedOptions.filter((option: any) => option !== value)
+      );
+    }
+  };
+
   useEffect(() => {
-    triggerGetSubscription({})
-      .unwrap()
-      .then(res => {
-        console.log(res);
-      });
+    const call = async () => {
+      await triggerGetSubscription({})
+        .unwrap()
+        .then(res => {
+          setSelectedOptions(res.platforms);
+          setAllNotification(res.type);
+          console.log(res);
+        });
+    };
+
+    call();
   }, []);
 
   const notificationsRadio = [
     {
       name: 'notifications',
       id: '1',
-      value: '7',
-      label: 'All Notifications'
-      // checked: false
+      value: 'All',
+      label: 'All Notifications',
+      checked: allNotification.includes('All')
     },
     {
       name: 'notifications',
       id: '2',
-      value: '30',
-      label: 'Important Only'
-      // checked: false
+      value: 'All',
+      label: 'Important Only',
+      checked: !allNotification.includes('All')
     }
   ];
 
@@ -36,16 +55,16 @@ const NotificationPrefrences = () => {
     {
       name: 'web',
       id: '1',
-      value: '7',
-      label: 'On'
-      // checked: false
+      value: 'Web',
+      label: 'On',
+      checked: selectedOptions.includes('Web')
     },
     {
       name: 'web',
       id: '2',
-      value: '30',
-      label: 'Off'
-      // checked: false
+      value: 'Web',
+      label: 'Off',
+      checked: !selectedOptions.includes('Web')
     }
   ];
 
@@ -53,16 +72,16 @@ const NotificationPrefrences = () => {
     {
       name: 'mobile',
       id: '1',
-      value: '7',
-      label: 'On'
-      // checked: false
+      value: 'App',
+      label: 'On',
+      checked: selectedOptions.includes('App')
     },
     {
       name: 'mobile',
       id: '2',
-      value: '30',
-      label: 'Off'
-      // checked: false
+      value: 'App',
+      label: 'Off',
+      checked: !selectedOptions.includes('App')
     }
   ];
 
@@ -70,16 +89,16 @@ const NotificationPrefrences = () => {
     {
       name: 'email',
       id: '1',
-      value: '7',
-      label: 'On'
-      // checked: false
+      value: 'Email',
+      label: 'On',
+      checked: selectedOptions.includes('Email')
     },
     {
       name: 'email',
       id: '2',
-      value: '30',
-      label: 'Off'
-      // checked: false
+      value: 'Email',
+      label: 'Off',
+      checked: !selectedOptions.includes('Email')
     }
   ];
 
@@ -102,7 +121,9 @@ const NotificationPrefrences = () => {
                   <div className="mb-3" key={radioData.id}>
                     <RadioButton
                       radioMetaData={radioData}
-                      onChange={() => {}}
+                      onChange={(value: string) => {
+                        setAllNotification(value);
+                      }}
                       customStyle={{ radio: '!text-mMedium !text-neutral900' }}
                     />
                   </div>
@@ -122,7 +143,7 @@ const NotificationPrefrences = () => {
                     <div className="mb-3" key={radioData.id}>
                       <RadioButton
                         radioMetaData={radioData}
-                        onChange={() => {}}
+                        onChange={(value: any) => handleRadioChange(value)}
                         customStyle={{
                           radio: '!text-mMedium !text-neutral900'
                         }}
@@ -150,7 +171,7 @@ const NotificationPrefrences = () => {
                     <div className="mb-3" key={radioData.id}>
                       <RadioButton
                         radioMetaData={radioData}
-                        onChange={() => {}}
+                        onChange={(value: any) => handleRadioChange(value)}
                         customStyle={{
                           radio: '!text-mMedium !text-neutral900'
                         }}
@@ -178,7 +199,7 @@ const NotificationPrefrences = () => {
                     <div className="mb-3" key={radioData.id}>
                       <RadioButton
                         radioMetaData={radioData}
-                        onChange={() => {}}
+                        onChange={(value: any) => handleRadioChange(value)}
                         customStyle={{
                           radio: '!text-mMedium !text-neutral900'
                         }}
