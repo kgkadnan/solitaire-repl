@@ -297,6 +297,15 @@ const CompanyDetail = ({
     'Individual'
   ];
 
+  const organisationTypesNew = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual',
+    'Other'
+  ];
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -329,22 +338,6 @@ const CompanyDetail = ({
     );
   };
 
-  // const processData = (dataArray: any) => {
-  //   return dataArray.map((item: any) => {
-  //     // Check if the item is an array
-  //     if (Array.isArray(item)) {
-  //       // If the item is an array and has a second element, take the second element
-  //       return item[1] ?? item[0]; // Fallback to the first element if the second one is not available
-  //     }
-  //     // If the item is not an array, take it as is
-  //     return item;
-  //   });
-  // };
-
-  // const handleProcessDataClick = () => {
-  //   const processedData = processData(data);
-  //   console.log(processedData); // Or update some state to display this in your UI
-  // };
   const handleDataUpdate = (
     label: any,
     isChecked: any,
@@ -1165,12 +1158,17 @@ const CompanyDetail = ({
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    // defaultValue={
-
-                    //   formState?.online?.sections?.[
-                    //     kycScreenIdentifierNames.COMPANY_DETAILS
-                    //   ]?.['organisation_type']
-                    // }
+                    defaultValue={
+                      organisationTypesNew.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? ''
+                        : formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                    }
                     defaultSelected={
                       organisationTypes.includes(
                         formState?.online?.sections?.[
