@@ -5,8 +5,18 @@ import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
 import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
 import ActionButton from '../action-button';
-
-const DashboardCarousel = ({ images }: any) => {
+interface ImageData {
+  link: string;
+  image_app?: string;
+  image_web?: string;
+  tag_line: string;
+  description_line: string;
+  cta: string;
+}
+interface DashboardCarouselProps {
+  images: ImageData[];
+}
+const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
   const settings = {
     dots: true, // Show dot indicators
     infinite: true, // Infinite looping
@@ -15,7 +25,6 @@ const DashboardCarousel = ({ images }: any) => {
     slidesToScroll: 1, // Number of slides to scroll
     autoplay: true, // Enable autoplay
     autoplaySpeed: 2000, // Delay between each auto-scroll
-
     appendDots: (dots: any) => (
       <div
         style={{
