@@ -8,21 +8,10 @@ import {
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 // theme.js
-import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
+import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
-
-const theme = createTheme({
-  typography: {
-    fontFamily: ['inherit'].join(','),
-    fontWeightLight: 400,
-    fontWeightRegular: 500,
-    fontWeightMedium: 600,
-    fontWeightBold: 700
-    // You can also customize other typography aspects here
-  }
-});
 
 interface ITable {
   rows: MRT_ColumnDef<MRT_RowData, any>[];
@@ -49,36 +38,52 @@ const Table = ({
   breadCrumLabel,
   isOrderDetail = false
 }: ITable) => {
-  const StylesSearchBar = styled(MRT_GlobalFilterTextField)(() => ({
-    boxShadow: 'var(--input-shadow) inset',
-    border: 'none',
-    borderRadius: '4px',
-    ':hover': {
-      border: 'none'
-    },
-    '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& :hover .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& :focus .MuiOutlinedInput-notchedOutline': {
-      borderColor: 'var(--neutral-200)'
-    },
-
-    '& .MuiOutlinedInput-notchedOutline:hover': {
-      borderColor: 'var(--neutral-200)'
-    },
-    '& .MuiInputAdornment-root': {
-      display: 'none'
-    }
-  }));
   // Fetching saved search data
+
+  const theme = createTheme({
+    typography: {
+      fontFamily: ['inherit'].join(','),
+      fontWeightLight: 400,
+      fontWeightRegular: 500,
+      fontWeightMedium: 600,
+      fontWeightBold: 700
+    },
+
+    components: {
+      MuiTableCell: {
+        styleOverrides: {
+          root: {
+            // Default state for the badge inside the cell
+            '& .MuiBadge-root': {
+              visibility: 'hidden'
+            },
+            // Hover state for the cell
+            '&:hover .MuiBadge-root': {
+              visibility: 'visible'
+            }
+          }
+        }
+      },
+      MuiTableHead: {
+        styleOverrides: {
+          root: {
+            '& .Mui-TableHeadCell-Content-Wrapper': {
+              whiteSpace: 'nowrap',
+              color: 'var(--neutral-700)',
+              fontWeight: 500
+            }
+          }
+        }
+      },
+      MuiTypography: {
+        styleOverrides: {
+          root: {
+            fontStyle: 'normal !important'
+          }
+        }
+      }
+    }
+  });
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
 
@@ -111,6 +116,18 @@ const Table = ({
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />
       )
     },
+    muiTablePaperProps: {
+      elevation: 0, //change the mui box shadow
+      //customize paper styles
+
+      sx: {
+        '&.MuiPaper-root': {
+          borderRadius: '0px !important'
+        },
+        borderRadius: '0px',
+        border: 'none'
+      }
+    },
     muiTableBodyRowProps: ({ row }) => ({
       onClick: row.getToggleSelectedHandler(),
       sx: {
@@ -140,25 +157,22 @@ const Table = ({
       sx: {
         minHeight: isNudge
           ? isOrderDetail
-            ? 'calc(100vh - 490px)'
-            : 'calc(100vh - 385px)'
+            ? 'calc(100vh - 450px)'
+            : 'calc(100vh - 315px)'
           : 'calc(100vh - 450px)',
         maxHeight: isNudge
           ? isOrderDetail
-            ? 'calc(100vh - 490px)'
-            : 'calc(100vh - 385px)'
+            ? 'calc(100vh - 450px)'
+            : 'calc(100vh - 315px)'
           : 'calc(100vh - 450px)'
       }
     },
     muiTableHeadRowProps: {
       sx: {
         backgroundColor: 'var(--neutral-50)',
-        '& .MuiTableSortLabel-root': {
-          color: 'red'
-        }
+        boxShadow: 'none'
       }
     },
-
     muiTableBodyCellProps: {
       sx: {
         color: 'var(--neutral-900)',
@@ -169,17 +183,20 @@ const Table = ({
         borderBottom: '1px solid var(--neutral-50)'
       }
     },
-
     muiTableHeadCellProps: () => {
       return {
         sx: {
           color: 'var(--neutral-700)',
           '&.MuiTableCell-root': {
-            padding: '4px 8px'
+            padding: '4px 8px',
+            background: 'var(--neutral-50)',
+            opacity: 1,
+            borderTop: '1px solid var(--neutral-200)'
           }
         }
       };
     },
+
     muiSelectAllCheckboxProps: {
       sx: {
         color: 'var(--neutral-200)',
@@ -221,16 +238,6 @@ const Table = ({
       }
     },
 
-    muiTablePaperProps: {
-      elevation: 0, //change the mui box shadow
-      //customize paper styles
-
-      sx: {
-        borderRadius: '8px',
-        border: 'none'
-      }
-    },
-
     renderTopToolbar: ({ table }) => (
       <div>
         {isEnableTopToolBar && (
@@ -267,7 +274,39 @@ const Table = ({
               </div>
             </div>
             <div>
-              <StylesSearchBar table={table} autoComplete="false" />
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                sx={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  border: 'none',
+                  borderRadius: '4px',
+                  ':hover': {
+                    border: 'none'
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& :hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& :focus .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .MuiOutlinedInput-notchedOutline:hover': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    display: 'none'
+                  }
+                }}
+              />
             </div>
           </Box>
         )}

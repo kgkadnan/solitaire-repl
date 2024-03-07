@@ -1,6 +1,6 @@
 import { InputField } from '@/components/v2/common/input-field';
 import { countries, kycScreenIdentifierNames } from '@/constants/enums/kyc';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { handleInputChange } from '../helper/handle-change';
 import { ManageLocales } from '@/utils/v2/translate';
 import { DynamicMobileInput } from '@/components/v2/common/input-field/dynamic-mobile';
@@ -12,6 +12,7 @@ import { RadioButton } from '@/components/v2/common/radio';
 
 import CheckboxWithInput from '@/components/v2/common/check';
 import RadioButtonWithInput from '@/components/v2/common/radio-with-input';
+import { useGetCountryCodeQuery } from '@/features/api/current-ip';
 
 const cities = [
   'AHMEDABAD',
@@ -60,6 +61,15 @@ const cities = [
   // Other states and cities...
 ];
 
+const businessTypes = [
+  'Manufacturer',
+  'Retailer',
+  'Wholesaler',
+  'Corporate Retailer'
+];
+
+const typesOfIndustryTypes = ['Diamonds', 'Colour Stones', 'Jewellery'];
+
 const computeCountryDropdownField = (cities: any) => {
   return cities?.map((city: any) => ({
     label: city,
@@ -74,6 +84,21 @@ const CompanyDetail = ({
   country,
   currentStepperStep
 }: any) => {
+  const { data, error } = useGetCountryCodeQuery({});
+  useEffect(() => {
+    if (data) {
+      dispatch(
+        updateFormState({
+          name: `formState.online.sections[${[
+            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+          ]}][company_country_code]`,
+          value: data.country_calling_code
+        })
+      );
+    } else if (error) {
+      console.error('Error fetching country code', error);
+    }
+  }, [data, error]);
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
@@ -86,16 +111,52 @@ const CompanyDetail = ({
 
   const memberOfAnyBusinessOrganisation = [
     {
+      name: 'isMemberOfBusiness',
       id: '1',
       value: true,
       label: 'Yes',
-      requiresInput: true
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === true,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Name If you select “Yes”',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][member_of_business_name]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'member_of_business_name'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? '',
+          placeholder: 'Name If you select “Yes”',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['member_of_business_name'] ?? ''
+        }
+      ]
     },
     {
+      name: 'isMemberOfBusiness',
       id: '2',
       value: false,
       label: 'No',
-      requiresInput: false
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_member_of_business'] === false
     }
   ];
 
@@ -178,21 +239,73 @@ const CompanyDetail = ({
 
   const moneyLaundering = [
     {
+      name: 'antiMoneyLaunderingPolicyName',
       id: '1',
       value: true,
       label: 'Yes',
-      requiresInput: true
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === true
     },
     {
+      name: 'antiMoneyLaunderingPolicyName',
       id: '2',
       value: false,
       label: 'No',
-      requiresInput: false
+      checked:
+        formState?.online?.sections?.[
+          kycScreenIdentifierNames.COMPANY_DETAILS
+        ]?.['is_anti_money_laundering'] === false,
+      inputs: [
+        {
+          id: '1',
+          type: 'text',
+          name: 'Specify here',
+          onInputChange: (e: any) => {
+            handleInputChange(
+              `formState.online.sections[${[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]}][no_anti_money_laundering_policy_reason]`,
+              e.target.value,
+              dispatch,
+              kycScreenIdentifierNames.COMPANY_DETAILS,
+              'no_anti_money_laundering_policy_reason'
+              // formState
+            );
+          },
+          error:
+            formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? '',
+          placeholder: 'Specify here',
+          value:
+            formState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['no_anti_money_laundering_policy_reason'] ?? ''
+        }
+      ]
     }
   ];
 
-  const [memberOfAnyBusiness, setMenberOfAnyBusiness] = useState();
-  const [moneyLaunderingState, setMoneyLaunderingState] = useState();
+  const organisationTypes = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual'
+  ];
+
+  const organisationTypesNew = [
+    'OPC',
+    'Public Ltd.',
+    'LLP',
+    'Private Ltd.',
+    'Partnership Firm',
+    'Individual',
+    'Other'
+  ];
   const [organisationType, setOrganisationType] = useState();
 
   const handleSelect = (value: any, formKey: string, setState: any) => {
@@ -218,12 +331,13 @@ const CompanyDetail = ({
 
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
-      [radioValue, inputValue],
+      inputValue,
       dispatch,
       kycScreenIdentifierNames.COMPANY_DETAILS,
       formKey
     );
   };
+
   const handleDataUpdate = (
     label: any,
     isChecked: any,
@@ -871,19 +985,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[0] === 'Other';
-                        }
-                        return false; // Default value if items is not an array
-                      })}
+                      ]?.['business_type']?.some(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.map((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[1];
-                        }
-                      })}
+                      ]?.['business_type']?.find(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1036,14 +1145,39 @@ const CompanyDetail = ({
                     }}
                   />
                 </div>{' '}
-                <div className="w-[100%] relative">
+                <div
+                  className={`w-[100%] relative ${
+                    organisationTypes.includes(
+                      formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['organisation_type']
+                    ) && 'mb-[45px]'
+                  }`}
+                >
                   <RadioButtonWithInput
                     name="organisationType"
                     label={'Other'}
                     value={'Other'}
-                    defaultSelected={formState?.online?.sections?.[
-                      kycScreenIdentifierNames.COMPANY_DETAILS
-                    ]?.['organisation_type'].includes('Other')}
+                    defaultValue={
+                      organisationTypesNew.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? ''
+                        : formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                    }
+                    defaultSelected={
+                      organisationTypes.includes(
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']
+                      )
+                        ? false
+                        : true
+                    }
                     requiresInput={true}
                     selectedOption={organisationType}
                     setState={setOrganisationType}
@@ -1101,7 +1235,7 @@ const CompanyDetail = ({
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className="flex w-[50%]">
-              <div className="w-full flex flex-col gap-[5px]">
+              <div className="w-full flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">Business Type*</p>
 
                 <div className="flex flex-wrap gap-[14px]">
@@ -1203,19 +1337,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[0] === 'Other';
-                        }
-                        return false; // Default value if items is not an array
-                      })}
+                      ]?.['business_type']?.some(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       defaultValue={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.map((items: any) => {
-                        if (Array.isArray(items)) {
-                          return items[1];
-                        }
-                      })}
+                      ]?.['business_type']?.find(
+                        (item: any) => !businessTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1323,7 +1452,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Other')}
+                      ]?.['industry_type']?.some(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.find(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1800,7 +1936,14 @@ const CompanyDetail = ({
                       label="Other"
                       defaultChecked={formState?.online?.sections?.[
                         kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Other')}
+                      ]?.['industry_type']?.some(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
+                      defaultValue={formState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']?.find(
+                        (item: any) => !typesOfIndustryTypes.includes(item)
+                      )}
                       onDataUpdate={(
                         label: string,
                         isChecked: boolean,
@@ -1827,7 +1970,9 @@ const CompanyDetail = ({
           )}
           <div
             className={`w-[50%] flex flex-col gap-[25px]  ${
-              memberOfAnyBusiness === true && 'mb-[45px]'
+              formState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_member_of_business'] === true && 'mb-[45px]'
             }`}
           >
             <div>
@@ -1843,25 +1988,19 @@ const CompanyDetail = ({
               {memberOfAnyBusinessOrganisation.map(data => {
                 return (
                   <div key={data.id}>
-                    <RadioButtonWithInput
-                      name="isMemberOfBusiness"
-                      label={data.label}
-                      value={data.value}
-                      defaultSelected={
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['is_member_of_business'] === data.value
-                      }
-                      requiresInput={data.requiresInput}
-                      selectedOption={memberOfAnyBusiness}
-                      setState={setMenberOfAnyBusiness}
-                      onSelect={handleSelect}
-                      onInputValueChange={handleInputValueChange}
-                      formKey={'is_member_of_business'}
-                      placeholder={'Name If you select “Yes”'}
+                    <RadioButton
+                      radioMetaData={data}
+                      onChange={() => {
+                        handleRadioChange({
+                          value: data.value,
+                          formKey: 'is_member_of_business'
+                        });
+                      }}
                       customStyle={{
                         radio: `!text-mRegular !text-neutral900  ${
-                          memberOfAnyBusiness === 'true' && 'mb-[10px]'
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['is_member_of_business'] === true && 'mb-[10px]'
                         }`
                       }}
                     />
@@ -1923,25 +2062,20 @@ const CompanyDetail = ({
                 {moneyLaundering.map(data => {
                   return (
                     <div key={data.id}>
-                      <RadioButtonWithInput
-                        name="antiMoneyLaunderingPolicyName"
-                        label={data.label}
-                        value={data.value}
-                        defaultSelected={
-                          formState?.online?.sections?.[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['is_anti_money_laundering'] === data.value
-                        }
-                        requiresInput={data.requiresInput}
-                        selectedOption={moneyLaunderingState}
-                        setState={setMoneyLaunderingState}
-                        onSelect={handleSelect}
-                        onInputValueChange={handleInputValueChange}
-                        formKey={'is_anti_money_laundering'}
-                        placeholder={'Specify here'}
+                      <RadioButton
+                        radioMetaData={data}
+                        onChange={() => {
+                          handleRadioChange({
+                            value: data.value,
+                            formKey: 'is_anti_money_laundering'
+                          });
+                        }}
                         customStyle={{
                           radio: `!text-mRegular !text-neutral900  ${
-                            moneyLaunderingState === 'true' && 'mb-[10px]'
+                            formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['is_anti_money_laundering'] === true &&
+                            'mb-[10px]'
                           }`
                         }}
                       />

@@ -124,6 +124,9 @@ const MyDiamonds = () => {
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
     setSearch('');
+    setPendingInvoiceDataState(pendingInvoicesData?.orders);
+    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+    setActiveInvoiceDataState(activeInvoicesData?.orders);
     setRadioState('90days');
     setShowSuggestions(false);
   };
@@ -174,7 +177,8 @@ const MyDiamonds = () => {
   };
 
   const handleSearch = (e: any) => {
-    const inputValue = e.target.value;
+    let inputValue = e.target.value;
+    inputValue = inputValue.toLowerCase();
     setShowSuggestions(true);
     setSearch(inputValue);
 
@@ -189,12 +193,12 @@ const MyDiamonds = () => {
       setPendingInvoiceDataState(filteredData);
     } else if (activeTab === ACTIVE_INVOICE) {
       const filteredData = activeInvoiceDataState.filter((item: any) =>
-        String(item.invoice_id).includes(inputValue)
+        String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setActiveInvoiceDataState(filteredData);
     } else {
       const filteredData = invoiceHistoryDataState.filter((item: any) =>
-        String(item.invoice_id).includes(inputValue)
+        String(item.invoice_id).toLowerCase().includes(inputValue)
       );
       setInvoiceHistoryDataState(filteredData);
     }
@@ -347,14 +351,14 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex border-b border-neutral200 w-[50%]  text-mMedium font-medium">
+            <div className="flex  w-[50%]  text-mMedium font-medium">
               {myDiamondsTabs.map(({ label, count, status }) => {
                 return (
                   <button
                     className={`px-[16px] py-[8px] ${
                       activeTab === status
                         ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                        : 'text-neutral600 border-b-[2px] border-transparent'
+                        : 'text-neutral600 border-b-[1px] border-neutral200'
                     }`}
                     key={label}
                     onClick={() => handleTabs({ tab: status })}
