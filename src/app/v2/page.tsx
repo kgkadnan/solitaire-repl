@@ -128,12 +128,12 @@ const Dashboard = () => {
     }
   ];
   useEffect(() => {
-    console.log('called');
     refetchCustomerData();
   }, []);
   useEffect(() => {
     if (customerData) {
-      const tabsCopy = [...tabs]; // Make a copy of the current tabs
+      const tabsCopy: ITabs[] = []; // Make a copy of the current tabs
+      // const tabsCopy = [...tabs]; // Make a copy of the current tabs
 
       // Check if there are saved searches and add the "Saved Search" tab
       if (customerData.customer.saved_searches.length > 0) {
@@ -144,14 +144,15 @@ const Dashboard = () => {
         });
       } else {
         // Remove the "Saved Search" tab if there are no saved searches
-        const index = tabsCopy.findIndex(tab => tab.label === 'Saved Search');
+        const index = tabsCopy?.findIndex(tab => tab.label === 'Saved Search');
         if (index !== -1) {
-          tabsCopy.splice(index, 1);
+          tabsCopy?.splice(index, 1);
         }
       }
 
       // Update the tabs state
       setTabs(tabsCopy);
+      setActiveTab(tabsCopy[0]?.label);
 
       // Check for pending and active invoices
       if (customerData.customer.orders.length > 0) {
@@ -210,9 +211,9 @@ const Dashboard = () => {
             tabsCopy.splice(index, 1);
           }
         }
-
         // Update the tabs state
         setTabs(tabsCopy);
+        setActiveTab(tabsCopy[0].label);
       }
     }
   }, [customerData]);
@@ -613,9 +614,11 @@ const Dashboard = () => {
                           key={items.order_id}
                           onClick={() => {
                             if (activeTab === 'Active Invoice') {
-                              router.push('/v2/your-orders?path=active');
+                              router.push(
+                                `/v2/your-orders?path=active&id=${items?.id}`
+                              );
                             } else {
-                              router.push('/v2/your-orders');
+                              router.push(`/v2/your-orders?id=${items?.id}`);
                             }
                             //  handleShowDetails(items?.id);
                           }}
@@ -641,17 +644,28 @@ const Dashboard = () => {
           </div>
         )}
         <div
-          className="border-t-[1px] p-4 flex justify-between border-neutral200 text-lRegular 
+          className="border-t-[1px] border-l-[1px] border-r-[1px] rounded-[8px] p-4 flex justify-between border-neutral200 text-lRegular 
      mt-[20px]"
         >
           {/* for fixed footer */}
           {/* fixed bottom-0 left-[84px] right-0 bg-white  */}
-          <div className="text-infoMain  flex gap-2">
-            <p>Terms & Conditions</p>
-            <p>Privacy Policy</p>
+          <div className="text-infoMain  flex gap-6 cursor-pointer">
+            <p
+              onClick={() =>
+                router.push('/v2/my-account?path=terms-and-conditions')
+              }
+            >
+              Terms & Conditions
+            </p>
+            <p
+              onClick={() => router.push('/v2/my-account?path=privacy-policy')}
+            >
+              Privacy Policy
+            </p>
           </div>
           <p className="text-neutral500">
-            Copyright © 2022 KGK Live.All rights reserved.
+            Copyright © {new Date().getFullYear()} KGK Live.All rights
+            reserved.
           </p>
         </div>
       </div>

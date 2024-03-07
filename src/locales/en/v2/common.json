@@ -78,11 +78,10 @@
   "app.modal.save": "Save",
   "app.modal.selectedStones": "Selected Stones",
   "app.modal.entireSearchResult": "Entire Search Results",
-  "app.modal.verifyMyKYCNow" : "Verify My KYC Now",
-  "app.modal.browseWebsite":"Browse Website",
-  "app.modal.login" : "Login",
+  "app.modal.verifyMyKYCNow": "Verify My KYC Now",
+  "app.modal.browseWebsite": "Browse Website",
+  "app.modal.login": "Login",
 
-  
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
   "app.myCart.actionButton.bookAppointment": "Book Appointment",
@@ -169,9 +168,8 @@
   "app.kyc.footer.saveAndNext": "Save and next",
   "app.kyc.footer.submit": "Submit",
   "app.modal.kyc.emailVerification": "Email Verification",
-  "app.kyc.statusScreen.exploreWebsite" : "Explore Website",
+  "app.kyc.statusScreen.exploreWebsite": "Explore Website",
 
   "app.myAccount.footer.cancel": "Cancel",
   "app.myAccount.footer.updatePassword": "Update Password"
-  
 }
