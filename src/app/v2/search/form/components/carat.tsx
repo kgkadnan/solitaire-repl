@@ -90,7 +90,7 @@ export const Carat = ({
         setCaratMax('');
         setCaratMin('');
       } else {
-        setValidationError('Max 5 carat ranges can be added');
+        setValidationError('Max 5 carats ranges can be added');
       }
     }
   };
@@ -113,9 +113,9 @@ export const Carat = ({
   };
 
   return (
-    <div id="Carat">
+    <div id="Carats">
       <AccordionComponent
-        value="Carat"
+        value="Carats"
         isDisable={true}
         accordionContent={
           <div className="px-[16px] py-[24px]">
@@ -189,7 +189,7 @@ export const Carat = ({
             </div>
           </div>
         }
-        accordionTrigger={'Carat'}
+        accordionTrigger={'Carats'}
       />
     </div>
   );

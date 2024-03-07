@@ -52,12 +52,11 @@
   "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
   "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
 
-
-  "app.myAccount.tabs.tablePrefrences" : "Table Preferences",
-  "app.myAccount.tabs.changePassword" : "Change Password",
-  "app.myAccount.tabs.notificationPrefrences" : "Notifications Preferences",
+  "app.myAccount.tabs.tablePrefrences": "Table Preferences",
+  "app.myAccount.tabs.changePassword": "Change Password",
+  "app.myAccount.tabs.notificationPrefrences": "Notifications Preferences",
   "app.myAccount.tabs.term&Conditions": "Term & Conditions",
-  "app.myAccount.tabs.privacyPolicy" : "Privacy Policy",
+  "app.myAccount.tabs.privacyPolicy": "Privacy Policy",
 
   "app.yourOrder.description.payableAmount": "Payable Amount",
   "app.yourOrder.description.paidAmount": "Paid Amount",
