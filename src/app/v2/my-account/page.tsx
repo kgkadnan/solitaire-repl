@@ -89,6 +89,8 @@ const MyAccount = () => {
       setActiveTab(myAccount.PRIVACY_POLICY);
     } else if (subRoute === 'terms-and-conditions') {
       setActiveTab(myAccount.TERM_AND_CONDITION);
+    } else if (subRoute === 'notification-preferences') {
+      setActiveTab(myAccount.NOTIFICATION_PREFRENCES);
     }
   }, [subRoute]);
 
