@@ -174,7 +174,7 @@ const NewArrivals = () => {
             setIsError={setIsError}
           />
         </div>
-        <Test/>
+        <Test />
       </div>
     </div>
   );
