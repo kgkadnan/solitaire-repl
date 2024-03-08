@@ -255,7 +255,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
             )}
           </div>
         </div>
-        <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] p-[16px]">
+        <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200   rounded-t-[8px] p-[16px]">
           {' '}
           <ActionButton
             actionButtonData={[
