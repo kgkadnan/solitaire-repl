@@ -216,7 +216,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[71vh]">
+    <div className="w-full flex flex-col items-center justify-center mt-[16px] ">
       <div className="w-[760px] flex flex-col gap-[16px]">
         <h1 className="text-neutral-900 text-headingS font-medium">
           Notification Preferences
@@ -331,7 +331,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
           </div>
         </div>
       </div>
-      <div className="h-[72px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200  sticky bottom-0 rounded-t-[8px] mt-auto p-[16px]">
+      <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[
