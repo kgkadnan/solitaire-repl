@@ -173,7 +173,7 @@ export const Carat = ({
                   <div
                     className={`${styles.ctaLabel} px-[4px] pr-[16px] pl-[8px]`}
                   >
-                    Add Carat
+                    Add Carats
                   </div>
                 </Button>
               </div>
