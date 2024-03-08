@@ -52,17 +52,16 @@
   "app.yourOrder.header.activeInvoiceDetails": "Active Invoices Details",
   "app.yourOrder.header.invoicesHistoryDetails": "Invoices History Details",
 
-
-  "app.myAccount.tabs.tablePrefrences" : "Table Preferences",
-  "app.myAccount.tabs.changePassword" : "Change Password",
-  "app.myAccount.tabs.notificationPrefrences" : "Notifications Preferences",
+  "app.myAccount.tabs.tablePrefrences": "Table Preferences",
+  "app.myAccount.tabs.changePassword": "Change Password",
+  "app.myAccount.tabs.notificationPrefrences": "Notifications Preferences",
   "app.myAccount.tabs.term&Conditions": "Term & Conditions",
-  "app.myAccount.tabs.privacyPolicy" : "Privacy Policy",
   "app.myAccount.footer.cancel": "Cancel",
   "app.myAccount.footer.updatePassword": "Update Password",
   "app.myAccount.footer.update": "Update",
   "app.myAccount.tablePrefrences.nonManageableEntities" : "Non Manageable entities",
   "app.myAccount.tablePrefrences.manageableEntities" : "Manageable entities",
+  "app.myAccount.tabs.privacyPolicy": "Privacy Policy",
 
   "app.yourOrder.description.payableAmount": "Payable Amount",
   "app.yourOrder.description.paidAmount": "Paid Amount",
@@ -84,11 +83,10 @@
   "app.modal.save": "Save",
   "app.modal.selectedStones": "Selected Stones",
   "app.modal.entireSearchResult": "Entire Search Results",
-  "app.modal.verifyMyKYCNow" : "Verify My KYC Now",
-  "app.modal.browseWebsite":"Browse Website",
-  "app.modal.login" : "Login",
+  "app.modal.verifyMyKYCNow": "Verify My KYC Now",
+  "app.modal.browseWebsite": "Browse Website",
+  "app.modal.login": "Login",
 
-  
   "app.myCart.mycart": "My Cart",
   "app.myCart.actionButton.delete": "Delete",
   "app.myCart.actionButton.bookAppointment": "Book Appointment",
@@ -179,4 +177,5 @@
 
 
   
+
 }

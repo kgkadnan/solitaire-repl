@@ -9,14 +9,14 @@ import Loader from '@/components/v2/common/file-attachment/component/loader';
 import { Label } from '@/components/ui/label';
 import styles from './profile-update.module.scss';
 import {
-  useLazyGetProfilePhotoQuery,
+  // useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 
 const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
-  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  // const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
 
   const dropzoneStyle = {
     borderRadius: '8px',

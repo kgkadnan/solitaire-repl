@@ -78,7 +78,7 @@ export const shape = [
 
 export const anchor = [
   'Shape',
-  'Carat',
+  'Carats',
   'Color',
   'Clarity',
   'Make Cut Polish Symmetry',
