@@ -141,7 +141,7 @@ const Notification = () => {
           <div className="flex justify-between px-[16px] pb-[20px] pt-[20px] border-t-[1px] border-neutral-200">
             <Link
               className="flex items-center gap-2 cursor-pointer"
-              href={'/v2/my-account?path=notification-prefrences'}
+              href={'/v2/my-account?path=notification-preferences'}
             >
               <Image src={prefrences} alt="prefrences" />
               <span className="text-neutral-700 text-mRegular">
