@@ -18,6 +18,8 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
+import { createBaseQuery } from '@/features/api/base-query';
+import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 
 interface IUserAccountInfo {
   customer: {
@@ -53,14 +55,26 @@ enum myAccount {
 }
 const MyAccount = () => {
   const subRoute = useSearchParams().get('path');
-
+  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
   const [activeTab, setActiveTab] = useState<string>(
-    myAccount.NOTIFICATION_PREFRENCES
+    myAccount.TABLE_PREFRENCES
   );
+
+  const [imageUrl, setImageUrl] = useState('');
+  useEffect(() => {
+    const getPhoto = async () => {
+      await triggerGetProfilePhoto({ size: 128 })
+        .unwrap()
+        .then((res: any) => {
+          setImageUrl(res);
+        });
+    };
+    getPhoto();
+  }, []);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
@@ -149,7 +163,16 @@ const MyAccount = () => {
               className="cursor-pointer relative"
               style={{ position: 'relative' }}
             >
-              <Image src={kamPhoto} alt="kamPhoto" />
+              {imageUrl.length ? (
+                <img src={imageUrl} alt="kam" />
+              ) : (
+                <Image
+                  src={kamPhoto}
+                  alt="kamPhoto"
+                  className="imageContainer"
+                  id="imageContainer"
+                />
+              )}
               <div className="absolute top-[72%] right-[8%] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
                 <Image src={uploadIcon} alt="uploadIcon" />
               </div>
