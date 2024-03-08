@@ -1,7 +1,8 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import kamPhoto from '@public/v2/assets/icons/my-account/kam-photo.svg';
+import kamPhoto from '@public/v2/assets/icons/my-account/KAM- Photo.svg';
+import uploadIcon from '@public/v2/assets/icons/my-account/uploadIcon.svg';
 import blueTickIcon from '@public/v2/assets/icons/my-account/blue-tick-icon.svg';
 import greyTickIcon from '@public/v2/assets/icons/my-account/grey-tick-icon.svg';
 import { kycStatus } from '@/constants/enums/kyc';
@@ -16,6 +17,7 @@ import TermAndCondtions from './components/term-and-conditions/term-and-conditio
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useSearchParams } from 'next/navigation';
+import ProfileUpdate from './components/profile-update/profile-update';
 
 interface IUserAccountInfo {
   customer: {
@@ -46,7 +48,8 @@ enum myAccount {
   CHANGE_PASSWORD = 'change password',
   NOTIFICATION_PREFRENCES = 'notification preferences',
   TERM_AND_CONDITION = 'term & condition',
-  PRIVACY_POLICY = 'privacy policy'
+  PRIVACY_POLICY = 'privacy policy',
+  PROFILE_UPDATE = 'profile update'
 }
 const MyAccount = () => {
   const subRoute = useSearchParams().get('path');
@@ -111,17 +114,20 @@ const MyAccount = () => {
         return <ChangePassword modalSetState={modalSetState} />;
 
       case myAccount.NOTIFICATION_PREFRENCES:
-        return <NotificationPrefrences />;
+        return <NotificationPrefrences modalSetState={modalSetState} />;
 
       case myAccount.PRIVACY_POLICY:
         return <PrivacyPolicy />;
       case myAccount.TERM_AND_CONDITION:
         return <TermAndCondtions />;
+
+      case myAccount.PROFILE_UPDATE:
+        return <ProfileUpdate />;
     }
   };
 
   return (
-    <div className="py-[16px] relative">
+    <div className="mt-[16px] relative">
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -135,8 +141,19 @@ const MyAccount = () => {
         }}
       >
         <div className="flex items-center  gap-5 p-[24px]">
-          <div onClick={() => {}} className="cursor-pointer">
-            <Image src={kamPhoto} alt="kamPhoto" />
+          <div className="group">
+            <div
+              onClick={() => {
+                setActiveTab(myAccount.PROFILE_UPDATE);
+              }}
+              className="cursor-pointer relative"
+              style={{ position: 'relative' }}
+            >
+              <Image src={kamPhoto} alt="kamPhoto" />
+              <div className="absolute top-[72%] right-[8%] opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                <Image src={uploadIcon} alt="uploadIcon" />
+              </div>
+            </div>
           </div>
 
           <div className="flex flex-col  justify-start gap-[8px]">
