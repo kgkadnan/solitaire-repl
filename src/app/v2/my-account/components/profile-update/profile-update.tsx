@@ -9,14 +9,14 @@ import Loader from '@/components/v2/common/file-attachment/component/loader';
 import { Label } from '@/components/ui/label';
 import styles from './profile-update.module.scss';
 import {
-  // useLazyGetProfilePhotoQuery,
+  useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 
 const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
-  // const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
 
   const dropzoneStyle = {
     borderRadius: '8px',
@@ -38,12 +38,13 @@ const ProfileUpdate = () => {
       //   .then((res: any) => {
       //     console.log(res);
       //   });
-      fetch(`${apiURL}/store/account/profile/${128}`)
-        .then(response => response.blob())
-        .then(blob => {
-          console.log(blob);
-          // Do something with the image data
-        });
+      // const response = await fetch('store/account/profile/128', {
+      //   method: 'GET',
+      //   redirect: 'follow' // Follow redirects
+      // });
+      // const data = await response.blob();
+      // const imageUrl = URL.createObjectURL(data);
+      // console.log(imageUrl);
     };
     getPhoto();
   }, []);

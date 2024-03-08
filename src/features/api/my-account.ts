@@ -17,7 +17,7 @@ export const myAccountApi = createApi({
       invalidatesTags: ['myAccount']
     }),
     getProfilePhoto: builder.query({
-      query: ({ size }) => `store/account/profile/${size}`,
+      query: ({ size }) => `store/account/profile/${size}?redirect=true`,
       providesTags: ['myAccount']
     })
   })
