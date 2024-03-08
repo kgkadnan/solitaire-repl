@@ -3,19 +3,17 @@ import React, { useEffect, useState } from 'react';
 const TermAndCondtions = () => {
   const [activeTab, setActiveTab] = useState<string>('KGK Website');
   const [data, setData] = useState<any>();
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleTabs = async ({ tab, url }: { tab: string; url: string }) => {
     setActiveTab(tab);
     try {
       // Place your async logic here
-      const response = await fetch(
-        `https://medusa-test.kgkit.net/public/page/${url}`,
-        {
-          headers: {
-            Accept: 'text/html'
-          }
+      const response = await fetch(`${apiURL}public/page/${url}`, {
+        headers: {
+          Accept: 'text/html'
         }
-      );
+      });
       const data = await response.text();
       setData(data);
     } catch (error) {
@@ -29,7 +27,7 @@ const TermAndCondtions = () => {
       try {
         // Place your async logic here
         const response = await fetch(
-          'https://medusa-test.kgkit.net/public/page/terms-and-condition-kgk-website',
+          `${apiURL}public/page/terms-and-condition-kgk-website`,
           {
             headers: {
               Accept: 'text/html'

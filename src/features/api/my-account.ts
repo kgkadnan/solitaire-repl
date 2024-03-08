@@ -10,14 +10,14 @@ export const myAccountApi = createApi({
   endpoints: builder => ({
     updateProfilePhoto: builder.mutation({
       query: data => ({
-        url: `store/customers/me/myAccount`,
+        url: `store/account/upload-profile-photo`,
         method: 'POST',
         body: data
       }),
       invalidatesTags: ['myAccount']
     }),
     getProfilePhoto: builder.query({
-      query: () => `store/account/profile/32`,
+      query: ({ size }) => `store/account/profile/${size}`,
       providesTags: ['myAccount']
     })
   })

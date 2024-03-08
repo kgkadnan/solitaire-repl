@@ -8,11 +8,15 @@ import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?ur
 import Loader from '@/components/v2/common/file-attachment/component/loader';
 import { Label } from '@/components/ui/label';
 import styles from './profile-update.module.scss';
-import { useUpdateProfilePhotoMutation } from '@/features/api/my-account';
-import checkMark from '@public/v2/assets/icons/my-account/Checklist/Checklist/Default/Active.svg';
+import {
+  useLazyGetProfilePhotoQuery,
+  useUpdateProfilePhotoMutation
+} from '@/features/api/my-account';
+import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 
 const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
+  const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
 
   const dropzoneStyle = {
     borderRadius: '8px',
@@ -23,10 +27,26 @@ const ProfileUpdate = () => {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    gap: '10px',
-    /* Individual border image properties */
-    backgroundImage: `url('data:image/svg+xml,%3Csvg width='100%25' height='100%25' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100%25' height='100%25' fill='none' stroke='%23333' stroke-width='10' stroke-dasharray='6%2c 14' stroke-dashoffset='0' stroke-linecap='square'/%3E%3C/svg%3E')`
+    gap: '10px'
   };
+
+  const apiURL = process.env.NEXT_PUBLIC_API_URL;
+  useEffect(() => {
+    const getPhoto = async () => {
+      // await triggerGetProfilePhoto({ size: 128 })
+      //   .unwrap()
+      //   .then((res: any) => {
+      //     console.log(res);
+      //   });
+      fetch(`${apiURL}/store/account/profile/${128}`)
+        .then(response => response.blob())
+        .then(blob => {
+          console.log(blob);
+          // Do something with the image data
+        });
+    };
+    getPhoto();
+  }, []);
 
   const [isFileUploaded, setIsFileUploaded] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
@@ -108,7 +128,7 @@ const ProfileUpdate = () => {
               error.length ? 'border-dangerMain' : 'border-neutral-200'
             } ${
               isFileUploaded || error.length
-                ? 'border-solid border-primaryMain'
+                ? 'border-solid shadow-sm'
                 : 'border-dashed'
             }`}
           >
@@ -160,8 +180,14 @@ const ProfileUpdate = () => {
                 />
               ) : (
                 <div onClick={e => e.stopPropagation()}>
-                  {Object.keys(selectedFile).length && (
-                    <Image src={checkMark} alt="checkMark" />
+                  {Object.keys(selectedFile).length && isFileUploaded && (
+                    <button
+                      onClick={() => {
+                        // handleDeleteAttachment({ key: formKey });
+                      }}
+                    >
+                      <Image src={deleteIcon} alt="deleteIcon" />
+                    </button>
                   )}
                 </div>
               )}
