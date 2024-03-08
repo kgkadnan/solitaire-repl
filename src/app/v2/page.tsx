@@ -63,6 +63,13 @@ const Dashboard = () => {
     styles.gradient3,
     styles.gradient4
   ];
+  const optionsClasses = [
+    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
+    'linear-gradient(90deg, #FFF4E3 0%, #E8E8FF 50%, #DBF2FC 100%)',
+    'linear-gradient(90deg, #E1F6F1 0%, #FFF4E3 50%, #EFEFFD 100%)',
+    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
+  ];
+
   const handleEdit = (stone: string) => {
     let savedSearchEditData = customerData?.customer.saved_searches.filter(
       (items: any) => {
@@ -221,8 +228,8 @@ const Dashboard = () => {
   const options = [
     {
       label: 'New Arrivals',
-      icon: <ArrivalIcon />,
-      color: styles.gradient1,
+      icon: <ArrivalIcon stroke="#101828" />,
+      color: optionsClasses[0],
       count: 0,
       isAvailable: true,
       link: '/v2/new-arrivals'
@@ -230,7 +237,7 @@ const Dashboard = () => {
     {
       label: 'My Cart',
       icon: <CartIcon />,
-      color: styles.gradient2,
+      color: optionsClasses[1],
       count: customerData?.customer.cart.items.length ?? 0,
       isAvailable: true,
       link: '/v2/my-cart'
@@ -238,7 +245,7 @@ const Dashboard = () => {
     {
       label: 'Bid to Buy',
       icon: <BidToBuyIcon />,
-      color: styles.gradient3,
+      color: optionsClasses[2],
       count: 0,
       isAvailable: false,
       link: '/v2/my-cart'
@@ -246,7 +253,7 @@ const Dashboard = () => {
     {
       label: 'My Appointments',
       icon: <AppointmentIcon />,
-      color: styles.gradient4,
+      color: optionsClasses[3],
       count: 0,
       isAvailable: false,
       link: '/v2/my-cart'
@@ -458,7 +465,7 @@ const Dashboard = () => {
           {options.map(data => {
             return (
               <div
-                className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 ${
+                className={`border-[1px] border-neutral200 p-[24px] flex rounded-[8px] w-full gap-4 hover:border-accentTeal shadow-sm ${
                   data.isAvailable ? 'cursor-pointer' : 'cursor-default'
                 }`}
                 key={data.label}
@@ -470,7 +477,10 @@ const Dashboard = () => {
                     : () => {}
                 }
               >
-                <div className={`${data.color} p-3 rounded-[4px]`}>
+                <div
+                  style={{ background: data.color }}
+                  className={`${data.color} p-3 rounded-[4px]`}
+                >
                   {' '}
                   {data.icon}{' '}
                 </div>
@@ -488,7 +498,7 @@ const Dashboard = () => {
             );
           })}
         </div>
-        <div className="flex w-full gap-4">
+        <div className="flex w-full gap-4 h-[400px]">
           {' '}
           {/* Ensure the container takes up full width */}
           {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
@@ -664,7 +674,7 @@ const Dashboard = () => {
             </p>
           </div>
           <p className="text-neutral500">
-            Copyright © {new Date().getFullYear()} KGK Live.All rights
+            Copyright © {new Date().getFullYear()} KGK Live. All rights
             reserved.
           </p>
         </div>
