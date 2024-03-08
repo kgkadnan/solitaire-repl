@@ -502,7 +502,7 @@ const Dashboard = () => {
           {' '}
           {/* Ensure the container takes up full width */}
           {/* Carousel Container - Allow it to shrink if necessary but also give it an initial width */}
-          <div className="flex-1 flex-shrink min-w-0">
+          <div className="flex-1 flex-shrink min-w-0 border-[1px] border-neutral50">
             <DashboardCarousel images={customerData?.customer.carousel_items} />
           </div>
           {/* KAMCard Container - Prevent it from shrinking and assign a max width */}
