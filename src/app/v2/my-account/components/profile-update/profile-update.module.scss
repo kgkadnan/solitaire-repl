@@ -1,0 +1,50 @@
+.label {
+  color: var(--neutral-900) !important;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.format {
+  color: var(--neutral-600);
+  font-size: var(--font-size-sRegular);
+  font-weight: 400;
+}
+.errorFormat {
+  color: hsl(var(--solitaire-error)) !important;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.errorlabel {
+  color: hsl(var(--solitaire-error)) !important;
+  font-size: 14px;
+  text-transform: capitalize;
+}
+
+.stroke {
+  stroke: hsl(var(--solitaire-quaternary));
+}
+
+.errorFill {
+  fill: hsl(var(--solitaire-error));
+  width: 100%;
+}
+
+.menuTriggerStyle {
+  background: hsl(var(--solitaire-secondary));
+  padding: 0px !important;
+}
+
+.menuContentStyle {
+  background-color: hsl(var(--solitaire-primary));
+  border: none;
+  border-radius: 10px;
+  min-width: 10rem;
+}
+.modalStyle {
+  max-width: 50vw;
+  height: 80vh;
+  z-index: 1200;
+  color: hsl(var(--solitaire-tertiary));
+  border-radius: 30px;
+}

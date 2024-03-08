@@ -54,7 +54,8 @@ export const FilterByDays: React.FC<IFilterByDaysProps> = ({
                 label: ManageLocales('app.myDiamonds.selectDate'),
                 svg: CalenderIcon,
                 variant: 'secondary',
-                handler: () => {}
+                handler: () => {},
+                customStyle: 'w-[140px]'
               }
             ]}
           />

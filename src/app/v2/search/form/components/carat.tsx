@@ -46,11 +46,13 @@ export const Carat = ({
 }: ICaratProps) => {
   const handleMaxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+      setCaratError('');
       setCaratMax(event.target.value);
     }
   };
   const handleMinChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (/^\d*\.?\d{0,2}$/.test(event.target.value)) {
+      setCaratError('');
       setCaratMin(event.target.value);
     }
   };
@@ -58,6 +60,21 @@ export const Carat = ({
   const normalizeValue = (value: string) => {
     // Normalize user input like '3-3.99' to '3.00-3.99'
     const caratRange = value.split('-');
+    if (isNaN(Number(caratRange[0])) || isNaN(Number(caratRange[1]))) {
+      setCaratError('Please enter both “Min” & “Max”');
+      return;
+    }
+    if (Number(caratRange[0]) > Number(caratRange[1])) {
+      setCaratError('“Min” should be less than “Max”');
+      return;
+    }
+
+    if (Number(caratRange[0]) < 0 || Number(caratRange[1]) > carat.range.lte) {
+      setCaratError(
+        `Please enter a range between ${carat.range.gte} to ${carat.range.lte} only`
+      );
+      return;
+    }
     if (caratRange[0] === '' || caratRange[1] === '') {
       setCaratError(`Please enter a valid carat range.`);
       return;
@@ -128,25 +145,13 @@ export const Carat = ({
                     minPlaceHolder: '0',
                     minOnchange: e => {
                       handleMinChange(e);
-                      handleNumericRange({
-                        min: e.target.value,
-                        max: caratMax,
-                        setErrorState: setCaratError,
-                        rangeCondition: carat.range
-                      });
                     }
                   }}
                   maxInputData={{
                     maxValue: caratMax,
-                    maxPlaceHolder: '30',
+                    maxPlaceHolder: '50',
                     maxOnchange: e => {
                       handleMaxChange(e);
-                      handleNumericRange({
-                        min: caratMin,
-                        max: e.target.value,
-                        setErrorState: setCaratError,
-                        rangeCondition: carat.range
-                      });
                     }
                   }}
                   inputGap="gap-[10px]"
@@ -173,7 +178,7 @@ export const Carat = ({
                   <div
                     className={`${styles.ctaLabel} px-[4px] pr-[16px] pl-[8px]`}
                   >
-                    Add Carat
+                    Add Carats
                   </div>
                 </Button>
               </div>

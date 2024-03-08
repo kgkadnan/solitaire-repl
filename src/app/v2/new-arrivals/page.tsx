@@ -25,6 +25,7 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
+import Test from './features/test';
 
 const NewArrivals = () => {
   const [activeTab, setActiveTab] = useState(0);
@@ -173,7 +174,7 @@ const NewArrivals = () => {
             setIsError={setIsError}
           />
         </div>
-        kk
+        <Test/>
       </div>
     </div>
   );
