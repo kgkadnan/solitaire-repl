@@ -138,7 +138,7 @@ export const Carat = ({
                   }}
                   maxInputData={{
                     maxValue: caratMax,
-                    maxPlaceHolder: '30',
+                    maxPlaceHolder: '50',
                     maxOnchange: e => {
                       handleMaxChange(e);
                       handleNumericRange({
@@ -173,7 +173,7 @@ export const Carat = ({
                   <div
                     className={`${styles.ctaLabel} px-[4px] pr-[16px] pl-[8px]`}
                   >
-                    Add Carat
+                    Add Carats
                   </div>
                 </Button>
               </div>

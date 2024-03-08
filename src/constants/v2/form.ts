@@ -511,7 +511,7 @@ export const discount = {
 export const carat = {
   range: {
     gte: 0,
-    lte: 30
+    lte: 50
   }
 };
 export const amountRange = {
