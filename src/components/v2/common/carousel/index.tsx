@@ -23,7 +23,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
     speed: 500, // Transition speed
     slidesToShow: 1, // Number of slides to show at once
     slidesToScroll: 1, // Number of slides to scroll
-    // autoplay: true, // Enable autoplay
+    autoplay: true, // Enable autoplay
     autoplaySpeed: 2000, // Delay between each auto-scroll
     appendDots: (dots: any) => (
       <div
