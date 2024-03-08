@@ -9,7 +9,8 @@ import {
   PENDING_INVOICE,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
-import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+
+import emptyOrderSvg from '@public/v2/assets/icons/empty-order.png';
 import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
@@ -429,7 +430,7 @@ const MyDiamonds = () => {
                 onClickHandler={() =>
                   router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
                 }
-                imageSrc={empty}
+                imageSrc={emptyOrderSvg}
               />
             </div>
           )}
