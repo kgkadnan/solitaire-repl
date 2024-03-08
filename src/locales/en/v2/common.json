@@ -59,8 +59,8 @@
   "app.myAccount.footer.cancel": "Cancel",
   "app.myAccount.footer.updatePassword": "Update Password",
   "app.myAccount.footer.update": "Update",
-  "app.myAccount.tablePrefrences.nonManageableEntities" : "Non Manageable entities",
-  "app.myAccount.tablePrefrences.manageableEntities" : "Manageable entities",
+  "app.myAccount.tablePrefrences.nonManageableEntities": "Non Manageable entities",
+  "app.myAccount.tablePrefrences.manageableEntities": "Manageable entities",
   "app.myAccount.tabs.privacyPolicy": "Privacy Policy",
 
   "app.yourOrder.description.payableAmount": "Payable Amount",
@@ -173,9 +173,5 @@
   "app.kyc.footer.saveAndNext": "Save and next",
   "app.kyc.footer.submit": "Submit",
   "app.modal.kyc.emailVerification": "Email Verification",
-  "app.kyc.statusScreen.exploreWebsite" : "Explore Website"
-
-
-  
-
+  "app.kyc.statusScreen.exploreWebsite": "Explore Website"
 }
