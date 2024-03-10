@@ -1,1 +1,0 @@
-export const BREADCRUM_CHARACTER_LIMIT = 9;

@@ -1,8 +1,8 @@
-import { BREADCRUM_CHARACTER_LIMIT } from '@/constants/v2/result';
 import React from 'react';
 import Cross from '@public/v2/assets/icons/cross.svg?url';
 import Edit from '@public/v2/assets/icons/edit.svg?url';
 import Tooltip from '../tooltip';
+import { BREADCRUM_CHARACTER_LIMIT } from '@/constants/business-logic';
 
 const Pill = (props: {
   isActive: boolean;

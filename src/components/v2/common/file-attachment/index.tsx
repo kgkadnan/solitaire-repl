@@ -12,10 +12,10 @@ import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
-import { IModalSetState } from '@/app/search/result/result-interface';
-import { Label } from '@/components/ui/label';
 
 import Loader from './component/loader';
+import { Label } from '../../ui/label';
+import { IModalSetState } from '@/app/v2/search/interface';
 
 interface IFileAttachments {
   lable: string;

@@ -39,8 +39,6 @@ import {
 } from '@/features/api/product';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { MRT_RowSelectionState } from 'material-react-table';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { IProduct } from '@/app/search/result/result-interface';
 import { notificationBadge } from '@/features/notification/notification-slice';
 import { useAddCartMutation } from '@/features/api/cart';
 import { useAppDispatch } from '@/hooks/hook';
@@ -79,6 +77,7 @@ import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
+import { IManageListingSequenceResponse, IProduct } from '../interface';
 
 // Column mapper outside the component to avoid re-creation on each render
 

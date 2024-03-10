@@ -26,3 +26,8 @@ export interface IRegisterState {
   registerFormState: IRegister;
   registerFormErrors: IRegister;
 }
+export interface IToken {
+  token: string;
+  phoneToken: string;
+  tempToken: string;
+}

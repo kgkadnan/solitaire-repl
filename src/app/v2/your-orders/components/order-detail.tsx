@@ -1,4 +1,3 @@
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import Tooltip from '@/components/v2/common/tooltip';
 import Table from '@/components/v2/table';
 import {
@@ -34,6 +33,7 @@ import {
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
+import { IManageListingSequenceResponse } from '../../search/interface';
 
 interface IOrderDetail {
   productDetailData: any;

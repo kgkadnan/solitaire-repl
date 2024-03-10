@@ -5,10 +5,10 @@ import Edit from '@public/v2/assets/icons/edit-number.svg?url';
 import { ManageLocales } from '@/utils/translate';
 import KgkIcon from '@public/v2/assets/icons/sidebar-icons/vector.svg';
 import { handleVerifyOtp } from './helpers/handle-verify-otp';
-import { IToken } from '@/app/register/page';
 import { IndividualActionButton } from '../action-button/individual-button';
 import OtpInput from '../otp';
 import { handleRegisterResendOTP } from './helpers/handle-register-resent';
+import { IToken } from '@/app/v2/register/interface';
 
 export interface IOtp {
   otpMobileNumber: string;

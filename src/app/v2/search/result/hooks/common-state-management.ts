@@ -1,5 +1,5 @@
-import { IYourSelection } from '@/app/search/result/result-interface';
 import { useState } from 'react';
+import { IYourSelection } from '../../interface';
 export const useCommonStateManagement = () => {
   const [yourSelectionData, setYourSelectionData] = useState<IYourSelection[]>(
     []

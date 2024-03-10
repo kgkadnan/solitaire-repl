@@ -6,7 +6,6 @@ import {
 } from '@/features/api/login';
 import { useRouter } from 'next/navigation';
 import useUser from '@/lib/use-auth';
-import { useModalStateManagement } from '@/hooks/modal-state-management';
 import {
   ENTER_PASSWORD,
   INCORRECT_LOGIN_CREDENTIALS,
@@ -41,6 +40,7 @@ import {
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 
 export interface IToken {
   token: string;

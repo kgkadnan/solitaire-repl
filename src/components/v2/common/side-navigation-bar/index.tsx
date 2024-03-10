@@ -13,8 +13,8 @@ import CartIcon from '@public/v2/assets/icons/sidebar-icons/shopping-cart.svg?ur
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import Tooltip from '../tooltip';
-import { Button } from '@/components/ui/button';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
+import { Button } from '../../ui/button';
 
 interface ISideNavigationBar {
   src?: React.ReactNode;

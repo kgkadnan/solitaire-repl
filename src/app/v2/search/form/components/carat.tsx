@@ -3,11 +3,10 @@ import React, { Dispatch, SetStateAction } from 'react';
 import { MinMaxInput } from '@/components/v2/common/min-max-input';
 import element from '@public/v2/assets/icons/elements.svg';
 import CaratTile from '@/components/v2/common/carat-tile';
-import { handleNumericRange } from '../helpers/handle-input-range-validation';
 import { carat } from '@/constants/v2/form';
-import { Button } from '@/components/ui/button';
 import styles from '../../../../../components/v2/common/action-button/action-button.module.scss';
 import Image from 'next/image';
+import { Button } from '@/components/v2/ui/button';
 
 // export const Carat = ({
 //   state,

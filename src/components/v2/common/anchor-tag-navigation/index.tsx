@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import arrowForward from '@public/assets/icons/arrow-forward.svg';
-import arrowBackward from '@public/assets/icons/arrow-backword.svg';
+import arrowForward from '@public/v2/assets/icons/arrow-forward.svg';
+import arrowBackward from '@public/v2/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
 import { Link } from 'react-scroll';
 import { kycStatus } from '@/constants/enums/kyc';

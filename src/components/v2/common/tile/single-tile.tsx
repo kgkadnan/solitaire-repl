@@ -1,6 +1,6 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import styles from './tile.module.scss';
+import { Button } from '../../ui/button';
 
 interface ITileProps {
   tileData: string[];

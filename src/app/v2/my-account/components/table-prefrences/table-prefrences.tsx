@@ -13,7 +13,6 @@ import {
 } from '@/features/api/manage-listing-sequence';
 import { ListManager } from 'react-beautiful-dnd-grid';
 import { ITablePrefrences } from './interface';
-import { ITableColumn } from '@/app/search/result/result-interface';
 import styles from './table-prefrences.module.scss';
 
 import Image from 'next/image';
@@ -25,6 +24,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
+import { ITableColumn } from '@/app/v2/search/interface';
 
 const TablePrefrences = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and

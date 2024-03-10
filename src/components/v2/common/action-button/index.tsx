@@ -1,7 +1,7 @@
-import { Button } from '@/components/ui/button';
 import React from 'react';
 import styles from './action-button.module.scss';
 import Image from 'next/image';
+import { Button } from '../../ui/button';
 
 interface IActionButtonData {
   actionButtonData: {
