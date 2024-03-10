@@ -89,8 +89,8 @@ export const anchor = [
   'Shade',
   'Discount% Price/Ct Amount Range',
   'Parameters',
-  'Girdle',
-  'Culet',
+  // 'Girdle',
+  // 'Culet',
   'Inclusions',
   'Key to Symbol'
 ];

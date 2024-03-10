@@ -151,7 +151,7 @@ const TopNavigationBar = () => {
             </Avatar>
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
-          <PopoverContent>
+          <PopoverContent className="z-[999]">
             <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">

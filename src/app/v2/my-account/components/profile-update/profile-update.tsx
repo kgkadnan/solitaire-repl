@@ -9,14 +9,18 @@ import Loader from '@/components/v2/common/file-attachment/component/loader';
 import { Label } from '@/components/ui/label';
 import styles from './profile-update.module.scss';
 import {
+  useDeleteProfileMutation,
   useLazyGetProfilePhotoQuery,
   useUpdateProfilePhotoMutation
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
+import logger from 'logging/log-util';
 
 const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [deleteProfile] = useDeleteProfileMutation({});
+  const [imageUrl, setImageUrl] = useState('');
 
   const dropzoneStyle = {
     borderRadius: '8px',
@@ -30,21 +34,16 @@ const ProfileUpdate = () => {
     gap: '10px'
   };
 
-  const apiURL = process.env.NEXT_PUBLIC_API_URL;
   useEffect(() => {
     const getPhoto = async () => {
-      // await triggerGetProfilePhoto({ size: 128 })
-      //   .unwrap()
-      //   .then((res: any) => {
-      //     console.log(res);
-      //   });
-      // const response = await fetch('store/account/profile/128', {
-      //   method: 'GET',
-      //   redirect: 'follow' // Follow redirects
-      // });
-      // const data = await response.blob();
-      // const imageUrl = URL.createObjectURL(data);
-      // console.log(imageUrl);
+      await triggerGetProfilePhoto({ size: 32 })
+        .unwrap()
+        .then((res: any) => {
+          if (res) {
+            setSelectedFile({ url: 'profile' });
+            setIsFileUploaded(true);
+          }
+        });
     };
     getPhoto();
   }, []);
@@ -93,6 +92,18 @@ const ProfileUpdate = () => {
       // Log an error message if the upload fails
       console.error('File upload failed:', error);
     }
+  };
+
+  const handleDeleteAttachment = () => {
+    deleteProfile({})
+      .unwrap()
+      .then(res => {
+        setSelectedFile({});
+        setIsFileUploaded(false);
+      })
+      .catch(error => {
+        logger.info(error);
+      });
   };
 
   const onDrop = async (acceptedFiles: any) => {
@@ -184,7 +195,7 @@ const ProfileUpdate = () => {
                   {Object.keys(selectedFile).length && isFileUploaded && (
                     <button
                       onClick={() => {
-                        // handleDeleteAttachment({ key: formKey });
+                        handleDeleteAttachment();
                       }}
                     >
                       <Image src={deleteIcon} alt="deleteIcon" />
