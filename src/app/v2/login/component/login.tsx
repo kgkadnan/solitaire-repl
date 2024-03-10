@@ -103,14 +103,6 @@ const LoginComponent = ({
             styles={{ inputMain: 'h-[64px]' }}
           />
 
-          {/* <div className="flex justify-center items-center text-sm sm:text-base h-10">
-            {isError && (
-              <div className="text-solitaireError flex text-left">
-                {errorText}
-              </div>
-            )}
-          </div> */}
-
           <div className="flex justify-between text-mRegualar text-neutral900">
             <div className="flex items-center gap-2">
               {' '}

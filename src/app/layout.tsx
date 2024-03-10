@@ -24,8 +24,9 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
-
-  const showHeader = isApplicationRoutes && !headerlessRoutes.includes(path);
+  console.log(path);
+  const showHeader =
+    (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>{children}</>
@@ -45,7 +46,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
       </Head>
       <body className={inter.className}>
         <Provider store={store}>
-          <ThemeProviders isV2Route={isV2Route}>
+          <ThemeProviders>
             {isV2Route ? (
               <>
                 {showHeader ? (

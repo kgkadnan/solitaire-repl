@@ -16,7 +16,7 @@
 
 @layer base {
   :root {
-    @apply bg-solitairePrimary text-foreground;
+    @apply bg-neutral0 text-foreground;
 
     --background: 180, 44%, 8%, 1;
 
@@ -71,7 +71,7 @@
     --solitaire-border: 180, 6%, 39%, 1; //Emerald 4
   }
   .primary {
-    @apply bg-solitairePrimary text-foreground;
+    @apply bg-neutral0 text-foreground;
 
     --background: 180, 44%, 8%, 1;
 
@@ -127,7 +127,7 @@
   }
 
   .secondary {
-    @apply bg-solitairePrimary text-foreground;
+    @apply bg-neutral0 text-foreground;
 
     --background: 0 0% 100%;
     --background-dark: 0 0% 100%;
