@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useMemo, useState } from 'react';
-import Tab from './components/tabs';
 import Timer from './components/timer';
 import NewArrivalDataTable from './components/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
@@ -25,15 +24,10 @@ import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-list
 import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
-import Test from './features/test';
+import { columnHeaders } from './constant';
 
 const NewArrivals = () => {
-  const [activeTab, setActiveTab] = useState(0);
-  const tabLabels = ['Bid Stone (100)', 'Active Bid (3)', 'Bid History (3)'];
 
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-  };
 
   const mapColumns = (columns: any) =>
     columns
@@ -93,8 +87,8 @@ const NewArrivals = () => {
 
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
   const memoizedColumns = useMemo(
-    () => mapColumns(dataTableState.columns),
-    [dataTableState.columns]
+    () => mapColumns(columnHeaders),
+    [columnHeaders]
   );
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
@@ -145,7 +139,8 @@ const NewArrivals = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [activeTab]);
+  }, []);
+  console.log(memoizedColumns,"memoizedColumns",dataTableState.columns)
   return (
     <div className="mb-[20px] relative">
       <div className="flex h-[81px] items-center justify-between">
@@ -155,13 +150,9 @@ const NewArrivals = () => {
         <Timer initialHours={1} initialMinutes={40} initialSeconds={10} />
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        <div className="w-[450px]">
-          <Tab
-            labels={tabLabels}
-            activeIndex={activeTab}
-            onTabClick={handleTabClick}
-          />
-        </div>
+        {/* <div className="w-[450px]">
+        
+        </div> */}
         <div className="border-b-[1px] border-neutral200">
           <NewArrivalDataTable
             rows={dataTableState.rows}
@@ -174,8 +165,7 @@ const NewArrivals = () => {
             setIsError={setIsError}
           />
         </div>
-        <Test />
-      </div>
+cta      </div>
     </div>
   );
 };

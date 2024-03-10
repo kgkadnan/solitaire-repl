@@ -16,13 +16,14 @@ import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import { ManageLocales } from '@/utils/v2/translate';
 
-import { useState } from 'react';
-import { useLazyGetProductCountQuery } from '@/features/api/product';
+import { useEffect, useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
 import NewArrivalCalculatedField from '../new-arrival-calculated-field';
+import Tab from '../tabs';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 
 const theme = createTheme({
   typography: {
@@ -88,6 +89,38 @@ const NewArrivalDataTable = ({
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
+  };
+  const [activeTab, setActiveTab] = useState(0);
+  const tabLabels = ['Bid Stone (100)', 'Active Bid (3)', 'Bid History (3)'];
+
+  const handleTabClick = (index: number) => {
+    setActiveTab(index);
+  };
+  const socketManager = new SocketManager();
+
+  useSocket(socketManager);
+
+  useEffect(() => {
+    socketManager.on('bid_stones', data => _handleBidStones(data));
+    socketManager.on('error', data => _handleError(data));
+    // socketManager.on('bid_placed', data => _handleBidPlaced(data));
+    // socketManager.on('bid_canceled', data => _handleBidCanceled(data));
+    // socketManager.on('request_get_bid_stones', () =>
+    //   socketManager.emit('get_bid_stones')
+    // );
+
+    // Cleanup on component unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, []);
+
+  const _handleBidStones = (data: any) => {
+    console.log(data, 'pooooooooooooooooooooooooo');
+  };
+
+  const _handleError = (data: any) => {
+    // setState with error
   };
 
   const getShapeDisplayName = ({ value }: { value: string }) => {
@@ -448,11 +481,8 @@ const NewArrivalDataTable = ({
     },
     renderTopToolbar: ({ table }) => (
       <div>
-        <NewArrivalCalculatedField
-          rows={rows}
-          selectedProducts={rowSelection}
-        />
-
+      <div>
+  
         <Box
           sx={{
             display: 'flex',
@@ -461,8 +491,17 @@ const NewArrivalDataTable = ({
             padding: '12px 16px'
           }}
         >
-          <div>
-            <MRT_GlobalFilterTextField
+          <div className='w-[450px]'>
+          <Tab
+            labels={tabLabels}
+            activeIndex={activeTab}
+            onTabClick={handleTabClick}
+          />
+            {/* <StylesSearchBar table={table} autoComplete="false" /> */}
+          </div>
+
+          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+          <MRT_GlobalFilterTextField
               table={table}
               autoComplete="false"
               sx={{
@@ -495,10 +534,6 @@ const NewArrivalDataTable = ({
                 }
               }}
             />
-            {/* <StylesSearchBar table={table} autoComplete="false" /> */}
-          </div>
-
-          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
             <div
               className="p-[4px] rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
@@ -525,6 +560,11 @@ const NewArrivalDataTable = ({
             </div>
           </div>
         </Box>
+        </div>
+        <NewArrivalCalculatedField
+          rows={rows}
+          selectedProducts={rowSelection}
+        />
       </div>
     ),
     renderDetailPanel: ({ row }) => {

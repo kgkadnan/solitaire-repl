@@ -27,7 +27,7 @@ export class SocketManager {
   }
 
   on(event: string, handler: (data: any) => void) {
-    console.log('ooonnnnnnnnnnnn');
+    console.log('jjjjjjjjjjjjjjjjjjjjj',event);
     this.socket.on(event, handler);
   }
 
