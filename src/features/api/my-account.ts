@@ -19,9 +19,20 @@ export const myAccountApi = createApi({
     getProfilePhoto: builder.query({
       query: ({ size }) => `store/account/profile/${size}?redirect=true`,
       providesTags: ['myAccount']
+    }),
+    deleteProfile: builder.mutation({
+      query: data => ({
+        url: `store/account/profile`,
+        method: 'DELETE',
+        body: data
+      }),
+      invalidatesTags: ['myAccount']
     })
   })
 });
 
-export const { useLazyGetProfilePhotoQuery, useUpdateProfilePhotoMutation } =
-  myAccountApi;
+export const {
+  useLazyGetProfilePhotoQuery,
+  useUpdateProfilePhotoMutation,
+  useDeleteProfileMutation
+} = myAccountApi;

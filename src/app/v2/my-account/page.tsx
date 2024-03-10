@@ -63,8 +63,8 @@ const MyAccount = () => {
   const [activeTab, setActiveTab] = useState<string>(
     myAccount.TABLE_PREFRENCES
   );
-
   const [imageUrl, setImageUrl] = useState('');
+
   useEffect(() => {
     const getPhoto = async () => {
       await triggerGetProfilePhoto({ size: 128 })

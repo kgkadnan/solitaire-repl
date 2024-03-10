@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NotificationIcon from '@public/v2/assets/icons/topbar-icons/notification.svg';
 import prefrences from '@public/v2/assets/icons/my-account/prefrences.svg';
 import markRead from '@public/v2/assets/icons/my-account/mark-read.svg';
@@ -17,6 +17,7 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import logger from 'logging/log-util';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 
 interface INotification {
   created_at: string;
@@ -33,6 +34,28 @@ const Notification = () => {
   const [triggerReadNotification] = useLazyReadNotificationQuery({});
   const [seenNotification] = useSeenNotificationMutation({});
   const [notificationData, setNotificationData] = useState<INotification[]>([]);
+
+  const socketManager = new SocketManager();
+
+  useSocket(socketManager);
+  useEffect(() => {
+    socketManager.on('notification', data => _handleNotification(data));
+    socketManager.on('error', data => _handleError(data));
+
+    // Cleanup on component unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, []);
+
+  const _handleNotification = (data: any) => {
+    console.log(data, 'hsssssdsdsds');
+  };
+
+  const _handleError = (data: any) => {
+    // setState with error
+    console.log(data, 'hsssssdsdsds');
+  };
 
   const formatCreatedAt = (createdAt: string) => {
     return formatDistanceToNow(new Date(createdAt), {
@@ -60,7 +83,6 @@ const Notification = () => {
         logger.error(error);
       });
   };
-  console.log('notification', notificationData);
 
   const callNotification = () => {
     triggerNotification({}).then(res => {
