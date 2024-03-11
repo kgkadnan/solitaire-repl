@@ -1,5 +1,4 @@
 import React, { useRef, useState, useEffect } from 'react';
-import { Input } from '@components/ui/input';
 import { IInputFieldProps } from './interface';
 import EyeSlash from '@public/v2/assets/icons/eye-slash.svg?url';
 import Eye from '@public/v2/assets/icons/eye.svg?url';
@@ -7,6 +6,7 @@ import PasswordSuccess from '@public/v2/assets/icons/password/password-success.s
 import PasswordFail from '@public/v2/assets/icons/password/password-fail.svg?url';
 import PasswordDefault from '@public/v2/assets/icons/password/password-default.svg?url'; // Default check icon, replace with your icon
 import { PASSWORD_NOT_MATCH } from '@/constants/error-messages/register';
+import { Input } from '../../ui/input';
 
 type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
 interface IPasswordProps extends IPasswordInputProps {

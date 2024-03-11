@@ -8,9 +8,9 @@ import {
   useUploadDocumentMutation
 } from '@/features/api/kyc';
 import { handleFileupload } from '../helper/handle-file-upload';
-import { useAppDispatch } from '@/hooks/hook';
 import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
+import { useAppDispatch } from '@/hooks/hook';
 
 export const RenderAttachment = ({
   formErrorState,

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import arrowForward from '@public/assets/icons/arrow-forward.svg';
-import arrowBackward from '@public/assets/icons/arrow-backword.svg';
+import arrowForward from '@public/v2/assets/icons/arrow-forward.svg';
+import arrowBackward from '@public/v2/assets/icons/arrow-backword.svg';
 import Image from 'next/image';
 import { Link } from 'react-scroll';
 import { kycStatus } from '@/constants/enums/kyc';
@@ -50,7 +50,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   return (
     <div
-      className={`flex items-center w-full bg-neutral0 sticky  z-[3] ${
+      className={`flex items-center w-full bg-neutral0 sticky  z-[2] ${
         localStorage.getItem('show-nudge') === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)

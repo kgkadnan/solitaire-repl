@@ -9,16 +9,15 @@ import { kycStatus } from '@/constants/enums/kyc';
 import Mail from '@public/v2/assets/icons/my-account/mail.svg?url';
 import Phone from '@public/v2/assets/icons/my-account/phone.svg?url';
 import { ManageLocales } from '@/utils/v2/translate';
-import TablePrefrences from './components/table-prefrences/table-prefrences';
+import TablePrefrences from './components/table-preferences/table-prefrences';
 import ChangePassword from './components/change-password/change-password';
-import NotificationPrefrences from './components/notification-prefrences/notification-prefrences';
+import NotificationPrefrences from './components/notification-preferences/notification-prefrences';
 import PrivacyPolicy from './components/privacy-policy/privacy-policy';
 import TermAndCondtions from './components/term-and-conditions/term-and-condition';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
-import { createBaseQuery } from '@/features/api/base-query';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 
 interface IUserAccountInfo {
@@ -63,8 +62,8 @@ const MyAccount = () => {
   const [activeTab, setActiveTab] = useState<string>(
     myAccount.TABLE_PREFRENCES
   );
-
   const [imageUrl, setImageUrl] = useState('');
+
   useEffect(() => {
     const getPhoto = async () => {
       await triggerGetProfilePhoto({ size: 128 })

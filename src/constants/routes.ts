@@ -1,26 +1,12 @@
 export const headerlessRoutes = [
-  '/login',
-  '/forgot-password',
-  '/reset-password',
-  '/register',
   '/v2/register',
   '/v2/login',
-  '/v2/forgot-password'
+  '/v2/forgot-password',
+  '/privacy-policy'
 ];
 
-export const myAccountRoutes = [
-  '/my-account/kyc',
-  '/my-account/summary',
-  '/my-account/change-password',
-  '/my-account/manage-diamond-sequence',
-  '/my-account/report-bug',
-  '/my-account/email-notification'
-];
-export const notificationRoutes = [
-  '/notification/all-notification',
-  '/notification/setting'
-];
 export const v2Routes = [
+  '/',
   '/v2',
   '/v2/search',
   '/v2/kyc',
@@ -35,24 +21,10 @@ export const v2Routes = [
   '/v2/new-arrivals',
   '/v2/my-account'
 ];
-export const protectedRoutes = [
-  '/',
-  '/search',
-  '/my-diamonds',
-  '/my-cart',
-  '/compare-stone',
-  ...notificationRoutes,
-  ...myAccountRoutes,
-  ...v2Routes
-];
+export const protectedRoutes = ['/', ...v2Routes];
 
 export const applicationRoutes = [
   ...headerlessRoutes,
   ...protectedRoutes,
-  '/match-pair',
-  '/new-arrival',
-  '/layouts',
-  '/appointments',
-  '/for-you',
   ...v2Routes
 ];

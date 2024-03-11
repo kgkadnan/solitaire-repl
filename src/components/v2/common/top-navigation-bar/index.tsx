@@ -145,17 +145,21 @@ const TopNavigationBar = () => {
             </Avatar>
           </PopoverTrigger>
           {/* Popover content with radio buttons */}
-          <PopoverContent>
+          <PopoverContent className="z-[999]">
             <div className="bg-neutral25 border-[1px] border-solid border-primaryBorder shadow-popupsShadow  rounded-[8px] relative top-[5px] right-[13%]">
               <div className="flex items-center border-b-[1px] border-solid border-primaryBorder p-[16px] gap-[8px]">
                 <Avatar className="bg-primaryMain flex items-center justify-center">
-                  <p className="text-center text-mRegular text-neutral0">
-                    {`${userAccountInfo?.customer?.first_name
-                      ?.charAt(0)
-                      .toUpperCase()}${userAccountInfo?.customer?.last_name
-                      ?.charAt(0)
-                      .toUpperCase()}`}
-                  </p>
+                  {imageUrl.length ? (
+                    <img src={imageUrl} alt="profile" />
+                  ) : (
+                    <p className="text-center text-mRegular text-neutral0">
+                      {`${userAccountInfo?.customer?.first_name
+                        ?.charAt(0)
+                        .toUpperCase()}${userAccountInfo?.customer?.last_name
+                        ?.charAt(0)
+                        .toUpperCase()}`}
+                    </p>
+                  )}
                 </Avatar>
                 <div>
                   <h1 className="text-lRegular font-regular text-neutral-900">

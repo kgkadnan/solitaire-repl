@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
-import { Input } from '@components/ui/input';
 import { IInputFieldProps } from './interface';
+import { Input } from '../../ui/input';
 export const InputField = ({
   type,
   name,

@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useEffect, useState } from 'react';
 import styles from './search-input.module.scss';
-import { Input } from '@components/ui/input';
 import searchIcon from '@public/v2/assets/icons/saved-search/search-icon.svg';
 import Image from 'next/image';
+import { Input } from '../../ui/input';
 
 interface ISearchInputProps {
   type: string;

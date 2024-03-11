@@ -1,10 +1,10 @@
 import { IOtp } from '..';
-import { IToken } from '@/app/register/page';
 import logger from 'logging/log-util';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
 import ActionButton from '../../action-button';
 import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import { IToken } from '@/app/v2/register/interface';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;

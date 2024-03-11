@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { IHeaderSearchBarProps } from '../interface';
-import ClearIcon from '@public/assets/icons/close-outline.svg?url';
+import ClearIcon from '@public/v2/assets/icons/close-outline.svg?url';
 import { ManageLocales } from '@/utils/v2/translate';
 import SearchInputField from '@/components/v2/common/search-input/search-input';
 import { PENDING_INVOICE } from '@/constants/business-logic';
