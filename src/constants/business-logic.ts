@@ -71,3 +71,4 @@ export const FILE_URLS = {
 };
 
 export const GIA_LINK = 'https://www.gia.edu/report-check?reportno=';
+export const BREADCRUM_CHARACTER_LIMIT = 9;

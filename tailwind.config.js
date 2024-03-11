@@ -56,20 +56,9 @@ module.exports = {
       },
       colors: {
         //*********Customize**************
-        solitairePrimary: 'hsl(var(--solitaire-primary))', // dark - Emerald Green / light- white
         solitaireSecondary: 'hsl(var(--solitaire-secondary))', // dark - Emerald 7 / light- white
-        solitaireTertiary: 'hsl(var(--solitaire-tertiary))', // dark - Emerald 1 / light- Carbon 6
         solitaireQuaternary: 'hsl(var(--solitaire-quaternary))', // dark - shadow / light- shadow
-        solitaireQuinary: 'hsl(var(--solitaire-quinary))', // dark - Emerald Green / light-Carbon 3
         solitaireSenary: 'hsl(var(--solitaire-senary))', // dark -Emerald 4 / light- Carbon 3
-        solitaireSeptenary: 'hsl(var(--solitaire-septenary))', // dark - Emerald 7 / light- shadow
-        solitaireOctonary: 'hsl(var(--solitaire-octonary))', // dark - Emerald 7 / light- Carbon 1
-        solitaireNonary: 'hsl(var(--solitaire-nonary))', // dark - Emerald 7 / light- Carbon 1
-        solitaireDenary: 'hsl(var(--solitaire-denary))', // dark - Emerald 7 / light- Carbon 1
-        solitaireOutline: 'hsl(var(--solitaire-outline))', // dark - Emerald 4 / light- Carbon 2
-        solitaireBorder: 'hsl(var(--solitaire-border))', // dar  - Emerald 4 / light- white
-        solitaireError: 'hsl(var(--solitaire-error))', // dark - Error / light- Error
-        solitaireSuccess: 'hsl(var(--solitaire-success))', // dark - Success / light- Success
         //********************* */
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

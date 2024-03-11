@@ -7,12 +7,12 @@ import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
 import { useAppDispatch } from '@/hooks/hook';
 import { useLazyGetKycPdfQuery } from '@/features/api/kyc';
 import { updateFormState } from '@/features/kyc/kyc';
-import { Label } from '@/components/ui/label';
 import mediaIcon from '@public/v2/assets/icons/attachment/media-icon.svg';
 import errorIcon from 'public/v2/assets/icons/attachment/error-icon.svg';
 import Loader from '../file-attachment/component/loader';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?url';
+import { Label } from '../../ui/label';
 
 interface IDownloadAndUpload {
   formState: any;

@@ -4,19 +4,14 @@ import React, { ReactNode, useEffect } from 'react';
 
 interface IThemeProvidersProps {
   children: ReactNode;
-  isV2Route?: boolean; // Include the optional boolean prop
 }
-export const ThemeProviders = ({
-  children,
-  isV2Route
-}: IThemeProvidersProps) => {
+export const ThemeProviders = ({ children }: IThemeProvidersProps) => {
   useEffect(() => {}, []);
   return (
     <ThemeProvider
       enableSystem={true}
       attribute="class"
-      defaultTheme={isV2Route ? 'v2primary' : 'primary'}
-      storageKey={isV2Route ? 'v2-theme' : 'theme'}
+      defaultTheme={'v2primary'}
     >
       {children}
     </ThemeProvider>

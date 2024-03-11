@@ -1,4 +1,4 @@
-import { IModalSetState } from '@/app/search/result/result-interface';
+import { IModalSetState } from '../search/interface';
 
 export interface IHeaderSearchBarProps {
   activeTab: string;

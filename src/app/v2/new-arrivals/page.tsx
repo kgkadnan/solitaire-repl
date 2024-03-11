@@ -22,10 +22,10 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
 import { useLazyGetAllProductQuery } from '@/features/api/product';
 import Test from './features/test';
+import { IManageListingSequenceResponse } from '../search/interface';
 
 const NewArrivals = () => {
   const [activeTab, setActiveTab] = useState(0);

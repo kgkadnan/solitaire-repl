@@ -14,6 +14,8 @@
     "react-hooks/exhaustive-deps": "off",
     "no-case-declarations": "off",
     "no-unused-vars": "off",
+    "no-unescaped-entities": "off",
+    "react/no-unescaped-entities": "off",
     //  Avoid Unused Variables and Imports
     // "no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
 

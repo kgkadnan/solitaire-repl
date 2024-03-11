@@ -1,5 +1,4 @@
 'use client';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
 import DataTable from '@/components/v2/common/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
@@ -19,7 +18,6 @@ import {
   useDeleteCartMutation,
   useLazyGetCartQuery
 } from '@/features/api/cart';
-import { IProductItem } from '@/app/my-cart/interface/interface';
 import ActionButton from '@/components/v2/common/action-button';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
@@ -53,7 +51,6 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { NO_STONES_SELECTED } from '@/constants/error-messages/cart';
 import { handleConfirmStone } from '../search/result/helpers/handle-confirm-stone';
-import { IProduct } from '@/app/search/result/result-interface';
 import ConfirmStone from '../search/result/components';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from '../search/result/helpers/handle-comment';
@@ -61,6 +58,11 @@ import { useRouter } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useConfirmProductMutation } from '@/features/api/product';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
+import {
+  IManageListingSequenceResponse,
+  IProduct,
+  IProductItem
+} from '../search/interface';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();

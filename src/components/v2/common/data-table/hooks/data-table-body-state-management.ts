@@ -1,4 +1,4 @@
-import { IProduct } from '@/app/search/result/result-interface';
+import { IProduct } from '@/app/v2/search/interface';
 import { useState } from 'react';
 
 export const useDataTableBodyStateManagement = () => {

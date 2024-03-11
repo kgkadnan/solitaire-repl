@@ -1,4 +1,3 @@
-import { IProduct } from '@/app/search/result/result-interface';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import {
   SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH,
@@ -6,6 +5,7 @@ import {
 } from '@/constants/error-messages/confirm-stone';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/confirm-stone';
 import { Dispatch, SetStateAction } from 'react';
+import { IProduct } from '../../interface';
 
 /**
  * Handles the confirmation of selected stones.

@@ -1,4 +1,4 @@
-import { IOtp } from '@/app/register/page';
+import { IOtp } from '.';
 
 export interface IOtpVerificationSetState {
   setOtpValues: React.Dispatch<React.SetStateAction<string[]>>;

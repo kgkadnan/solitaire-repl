@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '../../ui/dialog';
 
 export interface IDialog {
   dialogContent: React.ReactNode;

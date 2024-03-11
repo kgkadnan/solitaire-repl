@@ -1,7 +1,7 @@
 import React from 'react';
-import { Button } from '@/components/ui/button';
 import styles from './tile.module.scss';
 import Tooltip from '../tooltip';
+import { Button } from '../../ui/button';
 
 interface ITileProps {
   tileData: string[] | { title: string; short_name: string }[];

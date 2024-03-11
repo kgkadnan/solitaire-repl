@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
+import { Dialog, DialogContent } from '../../ui/dialog';
 
 export interface IDialog {
   isOpen: boolean;
