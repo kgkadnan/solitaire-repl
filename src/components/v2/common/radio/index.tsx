@@ -5,6 +5,7 @@ import { InputField } from '../input-field';
 export const RadioButton: React.FC<any> = ({
   radioMetaData,
   onChange,
+  onError,
   customStyle
 }) => {
   const { label, value, name, checked, inputs } = radioMetaData;
@@ -38,8 +39,10 @@ export const RadioButton: React.FC<any> = ({
           checked={checked}
           onClick={handleRadioChange}
         />
-        <div>{label}</div>
-        <span></span>
+        <div className={`${onError && 'text-dangerMain'}`}>{label}</div>
+        <span
+          style={{ border: onError && '1px solid var(--danger-main)' }}
+        ></span>
       </label>
 
       <div className="absolute top-[100%]">

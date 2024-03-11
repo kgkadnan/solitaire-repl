@@ -35,27 +35,27 @@ const Notification = () => {
   const [seenNotification] = useSeenNotificationMutation({});
   const [notificationData, setNotificationData] = useState<INotification[]>([]);
 
-  const socketManager = new SocketManager();
+  // const socketManager = new SocketManager();
 
-  useSocket(socketManager);
-  useEffect(() => {
-    socketManager.on('notification', data => _handleNotification(data));
-    socketManager.on('error', data => _handleError(data));
+  // useSocket(socketManager);
+  // useEffect(() => {
+  //   socketManager.on('notification', data => _handleNotification(data));
+  //   socketManager.on('error', data => _handleError(data));
 
-    // Cleanup on component unmount
-    return () => {
-      socketManager.disconnect();
-    };
-  }, []);
+  //   // Cleanup on component unmount
+  //   return () => {
+  //     socketManager.disconnect();
+  //   };
+  // }, []);
 
-  const _handleNotification = (data: any) => {
-    console.log(data, 'hsssssdsdsds');
-  };
+  // const _handleNotification = (data: any) => {
+  //   console.log(data, 'hsssssdsdsds');
+  // };
 
-  const _handleError = (data: any) => {
-    // setState with error
-    console.log(data, 'hsssssdsdsds');
-  };
+  // const _handleError = (data: any) => {
+  //   // setState with error
+  //   console.log(data, 'hsssssdsdsds');
+  // };
 
   const formatCreatedAt = (createdAt: string) => {
     return formatDistanceToNow(new Date(createdAt), {

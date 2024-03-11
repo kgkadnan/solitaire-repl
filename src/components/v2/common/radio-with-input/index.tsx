@@ -16,7 +16,8 @@ const RadioButtonWithInput = ({
   formKey,
   setState,
   defaultSelected = false, // New prop for default radio selection
-  defaultValue = '' // New prop for default input value
+  defaultValue = '', // New prop for default input value
+  onError
 }: any) => {
   const [inputValue, setInputValue] = useState('');
 
@@ -48,8 +49,10 @@ const RadioButtonWithInput = ({
           checked={selectedOption === value}
           onClick={() => onSelect(value, formKey, setState)}
         />
-        <div>{label}</div>
-        <span></span>
+        <div className={`${onError && 'text-dangerMain'}`}>{label}</div>
+        <span
+          style={{ border: onError && '1px solid var(--danger-main)' }}
+        ></span>
       </label>
 
       <div className="absolute top-[30px]">

@@ -11,8 +11,10 @@ const CheckboxWithInput = ({
   inputPlaceHolder,
   styles,
   defaultChecked = false, // Added prop for initial checked state
-  defaultValue = '' // Added prop for initial input value
+  defaultValue = '', // Added prop for initial input value
+  onError
 }: any) => {
+  console.log('onError', onError);
   const [isChecked, setIsChecked] = useState(defaultChecked); // Initialize with defaultChecked value
   const [inputValue, setInputValue] = useState(defaultValue); // Initialize with defaultValue
 
@@ -44,14 +46,18 @@ const CheckboxWithInput = ({
     <div className="flex flex-col gap-[5px]">
       <div className="flex gap-[5px]">
         <Checkbox
-          className={`rounded-[4px] border-neutral200 bg-neutral0 h-[20px] w-[20px] data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 ${styles}`}
+          className={`rounded-[4px] h-[20px] w-[20px] bg-neutral0 data-[state=checked]:border-primaryMain data-[state=checked]:bg-primaryMain data-[state=checked]:text-neutral25 ${styles}
+            ${onError ? ' border-dangerMain' : ' border-neutral200'}
+          `}
           onClick={handleCheckboxChange}
           checked={isChecked}
         />
         {label && (
           <button
             onClick={handleCheckboxChange}
-            className="text-neutral-900 font-mRegular"
+            className={`font-mRegular ${
+              onError ? 'text-dangerMain' : 'text-neutral-900'
+            }`}
           >
             {label}
           </button>
