@@ -50,7 +50,7 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   return (
     <div
-      className={`flex items-center w-full bg-neutral0 sticky  z-[3] ${
+      className={`flex items-center w-full bg-neutral0 sticky  z-[2] ${
         localStorage.getItem('show-nudge') === 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
           isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
