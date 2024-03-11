@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, FC } from 'react';
+import React, { ReactNode, FC, useEffect } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';
@@ -15,6 +15,8 @@ import {
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import logger from 'logging/log-util';
 
 const store = setupStore();
 
@@ -24,7 +26,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   const path = usePathname();
   const isApplicationRoutes = applicationRoutes.includes(path);
   const isV2Route = v2Routes.includes(path);
-  console.log(path);
+
   const showHeader =
     (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
   // Create a component that just renders children, with children as an optional prop
@@ -36,6 +38,22 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
+  const socketManager = new SocketManager();
+
+  useSocket(socketManager);
+  useEffect(() => {
+    socketManager.on('notification', data => _handleNotification(data));
+
+    // Cleanup on component unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, []);
+
+  const _handleNotification = (data: any) => {
+    logger.info(data);
+    // dispatch(notificationBadge(true));
+  };
   return (
     <html lang="en">
       <Head>

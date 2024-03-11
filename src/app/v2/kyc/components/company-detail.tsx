@@ -84,6 +84,9 @@ const CompanyDetail = ({
   country,
   currentStepperStep
 }: any) => {
+  console.log(
+    formErrorState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]
+  );
   const { data, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (data) {
@@ -883,314 +886,409 @@ const CompanyDetail = ({
           )}
           {country === countries.INDIA && (
             <div className="flex w-[50%]">
-              <div className="w-full flex flex-col gap-[10px]">
-                <p className="text-mRegular text-neutral900">Business Type*</p>
+              <div className="w-full flex flex-col">
+                <div className="flex flex-col gap-[10px]">
+                  <p className="text-mRegular text-neutral900">
+                    Business Type*
+                  </p>
 
-                <div className="flex flex-wrap gap-[14px]">
-                  {' '}
-                  <div className="w-[46%]">
-                    <CheckboxWithInput
-                      label="Manufacturer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Manufacturer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[50%]">
-                    <CheckboxWithInput
-                      label="Retailer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Retailer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[46%]">
-                    <CheckboxWithInput
-                      label="Wholesaler"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Wholesaler')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[50%]">
-                    <CheckboxWithInput
-                      label="Corporate Retailer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Corporate Retailer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Other"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some(
-                        (item: any) => !businessTypes.includes(item)
-                      )}
-                      defaultValue={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.find(
-                        (item: any) => !businessTypes.includes(item)
-                      )}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          true
-                        )
-                      }
-                      showInput={true}
-                      inputName={'Other'}
-                      inputPlaceHolder={'If other please specify'}
-                    />
+                  <div className="flex flex-wrap gap-[14px]">
+                    {' '}
+                    <div className="w-[46%]">
+                      <CheckboxWithInput
+                        label="Manufacturer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Manufacturer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[50%]">
+                      <CheckboxWithInput
+                        label="Retailer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Retailer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[46%]">
+                      <CheckboxWithInput
+                        label="Wholesaler"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Wholesaler')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[50%]">
+                      <CheckboxWithInput
+                        label="Corporate Retailer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Corporate Retailer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Other"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.some(
+                          (item: any) => !businessTypes.includes(item)
+                        )}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        defaultValue={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.find(
+                          (item: any) => !businessTypes.includes(item)
+                        )}
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            true
+                          )
+                        }
+                        showInput={true}
+                        inputName={'Other'}
+                        inputPlaceHolder={'If other please specify'}
+                      />
+                    </div>
                   </div>
                 </div>
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['business_type'] && (
+                  <span className="text-dangerMain">
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']
+                    }
+                  </span>
+                )}
               </div>
             </div>
           )}
           {country === countries.INDIA && (
-            <div className="w-[50%] flex flex-col gap-[10px] h-[24vh]">
-              <p className="text-mRegular text-neutral900">
-                Organisation Type*
-              </p>
+            <div className="w-[50%] flex flex-col  h-[24vh]">
+              <div className="flex flex-col gap-[10px]">
+                <p className="text-mRegular text-neutral900">
+                  Organisation Type*
+                </p>
 
-              <div className="flex  w-full justify-between flex-wrap  ">
-                {' '}
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'Individual'}
-                    value={'Individual'}
-                    requiresInput={false}
-                    selectedOption={organisationType}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'Individual'
-                    }
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'Partnership Firm'}
-                    value={'Partnership Firm'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'Partnership Firm'
-                    }
-                    requiresInput={false}
-                    selectedOption={organisationType}
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'Private Ltd.'}
-                    value={'Private Ltd.'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'Private Ltd.'
-                    }
-                    requiresInput={false}
-                    setState={setOrganisationType}
-                    selectedOption={organisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>{' '}
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'LLP'}
-                    value={'LLP'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'LLP'
-                    }
-                    requiresInput={false}
-                    selectedOption={organisationType}
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>{' '}
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'Public Ltd.'}
-                    value={'Public Ltd.'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'Public Ltd.'
-                    }
-                    requiresInput={false}
-                    selectedOption={organisationType}
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>{' '}
-                <div className="w-[50%] mb-3">
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'OPC'}
-                    value={'OPC'}
-                    defaultSelected={
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type'] === 'OPC'
-                    }
-                    requiresInput={false}
-                    selectedOption={organisationType}
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                  />
-                </div>{' '}
-                <div
-                  className={`w-[100%] relative ${
-                    organisationTypes.includes(
-                      formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['organisation_type']
-                    ) && 'mb-[45px]'
-                  }`}
-                >
-                  <RadioButtonWithInput
-                    name="organisationType"
-                    label={'Other'}
-                    value={'Other'}
-                    defaultValue={
-                      organisationTypesNew.includes(
+                <div className="flex  w-full justify-between flex-wrap  ">
+                  {' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Individual'}
+                      value={'Individual'}
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      defaultSelected={
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']
-                      )
-                        ? ''
-                        : formState?.online?.sections?.[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['organisation_type']
-                    }
-                    defaultSelected={
+                        ]?.['organisation_type'] === 'Individual'
+                      }
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Partnership Firm'}
+                      value={'Partnership Firm'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Partnership Firm'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Private Ltd.'}
+                      value={'Private Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Private Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      setState={setOrganisationType}
+                      selectedOption={organisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'LLP'}
+                      value={'LLP'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'LLP'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Public Ltd.'}
+                      value={'Public Ltd.'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'Public Ltd.'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div className="w-[50%] mb-3">
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'OPC'}
+                      value={'OPC'}
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] === 'OPC'
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={false}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                    />
+                  </div>{' '}
+                  <div
+                    className={`w-[100%] relative ${
                       organisationTypes.includes(
                         formState?.online?.sections?.[
                           kycScreenIdentifierNames.COMPANY_DETAILS
                         ]?.['organisation_type']
-                      )
-                        ? false
-                        : true
-                    }
-                    requiresInput={true}
-                    selectedOption={organisationType}
-                    setState={setOrganisationType}
-                    onSelect={handleSelect}
-                    onInputValueChange={handleInputValueChange}
-                    formKey={'organisation_type'}
-                    customStyle={{
-                      radio: '!text-mRegular !text-neutral900'
-                    }}
-                    placeholder={'If other please specify'}
-                  />
-                </div>{' '}
+                      ) && 'mb-[45px]'
+                    }`}
+                  >
+                    <RadioButtonWithInput
+                      name="organisationType"
+                      label={'Other'}
+                      value={'Other'}
+                      defaultValue={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0 &&
+                        organisationTypesNew.includes(
+                          formState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['organisation_type']
+                        )
+                          ? ''
+                          : formState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['organisation_type']
+                      }
+                      defaultSelected={
+                        formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type']?.length > 0
+                          ? organisationTypes.includes(
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['organisation_type']
+                            )
+                            ? false
+                            : true
+                          : false
+                      }
+                      onError={
+                        formErrorState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['organisation_type'] ?? ''
+                      }
+                      requiresInput={true}
+                      selectedOption={organisationType}
+                      setState={setOrganisationType}
+                      onSelect={handleSelect}
+                      onInputValueChange={handleInputValueChange}
+                      formKey={'organisation_type'}
+                      customStyle={{
+                        radio: '!text-mRegular !text-neutral900'
+                      }}
+                      placeholder={'If other please specify'}
+                    />
+                  </div>{' '}
+                </div>
               </div>
+              {formErrorState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['organisation_type'] && (
+                <span className="text-dangerMain">
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['organisation_type']
+                  }
+                </span>
+              )}
             </div>
           )}
           {country === countries.INDIA && (
@@ -1235,252 +1333,325 @@ const CompanyDetail = ({
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className="flex w-[50%]">
-              <div className="w-full flex flex-col gap-[10px]">
-                <p className="text-mRegular text-neutral900">Business Type*</p>
+              <div className="w-full flex flex-col">
+                <div className="flex flex-col gap-[10px]">
+                  <p className="text-mRegular text-neutral900">
+                    Business Type*
+                  </p>
 
-                <div className="flex flex-wrap gap-[14px]">
-                  {' '}
-                  <div className="w-[46%]">
-                    <CheckboxWithInput
-                      label="Manufacturer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Manufacturer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[50%]">
-                    <CheckboxWithInput
-                      label="Retailer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Retailer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[46%]">
-                    <CheckboxWithInput
-                      label="Wholesaler"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Wholesaler')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[50%]">
-                    <CheckboxWithInput
-                      label="Corporate Retailer"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.includes('Corporate Retailer')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Other"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.some(
-                        (item: any) => !businessTypes.includes(item)
-                      )}
-                      defaultValue={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['business_type']?.find(
-                        (item: any) => !businessTypes.includes(item)
-                      )}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          true
-                        )
-                      }
-                      showInput={true}
-                      inputName={'Other'}
-                      inputPlaceHolder={'If other please specify'}
-                    />
+                  <div className="flex flex-wrap gap-[14px]">
+                    {' '}
+                    <div className="w-[46%]">
+                      <CheckboxWithInput
+                        label="Manufacturer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Manufacturer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[50%]">
+                      <CheckboxWithInput
+                        label="Retailer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Retailer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[46%]">
+                      <CheckboxWithInput
+                        label="Wholesaler"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Wholesaler')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[50%]">
+                      <CheckboxWithInput
+                        label="Corporate Retailer"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.includes('Corporate Retailer')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Other"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.some(
+                          (item: any) => !businessTypes.includes(item)
+                        )}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['business_type'] ?? ''
+                        }
+                        defaultValue={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['business_type']?.find(
+                          (item: any) => !businessTypes.includes(item)
+                        )}
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            true
+                          )
+                        }
+                        showInput={true}
+                        inputName={'Other'}
+                        inputPlaceHolder={'If other please specify'}
+                      />
+                    </div>
                   </div>
                 </div>
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['business_type'] && (
+                  <span className="text-dangerMain">
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['business_type']
+                    }
+                  </span>
+                )}
               </div>
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
             <div className="flex">
-              <div className="w-full flex flex-col gap-[5px]">
-                <p className="text-mRegular text-neutral900">
-                  Type of Industry*
-                </p>
+              <div className="w-full flex flex-col ">
+                <div className="flex flex-col gap-[5px]">
+                  <p className="text-mRegular text-neutral900">
+                    Type of Industry*
+                  </p>
 
-                <div className="flex flex-wrap gap-[14px]">
-                  {' '}
-                  <div className="w-[30%]">
-                    <CheckboxWithInput
-                      label="Diamonds"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Diamonds')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="pl-[30px]">
-                    <CheckboxWithInput
-                      label="Colour Stones"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Colour Stones')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Jewellery"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Jewellery')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Other"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.some(
-                        (item: any) => !typesOfIndustryTypes.includes(item)
-                      )}
-                      defaultValue={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.find(
-                        (item: any) => !typesOfIndustryTypes.includes(item)
-                      )}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          true
-                        )
-                      }
-                      showInput={true}
-                      inputName={'Other'}
-                      inputPlaceHolder={'If other please specify'}
-                    />
+                  <div className="flex flex-wrap gap-[14px]">
+                    {' '}
+                    <div className="w-[30%]">
+                      <CheckboxWithInput
+                        label="Diamonds"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Diamonds')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="pl-[30px]">
+                      <CheckboxWithInput
+                        label="Colour Stones"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Colour Stones')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Jewellery"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Jewellery')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Other"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.some(
+                          (item: any) => !typesOfIndustryTypes.includes(item)
+                        )}
+                        defaultValue={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.find(
+                          (item: any) => !typesOfIndustryTypes.includes(item)
+                        )}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            true
+                          )
+                        }
+                        showInput={true}
+                        inputName={'Other'}
+                        inputPlaceHolder={'If other please specify'}
+                      />
+                    </div>
                   </div>
                 </div>
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['industry_type'] && (
+                  <span className="text-dangerMain">
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']
+                    }
+                  </span>
+                )}
               </div>
             </div>
           )}
@@ -1855,173 +2026,171 @@ const CompanyDetail = ({
           )}
           {country === countries.INDIA && (
             <div className="flex">
-              <div className="w-full flex flex-col gap-[5px]">
-                <p className="text-mRegular text-neutral900">
-                  Type of Industry*
-                </p>
+              <div className="w-full flex flex-col ">
+                <div className="flex flex-col gap-[5px]">
+                  <p className="text-mRegular text-neutral900">
+                    Type of Industry*
+                  </p>
 
-                <div className="flex flex-wrap gap-[14px]">
-                  {' '}
-                  <div className="w-[30%]">
-                    <CheckboxWithInput
-                      label="Diamonds"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Diamonds')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="pl-[30px]">
-                    <CheckboxWithInput
-                      label="Colour Stones"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Colour Stones')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Jewellery"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.includes('Jewellery')}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'industry_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
-                          false
-                        )
-                      }
-                    />
-                  </div>
-                  <div className="w-[100%]">
-                    <CheckboxWithInput
-                      label="Other"
-                      defaultChecked={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.some(
-                        (item: any) => !typesOfIndustryTypes.includes(item)
-                      )}
-                      defaultValue={formState?.online?.sections?.[
-                        kycScreenIdentifierNames.COMPANY_DETAILS
-                      ]?.['industry_type']?.find(
-                        (item: any) => !typesOfIndustryTypes.includes(item)
-                      )}
-                      onDataUpdate={(
-                        label: string,
-                        isChecked: boolean,
-                        inputValue: string
-                      ) =>
-                        handleDataUpdate(
-                          label,
-                          isChecked,
-                          kycScreenIdentifierNames.COMPANY_DETAILS,
-                          'business_type',
-                          inputValue,
-                          `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
-                          true
-                        )
-                      }
-                      showInput={true}
-                      inputName={'Other'}
-                      inputPlaceHolder={'If other please specify'}
-                    />
+                  <div className="flex flex-wrap gap-[14px]">
+                    {' '}
+                    <div className="w-[30%]">
+                      <CheckboxWithInput
+                        label="Diamonds"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Diamonds')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="pl-[30px]">
+                      <CheckboxWithInput
+                        label="Colour Stones"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Colour Stones')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Jewellery"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.includes('Jewellery')}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'industry_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
+                            false
+                          )
+                        }
+                      />
+                    </div>
+                    <div className="w-[100%]">
+                      <CheckboxWithInput
+                        label="Other"
+                        defaultChecked={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.some(
+                          (item: any) => !typesOfIndustryTypes.includes(item)
+                        )}
+                        defaultValue={formState?.online?.sections?.[
+                          kycScreenIdentifierNames.COMPANY_DETAILS
+                        ]?.['industry_type']?.find(
+                          (item: any) => !typesOfIndustryTypes.includes(item)
+                        )}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['industry_type'] ?? ''
+                        }
+                        onDataUpdate={(
+                          label: string,
+                          isChecked: boolean,
+                          inputValue: string
+                        ) =>
+                          handleDataUpdate(
+                            label,
+                            isChecked,
+                            kycScreenIdentifierNames.COMPANY_DETAILS,
+                            'business_type',
+                            inputValue,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            true
+                          )
+                        }
+                        showInput={true}
+                        inputName={'Other'}
+                        inputPlaceHolder={'If other please specify'}
+                      />
+                    </div>
                   </div>
                 </div>
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['industry_type'] && (
+                  <span className="text-dangerMain">
+                    {
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['industry_type']
+                    }
+                  </span>
+                )}
               </div>
             </div>
           )}
           <div
-            className={`w-[50%] flex flex-col gap-[25px]  ${
+            className={`w-[50%] flex flex-col ${
               formState?.online?.sections?.[
                 kycScreenIdentifierNames.COMPANY_DETAILS
               ]?.['is_member_of_business'] === true && 'mb-[45px]'
             }`}
           >
-            <div>
-              <p className="text-mRegular text-neutral900">
-                Member of any Business Organisation / Council*
-              </p>
-              <p className="text-sRegular text-neutral400">
-                If yes then provide the name
-              </p>
-            </div>
-            <div className="flex justify-between w-[60%] relative">
-              {' '}
-              {memberOfAnyBusinessOrganisation.map(data => {
-                return (
-                  <div key={data.id}>
-                    <RadioButton
-                      radioMetaData={data}
-                      onChange={() => {
-                        handleRadioChange({
-                          value: data.value,
-                          formKey: 'is_member_of_business'
-                        });
-                      }}
-                      customStyle={{
-                        radio: `!text-mRegular !text-neutral900  ${
-                          formState?.online?.sections?.[
-                            kycScreenIdentifierNames.COMPANY_DETAILS
-                          ]?.['is_member_of_business'] === true && 'mb-[10px]'
-                        }`
-                      }}
-                    />
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-          {country === countries.INDIA && (
-            <div className="w-[50%] flex flex-col gap-[25px]">
+            <div className="flex flex-col gap-[25px] ">
               <div>
                 <p className="text-mRegular text-neutral900">
-                  Registered under MSME Act*
+                  Member of any Business Organisation / Council*
                 </p>
                 <p className="text-sRegular text-neutral400">
-                  If yes then provide the name field & registration number
+                  If yes then provide the name
                 </p>
               </div>
               <div className="flex justify-between w-[60%] relative">
                 {' '}
-                {msmeData.map(data => {
+                {memberOfAnyBusinessOrganisation.map(data => {
                   return (
                     <div key={data.id}>
                       <RadioButton
@@ -2029,14 +2198,19 @@ const CompanyDetail = ({
                         onChange={() => {
                           handleRadioChange({
                             value: data.value,
-                            formKey: 'is_msme_registered'
+                            formKey: 'is_member_of_business'
                           });
                         }}
+                        onError={
+                          formErrorState?.online?.sections?.[
+                            kycScreenIdentifierNames.COMPANY_DETAILS
+                          ]?.['is_member_of_business'] ?? ''
+                        }
                         customStyle={{
                           radio: `!text-mRegular !text-neutral900  ${
                             formState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['is_msme_registered'] === true && 'mb-[10px]'
+                            ]?.['is_member_of_business'] === true && 'mb-[10px]'
                           }`
                         }}
                       />
@@ -2044,45 +2218,129 @@ const CompanyDetail = ({
                   );
                 })}
               </div>
+            </div>
+            {formErrorState?.online?.sections?.[
+              kycScreenIdentifierNames.COMPANY_DETAILS
+            ]?.['is_member_of_business'] && (
+              <span className="text-dangerMain">
+                {
+                  formErrorState?.online?.sections?.[
+                    kycScreenIdentifierNames.COMPANY_DETAILS
+                  ]?.['is_member_of_business']
+                }
+              </span>
+            )}
+          </div>
+          {country === countries.INDIA && (
+            <div className="w-[50%] flex flex-col ">
+              <div className="flex flex-col gap-[25px]">
+                <div>
+                  <p className="text-mRegular text-neutral900">
+                    Registered under MSME Act*
+                  </p>
+                  <p className="text-sRegular text-neutral400">
+                    If yes then provide the name field & registration number
+                  </p>
+                </div>
+                <div className="flex justify-between w-[60%] relative">
+                  {' '}
+                  {msmeData.map(data => {
+                    return (
+                      <div key={data.id}>
+                        <RadioButton
+                          radioMetaData={data}
+                          onChange={() => {
+                            handleRadioChange({
+                              value: data.value,
+                              formKey: 'is_msme_registered'
+                            });
+                          }}
+                          onError={
+                            formErrorState?.online?.sections?.[
+                              kycScreenIdentifierNames.COMPANY_DETAILS
+                            ]?.['is_msme_registered'] ?? ''
+                          }
+                          customStyle={{
+                            radio: `!text-mRegular !text-neutral900  ${
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['is_msme_registered'] === true && 'mb-[10px]'
+                            }`
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+              {formErrorState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_msme_registered'] && (
+                <span className="text-dangerMain">
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['is_msme_registered']
+                  }
+                </span>
+              )}
             </div>
           )}
           {country === countries.USA && (
-            <div className="w-[50%] flex flex-col gap-[25px]">
-              <div>
-                <p className="text-mRegular text-neutral900">
-                  Have you instituted an Anti-Money laundering policy in your
-                  company?*
-                </p>
-                <p className="text-sRegular text-neutral400">
-                  If “No” please specify why?
-                </p>
-              </div>
-              <div className="flex justify-between w-[60%] relative">
-                {' '}
-                {moneyLaundering.map(data => {
-                  return (
-                    <div key={data.id}>
-                      <RadioButton
-                        radioMetaData={data}
-                        onChange={() => {
-                          handleRadioChange({
-                            value: data.value,
-                            formKey: 'is_anti_money_laundering'
-                          });
-                        }}
-                        customStyle={{
-                          radio: `!text-mRegular !text-neutral900  ${
-                            formState?.online?.sections?.[
+            <div className="w-[50%] flex flex-col ">
+              <div className="flex flex-col gap-[25px]">
+                <div>
+                  <p className="text-mRegular text-neutral900">
+                    Have you instituted an Anti-Money laundering policy in your
+                    company?*
+                  </p>
+                  <p className="text-sRegular text-neutral400">
+                    If “No” please specify why?
+                  </p>
+                </div>
+                <div className="flex justify-between w-[60%] relative">
+                  {' '}
+                  {moneyLaundering.map(data => {
+                    return (
+                      <div key={data.id}>
+                        <RadioButton
+                          radioMetaData={data}
+                          onChange={() => {
+                            handleRadioChange({
+                              value: data.value,
+                              formKey: 'is_anti_money_laundering'
+                            });
+                          }}
+                          onError={
+                            formErrorState?.online?.sections?.[
                               kycScreenIdentifierNames.COMPANY_DETAILS
-                            ]?.['is_anti_money_laundering'] === true &&
-                            'mb-[10px]'
-                          }`
-                        }}
-                      />
-                    </div>
-                  );
-                })}
+                            ]?.['is_anti_money_laundering'] ?? ''
+                          }
+                          customStyle={{
+                            radio: `!text-mRegular !text-neutral900  ${
+                              formState?.online?.sections?.[
+                                kycScreenIdentifierNames.COMPANY_DETAILS
+                              ]?.['is_anti_money_laundering'] === true &&
+                              'mb-[10px]'
+                            }`
+                          }}
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
               </div>
+              {formErrorState?.online?.sections?.[
+                kycScreenIdentifierNames.COMPANY_DETAILS
+              ]?.['is_anti_money_laundering'] && (
+                <span className="text-dangerMain">
+                  {
+                    formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['is_anti_money_laundering']
+                  }
+                </span>
+              )}
             </div>
           )}
         </div>

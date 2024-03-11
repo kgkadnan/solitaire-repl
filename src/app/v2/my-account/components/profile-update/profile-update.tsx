@@ -1,4 +1,4 @@
-import { ALLOWED_FILE_TYPES } from '@/constants/business-logic';
+import { PROFILE_ALLOWED_FILE_TYPES } from '@/constants/business-logic';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { useDropzone } from 'react-dropzone';
@@ -20,7 +20,6 @@ const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [deleteProfile] = useDeleteProfileMutation({});
-  const [imageUrl, setImageUrl] = useState('');
 
   const dropzoneStyle = {
     borderRadius: '8px',
@@ -116,7 +115,7 @@ const ProfileUpdate = () => {
 
   const { fileRejections, getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: ALLOWED_FILE_TYPES,
+    accept: PROFILE_ALLOWED_FILE_TYPES,
     maxSize: 20 * 1024 * 1024,
     maxFiles: 1
   });
