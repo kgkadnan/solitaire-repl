@@ -1,4 +1,6 @@
 import { formatCassing } from '@/utils/format-cassing';
+
+import React from 'react';
 import {
   Table,
   TableBody,
@@ -6,8 +8,7 @@ import {
   TableHead,
   TableHeader,
   TableRow
-} from '@components/ui/table';
-import React from 'react';
+} from '../../ui/table';
 
 // Interface for the styles of the table
 interface IDisplayTableStyle {

@@ -1,4 +1,4 @@
-import diamond from '@public/assets/icons/Group 1713.svg';
+import diamond from '@public/v2/assets/icons/not-found.svg';
 import Image from 'next/image';
 
 export default function NotFound() {

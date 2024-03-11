@@ -3,12 +3,12 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ShareDialog } from './share-dialog';
 import { IndividualActionButton } from '../action-button/individual-button';
 import CheckboxComponent from '../checkbox';
-import { IProduct } from '@/app/search/result/result-interface';
 import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import Image from 'next/image';
 import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 import { Toast } from './toast';
+import { IProduct } from '@/app/v2/search/interface';
 
 const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(

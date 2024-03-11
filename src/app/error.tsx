@@ -1,6 +1,6 @@
 'use client'; // Error components must be Client Components
 
-import CustomErrorComponent from '@/components/common/error';
+import CustomErrorComponent from '@/components/v2/common/error';
 import { useEffect } from 'react';
 
 export default function Error({

@@ -1,5 +1,5 @@
-import { IToken } from '@/app/register/page';
 import InvalidCreds from '@/app/v2/login/component/invalid-creds';
+import { IToken } from '@/app/v2/register/interface';
 
 interface IHandleVerifyOtp {
   otpValues: string[];

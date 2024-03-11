@@ -1,7 +1,6 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import { useForgotPasswordMutation } from '@/features/api/forgot-password';
-import { useModalStateManagement } from '@/hooks/modal-state-management';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import { statusCode } from '@/constants/enums/status-code';
@@ -19,6 +18,7 @@ import useUser from '@/lib/use-auth';
 import OTPComponent from './component/otp';
 import ResetComponent from './component/reset-password';
 import { useGetCountryCodeQuery } from '@/features/api/current-ip';
+import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 const initialTokenState = {
   token: '',
   phoneToken: '',

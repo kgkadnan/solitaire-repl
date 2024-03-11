@@ -6,7 +6,6 @@ import mediaIcon from '@public/v2/assets/icons/attachment/media-icon.svg';
 import errorIcon from 'public/v2/assets/icons/attachment/error-icon.svg';
 import AttachMentIcon from '@public/v2/assets/icons/attachment/attachment.svg?url';
 import Loader from '@/components/v2/common/file-attachment/component/loader';
-import { Label } from '@/components/ui/label';
 import styles from './profile-update.module.scss';
 import {
   useDeleteProfileMutation,
@@ -15,6 +14,7 @@ import {
 } from '@/features/api/my-account';
 import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import logger from 'logging/log-util';
+import { Label } from '@/components/v2/ui/label';
 
 const ProfileUpdate = () => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
