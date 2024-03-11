@@ -14,8 +14,8 @@ const Tab: React.FC<ITabProps> = ({ labels, activeIndex, onTabClick }) => {
           key={label}
           className={`flex-1 py-2 px-4 text-center cursor-pointer border-[1px] border-neutral200 ${
             index === activeIndex
-              ? 'bg-primaryMain text-neutral25'  // Active tab styling
-              :  'bg-neutral0 text-neutral900'// Inactive tab styling
+              ? 'bg-primaryMain text-neutral25' // Active tab styling
+              : 'bg-neutral0 text-neutral900' // Inactive tab styling
           }
           ${index === 0 && 'rounded-l-[8px]'}
           ${index === labels.length - 1 && 'rounded-r-[8px]'}

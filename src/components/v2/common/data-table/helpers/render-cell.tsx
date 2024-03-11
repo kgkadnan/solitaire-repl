@@ -137,3 +137,7 @@ export const RenderMeasurements = ({ row }: any) => {
     <span>{`${row.original.length}*${row.original.width}*${row.original.depth}`}</span>
   );
 };
+
+export const RenderNewArrivalPrice = ({ row }: any) => {
+  return <span>{`${row.original.price}`}</span>;
+};

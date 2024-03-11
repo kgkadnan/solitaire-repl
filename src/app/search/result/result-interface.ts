@@ -151,7 +151,7 @@ export interface IProduct {
   natural_pavilion: string | null;
   surface_graining: string | null;
   internal_graining: string | null;
-  carat: number | null;
+  carats: number | null;
   discount: number;
   price_range: string | null;
   price_per_carat: number | null;

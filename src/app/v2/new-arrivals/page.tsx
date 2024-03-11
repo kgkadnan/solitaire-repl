@@ -10,25 +10,19 @@ import {
   RenderLab,
   RenderLotId,
   RednderLocation,
-  RenderAmount,
   RenderShape,
   RenderMeasurements,
-  RenderTracerId
+  RenderTracerId,
+  RenderNewArrivalPrice
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
-import { MRT_RowSelectionState } from 'material-react-table';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
-import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
-import { IManageListingSequenceResponse } from '@/app/my-account/manage-diamond-sequence/interface';
-import { LISTING_PAGE_DATA_LIMIT } from '@/constants/business-logic';
-import { useLazyGetAllProductQuery } from '@/features/api/product';
 import { columnHeaders } from './constant';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 
 const NewArrivals = () => {
-
-
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -54,7 +48,7 @@ const NewArrivals = () => {
 
         switch (accessor) {
           case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+            return { ...commonProps, Cell: RenderNewArrivalPrice };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -83,64 +77,52 @@ const NewArrivals = () => {
             };
         }
       });
-  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+  const [activeTab, setActiveTab] = useState(0);
+  const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
 
-  const { dataTableState, dataTableSetState } = useDataTableStateManagement();
+  const handleTabClick = (index: number) => {
+    setActiveTab(index);
+    
+  };
+  const [rows, setRows] = useState<any>([]);
+
+  const socketManager = new SocketManager();
+
+  useSocket(socketManager);
+
+  useEffect(() => {
+    socketManager.on('bid_stones', data => _handleBidStones(data));
+    socketManager.on('error', data => _handleError(data));
+    // socketManager.on('bid_placed', data => _handleBidPlaced(data));
+    // socketManager.on('bid_canceled', data => _handleBidCanceled(data));
+    // socketManager.on('request_get_bid_stones', () =>
+    //   socketManager.emit('get_bid_stones')
+    // );
+
+    // Cleanup on component unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, []);
+
+  const _handleBidStones = (data: any) => {
+    console.log(data, 'pooooooooooooooooooooooooo');
+    setRows(data);
+  };
+
+  const _handleError = (data: any) => {
+    // setState with error
+  };
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
     [columnHeaders]
   );
-  const { modalState, modalSetState } = useModalStateManagement();
-  const { errorState, errorSetState } = useErrorStateManagement();
+  const { modalSetState } = useModalStateManagement();
+  const { errorSetState } = useErrorStateManagement();
 
   const { setIsError, setErrorText, setInputError } = errorSetState;
   const [downloadExcel] = useDownloadExcelMutation();
-  const [triggerColumn, { data: columnData }] =
-    useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
-  useEffect(() => {
-    const fetchColumns = async () => {
-      const response = await triggerColumn({});
-      const shapeColumn = response.data?.find(
-        (column: any) => column.accessor === 'shape'
-      );
 
-      if (response.data?.length) {
-        let additionalColumn = {
-          accessor: 'shape_full',
-          id: shapeColumn?.id,
-          is_disabled: shapeColumn?.is_disabled,
-          is_fixed: shapeColumn?.is_fixed,
-          label: shapeColumn?.label,
-          sequence: shapeColumn?.sequence,
-          short_label: shapeColumn?.short_label
-        };
-
-        const updatedColumns = [...response.data, additionalColumn];
-        dataTableSetState.setColumns(updatedColumns);
-      }
-    };
-
-    fetchColumns();
-  }, []);
-  const [triggerProductApi] = useLazyGetAllProductQuery();
-
-  const fetchProducts = async () => {
-    triggerProductApi({
-      url: 'shape[]=RAD',
-      limit: LISTING_PAGE_DATA_LIMIT,
-      offset: 0
-    }).then(res => {
-      dataTableSetState.setRows(res.data.products);
-      setRowSelection({});
-      setErrorText('');
-      // setData(res.data);
-    });
-  };
-
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-  console.log(memoizedColumns,"memoizedColumns",dataTableState.columns)
   return (
     <div className="mb-[20px] relative">
       <div className="flex h-[81px] items-center justify-between">
@@ -155,17 +137,19 @@ const NewArrivals = () => {
         </div> */}
         <div className="border-b-[1px] border-neutral200">
           <NewArrivalDataTable
-            rows={dataTableState.rows}
             columns={memoizedColumns}
-            setRowSelection={setRowSelection}
-            rowSelection={rowSelection}
             modalSetState={modalSetState}
             setErrorText={setErrorText}
             downloadExcel={downloadExcel}
             setIsError={setIsError}
+            tabLabels={tabLabels}
+            activeTab={activeTab}
+            handleTabClick={handleTabClick}
+            rows={activeTab===0 ? rows.bidStone : activeTab===1 ? rows.activeStone : rows.bidStone}
           />
         </div>
-cta      </div>
+       {rows.length>0 && <p>lll</p>}
+      </div>
     </div>
   );
 };

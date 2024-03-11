@@ -126,12 +126,6 @@ const TopNavigationBar = () => {
           </div>
         )}
       <div className="z-50 flex gap-[16px] justify-end px-[32px] py-[10px]">
-        <div
-          className="flex items-center cursor-pointer"
-          onClick={() => (window.location.href = '/')}
-        >
-          Back to old theme
-        </div>
         <Notification />
 
         <Popover>

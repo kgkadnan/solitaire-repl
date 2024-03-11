@@ -2,6 +2,7 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
+  MRT_RowSelectionState,
   MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
@@ -16,7 +17,7 @@ import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
 import { ManageLocales } from '@/utils/v2/translate';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '@/components/v2/common/copy-and-share/share';
@@ -69,58 +70,24 @@ const theme = createTheme({
     }
   }
 });
-
 const NewArrivalDataTable = ({
-  rows,
   columns,
-  setRowSelection,
-  rowSelection,
   modalSetState,
   downloadExcel,
   setErrorText,
-  setIsError
+  setIsError,
+  tabLabels,
+  activeTab,
+  handleTabClick,
+  rows
 }: any) => {
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+
   // Fetching saved search data
 
-  const [isDropDownOpen, setIsDropDownOpen] = useState(false);
-  const handleDropdown = () => {
-    setIsDropDownOpen(!isDropDownOpen);
-  };
   const [isFullScreen, setIsFullScreen] = useState(false);
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen);
-  };
-  const [activeTab, setActiveTab] = useState(0);
-  const tabLabels = ['Bid Stone (100)', 'Active Bid (3)', 'Bid History (3)'];
-
-  const handleTabClick = (index: number) => {
-    setActiveTab(index);
-  };
-  const socketManager = new SocketManager();
-
-  useSocket(socketManager);
-
-  useEffect(() => {
-    socketManager.on('bid_stones', data => _handleBidStones(data));
-    socketManager.on('error', data => _handleError(data));
-    // socketManager.on('bid_placed', data => _handleBidPlaced(data));
-    // socketManager.on('bid_canceled', data => _handleBidCanceled(data));
-    // socketManager.on('request_get_bid_stones', () =>
-    //   socketManager.emit('get_bid_stones')
-    // );
-
-    // Cleanup on component unmount
-    return () => {
-      socketManager.disconnect();
-    };
-  }, []);
-
-  const _handleBidStones = (data: any) => {
-    console.log(data, 'pooooooooooooooooooooooooo');
-  };
-
-  const _handleError = (data: any) => {
-    // setState with error
   };
 
   const getShapeDisplayName = ({ value }: { value: string }) => {
@@ -479,92 +446,96 @@ const NewArrivalDataTable = ({
         border: 'none'
       }
     },
+    muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
+    muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
+
     renderTopToolbar: ({ table }) => (
       <div>
-      <div>
-  
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            padding: '12px 16px'
-          }}
-        >
-          <div className='w-[450px]'>
-          <Tab
-            labels={tabLabels}
-            activeIndex={activeTab}
-            onTabClick={handleTabClick}
-          />
-            {/* <StylesSearchBar table={table} autoComplete="false" /> */}
-          </div>
-
-          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-          <MRT_GlobalFilterTextField
-              table={table}
-              autoComplete="false"
-              sx={{
-                boxShadow: 'var(--input-shadow) inset',
-                border: 'none',
-                borderRadius: '4px',
-                ':hover': {
-                  border: 'none'
-                },
-                '& .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& :hover .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& :focus .MuiOutlinedInput-notchedOutline': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-
-                '& .MuiOutlinedInput-notchedOutline:hover': {
-                  borderColor: 'var(--neutral-200) !important'
-                },
-                '& .MuiInputAdornment-root': {
-                  display: 'none'
-                }
-              }}
-            />
-            <div
-              className="p-[4px] rounded-[4px] cursor-pointer"
-              onClick={handleDownloadExcel}
-            >
-              <Image
-                src={downloadIcon}
-                alt={'download'}
-                width={38}
-                height={38}
+        <div>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              padding: '12px 16px'
+            }}
+          >
+            <div className="w-[450px]">
+              <Tab
+                labels={tabLabels}
+                activeIndex={activeTab}
+                onTabClick={handleTabClick}
               />
             </div>
 
-            <div onClick={toggleFullScreen}>
-              <StyledToggleFullScreenButton table={table} />{' '}
-            </div>
+            <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+              <MRT_GlobalFilterTextField
+                table={table}
+                autoComplete="false"
+                sx={{
+                  boxShadow: 'var(--input-shadow) inset',
+                  border: 'none',
+                  borderRadius: '4px',
+                  ':hover': {
+                    border: 'none'
+                  },
+                  '& .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
 
-            <div className="flex p-[4px] rounded-[4px] cursor-pointer">
-              <Share
-                rows={rows}
-                selectedProducts={rowSelection}
-                setErrorText={setErrorText}
-                setIsError={setIsError}
+                  '& :hover .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& :focus .MuiOutlinedInput-notchedOutline': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+
+                  '& .MuiOutlinedInput-notchedOutline:hover': {
+                    borderColor: 'var(--neutral-200) !important'
+                  },
+                  '& .MuiInputAdornment-root': {
+                    display: 'none'
+                  }
+                }}
               />
+              <div
+                className="p-[4px] rounded-[4px] cursor-pointer"
+                onClick={handleDownloadExcel}
+              >
+                <Image
+                  src={downloadIcon}
+                  alt={'download'}
+                  width={38}
+                  height={38}
+                />
+              </div>
+
+              <div onClick={toggleFullScreen}>
+                <StyledToggleFullScreenButton table={table} />{' '}
+              </div>
+
+              <div className="flex p-[4px] rounded-[4px] cursor-pointer">
+                <Share
+                  rows={rows}
+                  selectedProducts={rowSelection}
+                  setErrorText={setErrorText}
+                  setIsError={setIsError}
+                />
+              </div>
             </div>
-          </div>
-        </Box>
+          </Box>
         </div>
-        <NewArrivalCalculatedField
-          rows={rows}
-          selectedProducts={rowSelection}
-        />
+
+        {rows.length > 0 && activeTab !== 2 && (
+          <NewArrivalCalculatedField
+            rows={rows}
+            selectedProducts={rowSelection}
+          />
+        )}
       </div>
     ),
     renderDetailPanel: ({ row }) => {
@@ -580,7 +551,13 @@ const NewArrivalDataTable = ({
 
   return (
     <ThemeProvider theme={theme}>
+      {/* <MaterialReactTable table={table} /> */}
+      {
+        rows.length>0 ? 
+      
       <MaterialReactTable table={table} />
+: <div>Loading</div>
+}
     </ThemeProvider>
   );
 };
