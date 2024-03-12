@@ -15,8 +15,6 @@ import {
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
-import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
-import logger from 'logging/log-util';
 
 const store = setupStore();
 
@@ -38,22 +36,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  const socketManager = new SocketManager();
-
-  useSocket(socketManager);
-  useEffect(() => {
-    socketManager.on('notification', data => _handleNotification(data));
-
-    // Cleanup on component unmount
-    return () => {
-      socketManager.disconnect();
-    };
-  }, []);
-
-  const _handleNotification = (data: any) => {
-    logger.info(data);
-    // dispatch(notificationBadge(true));
-  };
   return (
     <html lang="en">
       <Head>

@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
 import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
+
 import ActionButton from '../action-button';
 interface ImageData {
   link: string;
