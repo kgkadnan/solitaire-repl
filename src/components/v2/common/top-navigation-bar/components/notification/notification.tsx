@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import NotificationIcon from '@public/v2/assets/icons/topbar-icons/notification.svg';
 import prefrences from '@public/v2/assets/icons/my-account/prefrences.svg';
 import markRead from '@public/v2/assets/icons/my-account/mark-read.svg';
-import alertNotification from '@public/v2/assets/icons/my-account/alert-notification.svg';
 import emptyNotification from '@public/v2/assets/icons/empty-notification.svg';
+import redDotSvg from '@public/v2/assets/icons/red-dot.svg';
 import Image from 'next/image';
 import {
   Popover,
@@ -12,6 +12,7 @@ import {
 } from '@radix-ui/react-popover';
 import styles from './notification.module.scss';
 import {
+  useGetNotificationQuery,
   useLazyGetNotificationQuery,
   useLazyReadNotificationQuery,
   useSeenNotificationMutation
@@ -19,6 +20,7 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import logger from 'logging/log-util';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 
 interface INotification {
   created_at: string;
@@ -32,6 +34,7 @@ interface INotification {
 }
 const Notification = () => {
   const [triggerNotification] = useLazyGetNotificationQuery({});
+  const { data } = useGetNotificationQuery({});
   const [triggerReadNotification] = useLazyReadNotificationQuery({});
   const [seenNotification] = useSeenNotificationMutation({});
   const [notificationData, setNotificationData] = useState<INotification[]>([]);
@@ -41,6 +44,10 @@ const Notification = () => {
       addSuffix: true
     });
   };
+
+  useEffect(() => {
+    setNotificationData(data?.notices);
+  }, [data]);
 
   const handleReadNotification = (noticeId: number) => {
     triggerReadNotification({
@@ -61,6 +68,24 @@ const Notification = () => {
       .catch(error => {
         logger.error(error);
       });
+  };
+
+  const socketManager = new SocketManager();
+
+  useSocket(socketManager);
+  useEffect(() => {
+    socketManager.on('notification', data => _handleNotification());
+
+    // Cleanup on component unmount
+    return () => {
+      socketManager.disconnect();
+    };
+  }, [socketManager]);
+
+  const _handleNotification = () => {
+    triggerNotification({}).then(res => {
+      setNotificationData(res.data.notices);
+    });
   };
 
   const callNotification = () => {
@@ -99,11 +124,23 @@ const Notification = () => {
           callNotification();
         }}
       >
-        {notificationData.some(notification => !notification.seen_at) ? (
-          <Image src={alertNotification} alt="Notification Icon" />
-        ) : (
-          <Image src={NotificationIcon} alt="Notification Icon" />
-        )}
+        {
+          <div style={{ position: 'relative', display: 'inline-block' }}>
+            <Image src={NotificationIcon} alt="Notification Icon" />
+            {notificationData?.some(notification => !notification.seen_at) && (
+              <div
+                style={{
+                  position: 'absolute',
+                  top: '2px',
+                  right: 0,
+                  left: '13px'
+                }}
+              >
+                <Image src={redDotSvg} alt="Red Dot Icon" />
+              </div>
+            )}
+          </div>
+        }
       </PopoverTrigger>
       {/* Popover content with radio buttons */}
       <PopoverContent>
@@ -133,7 +170,13 @@ const Notification = () => {
                         !items?.read_at?.length && gradientClass
                       } flex p-[16px] w-[100%] gap-[15px] cursor-pointer border-b-[1px] border-neutral-200 hover:bg-neutral-50 `}
                     >
-                      <div className="bg-neutral100 w-[40px] h-[40px] flex items-center justify-center rounded-[4px]">
+                      <div
+                        className={` w-[40px] h-[40px] flex items-center justify-center rounded-[4px] ${
+                          !items?.read_at?.length
+                            ? 'bg-neutral0'
+                            : 'bg-neutral100'
+                        }`}
+                      >
                         <img src={items.icon_url} alt={items.icon_url} />
                       </div>
                       <div className="flex flex-col w-[85%]">
