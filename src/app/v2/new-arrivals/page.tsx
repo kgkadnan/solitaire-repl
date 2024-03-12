@@ -171,10 +171,12 @@ const NewArrivals = () => {
     [columnHeaders]
   );
   const { modalState, modalSetState } = useModalStateManagement();
-  const { errorSetState } = useErrorStateManagement();
+  const { errorState, errorSetState } = useErrorStateManagement();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
-  const { setIsError, setErrorText, setInputError } = errorSetState;
+  const { setIsError, setErrorText } = errorSetState;
+  const { isError, errorText } = errorState;
+
   const [downloadExcel] = useDownloadExcelMutation();
 
   const renderFooter = () => {
@@ -182,6 +184,16 @@ const NewArrivals = () => {
       return (
         <div className="flex items-center justify-end p-4">
           <div className="flex items-center gap-3">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
             <ActionButton
               actionButtonData={[
                 {
@@ -214,6 +226,16 @@ const NewArrivals = () => {
             </div>
           </div>
           <div className="flex items-center gap-3">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
             <ActionButton
               actionButtonData={[
                 {
@@ -251,6 +273,16 @@ const NewArrivals = () => {
               </p>
             </div>
           </div>
+          {isError && (
+            <div>
+              <span className="hidden  text-successMain" />
+              <span
+                className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+              >
+                {errorText}
+              </span>
+            </div>
+          )}
         </div>
       );
     } else {

@@ -389,7 +389,7 @@ const NewArrivalDataTable = ({
     enableColumnFilters: false,
     enablePagination: true,
     enableStickyHeader: true,
-    enableBottomToolbar: false,
+    // enableBottomToolbar: false,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
