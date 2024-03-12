@@ -4,9 +4,19 @@ interface ITabProps {
   labels: string[]; // Array of labels for the tabs
   activeIndex: number; // Index of the currently active tab
   onTabClick: (index: number) => void; // Function to handle tab click
+  activeCount: number;
+  bidCount: number;
+  historyCount: number;
 }
 
-const Tab: React.FC<ITabProps> = ({ labels, activeIndex, onTabClick }) => {
+const Tab: React.FC<ITabProps> = ({
+  labels,
+  activeIndex,
+  onTabClick,
+  activeCount,
+  bidCount,
+  historyCount
+}) => {
   return (
     <div className="flex">
       {labels.map((label, index) => (
@@ -22,7 +32,10 @@ const Tab: React.FC<ITabProps> = ({ labels, activeIndex, onTabClick }) => {
           `}
           onClick={() => onTabClick(index)}
         >
-          {label}
+          {label +
+            `(${
+              index === 0 ? bidCount : index === 1 ? activeCount : historyCount
+            })`}
         </div>
       ))}
     </div>

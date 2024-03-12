@@ -1,8 +1,6 @@
 'use client';
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import Timer from './components/timer';
 import NewArrivalDataTable from './components/data-table';
-import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
 import {
   RenderCarat,
   RenderDiscount,
@@ -23,8 +21,10 @@ import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from './components/timer';
+import { useGetBidHistoryQuery } from '@/features/api/dashboard';
 
 const NewArrivals = () => {
+  const { data: bidHistory } = useGetBidHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -104,10 +104,9 @@ const NewArrivals = () => {
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {
-    // Handle error here
+    console.log(data, 'i999');
   }, []);
-
-  console.log('000000000000000000', bid);
+  console.log(bidHistory, 'bidHistory');
   useEffect(() => {
     socketManager.on('bid_stones', handleBidStones);
     socketManager.on('error', handleError);
@@ -156,7 +155,16 @@ const NewArrivals = () => {
               tabLabels={tabLabels}
               activeTab={activeTab}
               handleTabClick={handleTabClick}
-              rows={bid ?? []}
+              rows={
+                activeTab === 0
+                  ? bid
+                  : activeTab === 1
+                  ? activeBid
+                  : bidHistory?.data
+              }
+              activeCount={activeBid?.length ?? 0}
+              bidCount={bid?.length ?? 0}
+              historyCount={bidHistory?.data?.length ?? 0}
             />
           }
         </div>

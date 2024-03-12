@@ -27,7 +27,6 @@ import Tab from '../tabs';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
-import EmptyScreen from '@/components/v2/common/empty-screen';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 
 const theme = createTheme({
@@ -87,8 +86,12 @@ const NewArrivalDataTable = ({
   tabLabels,
   activeTab,
   handleTabClick,
-  rows = []
+  rows = [],
+  activeCount,
+  bidCount,
+  historyCount
 }: any) => {
+  console.log(rows[0], 'rowsrowsrowsrowsrowsrows');
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   // Fetching saved search data
@@ -215,9 +218,8 @@ const NewArrivalDataTable = ({
   //   }));
   // };
 
-  const handleIncrement = (rowId: string, currentMaxBid: number) => {
+  const handleIncrement = (rowId: string, currentMaxBid: any) => {
     // Retrieve the current_max_bid for the row from the rows data
-    console.log(currentMaxBid, 'currentMaxBid');
     setBidValues(prevValues => {
       const currentBidValue = prevValues[rowId];
       // If there's already a bid value for this row, increment it
@@ -237,10 +239,8 @@ const NewArrivalDataTable = ({
     });
   };
 
-  const handleDecrement = (rowId: string) => {
+  const handleDecrement = (rowId: string, currentMaxBid: any) => {
     // Retrieve the current_max_bid for the row from the rows data
-    const currentMaxBid = rows.find((row: any) => row.id === rowId)?.original
-      ?.current_max_bid;
 
     setBidValues(prevValues => {
       const currentBidValue = prevValues[rowId];
@@ -248,7 +248,7 @@ const NewArrivalDataTable = ({
       if (currentBidValue !== undefined) {
         return {
           ...prevValues,
-          [rowId]: Math.max(currentMaxBid, currentBidValue - 0.5)
+          [rowId]: currentBidValue - 0.5
         };
       }
       // If no bid value for this row yet, just set it to current_max_bid (can't decrement below it)
@@ -271,7 +271,7 @@ const NewArrivalDataTable = ({
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div>
+      <div className="border-b-[1px] border-neutral200">
         <Box
           sx={{
             display: 'flex',
@@ -285,6 +285,9 @@ const NewArrivalDataTable = ({
               labels={tabLabels}
               activeIndex={activeTab}
               onTabClick={handleTabClick}
+              activeCount={activeCount}
+              bidCount={bidCount}
+              historyCount={historyCount}
             />
           </div>
 
@@ -648,10 +651,14 @@ const NewArrivalDataTable = ({
                 disabled
               />
             </div>
-            <div className="w-[250px]">
+            <div className="">
               <div className="text-mRegular text-neutral700">Bid Disc%</div>
               <div className="h-[40px] flex gap-1">
-                <div onClick={() => handleDecrement(row.id)}>
+                <div
+                  onClick={() =>
+                    handleDecrement(row.id, row.original.current_max_bid)
+                  }
+                >
                   <DecrementIcon />
                 </div>
                 <div className="w-[120px]">
@@ -676,13 +683,24 @@ const NewArrivalDataTable = ({
                 </div>
               </div>
             </div>
+            <div className="flex items-end">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: 'Add Bid',
+                    handler: () => modalSetState.setIsDialogOpen(false),
+                    customStyle: 'flex-1 w-full h-10'
+                  }
+                ]}
+              />
+            </div>
           </div>
         );
       }
       return null;
     }
   });
-  console.log(rows, 'oooooo');
   return (
     <ThemeProvider theme={theme}>
       <MaterialReactTable table={table} />
