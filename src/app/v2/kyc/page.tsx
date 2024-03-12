@@ -127,17 +127,17 @@ const KYC = () => {
   };
 
   const resendLabel = resendTimer > 0 ? `(${resendTimer}Sec)` : '';
-  // useEffect(() => {
-  //   let countdownInterval: NodeJS.Timeout;
+  useEffect(() => {
+    let countdownInterval: NodeJS.Timeout;
 
-  //   if (resendTimer > 0) {
-  //     countdownInterval = setInterval(() => {
-  //       setResendTimer((prevTimer: number) => prevTimer - 1);
-  //     }, 1000);
-  //   }
+    if (resendTimer > 0) {
+      countdownInterval = setInterval(() => {
+        setResendTimer((prevTimer: number) => prevTimer - 1);
+      }, 1000);
+    }
 
-  //   return () => clearInterval(countdownInterval);
-  // }, [resendTimer]);
+    return () => clearInterval(countdownInterval);
+  }, [resendTimer]);
 
   function findFirstNonFilledScreens(data: any) {
     const filledScreens = Object.keys(data).map(Number);
