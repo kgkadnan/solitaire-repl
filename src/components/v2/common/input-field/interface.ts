@@ -8,7 +8,7 @@ export interface IInputStyles {
 
 export interface IInputFieldProps {
   type: string;
-  name: string;
+  name?: string;
   value: string | number;
   label?: string;
   errorText?: string;

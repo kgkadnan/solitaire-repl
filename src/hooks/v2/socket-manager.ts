@@ -29,7 +29,9 @@ export class SocketManager {
   on(event: string, handler: (data: any) => void) {
     this.socket.on(event, handler);
   }
-
+  off(event: string, handler: (data: any) => void) {
+    this.socket.off(event, handler);
+  }
   disconnect() {
     console.log('oooooooooooooffffffffffffff');
     this.socket.disconnect();

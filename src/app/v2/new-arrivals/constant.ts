@@ -127,7 +127,7 @@ export const columnHeaders = [
   },
   {
     label: 'Current Max. Bid%',
-    accessor: 'discount',
+    accessor: 'current_max_bid',
     sequence: 15,
     is_fixed: false,
     short_label: 'Current Max. Bid%',

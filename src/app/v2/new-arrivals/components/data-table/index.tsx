@@ -24,7 +24,11 @@ import Share from '@/components/v2/common/copy-and-share/share';
 import ActionButton from '@/components/v2/common/action-button';
 import NewArrivalCalculatedField from '../new-arrival-calculated-field';
 import Tab from '../tabs';
-import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import { InputField } from '@/components/v2/common/input-field';
+import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
+import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
+import EmptyScreen from '@/components/v2/common/empty-screen';
+import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
 
 const theme = createTheme({
   typography: {
@@ -70,6 +74,10 @@ const theme = createTheme({
     }
   }
 });
+
+interface BidValues {
+  [key: string]: number;
+}
 const NewArrivalDataTable = ({
   columns,
   modalSetState,
@@ -79,7 +87,7 @@ const NewArrivalDataTable = ({
   tabLabels,
   activeTab,
   handleTabClick,
-  rows
+  rows = []
 }: any) => {
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
@@ -196,26 +204,170 @@ const NewArrivalDataTable = ({
       }
     })
   );
-  const [detailPanelValues, setDetailPanelValues] = useState({});
 
-  // Function to handle input changes in detail panels
-  const handleDetailPanelInputChange = (rowId: any, value: any) => {
-    setDetailPanelValues(prevValues => ({
-      ...prevValues,
-      [rowId]: value
-    }));
-  };
-  const DetailPanelInput = ({ value, onChange }: any) => {
-    return (
-      <input
-        // variant="outlined"
-        value={value}
-        onChange={e => onChange(e.target.value)}
-        // sx={{ margin: '8px' }} // Add some margin for visual separation
-      />
-    );
+  const [bidValues, setBidValues] = useState<BidValues>({});
+
+  // Function to increment the bid value for a specific row
+  // const handleIncrement = (rowId:string) => {
+  //   setBidValues((prevValues:any) => ({
+  //     ...prevValues,
+  //     [rowId]: (prevValues[rowId] || 0) + 0.5,
+  //   }));
+  // };
+
+  const handleIncrement = (rowId: string, currentMaxBid: number) => {
+    // Retrieve the current_max_bid for the row from the rows data
+    console.log(currentMaxBid, 'currentMaxBid');
+    setBidValues(prevValues => {
+      const currentBidValue = prevValues[rowId];
+      // If there's already a bid value for this row, increment it
+      if (currentBidValue !== undefined) {
+        return {
+          ...prevValues,
+          [rowId]: currentBidValue + 0.5
+        };
+      }
+      // If no bid value for this row yet, start from current_max_bid and add 0.5
+      else {
+        return {
+          ...prevValues,
+          [rowId]: currentMaxBid + 0.5
+        };
+      }
+    });
   };
 
+  const handleDecrement = (rowId: string) => {
+    // Retrieve the current_max_bid for the row from the rows data
+    const currentMaxBid = rows.find((row: any) => row.id === rowId)?.original
+      ?.current_max_bid;
+
+    setBidValues(prevValues => {
+      const currentBidValue = prevValues[rowId];
+      // If there's already a bid value for this row, decrement it but don't go below current_max_bid
+      if (currentBidValue !== undefined) {
+        return {
+          ...prevValues,
+          [rowId]: Math.max(currentMaxBid, currentBidValue - 0.5)
+        };
+      }
+      // If no bid value for this row yet, just set it to current_max_bid (can't decrement below it)
+      else {
+        return {
+          ...prevValues,
+          [rowId]: currentMaxBid
+        };
+      }
+    });
+  };
+
+  // Function to decrement the bid value for a specific row
+  // const handleDecrement = (rowId:string) => {
+  //   setBidValues((prevValues:any) => ({
+  //     ...prevValues,
+  //     [rowId]: Math.max(0, (prevValues[rowId] || 0) - 0.5), // Prevent negative values
+  //   }));
+  // };
+
+  const renderTopToolbar = ({ table }: any) => (
+    <div>
+      <div>
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            padding: '12px 16px'
+          }}
+        >
+          <div className="w-[450px]">
+            <Tab
+              labels={tabLabels}
+              activeIndex={activeTab}
+              onTabClick={handleTabClick}
+            />
+          </div>
+
+          <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
+            <MRT_GlobalFilterTextField
+              table={table}
+              autoComplete="false"
+              sx={{
+                boxShadow: 'var(--input-shadow) inset',
+                border: 'none',
+                borderRadius: '4px',
+                ':hover': {
+                  border: 'none'
+                },
+                '& .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& :hover .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& :focus .MuiOutlinedInput-notchedOutline': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+
+                '& .MuiOutlinedInput-notchedOutline:hover': {
+                  borderColor: 'var(--neutral-200) !important'
+                },
+                '& .MuiInputAdornment-root': {
+                  display: 'none'
+                }
+              }}
+            />
+            <div
+              className="p-[4px] rounded-[4px] cursor-pointer"
+              onClick={handleDownloadExcel}
+            >
+              <Image
+                src={downloadIcon}
+                alt={'download'}
+                width={38}
+                height={38}
+              />
+            </div>
+
+            <div onClick={toggleFullScreen}>
+              <StyledToggleFullScreenButton table={table} />{' '}
+            </div>
+
+            <div className="flex p-[4px] rounded-[4px] cursor-pointer">
+              <Share
+                rows={rows}
+                selectedProducts={rowSelection}
+                setErrorText={setErrorText}
+                setIsError={setIsError}
+              />
+            </div>
+          </div>
+        </Box>
+      </div>
+
+      {rows.length > 0 && activeTab !== 2 && (
+        <NewArrivalCalculatedField
+          rows={rows}
+          selectedProducts={rowSelection}
+        />
+      )}
+    </div>
+  );
+
+  const NoResultsComponent = () => (
+    <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
+      <Image src={empty} alt={'empty'} />
+      <p className="text-neutral900  w-[320px] text-center">
+        Our diamond collection awaits new arrivals. Stay tuned for dazzling
+        additions soon.
+      </p>
+    </div>
+  );
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -232,7 +384,7 @@ const NewArrivalDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
     enableStickyHeader: true,
     enableBottomToolbar: false,
     enableGrouping: true,
@@ -243,6 +395,9 @@ const NewArrivalDataTable = ({
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
+    renderTopToolbar,
+    renderEmptyRowsFallback: NoResultsComponent,
+    // renderFallbackComponent: NoResultsComponent,
     // enableExpanding: true,
 
     icons: {
@@ -446,118 +601,91 @@ const NewArrivalDataTable = ({
         border: 'none'
       }
     },
-    muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
+    // muiTableBodyProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
     muiTableHeadProps: rows?.length === 0 ? { style: { display: 'none' } } : {},
 
-    renderTopToolbar: ({ table }) => (
-      <div>
-        <div>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: '12px 16px'
-            }}
-          >
-            <div className="w-[450px]">
-              <Tab
-                labels={tabLabels}
-                activeIndex={activeTab}
-                onTabClick={handleTabClick}
-              />
-            </div>
-
-            <div className="flex gap-[12px]" style={{ alignItems: 'inherit' }}>
-              <MRT_GlobalFilterTextField
-                table={table}
-                autoComplete="false"
-                sx={{
-                  boxShadow: 'var(--input-shadow) inset',
-                  border: 'none',
-                  borderRadius: '4px',
-                  ':hover': {
-                    border: 'none'
-                  },
-                  '& .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--neutral-200) !important'
-                  },
-
-                  '& :hover .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--neutral-200) !important'
-                  },
-
-                  '& .Mui-focused .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--neutral-200) !important'
-                  },
-                  '& :focus .MuiOutlinedInput-notchedOutline': {
-                    borderColor: 'var(--neutral-200) !important'
-                  },
-
-                  '& .MuiOutlinedInput-notchedOutline:hover': {
-                    borderColor: 'var(--neutral-200) !important'
-                  },
-                  '& .MuiInputAdornment-root': {
-                    display: 'none'
-                  }
-                }}
-              />
-              <div
-                className="p-[4px] rounded-[4px] cursor-pointer"
-                onClick={handleDownloadExcel}
-              >
-                <Image
-                  src={downloadIcon}
-                  alt={'download'}
-                  width={38}
-                  height={38}
-                />
-              </div>
-
-              <div onClick={toggleFullScreen}>
-                <StyledToggleFullScreenButton table={table} />{' '}
-              </div>
-
-              <div className="flex p-[4px] rounded-[4px] cursor-pointer">
-                <Share
-                  rows={rows}
-                  selectedProducts={rowSelection}
-                  setErrorText={setErrorText}
-                  setIsError={setIsError}
-                />
-              </div>
-            </div>
-          </Box>
-        </div>
-
-        {rows.length > 0 && activeTab !== 2 && (
-          <NewArrivalCalculatedField
-            rows={rows}
-            selectedProducts={rowSelection}
-          />
-        )}
-      </div>
-    ),
     renderDetailPanel: ({ row }) => {
-      return (
-        <div>hee</div>
-        //   <DetailPanelInput
-        //     value={detailPanelValues![row.id] || ''}
-        //     onChange={(value:any) => handleDetailPanelInputChange(row.id, value)}
-        //   />
-      );
+      // Check if the current row's ID is in the rowSelection state
+      if (rowSelection[row.id]) {
+        const bidValue =
+          bidValues[row.id] !== undefined
+            ? bidValues[row.id]
+            : row.original.current_max_bid;
+
+        // If the row is selected, return the detail panel content
+        return (
+          <div
+            className="flex gap-6 "
+            onClick={event => event.stopPropagation()}
+          >
+            <div className="w-[120px]">
+              <InputField
+                label={'Current Max Bid%'}
+                type="text"
+                styles={{
+                  inputMain: 'h-[64px]',
+                  input: 'bg-infoSurface border-infoBorder text-infoMain'
+                }}
+                value={`${row.original.current_max_bid}%`}
+                disabled
+              />
+            </div>
+            <div className="w-[120px]">
+              <InputField
+                label={'Bid Pr/Ct'}
+                type="text"
+                styles={{ inputMain: 'h-[64px]' }}
+                value={row.original.price_per_carat.toFixed(2)}
+                disabled
+              />
+            </div>
+            <div className="w-[120px]">
+              <InputField
+                label={'Bid Amt $'}
+                type="text"
+                styles={{ inputMain: 'h-[64px]' }}
+                value={row.original.price?.toFixed(2)}
+                disabled
+              />
+            </div>
+            <div className="w-[250px]">
+              <div className="text-mRegular text-neutral700">Bid Disc%</div>
+              <div className="h-[40px] flex gap-1">
+                <div onClick={() => handleDecrement(row.id)}>
+                  <DecrementIcon />
+                </div>
+                <div className="w-[120px]">
+                  <InputField
+                    // label={'Bid Amt $'}
+                    type="text"
+                    styles={{ inputMain: 'h-[64px]' }}
+                    value={
+                      bidValue
+                      // row.original.my_current_bid ??
+                      // row.original.current_max_bid - 0.5
+                    }
+                    disabled
+                  />
+                </div>
+                <div
+                  onClick={() =>
+                    handleIncrement(row.id, row.original.current_max_bid)
+                  }
+                >
+                  <IncrementIcon />
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      }
+      return null;
     }
   });
-
+  console.log(rows, 'oooooo');
   return (
     <ThemeProvider theme={theme}>
-      {/* <MaterialReactTable table={table} /> */}
-      {
-        rows.length>0 ? 
-      
       <MaterialReactTable table={table} />
-: <div>Loading</div>
-}
     </ThemeProvider>
   );
 };

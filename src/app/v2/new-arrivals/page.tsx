@@ -1,5 +1,5 @@
 'use client';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import Timer from './components/timer';
 import NewArrivalDataTable from './components/data-table';
 import { useDataTableStateManagement } from '@/components/v2/common/data-table/hooks/data-table-state-management';
@@ -13,7 +13,8 @@ import {
   RenderShape,
   RenderMeasurements,
   RenderTracerId,
-  RenderNewArrivalPrice
+  RenderNewArrivalPrice,
+  RenderNewArrivalBidDiscount
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -21,6 +22,7 @@ import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import CountdownTimer from './components/timer';
 
 const NewArrivals = () => {
   const mapColumns = (columns: any) =>
@@ -57,6 +59,8 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderCarat };
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
+          case 'current_max_bid':
+            return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
           case 'details':
             return { ...commonProps, Cell: RenderDetails };
           case 'lab':
@@ -82,37 +86,39 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
-    
   };
-  const [rows, setRows] = useState<any>([]);
+  const [rows, setRows] = useState<any>();
+  const [activeBid, setActiveBid] = useState<any>();
+  const [bid, setBid] = useState<any>();
 
-  const socketManager = new SocketManager();
+  // const socketManager = new SocketManager();
+  const socketManager = useMemo(() => new SocketManager(), []);
 
   useSocket(socketManager);
 
-  useEffect(() => {
-    socketManager.on('bid_stones', data => _handleBidStones(data));
-    socketManager.on('error', data => _handleError(data));
-    // socketManager.on('bid_placed', data => _handleBidPlaced(data));
-    // socketManager.on('bid_canceled', data => _handleBidCanceled(data));
-    // socketManager.on('request_get_bid_stones', () =>
-    //   socketManager.emit('get_bid_stones')
-    // );
-
-    // Cleanup on component unmount
-    return () => {
-      socketManager.disconnect();
-    };
+  const handleBidStones = useCallback((data: any) => {
+    console.log(data, 'Bid stones data');
+    setRows(data.bidStone); // Adjust according to your data structure
+    setActiveBid(data.activeStone);
+    setBid(data.bidStone);
+    // Set other related state here
+  }, []);
+  const handleError = useCallback((data: any) => {
+    // Handle error here
   }, []);
 
-  const _handleBidStones = (data: any) => {
-    console.log(data, 'pooooooooooooooooooooooooo');
-    setRows(data);
-  };
+  console.log('000000000000000000', bid);
+  useEffect(() => {
+    socketManager.on('bid_stones', handleBidStones);
+    socketManager.on('error', handleError);
 
-  const _handleError = (data: any) => {
-    // setState with error
-  };
+    // Return a cleanup function to remove the listeners
+    return () => {
+      socketManager.off('bid_stones', handleBidStones);
+      socketManager.off('error', handleError);
+    };
+  }, [socketManager, handleBidStones, handleError]);
+
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
     [columnHeaders]
@@ -129,26 +135,32 @@ const NewArrivals = () => {
         <p className="text-headingM font-medium text-neutral900">
           New Arrivals
         </p>
-        <Timer initialHours={1} initialMinutes={40} initialSeconds={10} />
+        <CountdownTimer
+          initialHours={1}
+          initialMinutes={40}
+          initialSeconds={10}
+        />
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         {/* <div className="w-[450px]">
         
         </div> */}
         <div className="border-b-[1px] border-neutral200">
-          <NewArrivalDataTable
-            columns={memoizedColumns}
-            modalSetState={modalSetState}
-            setErrorText={setErrorText}
-            downloadExcel={downloadExcel}
-            setIsError={setIsError}
-            tabLabels={tabLabels}
-            activeTab={activeTab}
-            handleTabClick={handleTabClick}
-            rows={activeTab===0 ? rows.bidStone : activeTab===1 ? rows.activeStone : rows.bidStone}
-          />
+          {
+            <NewArrivalDataTable
+              columns={memoizedColumns}
+              modalSetState={modalSetState}
+              setErrorText={setErrorText}
+              downloadExcel={downloadExcel}
+              setIsError={setIsError}
+              tabLabels={tabLabels}
+              activeTab={activeTab}
+              handleTabClick={handleTabClick}
+              rows={bid ?? []}
+            />
+          }
         </div>
-       {rows.length>0 && <p>lll</p>}
+        {/* {activeTab!==2 && activeTab===0 ? rows?.bidStone.length>0 :  rows?.activeStone.length>0 && <p>lll</p>} */}
       </div>
     </div>
   );

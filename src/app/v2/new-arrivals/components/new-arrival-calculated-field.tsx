@@ -92,7 +92,7 @@ const NewArrivalCalculatedField = ({
   };
 
   return (
-    <div className="flex bg-primarySurface flex-wrap border-b-[1px] border-t-[1px] border-neutral200 items-center h-[40px]">
+    <div className="flex bg-primarySurface flex-wrap border-b-[1px] border-neutral200 items-center h-[40px]">
       {computeField().map(element => {
         return (
           <div

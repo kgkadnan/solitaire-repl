@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+// components/CountdownTimer.js
+import { useEffect, useState } from 'react';
 
-const Timer = ({
+const CountdownTimer = ({
   initialHours = 0,
   initialMinutes = 0,
   initialSeconds = 0
@@ -12,7 +13,7 @@ const Timer = ({
   });
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
+    const timerId = setInterval(() => {
       setTime(currentTime => {
         let { hours, minutes, seconds } = currentTime;
 
@@ -25,32 +26,51 @@ const Timer = ({
           hours--;
           minutes = 59;
           seconds = 59;
-        } else {
-          clearInterval(intervalId);
         }
 
         return { hours, minutes, seconds };
       });
     }, 1000);
 
-    return () => clearInterval(intervalId);
+    return () => clearInterval(timerId);
   }, []);
 
+  const formatTime = (unit: any) => (unit < 10 ? `0${unit}` : unit);
+
   return (
-    <div className="flex items-center justify-center space-x-1">
-      <div className="bg-blue-200 p-2 rounded">
-        {String(time.hours).padStart(2, '0')}
+    <div className="flex justify-center items-center">
+      <div className="flex flex-col items-center">
+        <span className="text-xs font-semibold text-gray-500 uppercase">
+          Hours
+        </span>
+        <div className="text-lg font-semibold bg-blue-100 rounded p-2">
+          {/* <div>
+          <div className='bg-[red]'>a</div>
+          <div className='bg-[green]'>b</div>
+          </div> */}
+          {formatTime(time.hours)}
+        </div>
       </div>
-      <div>:</div>
-      <div className="bg-blue-200 p-2 rounded">
-        {String(time.minutes).padStart(2, '0')}
+      <span className="text-lg font-semibold">:</span>
+      <div className="flex flex-col items-center">
+        <span className="text-xs font-semibold text-gray-500 uppercase">
+          Minutes
+        </span>
+        <div className="text-lg font-semibold bg-blue-200 rounded p-2">
+          {formatTime(time.minutes)}
+        </div>
       </div>
-      <div>:</div>
-      <div className="bg-blue-200 p-2 rounded">
-        {String(time.seconds).padStart(2, '0')}
+      <span className="text-lg font-semibold">:</span>
+      <div className="flex flex-col items-center">
+        <span className="text-xs font-semibold text-gray-500 uppercase">
+          Seconds
+        </span>
+        <div className="text-lg font-semibold bg-blue-300 rounded p-2">
+          {formatTime(time.seconds)}
+        </div>
       </div>
     </div>
   );
 };
 
-export default Timer;
+export default CountdownTimer;

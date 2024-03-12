@@ -141,3 +141,13 @@ export const RenderMeasurements = ({ row }: any) => {
 export const RenderNewArrivalPrice = ({ row }: any) => {
   return <span>{`${row.original.price}`}</span>;
 };
+
+export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
+  return (
+    <div
+      className={`text-infoMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
+    >
+      {`${renderedCellValue && renderedCellValue}%`}
+    </div>
+  );
+};
