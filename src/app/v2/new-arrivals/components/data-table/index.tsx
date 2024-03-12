@@ -89,11 +89,11 @@ const NewArrivalDataTable = ({
   rows = [],
   activeCount,
   bidCount,
-  historyCount
+  historyCount,
+  socketManager,
+  rowSelection,
+  setRowSelection
 }: any) => {
-  console.log(rows[0], 'rowsrowsrowsrowsrowsrows');
-  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
-
   // Fetching saved search data
 
   const [isFullScreen, setIsFullScreen] = useState(false);
@@ -255,7 +255,7 @@ const NewArrivalDataTable = ({
       else {
         return {
           ...prevValues,
-          [rowId]: currentMaxBid
+          [rowId]: currentMaxBid - 0.5
         };
       }
     });
@@ -688,8 +688,13 @@ const NewArrivalDataTable = ({
                 actionButtonData={[
                   {
                     variant: 'primary',
-                    label: 'Add Bid',
-                    handler: () => modalSetState.setIsDialogOpen(false),
+                    label: activeTab === 0 ? 'Add Bid' : 'Update Bid',
+                    handler: () => {
+                      socketManager.emit('place_bid', {
+                        product_id: row.id,
+                        bid_value: bidValues[row.id]
+                      });
+                    },
                     customStyle: 'flex-1 w-full h-10'
                   }
                 ]}

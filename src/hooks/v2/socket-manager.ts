@@ -23,6 +23,7 @@ export class SocketManager {
   }
 
   emit(event: string, data?: any) {
+    console.log(event, 'event', data);
     this.socket.emit(event, data);
   }
 
@@ -33,7 +34,6 @@ export class SocketManager {
     this.socket.off(event, handler);
   }
   disconnect() {
-    console.log('oooooooooooooffffffffffffff');
     this.socket.disconnect();
   }
 }

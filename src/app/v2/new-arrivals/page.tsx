@@ -12,7 +12,8 @@ import {
   RenderMeasurements,
   RenderTracerId,
   RenderNewArrivalPrice,
-  RenderNewArrivalBidDiscount
+  RenderNewArrivalBidDiscount,
+  RenderNewArrivalLotId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -22,9 +23,14 @@ import { columnHeaders } from './constant';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import CountdownTimer from './components/timer';
 import { useGetBidHistoryQuery } from '@/features/api/dashboard';
+import InvalidCreds from '../login/component/invalid-creds';
+import { DialogComponent } from '@/components/v2/common/dialog';
+import ActionButton from '@/components/v2/common/action-button';
+import { MRT_RowSelectionState } from 'material-react-table';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
+  console.log('saasas', bidHistory?.data);
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -68,7 +74,7 @@ const NewArrivals = () => {
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
           case 'lot_id':
-            return { ...commonProps, Cell: RenderLotId };
+            return { ...commonProps, Cell: RenderNewArrivalLotId };
 
           case 'tracr_id':
             return { ...commonProps, Cell: RenderTracerId };
@@ -105,16 +111,58 @@ const NewArrivals = () => {
   }, []);
   const handleError = useCallback((data: any) => {
     console.log(data, 'i999');
+    if (data) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <InvalidCreds
+          content={data}
+          handleClick={() => modalSetState.setIsDialogOpen(false)}
+        />
+      );
+    }
   }, []);
-  console.log(bidHistory, 'bidHistory');
+
+  const handleBidPlaced = useCallback((data: any) => {
+    console.log(data, 'placess');
+    if (data) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <InvalidCreds
+          content={data}
+          handleClick={() => modalSetState.setIsDialogOpen(false)}
+        />
+      );
+    }
+  }, []);
+  const handleBidCanceled = useCallback((data: any) => {
+    console.log(data, 'cancel');
+    if (data) {
+      modalSetState.setIsDialogOpen(true);
+      modalSetState.setDialogContent(
+        <InvalidCreds
+          content={data}
+          handleClick={() => modalSetState.setIsDialogOpen(false)}
+        />
+      );
+    }
+  }, []);
   useEffect(() => {
     socketManager.on('bid_stones', handleBidStones);
     socketManager.on('error', handleError);
+    socketManager.on('bid_placed', handleBidPlaced);
+    socketManager.on('bid_canceled', handleBidCanceled);
 
+    const handleRequestGetBidStones = (_: any) => {
+      socketManager.emit('get_bid_stones');
+    };
+
+    // Setting up the event listener for "request_get_bid_stones"
+    socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bid_stones', handleBidStones);
       socketManager.off('error', handleError);
+      socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
   }, [socketManager, handleBidStones, handleError]);
 
@@ -122,14 +170,101 @@ const NewArrivals = () => {
     () => mapColumns(columnHeaders),
     [columnHeaders]
   );
-  const { modalSetState } = useModalStateManagement();
+  const { modalState, modalSetState } = useModalStateManagement();
   const { errorSetState } = useErrorStateManagement();
+  const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   const { setIsError, setErrorText, setInputError } = errorSetState;
   const [downloadExcel] = useDownloadExcelMutation();
 
+  const renderFooter = () => {
+    if (activeTab == 0 && bid?.length > 0) {
+      return (
+        <div className="flex items-center justify-end p-4">
+          <div className="flex items-center gap-3">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Clear All',
+                  handler: () => {
+                    setRowSelection({});
+                  },
+                  isDisable: !Object.keys(rowSelection).length
+                }
+              ]}
+            />
+          </div>
+        </div>
+      );
+    } else if (activeTab === 1 && activeBid?.length > 0) {
+      return (
+        <div className="flex items-center justify-between p-4">
+          <div className="flex gap-4">
+            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                Winning
+              </p>
+            </div>
+            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Losing
+              </p>
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: 'Clear All',
+                  handler: () => {
+                    setRowSelection({});
+                  }
+                },
+                {
+                  variant: 'primary',
+                  label: 'Cancel Bid',
+                  handler: () => {
+                    socketManager.emit('cancel_bid', {
+                      // product_id: row.id,
+                    });
+                  }
+                }
+              ]}
+            />
+          </div>
+        </div>
+      );
+    } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
+      return (
+        <div className="flex items-center justify-between p-4">
+          <div className="flex gap-4">
+            <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
+            </div>
+            <div className=" border-[1px] border-dangerBorder rounded-[4px] bg-dangerSurface text-dangerMain">
+              <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                {' '}
+                Lost
+              </p>
+            </div>
+          </div>
+        </div>
+      );
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div className="mb-[20px] relative">
+      <DialogComponent
+        dialogContent={modalState.dialogContent}
+        isOpens={modalState.isDialogOpen}
+        setIsOpen={modalSetState.setIsDialogOpen}
+      />
       <div className="flex h-[81px] items-center justify-between">
         <p className="text-headingM font-medium text-neutral900">
           New Arrivals
@@ -165,10 +300,13 @@ const NewArrivals = () => {
               activeCount={activeBid?.length ?? 0}
               bidCount={bid?.length ?? 0}
               historyCount={bidHistory?.data?.length ?? 0}
+              socketManager={socketManager}
+              rowSelection={rowSelection}
+              setRowSelection={setRowSelection}
             />
           }
         </div>
-        {/* {activeTab!==2 && activeTab===0 ? rows?.bidStone.length>0 :  rows?.activeStone.length>0 && <p>lll</p>} */}
+        {renderFooter()}
       </div>
     </div>
   );

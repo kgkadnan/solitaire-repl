@@ -151,3 +151,29 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
     </div>
   );
 };
+
+export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
+  let statusClass = '';
+  let borderClass = '';
+  if (row.original.current_max_bid < row.original.my_current_bid) {
+    statusClass = 'bg-successSurface';
+    borderClass = 'border-successBorder';
+  } else if (row.original.current_max_bid > row.original.my_current_bid) {
+    statusClass = 'bg-dangerSurface';
+    borderClass = 'border-dangerBorder';
+  } else if (row.original.current_max_bid === row.original.my_current_bid) {
+    statusClass = 'bg-dangerSurface';
+    borderClass = 'border-dangerBorder';
+  } else {
+    statusClass = 'border-none';
+    // borderClass = 'border-neutral0';
+  }
+
+  return (
+    <span
+      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+    >
+      {renderedCellValue}
+    </span>
+  );
+};
