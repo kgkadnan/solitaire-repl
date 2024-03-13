@@ -101,7 +101,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       id: '2',
       value: 'Important',
       label: 'Important Only',
-      checked: !allNotification.includes('All')
+      checked: allNotification.includes('Important')
     }
   ];
 

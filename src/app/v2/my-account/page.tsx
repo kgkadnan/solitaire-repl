@@ -19,6 +19,7 @@ import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
+import { useLazyGetAuthDataQuery } from '@/features/api/login';
 
 interface IUserAccountInfo {
   customer: {
@@ -55,6 +56,7 @@ enum myAccount {
 const MyAccount = () => {
   const subRoute = useSearchParams().get('path');
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
+  const [triggerAuth] = useLazyGetAuthDataQuery();
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
@@ -64,23 +66,62 @@ const MyAccount = () => {
   );
   const [imageUrl, setImageUrl] = useState('');
 
+  const getPhoto = async () => {
+    await triggerGetProfilePhoto({ size: 128 })
+      .unwrap()
+      .then((res: any) => {
+        setImageUrl(res);
+      });
+  };
+
   useEffect(() => {
-    const getPhoto = async () => {
-      await triggerGetProfilePhoto({ size: 128 })
-        .unwrap()
-        .then((res: any) => {
-          setImageUrl(res);
-        });
-    };
     getPhoto();
   }, []);
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem('user');
+  const handleFileUpload = async ({
+    acceptedFiles,
+    setIsFileUploaded,
+    setSelectedFile,
+    setUploadProgress
+  }: any) => {
+    try {
+      if (acceptedFiles.length) {
+        setIsFileUploaded(false);
 
-    if (storedUser) {
-      setUserAccountInfo(JSON.parse(storedUser));
+        acceptedFiles.forEach((file: any) => {
+          setSelectedFile({ url: file.name });
+        });
+
+        const simulateUpload = async () => {
+          return new Promise<void>(resolve => {
+            setTimeout(() => {
+              resolve();
+            }, 1000); // Simulate a 1-second delay
+          });
+        };
+
+        setUploadProgress(0);
+        for (let i = 0; i <= 100; i += 50) {
+          setUploadProgress(i);
+          await simulateUpload(); // Simulate a delay between progress updates
+        }
+        setUploadProgress(0);
+        setIsFileUploaded(true);
+        getPhoto();
+      }
+    } catch (error) {
+      // Log an error message if the upload fails
+      console.error('File upload failed:', error);
     }
+  };
+
+  useEffect(() => {
+    const authToken = JSON.parse(localStorage.getItem('auth')!);
+
+    triggerAuth(authToken).then(res => {
+      setUserAccountInfo(res?.data);
+      localStorage.setItem('user', JSON.stringify(res?.data));
+    });
   }, []);
 
   useEffect(() => {
@@ -137,7 +178,7 @@ const MyAccount = () => {
         return <TermAndCondtions />;
 
       case myAccount.PROFILE_UPDATE:
-        return <ProfileUpdate />;
+        return <ProfileUpdate handleFileUpload={handleFileUpload} />;
     }
   };
 
