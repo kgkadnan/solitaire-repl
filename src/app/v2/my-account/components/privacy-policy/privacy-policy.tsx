@@ -1,3 +1,4 @@
+import { ManageLocales } from '@/utils/v2/translate';
 import { useEffect, useState } from 'react';
 
 const PrivacyPolicy = () => {
@@ -24,10 +25,15 @@ const PrivacyPolicy = () => {
   return (
     <>
       {data && (
-        <div
-          dangerouslySetInnerHTML={{ __html: data }}
-          className="text-neutral-900"
-        />
+        <>
+          <h1 className="text-headingS font-medium text-neutral-900 my-3">
+            {ManageLocales('app.myAccount.tabs.privacyPolicy')}
+          </h1>
+          <div
+            dangerouslySetInnerHTML={{ __html: data }}
+            className="text-neutral-900 ml-[16px]"
+          />
+        </>
       )}
     </>
   );

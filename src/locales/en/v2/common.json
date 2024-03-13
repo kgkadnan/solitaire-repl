@@ -34,6 +34,9 @@
   "app.calculatedField.discount": "Total Avg. Dis",
   "app.calculatedField.pr/ct": "Avg. Pr/Ct",
   "app.calculatedField.amount": "Total Amount",
+  "app.calculatedField.bidDis": "Bid Dis",
+  "app.calculatedField.bidprct": "Bid Pr/Ct",
+  "app.calculatedField.bidAmt": "Bid Amt",
 
   "app.myDiamonds.yourOrders": "Your Orders",
   "app.myDiamonds.tabs.pendingInvoice": "Pending Invoice",
@@ -56,6 +59,7 @@
   "app.myAccount.tabs.changePassword": "Change Password",
   "app.myAccount.tabs.notificationPrefrences": "Notifications Preferences",
   "app.myAccount.tabs.term&Conditions": "Term & Conditions",
+  "app.myAccount.tabs.termAndConditions": "Term And Conditions",
   "app.myAccount.footer.cancel": "Cancel",
   "app.myAccount.footer.updatePassword": "Update Password",
   "app.myAccount.footer.update": "Update",

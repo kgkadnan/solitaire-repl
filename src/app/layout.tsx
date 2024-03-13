@@ -40,22 +40,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
 
-  const socketManager = new SocketManager();
-
-  useSocket(socketManager);
-  useEffect(() => {
-    socketManager.on('notification', data => _handleNotification(data));
-
-    // Cleanup on component unmount
-    return () => {
-      socketManager.disconnect();
-    };
-  }, []);
-
-  const _handleNotification = (data: any) => {
-    logger.info(data);
-    // dispatch(notificationBadge(true));
-  };
   return (
     <html lang="en">
       <Head>
@@ -63,7 +47,6 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           rel="stylesheet"
           href="https://fonts.googleapis.com/css?family=Inter"
         />
-
         {/* <!-- Google Tag Manager --> */}
         <script
           dangerouslySetInnerHTML={{
@@ -85,6 +68,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
      })(window,document,'script','dataLayer', 'GTM-W85XMPHM');`}
         </Script>
         {/* <GoogleAnalytics gaId="GTM-W85XMPHM" /> */}
+                 
         {/* <!-- End Google Tag Manager --> */}
       </Head>
       <body className={inter.className}>

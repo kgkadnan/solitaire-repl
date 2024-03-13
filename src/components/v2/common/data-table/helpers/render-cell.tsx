@@ -137,3 +137,43 @@ export const RenderMeasurements = ({ row }: any) => {
     <span>{`${row.original.length}*${row.original.width}*${row.original.depth}`}</span>
   );
 };
+
+export const RenderNewArrivalPrice = ({ row }: any) => {
+  return <span>{`${row.original.price}`}</span>;
+};
+
+export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
+  return (
+    <div
+      className={`text-infoMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
+    >
+      {`${renderedCellValue && renderedCellValue}%`}
+    </div>
+  );
+};
+
+export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
+  let statusClass = '';
+  let borderClass = '';
+  if (row.original.current_max_bid < row.original.my_current_bid) {
+    statusClass = 'bg-successSurface';
+    borderClass = 'border-successBorder';
+  } else if (row.original.current_max_bid > row.original.my_current_bid) {
+    statusClass = 'bg-dangerSurface';
+    borderClass = 'border-dangerBorder';
+  } else if (row.original.current_max_bid === row.original.my_current_bid) {
+    statusClass = 'bg-dangerSurface';
+    borderClass = 'border-dangerBorder';
+  } else {
+    statusClass = 'border-none';
+    // borderClass = 'border-neutral0';
+  }
+
+  return (
+    <span
+      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+    >
+      {renderedCellValue}
+    </span>
+  );
+};

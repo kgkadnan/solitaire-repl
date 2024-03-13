@@ -4,6 +4,7 @@ import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
 import NoImageFound from '@public/v2/assets/images/carousel/fallback.svg';
+
 import ActionButton from '../action-button';
 interface ImageData {
   link: string;
@@ -43,50 +44,65 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
   return (
-    <Slider {...settings}>
-      {images?.map((data: any, index: number) => {
-        return (
-          <div
-            className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
-            key={index}
-          >
-            {' '}
-            {/* Container with relative positioning */}
-            <a
-              href={data.link}
-              target="_blank"
-              key={index}
-              className="h-[400px]"
-            >
-              <img
-                src={data.image_web ?? NoImageFound.src}
-                alt={`banner-${index}`}
-                className="w-full h-[400px] rounded-[8px]"
-                onError={handleImageError}
-              />
-              <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
-                {/* <div className='flex justify-between'> */}
-                <div className="flex flex-col">
-                  <p className="text-headingS medium">{data.tag_line}</p>
-                  <p className="text-lMedium medium">{data.description_line}</p>
-                </div>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: data.cta,
-                      handler: () => {},
-                      customStyle: 'flex-1 w-full h-10 '
-                    }
-                  ]}
-                />
-                {/* </div> */}
+    <>
+      {images?.length > 0 ? (
+        <Slider {...settings}>
+          {images?.map((data: any, index: number) => {
+            return (
+              <div
+                className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
+                key={index}
+              >
+                {' '}
+                {/* Container with relative positioning */}
+                <a
+                  href={data.link}
+                  target="_blank"
+                  key={index}
+                  className="h-[400px]"
+                >
+                  <img
+                    src={data.image_web ?? NoImageFound.src}
+                    alt={`banner-${index}`}
+                    className="w-full h-[400px] rounded-[8px]"
+                    onError={handleImageError}
+                  />
+                  <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                    {/* <div className='flex justify-between'> */}
+                    <div className="flex flex-col">
+                      <p className="text-headingS medium">{data.tag_line}</p>
+                      <p className="text-lMedium medium">
+                        {data.description_line}
+                      </p>
+                    </div>
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          label: data.cta,
+                          handler: () => {},
+                          customStyle: 'flex-1 w-full h-10 '
+                        }
+                      ]}
+                    />
+                    {/* </div> */}
+                  </div>
+                </a>
               </div>
-            </a>
-          </div>
-        );
-      })}
-    </Slider>
+            );
+          })}
+        </Slider>
+      ) : (
+        <div className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50">
+          <img
+            src={NoImageFound.src}
+            alt={`banner-not-found`}
+            className="w-full h-[400px] rounded-[8px]"
+            onError={handleImageError}
+          />
+        </div>
+      )}
+    </>
   );
 };
 

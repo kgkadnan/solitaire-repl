@@ -75,6 +75,8 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
     }
   };
 
+  console.log('data', selectedOptions);
+
   useEffect(() => {
     const call = async () => {
       await triggerGetSubscription({})
@@ -101,7 +103,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       id: '2',
       value: 'Important',
       label: 'Important Only',
-      checked: !allNotification.includes('All')
+      checked: allNotification.includes('Important')
     }
   ];
 
@@ -222,114 +224,118 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
           Notification Preferences
         </h1>
 
-        <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
-          <div className="flex flex-col gap-[24px]">
-            <div className="flex flex-col gap-[16px]">
-              <div>
-                <h1 className="text-headingS font-medium text-neutral-900">
-                  Notifications
-                </h1>
+        {selectedOptions?.length > 0 && allNotification?.length > 0 && (
+          <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
+            <div className="flex flex-col gap-[24px]">
+              <div className="flex flex-col gap-[16px]">
+                <div>
+                  <h1 className="text-headingS font-medium text-neutral-900">
+                    Notifications
+                  </h1>
+                </div>
+                <div>
+                  {notificationsRadio?.map((radioData: any) => (
+                    <div className="mb-3" key={radioData.id}>
+                      <RadioButton
+                        radioMetaData={radioData}
+                        onChange={(value: string) => {
+                          handleNotification({ value });
+                        }}
+                        customStyle={{
+                          radio: '!text-mMedium !text-neutral900'
+                        }}
+                      />
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div>
-                {notificationsRadio?.map((radioData: any) => (
-                  <div className="mb-3" key={radioData.id}>
-                    <RadioButton
-                      radioMetaData={radioData}
-                      onChange={(value: string) => {
-                        handleNotification({ value });
-                      }}
-                      customStyle={{ radio: '!text-mMedium !text-neutral900' }}
-                    />
+            </div>
+            <div className="flex flex-col gap-[24px]">
+              <div className="">
+                <div className="flex flex-col gap-[16px]">
+                  <h1 className="text-headingS font-medium text-neutral-900">
+                    Web
+                  </h1>
+
+                  <div className="flex gap-6">
+                    {webRadio?.map((radioData: any) => (
+                      <div className="mb-3" key={radioData.id}>
+                        <RadioButton
+                          radioMetaData={radioData}
+                          onChange={(value: any) => handleRadioChange(value)}
+                          customStyle={{
+                            radio: '!text-mMedium !text-neutral900'
+                          }}
+                        />
+                      </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
-          <div className="flex flex-col gap-[24px]">
-            <div className="">
-              <div className="flex flex-col gap-[16px]">
-                <h1 className="text-headingS font-medium text-neutral-900">
-                  Web
-                </h1>
-
-                <div className="flex gap-6">
-                  {webRadio?.map((radioData: any) => (
-                    <div className="mb-3" key={radioData.id}>
-                      <RadioButton
-                        radioMetaData={radioData}
-                        onChange={(value: any) => handleRadioChange(value)}
-                        customStyle={{
-                          radio: '!text-mMedium !text-neutral900'
-                        }}
-                      />
-                    </div>
-                  ))}
                 </div>
+                <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
+                  Never miss a moment on the web! Get notifications for updates
+                  you might have missed.
+                </p>
+                <hr className="border-neutral200" />
               </div>
-              <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
-                Never miss a moment on the web! Get notifications for updates
-                you might have missed.
-              </p>
-              <hr className="border-neutral200" />
             </div>
-          </div>
-          <div className="flex flex-col gap-[24px]">
-            <div className="">
-              <div className="flex flex-col gap-[16px]">
-                <h1 className="text-headingS font-medium text-neutral-900">
-                  Mobile
-                </h1>
+            <div className="flex flex-col gap-[24px]">
+              <div className="">
+                <div className="flex flex-col gap-[16px]">
+                  <h1 className="text-headingS font-medium text-neutral-900">
+                    Mobile
+                  </h1>
 
-                <div className="flex gap-6">
-                  {mobileRadio?.map((radioData: any) => (
-                    <div className="mb-3" key={radioData.id}>
-                      <RadioButton
-                        radioMetaData={radioData}
-                        onChange={(value: any) => handleRadioChange(value)}
-                        customStyle={{
-                          radio: '!text-mMedium !text-neutral900'
-                        }}
-                      />
-                    </div>
-                  ))}
+                  <div className="flex gap-6">
+                    {mobileRadio?.map((radioData: any) => (
+                      <div className="mb-3" key={radioData.id}>
+                        <RadioButton
+                          radioMetaData={radioData}
+                          onChange={(value: any) => handleRadioChange(value)}
+                          customStyle={{
+                            radio: '!text-mMedium !text-neutral900'
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
+                <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
+                  Stay connected on the go! Receive notifications for mobile
+                  updates you may have missed
+                </p>
+                <hr className="border-neutral200" />
               </div>
-              <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
-                Stay connected on the go! Receive notifications for mobile
-                updates you may have missed
-              </p>
-              <hr className="border-neutral200" />
             </div>
-          </div>
-          <div className="flex flex-col gap-[24px]">
-            <div className="">
-              <div className="flex flex-col gap-[16px]">
-                <h1 className="text-headingS font-medium text-neutral-900">
-                  Email
-                </h1>
+            <div className="flex flex-col gap-[24px]">
+              <div className="">
+                <div className="flex flex-col gap-[16px]">
+                  <h1 className="text-headingS font-medium text-neutral-900">
+                    Email
+                  </h1>
 
-                <div className="flex gap-6">
-                  {emailRadio?.map((radioData: any) => (
-                    <div className="mb-3" key={radioData.id}>
-                      <RadioButton
-                        radioMetaData={radioData}
-                        onChange={(value: any) => handleRadioChange(value)}
-                        customStyle={{
-                          radio: '!text-mMedium !text-neutral900'
-                        }}
-                      />
-                    </div>
-                  ))}
+                  <div className="flex gap-6">
+                    {emailRadio?.map((radioData: any) => (
+                      <div className="mb-3" key={radioData.id}>
+                        <RadioButton
+                          radioMetaData={radioData}
+                          onChange={(value: any) => handleRadioChange(value)}
+                          customStyle={{
+                            radio: '!text-mMedium !text-neutral900'
+                          }}
+                        />
+                      </div>
+                    ))}
+                  </div>
                 </div>
+                <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
+                  Don&apos;t miss out on important updates! Opt-in for email
+                  notifications and stay in the loop
+                </p>
+                <hr className="border-neutral200" />
               </div>
-              <p className=" mb-2 text-neutral-900 font-normal text-mRegular">
-                Don&apos;t miss out on important updates! Opt-in for email
-                notifications and stay in the loop
-              </p>
-              <hr className="border-neutral200" />
             </div>
           </div>
-        </div>
+        )}
       </div>
       <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] p-[16px]">
         {' '}

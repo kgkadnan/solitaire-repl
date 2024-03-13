@@ -36,6 +36,10 @@ const TablePrefrences = () => {
     []
   );
 
+  const [isUpdateTablePreferences, setIsUpdateTablePreferences] = useState<
+    ITableColumn[]
+  >([]);
+
   const [nonManageableListings, setNonManageableListings] = useState<
     ITableColumn[]
   >([]);
@@ -80,6 +84,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
     );
 
     setManageableListings(sortList(updatedListings));
+    setIsUpdateTablePreferences(sortList(updatedListings));
   };
 
   /**
@@ -111,6 +116,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
     }));
 
     setManageableListings(updatedWithSequence);
+    setIsUpdateTablePreferences(updatedWithSequence);
   };
 
   /**
@@ -122,11 +128,12 @@ and `nonManageableListings` whenever the `data` variable changes. */
     const manageable = data.filter(item => !item.is_fixed);
 
     setManageableListings(sortList(manageable));
+    setIsUpdateTablePreferences([]);
   };
 
   /* The `handleUpdateDiamondSequence` function is responsible for updating the diamond sequence. */
   const handleUpdateDiamondSequence = () => {
-    if (manageableListings?.length) {
+    if (manageableListings?.length && isUpdateTablePreferences.length > 0) {
       const updatedData = [...nonManageableListings, ...manageableListings];
 
       addManageListingSequence(updatedData)
@@ -180,7 +187,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
           <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
             {data?.length ? (
               <div>
-                {nonManageableListings?.length && (
+                {nonManageableListings?.length > 0 && (
                   <>
                     <div>
                       <h1 className="text-lMedium text-neutral-900 font-medium ml-2">
@@ -205,14 +212,14 @@ and `nonManageableListings` whenever the `data` variable changes. */
                         )}
                       </div>
                     </div>
-                    <hr className=" border-solitaireSenary mx-2 my-3" />
+                    {/* <hr className=" border-solitaireSenary mx-2 my-3" /> */}
                   </>
                 )}
 
-                {manageableListings?.length && (
+                {manageableListings?.length > 0 && (
                   <>
                     {' '}
-                    <h1 className="text-lMedium text-neutral-900 font-medium ml-2">
+                    <h1 className="text-lMedium text-neutral-900 font-medium mt-4 ml-2">
                       {ManageLocales(
                         'app.myAccount.tablePrefrences.manageableEntities'
                       )}{' '}
