@@ -31,7 +31,7 @@ const PrivacyPolicy = () => {
           </h1>
           <div
             dangerouslySetInnerHTML={{ __html: data }}
-            className="text-neutral-900"
+            className="text-neutral-900 ml-[16px]"
           />
         </>
       )}
