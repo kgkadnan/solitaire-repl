@@ -94,61 +94,61 @@ const TermAndCondtions = () => {
 
   return (
     <div className=" max-w-4xl mx-auto flex flex-col gap-[16px] mt-[16px]">
-        <div className='flex w-full items-center flex-col'>
-      <h1 className="text-headingS font-medium text-neutral-900">
-        Terms and Conditions
-      </h1>
+      <div className="flex w-full items-center flex-col">
+        <h1 className="text-headingS font-medium text-neutral-900">
+          Terms and Conditions
+        </h1>
 
-      <div className="rounded-[8px]  w-[385px]">
-        <button
-          className={`px-[16px] py-[8px] rounded-l-[8px] ${
-            activeTab === 'KGK Website'
-              ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
-              : 'text-neutral600 border-[1px] border-neutral-200'
-          }`}
-          key={'KGK Website'}
-          onClick={() =>
-            handleTabs({
-              tab: 'KGK Website',
-              url: 'terms-and-condition-kgk-website'
-            })
-          }
-        >
-          {'KGK Website'}
-        </button>
-        <button
-          className={`px-[16px] py-[8px] ${
-            activeTab === 'KGK Diamonds BV'
-              ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
-              : 'text-neutral600 border-[1px] border-neutral-200'
-          }`}
-          key={'KGK Diamonds BV'}
-          onClick={() =>
-            handleTabs({
-              tab: 'KGK Diamonds BV',
-              url: 'terms-and-condition-kgk-diamonds-bv'
-            })
-          }
-        >
-          {'KGK Diamonds BV'}
-        </button>
-        <button
-          className={`px-[16px] py-[8px] rounded-r-[8px] ${
-            activeTab === 'SPV T&C'
-              ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
-              : 'text-neutral600 border-[1px] border-neutral-200'
-          }`}
-          key={'SPV T&C'}
-          onClick={() =>
-            handleTabs({
-              tab: 'SPV T&C',
-              url: 'terms-and-condition-spv-term-and-condition'
-            })
-          }
-        >
-          {'SPV T&C'}
-        </button>
-      </div>
+        <div className="rounded-[8px]  w-[385px]">
+          <button
+            className={`px-[16px] py-[8px] rounded-l-[8px] ${
+              activeTab === 'KGK Website'
+                ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
+                : 'text-neutral600 border-[1px] border-neutral-200'
+            }`}
+            key={'KGK Website'}
+            onClick={() =>
+              handleTabs({
+                tab: 'KGK Website',
+                url: 'terms-and-condition-kgk-website'
+              })
+            }
+          >
+            {'KGK Website'}
+          </button>
+          <button
+            className={`px-[16px] py-[8px] ${
+              activeTab === 'KGK Diamonds BV'
+                ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
+                : 'text-neutral600 border-[1px] border-neutral-200'
+            }`}
+            key={'KGK Diamonds BV'}
+            onClick={() =>
+              handleTabs({
+                tab: 'KGK Diamonds BV',
+                url: 'terms-and-condition-kgk-diamonds-bv'
+              })
+            }
+          >
+            {'KGK Diamonds BV'}
+          </button>
+          <button
+            className={`px-[16px] py-[8px] rounded-r-[8px] ${
+              activeTab === 'SPV T&C'
+                ? ' border-[1px] border-primaryMain bg-primaryMain text-neutral25'
+                : 'text-neutral600 border-[1px] border-neutral-200'
+            }`}
+            key={'SPV T&C'}
+            onClick={() =>
+              handleTabs({
+                tab: 'SPV T&C',
+                url: 'terms-and-condition-spv-term-and-condition'
+              })
+            }
+          >
+            {'SPV T&C'}
+          </button>
+        </div>
       </div>
       <div>{renderCotent()}</div>
     </div>
