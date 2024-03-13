@@ -68,7 +68,7 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
      })(window,document,'script','dataLayer', 'GTM-W85XMPHM');`}
         </Script>
         {/* <GoogleAnalytics gaId="GTM-W85XMPHM" /> */}
-                 
+
         {/* <!-- End Google Tag Manager --> */}
       </Head>
       <body className={inter.className}>
