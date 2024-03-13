@@ -2,6 +2,8 @@
 import Image from 'next/image';
 import React from 'react';
 import errorIcon from '@public/v2/assets/icons/modal/error.svg';
+import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
+
 import { IndividualActionButton } from '@/components/v2/common/action-button/individual-button';
 import { ManageLocales } from '@/utils/v2/translate';
 
@@ -10,18 +12,23 @@ interface IInvalidCredsProps {
   handleClick?: () => void;
   header?: string;
   buttonText?: string;
+  status?: string;
 }
 
 const InvalidCreds: React.FC<IInvalidCredsProps> = ({
   content,
   handleClick,
   header,
-  buttonText
+  buttonText,
+  status = 'error'
 }) => {
   return (
     <div className="flex gap-[12px] flex-col items-center">
       <div className="absolute left-[-84px] top-[-84px]">
-        <Image src={errorIcon} alt="errorIcon" />
+        <Image
+          src={status === 'success' ? successIcon : errorIcon}
+          alt="errorIcon"
+        />
       </div>
       <div className="flex gap-[12px] flex-col mt-[80px] w-[100%]">
         {header && (

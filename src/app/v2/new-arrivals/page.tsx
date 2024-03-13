@@ -117,6 +117,7 @@ const NewArrivals = () => {
         <InvalidCreds
           content={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
+          buttonText="Okay"
         />
       );
     }
@@ -124,24 +125,28 @@ const NewArrivals = () => {
 
   const handleBidPlaced = useCallback((data: any) => {
     console.log(data, 'placess');
-    if (data) {
+    if (data?.status === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
           content={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
+          buttonText="Okay"
+          status="success"
         />
       );
     }
   }, []);
   const handleBidCanceled = useCallback((data: any) => {
     console.log(data, 'cancel');
-    if (data) {
+    if (data?.status === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
           content={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
+          buttonText="Okay"
+          status="success"
         />
       );
     }
@@ -152,12 +157,13 @@ const NewArrivals = () => {
     socketManager.on('bid_placed', handleBidPlaced);
     socketManager.on('bid_canceled', handleBidCanceled);
 
-    const handleRequestGetBidStones = (_: any) => {
+    const handleRequestGetBidStones = (data: any) => {
+      console.log(data, '-----------------');
       socketManager.emit('get_bid_stones');
     };
 
     // Setting up the event listener for "request_get_bid_stones"
-    socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+    // socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bid_stones', handleBidStones);
@@ -180,7 +186,7 @@ const NewArrivals = () => {
   const [downloadExcel] = useDownloadExcelMutation();
 
   const renderFooter = () => {
-    if (activeTab == 0 && bid?.length > 0) {
+    if (activeTab === 0 && bid?.length > 0) {
       return (
         <div className="flex items-center justify-end p-4">
           <div className="flex items-center gap-3">
@@ -250,7 +256,7 @@ const NewArrivals = () => {
                   label: 'Cancel Bid',
                   handler: () => {
                     socketManager.emit('cancel_bid', {
-                      // product_id: row.id,
+                      product_ids: Object.keys(rowSelection)
                     });
                   }
                 }

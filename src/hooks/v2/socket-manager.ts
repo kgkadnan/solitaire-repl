@@ -23,7 +23,6 @@ export class SocketManager {
   }
 
   emit(event: string, data?: any) {
-    console.log(event, 'event', data);
     this.socket.emit(event, data);
   }
 
