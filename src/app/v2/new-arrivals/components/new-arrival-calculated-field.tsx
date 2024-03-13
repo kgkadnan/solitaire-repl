@@ -2,7 +2,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import { IProduct } from '../../search/interface';
 interface INewArrivalCalculatedField {
-  rows: IProduct[];
+  rows: any[];
   selectedProducts: Record<string, boolean>;
 }
 
@@ -10,28 +10,23 @@ const NewArrivalCalculatedField = ({
   rows,
   selectedProducts
 }: INewArrivalCalculatedField) => {
-  const [selectedRows, setSelectedRows] = useState<IProduct[]>(
-    rows.filter((row: IProduct) => row.id in selectedProducts)
+  const [selectedRows, setSelectedRows] = useState<any[]>(
+    rows.filter((row: any) => row.id in selectedProducts)
   );
 
   useEffect(() => {
     // if (Object.keys(selectedProducts).length > 0)
-    setSelectedRows(rows.filter((row: IProduct) => row.id in selectedProducts));
+    setSelectedRows(rows.filter((row: any) => row.id in selectedProducts));
   }, [selectedProducts]);
 
   let computeTotal = (type: string) => {
     let total = 0;
     if (selectedRows?.length > 0) {
       selectedRows.forEach(row => {
-        if (type === 'amount') {
-          const variant = row.variants.find(
-            (variant: any) => variant.prices.length > 0
-          );
-          if (variant) {
-            total += variant.prices[0].amount;
-          }
-        } else if (type === 'carat' && row.carat !== null) {
-          total += row.carat;
+        if (type === 'amount' && row.price !== null) {
+          total += row.price;
+        } else if (type === 'carats' && row.carats !== null) {
+          total += row.carats;
         }
       });
     }
@@ -64,7 +59,7 @@ const NewArrivalCalculatedField = ({
       },
       {
         label: ManageLocales('app.calculatedField.carat'),
-        value: computeTotal('carat')
+        value: computeTotal('carats')
       },
       {
         label: ManageLocales('app.calculatedField.discount'),
@@ -78,6 +73,19 @@ const NewArrivalCalculatedField = ({
         label: ManageLocales('app.calculatedField.amount'),
         value: `$${computeTotal('amount')}`
       }
+
+      // {
+      //   label: ManageLocales('app.calculatedField.bidDis'),
+      //   value: `$${computeTotal('amount')}`
+      // },
+      // {
+      //   label: ManageLocales('app.calculatedField.bidprct'),
+      //   value: `$${computeTotal('amount')}`
+      // },
+      // {
+      //   label: ManageLocales('app.calculatedField.bidAmt'),
+      //   value: `$${computeTotal('amount')}`
+      // }
     ];
 
     return informativeData;

@@ -27,8 +27,8 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
           if (variant) {
             total += variant.prices[0].amount;
           }
-        } else if (type === 'carat' && row.carat !== null) {
-          total += row.carat;
+        } else if (type === 'carats' && row.carats !== null) {
+          total += row.carats;
         }
       });
     }
@@ -61,7 +61,7 @@ const CalculatedField = ({ rows, selectedProducts }: ICalculatedField) => {
       },
       {
         label: ManageLocales('app.calculatedField.carat'),
-        value: computeTotal('carat')
+        value: computeTotal('carats')
       },
       {
         label: ManageLocales('app.calculatedField.discount'),

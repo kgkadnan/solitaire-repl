@@ -41,7 +41,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
     { name: 'Disc%', state: 'discount' },
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
-    { name: 'Public URL', state: 'publicURL' }
+    { name: 'Public URL', state: 'public_url' }
   ];
 
   const { setIsInputDialogOpen } = modalSetState;
@@ -81,9 +81,9 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
               const amount = product.amount || 0; // Or however you calculate amount
               return `Amt ($): ${amount}`;
             }
-            if (attribute === 'publicURL' && selectedAttributes['publicURL']) {
-              return `Public URL: 'Public URL'`;
-            }
+            // if (attribute === 'publicURL' && selectedAttributes['publicURL']) {
+            //   return `Public URL: ${product[]}`;
+            // }
             // For other attributes, continue as before
             const option = shareOptions.find(opt => opt.state === attribute);
             return option ? `${option.name}: ${product[attribute]}` : '';
