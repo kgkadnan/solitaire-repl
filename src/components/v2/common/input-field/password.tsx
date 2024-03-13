@@ -5,12 +5,16 @@ import Eye from '@public/v2/assets/icons/eye.svg?url';
 import PasswordSuccess from '@public/v2/assets/icons/password/password-success.svg?url';
 import PasswordFail from '@public/v2/assets/icons/password/password-fail.svg?url';
 import PasswordDefault from '@public/v2/assets/icons/password/password-default.svg?url'; // Default check icon, replace with your icon
-import { PASSWORD_NOT_MATCH } from '@/constants/error-messages/register';
 import { Input } from '../../ui/input';
+import {
+  MINIMUM_CHAR_PASSWORD,
+  REQUIRED_FIELD
+} from '@/constants/error-messages/change-password';
 
 type IPasswordInputProps = Omit<IInputFieldProps, 'type'>;
 interface IPasswordProps extends IPasswordInputProps {
   isConfirmPassword?: boolean;
+  isFromChangePassword?: boolean;
 }
 export const PasswordField = ({
   name,
@@ -24,7 +28,8 @@ export const PasswordField = ({
   onBlur,
   maxLength,
   onKeyDown,
-  isConfirmPassword
+  isConfirmPassword,
+  isFromChangePassword = false
 }: IPasswordProps) => {
   const inputRef = useRef<any>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -127,16 +132,25 @@ export const PasswordField = ({
       <div className="mt-2">
         {!isConfirmPassword ? (
           // errorText !== PASSWORD_NOT_MATCH &&
-          isInputFocused &&
-          !allRulesValid &&
-          Object.entries(passwordRules).map(([rule, isValid]) => (
-            <div key={rule} className="flex items-center">
-              {renderIcon(isValid)}
-              <span className={`text-neutral900 ml-1`}>{rule}</span>
-            </div>
-          ))
+          isInputFocused ? (
+            !allRulesValid &&
+            Object.entries(passwordRules).map(([rule, isValid]) => (
+              <div key={rule} className="flex items-center">
+                {renderIcon(isValid)}
+                <span className={`text-neutral900 ml-1`}>{rule}</span>
+              </div>
+            ))
+          ) : (
+            isFromChangePassword && (
+              <p className="text-dangerMain">
+                {errorText !== MINIMUM_CHAR_PASSWORD && errorText}
+              </p>
+            )
+          )
         ) : (
-          <p className="text-dangerMain">{errorText && PASSWORD_NOT_MATCH}</p>
+          <p className="text-dangerMain">
+            {errorText !== MINIMUM_CHAR_PASSWORD && errorText}
+          </p>
         )}
       </div>
     </div>

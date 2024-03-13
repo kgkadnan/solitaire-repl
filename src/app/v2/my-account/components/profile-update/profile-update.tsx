@@ -16,7 +16,7 @@ import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import logger from 'logging/log-util';
 import { Label } from '@/components/v2/ui/label';
 
-const ProfileUpdate = () => {
+const ProfileUpdate = ({ handleFileUpload }: any) => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [deleteProfile] = useDeleteProfileMutation({});
@@ -39,7 +39,7 @@ const ProfileUpdate = () => {
         .unwrap()
         .then((res: any) => {
           if (res) {
-            setSelectedFile({ url: 'profile' });
+            setSelectedFile({ url: '' });
             setIsFileUploaded(true);
           }
         });
@@ -62,37 +62,6 @@ const ProfileUpdate = () => {
     return formData;
   };
 
-  const handleFileUpload = async ({ acceptedFiles }: any) => {
-    try {
-      if (acceptedFiles.length) {
-        setIsFileUploaded(false);
-
-        acceptedFiles.forEach((file: any) => {
-          setSelectedFile({ url: file.name });
-        });
-
-        const simulateUpload = async () => {
-          return new Promise<void>(resolve => {
-            setTimeout(() => {
-              resolve();
-            }, 1000); // Simulate a 1-second delay
-          });
-        };
-
-        setUploadProgress(0);
-        for (let i = 0; i <= 100; i += 50) {
-          setUploadProgress(i);
-          await simulateUpload(); // Simulate a delay between progress updates
-        }
-        setUploadProgress(0);
-        setIsFileUploaded(true);
-      }
-    } catch (error) {
-      // Log an error message if the upload fails
-      console.error('File upload failed:', error);
-    }
-  };
-
   const handleDeleteAttachment = () => {
     deleteProfile({})
       .unwrap()
@@ -109,7 +78,12 @@ const ProfileUpdate = () => {
     updateProfilePhoto(buildFormData({ acceptedFiles, key: 'profile' }))
       .unwrap()
       .then(() => {
-        handleFileUpload({ acceptedFiles });
+        handleFileUpload({
+          acceptedFiles,
+          setIsFileUploaded,
+          setSelectedFile,
+          setUploadProgress
+        });
       });
   };
 

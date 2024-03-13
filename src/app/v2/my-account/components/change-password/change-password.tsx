@@ -97,9 +97,9 @@ const ChangePassword = ({ modalSetState }: any) => {
 
   const handleChangePassword = ({
     event,
-    setChangePasswordState,
+    changePasswordState,
     setChangePasswordFormErrors,
-    changePasswordState
+    setChangePasswordState
   }: any) => {
     const { name, value } = event.target;
     setChangePasswordState((prev: any) => ({ ...prev, [name]: value }));
@@ -110,6 +110,7 @@ const ChangePassword = ({ modalSetState }: any) => {
       formState: changePasswordState
     });
   };
+
   const { userLoggedOut } = useUser();
   const router = useRouter();
 
@@ -125,6 +126,9 @@ const ChangePassword = ({ modalSetState }: any) => {
         setFormErrors,
         formState
       });
+
+      console.log('fieldError', fieldError);
+
       if (fieldError) {
         isValid = false;
         errors = { ...errors, [key]: fieldError };
@@ -138,7 +142,7 @@ const ChangePassword = ({ modalSetState }: any) => {
   const handleUpdatePassword = async () => {
     const isFormValid = validateAllFields({
       formState: changePasswordState,
-      setFormErrors: setChangePasswordState
+      setFormErrors: setChangePasswordFormErrors
     }); // Validate all fields
 
     if (!isFormValid) return;
@@ -209,6 +213,8 @@ const ChangePassword = ({ modalSetState }: any) => {
     setChangePasswordFormErrors(initialFormState);
   };
 
+  console.log('changePsswor', changePasswordFormErrors);
+
   return (
     <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[68vh]">
       <div className="w-[760px] flex flex-col gap-[16px]">
@@ -231,7 +237,7 @@ const ChangePassword = ({ modalSetState }: any) => {
               isConfirmPassword={true}
               value={changePasswordState.password}
               errorText={changePasswordFormErrors.password}
-              placeholder={'Enter new password'}
+              placeholder={'Enter password'}
             />
             {/* <div> */}
             <PasswordField
@@ -247,6 +253,7 @@ const ChangePassword = ({ modalSetState }: any) => {
               name="newPassword"
               value={changePasswordState.newPassword}
               errorText={changePasswordFormErrors.newPassword}
+              isFromChangePassword={true}
               placeholder={'Enter new password'}
             />
             {/* Input field for confirm password */}

@@ -20,7 +20,7 @@ import {
 } from '@/features/api/cart';
 import ActionButton from '@/components/v2/common/action-button';
 import EmptyScreen from '@/components/v2/common/empty-screen';
-import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import empty from '@public/v2/assets/icons/my-cart/empty-cart.svg';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import deleteIcon from '@public/v2/assets/icons/modal/bin.svg';
