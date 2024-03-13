@@ -28,6 +28,7 @@ import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const theme = createTheme({
   typography: {
@@ -364,11 +365,12 @@ const NewArrivalDataTable = ({
 
   const NoResultsComponent = () => (
     <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
-      <Image src={empty} alt={'empty'} />
+      {/* <Image src={empty} alt={'empty'} />
       <p className="text-neutral900  w-[320px] text-center">
         Our diamond collection awaits new arrivals. Stay tuned for dazzling
         additions soon.
-      </p>
+      </p> */}
+      <CustomKGKLoader />
     </div>
   );
   //pass table options to useMaterialReactTable
@@ -390,6 +392,7 @@ const NewArrivalDataTable = ({
     enablePagination: true,
     enableStickyHeader: true,
     // enableBottomToolbar: false,
+    // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
@@ -489,8 +492,16 @@ const NewArrivalDataTable = ({
         // minHeight: 'calc(100vh - 399px)',
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
-        minHeight: isFullScreen ? 'calc(100vh - 200px)' : 'calc(100vh - 399px)',
-        maxHeight: isFullScreen ? 'calc(100vh - 200px)' : 'calc(100vh - 399px)'
+        minHeight: isFullScreen
+          ? 'calc(100vh - 200px)'
+          : activeTab === 2
+          ? 'calc(100vh - 355px)'
+          : 'calc(100vh - 375px)',
+        maxHeight: isFullScreen
+          ? 'calc(100vh - 200px)'
+          : activeTab === 2
+          ? 'calc(100vh - 355px)'
+          : 'calc(100vh - 375px)'
       }
     },
     muiTableHeadRowProps: {
@@ -609,7 +620,7 @@ const NewArrivalDataTable = ({
 
     renderDetailPanel: ({ row }) => {
       // Check if the current row's ID is in the rowSelection state
-      if (rowSelection[row.id]) {
+      if (activeTab !== 2 && rowSelection[row.id]) {
         const bidValue =
           bidValues[row.id] !== undefined
             ? bidValues[row.id]
@@ -638,7 +649,17 @@ const NewArrivalDataTable = ({
                 label={'Bid Pr/Ct'}
                 type="text"
                 styles={{ inputMain: 'h-[64px]' }}
-                value={row.original.price_per_carat.toFixed(2)}
+                value={
+                  bidValues[row.id] !== undefined
+                    ? (
+                        row.original.rap *
+                        (1 + bidValues[row.id] / 100)
+                      ).toFixed(2)
+                    : row.original.price_per_carat.toFixed(2)
+                  //   (row.original.rap *
+                  //   (1 + bidValues[row.id] / 100)
+                  // ).toFixed(2)
+                }
                 disabled
               />
             </div>
@@ -647,7 +668,15 @@ const NewArrivalDataTable = ({
                 label={'Bid Amt $'}
                 type="text"
                 styles={{ inputMain: 'h-[64px]' }}
-                value={row.original.price?.toFixed(2)}
+                value={
+                  bidValues[row.id] !== undefined
+                    ? (
+                        row.original.rap *
+                        (1 + bidValues[row.id] / 100) *
+                        row.original.carats
+                      ).toFixed(2)
+                    : row.original.price.toFixed(2)
+                }
                 disabled
               />
             </div>
@@ -671,7 +700,6 @@ const NewArrivalDataTable = ({
                       // row.original.my_current_bid ??
                       // row.original.current_max_bid - 0.5
                     }
-                    disabled
                   />
                 </div>
                 <div

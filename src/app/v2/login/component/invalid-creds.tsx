@@ -20,7 +20,7 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
   handleClick,
   header,
   buttonText,
-  status = 'error'
+  status
 }) => {
   return (
     <div className="flex gap-[12px] flex-col items-center">
