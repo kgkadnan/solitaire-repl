@@ -1,5 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
-import React from 'react';
+import React, { useState } from 'react';
 import { AttachmentData } from './attachment-data/attachement-data';
 import FileAttachments from '@/components/v2/common/file-attachment';
 import CheckboxComponent from '@/components/v2/common/checkbox';
@@ -11,6 +11,7 @@ import { handleFileupload } from '../helper/handle-file-upload';
 import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
 import { useAppDispatch } from '@/hooks/hook';
+import { TermsDialogComponent } from './terms-and-conditions';
 
 export const RenderAttachment = ({
   formErrorState,
@@ -25,6 +26,7 @@ export const RenderAttachment = ({
   const [uploadDocument] = useUploadDocumentMutation({});
   const [deleteDocument] = useDeleteDocumentMutation({});
   const dispatch = useAppDispatch();
+  const [openTerms, setOpenTerms] = useState(false);
 
   const handleDeleteAttachment = ({
     key
@@ -94,6 +96,8 @@ export const RenderAttachment = ({
 
   return (
     <div>
+      <TermsDialogComponent isOpens={openTerms} setIsOpen={setOpenTerms} />
+
       <div className="flex flex-col gap-[16px]">
         <div className="flex items-center gap-[16px]">
           <span className="rounded-[50%] bg-primaryMain flex items-center justify-center text-neutral25 text-lMedium font-medium w-[40px] h-[40px]">
@@ -209,17 +213,18 @@ export const RenderAttachment = ({
               >
                 I hereby agree to
               </p>
-              <a
-                href="https://kgk.live/terms-condition"
-                className={` ${
+              <div
+                onClick={() => {
+                  setOpenTerms(true);
+                }}
+                className={`cursor-pointer ${
                   formErrorState.termAndCondition
                     ? 'text-dangerMain '
                     : 'text-infoMain'
                 } `}
-                target="_blank"
               >
                 terms and conditions
-              </a>
+              </div>
             </div>
           </div>
         </div>
