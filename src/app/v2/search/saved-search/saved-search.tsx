@@ -15,7 +15,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
 import { formatCreatedAt } from '@/utils/format-date';
 import styles from './saved-search.module.scss';
-import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import empty from '@public/v2/assets/icons/saved-search/empty-screen-saved-search.svg';
 
 export interface ISavedSearches {
   diamond_count: string;

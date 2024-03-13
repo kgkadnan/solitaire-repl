@@ -20,6 +20,8 @@ import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
+import { useAppDispatch, useAppSelector } from '@/hooks/hook';
+import { profileUpdate } from '@/features/profile/profile-update-slice';
 
 interface IUserAccountInfo {
   customer: {
@@ -54,6 +56,8 @@ enum myAccount {
   PROFILE_UPDATE = 'profile update'
 }
 const MyAccount = () => {
+  const dispatch = useAppDispatch();
+  const updatePhoto: any = useAppSelector((store: any) => store.profileUpdate);
   const subRoute = useSearchParams().get('path');
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerAuth] = useLazyGetAuthDataQuery();
@@ -108,6 +112,7 @@ const MyAccount = () => {
         setUploadProgress(0);
         setIsFileUploaded(true);
         getPhoto();
+        dispatch(profileUpdate(!updatePhoto?.status));
       }
     } catch (error) {
       // Log an error message if the upload fails

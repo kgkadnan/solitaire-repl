@@ -212,14 +212,14 @@ and `nonManageableListings` whenever the `data` variable changes. */
                         )}
                       </div>
                     </div>
-                    <hr className=" border-solitaireSenary mx-2 my-3" />
+                    {/* <hr className=" border-solitaireSenary mx-2 my-3" /> */}
                   </>
                 )}
 
                 {manageableListings?.length > 0 && (
                   <>
                     {' '}
-                    <h1 className="text-lMedium text-neutral-900 font-medium ml-2">
+                    <h1 className="text-lMedium text-neutral-900 font-medium mt-4 ml-2">
                       {ManageLocales(
                         'app.myAccount.tablePrefrences.manageableEntities'
                       )}{' '}

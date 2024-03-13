@@ -117,7 +117,7 @@ const ProfileUpdate = ({ handleFileUpload }: any) => {
                 : 'border-dashed'
             }`}
           >
-            <div className="w-[10%] mb-[15px] flex items-start">
+            <div className="w-[10%]  flex items-start">
               {!error?.length ? (
                 <Image src={mediaIcon} alt="mediaIcon" />
               ) : (
