@@ -38,35 +38,79 @@ const CountdownTimer = ({
   const formatTime = (unit: any) => (unit < 10 ? `0${unit}` : unit);
 
   return (
-    <div className="flex justify-center items-center">
-      <div className="flex flex-col items-center">
-        <span className="text-xs font-semibold text-gray-500 uppercase">
-          Hours
-        </span>
-        <div className="text-lg font-semibold bg-blue-100 rounded p-2">
-          {/* <div>
-          <div className='bg-[red]'>a</div>
-          <div className='bg-[green]'>b</div>
-          </div> */}
-          {formatTime(time.hours)}
+    <div className="flex justify-center items-center gap-2">
+      <div className="flex flex-col items-center gap-1 w-[50px]">
+        <span className="text-neutral800 text-sRegular uppercase">Hours</span>
+        <div className="text-lg font-semibold rounded  relative w-full">
+          <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+          </div>
+          <div className="z-2 relative flex justify-center items-center text-neutral600 text-headingM medium h-[40px]">
+            {formatTime(time.hours)}
+          </div>
         </div>
       </div>
-      <span className="text-lg font-semibold">:</span>
-      <div className="flex flex-col items-center">
-        <span className="text-xs font-semibold text-gray-500 uppercase">
-          Minutes
-        </span>
-        <div className="text-lg font-semibold bg-blue-200 rounded p-2">
-          {formatTime(time.minutes)}
+      <span className="text-lg font-semibold mt-[16px] text-neutral900">:</span>
+      <div className="flex flex-col items-center gap-1 w-[50px]">
+        <span className="text-neutral800 text-sRegular uppercase">MINUTES</span>
+        <div className="text-lg font-semibold rounded  relative w-full">
+          <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+          </div>
+          <div className="z-2 relative flex justify-center items-center text-neutral600 text-headingM medium h-[40px]">
+            {formatTime(time.minutes)}
+          </div>
         </div>
       </div>
-      <span className="text-lg font-semibold">:</span>
-      <div className="flex flex-col items-center">
-        <span className="text-xs font-semibold text-gray-500 uppercase">
-          Seconds
-        </span>
-        <div className="text-lg font-semibold bg-blue-300 rounded p-2">
-          {formatTime(time.seconds)}
+      <span className="text-lg font-semibold mt-[16px] text-neutral900">:</span>
+      <div className="flex flex-col items-center gap-1 w-[50px]">
+        <span className="text-neutral800 text-sRegular uppercase">SECONDS</span>
+        <div className="text-lg font-semibold rounded  relative w-full">
+          <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+            <div
+              className="h-[30px] w-full rounded-[8px]"
+              style={{
+                background:
+                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+              }}
+            ></div>
+          </div>
+          <div className="z-2 relative flex justify-center items-center text-neutral600 text-headingM medium h-[40px]">
+            {formatTime(time.seconds)}
+          </div>
         </div>
       </div>
     </div>

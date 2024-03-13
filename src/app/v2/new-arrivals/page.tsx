@@ -96,6 +96,7 @@ const NewArrivals = () => {
   const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
+  const [time, setTime] = useState();
 
   // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
@@ -103,9 +104,11 @@ const NewArrivals = () => {
   useSocket(socketManager);
 
   const handleBidStones = useCallback((data: any) => {
+    console.log(data);
     setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
+    setTime(data.endTime);
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {
@@ -334,11 +337,13 @@ const NewArrivals = () => {
         <p className="text-headingM font-medium text-neutral900">
           New Arrivals
         </p>
-        <CountdownTimer
-          initialHours={1}
-          initialMinutes={40}
-          initialSeconds={10}
-        />
+        {time && (
+          <CountdownTimer
+            initialHours={new Date(time).getHours()}
+            initialMinutes={new Date(time).getMinutes()}
+            initialSeconds={new Date(time).getSeconds()}
+          />
+        )}
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         {/* <div className="w-[450px]">
