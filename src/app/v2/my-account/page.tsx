@@ -61,7 +61,9 @@ const MyAccount = () => {
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
   const [userAccountInfo, setUserAccountInfo] = useState<IUserAccountInfo>();
-  const [activeTab, setActiveTab] = useState<string>(myAccount.PROFILE_UPDATE);
+  const [activeTab, setActiveTab] = useState<string>(
+    myAccount.TABLE_PREFRENCES
+  );
   const [imageUrl, setImageUrl] = useState('');
 
   const getPhoto = async () => {
