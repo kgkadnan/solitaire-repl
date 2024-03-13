@@ -1,3 +1,4 @@
+import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 
 const TermAndCondtions = () => {
@@ -42,12 +43,6 @@ const TermAndCondtions = () => {
       }
     };
     callAPi();
-    // t({ query: 'terms-and-condition-kgk-website' })
-    //   .unwrap()
-    //   .then(res => {
-    //     console.log(res);
-    //     setData(data);
-    //   });
   }, []);
 
   const renderCotent = () => {
@@ -93,7 +88,7 @@ const TermAndCondtions = () => {
   return (
     <div className="flex flex-col gap-[16px] mt-[16px]">
       <h1 className="text-headingS font-medium text-neutral-900">
-        Terms and Conditions
+        {ManageLocales('app.myAccount.tabs.termAndConditions')}
       </h1>
 
       <div className="rounded-[8px]  w-[385px]">

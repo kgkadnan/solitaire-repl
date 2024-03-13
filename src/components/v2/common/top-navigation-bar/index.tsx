@@ -17,6 +17,7 @@ import Link from 'next/link';
 import useUser from '@/lib/use-auth';
 import Notification from './components/notification/notification';
 import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
+import { useAppSelector } from '@/hooks/hook';
 
 interface IUserAccountInfo {
   customer: {
@@ -64,6 +65,8 @@ const TopNavigationBar = () => {
     fetchMyAPI();
   }, [localStorage.getItem('show-nudge')]);
 
+  const updatePhoto: any = useAppSelector((store: any) => store.profileUpdate);
+
   useEffect(() => {
     const storedUser = localStorage.getItem('user');
 
@@ -82,7 +85,7 @@ const TopNavigationBar = () => {
         });
     };
     getPhoto();
-  }, []);
+  }, [updatePhoto?.status]);
 
   const handleLogout = () => {
     userLoggedOut();

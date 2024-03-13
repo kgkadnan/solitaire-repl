@@ -12,6 +12,7 @@ import { loginApi } from './features/api/login';
 import { cartApi } from './features/api/cart';
 import { downloadExcelApi } from './features/api/download-excel';
 import notificationBadgeReducer from './features/notification/notification-slice';
+import profileUpdateReducer from './features/profile/profile-update-slice';
 import isEditingKycSlice from './features/kyc/is-editing-kyc';
 import searchResultReducer from './features/search-result/search-result';
 import searchListReducer from './features/search/search-list';
@@ -37,6 +38,7 @@ import { newNotificationApi } from './features/api/notification/notification';
 
 const rootReducer = combineReducers({
   notificationBadge: notificationBadgeReducer,
+  profileUpdate: profileUpdateReducer,
   isEditingKYC: isEditingKycSlice,
   searchResult: searchResultReducer,
   searchList: searchListReducer,
