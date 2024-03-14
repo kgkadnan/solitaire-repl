@@ -1,21 +1,24 @@
-// // socketManager.ts
-import { useEffect } from 'react';
+// // // socketManager.ts
+// import { useEffect } from 'react';
 import io, { Socket } from 'socket.io-client';
 
-export class SocketManager {
-  socket: Socket;
+import { useEffect } from 'react';
 
-  constructor() {
-    // Assuming you are using an environment variable for the server URL
-    this.socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
-      auth: {
-        token:
-          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJjdXN0b21lcl9pZCI6ImN1c18wMUhKRlA4U1E4UUM5UFZZQVRYRjk2TTgwRSIsImRvbWFpbiI6InN0b3JlIiwiaWF0IjoxNzA5Nzk0NDM1LCJleHAiOjE3MTIzODY0MzV9.GDbGbloVAV3_8hF7uRhGu96dvVWMSFyvb5SuIUj30U0'
-      }
-    });
+export class SocketManager {
+  socket: any;
+
+  initializeSocket(token: string) {
+    console.log(token);
+    if (token) {
+      this.socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
+        auth: { token }
+      });
+      this.initAndConnect();
+    }
   }
 
   initAndConnect() {
+    console.log('hi3');
     this.socket.on('connect', () => {
       console.log('Socket connected');
       this.emit('get_bid_stones');
@@ -23,83 +26,23 @@ export class SocketManager {
   }
 
   emit(event: string, data?: any) {
-    console.log('evern', event);
     this.socket.emit(event, data);
   }
 
   on(event: string, handler: (data: any) => void) {
-    this.socket.on(event, handler);
+    console.log(event, 'emiitting event');
+
+    this.socket?.on(event, handler);
   }
   off(event: string, handler: (data: any) => void) {
-    this.socket.off(event, handler);
+    this.socket?.off(event, handler);
   }
   disconnect() {
-    this.socket.disconnect();
+    this.socket?.disconnect();
   }
 }
 
 // Hook to manage the socket state within a React component
-export const useSocket = (socketManager: SocketManager) => {
-  useEffect(() => {
-    socketManager.initAndConnect();
-
-    return () => {
-      socketManager.disconnect();
-    };
-  }, [socketManager]);
+export const useSocket = (socketManager: SocketManager, token: string) => {
+  socketManager.initializeSocket(token!);
 };
-
-// export class SocketManager {
-//   socket: Socket | null = null;
-
-//   initAndConnect(token: string) {
-//     if (!token) {
-//       console.warn('Auth token is not provided');
-//       return;
-//     }
-
-//     this.socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
-//       auth: {
-//         token: token,
-//       },
-//     });
-
-//     this.socket.on('connect', () => {
-//       console.log('Socket connected');
-//       this.emit('get_bid_stones');
-//     });
-//   }
-
-//   emit(event: string, data?: any) {
-//     if (!this.socket) {
-//       console.warn('Socket not initialized');
-//       return;
-//     }
-//     this.socket.emit(event, data);
-//   }
-
-//   on(event: string, handler: (data: any) => void) {
-//     if (!this.socket) {
-//       console.warn('Socket not initialized');
-//       return;
-//     }
-//     this.socket.on(event, handler);
-//   }
-
-//   off(event: string, handler: (data: any) => void) {
-//     if (!this.socket) {
-//       console.warn('Socket not initialized');
-//       return;
-//     }
-//     this.socket.off(event, handler);
-//   }
-
-//   disconnect() {
-//     if (!this.socket) {
-//       console.warn('Socket not initialized');
-//       return;
-//     }
-//     console.log('Socket disconnected');
-//     this.socket.disconnect();
-//   }
-// }

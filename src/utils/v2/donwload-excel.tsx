@@ -19,6 +19,7 @@ interface IDownloadExcelFunctionProps {
   setRowSelection?: Dispatch<SetStateAction<{}>>;
   setIsError?: Dispatch<SetStateAction<boolean>>;
   orderId?: string;
+  fromNewArrivalBid?: boolean;
 }
 
 export const downloadExcelHandler = async ({
@@ -28,13 +29,15 @@ export const downloadExcelHandler = async ({
   modalSetState,
   setRowSelection,
   setIsError,
-  orderId
+  orderId,
+  fromNewArrivalBid
 }: IDownloadExcelFunctionProps) => {
   // Explicitly type res to include unwrap method
   downloadExcelApi({
     products: products,
     previous_searchs: previousSearch,
-    order_id: orderId
+    order_id: orderId,
+    from_new_arrival_bid: fromNewArrivalBid
   })
     .unwrap()
     .then((res: IDownloadExcelApiResponse) => {
