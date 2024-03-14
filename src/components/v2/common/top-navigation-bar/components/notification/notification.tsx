@@ -23,6 +23,7 @@ import Link from 'next/link';
 import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
+import { useRouter } from 'next/navigation';
 
 interface INotification {
   created_at: string;
@@ -35,6 +36,7 @@ interface INotification {
   title: string;
 }
 const Notification = () => {
+  const router = useRouter();
   const [triggerNotification] = useLazyGetNotificationQuery({});
   const [readAllNotification] = useReadAllNotificationMutation({});
   const { data } = useGetNotificationQuery({});
@@ -66,6 +68,17 @@ const Notification = () => {
               return notification;
             })
           );
+
+          let getData = notificationData.filter(data => {
+            return data.id === noticeId;
+          })[0];
+
+          let splitData = getData.target_page.split(':');
+          if (splitData[0] === 'my-cart') {
+            router.push(`${splitData[0]}?path=${splitData[1]}`);
+          } else if (splitData[0] === 'your-order') {
+            router.push(`your-orders?path=${splitData[1]}`);
+          }
         }
       })
       .catch(error => {
