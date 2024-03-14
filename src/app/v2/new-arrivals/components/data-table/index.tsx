@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
-  MRT_RowSelectionState,
   MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
@@ -27,8 +26,9 @@ import Tab from '../tabs';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
-import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 
 const theme = createTheme({
   typography: {
@@ -50,8 +50,14 @@ const theme = createTheme({
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
             visibility: 'visible'
+          },
+          '&.Mui-TableBodyCell-DetailPanel': {
+            borderBottom: 'none' // Customize the border as needed
           }
         }
+        // '&:hover':{
+        //   background:"red !important"
+        // }
       }
     },
     MuiTableHead: {
@@ -60,7 +66,8 @@ const theme = createTheme({
           '& .Mui-TableHeadCell-Content-Wrapper': {
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
-            fontWeight: 500
+            fontWeight: 500,
+            borderTop: 'none'
           }
         }
       }
@@ -153,7 +160,8 @@ const NewArrivalDataTable = ({
                       products: selectedIds,
                       downloadExcelApi: downloadExcel,
                       modalSetState,
-                      setRowSelection
+                      setRowSelection,
+                      fromNewArrivalBid: true
                     });
                   },
                   customStyle: 'flex-1 w-full'
@@ -170,7 +178,8 @@ const NewArrivalDataTable = ({
                       products: allProductIds,
                       downloadExcelApi: downloadExcel,
                       modalSetState,
-                      setRowSelection
+                      setRowSelection,
+                      fromNewArrivalBid: true
                     });
                   },
                   customStyle: 'flex-1 w-full'
@@ -189,7 +198,8 @@ const NewArrivalDataTable = ({
         products: allProductIds,
         downloadExcelApi: downloadExcel,
         modalSetState,
-        setRowSelection
+        setRowSelection,
+        fromNewArrivalBid: true
       });
     }
   };
@@ -211,14 +221,6 @@ const NewArrivalDataTable = ({
 
   const [bidValues, setBidValues] = useState<BidValues>({});
 
-  // Function to increment the bid value for a specific row
-  // const handleIncrement = (rowId:string) => {
-  //   setBidValues((prevValues:any) => ({
-  //     ...prevValues,
-  //     [rowId]: (prevValues[rowId] || 0) + 0.5,
-  //   }));
-  // };
-
   const handleIncrement = (rowId: string, currentMaxBid: any) => {
     // Retrieve the current_max_bid for the row from the rows data
     setBidValues(prevValues => {
@@ -227,14 +229,14 @@ const NewArrivalDataTable = ({
       if (currentBidValue !== undefined) {
         return {
           ...prevValues,
-          [rowId]: currentBidValue + 0.5
+          [rowId]: Number(currentBidValue) + 0.5
         };
       }
       // If no bid value for this row yet, start from current_max_bid and add 0.5
       else {
         return {
           ...prevValues,
-          [rowId]: currentMaxBid + 0.5
+          [rowId]: Number(currentMaxBid) + 0.5
         };
       }
     });
@@ -249,30 +251,24 @@ const NewArrivalDataTable = ({
       if (currentBidValue !== undefined) {
         return {
           ...prevValues,
-          [rowId]: currentBidValue - 0.5
+          [rowId]: Number(currentBidValue) - 0.5
         };
       }
       // If no bid value for this row yet, just set it to current_max_bid (can't decrement below it)
       else {
         return {
           ...prevValues,
-          [rowId]: currentMaxBid - 0.5
+          [rowId]: Number(currentMaxBid) - 0.5
         };
       }
     });
   };
 
-  // Function to decrement the bid value for a specific row
-  // const handleDecrement = (rowId:string) => {
-  //   setBidValues((prevValues:any) => ({
-  //     ...prevValues,
-  //     [rowId]: Math.max(0, (prevValues[rowId] || 0) - 0.5), // Prevent negative values
-  //   }));
-  // };
-
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div className="border-b-[1px] border-neutral200">
+      <div
+        className={` border-neutral200 ${activeTab !== 2 && 'border-b-[1px]'}`}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -364,13 +360,18 @@ const NewArrivalDataTable = ({
   );
 
   const NoResultsComponent = () => (
-    <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
-      {/* <Image src={empty} alt={'empty'} />
-      <p className="text-neutral900  w-[320px] text-center">
-        Our diamond collection awaits new arrivals. Stay tuned for dazzling
-        additions soon.
-      </p> */}
-      <CustomKGKLoader />
+    <div className="flex flex-col items-center justify-center gap-5 h-[100%] mt-[50px]">
+      {activeCount === 0 || bidCount === 0 || historyCount === 0 ? (
+        <>
+          <Image src={empty} alt={'empty'} />
+          <p className="text-neutral900  w-[320px] text-center ">
+            Our diamond collection awaits new arrivals. Stay tuned for dazzling
+            additions soon.
+          </p>
+        </>
+      ) : (
+        <CustomKGKLoader />
+      )}
     </div>
   );
   //pass table options to useMaterialReactTable
@@ -415,14 +416,33 @@ const NewArrivalDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
+      const isHighlightBackground =
+        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-          '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-            backgroundColor: 'var(--neutral-50)'
+          // '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+          //   backgroundColor: isHighlightBackground
+          //     ? isHighlightBackground.background
+          //     : 'var(--neutral-50)'
+          //     // backgroundColor: 'var(--neutral-50)'
+          // },
+          '&.MuiTableRow-root': {
+            // Define styles for the ::after pseudo-element of each cell within a hovered row
+            '& .MuiTableCell-root::after': {
+              // Maintain the default background color for non-lot_id columns
+              backgroundColor: 'var(--neutral-50) !important'
+            },
+            // Target the specific cell that matches the lot_id column within a hovered row
+            '& .MuiTableCell-root[data-index="1"]::after': {
+              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
+              backgroundColor: isHighlightBackground
+                ? `${isHighlightBackground.background} !important`
+                : 'var(--neutral-50)'
+            }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-25)'
@@ -452,7 +472,12 @@ const NewArrivalDataTable = ({
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
               ':hover': {
-                border: 'none'
+                border: 'none',
+                background: 'red'
+              },
+              '::after': {
+                border: 'none',
+                background: 'red'
               }
             }
           };
@@ -511,14 +536,26 @@ const NewArrivalDataTable = ({
       }
     },
     // muiTableBodyCellProps: ({ cell }) => {
-    muiTableBodyCellProps: ({ cell }) => {
+    muiTableBodyCellProps: ({ cell, row }) => {
+      const isHighlightBackground =
+        activeTab !== 0 &&
+        cell.column.id === 'lot_id' &&
+        RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: 'White',
+            background: isHighlightBackground
+              ? isHighlightBackground.background
+              : 'White',
+            color: isHighlightBackground && isHighlightBackground.text,
             opacity: 1,
+            '&:hover': {
+              background: isHighlightBackground
+                ? isHighlightBackground.background
+                : 'White'
+            },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
@@ -543,6 +580,7 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:CU_lot_id' ||
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:SCU_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
@@ -629,15 +667,19 @@ const NewArrivalDataTable = ({
         // If the row is selected, return the detail panel content
         return (
           <div
-            className="flex gap-6 "
+            className="flex gap-6"
             onClick={event => event.stopPropagation()}
           >
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">
+                Current Max Bid%
+              </div>
+
               <InputField
-                label={'Current Max Bid%'}
+                // label={'Current Max Bid%'}
                 type="text"
                 styles={{
-                  inputMain: 'h-[64px]',
+                  inputMain: 'h-[40px]',
                   input: 'bg-infoSurface border-infoBorder text-infoMain'
                 }}
                 value={`${row.original.current_max_bid}%`}
@@ -645,10 +687,12 @@ const NewArrivalDataTable = ({
               />
             </div>
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">Bid Pr/Ct</div>
+
               <InputField
-                label={'Bid Pr/Ct'}
+                // label={'Bid Pr/Ct'}
                 type="text"
-                styles={{ inputMain: 'h-[64px]' }}
+                styles={{ inputMain: 'h-[40px]' }}
                 value={
                   bidValues[row.id] !== undefined
                     ? (
@@ -664,10 +708,12 @@ const NewArrivalDataTable = ({
               />
             </div>
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">Bid Amt $</div>
+
               <InputField
-                label={'Bid Amt $'}
+                // label={'Bid Amt $'}
                 type="text"
-                styles={{ inputMain: 'h-[64px]' }}
+                styles={{ inputMain: 'h-[40px]' }}
                 value={
                   bidValues[row.id] !== undefined
                     ? (
@@ -693,13 +739,24 @@ const NewArrivalDataTable = ({
                 <div className="w-[120px]">
                   <InputField
                     // label={'Bid Amt $'}
-                    type="text"
+                    type="number"
                     styles={{ inputMain: 'h-[64px]' }}
                     value={
                       bidValue
                       // row.original.my_current_bid ??
                       // row.original.current_max_bid - 0.5
                     }
+                    onChange={e => {
+                      setBidValues((prevValues: any) => {
+                        // If there's already a bid value for this row, increment it
+                        return {
+                          ...prevValues,
+                          [row.id]: e.target.value
+                        };
+
+                        // If no bid value for this row yet, start from current_max_bid and add 0.5
+                      });
+                    }}
                   />
                 </div>
                 <div
@@ -722,6 +779,12 @@ const NewArrivalDataTable = ({
                         product_id: row.id,
                         bid_value: bidValues[row.id]
                       });
+                      activeTab === 0 &&
+                        setRowSelection((prev: any) => {
+                          let prevRows = { ...prev };
+                          delete prevRows[row.id];
+                          return prevRows;
+                        });
                     },
                     customStyle: 'flex-1 w-full h-10'
                   }

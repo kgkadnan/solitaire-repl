@@ -75,8 +75,6 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
     }
   };
 
-  console.log('data', selectedOptions);
-
   useEffect(() => {
     const call = async () => {
       await triggerGetSubscription({})

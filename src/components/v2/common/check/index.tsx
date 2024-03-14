@@ -14,7 +14,6 @@ const CheckboxWithInput = ({
   defaultValue = '', // Added prop for initial input value
   onError
 }: any) => {
-  console.log('onError', onError);
   const [isChecked, setIsChecked] = useState(defaultChecked); // Initialize with defaultChecked value
   const [inputValue, setInputValue] = useState(defaultValue); // Initialize with defaultValue
 

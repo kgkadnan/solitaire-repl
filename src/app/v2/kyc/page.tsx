@@ -761,7 +761,6 @@ const KYC = () => {
         }
       })
       .catch(error => {
-        console.log('llllllll', error);
         rejectedSteps.add(currentState);
         setRejectedSteps(new Set(rejectedSteps));
         setIsDialogOpen(true); // Show error dialog

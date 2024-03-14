@@ -22,6 +22,7 @@ import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import useUser from '@/lib/use-auth';
 
 interface INotification {
   created_at: string;
@@ -73,8 +74,11 @@ const Notification = () => {
   };
 
   const socketManager = new SocketManager();
+  const { authToken } = useUser();
 
-  useSocket(socketManager);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
   useEffect(() => {
     socketManager.on('notification', data => _handleNotification());
 

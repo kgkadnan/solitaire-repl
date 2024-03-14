@@ -18,10 +18,14 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { useSearchParams } from 'next/navigation';
 import ProfileUpdate from './components/profile-update/profile-update';
-import { useLazyGetProfilePhotoQuery } from '@/features/api/my-account';
+import {
+  useDeleteProfileMutation,
+  useLazyGetProfilePhotoQuery
+} from '@/features/api/my-account';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
 import { profileUpdate } from '@/features/profile/profile-update-slice';
+import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
   customer: {
@@ -57,6 +61,7 @@ enum myAccount {
 }
 const MyAccount = () => {
   const dispatch = useAppDispatch();
+  const [deleteProfile] = useDeleteProfileMutation({});
   const updatePhoto: any = useAppSelector((store: any) => store.profileUpdate);
   const subRoute = useSearchParams().get('path');
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
@@ -118,6 +123,23 @@ const MyAccount = () => {
       // Log an error message if the upload fails
       console.error('File upload failed:', error);
     }
+  };
+
+  const handleDeleteAttachment = ({
+    setSelectedFile,
+    setIsFileUploaded
+  }: any) => {
+    deleteProfile({})
+      .unwrap()
+      .then(res => {
+        setSelectedFile({});
+        setIsFileUploaded(false);
+        getPhoto();
+        dispatch(profileUpdate(!updatePhoto?.status));
+      })
+      .catch(error => {
+        logger.info(error);
+      });
   };
 
   useEffect(() => {
@@ -183,7 +205,12 @@ const MyAccount = () => {
         return <TermAndCondtions />;
 
       case myAccount.PROFILE_UPDATE:
-        return <ProfileUpdate handleFileUpload={handleFileUpload} />;
+        return (
+          <ProfileUpdate
+            handleFileUpload={handleFileUpload}
+            handleDeleteAttachment={handleDeleteAttachment}
+          />
+        );
     }
   };
 
