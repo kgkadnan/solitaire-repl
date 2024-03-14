@@ -108,7 +108,6 @@ const NewArrivals = () => {
   }, [authToken]);
 
   const handleBidStones = useCallback((data: any) => {
-    console.log(data);
     setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
