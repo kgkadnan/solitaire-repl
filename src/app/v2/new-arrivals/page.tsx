@@ -28,6 +28,7 @@ import ActionButton from '@/components/v2/common/action-button';
 import { MRT_RowSelectionState } from 'material-react-table';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
+import useUser from '@/lib/use-auth';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
@@ -97,11 +98,13 @@ const NewArrivals = () => {
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState();
+  const { authToken } = useUser();
 
   // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
-
-  useSocket(socketManager);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
 
   const handleBidStones = useCallback((data: any) => {
     console.log(data);
@@ -151,24 +154,24 @@ const NewArrivals = () => {
     }
   }, []);
   useEffect(() => {
+    const handleRequestGetBidStones = (data: any) => {
+      socketManager.emit('get_bid_stones');
+    };
     socketManager.on('bid_stones', handleBidStones);
     socketManager.on('error', handleError);
     socketManager.on('bid_placed', handleBidPlaced);
     socketManager.on('bid_canceled', handleBidCanceled);
 
-    const handleRequestGetBidStones = (data: any) => {
-      socketManager.emit('get_bid_stones');
-    };
-
     // Setting up the event listener for "request_get_bid_stones"
     socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bid_stones', handleBidStones);
       socketManager.off('error', handleError);
       socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
-  }, [socketManager, handleBidStones, handleError]);
+  }, [socketManager, handleBidStones, handleError, authToken]);
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),

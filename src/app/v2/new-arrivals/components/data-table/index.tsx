@@ -396,9 +396,9 @@ const NewArrivalDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
     enableStickyHeader: true,
-    enableBottomToolbar: false,
+    // enableBottomToolbar: false,
     // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,
@@ -729,6 +729,12 @@ const NewArrivalDataTable = ({
                         product_id: row.id,
                         bid_value: bidValues[row.id]
                       });
+                      activeTab === 0 &&
+                        setRowSelection((prev: any) => {
+                          let prevRows = { ...prev };
+                          delete prevRows[row.id];
+                          return prevRows;
+                        });
                     },
                     customStyle: 'flex-1 w-full h-10'
                   }
