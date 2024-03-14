@@ -35,6 +35,7 @@ import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
 import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import useUser from '@/lib/use-auth';
 
 interface ITabs {
   label: string;
@@ -429,8 +430,11 @@ const Dashboard = () => {
       });
   };
   const socketManager = useMemo(() => new SocketManager(), []);
+  const { authToken } = useUser();
 
-  useSocket(socketManager);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
   const handleBidStones = useCallback((data: any) => {
     setNewArrivalData(data.bidStone.length); // Adjust according to your data structure
 
