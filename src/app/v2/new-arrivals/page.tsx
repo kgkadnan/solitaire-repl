@@ -42,7 +42,7 @@ const NewArrivals = () => {
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          enableSorting: false,
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
