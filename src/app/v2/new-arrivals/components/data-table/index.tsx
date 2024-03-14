@@ -49,6 +49,9 @@ const theme = createTheme({
           // Hover state for the cell
           '&:hover .MuiBadge-root': {
             visibility: 'visible'
+          },
+          '&.Mui-TableBodyCell-DetailPanel': {
+            borderBottom: 'none' // Customize the border as needed
           }
         }
       }
@@ -59,7 +62,8 @@ const theme = createTheme({
           '& .Mui-TableHeadCell-Content-Wrapper': {
             whiteSpace: 'nowrap',
             color: 'var(--neutral-700)',
-            fontWeight: 500
+            fontWeight: 500,
+            borderTop: 'none'
           }
         }
       }
@@ -258,7 +262,9 @@ const NewArrivalDataTable = ({
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
-      <div className="border-b-[1px] border-neutral200">
+      <div
+        className={` border-neutral200 ${activeTab !== 2 && 'border-b-[1px]'}`}
+      >
         <Box
           sx={{
             display: 'flex',
@@ -534,6 +540,7 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:CU_lot_id' ||
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:SCU_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
@@ -620,15 +627,19 @@ const NewArrivalDataTable = ({
         // If the row is selected, return the detail panel content
         return (
           <div
-            className="flex gap-6 "
+            className="flex gap-6"
             onClick={event => event.stopPropagation()}
           >
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">
+                Current Max Bid%
+              </div>
+
               <InputField
-                label={'Current Max Bid%'}
+                // label={'Current Max Bid%'}
                 type="text"
                 styles={{
-                  inputMain: 'h-[64px]',
+                  inputMain: 'h-[40px]',
                   input: 'bg-infoSurface border-infoBorder text-infoMain'
                 }}
                 value={`${row.original.current_max_bid}%`}
@@ -636,10 +647,12 @@ const NewArrivalDataTable = ({
               />
             </div>
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">Bid Pr/Ct</div>
+
               <InputField
-                label={'Bid Pr/Ct'}
+                // label={'Bid Pr/Ct'}
                 type="text"
-                styles={{ inputMain: 'h-[64px]' }}
+                styles={{ inputMain: 'h-[40px]' }}
                 value={
                   bidValues[row.id] !== undefined
                     ? (
@@ -655,10 +668,12 @@ const NewArrivalDataTable = ({
               />
             </div>
             <div className="w-[120px]">
+              <div className="text-mRegular text-neutral700">Bid Amt $</div>
+
               <InputField
-                label={'Bid Amt $'}
+                // label={'Bid Amt $'}
                 type="text"
-                styles={{ inputMain: 'h-[64px]' }}
+                styles={{ inputMain: 'h-[40px]' }}
                 value={
                   bidValues[row.id] !== undefined
                     ? (

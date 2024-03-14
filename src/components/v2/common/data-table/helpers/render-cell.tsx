@@ -125,7 +125,9 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 };
 
 export const RenderAmount = ({ row }: any) => {
-  return <span>{`${row.original.variants[0].prices[0].amount}`}</span>;
+  return (
+    <span>{`${row.original.variants[0].prices[0].amount?.toFixed(2)}`}</span>
+  );
 };
 
 export const RenderShape = ({ row }: any) => {
@@ -139,15 +141,21 @@ export const RenderMeasurements = ({ row }: any) => {
 };
 
 export const RenderNewArrivalPrice = ({ row }: any) => {
-  return <span>{`${row.original.price}`}</span>;
+  return <span>{`${row?.original?.price?.toFixed(2) ?? '-'}`}</span>;
+};
+
+export const RenderNewArrivalPricePerCarat = ({ row }: any) => {
+  return <span>{`${row?.original?.price_per_carat?.toFixed(2) ?? '-'}`}</span>;
 };
 
 export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
   return (
-    <div
-      className={`text-infoMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
-    >
-      {`${renderedCellValue && renderedCellValue}%`}
+    <div className="w-full flex justify-center items-center">
+      <div
+        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] min-w-[50px] rounded-[4px]`}
+      >
+        {`${renderedCellValue && renderedCellValue}%`}
+      </div>
     </div>
   );
 };
@@ -155,16 +163,19 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
 export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
   let statusClass = '';
   let borderClass = '';
-
+  let textClass = '';
   if (row.original.current_max_bid < row.original.my_current_bid) {
     statusClass = 'bg-successSurface';
     borderClass = 'border-successBorder';
+    textClass = 'text-successMain';
   } else if (row.original.current_max_bid > row.original.my_current_bid) {
     statusClass = 'bg-dangerSurface';
     borderClass = 'border-dangerBorder';
+    textClass = 'text-dangerMain';
   } else if (row.original.current_max_bid === row.original.my_current_bid) {
     statusClass = 'bg-successSurface';
     borderClass = 'border-successBorder';
+    textClass = 'text-successMain';
   } else {
     statusClass = 'border-none';
     // borderClass = 'border-neutral0';
@@ -172,7 +183,7 @@ export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
 
   return (
     <span
-      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass} ${textClass}`}
     >
       {renderedCellValue}
     </span>

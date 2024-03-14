@@ -47,14 +47,14 @@ const CountdownTimer = ({
               className="h-[30px] w-full rounded-[8px]"
               style={{
                 background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                  'linear-gradient(90deg, #DBF2FC 40%, #E8E8FF 60%, #FFF4E3 100%)'
               }}
             ></div>
             <div
               className="h-[30px] w-full rounded-[8px]"
               style={{
                 background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                  'linear-gradient(90deg, #DBF2FC 40%, #E8E8FF 60%, #FFF4E3 100%)'
               }}
             ></div>
           </div>
@@ -71,15 +71,13 @@ const CountdownTimer = ({
             <div
               className="h-[30px] w-full rounded-[8px]"
               style={{
-                background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                background: 'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
               }}
             ></div>
             <div
               className="h-[30px] w-full rounded-[8px]"
               style={{
-                background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                background: 'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
               }}
             ></div>
           </div>
@@ -96,15 +94,13 @@ const CountdownTimer = ({
             <div
               className="h-[30px] w-full rounded-[8px]"
               style={{
-                background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                background: 'linear-gradient(90deg, #DBF2FC 50%,  #FFF4E3 100%)'
               }}
             ></div>
             <div
               className="h-[30px] w-full rounded-[8px]"
               style={{
-                background:
-                  'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)'
+                background: 'linear-gradient(90deg, #DBF2FC 50%,  #FFF4E3 100%)'
               }}
             ></div>
           </div>
