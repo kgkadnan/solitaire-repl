@@ -2,7 +2,6 @@ import { Box, Stack } from '@mui/material';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
-  MRT_RowSelectionState,
   MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
@@ -27,7 +26,7 @@ import Tab from '../tabs';
 import { InputField } from '@/components/v2/common/input-field';
 import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?url';
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
-import empty from '@public/v2/assets/icons/data-table/empty-cart.svg';
+import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const theme = createTheme({
@@ -153,7 +152,8 @@ const NewArrivalDataTable = ({
                       products: selectedIds,
                       downloadExcelApi: downloadExcel,
                       modalSetState,
-                      setRowSelection
+                      setRowSelection,
+                      fromNewArrivalBid: true
                     });
                   },
                   customStyle: 'flex-1 w-full'
@@ -170,7 +170,8 @@ const NewArrivalDataTable = ({
                       products: allProductIds,
                       downloadExcelApi: downloadExcel,
                       modalSetState,
-                      setRowSelection
+                      setRowSelection,
+                      fromNewArrivalBid: true
                     });
                   },
                   customStyle: 'flex-1 w-full'
@@ -189,7 +190,8 @@ const NewArrivalDataTable = ({
         products: allProductIds,
         downloadExcelApi: downloadExcel,
         modalSetState,
-        setRowSelection
+        setRowSelection,
+        fromNewArrivalBid: true
       });
     }
   };
@@ -364,13 +366,18 @@ const NewArrivalDataTable = ({
   );
 
   const NoResultsComponent = () => (
-    <div className="flex flex-col items-center justify-center gap-5 h-[90%]">
-      {/* <Image src={empty} alt={'empty'} />
-      <p className="text-neutral900  w-[320px] text-center">
-        Our diamond collection awaits new arrivals. Stay tuned for dazzling
-        additions soon.
-      </p> */}
-      <CustomKGKLoader />
+    <div className="flex flex-col items-center justify-center gap-5 h-[100%] mt-[50px]">
+      {activeCount === 0 || bidCount === 0 || historyCount === 0 ? (
+        <>
+          <Image src={empty} alt={'empty'} />
+          <p className="text-neutral900  w-[320px] text-center ">
+            Our diamond collection awaits new arrivals. Stay tuned for dazzling
+            additions soon.
+          </p>
+        </>
+      ) : (
+        <CustomKGKLoader />
+      )}
     </div>
   );
   //pass table options to useMaterialReactTable
@@ -389,9 +396,9 @@ const NewArrivalDataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: true,
+    enablePagination: false,
     enableStickyHeader: true,
-    // enableBottomToolbar: false,
+    enableBottomToolbar: false,
     // enableRowVirtualization:true,
     enableGrouping: true,
     enableExpandAll: false,

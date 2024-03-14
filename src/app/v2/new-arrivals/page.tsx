@@ -367,9 +367,9 @@ const NewArrivals = () => {
                   ? activeBid
                   : bidHistory?.data
               }
-              activeCount={activeBid?.length ?? 0}
-              bidCount={bid?.length ?? 0}
-              historyCount={bidHistory?.data?.length ?? 0}
+              activeCount={activeBid?.length}
+              bidCount={bid?.length}
+              historyCount={bidHistory?.data?.length}
               socketManager={socketManager}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
