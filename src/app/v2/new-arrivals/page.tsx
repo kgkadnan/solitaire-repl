@@ -12,7 +12,6 @@ import {
   RenderTracerId,
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
-  RenderNewArrivalLotId,
   RenderNewArrivalPricePerCarat
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
@@ -30,7 +29,6 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
 import useUser from '@/lib/use-auth';
-import { RenderAmount } from '@/components/v2/table/helpers/render-cell';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
@@ -76,8 +74,8 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
-          case 'lot_id':
-            return { ...commonProps, Cell: RenderNewArrivalLotId };
+          // case 'lot_id':
+          //   return { ...commonProps, Cell: RenderNewArrivalLotId };
           case 'price_per_carat':
             return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 

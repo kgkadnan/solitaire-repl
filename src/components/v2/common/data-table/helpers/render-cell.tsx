@@ -152,7 +152,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
   return (
     <div className="w-full flex justify-center items-center">
       <div
-        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] min-w-[50px] rounded-[4px]`}
+        className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] w-[74px] rounded-[4px] text-end`}
       >
         {`${renderedCellValue && renderedCellValue}%`}
       </div>
@@ -188,4 +188,27 @@ export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
       {renderedCellValue}
     </span>
   );
+};
+
+export const RenderNewArrivalLotIdColor = ({ row }: any) => {
+  let statusClass = '';
+  let textClass = '';
+  if (row.original.current_max_bid < row.original.my_current_bid) {
+    statusClass = 'var(--success-surface)';
+    textClass = 'var(--success-main)';
+  } else if (row.original.current_max_bid > row.original.my_current_bid) {
+    statusClass = 'var(--danger-surface)';
+    textClass = 'var(--danger-main)';
+  } else if (row.original.current_max_bid === row.original.my_current_bid) {
+    statusClass = 'var(--success-surface)';
+    textClass = 'var(--success-main)';
+  } else {
+    statusClass = 'border-none';
+    // borderClass = 'border-neutral0';
+  }
+
+  return {
+    background: statusClass,
+    text: textClass
+  };
 };

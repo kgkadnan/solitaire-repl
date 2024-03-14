@@ -28,6 +28,7 @@ import DecrementIcon from '@public/v2/assets/icons/new-arrivals/decrement.svg?ur
 import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?url';
 import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 
 const theme = createTheme({
   typography: {
@@ -54,6 +55,9 @@ const theme = createTheme({
             borderBottom: 'none' // Customize the border as needed
           }
         }
+        // '&:hover':{
+        //   background:"red !important"
+        // }
       }
     },
     MuiTableHead: {
@@ -412,14 +416,34 @@ const NewArrivalDataTable = ({
     // selectAllMode: undefined,
 
     muiTableBodyRowProps: ({ row }) => {
+      const isHighlightBackground =
+        activeTab !== 0 && RenderNewArrivalLotIdColor({ row });
+      console.log(isHighlightBackground, 'isHighlightBackground', row);
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
-          '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
-            backgroundColor: 'var(--neutral-50)'
+          // '&.MuiTableRow-root:hover .MuiTableCell-root::after': {
+          //   backgroundColor: isHighlightBackground
+          //     ? isHighlightBackground.background
+          //     : 'var(--neutral-50)'
+          //     // backgroundColor: 'var(--neutral-50)'
+          // },
+          '&.MuiTableRow-root': {
+            // Define styles for the ::after pseudo-element of each cell within a hovered row
+            '& .MuiTableCell-root::after': {
+              // Maintain the default background color for non-lot_id columns
+              backgroundColor: 'var(--neutral-50) !important'
+            },
+            // Target the specific cell that matches the lot_id column within a hovered row
+            '& .MuiTableCell-root[data-index="1"]::after': {
+              // Change the background color to red if isHighlightBackground is true, otherwise maintain the default hover color
+              backgroundColor: isHighlightBackground
+                ? `${isHighlightBackground.background} !important`
+                : 'var(--neutral-50)'
+            }
           },
           '&.MuiTableRow-root .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-25)'
@@ -449,7 +473,12 @@ const NewArrivalDataTable = ({
               borderBottom: '1px solid var(--neutral-50)',
               padding: '0px',
               ':hover': {
-                border: 'none'
+                border: 'none',
+                background: 'red'
+              },
+              '::after': {
+                border: 'none',
+                background: 'red'
               }
             }
           };
@@ -508,14 +537,26 @@ const NewArrivalDataTable = ({
       }
     },
     // muiTableBodyCellProps: ({ cell }) => {
-    muiTableBodyCellProps: ({ cell }) => {
+    muiTableBodyCellProps: ({ cell, row }) => {
+      const isHighlightBackground =
+        activeTab !== 0 &&
+        cell.column.id === 'lot_id' &&
+        RenderNewArrivalLotIdColor({ row });
       return {
         sx: {
           color: 'var(--neutral-900)',
           '&.MuiTableCell-root': {
             padding: '4px 8px',
-            background: 'White',
+            background: isHighlightBackground
+              ? isHighlightBackground.background
+              : 'White',
+            color: isHighlightBackground && isHighlightBackground.text,
             opacity: 1,
+            '&:hover': {
+              background: isHighlightBackground
+                ? isHighlightBackground.background
+                : 'White'
+            },
             visibility:
               (cell.id === 'shape:RAD_lot_id' ||
                 cell.id === 'shape:EM_lot_id' ||
