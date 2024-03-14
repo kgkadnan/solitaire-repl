@@ -553,6 +553,7 @@ const DataTable = ({
                 cell.id === 'shape:CU_lot_id' ||
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:SCU_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },

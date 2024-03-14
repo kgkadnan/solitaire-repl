@@ -12,7 +12,8 @@ import {
   RenderTracerId,
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
-  RenderNewArrivalLotId
+  RenderNewArrivalLotId,
+  RenderNewArrivalPricePerCarat
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -29,6 +30,7 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
 import useUser from '@/lib/use-auth';
+import { RenderAmount } from '@/components/v2/table/helpers/render-cell';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
@@ -76,6 +78,8 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RednderLocation };
           case 'lot_id':
             return { ...commonProps, Cell: RenderNewArrivalLotId };
+          case 'price_per_carat':
+            return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 
           case 'tracr_id':
             return { ...commonProps, Cell: RenderTracerId };
@@ -177,6 +181,7 @@ const NewArrivals = () => {
     () => mapColumns(columnHeaders),
     [columnHeaders]
   );
+  console.log(memoizedColumns, 'memoizedColumns');
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
@@ -355,7 +360,13 @@ const NewArrivals = () => {
         <div className="border-b-[1px] border-neutral200">
           {
             <NewArrivalDataTable
-              columns={memoizedColumns}
+              columns={
+                activeTab === 2
+                  ? memoizedColumns.filter(
+                      (data: any) => data.accessorKey !== 'current_max_bid'
+                    )
+                  : memoizedColumns
+              }
               modalSetState={modalSetState}
               setErrorText={setErrorText}
               downloadExcel={downloadExcel}

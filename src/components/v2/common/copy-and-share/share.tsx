@@ -122,7 +122,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
         </div>
         <div className="flex justify-between">
           <p className="text-lMedium font-medium text-neutral900">
-            Select Columns to share
+            Select columns to share
           </p>
           <div
             className="text-infoMain text-mRegular cursor-pointer"
