@@ -280,7 +280,7 @@ const MyAccount = () => {
             </div>
           </div>
         </div>
-        <div className="flex border-b border-neutral200   text-mMedium font-medium px-[24px]">
+        <div className="flex border-b border-transparent   text-mMedium font-medium px-[24px]">
           {myAccountTabs.map(({ label, status }) => {
             return (
               <button

@@ -91,7 +91,7 @@ const TermAndCondtions = () => {
         {ManageLocales('app.myAccount.tabs.termAndConditions')}
       </h1>
 
-      <div className="ml-[16px] flex flex-col gap-[16px]">
+      <div className="flex flex-col gap-[16px]">
         <div className="rounded-[8px]  w-[385px]">
           <button
             className={`px-[16px] py-[8px] rounded-l-[8px] ${
