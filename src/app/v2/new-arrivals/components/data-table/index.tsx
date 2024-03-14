@@ -213,14 +213,6 @@ const NewArrivalDataTable = ({
 
   const [bidValues, setBidValues] = useState<BidValues>({});
 
-  // Function to increment the bid value for a specific row
-  // const handleIncrement = (rowId:string) => {
-  //   setBidValues((prevValues:any) => ({
-  //     ...prevValues,
-  //     [rowId]: (prevValues[rowId] || 0) + 0.5,
-  //   }));
-  // };
-
   const handleIncrement = (rowId: string, currentMaxBid: any) => {
     // Retrieve the current_max_bid for the row from the rows data
     setBidValues(prevValues => {
@@ -229,14 +221,14 @@ const NewArrivalDataTable = ({
       if (currentBidValue !== undefined) {
         return {
           ...prevValues,
-          [rowId]: currentBidValue + 0.5
+          [rowId]: Number(currentBidValue) + 0.5
         };
       }
       // If no bid value for this row yet, start from current_max_bid and add 0.5
       else {
         return {
           ...prevValues,
-          [rowId]: currentMaxBid + 0.5
+          [rowId]: Number(currentMaxBid) + 0.5
         };
       }
     });
@@ -251,26 +243,18 @@ const NewArrivalDataTable = ({
       if (currentBidValue !== undefined) {
         return {
           ...prevValues,
-          [rowId]: currentBidValue - 0.5
+          [rowId]: Number(currentBidValue) - 0.5
         };
       }
       // If no bid value for this row yet, just set it to current_max_bid (can't decrement below it)
       else {
         return {
           ...prevValues,
-          [rowId]: currentMaxBid - 0.5
+          [rowId]: Number(currentMaxBid) - 0.5
         };
       }
     });
   };
-
-  // Function to decrement the bid value for a specific row
-  // const handleDecrement = (rowId:string) => {
-  //   setBidValues((prevValues:any) => ({
-  //     ...prevValues,
-  //     [rowId]: Math.max(0, (prevValues[rowId] || 0) - 0.5), // Prevent negative values
-  //   }));
-  // };
 
   const renderTopToolbar = ({ table }: any) => (
     <div>
@@ -700,13 +684,24 @@ const NewArrivalDataTable = ({
                 <div className="w-[120px]">
                   <InputField
                     // label={'Bid Amt $'}
-                    type="text"
+                    type="number"
                     styles={{ inputMain: 'h-[64px]' }}
                     value={
                       bidValue
                       // row.original.my_current_bid ??
                       // row.original.current_max_bid - 0.5
                     }
+                    onChange={e => {
+                      setBidValues((prevValues: any) => {
+                        // If there's already a bid value for this row, increment it
+                        return {
+                          ...prevValues,
+                          [row.id]: e.target.value
+                        };
+
+                        // If no bid value for this row yet, start from current_max_bid and add 0.5
+                      });
+                    }}
                   />
                 </div>
                 <div

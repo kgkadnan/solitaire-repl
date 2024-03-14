@@ -93,6 +93,7 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
+    setRowSelection({});
   };
   const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
