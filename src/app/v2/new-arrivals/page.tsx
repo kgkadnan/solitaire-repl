@@ -179,7 +179,6 @@ const NewArrivals = () => {
     () => mapColumns(columnHeaders),
     [columnHeaders]
   );
-  console.log(memoizedColumns, 'memoizedColumns');
   const { modalState, modalSetState } = useModalStateManagement();
   const { errorState, errorSetState } = useErrorStateManagement();
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});

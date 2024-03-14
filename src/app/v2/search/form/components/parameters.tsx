@@ -418,7 +418,7 @@ export const Parameters = ({
                               });
                           }
                         }}
-                        inputGap="gap-[20px]"
+                        inputGap="gap-[10px]"
                         errorText={errorState}
                       />
                     </div>
