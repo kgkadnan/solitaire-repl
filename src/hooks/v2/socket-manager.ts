@@ -8,7 +8,6 @@ export class SocketManager {
   socket: any;
 
   initializeSocket(token: string) {
-    console.log(token);
     if (token) {
       this.socket = io(process.env.NEXT_PUBLIC_SOCKET_URL as string, {
         auth: { token }
@@ -18,9 +17,7 @@ export class SocketManager {
   }
 
   initAndConnect() {
-    console.log('hi3');
     this.socket.on('connect', () => {
-      console.log('Socket connected');
       this.emit('get_bid_stones');
     });
   }
@@ -30,8 +27,6 @@ export class SocketManager {
   }
 
   on(event: string, handler: (data: any) => void) {
-    console.log(event, 'emiitting event');
-
     this.socket?.on(event, handler);
   }
   off(event: string, handler: (data: any) => void) {

@@ -127,8 +127,6 @@ const ChangePassword = ({ modalSetState }: any) => {
         formState
       });
 
-      console.log('fieldError', fieldError);
-
       if (fieldError) {
         isValid = false;
         errors = { ...errors, [key]: fieldError };
@@ -212,8 +210,6 @@ const ChangePassword = ({ modalSetState }: any) => {
     setChangePasswordState(initialFormState);
     setChangePasswordFormErrors(initialFormState);
   };
-
-  console.log('changePsswor', changePasswordFormErrors);
 
   return (
     <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[68vh]">
