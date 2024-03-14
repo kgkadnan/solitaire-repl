@@ -21,7 +21,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
     useEffect(() => {
       // Check if the user is KYC verified
       const showNudge = localStorage.getItem('show-nudge') ?? 'FULL'; // Replace with actual check
-      const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+      const isKycVerified = JSON?.parse(localStorage?.getItem('user')!);
       if (
         showNudge !== 'MINI' &&
         (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||

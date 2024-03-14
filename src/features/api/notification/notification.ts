@@ -24,6 +24,13 @@ export const newNotificationApi = createApi({
     readNotification: builder.query({
       query: ({ noticeId }) => `/store/customers/me/notices/read/${noticeId}`,
       providesTags: ['notification']
+    }),
+    readAllNotification: builder.mutation({
+      query: () => ({
+        url: `/store/customers/me/notices/read-all`,
+        method: 'PUT'
+      }),
+      invalidatesTags: ['notification']
     })
   })
 });
@@ -32,5 +39,6 @@ export const {
   useSeenNotificationMutation,
   useLazyGetNotificationQuery,
   useGetNotificationQuery,
+  useReadAllNotificationMutation,
   useLazyReadNotificationQuery
 } = newNotificationApi;

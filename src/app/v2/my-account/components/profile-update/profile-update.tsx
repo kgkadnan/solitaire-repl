@@ -16,10 +16,9 @@ import deleteIcon from '@public/v2/assets/icons/attachment/delete-icon.svg';
 import logger from 'logging/log-util';
 import { Label } from '@/components/v2/ui/label';
 
-const ProfileUpdate = ({ handleFileUpload }: any) => {
+const ProfileUpdate = ({ handleFileUpload, handleDeleteAttachment }: any) => {
   const [updateProfilePhoto] = useUpdateProfilePhotoMutation({});
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
-  const [deleteProfile] = useDeleteProfileMutation({});
 
   const dropzoneStyle = {
     borderRadius: '8px',
@@ -60,18 +59,6 @@ const ProfileUpdate = ({ handleFileUpload }: any) => {
     });
 
     return formData;
-  };
-
-  const handleDeleteAttachment = () => {
-    deleteProfile({})
-      .unwrap()
-      .then(res => {
-        setSelectedFile({});
-        setIsFileUploaded(false);
-      })
-      .catch(error => {
-        logger.info(error);
-      });
   };
 
   const onDrop = async (acceptedFiles: any) => {
@@ -168,7 +155,10 @@ const ProfileUpdate = ({ handleFileUpload }: any) => {
                   {Object.keys(selectedFile).length && isFileUploaded && (
                     <button
                       onClick={() => {
-                        handleDeleteAttachment();
+                        handleDeleteAttachment({
+                          setSelectedFile,
+                          setIsFileUploaded
+                        });
                       }}
                     >
                       <Image src={deleteIcon} alt="deleteIcon" />

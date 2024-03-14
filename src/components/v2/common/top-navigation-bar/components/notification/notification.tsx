@@ -15,6 +15,7 @@ import {
   useGetNotificationQuery,
   useLazyGetNotificationQuery,
   useLazyReadNotificationQuery,
+  useReadAllNotificationMutation,
   useSeenNotificationMutation
 } from '@/features/api/notification/notification';
 import { formatDistanceToNow } from 'date-fns';
@@ -35,6 +36,7 @@ interface INotification {
 }
 const Notification = () => {
   const [triggerNotification] = useLazyGetNotificationQuery({});
+  const [readAllNotification] = useReadAllNotificationMutation({});
   const { data } = useGetNotificationQuery({});
   const [triggerReadNotification] = useLazyReadNotificationQuery({});
   const [seenNotification] = useSeenNotificationMutation({});
@@ -112,6 +114,14 @@ const Notification = () => {
           });
       }
     });
+  };
+
+  const readAllNotificationHandler = () => {
+    readAllNotification({})
+      .unwrap()
+      .then(res => {
+        console.log('Res', res);
+      });
   };
 
   const gradientClasses = [
@@ -211,12 +221,17 @@ const Notification = () => {
                 Preferences
               </span>
             </Link>
-            <div className="flex items-center gap-2">
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                readAllNotificationHandler();
+              }}
+            >
               <Image src={markRead} alt="markRead" />
               <span className="text-neutral-700 text-mRegular">
                 Mark all as read
               </span>
-            </div>
+            </button>
           </div>
         </div>
       </PopoverContent>
