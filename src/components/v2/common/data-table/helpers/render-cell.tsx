@@ -155,6 +155,7 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
 export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
   let statusClass = '';
   let borderClass = '';
+
   if (row.original.current_max_bid < row.original.my_current_bid) {
     statusClass = 'bg-successSurface';
     borderClass = 'border-successBorder';
@@ -162,8 +163,8 @@ export const RenderNewArrivalLotId = ({ renderedCellValue, row }: any) => {
     statusClass = 'bg-dangerSurface';
     borderClass = 'border-dangerBorder';
   } else if (row.original.current_max_bid === row.original.my_current_bid) {
-    statusClass = 'bg-dangerSurface';
-    borderClass = 'border-dangerBorder';
+    statusClass = 'bg-successSurface';
+    borderClass = 'border-successBorder';
   } else {
     statusClass = 'border-none';
     // borderClass = 'border-neutral0';

@@ -6,7 +6,6 @@ import {
   RenderDiscount,
   RenderDetails,
   RenderLab,
-  RenderLotId,
   RednderLocation,
   RenderShape,
   RenderMeasurements,
@@ -27,10 +26,11 @@ import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import { MRT_RowSelectionState } from 'material-react-table';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import Image from 'next/image';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
-  console.log('saasas', bidHistory?.data);
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -96,6 +96,7 @@ const NewArrivals = () => {
   const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
+  const [time, setTime] = useState();
 
   // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
@@ -103,14 +104,14 @@ const NewArrivals = () => {
   useSocket(socketManager);
 
   const handleBidStones = useCallback((data: any) => {
-    console.log(data, 'Bid stones data');
+    console.log(data);
     setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
+    setTime(data.endTime);
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {
-    console.log(data, 'i999');
     if (data) {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -124,12 +125,11 @@ const NewArrivals = () => {
   }, []);
 
   const handleBidPlaced = useCallback((data: any) => {
-    console.log(data, 'placess');
-    if (data?.status === 'success') {
+    if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
@@ -138,12 +138,11 @@ const NewArrivals = () => {
     }
   }, []);
   const handleBidCanceled = useCallback((data: any) => {
-    console.log(data, 'cancel');
-    if (data?.status === 'success') {
+    if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
@@ -158,12 +157,11 @@ const NewArrivals = () => {
     socketManager.on('bid_canceled', handleBidCanceled);
 
     const handleRequestGetBidStones = (data: any) => {
-      console.log(data, '-----------------');
       socketManager.emit('get_bid_stones');
     };
 
     // Setting up the event listener for "request_get_bid_stones"
-    // socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+    socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bid_stones', handleBidStones);
@@ -255,9 +253,41 @@ const NewArrivals = () => {
                   variant: 'primary',
                   label: 'Cancel Bid',
                   handler: () => {
-                    socketManager.emit('cancel_bid', {
-                      product_ids: Object.keys(rowSelection)
-                    });
+                    modalSetState.setIsDialogOpen(true);
+                    modalSetState.setDialogContent(
+                      <>
+                        <div className="absolute left-[-84px] top-[-84px]">
+                          <Image src={warningIcon} alt="warning" />
+                        </div>
+                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+                          <h1 className="text-headingS text-neutral900">
+                            Are you sure you want to cancel this bid?
+                          </h1>
+                          <ActionButton
+                            actionButtonData={[
+                              {
+                                variant: 'secondary',
+                                label: 'Go Back',
+                                handler: () => {
+                                  modalSetState.setIsDialogOpen(false);
+                                },
+                                customStyle: 'flex-1 w-full'
+                              },
+                              {
+                                variant: 'primary',
+                                label: 'Cancel Bid',
+                                handler: () => {
+                                  socketManager.emit('cancel_bid', {
+                                    product_ids: Object.keys(rowSelection)
+                                  });
+                                },
+                                customStyle: 'flex-1 w-full'
+                              }
+                            ]}
+                          />
+                        </div>
+                      </>
+                    );
                   }
                 }
               ]}
@@ -307,11 +337,13 @@ const NewArrivals = () => {
         <p className="text-headingM font-medium text-neutral900">
           New Arrivals
         </p>
-        <CountdownTimer
-          initialHours={1}
-          initialMinutes={40}
-          initialSeconds={10}
-        />
+        {time && (
+          <CountdownTimer
+            initialHours={new Date(time).getHours()}
+            initialMinutes={new Date(time).getMinutes()}
+            initialSeconds={new Date(time).getSeconds()}
+          />
+        )}
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         {/* <div className="w-[450px]">
