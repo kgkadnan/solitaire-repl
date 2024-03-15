@@ -1,5 +1,5 @@
 import { ManageLocales } from '@/utils/v2/translate';
-import React from 'react';
+import React, { useState } from 'react';
 import { AttachmentData } from './attachment-data/attachement-data';
 import FileAttachments from '@/components/v2/common/file-attachment';
 import CheckboxComponent from '@/components/v2/common/checkbox';
@@ -13,6 +13,7 @@ import { updateFormState } from '@/features/kyc/kyc';
 import { countries } from '@/constants/enums/kyc';
 import { DownloadAndUpload } from '@/components/v2/common/download-and-upload';
 import ActionButton from '@/components/v2/common/action-button';
+import { TermsDialogComponent } from './terms-and-conditions';
 
 export const RenderOffline = ({
   formErrorState,
@@ -29,7 +30,7 @@ export const RenderOffline = ({
   const [uploadDocument] = useUploadDocumentMutation({});
   const [deleteDocument] = useDeleteDocumentMutation({});
   const dispatch = useAppDispatch();
-
+  const [openTerms, setOpenTerms] = useState(false);
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
@@ -99,6 +100,7 @@ export const RenderOffline = ({
 
   return (
     <div className="flex flex-col  items-center">
+      <TermsDialogComponent isOpens={openTerms} setIsOpen={setOpenTerms} />
       <div className="w-[920px] mt-[20px] mb-[10px]">
         <h1 className="text-lMedium text-neutral-900 font-lMedium">
           Download and Upload Hub
@@ -248,17 +250,18 @@ export const RenderOffline = ({
               >
                 I hereby agree to
               </p>
-              <a
-                href="https://kgk.live/terms-condition"
-                className={` ${
+              <div
+                onClick={() => {
+                  setOpenTerms(true);
+                }}
+                className={`cursor-pointer ${
                   formErrorState.termAndCondition
                     ? 'text-dangerMain '
                     : 'text-infoMain'
                 } `}
-                target="_blank"
               >
                 terms and conditions
-              </a>
+              </div>
             </div>
           </div>
         </div>

@@ -9,7 +9,7 @@ import AppointmentIcon from '@public/v2/assets/icons/sidebar-icons/appointment.s
 import BidToBuyIcon from '@public/v2/assets/icons/sidebar-icons/bid-to-buy.svg?url';
 import { useRouter } from 'next/navigation';
 import { useGetCustomerQuery } from '@/features/api/dashboard';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
 import micIcon from '@public/v2/assets/icons/dashboard/mic.svg';
 import editIcon from '@public/v2/assets/icons/saved-search/edit-button.svg';
@@ -34,6 +34,8 @@ import errorIcon from '@public/v2/assets/icons/modal/error.svg';
 import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
 import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import useUser from '@/lib/use-auth';
 
 interface ITabs {
   label: string;
@@ -49,7 +51,47 @@ const Dashboard = () => {
 
   const [activeTab, setActiveTab] = useState<string>('');
   const [tabs, setTabs] = useState<ITabs[]>([]);
-
+  const [newArrivalData, setNewArrivalData] = useState(0);
+  const optionsClasses = [
+    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
+    'linear-gradient(90deg, #FFF4E3 0%, #E8E8FF 50%, #DBF2FC 100%)',
+    'linear-gradient(90deg, #E1F6F1 0%, #FFF4E3 50%, #EFEFFD 100%)',
+    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
+  ];
+  const [options, setOptions] = useState([
+    {
+      label: 'New Arrivals',
+      icon: <ArrivalIcon stroke="#101828" />,
+      color: optionsClasses[0],
+      count: newArrivalData,
+      isAvailable: true,
+      link: '/v2/new-arrivals'
+    },
+    {
+      label: 'My Cart',
+      icon: <CartIcon />,
+      color: optionsClasses[1],
+      count: customerData?.customer.cart.items.length ?? 0,
+      isAvailable: true,
+      link: '/v2/my-cart'
+    },
+    {
+      label: 'Bid to Buy',
+      icon: <BidToBuyIcon />,
+      color: optionsClasses[2],
+      count: 0,
+      isAvailable: false,
+      link: '/v2/my-cart'
+    },
+    {
+      label: 'My Appointments',
+      icon: <AppointmentIcon />,
+      color: optionsClasses[3],
+      count: 0,
+      isAvailable: false,
+      link: '/v2/my-cart'
+    }
+  ]);
   const handleTabs = ({ tab }: { tab: string }) => {
     setActiveTab(tab);
   };
@@ -62,12 +104,6 @@ const Dashboard = () => {
     styles.gradient2,
     styles.gradient3,
     styles.gradient4
-  ];
-  const optionsClasses = [
-    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 30%, #FFF4E3 100%)',
-    'linear-gradient(90deg, #FFF4E3 0%, #E8E8FF 50%, #DBF2FC 100%)',
-    'linear-gradient(90deg, #E1F6F1 0%, #FFF4E3 50%, #EFEFFD 100%)',
-    'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
   ];
 
   const handleEdit = (stone: string) => {
@@ -224,41 +260,6 @@ const Dashboard = () => {
       }
     }
   }, [customerData]);
-
-  const options = [
-    {
-      label: 'New Arrivals',
-      icon: <ArrivalIcon stroke="#101828" />,
-      color: optionsClasses[0],
-      count: 0,
-      isAvailable: true,
-      link: '/v2/new-arrivals'
-    },
-    {
-      label: 'My Cart',
-      icon: <CartIcon />,
-      color: optionsClasses[1],
-      count: customerData?.customer.cart.items.length ?? 0,
-      isAvailable: true,
-      link: '/v2/my-cart'
-    },
-    {
-      label: 'Bid to Buy',
-      icon: <BidToBuyIcon />,
-      color: optionsClasses[2],
-      count: 0,
-      isAvailable: false,
-      link: '/v2/my-cart'
-    },
-    {
-      label: 'My Appointments',
-      icon: <AppointmentIcon />,
-      color: optionsClasses[3],
-      count: 0,
-      isAvailable: false,
-      link: '/v2/my-cart'
-    }
-  ];
 
   useEffect(() => {
     if (tabs.length > 0) {
@@ -428,6 +429,37 @@ const Dashboard = () => {
         }
       });
   };
+  const socketManager = useMemo(() => new SocketManager(), []);
+  const { authToken } = useUser();
+
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
+  const handleBidStones = useCallback((data: any) => {
+    setNewArrivalData(data.bidStone.length); // Adjust according to your data structure
+
+    // Set other related state here
+  }, []);
+  useEffect(() => {
+    // Update the "New Arrivals" option with the new count
+    const updatedOptions = options.map(option => {
+      if (option.label === 'New Arrivals') {
+        return { ...option, count: newArrivalData };
+      }
+      return option;
+    });
+
+    // Set the updated options to trigger a re-render
+    setOptions(updatedOptions);
+  }, [newArrivalData]);
+
+  useEffect(() => {
+    socketManager.on('bid_stones', handleBidStones);
+
+    return () => {
+      socketManager.off('bid_stones', handleBidStones);
+    };
+  }, [socketManager, handleBidStones]);
 
   return (
     <>

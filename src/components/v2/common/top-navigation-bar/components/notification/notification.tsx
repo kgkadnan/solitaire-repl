@@ -15,12 +15,15 @@ import {
   useGetNotificationQuery,
   useLazyGetNotificationQuery,
   useLazyReadNotificationQuery,
+  useReadAllNotificationMutation,
   useSeenNotificationMutation
 } from '@/features/api/notification/notification';
 import { formatDistanceToNow } from 'date-fns';
 import Link from 'next/link';
 import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+import useUser from '@/lib/use-auth';
+import { useRouter } from 'next/navigation';
 
 interface INotification {
   created_at: string;
@@ -33,7 +36,9 @@ interface INotification {
   title: string;
 }
 const Notification = () => {
+  const router = useRouter();
   const [triggerNotification] = useLazyGetNotificationQuery({});
+  const [readAllNotification] = useReadAllNotificationMutation({});
   const { data } = useGetNotificationQuery({});
   const [triggerReadNotification] = useLazyReadNotificationQuery({});
   const [seenNotification] = useSeenNotificationMutation({});
@@ -63,6 +68,17 @@ const Notification = () => {
               return notification;
             })
           );
+
+          let getData = notificationData.filter(data => {
+            return data.id === noticeId;
+          })[0];
+
+          let splitData = getData.target_page.split(':');
+          if (splitData[0] === 'my-cart') {
+            router.push(`${splitData[0]}?path=${splitData[1]}`);
+          } else if (splitData[0] === 'your-order') {
+            router.push(`your-orders?path=${splitData[1]}`);
+          }
         }
       })
       .catch(error => {
@@ -71,8 +87,11 @@ const Notification = () => {
   };
 
   const socketManager = new SocketManager();
+  const { authToken } = useUser();
 
-  useSocket(socketManager);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
   useEffect(() => {
     socketManager.on('notification', data => _handleNotification());
 
@@ -108,6 +127,21 @@ const Notification = () => {
           });
       }
     });
+  };
+
+  const readAllNotificationHandler = () => {
+    readAllNotification({})
+      .unwrap()
+      .then(res => {
+        setNotificationData(prevData =>
+          prevData.map(notification => {
+            if (!notification.read_at) {
+              return { ...notification, read_at: new Date().toISOString() };
+            }
+            return notification;
+          })
+        );
+      });
   };
 
   const gradientClasses = [
@@ -207,12 +241,17 @@ const Notification = () => {
                 Preferences
               </span>
             </Link>
-            <div className="flex items-center gap-2">
+            <button
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={() => {
+                readAllNotificationHandler();
+              }}
+            >
               <Image src={markRead} alt="markRead" />
               <span className="text-neutral-700 text-mRegular">
                 Mark all as read
               </span>
-            </div>
+            </button>
           </div>
         </div>
       </PopoverContent>

@@ -16,6 +16,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
   const { setDialogContent, setIsDialogOpen } = modalSetState;
 
   const [selectedOptions, setSelectedOptions] = useState<any>([]);
+
   const [allNotification, setAllNotification] = useState('');
 
   const handleRadioChange = (value: string) => {
@@ -74,8 +75,6 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       }
     }
   };
-
-  console.log('data', selectedOptions);
 
   useEffect(() => {
     const call = async () => {
@@ -161,7 +160,17 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
   const handleUpdateNotification = async () => {
     await manageSubscription({
       type: allNotification,
-      platforms: selectedOptions
+      platforms: [
+        {
+          Email: selectedOptions.includes('Email')
+        },
+        {
+          Mobile: selectedOptions.includes('Mobile')
+        },
+        {
+          Web: selectedOptions.includes('Web')
+        }
+      ]
     })
       .unwrap()
       .then(res => {

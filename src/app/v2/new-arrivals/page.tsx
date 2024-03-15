@@ -6,14 +6,13 @@ import {
   RenderDiscount,
   RenderDetails,
   RenderLab,
-  RenderLotId,
   RednderLocation,
   RenderShape,
   RenderMeasurements,
   RenderTracerId,
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
-  RenderNewArrivalLotId
+  RenderNewArrivalPricePerCarat
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -27,10 +26,12 @@ import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
 import { MRT_RowSelectionState } from 'material-react-table';
+import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
+import Image from 'next/image';
+import useUser from '@/lib/use-auth';
 
 const NewArrivals = () => {
   const { data: bidHistory } = useGetBidHistoryQuery({});
-  console.log('saasas', bidHistory?.data);
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -41,7 +42,7 @@ const NewArrivals = () => {
           header: short_label,
           enableGlobalFilter: accessor === 'lot_id',
           enableGrouping: accessor === 'shape',
-          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          enableSorting: false,
           minSize: 5,
           maxSize: accessor === 'details' ? 100 : 200,
           size: 5,
@@ -73,8 +74,10 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderLab };
           case 'location':
             return { ...commonProps, Cell: RednderLocation };
-          case 'lot_id':
-            return { ...commonProps, Cell: RenderNewArrivalLotId };
+          // case 'lot_id':
+          //   return { ...commonProps, Cell: RenderNewArrivalLotId };
+          case 'price_per_carat':
+            return { ...commonProps, Cell: RenderNewArrivalPricePerCarat };
 
           case 'tracr_id':
             return { ...commonProps, Cell: RenderTracerId };
@@ -92,25 +95,28 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
+    setRowSelection({});
   };
   const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
+  const [time, setTime] = useState();
+  const { authToken } = useUser();
 
   // const socketManager = new SocketManager();
   const socketManager = useMemo(() => new SocketManager(), []);
-
-  useSocket(socketManager);
+  useEffect(() => {
+    if (authToken) useSocket(socketManager, authToken);
+  }, [authToken]);
 
   const handleBidStones = useCallback((data: any) => {
-    console.log(data, 'Bid stones data');
     setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
+    setTime(data.endTime);
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {
-    console.log(data, 'i999');
     if (data) {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
@@ -124,12 +130,11 @@ const NewArrivals = () => {
   }, []);
 
   const handleBidPlaced = useCallback((data: any) => {
-    console.log(data, 'placess');
-    if (data?.status === 'success') {
+    if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
@@ -138,12 +143,11 @@ const NewArrivals = () => {
     }
   }, []);
   const handleBidCanceled = useCallback((data: any) => {
-    console.log(data, 'cancel');
-    if (data?.status === 'success') {
+    if (data && data['status'] === 'success') {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
@@ -152,25 +156,24 @@ const NewArrivals = () => {
     }
   }, []);
   useEffect(() => {
+    const handleRequestGetBidStones = (data: any) => {
+      socketManager.emit('get_bid_stones');
+    };
     socketManager.on('bid_stones', handleBidStones);
     socketManager.on('error', handleError);
     socketManager.on('bid_placed', handleBidPlaced);
     socketManager.on('bid_canceled', handleBidCanceled);
 
-    const handleRequestGetBidStones = (data: any) => {
-      console.log(data, '-----------------');
-      socketManager.emit('get_bid_stones');
-    };
-
     // Setting up the event listener for "request_get_bid_stones"
-    // socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+    socketManager.on('request_get_bid_stones', handleRequestGetBidStones);
+
     // Return a cleanup function to remove the listeners
     return () => {
       socketManager.off('bid_stones', handleBidStones);
       socketManager.off('error', handleError);
       socketManager.off('request_get_bid_stones', handleRequestGetBidStones);
     };
-  }, [socketManager, handleBidStones, handleError]);
+  }, [socketManager, handleBidStones, handleError, authToken]);
 
   const memoizedColumns = useMemo(
     () => mapColumns(columnHeaders),
@@ -255,9 +258,41 @@ const NewArrivals = () => {
                   variant: 'primary',
                   label: 'Cancel Bid',
                   handler: () => {
-                    socketManager.emit('cancel_bid', {
-                      product_ids: Object.keys(rowSelection)
-                    });
+                    modalSetState.setIsDialogOpen(true);
+                    modalSetState.setDialogContent(
+                      <>
+                        <div className="absolute left-[-84px] top-[-84px]">
+                          <Image src={warningIcon} alt="warning" />
+                        </div>
+                        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
+                          <h1 className="text-headingS text-neutral900">
+                            Are you sure you want to cancel this bid?
+                          </h1>
+                          <ActionButton
+                            actionButtonData={[
+                              {
+                                variant: 'secondary',
+                                label: 'Go Back',
+                                handler: () => {
+                                  modalSetState.setIsDialogOpen(false);
+                                },
+                                customStyle: 'flex-1 w-full'
+                              },
+                              {
+                                variant: 'primary',
+                                label: 'Cancel Bid',
+                                handler: () => {
+                                  socketManager.emit('cancel_bid', {
+                                    product_ids: Object.keys(rowSelection)
+                                  });
+                                },
+                                customStyle: 'flex-1 w-full'
+                              }
+                            ]}
+                          />
+                        </div>
+                      </>
+                    );
                   }
                 }
               ]}
@@ -307,11 +342,13 @@ const NewArrivals = () => {
         <p className="text-headingM font-medium text-neutral900">
           New Arrivals
         </p>
-        <CountdownTimer
-          initialHours={1}
-          initialMinutes={40}
-          initialSeconds={10}
-        />
+        {time && (
+          <CountdownTimer
+            initialHours={new Date(time).getHours()}
+            initialMinutes={new Date(time).getMinutes()}
+            initialSeconds={new Date(time).getSeconds()}
+          />
+        )}
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
         {/* <div className="w-[450px]">
@@ -320,7 +357,13 @@ const NewArrivals = () => {
         <div className="border-b-[1px] border-neutral200">
           {
             <NewArrivalDataTable
-              columns={memoizedColumns}
+              columns={
+                activeTab === 2
+                  ? memoizedColumns.filter(
+                      (data: any) => data.accessorKey !== 'current_max_bid'
+                    )
+                  : memoizedColumns
+              }
               modalSetState={modalSetState}
               setErrorText={setErrorText}
               downloadExcel={downloadExcel}
@@ -335,9 +378,9 @@ const NewArrivals = () => {
                   ? activeBid
                   : bidHistory?.data
               }
-              activeCount={activeBid?.length ?? 0}
-              bidCount={bid?.length ?? 0}
-              historyCount={bidHistory?.data?.length ?? 0}
+              activeCount={activeBid?.length}
+              bidCount={bid?.length}
+              historyCount={bidHistory?.data?.length}
               socketManager={socketManager}
               rowSelection={rowSelection}
               setRowSelection={setRowSelection}
