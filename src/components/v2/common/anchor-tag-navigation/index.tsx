@@ -72,7 +72,14 @@ const AnchorLinkNavigation: React.FC<IAnchorLinkNavigation> = ({
               to={links}
               spy={true}
               smooth={true}
-              offset={isNudge ? -170 : -120}
+              offset={
+                isNudge &&
+                (isKycVerified?.customer?.kyc?.status ===
+                  kycStatus.INPROGRESS ||
+                  isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                  ? -170
+                  : -120
+              }
               duration={100}
               delay={0}
               className={`flex-shrink-0 px-[12px] py-[8px] text-center text-mMedium font-medium capitalize cursor-pointer whitespace-nowrap text-neutral600 ${

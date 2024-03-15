@@ -78,126 +78,10 @@ import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
 import { IManageListingSequenceResponse, IProduct } from '../interface';
+import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 
 // Column mapper outside the component to avoid re-creation on each render
 
-const mapColumns = (columns: any) =>
-  columns
-    ?.filter(({ is_disabled }: any) => !is_disabled)
-    ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
-    .map(({ accessor, short_label, label }: any) => {
-      const commonProps = {
-        accessorKey: accessor,
-        header: short_label,
-        enableGlobalFilter: accessor === 'lot_id',
-        enableGrouping: accessor === 'shape',
-        enableSorting: accessor !== 'shape_full' && accessor !== 'details',
-        minSize: 5,
-        maxSize: accessor === 'details' ? 100 : 200,
-        size: 5,
-        Header: ({ column }: any) => (
-          <Tooltip
-            tooltipTrigger={<span>{column.columnDef.header}</span>}
-            tooltipContent={label}
-            tooltipContentStyles={'z-[4]'}
-          />
-        )
-      };
-
-      switch (accessor) {
-        case 'clarity':
-          return {
-            ...commonProps,
-            sortingFn: (rowA: any, rowB: any, columnId: string) => {
-              const indexA = clarity.indexOf(rowA.original[columnId]);
-              const indexB = clarity.indexOf(rowB.original[columnId]);
-              return indexA - indexB;
-            }
-          };
-        case 'table_inclusion':
-          return {
-            ...commonProps,
-            sortingFn: (rowA: any, rowB: any, columnId: string) => {
-              const indexA = tableInclusionSortOrder.indexOf(
-                rowA.original[columnId]
-              );
-              const indexB = tableInclusionSortOrder.indexOf(
-                rowB.original[columnId]
-              );
-              return indexA - indexB;
-            }
-          };
-        case 'table_black':
-          return {
-            ...commonProps,
-            sortingFn: (rowA: any, rowB: any, columnId: string) => {
-              const indexA = tableBlackSortOrder.indexOf(
-                rowA.original[columnId]
-              );
-              const indexB = tableBlackSortOrder.indexOf(
-                rowB.original[columnId]
-              );
-              return indexA - indexB;
-            }
-          };
-
-        case 'side_black':
-          return {
-            ...commonProps,
-            sortingFn: (rowA: any, rowB: any, columnId: string) => {
-              const indexA = sideBlackSortOrder.indexOf(
-                rowA.original[columnId]
-              );
-              const indexB = sideBlackSortOrder.indexOf(
-                rowB.original[columnId]
-              );
-              return indexA - indexB;
-            }
-          };
-
-        case 'fluorescence':
-          return {
-            ...commonProps,
-            sortingFn: (rowA: any, rowB: any, columnId: string) => {
-              const indexA = fluorescenceSortOrder.indexOf(
-                rowA.original[columnId]
-              );
-              const indexB = fluorescenceSortOrder.indexOf(
-                rowB.original[columnId]
-              );
-              return indexA - indexB;
-            }
-          };
-        case 'amount':
-          return { ...commonProps, Cell: RenderAmount };
-        case 'measurements':
-          return { ...commonProps, Cell: RenderMeasurements };
-        case 'shape_full':
-          return { ...commonProps, Cell: RenderShape };
-        case 'carat':
-          return { ...commonProps, Cell: RenderCarat };
-        case 'discount':
-          return { ...commonProps, Cell: RenderDiscount };
-        case 'details':
-          return { ...commonProps, Cell: RenderDetails };
-        case 'lab':
-          return { ...commonProps, Cell: RenderLab };
-        case 'location':
-          return { ...commonProps, Cell: RednderLocation };
-        case 'lot_id':
-          return { ...commonProps, Cell: RenderLotId };
-
-        case 'tracr_id':
-          return { ...commonProps, Cell: RenderTracerId };
-        default:
-          return {
-            ...commonProps,
-            Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-              <span>{renderedCellValue ?? '-'}</span>
-            )
-          };
-      }
-    });
 const Result = ({
   activeTab,
   searchParameters,
@@ -229,6 +113,10 @@ const Result = ({
   const [saveSearchName, setSaveSearchName] = useState('');
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
+
+  const [isDetailPage, setIsDetailPage] = useState(false);
+
+  const [detailPageData, setDetailPageData] = useState({});
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
@@ -271,6 +159,138 @@ const Result = ({
       }
     );
   };
+
+  const handleDetailPage = ({ row }: { row: any }) => {
+    setIsDetailPage(true);
+    setDetailPageData(row);
+  };
+
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          enableGrouping: accessor === 'shape',
+          enableSorting: accessor !== 'shape_full' && accessor !== 'details',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: 5,
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={label}
+              tooltipContentStyles={'z-[4]'}
+            />
+          )
+        };
+
+        switch (accessor) {
+          case 'clarity':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = clarity.indexOf(rowA.original[columnId]);
+                const indexB = clarity.indexOf(rowB.original[columnId]);
+                return indexA - indexB;
+              }
+            };
+          case 'table_inclusion':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableInclusionSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableInclusionSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'table_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'side_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = sideBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = sideBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'fluorescence':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = fluorescenceSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = fluorescenceSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
+          case 'shape_full':
+            return { ...commonProps, Cell: RenderShape };
+          case 'carat':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return { ...commonProps, Cell: RenderDetails };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
+        }
+      });
 
   useEffect(() => {
     fetchProducts();
@@ -541,6 +561,7 @@ const Result = ({
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
+    setIsDetailPage(false);
     setConfirmStoneData([]);
   };
 
@@ -781,175 +802,189 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      <div className="flex h-[81px] items-center">
-        <p className="text-headingM font-medium text-neutral900">
-          {editRoute
-            ? ManageLocales('app.result.headerEdit')
-            : ManageLocales('app.result.headerResult')}
-        </p>
-      </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        {isConfirmStone ? (
-          <ConfirmStone
-            rows={confirmStoneData}
-            columns={columnData}
-            goBackToListView={goBackToListView}
-            activeTab={activeTab}
-          />
-        ) : (
-          <div className="border-b-[1px] border-neutral200">
-            <DataTable
-              rows={dataTableState.rows}
-              columns={memoizedColumns}
-              setRowSelection={setRowSelection}
-              rowSelection={rowSelection}
-              showCalculatedField={true}
-              isResult={true}
-              activeTab={activeTab}
-              searchParameters={searchParameters}
-              setActiveTab={setActiveTab}
-              handleCloseAllTabs={handleCloseAllTabs}
-              handleCloseSpecificTab={handleCloseSpecificTab}
-              handleNewSearch={handleNewSearch}
-              setSearchParameters={setSearchParameters}
-              modalSetState={modalSetState}
-              data={data}
-              setErrorText={setErrorText}
-              downloadExcel={downloadExcel}
-              setIsError={setIsError}
-              searchList={searchList}
-            />
-          </div>
-        )}
-        <div className="p-[16px] rounded-b-[8px] shadow-inputShadow ">
+      {!isDetailPage && (
+        <div className="flex h-[81px] items-center">
+          <p className="text-headingM font-medium text-neutral900">
+            {editRoute
+              ? ManageLocales('app.result.headerEdit')
+              : ManageLocales('app.result.headerResult')}
+          </p>
+        </div>
+      )}
+
+      {isDetailPage ? (
+        <DiamondDetailsComponent
+          data={dataTableState.rows}
+          filterData={detailPageData}
+          goBackToListView={goBackToListView}
+          handleDetailPage={handleDetailPage}
+        />
+      ) : (
+        <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
           {isConfirmStone ? (
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.confirmStone.footer.back'),
-                  handler: () => {
-                    goBackToListView();
-                  }
-                },
-
-                {
-                  variant: 'secondary',
-                  label: ManageLocales('app.confirmStone.footer.addComment'),
-                  handler: () => {
-                    setCommentValue('');
-                    setIsAddCommentDialogOpen(true);
-                  }
-                },
-
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.confirmStone.footer.confirmStone'),
-                  handler: () => confirmStoneApiCall()
-                }
-              ]}
+            <ConfirmStone
+              rows={confirmStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              activeTab={activeTab}
             />
           ) : (
-            dataTableState.rows.length > 0 && (
-              <div className="flex items-center justify-between">
-                <div className="flex gap-4">
-                  <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      In Cart
-                    </p>
-                  </div>
-                  <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Hold
-                    </p>
-                  </div>
-                  <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                    <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                      {' '}
-                      Memo
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-3">
-                  {isError && (
-                    <div>
-                      <span className="hidden  text-successMain" />
-                      <span
-                        className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                      >
-                        {errorText}
-                      </span>
-                    </div>
-                  )}
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales(
-                          'app.searchResult.downloadALlResult'
-                        ),
-                        handler: donwloadAllSearchTabsExcelHandler
-                      },
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.searchResult.addToCart'),
-                        handler: handleAddToCart
-                      },
-
-                      {
-                        variant: 'primary',
-                        label: ManageLocales('app.searchResult.confirmStone'),
-                        handler: () => {
-                          handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: dataTableState.rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData
-                          });
-                        }
-                      }
-                    ]}
-                  />
-                  <Dropdown
-                    dropdownTrigger={
-                      <Image
-                        src={threeDotsSvg}
-                        alt="threeDotsSvg"
-                        width={40}
-                        height={40}
-                      />
-                    }
-                    dropdownMenu={[
-                      {
-                        label: ManageLocales(
-                          'app.search.actionButton.bookAppointment'
-                        ),
-                        handler: () => {}
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.search.actionButton.compareStone'
-                        ),
-                        handler: () => {}
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.search.actionButton.findMatchingPair'
-                        ),
-                        handler: () => {}
-                      }
-                    ]}
-                    isDisable={true}
-                  />
-                </div>
-              </div>
-            )
+            <div className="border-b-[1px] border-neutral200">
+              <DataTable
+                rows={dataTableState.rows}
+                columns={memoizedColumns}
+                setRowSelection={setRowSelection}
+                rowSelection={rowSelection}
+                showCalculatedField={true}
+                isResult={true}
+                activeTab={activeTab}
+                searchParameters={searchParameters}
+                setActiveTab={setActiveTab}
+                handleCloseAllTabs={handleCloseAllTabs}
+                handleCloseSpecificTab={handleCloseSpecificTab}
+                handleNewSearch={handleNewSearch}
+                setSearchParameters={setSearchParameters}
+                modalSetState={modalSetState}
+                data={data}
+                setErrorText={setErrorText}
+                downloadExcel={downloadExcel}
+                setIsError={setIsError}
+                searchList={searchList}
+              />
+            </div>
           )}
+          <div className="p-[16px] rounded-b-[8px] shadow-inputShadow ">
+            {isConfirmStone ? (
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.confirmStone.footer.back'),
+                    handler: () => {
+                      goBackToListView();
+                    }
+                  },
+
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.confirmStone.footer.addComment'),
+                    handler: () => {
+                      setCommentValue('');
+                      setIsAddCommentDialogOpen(true);
+                    }
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: ManageLocales(
+                      'app.confirmStone.footer.confirmStone'
+                    ),
+                    handler: () => confirmStoneApiCall()
+                  }
+                ]}
+              />
+            ) : (
+              dataTableState.rows.length > 0 && (
+                <div className="flex items-center justify-between">
+                  <div className="flex gap-4">
+                    <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                        In Cart
+                      </p>
+                    </div>
+                    <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                        {' '}
+                        Hold
+                      </p>
+                    </div>
+                    <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                        {' '}
+                        Memo
+                      </p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    {isError && (
+                      <div>
+                        <span className="hidden  text-successMain" />
+                        <span
+                          className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                        >
+                          {errorText}
+                        </span>
+                      </div>
+                    )}
+                    <ActionButton
+                      actionButtonData={[
+                        {
+                          variant: 'secondary',
+                          label: ManageLocales(
+                            'app.searchResult.downloadALlResult'
+                          ),
+                          handler: donwloadAllSearchTabsExcelHandler
+                        },
+                        {
+                          variant: 'secondary',
+                          label: ManageLocales('app.searchResult.addToCart'),
+                          handler: handleAddToCart
+                        },
+
+                        {
+                          variant: 'primary',
+                          label: ManageLocales('app.searchResult.confirmStone'),
+                          handler: () => {
+                            handleConfirmStone({
+                              selectedRows: rowSelection,
+                              rows: dataTableState.rows,
+                              setIsError,
+                              setErrorText,
+                              setIsConfirmStone,
+                              setConfirmStoneData
+                            });
+                          }
+                        }
+                      ]}
+                    />
+                    <Dropdown
+                      dropdownTrigger={
+                        <Image
+                          src={threeDotsSvg}
+                          alt="threeDotsSvg"
+                          width={40}
+                          height={40}
+                        />
+                      }
+                      dropdownMenu={[
+                        {
+                          label: ManageLocales(
+                            'app.search.actionButton.bookAppointment'
+                          ),
+                          handler: () => {}
+                        },
+                        {
+                          label: ManageLocales(
+                            'app.search.actionButton.compareStone'
+                          ),
+                          handler: () => {}
+                        },
+                        {
+                          label: ManageLocales(
+                            'app.search.actionButton.findMatchingPair'
+                          ),
+                          handler: () => {}
+                        }
+                      ]}
+                      isDisable={true}
+                    />
+                  </div>
+                </div>
+              )
+            )}
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
