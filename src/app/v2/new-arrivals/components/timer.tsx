@@ -44,14 +44,14 @@ const CountdownTimer = ({
         <div className="text-lg font-semibold rounded  relative w-full">
           <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background:
                   'linear-gradient(90deg, #DBF2FC 40%, #E8E8FF 60%, #FFF4E3 100%)'
               }}
             ></div>
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background:
                   'linear-gradient(90deg, #DBF2FC 40%, #E8E8FF 60%, #FFF4E3 100%)'
@@ -69,13 +69,13 @@ const CountdownTimer = ({
         <div className="text-lg font-semibold rounded  relative w-full">
           <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
               }}
             ></div>
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC 0%, #E8E8FF 100%)'
               }}
@@ -92,13 +92,13 @@ const CountdownTimer = ({
         <div className="text-lg font-semibold rounded  relative w-full">
           <div className="gap-[1px] flex flex-col  absolute inset-0 z-0 w-full h-[40px]">
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC 50%,  #FFF4E3 100%)'
               }}
             ></div>
             <div
-              className="h-[30px] w-full rounded-[8px]"
+              className="h-[30px] w-full rounded-[6px]"
               style={{
                 background: 'linear-gradient(90deg, #DBF2FC 50%,  #FFF4E3 100%)'
               }}
