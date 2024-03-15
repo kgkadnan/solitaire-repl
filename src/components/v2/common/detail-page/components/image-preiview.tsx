@@ -108,7 +108,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                     height={40}
                     width={40}
                     alt={'Download'}
-                    onClick={() => handleDownloadImage(image?.url || '')}
+                    onClick={() => {
+                      handleDownloadImage(image?.url || '');
+                    }}
                   />
                 }
                 tooltipContent={'Download'}
@@ -116,7 +118,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               />
             )}
 
-            <p className="sm:hidden">{image?.name}</p>
+            <span className="lg:block sm:hidden text-center">
+              {image?.name}
+            </span>
           </div>
         ))}
       </div>

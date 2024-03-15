@@ -164,15 +164,15 @@ export default function DiamondDetailsComponent({
               className="lg:hidden text-[22px] text-[#344054] font-medium mr-5"
               style={{ alignSelf: 'center' }}
             >
-              {/* Stock No: {tableData?.lot_id ?? '-'} */}
+              Stock No: {tableData?.lot_id ?? '-'}
             </p>
             {/* <Image
-              className="cursor-pointer"
-              src="/Download.png"
-              alt={"Download"}
-              height={40}
-              width={40}
-            /> */}
+            className="cursor-pointer"
+            src="/Download.png"
+            alt={"Download"}
+            height={40}
+            width={40}
+          /> */}
             <Tooltip
               tooltipTrigger={
                 <Image
@@ -188,28 +188,28 @@ export default function DiamondDetailsComponent({
               tooltipContentStyles={'z-[4]'}
             />
           </div>
-          <div className="pt-8">
+          <div className="pt-8 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
               Basic Details
             </div>
             {displayTable(basicDetails)}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] lg:text-[16px]  font-medium text-[#344054]">
               Measurements
             </div>
             {displayTable(mesurementsDetails)}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
               Inclusion Details
             </div>
             {displayTable(inclusionDetails)}
           </div>
 
-          <div className="mt-6">
+          <div className="mt-6 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>

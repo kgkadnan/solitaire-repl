@@ -79,7 +79,7 @@ const ImageModal: React.FC<ModalProps> = ({
                 <iframe
                   frameBorder="0"
                   src={images[imageIndex].url}
-                  className="lg:w-[650px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
+                  className="lg:w-[662px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
                   onError={handleImageError}
                 />
               ) : (
@@ -122,7 +122,7 @@ const ImageModal: React.FC<ModalProps> = ({
                     />
                   }
                   tooltipContent={
-                    item.alt === 'download' ? 'Download Media' : 'Media Link'
+                    item.alt === 'download' ? 'Download' : 'Media Link'
                   }
                   tooltipContentStyles={'z-[4]'}
                 />
