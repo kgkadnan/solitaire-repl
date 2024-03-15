@@ -133,7 +133,14 @@ const Notification = () => {
     readAllNotification({})
       .unwrap()
       .then(res => {
-        console.log('Res', res);
+        setNotificationData(prevData =>
+          prevData.map(notification => {
+            if (!notification.read_at) {
+              return { ...notification, read_at: new Date().toISOString() };
+            }
+            return notification;
+          })
+        );
       });
   };
 
