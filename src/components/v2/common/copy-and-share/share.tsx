@@ -81,9 +81,14 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
               const amount = product.amount || 0; // Or however you calculate amount
               return `Amt ($): ${amount}`;
             }
-            // if (attribute === 'publicURL' && selectedAttributes['publicURL']) {
-            //   return `Public URL: ${product[]}`;
-            // }
+            if (
+              attribute === 'public_url' &&
+              selectedAttributes['public_url']
+            ) {
+              return `Public URL: ${
+                process.env.NEXT_PUBLIC_DNA_URL
+              }${product?.public_url.split('/').pop()}`;
+            }
             // For other attributes, continue as before
             const option = shareOptions.find(opt => opt.state === attribute);
             return option ? `${option.name}: ${product[attribute]}` : '';
