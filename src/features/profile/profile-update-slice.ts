@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
-  status: false
+  status: false,
+  deleteStatus: false
 };
 
 const ProfileUpdateSlice = createSlice({
@@ -9,9 +10,12 @@ const ProfileUpdateSlice = createSlice({
   reducers: {
     profileUpdate: (state, { payload }) => {
       state.status = payload;
+    },
+    deleteProfileStore: (state, { payload }) => {
+      state.deleteStatus = payload;
     }
   }
 });
 
-export const { profileUpdate } = ProfileUpdateSlice.actions;
+export const { profileUpdate, deleteProfileStore } = ProfileUpdateSlice.actions;
 export default ProfileUpdateSlice.reducer;
