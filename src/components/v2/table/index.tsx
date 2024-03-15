@@ -12,6 +12,7 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 import { Box } from '@mui/material';
 import Image from 'next/image';
 import { ManageLocales } from '@/utils/v2/translate';
+import { kycStatus } from '@/constants/enums/kyc';
 
 interface ITable {
   rows: MRT_ColumnDef<MRT_RowData, any>[];
@@ -86,6 +87,7 @@ const Table = ({
   });
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -155,16 +157,22 @@ const Table = ({
 
     muiTableContainerProps: {
       sx: {
-        minHeight: isNudge
-          ? isOrderDetail
-            ? 'calc(100vh - 450px)'
-            : 'calc(100vh - 315px)'
-          : 'calc(100vh - 450px)',
-        maxHeight: isNudge
-          ? isOrderDetail
-            ? 'calc(100vh - 450px)'
-            : 'calc(100vh - 315px)'
-          : 'calc(100vh - 450px)'
+        minHeight:
+          isNudge &&
+          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? isOrderDetail
+              ? 'calc(100vh - 450px)'
+              : 'calc(100vh - 315px)'
+            : 'calc(100vh - 450px)',
+        maxHeight:
+          isNudge &&
+          (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+            isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? isOrderDetail
+              ? 'calc(100vh - 450px)'
+              : 'calc(100vh - 315px)'
+            : 'calc(100vh - 450px)'
       }
     },
     muiTableHeadRowProps: {

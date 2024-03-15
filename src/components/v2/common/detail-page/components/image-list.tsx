@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import NoImageFound from '../../../../public/fall-back-img.svg';
+import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 
 export interface ImagesType {
   name: string;
@@ -34,7 +34,7 @@ const ImageList: React.FC<ImageListProps> = ({
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col h-[100%]">
       {images.map((image, index) =>
         image.name === 'B2B' || image.name === 'B2B Sparkle' ? (
           <div

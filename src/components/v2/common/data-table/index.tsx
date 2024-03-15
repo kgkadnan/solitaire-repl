@@ -416,6 +416,8 @@ const DataTable = ({
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
+          : row.original.lot_id
+          ? () => {}
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
@@ -773,9 +775,11 @@ const DataTable = ({
   });
 
   return (
-    <ThemeProvider theme={theme}>
-      <MaterialReactTable table={table} />
-    </ThemeProvider>
+    <>
+      <ThemeProvider theme={theme}>
+        <MaterialReactTable table={table} />
+      </ThemeProvider>
+    </>
   );
 };
 

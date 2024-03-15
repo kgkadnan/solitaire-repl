@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-
-import NoImageFound from '../../../../public/fall-back-img.svg';
+import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 
 import { Toast } from '../../copy-and-share/toast';
 import Tooltip from '../../tooltip';

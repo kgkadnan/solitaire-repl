@@ -3,7 +3,7 @@ import Image from 'next/image';
 
 import { useEffect, useState } from 'react';
 
-import NoImageFound from '../../../../public/fall-back-img.svg';
+import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
 import ImageModal from './image-modal';
 import { ImagesType } from '../interfrace';
@@ -12,6 +12,7 @@ import 'slick-carousel/slick/slick-theme.css';
 import './carousel.css'; // Import your custom CSS file for React Slick
 import Slider from 'react-slick';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
+import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 
 interface ImageSliderProps {
   images: ImagesType[];
@@ -108,7 +109,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                       tooltipTrigger={
                         <Image
                           className="absolute top-3 left-3 p-1 cursor-pointer"
-                          src="/Download.png"
+                          src={downloadImg}
                           height={40}
                           width={40}
                           alt={'Download'}

@@ -2,9 +2,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-
-import { useDispatch, useSelector } from 'react-redux';
-
+import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
+import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
+import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
+import shareSvg from '@public/v2/assets/icons/detail-page/share.svg';
+import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
+import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 // import { AppDispatch } from '@/redux/store';
 
 export interface TableColumn {
@@ -29,28 +32,42 @@ import ImageSlider from './components/image-slider';
 import ImageList from './components/image-list';
 import ImagePreview from './components/image-preiview';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import ResponsiveTable from './components/CommonTable';
+import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
+import ShowPopups from './components/popup';
 
-export default function DiamondDetailsComponent({
-  params,
-  tableData
+export function DiamondDetailsComponent({
+  data,
+  filterData,
+  goBackToListView,
+  handleDetailPage
 }: {
-  params: { diamondId: string };
-  tableData: any;
+  data: any;
+  filterData: any;
+  goBackToListView: any;
+  handleDetailPage: any;
 }) {
+  const [tableData, setTableData] = useState<any>([]);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
   //   const dispatch: AppDispatch = useDispatch();
   //   const diamondData = useSelector(selectDiamondData);
 
-  //   const tableData: any = diamondData?.data?.product
-  //     ? { ...diamondData?.data?.product }
-  //     : {};
-  //   if (tableData) {
-  //     tableData['measurement'] = `${tableData?.length ?? 0}*${
-  //       tableData?.width ?? 0
-  //     }*${tableData?.height ?? 0}`;
-  //     tableData['shape'] = getShapeDisplayName(tableData?.shape ?? '');
-  //   }
   const [showToast, setShowToast] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+
+  useEffect(() => {
+    let copyData = filterData ? { ...filterData } : {};
+
+    if (copyData) {
+      copyData['measurement'] = `${copyData?.length ?? 0}*${
+        copyData?.width ?? 0
+      }*${copyData?.height ?? 0}`;
+      copyData['shape'] = getShapeDisplayName(copyData?.shape ?? '');
+    }
+
+    setTableData(copyData);
+  }, [filterData, data]);
 
   //   useEffect(() => {
   //     dispatch(fetchDiamondDetailsApi(params?.diamondId));
@@ -76,7 +93,7 @@ export default function DiamondDetailsComponent({
       <div>
         {tableHeadArray.map((item: TableColumn[], index: any) => (
           <div key={`item-${index}`} className="mt-4">
-            {/* <ResponsiveTable tableHead={item} tableData={[tableData]} /> */}
+            <ResponsiveTable tableHead={item} tableData={[tableData]} />
           </div>
         ))}
       </div>
@@ -136,11 +153,67 @@ export default function DiamondDetailsComponent({
     });
   };
 
+  const RenderNewArrivalLotId = ({ tableData }: any) => {
+    let statusClass = '';
+    let borderClass = '';
+    let value = '';
+    if (tableData.diamond_status === MEMO_STATUS) {
+      statusClass = 'bg-legendMemoFill';
+      borderClass = 'border-lengendMemoBorder';
+      value = 'Memo';
+    } else if (tableData.diamond_status === HOLD_STATUS) {
+      statusClass = 'bg-legendHoldFill';
+
+      borderClass = 'border-lengendHoldBorder';
+      value = 'Hold';
+    } else if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
+      statusClass = 'bg-legendInCartFill';
+      borderClass = 'border-lengendInCardBorder';
+      value = 'InCart';
+    } else {
+      statusClass = 'border-none';
+      value = 'Available';
+      // borderClass = 'border-neutral0';
+    }
+
+    return (
+      <span
+        className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      >
+        {value}
+      </span>
+    );
+  };
+
   return (
-    <div className="text-black bg-white">
+    <div className="text-black bg-white mt-2">
       <Toast show={showToast} message="Copied Successfully" />
-      <div className="lg:flex lg:ml-24 p-5">
-        <div className="flex">
+      <div className="flex items-center">
+        <Image
+          src={backWardArrow}
+          alt="backWardArrow"
+          onClick={() => {
+            goBackToListView!();
+          }}
+          className="cursor-pointer"
+        />
+        <div className="flex gap-[8px] items-center">
+          <button
+            className="text-neutral600 text-sMedium font-regular cursor-pointer"
+            onClick={() => {
+              goBackToListView!();
+            }}
+          >
+            Search Results
+          </button>
+          <span className="text-neutral600">/</span>
+          <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">
+            Stock No:{tableData.lot_id}
+          </p>
+        </div>
+      </div>
+      <div className="lg:flex py-5">
+        <div className="flex lg:h-[75vh]">
           <div className="w-full lg:hidden">
             <ImageSlider images={images} />
           </div>
@@ -158,35 +231,131 @@ export default function DiamondDetailsComponent({
             />
           </div>
         </div>
-        <div className="lg:w-2/3 lg:ml-10 scroll-adjust-custom lg:overflow-y-scroll lg:h-[95vh]">
-          <div className="flex mt-4 lg:mt-0">
+        <div className="lg:w-2/3 lg:ml-10 scroll-adjust-custom lg:overflow-y-scroll lg:h-[75vh]">
+          <div className="flex justify-between mt-4 lg:mt-0 w-full">
             <p
-              className="lg:hidden text-[22px] text-[#344054] font-medium mr-5"
+              className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 w-[50%]"
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
-            {/* <Image
-            className="cursor-pointer"
-            src="/Download.png"
-            alt={"Download"}
-            height={40}
-            width={40}
-          /> */}
-            <Tooltip
-              tooltipTrigger={
-                <Image
-                  className="cursor-pointer"
-                  src="/Media.png"
-                  alt={'media'}
-                  height={40}
-                  width={40}
-                  onClick={copyLink}
+
+            <div className="flex w-[40%] justify-around items-center">
+              <div className="flex gap-3 ">
+                <Tooltip
+                  tooltipTrigger={
+                    <Image
+                      className="cursor-pointer"
+                      src={downloadImg}
+                      alt={'Download'}
+                      height={40}
+                      width={40}
+                    />
+                  }
+                  tooltipContent={'Download Excel'}
+                  tooltipContentStyles={'z-[4]'}
                 />
-              }
-              tooltipContent={'Media Link'}
-              tooltipContentStyles={'z-[4]'}
-            />
+
+                <Tooltip
+                  tooltipTrigger={
+                    <Image
+                      className="cursor-pointer"
+                      src={linkSvg}
+                      alt={'media'}
+                      height={40}
+                      width={40}
+                      onClick={copyLink}
+                    />
+                  }
+                  tooltipContent={'Media Link'}
+                  tooltipContentStyles={'z-[4]'}
+                />
+
+                <Tooltip
+                  tooltipTrigger={
+                    <Image
+                      className="cursor-pointer"
+                      src={shareSvg}
+                      alt={'share'}
+                      height={40}
+                      width={40}
+                    />
+                  }
+                  tooltipContent={'Share'}
+                  tooltipContentStyles={'z-[4]'}
+                />
+              </div>
+              <div className="border-r-[1px] border-neutral-200"></div>
+              <div className="flex gap-3 relative">
+                {/* Backward Arrow */}
+                <button
+                  className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                    currentIndex <= 0 ? 'bg-neutral-50' : 'bg-neutral0 '
+                  } `}
+                  disabled={currentIndex <= 0}
+                  onClick={() => {
+                    console.log('hello');
+                    setCurrentIndex(prev => prev - 1);
+                    handleDetailPage({ row: data[currentIndex - 1] });
+                  }}
+                >
+                  <Image
+                    className="cursor-pointer"
+                    src={backwardArrow}
+                    alt={'backWardArrow'}
+                  />
+
+                  {/* Additional content for backward arrow */}
+                  {currentIndex > 0 && (
+                    <ShowPopups data={data} currentIndex={currentIndex - 1} />
+                  )}
+                </button>
+
+                {/* Forward Arrow */}
+                <button
+                  className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                    currentIndex >= data.length
+                      ? 'bg-neutral-50'
+                      : 'bg-neutral0 '
+                  }`}
+                  disabled={currentIndex >= data.length}
+                  onClick={() => {
+                    console.log('hello2');
+                    setCurrentIndex(prev => prev + 1);
+                    handleDetailPage({ row: data[currentIndex + 1] });
+                  }}
+                >
+                  <Image
+                    className="cursor-pointer"
+                    src={forwardArrow}
+                    alt={'forwardArrow'}
+                  />
+
+                  {/* Additional content for forward arrow */}
+
+                  {currentIndex <= data.length && (
+                    <ShowPopups data={data} currentIndex={currentIndex + 1} />
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+          <div className="flex items-center mt-4">
+            <div className="flex items-center">
+              <p className="text-headingS font-medium text-neutral-900 ">
+                $
+                {tableData.length > 0 &&
+                  tableData?.variants[0]?.prices[0]?.amount?.toFixed(2)}
+              </p>
+              <p
+                className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
+              >
+                {tableData.length > 0 && tableData.discount}%
+              </p>
+            </div>
+            <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+
+            {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
             <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">

@@ -1,12 +1,11 @@
 'use client';
 import Image from 'next/image';
 import React, { useRef, useEffect, useState } from 'react';
-
-import NoImageFound from '../../../../public/fall-back-img.svg';
-
+import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import { ImagesType } from '../interfrace';
 import Tooltip from '../../tooltip';
 import { handleDownloadImage } from '@/utils/v2/detail-page';
+import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 import ImageModal from './image-modal';
 
 interface ImagePreviewProps {
@@ -51,7 +50,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   return (
     <>
       <div
-        className="scroll-adjust-custom lg:overflow-y-scroll h-[95vh]"
+        className="scroll-adjust-custom lg:overflow-y-scroll h-[100%]"
         ref={containerRef}
       >
         {images.map((image, index) => (
@@ -104,7 +103,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 tooltipTrigger={
                   <Image
                     className="absolute top-3 left-3 p-1"
-                    src="/Download.png"
+                    src={downloadImg}
                     height={40}
                     width={40}
                     alt={'Download'}
