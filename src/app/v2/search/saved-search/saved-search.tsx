@@ -51,6 +51,7 @@ import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import EmptyScreen from '@/components/v2/common/empty-screen';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const SavedSearch = () => {
   const router = useRouter();
@@ -188,6 +189,7 @@ const SavedSearch = () => {
   };
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
 
   return (
     <div className="mb-[20px]">
@@ -254,7 +256,11 @@ const SavedSearch = () => {
         </div>
         <div
           className={` overflow-auto ${
-            isNudge ? 'h-[calc(100vh-380px)]' : 'h-[calc(100vh-310px)]'
+            isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'h-[calc(100vh-380px)]'
+              : 'h-[calc(100vh-310px)]'
           }`}
         >
           {savedSearchState?.savedSearchData?.length ? (

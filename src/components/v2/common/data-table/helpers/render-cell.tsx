@@ -12,7 +12,11 @@ export const RenderDetails = () => {
   return <Image src={Media} alt="Media" />;
 };
 
-export const RenderLotId = ({ renderedCellValue, row }: any) => {
+export const RenderLotId = ({
+  renderedCellValue,
+  row,
+  handleDetailPage
+}: any) => {
   let statusClass = '';
   let borderClass = '';
   if (row.original.diamond_status === MEMO_STATUS) {
@@ -35,6 +39,9 @@ export const RenderLotId = ({ renderedCellValue, row }: any) => {
   return (
     <span
       className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      onClick={() => {
+        handleDetailPage({ row: row.original });
+      }}
     >
       {renderedCellValue}
     </span>
@@ -104,7 +111,7 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
           {renderedCellValue}
         </Link>
       ) : (
-        <span>{renderedCellValue}</span>
+        <span>{renderedCellValue ?? '-'}</span>
       )}
     </>
   );
@@ -115,7 +122,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
     >
-      {`${renderedCellValue && renderedCellValue}%`}
+      {`${renderedCellValue ?? renderedCellValue}%`}
     </div>
   );
 };
