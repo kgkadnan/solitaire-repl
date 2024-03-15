@@ -54,7 +54,7 @@ import { handleConfirmStone } from '../search/result/helpers/handle-confirm-ston
 import ConfirmStone from '../search/result/components';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from '../search/result/helpers/handle-comment';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useConfirmProductMutation } from '@/features/api/product';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
@@ -91,6 +91,7 @@ const MyCart = () => {
     Sold: 0
   });
   const [tiggerCart, { isLoading }] = useLazyGetCartQuery();
+  const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
   const [confirmProduct] = useConfirmProductMutation();
@@ -98,6 +99,11 @@ const MyCart = () => {
   const [triggerColumn, { data: columnData }] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
+  useEffect(() => {
+    if (subRoute === 'active') {
+      setActiveTab(AVAILABLE_STATUS);
+    }
+  }, []);
   const processCartItems = ({
     cartItems,
     activeTab
@@ -571,7 +577,7 @@ const MyCart = () => {
                         variant: 'primary',
                         label: ManageLocales('app.modal.goToYourOrder'),
                         handler: () => {
-                          router.push('/v2/your-orders');
+                          router.push('/v2/your-order');
                         },
                         customStyle: 'flex-1 w-full h-10'
                       }

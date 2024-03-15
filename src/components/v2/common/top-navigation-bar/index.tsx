@@ -76,6 +76,11 @@ const TopNavigationBar = () => {
   }, []);
 
   const [imageUrl, setImageUrl] = useState('');
+
+  useEffect(() => {
+    setImageUrl('');
+  }, [updatePhoto?.deleteStatus]);
+
   useEffect(() => {
     const getPhoto = async () => {
       await triggerGetProfilePhoto({ size: 32 })

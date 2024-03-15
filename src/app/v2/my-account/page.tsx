@@ -24,7 +24,10 @@ import {
 } from '@/features/api/my-account';
 import { useLazyGetAuthDataQuery } from '@/features/api/login';
 import { useAppDispatch, useAppSelector } from '@/hooks/hook';
-import { profileUpdate } from '@/features/profile/profile-update-slice';
+import {
+  profileUpdate,
+  deleteProfileStore
+} from '@/features/profile/profile-update-slice';
 import logger from 'logging/log-util';
 
 interface IUserAccountInfo {
@@ -63,6 +66,7 @@ const MyAccount = () => {
   const dispatch = useAppDispatch();
   const [deleteProfile] = useDeleteProfileMutation({});
   const updatePhoto: any = useAppSelector((store: any) => store.profileUpdate);
+
   const subRoute = useSearchParams().get('path');
   const [triggerGetProfilePhoto] = useLazyGetProfilePhotoQuery({});
   const [triggerAuth] = useLazyGetAuthDataQuery();
@@ -134,8 +138,8 @@ const MyAccount = () => {
       .then(res => {
         setSelectedFile({});
         setIsFileUploaded(false);
-        getPhoto();
-        dispatch(profileUpdate(!updatePhoto?.status));
+        setImageUrl('');
+        dispatch(deleteProfileStore(!updatePhoto.deleteStatus));
       })
       .catch(error => {
         logger.info(error);
