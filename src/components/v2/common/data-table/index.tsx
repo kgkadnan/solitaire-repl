@@ -43,6 +43,7 @@ import { MODIFY_SEARCH_STONES_EXCEEDS_LIMIT } from '@/constants/error-messages/s
 import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handle-card-click';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '../copy-and-share/share';
+import Tooltip from '../tooltip';
 
 const theme = createTheme({
   typography: {
@@ -748,17 +749,29 @@ const DataTable = ({
               className="p-[4px] rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
             >
-              <Image
-                src={downloadIcon}
-                alt={'download'}
-                width={38}
-                height={38}
+              <Tooltip
+                tooltipTrigger={
+                  <Image
+                    src={downloadIcon}
+                    alt={'download'}
+                    width={38}
+                    height={38}
+                  />
+                }
+                tooltipContent={'Download Excel'}
+                tooltipContentStyles={'z-[4]'}
               />
             </div>
 
-            <div onClick={toggleFullScreen}>
-              <StyledToggleFullScreenButton table={table} />{' '}
-            </div>
+            <Tooltip
+              tooltipTrigger={
+                <div onClick={toggleFullScreen}>
+                  <StyledToggleFullScreenButton table={table} title="" />{' '}
+                </div>
+              }
+              tooltipContent={'Full Screen'}
+              tooltipContentStyles={'z-[4]'}
+            />
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Share

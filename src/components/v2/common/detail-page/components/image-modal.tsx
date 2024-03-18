@@ -66,7 +66,7 @@ const ImageModal: React.FC<ModalProps> = ({
             </button>
           </div>
           <div className="flex w-[100%]">
-            <div className="mt-2 sm:max-h-[210px] lg:max-h-[510px] overflow-y-scroll w-[10%]">
+            <div className="mt-2 sm:max-h-[210px] lg:max-h-[510px] overflow-y-scroll w-[12%]">
               <ImageList
                 images={images}
                 selectedImageIndex={imageIndex}
