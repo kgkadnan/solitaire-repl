@@ -186,7 +186,8 @@ const NewArrivals = () => {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content=""
+          header={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
         />
