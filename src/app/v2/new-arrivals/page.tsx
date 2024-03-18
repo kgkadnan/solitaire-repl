@@ -97,7 +97,6 @@ const NewArrivals = () => {
     setActiveTab(index);
     setRowSelection({});
   };
-  const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState();
@@ -110,7 +109,6 @@ const NewArrivals = () => {
   }, [authToken]);
 
   const handleBidStones = useCallback((data: any) => {
-    setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
