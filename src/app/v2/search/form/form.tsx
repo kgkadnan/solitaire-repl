@@ -696,7 +696,7 @@ const Form = ({
               onChange={handleInputChange}
               styles={{
                 inputMain: 'w-full',
-                input: `h-full p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
+                input: `h-[40px] p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
                 ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
@@ -766,7 +766,9 @@ const Form = ({
                     {
                       variant: 'secondary',
                       svg: BinIcon,
-                      handler: handleCloseAllTabs
+                      handler: handleCloseAllTabs,
+                      customStyle: 'w-[40px] h-[40px]',
+                      tooltip: 'Close all tabs'
                     }
                   ]}
                 />

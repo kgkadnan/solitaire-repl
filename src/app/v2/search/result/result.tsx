@@ -644,7 +644,7 @@ const Result = ({
               onChange={handleInputChange}
               styles={{
                 inputMain: 'w-full',
-                input: `h-full p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
+                input: `h-[40px] p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
                 ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
@@ -907,17 +907,6 @@ const Result = ({
           }
         });
     }
-  };
-
-  const donwloadAllSearchTabsExcelHandler = () => {
-    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
-    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
-    downloadExcelHandler({
-      previousSearch: allTabsIds,
-      downloadExcelApi: downloadExcel,
-      modalSetState,
-      setRowSelection
-    });
   };
 
   const images = [
@@ -1186,13 +1175,6 @@ const Result = ({
                     )}
                     <ActionButton
                       actionButtonData={[
-                        {
-                          variant: 'secondary',
-                          label: ManageLocales(
-                            'app.searchResult.downloadALlResult'
-                          ),
-                          handler: donwloadAllSearchTabsExcelHandler
-                        },
                         {
                           variant: 'secondary',
                           label: ManageLocales('app.searchResult.addToCart'),

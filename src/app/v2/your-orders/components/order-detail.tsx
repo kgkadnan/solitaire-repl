@@ -8,9 +8,6 @@ import {
   RenderDiscount,
   RenderLab
 } from '@/components/v2/table/helpers/render-cell';
-import errorIcon from '@public/v2/assets/icons/modal/error.svg';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import { useLazyGetManageListingSequenceQuery } from '@/features/api/manage-listing-sequence';
 import { formatCreatedAt } from '@/utils/format-date';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
@@ -19,11 +16,9 @@ import React, { useEffect, useMemo, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import Image from 'next/image';
 import {
-  ACTIVE_INVOICE_BREADCRUMB_LABEL,
   INVOICE_HISTORY_BREADCRUMB_LABEL,
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
-import Link from 'next/link';
 import ActionButton from '@/components/v2/common/action-button';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
@@ -126,71 +121,17 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
 
   const handleDownloadExcel = () => {
-    let selectedIds = Object.keys(rowSelection);
-    if (selectedIds.length > 0) {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <>
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={downloadExcelIcon} alt="downloadExcelIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-            <h1 className="text-headingS text-neutral900">
-              Do you want to download “Selected Stones” or “Entire Your Orders”
-              ?
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.selectedStones'),
-                  handler: () => {
-                    downloadExcelHandler({
-                      products: selectedIds,
-                      orderId: productDetailData.id,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection
-                    });
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.entireSearchResult'),
-                  handler: () => {
-                    const allProductIds = rows.map(({ id }: { id: string }) => {
-                      return id;
-                    });
+    const allProductIds = rows.map(({ id }: { id: string }) => {
+      return id;
+    });
 
-                    downloadExcelHandler({
-                      products: allProductIds,
-                      orderId: productDetailData.id,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection
-                    });
-                  },
-                  customStyle: 'flex-1 w-full h-10'
-                }
-              ]}
-            />
-          </div>
-        </>
-      );
-    } else {
-      const allProductIds = rows.map(({ id }: { id: string }) => {
-        return id;
-      });
-
-      downloadExcelHandler({
-        products: allProductIds,
-        orderId: productDetailData.id,
-        downloadExcelApi: downloadExcel,
-        modalSetState,
-        setRowSelection
-      });
-    }
+    downloadExcelHandler({
+      products: allProductIds,
+      orderId: productDetailData.id,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection
+    });
   };
 
   // const handleDownloadInvoice = () => {

@@ -9,9 +9,9 @@ import {
 } from 'material-react-table';
 
 import downloadIcon from '@public/v2/assets/icons/data-table/download.svg';
-import downloadExcelIcon from '@public/v2/assets/icons/modal/download.svg';
 import saveIcon from '@public/v2/assets/icons/data-table/bookmark.svg';
 import BinIcon from '@public/v2/assets/icons/bin.svg';
+import DownloadAllIcon from '@public/v2/assets/icons/download-all.svg';
 import NewSearchIcon from '@public/v2/assets/icons/new-search.svg';
 // import shareButtonSvg from '@public/v2/assets/icons/data-table/share-button.svg';
 import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDown.svg';
@@ -298,68 +298,27 @@ const DataTable = ({
   };
 
   const handleDownloadExcel = () => {
-    let selectedIds = Object.keys(rowSelection);
-    if (selectedIds.length > 0) {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <>
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={downloadExcelIcon} alt="downloadExcelIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-            <h1 className="text-headingS text-neutral900">
-              Do you want to download “Selected Stones” or “Entire Search
-              Results” ?
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.selectedStones'),
-                  handler: () => {
-                    downloadExcelHandler({
-                      products: selectedIds,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection
-                    });
-                  },
-                  customStyle: 'flex-1 w-full'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.entireSearchResult'),
-                  handler: () => {
-                    const allProductIds = rows.map(({ id }: { id: string }) => {
-                      return id;
-                    });
+    const allProductIds = rows.map(({ id }: { id: string }) => {
+      return id;
+    });
 
-                    downloadExcelHandler({
-                      products: allProductIds,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection
-                    });
-                  },
-                  customStyle: 'flex-1 w-full'
-                }
-              ]}
-            />
-          </div>
-        </>
-      );
-    } else {
-      const allProductIds = rows.map(({ id }: { id: string }) => {
-        return id;
-      });
+    downloadExcelHandler({
+      products: allProductIds,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection
+    });
+  };
 
-      downloadExcelHandler({
-        products: allProductIds,
-        downloadExcelApi: downloadExcel,
-        modalSetState,
-        setRowSelection
-      });
-    }
+  const downloadAllSearchTabsExcelHandler = () => {
+    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
+    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
+    downloadExcelHandler({
+      previousSearch: allTabsIds,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection
+    });
   };
 
   const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
@@ -557,6 +516,8 @@ const DataTable = ({
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
                 cell.id === 'shape:SCU_lot_id' ||
+                cell.id === 'shape:RX_lot_id' ||
+                cell.id === 'shape:TR_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
@@ -661,8 +622,17 @@ const DataTable = ({
                   },
                   {
                     variant: 'secondary',
+                    svg: DownloadAllIcon,
+                    handler: downloadAllSearchTabsExcelHandler,
+                    customStyle: 'w-[40px] h-[40px]',
+                    tooltip: 'Download all search results'
+                  },
+                  {
+                    variant: 'secondary',
                     svg: BinIcon,
-                    handler: handleCloseAllTabs
+                    handler: handleCloseAllTabs,
+                    customStyle: 'w-[40px] h-[40px]',
+                    tooltip: 'Close all tabs'
                   }
                 ]}
                 containerStyle="flex gap-[12px]!important"
