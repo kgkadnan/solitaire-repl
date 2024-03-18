@@ -68,15 +68,18 @@ const ConfirmStone = ({
   columns,
   goBackToListView,
   activeTab,
-  isFromMyCart = false
+  isFrom
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   useEffect(() => {
-    if (isFromMyCart) {
+    if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
+    }
+    if (isFrom === 'Detail Page') {
+      setBreadCrumLabel('Detail Page');
     } else {
       const storedSelection = localStorage.getItem('Search');
 

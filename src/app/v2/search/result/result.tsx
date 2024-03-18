@@ -117,8 +117,6 @@ const Result = ({
   const [data, setData] = useState([]);
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
-  console.log('rowSelection', rowSelection);
-
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -168,6 +166,8 @@ const Result = ({
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
+    setIsError(false);
+    setErrorText('');
     setDetailPageData(row);
   };
 
@@ -1019,6 +1019,7 @@ const Result = ({
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
+            breadCrumLabel={'Search Results'}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -1092,6 +1093,7 @@ const Result = ({
               columns={columnData}
               goBackToListView={goBackToListView}
               activeTab={activeTab}
+              isFrom={isDetailPage && 'Detail Page'}
             />
           ) : (
             <div className="border-b-[1px] border-neutral200">

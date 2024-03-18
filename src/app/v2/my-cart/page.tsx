@@ -208,6 +208,151 @@ const MyCart = () => {
     fetchColumns();
   }, []);
 
+  const handleDetailPage = ({ row }: { row: any }) => {
+    setIsDetailPage(true);
+    setIsError(false);
+    setErrorText('');
+    setDetailPageData(row);
+  };
+
+  const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
+  };
+
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          enableSorting: accessor !== 'shape',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: 5,
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={label}
+              tooltipContentStyles={'z-[4]'}
+            />
+          )
+        };
+
+        switch (accessor) {
+          case 'clarity':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = clarity.indexOf(rowA.original[columnId]);
+                const indexB = clarity.indexOf(rowB.original[columnId]);
+                return indexA - indexB;
+              }
+            };
+          case 'table_inclusion':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableInclusionSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableInclusionSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'table_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'side_black':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = sideBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = sideBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'fluorescence':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = fluorescenceSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = fluorescenceSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderCartLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
+          case 'carat':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'shape_full':
+            return { ...commonProps, Cell: RenderShape };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
+
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
+        }
+      });
+
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
@@ -568,148 +713,6 @@ const MyCart = () => {
     }
   };
 
-  const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setDetailPageData(row);
-  };
-
-  const handleDetailImage = ({ row }: any) => {
-    setDetailImageData(row);
-    setIsModalOpen(true);
-  };
-
-  const mapColumns = (columns: any) =>
-    columns
-      ?.filter(({ is_disabled }: any) => !is_disabled)
-      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
-      .map(({ accessor, short_label, label }: any) => {
-        const commonProps = {
-          accessorKey: accessor,
-          header: short_label,
-          enableGlobalFilter: accessor === 'lot_id',
-          enableSorting: accessor !== 'shape',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
-          Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[4]'}
-            />
-          )
-        };
-
-        switch (accessor) {
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
-          case 'table_inclusion':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-          case 'table_black':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'side_black':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'fluorescence':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'lot_id':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue, row }: any) => {
-                return RenderCartLotId({
-                  renderedCellValue,
-                  row,
-                  handleDetailPage
-                });
-              }
-            };
-
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
-          case 'measurements':
-            return { ...commonProps, Cell: RenderMeasurements };
-          case 'carat':
-            return { ...commonProps, Cell: RenderCarat };
-          case 'shape_full':
-            return { ...commonProps, Cell: RenderShape };
-          case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
-          case 'details':
-            return {
-              ...commonProps,
-              Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImage });
-              }
-            };
-          case 'lab':
-            return { ...commonProps, Cell: RenderLab };
-          case 'location':
-            return { ...commonProps, Cell: RednderLocation };
-          case 'tracr_id':
-            return { ...commonProps, Cell: RenderTracerId };
-
-          default:
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-                <span>{renderedCellValue ?? '-'}</span>
-              )
-            };
-        }
-      });
   const goBack = () => {
     setIsDetailPage(false);
     setDetailPageData({});
@@ -782,11 +785,13 @@ const MyCart = () => {
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      <div className="flex h-[81px] items-center ">
-        <p className="text-headingM font-medium text-neutral900">
-          {ManageLocales('app.myCart.mycart')}
-        </p>
-      </div>
+      {(isConfirmStone || !isDetailPage) && (
+        <div className="flex h-[81px] items-center ">
+          <p className="text-headingM font-medium text-neutral900">
+            {ManageLocales('app.myCart.mycart')}
+          </p>
+        </div>
+      )}
       {isDetailPage && !isConfirmStone ? (
         <>
           <DiamondDetailsComponent
@@ -794,6 +799,7 @@ const MyCart = () => {
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
+            breadCrumLabel={'My Cart'}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -882,7 +888,7 @@ const MyCart = () => {
               rows={confirmStoneData}
               columns={columnData}
               goBackToListView={goBackToListView}
-              isFromMyCart={true}
+              isFrom={'My Cart'}
             />
           ) : rows.length && memoizedColumns.length ? (
             <div>

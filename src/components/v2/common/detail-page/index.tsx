@@ -40,12 +40,14 @@ export function DiamondDetailsComponent({
   data,
   filterData,
   goBackToListView,
-  handleDetailPage
+  handleDetailPage,
+  breadCrumLabel
 }: {
   data: any;
   filterData: any;
   goBackToListView: any;
   handleDetailPage: any;
+  breadCrumLabel: string;
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -203,7 +205,7 @@ export function DiamondDetailsComponent({
               goBackToListView!();
             }}
           >
-            Search Results
+            {breadCrumLabel}
           </button>
           <span className="text-neutral600">/</span>
           <p className="text-neutral700 p-[8px] bg-neutral100 rounded-[4px] text-sMedium font-medium">

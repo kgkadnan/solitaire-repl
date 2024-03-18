@@ -117,6 +117,8 @@ const MyDiamonds = () => {
   useEffect(() => {
     if (subRoute === 'recent-confirmations') {
       setActiveTab(PENDING_INVOICE);
+    } else if (subRoute === 'active-invoice') {
+      setActiveTab(ACTIVE_INVOICE);
     }
   }, []);
 
