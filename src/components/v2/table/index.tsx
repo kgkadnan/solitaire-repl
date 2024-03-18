@@ -164,7 +164,7 @@ const Table = ({
             ? isOrderDetail
               ? 'calc(100vh - 450px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 450px)',
+            : 'calc(100vh - 340px)',
         maxHeight:
           isNudge &&
           (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
@@ -172,7 +172,7 @@ const Table = ({
             ? isOrderDetail
               ? 'calc(100vh - 450px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 450px)'
+            : 'calc(100vh - 340px)'
       }
     },
     muiTableHeadRowProps: {

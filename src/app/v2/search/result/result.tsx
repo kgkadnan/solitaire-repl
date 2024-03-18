@@ -79,6 +79,9 @@ import { Dropdown } from '@/components/v2/common/dropdown-menu';
 import { IItem } from '../saved-search/saved-search';
 import { IManageListingSequenceResponse, IProduct } from '../interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
+import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
+import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import { FILE_URLS } from '@/constants/v2/detail-page';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -115,8 +118,9 @@ const Result = ({
   const [rowSelection, setRowSelection] = useState<MRT_RowSelectionState>({});
 
   const [isDetailPage, setIsDetailPage] = useState(false);
-
-  const [detailPageData, setDetailPageData] = useState({});
+  const [detailPageData, setDetailPageData] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [detailImageData, setDetailImageData] = useState<any>({});
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
@@ -162,7 +166,14 @@ const Result = ({
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
+    setIsError(false);
+    setErrorText('');
     setDetailPageData(row);
+  };
+
+  const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
   };
 
   const mapColumns = (columns: any) =>
@@ -263,7 +274,12 @@ const Result = ({
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
           case 'details':
-            return { ...commonProps, Cell: RenderDetails };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
           case 'location':
@@ -346,26 +362,6 @@ const Result = ({
       setIsError(true);
       setErrorText(NO_STONES_SELECTED);
     } else {
-      // const hasMemoOut = selectedIds.some((id: string) => {
-      //   return dataTableState.rows.some(
-      //     (row: IProduct) => row.id === id && row.diamond_status === MEMO_STATUS
-      //   );
-      // });
-
-      // const hasHold = selectedIds.some((id: string) => {
-      //   return dataTableState.rows.some(
-      //     (row: IProduct) => row.id === id && row.diamond_status === HOLD_STATUS
-      //   );
-      // });
-
-      // if (hasMemoOut) {
-      //   setErrorText(NO_STONES_AVAILABLE);
-      //   setIsError(true);
-      // } else if (hasHold) {
-      //   setIsError(true);
-      //   setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
-      // } else {
-      // Extract variant IDs for selected stones
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -471,6 +467,131 @@ const Result = ({
     }
   };
 
+  const handleAddToCartDetailPage = () => {
+    const hasMemoOut = dataTableState.rows.some(
+      (row: IProduct) =>
+        row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
+    );
+    const hasHold = dataTableState.rows.some(
+      (row: IProduct) =>
+        row.id === detailPageData.id && row.diamond_status === HOLD_STATUS
+    );
+
+    if (hasMemoOut) {
+      setErrorText(NO_STONES_AVAILABLE);
+      setIsError(true);
+    } else if (hasHold) {
+      setIsError(true);
+      setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
+    } else {
+      // Extract variant IDs for selected stones
+      const variantIds = [detailPageData.id]
+        ?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            dataTableState.rows.find((row: IProduct) => {
+              return row?.id === detailPageData.id;
+            }) ?? {};
+
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+          return '';
+        })
+        .filter(Boolean);
+
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={confirmIcon} alt="confirmIcon" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <h1 className="text-headingS text-neutral900">
+                    {res?.message}
+                  </h1>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.continue'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                          setIsDetailPage(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Go to "My Cart"',
+                        handler: () => {
+                          router.push('/v2/my-cart');
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setErrorText('');
+            triggerProductApi({
+              url: searchUrl,
+              limit: LISTING_PAGE_DATA_LIMIT,
+              offset: 0
+            }).then(res => {
+              dataTableSetState.setRows(res.data.products);
+              setRowSelection({});
+              setErrorText('');
+              setData(res.data);
+            });
+            dispatch(notificationBadge(true));
+
+            // refetchRow();
+          })
+          .catch(error => {
+            // On error, set error state and error message
+
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular">
+                    {error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          });
+        // Clear the selected checkboxes
+        setRowSelection({});
+      }
+    }
+  };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputError('');
     const inputValue = e.target.value;
@@ -561,7 +682,7 @@ const Result = ({
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
-    setIsDetailPage(false);
+    setIsDetailPage(true);
     setConfirmStoneData([]);
   };
 
@@ -784,8 +905,68 @@ const Result = ({
     });
   };
 
+  const images = [
+    {
+      name: getShapeDisplayName(detailImageData?.shape ?? ''),
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'GIA Certificate',
+      url: detailImageData?.certificate_url ?? '',
+      isSepratorNeeded: true
+    },
+    {
+      name: 'B2B',
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'B2B Sparkle',
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    },
+
+    {
+      name: 'Heart',
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Arrow',
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Aset',
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Ideal',
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Fluorescence',
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    }
+  ];
+
+  const goBack = () => {
+    setIsDetailPage(false);
+    setDetailPageData({});
+  };
+
   return (
     <div className="mb-[20px] relative">
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(!isModalOpen)}
+        selectedImageIndex={0}
+        images={images}
+      />
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -802,7 +983,7 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      {!isDetailPage && (
+      {((!isDetailPage && !isConfirmStone) || isConfirmStone) && (
         <div className="flex h-[81px] items-center">
           <p className="text-headingM font-medium text-neutral900">
             {editRoute
@@ -812,14 +993,82 @@ const Result = ({
         </div>
       )}
 
-      {isDetailPage ? (
-        <DiamondDetailsComponent
-          data={dataTableState.rows}
-          filterData={detailPageData}
-          goBackToListView={goBackToListView}
-          handleDetailPage={handleDetailPage}
-          modalSetState={modalSetState}
-        />
+      {isDetailPage && detailPageData?.length ? (
+        <>
+          <DiamondDetailsComponent
+            data={dataTableState.rows}
+            filterData={detailPageData}
+            goBackToListView={goBack}
+            handleDetailPage={handleDetailPage}
+            breadCrumLabel={'Search Results'}
+            modalSetState={modalSetState}
+          />
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: isConfirmStone ? 'primary' : 'secondary',
+                  label: ManageLocales('app.searchResult.addToCart'),
+                  handler: handleAddToCartDetailPage
+                },
+
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.searchResult.confirmStone'),
+                  isHidden: isConfirmStone,
+                  handler: () => {
+                    setIsDetailPage(false);
+                    const { id } = detailPageData;
+                    const selectedRows = { [id]: true };
+                    handleConfirmStone({
+                      selectedRows: selectedRows,
+                      rows: dataTableState.rows,
+                      setIsError,
+                      setErrorText,
+                      setIsConfirmStone,
+                      setConfirmStoneData
+                    });
+                  }
+                }
+              ]}
+            />
+            <Dropdown
+              dropdownTrigger={
+                <Image
+                  src={threeDotsSvg}
+                  alt="threeDotsSvg"
+                  width={40}
+                  height={40}
+                />
+              }
+              dropdownMenu={[
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.bookAppointment'
+                  ),
+                  handler: () => {}
+                },
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.findMatchingPair'
+                  ),
+                  handler: () => {}
+                }
+              ]}
+              isDisable={true}
+            />
+          </div>
+        </>
       ) : (
         <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
           {isConfirmStone ? (
@@ -828,6 +1077,9 @@ const Result = ({
               columns={columnData}
               goBackToListView={goBackToListView}
               activeTab={activeTab}
+              isFrom={isDetailPage && 'Detail Page'}
+              handleDetailImage={handleDetailImage}
+              handleDetailPage={handleDetailPage}
             />
           ) : (
             <div className="border-b-[1px] border-neutral200">

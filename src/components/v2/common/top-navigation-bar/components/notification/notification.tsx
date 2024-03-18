@@ -73,11 +73,19 @@ const Notification = () => {
             return data.id === noticeId;
           })[0];
 
-          let splitData = getData.target_page.split(':');
-          if (splitData[0] === 'my-cart') {
-            router.push(`${splitData[0]}?path=${splitData[1]}`);
-          } else if (splitData[0] === 'your-order') {
-            router.push(`your-orders?path=${splitData[1]}`);
+          let splitData = getData.target_page;
+          if (splitData === 'Dashboard') {
+            router.push(`/v2`);
+          } else if (splitData === 'Orders Tab') {
+            router.push(`/v2/your-orders?path=recent-confirmations`);
+          } else if (splitData === 'Account Settings') {
+            router.push(`/v2/my-account`);
+          } else if (splitData === 'New Arrivals --> Bid History') {
+            router.push(`/v2/new-arrivals?path=bid-history`);
+          } else if (splitData === 'Your Orders --> Active Invoice') {
+            router.push(`/v2/your-orders?path=active-invoice`);
+          } else if (splitData === 'Cart') {
+            router.push(`/v2/my-cart`);
           }
         }
       })

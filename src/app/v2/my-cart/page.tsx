@@ -32,6 +32,7 @@ import {
   RednderLocation,
   RenderAmount,
   RenderCarat,
+  RenderCartLotId,
   RenderDetails,
   RenderDiscount,
   RenderLab,
@@ -63,6 +64,10 @@ import {
   IProduct,
   IProductItem
 } from '../search/interface';
+import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
+import { FILE_URLS } from '@/constants/v2/detail-page';
+import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
+import { getShapeDisplayName } from '@/utils/v2/detail-page';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -83,6 +88,11 @@ const MyCart = () => {
   const [cartItems, setCartItems] = useState<any>([]);
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+
+  const [isDetailPage, setIsDetailPage] = useState(false);
+  const [detailPageData, setDetailPageData] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [detailImageData, setDetailImageData] = useState<any>({});
 
   const [diamondStatusCounts, setDiamondStatusCounts] = useState({
     Available: 0,
@@ -171,6 +181,45 @@ const MyCart = () => {
     fetchMyAPI();
   }, [activeTab]);
 
+  // Fetch Columns
+  useEffect(() => {
+    const fetchColumns = async () => {
+      const response = await triggerColumn({});
+      const shapeColumn = response.data?.find(
+        (column: any) => column.accessor === 'shape'
+      );
+
+      if (response.data?.length) {
+        let additionalColumn = {
+          accessor: 'shape_full',
+          id: shapeColumn?.id,
+          is_disabled: shapeColumn?.is_disabled,
+          is_fixed: shapeColumn?.is_fixed,
+          label: shapeColumn?.label,
+          sequence: shapeColumn?.sequence,
+          short_label: shapeColumn?.short_label
+        };
+
+        const updatedColumns = [...response.data, additionalColumn];
+        dataTableSetState.setColumns(updatedColumns);
+      }
+    };
+
+    fetchColumns();
+  }, []);
+
+  const handleDetailPage = ({ row }: { row: any }) => {
+    setIsDetailPage(true);
+    setIsError(false);
+    setErrorText('');
+    setDetailPageData(row);
+  };
+
+  const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
+  };
+
   const mapColumns = (columns: any) =>
     columns
       ?.filter(({ is_disabled }: any) => !is_disabled)
@@ -258,6 +307,18 @@ const MyCart = () => {
               }
             };
 
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderCartLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+
           case 'amount':
             return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
@@ -269,7 +330,12 @@ const MyCart = () => {
           case 'discount':
             return { ...commonProps, Cell: RenderDiscount };
           case 'details':
-            return { ...commonProps, Cell: RenderDetails };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
           case 'location':
@@ -286,33 +352,6 @@ const MyCart = () => {
             };
         }
       });
-
-  // Fetch Columns
-  useEffect(() => {
-    const fetchColumns = async () => {
-      const response = await triggerColumn({});
-      const shapeColumn = response.data?.find(
-        (column: any) => column.accessor === 'shape'
-      );
-
-      if (response.data?.length) {
-        let additionalColumn = {
-          accessor: 'shape_full',
-          id: shapeColumn?.id,
-          is_disabled: shapeColumn?.is_disabled,
-          is_fixed: shapeColumn?.is_fixed,
-          label: shapeColumn?.label,
-          sequence: shapeColumn?.sequence,
-          short_label: shapeColumn?.short_label
-        };
-
-        const updatedColumns = [...response.data, additionalColumn];
-        dataTableSetState.setColumns(updatedColumns);
-      }
-    };
-
-    fetchColumns();
-  }, []);
 
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
@@ -344,6 +383,7 @@ const MyCart = () => {
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
+    setIsDetailPage(true);
     setConfirmStoneData([]);
   };
 
@@ -674,8 +714,67 @@ const MyCart = () => {
     }
   };
 
+  const goBack = () => {
+    setIsDetailPage(false);
+    setDetailPageData({});
+  };
+  const images = [
+    {
+      name: getShapeDisplayName(detailImageData?.shape ?? ''),
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'GIA Certificate',
+      url: detailImageData?.certificate_url ?? '',
+      isSepratorNeeded: true
+    },
+    {
+      name: 'B2B',
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'B2B Sparkle',
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    },
+
+    {
+      name: 'Heart',
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Arrow',
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Aset',
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Ideal',
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Fluorescence',
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    }
+  ];
+
   return (
     <div className="relative">
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(!isModalOpen)}
+        selectedImageIndex={0}
+        images={images}
+      />
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -687,210 +786,286 @@ const MyCart = () => {
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      <div className="flex h-[81px] items-center ">
-        <p className="text-headingM font-medium text-neutral900">
-          {ManageLocales('app.myCart.mycart')}
-        </p>
-      </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-165px)] shadow-inputShadow">
-        <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
-          <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
-            {myCartTabs.map(({ label, status, count }) => {
-              return (
-                <button
-                  className={`px-[16px] py-[8px] ${
-                    activeTab === status
-                      ? 'text-neutral900 border-b-[2px] border-primaryMain'
-                      : 'text-neutral600'
-                  }`}
-                  key={label}
-                  onClick={() => handleTabs({ tab: status })}
-                >
-                  {label} {count > 0 && `(${count})`}
-                </button>
-              );
-            })}
-          </div>
+      {(isConfirmStone || !isDetailPage) && (
+        <div className="flex h-[81px] items-center ">
+          <p className="text-headingM font-medium text-neutral900">
+            {ManageLocales('app.myCart.mycart')}
+          </p>
         </div>
-
-        {isLoading ? (
-          <Loader />
-        ) : isConfirmStone ? (
-          <ConfirmStone
-            rows={confirmStoneData}
-            columns={columnData}
-            goBackToListView={goBackToListView}
-            isFromMyCart={true}
+      )}
+      {isDetailPage && detailPageData?.length ? (
+        <>
+          <DiamondDetailsComponent
+            data={dataTableState.rows}
+            filterData={detailPageData}
+            goBackToListView={goBack}
+            handleDetailPage={handleDetailPage}
+            breadCrumLabel={'My Cart'}
+            modalSetState={modalSetState}
           />
-        ) : rows.length && memoizedColumns.length ? (
-          <div>
-            <DataTable
-              rows={rows}
-              columns={memoizedColumns}
-              setRowSelection={setRowSelection}
-              rowSelection={rowSelection}
-              showCalculatedField={activeTab !== SOLD_STATUS}
-              modalSetState={modalSetState}
-              downloadExcel={downloadExcel}
-              myCart={true}
-              setIsError={setIsError}
-              setErrorText={setErrorText}
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.searchResult.confirmStone'),
+                  isHidden: isConfirmStone,
+                  handler: () => {
+                    setIsDetailPage(false);
+                    const { id } = detailPageData;
+                    const selectedRows = { [id]: true };
+                    handleConfirmStone({
+                      selectedRows: selectedRows,
+                      rows: dataTableState.rows,
+                      setIsError,
+                      setErrorText,
+                      setIsConfirmStone,
+                      setConfirmStoneData
+                    });
+                  }
+                }
+              ]}
+            />
+            <Dropdown
+              dropdownTrigger={
+                <Image
+                  src={threeDotsSvg}
+                  alt="threeDotsSvg"
+                  width={40}
+                  height={40}
+                />
+              }
+              dropdownMenu={[
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.bookAppointment'
+                  ),
+                  handler: () => {}
+                },
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.findMatchingPair'
+                  ),
+                  handler: () => {}
+                }
+              ]}
+              isDisable={true}
             />
           </div>
-        ) : (
-          <EmptyScreen
-            label={ManageLocales('app.emptyCart.actionButton.searchDiamonds')}
-            message="No diamonds in your cart yet. Let’s change that!"
-            onClickHandler={() => {}}
-            imageSrc={empty}
-          />
-        )}
-
-        {rows.length > 0 ? (
-          <div className="flex gap-3 justify-end items-center p-[16px]  ">
-            {isConfirmStone ? (
-              <>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.confirmStone.footer.back'),
-                      handler: () => {
-                        goBackToListView();
-                      }
-                    },
-
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales(
-                        'app.confirmStone.footer.addComment'
-                      ),
-                      handler: () => {
-                        setCommentValue('');
-                        setIsAddCommentDialogOpen(true);
-                      }
-                    },
-
-                    {
-                      variant: 'primary',
-                      label: ManageLocales(
-                        'app.confirmStone.footer.confirmStone'
-                      ),
-                      handler: () => confirmStoneApiCall()
-                    }
-                  ]}
-                />
-              </>
-            ) : (
-              <>
-                {' '}
-                {isError && (
-                  <div>
-                    <span className="hidden  text-successMain" />
-                    <span
-                      className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                    >
-                      {errorText}
-                    </span>
-                  </div>
-                )}
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'secondary',
-                      label: ManageLocales('app.myCart.actionButton.delete'),
-                      handler: deleteCartHandler
-                    },
-                    // {
-                    //   variant: 'secondary',
-                    //   label: ManageLocales(
-                    //     'app.myCart.actionButton.bookAppointment'
-                    //   ),
-                    //   handler: () => {},
-                    //   isHidden: activeTab !== AVAILABLE_STATUS
-                    // },
-                    {
-                      variant: 'primary',
-                      label: ManageLocales(
-                        'app.myCart.actionButton.confirmStone'
-                      ),
-                      handler: () => {
-                        handleConfirmStone({
-                          selectedRows: rowSelection,
-                          rows: dataTableState.rows,
-                          setIsError,
-                          setErrorText,
-                          setIsConfirmStone,
-                          setConfirmStoneData
-                        });
-                      },
-                      isHidden: activeTab !== AVAILABLE_STATUS
-                    }
-                    // {
-                    //   variant: 'secondary',
-                    //   label: ManageLocales('app.myCart.actionButton.compareStone'),
-                    //   handler: () => {},
-                    //   isHidden:
-                    //     activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
-                    // }
-                    // {
-                    //   variant: 'primary',
-                    //   label: ManageLocales(
-                    //     'app.myCart.actionButton.viewSimilarStone'
-                    //   ),
-                    //   handler: () => {},
-                    //   isHidden: activeTab === AVAILABLE_STATUS
-                    // }
-                  ]}
-                />
-                <Dropdown
-                  dropdownTrigger={
-                    <Image
-                      src={threeDotsSvg}
-                      alt="threeDotsSvg"
-                      width={40}
-                      height={40}
-                    />
-                  }
-                  dropdownMenu={[
-                    {
-                      label: ManageLocales(
-                        'app.myCart.actionButton.compareStone'
-                      ),
-                      handler: () => {},
-                      isHidden: activeTab === SOLD_STATUS
-                    },
-                    {
-                      label: ManageLocales(
-                        'app.myCart.actionButton.findMatchingPair'
-                      ),
-                      handler: () => {},
-                      isHidden: activeTab !== AVAILABLE_STATUS
-                    },
-                    {
-                      label: ManageLocales(
-                        'app.myCart.actionButton.bookAppointment'
-                      ),
-                      handler: () => {},
-                      isHidden: activeTab !== AVAILABLE_STATUS
-                    },
-                    {
-                      label: ManageLocales(
-                        'app.myCart.actionButton.viewSimilarStone'
-                      ),
-                      handler: () => {},
-                      isHidden: activeTab === AVAILABLE_STATUS
-                    }
-                  ]}
-                  isDisable={true}
-                />
-              </>
-            )}
+        </>
+      ) : (
+        <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-165px)] shadow-inputShadow">
+          <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
+            <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
+              {myCartTabs.map(({ label, status, count }) => {
+                return (
+                  <button
+                    className={`px-[16px] py-[8px] ${
+                      activeTab === status
+                        ? 'text-neutral900 border-b-[2px] border-primaryMain'
+                        : 'text-neutral600'
+                    }`}
+                    key={label}
+                    onClick={() => handleTabs({ tab: status })}
+                  >
+                    {label} {count > 0 && `(${count})`}
+                  </button>
+                );
+              })}
+            </div>
           </div>
-        ) : (
-          <></>
-        )}
-      </div>
+
+          {isLoading ? (
+            <Loader />
+          ) : isConfirmStone ? (
+            <ConfirmStone
+              rows={confirmStoneData}
+              columns={columnData}
+              goBackToListView={goBackToListView}
+              isFrom={'My Cart'}
+              handleDetailImage={handleDetailImage}
+              handleDetailPage={handleDetailPage}
+            />
+          ) : rows.length && memoizedColumns.length ? (
+            <div>
+              <DataTable
+                rows={rows}
+                columns={memoizedColumns}
+                setRowSelection={setRowSelection}
+                rowSelection={rowSelection}
+                showCalculatedField={activeTab !== SOLD_STATUS}
+                modalSetState={modalSetState}
+                downloadExcel={downloadExcel}
+                myCart={true}
+                setIsError={setIsError}
+                setErrorText={setErrorText}
+              />
+            </div>
+          ) : (
+            <EmptyScreen
+              label={ManageLocales('app.emptyCart.actionButton.searchDiamonds')}
+              message="No diamonds in your cart yet. Let’s change that!"
+              onClickHandler={() => {}}
+              imageSrc={empty}
+            />
+          )}
+
+          {rows.length > 0 ? (
+            <div className="flex gap-3 justify-end items-center p-[16px]  ">
+              {isConfirmStone ? (
+                <>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.confirmStone.footer.back'),
+                        handler: () => {
+                          goBackToListView();
+                        }
+                      },
+
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales(
+                          'app.confirmStone.footer.addComment'
+                        ),
+                        handler: () => {
+                          setCommentValue('');
+                          setIsAddCommentDialogOpen(true);
+                        }
+                      },
+
+                      {
+                        variant: 'primary',
+                        label: ManageLocales(
+                          'app.confirmStone.footer.confirmStone'
+                        ),
+                        handler: () => confirmStoneApiCall()
+                      }
+                    ]}
+                  />
+                </>
+              ) : (
+                <>
+                  {' '}
+                  {isError && (
+                    <div>
+                      <span className="hidden  text-successMain" />
+                      <span
+                        className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                      >
+                        {errorText}
+                      </span>
+                    </div>
+                  )}
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'secondary',
+                        label: ManageLocales('app.myCart.actionButton.delete'),
+                        handler: deleteCartHandler
+                      },
+                      // {
+                      //   variant: 'secondary',
+                      //   label: ManageLocales(
+                      //     'app.myCart.actionButton.bookAppointment'
+                      //   ),
+                      //   handler: () => {},
+                      //   isHidden: activeTab !== AVAILABLE_STATUS
+                      // },
+                      {
+                        variant: 'primary',
+                        label: ManageLocales(
+                          'app.myCart.actionButton.confirmStone'
+                        ),
+                        handler: () => {
+                          handleConfirmStone({
+                            selectedRows: rowSelection,
+                            rows: dataTableState.rows,
+                            setIsError,
+                            setErrorText,
+                            setIsConfirmStone,
+                            setConfirmStoneData
+                          });
+                        },
+                        isHidden: activeTab !== AVAILABLE_STATUS
+                      }
+                      // {
+                      //   variant: 'secondary',
+                      //   label: ManageLocales('app.myCart.actionButton.compareStone'),
+                      //   handler: () => {},
+                      //   isHidden:
+                      //     activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
+                      // }
+                      // {
+                      //   variant: 'primary',
+                      //   label: ManageLocales(
+                      //     'app.myCart.actionButton.viewSimilarStone'
+                      //   ),
+                      //   handler: () => {},
+                      //   isHidden: activeTab === AVAILABLE_STATUS
+                      // }
+                    ]}
+                  />
+                  <Dropdown
+                    dropdownTrigger={
+                      <Image
+                        src={threeDotsSvg}
+                        alt="threeDotsSvg"
+                        width={40}
+                        height={40}
+                      />
+                    }
+                    dropdownMenu={[
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.compareStone'
+                        ),
+                        handler: () => {},
+                        isHidden: activeTab === SOLD_STATUS
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.findMatchingPair'
+                        ),
+                        handler: () => {},
+                        isHidden: activeTab !== AVAILABLE_STATUS
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.bookAppointment'
+                        ),
+                        handler: () => {},
+                        isHidden: activeTab !== AVAILABLE_STATUS
+                      },
+                      {
+                        label: ManageLocales(
+                          'app.myCart.actionButton.viewSimilarStone'
+                        ),
+                        handler: () => {},
+                        isHidden: activeTab === AVAILABLE_STATUS
+                      }
+                    ]}
+                    isDisable={true}
+                  />
+                </>
+              )}
+            </div>
+          ) : (
+            <></>
+          )}
+        </div>
+      )}
     </div>
   );
 };
