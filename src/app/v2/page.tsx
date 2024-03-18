@@ -435,7 +435,7 @@ const Dashboard = () => {
       <div className="flex flex-col gap-4 ">
         {' '}
         <div
-          className={`bg-cover bg-no-repeat flex justify-center flex-col items-center h-[220px] gap-5`}
+          className={`bg-cover bg-no-repeat flex justify-center flex-col items-center h-[120px] gap-5`}
           style={{
             backgroundImage: 'url(/gradient.png)'
             //         background: `
@@ -446,7 +446,7 @@ const Dashboard = () => {
           <p className="text-headingM medium text-neutral900">
             Hello, {customerData?.customer.first_name}
           </p>
-          <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
+          {/* <div className="flex items-center bg-neutral0 rounded-[4px] overflow-hidden border-[1px] border-primaryBorder w-[720px] px-4 py-2">
             <div className="relative flex-grow items-center">
               <input
                 className="px-10 py-2 w-full text-gray-600 rounded-lg focus:outline-none"
@@ -460,7 +460,7 @@ const Dashboard = () => {
                 <Image src={micIcon} alt={'micIcon'} />
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="flex justify-between gap-4">
           {options.map(data => {
