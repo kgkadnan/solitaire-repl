@@ -327,7 +327,9 @@ const Result = ({
 
     fetchColumns();
   }, []);
-
+  const memoizedRows = useMemo(() => {
+    return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
+  }, [dataTableState.rows]);
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
@@ -832,7 +834,7 @@ const Result = ({
           ) : (
             <div className="border-b-[1px] border-neutral200">
               <DataTable
-                rows={dataTableState.rows}
+                rows={memoizedRows}
                 columns={memoizedColumns}
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
