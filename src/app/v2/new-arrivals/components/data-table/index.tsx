@@ -29,6 +29,7 @@ import IncrementIcon from '@public/v2/assets/icons/new-arrivals/increment.svg?ur
 import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
+import Tooltip from '@/components/v2/common/tooltip';
 
 const theme = createTheme({
   typography: {
@@ -137,71 +138,17 @@ const NewArrivalDataTable = ({
   };
 
   const handleDownloadExcel = () => {
-    let selectedIds = Object.keys(rowSelection);
-    if (selectedIds.length > 0) {
-      modalSetState.setIsDialogOpen(true);
-      modalSetState.setDialogContent(
-        <>
-          <div className="absolute left-[-84px] top-[-84px]">
-            <Image src={downloadExcelIcon} alt="downloadExcelIcon" />
-          </div>
-          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[357px]">
-            <h1 className="text-headingS text-neutral900">
-              Do you want to download “Selected Stones” or “Entire Search
-              Results” ?
-            </h1>
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.selectedStones'),
-                  handler: () => {
-                    downloadExcelHandler({
-                      products: selectedIds,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection,
-                      fromNewArrivalBid: true
-                    });
-                  },
-                  customStyle: 'flex-1 w-full'
-                },
-                {
-                  variant: 'primary',
-                  label: ManageLocales('app.modal.entireSearchResult'),
-                  handler: () => {
-                    const allProductIds = rows.map(({ id }: { id: string }) => {
-                      return id;
-                    });
+    const allProductIds = rows.map(({ id }: { id: string }) => {
+      return id;
+    });
 
-                    downloadExcelHandler({
-                      products: allProductIds,
-                      downloadExcelApi: downloadExcel,
-                      modalSetState,
-                      setRowSelection,
-                      fromNewArrivalBid: true
-                    });
-                  },
-                  customStyle: 'flex-1 w-full'
-                }
-              ]}
-            />
-          </div>
-        </>
-      );
-    } else {
-      const allProductIds = rows.map(({ id }: { id: string }) => {
-        return id;
-      });
-
-      downloadExcelHandler({
-        products: allProductIds,
-        downloadExcelApi: downloadExcel,
-        modalSetState,
-        setRowSelection,
-        fromNewArrivalBid: true
-      });
-    }
+    downloadExcelHandler({
+      products: allProductIds,
+      downloadExcelApi: downloadExcel,
+      modalSetState,
+      setRowSelection,
+      fromNewArrivalBid: true
+    });
   };
 
   const StyledToggleFullScreenButton = styled(MRT_ToggleFullScreenButton)(
@@ -329,17 +276,29 @@ const NewArrivalDataTable = ({
               className="p-[4px] rounded-[4px] cursor-pointer"
               onClick={handleDownloadExcel}
             >
-              <Image
-                src={downloadIcon}
-                alt={'download'}
-                width={38}
-                height={38}
+              <Tooltip
+                tooltipTrigger={
+                  <Image
+                    src={downloadIcon}
+                    alt={'download'}
+                    width={38}
+                    height={38}
+                  />
+                }
+                tooltipContent={'Download Excel'}
+                tooltipContentStyles={'z-[4]'}
               />
             </div>
 
-            <div onClick={toggleFullScreen}>
-              <StyledToggleFullScreenButton table={table} />{' '}
-            </div>
+            <Tooltip
+              tooltipTrigger={
+                <div onClick={toggleFullScreen}>
+                  <StyledToggleFullScreenButton table={table} title="" />{' '}
+                </div>
+              }
+              tooltipContent={'Full Screen'}
+              tooltipContentStyles={'z-[4]'}
+            />
 
             <div className="flex p-[4px] rounded-[4px] cursor-pointer">
               <Share
@@ -586,6 +545,8 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
                 cell.id === 'shape:SCU_lot_id' ||
+                cell.id === 'shape:RX_lot_id' ||
+                cell.id === 'shape:TR_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
