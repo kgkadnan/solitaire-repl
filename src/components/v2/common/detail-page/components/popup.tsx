@@ -29,7 +29,9 @@ const ShowPopups = ({ data, currentIndex }: any) => {
           <div className="text-[15px] text-neutral-900 font-medium">
             {`$${
               (data[currentIndex]?.variants
-                ? data[currentIndex]?.variants[0]?.prices[0]?.amount?.toFixed(2)
+                ? data[currentIndex]?.variants[0]?.prices[0]?.amount?.toFixed(
+                    2
+                  ) ?? '-'
                 : data[currentIndex]?.amount?.toFixed(2)) ?? '-'
             }`}
           </div>
