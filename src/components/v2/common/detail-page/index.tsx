@@ -152,36 +152,35 @@ export function DiamondDetailsComponent({
       }, 2000);
     });
   };
-
+  let statusValue = '';
   const RenderNewArrivalLotId = ({ tableData }: any) => {
     let statusClass = '';
     let borderClass = '';
-    let value = '';
+
     if (tableData.diamond_status === MEMO_STATUS) {
-      statusClass = 'bg-legendMemoFill';
+      statusClass = 'bg-legendMemoFill text-legendMemo';
       borderClass = 'border-lengendMemoBorder';
-      value = 'Memo';
+      statusValue = 'Memo';
     } else if (tableData.diamond_status === HOLD_STATUS) {
-      statusClass = 'bg-legendHoldFill';
+      statusClass = 'bg-legendHoldFill  text-legendHold';
 
       borderClass = 'border-lengendHoldBorder';
-      value = 'Hold';
+      statusValue = 'Hold';
     } else if (tableData?.in_cart && Object.keys(tableData.in_cart).length) {
-      statusClass = 'bg-legendInCartFill';
+      statusClass = 'bg-legendInCartFill text-legendInCart';
       borderClass = 'border-lengendInCardBorder';
-      value = 'InCart';
-    } else {
-      statusClass = 'border-none';
-      value = 'Available';
-      // borderClass = 'border-neutral0';
+      statusValue = 'InCart';
     }
-
     return (
-      <span
-        className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
-      >
-        {value}
-      </span>
+      <>
+        {statusValue.length > 0 && (
+          <span
+            className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+          >
+            {statusValue}
+          </span>
+        )}
+      </>
     );
   };
 
@@ -241,7 +240,7 @@ export function DiamondDetailsComponent({
             </p>
 
             <div className="flex w-[40%] justify-around items-center">
-              <div className="flex gap-3 ">
+              <div className="flex gap-3 w-[50%]">
                 <Tooltip
                   tooltipTrigger={
                     <Image
@@ -285,8 +284,8 @@ export function DiamondDetailsComponent({
                   tooltipContentStyles={'z-[4]'}
                 />
               </div>
-              <div className="border-r-[1px] border-neutral-200"></div>
-              <div className="flex gap-3 relative">
+              <div className="border-r-[1px] h-[40px] border-neutral-200"></div>
+              <div className="flex gap-3 relative w-[50%] justify-center">
                 {/* Backward Arrow */}
                 <button
                   className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
@@ -314,11 +313,11 @@ export function DiamondDetailsComponent({
                 {/* Forward Arrow */}
                 <button
                   className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
-                    currentIndex >= data.length
+                    currentIndex >= data.length - 1
                       ? 'bg-neutral-50'
-                      : 'bg-neutral0 '
+                      : 'bg-neutral0'
                   }`}
-                  disabled={currentIndex >= data.length}
+                  disabled={currentIndex >= data.length - 1}
                   onClick={() => {
                     console.log('hello2');
                     setCurrentIndex(prev => prev + 1);
@@ -333,7 +332,7 @@ export function DiamondDetailsComponent({
 
                   {/* Additional content for forward arrow */}
 
-                  {currentIndex <= data.length && (
+                  {currentIndex < data.length - 1 && (
                     <ShowPopups data={data} currentIndex={currentIndex + 1} />
                   )}
                 </button>
@@ -353,7 +352,10 @@ export function DiamondDetailsComponent({
                 {tableData.length > 0 && tableData.discount}%
               </p>
             </div>
-            <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+
+            {statusValue.length > 0 && (
+              <div className="border-r-[1px] border-neutral-200 h-[20px]"></div>
+            )}
 
             {RenderNewArrivalLotId({ tableData })}
           </div>

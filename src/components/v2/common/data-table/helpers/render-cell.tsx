@@ -8,8 +8,16 @@ import Isr from '@public/v2/assets/png/data-table/ISR.png';
 import Bel from '@public/v2/assets/png/data-table/BEL.png';
 import Dub from '@public/v2/assets/png/data-table/DUB.png';
 
-export const RenderDetails = () => {
-  return <Image src={Media} alt="Media" />;
+export const RenderDetails = ({ row, handleDetailImage }: any) => {
+  return (
+    <button
+      onClick={() => {
+        handleDetailImage({ row: row.original });
+      }}
+    >
+      <Image src={Media} alt="Media" />
+    </button>
+  );
 };
 
 export const RenderLotId = ({
@@ -39,6 +47,22 @@ export const RenderLotId = ({
   return (
     <span
       className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
+      onClick={() => {
+        handleDetailPage({ row: row.original });
+      }}
+    >
+      {renderedCellValue}
+    </span>
+  );
+};
+
+export const RenderCartLotId = ({
+  renderedCellValue,
+  row,
+  handleDetailPage
+}: any) => {
+  return (
+    <span
       onClick={() => {
         handleDetailPage({ row: row.original });
       }}
