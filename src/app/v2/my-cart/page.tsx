@@ -40,7 +40,7 @@ import {
   RenderShape,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import Loader from '@/components/v2/common/loader';
+
 import {
   clarity,
   fluorescenceSortOrder,
@@ -68,6 +68,7 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -885,8 +886,8 @@ const MyCart = () => {
             </div>
           </div>
 
-          {isLoading ? (
-            <Loader />
+          {rows.length < 0 ? (
+            <CustomKGKLoader />
           ) : isConfirmStone ? (
             <ConfirmStone
               rows={confirmStoneData}
@@ -896,28 +897,34 @@ const MyCart = () => {
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
             />
-          ) : rows.length && memoizedColumns.length ? (
-            <div>
-              <DataTable
-                rows={rows}
-                columns={memoizedColumns}
-                setRowSelection={setRowSelection}
-                rowSelection={rowSelection}
-                showCalculatedField={activeTab !== SOLD_STATUS}
-                modalSetState={modalSetState}
-                downloadExcel={downloadExcel}
-                myCart={true}
-                setIsError={setIsError}
-                setErrorText={setErrorText}
-              />
-            </div>
           ) : (
-            <EmptyScreen
-              label={ManageLocales('app.emptyCart.actionButton.searchDiamonds')}
-              message="No diamonds in your cart yet. Let’s change that!"
-              onClickHandler={() => {}}
-              imageSrc={empty}
-            />
+            <>
+              {rows.length && memoizedColumns.length ? (
+                <div>
+                  <DataTable
+                    rows={rows}
+                    columns={memoizedColumns}
+                    setRowSelection={setRowSelection}
+                    rowSelection={rowSelection}
+                    showCalculatedField={activeTab !== SOLD_STATUS}
+                    modalSetState={modalSetState}
+                    downloadExcel={downloadExcel}
+                    myCart={true}
+                    setIsError={setIsError}
+                    setErrorText={setErrorText}
+                  />
+                </div>
+              ) : (
+                <EmptyScreen
+                  label={ManageLocales(
+                    'app.emptyCart.actionButton.searchDiamonds'
+                  )}
+                  message="No diamonds in your cart yet. Let’s change that!"
+                  onClickHandler={() => {}}
+                  imageSrc={empty}
+                />
+              )}
+            </>
           )}
 
           {rows.length > 0 ? (
