@@ -9,6 +9,7 @@ import crossIcon from '@public/v2/assets/icons/modal/cross.svg';
 import { SELECT_STONE_TO_PERFORM_ACTION } from '@/constants/error-messages/search';
 import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
+import Tooltip from '../tooltip';
 
 const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
@@ -26,7 +27,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
   const shareOptions = [
     { name: 'Stock No', state: 'lot_id' },
     { name: 'Shape', state: 'shape' },
-    { name: 'Carat', state: 'carat' },
+    { name: 'Carats', state: 'carats' },
     { name: 'Color', state: 'color' },
     { name: 'Clarity', state: 'clarity' },
     { name: 'Cut', state: 'cut' },
@@ -207,7 +208,20 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
           }
         }}
       >
-        <Image src={shareButtonSvg} alt={'share'} width={38} height={38} />
+        <Tooltip
+          tooltipTrigger={
+            <Image
+              className="cursor-pointer"
+              src={shareButtonSvg}
+              alt={'share'}
+              height={38}
+              width={38}
+            />
+          }
+          tooltipContent={'Share'}
+          tooltipContentStyles={'z-[4]'}
+        />
+        {/* <Image src={shareButtonSvg} alt={'share'} width={38} height={38} /> */}
       </div>
       {/* {copied && <span>Copied!</span>} */}
     </>

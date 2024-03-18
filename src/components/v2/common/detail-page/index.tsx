@@ -5,7 +5,6 @@ import { useEffect, useState } from 'react';
 import backWardArrow from '@public/v2/assets/icons/my-diamonds/backwardArrow.svg';
 import linkSvg from '@public/v2/assets/icons/detail-page/link.svg';
 import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
-import shareSvg from '@public/v2/assets/icons/detail-page/share.svg';
 import forwardArrow from '@public/v2/assets/icons/detail-page/forward-arrow.svg';
 import backwardArrow from '@public/v2/assets/icons/detail-page/back-ward-arrow.svg';
 // import { AppDispatch } from '@/redux/store';
@@ -35,26 +34,36 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ResponsiveTable from './components/CommonTable';
 import { HOLD_STATUS, MEMO_STATUS } from '@/constants/business-logic';
 import ShowPopups from './components/popup';
+import Share from '../copy-and-share/share';
+import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
+import { useDownloadExcelMutation } from '@/features/api/download-excel';
+import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 export function DiamondDetailsComponent({
   data,
   filterData,
   goBackToListView,
-  handleDetailPage
+  handleDetailPage,
+  modalSetState
 }: {
   data: any;
   filterData: any;
   goBackToListView: any;
   handleDetailPage: any;
+  modalSetState?: any;
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
   //   const dispatch: AppDispatch = useDispatch();
   //   const diamondData = useSelector(selectDiamondData);
+  const { errorSetState } = useErrorStateManagement();
+
+  const { setIsError, setErrorText } = errorSetState;
 
   const [showToast, setShowToast] = useState(false);
   const [selectedImageIndex, setSelectedImageIndex] = useState<number>(0);
+  const [downloadExcel] = useDownloadExcelMutation();
 
   useEffect(() => {
     let copyData = filterData ? { ...filterData } : {};
@@ -144,7 +153,9 @@ export function DiamondDetailsComponent({
   ];
 
   const copyLink = () => {
-    const link = window.location.href;
+    const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
+      .split('/')
+      .pop()}`;
     navigator.clipboard.writeText(link).then(() => {
       setShowToast(true); // Show the toast notification
       setTimeout(() => {
@@ -184,7 +195,13 @@ export function DiamondDetailsComponent({
       </span>
     );
   };
-
+  const handleDownloadExcel = () => {
+    downloadExcelHandler({
+      products: [filterData.id],
+      downloadExcelApi: downloadExcel,
+      modalSetState
+    });
+  };
   return (
     <div className="text-black bg-white mt-2">
       <Toast show={showToast} message="Copied Successfully" />
@@ -250,6 +267,7 @@ export function DiamondDetailsComponent({
                       alt={'Download'}
                       height={40}
                       width={40}
+                      onClick={handleDownloadExcel}
                     />
                   }
                   tooltipContent={'Download Excel'}
@@ -271,18 +289,11 @@ export function DiamondDetailsComponent({
                   tooltipContentStyles={'z-[4]'}
                 />
 
-                <Tooltip
-                  tooltipTrigger={
-                    <Image
-                      className="cursor-pointer"
-                      src={shareSvg}
-                      alt={'share'}
-                      height={40}
-                      width={40}
-                    />
-                  }
-                  tooltipContent={'Share'}
-                  tooltipContentStyles={'z-[4]'}
+                <Share
+                  rows={data}
+                  selectedProducts={{ [filterData.id]: true }}
+                  setIsError={setIsError}
+                  setErrorText={setErrorText}
                 />
               </div>
               <div className="border-r-[1px] border-neutral-200"></div>
@@ -294,7 +305,6 @@ export function DiamondDetailsComponent({
                   } `}
                   disabled={currentIndex <= 0}
                   onClick={() => {
-                    console.log('hello');
                     setCurrentIndex(prev => prev - 1);
                     handleDetailPage({ row: data[currentIndex - 1] });
                   }}
@@ -320,7 +330,6 @@ export function DiamondDetailsComponent({
                   }`}
                   disabled={currentIndex >= data.length}
                   onClick={() => {
-                    console.log('hello2');
                     setCurrentIndex(prev => prev + 1);
                     handleDetailPage({ row: data[currentIndex + 1] });
                   }}

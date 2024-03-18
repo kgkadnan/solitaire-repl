@@ -43,7 +43,6 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
-  console.log(images, 'images');
   return (
     <>
       {images?.length > 0 ? (
