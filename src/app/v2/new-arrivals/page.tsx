@@ -142,7 +142,6 @@ const NewArrivals = () => {
     setActiveTab(index);
     setRowSelection({});
   };
-  const [rows, setRows] = useState<any>();
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState();
@@ -155,7 +154,6 @@ const NewArrivals = () => {
   }, [authToken]);
 
   const handleBidStones = useCallback((data: any) => {
-    setRows(data.bidStone); // Adjust according to your data structure
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
@@ -458,6 +456,7 @@ const NewArrivals = () => {
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'New Arrival'}
+            modalSetState={modalSetState}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (

@@ -383,6 +383,7 @@ const MyCart = () => {
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
+    setIsDetailPage(true);
     setConfirmStoneData([]);
   };
 
@@ -792,7 +793,7 @@ const MyCart = () => {
           </p>
         </div>
       )}
-      {isDetailPage && !isConfirmStone ? (
+      {isDetailPage && detailPageData?.length ? (
         <>
           <DiamondDetailsComponent
             data={dataTableState.rows}
@@ -800,6 +801,7 @@ const MyCart = () => {
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'My Cart'}
+            modalSetState={modalSetState}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -817,7 +819,9 @@ const MyCart = () => {
                 {
                   variant: 'primary',
                   label: ManageLocales('app.searchResult.confirmStone'),
+                  isHidden: isConfirmStone,
                   handler: () => {
+                    setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
@@ -889,6 +893,8 @@ const MyCart = () => {
               columns={columnData}
               goBackToListView={goBackToListView}
               isFrom={'My Cart'}
+              handleDetailImage={handleDetailImage}
+              handleDetailPage={handleDetailPage}
             />
           ) : rows.length && memoizedColumns.length ? (
             <div>

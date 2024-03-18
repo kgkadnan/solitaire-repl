@@ -46,52 +46,87 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
   return (
     <>
       {images?.length > 0 ? (
-        <Slider {...settings}>
-          {images?.map((data: any, index: number) => {
-            return (
-              <div
-                className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
-                key={index}
-              >
-                {' '}
-                {/* Container with relative positioning */}
-                <a
-                  href={data.link}
-                  target="_blank"
+        images.length > 1 ? (
+          <Slider {...settings}>
+            {images?.map((data: any, index: number) => {
+              return (
+                <div
+                  className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
                   key={index}
-                  className="h-[400px]"
                 >
-                  <img
-                    src={data.image_web ?? NoImageFound.src}
-                    alt={`banner-${index}`}
-                    className="w-full h-[400px] rounded-[8px]"
-                    onError={handleImageError}
-                  />
-                  <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
-                    {/* <div className='flex justify-between'> */}
-                    <div className="flex flex-col">
-                      <p className="text-headingS medium">{data.tag_line}</p>
-                      <p className="text-lMedium medium">
-                        {data.description_line}
-                      </p>
-                    </div>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'secondary',
-                          label: data.cta,
-                          handler: () => {},
-                          customStyle: 'flex-1 w-full h-10 '
-                        }
-                      ]}
+                  {' '}
+                  {/* Container with relative positioning */}
+                  <a
+                    href={data.link}
+                    target="_blank"
+                    key={index}
+                    className="h-[400px]"
+                  >
+                    <img
+                      src={data.image_web ?? NoImageFound.src}
+                      alt={`banner-${index}`}
+                      className="w-full h-[400px] rounded-[8px]"
+                      onError={handleImageError}
                     />
-                    {/* </div> */}
-                  </div>
-                </a>
+                    <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                      {/* <div className='flex justify-between'> */}
+                      <div className="flex flex-col">
+                        <p className="text-headingS medium">{data.tag_line}</p>
+                        <p className="text-lMedium medium">
+                          {data.description_line}
+                        </p>
+                      </div>
+                      <ActionButton
+                        actionButtonData={[
+                          {
+                            variant: 'secondary',
+                            label: data.cta,
+                            handler: () => {},
+                            customStyle: 'flex-1 w-full h-10 '
+                          }
+                        ]}
+                      />
+                      {/* </div> */}
+                    </div>
+                  </a>
+                </div>
+              );
+            })}
+          </Slider>
+        ) : (
+          <div className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50">
+            {' '}
+            {/* Container with relative positioning */}
+            <a href={images[0].link} target="_blank" className="h-[400px]">
+              <img
+                src={images[0].image_web ?? NoImageFound.src}
+                alt={`banner-${1}`}
+                className="w-full h-[400px] rounded-[8px]"
+                onError={handleImageError}
+              />
+              <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                {/* <div className='flex justify-between'> */}
+                <div className="flex flex-col">
+                  <p className="text-headingS medium">{images[0].tag_line}</p>
+                  <p className="text-lMedium medium">
+                    {images[0].description_line}
+                  </p>
+                </div>
+                <ActionButton
+                  actionButtonData={[
+                    {
+                      variant: 'secondary',
+                      label: images[0].cta,
+                      handler: () => {},
+                      customStyle: 'flex-1 w-full h-10 '
+                    }
+                  ]}
+                />
+                {/* </div> */}
               </div>
-            );
-          })}
-        </Slider>
+            </a>
+          </div>
+        )
       ) : (
         <div className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50">
           <img

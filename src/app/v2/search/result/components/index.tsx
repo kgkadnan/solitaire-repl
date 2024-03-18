@@ -8,6 +8,7 @@ import {
   RednderLocation,
   RenderAmount,
   RenderCarat,
+  RenderCartLotId,
   RenderDetails,
   RenderDiscount,
   RenderLab
@@ -15,63 +16,17 @@ import {
 
 import React, { useEffect, useMemo, useState } from 'react';
 
-const mapColumns = (columns: any) =>
-  columns
-    ?.filter(({ is_disabled }: any) => !is_disabled)
-    ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
-    .map(({ accessor, short_label, label }: any) => {
-      const commonProps = {
-        accessorKey: accessor,
-        header: short_label,
-        enableGlobalFilter: accessor === 'lot_id',
-        minSize: 5,
-        maxSize: accessor === 'details' ? 100 : 200,
-        size: accessor === 'measurements' ? 183 : 5,
-        Header: ({ column }: any) => (
-          <Tooltip
-            tooltipTrigger={<span>{column.columnDef.header}</span>}
-            tooltipContent={label}
-            tooltipContentStyles={'z-[4]'}
-          />
-        )
-      };
-
-      switch (accessor) {
-        case 'amount':
-          return { ...commonProps, Cell: RenderAmount };
-        case 'carat':
-          return { ...commonProps, Cell: RenderCarat };
-        case 'measurements':
-          return { ...commonProps, Cell: RenderMeasurements };
-        case 'discount':
-          return { ...commonProps, Cell: RenderDiscount };
-        case 'details':
-          return { ...commonProps, Cell: RenderDetails };
-        case 'lab':
-          return { ...commonProps, Cell: RenderLab };
-        case 'location':
-          return { ...commonProps, Cell: RednderLocation };
-        case 'tracr_id':
-          return { ...commonProps, Cell: RenderTracerId };
-        default:
-          return {
-            ...commonProps,
-            Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-              <span>{renderedCellValue ?? '-'}</span>
-            )
-          };
-      }
-    });
-
 const ConfirmStone = ({
   rows,
   columns,
   goBackToListView,
   activeTab,
-  isFrom
+  isFrom,
+  handleDetailImage,
+  handleDetailPage
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
-  const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
+
   const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   useEffect(() => {
@@ -98,6 +53,71 @@ const ConfirmStone = ({
       }
     }
   }, []);
+
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: accessor === 'measurements' ? 183 : 5,
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={label}
+              tooltipContentStyles={'z-[4]'}
+            />
+          )
+        };
+
+        switch (accessor) {
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
+          case 'carat':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderCartLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
+        }
+      });
+  const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
 
   return (
     <div className="">

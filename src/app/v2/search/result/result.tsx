@@ -362,128 +362,108 @@ const Result = ({
       setIsError(true);
       setErrorText(NO_STONES_SELECTED);
     } else {
-      const hasMemoOut = selectedIds.some((id: string) => {
-        return dataTableState.rows.some(
-          (row: IProduct) => row.id === id && row.diamond_status === MEMO_STATUS
-        );
-      });
+      const variantIds = selectedIds
+        ?.map((id: string) => {
+          const myCartCheck: IProduct | object =
+            dataTableState.rows.find((row: IProduct) => {
+              return row?.id === id;
+            }) ?? {};
 
-      const hasHold = selectedIds.some((id: string) => {
-        return dataTableState.rows.some(
-          (row: IProduct) => row.id === id && row.diamond_status === HOLD_STATUS
-        );
-      });
+          if (myCartCheck && 'variants' in myCartCheck) {
+            return myCartCheck.variants[0]?.id;
+          }
+          return '';
+        })
+        .filter(Boolean);
 
-      if (hasMemoOut) {
-        setErrorText(NO_STONES_AVAILABLE);
-        setIsError(true);
-      } else if (hasHold) {
-        setIsError(true);
-        setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
-      } else {
-        // Extract variant IDs for selected stones
-        const variantIds = selectedIds
-          ?.map((id: string) => {
-            const myCartCheck: IProduct | object =
-              dataTableState.rows.find((row: IProduct) => {
-                return row?.id === id;
-              }) ?? {};
-
-            if (myCartCheck && 'variants' in myCartCheck) {
-              return myCartCheck.variants[0]?.id;
-            }
-            return '';
-          })
-          .filter(Boolean);
-
-        // If there are variant IDs, add to the cart
-        if (variantIds.length) {
-          addCart({
-            variants: variantIds
-          })
-            .unwrap()
-            .then((res: any) => {
-              setIsDialogOpen(true);
-              setDialogContent(
-                <>
-                  <div className="absolute left-[-84px] top-[-84px]">
-                    <Image src={confirmIcon} alt="confirmIcon" />
-                  </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                    <h1 className="text-headingS text-neutral900">
-                      {res?.message}
-                    </h1>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.continue'),
-                          handler: () => setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full h-10'
+      // If there are variant IDs, add to the cart
+      if (variantIds.length) {
+        addCart({
+          variants: variantIds
+        })
+          .unwrap()
+          .then((res: any) => {
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={confirmIcon} alt="confirmIcon" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <h1 className="text-headingS text-neutral900">
+                    {res?.message}
+                  </h1>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.continue'),
+                        handler: () => setIsDialogOpen(false),
+                        customStyle: 'flex-1 w-full h-10'
+                      },
+                      {
+                        variant: 'primary',
+                        label: 'Go to "My Cart"',
+                        handler: () => {
+                          router.push('/v2/my-cart');
                         },
-                        {
-                          variant: 'primary',
-                          label: 'Go to "My Cart"',
-                          handler: () => {
-                            router.push('/v2/my-cart');
-                          },
-                          customStyle: 'flex-1 w-full h-10'
-                        }
-                      ]}
-                    />
-                  </div>
-                </>
-              );
-              // On success, show confirmation dialog and update badge
-              setIsError(false);
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+            // On success, show confirmation dialog and update badge
+            setIsError(false);
+            setErrorText('');
+            triggerProductApi({
+              url: searchUrl,
+              limit: LISTING_PAGE_DATA_LIMIT,
+              offset: 0
+            }).then(res => {
+              dataTableSetState.setRows(res.data.products);
+              setRowSelection({});
               setErrorText('');
-              triggerProductApi({
-                url: searchUrl,
-                limit: LISTING_PAGE_DATA_LIMIT,
-                offset: 0
-              }).then(res => {
-                dataTableSetState.setRows(res.data.products);
-                setRowSelection({});
-                setErrorText('');
-                setData(res.data);
-              });
-              dispatch(notificationBadge(true));
-
-              // refetchRow();
-            })
-            .catch(error => {
-              // On error, set error state and error message
-
-              setIsDialogOpen(true);
-              setDialogContent(
-                <>
-                  <div className="absolute left-[-84px] top-[-84px]">
-                    <Image src={errorSvg} alt="errorSvg" />
-                  </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                    <p className="text-neutral600 text-mRegular">
-                      {error?.data?.message}
-                    </p>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.okay'),
-                          handler: () => {
-                            setIsDialogOpen(false);
-                          },
-                          customStyle: 'flex-1 w-full h-10'
-                        }
-                      ]}
-                    />
-                  </div>
-                </>
-              );
+              setData(res.data);
             });
-          // Clear the selected checkboxes
-          setRowSelection({});
-        }
+            dispatch(notificationBadge(true));
+
+            // refetchRow();
+          })
+          .catch(error => {
+            // On error, set error state and error message
+
+            setIsDialogOpen(true);
+            setDialogContent(
+              <>
+                <div className="absolute left-[-84px] top-[-84px]">
+                  <Image src={errorSvg} alt="errorSvg" />
+                </div>
+                <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+                  <p className="text-neutral600 text-mRegular">
+                    {error?.data?.message}
+                  </p>
+                  <ActionButton
+                    actionButtonData={[
+                      {
+                        variant: 'primary',
+                        label: ManageLocales('app.modal.okay'),
+                        handler: () => {
+                          setIsDialogOpen(false);
+                        },
+                        customStyle: 'flex-1 w-full h-10'
+                      }
+                    ]}
+                  />
+                </div>
+              </>
+            );
+          });
+        // Clear the selected checkboxes
+        setRowSelection({});
       }
+      // }
     }
   };
 
@@ -702,6 +682,7 @@ const Result = ({
 
   const goBackToListView = () => {
     setIsConfirmStone(false);
+    setIsDetailPage(true);
     setConfirmStoneData([]);
   };
 
@@ -1012,7 +993,7 @@ const Result = ({
         </div>
       )}
 
-      {isDetailPage && !isConfirmStone ? (
+      {isDetailPage && detailPageData?.length ? (
         <>
           <DiamondDetailsComponent
             data={dataTableState.rows}
@@ -1020,6 +1001,7 @@ const Result = ({
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'Search Results'}
+            modalSetState={modalSetState}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -1035,7 +1017,7 @@ const Result = ({
             <ActionButton
               actionButtonData={[
                 {
-                  variant: 'secondary',
+                  variant: isConfirmStone ? 'primary' : 'secondary',
                   label: ManageLocales('app.searchResult.addToCart'),
                   handler: handleAddToCartDetailPage
                 },
@@ -1043,7 +1025,9 @@ const Result = ({
                 {
                   variant: 'primary',
                   label: ManageLocales('app.searchResult.confirmStone'),
+                  isHidden: isConfirmStone,
                   handler: () => {
+                    setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
@@ -1094,6 +1078,8 @@ const Result = ({
               goBackToListView={goBackToListView}
               activeTab={activeTab}
               isFrom={isDetailPage && 'Detail Page'}
+              handleDetailImage={handleDetailImage}
+              handleDetailPage={handleDetailPage}
             />
           ) : (
             <div className="border-b-[1px] border-neutral200">
@@ -1153,7 +1139,7 @@ const Result = ({
             ) : (
               dataTableState.rows.length > 0 && (
                 <div className="flex items-center justify-between">
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 h-[30px] min-w-[270px]">
                     <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
                       <p className="text-mMedium font-medium px-[6px] py-[4px]">
                         In Cart
