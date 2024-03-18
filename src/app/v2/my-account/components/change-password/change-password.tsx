@@ -220,7 +220,7 @@ const ChangePassword = ({ modalSetState }: any) => {
         <div className="bg-neutral0 flex flex-col justify-center px-[194px] py-[24px] items-center rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
           <div className="w-[374px] flex flex-col gap-[24px]">
             <PasswordField
-              label={'Password'}
+              label={'Current Password'}
               onChange={event =>
                 handleChangePassword({
                   event,
@@ -233,7 +233,7 @@ const ChangePassword = ({ modalSetState }: any) => {
               isConfirmPassword={true}
               value={changePasswordState.password}
               errorText={changePasswordFormErrors.password}
-              placeholder={'Enter password'}
+              placeholder={'Enter Current password'}
             />
             {/* <div> */}
             <PasswordField

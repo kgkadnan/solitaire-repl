@@ -12,7 +12,8 @@ import {
   RenderTracerId,
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
-  RenderNewArrivalPricePerCarat
+  RenderNewArrivalPricePerCarat,
+  RenderCartLotId
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -29,8 +30,30 @@ import { MRT_RowSelectionState } from 'material-react-table';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
 import useUser from '@/lib/use-auth';
+import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
+import { getShapeDisplayName } from '@/utils/v2/detail-page';
+import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
+import { FILE_URLS } from '@/constants/v2/detail-page';
+import { useSearchParams } from 'next/navigation';
 
 const NewArrivals = () => {
+  const [isDetailPage, setIsDetailPage] = useState(false);
+  const [detailPageData, setDetailPageData] = useState<any>({});
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [detailImageData, setDetailImageData] = useState<any>({});
+
+  const pathName = useSearchParams().get('path');
+
+  const handleDetailPage = ({ row }: { row: any }) => {
+    setIsDetailPage(true);
+    setDetailPageData(row);
+  };
+
+  const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
+  };
+
   const { data: bidHistory } = useGetBidHistoryQuery({});
   const mapColumns = (columns: any) =>
     columns
@@ -68,8 +91,24 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderDiscount };
           case 'current_max_bid':
             return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderCartLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
           case 'details':
-            return { ...commonProps, Cell: RenderDetails };
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
           case 'location':
@@ -93,6 +132,12 @@ const NewArrivals = () => {
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
   const [timeDifference, setTimeDifference] = useState(null);
+
+  useEffect(() => {
+    if (pathName === 'bid-history') {
+      setActiveTab(2);
+    }
+  }, []);
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
@@ -337,67 +382,165 @@ const NewArrivals = () => {
     }
   };
 
+  const images = [
+    {
+      name: getShapeDisplayName(detailImageData?.shape ?? ''),
+      url: `${FILE_URLS.IMG.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'GIA Certificate',
+      url: detailImageData?.certificate_url ?? '',
+      isSepratorNeeded: true
+    },
+    {
+      name: 'B2B',
+      url: `${FILE_URLS.B2B.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'B2B Sparkle',
+      url: `${FILE_URLS.B2B_SPARKLE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    },
+
+    {
+      name: 'Heart',
+      url: `${FILE_URLS.HEART.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Arrow',
+      url: `${FILE_URLS.ARROW.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Aset',
+      url: `${FILE_URLS.ASET.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Ideal',
+      url: `${FILE_URLS.IDEAL.replace('***', detailImageData?.lot_id ?? '')}`
+    },
+    {
+      name: 'Fluorescence',
+      url: `${FILE_URLS.FLUORESCENCE.replace(
+        '***',
+        detailImageData?.lot_id ?? ''
+      )}`,
+      isSepratorNeeded: true
+    }
+  ];
+
+  const goBack = () => {
+    setIsDetailPage(false);
+    setDetailPageData({});
+  };
+
   return (
     <div className="mb-[20px] relative">
+      <ImageModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(!isModalOpen)}
+        selectedImageIndex={0}
+        images={images}
+      />
       <DialogComponent
         dialogContent={modalState.dialogContent}
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
-      <div className="flex h-[81px] items-center justify-between">
-        <p className="text-headingM font-medium text-neutral900">
-          New Arrivals
-        </p>
+      
+      
 
-        {timeDifference !== null && timeDifference >= 0 && (
+        
+
+      {isDetailPage ? (
+        <>
+          <DiamondDetailsComponent
+            data={
+              activeTab === 0
+                ? bid
+                : activeTab === 1
+                ? activeBid
+                : bidHistory?.data
+            }
+            filterData={detailPageData}
+            goBackToListView={goBack}
+            handleDetailPage={handleDetailPage}
+            breadCrumLabel={'New Arrival'}
+            modalSetState={modalSetState}
+          />
+          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
+            {isError && (
+              <div>
+                <span className="hidden  text-successMain" />
+                <span
+                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+                >
+                  {errorText}
+                </span>
+              </div>
+            )}
+          </div>
+        </>
+      ) : (
+        <>
+          {' '}
+          <div className="flex h-[81px] items-center justify-between">
+            <p className="text-headingM font-medium text-neutral900">
+              New Arrivals
+            </p>
+            {timeDifference !== null && timeDifference >= 0 && (
           <CountdownTimer
             initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
             initialMinutes={Math.floor(
               (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
             )}
             initialSeconds={Math.floor((timeDifference % (1000 * 60)) / 1000)}
-          />
-        )}
-      </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        {/* <div className="w-[450px]">
-        
-        </div> */}
-        <div className="border-b-[1px] border-neutral200">
-          {
-            <NewArrivalDataTable
-              columns={
-                activeTab === 2
-                  ? memoizedColumns.filter(
-                      (data: any) => data.accessorKey !== 'current_max_bid'
-                    )
-                  : memoizedColumns
+              />
+            )}
+          </div>
+          <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+            {/* <div className="w-[450px]">
+    
+    </div> */}
+            <div className="border-b-[1px] border-neutral200">
+              {
+                <NewArrivalDataTable
+                  columns={
+                    activeTab === 2
+                      ? memoizedColumns.filter(
+                          (data: any) => data.accessorKey !== 'current_max_bid'
+                        )
+                      : memoizedColumns
+                  }
+                  modalSetState={modalSetState}
+                  setErrorText={setErrorText}
+                  downloadExcel={downloadExcel}
+                  setIsError={setIsError}
+                  tabLabels={tabLabels}
+                  activeTab={activeTab}
+                  handleTabClick={handleTabClick}
+                  rows={
+                    activeTab === 0
+                      ? bid
+                      : activeTab === 1
+                      ? activeBid
+                      : bidHistory?.data
+                  }
+                  activeCount={activeBid?.length}
+                  bidCount={bid?.length}
+                  historyCount={bidHistory?.data?.length}
+                  socketManager={socketManager}
+                  rowSelection={rowSelection}
+                  setRowSelection={setRowSelection}
+                />
               }
-              modalSetState={modalSetState}
-              setErrorText={setErrorText}
-              downloadExcel={downloadExcel}
-              setIsError={setIsError}
-              tabLabels={tabLabels}
-              activeTab={activeTab}
-              handleTabClick={handleTabClick}
-              rows={
-                activeTab === 0
-                  ? bid
-                  : activeTab === 1
-                  ? activeBid
-                  : bidHistory?.data
-              }
-              activeCount={activeBid?.length}
-              bidCount={bid?.length}
-              historyCount={bidHistory?.data?.length}
-              socketManager={socketManager}
-              rowSelection={rowSelection}
-              setRowSelection={setRowSelection}
-            />
-          }
-        </div>
-        {renderFooter()}
-      </div>
+            </div>
+            {renderFooter()}
+          </div>
+        </>
+      )}
     </div>
   );
 };
