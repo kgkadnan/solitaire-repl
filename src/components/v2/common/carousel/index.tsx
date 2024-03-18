@@ -51,7 +51,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
             {images?.map((data: any, index: number) => {
               return (
                 <div
-                  className="relative w-full min-h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
+                  className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
                   key={index}
                 >
                   {' '}
@@ -68,7 +68,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
                       className="w-full h-[400px] rounded-[8px]"
                       onError={handleImageError}
                     />
-                    <div className="absolute bottom-0 left-0 w-full h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
+                    <div className="absolute bottom-0 left-0 w-full min-h-[100px] bg-black bg-opacity-50 flex justify-between items-center rounded-b-[8px] text-neutral0 p-4">
                       {/* <div className='flex justify-between'> */}
                       <div className="flex flex-col">
                         <p className="text-headingS medium">{data.tag_line}</p>
