@@ -57,7 +57,10 @@ const ImageList: React.FC<ImageListProps> = ({
               // className="mr-[37px]"
             />
             {image.isSepratorNeeded && (
-              <hr className="1px solid #E4E7EC my-[4px] mt-[15px]" />
+              <hr
+                className="1px solid var(--neutral-200) my-[4px] mt-[15px]"
+                style={{ borderColor: 'var(--neutral-200)' }}
+              />
             )}
           </div>
         ) : (
@@ -77,7 +80,10 @@ const ImageList: React.FC<ImageListProps> = ({
               onClick={() => handleClick(index)}
             />
             {image.isSepratorNeeded && (
-              <hr className="1px solid #E4E7EC my-[4px] mt-[15px]" />
+              <hr
+                className="1px solid var(--neutral-200) my-[4px] mt-[15px]"
+                style={{ borderColor: 'var(--neutral-200)' }}
+              />
             )}
           </>
         )
