@@ -355,8 +355,4 @@
     -webkit-box-shadow: var(--input-shadow) inset !important;
     transition: background-color 5000s ease-in-out 0s !important; /* Adjust the transition to a long duration */
   }
-  input:-webkit-autofill::first-line,
-  input:-webkit-autofill {
-    font-family: 'Inter', sans-serif !important; /* Use the imported Google Font */
-  }
 }
