@@ -160,11 +160,25 @@ const NewArrivals = () => {
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
-
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
+    if (data.activeStone) {
+      data.activeStone.map((row: any) => {
+        if (row.current_max_bid > row.my_current_bid) {
+          setRowSelection(prev => {
+            return { ...prev, [row.id]: true };
+          });
+        } else {
+          setRowSelection((prev: any) => {
+            let prevRows = { ...prev };
+            delete prevRows[row.id];
+            return prevRows;
+          });
+        }
+      });
+    }
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {

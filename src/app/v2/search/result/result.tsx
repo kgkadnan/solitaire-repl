@@ -155,15 +155,28 @@ const Result = ({
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
     triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      res => {
-        dataTableSetState.setRows(res.data.products);
-        setRowSelection({});
-        setErrorText('');
-        setData(res.data);
+      (res: any) => {
+        if (columnData?.length > 0) {
+          // let newArr: any = [];
+          // res.data.products.forEach((row: any) => {
+          //   let obj: any = {};
+          //   columnData?.forEach(col => {
+          //     if (col.accessor === 'amount') {
+          //       obj[col.accessor] === row.variants[0].prices[0].amount;
+          //     } else {
+          //       obj[col.accessor] = row[col.accessor];
+          //     }
+          //   });
+          //   newArr.push(obj);
+          // });
+          dataTableSetState.setRows(res.data.products);
+          setRowSelection({});
+          setErrorText('');
+          setData(res.data);
+        }
       }
     );
   };
-
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setIsError(false);
@@ -263,8 +276,8 @@ const Result = ({
                 return indexA - indexB;
               }
             };
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+          // case 'amount':
+          //   return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -310,7 +323,7 @@ const Result = ({
 
   useEffect(() => {
     fetchProducts();
-  }, [activeTab]);
+  }, [activeTab, columnData]);
 
   useEffect(() => {
     setErrorText('');

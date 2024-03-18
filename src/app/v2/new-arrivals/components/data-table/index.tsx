@@ -267,7 +267,10 @@ const NewArrivalDataTable = ({
   const renderTopToolbar = ({ table }: any) => (
     <div>
       <div
-        className={` border-neutral200 ${activeTab !== 2 && 'border-b-[1px]'}`}
+        className={` border-neutral200 ${
+          (activeTab !== 2 || (activeTab === 2 && historyCount === 0)) &&
+          'border-b-[1px]'
+        }`}
       >
         <Box
           sx={{

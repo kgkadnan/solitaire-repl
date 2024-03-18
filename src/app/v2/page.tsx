@@ -320,16 +320,16 @@ const Dashboard = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      case 'delivery':
-        return (
-          <Link
-            href={value[accessor]?.link}
-            target="_blank"
-            className="pl-1 text-infoMain cursor-pointer"
-          >
-            Track Order
-          </Link>
-        );
+      // case 'delivery':
+      //   return (
+      //     <Link
+      //       href={value[accessor]?.link}
+      //       target="_blank"
+      //       className="pl-1 text-infoMain cursor-pointer"
+      //     >
+      //       Track Order
+      //     </Link>
+      //   );
       case 'invoice_id':
         return (
           <>
@@ -349,86 +349,86 @@ const Dashboard = () => {
             <Image src={arrow} alt="arrow" />
           </button>
         );
-      case 'download_invoice':
-        return (
-          <button
-            className="flex items-center cursor-pointer"
-            onClick={() => handleDownloadInvoice(value?.invoice_id)}
-          >
-            <Image src={downloadIcon} alt="downloadExcelIcon" />
-          </button>
-        );
+      // case 'download_invoice':
+      //   return (
+      //     <button
+      //       className="flex items-center cursor-pointer"
+      //       onClick={() => handleDownloadInvoice(value?.invoice_id)}
+      //     >
+      //       <Image src={downloadIcon} alt="downloadExcelIcon" />
+      //     </button>
+      //   );
       default:
         return <span>{value[accessor]}</span>;
     }
   };
-  const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
+  // const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
 
-  const handleDownloadInvoice = (downloadInvoiceId: string) => {
-    triggerDownloadInvoice({ invoiceId: downloadInvoiceId })
-      .then((res: any) => {
-        const { data, fileName } = res?.data || {};
-        downloadPdfFromBase64(data, fileName, {
-          onSave: () => {
-            // Handle any post-download actions here
-            if (modalSetState.setIsDialogOpen)
-              modalSetState.setIsDialogOpen(true);
+  // const handleDownloadInvoice = (downloadInvoiceId: string) => {
+  //   triggerDownloadInvoice({ invoiceId: downloadInvoiceId })
+  //     .then((res: any) => {
+  //       const { data, fileName } = res?.data || {};
+  //       downloadPdfFromBase64(data, fileName, {
+  //         onSave: () => {
+  //           // Handle any post-download actions here
+  //           if (modalSetState.setIsDialogOpen)
+  //             modalSetState.setIsDialogOpen(true);
 
-            if (modalSetState.setDialogContent) {
-              modalSetState.setDialogContent(
-                <>
-                  <div className="absolute left-[-84px] top-[-84px]">
-                    <Image src={confirmIcon} alt="confirmIcon" />
-                  </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                    <h1 className="text-headingS text-neutral900">
-                      Download Invoice Successfully
-                    </h1>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.okay'),
-                          handler: () => modalSetState.setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full h-10'
-                        }
-                      ]}
-                    />
-                  </div>
-                </>
-              );
-            }
-          }
-        });
-      })
-      .catch((error: any) => {
-        if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
-        if (modalSetState.setDialogContent) {
-          modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorIcon} alt="errorIcon" />
-              </div>
-              <h1 className="text-headingS text-neutral900">
-                {error?.data?.message}
-              </h1>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => modalSetState.setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        }
-      });
-  };
+  //           if (modalSetState.setDialogContent) {
+  //             modalSetState.setDialogContent(
+  //               <>
+  //                 <div className="absolute left-[-84px] top-[-84px]">
+  //                   <Image src={confirmIcon} alt="confirmIcon" />
+  //                 </div>
+  //                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+  //                   <h1 className="text-headingS text-neutral900">
+  //                     Download Invoice Successfully
+  //                   </h1>
+  //                   <ActionButton
+  //                     actionButtonData={[
+  //                       {
+  //                         variant: 'primary',
+  //                         label: ManageLocales('app.modal.okay'),
+  //                         handler: () => modalSetState.setIsDialogOpen(false),
+  //                         customStyle: 'flex-1 w-full h-10'
+  //                       }
+  //                     ]}
+  //                   />
+  //                 </div>
+  //               </>
+  //             );
+  //           }
+  //         }
+  //       });
+  //     })
+  //     .catch((error: any) => {
+  //       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
+  //       if (modalSetState.setDialogContent) {
+  //         modalSetState.setDialogContent(
+  //           <>
+  //             <div className="absolute left-[-84px] top-[-84px]">
+  //               <Image src={errorIcon} alt="errorIcon" />
+  //             </div>
+  //             <h1 className="text-headingS text-neutral900">
+  //               {error?.data?.message}
+  //             </h1>
+  //             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+  //               <ActionButton
+  //                 actionButtonData={[
+  //                   {
+  //                     variant: 'primary',
+  //                     label: ManageLocales('app.modal.okay'),
+  //                     handler: () => modalSetState.setIsDialogOpen(false),
+  //                     customStyle: 'flex-1 w-full h-10'
+  //                   }
+  //                 ]}
+  //               />
+  //             </div>
+  //           </>
+  //         );
+  //       }
+  //     });
+  // };
 
   return (
     <>

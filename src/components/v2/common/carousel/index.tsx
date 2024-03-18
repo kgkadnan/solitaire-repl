@@ -51,7 +51,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
             {images?.map((data: any, index: number) => {
               return (
                 <div
-                  className="relative w-full h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
+                  className="relative w-full min-h-[400px] rounded-[8px] overflow-hidden bg-neutral50"
                   key={index}
                 >
                   {' '}

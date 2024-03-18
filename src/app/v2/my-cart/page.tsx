@@ -617,7 +617,7 @@ const MyCart = () => {
                         variant: 'primary',
                         label: ManageLocales('app.modal.goToYourOrder'),
                         handler: () => {
-                          router.push('/v2/your-order');
+                          router.push('/v2/your-orders');
                         },
                         customStyle: 'flex-1 w-full h-10'
                       }
