@@ -449,10 +449,6 @@ const NewArrivals = () => {
         isOpens={modalState.isDialogOpen}
         setIsOpen={modalSetState.setIsDialogOpen}
       />
-      
-      
-
-        
 
       {isDetailPage ? (
         <>
@@ -491,12 +487,14 @@ const NewArrivals = () => {
               New Arrivals
             </p>
             {timeDifference !== null && timeDifference >= 0 && (
-          <CountdownTimer
-            initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
-            initialMinutes={Math.floor(
-              (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
-            )}
-            initialSeconds={Math.floor((timeDifference % (1000 * 60)) / 1000)}
+              <CountdownTimer
+                initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+                initialMinutes={Math.floor(
+                  (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                )}
+                initialSeconds={Math.floor(
+                  (timeDifference % (1000 * 60)) / 1000
+                )}
               />
             )}
           </div>
