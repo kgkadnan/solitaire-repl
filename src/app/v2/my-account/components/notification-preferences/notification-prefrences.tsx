@@ -233,7 +233,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
           Notification Preferences
         </h1>
 
-        {selectedOptions?.length > 0 && allNotification?.length > 0 && (
+        {allNotification?.length > 0 && (
           <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
             <div className="flex flex-col gap-[24px]">
               <div className="flex flex-col gap-[16px]">
