@@ -193,72 +193,72 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     }
   };
 
-  const handleDownloadInvoice = () => {
-    triggerDownloadInvoice({ invoiceId: productDetailData?.invoice_id })
-      .then((res: any) => {
-        const { data, fileName } = res?.data || {};
-        downloadPdfFromBase64(data, fileName, {
-          onSave: () => {
-            // Handle any post-download actions here
-            if (modalSetState.setIsDialogOpen)
-              modalSetState.setIsDialogOpen(true);
-            if (setRowSelection) setRowSelection({});
+  // const handleDownloadInvoice = () => {
+  //   triggerDownloadInvoice({ invoiceId: productDetailData?.invoice_id })
+  //     .then((res: any) => {
+  //       const { data, fileName } = res?.data || {};
+  //       downloadPdfFromBase64(data, fileName, {
+  //         onSave: () => {
+  //           // Handle any post-download actions here
+  //           if (modalSetState.setIsDialogOpen)
+  //             modalSetState.setIsDialogOpen(true);
+  //           if (setRowSelection) setRowSelection({});
 
-            if (modalSetState.setDialogContent) {
-              modalSetState.setDialogContent(
-                <>
-                  <div className="absolute left-[-84px] top-[-84px]">
-                    <Image src={confirmIcon} alt="confirmIcon" />
-                  </div>
-                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                    <h1 className="text-headingS text-neutral900">
-                      Download Invoice Successfully
-                    </h1>
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.modal.okay'),
-                          handler: () => modalSetState.setIsDialogOpen(false),
-                          customStyle: 'flex-1 w-full h-10'
-                        }
-                      ]}
-                    />
-                  </div>
-                </>
-              );
-            }
-          }
-        });
-      })
-      .catch(error => {
-        if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
-        if (modalSetState.setDialogContent) {
-          modalSetState.setDialogContent(
-            <>
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={errorIcon} alt="errorIcon" />
-              </div>
-              <h1 className="text-headingS text-neutral900">
-                {error?.data?.message}
-              </h1>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => modalSetState.setIsDialogOpen(false),
-                      customStyle: 'flex-1 w-full h-10'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        }
-      });
-  };
+  //           if (modalSetState.setDialogContent) {
+  //             modalSetState.setDialogContent(
+  //               <>
+  //                 <div className="absolute left-[-84px] top-[-84px]">
+  //                   <Image src={confirmIcon} alt="confirmIcon" />
+  //                 </div>
+  //                 <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+  //                   <h1 className="text-headingS text-neutral900">
+  //                     Download Invoice Successfully
+  //                   </h1>
+  //                   <ActionButton
+  //                     actionButtonData={[
+  //                       {
+  //                         variant: 'primary',
+  //                         label: ManageLocales('app.modal.okay'),
+  //                         handler: () => modalSetState.setIsDialogOpen(false),
+  //                         customStyle: 'flex-1 w-full h-10'
+  //                       }
+  //                     ]}
+  //                   />
+  //                 </div>
+  //               </>
+  //             );
+  //           }
+  //         }
+  //       });
+  //     })
+  //     .catch(error => {
+  //       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
+  //       if (modalSetState.setDialogContent) {
+  //         modalSetState.setDialogContent(
+  //           <>
+  //             <div className="absolute left-[-84px] top-[-84px]">
+  //               <Image src={errorIcon} alt="errorIcon" />
+  //             </div>
+  //             <h1 className="text-headingS text-neutral900">
+  //               {error?.data?.message}
+  //             </h1>
+  //             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+  //               <ActionButton
+  //                 actionButtonData={[
+  //                   {
+  //                     variant: 'primary',
+  //                     label: ManageLocales('app.modal.okay'),
+  //                     handler: () => modalSetState.setIsDialogOpen(false),
+  //                     customStyle: 'flex-1 w-full h-10'
+  //                   }
+  //                 ]}
+  //               />
+  //             </div>
+  //           </>
+  //         );
+  //       }
+  //     });
+  // };
 
   return (
     <>
@@ -308,7 +308,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                     {formatCreatedAt(productDetailData?.created_at)}
                   </span>
                 </div>
-                {breadCrumLabel === ACTIVE_INVOICE_BREADCRUMB_LABEL && (
+                {/* {breadCrumLabel === ACTIVE_INVOICE_BREADCRUMB_LABEL && (
                   <div className="mr-3">
                     {' '}
                     <Link
@@ -319,7 +319,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                       Track order
                     </Link>
                   </div>
-                )}
+                )} */}
               </div>
               <div className="bg-neutral25 flex gap-[8px] py-[8px]">
                 <div className="bg-neutral0 border-[1px] border-solid border-neutral200 rounded-[8px] shadow-sm">
@@ -407,15 +407,15 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                           'app.yourOrder.description.donwloadExcel'
                         ),
                         handler: () => handleDownloadExcel()
-                      },
-
-                      {
-                        variant: 'primary',
-                        label: ManageLocales(
-                          'app.yourOrder.description.downloadInvoice'
-                        ),
-                        handler: () => handleDownloadInvoice()
                       }
+
+                      // {
+                      //   variant: 'primary',
+                      //   label: ManageLocales(
+                      //     'app.yourOrder.description.downloadInvoice'
+                      //   ),
+                      //   handler: () => handleDownloadInvoice()
+                      // }
                     ]
               }
             />
