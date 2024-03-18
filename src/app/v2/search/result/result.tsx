@@ -1002,7 +1002,7 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      {(isConfirmStone || !isDetailPage) && (
+      {((!isDetailPage && !isConfirmStone) || isConfirmStone) && (
         <div className="flex h-[81px] items-center">
           <p className="text-headingM font-medium text-neutral900">
             {editRoute
