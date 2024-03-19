@@ -40,6 +40,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   }, [selectedImageIndex]);
 
   const handleImageError = (event: any) => {
+    console.log('evnet', event);
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
 
@@ -68,6 +69,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
+
                 <iframe
                   key={index}
                   style={{ height: '380px', width: '485px' }}
