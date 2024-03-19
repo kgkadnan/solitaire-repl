@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
@@ -22,6 +22,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showDownloadButton, setShowDownloadButton] = useState(false);
+  const [imageName, setImageName] = useState('');
 
   const settings = {
     dots: true, // Show dot indicators
@@ -32,6 +33,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
     autoplay: false, // Enable autoplay
     afterChange: (current: number) => {
       setCurrentImageIndex(current);
+      setImageName(images[current].name);
     },
     appendDots: (dots: any) => (
       <div
@@ -43,13 +45,17 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
           textAlign: 'center'
         }}
       >
-        <ul style={{ margin: '0', height: '60px' }}> {dots} </ul>
+        <ul style={{ margin: '0' }}> {dots} </ul>
       </div>
     )
   };
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
+
+  useEffect(() => {
+    setImageName(images[0].name);
+  }, []);
 
   return (
     <div className="details-slider">
@@ -150,7 +156,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
           );
         })}
       </Slider>
-
+      <p className="mt-1 text-center text-[16px] font-medium"> {imageName}</p>
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
