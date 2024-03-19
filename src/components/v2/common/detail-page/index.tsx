@@ -354,12 +354,9 @@ export function DiamondDetailsComponent({
           <div className="flex items-center mt-4">
             <div className="flex items-center">
               <p className="text-headingS font-medium text-neutral-900 ">
-                {tableData?.variants > 0
-                  ? `$${
-                      tableData?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
-                      '-'
-                    }`
-                  : `$${tableData?.amount?.toFixed(2) ?? '-'}`}
+                {tableData?.variants?.length > 0
+                  ? `$${tableData?.variants[0]?.prices[0]?.amount?.toFixed(2)}`
+                  : `$${tableData?.amount?.toFixed(2)}`}
               </p>
               <p
                 className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}
