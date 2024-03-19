@@ -138,12 +138,14 @@ const NewArrivalDataTable = ({
   };
 
   const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
+
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
 
     downloadExcelHandler({
-      products: allProductIds,
+      products: selectedIds.length > 0 ? selectedIds : allProductIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
