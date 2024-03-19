@@ -308,6 +308,7 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
+                isNewArrival={true}
               />
             </div>
           </div>

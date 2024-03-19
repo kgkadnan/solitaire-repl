@@ -11,7 +11,13 @@ import { Toast } from './toast';
 import { IProduct } from '@/app/v2/search/interface';
 import Tooltip from '../tooltip';
 
-const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
+const Share = ({
+  rows,
+  selectedProducts,
+  setErrorText,
+  setIsError,
+  isNewArrival = false
+}: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows.filter((row: IProduct) => row.id in selectedProducts)
   );
@@ -23,8 +29,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
   const { isInputDialogOpen } = modalState;
   // const [copied, setCopied] = useState(false);
   const [showToast, setShowToast] = useState(false);
-
-  const shareOptions = [
+  const [shareOptions, setShareOptions] = useState([
     { name: 'Stock No', state: 'lot_id' },
     { name: 'Shape', state: 'shape' },
     { name: 'Carats', state: 'carats' },
@@ -43,8 +48,20 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
     { name: 'Pr/Ct', state: 'price_per_carat' },
     { name: 'Amt ($)', state: 'amount' },
     { name: 'Public URL', state: 'public_url' }
-  ];
+  ]);
 
+  useEffect(() => {
+    if (isNewArrival) {
+      setShareOptions(prev => [
+        ...prev,
+        { name: 'Current Max Bid', state: 'current_max_bid' }
+      ]);
+      setSelectedAttributes((prev: any) => ({
+        ...prev,
+        current_max_bid: true
+      }));
+    }
+  }, [isNewArrival]);
   const { setIsInputDialogOpen } = modalSetState;
 
   const [selectedAttributes, setSelectedAttributes] = useState(
@@ -53,7 +70,7 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
       return acc;
     }, {})
   );
-
+  console.log(selectedAttributes, 'selectedAttributes');
   const handleAttributeToggle = (attribute: any) => {
     setSelectedAttributes((prev: any) => ({
       ...prev,
@@ -81,6 +98,12 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
             if (attribute === 'amount' && selectedAttributes['amount']) {
               const amount = product.amount || 0; // Or however you calculate amount
               return `Amt ($): ${amount}`;
+            }
+            if (
+              attribute === 'current_max_bid' &&
+              selectedAttributes['current_max_bid']
+            ) {
+              return `Current Max Bid: ${product?.current_max_bid.toFixed(2)}`;
             }
             if (
               attribute === 'public_url' &&
@@ -151,8 +174,10 @@ const Share = ({ rows, selectedProducts, setErrorText, setIsError }: any) => {
           {shareOptions.map(item => (
             <div
               key={item.state}
-              className={`w-[187px] border-[1px] text-mMedium font-medium flex items-center rounded-[4px] border-neutral200  ${
-                item.name === 'Public URL' ? 'text-infoMain' : 'text-neutral900'
+              className={`w-[187px] border-[1px] text-mMedium font-medium flex items-center rounded-[4px]   ${
+                item.name === 'Public URL'
+                  ? 'text-infoMain border-primaryMain'
+                  : 'text-neutral900 border-neutral200'
               }`}
               onClick={() => handleAttributeToggle(item.state)}
             >
