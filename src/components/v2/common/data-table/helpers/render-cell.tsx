@@ -139,7 +139,9 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
           {renderedCellValue}
         </Link>
       ) : (
-        <span>{renderedCellValue ?? '-'}</span>
+        <span className="underline text-infoMain">
+          {renderedCellValue ?? '-'}
+        </span>
       )}
     </>
   );
