@@ -113,7 +113,7 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
-  console.log('tableData', tableData);
+
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
@@ -157,7 +157,6 @@ export function DiamondDetailsComponent({
     }
   ];
 
-  console.log('images', images);
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')

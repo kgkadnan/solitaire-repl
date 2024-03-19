@@ -47,19 +47,29 @@ const ImageList: React.FC<ImageListProps> = ({
             }}
           >
             <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
-            <iframe
-              key={index}
-              frameBorder="0"
-              src={image.url}
-              height={74}
-              width={74}
-              style={{ border: '1px solid #F1F1F1', overflow: 'hidden' }}
-              className={`cursor-pointer lg:w-[74px] lg:h-[60px] sm:w-[35px] sm:h-[30px] ${
-                index !== 0 ? 'mt-3' : ''
-              } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
-              onError={handleImageError}
-              // className="mr-[37px]"
-            />
+            {image.url === 'null' || image.url === null ? (
+              <Image
+                src={NoImageFound}
+                alt="NoImageFound"
+                height={74}
+                width={74}
+              />
+            ) : (
+              <iframe
+                key={index}
+                frameBorder="0"
+                src={image.url}
+                height={74}
+                width={74}
+                style={{ border: '1px solid #F1F1F1', overflow: 'hidden' }}
+                className={`cursor-pointer lg:w-[74px] lg:h-[60px] sm:w-[35px] sm:h-[30px] ${
+                  index !== 0 ? 'mt-3' : ''
+                } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
+                onError={handleImageError}
+                // className="mr-[37px]"
+              />
+            )}
+
             {image.isSepratorNeeded && (
               <hr
                 className="1px solid var(--neutral-200) my-[4px] mt-[15px]"

@@ -77,22 +77,20 @@ const ImageModal: React.FC<ModalProps> = ({
               {images[imageIndex].name === 'B2B' ||
               images[imageIndex].name === 'B2B Sparkle' ||
               images[imageIndex].name === 'GIA Certificate' ? (
-                images[imageIndex].url.length ? (
+                images[imageIndex].url === 'null' ||
+                images[imageIndex].url === null ? (
+                  <Image
+                    src={NoImageFound}
+                    alt="NoImageFound"
+                    className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
+                    height={600}
+                    width={650}
+                  />
+                ) : (
                   <iframe
                     frameBorder="0"
                     src={images[imageIndex].url}
                     className="lg:w-[662px] lg:h-[465px] sm:w-[300px] sm:h-[210px]"
-                  />
-                ) : (
-                  <img
-                    src={NoImageFound}
-                    style={{
-                      background: '#F2F4F7'
-                    }}
-                    className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
-                    alt="Preview"
-                    height={600}
-                    width={650}
                   />
                 )
               ) : (
