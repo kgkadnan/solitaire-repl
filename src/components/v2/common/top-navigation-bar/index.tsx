@@ -105,7 +105,7 @@ const TopNavigationBar = () => {
         currentPath !== '/v2/kyc' &&
         v2Routes.includes(currentPath) && (
           <div
-            className={`bg-primaryMain pr-[32px] flex justify-between px-[32px] py-[8px] transition ease-in-out duration-500 ${
+            className={`bg-primaryMain pr-[32px] flex justify-between px-[32px] py-[8px] transition ease-in-out duration-500 items-center ${
               showNudge === 'MINI' ? 'translate-y-0' : '-translate-y-full'
             }`}
           >
