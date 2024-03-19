@@ -114,22 +114,28 @@ const ImageModal: React.FC<ModalProps> = ({
             </div>
           </div>
           <div className="flex mt-5 justify-center">
-            <Tooltip
-              tooltipTrigger={
-                <Image
-                  src={downloadSvg}
-                  alt={downloadSvg}
-                  height={40}
-                  width={40}
-                  className="mr-2 cursor-pointer"
-                  onClick={() => {
-                    handleDownloadImage(images[imageIndex]?.url || '');
-                  }}
-                />
-              }
-              tooltipContent={'Media Link'}
-              tooltipContentStyles={'z-[4]'}
-            />
+            {(images[imageIndex].name !== 'B2B' ||
+              images[imageIndex].name !== 'B2B Sparkle') && (
+              <Tooltip
+                tooltipTrigger={
+                  <Image
+                    src={downloadSvg}
+                    alt={downloadSvg}
+                    height={40}
+                    width={40}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      handleDownloadImage(
+                        images[imageIndex]?.url || '',
+                        images[imageIndex].name
+                      );
+                    }}
+                  />
+                }
+                tooltipContent={'Media Link'}
+                tooltipContentStyles={'z-[4]'}
+              />
+            )}
 
             <Tooltip
               tooltipTrigger={

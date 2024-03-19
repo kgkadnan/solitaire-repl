@@ -38,6 +38,7 @@ import Share from '../copy-and-share/share';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+import { useLazyGetBase64Query } from '@/features/api/public';
 
 export function DiamondDetailsComponent({
   data,
@@ -56,6 +57,8 @@ export function DiamondDetailsComponent({
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  const [triggerBase64] = useLazyGetBase64Query({});
 
   //   const dispatch: AppDispatch = useDispatch();
   //   const diamondData = useSelector(selectDiamondData);
@@ -246,6 +249,7 @@ export function DiamondDetailsComponent({
           <div className="hidden lg:block">
             <ImagePreview
               images={images}
+              triggerBase64={triggerBase64}
               selectedImageIndex={selectedImageIndex}
             />
           </div>
