@@ -11,15 +11,15 @@ export const Toast = ({ message, show }: any) => {
   return (
     // <div className="fixed  w-[320px]  top-[64px]  transform -translate-x-1/2 bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900">
     <div
-      className={`fixed w-[320px] right-[4px] bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900 transition-all duration-500 transform ${
+      className={`fixed w-[320px] right-[32px] bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900 transition-all duration-500 transform ${
         show ? '' : 'translate-x-full'
       }
     ${
       isNudge &&
       (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
         isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-        ? 'top-[124px]'
-        : 'top-[64px]'
+        ? 'top-[134px]'
+        : 'top-[74px]'
     }
     `}
       // onTransitionEnd={handleTransitionEnd}

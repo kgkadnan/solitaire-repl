@@ -67,11 +67,15 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
     <>
       {' '}
       {row.original.lab === 'GIA' ? (
-        <Link href={`${GIA_LINK}${row.rpt_number}`} target="_blank">
+        <Link
+          href={`${GIA_LINK}${row.rpt_number}`}
+          target="_blank"
+          className="underline text-infoMain"
+        >
           {renderedCellValue}
         </Link>
       ) : (
-        <span>{renderedCellValue}</span>
+        <span className="underline text-infoMain">{renderedCellValue}</span>
       )}
     </>
   );
