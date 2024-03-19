@@ -1,24 +1,20 @@
-import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { createBaseQuery } from './base-query';
 
 // Define a new API service
 export const publicApi = createApi({
   reducerPath: 'publicApi',
-  baseQuery: fetchBaseQuery({
-    baseUrl: 'https://medusa-test.kgkit.net/public/page/',
-    headers: {
-      Accept: 'text/html',
-      'Content-Type': 'text/html'
-    }
-  }),
+  baseQuery: createBaseQuery(),
+  tagTypes: ['public'],
 
   endpoints: builder => ({
-    getHtmlContent: builder.query({
-      query: ({ query }) => `${query}`,
-      transformResponse: (responseText: string) => responseText // Return the raw response text as string
+    getBase64: builder.query({
+      query: ({ url }) => `/public/get-blob-base64?url=${url}`,
+      providesTags: ['public']
     })
   })
 });
 
 // Export the auto-generated hooks for usage in components
-export const { useLazyGetHtmlContentQuery } = publicApi;
+export const { useLazyGetBase64Query } = publicApi;
 export default publicApi;

@@ -107,22 +107,26 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                   )}
 
                   {!showDownloadButton && (
-                    <Tooltip
-                      tooltipTrigger={
-                        <Image
-                          className="absolute top-3 left-3 p-1 cursor-pointer"
-                          src={downloadImg}
-                          height={40}
-                          width={40}
-                          alt={'Download'}
-                          onClick={() => {
-                            handleDownloadImage(img.url || '');
-                          }}
+                    <>
+                      {!(img.name === 'B2B' || img.name === 'B2B Sparkle') && (
+                        <Tooltip
+                          tooltipTrigger={
+                            <Image
+                              className="absolute top-3 left-3 p-1"
+                              src={downloadImg}
+                              height={40}
+                              width={40}
+                              alt={'Download'}
+                              onClick={() => {
+                                handleDownloadImage(img.url || '', img.name);
+                              }}
+                            />
+                          }
+                          tooltipContent={'Download'}
+                          tooltipContentStyles={'z-[4]'}
                         />
-                      }
-                      tooltipContent={'Download'}
-                      tooltipContentStyles={'z-[4]'}
-                    />
+                      )}
+                    </>
                   )}
                 </div>
               </div>{' '}

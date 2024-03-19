@@ -11,11 +11,13 @@ import ImageModal from './image-modal';
 interface ImagePreviewProps {
   images: ImagesType[];
   selectedImageIndex: number;
+  triggerBase64: any;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
-  selectedImageIndex
+  selectedImageIndex,
+  triggerBase64
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -101,22 +103,26 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
             )}
 
             {!showDownloadButton.includes(index) && (
-              <Tooltip
-                tooltipTrigger={
-                  <Image
-                    className="absolute top-3 left-3 p-1"
-                    src={downloadImg}
-                    height={40}
-                    width={40}
-                    alt={'Download'}
-                    onClick={() => {
-                      handleDownloadImage(image?.url || '');
-                    }}
+              <>
+                {!(image.name === 'B2B' || image.name === 'B2B Sparkle') && (
+                  <Tooltip
+                    tooltipTrigger={
+                      <Image
+                        className="absolute top-3 left-3 p-1"
+                        src={downloadImg}
+                        height={40}
+                        width={40}
+                        alt={'Download'}
+                        onClick={() => {
+                          handleDownloadImage(image?.url || '', image.name);
+                        }}
+                      />
+                    }
+                    tooltipContent={'Download'}
+                    tooltipContentStyles={'z-[4]'}
                   />
-                }
-                tooltipContent={'Download'}
-                tooltipContentStyles={'z-[4]'}
-              />
+                )}
+              </>
             )}
 
             <span className="lg:block sm:hidden text-center">
