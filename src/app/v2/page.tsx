@@ -282,9 +282,9 @@ const Dashboard = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        { label: 'Tracking Details', accessor: 'delivery' },
-        { label: 'Details', accessor: 'details' },
-        { label: 'Download Invoice', accessor: 'download_invoice' }
+        // { label: 'Tracking Details', accessor: 'delivery' },
+        { label: 'Details', accessor: 'details' }
+        // { label: 'Download Invoice', accessor: 'download_invoice' }
       ],
       data: tabs.find(tab => tab.label === activeTab)?.data
     }

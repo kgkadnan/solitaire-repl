@@ -162,7 +162,7 @@ const MyDiamonds = () => {
       keys: [
         { label: 'Invoice Number', accessor: 'invoice_id' },
         { label: 'Invoice Date', accessor: 'created_at' },
-        { label: 'Tracking Details', accessor: 'delivery' },
+        // { label: 'Tracking Details', accessor: 'delivery' },
         { label: 'Details', accessor: 'details' }
       ],
       data: activeInvoiceDataState
