@@ -131,6 +131,7 @@ const NewArrivals = () => {
       });
   const [activeTab, setActiveTab] = useState(0);
   const tabLabels = ['Bid Stone', 'Active Bid', 'Bid History'];
+  const [timeDifference, setTimeDifference] = useState(null);
 
   useEffect(() => {
     if (pathName === 'bid-history') {
@@ -145,6 +146,13 @@ const NewArrivals = () => {
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();
   const [time, setTime] = useState();
+  useEffect(() => {
+    const currentTime: any = new Date();
+    const targetTime: any = new Date(time!);
+    const timeDiff: any = targetTime - currentTime;
+
+    setTimeDifference(timeDiff);
+  }, [time]);
   const { authToken } = useUser();
 
   // const socketManager = new SocketManager();
@@ -152,11 +160,25 @@ const NewArrivals = () => {
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
   }, [authToken]);
-
   const handleBidStones = useCallback((data: any) => {
     setActiveBid(data.activeStone);
     setBid(data.bidStone);
     setTime(data.endTime);
+    if (data.activeStone) {
+      data.activeStone.map((row: any) => {
+        if (row.current_max_bid > row.my_current_bid) {
+          setRowSelection(prev => {
+            return { ...prev, [row.id]: true };
+          });
+        } else {
+          setRowSelection((prev: any) => {
+            let prevRows = { ...prev };
+            delete prevRows[row.id];
+            return prevRows;
+          });
+        }
+      });
+    }
     // Set other related state here
   }, []);
   const handleError = useCallback((data: any) => {
@@ -164,7 +186,8 @@ const NewArrivals = () => {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={data}
+          content=""
+          header={data}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
         />
@@ -478,11 +501,15 @@ const NewArrivals = () => {
             <p className="text-headingM font-medium text-neutral900">
               New Arrivals
             </p>
-            {time && (
+            {timeDifference !== null && timeDifference >= 0 && (
               <CountdownTimer
-                initialHours={new Date(time).getHours()}
-                initialMinutes={new Date(time).getMinutes()}
-                initialSeconds={new Date(time).getSeconds()}
+                initialHours={Math.floor(timeDifference / (1000 * 60 * 60))}
+                initialMinutes={Math.floor(
+                  (timeDifference % (1000 * 60 * 60)) / (1000 * 60)
+                )}
+                initialSeconds={Math.floor(
+                  (timeDifference % (1000 * 60)) / 1000
+                )}
               />
             )}
           </div>

@@ -295,16 +295,16 @@ const MyDiamonds = () => {
             <span>{formatNumberWithLeadingZeros(value[accessor])}</span>
           </>
         );
-      case 'delivery':
-        return (
-          <Link
-            href={value[accessor]?.link}
-            target="_blank"
-            className="pl-1 text-infoMain cursor-pointer"
-          >
-            Track Order
-          </Link>
-        );
+      // case 'delivery':
+      //   return (
+      //     <Link
+      //       href={value[accessor]?.link}
+      //       target="_blank"
+      //       className="pl-1 text-infoMain cursor-pointer"
+      //     >
+      //       Track Order
+      //     </Link>
+      //   );
       case 'invoice_id':
         return (
           <>

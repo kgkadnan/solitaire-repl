@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './action-button.module.scss';
 import Image from 'next/image';
 import { Button } from '../../ui/button';
+import Tooltip from '../tooltip';
 
 interface IActionButtonData {
   actionButtonData: {
@@ -12,6 +13,7 @@ interface IActionButtonData {
     handler: () => void;
     isHidden?: boolean;
     customStyle?: string;
+    tooltip?: string;
   }[];
   containerStyle?: string;
 }
@@ -24,7 +26,16 @@ const ActionButton = ({
     <div className={`${styles.ctaContainer} ${containerStyle}`}>
       {actionButtonData.map(
         (
-          { isDisable, variant, svg, label, handler, isHidden, customStyle },
+          {
+            isDisable,
+            variant,
+            svg,
+            label,
+            handler,
+            isHidden,
+            customStyle,
+            tooltip
+          },
           index
         ) => {
           if (isHidden) {
@@ -35,19 +46,50 @@ const ActionButton = ({
               className={`${customStyle}`}
               key={label ?? `icon-button-${index}`}
             >
-              <Button
-                disabled={isDisable}
-                onClick={() => handler()}
-                variant={variant}
-                className={`${styles.ctaStyle} 
-                ${svg ? 'p-[8px]' : 'px-[16px] py-[8px]'}
+              {label || !tooltip ? (
+                <Button
+                  disabled={isDisable}
+                  onClick={() => handler()}
+                  variant={variant}
+                  className={`${styles.ctaStyle} 
+                ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
             ${variant === 'primary' && styles.ctaPrimaryStyle} ${
               variant === 'secondary' && styles.ctaSecondaryStyle
             }`}
-              >
-                {svg && <Image src={svg} alt={label ?? 'icon-button'} />}
-                <div className={styles.ctaLabel}>{label}</div>
-              </Button>
+                >
+                  {svg && (
+                    <Image
+                      src={svg}
+                      alt={label ?? 'icon-button'}
+                      // className="ml-[4px]"
+                    />
+                  )}
+                  <div className={styles.ctaLabel}>{label}</div>
+                </Button>
+              ) : (
+                <Tooltip
+                  tooltipTrigger={
+                    <Button
+                      disabled={isDisable}
+                      onClick={() => handler()}
+                      variant={variant}
+                      className={`${styles.ctaStyle} 
+                ${svg ? 'p-[8px] ' : 'px-[16px] py-[8px]'}
+            ${variant === 'primary' && styles.ctaPrimaryStyle} ${
+              variant === 'secondary' && styles.ctaSecondaryStyle
+            }`}
+                    >
+                      <Image
+                        src={svg}
+                        alt={label ?? 'icon-button'}
+                        // className="ml-[4px]"
+                      />
+                    </Button>
+                  }
+                  tooltipContent={tooltip}
+                  tooltipContentStyles={'z-[4]'}
+                />
+              )}
             </div>
           );
         }

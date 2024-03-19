@@ -155,15 +155,28 @@ const Result = ({
     const url = constructUrlParams(selections[activeTab - 1]?.queryParams);
     setSearchUrl(url);
     triggerProductApi({ url, limit: LISTING_PAGE_DATA_LIMIT, offset: 0 }).then(
-      res => {
-        dataTableSetState.setRows(res.data.products);
-        setRowSelection({});
-        setErrorText('');
-        setData(res.data);
+      (res: any) => {
+        if (columnData?.length > 0) {
+          // let newArr: any = [];
+          // res.data.products.forEach((row: any) => {
+          //   let obj: any = {};
+          //   columnData?.forEach(col => {
+          //     if (col.accessor === 'amount') {
+          //       obj[col.accessor] === row.variants[0].prices[0].amount;
+          //     } else {
+          //       obj[col.accessor] = row[col.accessor];
+          //     }
+          //   });
+          //   newArr.push(obj);
+          // });
+          dataTableSetState.setRows(res.data.products);
+          setRowSelection({});
+          setErrorText('');
+          setData(res.data);
+        }
       }
     );
   };
-
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
     setIsError(false);
@@ -263,8 +276,8 @@ const Result = ({
                 return indexA - indexB;
               }
             };
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
+          // case 'amount':
+          //   return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
@@ -310,7 +323,7 @@ const Result = ({
 
   useEffect(() => {
     fetchProducts();
-  }, [activeTab]);
+  }, [activeTab, columnData]);
 
   useEffect(() => {
     setErrorText('');
@@ -343,7 +356,9 @@ const Result = ({
 
     fetchColumns();
   }, []);
-
+  const memoizedRows = useMemo(() => {
+    return Array.isArray(dataTableState.rows) ? dataTableState.rows : [];
+  }, [dataTableState.rows]);
   const memoizedColumns = useMemo(
     () => mapColumns(dataTableState.columns),
     [dataTableState.columns]
@@ -629,7 +644,7 @@ const Result = ({
               onChange={handleInputChange}
               styles={{
                 inputMain: 'w-full',
-                input: `h-full p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
+                input: `h-[40px] p-2 flex-grow block w-[100%] !text-primaryMain min-w-0 rounded-r-sm text-mRegular shadow-[var(--input-shadow)] border-[1px] border-neutral200 rounded-r-[4px]
                 ${inputError ? 'border-dangerMain' : 'border-neutral200'}`
               }}
             />
@@ -894,17 +909,6 @@ const Result = ({
     }
   };
 
-  const donwloadAllSearchTabsExcelHandler = () => {
-    const searchTabsData = JSON.parse(localStorage.getItem('Search')!);
-    const allTabsIds = searchTabsData.map((tab: any) => tab.searchId);
-    downloadExcelHandler({
-      previousSearch: allTabsIds,
-      downloadExcelApi: downloadExcel,
-      modalSetState,
-      setRowSelection
-    });
-  };
-
   const images = [
     {
       name: getShapeDisplayName(detailImageData?.shape ?? ''),
@@ -1084,7 +1088,7 @@ const Result = ({
           ) : (
             <div className="border-b-[1px] border-neutral200">
               <DataTable
-                rows={dataTableState.rows}
+                rows={memoizedRows}
                 columns={memoizedColumns}
                 setRowSelection={setRowSelection}
                 rowSelection={rowSelection}
@@ -1171,13 +1175,6 @@ const Result = ({
                     )}
                     <ActionButton
                       actionButtonData={[
-                        {
-                          variant: 'secondary',
-                          label: ManageLocales(
-                            'app.searchResult.downloadALlResult'
-                          ),
-                          handler: donwloadAllSearchTabsExcelHandler
-                        },
                         {
                           variant: 'secondary',
                           label: ManageLocales('app.searchResult.addToCart'),

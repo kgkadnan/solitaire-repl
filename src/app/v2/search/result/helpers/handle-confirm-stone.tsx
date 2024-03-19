@@ -35,7 +35,6 @@ export const handleConfirmStone = ({
   setConfirmStoneData
 }: IHandleConfirmStone) => {
   let selectedIds = Object.keys(selectedRows);
-  console.log('selectedIds', selectedIds);
   const hasMemoOut = selectedIds?.some(id => {
     return rows.some(
       row => row.id === id && row.diamond_status === MEMO_STATUS
