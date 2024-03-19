@@ -68,17 +68,30 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 }}
               >
                 <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
-                <iframe
-                  key={index}
-                  style={{ height: '380px', width: '485px' }}
-                  frameBorder="0"
-                  src={image.url}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                  onError={e => {
-                    handleImageError(e);
-                    setShowDownloadButton([...showDownloadButton, index]);
-                  }}
-                />
+
+                {image.url === 'null' || image.url === null ? (
+                  <Image
+                    src={NoImageFound}
+                    alt="NoImageFound"
+                    style={{
+                      height: '380px',
+                      width: '485px',
+                      background: '#F2F4F7'
+                    }}
+                  />
+                ) : (
+                  <iframe
+                    key={index}
+                    style={{ height: '380px', width: '485px' }}
+                    frameBorder="0"
+                    src={image.url}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    onError={e => {
+                      handleImageError(e);
+                      setShowDownloadButton([...showDownloadButton, index]);
+                    }}
+                  />
+                )}
               </div>
             ) : (
               <img

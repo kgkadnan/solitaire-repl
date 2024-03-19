@@ -194,7 +194,7 @@ const Notification = () => {
           </div>
 
           {notificationData?.length > 0 ? (
-            <div className="max-h-[692px] overflow-y-scroll">
+            <div className="max-h-[70vh] overflow-y-scroll">
               {notificationData?.length > 0 &&
                 notificationData?.map((items: any, index: number) => {
                   // Calculate the gradient index based on the item's index

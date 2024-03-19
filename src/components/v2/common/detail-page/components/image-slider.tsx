@@ -73,16 +73,28 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                     >
                       <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
 
-                      <iframe
-                        frameBorder="0"
-                        src={img.url}
-                        className="object-contain"
-                        style={{ height: '100%', width: '100%' }}
-                        onError={e => {
-                          handleImageError(e);
-                          setShowDownloadButton(true);
-                        }}
-                      />
+                      {img.url === 'null' || img.url === null ? (
+                        <Image
+                          src={NoImageFound}
+                          alt="NoImageFound"
+                          style={{
+                            height: 'auto',
+                            width: '300px',
+                            background: '#F2F4F7'
+                          }}
+                        />
+                      ) : (
+                        <iframe
+                          frameBorder="0"
+                          src={img.url}
+                          className="object-contain"
+                          style={{ height: '100%', width: '100%' }}
+                          onError={e => {
+                            handleImageError(e);
+                            setShowDownloadButton(true);
+                          }}
+                        />
+                      )}
                     </div>
                   ) : (
                     <img

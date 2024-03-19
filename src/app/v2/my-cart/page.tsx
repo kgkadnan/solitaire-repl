@@ -59,11 +59,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
 import { useConfirmProductMutation } from '@/features/api/product';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
-import {
-  IManageListingSequenceResponse,
-  IProduct,
-  IProductItem
-} from '../search/interface';
+import { IProduct, IProductItem } from '../search/interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
@@ -101,14 +97,14 @@ const MyCart = () => {
     Hold: 0,
     Sold: 0
   });
-  const [tiggerCart, { isLoading }] = useLazyGetCartQuery();
+  const [tiggerCart, { data }] = useLazyGetCartQuery();
   const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
   const [confirmProduct] = useConfirmProductMutation();
   const router = useRouter();
   const [triggerColumn, { data: columnData }] =
-    useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
+    useLazyGetManageListingSequenceQuery<any>();
 
   useEffect(() => {
     if (subRoute === 'active') {
@@ -886,9 +882,7 @@ const MyCart = () => {
             </div>
           </div>
 
-          {rows.length < 0 ? (
-            <CustomKGKLoader />
-          ) : isConfirmStone ? (
+          {isConfirmStone ? (
             <ConfirmStone
               rows={confirmStoneData}
               columns={columnData}
@@ -899,22 +893,11 @@ const MyCart = () => {
             />
           ) : (
             <>
-              {rows.length && memoizedColumns.length ? (
-                <div>
-                  <DataTable
-                    rows={rows}
-                    columns={memoizedColumns}
-                    setRowSelection={setRowSelection}
-                    rowSelection={rowSelection}
-                    showCalculatedField={activeTab !== SOLD_STATUS}
-                    modalSetState={modalSetState}
-                    downloadExcel={downloadExcel}
-                    myCart={true}
-                    setIsError={setIsError}
-                    setErrorText={setErrorText}
-                  />
-                </div>
-              ) : (
+              {!rows.length &&
+              !memoizedColumns.length &&
+              data?.cart?.items.length ? (
+                <CustomKGKLoader />
+              ) : !data?.cart?.items.length ? (
                 <EmptyScreen
                   label={ManageLocales(
                     'app.emptyCart.actionButton.searchDiamonds'
@@ -922,6 +905,19 @@ const MyCart = () => {
                   message="No diamonds in your cart yet. Let’s change that!"
                   onClickHandler={() => {}}
                   imageSrc={empty}
+                />
+              ) : (
+                <DataTable
+                  rows={rows}
+                  columns={memoizedColumns}
+                  setRowSelection={setRowSelection}
+                  rowSelection={rowSelection}
+                  showCalculatedField={activeTab !== SOLD_STATUS}
+                  modalSetState={modalSetState}
+                  downloadExcel={downloadExcel}
+                  myCart={true}
+                  setIsError={setIsError}
+                  setErrorText={setErrorText}
                 />
               )}
             </>
