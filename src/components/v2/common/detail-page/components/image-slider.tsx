@@ -62,7 +62,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
             >
               <div className="relative w-full min-h-[328px]">
                 <div className="absolute w-full flex justify-center inset-0 p-5">
-                  {img.name === 'B2B' || img.name === 'B2B Sparkle' ? (
+                  {img.name === 'B2B' ||
+                  img.name === 'B2B Sparkle' ||
+                  img.name === 'GIA Certificate' ? (
                     <div
                       className="relative overflow-hidden w-full h-full"
                       onClick={() => {

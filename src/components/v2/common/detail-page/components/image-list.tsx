@@ -34,9 +34,11 @@ const ImageList: React.FC<ImageListProps> = ({
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
   return (
-    <div className="flex flex-col h-[100%]">
+    <div className="flex flex-col">
       {images.map((image, index) =>
-        image.name === 'B2B' || image.name === 'B2B Sparkle' ? (
+        image.name === 'B2B' ||
+        image.name === 'B2B Sparkle' ||
+        image.name === 'GIA Certificate' ? (
           <div
             key={index}
             className="relative overflow-hidden"
@@ -49,6 +51,8 @@ const ImageList: React.FC<ImageListProps> = ({
               key={index}
               frameBorder="0"
               src={image.url}
+              height={74}
+              width={74}
               style={{ border: '1px solid #F1F1F1', overflow: 'hidden' }}
               className={`cursor-pointer lg:w-[74px] lg:h-[60px] sm:w-[35px] sm:h-[30px] ${
                 index !== 0 ? 'mt-3' : ''

@@ -54,8 +54,6 @@ export function DiamondDetailsComponent({
   breadCrumLabel: string;
   modalSetState?: any;
 }) {
-  console.log('filterData', filterData);
-
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -112,7 +110,7 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
-
+  console.log('tableData', tableData);
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
@@ -120,7 +118,7 @@ export function DiamondDetailsComponent({
     },
     {
       name: 'GIA Certificate',
-      url: tableData?.certificate_url ?? '',
+      url: `${tableData?.certificate_url}`,
       isSepratorNeeded: true
     },
     {
@@ -156,6 +154,7 @@ export function DiamondDetailsComponent({
     }
   ];
 
+  console.log('images', images);
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')
@@ -355,12 +354,9 @@ export function DiamondDetailsComponent({
           <div className="flex items-center mt-4">
             <div className="flex items-center">
               <p className="text-headingS font-medium text-neutral-900 ">
-                {tableData?.variants > 0
-                  ? `$${
-                      tableData?.variants[0]?.prices[0]?.amount?.toFixed(2) ??
-                      '-'
-                    }`
-                  : `$${tableData?.amount?.toFixed(2) ?? '-'}`}
+                {tableData?.variants?.length > 0
+                  ? `$${tableData?.variants[0]?.prices[0]?.amount?.toFixed(2)}`
+                  : `$${tableData?.amount?.toFixed(2)}`}
               </p>
               <p
                 className={`text-successMain text-mMedium px-[8px] py-[2px] rounded-[4px]`}

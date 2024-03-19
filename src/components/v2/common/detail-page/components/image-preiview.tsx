@@ -55,7 +55,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
       >
         {images.map((image, index) => (
           <div key={index} className="relative mb-4 cursor-pointer">
-            {image.name === 'B2B' || image.name === 'B2B Sparkle' ? (
+            {image.name === 'B2B' ||
+            image.name === 'B2B Sparkle' ||
+            image.name === 'GIA Certificate' ? (
               <div
                 className="relative overflow-hidden"
                 onClick={() => {
