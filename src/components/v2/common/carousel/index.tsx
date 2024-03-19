@@ -44,7 +44,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
   return (
-    <>
+    <div className='dashboard-carousel'>
       {images?.length > 0 ? (
         images.length > 1 ? (
           <Slider {...settings}>
@@ -137,7 +137,7 @@ const DashboardCarousel: React.FC<DashboardCarouselProps> = ({ images }) => {
           />
         </div>
       )}
-    </>
+    </div>
   );
 };
 
