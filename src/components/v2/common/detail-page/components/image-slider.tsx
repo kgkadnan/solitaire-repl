@@ -1,7 +1,7 @@
 'use client';
 import Image from 'next/image';
 
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 import NoImageFound from '@public/v2/assets/icons/detail-page/fall-back-img.svg';
 import Tooltip from '../../tooltip';
@@ -52,7 +52,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
   };
 
   return (
-    <>
+    <div className="details-slider">
       <Slider {...settings}>
         {images.map((img, index) => {
           return (
@@ -139,7 +139,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         selectedImageIndex={currentImageIndex}
         images={images}
       />
-    </>
+    </div>
   );
 };
 

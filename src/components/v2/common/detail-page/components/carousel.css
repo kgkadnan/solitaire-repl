@@ -1,6 +1,6 @@
 
 
-.slick-active  button:before {
+.details-slider .slick-active  button:before {
     color: White !important;
   
     background: White !important;
@@ -9,11 +9,11 @@
     border-radius: 50%;
     content:none;
   }
-  .slick-slide {
+  .details-slider .slick-slide {
     height: 365px;
   }
   
-  .slick-dots li button:before {
+  .details-slider .slick-dots li button:before {
     /* color: white !important;
     background: White !important; */
   
@@ -25,11 +25,11 @@
   
   
   }
-  .slick-dots{
+  .details-slider .slick-dots{
     bottom: 0px !important;
    
   }
-  .slick-dots li{
+  .details-slider .slick-dots li{
     /* margin: 0px !important; */
     margin: 0px 5px;
     height: 5px;
@@ -40,7 +40,7 @@
     display: inline-flex;
   }
   
-  .slick-dots li button{
+  .details-slider .slick-dots li button{
     background: #E4E7EC;
     content:none;
     height: 2px;
@@ -48,7 +48,7 @@
     border-radius: 50%;
     padding: 3px;
   }
-  .slick-dots li button:hover{
+ .details-slider .slick-dots li button:hover{
     background: #1D2939;
     content:none;
     height: 6px;
@@ -56,12 +56,12 @@
     border-radius: 50%;
   
   }
-  .slick-dots .slick-active button:hover{
+  .details-slider .slick-dots .slick-active button:hover{
     background: #1D2939 !important;
     width: 16px;
     border-radius: 10px;
   }
-  .slick-dots .slick-active button{
+  .details-slider .slick-dots .slick-active button{
     background: #1D2939 !important;
     width: 16px;
     padding: 0px 5px;
