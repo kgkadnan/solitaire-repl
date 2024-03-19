@@ -121,12 +121,13 @@ const OrderDetail: React.FC<IOrderDetail> = ({
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
 
   const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
 
     downloadExcelHandler({
-      products: allProductIds,
+      products: selectedIds.length > 0 ? selectedIds : allProductIds,
       orderId: productDetailData.id,
       downloadExcelApi: downloadExcel,
       modalSetState,
