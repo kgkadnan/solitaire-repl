@@ -70,7 +70,6 @@ const Share = ({
       return acc;
     }, {})
   );
-  console.log(selectedAttributes, 'selectedAttributes');
   const handleAttributeToggle = (attribute: any) => {
     setSelectedAttributes((prev: any) => ({
       ...prev,
