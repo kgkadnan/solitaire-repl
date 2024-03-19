@@ -54,8 +54,6 @@ export function DiamondDetailsComponent({
   breadCrumLabel: string;
   modalSetState?: any;
 }) {
-  console.log('filterData', filterData);
-
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -112,7 +110,7 @@ export function DiamondDetailsComponent({
       </div>
     );
   };
-
+  console.log('tableData', tableData);
   const images = [
     {
       name: getShapeDisplayName(tableData?.shape ?? ''),
@@ -120,7 +118,7 @@ export function DiamondDetailsComponent({
     },
     {
       name: 'GIA Certificate',
-      url: tableData?.certificate_url ?? '',
+      url: `${tableData?.certificate_url}`,
       isSepratorNeeded: true
     },
     {
@@ -156,6 +154,7 @@ export function DiamondDetailsComponent({
     }
   ];
 
+  console.log('images', images);
   const copyLink = () => {
     const link = `${process.env.NEXT_PUBLIC_DNA_URL}${filterData?.public_url
       .split('/')
