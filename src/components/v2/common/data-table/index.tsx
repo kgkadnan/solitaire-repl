@@ -128,6 +128,7 @@ const DataTable = ({
   };
 
   const onDropDownClick = (data: any) => {
+    setIsLoading(true);
     setIsDropDownOpen(false);
     triggerSavedSearch({
       searchByName: data.value
@@ -136,6 +137,7 @@ const DataTable = ({
       const searchUrl = constructUrlParams(metaData);
       triggerProductCountApi({ searchUrl }).then(response => {
         if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
+          setIsLoading(false);
           modalSetState.setIsDialogOpen(true);
           modalSetState.setDialogContent(
             <>
@@ -243,6 +245,7 @@ const DataTable = ({
               );
             }
           }
+          setIsLoading(false);
         }
       });
     });
@@ -308,7 +311,8 @@ const DataTable = ({
       products: selectedIds.length > 0 ? selectedIds : allProductIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
-      setRowSelection
+      setRowSelection,
+      setIsLoading: setIsLoading
     });
   };
 
@@ -319,7 +323,8 @@ const DataTable = ({
       previousSearch: allTabsIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
-      setRowSelection
+      setRowSelection,
+      setIsLoading: setIsLoading
     });
   };
 
@@ -631,6 +636,7 @@ const DataTable = ({
                     svg: NewSearchIcon,
                     label: ManageLocales('app.search.newSearch'),
                     handler: () => {
+                      setIsLoading(true);
                       handleNewSearch();
                     }
                   },
