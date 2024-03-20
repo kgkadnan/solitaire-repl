@@ -26,7 +26,8 @@ export const RenderCartLotId = ({
 }: any) => {
   return (
     <span
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
         handleDetailPage({ row: row.original });
       }}
     >

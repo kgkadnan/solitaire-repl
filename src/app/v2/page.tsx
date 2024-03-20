@@ -480,7 +480,7 @@ const Dashboard = () => {
               >
                 <div
                   style={{ background: data.color }}
-                  className={`${data.color} p-3 rounded-[4px]`}
+                  className={`${data.color} p-3 rounded-[4px] h-[48px]`}
                 >
                   {' '}
                   {data.icon}{' '}

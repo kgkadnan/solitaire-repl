@@ -47,7 +47,8 @@ export const RenderLotId = ({
   return (
     <span
       className={`rounded-[4px] ${statusClass} border-[1px] px-[8px] py-[3px] ${borderClass}`}
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
         handleDetailPage({ row: row.original });
       }}
     >
@@ -63,7 +64,8 @@ export const RenderCartLotId = ({
 }: any) => {
   return (
     <span
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
         handleDetailPage({ row: row.original });
       }}
     >
@@ -139,7 +141,7 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
           {renderedCellValue}
         </Link>
       ) : (
-        <span className="underline text-infoMain">
+        <span className={`${'underline text-infoMain'}`}>
           {renderedCellValue ?? '-'}
         </span>
       )}
