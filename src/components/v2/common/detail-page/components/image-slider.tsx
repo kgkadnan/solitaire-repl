@@ -72,7 +72,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                   img.name === 'B2B Sparkle' ||
                   img.name === 'GIA Certificate' ? (
                     <div
-                      className="relative overflow-hidden w-full h-full"
+                      className="relative flex justify-center overflow-hidden w-full h-full"
                       onClick={() => {
                         setIsModalOpen(!isModalOpen);
                       }}
@@ -83,6 +83,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                         <Image
                           src={NoImageFound}
                           alt="NoImageFound"
+                          className="flex justify-center"
                           style={{
                             height: 'auto',
                             width: '300px',

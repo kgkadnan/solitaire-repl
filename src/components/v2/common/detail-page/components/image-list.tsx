@@ -53,6 +53,9 @@ const ImageList: React.FC<ImageListProps> = ({
                 alt="NoImageFound"
                 height={74}
                 width={74}
+                className={`cursor-pointer xl:w-[74px] xl:h-[60px] sm:w-[35px] sm:h-[30px] ${
+                  index !== 0 ? 'mt-3' : ''
+                } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
               />
             ) : (
               <iframe
@@ -62,7 +65,7 @@ const ImageList: React.FC<ImageListProps> = ({
                 height={74}
                 width={74}
                 style={{ border: '1px solid #F1F1F1', overflow: 'hidden' }}
-                className={`cursor-pointer lg:w-[74px] lg:h-[60px] sm:w-[35px] sm:h-[30px] ${
+                className={`cursor-pointer xl:w-[74px] xl:h-[60px] sm:w-[35px] sm:h-[30px] ${
                   index !== 0 ? 'mt-3' : ''
                 } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
                 onError={handleImageError}
@@ -87,7 +90,9 @@ const ImageList: React.FC<ImageListProps> = ({
               alt={`Image ${index + 1}`}
               id={`image-${index}`}
               style={{ border: '1px solid #F1F1F1', background: '#F2F4F7' }}
-              className={`cursor-pointer ${index !== 0 ? 'mt-3' : ''} 
+              className={`cursor-pointer xl:w-[74px] xl:h-[60px] sm:w-[35px] sm:h-[30px] ${
+                index !== 0 ? 'mt-3' : ''
+              } 
             
             `}
               onError={handleImageError}

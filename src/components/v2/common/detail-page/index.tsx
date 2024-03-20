@@ -231,29 +231,29 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="lg:flex py-5">
-        <div className="flex lg:h-[75vh]">
-          <div className="w-full lg:hidden">
+      <div className="xl:flex py-5">
+        <div className="flex xl:h-[75vh]">
+          <div className="w-full xl:hidden">
             <ImageSlider images={images} />
           </div>
-          <div className="hidden lg:block mr-5">
+          <div className="hidden xl:block mr-5">
             <ImageList
               images={images}
               selectedImageIndex={selectedImageIndex}
               onImageClick={handleImageClick}
             />
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <ImagePreview
               images={images}
               selectedImageIndex={selectedImageIndex}
             />
           </div>
         </div>
-        <div className="lg:w-2/3 lg:ml-10 scroll-adjust-custom lg:overflow-y-scroll lg:h-[75vh]">
-          <div className="flex justify-between mt-4 lg:mt-0 w-full">
+        <div className="xl:w-2/3 xl:ml-10 scroll-adjust-custom xl:overflow-y-scroll xl:h-[75vh]">
+          <div className="flex justify-between mt-4 xl:mt-0 w-full">
             <p
-              className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 "
+              className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
@@ -374,28 +374,28 @@ export function DiamondDetailsComponent({
             {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
               Basic Details
             </div>
             {displayTable(basicDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px]  font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
               Measurements
             </div>
             {displayTable(mesurementsDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
               Inclusion Details
             </div>
             {displayTable(inclusionDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>
             {displayTable(otherInformationDetails)}
