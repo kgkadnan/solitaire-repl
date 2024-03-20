@@ -26,7 +26,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
       playerRef.current = new YT.Player('youtube-player', {
         height: '550',
         width: '100%',
-        videoId: '01QBBfpE2wo', //screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', // 'WI_43FwleUg',bqbnuuOF9cI
+        videoId: 'rXjbNpi79FI', //screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', // 'WI_43FwleUg',bqbnuuOF9cI
         playerVars: {
           autoplay: 1,
           mute: 1,
@@ -35,7 +35,7 @@ const UserAuthenticationLayout: React.FC<IUserAuthenticationLayoutProps> = ({
           rel: 0,
           iv_load_policy: 3,
           loop: 1,
-          playlist: '01QBBfpE2wo', // screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', //'WI_43FwleUg',bqbnuuOF9cI
+          playlist: 'rXjbNpi79FI', // screen === 'register' ? 'WI_43FwleUg' : 'bqbnuuOF9cI', //'WI_43FwleUg',bqbnuuOF9cI
           disablekb: 1 // Disable keyboard controls
         },
         events: {

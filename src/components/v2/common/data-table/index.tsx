@@ -298,12 +298,13 @@ const DataTable = ({
   };
 
   const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
 
     downloadExcelHandler({
-      products: allProductIds,
+      products: selectedIds.length > 0 ? selectedIds : allProductIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection
@@ -376,8 +377,6 @@ const DataTable = ({
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
-          : row.original.lot_id
-          ? () => {}
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',

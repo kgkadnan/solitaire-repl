@@ -138,12 +138,14 @@ const NewArrivalDataTable = ({
   };
 
   const handleDownloadExcel = () => {
+    let selectedIds = Object.keys(rowSelection);
+
     const allProductIds = rows.map(({ id }: { id: string }) => {
       return id;
     });
 
     downloadExcelHandler({
-      products: allProductIds,
+      products: selectedIds.length > 0 ? selectedIds : allProductIds,
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
@@ -306,6 +308,7 @@ const NewArrivalDataTable = ({
                 selectedProducts={rowSelection}
                 setErrorText={setErrorText}
                 setIsError={setIsError}
+                isNewArrival={true}
               />
             </div>
           </div>
@@ -383,8 +386,6 @@ const NewArrivalDataTable = ({
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
-          : row.original.lot_id
-          ? () => {}
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
