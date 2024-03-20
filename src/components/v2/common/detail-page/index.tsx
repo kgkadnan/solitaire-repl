@@ -58,8 +58,6 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [triggerBase64] = useLazyGetBase64Query({});
-
   //   const dispatch: AppDispatch = useDispatch();
   //   const diamondData = useSelector(selectDiamondData);
   const { errorSetState } = useErrorStateManagement();
@@ -248,7 +246,6 @@ export function DiamondDetailsComponent({
           <div className="hidden lg:block">
             <ImagePreview
               images={images}
-              triggerBase64={triggerBase64}
               selectedImageIndex={selectedImageIndex}
             />
           </div>
@@ -256,14 +253,14 @@ export function DiamondDetailsComponent({
         <div className="lg:w-2/3 lg:ml-10 scroll-adjust-custom lg:overflow-y-scroll lg:h-[75vh]">
           <div className="flex justify-between mt-4 lg:mt-0 w-full">
             <p
-              className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 w-[50%]"
+              className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
             <div className="flex w-[40%] justify-around items-center">
-              <div className="flex gap-3 w-[50%]">
+              <div className="flex gap-3">
                 <Tooltip
                   tooltipTrigger={
                     <Image
@@ -294,15 +291,17 @@ export function DiamondDetailsComponent({
                   tooltipContentStyles={'z-[4]'}
                 />
 
-                <Share
-                  rows={data}
-                  selectedProducts={{ [filterData.id]: true }}
-                  setIsError={setIsError}
-                  setErrorText={setErrorText}
-                />
+                <div className="w-[38px] h-[38px]">
+                  <Share
+                    rows={data}
+                    selectedProducts={{ [filterData.id]: true }}
+                    setIsError={setIsError}
+                    setErrorText={setErrorText}
+                  />
+                </div>
               </div>
               <div className="border-r-[1px] h-[40px] border-neutral-200"></div>
-              <div className="flex gap-3 relative w-[50%] justify-center">
+              <div className="flex gap-3 relative justify-center">
                 {/* Backward Arrow */}
                 <button
                   className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${

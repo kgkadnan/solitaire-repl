@@ -19,12 +19,13 @@ import Image from 'next/image';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import logger from 'logging/log-util';
-import Loader from '@/components/v2/common/loader';
+
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { ITableColumn } from '@/app/v2/search/interface';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const TablePrefrences = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
@@ -185,7 +186,7 @@ and `nonManageableListings` whenever the `data` variable changes. */
           </h1>
 
           <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
-            {data?.length ? (
+            {nonManageableListings?.length || manageableListings?.length ? (
               <div>
                 {nonManageableListings?.length > 0 && (
                   <>
@@ -258,27 +259,29 @@ and `nonManageableListings` whenever the `data` variable changes. */
                 )}
               </div>
             ) : (
-              <Loader />
+              <CustomKGKLoader />
             )}
           </div>
         </div>
-        <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200   rounded-t-[8px] p-[16px]">
-          {' '}
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myAccount.footer.cancel'),
-                handler: () => handleCancel()
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.myAccount.footer.update'),
-                handler: () => handleUpdateDiamondSequence()
-              }
-            ]}
-          />
-        </div>
+        {(nonManageableListings?.length || manageableListings?.length) && (
+          <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200   rounded-t-[8px] p-[16px]">
+            {' '}
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.myAccount.footer.cancel'),
+                  handler: () => handleCancel()
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.myAccount.footer.update'),
+                  handler: () => handleUpdateDiamondSequence()
+                }
+              ]}
+            />
+          </div>
+        )}
       </div>
     </>
   );
