@@ -62,8 +62,7 @@ const RegisterComponent = ({
             handleRegisterChange({
               event,
               setRegisterFormState,
-              setRegisterFormErrors,
-              registerFormState
+              setRegisterFormErrors
             })
           }
           placeholder={ManageLocales('app.register.firstName.placeholder')}
@@ -82,8 +81,7 @@ const RegisterComponent = ({
               handleRegisterChange({
                 event,
                 setRegisterFormState,
-                setRegisterFormErrors,
-                registerFormState
+                setRegisterFormErrors
               })
             }
             placeholder={ManageLocales('app.register.lastName.placeholder')}
@@ -96,8 +94,7 @@ const RegisterComponent = ({
               handleRegisterChange({
                 event,
                 setRegisterFormState,
-                setRegisterFormErrors,
-                registerFormState
+                setRegisterFormErrors
               })
             }
             type="email"
@@ -114,8 +111,7 @@ const RegisterComponent = ({
               handleRegisterChange({
                 event,
                 setRegisterFormState,
-                setRegisterFormErrors,
-                registerFormState
+                setRegisterFormErrors
               })
             }
             type="number"
@@ -136,8 +132,7 @@ const RegisterComponent = ({
               handleRegisterChange({
                 event,
                 setRegisterFormState,
-                setRegisterFormErrors,
-                registerFormState
+                setRegisterFormErrors
               })
             }
             name="password"
@@ -152,8 +147,7 @@ const RegisterComponent = ({
               handleRegisterChange({
                 event,
                 setRegisterFormState,
-                setRegisterFormErrors,
-                registerFormState
+                setRegisterFormErrors
               })
             }
             name="confirmPassword"

@@ -12,15 +12,15 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 const LoginComponent = ({
   setPhoneNumber,
-  isPhoneNumberValid,
-  setEmailErrorText,
+
+  setPhoneErrorText,
   // setErrorText,
   setPasswordErrorText,
   setPassword,
   // setIsError,
   handleKeyDown,
   phoneNumber,
-  emailErrorText,
+  phoneErrorText,
   password,
   passwordErrorText,
   handleLogin
@@ -59,8 +59,8 @@ const LoginComponent = ({
                 event,
                 type: 'phone',
                 setPhoneNumber,
-                isPhoneNumberValid,
-                setEmailErrorText,
+
+                setPhoneErrorText,
                 // setErrorText,
                 setPasswordErrorText,
                 setPassword
@@ -70,7 +70,7 @@ const LoginComponent = ({
             type="number"
             name="mobileNumber"
             // value={registerFormState.mobileNumber}
-            errorText={emailErrorText}
+            errorText={phoneErrorText}
             // registerFormState={registerFormState}
             // setRegisterFormState={setRegisterFormState}
             placeholder={ManageLocales('app.register.mobileNumber.placeholder')}
@@ -86,8 +86,8 @@ const LoginComponent = ({
                 event,
                 type: 'password',
                 setPhoneNumber,
-                isPhoneNumberValid,
-                setEmailErrorText,
+
+                setPhoneErrorText,
                 // setErrorText,
                 setPasswordErrorText,
                 setPassword

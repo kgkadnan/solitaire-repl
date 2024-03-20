@@ -8,8 +8,10 @@ import { useRouter } from 'next/navigation';
 import useUser from '@/lib/use-auth';
 import {
   ENTER_PASSWORD,
+  ENTER_PHONE,
   INCORRECT_LOGIN_CREDENTIALS,
   INVALID_EMAIL_FORMAT,
+  INVALID_MOBILE,
   INVALID_PHONE
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
@@ -70,7 +72,7 @@ const Login = () => {
   );
   const [verifyLogin] = useVerifyLoginMutation();
 
-  const [emailErrorText, setEmailErrorText] = useState<string>('');
+  const [phoneErrorText, setPhoneErrorText] = useState<string>('');
   const [passwordErrorText, setPasswordErrorText] = useState<string>('');
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
@@ -165,8 +167,9 @@ const Login = () => {
 
   const handleLogin = async () => {
     if (
-      !emailErrorText.length &&
+      !phoneErrorText.length &&
       !passwordErrorText.length &&
+      isPhoneNumberValid(phoneNumber.mobileNumber) &&
       password.length &&
       phoneNumber.mobileNumber.length
     ) {
@@ -215,11 +218,11 @@ const Login = () => {
       }
     } else if (!password.length && !phoneNumber.mobileNumber.length) {
       setPasswordErrorText(ENTER_PASSWORD);
-      setEmailErrorText(INVALID_EMAIL_FORMAT);
+      setPhoneErrorText(ENTER_PHONE);
+    } else if (!isPhoneNumberValid(phoneNumber.mobileNumber)) {
+      setPhoneErrorText(INVALID_MOBILE);
     } else if (!password.length) {
       setPasswordErrorText(ENTER_PASSWORD);
-    } else if (!phoneNumber.mobileNumber.length) {
-      setEmailErrorText(INVALID_EMAIL_FORMAT);
     }
   };
   // Handle Enter key press for login
@@ -312,15 +315,14 @@ const Login = () => {
         return (
           <LoginComponent
             setPhoneNumber={setPhoneNumber}
-            isPhoneNumberValid={isPhoneNumberValid}
-            setEmailErrorText={setEmailErrorText}
+            setPhoneErrorText={setPhoneErrorText}
             // setErrorText={setErrorText}
             setPasswordErrorText={setPasswordErrorText}
             setPassword={setPassword}
             // setIsError={setIsError}
             handleKeyDown={handleKeyDown}
             phoneNumber={phoneNumber}
-            emailErrorText={emailErrorText}
+            phoneErrorText={phoneErrorText}
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}

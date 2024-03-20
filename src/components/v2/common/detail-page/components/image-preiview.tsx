@@ -78,6 +78,9 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                       width: '485px',
                       background: '#F2F4F7'
                     }}
+                    onLoad={() => {
+                      setShowDownloadButton([...showDownloadButton, index]);
+                    }}
                   />
                 ) : (
                   <iframe
