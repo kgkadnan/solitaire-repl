@@ -30,7 +30,7 @@ const ResponsiveTable: React.FC<ResponsiveTableProps> = ({
             {tableHead.map((column, index) => (
               <th
                 key={column.key}
-                className={`p-[10px] lg:px-4 lg:py-3 text-left !font-medium lg:whitespace-nowrap  ${
+                className={`p-[10px] lg:px-4 lg:py-3 text-left !font-medium whitespace-nowrap  ${
                   column.hiddenAbove1024 ? 'lg:hidden' : ''
                 } ${column.hiddenBelow1024 ? 'hidden lg:table-cell' : ''}`}
                 style={{
