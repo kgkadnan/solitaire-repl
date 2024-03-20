@@ -10,9 +10,7 @@ import {
   ENTER_PASSWORD,
   ENTER_PHONE,
   INCORRECT_LOGIN_CREDENTIALS,
-  INVALID_EMAIL_FORMAT,
-  INVALID_MOBILE,
-  INVALID_PHONE
+  INVALID_MOBILE
 } from '@/constants/error-messages/register';
 import { Events } from '@/constants/enums/event';
 import LoginComponent from './component/login';
@@ -41,8 +39,8 @@ import {
   initialOTPFormState,
   useOtpVerificationStateManagement
 } from '@/components/v2/common/otp-verication/hooks/otp-verification-state-management';
-import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 export interface IToken {
   token: string;
@@ -64,6 +62,7 @@ const Login = () => {
     mobileNumber: string;
   }>({ countryCode: '', mobileNumber: '' });
   const [password, setPassword] = useState<string>('');
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const [token, setToken] = useState(initialTokenState);
   const { data }: { data?: IAuthDataResponse } = useGetAuthDataQuery(
@@ -224,6 +223,7 @@ const Login = () => {
     } else if (!password.length) {
       setPasswordErrorText(ENTER_PASSWORD);
     }
+    setIsLoading(false);
   };
   // Handle Enter key press for login
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -320,6 +320,7 @@ const Login = () => {
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
+            setIsLoading={setIsLoading}
             // isError={isError}
             // errorText={errorText}
           />
@@ -352,6 +353,7 @@ const Login = () => {
   // JSX rendering for the Login component
   return (
     <>
+      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

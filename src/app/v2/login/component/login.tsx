@@ -23,7 +23,8 @@ const LoginComponent = ({
   phoneErrorText,
   password,
   passwordErrorText,
-  handleLogin
+  handleLogin,
+  setIsLoading
 }: any) => {
   const [isKeepSignedIn, setIsKeepSignedIn] = useState(false);
   const router = useRouter();
@@ -31,6 +32,7 @@ const LoginComponent = ({
 
   const handleSubmit = (event: any) => {
     event.preventDefault(); // Prevent default form submission behavior
+    setIsLoading(true);
     handleLogin(); // Your login handler
   };
 

@@ -22,6 +22,7 @@ interface IRegisterComponent {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
+  setIsLoading: any;
 }
 const RegisterComponent = ({
   registerSetState,
@@ -32,7 +33,8 @@ const RegisterComponent = ({
   setToken,
   setIsDialogOpen,
   setDialogContent,
-  setOTPVerificationFormState
+  setOTPVerificationFormState,
+  setIsLoading
 }: IRegisterComponent) => {
   const router = useRouter();
   const pathName = useSearchParams().get('path');
@@ -42,7 +44,7 @@ const RegisterComponent = ({
 
   const handleRegisterSubmit = (e: any) => {
     e.preventDefault();
-
+    setIsLoading(true);
     handleRegister({
       role: 'register',
       registerFormState,
@@ -53,7 +55,8 @@ const RegisterComponent = ({
       setToken,
       setIsDialogOpen,
       setDialogContent,
-      setOTPVerificationFormState
+      setOTPVerificationFormState,
+      setIsLoading
     });
   };
   return (
