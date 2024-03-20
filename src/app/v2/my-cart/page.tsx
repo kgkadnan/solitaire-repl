@@ -98,7 +98,7 @@ const MyCart = () => {
     Hold: 0,
     Sold: 0
   });
-  const [tiggerCart, { data }] = useLazyGetCartQuery();
+  const [tiggerCart] = useLazyGetCartQuery();
   const subRoute = useSearchParams().get('path');
   // Mutation for deleting items from the cart
   const [deleteCart] = useDeleteCartMutation();
@@ -152,6 +152,7 @@ const MyCart = () => {
           setIsLoading(false);
         })
         .catch(error => {
+          setIsLoading(false);
           setIsDialogOpen(true);
           setDialogContent(
             <>

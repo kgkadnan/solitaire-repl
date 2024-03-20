@@ -88,6 +88,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
                             width: '300px',
                             background: '#F2F4F7'
                           }}
+                          onLoad={() => {
+                            setShowDownloadButton(true);
+                          }}
                         />
                       ) : (
                         <iframe

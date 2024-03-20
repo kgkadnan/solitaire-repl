@@ -135,17 +135,11 @@ const Register = () => {
         <MobileInput
           label={ManageLocales('app.register.mobileNumber')}
           onChange={event => {
-            if (!PHONE_REGEX.test(event.target.value)) {
-              setOTPVerificationFormErrors(prev => ({
-                ...prev,
-                otpMobileNumber: INVALID_PHONE
-              }));
-            } else {
-              setOTPVerificationFormErrors(prev => ({
-                ...prev,
-                otpMobileNumber: ''
-              }));
-            }
+            setOTPVerificationFormErrors(prev => ({
+              ...prev,
+              otpMobileNumber: ''
+            }));
+
             handleOTPChange({ event, setOTPVerificationFormState });
           }}
           type="number"

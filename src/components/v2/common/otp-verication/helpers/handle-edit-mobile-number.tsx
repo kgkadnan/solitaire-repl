@@ -5,6 +5,8 @@ import ActionButton from '../../action-button';
 import Image from 'next/image';
 import successIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import { IToken } from '@/app/v2/register/interface';
+import { INVALID_PHONE } from '@/constants/error-messages/register';
+import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 interface IHandleEditMobileNumber {
   otpVerificationFormState: IOtp;
   setOTPVerificationFormErrors: React.Dispatch<React.SetStateAction<IOtp>>;
@@ -36,6 +38,11 @@ export const handleEditMobileNumber = ({
     setOTPVerificationFormErrors(prev => ({
       ...prev,
       mobileNumber: 'Please enter Mobile Number to Save'
+    }));
+  } else if (!PHONE_REGEX.test(otpVerificationFormState.otpMobileNumber)) {
+    setOTPVerificationFormErrors(prev => ({
+      ...prev,
+      otpMobileNumber: INVALID_PHONE
     }));
   } else {
     // if (verifyNumber?.exists === false) {

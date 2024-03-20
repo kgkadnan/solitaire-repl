@@ -97,18 +97,12 @@ const ChangePassword = ({ modalSetState }: any) => {
 
   const handleChangePassword = ({
     event,
-    changePasswordState,
     setChangePasswordFormErrors,
     setChangePasswordState
   }: any) => {
     const { name, value } = event.target;
     setChangePasswordState((prev: any) => ({ ...prev, [name]: value }));
-    validateField({
-      name,
-      value,
-      setFormErrors: setChangePasswordFormErrors,
-      formState: changePasswordState
-    });
+    setChangePasswordFormErrors((prev: any) => ({ ...prev, [name]: '' }));
   };
 
   const { userLoggedOut } = useUser();
@@ -225,8 +219,7 @@ const ChangePassword = ({ modalSetState }: any) => {
                 handleChangePassword({
                   event,
                   setChangePasswordState,
-                  setChangePasswordFormErrors,
-                  changePasswordState
+                  setChangePasswordFormErrors
                 })
               }
               name="password"
@@ -242,8 +235,7 @@ const ChangePassword = ({ modalSetState }: any) => {
                 handleChangePassword({
                   event,
                   setChangePasswordState,
-                  setChangePasswordFormErrors,
-                  changePasswordState
+                  setChangePasswordFormErrors
                 })
               }
               name="newPassword"
@@ -259,8 +251,7 @@ const ChangePassword = ({ modalSetState }: any) => {
                 handleChangePassword({
                   event,
                   setChangePasswordState,
-                  setChangePasswordFormErrors,
-                  changePasswordState
+                  setChangePasswordFormErrors
                 })
               }
               name="confirmPassword"
