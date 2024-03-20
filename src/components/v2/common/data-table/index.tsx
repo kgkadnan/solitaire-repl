@@ -377,8 +377,6 @@ const DataTable = ({
       return {
         onClick: row.id.includes('shape')
           ? row.getToggleExpandedHandler()
-          : row.original.lot_id
-          ? () => {}
           : row.getToggleSelectedHandler(),
         sx: {
           cursor: 'pointer',
