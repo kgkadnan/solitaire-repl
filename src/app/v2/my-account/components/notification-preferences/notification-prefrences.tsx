@@ -190,7 +190,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
               <ActionButton
                 actionButtonData={[
                   {
-                    variant: 'secondary',
+                    variant: 'primary',
                     label: ManageLocales('app.modal.okay'),
                     handler: () => {
                       setIsDialogOpen(false);
