@@ -128,6 +128,7 @@ const RegisterComponent = ({
               errorText={registerFormErrors.email}
               placeholder={ManageLocales('app.register.email.placeholder')}
               styles={{ inputMain: 'h-[64px]' }}
+              autoComplete="off"
             />
             {/* Input field for mobile Number */}
             <MobileInput
@@ -166,6 +167,7 @@ const RegisterComponent = ({
               value={registerFormState.password}
               errorText={registerFormErrors.password}
               placeholder={ManageLocales('app.register.password.placeholder')}
+              autoComplete="off"
             />
             {/* Input field for confirm password */}
             <PasswordField
