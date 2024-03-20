@@ -9,6 +9,7 @@ import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const NotificationPrefrences = ({ modalSetState }: any) => {
   const [triggerGetSubscription, { data }] = useLazyGetSubscriptionQuery({});
@@ -260,7 +261,7 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
           Notification Preferences
         </h1>
 
-        {allNotification?.length > 0 && (
+        {allNotification?.length > 0 ? (
           <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
             <div className="flex flex-col gap-[24px]">
               <div className="flex flex-col gap-[16px]">
@@ -371,28 +372,32 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
               </div>
             </div>
           </div>
+        ) : (
+          <CustomKGKLoader />
         )}
       </div>
-      <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] p-[16px]">
-        {' '}
-        <ActionButton
-          actionButtonData={[
-            {
-              variant: 'secondary',
-              label: ManageLocales('app.myAccount.footer.cancel'),
-              handler: () => {
-                setSelectedOptions(data.platforms);
-                setAllNotification(data.type);
+      {allNotification?.length > 0 && (
+        <div className="h-[72px] mt-[30px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200 rounded-t-[8px] p-[16px]">
+          {' '}
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: ManageLocales('app.myAccount.footer.cancel'),
+                handler: () => {
+                  setSelectedOptions(data.platforms);
+                  setAllNotification(data.type);
+                }
+              },
+              {
+                variant: 'primary',
+                label: ManageLocales('app.myAccount.footer.update'),
+                handler: () => handleUpdateNotification()
               }
-            },
-            {
-              variant: 'primary',
-              label: ManageLocales('app.myAccount.footer.update'),
-              handler: () => handleUpdateNotification()
-            }
-          ]}
-        />
-      </div>
+            ]}
+          />
+        </div>
+      )}
     </div>
   );
 };

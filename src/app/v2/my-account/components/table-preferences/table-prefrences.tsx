@@ -19,12 +19,13 @@ import Image from 'next/image';
 import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 import logger from 'logging/log-util';
-import Loader from '@/components/v2/common/loader';
+
 import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import CheckboxComponent from '@/components/v2/common/checkbox';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { ITableColumn } from '@/app/v2/search/interface';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const TablePrefrences = () => {
   /* The code is using two custom hooks `useGetManageListingSequenceQuery` and
@@ -179,13 +180,12 @@ and `nonManageableListings` whenever the `data` variable changes. */
       />
 
       <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[71vh]">
-        <div className="w-[789px] flex flex-col gap-[16px]">
-          <h1 className="text-neutral-900 text-headingS font-medium">
-            Table Preferences
-          </h1>
-
-          <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
-            {data?.length ? (
+        {nonManageableListings?.length || manageableListings?.length ? (
+          <div className="w-[789px] flex flex-col gap-[16px]">
+            <h1 className="text-neutral-900 text-headingS font-medium">
+              Table Preferences
+            </h1>
+            <div className="bg-neutral0 flex flex-col gap-[12px]  px-[24px] py-[24px]  rounded-[8px] border-solid border-[1px] border-neutral-200 shadow-sm">
               <div>
                 {nonManageableListings?.length > 0 && (
                   <>
@@ -257,28 +257,32 @@ and `nonManageableListings` whenever the `data` variable changes. */
                   </>
                 )}
               </div>
-            ) : (
-              <Loader />
-            )}
+            </div>
           </div>
-        </div>
-        <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200   rounded-t-[8px] p-[16px]">
-          {' '}
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.myAccount.footer.cancel'),
-                handler: () => handleCancel()
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.myAccount.footer.update'),
-                handler: () => handleUpdateDiamondSequence()
-              }
-            ]}
-          />
-        </div>
+        ) : (
+          <CustomKGKLoader />
+        )}
+
+        {(nonManageableListings?.length > 0 ||
+          manageableListings?.length > 0) && (
+          <div className="h-[72px] mt-[18px] w-[1136px] bg-neutral0 border-[1px] border-solid border-neutral200  rounded-t-[8px] p-[16px]">
+            {' '}
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.myAccount.footer.cancel'),
+                  handler: () => handleCancel()
+                },
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.myAccount.footer.update'),
+                  handler: () => handleUpdateDiamondSequence()
+                }
+              ]}
+            />
+          </div>
+        )}
       </div>
     </>
   );

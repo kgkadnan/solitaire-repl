@@ -44,6 +44,64 @@ const TermAndCondtions = () => {
     };
     callAPi();
   }, []);
+  let styling = `<style>
+.statiContentBox {
+div {
+all: revert;
+}
+h1 {
+all: revert;
+}
+h2 {
+all: revert;
+}
+h3 {
+all: revert;
+}
+h4 {
+all: revert;
+}
+h5 {
+all: revert;
+}
+h6 {
+all: revert;
+}
+p {
+all: revert;
+}
+ul {
+all: revert;
+}
+ol {
+all: revert;
+}
+li {
+all: revert;
+}
+a {
+all: revert;
+}
+span {
+all: revert;
+}
+img {
+all: revert;
+}
+button {
+all: revert;
+}
+input {
+all: revert;
+}
+textarea {
+all: revert;
+}
+form {
+all: revert;
+}
+}
+</style>`;
 
   const renderCotent = () => {
     switch (activeTab) {
@@ -52,7 +110,7 @@ const TermAndCondtions = () => {
           <>
             {data && (
               <div
-                dangerouslySetInnerHTML={{ __html: data }}
+                dangerouslySetInnerHTML={{ __html: styling + data }}
                 className="text-neutral-900"
               />
             )}
@@ -64,7 +122,7 @@ const TermAndCondtions = () => {
           <>
             {data && (
               <div
-                dangerouslySetInnerHTML={{ __html: data }}
+                dangerouslySetInnerHTML={{ __html: styling + data }}
                 className="text-neutral-900"
               />
             )}
@@ -76,7 +134,7 @@ const TermAndCondtions = () => {
           <>
             {data && (
               <div
-                dangerouslySetInnerHTML={{ __html: data }}
+                dangerouslySetInnerHTML={{ __html: styling + data }}
                 className="text-neutral-900"
               />
             )}

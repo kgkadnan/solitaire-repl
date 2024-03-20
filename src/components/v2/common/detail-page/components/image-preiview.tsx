@@ -11,19 +11,17 @@ import ImageModal from './image-modal';
 interface ImagePreviewProps {
   images: ImagesType[];
   selectedImageIndex: number;
-  triggerBase64: any;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
-  selectedImageIndex,
-  triggerBase64
+  selectedImageIndex
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [openDialogImageIndex, setOpenDialogImageIndex] = useState<number>(0);
-  const [showDownloadButton, setShowDownloadButton] = useState<Number[]>([]);
+  const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
 
   useEffect(() => {
     if (containerRef.current) {
@@ -79,7 +77,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                       background: '#F2F4F7'
                     }}
                     onLoad={() => {
-                      setShowDownloadButton([...showDownloadButton, index]);
+                      setShowDownloadButton(prevState => [
+                        ...prevState,
+                        image.name
+                      ]);
                     }}
                   />
                 ) : (
@@ -91,7 +92,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                     allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                     onError={e => {
                       handleImageError(e);
-                      setShowDownloadButton([...showDownloadButton, index]);
+                      setShowDownloadButton(prevState => [
+                        ...prevState,
+                        image.name
+                      ]);
                     }}
                   />
                 )}
@@ -108,8 +112,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 alt={`Image ${index + 1}`}
                 className={`mb-4`}
                 onError={e => {
+                  setShowDownloadButton(prevState => [
+                    ...prevState,
+                    image.name
+                  ]);
                   handleImageError(e);
-                  setShowDownloadButton([...showDownloadButton, index]);
                 }}
                 onClick={() => {
                   setOpenDialogImageIndex(index);
@@ -118,7 +125,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               />
             )}
 
-            {!showDownloadButton.includes(index) && (
+            {!showDownloadButton.includes(image.name) && (
               <>
                 {!(image.name === 'B2B' || image.name === 'B2B Sparkle') && (
                   <Tooltip
