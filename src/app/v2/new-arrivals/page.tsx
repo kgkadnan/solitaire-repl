@@ -141,7 +141,23 @@ const NewArrivals = () => {
 
   const handleTabClick = (index: number) => {
     setActiveTab(index);
-    setRowSelection({});
+    if (index === 1 && activeBid.length > 0) {
+      activeBid.map((row: any) => {
+        if (row.current_max_bid > row.my_current_bid) {
+          setRowSelection(prev => {
+            return { ...prev, [row.id]: true };
+          });
+        } else {
+          setRowSelection((prev: any) => {
+            let prevRows = { ...prev };
+            delete prevRows[row.id];
+            return prevRows;
+          });
+        }
+      });
+    } else {
+      setRowSelection({});
+    }
   };
   const [activeBid, setActiveBid] = useState<any>();
   const [bid, setBid] = useState<any>();

@@ -483,15 +483,15 @@ const NewArrivalDataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? 'calc(100vh - 200px)'
+          ? 'calc(100vh - 135px)'
           : activeTab === 2
           ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 375px)',
+          : 'calc(100vh - 405px)',
         maxHeight: isFullScreen
-          ? 'calc(100vh - 200px)'
+          ? 'calc(100vh - 135px)'
           : activeTab === 2
           ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 375px)'
+          : 'calc(100vh - 405px)'
       }
     },
     muiTableHeadRowProps: {
