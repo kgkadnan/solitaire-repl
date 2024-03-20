@@ -58,6 +58,7 @@ const RegisterComponent = ({
   return (
     <div className="my-[20px]">
       <form
+        autoComplete="off"
         onSubmit={handleRegisterSubmit}
         className="flex items-center text-center"
       >
