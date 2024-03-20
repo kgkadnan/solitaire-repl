@@ -85,6 +85,7 @@ const MyCart = () => {
   const [cartItems, setCartItems] = useState<any>([]);
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
@@ -136,6 +137,7 @@ const MyCart = () => {
   };
 
   useEffect(() => {
+    setIsLoading(true);
     const fetchMyAPI = async () => {
       await tiggerCart({})
         .then((response: any) => {
@@ -147,6 +149,7 @@ const MyCart = () => {
           setCartItems(filteredRows);
           setDiamondStatusCounts(counts);
           setRowSelection({});
+          setIsLoading(false);
         })
         .catch(error => {
           setIsDialogOpen(true);
@@ -893,11 +896,9 @@ const MyCart = () => {
             />
           ) : (
             <>
-              {!rows.length &&
-              !memoizedColumns.length &&
-              data?.cart?.items.length ? (
+              {isLoading ? (
                 <CustomKGKLoader />
-              ) : !data?.cart?.items.length ? (
+              ) : !rows.length ? (
                 <EmptyScreen
                   label={ManageLocales(
                     'app.emptyCart.actionButton.searchDiamonds'
