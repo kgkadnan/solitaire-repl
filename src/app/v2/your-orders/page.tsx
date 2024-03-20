@@ -369,7 +369,7 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex  w-[50%]  text-mMedium font-medium">
+            <div className="flex  w-[50%]  text-mMedium font-medium h-[40px]">
               {myDiamondsTabs.map(({ label, count, status }) => {
                 return (
                   <button

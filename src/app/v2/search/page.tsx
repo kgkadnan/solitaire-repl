@@ -18,6 +18,7 @@ import useFormStateManagement from './form/hooks/form-state';
 import useNumericFieldValidation from './form/hooks/numeric-field-validation-management';
 import Result from './result/result';
 import SavedSearch from './saved-search/saved-search';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const Search = () => {
   const subRoute = useSearchParams().get('active-tab');
@@ -38,6 +39,7 @@ const Search = () => {
   const { errorState, errorSetState } = useNumericFieldValidation();
 
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   useEffect(() => {
     let selection = JSON.parse(localStorage.getItem('Search')!) || [];
@@ -129,6 +131,7 @@ const Search = () => {
     removeDataIndex: number,
     yourSelection: ISavedSearch[]
   ) => {
+    // setIsLoading(false)
     let closeSpecificSearch = yourSelection.filter(
       (_items: ISavedSearch, index: number) => {
         return index !== removeDataIndex - 1;
@@ -147,58 +150,14 @@ const Search = () => {
     }
 
     localStorage.setItem('Search', JSON.stringify(closeSpecificSearch));
+
     // setSearchParameters(closeSpecificSearch);
   };
 
   const handleCloseSpecificTab = (id: number) => {
     let yourSelection = JSON.parse(localStorage.getItem('Search')!);
 
-    // if (!yourSelection[id - 1]?.isSavedSearch) {
-    //   setDialogContent(
-    //     <>
-    //       {' '}
-    //       <div className="absolute left-[-84px] top-[-84px]">
-    //         <Image src={warningIcon} alt="warningIcon" />
-    //       </div>
-    //       <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-    //         <div>
-    //           <h1 className="text-headingS text-neutral900">
-    //             {' '}
-    //             {ManageLocales('app.search.confirmHeader')}
-    //           </h1>
-    //           <p className="text-neutral600 text-mRegular">
-    //             {ManageLocales('app.search.closeSpecificTabs')}
-    //           </p>
-    //         </div>
-    //         <ActionButton
-    //           actionButtonData={[
-    //             {
-    //               variant: 'secondary',
-    //               label: ManageLocales('app.modal.no'),
-    //               handler: () => {
-    //                 setIsDialogOpen(false);
-    //                 // closeSearch(id, yourSelection);
-    //               },
-    //               customStyle: 'flex-1 h-10'
-    //             },
-    //             {
-    //               variant: 'primary',
-    //               label: ManageLocales('app.modal.yes'),
-    //               handler: () => {
-    //                 setIsDialogOpen(false);
-    //                 closeSearch(id, yourSelection);
-    //               },
-    //               customStyle: 'flex-1 h-10'
-    //             }
-    //           ]}
-    //         />
-    //       </div>
-    //     </>
-    //   );
-    //   setIsDialogOpen(true);
-    // } else {
     closeSearch(id, yourSelection);
-    // }
   };
   return (
     <div>
@@ -207,7 +166,7 @@ const Search = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-
+      {isLoading && <CustomKGKLoader />}
       {subRoute === SubRoutes.NEW_SEARCH ||
       editRoute === SubRoutes.SAVED_SEARCH ||
       editRoute === SubRoutes.RESULT ? (
@@ -228,6 +187,7 @@ const Search = () => {
           setDialogContent={setDialogContent}
           addSearches={addSearches}
           setAddSearches={setAddSearches}
+          setIsLoading={setIsLoading}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
         <SavedSearch />
@@ -249,6 +209,7 @@ const Search = () => {
           setActiveTab={setActiveTab}
           handleCloseAllTabs={handleCloseAllTabs}
           handleCloseSpecificTab={handleCloseSpecificTab}
+          setIsLoading={setIsLoading}
         />
       )}
     </div>

@@ -110,7 +110,8 @@ const DataTable = ({
   data,
   setErrorText,
   setIsError,
-  searchList
+  searchList,
+  setIsLoading
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -441,6 +442,7 @@ const DataTable = ({
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
       }
+      //  pagination: { pageSize: 20,pageIndex:0 }
     },
 
     // renderEmptyRowsFallback: () => {
@@ -453,7 +455,7 @@ const DataTable = ({
       sx: {
         // minHeight: 'calc(100vh - 399px)',
         // maxHeight: 'calc(100vh - 399px)'
-        height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
+        height: isFullScreen ? '70vh' : 'calc(100vh - 412px)',
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -464,7 +466,7 @@ const DataTable = ({
           ? showCalculatedField
             ? 'calc(100vh - 415px)'
             : 'calc(100vh - 375px)'
-          : 'calc(100vh - 399px)',
+          : 'calc(100vh - 412px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
@@ -475,7 +477,7 @@ const DataTable = ({
           ? showCalculatedField
             ? 'calc(100vh - 415px)'
             : 'calc(100vh - 375px)'
-          : 'calc(100vh - 399px)'
+          : 'calc(100vh - 412px)'
       }
     },
     muiTableHeadRowProps: {
@@ -611,6 +613,7 @@ const DataTable = ({
                 activeTab={activeTab}
                 setActiveTab={setActiveTab}
                 handleCloseSpecificTab={handleCloseSpecificTab}
+                setIsLoading={setIsLoading}
               />
             </div>
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">

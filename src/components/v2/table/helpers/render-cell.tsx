@@ -89,15 +89,21 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-full rounded-[4px]`}
     >
-      {`${renderedCellValue && renderedCellValue}%`}
+      {`${renderedCellValue === 0 ? '0.00' : renderedCellValue.toFixed(2)}%`}
     </div>
   );
 };
 
 export const RenderCarat = ({ renderedCellValue }: any) => {
-  return <span>{`${renderedCellValue && renderedCellValue.toFixed(2)}`}</span>;
+  return (
+    <span>{`${renderedCellValue ? renderedCellValue.toFixed(2) : '-'}`}</span>
+  );
 };
 
 export const RenderAmount = ({ row }: any) => {
-  return <span>{`${row.original.variants[0].prices[0].amount}`}</span>;
+  return (
+    <span>{`${
+      row.original.variants[0].prices[0].amount?.toFixed(2) ?? '-'
+    }`}</span>
+  );
 };

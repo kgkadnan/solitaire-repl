@@ -91,7 +91,8 @@ const Result = ({
   setActiveTab,
   handleCloseAllTabs,
   handleCloseSpecificTab,
-  setSearchParameters
+  setSearchParameters,
+  setIsLoading
 }: {
   activeTab: number;
   searchParameters: any;
@@ -99,6 +100,7 @@ const Result = ({
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (id: number) => void;
+  setIsLoading: any;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -144,6 +146,7 @@ const Result = ({
   // Fetch Products
 
   const fetchProducts = async () => {
+    setIsLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -173,6 +176,7 @@ const Result = ({
           setRowSelection({});
           setErrorText('');
           setData(res.data);
+          setIsLoading(false);
         }
       }
     );
@@ -322,6 +326,7 @@ const Result = ({
       });
 
   useEffect(() => {
+    // setIsLoading(true)
     fetchProducts();
   }, [activeTab, columnData]);
 
@@ -1107,6 +1112,7 @@ const Result = ({
                 downloadExcel={downloadExcel}
                 setIsError={setIsError}
                 searchList={searchList}
+                setIsLoading={setIsLoading}
               />
             </div>
           )}

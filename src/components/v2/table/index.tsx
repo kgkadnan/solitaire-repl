@@ -162,17 +162,17 @@ const Table = ({
           (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
             isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
             ? isOrderDetail
-              ? 'calc(100vh - 450px)'
+              ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 340px)',
+            : 'calc(100vh - 450px)',
         maxHeight:
           isNudge &&
           (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
             isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
             ? isOrderDetail
-              ? 'calc(100vh - 450px)'
+              ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 340px)'
+            : 'calc(100vh - 450px)'
       }
     },
     muiTableHeadRowProps: {

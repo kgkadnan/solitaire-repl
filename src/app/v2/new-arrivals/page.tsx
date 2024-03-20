@@ -466,7 +466,7 @@ const NewArrivals = () => {
     setIsDetailPage(false);
     setDetailPageData({});
   };
-
+  console.log(bid, 'ooooooooooooo');
   return (
     <div className="mb-[20px] relative">
       <ImageModal
@@ -538,9 +538,21 @@ const NewArrivals = () => {
                 <NewArrivalDataTable
                   columns={
                     activeTab === 2
-                      ? memoizedColumns.filter(
-                          (data: any) => data.accessorKey !== 'current_max_bid'
-                        )
+                      ? memoizedColumns
+                          .filter(
+                            (data: any) =>
+                              data.accessorKey !== 'current_max_bid'
+                          ) // Filter out data with accessor key 'current_max_bid'
+                          .map((data: any) => {
+                            if (data.accessorKey === 'discount') {
+                              // Update the accessor key 'discount' to 'current_max_bid'
+                              return {
+                                ...data,
+                                accessorKey: 'current_max_bid'
+                              };
+                            }
+                            return data;
+                          })
                       : memoizedColumns
                   }
                   modalSetState={modalSetState}
