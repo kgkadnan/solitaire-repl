@@ -58,8 +58,6 @@ export function DiamondDetailsComponent({
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const [triggerBase64] = useLazyGetBase64Query({});
-
   //   const dispatch: AppDispatch = useDispatch();
   //   const diamondData = useSelector(selectDiamondData);
   const { errorSetState } = useErrorStateManagement();
@@ -233,37 +231,36 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="lg:flex py-5">
-        <div className="flex lg:h-[75vh]">
-          <div className="w-full lg:hidden">
+      <div className="xl:flex py-5">
+        <div className="flex xl:h-[75vh]">
+          <div className="w-full xl:hidden">
             <ImageSlider images={images} />
           </div>
-          <div className="hidden lg:block mr-5">
+          <div className="hidden xl:block mr-5">
             <ImageList
               images={images}
               selectedImageIndex={selectedImageIndex}
               onImageClick={handleImageClick}
             />
           </div>
-          <div className="hidden lg:block">
+          <div className="hidden xl:block">
             <ImagePreview
               images={images}
-              triggerBase64={triggerBase64}
               selectedImageIndex={selectedImageIndex}
             />
           </div>
         </div>
-        <div className="lg:w-2/3 lg:ml-10 scroll-adjust-custom lg:overflow-y-scroll lg:h-[75vh]">
-          <div className="flex justify-between mt-4 lg:mt-0 w-full">
+        <div className="xl:w-2/3 xl:ml-10 scroll-adjust-custom xl:overflow-y-scroll xl:h-[75vh]">
+          <div className="flex justify-between mt-4 xl:mt-0 w-full">
             <p
-              className="sm:text-[22px] lg:text-[28px] text-[#344054] font-medium mr-5 w-[50%]"
+              className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "
               style={{ alignSelf: 'center' }}
             >
               Stock No: {tableData?.lot_id ?? '-'}
             </p>
 
             <div className="flex w-[40%] justify-around items-center">
-              <div className="flex gap-3 w-[50%]">
+              <div className="flex gap-3">
                 <Tooltip
                   tooltipTrigger={
                     <Image
@@ -294,15 +291,17 @@ export function DiamondDetailsComponent({
                   tooltipContentStyles={'z-[4]'}
                 />
 
-                <Share
-                  rows={data}
-                  selectedProducts={{ [filterData.id]: true }}
-                  setIsError={setIsError}
-                  setErrorText={setErrorText}
-                />
+                <div className="w-[38px] h-[38px]">
+                  <Share
+                    rows={data}
+                    selectedProducts={{ [filterData.id]: true }}
+                    setIsError={setIsError}
+                    setErrorText={setErrorText}
+                  />
+                </div>
               </div>
               <div className="border-r-[1px] h-[40px] border-neutral-200"></div>
-              <div className="flex gap-3 relative w-[50%] justify-center">
+              <div className="flex gap-3 relative justify-center">
                 {/* Backward Arrow */}
                 <button
                   className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
@@ -375,28 +374,28 @@ export function DiamondDetailsComponent({
             {RenderNewArrivalLotId({ tableData })}
           </div>
           <div className="pt-8 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] text-[#344054]  font-medium">
+            <div className="sm:text-[14px] xl:text-[16px] text-[#344054]  font-medium">
               Basic Details
             </div>
             {displayTable(basicDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px]  font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px]  font-medium text-[#344054]">
               Measurements
             </div>
             {displayTable(mesurementsDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
               Inclusion Details
             </div>
             {displayTable(inclusionDetails)}
           </div>
 
           <div className="mt-6 max-w-[100%] pr-[10px]">
-            <div className="sm:text-[14px] lg:text-[16px] font-medium text-[#344054]">
+            <div className="sm:text-[14px] xl:text-[16px] font-medium text-[#344054]">
               Other Information
             </div>
             {displayTable(otherInformationDetails)}

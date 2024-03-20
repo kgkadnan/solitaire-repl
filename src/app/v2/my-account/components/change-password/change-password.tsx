@@ -206,7 +206,7 @@ const ChangePassword = ({ modalSetState }: any) => {
   };
 
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-[16px]  min-h-[68vh]">
+    <div className="w-full flex flex-col items-center justify-center mt-[16px] ">
       <div className="w-[760px] flex flex-col gap-[16px]">
         <h1 className="text-neutral-900 text-headingS font-medium">
           Change Password
@@ -263,7 +263,7 @@ const ChangePassword = ({ modalSetState }: any) => {
           </div>
         </div>
       </div>
-      <div className="h-[72px] w-[1136px]  bg-neutral0 border-[1px] border-solid border-neutral200   rounded-t-[8px] mt-auto p-[16px]">
+      <div className="h-[72px] w-[1136px]  bg-neutral0 border-[1px] border-solid border-neutral200 bottom-[-57%] absolute   rounded-t-[8px] p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[
