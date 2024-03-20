@@ -46,7 +46,7 @@ const ConfirmStone = ({
 
       const isExcist = selections[activeTab - 1]?.saveSearchName;
 
-      if (isExcist.length > 0) {
+      if (isExcist?.length > 0) {
         setBreadCrumLabel(isExcist);
       } else {
         setBreadCrumLabel(`Result ${activeTab}`);

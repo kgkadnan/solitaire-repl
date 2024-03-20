@@ -35,6 +35,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useSearchParams } from 'next/navigation';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -43,6 +44,7 @@ const NewArrivals = () => {
   const [detailImageData, setDetailImageData] = useState<any>({});
 
   const pathName = useSearchParams().get('path');
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const handleDetailPage = ({ row }: { row: any }) => {
     setIsDetailPage(true);
@@ -466,9 +468,9 @@ const NewArrivals = () => {
     setIsDetailPage(false);
     setDetailPageData({});
   };
-  console.log(bid, 'ooooooooooooo');
   return (
     <div className="mb-[20px] relative">
+      {isLoading && <CustomKGKLoader />}
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
@@ -575,6 +577,7 @@ const NewArrivals = () => {
                   socketManager={socketManager}
                   rowSelection={rowSelection}
                   setRowSelection={setRowSelection}
+                  setIsLoading={setIsLoading}
                 />
               }
             </div>

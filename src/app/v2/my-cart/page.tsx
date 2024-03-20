@@ -771,6 +771,7 @@ const MyCart = () => {
 
   return (
     <div className="relative">
+      {isLoading && <CustomKGKLoader />}
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}

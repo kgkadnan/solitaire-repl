@@ -134,11 +134,10 @@ const SavedSearch = ({ setIsLoading }: any) => {
   ];
 
   useEffect(() => {
-   
     savedSearchSetState.setSavedSearchData(data?.savedSearches);
     setIsLoading(false);
   }, [data]);
-// useEffect(()=>{setIsLoading(true)},[])
+  // useEffect(()=>{setIsLoading(true)},[])
   // Debounced search function
   const debouncedSave = useCallback(
     (inputValue: string) => {

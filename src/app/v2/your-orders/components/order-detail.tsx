@@ -40,13 +40,15 @@ interface IOrderDetail {
   goBackToListView: () => void;
   breadCrumLabel: string;
   modalSetState: any;
+  setIsLoading: any;
 }
 
 const OrderDetail: React.FC<IOrderDetail> = ({
   goBackToListView,
   productDetailData,
   breadCrumLabel,
-  modalSetState
+  modalSetState,
+  setIsLoading
 }) => {
   const [triggerColumn] =
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
@@ -167,7 +169,8 @@ const OrderDetail: React.FC<IOrderDetail> = ({
       orderId: productDetailData.id,
       downloadExcelApi: downloadExcel,
       modalSetState,
-      setRowSelection
+      setRowSelection,
+      setIsLoading: setIsLoading
     });
   };
 
