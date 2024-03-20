@@ -389,6 +389,9 @@ const DataTable = ({
           '&.MuiTableRow-root:active .MuiTableCell-root::after': {
             backgroundColor: 'var(--neutral-100)'
           }
+          // '&.MuiTableCell-root[data-index="1"] ':{
+          //     display: 'none'
+          //   },
         }
       };
     },
@@ -501,6 +504,9 @@ const DataTable = ({
                 cell.id === 'shape:CU_lot_id' ||
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:PS-RS_lot_id' ||
+                cell.id === 'shape:SPL_lot_id' ||
+                cell.id === 'shape:RC_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'hidden',
             display:
@@ -517,9 +523,15 @@ const DataTable = ({
                 cell.id === 'shape:SCU_lot_id' ||
                 cell.id === 'shape:RX_lot_id' ||
                 cell.id === 'shape:TR_lot_id' ||
+                cell.id === 'shape:PS-RS_lot_id' ||
+                cell.id === 'shape:SPL_lot_id' ||
+                cell.id === 'shape:RC_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
+          //      '&.MuiTableCell-root[data-index="1"] ':{
+          //   display:'none'
+          // },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }

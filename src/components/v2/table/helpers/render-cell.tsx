@@ -71,12 +71,14 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
         <Link
           href={`${GIA_LINK}${row.rpt_number}`}
           target="_blank"
-          className="underline text-infoMain"
+          className={`${renderedCellValue && 'underline text-infoMain'}`}
         >
-          {renderedCellValue}
+          {renderedCellValue ?? '-'}
         </Link>
       ) : (
-        <span className="underline text-infoMain">{renderedCellValue}</span>
+        <span className={`${renderedCellValue && 'underline text-infoMain'}`}>
+          {renderedCellValue ?? '-'}
+        </span>
       )}
     </>
   );

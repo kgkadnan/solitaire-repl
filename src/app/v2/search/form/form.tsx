@@ -435,7 +435,7 @@ const Form = ({
         // return;
       } else {
         setIsError(true);
-        setErrorText(EXCEEDS_LIMITS);
+        // setErrorText(EXCEEDS_LIMITS);
       }
     } else {
       setIsError(true);
@@ -643,7 +643,7 @@ const Form = ({
             }
           } else {
             setIsError(true);
-            setErrorText(EXCEEDS_LIMITS);
+            // setErrorText(EXCEEDS_LIMITS);
           }
         } else {
           setIsError(true);

@@ -136,12 +136,12 @@ export const RenderLab = ({ renderedCellValue, row }: any) => {
         <Link
           href={`${GIA_LINK}${row.original.rpt_number}`}
           target="_blank"
-          className="underline text-infoMain"
+          className={`${renderedCellValue && 'underline text-infoMain'}`}
         >
           {renderedCellValue}
         </Link>
       ) : (
-        <span className={`${'underline text-infoMain'}`}>
+        <span className={`${renderedCellValue && 'underline text-infoMain'}`}>
           {renderedCellValue ?? '-'}
         </span>
       )}
@@ -154,7 +154,7 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-[74px] text-end rounded-[4px]`}
     >
-      {`${renderedCellValue ?? renderedCellValue}%`}
+      {`${renderedCellValue ?? renderedCellValue.toFixed(2)}%`}
     </div>
   );
 };
