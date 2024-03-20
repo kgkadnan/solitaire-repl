@@ -8,6 +8,7 @@ import { ManageLocales } from '@/utils/v2/translate';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import warningIcon from 'public/v2/assets/icons/modal/warning.svg';
+import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 
 const NotificationPrefrences = ({ modalSetState }: any) => {
   const [triggerGetSubscription, { data }] = useLazyGetSubscriptionQuery({});
@@ -173,8 +174,34 @@ const NotificationPrefrences = ({ modalSetState }: any) => {
       ]
     })
       .unwrap()
-      .then(res => {
-        console.log('res', res);
+      .then(() => {
+        setIsDialogOpen(true);
+        setDialogContent(
+          <>
+            <div className="absolute left-[-84px] top-[-84px]">
+              <Image src={confirmIcon} alt="confirmIcon" />
+            </div>
+            <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+              <div>
+                <h1 className="text-headingS text-neutral900">
+                  Your notification preferences have been successfully saved
+                </h1>
+              </div>
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.modal.okay'),
+                    handler: () => {
+                      setIsDialogOpen(false);
+                    },
+                    customStyle: 'w-full flex-1'
+                  }
+                ]}
+              />
+            </div>
+          </>
+        );
       })
       .catch(e => {
         console.log('eeeee', e);

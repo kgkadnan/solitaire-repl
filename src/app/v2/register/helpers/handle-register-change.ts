@@ -7,20 +7,13 @@ interface IHandleChange {
     | React.ChangeEvent<HTMLSelectElement>;
   setRegisterFormState: React.Dispatch<React.SetStateAction<IRegister>>;
   setRegisterFormErrors: React.Dispatch<React.SetStateAction<IRegister>>;
-  registerFormState: IRegister;
 }
 export const handleRegisterChange = ({
   event,
   setRegisterFormState,
-  setRegisterFormErrors,
-  registerFormState
+  setRegisterFormErrors
 }: IHandleChange) => {
   const { name, value } = event.target;
   setRegisterFormState((prev: any) => ({ ...prev, [name]: value }));
-  validateField({
-    name,
-    value,
-    setFormErrors: setRegisterFormErrors,
-    formState: registerFormState
-  });
+  setRegisterFormErrors((prev: any) => ({ ...prev, [name]: '' }));
 };

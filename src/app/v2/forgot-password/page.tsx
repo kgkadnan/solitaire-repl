@@ -54,12 +54,7 @@ const ForgotPassword = () => {
   const handlePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = e.target.value;
     setPhoneNumber((prev: any) => ({ ...prev, phoneNumber: inputValue }));
-
-    if (isPhoneNumberValid(inputValue)) {
-      setPhoneErrorText('');
-    } else {
-      setPhoneErrorText(INVALID_PHONE);
-    }
+    setPhoneErrorText('');
   };
   const { data: currentCountryCode, error } = useGetCountryCodeQuery({});
   useEffect(() => {
@@ -74,7 +69,10 @@ const ForgotPassword = () => {
   }, [currentCountryCode, error]);
 
   const handleForgotPassword = async () => {
-    if (phoneNumber.phoneNumber.length && !phoneErrorText) {
+    if (
+      phoneNumber.phoneNumber.length &&
+      isPhoneNumberValid(phoneNumber.phoneNumber)
+    ) {
       let res: any = await forgotPassword({
         phone: phoneNumber.phoneNumber,
         country_code: phoneNumber.countryCode
