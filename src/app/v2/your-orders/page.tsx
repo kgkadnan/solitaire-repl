@@ -33,6 +33,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const MyDiamonds = () => {
   const router = useRouter();
@@ -42,6 +43,7 @@ const MyDiamonds = () => {
   const [activeTab, setActiveTab] = useState(
     pathName === 'active' ? ACTIVE_INVOICE : PENDING_INVOICE
   );
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const [pendingInvoiceDataState, setPendingInvoiceDataState] = useState([]);
   const [activeInvoiceDataState, setActiveInvoiceDataState] = useState([]);
@@ -339,6 +341,7 @@ const MyDiamonds = () => {
               goBackToListView={goBackToListView}
               breadCrumLabel={PENING_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
+              setIsLoading={setIsLoading}
             />
           );
         case ACTIVE_INVOICE:
@@ -348,6 +351,7 @@ const MyDiamonds = () => {
               goBackToListView={goBackToListView}
               breadCrumLabel={ACTIVE_INVOICE_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
+              setIsLoading={setIsLoading}
             />
           );
         case INVOICE_HISTORY:
@@ -357,6 +361,7 @@ const MyDiamonds = () => {
               goBackToListView={goBackToListView}
               breadCrumLabel={INVOICE_HISTORY_BREADCRUMB_LABEL}
               modalSetState={modalSetState}
+              setIsLoading={setIsLoading}
             />
           );
         // Add more cases as needed for other tabs
@@ -369,7 +374,7 @@ const MyDiamonds = () => {
         <>
           {' '}
           <div className="flex pr-[16px] py-[16px] justify-between items-center border-b-[1px] border-neutral200">
-            <div className="flex  w-[50%]  text-mMedium font-medium">
+            <div className="flex  w-[50%]  text-mMedium font-medium h-[40px]">
               {myDiamondsTabs.map(({ label, count, status }) => {
                 return (
                   <button
@@ -451,6 +456,7 @@ const MyDiamonds = () => {
 
   return (
     <div className="relative mb-[20px]">
+      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}

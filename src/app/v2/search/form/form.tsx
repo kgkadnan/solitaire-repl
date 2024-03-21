@@ -76,7 +76,8 @@ const Form = ({
   setIsDialogOpen,
   setDialogContent,
   addSearches,
-  setAddSearches
+  setAddSearches,
+  setIsLoading
 }: {
   searchUrl: String;
   setSearchUrl: Dispatch<SetStateAction<string>>;
@@ -94,6 +95,7 @@ const Form = ({
   setDialogContent: any;
   addSearches: any;
   setAddSearches: any;
+  setIsLoading: any;
 }) => {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -252,6 +254,7 @@ const Form = ({
 
   // Load saved search data when component mounts
   useEffect(() => {
+    setIsLoading(false);
     let modifySearchResult = JSON.parse(localStorage.getItem('Search')!);
 
     let modifysavedSearchData = savedSearch?.savedSearch?.meta_data;
@@ -758,6 +761,7 @@ const Form = ({
                   activeTab={activeTab}
                   setActiveTab={setActiveTab}
                   handleCloseSpecificTab={handleCloseSpecificTab}
+                  setIsLoading={setIsLoading}
                 />
               </div>
               <div className="pr-[2px] flex gap-[12px]  justify-end flex-wrap">

@@ -72,7 +72,6 @@ import { handleConfirmStone } from './helpers/handle-confirm-stone';
 import { AddCommentDialog } from '@/components/v2/common/comment-dialog';
 import { handleComment } from './helpers/handle-comment';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
-import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 
 import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 import { Dropdown } from '@/components/v2/common/dropdown-menu';
@@ -91,7 +90,8 @@ const Result = ({
   setActiveTab,
   handleCloseAllTabs,
   handleCloseSpecificTab,
-  setSearchParameters
+  setSearchParameters,
+  setIsLoading
 }: {
   activeTab: number;
   searchParameters: any;
@@ -99,6 +99,7 @@ const Result = ({
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseAllTabs: () => void;
   handleCloseSpecificTab: (id: number) => void;
+  setIsLoading: any;
 }) => {
   const dispatch = useAppDispatch();
 
@@ -144,6 +145,7 @@ const Result = ({
   // Fetch Products
 
   const fetchProducts = async () => {
+    setIsLoading(true);
     const storedSelection = localStorage.getItem('Search');
 
     if (!storedSelection) return;
@@ -173,6 +175,7 @@ const Result = ({
           setRowSelection({});
           setErrorText('');
           setData(res.data);
+          setIsLoading(false);
         }
       }
     );
@@ -322,6 +325,7 @@ const Result = ({
       });
 
   useEffect(() => {
+    // setIsLoading(true)
     fetchProducts();
   }, [activeTab, columnData]);
 
@@ -368,6 +372,7 @@ const Result = ({
   };
 
   const handleAddToCart = () => {
+    setIsLoading(true);
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 300) {
@@ -398,6 +403,7 @@ const Result = ({
         })
           .unwrap()
           .then((res: any) => {
+            setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -447,6 +453,7 @@ const Result = ({
             // refetchRow();
           })
           .catch(error => {
+            setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -483,6 +490,7 @@ const Result = ({
   };
 
   const handleAddToCartDetailPage = () => {
+    setIsLoading(true);
     const hasMemoOut = dataTableState.rows.some(
       (row: IProduct) =>
         row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
@@ -521,6 +529,7 @@ const Result = ({
         })
           .unwrap()
           .then((res: any) => {
+            setIsLoading(false);
             setIsDialogOpen(true);
             setDialogContent(
               <>
@@ -573,6 +582,7 @@ const Result = ({
             // refetchRow();
           })
           .catch(error => {
+            setIsLoading(false);
             // On error, set error state and error message
 
             setIsDialogOpen(true);
@@ -767,6 +777,7 @@ const Result = ({
   };
 
   const confirmStoneApiCall = () => {
+    setIsLoading(true);
     const variantIds: string[] = [];
 
     confirmStoneData.forEach((ids: any) => {
@@ -781,6 +792,7 @@ const Result = ({
         .unwrap()
         .then(res => {
           if (res) {
+            setIsLoading(false);
             setCommentValue('');
             setIsDialogOpen(true);
 
@@ -836,6 +848,7 @@ const Result = ({
           }
         })
         .catch(e => {
+          setIsLoading(false);
           setCommentValue('');
 
           if (e.data.type === 'unauthorized') {
@@ -1006,6 +1019,7 @@ const Result = ({
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'Search Results'}
             modalSetState={modalSetState}
+            setIsLoading={setIsLoading}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -1031,6 +1045,7 @@ const Result = ({
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
+                    // setIsLoading(true)
                     setIsDetailPage(false);
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
@@ -1107,6 +1122,7 @@ const Result = ({
                 downloadExcel={downloadExcel}
                 setIsError={setIsError}
                 searchList={searchList}
+                setIsLoading={setIsLoading}
               />
             </div>
           )}

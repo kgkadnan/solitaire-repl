@@ -101,7 +101,8 @@ const NewArrivalDataTable = ({
   historyCount,
   socketManager,
   rowSelection,
-  setRowSelection
+  setRowSelection,
+  setIsLoading
 }: any) => {
   // Fetching saved search data
 
@@ -149,6 +150,7 @@ const NewArrivalDataTable = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
+      setIsLoading: setIsLoading,
       fromNewArrivalBid: true
     });
   };

@@ -10,12 +10,14 @@ const Breadcrum = ({
   searchParameters,
   activeTab,
   // setActiveTab,
-  handleCloseSpecificTab
+  handleCloseSpecificTab,
+  setIsLoading
 }: {
   searchParameters: any;
   activeTab: number;
   setActiveTab: Dispatch<SetStateAction<number>>;
   handleCloseSpecificTab: (id: number) => void;
+  setIsLoading?: any;
 }) => {
   const router = useRouter();
 
@@ -44,11 +46,13 @@ const Breadcrum = ({
               }
               handlePillClick={() => {
                 // setActiveTab(index + 1);
+                setIsLoading(true);
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${index + 1}`
                 );
               }}
               handlePillEdit={() => {
+                setIsLoading(true);
                 router.push(
                   `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
                     index + 1
@@ -56,6 +60,7 @@ const Breadcrum = ({
                 );
               }}
               handlePillDelete={() => {
+                // setIsLoading(true)
                 handleCloseSpecificTab(index + 1);
               }}
             />
