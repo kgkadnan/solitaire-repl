@@ -290,7 +290,7 @@ export function DiamondDetailsComponent({
             </p>
 
             <div className="flex w-[40%] justify-around items-center">
-              <div className="flex gap-3">
+              <div className="flex gap-3 items-center">
                 <Tooltip
                   tooltipTrigger={
                     <Image
@@ -331,10 +331,10 @@ export function DiamondDetailsComponent({
                 </div>
               </div>
               <div className="border-r-[1px] h-[40px] border-neutral-200"></div>
-              <div className="flex gap-3 relative justify-center">
+              <div className="flex gap-3 items-center relative justify-center">
                 {/* Backward Arrow */}
                 <button
-                  className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex <= 0 ? 'bg-neutral-50' : 'bg-neutral0 '
                   } `}
                   disabled={currentIndex <= 0}
@@ -357,7 +357,7 @@ export function DiamondDetailsComponent({
 
                 {/* Forward Arrow */}
                 <button
-                  className={`relative group  h-[37px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
+                  className={`relative group  h-[34px] w-[37px] shadow-sm flex items-center justify-center rounded-[4px] hover:bg-neutral-50 border-[1px] border-neutral-200 ${
                     currentIndex >= data.length - 1
                       ? 'bg-neutral-50'
                       : 'bg-neutral0'
