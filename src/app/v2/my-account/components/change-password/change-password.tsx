@@ -14,6 +14,7 @@ import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
 import useUser from '@/lib/use-auth';
 import { useRouter } from 'next/navigation';
 import errorSvg from '@public/v2/assets/icons/modal/error.svg';
+import { kycStatus } from '@/constants/enums/kyc';
 const initialFormState = {
   password: '',
   newPassword: '',
@@ -205,8 +206,19 @@ const ChangePassword = ({ modalSetState }: any) => {
     setChangePasswordFormErrors(initialFormState);
   };
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
   return (
-    <div className="w-full flex flex-col items-center justify-center mt-[16px] ">
+    <div
+      className={`w-full  flex flex-col items-center justify-between mt-[16px]  ${
+        isNudge &&
+        (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+          isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'h-[calc(100vh-353px)]'
+          : 'h-[calc(100vh-293px)]'
+      }`}
+    >
       <div className="w-[760px] flex flex-col gap-[16px]">
         <h1 className="text-neutral-900 text-headingS font-medium">
           Change Password
@@ -263,7 +275,8 @@ const ChangePassword = ({ modalSetState }: any) => {
           </div>
         </div>
       </div>
-      <div className="h-[72px] w-[1136px]  bg-neutral0 border-[1px] border-solid border-neutral200 bottom-[-57%] absolute   rounded-t-[8px] p-[16px]">
+
+      <div className="h-[72px]  w-[1136px]  bg-neutral0 border-[1px] mt-auto border-solid border-neutral200   rounded-t-[8px] p-[16px]">
         {' '}
         <ActionButton
           actionButtonData={[
