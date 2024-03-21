@@ -336,7 +336,8 @@ const NewArrivals = () => {
                   label: 'Clear All',
                   handler: () => {
                     setRowSelection({});
-                  }
+                  },
+                  isDisable: !Object.keys(rowSelection).length
                 },
                 {
                   variant: 'primary',
@@ -377,7 +378,8 @@ const NewArrivals = () => {
                         </div>
                       </>
                     );
-                  }
+                  },
+                  isDisable: !Object.keys(rowSelection).length
                 }
               ]}
             />
