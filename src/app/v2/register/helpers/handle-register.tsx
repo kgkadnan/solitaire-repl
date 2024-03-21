@@ -16,6 +16,7 @@ interface IHandleRegister {
   setDialogContent: React.Dispatch<React.SetStateAction<React.ReactNode>>;
   setToken: React.Dispatch<React.SetStateAction<IToken>>;
   setOTPVerificationFormState: React.Dispatch<React.SetStateAction<IOtp>>;
+  setIsLoading: any;
 }
 export const handleRegister = async ({
   role,
@@ -27,7 +28,8 @@ export const handleRegister = async ({
   setToken,
   setIsDialogOpen,
   setDialogContent,
-  setOTPVerificationFormState
+  setOTPVerificationFormState,
+  setIsLoading
 }: IHandleRegister) => {
   const isFormValid = validateAllFields({
     formState: registerFormState,
@@ -46,6 +48,7 @@ export const handleRegister = async ({
   })
     .unwrap()
     .then((res: any) => {
+      setIsLoading(false);
       if (res?.customer) {
         setCurrentState('OTPVerification');
         setRole(role);
@@ -63,6 +66,7 @@ export const handleRegister = async ({
       }
     })
     .catch((e: any) => {
+      setIsLoading(false);
       setIsDialogOpen(true);
       setDialogContent(
         <InvalidCreds

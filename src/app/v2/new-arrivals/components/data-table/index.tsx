@@ -101,7 +101,8 @@ const NewArrivalDataTable = ({
   historyCount,
   socketManager,
   rowSelection,
-  setRowSelection
+  setRowSelection,
+  setIsLoading
 }: any) => {
   // Fetching saved search data
 
@@ -149,6 +150,7 @@ const NewArrivalDataTable = ({
       downloadExcelApi: downloadExcel,
       modalSetState,
       setRowSelection,
+      setIsLoading: setIsLoading,
       fromNewArrivalBid: true
     });
   };
@@ -483,15 +485,15 @@ const NewArrivalDataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? 'calc(100vh - 200px)'
+          ? 'calc(100vh - 135px)'
           : activeTab === 2
           ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 375px)',
+          : 'calc(100vh - 405px)',
         maxHeight: isFullScreen
-          ? 'calc(100vh - 200px)'
+          ? 'calc(100vh - 135px)'
           : activeTab === 2
           ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 375px)'
+          : 'calc(100vh - 405px)'
       }
     },
     muiTableHeadRowProps: {
@@ -532,6 +534,9 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:CU_lot_id' ||
                 cell.id === 'shape:MQ_lot_id' ||
                 cell.id === 'shape:HS_lot_id' ||
+                cell.id === 'shape:PS-RS_lot_id' ||
+                cell.id === 'shape:SPL_lot_id' ||
+                cell.id === 'shape:RC_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'hidden',
             display:
@@ -548,9 +553,15 @@ const NewArrivalDataTable = ({
                 cell.id === 'shape:SCU_lot_id' ||
                 cell.id === 'shape:RX_lot_id' ||
                 cell.id === 'shape:TR_lot_id' ||
+                cell.id === 'shape:PS-RS_lot_id' ||
+                cell.id === 'shape:SPL_lot_id' ||
+                cell.id === 'shape:RC_lot_id' ||
                 cell.id === 'shape:RMB_lot_id') &&
               'none'
           },
+          // '&.MuiTableCell-root[data-index="1"] ':{
+          //   display:'none'
+          // },
           whiteSpace: 'nowrap',
           borderBottom: '1px solid var(--neutral-50)'
         }

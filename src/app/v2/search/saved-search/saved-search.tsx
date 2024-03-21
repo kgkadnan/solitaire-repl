@@ -53,7 +53,7 @@ import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
 
-const SavedSearch = () => {
+const SavedSearch = ({ setIsLoading }: any) => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { savedSearchSetState, savedSearchState } =
@@ -135,8 +135,9 @@ const SavedSearch = () => {
 
   useEffect(() => {
     savedSearchSetState.setSavedSearchData(data?.savedSearches);
+    setIsLoading(false);
   }, [data]);
-
+  // useEffect(()=>{setIsLoading(true)},[])
   // Debounced search function
   const debouncedSave = useCallback(
     (inputValue: string) => {

@@ -38,7 +38,6 @@ import Share from '../copy-and-share/share';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
-import { useLazyGetBase64Query } from '@/features/api/public';
 
 export function DiamondDetailsComponent({
   data,
@@ -46,7 +45,8 @@ export function DiamondDetailsComponent({
   goBackToListView,
   handleDetailPage,
   breadCrumLabel,
-  modalSetState
+  modalSetState,
+  setIsLoading
 }: {
   data: any;
   filterData: any;
@@ -54,6 +54,7 @@ export function DiamondDetailsComponent({
   handleDetailPage: any;
   breadCrumLabel: string;
   modalSetState?: any;
+  setIsLoading?: any;
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -201,7 +202,8 @@ export function DiamondDetailsComponent({
     downloadExcelHandler({
       products: [filterData.id],
       downloadExcelApi: downloadExcel,
-      modalSetState
+      modalSetState,
+      setIsLoading: setIsLoading
     });
   };
   return (

@@ -65,6 +65,7 @@ import { FILE_URLS } from '@/constants/v2/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { SubRoutes } from '@/constants/v2/enums/routes';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -770,6 +771,7 @@ const MyCart = () => {
 
   return (
     <div className="relative">
+      {isLoading && <CustomKGKLoader />}
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
@@ -905,7 +907,9 @@ const MyCart = () => {
                     'app.emptyCart.actionButton.searchDiamonds'
                   )}
                   message="No diamonds in your cart yet. Let’s change that!"
-                  onClickHandler={() => {}}
+                  onClickHandler={() =>
+                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                  }
                   imageSrc={empty}
                 />
               ) : (

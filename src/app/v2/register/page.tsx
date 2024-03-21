@@ -31,6 +31,7 @@ import { handleOTPChange } from '@/components/v2/common/otp-verication/helpers/h
 import { PHONE_REGEX } from '@/constants/validation-regex/regex';
 import { INVALID_PHONE } from '@/constants/error-messages/register';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 export interface IOtp {
   otpMobileNumber: string;
@@ -73,6 +74,7 @@ const Register = () => {
   //common states
   const [currentState, setCurrentState] = useState('register');
   const [role, setRole] = useState('');
+  const [isLoading, setIsLoading] = useState(false); // State to track loading
 
   const { modalState, modalSetState } = useModalStateManagement();
   const { dialogContent, isDialogOpen, isInputDialogOpen } = modalState;
@@ -204,6 +206,7 @@ const Register = () => {
             setDialogContent={setDialogContent}
             setOTPVerificationFormState={setOTPVerificationFormState}
             setRole={setRole}
+            setIsLoading={setIsLoading}
           />
         );
       case 'OTPVerification':
@@ -234,6 +237,7 @@ const Register = () => {
 
   return (
     <>
+      {isLoading && <CustomKGKLoader />}
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
