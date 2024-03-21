@@ -77,24 +77,27 @@ const MyDiamonds = () => {
   const { setIsDialogOpen } = modalSetState;
 
   // Fetch recent confirmation data
-  const { data: pendingInvoicesData } = useCardRecentConfirmationQuery({
-    resentConfiramtionStatus,
-    resentConfiramtionInvoiceStatus,
-    expand,
-    recentConfirmlimit
-  });
+  const { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice } =
+    useCardRecentConfirmationQuery({
+      resentConfiramtionStatus,
+      resentConfiramtionInvoiceStatus,
+      expand,
+      recentConfirmlimit
+    });
 
   // Fetch my-invoice data
-  const { data: activeInvoicesData } = useCardMyInvoiceQuery({
-    myInvoiceStatus,
-    myInvoiceInvoiceStatus,
-    myInvoicelimit
-  });
+  const { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice } =
+    useCardMyInvoiceQuery({
+      myInvoiceStatus,
+      myInvoiceInvoiceStatus,
+      myInvoicelimit
+    });
 
   // Fetch previous-confiramtion-data
-  const { data: invoiceHistoryData } = useCardPreviousConfirmationQuery({
-    previousConfirmStatus
-  });
+  const { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory } =
+    useCardPreviousConfirmationQuery({
+      previousConfirmStatus
+    });
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
   useEffect(() => {
@@ -438,16 +441,21 @@ const MyDiamonds = () => {
               ))}
             </div>
           ) : (
-            <div className="min-h-[65vh] h-[65vh]">
-              <EmptyScreen
-                label="Search Diamonds"
-                message="Looks like you haven't placed any orders yet. Let’s place some orders!"
-                onClickHandler={() =>
-                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                }
-                imageSrc={emptyOrderSvg}
-              />
-            </div>
+            (!isLoading ||
+              isLoadingInvoiceHistory ||
+              isLoadingPendingInvoice ||
+              isLoadngActiveInvoice) && (
+              <div className="min-h-[65vh] h-[65vh]">
+                <EmptyScreen
+                  label="Search Diamonds"
+                  message="Looks like you haven't placed any orders yet. Let’s place some orders!"
+                  onClickHandler={() =>
+                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                  }
+                  imageSrc={emptyOrderSvg}
+                />
+              </div>
+            )
           )}
         </>
       );
@@ -456,7 +464,6 @@ const MyDiamonds = () => {
 
   return (
     <div className="relative mb-[20px]">
-      {isLoading && <CustomKGKLoader />}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -475,7 +482,14 @@ const MyDiamonds = () => {
         </p>
       </div>
       <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
-        {renderContent()}
+        {isLoading ||
+        !isLoadingInvoiceHistory ||
+        !isLoadingPendingInvoice ||
+        !isLoadngActiveInvoice ? (
+          <CustomKGKLoader />
+        ) : (
+          renderContent()
+        )}
       </div>
     </div>
   );

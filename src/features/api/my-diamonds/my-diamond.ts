@@ -70,6 +70,9 @@ export const myDiamondApi = createApi({
 
 export const {
   useCardRecentConfirmationQuery,
+  useLazyCardMyInvoiceQuery,
+  useLazyCardPreviousConfirmationQuery,
+  useLazyCardRecentConfirmationQuery,
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
   useGetProductDetailsQuery,

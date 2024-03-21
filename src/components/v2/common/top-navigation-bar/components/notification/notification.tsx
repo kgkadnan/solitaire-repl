@@ -24,6 +24,15 @@ import logger from 'logging/log-util';
 import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
 import useUser from '@/lib/use-auth';
 import { useRouter } from 'next/navigation';
+import {
+  ACTIVE_INVOICE,
+  AVAILABLE_STATUS,
+  HOLD_STATUS,
+  INVOICE_HISTORY,
+  MEMO_STATUS,
+  PENDING_INVOICE,
+  SOLD_STATUS
+} from '@/constants/business-logic';
 
 interface INotification {
   created_at: string;
@@ -74,19 +83,39 @@ const Notification = () => {
           })[0];
 
           let splitData = getData.target_page.split(':');
-          // if (splitData[0] === 'my-cart') {
-          //   router.push(`/v2`);
-          // } else if (splitData === 'Orders Tab') {
-          //   router.push(`/v2/your-orders?path=recent-confirmations`);
-          // } else if (splitData === 'Account Settings') {
-          //   router.push(`/v2/my-account`);
-          // } else if (splitData === 'New Arrivals --> Bid History') {
-          //   router.push(`/v2/new-arrivals?path=bid-history`);
-          // } else if (splitData === 'Your Orders --> Active Invoice') {
-          //   router.push(`/v2/your-orders?path=active-invoice`);
-          // } else if (splitData === 'Cart') {
-          //   router.push(`/v2/my-cart`);
-          // }
+          if (splitData[0] === 'my-cart') {
+            if (splitData[1] === 'active') {
+              router.push(`/v2/my-cart?path=${AVAILABLE_STATUS}`);
+            } else if (splitData[1] === 'memo') {
+              router.push(`/v2/my-cart?path=${MEMO_STATUS}`);
+            } else if (splitData[1] === 'hold') {
+              router.push(`/v2/my-cart?path=${HOLD_STATUS}`);
+            } else if (splitData[1] === 'sold') {
+              router.push(`/v2/my-cart?path=${SOLD_STATUS}`);
+            }
+          } else if (splitData[0] === 'new-arrival') {
+            if (splitData[1] === 'bidHistory') {
+              router.push(`/v2/new-arrivals?path=bidHistory`);
+            } else if (splitData[1] === 'bidStone') {
+              router.push(`/v2/new-arrivals?path=bidStone`);
+            } else if (splitData[1] === 'activeBid') {
+              router.push(`/v2/new-arrivals?path=activeBid`);
+            }
+          } else if (splitData[0] === 'your-orders') {
+            if (splitData[1] === 'pendingInvoices') {
+              router.push(`/v2/${splitData[0]}?path=${PENDING_INVOICE}`);
+            } else if (splitData[1] === 'activeInvoices') {
+              router.push(`/v2/${splitData[0]}?path=${ACTIVE_INVOICE}`);
+            } else if (splitData[1] === 'invoicesHistory') {
+              router.push(`/v2/${splitData[0]}?path=${INVOICE_HISTORY}`);
+            }
+          } else if (splitData[0] === 'my-account') {
+            router.push(`/v2/my-account`);
+          } else if (splitData[0] === 'search') {
+            router.push(`/v2/search?active-tab=new-search`);
+          } else if (splitData[0] === 'home') {
+            router.push(`/v2`);
+          }
         }
       })
       .catch(error => {

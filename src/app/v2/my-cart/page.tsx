@@ -109,8 +109,8 @@ const MyCart = () => {
     useLazyGetManageListingSequenceQuery<any>();
 
   useEffect(() => {
-    if (subRoute === 'active') {
-      setActiveTab(AVAILABLE_STATUS);
+    if (subRoute?.length) {
+      setActiveTab(subRoute);
     }
   }, []);
   const processCartItems = ({

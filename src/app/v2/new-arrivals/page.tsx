@@ -136,8 +136,12 @@ const NewArrivals = () => {
   const [timeDifference, setTimeDifference] = useState(null);
 
   useEffect(() => {
-    if (pathName === 'bid-history') {
+    if (pathName === 'bidHistory') {
       setActiveTab(2);
+    } else if (pathName === 'bidStone') {
+      setActiveTab(0);
+    } else if (pathName === 'activeBid') {
+      setActiveTab(1);
     }
   }, []);
 
