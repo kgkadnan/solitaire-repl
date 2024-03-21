@@ -218,7 +218,8 @@ const NewArrivals = () => {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={'Bid Placed Successfully'}
+          content=""
+          header={'Bid Placed Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
@@ -231,7 +232,8 @@ const NewArrivals = () => {
       modalSetState.setIsDialogOpen(true);
       modalSetState.setDialogContent(
         <InvalidCreds
-          content={'Bid Canceled Successfully'}
+          content=""
+          header={'Bid Canceled Successfully'}
           handleClick={() => modalSetState.setIsDialogOpen(false)}
           buttonText="Okay"
           status="success"
