@@ -44,7 +44,7 @@ const RegisterComponent = ({
 
   const handleRegisterSubmit = (e: any) => {
     e.preventDefault();
-    setIsLoading(true);
+
     handleRegister({
       role: 'register',
       registerFormState,
