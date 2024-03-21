@@ -11,11 +11,13 @@ import ImageModal from './image-modal';
 interface ImagePreviewProps {
   images: ImagesType[];
   selectedImageIndex: number;
+  setIsLoading: any;
 }
 
 const ImagePreview: React.FC<ImagePreviewProps> = ({
   images,
-  selectedImageIndex
+  selectedImageIndex,
+  setIsLoading
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -137,7 +139,11 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                         width={40}
                         alt={'Download'}
                         onClick={() => {
-                          handleDownloadImage(image?.url || '', image.name);
+                          handleDownloadImage(
+                            image?.url || '',
+                            image.name,
+                            setIsLoading
+                          );
                         }}
                       />
                     }
@@ -159,6 +165,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={openDialogImageIndex}
         images={images}
+        setIsLoading={setIsLoading}
       />
     </>
   );

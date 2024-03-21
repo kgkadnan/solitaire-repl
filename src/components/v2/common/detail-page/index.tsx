@@ -268,6 +268,7 @@ export function DiamondDetailsComponent({
             <ImagePreview
               images={images}
               selectedImageIndex={selectedImageIndex}
+              setIsLoading={setIsLoading}
             />
           </div>
         </div>

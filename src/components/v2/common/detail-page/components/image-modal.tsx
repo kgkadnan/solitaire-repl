@@ -15,13 +15,15 @@ interface ModalProps {
   onClose: () => void;
   selectedImageIndex: number;
   images: ImagesType[];
+  setIsLoading?: any;
 }
 
 const ImageModal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
   images,
-  selectedImageIndex
+  selectedImageIndex,
+  setIsLoading
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
@@ -34,9 +36,6 @@ const ImageModal: React.FC<ModalProps> = ({
   }, [selectedImageIndex]);
 
   if (!isOpen) return null;
-  const handleImageError = (event: any) => {
-    event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
-  };
 
   const copyLink = ({ url }: { url: string }) => {
     navigator.clipboard.writeText(url).then(() => {
@@ -125,7 +124,8 @@ const ImageModal: React.FC<ModalProps> = ({
                     onClick={() => {
                       handleDownloadImage(
                         images[imageIndex]?.url || '',
-                        images[imageIndex].name
+                        images[imageIndex].name,
+                        setIsLoading
                       );
                     }}
                   />

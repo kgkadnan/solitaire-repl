@@ -182,13 +182,14 @@ const Result = ({
     );
   };
   const handleDetailPage = ({ row }: { row: any }) => {
+    if (isConfirmStone) {
+      setBreadCrumLabel('Confirm Stone');
+    }
     setIsDetailPage(true);
     setIsError(false);
     setErrorText('');
     setDetailPageData(row);
   };
-
-  console.log('isDetailPage', isDetailPage);
 
   const handleDetailImage = ({ row }: any) => {
     setDetailImageData(row);
@@ -978,6 +979,9 @@ const Result = ({
   ];
 
   const goBack = () => {
+    if (breadCrumLabel === 'Confirm Stone') {
+      setBreadCrumLabel('');
+    }
     setIsDetailPage(false);
     setDetailPageData({});
   };
@@ -985,6 +989,7 @@ const Result = ({
   return (
     <div className="relative">
       <ImageModal
+        setIsLoading={setIsLoading}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
@@ -1209,7 +1214,6 @@ const Result = ({
                           variant: 'primary',
                           label: ManageLocales('app.searchResult.confirmStone'),
                           handler: () => {
-                            setBreadCrumLabel('Confirm Stone');
                             handleConfirmStone({
                               selectedRows: rowSelection,
                               rows: dataTableState.rows,

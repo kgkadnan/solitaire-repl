@@ -15,9 +15,14 @@ export const getShapeDisplayName = (value = '') => {
   return shapesMapping[value] || value;
 };
 const apiURL = process.env.NEXT_PUBLIC_API_URL;
-export const handleDownloadImage = async (imageUrl = '', name: string) => {
+export const handleDownloadImage = async (
+  imageUrl = '',
+  name: string,
+  setIsLoading?: any
+) => {
   try {
     // Place your async logic here
+    setIsLoading(true);
     const response = await fetch(
       `${apiURL}public/get-blob-base64?url=${imageUrl}`
     );
@@ -40,7 +45,7 @@ export const handleDownloadImage = async (imageUrl = '', name: string) => {
 
     // Create URL for the Blob
     const blobUrl = URL.createObjectURL(blob);
-
+    setIsLoading(false);
     // Create a download link
     const a = document.createElement('a');
     a.href = blobUrl;
