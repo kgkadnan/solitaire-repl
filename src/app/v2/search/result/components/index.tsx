@@ -33,8 +33,8 @@ const ConfirmStone = ({
     if (isFrom === 'My Cart') {
       setBreadCrumLabel('My Cart');
     }
-    if (isFrom === 'Detail Page') {
-      setBreadCrumLabel('Detail Page');
+    if (isFrom.length) {
+      setBreadCrumLabel(isFrom);
     } else {
       const storedSelection = localStorage.getItem('Search');
 
@@ -120,7 +120,7 @@ const ConfirmStone = ({
   const memoizedColumns = useMemo(() => mapColumns(columns), [columns]);
 
   return (
-    <div className="">
+    <>
       {memoizedColumns?.length > 0 && rows?.length > 0 && (
         <Table
           rows={rows}
@@ -130,11 +130,13 @@ const ConfirmStone = ({
           rowSelection={rowSelection}
           isEnableTopToolBar={true}
           showGloablFilter={true}
-          goBackToListView={goBackToListView}
+          goBackToListView={() => {
+            goBackToListView(isFrom);
+          }}
           breadCrumLabel={breadCrumLabel}
         />
       )}
-    </div>
+    </>
   );
 };
 

@@ -124,9 +124,9 @@ const Table = ({
 
       sx: {
         '&.MuiPaper-root': {
-          borderRadius: '0px !important'
+          borderRadius: '8px !important'
         },
-        borderRadius: '0px',
+        borderRadius: '8px',
         border: 'none'
       }
     },
@@ -164,7 +164,9 @@ const Table = ({
             ? isOrderDetail
               ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 450px)',
+            : isOrderDetail
+            ? 'calc(100vh - 477px)'
+            : 'calc(100vh - 329px)',
         maxHeight:
           isNudge &&
           (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
@@ -172,7 +174,9 @@ const Table = ({
             ? isOrderDetail
               ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
-            : 'calc(100vh - 450px)'
+            : isOrderDetail
+            ? 'calc(100vh - 477px)'
+            : 'calc(100vh - 329px)'
       }
     },
     muiTableHeadRowProps: {

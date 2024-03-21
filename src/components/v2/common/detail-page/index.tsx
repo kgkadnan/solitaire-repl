@@ -38,6 +38,7 @@ import Share from '../copy-and-share/share';
 import { useErrorStateManagement } from '@/hooks/v2/error-state-management';
 import { useDownloadExcelMutation } from '@/features/api/download-excel';
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
+import { kycStatus } from '@/constants/enums/kyc';
 
 export function DiamondDetailsComponent({
   data,
@@ -206,6 +207,8 @@ export function DiamondDetailsComponent({
       setIsLoading: setIsLoading
     });
   };
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   return (
     <div className="text-black bg-white mt-2">
       <Toast show={showToast} message="Copied Successfully" />
@@ -233,12 +236,28 @@ export function DiamondDetailsComponent({
           </p>
         </div>
       </div>
-      <div className="xl:flex py-5">
-        <div className="flex xl:h-[75vh]">
+      <div className="xl:flex pt-5">
+        <div
+          className={`flex ${
+            isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'xl:h-[calc(73vh-60px)]'
+              : 'xl:h-[73vh]'
+          }`}
+        >
           <div className="w-full xl:hidden">
             <ImageSlider images={images} />
           </div>
-          <div className="hidden xl:block mr-5">
+          <div
+            className={`hidden xl:block mr-5 ${
+              isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+                ? 'h-[calc(73vh-60px)]'
+                : 'h-[73vh]'
+            } overflow-y-scroll`}
+          >
             <ImageList
               images={images}
               selectedImageIndex={selectedImageIndex}
@@ -252,7 +271,15 @@ export function DiamondDetailsComponent({
             />
           </div>
         </div>
-        <div className="xl:w-2/3 xl:ml-10 scroll-adjust-custom xl:overflow-y-scroll xl:h-[75vh]">
+        <div
+          className={`xl:w-2/3 xl:ml-10 scroll-adjust-custom xl:overflow-y-scroll ${
+            isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'xl:h-[calc(73vh-60px)]'
+              : 'xl:h-[73vh]'
+          }`}
+        >
           <div className="flex justify-between mt-4 xl:mt-0 w-full">
             <p
               className="sm:text-[22px] xl:text-[28px] text-[#344054] font-medium mr-5 "

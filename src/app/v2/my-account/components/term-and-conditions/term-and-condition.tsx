@@ -46,6 +46,7 @@ const TermAndCondtions = () => {
   }, []);
   let styling = `<style>
 .statiContentBox {
+
 div {
 all: revert;
 }
@@ -72,6 +73,7 @@ all: revert;
 }
 ul {
 all: revert;
+padding-left: 15px;
 }
 ol {
 all: revert;

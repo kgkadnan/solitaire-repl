@@ -22,6 +22,67 @@ const PrivacyPolicy = () => {
     };
     callAPi();
   }, []);
+
+  let styling = `<style>
+  .statiContentBox {
+  
+  div {
+  all: revert;
+  }
+  h1 {
+  all: revert;
+  }
+  h2 {
+  all: revert;
+  }
+  h3 {
+  all: revert;
+  }
+  h4 {
+  all: revert;
+  }
+  h5 {
+  all: revert;
+  }
+  h6 {
+  all: revert;
+  }
+  p {
+  all: revert;
+  }
+  ul {
+  all: revert;
+  padding-left: 15px;
+  }
+  ol {
+  all: revert;
+  }
+  li {
+  all: revert;
+  }
+  a {
+  all: revert;
+  }
+  span {
+  all: revert;
+  }
+  img {
+  all: revert;
+  }
+  button {
+  all: revert;
+  }
+  input {
+  all: revert;
+  }
+  textarea {
+  all: revert;
+  }
+  form {
+  all: revert;
+  }
+  }
+  </style>`;
   return (
     <>
       {data && (
@@ -30,7 +91,7 @@ const PrivacyPolicy = () => {
             {ManageLocales('app.myAccount.tabs.privacyPolicy')}
           </h1>
           <div
-            dangerouslySetInnerHTML={{ __html: data }}
+            dangerouslySetInnerHTML={{ __html: styling + data }}
             className="text-neutral-900"
           />
         </>
