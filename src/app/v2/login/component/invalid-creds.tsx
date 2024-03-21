@@ -44,7 +44,7 @@ const InvalidCreds: React.FC<IInvalidCredsProps> = ({
             onClick={handleClick}
             variant={'primary'}
             size={'custom'}
-            className="rounded-[4px] w-[100%] h-10"
+            className="rounded-[4px] w-[100%] h-10 z-[1]"
           >
             {buttonText ?? ManageLocales('app.modal.editSelection')}
           </IndividualActionButton>

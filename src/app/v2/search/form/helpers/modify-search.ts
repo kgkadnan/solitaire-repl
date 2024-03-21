@@ -70,8 +70,8 @@ export const setModifySearch = (data: any, setState: any, carat: any) => {
     setSelectedGirdle
   } = setState;
   data?.shape && setSelectedShape(data?.shape);
-  data?.carat && setSelectedCaratRange(data?.carat);
-  data?.carat && setCaratRangeData;
+  data?.carats && setSelectedCaratRange(data?.carats);
+  // data?.carats && setCaratRangeData;
   data?.clarity && setSelectedClarity(data?.clarity);
   data?.cut && setSelectedCut(data?.cut);
   data?.lab && setSelectedLab(data?.lab);
