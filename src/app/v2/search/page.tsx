@@ -190,7 +190,7 @@ const Search = () => {
           setIsLoading={setIsLoading}
         />
       ) : subRoute === SubRoutes.SAVED_SEARCH ? (
-        <SavedSearch setIsLoading={setIsLoading} />
+        <SavedSearch setIsLoading={setIsLoading} isLoading={isLoading} />
       ) : activeTab === -1 ? (
         <div className="h-screen">
           {' '}
