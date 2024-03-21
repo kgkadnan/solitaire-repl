@@ -22,10 +22,8 @@ const PrivacyPolicy = () => {
     };
     callAPi();
   }, []);
-
   let styling = `<style>
   .statiContentBox {
-  
   div {
   all: revert;
   }

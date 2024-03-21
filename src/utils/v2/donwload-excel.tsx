@@ -84,6 +84,7 @@ export const downloadExcelHandler = async ({
       }
     })
     .catch((error: any) => {
+      setIsLoading(false);
       if (modalSetState.setIsDialogOpen) modalSetState.setIsDialogOpen(true);
       if (modalSetState.setDialogContent) {
         if (error.data.type === 'not_allowed') {

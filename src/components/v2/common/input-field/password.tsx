@@ -29,7 +29,8 @@ export const PasswordField = ({
   maxLength,
   onKeyDown,
   isConfirmPassword,
-  isFromChangePassword = false
+  isFromChangePassword = false,
+  autoComplete
 }: IPasswordProps) => {
   const inputRef = useRef<any>(null);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -121,6 +122,7 @@ export const PasswordField = ({
             setIsInputFocused(true);
           }}
           onKeyDown={onKeyDown}
+          autoComplete={autoComplete}
         />
         <div
           className="absolute right-2 cursor-pointer"
