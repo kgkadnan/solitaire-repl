@@ -35,9 +35,10 @@ export const handleRegister = async ({
     formState: registerFormState,
     setFormErrors: setRegisterFormErrors
   }); // Validate all fields
-
   if (!isFormValid) return; // If the form is not valid, prevent submission
   // If the form is valid, proceed with the form submission (e.g., API call)
+  setIsLoading(true);
+
   await register({
     first_name: registerFormState.firstName,
     last_name: registerFormState.lastName,

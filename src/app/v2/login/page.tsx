@@ -165,6 +165,7 @@ const Login = () => {
   }, [data]);
 
   const handleLogin = async () => {
+    setIsLoading(true);
     if (
       !phoneErrorText.length &&
       !passwordErrorText.length &&
@@ -320,7 +321,7 @@ const Login = () => {
             password={password}
             passwordErrorText={passwordErrorText}
             handleLogin={handleLogin}
-            setIsLoading={setIsLoading}
+            // setIsLoading={setIsLoading}
             // isError={isError}
             // errorText={errorText}
           />
