@@ -50,6 +50,7 @@ const PrivacyPolicy = () => {
   }
   ul {
   all: revert;
+  padding-left: 15px;
   }
   ol {
   all: revert;

@@ -122,6 +122,7 @@ const Result = ({
   const [detailPageData, setDetailPageData] = useState<any>({});
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [detailImageData, setDetailImageData] = useState<any>({});
+  const [breadCrumLabel, setBreadCrumLabel] = useState('');
 
   const [isConfirmStone, setIsConfirmStone] = useState(false);
   const [confirmStoneData, setConfirmStoneData] = useState<IProduct[]>([]);
@@ -181,6 +182,9 @@ const Result = ({
     );
   };
   const handleDetailPage = ({ row }: { row: any }) => {
+    if (isConfirmStone) {
+      setBreadCrumLabel('Confirm Stone');
+    }
     setIsDetailPage(true);
     setIsError(false);
     setErrorText('');
@@ -543,7 +547,7 @@ const Result = ({
                   <ActionButton
                     actionButtonData={[
                       {
-                        variant: 'primary',
+                        variant: 'secondary',
                         label: ManageLocales('app.modal.continue'),
                         handler: () => {
                           setIsDialogOpen(false);
@@ -705,9 +709,12 @@ const Result = ({
     );
   };
 
-  const goBackToListView = () => {
+  const goBackToListView = (isFrom?: string) => {
+    if (isFrom === 'Detail Page') {
+      setIsDetailPage(true);
+      setBreadCrumLabel('');
+    }
     setIsConfirmStone(false);
-    setIsDetailPage(true);
     setConfirmStoneData([]);
   };
 
@@ -854,7 +861,7 @@ const Result = ({
           if (e.data.type === 'unauthorized') {
             setIsDialogOpen(true);
             setDialogContent(
-              <>
+              <div className="h-[270px]">
                 <div className="absolute left-[-84px] top-[-84px]">
                   <Image src={errorSvg} alt="errorSvg" />
                 </div>
@@ -888,7 +895,7 @@ const Result = ({
                     ]}
                   />
                 </div>
-              </>
+              </div>
             );
           } else {
             setIsDialogOpen(true);
@@ -972,13 +979,17 @@ const Result = ({
   ];
 
   const goBack = () => {
+    if (breadCrumLabel === 'Confirm Stone') {
+      setBreadCrumLabel('');
+    }
     setIsDetailPage(false);
     setDetailPageData({});
   };
 
   return (
-    <div className="mb-[20px] relative">
+    <div className="relative">
       <ImageModal
+        setIsLoading={setIsLoading}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
@@ -1000,7 +1011,7 @@ const Result = ({
         onClose={() => setIsAddCommentDialogOpen(false)}
         renderContent={rederAddCommentDialogs}
       />
-      {((!isDetailPage && !isConfirmStone) || isConfirmStone) && (
+      {!isDetailPage && (
         <div className="flex h-[81px] items-center">
           <p className="text-headingM font-medium text-neutral900">
             {editRoute
@@ -1017,7 +1028,9 @@ const Result = ({
             filterData={detailPageData}
             goBackToListView={goBack}
             handleDetailPage={handleDetailPage}
-            breadCrumLabel={'Search Results'}
+            breadCrumLabel={
+              breadCrumLabel.length ? breadCrumLabel : 'Search Results'
+            }
             modalSetState={modalSetState}
             setIsLoading={setIsLoading}
           />
@@ -1045,8 +1058,8 @@ const Result = ({
                   label: ManageLocales('app.searchResult.confirmStone'),
                   isHidden: isConfirmStone,
                   handler: () => {
-                    // setIsLoading(true)
                     setIsDetailPage(false);
+                    setBreadCrumLabel('Detail Page');
                     const { id } = detailPageData;
                     const selectedRows = { [id]: true };
                     handleConfirmStone({
@@ -1066,8 +1079,8 @@ const Result = ({
                 <Image
                   src={threeDotsSvg}
                   alt="threeDotsSvg"
-                  width={40}
-                  height={40}
+                  width={4}
+                  height={43}
                 />
               }
               dropdownMenu={[
@@ -1096,7 +1109,7 @@ const Result = ({
               columns={columnData}
               goBackToListView={goBackToListView}
               activeTab={activeTab}
-              isFrom={isDetailPage && 'Detail Page'}
+              isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
             />
@@ -1218,8 +1231,8 @@ const Result = ({
                         <Image
                           src={threeDotsSvg}
                           alt="threeDotsSvg"
-                          width={40}
-                          height={40}
+                          width={4}
+                          height={43}
                         />
                       }
                       dropdownMenu={[

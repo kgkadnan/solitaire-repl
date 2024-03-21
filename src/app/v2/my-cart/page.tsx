@@ -844,8 +844,8 @@ const MyCart = () => {
                 <Image
                   src={threeDotsSvg}
                   alt="threeDotsSvg"
-                  width={40}
-                  height={40}
+                  width={43}
+                  height={43}
                 />
               }
               dropdownMenu={[
@@ -1031,8 +1031,8 @@ const MyCart = () => {
                       <Image
                         src={threeDotsSvg}
                         alt="threeDotsSvg"
-                        width={40}
-                        height={40}
+                        width={43}
+                        height={43}
                       />
                     }
                     dropdownMenu={[
