@@ -20,6 +20,7 @@ export interface IInputFieldProps {
   maxLength?: number;
   onFocus?: (event: ChangeEvent<HTMLInputElement>) => void;
   onKeyDown?: KeyboardEventHandler<HTMLInputElement>;
+  autoComplete?: string;
 }
 
 export interface IDynamicInputFieldProps {
