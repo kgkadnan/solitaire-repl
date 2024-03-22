@@ -27,14 +27,7 @@ import Link from 'next/link';
 import { formatNumberWithLeadingZeros } from '@/utils/format-number-withLeadingZeros';
 import arrow from '@public/v2/assets/icons/my-diamonds/Arrow.svg';
 import icon from '@public/v2/assets/icons/my-diamonds/avatar.svg';
-import downloadIcon from '@public/v2/assets/icons/download.svg';
-import ActionButton from '@/components/v2/common/action-button';
-import { ManageLocales } from '@/utils/v2/translate';
-import errorIcon from '@public/v2/assets/icons/modal/error.svg';
-import { useLazyDonwloadInvoiceQuery } from '@/features/api/download-invoice';
-import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
-import confirmIcon from '@public/v2/assets/icons/modal/confirm.svg';
-import { SocketManager, useSocket } from '@/hooks/v2/socket-manager';
+
 // import useUser from '@/lib/use-auth';
 
 interface ITabs {
