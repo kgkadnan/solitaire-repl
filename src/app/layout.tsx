@@ -1,5 +1,5 @@
 'use client';
-import React, { ReactNode, FC } from 'react';
+import React, { ReactNode, FC, useEffect } from 'react';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import { Inter } from 'next/font/google';
 import '../../styles/_globals.scss';

@@ -128,7 +128,8 @@ const Notification = () => {
 
   useEffect(() => {
     if (authToken) useSocket(socketManager, authToken);
-  }, [authToken]);
+  }, [authToken, socketManager]);
+
   useEffect(() => {
     socketManager.on('notification', data => _handleNotification());
 
@@ -136,7 +137,7 @@ const Notification = () => {
     return () => {
       socketManager.disconnect();
     };
-  }, [socketManager]);
+  }, [socketManager, authToken]);
 
   const _handleNotification = () => {
     triggerNotification({}).then(res => {

@@ -24,6 +24,9 @@ import ActionButton from '@/components/v2/common/action-button';
 import { ManageLocales } from '@/utils/v2/translate';
 import { IActionButtonDataItem } from './interface/interface';
 import { handleReset } from './helpers/reset';
+
+import { parameter } from '@/constants/v2/form';
+
 import {
   MAX_SEARCH_FORM_COUNT,
   MAX_SEARCH_TAB_LIMIT,
@@ -54,6 +57,7 @@ import bookmarkIcon from '@public/v2/assets/icons/modal/bookmark.svg';
 import { InputField } from '@/components/v2/common/input-field';
 import { isSearchAlreadyExist } from '../saved-search/helpers/handle-card-click';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
+import { handleNumericRange } from './helpers/handle-input-range-validation';
 
 export interface ISavedSearch {
   saveSearchName: string;
@@ -177,7 +181,9 @@ const Form = ({
     saveSearchName,
     setSaveSearchName,
     setInputError,
-    inputError
+    inputError,
+    setMinMaxError,
+    minMaxError
   } = useValidationStateManagement();
 
   const { modalState, modalSetState } = useModalStateManagement();
@@ -860,6 +866,7 @@ const Form = ({
             setPricePerCaratError={setPricePerCaratError}
             amountRangeError={amountRangeError}
             setAmountRangeError={setAmountRangeError}
+            setMinMaxError={setMinMaxError}
           />
 
           <Parameters
@@ -867,6 +874,7 @@ const Form = ({
             setState={setState}
             errorSetState={errorSetState}
             errorState={errorState}
+            setMinMaxError={setMinMaxError}
           />
 
           <Inclusions state={state} setState={setState} />
@@ -881,16 +889,18 @@ const Form = ({
       >
         <div
           className={` flex items-center w-full  ${
-            isError ? 'justify-between' : 'justify-end'
+            isError || minMaxError ? 'justify-between' : 'justify-end'
           } `}
         >
-          {isError && (
+          {(isError || minMaxError.length) && (
             <div>
               <span className="hidden  text-successMain" />
               <span
                 className={`text-mRegular font-medium text-${messageColor} pl-[8px]`}
               >
-                {!isValidationError && errorText}
+                {minMaxError.length
+                  ? minMaxError
+                  : !isValidationError && errorText}
               </span>
             </div>
           )}

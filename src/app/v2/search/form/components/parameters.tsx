@@ -10,7 +10,8 @@ export const Parameters = ({
   state,
   setState,
   errorSetState,
-  errorState
+  errorState,
+  setMinMaxError
 }: any) => {
   const {
     setTablePerMin,
@@ -400,7 +401,8 @@ export const Parameters = ({
                                 min: e.target.value,
                                 max: maxValue,
                                 setErrorState: errorSetState,
-                                rangeCondition: range
+                                rangeCondition: range,
+                                setMinMaxError
                               });
                           }
                         }}
@@ -414,12 +416,14 @@ export const Parameters = ({
                                 min: minValue,
                                 max: e.target.value,
                                 setErrorState: errorSetState,
-                                rangeCondition: range
+                                rangeCondition: range,
+                                setMinMaxError
                               });
                           }
                         }}
                         inputGap="gap-[10px]"
                         errorText={errorState}
+                        isShowError={false}
                       />
                     </div>
                   );

@@ -24,6 +24,7 @@ interface IShapeProps {
   pricePerCaratMax: string;
   discountError: string;
   amountRangeError: string;
+  setMinMaxError?: any;
 }
 
 export const DiscountPrice = ({
@@ -44,7 +45,8 @@ export const DiscountPrice = ({
   amountRangeMax,
   pricePerCaratMin,
   pricePerCaratMax,
-  discountError
+  discountError,
+  setMinMaxError
 }: IShapeProps) => {
   const discountPriceAmoutData = [
     {
@@ -58,7 +60,8 @@ export const DiscountPrice = ({
             min: discountMin,
             max: event.target.value,
             setErrorState: setDiscountError,
-            rangeCondition: discount.range
+            rangeCondition: discount.range,
+            setMinMaxError
           });
         }
       },
@@ -69,7 +72,8 @@ export const DiscountPrice = ({
             min: event.target.value,
             max: discountMax,
             setErrorState: setDiscountError,
-            rangeCondition: discount.range
+            rangeCondition: discount.range,
+            setMinMaxError
           });
         }
       },
@@ -86,7 +90,8 @@ export const DiscountPrice = ({
           min: newValue[0],
           max: newValue[1],
           setErrorState: setDiscountError,
-          rangeCondition: discount.range
+          rangeCondition: discount.range,
+          setMinMaxError
         });
       },
       maxValue: discountMax,
@@ -109,7 +114,8 @@ export const DiscountPrice = ({
             min: pricePerCaratMin,
             max: event.target.value,
             setErrorState: setPricePerCaratError,
-            rangeCondition: pricePerCarat.range
+            rangeCondition: pricePerCarat.range,
+            setMinMaxError
           });
         }
       },
@@ -120,7 +126,8 @@ export const DiscountPrice = ({
             min: event.target.value,
             max: pricePerCaratMax,
             setErrorState: setPricePerCaratError,
-            rangeCondition: pricePerCarat.range
+            rangeCondition: pricePerCarat.range,
+            setMinMaxError
           });
         }
       },
@@ -137,7 +144,8 @@ export const DiscountPrice = ({
           min: newValue[0],
           max: newValue[1],
           setErrorState: setPricePerCaratError,
-          rangeCondition: pricePerCarat.range
+          rangeCondition: pricePerCarat.range,
+          setMinMaxError
         });
       },
       maxValue: pricePerCaratMax,
@@ -159,7 +167,8 @@ export const DiscountPrice = ({
             min: amountRangeMin,
             max: event.target.value,
             setErrorState: setAmountRangeError,
-            rangeCondition: amountRange.range
+            rangeCondition: amountRange.range,
+            setMinMaxError
           });
         }
       },
@@ -170,7 +179,8 @@ export const DiscountPrice = ({
             min: event.target.value,
             max: amountRangeMax,
             setErrorState: setAmountRangeError,
-            rangeCondition: amountRange.range
+            rangeCondition: amountRange.range,
+            setMinMaxError
           });
         }
       },
@@ -186,7 +196,8 @@ export const DiscountPrice = ({
           min: newValue[0],
           max: newValue[1],
           setErrorState: setAmountRangeError,
-          rangeCondition: amountRange.range
+          rangeCondition: amountRange.range,
+          setMinMaxError
         });
       },
       maxValue: amountRangeMax,
@@ -223,6 +234,7 @@ export const DiscountPrice = ({
                     rangeMax={items.rangeMax}
                     rangeMin={items.rangeMin}
                     steps={items.step}
+                    setMinMaxError={setMinMaxError}
                   />
                 </div>
               );
