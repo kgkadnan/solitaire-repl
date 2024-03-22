@@ -151,7 +151,7 @@ const NewArrivalDataTable = ({
       modalSetState,
       setRowSelection,
       setIsLoading: setIsLoading,
-      fromNewArrivalBid: true
+      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
     });
   };
 
@@ -171,6 +171,14 @@ const NewArrivalDataTable = ({
   );
 
   const [bidValues, setBidValues] = useState<BidValues>({});
+  const [columnOrder, setColumnOrder] = useState(
+    [
+      'mrt-row-select',
+      'lot_id',
+      'last_bid_date',
+      ...columns.map((c: any) => c.accessorKey)
+    ] //array of column ids (Initializing is optional as of v2.10.0)
+  );
 
   const handleIncrement = (rowId: string, currentMaxBid: any) => {
     // Retrieve the current_max_bid for the row from the rows data
@@ -311,6 +319,7 @@ const NewArrivalDataTable = ({
                 setErrorText={setErrorText}
                 setIsError={setIsError}
                 isNewArrival={true}
+                activeTab={activeTab}
               />
             </div>
           </div>
@@ -349,7 +358,7 @@ const NewArrivalDataTable = ({
     //state
     getRowId: originalRow => originalRow.id,
     onRowSelectionChange: setRowSelection,
-    state: { rowSelection },
+    state: { columnOrder, rowSelection },
     //filters
     positionToolbarAlertBanner: 'none',
     enableFilters: true,
@@ -648,7 +657,7 @@ const NewArrivalDataTable = ({
             className="flex gap-6"
             onClick={event => event.stopPropagation()}
           >
-            <div className="w-[120px]">
+            <div className="w-[120px] ml-10">
               <div className="text-mRegular text-neutral700">
                 Current Max Bid%
               </div>

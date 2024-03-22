@@ -47,7 +47,8 @@ export function DiamondDetailsComponent({
   handleDetailPage,
   breadCrumLabel,
   modalSetState,
-  setIsLoading
+  setIsLoading,
+  activeTab
 }: {
   data: any;
   filterData: any;
@@ -56,6 +57,7 @@ export function DiamondDetailsComponent({
   breadCrumLabel: string;
   modalSetState?: any;
   setIsLoading?: any;
+  activeTab?: number;
 }) {
   const [tableData, setTableData] = useState<any>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -204,7 +206,8 @@ export function DiamondDetailsComponent({
       products: [filterData.id],
       downloadExcelApi: downloadExcel,
       modalSetState,
-      setIsLoading: setIsLoading
+      setIsLoading: setIsLoading,
+      [activeTab === 2 ? 'fromNewArrivalBidHistory' : 'fromNewArrivalBid']: true
     });
   };
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
