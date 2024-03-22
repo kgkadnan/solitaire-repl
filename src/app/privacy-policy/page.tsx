@@ -2,7 +2,7 @@
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useEffect, useState } from 'react';
-import './common-style.module.scss'
+import './common-style.module.scss';
 const PrivacyPolicy = () => {
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const [data, setData] = useState<any>();
