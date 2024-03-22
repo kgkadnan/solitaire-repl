@@ -528,8 +528,8 @@ const NewArrivals = () => {
       ) : (
         <>
           {' '}
-          <div className="flex h-[81px] items-center justify-between">
-            <p className="text-headingM font-medium text-neutral900">
+          <div className="flex  py-[8px] items-center justify-between">
+            <p className="text-lMedium font-medium text-neutral900">
               New Arrivals
             </p>
             {timeDifference !== null && timeDifference >= 0 && (

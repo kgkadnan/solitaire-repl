@@ -1012,8 +1012,8 @@ const Result = ({
         renderContent={rederAddCommentDialogs}
       />
       {!isDetailPage && (
-        <div className="flex h-[81px] items-center">
-          <p className="text-headingM font-medium text-neutral900">
+        <div className="flex py-[8px] items-center">
+          <p className="text-lMedium font-medium text-neutral900">
             {editRoute
               ? ManageLocales('app.result.headerEdit')
               : ManageLocales('app.result.headerResult')}
@@ -1114,7 +1114,7 @@ const Result = ({
               handleDetailPage={handleDetailPage}
             />
           ) : (
-            <div className="border-b-[1px] border-neutral200">
+            <div className="">
               <DataTable
                 rows={memoizedRows}
                 columns={memoizedColumns}
@@ -1139,8 +1139,9 @@ const Result = ({
               />
             </div>
           )}
-          <div className="p-[16px] rounded-b-[8px] shadow-inputShadow ">
-            {isConfirmStone ? (
+          {/* <div className="p-[16px] rounded-b-[8px] shadow-inputShadow "> */}
+          {
+            isConfirmStone && (
               <ActionButton
                 actionButtonData={[
                   {
@@ -1169,99 +1170,101 @@ const Result = ({
                   }
                 ]}
               />
-            ) : (
-              dataTableState.rows.length > 0 && (
-                <div className="flex items-center justify-between">
-                  <div className="flex gap-4 h-[30px] min-w-[270px]">
-                    <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                        In Cart
-                      </p>
-                    </div>
-                    <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                        {' '}
-                        Hold
-                      </p>
-                    </div>
-                    <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-                      <p className="text-mMedium font-medium px-[6px] py-[4px]">
-                        {' '}
-                        Memo
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    {isError && (
-                      <div>
-                        <span className="hidden  text-successMain" />
-                        <span
-                          className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                        >
-                          {errorText}
-                        </span>
-                      </div>
-                    )}
-                    <ActionButton
-                      actionButtonData={[
-                        {
-                          variant: 'secondary',
-                          label: ManageLocales('app.searchResult.addToCart'),
-                          handler: handleAddToCart
-                        },
+            )
+            // : (
+            //   dataTableState.rows.length > 0 && (
+            //     <div className="flex items-center justify-between">
+            //       <div className="flex gap-4 h-[30px] min-w-[270px]">
+            //         <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
+            //             In Cart
+            //           </p>
+            //         </div>
+            //         <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
+            //             {' '}
+            //             Hold
+            //           </p>
+            //         </div>
+            //         <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
+            //             {' '}
+            //             Memo
+            //           </p>
+            //         </div>
+            //       </div>
+            //       <div className="flex items-center gap-3">
+            //         {isError && (
+            //           <div>
+            //             <span className="hidden  text-successMain" />
+            //             <span
+            //               className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
+            //             >
+            //               {errorText}
+            //             </span>
+            //           </div>
+            //         )}
+            //         <ActionButton
+            //           actionButtonData={[
+            //             {
+            //               variant: 'secondary',
+            //               label: ManageLocales('app.searchResult.addToCart'),
+            //               handler: handleAddToCart
+            //             },
 
-                        {
-                          variant: 'primary',
-                          label: ManageLocales('app.searchResult.confirmStone'),
-                          handler: () => {
-                            handleConfirmStone({
-                              selectedRows: rowSelection,
-                              rows: dataTableState.rows,
-                              setIsError,
-                              setErrorText,
-                              setIsConfirmStone,
-                              setConfirmStoneData
-                            });
-                          }
-                        }
-                      ]}
-                    />
-                    <Dropdown
-                      dropdownTrigger={
-                        <Image
-                          src={threeDotsSvg}
-                          alt="threeDotsSvg"
-                          width={4}
-                          height={43}
-                        />
-                      }
-                      dropdownMenu={[
-                        {
-                          label: ManageLocales(
-                            'app.search.actionButton.bookAppointment'
-                          ),
-                          handler: () => {}
-                        },
-                        {
-                          label: ManageLocales(
-                            'app.search.actionButton.compareStone'
-                          ),
-                          handler: () => {}
-                        },
-                        {
-                          label: ManageLocales(
-                            'app.search.actionButton.findMatchingPair'
-                          ),
-                          handler: () => {}
-                        }
-                      ]}
-                      isDisable={true}
-                    />
-                  </div>
-                </div>
-              )
-            )}
-          </div>
+            //             {
+            //               variant: 'primary',
+            //               label: ManageLocales('app.searchResult.confirmStone'),
+            //               handler: () => {
+            //                 handleConfirmStone({
+            //                   selectedRows: rowSelection,
+            //                   rows: dataTableState.rows,
+            //                   setIsError,
+            //                   setErrorText,
+            //                   setIsConfirmStone,
+            //                   setConfirmStoneData
+            //                 });
+            //               }
+            //             }
+            //           ]}
+            //         />
+            //         <Dropdown
+            //           dropdownTrigger={
+            //             <Image
+            //               src={threeDotsSvg}
+            //               alt="threeDotsSvg"
+            //               width={4}
+            //               height={43}
+            //             />
+            //           }
+            //           dropdownMenu={[
+            //             {
+            //               label: ManageLocales(
+            //                 'app.search.actionButton.bookAppointment'
+            //               ),
+            //               handler: () => {}
+            //             },
+            //             {
+            //               label: ManageLocales(
+            //                 'app.search.actionButton.compareStone'
+            //               ),
+            //               handler: () => {}
+            //             },
+            //             {
+            //               label: ManageLocales(
+            //                 'app.search.actionButton.findMatchingPair'
+            //               ),
+            //               handler: () => {}
+            //             }
+            //           ]}
+            //           isDisable={true}
+            //         />
+            //       </div>
+            //     </div>
+            //   )
+            // )
+          }
+          {/* </div> */}
         </div>
       )}
     </div>

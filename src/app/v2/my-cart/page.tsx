@@ -790,8 +790,8 @@ const MyCart = () => {
         renderContent={rederAddCommentDialogs}
       />
       {(isConfirmStone || !isDetailPage) && (
-        <div className="flex h-[81px] items-center ">
-          <p className="text-headingM font-medium text-neutral900">
+        <div className="flex  py-[8px] items-center ">
+          <p className="text-lMedium font-medium text-neutral900">
             {ManageLocales('app.myCart.mycart')}
           </p>
         </div>

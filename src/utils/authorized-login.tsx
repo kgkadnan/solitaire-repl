@@ -58,7 +58,7 @@ const authorizedLogin = (WrappedComponent: React.ComponentType) => {
 
             <div className="flex-1 flex flex-col w-[calc(100%-84px)]">
               <V2TopNavigationBar />
-              <main className="flex-1 px-[32px] ml-[84px] bg-neutral25">
+              <main className="flex-1 px-[16px] ml-[84px] bg-neutral25">
                 <WrappedComponent {...props} />{' '}
               </main>
             </div>
