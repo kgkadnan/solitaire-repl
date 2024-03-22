@@ -7,7 +7,8 @@ export const MinMaxInput = ({
   minInputData,
   maxInputData,
   inputGap,
-  errorText
+  errorText,
+  isShowError = true
 }: IMinMaxInput) => {
   const minMaxData = ['min', 'max'];
   const { minValue, minPlaceHolder, minOnchange } = minInputData;
@@ -42,7 +43,7 @@ export const MinMaxInput = ({
           </div>
         ))}
       </div>
-      {errorText && (
+      {errorText && isShowError && (
         <p className="text-dangerMain text-sRegular font-regular mb-[5px]">
           {errorText}
         </p>

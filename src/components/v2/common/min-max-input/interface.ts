@@ -15,4 +15,5 @@ export interface IMinMaxInput {
   maxInputData: IMaxInputData;
   inputGap: string;
   errorText?: string;
+  isShowError?: boolean;
 }
