@@ -255,3 +255,14 @@ export const RenderNewArrivalLotIdColor = ({ row }: any) => {
     text: textClass
   };
 };
+
+export const RenderBidDate = ({ row }: any) => {
+  const date = new Date(row.original.last_bid_date);
+
+  const day = date.getDate().toString().padStart(2, '0');
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const year = date.getFullYear().toString().slice(2);
+
+  const formattedDate = `${day}/${month}/${year}`;
+  return <span>{`${formattedDate ?? '-'}`}</span>;
+};

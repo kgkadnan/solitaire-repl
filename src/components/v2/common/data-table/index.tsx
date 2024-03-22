@@ -343,6 +343,7 @@ const DataTable = ({
     })
   );
 
+  const NoResultsComponent = () => <></>;
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -370,7 +371,7 @@ const DataTable = ({
     enableToolbarInternalActions: true,
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
-
+    renderEmptyRowsFallback: NoResultsComponent,
     icons: {
       SearchIcon: () => (
         <Image src={searchIcon} alt={'searchIcon'} className="mr-[6px]" />

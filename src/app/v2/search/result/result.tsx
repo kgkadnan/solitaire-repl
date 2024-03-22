@@ -376,7 +376,6 @@ const Result = ({
   };
 
   const handleAddToCart = () => {
-    setIsLoading(true);
     let selectedIds = Object.keys(rowSelection);
 
     if (selectedIds.length > 300) {
@@ -386,6 +385,7 @@ const Result = ({
       setIsError(true);
       setErrorText(NO_STONES_SELECTED);
     } else {
+      setIsLoading(true);
       const variantIds = selectedIds
         ?.map((id: string) => {
           const myCartCheck: IProduct | object =
@@ -494,7 +494,6 @@ const Result = ({
   };
 
   const handleAddToCartDetailPage = () => {
-    setIsLoading(true);
     const hasMemoOut = dataTableState.rows.some(
       (row: IProduct) =>
         row.id === detailPageData.id && row.diamond_status === MEMO_STATUS
@@ -511,6 +510,7 @@ const Result = ({
       setIsError(true);
       setErrorText(SOME_STONES_ARE_ON_HOLD_MODIFY_SEARCH);
     } else {
+      setIsLoading(true);
       // Extract variant IDs for selected stones
       const variantIds = [detailPageData.id]
         ?.map((id: string) => {
@@ -784,7 +784,6 @@ const Result = ({
   };
 
   const confirmStoneApiCall = () => {
-    setIsLoading(true);
     const variantIds: string[] = [];
 
     confirmStoneData.forEach((ids: any) => {
@@ -792,6 +791,7 @@ const Result = ({
     });
 
     if (variantIds.length) {
+      setIsLoading(true);
       confirmProduct({
         variants: variantIds,
         comments: commentValue

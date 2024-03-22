@@ -13,7 +13,8 @@ import {
   RenderNewArrivalPrice,
   RenderNewArrivalBidDiscount,
   RenderNewArrivalPricePerCarat,
-  RenderCartLotId
+  RenderCartLotId,
+  RenderBidDate
 } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
@@ -93,6 +94,8 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderDiscount };
           case 'current_max_bid':
             return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
+          case 'last_bid_date':
+            return { ...commonProps, Cell: RenderBidDate };
           case 'lot_id':
             return {
               ...commonProps,
@@ -502,6 +505,8 @@ const NewArrivals = () => {
             handleDetailPage={handleDetailPage}
             breadCrumLabel={'New Arrival'}
             modalSetState={modalSetState}
+            setIsLoading={setIsLoading}
+            activeTab={activeTab}
           />
           <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
             {isError && (
@@ -544,22 +549,20 @@ const NewArrivals = () => {
                 <NewArrivalDataTable
                   columns={
                     activeTab === 2
-                      ? memoizedColumns
-                          .filter(
-                            (data: any) =>
-                              data.accessorKey !== 'current_max_bid'
-                          ) // Filter out data with accessor key 'current_max_bid'
-                          .map((data: any) => {
-                            if (data.accessorKey === 'discount') {
-                              // Update the accessor key 'discount' to 'current_max_bid'
-                              return {
-                                ...data,
-                                accessorKey: 'current_max_bid'
-                              };
-                            }
-                            return data;
-                          })
-                      : memoizedColumns
+                      ? memoizedColumns.filter(
+                          (data: any) =>
+                            data.accessorKey !== 'current_max_bid' &&
+                            data.accessorKey !== 'shape'
+                        ) // Filter out data with accessor key 'current_max_bid'
+                      : activeTab === 1
+                      ? memoizedColumns.filter(
+                          (data: any) =>
+                            data.accessorKey !== 'last_bid_date' &&
+                            data.accessorKey !== 'shape'
+                        )
+                      : memoizedColumns.filter(
+                          (data: any) => data.accessorKey !== 'last_bid_date'
+                        )
                   }
                   modalSetState={modalSetState}
                   setErrorText={setErrorText}
