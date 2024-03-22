@@ -1,0 +1,16 @@
+// .commonStyle >.statiContentBox > .staticContentWrapper> h2{
+//     color: red !important;
+// }
+.commonStyle {
+  .statiContentBox {
+    .staticContentWrapper {
+      h2 {
+        color: red !important;
+      }
+    }
+  }
+}
+
+.commonStyle {
+  background: red;
+}

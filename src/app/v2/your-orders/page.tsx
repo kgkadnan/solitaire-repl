@@ -10,7 +10,7 @@ import {
   PENING_INVOICE_BREADCRUMB_LABEL
 } from '@/constants/business-logic';
 
-import emptyOrderSvg from '@public/v2/assets/icons/empty-order.png';
+import emptyOrderSvg from '@public/v2/assets/icons/empty-order.svg';
 import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
