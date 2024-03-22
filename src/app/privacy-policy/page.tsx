@@ -2,7 +2,7 @@
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { ManageLocales } from '@/utils/v2/translate';
 import { useEffect, useState } from 'react';
-
+import './common-style.module.scss';
 const PrivacyPolicy = () => {
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
   const [data, setData] = useState<any>();
@@ -87,7 +87,7 @@ const PrivacyPolicy = () => {
     <>
       {data ? (
         <>
-          <div className=" max-w-4xl mx-auto flex flex-col gap-[16px] mt-[16px]">
+          <div className=" max-w-4xl mx-auto flex flex-col gap-[16px] mt-[16px] commonStyle">
             <div className="flex w-full items-center flex-col">
               <h1 className="text-headingS font-medium text-neutral-900">
                 {' '}

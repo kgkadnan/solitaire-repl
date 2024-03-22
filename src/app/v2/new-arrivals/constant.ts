@@ -9,18 +9,28 @@ export const columnHeaders = [
     id: 'cus_ma-lis-seq_01HQSNF0TRKW8FXJDQZX15NX4Y'
   },
   {
+    label: 'Date',
+    accessor: 'last_bid_date',
+    sequence: 2,
+    is_fixed: false,
+    short_label: 'Date',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01HQSNF0TRKW8FXJDQZX15NX4Y'
+  },
+  {
     label: 'Details',
     accessor: 'details',
-    sequence: 2,
-    is_fixed: true,
+    sequence: 3,
+    is_fixed: false,
     short_label: 'Details',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TR4N89VZ146CBSE7KY'
   },
+
   {
     label: 'Location',
     accessor: 'location',
-    sequence: 3,
+    sequence: 4,
     is_fixed: false,
     short_label: 'Loc',
     is_disabled: false,
@@ -29,7 +39,7 @@ export const columnHeaders = [
   {
     label: 'Lab',
     accessor: 'lab',
-    sequence: 4,
+    sequence: 5,
     is_fixed: false,
     short_label: 'Lab',
     is_disabled: false,
@@ -38,7 +48,16 @@ export const columnHeaders = [
   {
     label: 'Shape',
     accessor: 'shape',
-    sequence: 5,
+    sequence: 6,
+    is_fixed: false,
+    short_label: 'Shape',
+    is_disabled: false,
+    id: 'cus_ma-lis-seq_01HQSNF0TS5WJNQ6X05ZKQD305'
+  },
+  {
+    label: 'Shape',
+    accessor: 'shape_full',
+    sequence: 6,
     is_fixed: false,
     short_label: 'Shape',
     is_disabled: false,
@@ -47,7 +66,7 @@ export const columnHeaders = [
   {
     label: 'Carats',
     accessor: 'carats',
-    sequence: 6,
+    sequence: 7,
     is_fixed: false,
     short_label: 'Carats',
     is_disabled: false,
@@ -56,7 +75,7 @@ export const columnHeaders = [
   {
     label: 'Color',
     accessor: 'color',
-    sequence: 7,
+    sequence: 8,
     is_fixed: false,
     short_label: 'Color',
     is_disabled: false,
@@ -65,7 +84,7 @@ export const columnHeaders = [
   {
     label: 'Clarity',
     accessor: 'clarity',
-    sequence: 8,
+    sequence: 9,
     is_fixed: false,
     short_label: 'Clarity',
     is_disabled: false,
@@ -74,7 +93,7 @@ export const columnHeaders = [
   {
     label: 'Cut',
     accessor: 'cut',
-    sequence: 9,
+    sequence: 10,
     is_fixed: false,
     short_label: 'Cut',
     is_disabled: false,
@@ -83,7 +102,7 @@ export const columnHeaders = [
   {
     label: 'Polish',
     accessor: 'polish',
-    sequence: 10,
+    sequence: 11,
     is_fixed: false,
     short_label: 'Pol',
     is_disabled: false,
@@ -92,7 +111,7 @@ export const columnHeaders = [
   {
     label: 'Symmetry',
     accessor: 'symmetry',
-    sequence: 11,
+    sequence: 12,
     is_fixed: false,
     short_label: 'Sym',
     is_disabled: false,
@@ -101,7 +120,7 @@ export const columnHeaders = [
   {
     label: 'Fluorescence',
     accessor: 'fluorescence',
-    sequence: 12,
+    sequence: 13,
     is_fixed: false,
     short_label: 'Fluo',
     is_disabled: false,
@@ -110,7 +129,7 @@ export const columnHeaders = [
   {
     label: 'Rap Value',
     accessor: 'rap_value',
-    sequence: 13,
+    sequence: 14,
     is_fixed: false,
     short_label: 'Rap Val',
     is_disabled: false,
@@ -119,7 +138,7 @@ export const columnHeaders = [
   {
     label: 'Discount',
     accessor: 'discount',
-    sequence: 14,
+    sequence: 15,
     is_fixed: false,
     short_label: 'Disc %',
     is_disabled: false,
@@ -128,7 +147,7 @@ export const columnHeaders = [
   {
     label: 'Current Max. Bid%',
     accessor: 'current_max_bid',
-    sequence: 15,
+    sequence: 16,
     is_fixed: false,
     short_label: 'Current Max. Bid%',
     is_disabled: false,
@@ -137,7 +156,7 @@ export const columnHeaders = [
   {
     label: 'Price/Carat',
     accessor: 'price_per_carat',
-    sequence: 16,
+    sequence: 17,
     is_fixed: false,
     short_label: 'Pr/Ct',
     is_disabled: false,
@@ -146,7 +165,7 @@ export const columnHeaders = [
   {
     label: 'Amount',
     accessor: 'amount',
-    sequence: 17,
+    sequence: 18,
     is_fixed: false,
     short_label: 'Amt ($)',
     is_disabled: false,
@@ -155,7 +174,7 @@ export const columnHeaders = [
   {
     label: 'Rap',
     accessor: 'rap',
-    sequence: 18,
+    sequence: 19,
     is_fixed: false,
     short_label: 'Rap ($)',
     is_disabled: false,
@@ -164,7 +183,7 @@ export const columnHeaders = [
   {
     label: 'Table%',
     accessor: 'table_percentage',
-    sequence: 19,
+    sequence: 20,
     is_fixed: false,
     short_label: 'Table %',
     is_disabled: false,
@@ -173,7 +192,7 @@ export const columnHeaders = [
   {
     label: 'Shade',
     accessor: 'shade',
-    sequence: 20,
+    sequence: 21,
     is_fixed: false,
     short_label: 'Shade',
     is_disabled: false,
@@ -182,7 +201,7 @@ export const columnHeaders = [
   {
     label: 'Depth%',
     accessor: 'depth_percentage',
-    sequence: 21,
+    sequence: 22,
     is_fixed: false,
     short_label: 'Depth%',
     is_disabled: false,
@@ -191,7 +210,7 @@ export const columnHeaders = [
   {
     label: 'Ratio',
     accessor: 'ratio',
-    sequence: 22,
+    sequence: 23,
     is_fixed: false,
     short_label: 'Ratio',
     is_disabled: false,
@@ -200,7 +219,7 @@ export const columnHeaders = [
   {
     label: 'Measurements (L*W*D)',
     accessor: 'measurements',
-    sequence: 23,
+    sequence: 24,
     is_fixed: false,
     short_label: 'Measurements (L*W*D)',
     is_disabled: false,
@@ -209,7 +228,7 @@ export const columnHeaders = [
   {
     label: 'Crown Angle',
     accessor: 'crown_angle',
-    sequence: 24,
+    sequence: 25,
     is_fixed: false,
     short_label: 'CA',
     is_disabled: false,
@@ -218,7 +237,7 @@ export const columnHeaders = [
   {
     label: 'Crown Height',
     accessor: 'crown_height',
-    sequence: 25,
+    sequence: 26,
     is_fixed: false,
     short_label: 'CH',
     is_disabled: false,
@@ -227,7 +246,7 @@ export const columnHeaders = [
   {
     label: 'Girdle%',
     accessor: 'girdle_percentage',
-    sequence: 26,
+    sequence: 27,
     is_fixed: false,
     short_label: 'Girdle%',
     is_disabled: false,
@@ -236,7 +255,7 @@ export const columnHeaders = [
   {
     label: 'Pavilion Angle',
     accessor: 'pavilion_angle',
-    sequence: 27,
+    sequence: 28,
     is_fixed: false,
     short_label: 'PA',
     is_disabled: false,
@@ -245,7 +264,7 @@ export const columnHeaders = [
   {
     label: 'Pavilion Height',
     accessor: 'pavilion_height',
-    sequence: 28,
+    sequence: 29,
     is_fixed: false,
     short_label: 'PH',
     is_disabled: false,
@@ -254,7 +273,7 @@ export const columnHeaders = [
   {
     label: 'Lower Half',
     accessor: 'lower_half',
-    sequence: 29,
+    sequence: 30,
     is_fixed: false,
     short_label: 'LH',
     is_disabled: false,
@@ -263,7 +282,7 @@ export const columnHeaders = [
   {
     label: 'Star Length',
     accessor: 'star_length',
-    sequence: 30,
+    sequence: 31,
     is_fixed: false,
     short_label: 'SL',
     is_disabled: false,
@@ -272,7 +291,7 @@ export const columnHeaders = [
   {
     label: 'Culet',
     accessor: 'culet',
-    sequence: 31,
+    sequence: 32,
     is_fixed: false,
     short_label: 'Culet',
     is_disabled: false,
@@ -281,7 +300,7 @@ export const columnHeaders = [
   {
     label: 'Girdle',
     accessor: 'girdle',
-    sequence: 32,
+    sequence: 33,
     is_fixed: false,
     short_label: 'Girdle',
     is_disabled: false,
@@ -290,7 +309,7 @@ export const columnHeaders = [
   {
     label: 'Table Black',
     accessor: 'table_black',
-    sequence: 33,
+    sequence: 34,
     is_fixed: false,
     short_label: 'TB',
     is_disabled: false,
@@ -299,7 +318,7 @@ export const columnHeaders = [
   {
     label: 'Side Black',
     accessor: 'side_black',
-    sequence: 34,
+    sequence: 35,
     is_fixed: false,
     short_label: 'SB',
     is_disabled: false,
@@ -308,7 +327,7 @@ export const columnHeaders = [
   {
     label: 'Table Inclusion',
     accessor: 'table_inclusion',
-    sequence: 35,
+    sequence: 36,
     is_fixed: false,
     short_label: 'TI',
     is_disabled: false,
@@ -317,7 +336,7 @@ export const columnHeaders = [
   {
     label: 'Side Inclusion',
     accessor: 'side_inclusion',
-    sequence: 36,
+    sequence: 37,
     is_fixed: false,
     short_label: 'SI',
     is_disabled: false,
@@ -326,7 +345,7 @@ export const columnHeaders = [
   {
     label: 'Table Open',
     accessor: 'table_open',
-    sequence: 37,
+    sequence: 38,
     is_fixed: false,
     short_label: 'TO',
     is_disabled: false,
@@ -335,7 +354,7 @@ export const columnHeaders = [
   {
     label: 'Crown Open',
     accessor: 'crown_open',
-    sequence: 38,
+    sequence: 39,
     is_fixed: false,
     short_label: 'CO',
     is_disabled: false,
@@ -344,7 +363,7 @@ export const columnHeaders = [
   {
     label: 'Pavilion Open',
     accessor: 'pavilion_open',
-    sequence: 39,
+    sequence: 40,
     is_fixed: false,
     short_label: 'PO',
     is_disabled: false,
@@ -353,7 +372,7 @@ export const columnHeaders = [
   {
     label: 'Milky',
     accessor: 'milky',
-    sequence: 40,
+    sequence: 41,
     is_fixed: false,
     short_label: 'Milky',
     is_disabled: false,
@@ -362,7 +381,7 @@ export const columnHeaders = [
   {
     label: 'Eye Clean',
     accessor: 'eye_clean',
-    sequence: 41,
+    sequence: 42,
     is_fixed: false,
     short_label: 'EC',
     is_disabled: false,
@@ -371,7 +390,7 @@ export const columnHeaders = [
   {
     label: 'Report Comments',
     accessor: 'report_comment',
-    sequence: 42,
+    sequence: 43,
     is_fixed: false,
     short_label: 'RPT Com',
     is_disabled: false,
@@ -380,7 +399,7 @@ export const columnHeaders = [
   {
     label: 'Key to Symbols',
     accessor: 'key_to_symbols',
-    sequence: 43,
+    sequence: 44,
     is_fixed: false,
     short_label: 'Key to Symbols',
     is_disabled: false,
@@ -389,7 +408,7 @@ export const columnHeaders = [
   {
     label: 'Laser Inscription',
     accessor: 'inscription',
-    sequence: 44,
+    sequence: 45,
     is_fixed: false,
     short_label: 'Ins',
     is_disabled: false,
@@ -398,7 +417,7 @@ export const columnHeaders = [
   {
     label: 'Luster',
     accessor: 'luster',
-    sequence: 45,
+    sequence: 46,
     is_fixed: false,
     short_label: 'Luster',
     is_disabled: false,
@@ -407,7 +426,7 @@ export const columnHeaders = [
   {
     label: 'Country of Origin',
     accessor: 'origin_country',
-    sequence: 46,
+    sequence: 47,
     is_fixed: false,
     short_label: 'Origin',
     is_disabled: false,
@@ -416,19 +435,10 @@ export const columnHeaders = [
   {
     label: 'Tracr ID',
     accessor: 'tracr_id',
-    sequence: 47,
+    sequence: 48,
     is_fixed: false,
     short_label: 'Tracr ID',
     is_disabled: false,
     id: 'cus_ma-lis-seq_01HQSNF0TZZ3Y0TDT19W09BJ2N'
-  },
-  {
-    accessor: 'shape_full',
-    id: 'cus_ma-lis-seq_01HQSNF0TS5WJNQ6X05ZKQD305',
-    is_disabled: false,
-    is_fixed: false,
-    label: 'Shape',
-    sequence: 5,
-    short_label: 'Shape'
   }
 ];

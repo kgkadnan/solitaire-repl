@@ -21,6 +21,7 @@ interface IDownloadExcelFunctionProps {
   orderId?: string;
   setIsLoading?: any;
   fromNewArrivalBid?: boolean;
+  fromNewArrivalBidHistory?: boolean;
 }
 
 export const downloadExcelHandler = async ({
@@ -32,7 +33,8 @@ export const downloadExcelHandler = async ({
   setIsError,
   orderId,
   setIsLoading,
-  fromNewArrivalBid
+  fromNewArrivalBid,
+  fromNewArrivalBidHistory
 }: IDownloadExcelFunctionProps) => {
   setIsLoading(true);
   // Explicitly type res to include unwrap method
@@ -40,7 +42,8 @@ export const downloadExcelHandler = async ({
     products: products,
     previous_searchs: previousSearch,
     order_id: orderId,
-    from_new_arrival_bid: fromNewArrivalBid
+    from_new_arrival_bid: fromNewArrivalBid,
+    from_new_arrival_bid_history: fromNewArrivalBidHistory
   })
     .unwrap()
     .then((res: IDownloadExcelApiResponse) => {

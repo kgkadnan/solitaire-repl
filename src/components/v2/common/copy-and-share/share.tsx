@@ -16,7 +16,8 @@ const Share = ({
   selectedProducts,
   setErrorText,
   setIsError,
-  isNewArrival = false
+  isNewArrival = false,
+  activeTab
 }: any) => {
   const [selectedRows, setSelectedRows] = useState<IProduct[]>(
     rows.filter((row: IProduct) => row.id in selectedProducts)
@@ -49,19 +50,83 @@ const Share = ({
     { name: 'Amt ($)', state: 'amount' },
     { name: 'Public URL', state: 'public_url' }
   ]);
+  console.log(activeTab, activeTab);
+  // useEffect(() => {
+  //   if (isNewArrival) {
+  //     if(activeTab && activeTab===2){
+  //       setShareOptions(prev => [
+  //         ...prev,
+  //         { name: 'Date', state: 'last_bid_date' }
+  //       ]);
+  //       setSelectedAttributes((prev: any) => ({
+  //         ...prev,
+  //         last_bid_date: true
+  //       }));
+  //     }
+  //     else{
+  //       setShareOptions(prev => [
+  //         ...prev,
+  //         { name: 'Current Max Bid', state: 'current_max_bid' }
+  //       ]);
+  //       setSelectedAttributes((prev: any) => ({
+  //         ...prev,
+  //         current_max_bid: true
+  //       }));
+  //     }
 
+  //   }
+  // }, [isNewArrival]);
   useEffect(() => {
     if (isNewArrival) {
-      setShareOptions(prev => [
-        ...prev,
-        { name: 'Current Max Bid', state: 'current_max_bid' }
-      ]);
-      setSelectedAttributes((prev: any) => ({
-        ...prev,
-        current_max_bid: true
-      }));
+      // Define the field to add based on activeTab
+      let fieldToAdd: any;
+      let fieldToRemove: any;
+
+      if (activeTab === 2) {
+        fieldToAdd = { name: 'Date', state: 'last_bid_date' };
+        fieldToRemove = { state: 'current_max_bid' };
+      } else {
+        fieldToAdd = { name: 'Current Max Bid', state: 'current_max_bid' };
+        fieldToRemove = { state: 'last_bid_date' };
+      }
+
+      // Check if the field to remove exists in shareOptions
+      const isFieldToRemoveExist = shareOptions.some(
+        option => option.state === fieldToRemove.state
+      );
+
+      // Remove the field to remove if it exists
+      if (isFieldToRemoveExist) {
+        setShareOptions(prev =>
+          prev.filter(option => option.state !== fieldToRemove.state)
+        );
+
+        // Update selected attributes
+        setSelectedAttributes((prev: any) => {
+          const updatedAttributes = { ...prev };
+          delete updatedAttributes[fieldToRemove.state];
+          return updatedAttributes;
+        });
+      }
+
+      // Check if the field to add is already added to shareOptions
+      const isFieldToAddAlreadyAdded = shareOptions.some(
+        option => option.state === fieldToAdd.state
+      );
+
+      if (!isFieldToAddAlreadyAdded) {
+        // Add the field to shareOptions
+        setShareOptions(prev => [...prev, fieldToAdd]);
+
+        // Update selected attributes
+        setSelectedAttributes((prev: any) => ({
+          ...prev,
+          [fieldToAdd.state]: true
+        }));
+      }
     }
-  }, [isNewArrival]);
+  }, [isNewArrival, activeTab, shareOptions]);
+
   const { setIsInputDialogOpen } = modalSetState;
 
   const [selectedAttributes, setSelectedAttributes] = useState(
@@ -103,6 +168,19 @@ const Share = ({
               selectedAttributes['current_max_bid']
             ) {
               return `Current Max Bid: ${product?.current_max_bid.toFixed(2)}`;
+            }
+            if (
+              attribute === 'last_bid_date' &&
+              selectedAttributes['last_bid_date']
+            ) {
+              const date = new Date(product?.last_bid_date);
+
+              const day = date.getDate().toString().padStart(2, '0');
+              const month = (date.getMonth() + 1).toString().padStart(2, '0');
+              const year = date.getFullYear().toString().slice(2);
+
+              const formattedDate = `${day}/${month}/${year}`;
+              return `Date: ${formattedDate}`;
             }
             if (
               attribute === 'public_url' &&
