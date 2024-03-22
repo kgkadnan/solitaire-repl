@@ -27,8 +27,11 @@ const useValidationStateManagement = () => {
     price_per_carat: { from: null, to: null }
     // Add more input groups here if needed
   });
+  const [minMaxError, setMinMaxError] = useState('');
 
   return {
+    setMinMaxError,
+    minMaxError,
     validationError,
     setValidationError,
     isInputDialogOpen,

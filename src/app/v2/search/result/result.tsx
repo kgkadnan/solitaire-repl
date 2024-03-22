@@ -283,8 +283,8 @@ const Result = ({
                 return indexA - indexB;
               }
             };
-          // case 'amount':
-          //   return { ...commonProps, Cell: RenderAmount };
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
           case 'measurements':
             return { ...commonProps, Cell: RenderMeasurements };
           case 'shape_full':
