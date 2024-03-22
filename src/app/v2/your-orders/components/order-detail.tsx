@@ -28,7 +28,6 @@ import {
   RenderMeasurements,
   RenderTracerId
 } from '@/components/v2/common/data-table/helpers/render-cell';
-import { downloadPdfFromBase64 } from '@/utils/download-invoice-from-base-64';
 import { IManageListingSequenceResponse } from '../../search/interface';
 import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
@@ -54,7 +53,6 @@ const OrderDetail: React.FC<IOrderDetail> = ({
     useLazyGetManageListingSequenceQuery<IManageListingSequenceResponse>();
 
   const [downloadExcel] = useDownloadExcelMutation();
-  const [triggerDownloadInvoice] = useLazyDonwloadInvoiceQuery();
 
   const [isDetailPage, setIsDetailPage] = useState(false);
   const [detailPageData, setDetailPageData] = useState<any>({});
