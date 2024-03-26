@@ -481,7 +481,8 @@ const NewArrivalDataTable = ({
       grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
-      }
+      },
+      pagination: { pageSize: 20, pageIndex: 0 }
     },
 
     // renderEmptyRowsFallback: () => {
