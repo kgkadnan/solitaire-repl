@@ -4,8 +4,7 @@ import { DialogComponent } from '@/components/v2/common/dialog';
 import {
   useDeleteSavedSearchMutation,
   useGetAllSavedSearchesQuery,
-  useGetSavedSearchListQuery,
-  useLazyGetAllSavedSearchesQuery
+  useGetSavedSearchListQuery
 } from '@/features/api/saved-searches';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -56,6 +55,9 @@ import { kycStatus } from '@/constants/enums/kyc';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 const SavedSearch = ({ setIsLoading, isLoading }: any) => {
+  useEffect(() => {
+    setIsLoading(true);
+  }, []);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { savedSearchSetState, savedSearchState } =
@@ -66,8 +68,6 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
   const { data } = useGetAllSavedSearchesQuery({
     searchByName: savedSearchState.searchByName
   });
-
-  const [triggerSaved] = useLazyGetAllSavedSearchesQuery({});
 
   const { data: searchList }: { data?: IItem[] } = useGetSavedSearchListQuery(
     savedSearchState.search
@@ -138,11 +138,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
   ];
 
   useEffect(() => {
-    setIsLoading(true);
-    triggerSaved({}).then(res => {
-      savedSearchSetState.setSavedSearchData(res?.data?.savedSearches);
-      setIsLoading(false);
-    });
+    savedSearchSetState.setSavedSearchData(data?.savedSearches);
   }, [data]);
 
   // useEffect(()=>{setIsLoading(true)},[])
@@ -280,90 +276,91 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
               : 'h-[calc(100vh-245px)]'
           }`}
         >
-          {!savedSearchState?.savedSearchData.length
-            ? !isLoading && (
-                <EmptyScreen
-                  label="Search Diamonds"
-                  message="No saved searches so far. Let’s save some searches!"
-                  onClickHandler={() =>
-                    router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
-                  }
-                  imageSrc={empty}
-                />
-              )
-            : savedSearchState?.savedSearchData?.map(
-                (
-                  { id, name, meta_data, created_at }: ISavedSearches,
-                  index
-                ) => {
-                  // Calculate the gradient index based on the item's index
-                  const gradientIndex = index % gradientClasses.length;
-                  // Get the gradient class for the calculated index
-                  const gradientClass = gradientClasses[gradientIndex];
+          {!savedSearchState?.savedSearchData?.length ? (
+            <>
+              {setIsLoading(false)}
+              <EmptyScreen
+                label="Search Diamonds"
+                message="No saved searches so far. Let’s save some searches!"
+                onClickHandler={() =>
+                  router.push(`/v2/search?active-tab=${SubRoutes.NEW_SEARCH}`)
+                }
+                imageSrc={empty}
+              />
+            </>
+          ) : (
+            savedSearchState?.savedSearchData?.map(
+              ({ id, name, meta_data, created_at }: ISavedSearches, index) => {
+                setIsLoading(false);
+                // Calculate the gradient index based on the item's index
+                const gradientIndex = index % gradientClasses.length;
+                // Get the gradient class for the calculated index
+                const gradientClass = gradientClasses[gradientIndex];
 
-                  return (
-                    <div
-                      className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
-                      key={id}
-                      onClick={() =>
-                        handleCardClick({
-                          id,
-                          savedSearchData: savedSearchState.savedSearchData,
-                          router,
-                          triggerProductCountApi,
-                          setDialogContent,
-                          setIsDialogOpen
-                        })
-                      }
-                    >
-                      <div className="flex items-center gap-[18px] md:w-[40%]">
-                        <CheckboxComponent
-                          onClick={e => {
-                            e.stopPropagation();
-                            handleCheckbox({
-                              id,
-                              selectedCheckboxes,
-                              setSelectedCheckboxes,
-                              setSelectAllChecked,
-                              selectAllChecked,
-                              data: savedSearchState.savedSearchData
-                            });
-                          }}
-                          isChecked={selectedCheckboxes.includes(id)}
-                        />
-                        <div
-                          className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
-                        >
-                          {name
-                            .split(' ') // Split the name into words
-                            .map(word => word.charAt(0)) // Extract the first character of each word
-                            .join('')}
-                        </div>
-                        <div className="flex flex-col gap-[18px]">
-                          <h1 className="text-neutral900 font-medium text-mMedium capitalize">
-                            {name}
-                          </h1>
-                          <div className="text-neutral700 font-regular text-sMedium">
-                            {formatCreatedAt(created_at)}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="w-full md:w-[50%] mt-4 md:mt-0">
-                        <DisplayTable column={coloumn} row={[meta_data]} />
-                      </div>
-                      <button
-                        className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                return (
+                  <div
+                    className="p-[16px] flex flex-col md:flex-row w-full border-b-[1px] border-neutral200 cursor-pointer group hover:bg-neutral50"
+                    key={id}
+                    onClick={() =>
+                      handleCardClick({
+                        id,
+                        savedSearchData: savedSearchState.savedSearchData,
+                        router,
+                        triggerProductCountApi,
+                        setDialogContent,
+                        setIsDialogOpen
+                      })
+                    }
+                  >
+                    <div className="flex items-center gap-[18px] md:w-[40%]">
+                      <CheckboxComponent
                         onClick={e => {
                           e.stopPropagation();
-                          handleEdit(id);
+                          handleCheckbox({
+                            id,
+                            selectedCheckboxes,
+                            setSelectedCheckboxes,
+                            setSelectAllChecked,
+                            selectAllChecked,
+                            data: savedSearchState.savedSearchData
+                          });
                         }}
+                        isChecked={selectedCheckboxes.includes(id)}
+                      />
+                      <div
+                        className={` ${gradientClass} text-headingM w-[69px] h-[69px] text-neutral700 uppercase p-[14px] rounded-[4px] font-medium text-center`}
                       >
-                        <Image src={editIcon} alt="editIcon" />
-                      </button>
+                        {name
+                          .split(' ') // Split the name into words
+                          .map(word => word.charAt(0)) // Extract the first character of each word
+                          .join('')}
+                      </div>
+                      <div className="flex flex-col gap-[18px]">
+                        <h1 className="text-neutral900 font-medium text-mMedium capitalize">
+                          {name}
+                        </h1>
+                        <div className="text-neutral700 font-regular text-sMedium">
+                          {formatCreatedAt(created_at)}
+                        </div>
+                      </div>
                     </div>
-                  );
-                }
-              )}
+                    <div className="w-full md:w-[50%] mt-4 md:mt-0">
+                      <DisplayTable column={coloumn} row={[meta_data]} />
+                    </div>
+                    <button
+                      className="w-full md:w-[10%] flex justify-end items-start opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                      onClick={e => {
+                        e.stopPropagation();
+                        handleEdit(id);
+                      }}
+                    >
+                      <Image src={editIcon} alt="editIcon" />
+                    </button>
+                  </div>
+                );
+              }
+            )
+          )}
         </div>
         <div className="px-[16px] py-2 flex items-center justify-end border-t-[1px] border-neutral200">
           <ActionButton
@@ -387,7 +384,8 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
                         setIsDialogOpen,
                         setSelectedCheckboxes,
                         setSelectAllChecked,
-                        setIsError
+                        setIsError,
+                        setIsLoading
                       })
                   })
               }

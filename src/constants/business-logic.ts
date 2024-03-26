@@ -79,3 +79,9 @@ export const FILE_URLS = {
 
 export const GIA_LINK = 'https://www.gia.edu/report-check?reportno=';
 export const BREADCRUM_CHARACTER_LIMIT = 9;
+
+export const LAB_LINKS = {
+  GIA_LINK: 'https://www.gia.edu/report-check?reportno=',
+  IGI_LINK: 'https://www.igi.org/verify-your-report/?r=',
+  HRD_LINK: 'https://my.hrdantwerp.com/?id=34&record_number='
+};
