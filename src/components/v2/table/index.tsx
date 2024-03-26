@@ -25,7 +25,7 @@ interface ITable {
   goBackToListView?: () => void;
   breadCrumLabel?: string;
   isOrderDetail?: boolean;
-  identifier: string;
+  identifier?: string;
 }
 
 const Table = ({
