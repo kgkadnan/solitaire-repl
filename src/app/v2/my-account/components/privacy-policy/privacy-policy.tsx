@@ -1,5 +1,6 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import { useEffect, useState } from 'react';
+import '../../../../privacy-policy/common-style.css';
 
 const PrivacyPolicy = () => {
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
@@ -82,7 +83,7 @@ const PrivacyPolicy = () => {
   }
   </style>`;
   return (
-    <>
+    <div className="commonStyle">
       {data && (
         <>
           <h1 className="text-headingS font-medium text-neutral-900 my-3">
@@ -94,7 +95,7 @@ const PrivacyPolicy = () => {
           />
         </>
       )}
-    </>
+    </div>
   );
 };
 
