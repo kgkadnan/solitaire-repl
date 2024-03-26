@@ -1,5 +1,6 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
+import '../../../../privacy-policy/common-style.css';
 
 const TermAndCondtions = () => {
   const [activeTab, setActiveTab] = useState<string>('KGK Website');
@@ -146,7 +147,7 @@ all: revert;
   };
 
   return (
-    <div className="flex flex-col gap-[16px] mt-[16px]">
+    <div className="flex flex-col gap-[16px] mt-[16px] commonStyle">
       <h1 className="text-headingS font-medium text-neutral-900">
         {ManageLocales('app.myAccount.tabs.termAndConditions')}
       </h1>
