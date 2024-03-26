@@ -81,6 +81,7 @@ import { DiamondDetailsComponent } from '@/components/v2/common/detail-page';
 import ImageModal from '@/components/v2/common/detail-page/components/image-modal';
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import { FILE_URLS } from '@/constants/v2/detail-page';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 // Column mapper outside the component to avoid re-creation on each render
 
@@ -718,7 +719,7 @@ const Result = ({
     setConfirmStoneData([]);
   };
 
-  const rederAddCommentDialogs = () => {
+  const renderAddCommentDialogs = () => {
     return (
       <>
         {' '}
@@ -985,9 +986,17 @@ const Result = ({
     setIsDetailPage(false);
     setDetailPageData({});
   };
-
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 2000);
+  }, [isError]);
   return (
     <div className="relative">
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <ImageModal
         setIsLoading={setIsLoading}
         isOpen={isModalOpen}
@@ -1009,7 +1018,7 @@ const Result = ({
       <AddCommentDialog
         isOpen={isAddCommentDialogOpen}
         onClose={() => setIsAddCommentDialogOpen(false)}
-        renderContent={rederAddCommentDialogs}
+        renderContent={renderAddCommentDialogs}
       />
       {!isDetailPage && (
         <div className="flex py-[8px] items-center">
@@ -1112,6 +1121,7 @@ const Result = ({
               isFrom={breadCrumLabel}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
+              identifier={'result'}
             />
           ) : (
             <div className="">
@@ -1136,12 +1146,16 @@ const Result = ({
                 setIsError={setIsError}
                 searchList={searchList}
                 setIsLoading={setIsLoading}
+                handleAddToCart={handleAddToCart}
+                handleConfirmStone={handleConfirmStone}
+                setIsConfirmStone={setIsConfirmStone}
+                setConfirmStoneData={setConfirmStoneData}
               />
             </div>
           )}
           {/* <div className="p-[16px] rounded-b-[8px] shadow-inputShadow "> */}
-          {
-            isConfirmStone && (
+          {isConfirmStone && (
+            <div className="px-4 py-2">
               <ActionButton
                 actionButtonData={[
                   {
@@ -1170,101 +1184,8 @@ const Result = ({
                   }
                 ]}
               />
-            )
-            // : (
-            //   dataTableState.rows.length > 0 && (
-            //     <div className="flex items-center justify-between">
-            //       <div className="flex gap-4 h-[30px] min-w-[270px]">
-            //         <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
-            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
-            //             In Cart
-            //           </p>
-            //         </div>
-            //         <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
-            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
-            //             {' '}
-            //             Hold
-            //           </p>
-            //         </div>
-            //         <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
-            //           <p className="text-mMedium font-medium px-[6px] py-[4px]">
-            //             {' '}
-            //             Memo
-            //           </p>
-            //         </div>
-            //       </div>
-            //       <div className="flex items-center gap-3">
-            //         {isError && (
-            //           <div>
-            //             <span className="hidden  text-successMain" />
-            //             <span
-            //               className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-            //             >
-            //               {errorText}
-            //             </span>
-            //           </div>
-            //         )}
-            //         <ActionButton
-            //           actionButtonData={[
-            //             {
-            //               variant: 'secondary',
-            //               label: ManageLocales('app.searchResult.addToCart'),
-            //               handler: handleAddToCart
-            //             },
-
-            //             {
-            //               variant: 'primary',
-            //               label: ManageLocales('app.searchResult.confirmStone'),
-            //               handler: () => {
-            //                 handleConfirmStone({
-            //                   selectedRows: rowSelection,
-            //                   rows: dataTableState.rows,
-            //                   setIsError,
-            //                   setErrorText,
-            //                   setIsConfirmStone,
-            //                   setConfirmStoneData
-            //                 });
-            //               }
-            //             }
-            //           ]}
-            //         />
-            //         <Dropdown
-            //           dropdownTrigger={
-            //             <Image
-            //               src={threeDotsSvg}
-            //               alt="threeDotsSvg"
-            //               width={4}
-            //               height={43}
-            //             />
-            //           }
-            //           dropdownMenu={[
-            //             {
-            //               label: ManageLocales(
-            //                 'app.search.actionButton.bookAppointment'
-            //               ),
-            //               handler: () => {}
-            //             },
-            //             {
-            //               label: ManageLocales(
-            //                 'app.search.actionButton.compareStone'
-            //               ),
-            //               handler: () => {}
-            //             },
-            //             {
-            //               label: ManageLocales(
-            //                 'app.search.actionButton.findMatchingPair'
-            //               ),
-            //               handler: () => {}
-            //             }
-            //           ]}
-            //           isDisable={true}
-            //         />
-            //       </div>
-            //     </div>
-            //   )
-            // )
-          }
-          {/* </div> */}
+            </div>
+          )}
         </div>
       )}
     </div>

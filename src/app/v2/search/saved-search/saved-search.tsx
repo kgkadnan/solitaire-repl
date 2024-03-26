@@ -53,6 +53,7 @@ import { useAppDispatch } from '@/hooks/hook';
 import { modifySavedSearch } from '@/features/saved-search/saved-search';
 import EmptyScreen from '@/components/v2/common/empty-screen';
 import { kycStatus } from '@/constants/enums/kyc';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 const SavedSearch = ({ setIsLoading, isLoading }: any) => {
   const router = useRouter();
@@ -198,9 +199,17 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
 
   let isNudge = localStorage.getItem('show-nudge') === 'MINI';
   const isKycVerified = JSON.parse(localStorage.getItem('user')!);
-
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 2000);
+  }, [isError]);
   return (
     <div className="mb-[20px]">
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <DialogComponent
         dialogContent={dialogContent}
         isOpens={isDialogOpen}
@@ -267,8 +276,8 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
-              ? 'h-[calc(100vh-380px)]'
-              : 'h-[calc(100vh-310px)]'
+              ? 'h-[calc(100vh-315px)]'
+              : 'h-[calc(100vh-245px)]'
           }`}
         >
           {!savedSearchState?.savedSearchData.length
@@ -356,19 +365,7 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
                 }
               )}
         </div>
-        <div className="p-[16px] flex items-center justify-between border-t-[1px] border-neutral200">
-          <div>
-            {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )}
-          </div>
+        <div className="px-[16px] py-2 flex items-center justify-end border-t-[1px] border-neutral200">
           <ActionButton
             actionButtonData={[
               {

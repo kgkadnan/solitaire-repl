@@ -25,6 +25,7 @@ interface ITable {
   goBackToListView?: () => void;
   breadCrumLabel?: string;
   isOrderDetail?: boolean;
+  identifier: string;
 }
 
 const Table = ({
@@ -37,7 +38,8 @@ const Table = ({
   showGloablFilter = false,
   goBackToListView,
   breadCrumLabel,
-  isOrderDetail = false
+  isOrderDetail = false,
+  identifier
 }: ITable) => {
   // Fetching saved search data
 
@@ -166,7 +168,9 @@ const Table = ({
               : 'calc(100vh - 315px)'
             : isOrderDetail
             ? 'calc(100vh - 477px)'
-            : 'calc(100vh - 329px)',
+            : identifier === 'result'
+            ? 'calc(100vh - 240px)'
+            : 'calc(100vh - 310px)',
         maxHeight:
           isNudge &&
           (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
@@ -176,7 +180,9 @@ const Table = ({
               : 'calc(100vh - 315px)'
             : isOrderDetail
             ? 'calc(100vh - 477px)'
-            : 'calc(100vh - 329px)'
+            : identifier === 'result'
+            ? 'calc(100vh - 240px)'
+            : 'calc(100vh - 310px)'
       }
     },
     muiTableHeadRowProps: {

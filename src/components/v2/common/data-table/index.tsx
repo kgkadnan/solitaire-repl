@@ -19,6 +19,7 @@ import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDow
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 
 // theme.js
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
@@ -35,8 +36,10 @@ import SavedSearchDropDown from '../saved-search-dropdown';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
+  AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  SOLD_STATUS
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
@@ -45,6 +48,7 @@ import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handl
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '../copy-and-share/share';
 import Tooltip from '../tooltip';
+import { Dropdown } from '../dropdown-menu';
 
 const theme = createTheme({
   typography: {
@@ -112,7 +116,12 @@ const DataTable = ({
   setErrorText,
   setIsError,
   searchList,
-  setIsLoading
+  setIsLoading,
+  handleAddToCart,
+  handleConfirmStone,
+  setIsConfirmStone,
+  setConfirmStoneData,
+  deleteCartHandler
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -471,8 +480,8 @@ const DataTable = ({
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 415px)'
-            : 'calc(100vh - 375px)'
+            ? 'calc(100vh - 350px)'
+            : 'calc(100vh - 303px)'
           : 'calc(100vh - 330px)',
         maxHeight: isFullScreen
           ? myCart
@@ -482,8 +491,8 @@ const DataTable = ({
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 415px)'
-            : 'calc(100vh - 375px)'
+            ? 'calc(100vh - 350px)'
+            : 'calc(100vh - 303px)'
           : 'calc(100vh - 330px)'
       }
     },
@@ -807,22 +816,21 @@ const DataTable = ({
                   {
                     variant: 'secondary',
                     label: ManageLocales('app.searchResult.addToCart'),
-                    handler: () => {}
-                    // handleAddToCart
+                    handler: () => handleAddToCart()
                   },
 
                   {
                     variant: 'primary',
                     label: ManageLocales('app.searchResult.confirmStone'),
                     handler: () => {
-                      // handleConfirmStone({
-                      //   selectedRows: rowSelection,
-                      //   rows: rows,
-                      //   setIsError,
-                      //   setErrorText,
-                      //   setIsConfirmStone,
-                      //   setConfirmStoneData
-                      // });
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
                     }
                   }
                 ]}
@@ -858,6 +866,82 @@ const DataTable = ({
               ]}
               isDisable={true}
             /> */}
+            </div>
+          </div>
+        )}
+        {myCart && (
+          <div className="flex items-center justify-between">
+            <div></div>
+            <MRT_TablePagination table={table} />
+            <div className="flex gap-2">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.myCart.actionButton.delete'),
+                    handler: deleteCartHandler
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.confirmStone'
+                    ),
+                    handler: () => {
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
+                    },
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  }
+                ]}
+              />
+              <Dropdown
+                dropdownTrigger={
+                  <Image
+                    src={threeDotsSvg}
+                    alt="threeDotsSvg"
+                    width={43}
+                    height={43}
+                  />
+                }
+                dropdownMenu={[
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.compareStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab === SOLD_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.bookAppointment'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.viewSimilarStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab === AVAILABLE_STATUS
+                  }
+                ]}
+                isDisable={true}
+              />
             </div>
           </div>
         )}

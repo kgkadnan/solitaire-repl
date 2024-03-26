@@ -445,7 +445,7 @@ const MyDiamonds = () => {
               isLoadingInvoiceHistory ||
               isLoadingPendingInvoice ||
               isLoadngActiveInvoice) && (
-              <div className="min-h-[65vh] h-[65vh]">
+              <div className="min-h-[73vh] h-[65vh]">
                 <EmptyScreen
                   label="Search Diamonds"
                   message="Looks like you haven't placed any orders yet. Let’s place some orders!"

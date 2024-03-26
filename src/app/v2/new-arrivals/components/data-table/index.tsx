@@ -102,7 +102,8 @@ const NewArrivalDataTable = ({
   socketManager,
   rowSelection,
   setRowSelection,
-  setIsLoading
+  setIsLoading,
+  renderFooter
 }: any) => {
   // Fetching saved search data
 
@@ -334,7 +335,7 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
-
+  const renderBottomToolbar = ({ table }: any) => renderFooter(table);
   const NoResultsComponent = () => (
     <div className="flex flex-col items-center justify-center gap-5 h-[100%] mt-[50px]">
       {activeCount === 0 || bidCount === 0 || historyCount === 0 ? (
@@ -379,6 +380,7 @@ const NewArrivalDataTable = ({
     globalFilterFn: 'startsWith',
     selectAllMode: 'page',
     renderTopToolbar,
+    renderBottomToolbar,
     renderEmptyRowsFallback: NoResultsComponent,
     // renderFallbackComponent: NoResultsComponent,
     // enableExpanding: true,
@@ -494,15 +496,19 @@ const NewArrivalDataTable = ({
         // maxHeight: 'calc(100vh - 399px)'
         height: isFullScreen ? '70vh' : 'calc(100vh - 399px)',
         minHeight: isFullScreen
-          ? 'calc(100vh - 135px)'
+          ? activeTab === 2
+            ? 'calc(100vh - 125px)'
+            : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 405px)',
+          ? 'calc(100vh - 260px)'
+          : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
-          ? 'calc(100vh - 135px)'
+          ? activeTab === 2
+            ? 'calc(100vh - 125px)'
+            : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? 'calc(100vh - 355px)'
-          : 'calc(100vh - 405px)'
+          ? 'calc(100vh - 260px)'
+          : 'calc(100vh - 295px)'
       }
     },
     muiTableHeadRowProps: {
@@ -636,7 +642,7 @@ const NewArrivalDataTable = ({
       //customize paper styles
 
       sx: {
-        borderRadius: '8px 8px 0px 0px',
+        borderRadius: '8px',
         border: 'none'
       }
     },
