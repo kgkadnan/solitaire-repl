@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-
+import '../privacy-policy/common-style.css';
 const TermAndCondtions = () => {
   const [activeTab, setActiveTab] = useState<string>('KGK Website');
   const [data, setData] = useState<any>();
@@ -151,7 +151,7 @@ const TermAndCondtions = () => {
   };
 
   return (
-    <div className=" max-w-4xl mx-auto flex flex-col gap-[16px] mt-[16px]">
+    <div className=" max-w-4xl mx-auto flex flex-col gap-[16px] mt-[16px] commonStyle">
       <div className="flex w-full items-center flex-col">
         <h1 className="text-headingS font-medium text-neutral-900">
           Terms and Conditions
