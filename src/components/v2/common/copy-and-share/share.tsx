@@ -284,7 +284,7 @@ const Share = ({
             setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
           }
         }}
-        className="w-[38px] h-[38px]"
+        className="w-[39px] h-[39px]"
       >
         <Tooltip
           tooltipTrigger={
@@ -292,8 +292,8 @@ const Share = ({
               className="cursor-pointer"
               src={shareButtonSvg}
               alt={'share'}
-              height={38}
-              width={38}
+              height={39}
+              width={39}
             />
           }
           tooltipContent={'Share'}
