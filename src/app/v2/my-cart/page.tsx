@@ -66,6 +66,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -113,6 +114,12 @@ const MyCart = () => {
       setActiveTab(subRoute);
     }
   }, []);
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 2000);
+  }, [isError]);
   const processCartItems = ({
     cartItems,
     activeTab
@@ -421,7 +428,9 @@ const MyCart = () => {
             </div>
             <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
               <h1 className="text-headingS text-neutral900">
-                Item successfully deleted from “My Cart”
+                {deleteCartIds.length}{' '}
+                {`${deleteCartIds.length === 1 ? 'stone' : 'stones'} `}{' '}
+                successfully deleted from “My Cart”
               </h1>
               <ActionButton
                 actionButtonData={[
@@ -779,6 +788,9 @@ const MyCart = () => {
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
@@ -798,8 +810,8 @@ const MyCart = () => {
         renderContent={rederAddCommentDialogs}
       />
       {(isConfirmStone || !isDetailPage) && (
-        <div className="flex h-[81px] items-center ">
-          <p className="text-headingM font-medium text-neutral900">
+        <div className="flex  py-[8px] items-center ">
+          <p className="text-lMedium font-medium text-neutral900">
             {ManageLocales('app.myCart.mycart')}
           </p>
         </div>
@@ -875,7 +887,7 @@ const MyCart = () => {
           </div>
         </>
       ) : (
-        <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-165px)] shadow-inputShadow">
+        <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-110px)] shadow-inputShadow">
           <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
             <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
               {myCartTabs.map(({ label, status, count }) => {
@@ -904,6 +916,7 @@ const MyCart = () => {
               isFrom={'My Cart'}
               handleDetailImage={handleDetailImage}
               handleDetailPage={handleDetailPage}
+              identifier={'cart'}
             />
           ) : (
             <>
@@ -931,14 +944,15 @@ const MyCart = () => {
                   setIsError={setIsError}
                   setErrorText={setErrorText}
                   setIsLoading={setIsLoading}
+                  deleteCartHandler={deleteCartHandler}
                 />
               )}
             </>
           )}
 
           {rows.length > 0 ? (
-            <div className="flex gap-3 justify-end items-center p-[16px]  ">
-              {isConfirmStone ? (
+            <div className="flex gap-3 justify-end items-center px-4 py-2">
+              {isConfirmStone && (
                 <>
                   <ActionButton
                     actionButtonData={[
@@ -969,110 +983,6 @@ const MyCart = () => {
                         handler: () => confirmStoneApiCall()
                       }
                     ]}
-                  />
-                </>
-              ) : (
-                <>
-                  {' '}
-                  {isError && (
-                    <div>
-                      <span className="hidden  text-successMain" />
-                      <span
-                        className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                      >
-                        {errorText}
-                      </span>
-                    </div>
-                  )}
-                  <ActionButton
-                    actionButtonData={[
-                      {
-                        variant: 'secondary',
-                        label: ManageLocales('app.myCart.actionButton.delete'),
-                        handler: deleteCartHandler
-                      },
-                      // {
-                      //   variant: 'secondary',
-                      //   label: ManageLocales(
-                      //     'app.myCart.actionButton.bookAppointment'
-                      //   ),
-                      //   handler: () => {},
-                      //   isHidden: activeTab !== AVAILABLE_STATUS
-                      // },
-                      {
-                        variant: 'primary',
-                        label: ManageLocales(
-                          'app.myCart.actionButton.confirmStone'
-                        ),
-                        handler: () => {
-                          handleConfirmStone({
-                            selectedRows: rowSelection,
-                            rows: dataTableState.rows,
-                            setIsError,
-                            setErrorText,
-                            setIsConfirmStone,
-                            setConfirmStoneData
-                          });
-                        },
-                        isHidden: activeTab !== AVAILABLE_STATUS
-                      }
-                      // {
-                      //   variant: 'secondary',
-                      //   label: ManageLocales('app.myCart.actionButton.compareStone'),
-                      //   handler: () => {},
-                      //   isHidden:
-                      //     activeTab !== HOLD_STATUS && activeTab !== MEMO_STATUS
-                      // }
-                      // {
-                      //   variant: 'primary',
-                      //   label: ManageLocales(
-                      //     'app.myCart.actionButton.viewSimilarStone'
-                      //   ),
-                      //   handler: () => {},
-                      //   isHidden: activeTab === AVAILABLE_STATUS
-                      // }
-                    ]}
-                  />
-                  <Dropdown
-                    dropdownTrigger={
-                      <Image
-                        src={threeDotsSvg}
-                        alt="threeDotsSvg"
-                        width={43}
-                        height={43}
-                      />
-                    }
-                    dropdownMenu={[
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.compareStone'
-                        ),
-                        handler: () => {},
-                        isHidden: activeTab === SOLD_STATUS
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.findMatchingPair'
-                        ),
-                        handler: () => {},
-                        isHidden: activeTab !== AVAILABLE_STATUS
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.bookAppointment'
-                        ),
-                        handler: () => {},
-                        isHidden: activeTab !== AVAILABLE_STATUS
-                      },
-                      {
-                        label: ManageLocales(
-                          'app.myCart.actionButton.viewSimilarStone'
-                        ),
-                        handler: () => {},
-                        isHidden: activeTab === AVAILABLE_STATUS
-                      }
-                    ]}
-                    isDisable={true}
                   />
                 </>
               )}

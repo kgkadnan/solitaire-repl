@@ -23,7 +23,8 @@ const ConfirmStone = ({
   activeTab,
   isFrom,
   handleDetailImage,
-  handleDetailPage
+  handleDetailPage,
+  identifier
 }: any) => {
   const [rowSelection, setRowSelection] = useState({});
 
@@ -134,6 +135,7 @@ const ConfirmStone = ({
             goBackToListView(isFrom);
           }}
           breadCrumLabel={breadCrumLabel}
+          identifier={identifier}
         />
       )}
     </>

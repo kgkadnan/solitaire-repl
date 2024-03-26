@@ -51,31 +51,6 @@ const Share = ({
     { name: 'Public URL', state: 'public_url' }
   ]);
 
-  // useEffect(() => {
-  //   if (isNewArrival) {
-  //     if(activeTab && activeTab===2){
-  //       setShareOptions(prev => [
-  //         ...prev,
-  //         { name: 'Date', state: 'last_bid_date' }
-  //       ]);
-  //       setSelectedAttributes((prev: any) => ({
-  //         ...prev,
-  //         last_bid_date: true
-  //       }));
-  //     }
-  //     else{
-  //       setShareOptions(prev => [
-  //         ...prev,
-  //         { name: 'Current Max Bid', state: 'current_max_bid' }
-  //       ]);
-  //       setSelectedAttributes((prev: any) => ({
-  //         ...prev,
-  //         current_max_bid: true
-  //       }));
-  //     }
-
-  //   }
-  // }, [isNewArrival]);
   useEffect(() => {
     if (isNewArrival) {
       // Define the field to add based on activeTab
