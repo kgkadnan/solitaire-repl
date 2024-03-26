@@ -50,7 +50,7 @@ const Share = ({
     { name: 'Amt ($)', state: 'amount' },
     { name: 'Public URL', state: 'public_url' }
   ]);
-  console.log(activeTab, activeTab);
+
   // useEffect(() => {
   //   if (isNewArrival) {
   //     if(activeTab && activeTab===2){
@@ -309,6 +309,7 @@ const Share = ({
             setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
           }
         }}
+        className="w-[38px] h-[38px]"
       >
         <Tooltip
           tooltipTrigger={
