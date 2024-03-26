@@ -11,11 +11,14 @@ export const handleDelete = async ({
   setIsDialogOpen,
   setSelectedCheckboxes,
   setSelectAllChecked,
-  setIsError
+  setIsError,
+  setIsLoading
 }: any) => {
+  setIsLoading(true);
   await deleteSavedSearch(selectedCheckboxes)
     .unwrap()
     .then(() => {
+      setIsLoading(false);
       setDialogContent(
         <>
           <div className="absolute left-[-84px] top-[-84px]">
@@ -43,6 +46,7 @@ export const handleDelete = async ({
       setIsDialogOpen(true);
     })
     .catch((error: any) => {
+      setIsLoading(false);
       setDialogContent(
         <>
           <div className="absolute left-[-84px] top-[-84px]">

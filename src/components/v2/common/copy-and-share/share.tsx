@@ -284,6 +284,7 @@ const Share = ({
             setErrorText(SELECT_STONE_TO_PERFORM_ACTION);
           }
         }}
+        className="w-[38px] h-[38px]"
       >
         <Tooltip
           tooltipTrigger={

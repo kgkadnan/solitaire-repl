@@ -992,6 +992,9 @@ const Result = ({
         setIsError(false); // Hide the toast notification after some time
       }, 2000);
   }, [isError]);
+
+  console.log('drrrrrr', memoizedRows);
+
   return (
     <div className="relative">
       {isError && (

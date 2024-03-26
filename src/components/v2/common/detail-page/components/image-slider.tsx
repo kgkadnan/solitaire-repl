@@ -16,9 +16,10 @@ import downloadImg from '@public/v2/assets/icons/detail-page/download.svg';
 
 interface ImageSliderProps {
   images: ImagesType[];
+  setIsLoading: any;
 }
 
-const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
+const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [showDownloadButton, setShowDownloadButton] = useState(false);
@@ -166,6 +167,7 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images }) => {
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={currentImageIndex}
         images={images}
+        setIsLoading={setIsLoading}
       />
     </div>
   );

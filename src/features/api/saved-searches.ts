@@ -40,6 +40,7 @@ export const savedSearchesApi = createApi({
         method: 'DELETE',
         body: filter // Modify this to match your API's payload
       }),
+
       invalidatesTags: ['SavedSearch']
     })
   })
