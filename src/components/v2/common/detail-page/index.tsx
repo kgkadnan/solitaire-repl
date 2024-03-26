@@ -85,21 +85,6 @@ export function DiamondDetailsComponent({
     setTableData(copyData);
   }, [filterData, data]);
 
-  //   useEffect(() => {
-  //     dispatch(fetchDiamondDetailsApi(params?.diamondId));
-  //   }, [params?.diamondId]);
-
-  //   if (
-  //     !diamondData?.loading ||
-  //     diamondData?.loading === LOADING_VALUES.PENDING
-  //   ) {
-  //     return <Loading />;
-  //   }
-
-  //   if (diamondData?.loading === LOADING_VALUES.FAILED) {
-  //     return <ErrorPage />;
-  //   }
-
   const handleImageClick = (index: number) => {
     setSelectedImageIndex(index);
   };
@@ -250,7 +235,7 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full xl:hidden">
-            <ImageSlider images={images} />
+            <ImageSlider images={images} setIsLoading={setIsLoading} />
           </div>
           <div
             className={`hidden xl:block mr-5 ${
@@ -276,7 +261,7 @@ export function DiamondDetailsComponent({
           </div>
         </div>
         <div
-          className={`xl:w-2/3 xl:ml-10 scroll-adjust-custom xl:overflow-y-scroll ${
+          className={`xl:w-2/3 xl:ml-10 mb-[12px] scroll-adjust-custom xl:overflow-y-scroll ${
             isNudge &&
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)

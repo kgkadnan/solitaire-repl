@@ -412,7 +412,7 @@ const MyDiamonds = () => {
           {data?.length > 0 ? (
             <div className="max-w-full overflow-x-auto">
               {/* header */}
-              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b border-neutral-200 bg-neutral-50 text-neutral700">
+              <div className="grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] text-mMedium h-[47px] border-b  border-neutral-200 bg-neutral-50 text-neutral700">
                 {keys?.map(({ label }: any) => (
                   <div key={label} className="p-4 text-left font-medium">
                     {label}
@@ -421,13 +421,15 @@ const MyDiamonds = () => {
               </div>
               {/* rows */}
 
-              {data?.map((items: any) => (
+              {data?.map((items: any, index: number) => (
                 <div
                   key={items.order_id}
                   onClick={() => {
                     handleShowDetails(items?.id);
                   }}
-                  className="cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0 border-b border-neutral-200 hover:bg-neutral-50"
+                  className={`cursor-pointer grid grid-cols-[repeat(auto-fit,_minmax(0,_1fr))] bg-neutral0   border-neutral-200 hover:bg-neutral-50 ${
+                    index >= data.length - 1 ? 'rounded-[8px]' : 'border-b'
+                  }`}
                 >
                   {keys?.map(({ accessor }: any, index: number) => (
                     <div
@@ -481,7 +483,7 @@ const MyDiamonds = () => {
             : ManageLocales('app.myDiamonds.yourOrders')}
         </p>
       </div>
-      <div className="border-[1px] border-neutral200 rounded-[8px] shadow-inputShadow">
+      <div className="border-[1px] border-neutral200 rounded-[8px]">
         {isLoading ||
         !isLoadingInvoiceHistory ||
         !isLoadingPendingInvoice ||

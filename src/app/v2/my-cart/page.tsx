@@ -397,6 +397,8 @@ const MyCart = () => {
   };
 
   const handleTabs = ({ tab }: { tab: string }) => {
+    setErrorText('');
+    setIsError(false);
     setActiveTab(tab);
   };
 
@@ -407,12 +409,13 @@ const MyCart = () => {
       );
       return selectedRow?.id;
     });
-
+    setIsLoading(true);
     deleteCart({
       items: deleteCartIds
     })
       .unwrap()
       .then(res => {
+        setIsLoading(false);
         const { filteredRows, counts } = processCartItems({
           cartItems: res.cart.items,
           activeTab
@@ -447,6 +450,7 @@ const MyCart = () => {
         setRowSelection({});
       })
       .catch(error => {
+        setIsLoading(false);
         setIsDialogOpen(true);
         setDialogContent(
           <>
@@ -502,7 +506,10 @@ const MyCart = () => {
                 {
                   variant: 'primary',
                   label: ManageLocales('app.modal.yes'),
-                  handler: () => handleDelete({ selectedIds }),
+                  handler: () => {
+                    handleDelete({ selectedIds });
+                    setIsDialogOpen(false);
+                  },
                   customStyle: 'flex-1 h-10'
                 }
               ]}
@@ -789,6 +796,7 @@ const MyCart = () => {
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
         images={images}
+        setIsLoading={setIsLoading}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -912,9 +920,7 @@ const MyCart = () => {
             />
           ) : (
             <>
-              {isLoading ? (
-                <CustomKGKLoader />
-              ) : !rows.length ? (
+              {!rows.length && !isLoading ? (
                 <EmptyScreen
                   label={ManageLocales(
                     'app.emptyCart.actionButton.searchDiamonds'
@@ -937,6 +943,7 @@ const MyCart = () => {
                   myCart={true}
                   setIsError={setIsError}
                   setErrorText={setErrorText}
+                  setIsLoading={setIsLoading}
                   deleteCartHandler={deleteCartHandler}
                 />
               )}

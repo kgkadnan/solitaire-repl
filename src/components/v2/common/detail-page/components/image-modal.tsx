@@ -27,6 +27,7 @@ const ImageModal: React.FC<ModalProps> = ({
 }) => {
   const [imageIndex, setImageIndex] = useState<number>(0);
   const [showToast, setShowToast] = useState(false);
+  const [showDownloadButton, setShowDownloadButton] = useState<string>('');
   const handleImageClick = (index: number) => {
     setImageIndex(index);
   };
@@ -103,6 +104,7 @@ const ImageModal: React.FC<ModalProps> = ({
                   height={600}
                   width={650}
                   onError={(e: any) => {
+                    setShowDownloadButton(images[imageIndex].name);
                     e.target.onerror = null;
                     e.target.src = NoImageFound.src;
                   }}
@@ -112,28 +114,29 @@ const ImageModal: React.FC<ModalProps> = ({
           </div>
           <div className="flex mt-5 justify-center">
             {(images[imageIndex].name !== 'B2B' ||
-              images[imageIndex].name !== 'B2B Sparkle') && (
-              <Tooltip
-                tooltipTrigger={
-                  <Image
-                    src={downloadSvg}
-                    alt={downloadSvg}
-                    height={40}
-                    width={40}
-                    className="mr-2 cursor-pointer"
-                    onClick={() => {
-                      handleDownloadImage(
-                        images[imageIndex]?.url || '',
-                        images[imageIndex].name,
-                        setIsLoading
-                      );
-                    }}
-                  />
-                }
-                tooltipContent={'Media Link'}
-                tooltipContentStyles={'z-[4]'}
-              />
-            )}
+              images[imageIndex].name !== 'B2B Sparkle') &&
+              !showDownloadButton.includes(images[imageIndex].name) && (
+                <Tooltip
+                  tooltipTrigger={
+                    <Image
+                      src={downloadSvg}
+                      alt={downloadSvg}
+                      height={40}
+                      width={40}
+                      className="mr-2 cursor-pointer"
+                      onClick={() => {
+                        handleDownloadImage(
+                          images[imageIndex]?.url || '',
+                          images[imageIndex].name,
+                          setIsLoading
+                        );
+                      }}
+                    />
+                  }
+                  tooltipContent={'Media Link'}
+                  tooltipContentStyles={'z-[4]'}
+                />
+              )}
 
             <Tooltip
               tooltipTrigger={
