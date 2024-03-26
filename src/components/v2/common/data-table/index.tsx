@@ -345,8 +345,8 @@ const DataTable = ({
       border: `1px solid #E4E7EC`,
       background: 'var(--neutral-0)',
       padding: '4px',
-      width: '35px',
-      height: '35px',
+      width: '36px',
+      height: '36px',
       borderRadius: '4px',
       boxShadow: '0px 1px 0px 0px hsla(220, 43%, 11%, 0.12)',
       ':hover': {
@@ -732,7 +732,7 @@ const DataTable = ({
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
                 <button
-                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer h-[38px]"
+                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 shadow-sm bg-neutral0 items-center cursor-pointer h-[37px]"
                   onClick={() => {
                     searchParameters[activeTab - 1].saveSearchName.length
                       ? handleUpdateSaveSearch()
@@ -757,8 +757,8 @@ const DataTable = ({
                   <Image
                     src={downloadIcon}
                     alt={'download'}
-                    width={38}
-                    height={38}
+                    width={39}
+                    height={39}
                   />
                 }
                 tooltipContent={'Download Excel'}
