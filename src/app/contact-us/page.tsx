@@ -38,7 +38,7 @@ const ContactUs = () => {
       <h1 className="text-headingS font-medium text-neutral-900">Contact Us</h1>
       <div className="flex gap-6">
         {contactData.map(data => (
-          <div className="w-[300px] border-[1px] border-neutral200 rounded-[8px] p-2 flex flex-col gap-2">
+          <div className="w-[300px] border-[1px] border-neutral200 rounded-[8px] p-2 flex flex-col gap-2" key={data.companyName}>
             <div className="flex gap-2">
               <Image src={data.flag} alt={data.country} />{' '}
               <p className="text-neutral900">{data.country}</p>
