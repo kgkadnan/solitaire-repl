@@ -300,6 +300,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
         images={images}
+        setIsLoading={setIsLoading}
       />{' '}
       {productDetailData && Object.keys(productDetailData).length > 0 && (
         <div>

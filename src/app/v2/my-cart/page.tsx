@@ -390,6 +390,8 @@ const MyCart = () => {
   };
 
   const handleTabs = ({ tab }: { tab: string }) => {
+    setErrorText('');
+    setIsError(false);
     setActiveTab(tab);
   };
 
@@ -782,6 +784,7 @@ const MyCart = () => {
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
         images={images}
+        setIsLoading={setIsLoading}
       />
       <DialogComponent
         dialogContent={dialogContent}
@@ -927,6 +930,7 @@ const MyCart = () => {
                   myCart={true}
                   setIsError={setIsError}
                   setErrorText={setErrorText}
+                  setIsLoading={setIsLoading}
                 />
               )}
             </>

@@ -235,7 +235,7 @@ export function DiamondDetailsComponent({
           }`}
         >
           <div className="w-full xl:hidden">
-            <ImageSlider images={images} />
+            <ImageSlider images={images} setIsLoading={setIsLoading} />
           </div>
           <div
             className={`hidden xl:block mr-5 ${

@@ -487,6 +487,7 @@ const NewArrivals = () => {
         onClose={() => setIsModalOpen(!isModalOpen)}
         selectedImageIndex={0}
         images={images}
+        setIsLoading={setIsLoading}
       />
       <DialogComponent
         dialogContent={modalState.dialogContent}

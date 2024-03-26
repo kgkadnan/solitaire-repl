@@ -60,13 +60,4 @@ export const handleDownloadImage = async (
     // Handle any errors
     console.error('Error fetching data:', error);
   }
-
-  // if (imageUrl) {
-  //   const link = document.createElement('a');
-  //   link.href = imageUrl;
-  //   link.download = `image_${imageUrl}`;
-  //   document.body.appendChild(link);
-  //   link.click();
-  //   document.body.removeChild(link);
-  // }
 };
