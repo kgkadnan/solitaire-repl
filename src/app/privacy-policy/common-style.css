@@ -1,0 +1,6 @@
+
+
+.commonStyle h2 {
+  font-size: var(--font-size-lMedium);
+  color:var(--neutral-900)
+}
