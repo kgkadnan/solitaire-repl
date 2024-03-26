@@ -46,7 +46,6 @@ Dev deployed instance pointing to staging backend same goes websocket
 
 dependency on Backend (needs to be deployed
 
-
 ## Start development server
 
 development: pnpm dev

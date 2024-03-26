@@ -38,7 +38,7 @@ const CountdownTimer = ({
   const formatTime = (unit: any) => (unit < 10 ? `0${unit}` : unit);
 
   return (
-    <div className="flex justify-center items-center gap-2 h-[34px]">
+    <div className="flex justify-center items-center gap-2 h-[34px] mr-2">
       <div className="flex flex-col items-center gap-[2px] w-[25px]">
         <span className="text-neutral800 text-[8px] uppercase">Hours</span>
         <div className="text-lg font-semibold rounded  relative w-full">

@@ -892,7 +892,7 @@ const Form = ({
             isError || minMaxError ? 'justify-between' : 'justify-end'
           } `}
         >
-          {(isError || minMaxError.length) && (
+          {(isError || minMaxError.length > 0) && (
             <div>
               <span className="hidden  text-successMain" />
               <span
