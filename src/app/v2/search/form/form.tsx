@@ -746,21 +746,21 @@ const Form = ({
     );
   };
   return (
-    <div className=" flex flex-col pt-[32px] gap-[24px]">
+    <div className=" flex flex-col gap-[24px]">
       <InputDialogComponent
         isOpen={isInputDialogOpen}
         onClose={() => setIsInputDialogOpen(false)}
         renderContent={renderContentWithInput}
       />
       <div>
+        <div className="py-2">
+          <span className="text-neutral900 text-lRegular font-medium grid gap-[24px]">
+            Search for Diamonds
+          </span>
+        </div>
         <div className="flex flex-col gap-[16px]">
-          <div>
-            <span className="text-neutral900 text-headingM font-medium grid gap-[24px]">
-              Search for Diamonds
-            </span>
-          </div>
           {searchParameters.length > 0 ? (
-            <div className="flex justify-between border-[1px] border-neutral200  p-[16px]">
+            <div className="flex justify-between border-[1px] border-neutral200  px-[16px] py-[8px]">
               <div className="flex gap-[12px] flex-wrap ">
                 <Breadcrum
                   searchParameters={searchParameters}

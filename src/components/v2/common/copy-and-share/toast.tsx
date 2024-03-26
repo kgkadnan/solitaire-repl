@@ -1,7 +1,7 @@
 import { kycStatus } from '@/constants/enums/kyc';
 import React from 'react';
 
-export const Toast = ({ message, show }: any) => {
+export const Toast = ({ message, show, isSuccess = true }: any) => {
   // Dismiss the toast after 3 seconds
 
   if (!show) return null;
@@ -11,8 +11,13 @@ export const Toast = ({ message, show }: any) => {
   return (
     // <div className="fixed  w-[320px]  top-[64px]  transform -translate-x-1/2 bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900">
     <div
-      className={`fixed w-[320px] right-[32px] bg-successSurface border-[1px] border-successBorder rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900 transition-all duration-500 transform ${
+      className={`fixed w-[320px] right-[16px]  border-[1px]  rounded-[8px] shadow-md text-mMedium medium p-4 text-neutral900 transition-all duration-500 transform z-[1000] ${
         show ? '' : 'translate-x-full'
+      }
+      ${
+        isSuccess
+          ? 'bg-successSurface border-successBorder'
+          : 'bg-dangerSurface border-dangerBorder'
       }
     ${
       isNudge &&

@@ -3,6 +3,7 @@ import styles from './data-table.module.scss';
 import {
   MRT_ExpandButton,
   MRT_GlobalFilterTextField,
+  MRT_TablePagination,
   MRT_ToggleFullScreenButton,
   MaterialReactTable,
   useMaterialReactTable
@@ -18,6 +19,7 @@ import chevronDown from '@public/v2/assets/icons/save-search-dropdown/chevronDow
 import Image from 'next/image';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import searchIcon from '@public/v2/assets/icons/data-table/search-icon.svg';
+import threeDotsSvg from '@public/v2/assets/icons/threedots.svg';
 
 // theme.js
 import { ThemeProvider, createTheme, styled } from '@mui/material/styles';
@@ -34,8 +36,10 @@ import SavedSearchDropDown from '../saved-search-dropdown';
 import { useLazyGetProductCountQuery } from '@/features/api/product';
 import { constructUrlParams } from '@/utils/v2/construct-url-params';
 import {
+  AVAILABLE_STATUS,
   MAX_SAVED_SEARCH_COUNT,
-  MAX_SEARCH_TAB_LIMIT
+  MAX_SEARCH_TAB_LIMIT,
+  SOLD_STATUS
 } from '@/constants/business-logic';
 import { Routes, SubRoutes } from '@/constants/v2/enums/routes';
 import { useRouter } from 'next/navigation';
@@ -44,6 +48,7 @@ import { isSearchAlreadyExist } from '@/app/v2/search/saved-search/helpers/handl
 import { downloadExcelHandler } from '@/utils/v2/donwload-excel';
 import Share from '../copy-and-share/share';
 import Tooltip from '../tooltip';
+import { Dropdown } from '../dropdown-menu';
 
 const theme = createTheme({
   typography: {
@@ -111,7 +116,12 @@ const DataTable = ({
   setErrorText,
   setIsError,
   searchList,
-  setIsLoading
+  setIsLoading,
+  handleAddToCart,
+  handleConfirmStone,
+  setIsConfirmStone,
+  setConfirmStoneData,
+  deleteCartHandler
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -362,7 +372,7 @@ const DataTable = ({
     enableColumnFilters: false,
     enablePagination: false,
     enableStickyHeader: true,
-    enableBottomToolbar: false,
+    enableBottomToolbar: true,
     enableGrouping: true,
     enableExpandAll: false,
     enableColumnDragging: false,
@@ -447,8 +457,8 @@ const DataTable = ({
       grouping: ['shape'],
       columnPinning: {
         left: ['mrt-row-select', 'lot_id', 'mrt-row-expand']
-      }
-      //  pagination: { pageSize: 20,pageIndex:0 }
+      },
+      pagination: { pageSize: 20, pageIndex: 0 }
     },
 
     // renderEmptyRowsFallback: () => {
@@ -461,29 +471,29 @@ const DataTable = ({
       sx: {
         // minHeight: 'calc(100vh - 399px)',
         // maxHeight: 'calc(100vh - 399px)'
-        height: isFullScreen ? '70vh' : 'calc(100vh - 412px)',
+        height: isFullScreen ? '70vh' : 'calc(100vh - 330px)',
         minHeight: isFullScreen
           ? myCart
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
-            : 'calc(100vh - 200px)'
+            : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 415px)'
-            : 'calc(100vh - 375px)'
-          : 'calc(100vh - 412px)',
+            ? 'calc(100vh - 350px)'
+            : 'calc(100vh - 303px)'
+          : 'calc(100vh - 330px)',
         maxHeight: isFullScreen
           ? myCart
             ? showCalculatedField
               ? 'calc(100vh - 130px)'
               : 'calc(100vh - 90px)'
-            : 'calc(100vh - 200px)'
+            : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 415px)'
-            : 'calc(100vh - 375px)'
-          : 'calc(100vh - 412px)'
+            ? 'calc(100vh - 350px)'
+            : 'calc(100vh - 303px)'
+          : 'calc(100vh - 330px)'
       }
     },
     muiTableHeadRowProps: {
@@ -605,14 +615,14 @@ const DataTable = ({
       //customize paper styles
 
       sx: {
-        borderRadius: '8px 8px 0px 0px',
+        borderRadius: '8px',
         border: 'none'
       }
     },
     renderTopToolbar: ({ table }) => (
       <div>
         {isResult && (
-          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[12px] items-center">
+          <div className=" min-h-[55px] items-start justify-between border-b-[1px] border-neutral200 flex px-[16px] py-[8px] items-center">
             <div className="flex lg-w-[calc(100%-500px)] gap-[12px] flex-wrap">
               <Breadcrum
                 searchParameters={searchParameters}
@@ -625,7 +635,7 @@ const DataTable = ({
             <div className="pr-[2px] flex gap-[12px] w-[500px]  justify-end flex-wrap relative">
               <button
                 onClick={handleDropdown}
-                className={`flex items-center px-[16px] py-[8px] text-mMedium font-medium text-neutral900 ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
+                className={`flex items-center px-[16px] py-[8px] text-mMedium font-medium text-neutral900 !h-[40px] ${styles.ctaStyle} ${styles.ctaSecondaryStyle}`}
               >
                 {ManageLocales('app.search.savedSearch')}
                 <Image src={chevronDown} alt="chevronDown" />
@@ -675,7 +685,7 @@ const DataTable = ({
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            padding: '12px 16px'
+            padding: '8px 16px'
           }}
         >
           <div>
@@ -720,7 +730,7 @@ const DataTable = ({
               (searchParameters &&
               !searchParameters[activeTab - 1]?.isSavedSearch ? (
                 <button
-                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer"
+                  className=" flex border-[1px] border-neutral200 rounded-[4px] px-2 py-1 bg-neutral0 items-center cursor-pointer h-[38px]"
                   onClick={() => {
                     searchParameters[activeTab - 1].saveSearchName.length
                       ? handleUpdateSaveSearch()
@@ -774,6 +784,167 @@ const DataTable = ({
             </div>
           </div>
         </Box>
+      </div>
+    ),
+    renderBottomToolbar: ({ table }) => (
+      <div className=" px-[16px] border-t-[1px] border-neutral200">
+        {isResult && (
+          <div className="flex items-center justify-between">
+            <div className="flex gap-4 h-[30px]">
+              <div className=" border-[1px] border-lengendInCardBorder rounded-[4px] bg-legendInCartFill text-legendInCart">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  In Cart
+                </p>
+              </div>
+              <div className=" border-[1px] border-lengendHoldBorder rounded-[4px] bg-legendHoldFill text-legendHold">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Hold
+                </p>
+              </div>
+              <div className="border-[1px] border-lengendMemoBorder rounded-[4px] bg-legendMemoFill text-legendMemo">
+                <p className="text-mMedium font-medium px-[6px] py-[4px]">
+                  {' '}
+                  Memo
+                </p>
+              </div>
+            </div>
+            <MRT_TablePagination table={table} />
+            <div className="flex items-center gap-3">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.searchResult.addToCart'),
+                    handler: () => handleAddToCart()
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: ManageLocales('app.searchResult.confirmStone'),
+                    handler: () => {
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
+                    }
+                  }
+                ]}
+              />
+              {/* <Dropdown
+              dropdownTrigger={
+                <Image
+                  src={threeDotsSvg}
+                  alt="threeDotsSvg"
+                  width={4}
+                  height={43}
+                />
+              }
+              dropdownMenu={[
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.bookAppointment'
+                  ),
+                  handler: () => {}
+                },
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.compareStone'
+                  ),
+                  handler: () => {}
+                },
+                {
+                  label: ManageLocales(
+                    'app.search.actionButton.findMatchingPair'
+                  ),
+                  handler: () => {}
+                }
+              ]}
+              isDisable={true}
+            /> */}
+            </div>
+          </div>
+        )}
+        {myCart && (
+          <div className="flex items-center justify-between">
+            <div></div>
+            <MRT_TablePagination table={table} />
+            <div className="flex gap-2">
+              <ActionButton
+                actionButtonData={[
+                  {
+                    variant: 'secondary',
+                    label: ManageLocales('app.myCart.actionButton.delete'),
+                    handler: deleteCartHandler
+                  },
+
+                  {
+                    variant: 'primary',
+                    label: ManageLocales(
+                      'app.myCart.actionButton.confirmStone'
+                    ),
+                    handler: () => {
+                      handleConfirmStone({
+                        selectedRows: rowSelection,
+                        rows: rows,
+                        setIsError,
+                        setErrorText,
+                        setIsConfirmStone,
+                        setConfirmStoneData
+                      });
+                    },
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  }
+                ]}
+              />
+              <Dropdown
+                dropdownTrigger={
+                  <Image
+                    src={threeDotsSvg}
+                    alt="threeDotsSvg"
+                    width={43}
+                    height={43}
+                  />
+                }
+                dropdownMenu={[
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.compareStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab === SOLD_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.findMatchingPair'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.bookAppointment'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab !== AVAILABLE_STATUS
+                  },
+                  {
+                    label: ManageLocales(
+                      'app.myCart.actionButton.viewSimilarStone'
+                    ),
+                    handler: () => {},
+                    isHidden: activeTab === AVAILABLE_STATUS
+                  }
+                ]}
+                isDisable={true}
+              />
+            </div>
+          </div>
+        )}
       </div>
     )
   });

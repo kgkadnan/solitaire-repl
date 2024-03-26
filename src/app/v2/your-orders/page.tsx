@@ -445,7 +445,7 @@ const MyDiamonds = () => {
               isLoadingInvoiceHistory ||
               isLoadingPendingInvoice ||
               isLoadngActiveInvoice) && (
-              <div className="min-h-[65vh] h-[65vh]">
+              <div className="min-h-[73vh] h-[65vh]">
                 <EmptyScreen
                   label="Search Diamonds"
                   message="Looks like you haven't placed any orders yet. Let’s place some orders!"
@@ -469,8 +469,8 @@ const MyDiamonds = () => {
         isOpens={isDialogOpen}
         setIsOpen={setIsDialogOpen}
       />
-      <div className="flex h-[81px] items-center">
-        <p className="text-headingM font-medium text-neutral900">
+      <div className="flex  py-[8px] items-center">
+        <p className="text-lMedium font-medium text-neutral900">
           {showDetail
             ? activeTab === PENDING_INVOICE
               ? ManageLocales('app.yourOrder.header.pendingInvoiceDetails')

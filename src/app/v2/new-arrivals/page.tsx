@@ -27,7 +27,10 @@ import { useGetBidHistoryQuery } from '@/features/api/dashboard';
 import InvalidCreds from '../login/component/invalid-creds';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import ActionButton from '@/components/v2/common/action-button';
-import { MRT_RowSelectionState } from 'material-react-table';
+import {
+  MRT_RowSelectionState,
+  MRT_TablePagination
+} from 'material-react-table';
 import warningIcon from '@public/v2/assets/icons/modal/warning.svg';
 import Image from 'next/image';
 import useUser from '@/lib/use-auth';
@@ -37,6 +40,7 @@ import ImageModal from '@/components/v2/common/detail-page/components/image-moda
 import { FILE_URLS } from '@/constants/v2/detail-page';
 import { useSearchParams } from 'next/navigation';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import { Toast } from '@/components/v2/common/copy-and-share/toast';
 
 const NewArrivals = () => {
   const [isDetailPage, setIsDetailPage] = useState(false);
@@ -281,39 +285,29 @@ const NewArrivals = () => {
 
   const [downloadExcel] = useDownloadExcelMutation();
 
-  const renderFooter = () => {
+  const renderFooter = (table: any) => {
     if (activeTab === 0 && bid?.length > 0) {
       return (
-        <div className="flex items-center justify-end p-4">
-          <div className="flex items-center gap-3">
-            {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )}
-            <ActionButton
-              actionButtonData={[
-                {
-                  variant: 'secondary',
-                  label: 'Clear All',
-                  handler: () => {
-                    setRowSelection({});
-                  },
-                  isDisable: !Object.keys(rowSelection).length
-                }
-              ]}
-            />
-          </div>
+        <div className="flex items-center justify-between px-4 py-0">
+          <div></div>
+          <MRT_TablePagination table={table} />
+          <ActionButton
+            actionButtonData={[
+              {
+                variant: 'secondary',
+                label: 'Clear All',
+                handler: () => {
+                  setRowSelection({});
+                },
+                isDisable: !Object.keys(rowSelection).length
+              }
+            ]}
+          />
         </div>
       );
     } else if (activeTab === 1 && activeBid?.length > 0) {
       return (
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between px-4 py-0">
           <div className="flex gap-4">
             <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
               <p className="text-mMedium font-medium px-[6px] py-[4px]">
@@ -327,17 +321,8 @@ const NewArrivals = () => {
               </p>
             </div>
           </div>
+          <MRT_TablePagination table={table} />
           <div className="flex items-center gap-3">
-            {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )}
             <ActionButton
               actionButtonData={[
                 {
@@ -397,7 +382,7 @@ const NewArrivals = () => {
       );
     } else if (activeTab === 2 && bidHistory?.data?.length > 0) {
       return (
-        <div className="flex items-center justify-between p-4">
+        <div className="flex items-center justify-between px-4 py-0">
           <div className="flex gap-4">
             <div className=" border-[1px] border-successBorder rounded-[4px] bg-successSurface text-successMain">
               <p className="text-mMedium font-medium px-[6px] py-[4px]">Won</p>
@@ -409,16 +394,8 @@ const NewArrivals = () => {
               </p>
             </div>
           </div>
-          {isError && (
-            <div>
-              <span className="hidden  text-successMain" />
-              <span
-                className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-              >
-                {errorText}
-              </span>
-            </div>
-          )}
+          <MRT_TablePagination table={table} />
+          <div></div>
         </div>
       );
     } else {
@@ -479,9 +456,18 @@ const NewArrivals = () => {
     setIsDetailPage(false);
     setDetailPageData({});
   };
+  useEffect(() => {
+    isError &&
+      setTimeout(() => {
+        setIsError(false); // Hide the toast notification after some time
+      }, 2000);
+  }, [isError]);
   return (
     <div className="mb-[20px] relative">
       {isLoading && <CustomKGKLoader />}
+      {isError && (
+        <Toast show={isError} message={errorText} isSuccess={false} />
+      )}
       <ImageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(!isModalOpen)}
@@ -512,24 +498,12 @@ const NewArrivals = () => {
             setIsLoading={setIsLoading}
             activeTab={activeTab}
           />
-          <div className="p-[16px] flex justify-end items-center border-t-[1px] border-l-[1px] border-neutral-200 gap-3 rounded-b-[8px] shadow-inputShadow ">
-            {isError && (
-              <div>
-                <span className="hidden  text-successMain" />
-                <span
-                  className={`text-mRegular font-medium text-dangerMain pl-[8px]`}
-                >
-                  {errorText}
-                </span>
-              </div>
-            )}
-          </div>
         </>
       ) : (
         <>
           {' '}
-          <div className="flex h-[81px] items-center justify-between">
-            <p className="text-headingM font-medium text-neutral900">
+          <div className="flex  py-[4px] items-center justify-between">
+            <p className="text-lMedium font-medium text-neutral900">
               New Arrivals
             </p>
             {timeDifference !== null && timeDifference >= 0 && (
@@ -589,10 +563,11 @@ const NewArrivals = () => {
                   rowSelection={rowSelection}
                   setRowSelection={setRowSelection}
                   setIsLoading={setIsLoading}
+                  renderFooter={renderFooter}
                 />
               }
             </div>
-            {renderFooter()}
+            {/* {renderFooter()} */}
           </div>
         </>
       )}
