@@ -15,6 +15,9 @@ import {
   useCardMyInvoiceQuery,
   useCardPreviousConfirmationQuery,
   useCardRecentConfirmationQuery,
+  useLazyCardMyInvoiceQuery,
+  useLazyCardPreviousConfirmationQuery,
+  useLazyCardRecentConfirmationQuery,
   useLazyGetProductDetailsQuery
 } from '@/features/api/my-diamonds/my-diamond';
 import { ManageLocales } from '@/utils/v2/translate';
@@ -34,6 +37,7 @@ import { SubRoutes } from '@/constants/v2/enums/routes';
 import { DialogComponent } from '@/components/v2/common/dialog';
 import { useModalStateManagement } from '@/hooks/v2/modal-state.management';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
+import logger from 'logging/log-util';
 
 const MyDiamonds = () => {
   const router = useRouter();
@@ -75,34 +79,89 @@ const MyDiamonds = () => {
   const { modalState, modalSetState } = useModalStateManagement();
   const { isDialogOpen, dialogContent } = modalState;
   const { setIsDialogOpen } = modalSetState;
-
-  // Fetch recent confirmation data
-  const { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice } =
-    useCardRecentConfirmationQuery({
+  useEffect(() => {
+    setIsLoading(true);
+    triggerPendingInvoiceData({
       resentConfiramtionStatus,
       resentConfiramtionInvoiceStatus,
       expand,
       recentConfirmlimit
-    });
+    })
+      .unwrap()
+      .then(res => {
+        setPendingInvoiceDataState(res?.orders);
+        setIsLoading(false);
+      })
+      .catch((e: any) => {
+        logger.error(e);
+        setIsLoading(false);
+      });
+  }, [
+    resentConfiramtionStatus,
+    resentConfiramtionInvoiceStatus,
+    expand,
+    recentConfirmlimit
+  ]);
 
-  // Fetch my-invoice data
-  const { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice } =
-    useCardMyInvoiceQuery({
+  useEffect(() => {
+    triggerActiveInvoice({
       myInvoiceStatus,
       myInvoiceInvoiceStatus,
       myInvoicelimit
-    });
+    })
+      .unwrap()
+      .then(res => {
+        setActiveInvoiceDataState(res?.orders);
+      });
+  }, [myInvoiceStatus, myInvoiceInvoiceStatus, myInvoicelimit]);
+
+  useEffect(() => {
+    triggerInvoiceHistory({ previousConfirmStatus })
+      .unwrap()
+      .then(res => {
+        setInvoiceHistoryDataState(res?.orders);
+      });
+  }, [previousConfirmStatus]);
+  const [
+    triggerPendingInvoiceData,
+    { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice }
+  ] = useLazyCardRecentConfirmationQuery({});
+  const [
+    triggerActiveInvoice,
+    { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice }
+  ] = useLazyCardMyInvoiceQuery({});
+
+  const [
+    triggerInvoiceHistory,
+    { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory }
+  ] = useLazyCardPreviousConfirmationQuery({});
+  // Fetch recent confirmation data
+  // const { data: pendingInvoicesData, isSuccess: isLoadingPendingInvoice } =
+  //   useCardRecentConfirmationQuery({
+  //     resentConfiramtionStatus,
+  //     resentConfiramtionInvoiceStatus,
+  //     expand,
+  //     recentConfirmlimit
+  //   });
+
+  // Fetch my-invoice data
+  // const { data: activeInvoicesData, isSuccess: isLoadngActiveInvoice } =
+  //   useCardMyInvoiceQuery({
+  //     myInvoiceStatus,
+  //     myInvoiceInvoiceStatus,
+  //     myInvoicelimit
+  //   });
 
   // Fetch previous-confiramtion-data
-  const { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory } =
-    useCardPreviousConfirmationQuery({
-      previousConfirmStatus
-    });
+  // const { data: invoiceHistoryData, isSuccess: isLoadingInvoiceHistory } =
+  //   useCardPreviousConfirmationQuery({
+  //     previousConfirmStatus
+  //   });
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  useEffect(() => {
-    setPendingInvoiceDataState(pendingInvoicesData?.orders);
-  }, [pendingInvoicesData]);
+  // useEffect(() => {
+  //   setPendingInvoiceDataState(pendingInvoicesData?.orders);
+  // }, [pendingInvoicesData]);
 
   useEffect(() => {
     if (detailId) {
@@ -111,13 +170,13 @@ const MyDiamonds = () => {
   }, [detailId]);
 
   // useEffect to update recentConfirmData when myDiamondRecentConfirmData changes
-  useEffect(() => {
-    setActiveInvoiceDataState(activeInvoicesData?.orders);
-  }, [activeInvoicesData]);
+  // useEffect(() => {
+  //   setActiveInvoiceDataState(activeInvoicesData?.orders);
+  // }, [activeInvoicesData]);
 
-  useEffect(() => {
-    setInvoiceHistoryDataState(invoiceHistoryData?.orders);
-  }, [invoiceHistoryData]);
+  // useEffect(() => {
+  //   setInvoiceHistoryDataState(invoiceHistoryData?.orders);
+  // }, [invoiceHistoryData]);
 
   useEffect(() => {
     if (subRoute === 'recent-confirmations') {
