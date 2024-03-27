@@ -210,7 +210,11 @@ export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {
       <div
         className={`text-infoMain border-[1px] border-infoBorder bg-infoSurface px-[8px] py-[2px] w-[74px] rounded-[4px] text-end`}
       >
-        {`${renderedCellValue === 0 ? '0.00' : renderedCellValue?.toFixed(2)}%`}
+        {`${
+          renderedCellValue === 0
+            ? '0.00'
+            : renderedCellValue?.toFixed(2) ?? '0.00'
+        }%`}
       </div>
     </div>
   );
