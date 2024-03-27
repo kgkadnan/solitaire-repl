@@ -372,7 +372,7 @@ const DataTable = ({
     enableDensityToggle: false,
     enableHiding: false,
     enableColumnFilters: false,
-    enablePagination: false,
+    enablePagination: true,
     enableStickyHeader: true,
     enableBottomToolbar: true,
     enableGrouping: true,

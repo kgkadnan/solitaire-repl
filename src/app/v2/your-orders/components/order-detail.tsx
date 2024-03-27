@@ -445,7 +445,7 @@ const OrderDetail: React.FC<IOrderDetail> = ({
                 rowSelection={rowSelection}
                 isOrderDetail={true}
               />
-              <div className="p-[16px]">
+              <div className="px-[16px] py-2">
                 <ActionButton
                   actionButtonData={
                     breadCrumLabel === PENING_INVOICE_BREADCRUMB_LABEL
