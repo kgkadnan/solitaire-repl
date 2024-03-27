@@ -16,7 +16,8 @@ import Dub from '@public/v2/assets/png/data-table/DUB.png';
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
   return (
     <button
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
         handleDetailImage({ row: row.original });
       }}
     >
@@ -167,7 +168,11 @@ export const RenderDiscount = ({ renderedCellValue }: any) => {
     <div
       className={`text-successMain border-[1px] border-successBorder bg-successSurface px-[8px] py-[2px] w-[74px] text-end rounded-[4px]`}
     >
-      {`${renderedCellValue === 0 ? '0.00' : renderedCellValue?.toFixed(2)}%`}
+      {`${
+        renderedCellValue === 0
+          ? '0.00'
+          : renderedCellValue?.toFixed(2) ?? '0.00'
+      }%`}
     </div>
   );
 };
@@ -201,7 +206,9 @@ export const RenderNewArrivalPrice = ({ row }: any) => {
 };
 
 export const RenderNewArrivalPricePerCarat = ({ row }: any) => {
-  return <span>{`${row?.original?.price_per_carat?.toFixed(2) ?? '-'}`}</span>;
+  return (
+    <span>{`${row?.original?.price_per_carat?.toFixed(2) ?? '0.00'}`}</span>
+  );
 };
 
 export const RenderNewArrivalBidDiscount = ({ renderedCellValue }: any) => {

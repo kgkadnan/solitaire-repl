@@ -30,6 +30,7 @@ import empty from '@public/v2/assets/icons/data-table/empty-new-arrivals.svg';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { RenderNewArrivalLotIdColor } from '@/components/v2/common/data-table/helpers/render-cell';
 import Tooltip from '@/components/v2/common/tooltip';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const theme = createTheme({
   typography: {
@@ -337,7 +338,7 @@ const NewArrivalDataTable = ({
   );
   const renderBottomToolbar = ({ table }: any) => renderFooter(table);
   const NoResultsComponent = () => (
-    <div className="flex flex-col items-center justify-center gap-5 h-[100%] mt-[50px]">
+    <div className="flex flex-col items-center justify-center gap-5 h-[60vh] mt-[50px]">
       {activeCount === 0 || bidCount === 0 || historyCount === 0 ? (
         <>
           <Image src={empty} alt={'empty'} />
@@ -351,6 +352,9 @@ const NewArrivalDataTable = ({
       )}
     </div>
   );
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
     columns,
@@ -501,14 +505,30 @@ const NewArrivalDataTable = ({
             ? 'calc(100vh - 125px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? 'calc(100vh - 260px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 362px)'
+            : 'calc(100vh - 260px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 362px)'
           : 'calc(100vh - 295px)',
         maxHeight: isFullScreen
           ? activeTab === 2
             ? 'calc(100vh - 125px)'
             : 'calc(100vh - 175px)'
           : activeTab === 2
-          ? 'calc(100vh - 260px)'
+          ? isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 362px)'
+            : 'calc(100vh - 260px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 362px)'
           : 'calc(100vh - 295px)'
       }
     },

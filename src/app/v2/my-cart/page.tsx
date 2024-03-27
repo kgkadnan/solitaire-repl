@@ -67,6 +67,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -210,166 +211,12 @@ const MyCart = () => {
         };
 
         const updatedColumns = [...response.data, additionalColumn];
-        dataTableSetState.setColumns(updatedColumns);
+        dataTableSetState.setColumns(mapColumns(updatedColumns));
       }
     };
 
     fetchColumns();
   }, []);
-
-  const handleDetailPage = ({ row }: { row: any }) => {
-    setIsDetailPage(true);
-    setIsError(false);
-    setErrorText('');
-    setDetailPageData(row);
-  };
-
-  const handleDetailImage = ({ row }: any) => {
-    setDetailImageData(row);
-    setIsModalOpen(true);
-  };
-
-  const mapColumns = (columns: any) =>
-    columns
-      ?.filter(({ is_disabled }: any) => !is_disabled)
-      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
-      .map(({ accessor, short_label, label }: any) => {
-        const commonProps = {
-          accessorKey: accessor,
-          header: short_label,
-          enableGlobalFilter: accessor === 'lot_id',
-          enableSorting: accessor !== 'shape',
-          minSize: 5,
-          maxSize: accessor === 'details' ? 100 : 200,
-          size: 5,
-          Header: ({ column }: any) => (
-            <Tooltip
-              tooltipTrigger={<span>{column.columnDef.header}</span>}
-              tooltipContent={label}
-              tooltipContentStyles={'z-[4]'}
-            />
-          )
-        };
-
-        switch (accessor) {
-          case 'clarity':
-            return {
-              ...commonProps,
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = clarity.indexOf(rowA.original[columnId]);
-                const indexB = clarity.indexOf(rowB.original[columnId]);
-                return indexA - indexB;
-              }
-            };
-          case 'table_inclusion':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableInclusionSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableInclusionSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-          case 'table_black':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = tableBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = tableBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'side_black':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = sideBlackSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = sideBlackSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'fluorescence':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
-              sortingFn: (rowA: any, rowB: any, columnId: string) => {
-                const indexA = fluorescenceSortOrder.indexOf(
-                  rowA.original[columnId]
-                );
-                const indexB = fluorescenceSortOrder.indexOf(
-                  rowB.original[columnId]
-                );
-                return indexA - indexB;
-              }
-            };
-
-          case 'lot_id':
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue, row }: any) => {
-                return RenderCartLotId({
-                  renderedCellValue,
-                  row,
-                  handleDetailPage
-                });
-              }
-            };
-
-          case 'amount':
-            return { ...commonProps, Cell: RenderAmount };
-          case 'measurements':
-            return { ...commonProps, Cell: RenderMeasurements };
-          case 'carat':
-            return { ...commonProps, Cell: RenderCarat };
-          case 'shape_full':
-            return { ...commonProps, Cell: RenderShape };
-          case 'discount':
-            return { ...commonProps, Cell: RenderDiscount };
-          case 'details':
-            return {
-              ...commonProps,
-              Cell: ({ row }: any) => {
-                return RenderDetails({ row, handleDetailImage });
-              }
-            };
-          case 'lab':
-            return { ...commonProps, Cell: RenderLab };
-          case 'location':
-            return { ...commonProps, Cell: RednderLocation };
-          case 'tracr_id':
-            return { ...commonProps, Cell: RenderTracerId };
-
-          default:
-            return {
-              ...commonProps,
-              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
-                <span>{renderedCellValue ?? '-'}</span>
-              )
-            };
-        }
-      });
-
-  const memoizedColumns = useMemo(
-    () => mapColumns(dataTableState.columns),
-    [dataTableState.columns]
-  );
 
   const myCartTabs = [
     {
@@ -789,6 +636,175 @@ const MyCart = () => {
     }
   ];
 
+  const handleDetailPage = ({ row }: { row: any }) => {
+    setIsDetailPage(true);
+    setIsError(false);
+    setErrorText('');
+    setDetailPageData(row);
+  };
+
+  const handleDetailImage = ({ row }: any) => {
+    setDetailImageData(row);
+    setIsModalOpen(true);
+  };
+
+  const mapColumns = (columns: any) =>
+    columns
+      ?.filter(({ is_disabled }: any) => !is_disabled)
+      ?.sort(({ sequence: a }: any, { sequence: b }: any) => a - b)
+      .map(({ accessor, short_label, label }: any) => {
+        const commonProps = {
+          accessorKey: accessor,
+          header: short_label,
+          enableGlobalFilter: accessor === 'lot_id',
+          enableSorting: accessor !== 'shape',
+          minSize: 5,
+          maxSize: accessor === 'details' ? 100 : 200,
+          size: 5,
+          Header: ({ column }: any) => (
+            <Tooltip
+              tooltipTrigger={<span>{column.columnDef.header}</span>}
+              tooltipContent={label}
+              tooltipContentStyles={'z-[4]'}
+            />
+          )
+        };
+
+        switch (accessor) {
+          case 'clarity':
+            return {
+              ...commonProps,
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = clarity.indexOf(rowA.original[columnId]);
+                const indexB = clarity.indexOf(rowB.original[columnId]);
+                return indexA - indexB;
+              }
+            };
+          case 'table_inclusion':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableInclusionSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableInclusionSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+          case 'table_black':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = tableBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = tableBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'side_black':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = sideBlackSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = sideBlackSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'fluorescence':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
+              sortingFn: (rowA: any, rowB: any, columnId: string) => {
+                const indexA = fluorescenceSortOrder.indexOf(
+                  rowA.original[columnId]
+                );
+                const indexB = fluorescenceSortOrder.indexOf(
+                  rowB.original[columnId]
+                );
+                return indexA - indexB;
+              }
+            };
+
+          case 'lot_id':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue, row }: any) => {
+                return RenderCartLotId({
+                  renderedCellValue,
+                  row,
+                  handleDetailPage
+                });
+              }
+            };
+
+          case 'amount':
+            return { ...commonProps, Cell: RenderAmount };
+          case 'measurements':
+            return { ...commonProps, Cell: RenderMeasurements };
+          case 'carat':
+            return { ...commonProps, Cell: RenderCarat };
+          case 'shape_full':
+            return { ...commonProps, Cell: RenderShape };
+          case 'discount':
+            return { ...commonProps, Cell: RenderDiscount };
+          case 'details':
+            return {
+              ...commonProps,
+              Cell: ({ row }: any) => {
+                return RenderDetails({ row, handleDetailImage });
+              }
+            };
+
+          case 'price_per_carat':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue === 0
+                    ? '0.00'
+                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                }%`}</span>
+              )
+            };
+          case 'lab':
+            return { ...commonProps, Cell: RenderLab };
+          case 'location':
+            return { ...commonProps, Cell: RednderLocation };
+          case 'tracr_id':
+            return { ...commonProps, Cell: RenderTracerId };
+
+          default:
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: string }) => (
+                <span>{renderedCellValue ?? '-'}</span>
+              )
+            };
+        }
+      });
+
+  // const memoizedColumns = useMemo(
+  //   () => mapColumns(dataTableState.columns),
+  //   [dataTableState.columns]
+  // );
+
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}
@@ -891,7 +907,15 @@ const MyCart = () => {
           </div>
         </>
       ) : (
-        <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-110px)] shadow-inputShadow">
+        <div
+          className={`border-[1px] border-neutral200 rounded-[8px] ${
+            isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'h-[calc(100vh-200px)]'
+              : 'h-[calc(100vh-110px)]'
+          }  shadow-inputShadow`}
+        >
           <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
             <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
               {myCartTabs.map(({ label, status, count }) => {
@@ -936,20 +960,22 @@ const MyCart = () => {
                   imageSrc={empty}
                 />
               ) : (
-                <DataTable
-                  rows={rows}
-                  columns={memoizedColumns}
-                  setRowSelection={setRowSelection}
-                  rowSelection={rowSelection}
-                  showCalculatedField={activeTab !== SOLD_STATUS}
-                  modalSetState={modalSetState}
-                  downloadExcel={downloadExcel}
-                  myCart={true}
-                  setIsError={setIsError}
-                  setErrorText={setErrorText}
-                  setIsLoading={setIsLoading}
-                  deleteCartHandler={deleteCartHandler}
-                />
+                dataTableState.columns.length > 0 && (
+                  <DataTable
+                    rows={rows}
+                    columns={dataTableState.columns}
+                    setRowSelection={setRowSelection}
+                    rowSelection={rowSelection}
+                    showCalculatedField={activeTab !== SOLD_STATUS}
+                    modalSetState={modalSetState}
+                    downloadExcel={downloadExcel}
+                    myCart={true}
+                    setIsError={setIsError}
+                    setErrorText={setErrorText}
+                    setIsLoading={setIsLoading}
+                    deleteCartHandler={deleteCartHandler}
+                  />
+                )
               )}
             </>
           )}

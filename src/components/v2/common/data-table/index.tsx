@@ -51,6 +51,7 @@ import Tooltip from '../tooltip';
 import { Dropdown } from '../dropdown-menu';
 import { InputDialogComponent } from '../input-dialog';
 import { InputField } from '../input-field';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const theme = createTheme({
   typography: {
@@ -370,6 +371,9 @@ const DataTable = ({
     })
   );
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
   const NoResultsComponent = () => <></>;
   //pass table options to useMaterialReactTable
   const table = useMaterialReactTable({
@@ -497,8 +501,20 @@ const DataTable = ({
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 350px)'
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 440px)'
+              : 'calc(100vh - 350px)'
+            : isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 380px)'
             : 'calc(100vh - 303px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
           : 'calc(100vh - 330px)',
         maxHeight: isFullScreen
           ? myCart
@@ -508,8 +524,20 @@ const DataTable = ({
             : 'calc(100vh - 230px)'
           : myCart
           ? showCalculatedField
-            ? 'calc(100vh - 350px)'
+            ? isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'calc(100vh - 440px)'
+              : 'calc(100vh - 350px)'
+            : isNudge &&
+              (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+                isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+            ? 'calc(100vh - 380px)'
             : 'calc(100vh - 303px)'
+          : isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+          ? 'calc(100vh - 405px)'
           : 'calc(100vh - 330px)'
       }
     },
