@@ -67,6 +67,7 @@ import { getShapeDisplayName } from '@/utils/v2/detail-page';
 import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 import { SubRoutes } from '@/constants/v2/enums/routes';
 import { Toast } from '@/components/v2/common/copy-and-share/toast';
+import { kycStatus } from '@/constants/enums/kyc';
 
 const MyCart = () => {
   const { dataTableState, dataTableSetState } = useDataTableStateManagement();
@@ -789,6 +790,9 @@ const MyCart = () => {
   //   [dataTableState.columns]
   // );
 
+  let isNudge = localStorage.getItem('show-nudge') === 'MINI';
+  const isKycVerified = JSON.parse(localStorage.getItem('user')!);
+
   return (
     <div className="relative">
       {isLoading && <CustomKGKLoader />}
@@ -891,7 +895,15 @@ const MyCart = () => {
           </div>
         </>
       ) : (
-        <div className="border-[1px] border-neutral200 rounded-[8px] h-[calc(100vh-110px)] shadow-inputShadow">
+        <div
+          className={`border-[1px] border-neutral200 rounded-[8px] ${
+            isNudge &&
+            (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
+              isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
+              ? 'h-[calc(100vh-200px)]'
+              : 'h-[calc(100vh-110px)]'
+          }  shadow-inputShadow`}
+        >
           <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
             <div className="flex border-b border-neutral200 w-full ml-3 text-mMedium font-medium">
               {myCartTabs.map(({ label, status, count }) => {
