@@ -33,7 +33,7 @@ const ImageList: React.FC<ImageListProps> = ({
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
-  console.log('images', images);
+
   return (
     <div className="flex flex-col">
       {images.map((image, index) =>
