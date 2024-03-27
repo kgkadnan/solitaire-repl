@@ -993,8 +993,6 @@ const Result = ({
       }, 2000);
   }, [isError]);
 
-  console.log('drrrrrr', memoizedRows);
-
   return (
     <div className="relative">
       {isError && (

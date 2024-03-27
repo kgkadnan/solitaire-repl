@@ -38,12 +38,8 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
 
   return (
     <html lang="en">
-      <Head>
-        <link
-          rel="stylesheet"
-          href="https://fonts.googleapis.com/css?family=Inter"
-        />
-        {/* <!-- Google Tag Manager --> */}
+      <head>
+        {' '}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -55,6 +51,13 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
         `
           }}
         />
+      </head>
+      <Head>
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css?family=Inter"
+        />
+        {/* <!-- Google Tag Manager --> */}
 
         {/* <!-- End Google Tag Manager --> */}
       </Head>
