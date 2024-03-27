@@ -264,6 +264,7 @@ const MyCart = () => {
           case 'table_inclusion':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = tableInclusionSortOrder.indexOf(
                   rowA.original[columnId]
@@ -277,6 +278,7 @@ const MyCart = () => {
           case 'table_black':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = tableBlackSortOrder.indexOf(
                   rowA.original[columnId]
@@ -291,6 +293,7 @@ const MyCart = () => {
           case 'side_black':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = sideBlackSortOrder.indexOf(
                   rowA.original[columnId]
@@ -305,6 +308,7 @@ const MyCart = () => {
           case 'fluorescence':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = fluorescenceSortOrder.indexOf(
                   rowA.original[columnId]

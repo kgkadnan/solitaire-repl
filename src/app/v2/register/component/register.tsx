@@ -128,7 +128,7 @@ const RegisterComponent = ({
               errorText={registerFormErrors.email}
               placeholder={ManageLocales('app.register.email.placeholder')}
               styles={{ inputMain: 'h-[64px]' }}
-              autoComplete="off"
+              autoComplete="none"
             />
             {/* Input field for mobile Number */}
             <MobileInput

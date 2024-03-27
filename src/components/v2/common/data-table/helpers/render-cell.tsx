@@ -101,7 +101,7 @@ export const RenderTracerId = ({ row, renderedCellValue }: any) => {
         textOverflow: 'ellipsis'
       }}
     >
-      {value}
+      {value ?? '-'}
     </Link>
   );
 };
