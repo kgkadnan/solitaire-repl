@@ -100,6 +100,7 @@ const NewArrivals = () => {
             return { ...commonProps, Cell: RenderNewArrivalBidDiscount };
           case 'last_bid_date':
             return { ...commonProps, Cell: RenderBidDate };
+
           case 'lot_id':
             return {
               ...commonProps,
