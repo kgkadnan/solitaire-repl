@@ -40,11 +40,11 @@ Also, be sure to have `git` available in your PATH, `pnpm` might need it.
 ## Create env file
 
 replace the example env file with actual values. taking .env.local.example
-Dev deployed instance pointing to staging backend same goes websocket
+Production deployment
 
 ## Backend
 
-dependency on Backend (needs to be deployed
+dependency on Backend (needs to be deployed)
 
 ## Start development server
 
