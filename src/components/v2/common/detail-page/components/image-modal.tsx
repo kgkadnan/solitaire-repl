@@ -78,10 +78,12 @@ const ImageModal: React.FC<ModalProps> = ({
               images[imageIndex].name === 'B2B Sparkle' ||
               images[imageIndex].name === 'GIA Certificate' ? (
                 images[imageIndex].url === 'null' ||
-                images[imageIndex].url === null ? (
+                images[imageIndex].url === null ||
+                !images[imageIndex].url.length ? (
                   <Image
                     src={NoImageFound}
                     alt="NoImageFound"
+                    style={{ objectFit: 'cover' }}
                     className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
                     height={600}
                     width={650}

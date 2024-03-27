@@ -80,7 +80,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                     >
                       <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer "></div>
 
-                      {img.url === 'null' || img.url === null ? (
+                      {img.url === 'null' ||
+                      img.url === null ||
+                      !img.url.length ? (
                         <Image
                           src={NoImageFound}
                           alt="NoImageFound"
@@ -88,7 +90,8 @@ const ImageSlider: React.FC<ImageSliderProps> = ({ images, setIsLoading }) => {
                           style={{
                             height: 'auto',
                             width: '300px',
-                            background: '#F2F4F7'
+                            background: '#F2F4F7',
+                            objectFit: 'cover'
                           }}
                           onLoad={() => {
                             setShowDownloadButton(true);
