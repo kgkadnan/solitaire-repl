@@ -257,59 +257,70 @@ const MyAccount = () => {
             </div>
           </div>
 
-          <div className="flex flex-col  justify-start gap-[8px]">
-            <div className="flex items-center gap-[6px]">
-              <h1 className="text-lRegular font-regular text-neutral-900">
-                {' '}
-                {`${userAccountInfo?.customer?.first_name} ${userAccountInfo?.customer?.last_name}`}
-              </h1>
-              {userAccountInfo?.customer?.kyc?.status === kycStatus.APPROVED ? (
-                <Image src={blueTickIcon} alt="blueTickIcon" />
-              ) : (
-                <Image src={greyTickIcon} alt="greyTickIcon" />
-              )}
+          {userAccountInfo?.customer &&
+            Object.keys(userAccountInfo?.customer)?.length && (
+              <div className="flex flex-col  justify-start gap-[8px]">
+                <div className="flex items-center gap-[6px]">
+                  <h1 className="text-lRegular font-regular text-neutral-900">
+                    {' '}
+                    {`${userAccountInfo?.customer?.first_name} ${userAccountInfo?.customer?.last_name}`}
+                  </h1>
+                  {userAccountInfo?.customer?.kyc?.status ===
+                  kycStatus.APPROVED ? (
+                    <Image src={blueTickIcon} alt="blueTickIcon" />
+                  ) : (
+                    <Image src={greyTickIcon} alt="greyTickIcon" />
+                  )}
 
-              <p
-                className={`h-[24px] text-sRegular  border ${
-                  userAccountInfo?.customer?.kyc?.status ===
-                    kycStatus.PENDING ||
-                  userAccountInfo?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS
-                    ? 'border-lengendInCardBorder bg-legendInCartFill text-legendInCart'
-                    : userAccountInfo?.customer?.kyc?.status ===
-                      kycStatus.REJECTED
-                    ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
-                    : 'border-successBorder bg-primaryModalRing text-successMain'
-                } rounded py-[6px] px-[4px] flex justify-center items-center`}
-              >
-                {userAccountInfo?.customer?.kyc?.status === kycStatus.PENDING
-                  ? 'KYC Pending'
-                  : userAccountInfo?.customer?.kyc?.status ===
-                    kycStatus.REJECTED
-                  ? 'KYC Rejected'
-                  : userAccountInfo?.customer?.kyc?.status ===
-                    kycStatus.INPROGRESS
-                  ? 'KYC In-progress'
-                  : 'KYC Approved'}
-              </p>
-            </div>
-            <div className="flex items-center gap-[6px]">
-              {' '}
-              <Mail />
-              <p className="text-mRegular font-regular text-neutral-600">
-                {' '}
-                {userAccountInfo?.customer?.email ?? '-'}
-              </p>
-            </div>
-            <div className="flex items-center gap-[6px]">
-              {' '}
-              <Phone />
-              <p className="text-mRegular font-regular text-neutral-600">
-                {' '}
-                {userAccountInfo?.customer?.phone ?? '-'}
-              </p>
-            </div>
-          </div>
+                  <p
+                    className={`h-[24px] text-sRegular  border ${
+                      userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.PENDING ||
+                      userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS
+                        ? 'border-lengendInCardBorder bg-legendInCartFill text-legendInCart'
+                        : userAccountInfo?.customer?.kyc?.status ===
+                          kycStatus.REJECTED
+                        ? 'border-primaryModalFillRed bg-primaryModalRingRed text-dangerMain'
+                        : userAccountInfo?.customer?.kyc?.status ===
+                          kycStatus.APPROVED
+                        ? 'border-successBorder bg-primaryModalRing text-successMain'
+                        : '-'
+                    } rounded py-[6px] px-[4px] flex justify-center items-center`}
+                  >
+                    {userAccountInfo?.customer?.kyc?.status ===
+                    kycStatus.PENDING
+                      ? 'KYC Pending'
+                      : userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.REJECTED
+                      ? 'KYC Rejected'
+                      : userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.INPROGRESS
+                      ? 'KYC In-progress'
+                      : userAccountInfo?.customer?.kyc?.status ===
+                        kycStatus.APPROVED
+                      ? 'KYC Approved'
+                      : '-'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-[6px]">
+                  {' '}
+                  <Mail />
+                  <p className="text-mRegular font-regular text-neutral-600">
+                    {' '}
+                    {userAccountInfo?.customer?.email ?? '-'}
+                  </p>
+                </div>
+                <div className="flex items-center gap-[6px]">
+                  {' '}
+                  <Phone />
+                  <p className="text-mRegular font-regular text-neutral-600">
+                    {' '}
+                    {userAccountInfo?.customer?.phone ?? '-'}
+                  </p>
+                </div>
+              </div>
+            )}
         </div>
         <div className="flex border-b border-transparent   text-mMedium font-medium px-[24px]">
           {myAccountTabs.map(({ label, status }) => {
