@@ -305,6 +305,17 @@ const Result = ({
                 return RenderDetails({ row, handleDetailImage });
               }
             };
+          case 'price_per_carat':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue === 0
+                    ? '0.00'
+                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                }%`}</span>
+              )
+            };
           case 'lab':
             return { ...commonProps, Cell: RenderLab };
           case 'location':

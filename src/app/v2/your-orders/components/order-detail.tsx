@@ -123,7 +123,17 @@ const OrderDetail: React.FC<IOrderDetail> = ({
 
           case 'tracr_id':
             return { ...commonProps, Cell: RenderTracerId };
-
+          case 'price_per_carat':
+            return {
+              ...commonProps,
+              Cell: ({ renderedCellValue }: { renderedCellValue: any }) => (
+                <span>{`${
+                  renderedCellValue === 0
+                    ? '0.00'
+                    : renderedCellValue?.toFixed(2) ?? '0.00'
+                }%`}</span>
+              )
+            };
           default:
             return {
               ...commonProps,
