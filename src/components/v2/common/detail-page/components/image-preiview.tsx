@@ -69,14 +69,17 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               >
                 <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
 
-                {image.url === 'null' || image.url === null ? (
+                {image.url === 'null' ||
+                image.url === null ||
+                !image.url.length ? (
                   <Image
                     src={NoImageFound}
                     alt="NoImageFound"
                     style={{
                       height: '380px',
                       width: '485px',
-                      background: '#F2F4F7'
+                      background: '#F2F4F7',
+                      objectFit: 'cover'
                     }}
                     onLoad={() => {
                       setShowDownloadButton(prevState => [
