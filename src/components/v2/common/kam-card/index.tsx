@@ -78,11 +78,10 @@ const KAMCard: React.FC<IKAMCardProps> = ({
               <span className="">{phoneNumber}</span>
             </div>
             <div className="flex items-center gap-2  cursor-pointer">
-              <a href={`mailto:${email}`}>
+              <a href={`mailto:${email}`} className="flex gap-2 items-center">
                 {' '}
-                <Mail />
+                <Mail /> <span className="">{email}</span>{' '}
               </a>
-              <span className="">{email}</span>{' '}
               <div onClick={() => handleCopy(email)}>
                 {' '}
                 <Copy />
