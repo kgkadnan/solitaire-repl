@@ -125,10 +125,10 @@ const Table = ({
       //customize paper styles
 
       sx: {
-        '&.MuiPaper-root': {
-          borderRadius: '8px !important'
-        },
-        borderRadius: '8px',
+        // '&.MuiPaper-root': {
+        //   borderRadius: '8px !important'
+        // },
+        // borderRadius: '8px',
         border: 'none'
       }
     },
