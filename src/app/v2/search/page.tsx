@@ -84,43 +84,45 @@ const Search = () => {
     setDialogContent(
       <>
         {' '}
-        <div className="absolute left-[-84px] top-[-84px]">
-          <Image src={warningIcon} alt="warningIcon" />
-        </div>
-        <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-          <div>
-            <h1 className="text-headingS text-neutral900">
-              {' '}
-              {ManageLocales('app.search.confirmHeader')}
-            </h1>
-            <p className="text-neutral600 text-mRegular">
-              {ManageLocales('app.search.closeTabs')}
-            </p>
+        <div className="h-[200px]">
+          <div className="absolute left-[-84px] top-[-84px]">
+            <Image src={warningIcon} alt="warningIcon" />
           </div>
-          <ActionButton
-            actionButtonData={[
-              {
-                variant: 'secondary',
-                label: ManageLocales('app.modal.no'),
-                handler: () => setIsDialogOpen(false),
-                customStyle: 'flex-1 h-10'
-              },
-              {
-                variant: 'primary',
-                label: ManageLocales('app.modal.yes'),
-                handler: () => {
-                  localStorage.removeItem('Search'),
-                    setIsDialogOpen(false),
-                    router.push(
-                      `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
-                    ),
-                    setSearchParameters([]);
-                  setAddSearches([]);
+          <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
+            <div>
+              <h1 className="text-headingS text-neutral900">
+                {' '}
+                {ManageLocales('app.search.confirmHeader')}
+              </h1>
+              <p className="text-neutral600 text-mRegular">
+                {ManageLocales('app.search.closeTabs')}
+              </p>
+            </div>
+            <ActionButton
+              actionButtonData={[
+                {
+                  variant: 'secondary',
+                  label: ManageLocales('app.modal.no'),
+                  handler: () => setIsDialogOpen(false),
+                  customStyle: 'flex-1 h-10'
                 },
-                customStyle: 'flex-1 h-10'
-              }
-            ]}
-          />
+                {
+                  variant: 'primary',
+                  label: ManageLocales('app.modal.yes'),
+                  handler: () => {
+                    localStorage.removeItem('Search'),
+                      setIsDialogOpen(false),
+                      router.push(
+                        `${Routes.SEARCH}?active-tab=${SubRoutes.NEW_SEARCH}`
+                      ),
+                      setSearchParameters([]);
+                    setAddSearches([]);
+                  },
+                  customStyle: 'flex-1 h-10'
+                }
+              ]}
+            />
+          </div>
         </div>
       </>
     );
