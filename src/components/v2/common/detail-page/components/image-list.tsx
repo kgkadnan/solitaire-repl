@@ -33,6 +33,7 @@ const ImageList: React.FC<ImageListProps> = ({
   const handleImageError = (event: any) => {
     event.target.src = NoImageFound.src; // Set the fallback image when the original image fails to load
   };
+  console.log('images', images);
   return (
     <div className="flex flex-col">
       {images.map((image, index) =>
@@ -47,13 +48,12 @@ const ImageList: React.FC<ImageListProps> = ({
             }}
           >
             <div className="absolute top-0 left-0 right-0 bottom-0 cursor-pointer"></div>
-            {image.url === 'null' || image.url === null ? (
+            {image.url === 'null' || image.url === null || !image.url.length ? (
               <Image
                 src={NoImageFound}
                 alt="NoImageFound"
-                height={74}
-                width={74}
-                className={`cursor-pointer md:w-[74px] md:h-[60px] sm:w-[35px] sm:h-[30px] ${
+                style={{ objectFit: 'cover' }}
+                className={`cursor-pointer md:w-[76px] md:h-[60px] sm:w-[35px] sm:h-[30px] ${
                   index !== 0 ? 'mt-3' : ''
                 } ${index === selectedImageIndex ? 'bg-gray-200' : ''}`}
               />

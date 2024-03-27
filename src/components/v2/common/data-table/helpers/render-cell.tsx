@@ -16,7 +16,8 @@ import Dub from '@public/v2/assets/png/data-table/DUB.png';
 export const RenderDetails = ({ row, handleDetailImage }: any) => {
   return (
     <button
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
         handleDetailImage({ row: row.original });
       }}
     >
