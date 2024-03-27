@@ -367,8 +367,10 @@ const SavedSearch = ({ setIsLoading, isLoading }: any) => {
             actionButtonData={[
               {
                 variant: 'secondary',
+                isDisable: !savedSearchState?.savedSearchData?.length,
                 label: ManageLocales('app.savedSearch.delete'),
                 svg: BinIcon,
+
                 handler: () =>
                   deleteSavedSearchHandler({
                     selectedCheckboxes,
