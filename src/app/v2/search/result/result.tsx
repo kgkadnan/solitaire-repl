@@ -233,6 +233,7 @@ const Result = ({
           case 'table_inclusion':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = tableInclusionSortOrder.indexOf(
                   rowA.original[columnId]
@@ -246,6 +247,7 @@ const Result = ({
           case 'table_black':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = tableBlackSortOrder.indexOf(
                   rowA.original[columnId]
@@ -260,6 +262,7 @@ const Result = ({
           case 'side_black':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = sideBlackSortOrder.indexOf(
                   rowA.original[columnId]
@@ -274,6 +277,7 @@ const Result = ({
           case 'fluorescence':
             return {
               ...commonProps,
+              Cell: ({ renderedCellValue }: any) => renderedCellValue ?? '-',
               sortingFn: (rowA: any, rowB: any, columnId: string) => {
                 const indexA = fluorescenceSortOrder.indexOf(
                   rowA.original[columnId]
@@ -992,8 +996,6 @@ const Result = ({
         setIsError(false); // Hide the toast notification after some time
       }, 2000);
   }, [isError]);
-
-  console.log('drrrrrr', memoizedRows);
 
   return (
     <div className="relative">

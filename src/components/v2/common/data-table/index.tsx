@@ -142,91 +142,37 @@ const DataTable = ({
   const onDropDownClick = (data: any) => {
     setIsLoading(true);
     setIsDropDownOpen(false);
+
     triggerSavedSearch({
       searchByName: data.value
-    }).then(res => {
-      let metaData = res.data.savedSearches[0].meta_data;
-      const searchUrl = constructUrlParams(metaData);
-      triggerProductCountApi({ searchUrl }).then(response => {
-        if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
-          setIsLoading(false);
-          modalSetState.setIsDialogOpen(true);
-          modalSetState.setDialogContent(
-            <>
-              {' '}
-              <div className="absolute left-[-84px] top-[-84px]">
-                <Image src={warningIcon} alt="warningIcon" />
-              </div>
-              <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
-                <div>
-                  <h1 className="text-headingS text-neutral900">
-                    {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
-                  </h1>
-                </div>
-                <ActionButton
-                  actionButtonData={[
-                    {
-                      variant: 'primary',
-                      label: ManageLocales('app.modal.okay'),
-                      handler: () => {
-                        modalSetState.setIsDialogOpen(false);
-                      },
-                      customStyle: 'flex-1'
-                    }
-                  ]}
-                />
-              </div>
-            </>
-          );
-        } else {
-          const data: any = JSON.parse(localStorage.getItem('Search')!);
-
-          if (data?.length) {
-            let isAlreadyOpenIndex = isSearchAlreadyExist(
-              data,
-              res.data.savedSearches[0].name
-            );
-
-            if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
-              router.push(
-                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                  isAlreadyOpenIndex + 1
-                }`
-              );
-              return;
-            } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+    })
+      .then(res => {
+        let metaData = res.data.savedSearches[0].meta_data;
+        const searchUrl = constructUrlParams(metaData);
+        setIsLoading(false);
+        triggerProductCountApi({ searchUrl })
+          .then(response => {
+            if (response?.data?.count > MAX_SAVED_SEARCH_COUNT) {
+              setIsLoading(false);
+              modalSetState.setIsDialogOpen(true);
               modalSetState.setDialogContent(
                 <>
+                  {' '}
                   <div className="absolute left-[-84px] top-[-84px]">
                     <Image src={warningIcon} alt="warningIcon" />
                   </div>
-                  <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
+                  <div className="absolute bottom-[30px] flex flex-col gap-[15px] w-[352px]">
                     <div>
                       <h1 className="text-headingS text-neutral900">
-                        {' '}
-                        {ManageLocales('app.savedSearch.maxTabReached')}
+                        {MODIFY_SEARCH_STONES_EXCEEDS_LIMIT}
                       </h1>
-                      <p className="text-neutral600 text-mRegular">
-                        {ManageLocales('app.savedSearch.maxTabReached.content')}
-                      </p>
                     </div>
                     <ActionButton
                       actionButtonData={[
                         {
-                          variant: 'secondary',
-                          label: ManageLocales('app.modal.cancel'),
-                          handler: () => {
-                            modalSetState.setIsDialogOpen(false);
-                          },
-                          customStyle: 'flex-1'
-                        },
-                        {
                           variant: 'primary',
-                          label: ManageLocales('app.modal.manageTabs'),
+                          label: ManageLocales('app.modal.okay'),
                           handler: () => {
-                            router.push(
-                              `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
-                            );
                             modalSetState.setIsDialogOpen(false);
                           },
                           customStyle: 'flex-1'
@@ -236,31 +182,100 @@ const DataTable = ({
                   </div>
                 </>
               );
-              modalSetState.setIsDialogOpen(true);
             } else {
-              const localStorageData = [
-                ...data,
-                {
-                  saveSearchName: res.data.savedSearches[0].name,
-                  isSavedSearch: true,
-                  searchId: response?.data?.search_id,
-                  queryParams: res.data.savedSearches[0].meta_data,
-                  id: res.data.savedSearches[0].id
-                }
-              ];
+              const data: any = JSON.parse(localStorage.getItem('Search')!);
 
-              localStorage.setItem('Search', JSON.stringify(localStorageData));
-              router.push(
-                `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
-                  data.length + 1
-                }`
-              );
+              if (data?.length) {
+                let isAlreadyOpenIndex = isSearchAlreadyExist(
+                  data,
+                  res.data.savedSearches[0].name
+                );
+
+                if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
+                  router.push(
+                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                      isAlreadyOpenIndex + 1
+                    }`
+                  );
+                  return;
+                } else if (data?.length >= MAX_SEARCH_TAB_LIMIT) {
+                  modalSetState.setDialogContent(
+                    <>
+                      <div className="absolute left-[-84px] top-[-84px]">
+                        <Image src={warningIcon} alt="warningIcon" />
+                      </div>
+                      <div className="absolute bottom-[20px] flex flex-col gap-[15px] w-[352px]">
+                        <div>
+                          <h1 className="text-headingS text-neutral900">
+                            {' '}
+                            {ManageLocales('app.savedSearch.maxTabReached')}
+                          </h1>
+                          <p className="text-neutral600 text-mRegular">
+                            {ManageLocales(
+                              'app.savedSearch.maxTabReached.content'
+                            )}
+                          </p>
+                        </div>
+                        <ActionButton
+                          actionButtonData={[
+                            {
+                              variant: 'secondary',
+                              label: ManageLocales('app.modal.cancel'),
+                              handler: () => {
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1'
+                            },
+                            {
+                              variant: 'primary',
+                              label: ManageLocales('app.modal.manageTabs'),
+                              handler: () => {
+                                router.push(
+                                  `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-1`
+                                );
+                                modalSetState.setIsDialogOpen(false);
+                              },
+                              customStyle: 'flex-1'
+                            }
+                          ]}
+                        />
+                      </div>
+                    </>
+                  );
+                  modalSetState.setIsDialogOpen(true);
+                } else {
+                  const localStorageData = [
+                    ...data,
+                    {
+                      saveSearchName: res.data.savedSearches[0].name,
+                      isSavedSearch: true,
+                      searchId: response?.data?.search_id,
+                      queryParams: res.data.savedSearches[0].meta_data,
+                      id: res.data.savedSearches[0].id
+                    }
+                  ];
+
+                  localStorage.setItem(
+                    'Search',
+                    JSON.stringify(localStorageData)
+                  );
+                  router.push(
+                    `${Routes.SEARCH}?active-tab=${SubRoutes.RESULT}-${
+                      data.length + 1
+                    }`
+                  );
+                }
+              }
+              setIsLoading(false);
             }
-          }
-          setIsLoading(false);
-        }
+          })
+          .catch(() => {
+            setIsLoading(false);
+          });
+      })
+      .catch(() => {
+        setIsLoading(false);
       });
-    });
   };
 
   const getShapeDisplayName = ({ value }: { value: string }) => {

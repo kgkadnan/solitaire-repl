@@ -593,6 +593,7 @@ const Form = ({
     setSearchCount(0);
     setIsError(false);
     setErrorText('');
+    setMinMaxError('');
     setValidationError('');
     handleReset(setState, errorSetState);
   };
