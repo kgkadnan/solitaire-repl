@@ -167,7 +167,7 @@ const Table = ({
               ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
             : isOrderDetail
-            ? 'calc(100vh - 477px)'
+            ? 'calc(100vh - 390px)'
             : identifier === 'result'
             ? 'calc(100vh - 240px)'
             : 'calc(100vh - 310px)',
@@ -179,7 +179,7 @@ const Table = ({
               ? 'calc(100vh - 550px)'
               : 'calc(100vh - 315px)'
             : isOrderDetail
-            ? 'calc(100vh - 477px)'
+            ? 'calc(100vh - 390px)'
             : identifier === 'result'
             ? 'calc(100vh - 240px)'
             : 'calc(100vh - 310px)'
