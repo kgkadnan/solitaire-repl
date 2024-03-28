@@ -45,6 +45,7 @@ Production deployment
 ## Backend
 
 dependency on Backend (needs to be deployed)
+Public page env updated
 
 ## Start development server
 
