@@ -987,6 +987,8 @@ const MyCart = () => {
                     setIsLoading={setIsLoading}
                     deleteCartHandler={deleteCartHandler}
                     activeCartTab={activeTab}
+                    setIsConfirmStone={setIsConfirmStone}
+                    setConfirmStoneData={setConfirmStoneData}
                   />
                 )
               )}

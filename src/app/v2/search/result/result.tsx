@@ -1163,7 +1163,7 @@ const Result = ({
                 searchList={searchList}
                 setIsLoading={setIsLoading}
                 handleAddToCart={handleAddToCart}
-                handleConfirmStone={handleConfirmStone}
+                // handleConfirmStone={handleConfirmStone}
                 setIsConfirmStone={setIsConfirmStone}
                 setConfirmStoneData={setConfirmStoneData}
               />
