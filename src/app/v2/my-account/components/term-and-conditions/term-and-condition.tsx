@@ -1,13 +1,16 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import React, { useEffect, useState } from 'react';
 import '../../../../privacy-policy/common-style.css';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const TermAndCondtions = () => {
   const [activeTab, setActiveTab] = useState<string>('KGK Website');
+  const [isLoading, setIsloading] = useState(false);
   const [data, setData] = useState<any>();
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
 
   const handleTabs = async ({ tab, url }: { tab: string; url: string }) => {
+    setIsloading(true);
     setActiveTab(tab);
     try {
       // Place your async logic here
@@ -16,15 +19,18 @@ const TermAndCondtions = () => {
           Accept: 'text/html'
         }
       });
+      setIsloading(false);
       const data = await response.text();
       setData(data);
     } catch (error) {
       // Handle any errors
+      setIsloading(false);
       console.error('Error fetching data:', error);
     }
   };
 
   useEffect(() => {
+    setIsloading(true);
     const callAPi = async () => {
       try {
         // Place your async logic here
@@ -38,8 +44,10 @@ const TermAndCondtions = () => {
         );
         const data = await response.text();
         setData(data);
+        setIsloading(false);
       } catch (error) {
         // Handle any errors
+        setIsloading(false);
         console.error('Error fetching data:', error);
       }
     };
@@ -148,6 +156,7 @@ all: revert;
 
   return (
     <div className="flex flex-col gap-[16px] mt-[16px] commonStyle">
+      {isLoading && <CustomKGKLoader />}
       <h1 className="text-headingS font-medium text-neutral-900">
         {ManageLocales('app.myAccount.tabs.termAndConditions')}
       </h1>

@@ -1,11 +1,14 @@
 import { ManageLocales } from '@/utils/v2/translate';
 import { useEffect, useState } from 'react';
 import '../../../../privacy-policy/common-style.css';
+import CustomKGKLoader from '@/components/v2/common/custom-kgk-loader';
 
 const PrivacyPolicy = () => {
   const apiURL = process.env.NEXT_PUBLIC_API_URL;
+  const [isLoading, setIsloading] = useState(false);
   const [data, setData] = useState<any>();
   useEffect(() => {
+    setIsloading(true);
     const callAPi = async () => {
       try {
         // Place your async logic here
@@ -16,8 +19,10 @@ const PrivacyPolicy = () => {
         });
         const data = await response.text();
         setData(data);
+        setIsloading(false);
       } catch (error) {
         // Handle any errors
+        setIsloading(false);
         console.error('Error fetching data:', error);
       }
     };
@@ -84,6 +89,7 @@ const PrivacyPolicy = () => {
   </style>`;
   return (
     <div className="commonStyle">
+      {isLoading && <CustomKGKLoader />}
       {data && (
         <>
           <h1 className="text-headingS font-medium text-neutral-900 my-3">
