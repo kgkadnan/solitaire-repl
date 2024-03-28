@@ -52,6 +52,7 @@ import { Dropdown } from '../dropdown-menu';
 import { InputDialogComponent } from '../input-dialog';
 import { InputField } from '../input-field';
 import { kycStatus } from '@/constants/enums/kyc';
+import { handleConfirmStone } from '@app/v2/search/result/helpers/handle-confirm-stone';
 
 const theme = createTheme({
   typography: {
@@ -121,10 +122,11 @@ const DataTable = ({
   searchList,
   setIsLoading,
   handleAddToCart,
-  handleConfirmStone,
+  // handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
-  deleteCartHandler
+  deleteCartHandler,
+  activeCartTab
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -942,7 +944,7 @@ const DataTable = ({
                         setConfirmStoneData
                       });
                     },
-                    isHidden: activeTab !== AVAILABLE_STATUS
+                    isHidden: activeCartTab !== AVAILABLE_STATUS
                   }
                 ]}
               />
