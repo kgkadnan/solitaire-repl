@@ -925,7 +925,7 @@ const MyCart = () => {
             (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
               isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'h-[calc(100vh-200px)]'
-              : 'h-[calc(100vh-110px)]'
+              : 'h-[calc(100vh-132px)]'
           }  shadow-inputShadow`}
         >
           <div className="flex h-[72px] items-center border-b-[1px] border-neutral200">
