@@ -124,7 +124,8 @@ const DataTable = ({
   handleConfirmStone,
   setIsConfirmStone,
   setConfirmStoneData,
-  deleteCartHandler
+  deleteCartHandler,
+  activeCartTab
 }: any) => {
   // Fetching saved search data
   const router = useRouter();
@@ -942,7 +943,7 @@ const DataTable = ({
                         setConfirmStoneData
                       });
                     },
-                    isHidden: activeTab !== AVAILABLE_STATUS
+                    isHidden: activeCartTab !== AVAILABLE_STATUS
                   }
                 ]}
               />
