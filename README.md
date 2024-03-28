@@ -40,7 +40,7 @@ Also, be sure to have `git` available in your PATH, `pnpm` might need it.
 ## Create env file
 
 replace the example env file with actual values. taking .env.local.example
-Staging deployment 
+Staging deployment
 
 ## Backend
 
