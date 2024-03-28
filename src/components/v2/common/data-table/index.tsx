@@ -507,7 +507,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 350px)'
+              : 'calc(100vh - 372px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
@@ -530,7 +530,7 @@ const DataTable = ({
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
               ? 'calc(100vh - 440px)'
-              : 'calc(100vh - 350px)'
+              : 'calc(100vh - 372px)'
             : isNudge &&
               (isKycVerified?.customer?.kyc?.status === kycStatus.INPROGRESS ||
                 isKycVerified?.customer?.kyc?.status === kycStatus.REJECTED)
