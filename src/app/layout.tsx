@@ -31,15 +31,14 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
     <>
-      <AppDownloadPopup />
       {children}
+      <AppDownloadPopup></AppDownloadPopup>
     </>
   );
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
-
   return (
     <html lang="en">
       <head>
@@ -78,12 +77,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           <ThemeProviders>
             {isV2Route ? (
               <>
+                {/* <AppDownloadPopup/> */}
                 {showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
-                  <div>
-                    <ChildrenComponent>{children}</ChildrenComponent>
-                  </div>
+                  <ChildrenComponent>{children}</ChildrenComponent>
                 )}{' '}
               </>
             ) : (
