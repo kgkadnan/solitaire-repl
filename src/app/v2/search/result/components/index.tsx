@@ -111,7 +111,7 @@ const ConfirmStone = ({
                   renderedCellValue === 0
                     ? '0.00'
                     : renderedCellValue?.toFixed(2) ?? '0.00'
-                }%`}</span>
+                }`}</span>
               )
             };
           case 'lab':
