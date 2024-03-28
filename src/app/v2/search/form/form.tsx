@@ -886,7 +886,7 @@ const Form = ({
         </div>
       </div>
       <div
-        className={`grid backdrop-blur-sm  gap-[8px]  sticky bottom-0 z-50 h-[72px] py-[16px] border-t-[1px] border-neutral200 flex w-full `}
+        className={`grid backdrop-blur-sm  gap-[8px]  sticky bottom-0 z-[2] h-[72px] py-[16px] border-t-[1px] border-neutral200 flex w-full `}
       >
         <div
           className={` flex items-center w-full  ${
