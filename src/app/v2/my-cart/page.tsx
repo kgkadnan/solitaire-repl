@@ -254,12 +254,24 @@ const MyCart = () => {
   };
 
   const handleDelete = ({ selectedIds }: { selectedIds: string[] }) => {
-    const deleteCartIds = selectedIds.map((id: string) => {
-      const selectedRow = cartItems.find(
-        (row: IProductItem) => row.product.id === id
-      );
-      return selectedRow?.id;
-    });
+    const deleteCartIds = selectedIds
+      ?.map((id: string) => {
+        const selectedRow: any =
+          cartItems.find((row: IProductItem) => {
+            return row?.product.id === id;
+          }) ?? {};
+        if (selectedRow) {
+          return selectedRow?.id;
+        }
+        return '';
+      })
+      .filter(Boolean);
+    // selectedIds.map((id: string) => {
+    //   const selectedRow = cartItems.find(
+    //     (row: IProductItem) => row.product.id === id
+    //   );
+    //   return selectedRow?.id;
+    // });
     setIsLoading(true);
     deleteCart({
       items: deleteCartIds
@@ -974,6 +986,9 @@ const MyCart = () => {
                     setErrorText={setErrorText}
                     setIsLoading={setIsLoading}
                     deleteCartHandler={deleteCartHandler}
+                    activeCartTab={activeTab}
+                    setIsConfirmStone={setIsConfirmStone}
+                    setConfirmStoneData={setConfirmStoneData}
                   />
                 )
               )}
