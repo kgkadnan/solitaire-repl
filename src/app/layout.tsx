@@ -15,6 +15,7 @@ import {
 } from '@/constants/routes';
 import { ThemeProviders } from './theme-providers';
 import Head from 'next/head';
+import AppDownloadPopup from '@/components/v2/common/alert-pop-for-mobile';
 
 const store = setupStore();
 
@@ -29,13 +30,15 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
     (isApplicationRoutes && !headerlessRoutes.includes(path)) || path === '/';
   // Create a component that just renders children, with children as an optional prop
   const ChildrenComponent: FC<{ children?: ReactNode }> = ({ children }) => (
-    <>{children}</>
+    <>
+      {children}
+      <AppDownloadPopup></AppDownloadPopup>
+    </>
   );
   // Wrap the ChildrenComponent with authorizedLogin if it's a secure page
   const SecureComponent = protectedRoutes.includes(path)
     ? authorizedLogin(ChildrenComponent)
     : ChildrenComponent;
-
   return (
     <html lang="en">
       <head>
@@ -74,10 +77,11 @@ export default function RootLayout({ children }: { children?: ReactNode }) {
           <ThemeProviders>
             {isV2Route ? (
               <>
+                {/* <AppDownloadPopup/> */}
                 {showHeader ? (
                   <SecureComponent>{children}</SecureComponent>
                 ) : (
-                  <div>{children}</div>
+                  <ChildrenComponent>{children}</ChildrenComponent>
                 )}{' '}
               </>
             ) : (
