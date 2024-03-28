@@ -974,6 +974,7 @@ const MyCart = () => {
                     setErrorText={setErrorText}
                     setIsLoading={setIsLoading}
                     deleteCartHandler={deleteCartHandler}
+                    activeCartTab={activeTab}
                   />
                 )
               )}
