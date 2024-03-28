@@ -2,7 +2,7 @@
 import React from 'react';
 import { useMediaQuery } from 'react-responsive';
 import { Dialog, DialogContent } from '../../ui/dialog';
-import appDownload from '@public/app-download.svg';
+import appDownload from '@public/app-download.png';
 import Image from 'next/image';
 import playStore from '@public/play-store.svg';
 
@@ -31,7 +31,12 @@ const AppDownloadPopup = () => {
               Redefines the B2B diamond buy process with intuitive design and
               seamless functionality
             </p>
-            <Image alt="app-download" src={appDownload} />
+            <Image
+              alt="app-download"
+              src={appDownload}
+              height={400}
+              width={196}
+            />
             <a
               href="https://play.google.com/store/apps/details?id=com.kgk.diamonds"
               target="_blank"
