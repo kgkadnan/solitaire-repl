@@ -121,7 +121,7 @@ export const RenderCarat = ({ renderedCellValue }: any) => {
 export const RenderAmount = ({ row }: any) => {
   return (
     <span>{`${
-      row.original.variants[0].prices[0].amount?.toFixed(2) ?? '-'
+      row.original.variants[0].prices[0]?.amount?.toFixed(2) ?? '-'
     }`}</span>
   );
 };
