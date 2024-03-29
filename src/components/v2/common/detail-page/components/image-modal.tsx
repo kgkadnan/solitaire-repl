@@ -148,7 +148,7 @@ const ImageModal: React.FC<ModalProps> = ({
                     />
                   }
                   tooltipContent={'Download'}
-                  tooltipContentStyles={'z-[4]'}
+                  tooltipContentStyles={'z-[2000]'}
                 />
               )}
 
@@ -167,7 +167,7 @@ const ImageModal: React.FC<ModalProps> = ({
                   />
                 }
                 tooltipContent={'Media Link'}
-                tooltipContentStyles={'z-[4]'}
+                tooltipContentStyles={'z-[2000]'}
               />
             )}
           </div>

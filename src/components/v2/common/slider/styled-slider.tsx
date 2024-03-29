@@ -18,9 +18,7 @@ const StyledThumb = styled.div`
   cursor: grab;
   position: relative;
   top: -5px;
-  z-index: 1;
 &:focus-visible {
-  z-index: 1;
   outline: 2px solid var(--primary-focus);
 `;
 

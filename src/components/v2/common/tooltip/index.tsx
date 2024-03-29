@@ -20,7 +20,7 @@ const Tooltip = ({
         <RadixTooltip.Portal>
           <RadixTooltip.Content
             side={tooltipContentSide}
-            className={`data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade z-[999] data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade text-neutral25 select-none rounded-[8px] bg-primaryMain p-[12px] leading-none shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity] text-mMedium font-medium ${tooltipContentStyles}`}
+            className={`data-[state=delayed-open]:data-[side=top]:animate-slideDownAndFade  data-[state=delayed-open]:data-[side=right]:animate-slideLeftAndFade data-[state=delayed-open]:data-[side=left]:animate-slideRightAndFade data-[state=delayed-open]:data-[side=bottom]:animate-slideUpAndFade text-neutral25 select-none rounded-[8px] bg-primaryMain p-[12px] leading-none shadow-[hsl(206_22%_7%_/_35%)_0px_10px_38px_-10px,_hsl(206_22%_7%_/_20%)_0px_10px_20px_-15px] will-change-[transform,opacity] text-mMedium font-medium ${tooltipContentStyles}`}
           >
             {tooltipContent}
             <RadixTooltip.Arrow className="fill-primaryMain" />
