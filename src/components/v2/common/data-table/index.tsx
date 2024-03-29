@@ -142,16 +142,29 @@ const DataTable = ({
     setIsFullScreen(!isFullScreen);
   };
 
-  const onDropDownClick = (data: any) => {
+  const onDropDownClick = (value: any) => {
+    console.log('value', value);
     setIsLoading(true);
     setIsDropDownOpen(false);
 
     triggerSavedSearch({
-      searchByName: data.value
+      searchByName: value.value
     })
       .then(res => {
-        let metaData = res.data.savedSearches[0].meta_data;
-        const searchUrl = constructUrlParams(metaData);
+        let searchData: any;
+
+        if (res.data.savedSearches.length > 1) {
+          let savedSearchData = res.data.savedSearches;
+
+          let filteredData = savedSearchData.filter((savedSearch: any) => {
+            return savedSearch.name.toLowerCase() === value.value.toLowerCase();
+          })[0];
+          searchData = filteredData;
+        } else {
+          searchData = res.data.savedSearches[0];
+        }
+
+        const searchUrl = constructUrlParams(searchData.meta_data);
         setIsLoading(false);
         triggerProductCountApi({ searchUrl })
           .then(response => {
@@ -191,7 +204,7 @@ const DataTable = ({
               if (data?.length) {
                 let isAlreadyOpenIndex = isSearchAlreadyExist(
                   data,
-                  res.data.savedSearches[0].name
+                  searchData.name
                 );
 
                 if (isAlreadyOpenIndex >= 0 && isAlreadyOpenIndex !== null) {
