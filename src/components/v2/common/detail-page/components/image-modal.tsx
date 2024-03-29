@@ -33,6 +33,10 @@ const ImageModal: React.FC<ModalProps> = ({
   };
 
   useEffect(() => {
+    setShowDownloadButton('');
+    setImageIndex(0);
+  }, [isOpen]);
+  useEffect(() => {
     setImageIndex(selectedImageIndex || 0);
   }, [selectedImageIndex]);
 
@@ -46,7 +50,7 @@ const ImageModal: React.FC<ModalProps> = ({
       }, 2000);
     });
   };
-
+  console.log('Dsdsdsd', showDownloadButton);
   return (
     <div className="fixed z-[1200] inset-0 overflow-y-auto ">
       <Toast show={showToast} message="Copied Successfully" />
@@ -80,13 +84,20 @@ const ImageModal: React.FC<ModalProps> = ({
                 images[imageIndex].url === 'null' ||
                 images[imageIndex].url === null ||
                 !images[imageIndex].url.length ? (
-                  <Image
+                  <img
                     src={NoImageFound}
                     alt="NoImageFound"
-                    style={{ objectFit: 'cover' }}
                     className="lg:w-[662px] lg:h-[510px] sm:w-[300px] sm:h-[210px]"
                     height={600}
                     width={650}
+                    style={{
+                      background: '#F2F4F7'
+                    }}
+                    onError={(e: any) => {
+                      setShowDownloadButton(images[imageIndex].name);
+                      e.target.onerror = null;
+                      e.target.src = NoImageFound.src;
+                    }}
                   />
                 ) : (
                   <iframe
@@ -114,9 +125,10 @@ const ImageModal: React.FC<ModalProps> = ({
               )}
             </div>
           </div>
+
           <div className="flex mt-5 justify-center">
-            {(images[imageIndex].name !== 'B2B' ||
-              images[imageIndex].name !== 'B2B Sparkle') &&
+            {images[imageIndex].name !== 'B2B' &&
+              images[imageIndex].name !== 'B2B Sparkle' &&
               !showDownloadButton.includes(images[imageIndex].name) && (
                 <Tooltip
                   tooltipTrigger={
@@ -135,27 +147,29 @@ const ImageModal: React.FC<ModalProps> = ({
                       }}
                     />
                   }
-                  tooltipContent={'Media Link'}
+                  tooltipContent={'Download'}
                   tooltipContentStyles={'z-[4]'}
                 />
               )}
 
-            <Tooltip
-              tooltipTrigger={
-                <Image
-                  src={linkSvg}
-                  alt={linkSvg}
-                  height={40}
-                  width={40}
-                  className="mr-2 cursor-pointer"
-                  onClick={() => {
-                    copyLink({ url: images[imageIndex]?.url });
-                  }}
-                />
-              }
-              tooltipContent={'Media Link'}
-              tooltipContentStyles={'z-[4]'}
-            />
+            {!showDownloadButton.includes(images[imageIndex].name) && (
+              <Tooltip
+                tooltipTrigger={
+                  <Image
+                    src={linkSvg}
+                    alt={linkSvg}
+                    height={40}
+                    width={40}
+                    className="mr-2 cursor-pointer"
+                    onClick={() => {
+                      copyLink({ url: images[imageIndex]?.url });
+                    }}
+                  />
+                }
+                tooltipContent={'Media Link'}
+                tooltipContentStyles={'z-[4]'}
+              />
+            )}
           </div>
         </div>
       </div>
