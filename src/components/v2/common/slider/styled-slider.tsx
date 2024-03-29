@@ -6,6 +6,7 @@ const StyledSliderWrapper = styled(ReactSlider)`
   width: 390px;
   height: 5px;
   position: absolute;
+  z-index: 1;
 `;
 
 const StyledThumb = styled.div`
@@ -17,7 +18,6 @@ const StyledThumb = styled.div`
   cursor: grab;
   position: relative;
   top: -5px;
-  
 &:focus-visible {
   outline: 2px solid var(--primary-focus);
 `;
@@ -29,6 +29,7 @@ const ThumbComponent = ({ key, ...restProps }: any) => (
 const StyledTrack = styled.div`
   top: 0;
   bottom: 0;
+
   background: ${(props: any) =>
     props.index === 2
       ? 'var(--neutral-300)'

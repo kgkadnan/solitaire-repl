@@ -26,6 +26,10 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
   const [showDownloadButton, setShowDownloadButton] = useState<string[]>([]);
 
   useEffect(() => {
+    setShowDownloadButton([]);
+  }, []);
+
+  useEffect(() => {
     if (containerRef.current) {
       const selectedImageElement = containerRef.current.children[
         selectedImageIndex
@@ -72,7 +76,7 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                 {image.url === 'null' ||
                 image.url === null ||
                 !image.url.length ? (
-                  <Image
+                  <img
                     src={NoImageFound}
                     alt="NoImageFound"
                     style={{
@@ -81,11 +85,12 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
                       background: '#F2F4F7',
                       objectFit: 'cover'
                     }}
-                    onLoad={() => {
+                    onError={e => {
                       setShowDownloadButton(prevState => [
                         ...prevState,
                         image.name
                       ]);
+                      handleImageError(e);
                     }}
                   />
                 ) : (
@@ -130,32 +135,30 @@ const ImagePreview: React.FC<ImagePreviewProps> = ({
               />
             )}
 
-            {!showDownloadButton.includes(image.name) && (
-              <>
-                {!(image.name === 'B2B' || image.name === 'B2B Sparkle') && (
-                  <Tooltip
-                    tooltipTrigger={
-                      <Image
-                        className="absolute top-3 left-3 p-1"
-                        src={downloadImg}
-                        height={40}
-                        width={40}
-                        alt={'Download'}
-                        onClick={() => {
-                          handleDownloadImage(
-                            image?.url || '',
-                            image.name,
-                            setIsLoading
-                          );
-                        }}
-                      />
-                    }
-                    tooltipContent={'Download'}
-                    tooltipContentStyles={'z-[4]'}
-                  />
-                )}
-              </>
-            )}
+            {image.name !== 'B2B' &&
+              image.name !== 'B2B Sparkle' &&
+              !showDownloadButton.includes(image.name) && (
+                <Tooltip
+                  tooltipTrigger={
+                    <Image
+                      className="absolute top-3 left-3 p-1"
+                      src={downloadImg}
+                      height={40}
+                      width={40}
+                      alt={'Download'}
+                      onClick={() => {
+                        handleDownloadImage(
+                          image?.url || '',
+                          image.name,
+                          setIsLoading
+                        );
+                      }}
+                    />
+                  }
+                  tooltipContent={'Download'}
+                  tooltipContentStyles={'z-[4]'}
+                />
+              )}
 
             <span className="lg:block sm:hidden text-center">
               {image?.name}
