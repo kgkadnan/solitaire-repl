@@ -51,6 +51,7 @@ export const handleRegister = async ({
     .then((res: any) => {
       setIsLoading(false);
       if (res?.customer) {
+        localStorage.removeItem('show-nudge');
         setCurrentState('OTPVerification');
         setRole(role);
         setOTPVerificationFormState(prev => ({
