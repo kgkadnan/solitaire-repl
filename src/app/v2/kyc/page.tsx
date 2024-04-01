@@ -416,16 +416,17 @@ const KYC = () => {
                   })
                 );
 
-                Object.keys(kycDetails?.kyc?.profile_data?.online['4']).map(
-                  key => {
-                    dispatch(
-                      updateFormState({
-                        name: `formState.attachment[${key}].isFileUploaded`,
-                        value: true
-                      })
-                    );
-                  }
-                );
+                kycDetails?.kyc?.profile_data?.online['4'] &&
+                  Object.keys(kycDetails?.kyc?.profile_data?.online['4']).map(
+                    key => {
+                      dispatch(
+                        updateFormState({
+                          name: `formState.attachment[${key}].isFileUploaded`,
+                          value: true
+                        })
+                      );
+                    }
+                  );
               }
             } else {
               dispatch(

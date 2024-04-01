@@ -187,7 +187,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsBoolean({ message: MSME_REGISTERED_INVALID })
   is_msme_registered: boolean = false;
 
-  @ValidateIf(object => object?.is_msme_registered === true)
+  @ValidateIf((object, value) => object?.is_msme_registered === value)
   @IsString({
     message: MSME_TYPE_INVALID
   })
@@ -195,7 +195,7 @@ export class IndiaKycPostCompanyDetailsValidation extends KycPostCompanyDetailsV
   @IsNotEmpty({ message: MSME_TYPE_MANDATORY })
   msme_type: string;
 
-  @ValidateIf(object => object?.is_msme_registered === true)
+  @ValidateIf((object, value) => object?.is_msme_registered === value)
   @IsString({
     message: MSME_REGISTRATION_NUMBER_INVALID
   })

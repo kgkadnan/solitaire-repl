@@ -45,7 +45,7 @@ export const RadioButton: React.FC<any> = ({
         ></span>
       </label>
 
-      <div className="absolute top-[100%]">
+      <div className={`absolute top-[100%]`}>
         {checked &&
           inputs &&
           inputs.map((input: any) => (
@@ -58,7 +58,9 @@ export const RadioButton: React.FC<any> = ({
               errorText={input.error}
               placeholder={input.placeholder}
               styles={{
-                inputMain: `h-64px !w-[380px]`,
+                inputMain: `h-64px !w-[380px]  ${
+                  input.error?.length && 'mb-[14px]'
+                }`,
                 input: `${
                   input.error ? 'border-dangerMain' : 'border-neutral200'
                 }`
