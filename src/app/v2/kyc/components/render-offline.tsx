@@ -92,7 +92,7 @@ export const RenderOffline = ({
         dispatch(
           updateFormState({
             name: `formState.attachment[${key}]`,
-            value: {}
+            value: ''
           })
         );
       });

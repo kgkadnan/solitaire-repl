@@ -84,24 +84,22 @@ const CompanyDetail = ({
   country,
   currentStepperStep
 }: any) => {
-  console.log(
-    formErrorState?.online?.sections?.[kycScreenIdentifierNames.COMPANY_DETAILS]
-  );
   const { data, error } = useGetCountryCodeQuery({});
   useEffect(() => {
     if (data) {
       dispatch(
         updateFormState({
           name: `formState.online.sections[${[
-            kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
+            kycScreenIdentifierNames.COMPANY_DETAILS
           ]}][company_country_code]`,
-          value: data.country_calling_code
+          value: data.country_calling_code.replace(/\+/g, '')
         })
       );
     } else if (error) {
       console.error('Error fetching country code', error);
     }
   }, [data, error]);
+
   const handleRadioChange = ({ value, formKey }: any) => {
     handleInputChange(
       `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][${formKey}]`,
@@ -365,7 +363,12 @@ const CompanyDetail = ({
         newData.push(label);
       }
     }
-
+    dispatch(
+      updateFormState({
+        name: `formErrorState.online.sections.${[screenName]}.${[key]}`,
+        value: ''
+      })
+    );
     dispatch(updateFormState({ name: path, value: newData }));
   };
 
@@ -583,6 +586,18 @@ const CompanyDetail = ({
                   }}
                   // autoFocus={false}
                 />
+                {formErrorState?.online?.sections?.[
+                  kycScreenIdentifierNames.COMPANY_DETAILS
+                ]?.['city'] && (
+                  <p className="text-dangerMain h-1">
+                    {formErrorState?.online?.sections?.[
+                      kycScreenIdentifierNames.COMPANY_DETAILS
+                    ]?.['city'] &&
+                      formErrorState?.online?.sections?.[
+                        kycScreenIdentifierNames.COMPANY_DETAILS
+                      ]?.['city']}
+                  </p>
+                )}
               </div>
             </div>
           )}
@@ -1866,7 +1881,7 @@ const CompanyDetail = ({
           {country === countries.INDIA && (
             <div className={'w-[50%]'}>
               <InputField
-                label={'Business Registration Number (CIN)'}
+                label={'Business Registration Number (CIN)*'}
                 onChange={e =>
                   handleInputChange(
                     `formState.online.sections[${[
@@ -1880,7 +1895,7 @@ const CompanyDetail = ({
                   )
                 }
                 type="text"
-                name={'Business Registration Number (CIN)'}
+                name={'Business Registration Number (CIN)*'}
                 value={
                   formState?.online?.sections?.[
                     kycScreenIdentifierNames.COMPANY_DETAILS
@@ -2118,7 +2133,7 @@ const CompanyDetail = ({
                         }
                       />
                     </div>
-                    <div className="w-[100%]">
+                    <div className="w-[380px]">
                       <CheckboxWithInput
                         label="Other"
                         defaultChecked={formState?.online?.sections?.[
@@ -2145,9 +2160,9 @@ const CompanyDetail = ({
                             label,
                             isChecked,
                             kycScreenIdentifierNames.COMPANY_DETAILS,
-                            'business_type',
+                            'industry_type',
                             inputValue,
-                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][business_type]`,
+                            `formState.online.sections[${kycScreenIdentifierNames.COMPANY_DETAILS}][industry_type]`,
                             true
                           )
                         }

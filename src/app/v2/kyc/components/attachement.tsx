@@ -47,11 +47,12 @@ export const RenderAttachment = ({
         dispatch(
           updateFormState({
             name: `formState.attachment[${key}]`,
-            value: {}
+            value: ''
           })
         );
       });
   };
+
   const buildFormData = ({ acceptedFiles, key }: any) => {
     const formData = new FormData();
 
