@@ -28,7 +28,7 @@ export const handleFileupload = async ({
         return new Promise<void>(resolve => {
           setTimeout(() => {
             resolve();
-          }, 1000); // Simulate a 1-second delay
+          }, 100);
         });
       };
       dispatch(

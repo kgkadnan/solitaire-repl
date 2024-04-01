@@ -22,7 +22,7 @@ const CompanyOwnerDetail = ({
           name: `formState.online.sections[${[
             kycScreenIdentifierNames.COMPANY_OWNER_DETAILS
           ]}][owner_country_code]`,
-          value: data.country_calling_code
+          value: data.country_calling_code.replace(/\+/g, '')
         })
       );
     } else if (error) {

@@ -38,6 +38,7 @@ export const DynamicMobileInput = ({
       value: code
     }));
   };
+
   return (
     <div className={`flex text-left flex-col ${containerStyle}`}>
       {label && <p className="text-mRegular text-neutral900">{label}</p>}

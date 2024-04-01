@@ -24,7 +24,8 @@ export class IndianAttachmentValidation {
   @IsNotEmpty({ message: INCORPORATION_CERTIFICATE })
   incorporation_certificate: string;
 
-  @IsNotEmpty({ message: CANCEL_CHAQUE })
+  // @IsNotEmpty({ message: CANCEL_CHAQUE })
+  @IsOptional()
   cancel_cheque: string;
 
   @IsNotEmpty({ message: SECTION_194Q })

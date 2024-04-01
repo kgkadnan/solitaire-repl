@@ -661,6 +661,8 @@ const KYC = () => {
       );
     }
 
+    if (validationError?.length) return;
+
     // Make the API call to submit the form data
     let updatedCompanyDetails;
     if (screenName === kycScreenIdentifierNames.COMPANY_DETAILS) {
@@ -929,7 +931,7 @@ const KYC = () => {
     if (
       !validationError?.length &&
       !onlineValidator.length &&
-      !manualValidationError.length
+      !manualValidationError?.length
     ) {
       if (!formState.termAndCondition) {
         dispatch(

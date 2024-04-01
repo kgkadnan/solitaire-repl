@@ -39,7 +39,7 @@ const CheckboxWithInput = ({
   useEffect(() => {
     setIsChecked(defaultChecked);
     setInputValue(defaultValue);
-  }, [defaultChecked, defaultValue]);
+  }, []);
 
   return (
     <div className="flex flex-col gap-[5px]">

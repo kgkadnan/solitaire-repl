@@ -35,7 +35,7 @@ export let AttachmentData: any = {
         {
           id: ' 4',
           label: 'Cancel Cheque',
-          isRequired: true,
+          isRequired: false,
           formKey: 'cancel_cheque',
           maxFile: fileLimit.MAX_FILES,
           minFile: fileLimit.MIN_FILES,
