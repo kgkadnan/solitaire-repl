@@ -1535,7 +1535,7 @@ const CompanyDetail = ({
             </div>
           )}
           {(country === countries.BELGIUM || country === countries.USA) && (
-            <div className="flex w-[380px]">
+            <div className="flex w-[380px] h-[17vh]">
               <div className="w-full flex flex-col ">
                 <div className="flex flex-col gap-[5px]">
                   <p className="text-mRegular text-neutral900">
@@ -2431,7 +2431,7 @@ const CompanyDetail = ({
             </div>
           )}
           {country === countries.BELGIUM && (
-            <div className="w-[50%] flex flex-col  h-[24vh]">
+            <div className="w-[50%] flex flex-col \">
               <div className="flex flex-col gap-[10px]">
                 <p className="text-mRegular text-neutral900">
                   Organisation Type*
@@ -2589,15 +2589,7 @@ const CompanyDetail = ({
                       }}
                     />
                   </div>{' '}
-                  <div
-                    className={`w-[100%] relative ${
-                      organisationTypes.includes(
-                        formState?.online?.sections?.[
-                          kycScreenIdentifierNames.COMPANY_DETAILS
-                        ]?.['organisation_type']
-                      ) && 'mb-[45px]'
-                    }`}
-                  >
+                  <div className={`w-[100%] relative mb-[45px]`}>
                     <RadioButtonWithInput
                       name="organisationType"
                       label={'Other'}
