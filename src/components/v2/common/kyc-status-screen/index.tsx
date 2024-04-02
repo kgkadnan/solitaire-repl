@@ -35,9 +35,9 @@ export const KycStatusScreen: React.FC<IKycStatusScreen> = ({ status }) => {
     }, 2000);
   };
   return (
-    <div className="relative w-full h-[100%]">
+    <div className="relative w-full h-[calc(100vh-60px)]">
       <Toast show={showToast} message="Copied Successfully" />
-      <div className="flex flex-col gap-y-10 justify-center items-center">
+      <div className="flex flex-col gap-y-10 justify-center items-center relative">
         <div className="">
           {status === kycStatus.PENDING ? (
             <Image src={pendingIcon} alt="kyc_pending_icon" />
