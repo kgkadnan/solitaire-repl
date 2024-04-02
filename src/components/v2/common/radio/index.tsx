@@ -8,7 +8,8 @@ export const RadioButton: React.FC<any> = ({
   onError,
   customStyle
 }) => {
-  const { label, value, name, checked, inputs } = radioMetaData;
+  const { label, value, name, checked, inputs, inputCustomStyle } =
+    radioMetaData;
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const handleRadioChange = () => {
@@ -45,7 +46,7 @@ export const RadioButton: React.FC<any> = ({
         ></span>
       </label>
 
-      <div className={`absolute top-[100%]`}>
+      <div className={`absolute top-[100%] ${inputCustomStyle}`}>
         {checked &&
           inputs &&
           inputs.map((input: any) => (
